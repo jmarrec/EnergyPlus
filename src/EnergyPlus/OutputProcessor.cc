@@ -5376,6 +5376,9 @@ namespace OutputProcessor {
         case OutputProcessor::Unit::W_K:
             return "W/K";
             break;
+        case OutputProcessor::Unit::K_W:
+            return "K/W";
+            break;
         case OutputProcessor::Unit::ppm:
             return "ppm";
             break;
@@ -5525,6 +5528,8 @@ namespace OutputProcessor {
             return OutputProcessor::Unit::clo;
         } else if (unitUpper == "W/K") {
             return OutputProcessor::Unit::W_K;
+        } else if (unitUpper == "K/W") {
+            return OutputProcessor::Unit::K_W;
         } else if (unitUpper == "KGWATER/S") {
             return OutputProcessor::Unit::kgWater_s;
         } else {
