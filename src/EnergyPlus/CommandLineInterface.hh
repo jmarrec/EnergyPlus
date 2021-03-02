@@ -62,14 +62,14 @@ struct EnergyPlusData;
 
 namespace CommandLineInterface {
 
-    enum class ReturnCodes {
-        Success,
-        Failure,
-        SuccessButHelper,
+    enum class ReturnCode {
+        Success = 0,
+        Failure = 1,
+        SuccessButHelper = 2,
     };
 
     // Process command line arguments
-    int ENERGYPLUSLIB_API ProcessArgs(EnergyPlusData &state, int argc, const char *argv[]);
+    ReturnCode ENERGYPLUSLIB_API ProcessArgs(EnergyPlusData &state, int argc, const char *argv[]);
 
     void ReadINIFile(InputFile &inputFile,               // Unit number of the opened INI file
                      std::string const &Heading,         // Heading for the parameters ('[heading]')
@@ -77,7 +77,7 @@ namespace CommandLineInterface {
                      std::string &DataOut                // Output from the retrieval
     );
 
-    int runReadVarsESO(EnergyPlusData &state);
+    ReturnCode runReadVarsESO(EnergyPlusData &state);
 
 } // namespace CommandLineInterface
 

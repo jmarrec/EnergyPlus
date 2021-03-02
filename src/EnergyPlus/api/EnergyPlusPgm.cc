@@ -362,9 +362,9 @@ int wrapUpEnergyPlus(EnergyPlus::EnergyPlusData &state) {
              if (state.files.outputControl.csv) {
                  ShowWarningMessage(state, "Native CSV output requested in input file, but running ReadVarsESO due to command line argument.");
              }
-             int status = CommandLineInterface::runReadVarsESO(state);
-             if (status) {
-                 return status;
+             EnergyPlus::CommandLineInterface::ReturnCode status = CommandLineInterface::runReadVarsESO(state);
+             if (status == EnergyPlus::CommandLineInterface::ReturnCode::Failure) {
+                 return static_cast<int>(status);
              }
         }
     } catch (const FatalError &e) {
@@ -430,12 +430,12 @@ int runEnergyPlusAsLibrary(EnergyPlus::EnergyPlusData &state, int argc, const ch
     if (!std::cerr.good()) std::cerr.clear();
     if (!std::cout.good()) std::cout.clear();
 
-    int return_code = EnergyPlus::CommandLineInterface::ProcessArgs(state, argc, argv );
-    if (return_code == static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCodes::Failure)) {
-        return return_code;
-    } else if (return_code == static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCodes::SuccessButHelper)) {
+    EnergyPlus::CommandLineInterface::ReturnCode return_code = EnergyPlus::CommandLineInterface::ProcessArgs(state, argc, argv );
+    if (return_code == EnergyPlus::CommandLineInterface::ReturnCode::Failure) {
+        return static_cast<int>(return_code);
+    } else if (return_code == EnergyPlus::CommandLineInterface::ReturnCode::SuccessButHelper) {
         // If it was "--version" or "--help", you do not want to continue trying to run the simulation, but do not want to indicate failure either
-        return static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCodes::Success);
+        return static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCode::Success);
     }
 
     int status = initializeAsLibrary(state);
