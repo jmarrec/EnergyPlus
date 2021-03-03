@@ -115,6 +115,7 @@ UNIQUE_OBJ_STR = 'unique-object'
 REQUIRED_OBJ_STR = 'required-object'
 OBSOLETE_STR = 'obsolete'
 
+
 # field-level strings
 REQUIRED_FIELD_STR = 'required-field'
 TYPE_STR = 'type'
@@ -143,6 +144,14 @@ REAL_STR = 'real'
 INTEGER_STR = 'integer'
 NODE_STR = 'node'
 
+
+# OpenStudio specific
+MAX_FIELDS_STR = 'max-fields'
+HANDLE_STR = 'handle'
+URL_STR = 'url-object'
+URL_FIELD_STR = 'url'
+TOKEN_MAX_FIELDS = 39
+TOKEN_URL = 40
 
 class Data:
     index = 0
@@ -207,6 +216,18 @@ def parse_idd(data):
                     if 'extensions' not in obj_data['properties']:
                         raise RuntimeError("Object with min-fields > num_fields. Object name = " + obj_name)
                 root['properties'][obj_name]['min_fields'] = obj_data.pop('min_fields')
+            if 'max_fields' in obj_data:
+                if 'extensions' not in obj_data['properties']:
+                    raise RuntimeError(
+                        "Object with max-fields makes no sense for a "
+                        "non-extensible object. "
+                        "Object name = {}".format(obj_name))
+                num_fields_with_name = len(obj_data['properties']) + 1
+                if int(obj_data['max_fields']) <= num_fields_with_name:
+                    raise RuntimeError(
+                        "Object with max-fields <= num_fields. "
+                        "Object name = {}".format(obj_name))
+                root['properties'][obj_name]['max_fields'] = obj_data.pop('max_fields')
             if 'extensible_size' in obj_data:
                 root['properties'][obj_name]['extensible_size'] = obj_data.pop('extensible_size')
             if 'format' in obj_data:
@@ -232,7 +253,8 @@ def parse_obj(data):
     while True:
         token = look_ahead(data)
         if token == TOKEN_NONE:
-            raise RuntimeError("TOKEN_NONE returned")
+            raise RuntimeError("TOKEN_NONE returned in parse_obj: "
+                               "{}".format(parse_string(data)))
 
         elif token == TOKEN_END:
             return root
@@ -276,6 +298,21 @@ def parse_obj(data):
             if 'min_fields' in root:
                 raise KeyError("min_fields already exists, must define only one per object")
             root['min_fields'] = num
+
+        elif token == TOKEN_MAX_FIELDS:
+            next_token(data)
+            if look_ahead(data) != TOKEN_NUMBER:
+                raise RuntimeError("expected number after /max-fields")
+            num = parse_number(data)
+            if num is None:
+                raise RuntimeError("parse number returned None")
+            if 'max_fields' in root:
+                raise KeyError("max_fields already exists, must define only one per object")
+            root['max_fields'] = num
+
+        elif token == TOKEN_URL:
+            next_token(data)
+            root['is_url_obj'] = True
 
         elif token == TOKEN_FORMAT:
             next_token(data)
@@ -331,6 +368,7 @@ def parse_obj(data):
             field_name = parse_line(data)
             original_field_name = field_name
             field_name = field_name.lower()
+            print(field_name)
             field_data = parse_field(data, token_a_or_n)
 
             if 'begin-extensible' in field_data:
@@ -398,7 +436,8 @@ def parse_field(data, token):
     while True:
         token = look_ahead(data)
         if token == TOKEN_NONE:
-            raise RuntimeError("token none returned in parse field")
+            raise RuntimeError("TOKEN_NONE returned in parse_field: "
+                               "{}".format(parse_string(data)))
 
         elif token == TOKEN_EXCLAMATION:
             next_token(data)
@@ -417,6 +456,14 @@ def parse_field(data, token):
             if match_string(data, ALPHA_STR) or match_string(data, CHOICE_STR):
                 if 'type' not in root or root['type'] != 'string':
                     root['type'] = 'string'
+
+            elif match_string(data, HANDLE_STR):
+                if 'type' not in root or root['type'] != 'handle':
+                    root['type'] = 'handle'
+            elif match_string(data, URL_FIELD_STR):
+                if 'type' not in root or root['type'] != 'url':
+                    root['type'] = 'url'
+
             elif match_string(data, OBJECT_LIST_STR):
                 if 'data_type' not in root:
                     root['data_type'] = 'object_list'
@@ -427,14 +474,13 @@ def parse_field(data, token):
                     root['data_type'] = 'external_list'
                 else:
                     raise RuntimeError("Two external-lists?")
+
             elif match_string(data, REAL_STR) or match_string(data, INTEGER_STR):
                 if 'type' not in root or 'type' != 'number':
                     root['type'] = 'number'
+
             elif match_string(data, NODE_STR):
                 root['type'] = 'string'
-            else:
-                bad_type = parse_line(data)
-                raise RuntimeError("Invalid \\type: \"%s\"" % bad_type)
 
         elif token == TOKEN_OBJ_LIST:
             next_token(data)
@@ -538,7 +584,11 @@ def parse_field(data, token):
             next_token(data)
             root['retaincase'] = True
 
-        elif token in [TOKEN_A, TOKEN_N, TOKEN_END, TOKEN_STRING, TOKEN_GROUP]:
+        elif token == TOKEN_GROUP:
+            next_token(data)
+            eat_comment(data)
+
+        elif token == TOKEN_A or token == TOKEN_N or token == TOKEN_END or token == TOKEN_STRING:
             has_default = 'default' in root
             if is_autocalculatable:
                 create_any_of(root, TOKEN_AUTOCALCULATABLE, has_default)
@@ -638,6 +688,10 @@ def next_token(data):
             return TOKEN_FORMAT
         if match_string(data, MIN_FIELDS_STR):
             return TOKEN_MIN_FIELDS
+        if match_string(data, MAX_FIELDS_STR):
+            return TOKEN_MAX_FIELDS
+        if match_string(data, URL_STR):
+            return TOKEN_URL
         if match_string(data, REQUIRED_OBJ_STR):
             return TOKEN_REQUIRED_OBJ
         if match_string(data, UNIQUE_OBJ_STR):
@@ -741,6 +795,11 @@ def parse_number(data):
         save_index += 1
 
     data.index += len(num)
+
+    # TODO: workaround for "Version" object
+    if num == '3.1.1':
+        return None
+
     return float(num)
 
 

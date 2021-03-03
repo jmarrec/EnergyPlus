@@ -72,122 +72,125 @@ def isInt(s):
         return False
 
 extension_renaming = {
-    'LifeCycleCost:UseAdjustment': 'multipliers',
-    'LifeCycleCost:UsePriceEscalation': 'escalations',
-    'ElectricLoadCenter:Transformer': 'meters',
-    'ElectricLoadCenter:Generators': 'generator_outputs',
-    'Generator:FuelCell:AirSupply': 'constituent_fractions',
-    'DemandManager:ExteriorLights': 'lights',
-    'DemandManager:Ventilation': 'controllers',
-    'DemandManagerAssignmentList': 'manager_data',
-    'DemandManager:Lights': 'lights',
-    'DemandManager:Thermostats': 'thermostats',
-    'DemandManager:ElectricEquipment': 'equipment',
-    'DaylightingDevice:Tubular': 'transition_lengths',
-    'Daylighting:Controls': 'control_data',
-    'ZoneHVAC:Baseboard:RadiantConvective:Steam': 'surface_fractions',
-    'ZoneHVAC:Baseboard:RadiantConvective:Electric': 'surface_fractions',
-    'ZoneHVAC:HighTemperatureRadiant': 'surface_fractions',
-    'ZoneHVAC:LowTemperatureRadiant:SurfaceGroup': 'surface_fractions',
-    'ZoneHVAC:Baseboard:RadiantConvective:Water': 'surface_fractions',
-    'ZoneHVAC:VentilatedSlab:SlabGroup': 'data',
-    'ZoneHVAC:CoolingPanel:RadiantConvective:Water': 'surface_fractions',
-    'AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR': 'loading_indices',
-    'AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl': 'loading_indices',
-    'ZoneTerminalUnitList': 'terminal_units',
-    'RoomAir:TemperaturePattern:NondimensionalHeight': 'pairs',
-    'RoomAir:Node:AirflowNetwork:InternalGains': 'gains',
-    'RoomAirSettings:AirflowNetwork': 'nodes',
-    'RoomAir:Node:AirflowNetwork:HVACEquipment': 'equipment_fractions',
-    'RoomAir:TemperaturePattern:SurfaceMapping': 'surface_deltas',
-    'RoomAir:Node:AirflowNetwork:AdjacentSurfaceList': 'surfaces',
-    'Controller:MechanicalVentilation': 'zone_specifications',
-    'WaterUse:Connections': 'connections',
-    'WaterUse:RainCollector': 'surfaces',
-    'Output:Table:Annual': 'variable_details',
-    'Meter:CustomDecrement': 'variable_details',
-    'Output:Table:Monthly': 'variable_details',
-    'Output:Table:SummaryReports': 'reports',
-    'Meter:Custom': 'variable_details',
-    'UnitarySystemPerformance:Multispeed': 'flow_ratios',
-    'SurfaceProperty:ExteriorNaturalVentedCavity': 'surface',
-    'ZoneProperty:UserViewFactors:BySurfaceName': 'view_factors',
-    'SurfaceProperty:HeatTransferAlgorithm:SurfaceList': 'surface',
-    'AirLoopHVAC:ZoneSplitter': 'nodes',
-    'AirLoopHVAC:SupplyPath': 'components',
-    'AirLoopHVAC:ReturnPath': 'components',
-    'AirLoopHVAC:ReturnPlenum': 'nodes',
-    'AirLoopHVAC:ZoneMixer': 'nodes',
-    'AirLoopHVAC:SupplyPlenum': 'nodes',
-    'BuildingSurface:Detailed': 'vertices',
-    'Shading:Zone:Detailed': 'vertices',
-    'RoofCeiling:Detailed': 'vertices',
-    'Shading:Site:Detailed': 'vertices',
-    'Wall:Detailed': 'vertices',
-    'ZoneList': 'zones',
-    'Floor:Detailed': 'vertices',
-    'Shading:Building:Detailed': 'vertices',
-    'SolarCollector:UnglazedTranspired:Multisystem': 'systems',
-    'SolarCollector:UnglazedTranspired': 'surfaces',
-    'Parametric:SetValueForRun': 'values',
-    'Parametric:Logic': 'lines',
-    'Parametric:FileNameSuffix': 'suffixes',
-    'Parametric:RunControl': 'runs',
-    'ZoneHVAC:EquipmentList': 'equipment',
-    'AvailabilityManagerAssignmentList': 'managers',
-    'Table:IndependentVariable': 'values',
-    'Table:IndependentVariableList': 'independent_variables',
-    'Table:Lookup': 'values',
-    'Matrix:TwoDimension': 'values',
-    'WindowMaterial:GlazingGroup:Thermochromic': 'temperature_data',
-    'Schedule:Compact': 'data',
-    'Schedule:Day:Interval': 'data',
-    'Schedule:Week:Compact': 'data',
-    'EnergyManagementSystem:GlobalVariable': 'variables',
-    'EnergyManagementSystem:ProgramCallingManager': 'programs',
-    'EnergyManagementSystem:Program': 'lines',
-    'EnergyManagementSystem:Subroutine': 'lines',
-    'Refrigeration:CaseAndWalkInList': 'cases_and_walkins',
-    'Refrigeration:CompressorList': 'compressors',
-    'ZoneHVAC:RefrigerationChillerSet': 'chillers',
-    'Refrigeration:WalkIn': 'zone_data',
-    'Refrigeration:TransferLoadList': 'transfer_loads',
-    'Branch': 'components',
-    'PipingSystem:Underground:Domain': 'pipe_circuits',
-    'Connector:Splitter': 'branches',
-    'Connector:Mixer': 'branches',
-    'BranchList': 'branches',
-    'PipingSystem:Underground:PipeCircuit': 'pipe_segments',
-    'NodeList': 'nodes',
-    'OutdoorAir:NodeList': 'nodes',
-    'Fan:SystemModel': 'speed_fractions',
-    'AirflowNetwork:Distribution:DuctViewFactors': 'surfaces',
-    'GroundHeatExchanger:System': 'vertical_well_locations',
-    'GroundHeatExchanger:ResponseFactors': 'g_functions',
-    'Foundation:Kiva': 'blocks',
-    'SurfaceProperty:ExposedFoundationPerimeter': 'surfaces',
-    'SurfaceProperty:SurroundingSurfaces': 'surfaces',
-    'ZoneHVAC:HybridUnitaryHVAC': 'modes',
-    'ShadowCalculation': 'shading_zone_groups',
-    'Schedule:Year': 'schedule_weeks',
-    'WindowShadingControl': 'fenestration_surfaces',
-    'PlantEquipmentList': 'equipment',
-    'CondenserEquipmentList': 'equipment',
-    'AirLoopHVAC:Mixer': 'nodes',
-    'AirLoopHVAC:Splitter': 'nodes',
-    'AirLoopHVAC:DedicatedOutdoorAirSystem': 'airloophvacs',
-    'PythonPlugin:Variables': 'global_py_vars',
-    'PythonPlugin:SearchPaths': 'py_search_paths',
-    'Output:Diagnostics': 'diagnostics',
+    'OS:LifeCycleCost:UseAdjustment': 'multipliers',
+    'OS:LifeCycleCost:UsePriceEscalation': 'escalations',
+    'OS:ElectricLoadCenter:Transformer': 'meters',
+    'OS:ElectricLoadCenter:Generators': 'generator_outputs',
+    'OS:Generator:FuelCell:AirSupply': 'constituent_fractions',
+    'OS:DemandManager:ExteriorLights': 'lights',
+    'OS:DemandManager:Ventilation': 'controllers',
+    'OS:DemandManagerAssignmentList': 'manager_data',
+    'OS:DemandManager:Lights': 'lights',
+    'OS:DemandManager:Thermostats': 'thermostats',
+    'OS:DemandManager:ElectricEquipment': 'equipment',
+    'OS:DaylightingDevice:Tubular': 'transition_lengths',
+    'OS:Daylighting:Controls': 'control_data',
+    'OS:ZoneHVAC:Baseboard:RadiantConvective:Steam': 'surface_fractions',
+    'OS:ZoneHVAC:Baseboard:RadiantConvective:Electric': 'surface_fractions',
+    'OS:ZoneHVAC:HighTemperatureRadiant': 'surface_fractions',
+    'OS:ZoneHVAC:LowTemperatureRadiant:SurfaceGroup': 'surface_fractions',
+    'OS:ZoneHVAC:Baseboard:RadiantConvective:Water': 'surface_fractions',
+    'OS:ZoneHVAC:VentilatedSlab:SlabGroup': 'data',
+    'OS:ZoneHVAC:CoolingPanel:RadiantConvective:Water': 'surface_fractions',
+    'OS:AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl:HR': 'loading_indices',
+    'OS:AirConditioner:VariableRefrigerantFlow:FluidTemperatureControl': 'loading_indices',
+    'OS:ZoneTerminalUnitList': 'terminal_units',
+    'OS:RoomAir:TemperaturePattern:NondimensionalHeight': 'pairs',
+    'OS:RoomAir:Node:AirflowNetwork:InternalGains': 'gains',
+    'OS:RoomAirSettings:AirflowNetwork': 'nodes',
+    'OS:RoomAir:Node:AirflowNetwork:HVACEquipment': 'equipment_fractions',
+    'OS:RoomAir:TemperaturePattern:SurfaceMapping': 'surface_deltas',
+    'OS:RoomAir:Node:AirflowNetwork:AdjacentSurfaceList': 'surfaces',
+    'OS:Controller:MechanicalVentilation': 'zone_specifications',
+    'OS:WaterUse:Connections': 'connections',
+    'OS:WaterUse:RainCollector': 'surfaces',
+    'OS:Output:Table:Annual': 'variable_details',
+    'OS:Meter:CustomDecrement': 'variable_details',
+    'OS:Output:Table:Monthly': 'variable_details',
+    'OS:Output:Table:SummaryReports': 'reports',
+    'OS:Meter:Custom': 'variable_details',
+    'OS:UnitarySystemPerformance:Multispeed': 'flow_ratios',
+    'OS:SurfaceProperty:ExteriorNaturalVentedCavity': 'surface',
+    'OS:ZoneProperty:UserViewFactors:BySurfaceName': 'view_factors',
+    'OS:SurfaceProperty:HeatTransferAlgorithm:SurfaceList': 'surface',
+    'OS:AirLoopHVAC:ZoneSplitter': 'nodes',
+    'OS:AirLoopHVAC:SupplyPath': 'components',
+    'OS:AirLoopHVAC:ReturnPath': 'components',
+    'OS:AirLoopHVAC:ReturnPlenum': 'nodes',
+    'OS:AirLoopHVAC:ZoneMixer': 'nodes',
+    'OS:AirLoopHVAC:SupplyPlenum': 'nodes',
+    'OS:BuildingSurface:Detailed': 'vertices',
+    'OS:Shading:Zone:Detailed': 'vertices',
+    'OS:RoofCeiling:Detailed': 'vertices',
+    'OS:Shading:Site:Detailed': 'vertices',
+    'OS:Wall:Detailed': 'vertices',
+    'OS:ZoneList': 'zones',
+    'OS:Floor:Detailed': 'vertices',
+    'OS:Shading:Building:Detailed': 'vertices',
+    'OS:SolarCollector:UnglazedTranspired:Multisystem': 'systems',
+    'OS:SolarCollector:UnglazedTranspired': 'surfaces',
+    'OS:Parametric:SetValueForRun': 'values',
+    'OS:Parametric:Logic': 'lines',
+    'OS:Parametric:FileNameSuffix': 'suffixes',
+    'OS:Parametric:RunControl': 'runs',
+    'OS:ZoneHVAC:EquipmentList': 'equipment',
+    'OS:AvailabilityManagerAssignmentList': 'managers',
+    'OS:Table:IndependentVariable': 'values',
+    'OS:Table:IndependentVariableList': 'independent_variables',
+    'OS:Table:Lookup': 'values',
+    'OS:Matrix:TwoDimension': 'values',
+    'OS:WindowMaterial:GlazingGroup:Thermochromic': 'temperature_data',
+    'OS:Schedule:Compact': 'data',
+    'OS:Schedule:Day:Interval': 'data',
+    'OS:Schedule:Week:Compact': 'data',
+    'OS:EnergyManagementSystem:GlobalVariable': 'variables',
+    'OS:EnergyManagementSystem:ProgramCallingManager': 'programs',
+    'OS:EnergyManagementSystem:Program': 'lines',
+    'OS:EnergyManagementSystem:Subroutine': 'lines',
+    'OS:Refrigeration:CaseAndWalkInList': 'cases_and_walkins',
+    'OS:Refrigeration:CompressorList': 'compressors',
+    'OS:ZoneHVAC:RefrigerationChillerSet': 'chillers',
+    'OS:Refrigeration:WalkIn': 'zone_data',
+    'OS:Refrigeration:TransferLoadList': 'transfer_loads',
+    'OS:Branch': 'components',
+    'OS:PipingSystem:Underground:Domain': 'pipe_circuits',
+    'OS:Connector:Splitter': 'branches',
+    'OS:Connector:Mixer': 'branches',
+    'OS:BranchList': 'branches',
+    'OS:PipingSystem:Underground:PipeCircuit': 'pipe_segments',
+    'OS:NodeList': 'nodes',
+    'OS:OutdoorAir:NodeList': 'nodes',
+    'OS:Fan:SystemModel': 'speed_fractions',
+    'OS:AirflowNetwork:Distribution:DuctViewFactors': 'surfaces',
+    'OS:GroundHeatExchanger:System': 'vertical_well_locations',
+    'OS:GroundHeatExchanger:ResponseFactors': 'g_functions',
+    'OS:Foundation:Kiva': 'blocks',
+    'OS:SurfaceProperty:ExposedFoundationPerimeter': 'surfaces',
+    'OS:SurfaceProperty:SurroundingSurfaces': 'surfaces',
+    'OS:ZoneHVAC:HybridUnitaryHVAC': 'modes',
+    'OS:ShadowCalculation': 'shading_zone_groups',
+    'OS:Schedule:Year': 'schedule_weeks',
+    'OS:WindowShadingControl': 'fenestration_surfaces',
+    'OS:PlantEquipmentList': 'equipment',
+    'OS:CondenserEquipmentList': 'equipment',
+    'OS:AirLoopHVAC:Mixer': 'nodes',
+    'OS:AirLoopHVAC:Splitter': 'nodes',
+    'OS:AirLoopHVAC:DedicatedOutdoorAirSystem': 'airloophvacs',
+    'OS:PythonPlugin:Variables': 'global_py_vars',
+    'OS:PythonPlugin:SearchPaths': 'py_search_paths',
+    'OS:Output:Diagnostics': 'diagnostics',
 }
 remaining_objects = [
-    'Site:SpectrumData',
-    'Schedule:Day:List',
-    'MaterialProperty:GlazingSpectralData',
+    'OS:Site:SpectrumData',
+    'OS:Schedule:Day:List',
+    'OS:MaterialProperty:GlazingSpectralData',
 ]
 
 
 def get_schema_object(schema, object_key):
+    if object_key not in schema['properties']:
+        print("{} is not in the SCHEMA".format(object_key))
+        return dict()
     if '.*' in schema['properties'][object_key]['patternProperties']:
         return schema['properties'][object_key]['patternProperties']['.*']
     if R'^.*\S.*$' in schema['properties'][object_key]['patternProperties']:
@@ -196,82 +199,94 @@ def get_schema_object(schema, object_key):
 
 
 def change_version(schema):
-    schema["epJSON_schema_version"] = "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}.${CMAKE_VERSION_PATCH}"
-    schema["epJSON_schema_build"] = "${CMAKE_VERSION_BUILD}"
-    loc = get_schema_object(schema, 'Version')['properties']['version_identifier']
-    loc['default'] = "${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}"
+    schema["epJSON_schema_version"] = "3.1.1"
+    schema["epJSON_schema_build"] = "3.1.1"
+    loc = get_schema_object(schema, 'OS:Version')['properties']['version_identifier']
+    loc['default'] = "3.1.1"
     loc['type'] = "string"
 
 
 def change_schedule_compact(schema):
-    loc = get_schema_object(schema, 'Schedule:Compact')['properties']['extensions']['items']['properties']['field']
+    loc = get_schema_object(schema, 'OS:Schedule:Compact')['properties']['extensions']['items']['properties']['field']
     loc.pop('type')
     loc['anyOf'] = anyOf()
 
 
 def change_special_cased_enums(schema):
-    loc = get_schema_object(schema, 'GroundHeatTransfer:Slab:Insulation')['properties']['ivins_flag_is_there_vertical_insulation']
-    loc.pop('type')
-    newAnyOf = anyOf()
-    newAnyOf[0]['enum'] = [int(i) for i in loc['enum'][:] if isInt(i)]
-    newAnyOf[1]['enum'] = ['']
-    loc['anyOf'] = newAnyOf
-    loc.pop('enum')
+    loc = get_schema_object(schema, 'OS:GroundHeatTransfer:Slab:Insulation')
+    if loc:
+        loc = loc['properties']['ivins_flag_is_there_vertical_insulation']
+        loc.pop('type')
+        newAnyOf = anyOf()
+        newAnyOf[0]['enum'] = [int(i) for i in loc['enum'][:] if isInt(i)]
+        newAnyOf[1]['enum'] = ['']
+        loc['anyOf'] = newAnyOf
+        loc.pop('enum')
 
-    loc = get_schema_object(schema, 'WindowMaterial:Screen')['properties']['angle_of_resolution_for_screen_transmittance_output_map']
-    loc.pop('type')
-    newAnyOf = anyOf()
-    newAnyOf[0]['enum'] = [int(i) for i in loc['enum'][:] if isInt(i)]
-    newAnyOf[1]['enum'] = ['']
-    loc['anyOf'] = newAnyOf
-    loc.pop('enum')
+    loc = get_schema_object(schema, 'WindowMaterial:Screen')
+    if loc:
+        loc = loc ['properties']['angle_of_resolution_for_screen_transmittance_output_map']
+        loc.pop('type')
+        newAnyOf = anyOf()
+        newAnyOf[0]['enum'] = [int(i) for i in loc['enum'][:] if isInt(i)]
+        newAnyOf[1]['enum'] = ['']
+        loc['anyOf'] = newAnyOf
+        loc.pop('enum')
 
-    loc = get_schema_object(schema, 'Refrigeration:System')['properties']['number_of_compressor_stages']
-    loc.pop('type')
-    newAnyOf = anyOf()
-    newAnyOf[0]['enum'] = [int(i) for i in loc['enum'][:] if isInt(i)]
-    newAnyOf[1]['enum'] = ['']
-    loc['anyOf'] = newAnyOf
-    loc.pop('enum')
+    loc = get_schema_object(schema, 'Refrigeration:System')
+    if loc:
+        loc = loc['properties']['number_of_compressor_stages']
+        loc.pop('type')
+        newAnyOf = anyOf()
+        newAnyOf[0]['enum'] = [int(i) for i in loc['enum'][:] if isInt(i)]
+        newAnyOf[1]['enum'] = ['']
+        loc['anyOf'] = newAnyOf
+        loc.pop('enum')
 
-    loc = get_schema_object(schema, 'ElectricLoadCenter:Transformer')['properties']['phase']
-    loc.pop('type')
-    newAnyOf = anyOf()
-    newAnyOf[0]['enum'] = [int(i) for i in loc['enum'][:] if isInt(i)]
-    newAnyOf[1]['enum'] = ['']
-    loc['anyOf'] = newAnyOf
-    loc.pop('enum')
+    loc = get_schema_object(schema, 'ElectricLoadCenter:Transformer')
+    if loc:
+        loc = loc['properties']['phase']
+        loc.pop('type')
+        newAnyOf = anyOf()
+        newAnyOf[0]['enum'] = [int(i) for i in loc['enum'][:] if isInt(i)]
+        newAnyOf[1]['enum'] = ['']
+        loc['anyOf'] = newAnyOf
+        loc.pop('enum')
 
-    loc = get_schema_object(schema, 'Zone')['properties']['zone_outside_convection_algorithm']['enum']
-    loc.insert(0, '')
+    loc = get_schema_object(schema, 'OS:ThermalZone')
+    if loc:
+        loc = loc['properties']['zone_outside_convection_algorithm']['enum']
+        loc.insert(0, '')
 
-    loc = get_schema_object(schema, 'Zone')['properties']['zone_inside_convection_algorithm']['enum']
-    loc.insert(0, '')
+    loc = get_schema_object(schema, 'OS:ThermalZone')
+    if loc:
+        loc = loc['properties']['zone_inside_convection_algorithm']['enum']
+        loc.insert(0, '')
 
 
 def change_utility_cost(schema):
-    legacy_idd = schema['properties']['UtilityCost:Charge:Block']['legacy_idd']['fields']
-    loc = get_schema_object(schema, 'UtilityCost:Charge:Block')['properties']
+    legacy_idd = schema['properties']['OS:UtilityCost:Charge:Block']['legacy_idd']['fields']
+    loc = get_schema_object(schema, 'OS:UtilityCost:Charge:Block')['properties']
     for i in range(6, len(legacy_idd)):
         field = legacy_idd[i]
         loc[field].pop('type')
         loc[field]['anyOf'] = anyOf()
 
-    loc = get_schema_object(schema, 'UtilityCost:Ratchet')['properties']
+    loc = get_schema_object(schema, 'OS:UtilityCost:Ratchet')['properties']
     loc['offset_value_or_variable_name'].pop('type')
     loc['offset_value_or_variable_name']['anyOf'] = anyOf()
     loc['multiplier_value_or_variable_name'].pop('type')
     loc['multiplier_value_or_variable_name']['anyOf'] = anyOf()
 
-    loc = get_schema_object(schema, 'UtilityCost:Charge:Simple')['properties']
+    loc = get_schema_object(schema, 'OS:UtilityCost:Charge:Simple')['properties']
     loc['cost_per_unit_value_or_variable_name'].pop('type')
     loc['cost_per_unit_value_or_variable_name']['anyOf'] = anyOf()
 
-    loc = get_schema_object(schema, 'UtilityCost:Qualify')['properties']
+    loc = get_schema_object(schema, 'OS:UtilityCost:Qualify')['properties']
     loc['threshold_value_or_variable_name'].pop('type')
     loc['threshold_value_or_variable_name']['anyOf'] = anyOf()
 
-    loc = get_schema_object(schema, 'UtilityCost:Tariff')['properties']
+    loc = get_schema_object(schema, 'OS:UtilityCost:Tariff')['properties']
     loc['minimum_monthly_charge_or_variable_name'].pop('type')
     loc['minimum_monthly_charge_or_variable_name']['anyOf'] = anyOf()
     loc['monthly_charge_or_variable_name'].pop('type')
@@ -279,66 +294,76 @@ def change_utility_cost(schema):
 
 
 def add_explicit_extensible_bounds(schema):
-    # Schedule:Year
-    loc = get_schema_object(schema, 'Schedule:Year')['properties']['schedule_weeks']
-    loc['minItems'] = 1
-    loc['maxItems'] = 53
 
     # EnergyManagementSystem:Program
-    loc = get_schema_object(schema, 'EnergyManagementSystem:Program')
-    if 'required' in loc and 'lines' not in loc['required']:
-        loc['required'].append('lines')
-    if 'required' not in loc:
-        loc['required'] = ['lines']
-    loc['properties']['lines']['minItems'] = 1
+    loc = get_schema_object(schema, 'OS:EnergyManagementSystem:Program')
+    if loc:
+        if 'required' in loc and 'lines' not in loc['required']:
+            loc['required'].append('lines')
+        if 'required' not in loc:
+            loc['required'] = ['lines']
+        if 'minItems' not in loc['properties']['lines']:
+            loc['properties']['lines']['minItems'] = 1
 
 
 def change_special_cased_name_fields(schema):
-    original_name = schema['properties']['ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['legacy_idd']['field_info'].pop('zone_terminal_unit_name')
-    schema['properties']['ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['legacy_idd']['field_info']['name'] = original_name
-    schema['properties']['ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['legacy_idd']['fields'][0] = 'name'
-    schema['properties']['ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['legacy_idd']['alphas']['fields'][0] = 'name'
-    del get_schema_object(schema, 'ZoneHVAC:TerminalUnit:VariableRefrigerantFlow')['required'][0]
-    schema['properties']['ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['name'] = \
-        get_schema_object(schema, 'ZoneHVAC:TerminalUnit:VariableRefrigerantFlow')['properties'].pop('zone_terminal_unit_name')
+    #original_name = schema['properties']['OS:ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['legacy_idd']['field_info'].pop('zone_terminal_unit_name')
+    #schema['properties']['OS:ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['legacy_idd']['field_info']['name'] = original_name
+    schema['properties']['OS:ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['legacy_idd']['fields'][0] = 'name'
+    schema['properties']['OS:ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['legacy_idd']['alphas']['fields'][0] = 'name'
+    del get_schema_object(schema, 'OS:ZoneHVAC:TerminalUnit:VariableRefrigerantFlow')['required'][0]
+    #schema['properties']['OS:ZoneHVAC:TerminalUnit:VariableRefrigerantFlow']['name'] = \
+    #    get_schema_object(schema, 'OS:ZoneHVAC:TerminalUnit:VariableRefrigerantFlow')['properties'].pop('zone_terminal_unit_name')
 
-    original_name = schema['properties']['AirConditioner:VariableRefrigerantFlow']['legacy_idd']['field_info'].pop('heat_pump_name')
-    schema['properties']['AirConditioner:VariableRefrigerantFlow']['legacy_idd']['field_info']['name'] = original_name
-    schema['properties']['AirConditioner:VariableRefrigerantFlow']['legacy_idd']['fields'][0] = 'name'
-    schema['properties']['AirConditioner:VariableRefrigerantFlow']['legacy_idd']['alphas']['fields'][0] = 'name'
-    del get_schema_object(schema, 'AirConditioner:VariableRefrigerantFlow')['required'][0]
-    schema['properties']['AirConditioner:VariableRefrigerantFlow']['name'] = \
-        get_schema_object(schema, 'AirConditioner:VariableRefrigerantFlow')['properties'].pop('heat_pump_name')
+    # original_name = schema['properties']['OS:AirConditioner:VariableRefrigerantFlow']['legacy_idd']['field_info'].pop('heat_pump_name')
+    # schema['properties']['OS:AirConditioner:VariableRefrigerantFlow']['legacy_idd']['field_info']['name'] = original_name
+    # schema['properties']['OS:AirConditioner:VariableRefrigerantFlow']['legacy_idd']['fields'][0] = 'name'
+    # schema['properties']['OS:AirConditioner:VariableRefrigerantFlow']['legacy_idd']['alphas']['fields'][0] = 'name'
+    # del get_schema_object(schema, 'OS:AirConditioner:VariableRefrigerantFlow')['required'][0]
+    # schema['properties']['OS:AirConditioner:VariableRefrigerantFlow']['name'] = \
+        # get_schema_object(schema, 'OS:AirConditioner:VariableRefrigerantFlow')['properties'].pop('heat_pump_name')
 
 
 def change_extensions_name(schema):
     for key, value in extension_renaming.items():
-        get_schema_object(schema, key)['properties'][value] = get_schema_object(schema, key)['properties']['extensions']
-        loc = get_schema_object(schema, key)['properties']
-        del loc['extensions']
-        schema['properties'][key]['legacy_idd']['extension'] = value
+        obj = get_schema_object(schema, key)
+        if obj:
+            if 'extensions' not in obj['properties']:
+                print(f"extensions not found for {key}")
+                continue
+            obj['properties'][value] = obj['properties']['extensions']
+            loc = obj['properties']
+            del loc['extensions']
+            schema['properties'][key]['legacy_idd']['extension'] = value
 
     for key in remaining_objects:
+        if key not in schema['properties']:
+            print(f"{key} not found in schema['properties'] for remaining_objects")
+            continue
         schema['properties'][key]['legacy_idd']['extension'] = 'extensions'
 
 
 def change_89_release_issues(schema):
     curves = [
-        'Curve:Linear', 'Curve:Quadratic', 'Curve:Cubic', 'Curve:Quartic', 'Curve:Exponent',
-        'Curve:Bicubic', 'Curve:Biquadratic', 'Curve:QuadraticLinear', 'Curve:CubicLinear', 'Curve:Triquadratic',
-        'Curve:ExponentialSkewNormal', 'Curve:Sigmoid', 'Curve:RectangularHyperbola1', 'Curve:RectangularHyperbola2', 'Curve:ExponentialDecay',
-        'Curve:DoubleExponentialDecay', 'Curve:ChillerPartLoadWithLift', 'Table:Lookup'
+        'OS:Curve:Linear', 'OS:Curve:Quadratic', 'OS:Curve:Cubic', 'OS:Curve:Quartic', 'OS:Curve:Exponent',
+        'OS:Curve:Bicubic', 'OS:Curve:Biquadratic', 'OS:Curve:QuadraticLinear', 'OS:Curve:CubicLinear', 'OS:Curve:Triquadratic',
+        'OS:Curve:ExponentialSkewNormal', 'OS:Curve:Sigmoid', 'OS:Curve:RectangularHyperbola1', 'OS:Curve:RectangularHyperbola2', 'OS:Curve:ExponentialDecay',
+        'OS:Curve:DoubleExponentialDecay', 'OS:Curve:ChillerPartLoadWithLift', 'OS:Table:Lookup'
     ]
     for curve in curves:
-        get_schema_object(schema, curve)['properties']['output_unit_type']['enum'] = [
-            '',
-            'Capacity',
-            'Dimensionless',
-            'Power',
-            'Pressure',
-            'Temperature'
-        ]
+        loc = get_schema_object(schema, curve)
+        if loc:
+            loc['properties']['output_unit_type']['enum'] = [
+                '',
+                'Capacity',
+                'Dimensionless',
+                'Power',
+                'Pressure',
+                'Temperature'
+            ]
 
-    get_schema_object(schema, 'Schedule:Week:Compact')['properties']['data']['items']['properties']['daytype_list'].pop('enum')
+    loc = get_schema_object(schema, 'OS:Schedule:Week:Compact')
+    if loc:
+        loc['properties']['data']['items']['properties']['daytype_list'].pop('enum')
 
 
