@@ -91,7 +91,7 @@ jobs:
       run: |
         set -x
         curl -L -O https://download.qt.io/official_releases/qt-installer-framework/4.1.1/QtInstallerFramework-windows-x86-4.1.1.exe
-        ./QtInstallerFramework-win-x86.exe --verbose --script ./scripts/dev/install_script_qtifw.qs
+        ./QtInstallerFramework-windows-x86-4.1.1.exe --verbose --script ./scripts/dev/install_script_qtifw.qs
         echo "C:/Qt/QtIFW-4.1.1/bin" >> $GITHUB_PATH
 
     - name: Create Build Directory
