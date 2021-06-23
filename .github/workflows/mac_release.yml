@@ -2,8 +2,8 @@ name: Mac Releases
 
 on:
   push:
-    tags:
-      - '*'
+    #tags:
+    #  - '*'
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,7 +32,7 @@ jobs:
     - name: Setup QtIFW 4.x
       uses: jmarrec/setup-qtifw@v1
       with:
-        qtifw-version: '4.x'
+        qtifw-version: '4.1.0'
 
     - name: Install System dependencies and LaTeX
       shell: bash
