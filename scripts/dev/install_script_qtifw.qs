@@ -42,15 +42,6 @@ Controller.prototype.IntroductionPageCallback = function() {
   //gui.clickButton(buttons.NextButton);
 //};
 
-Controller.prototype.LicenseAgreementPageCallback = function() {
-  console.log("---- LICENSE PAGE");
-  logCurrentPage();
-  // click delay because the next button is initially disabled for ~1s
-  gui.clickButton(buttons.NextButton, 3000);
-};
-
-
-
 Controller.prototype.TargetDirectoryPageCallback = function()
 {
   console.log("---- TARGET DIRECTORY PAGE");
@@ -112,7 +103,24 @@ Controller.prototype.TargetDirectoryPageCallback = function()
 Controller.prototype.LicenseAgreementPageCallback = function() {
   console.log("---- LICENSE AGREEMENT PAGE");
   logCurrentPage();
-  gui.currentPageWidget().AcceptLicenseRadioButton.setChecked(true);
+  var widget = gui.currentPageWidget();
+  if (widget != null) {
+    console.log("Accepting license");
+    var accept = widget.AcceptLicenseRadioButton;
+    if (accept != null) {
+      console.log("Accepting license: checking Radio button");
+      accept.setChecked(true);
+    } else {
+      // QTIFW >= 4.1.0
+      var accept = widget.AcceptLicenseCheckBox;
+      if (accept != null) {
+        console.log("Accepting license: checking Checkbox button");
+        accept.setChecked(true);
+      }
+
+      console.log("Accepting license: button does not exist?!");
+    }
+  }
   gui.clickButton(buttons.NextButton);
 };
 
