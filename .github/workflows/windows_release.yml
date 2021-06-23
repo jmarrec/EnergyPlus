@@ -43,6 +43,10 @@ jobs:
 #        python -m pip install --upgrade pip
 #        pip install aqtinstall
 
+    - name: Setup QtIFW 4.x
+      uses: jmarrec/setup-qtifw@v1
+      with:
+        qtifw-version: '4.x'
 
     - name: Install System dependencies and LaTeX
       shell: bash
@@ -85,14 +89,6 @@ jobs:
       working-directory: ./doc/
       run: |
         mpm --verbose --admin --require=@energyplus_packages_windows.lst
-
-    - name: Install Qt IFW
-      shell: bash
-      run: |
-        set -x
-        curl -L -O https://download.qt.io/official_releases/qt-installer-framework/4.1.1/QtInstallerFramework-windows-x86-4.1.1.exe
-        ./QtInstallerFramework-windows-x86-4.1.1.exe --verbose --script ./scripts/dev/install_script_qtifw.qs
-        echo "C:/Qt/QtIFW-4.1.1/bin" >> $GITHUB_PATH
 
     - name: Create Build Directory
       run: cmake -E make_directory ./build/
