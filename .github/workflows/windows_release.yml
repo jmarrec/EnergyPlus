@@ -46,7 +46,7 @@ jobs:
     - name: Setup QtIFW 4.x
       uses: jmarrec/setup-qtifw@v1
       with:
-        qtifw-version: '4.0.1'
+        qtifw-version: '4'
 
     - name: Install System dependencies and LaTeX
       shell: bash
