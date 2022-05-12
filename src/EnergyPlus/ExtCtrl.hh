@@ -58,6 +58,7 @@
 #include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
+#include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
@@ -69,46 +70,23 @@ struct EnergyPlusData;
 
 namespace ExtCtrl {
 
-    // Data
-    // MODULE PARAMETER DEFINITIONS:
-    // For SEND command
-    extern int const CMD_OBS_INIT;
-    extern int const NUM_OBSS;
-    extern int const CMD_OBS_INDEX_LOW;
-    extern int const CMD_OBS_INDEX_HIGH;
-    extern Real64 stats[];
-    extern Real64 const STAT_DATA_NULL;
+    int constexpr CMD_OBS_INIT(0);
+    int constexpr NUM_OBSS(100);
+    int constexpr CMD_OBS_INDEX_LOW(1);
+    int constexpr CMD_OBS_INDEX_HIGH(NUM_OBSS);
+    Real64 constexpr OBS_DATA_NULL(-123.0);
 
-    // For RECV command
-    extern int const CMD_ACT_REQ;
-    extern int const NUM_ACTS;
-    extern int const CMD_ACT_INDEX_LOW;
-    extern int const CMD_ACT_INDEX_HIGH;
-    extern Real64 acts[];
-    extern Real64 const ACT_DATA_NULL;
+    // For receiving action
+    int constexpr CMD_ACT_REQ(0);
+    int constexpr NUM_ACTS(100);
+    int constexpr CMD_ACT_INDEX_LOW(1);
+    int constexpr CMD_ACT_INDEX_HIGH(NUM_ACTS);
+    Real64 constexpr ACT_DATA_NULL(-456.0);
 
-    extern std::string const blank_string;
+    constexpr const char *cActPipeFilename("ACT_PIPE_FILENAME");
+    constexpr const char *cObsPipeFilename("OBS_PIPE_FILENAME");
 
-    // MODULE VARIABLE DECLARATIONS:
-    // na
-
-    // MODULE VARIABLE DEFINITIONS:
-    extern std::string String;
-    extern bool ReportErrors;
-
-    // DERIVED TYPE DEFINITIONS
-
-    // Types
-
-    // Object Data
-
-    // Subroutine Specifications for the Module
-
-    // Functions
-
-    int InitializeExtCtrlRoutines(EnergyPlusData &state);
-    void InitializeObsData();
-    void InitializeActData();
+    void InitializeExtCtrlRoutines(EnergyPlusData &state);
 
     Real64 ExtCtrlObs(EnergyPlusData &state,
                       Real64 const cmd, // command code
@@ -121,6 +99,37 @@ namespace ExtCtrl {
     );
 
 } // namespace ExtCtrl
+
+struct ExtCtrlData : BaseGlobalStruct
+{
+    bool AlreadyDidOnce = false;
+    std::array<Real64, ExtCtrl::NUM_OBSS> obss{};
+    std::array<Real64, ExtCtrl::NUM_ACTS> acts{};
+
+    std::ifstream act_ifs;
+    std::ofstream obs_ofs;
+    std::string act_filename;
+    std::string obs_filename;
+    int act_seq = 0;
+    int obs_seq = 0;
+
+    ExtCtrlData()
+    {
+        obss.fill(ExtCtrl::OBS_DATA_NULL);
+        acts.fill(ExtCtrl::ACT_DATA_NULL);
+    }
+
+    void clear_state() override
+    {
+        this->AlreadyDidOnce = false;
+        obss.fill(ExtCtrl::OBS_DATA_NULL);
+        acts.fill(ExtCtrl::ACT_DATA_NULL);
+        act_filename.clear();
+        obs_filename.clear();
+        act_seq = 0;
+        obs_seq = 0;
+    }
+};
 
 } // namespace EnergyPlus
 

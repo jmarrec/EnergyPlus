@@ -129,6 +129,7 @@ struct EnvironmentData;
 struct ErrorTrackingData;
 struct EvaporativeCoolersData;
 struct EvaporativeFluidCoolersData;
+struct ExtCtrlData;
 struct ExteriorEnergyUseData;
 struct ExternalInterfaceData;
 struct FanCoilUnitsData;
@@ -391,6 +392,7 @@ struct EnergyPlusData : BaseGlobalStruct
     std::unique_ptr<ErrorTrackingData> dataErrTracking;
     std::unique_ptr<EvaporativeCoolersData> dataEvapCoolers;
     std::unique_ptr<EvaporativeFluidCoolersData> dataEvapFluidCoolers;
+    std::unique_ptr<ExtCtrlData> dataExtCtrl;
     std::unique_ptr<ExteriorEnergyUseData> dataExteriorEnergyUse;
     std::unique_ptr<ExternalInterfaceData> dataExternalInterface;
     std::unique_ptr<FanCoilUnitsData> dataFanCoilUnits;

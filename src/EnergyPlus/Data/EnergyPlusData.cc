@@ -113,6 +113,7 @@ EnergyPlusData::EnergyPlusData()
     this->dataErrTracking = std::make_unique<ErrorTrackingData>();
     this->dataEvapCoolers = std::make_unique<EvaporativeCoolersData>();
     this->dataEvapFluidCoolers = std::make_unique<EvaporativeFluidCoolersData>();
+    this->dataExtCtrl = std::make_unique<ExtCtrlData>();
     this->dataExteriorEnergyUse = std::make_unique<ExteriorEnergyUseData>();
     this->dataExternalInterface = std::make_unique<ExternalInterfaceData>();
     this->dataFanCoilUnits = std::make_unique<FanCoilUnitsData>();

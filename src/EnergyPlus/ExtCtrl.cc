@@ -68,6 +68,9 @@
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
+#include <array>
+#include <string>
+
 namespace EnergyPlus {
 
 namespace ExtCtrl {
@@ -82,130 +85,74 @@ namespace ExtCtrl {
     // PURPOSE OF THIS MODULE:
     // This module provides a repository for suporting external control
 
-    // METHODOLOGY EMPLOYED:
-    // na
-
-    // REFERENCES:
-    // na
-
-    // OTHER NOTES:
-    // na
-
-    // Data
-    // MODULE PARAMETER DEFINITIONS:
-    // For sending observation
-
-    int const CMD_OBS_INIT(0);
-    int const NUM_OBSS(100);
-    int const CMD_OBS_INDEX_LOW(1);
-    int const CMD_OBS_INDEX_HIGH(NUM_OBSS);
-    Real64 obss[NUM_OBSS];
-    Real64 const OBS_DATA_NULL(-123.0);
-
-    // For receiving action
-    int const CMD_ACT_REQ(0);
-    int const NUM_ACTS(100);
-    int const CMD_ACT_INDEX_LOW(1);
-    int const CMD_ACT_INDEX_HIGH(NUM_ACTS);
-    Real64 acts[NUM_ACTS];
-    Real64 const ACT_DATA_NULL(-456.0);
-
-    std::string const blank_string;
-
-    // MODULE VARIABLE DECLARATIONS:
-    // na
-
-    // MODULE VARIABLE DEFINITIONS:
-    // std::string String;
-    bool ReportErrors(true);
-
     // Object Data
-    std::ifstream act_ifs;
-    std::ofstream obs_ofs;
-    char *act_filename;
-    char *obs_filename;
-    int act_seq = 0;
-    int obs_seq = 0;
 
     // Subroutine Specifications for the Module
 
     // Functions
 
-    int InitializeExtCtrlRoutines(EnergyPlusData &state)
+    void InitializeExtCtrlRoutines(EnergyPlusData &state)
     {
-        static bool firstCall(true);
-        if (firstCall) {
-            firstCall = false;
-            // DisplayString("InitializeExtCtrlRoutine(): First call");
-
-            if ((act_filename = getenv("ACT_PIPE_FILENAME")) == NULL) {
-                ShowFatalError(state, "InitializeExtCtrlActRoutines: Environment variable ACT_PIPE_FILENAME not specified");
-                DisplayString(state, "InitializeExtCtrlRoutine: ACT file not specified");
-                return 1;
-            }
-            if ((obs_filename = getenv("OBS_PIPE_FILENAME")) == NULL) {
-                ShowFatalError(state, "InitializeExtCtrlActRoutines: Environment variable OBS_PIPE_FILENAME not specified");
-                return 1;
-            }
+        if (state.dataExtCtrl->AlreadyDidOnce) {
+            return;
         }
-        return 0;
+
+        // DisplayString("InitializeExtCtrlRoutine(): First call");
+        get_environment_variable(cActPipeFilename, state.dataExtCtrl->act_filename);
+        if (state.dataExtCtrl->act_filename.empty()) {
+            ShowFatalError(state, "InitializeExtCtrlActRoutines: Environment variable ACT_PIPE_FILENAME not specified");
+        }
+        get_environment_variable(cObsPipeFilename, state.dataExtCtrl->obs_filename);
+        if (state.dataExtCtrl->obs_filename.empty()) {
+            ShowFatalError(state, "InitializeExtCtrlActRoutines: Environment variable OBS_PIPE_FILENAME not specified");
+        }
+
+        state.dataExtCtrl->AlreadyDidOnce = true;
     }
 
     std::string ExtCtrlRead(EnergyPlusData &state)
     {
-        if (!act_ifs.is_open()) {
-            act_ifs.open(act_filename);
-            act_ifs.rdbuf()->pubsetbuf(0, 0); // Making unbuffered
-            if (!act_ifs.is_open()) {
+        if (!state.dataExtCtrl->act_ifs.is_open()) {
+            state.dataExtCtrl->act_ifs.open(state.dataExtCtrl->act_filename);
+            state.dataExtCtrl->act_ifs.rdbuf()->pubsetbuf(0, 0); // Making unbuffered
+            if (!state.dataExtCtrl->act_ifs.is_open()) {
                 ShowFatalError(state, "ExtCtrlRead: ACT file could not open");
                 return "";
             }
-            DisplayString(state, "ExtCtrlRead: Opened ACT file: " + std::string(act_filename));
+            DisplayString(state, "ExtCtrlRead: Opened ACT file: " + std::string(state.dataExtCtrl->act_filename));
         }
         std::string line;
     again:
-        act_ifs >> line;
-        size_t idx = line.find(",");
+        state.dataExtCtrl->act_ifs >> line;
+        size_t idx = line.find(',');
         if (idx == std::string::npos) {
             goto again;
         }
         std::string seq = line.substr(0, idx);
         std::string val = line.substr(idx + 1, std::string::npos);
-        assert(act_seq == seq);
-        act_seq++;
+        assert(state.dataExtCtrl->act_seq == seq);
+        state.dataExtCtrl->act_seq++;
         return val;
     }
 
-    void ExtCtrlWrite(EnergyPlusData &state, std::string str)
+    void ExtCtrlWrite(EnergyPlusData &state, const std::string &str)
     {
-        if (!obs_ofs.is_open()) {
-            obs_ofs.open(obs_filename);
-            if (!obs_ofs.is_open()) {
+        if (!state.dataExtCtrl->obs_ofs.is_open()) {
+            state.dataExtCtrl->obs_ofs.open(state.dataExtCtrl->obs_filename);
+            if (!state.dataExtCtrl->obs_ofs.is_open()) {
                 ShowFatalError(state, "ExtCtrlWrite: InitializeExtCtrlRoutine: OBS file could not open");
                 return;
             }
-            DisplayString(state, "ExtCtrlWrite: Opened OBS file: " + std::string(obs_filename));
+            DisplayString(state, "ExtCtrlWrite: Opened OBS file: " + std::string(state.dataExtCtrl->obs_filename));
         }
-        obs_ofs << obs_seq << "," << str << std::endl;
-        obs_seq++;
+        state.dataExtCtrl->obs_ofs << state.dataExtCtrl->obs_seq << "," << str << std::endl;
+        state.dataExtCtrl->obs_seq++;
     }
 
-    void ExtCtrlFlush()
+    void ExtCtrlFlush(EnergyPlusData &state)
     {
-        obs_ofs << "DELIMITER" << std::endl;
-        obs_ofs.flush();
-    }
-
-    void InitializeObsData()
-    {
-        for (int i = 0; i < NUM_OBSS; i++)
-            obss[i] = OBS_DATA_NULL;
-    }
-
-    void InitializeActData()
-    {
-        for (int i = 0; i < NUM_ACTS; i++)
-            acts[i] = ACT_DATA_NULL;
+        state.dataExtCtrl->obs_ofs << "DELIMITER" << std::endl;
+        state.dataExtCtrl->obs_ofs.flush();
     }
 
     Real64 ExtCtrlObs(EnergyPlusData &state,
@@ -215,12 +162,11 @@ namespace ExtCtrl {
     {
         Int64 cmdInt = cmd;
 
-        if (InitializeExtCtrlRoutines(state)) {
-            return -1.0;
-        }
+        InitializeExtCtrlRoutines(state);
+
         if (cmdInt >= CMD_OBS_INDEX_LOW && cmdInt <= CMD_OBS_INDEX_HIGH) {
-            // DisplayString("ExtCtrlObs: set obs[" + std::to_string(cmdInt) + "] = " + std::to_string(arg));
-            obss[cmdInt - 1] = arg;
+            // DisplayString(format("ExtCtrlObs: set obs[{}] = {}", cmdInt, arg));
+            state.dataExtCtrl->obss[cmdInt - 1] = arg;
             return 0.0;
         } else if (cmdInt == CMD_OBS_INIT) {
             // DisplayString("ExtCtrlObs: INIT");
@@ -230,9 +176,7 @@ namespace ExtCtrl {
             return 0.0;
         }
         // TODO: Show error code
-        ShowWarningMessage(state,
-                           "Obs index " + std::to_string(cmdInt) + " is out of range [" + std::to_string(CMD_OBS_INDEX_LOW) + "..." +
-                               std::to_string(CMD_OBS_INDEX_HIGH) + "]");
+        ShowWarningMessage(state, format("ExtCtrlObs: Obs index {} is out of range [{}...{}]", cmdInt, CMD_OBS_INDEX_LOW, CMD_OBS_INDEX_HIGH));
         return -1.0;
     }
 
@@ -244,17 +188,15 @@ namespace ExtCtrl {
         Int64 cmdInt = cmd;
         Int64 argInt = arg;
 
-        if (InitializeExtCtrlRoutines(state)) {
-            return -1.0;
-        }
+        InitializeExtCtrlRoutines(state);
+
         if (cmdInt >= CMD_ACT_INDEX_LOW && cmdInt <= CMD_ACT_INDEX_HIGH) {
-            // DisplayString("ExtCtrlAct: get acts[" + std::to_string(cmdInt) + "] = " + std::to_string(acts[cmdInt - 1]));
-            return acts[cmdInt - 1];
+            // DisplayString("ExtCtrlAct: get acts[" + std::to_string(cmdInt) + "] = " +
+            // std::to_string(state.dataExtCtrl->acts[cmdInt - 1]));
+            return state.dataExtCtrl->acts[cmdInt - 1];
         } else if (cmdInt == CMD_ACT_REQ) {
             if (!(argInt >= 0 && argInt <= CMD_ACT_INDEX_HIGH)) {
-                ShowWarningMessage(state,
-                                   "ExtCtrlAct: Number of obss " + std::to_string(argInt) + " must be in range [0..." +
-                                       std::to_string(CMD_ACT_INDEX_HIGH) + "]");
+                ShowWarningMessage(state, format("ExtCtrlAct:  Number of obss {} it out of range [0...{}]", argInt, CMD_ACT_INDEX_HIGH));
                 return -1.0;
             }
             // skip system timestep
@@ -265,9 +207,9 @@ namespace ExtCtrl {
             // Send observation data to the server, and receive next action.
             ExtCtrlWrite(state, std::to_string(argInt));
             for (int i = CMD_ACT_INDEX_LOW; i <= argInt; i++) {
-                ExtCtrlWrite(state, std::to_string(obss[i - 1]));
+                ExtCtrlWrite(state, std::to_string(state.dataExtCtrl->obss[i - 1]));
             }
-            ExtCtrlFlush();
+            ExtCtrlFlush(state);
 
             // Get action data
             std::string line;
@@ -278,15 +220,14 @@ namespace ExtCtrl {
                 line = ExtCtrlRead(state);
                 double val = std::stod(line);
                 if (i <= CMD_ACT_INDEX_HIGH) {
-                    acts[i - 1] = val;
+                    state.dataExtCtrl->acts[i - 1] = val;
                 }
             }
 
             return 0.0;
         }
-        ShowWarningMessage(state,
-                           "Act index " + std::to_string(cmdInt) + " is out of range [" + std::to_string(CMD_ACT_INDEX_LOW) + " to " +
-                               std::to_string(CMD_ACT_INDEX_HIGH) + "]");
+
+        ShowWarningMessage(state, format("ExtCtrlAct: Act index {} is out of range [{}...{}]", cmdInt, CMD_ACT_INDEX_LOW, CMD_ACT_INDEX_HIGH));
         return -1.0;
     }
 
