@@ -231,10 +231,12 @@ namespace DataRuntimeLanguage {
         TomorrowDifSolarRad,     // Access TomorrowDifSolarRad(hour, timestep)
         TomorrowAlbedo,          // Access TomorrowAlbedo(hour, timestep)
         TomorrowLiquidPrecip,    // Access TomorrowLiquidPrecip(hour, timestep)
+        ExtCtrlObs,              // Access for external control extctrlobs routine
+        ExtCtrlAct,              // Access for external control extctrlobs routine
         Num
     };
 
-    int constexpr NumPossibleOperators(96); // total number of operators and built-in functions
+    int constexpr NumPossibleOperators(98); // total number of operators and built-in functions
 
     int constexpr MaxWhileLoopIterations(1000000); // protect from infinite loop in WHILE loops
 

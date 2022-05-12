@@ -68,6 +68,7 @@
 #include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataSystemVariables.hh>
 #include <EnergyPlus/EMSManager.hh>
+#include <EnergyPlus/ExtCtrl.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/GlobalNames.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
@@ -1299,7 +1300,8 @@ void ParseExpression(EnergyPlusData &state,
                     i_parse("@TOMORROWSKYTEMP", ErlFunc::TomorrowSkyTemp) || i_parse("@TOMORROWHORIZIRSKY", ErlFunc::TomorrowHorizIRSky) ||
                     i_parse("@TOMORROWBEAMSOLARRAD", ErlFunc::TomorrowBeamSolarRad) ||
                     i_parse("@TOMORROWDIFSOLARRAD", ErlFunc::TomorrowDifSolarRad) || i_parse("@TOMORROWALBEDO", ErlFunc::TomorrowAlbedo) ||
-                    i_parse("@TOMORROWLIQUIDPRECIP", ErlFunc::TomorrowLiquidPrecip)) {
+                    i_parse("@TOMORROWLIQUIDPRECIP", ErlFunc::TomorrowLiquidPrecip) || i_parse("@EXTCTRLOBS", ErlFunc::ExtCtrlObs) ||
+                    i_parse("@EXTCTRLACT", ErlFunc::ExtCtrlAct)) {
                     // was a built in function operator
                 } else { // throw error
                     if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "ERROR \"{}\"\n", String);
@@ -2504,6 +2506,10 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                                          Operand(2).Number,
                                          state.dataWeatherManager->TomorrowLiquidPrecip,
                                          ReturnValue);
+                } else if (SELECT_CASE_var == ErlFunc::ExtCtrlObs) {
+                    ReturnValue = SetErlValueNumber(ExtCtrl::ExtCtrlObs(state, Operand(1).Number, Operand(2).Number));
+                } else if (SELECT_CASE_var == ErlFunc::ExtCtrlAct) {
+                    ReturnValue = SetErlValueNumber(ExtCtrl::ExtCtrlAct(state, Operand(1).Number, Operand(2).Number));
                 } else {
                     // throw Error!
                     ShowFatalError(state, "caught unexpected Expression(ExpressionNum)%Operator in EvaluateExpression");
@@ -4343,6 +4349,14 @@ void SetupPossibleOperators(EnergyPlusData &state)
     state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::TomorrowLiquidPrecip)).Symbol = "@TOMORROWLIQUIDPRECIP";
     state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::TomorrowLiquidPrecip)).NumOperands = 2;
     state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::TomorrowLiquidPrecip)).Code = ErlFunc::TomorrowLiquidPrecip;
+
+    state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::ExtCtrlObs)).Symbol = "@EXTCTRLOBS";
+    state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::ExtCtrlObs)).NumOperands = 2;
+    state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::ExtCtrlObs)).Code = ErlFunc::ExtCtrlObs;
+
+    state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::ExtCtrlAct)).Symbol = "@EXTCTRLACT";
+    state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::ExtCtrlAct)).NumOperands = 2;
+    state.dataRuntimeLang->PossibleOperators(static_cast<int>(ErlFunc::ExtCtrlAct)).Code = ErlFunc::ExtCtrlAct;
 
     state.dataRuntimeLangProcessor->AlreadyDidOnce = true;
 }
