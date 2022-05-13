@@ -2507,9 +2507,20 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                                          state.dataWeatherManager->TomorrowLiquidPrecip,
                                          ReturnValue);
                 } else if (SELECT_CASE_var == ErlFunc::ExtCtrlObs) {
-                    ReturnValue = SetErlValueNumber(ExtCtrl::ExtCtrlObs(state, Operand(1).Number, Operand(2).Number));
+                    if (ExtCtrl::ExtCtrlObs(state, Operand(1).Number, Operand(2).Number)) {
+                        ReturnValue = SetErlValueNumber(0.0); // OK
+                    } else {
+                        ReturnValue.Type = Value::Error;
+                        ReturnValue.Error = "Error in ExtCtrlObs";
+                    }
                 } else if (SELECT_CASE_var == ErlFunc::ExtCtrlAct) {
-                    ReturnValue = SetErlValueNumber(ExtCtrl::ExtCtrlAct(state, Operand(1).Number, Operand(2).Number));
+                    Real64 readValue = 0.0;
+                    if (ExtCtrl::ExtCtrlAct(state, Operand(1).Number, Operand(2).Number, readValue)) {
+                        ReturnValue = SetErlValueNumber(readValue);
+                    } else {
+                        ReturnValue.Type = Value::Error;
+                        ReturnValue.Error = "Error in ExtCtrlAct";
+                    }
                 } else {
                     // throw Error!
                     ShowFatalError(state, "caught unexpected Expression(ExpressionNum)%Operator in EvaluateExpression");

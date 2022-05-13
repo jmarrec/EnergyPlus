@@ -88,14 +88,19 @@ namespace ExtCtrl {
 
     void InitializeExtCtrlRoutines(EnergyPlusData &state);
 
-    Real64 ExtCtrlObs(EnergyPlusData &state,
-                      Real64 const cmd, // command code
-                      Real64 const arg  // command value
+    // Sends observations from E+ (reading a sensor) to the FIFO
+    bool ExtCtrlObs(EnergyPlusData &state,
+                    int const index,   // command code
+                    Real64 const value // command value
     );
 
-    Real64 ExtCtrlAct(EnergyPlusData &state,
-                      Real64 const cmd, // command code
-                      Real64 const arg  // command value
+    // Retrieve computed values from the FIFO
+    // Special case is when cmd = CMD_ACT_REQ(0), then second args tells how many datapoints to read
+    // Returns -1.0 in case of problem
+    bool ExtCtrlAct(EnergyPlusData &state,
+                    int const cmd,    // command code
+                    int const arg,    // command value
+                    Real64 &readValue // Output: Returned value, only valid if return value from function is true
     );
 
 } // namespace ExtCtrl

@@ -159,58 +159,55 @@ namespace ExtCtrl {
         state.dataExtCtrl->obs_ofs.flush();
     }
 
-    Real64 ExtCtrlObs(EnergyPlusData &state,
-                      Real64 const cmd, // command code
-                      Real64 const arg  // command value
+    bool ExtCtrlObs(EnergyPlusData &state,
+                    int const index,   // command code
+                    Real64 const value // command value
     )
     {
-        Int64 cmdInt = cmd;
-
         InitializeExtCtrlRoutines(state);
 
-        if (cmdInt >= CMD_OBS_INDEX_LOW && cmdInt <= CMD_OBS_INDEX_HIGH) {
+        if (index >= CMD_OBS_INDEX_LOW && index <= CMD_OBS_INDEX_HIGH) {
             // DisplayString(format("ExtCtrlObs: set obs[{}] = {}", cmdInt, arg));
-            state.dataExtCtrl->obss[cmdInt - 1] = arg;
-            return 0.0;
-        } else if (cmdInt == CMD_OBS_INIT) {
+            state.dataExtCtrl->obss[index - 1] = value;
+            return true;
+        } else if (index == CMD_OBS_INIT) {
             // DisplayString("ExtCtrlObs: INIT");
             //  If not connected to the server, try to connect.
             //  TODO:
             // ShowFatalError("Failed to connect to external service");
-            return 0.0;
+            return true;
         }
         // TODO: Show error code
-        ShowWarningMessage(state, format("ExtCtrlObs: Obs index {} is out of range [{}...{}]", cmdInt, CMD_OBS_INDEX_LOW, CMD_OBS_INDEX_HIGH));
-        return -1.0;
+        ShowWarningMessage(state, format("ExtCtrlObs: Obs index {} is out of range [{}...{}]", index, CMD_OBS_INDEX_LOW, CMD_OBS_INDEX_HIGH));
+        return false;
     }
 
-    Real64 ExtCtrlAct(EnergyPlusData &state,
-                      Real64 const cmd, // command code
-                      Real64 const arg  // command value
-    )
+    bool ExtCtrlAct(EnergyPlusData &state,
+                    int const cmd, // command code
+                    int const arg, // command value
+                    Real64 &readValue)
     {
-        Int64 cmdInt = cmd;
-        Int64 argInt = arg;
-
         InitializeExtCtrlRoutines(state);
 
-        if (cmdInt >= CMD_ACT_INDEX_LOW && cmdInt <= CMD_ACT_INDEX_HIGH) {
-            // DisplayString("ExtCtrlAct: get acts[" + std::to_string(cmdInt) + "] = " +
-            // std::to_string(state.dataExtCtrl->acts[cmdInt - 1]));
-            return state.dataExtCtrl->acts[cmdInt - 1];
-        } else if (cmdInt == CMD_ACT_REQ) {
-            if (!(argInt >= 0 && argInt <= CMD_ACT_INDEX_HIGH)) {
-                ShowWarningMessage(state, format("ExtCtrlAct:  Number of obss {} it out of range [0...{}]", argInt, CMD_ACT_INDEX_HIGH));
-                return -1.0;
+        if (cmd >= CMD_ACT_INDEX_LOW && cmd <= CMD_ACT_INDEX_HIGH) {
+            // DisplayString("ExtCtrlAct: get acts[" + std::to_string(cmd) + "] = " +
+            // std::to_string(state.dataExtCtrl->acts[cmd - 1]));
+            readValue = state.dataExtCtrl->acts[cmd - 1];
+            return true;
+        } else if (cmd == CMD_ACT_REQ) {
+            if (!(arg >= 0 && arg <= CMD_ACT_INDEX_HIGH)) {
+                ShowWarningMessage(state, format("ExtCtrlAct:  Number of obss {} it out of range [0...{}]", arg, CMD_ACT_INDEX_HIGH));
+                return false;
             }
+            // TODO: really want that?
             // skip system timestep
             if (state.dataHVACGlobal->TimeStepSys < state.dataGlobal->TimeStepZone) {
-                return 0.0;
+                return true;
             }
 
             // Send observation data to the server, and receive next action.
-            ExtCtrlWrite(state, std::to_string(argInt));
-            for (int i = CMD_ACT_INDEX_LOW; i <= argInt; i++) {
+            ExtCtrlWrite(state, std::to_string(arg));
+            for (int i = CMD_ACT_INDEX_LOW; i <= arg; i++) {
                 ExtCtrlWrite(state, std::to_string(state.dataExtCtrl->obss[i - 1]));
             }
             ExtCtrlFlush(state);
@@ -227,11 +224,11 @@ namespace ExtCtrl {
                 }
             }
 
-            return 0.0;
+            return true;
         }
 
-        ShowWarningMessage(state, format("ExtCtrlAct: Act index {} is out of range [{}...{}]", cmdInt, CMD_ACT_INDEX_LOW, CMD_ACT_INDEX_HIGH));
-        return -1.0;
+        ShowWarningMessage(state, format("ExtCtrlAct: Act index {} is out of range [{}...{}]", cmd, CMD_ACT_INDEX_LOW, CMD_ACT_INDEX_HIGH));
+        return false;
     }
 
 } // namespace ExtCtrl
