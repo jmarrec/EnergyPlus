@@ -247,6 +247,10 @@ class DataExchange:
         self.api.tomorrowWeatherLiquidPrecipitationAtTime.restype = RealEP
         self.api.currentSimTime.argtypes = [c_void_p]
         self.api.currentSimTime.restype = RealEP
+        self.api.extCtrlObs.argtypes = [c_void_p, c_int, RealEP]
+        self.api.extCtrlObs.restype = c_int
+        self.api.extCtrlAct.argtypes = [c_void_p, c_int, c_int]
+        self.api.extCtrlAct.restype = RealEP
 
     def list_available_api_data_csv(self, state: c_void_p) -> bytes:
         """
@@ -1436,3 +1440,25 @@ class DataExchange:
         :return: Value of the simulation time from the start of the environment in fractional hours
         """
         return self.api.currentSimTime(state)
+
+    def extctrl_obs(self, state: c_void_p, index: int, value: float) -> int:
+        """
+        Sends observations from E+ to the Obs FIFO
+
+        :param state: An active EnergyPlus "state" that is returned from a call to `api.state_manager.new_state()`.
+        :param index: The index of the observation array to store it in
+        :param value: The value from E+ (eg a sensor, or a calculated value)
+        :return: a return code of 0 if it worked fine, 1 otherwise
+        """
+        return self.api.extCtrlObs(state, index, value)
+
+    def extctrl_act(self, state: c_void_p, cmd: int, arg: int) -> float:
+        """
+        Reads external data from the Act FIFO
+
+        :param state: An active EnergyPlus "state" that is returned from a call to `api.state_manager.new_state()`.
+        :param cmd: The index of the array to read, (or 0 to tell it to read)
+        :param arg: The number of observations that needs reading if cmd = 0, ignored otherwise
+        :return: the value it read, or 0.0 if it just worked when cmd=0, or -1.0 if something went wrong
+        """
+        return self.api.extCtrlAct(state, cmd, arg)

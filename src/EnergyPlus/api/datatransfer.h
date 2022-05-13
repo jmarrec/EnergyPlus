@@ -803,6 +803,28 @@ ENERGYPLUSLIB_API Real64 tomorrowWeatherLiquidPrecipitationAtTime(EnergyPlusStat
 /// \see apiErrorFlag
 ENERGYPLUSLIB_API Real64 currentSimTime(EnergyPlusState state);
 
+/// \brief Sends observations from E+ to the Obs FIFO
+/// \param[in] state An active EnergyPlusState instance created with `stateNew`.
+/// \param[in] index The index of the observation array to store it in
+/// \param[in] value The value from E+ (eg a sensor, or a calculated value)
+/// \return a return code of 0 if it worked fine, 1 otherwise
+/// \remark The behavior of this function is not well-defined until the `apiDataFullyReady` function returns true.
+/// \remark The API error flag will be set if an issue occurs in the lookup, use `apiErrorFlag` to check
+/// \see apiDataFullyReady
+/// \see apiErrorFlag
+ENERGYPLUSLIB_API int extCtrlObs(EnergyPlusState state, int index, Real64 value);
+
+/// \brief Reads external data from the Act FIFO
+/// \param[in] state An active EnergyPlusState instance created with `stateNew`.
+/// \param[in] cmd The index of the array to read
+/// \param[in] arg The number of observations that needs reading if cmd = 0
+/// \return the value it read, or 0.0 if it just worked when cmd=0, or -1.0 if something went wrong
+/// \remark The behavior of this function is not well-defined until the `apiDataFullyReady` function returns true.
+/// \remark The API error flag will be set if an issue occurs in the lookup, use `apiErrorFlag` to check
+/// \see apiDataFullyReady
+/// \see apiErrorFlag
+ENERGYPLUSLIB_API Real64 extCtrlAct(EnergyPlusState state, int cmd, int arg);
+
 #ifdef __cplusplus
 }
 #endif

@@ -45,6 +45,7 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#include "EnergyPlus/ExtCtrl.hh"
 #include <cmath>
 
 #include <ObjexxFCL/ArrayS.functions.hh>
@@ -1190,5 +1191,27 @@ Real64 currentSimTime(EnergyPlusState state)
 {
     auto *thisState = reinterpret_cast<EnergyPlus::EnergyPlusData *>(state);
     Real64 value = (thisState->dataGlobal->DayOfSim - 1) * 24 + currentTime(state);
+    return value;
+}
+
+int extCtrlObs(EnergyPlusState state, int index, Real64 value)
+{
+    auto *thisState = reinterpret_cast<EnergyPlus::EnergyPlusData *>(state);
+    int return_code = 0;
+    if (!EnergyPlus::ExtCtrl::ExtCtrlObs(*thisState, index, value)) {
+        thisState->dataPluginManager->apiErrorFlag = true;
+        return_code = 1;
+    }
+    return return_code;
+}
+
+Real64 extCtrlAct(EnergyPlusState state, int cmd, int arg)
+{
+    auto *thisState = reinterpret_cast<EnergyPlus::EnergyPlusData *>(state);
+    Real64 value = 0.0;
+    if (!EnergyPlus::ExtCtrl::ExtCtrlAct(*thisState, cmd, arg, value)) {
+        value = -1.0;
+        thisState->dataPluginManager->apiErrorFlag = true;
+    }
     return value;
 }
