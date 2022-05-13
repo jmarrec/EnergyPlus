@@ -375,6 +375,7 @@ void EnergyPlusData::clear_state()
     this->dataErrTracking->clear_state();
     this->dataEvapCoolers->clear_state();
     this->dataEvapFluidCoolers->clear_state();
+    this->dataExtCtrl->clear_state();
     this->dataExteriorEnergyUse->clear_state();
     this->dataExternalInterface->clear_state();
     this->dataFanCoilUnits->clear_state();
