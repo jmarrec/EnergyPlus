@@ -112,25 +112,29 @@ namespace ExtCtrl {
 
     std::string ExtCtrlRead(EnergyPlusData &state)
     {
-        if (!state.dataExtCtrl->act_ifs.is_open()) {
-            state.dataExtCtrl->act_ifs.open(state.dataExtCtrl->act_filename);
-            state.dataExtCtrl->act_ifs.rdbuf()->pubsetbuf(0, 0); // Making unbuffered
-            if (!state.dataExtCtrl->act_ifs.is_open()) {
+        auto &act_ifs = state.dataExtCtrl->act_ifs;
+        if (!act_ifs.is_open()) {
+            act_ifs.open(state.dataExtCtrl->act_filename);
+            act_ifs.rdbuf()->pubsetbuf(nullptr, 0); // Making unbuffered
+            if (!act_ifs.is_open()) {
                 ShowFatalError(state, "ExtCtrlRead: ACT file could not open");
                 return "";
             }
             DisplayString(state, "ExtCtrlRead: Opened ACT file: " + std::string(state.dataExtCtrl->act_filename));
         }
+
+        // We just do an infinite loop until a value comes in
         std::string line;
-    again:
-        state.dataExtCtrl->act_ifs >> line;
-        size_t idx = line.find(',');
-        if (idx == std::string::npos) {
-            goto again;
+        size_t idx = std::string::npos;
+        while (idx == std::string::npos) {
+            act_ifs >> line;
+            idx = line.find(',');
+            // TODO: include some kind of timeout?
         }
+
         std::string seq = line.substr(0, idx);
         std::string val = line.substr(idx + 1, std::string::npos);
-        assert(state.dataExtCtrl->act_seq == seq);
+        assert(state.dataExtCtrl->act_seq == std::stoi(seq));
         state.dataExtCtrl->act_seq++;
         return val;
     }
@@ -212,10 +216,9 @@ namespace ExtCtrl {
             ExtCtrlFlush(state);
 
             // Get action data
-            std::string line;
-            line = ExtCtrlRead(state);
+            std::string line = ExtCtrlRead(state);
             int NumActsReceived = std::stoi(line);
-            assert(NumActsReceived >= 0 && MumActsReceived <= CMD_ACT_INDEX_HIGH);
+            assert(NumActsReceived >= 0 && NumActsReceived <= CMD_ACT_INDEX_HIGH);
             for (int i = 1; i <= NumActsReceived; i++) {
                 line = ExtCtrlRead(state);
                 double val = std::stod(line);
