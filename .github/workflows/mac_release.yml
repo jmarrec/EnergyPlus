@@ -2,6 +2,7 @@ name: Mac Releases
 
 on:
   push:
+    branches: [9303_Fortran_UtilitiesLinking]
     tags:
       - '*'
 
@@ -73,7 +74,7 @@ jobs:
       working-directory: ./build
       shell: bash
       run: |
-        cmake -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
+        VERBOSE=1 cmake -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
               -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=${{ matrix.macos_dev_target }} \
               -DLINK_WITH_PYTHON:BOOL=ON -DPython_REQUIRED_VERSION:STRING=${{ steps.setup-python.outputs.python-version }} \
               -DPython_ROOT_DIR:PATH=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/x64/ \
@@ -84,7 +85,7 @@ jobs:
     - name: Build Package
       working-directory: ./build
       shell: bash
-      run: cmake --build . --target package -j 3
+      run: VERBOSE=1 cmake --build . --target package -j 3
 
     - name: Upload Tarball to release
       uses: svenstaro/upload-release-action@v2
