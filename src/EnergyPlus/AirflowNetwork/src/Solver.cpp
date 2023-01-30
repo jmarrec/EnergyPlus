@@ -10045,7 +10045,8 @@ namespace AirflowNetwork {
             if (VentCtrlNum == VentControlType::AdjTemp && MultizoneSurfaceData(i).IndVentControl) {
                 Tamb = ANZT(MultizoneZoneData(MultizoneSurfaceData(i).NodeNums[1]).ZoneNum);
             }
-            if (ANZT(ZoneNum) > Tamb && ANZT(ZoneNum) > VentTemp) {
+            [[maybe_unused]] double tttt = ANZT(ZoneNum);
+            if ((ANZT(ZoneNum) > Tamb) && (ANZT(ZoneNum) > VentTemp)) {
                 OpenFactor = MultizoneSurfaceData(i).Factor;
                 m_state.dataSurface->SurfWinVentingOpenFactorMultRep(SurfNum) = 1.0;
                 // Modulation of OpenFactor
