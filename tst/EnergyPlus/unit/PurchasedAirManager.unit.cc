@@ -1264,6 +1264,7 @@ TEST_F(ZoneIdealLoadsTest, IdealLoads_EMSOverrideTest_Revised_ZeroFlow)
 
     state->dataLoopNodes->Node(2).Temp = 25.0;
     state->dataLoopNodes->Node(2).HumRat = 0.001;
+    state->dataEnvrn->StdRhoAir = 1.2;
 
     InitPurchasedAir(*state, 1, 1);
     Real64 SysOutputProvided;
@@ -1454,6 +1455,7 @@ TEST_F(ZoneIdealLoadsTest, IdealLoads_Fix_SA_HumRat_Test)
 
     state->dataLoopNodes->Node(1).Temp = 30;
     state->dataLoopNodes->Node(1).HumRat = 0.012;
+    state->dataEnvrn->StdRhoAir = 1.2;
 
     CalcPurchAirLoads(*state, 1, SysOutputProvided, MoistOutputProvided, 1);
 
