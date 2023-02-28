@@ -14213,7 +14213,7 @@ void WriteEioTables(EnergyPlusData &state)
                 tableNameWithSigns.substr(3, tableNameWithSigns.size() - 4); // get rid of the '! <' from the beginning and the '>' from the end
             // first count the number of matching lines
             int countOfMatchingLines = 0;
-            for (auto bodyLine : bodyLines) {
+            for (const auto &bodyLine : bodyLines) {
                 if (bodyLine.size() > tableName.size()) {
                     if (bodyLine.substr(0, tableName.size() + 1) ==
                         tableName + ",") { // this needs to match the test used to populate the body of table below
@@ -14242,7 +14242,7 @@ void WriteEioTables(EnergyPlusData &state)
                 }
                 // look for data lines
                 int rowNum = 0;
-                for (auto bodyLine : bodyLines) {
+                for (const auto &bodyLine : bodyLines) {
                     if (bodyLine.size() > tableName.size()) {
                         if (bodyLine.substr(0, tableName.size() + 1) ==
                             tableName + ",") { // this needs to match the test used in the original counting
@@ -16098,8 +16098,10 @@ void GetZoneComponentAreas(EnergyPlusData &state, Array1D<ZompComponentAreasType
         areas(iZone).floor = state.dataHeatBal->Zone(iZone).FloorArea;
     }
 
-    for (auto curSurface : state.dataSurface->Surface) {
-        if (!curSurface.HeatTransSurf) continue;
+    for (const auto &curSurface : state.dataSurface->Surface) {
+        if (!curSurface.HeatTransSurf) {
+            continue;
+        }
         bool isExterior = curSurface.ExtBoundCond == ExternalEnvironment || curSurface.ExtBoundCond == OtherSideCondModeledExt;
         bool isTouchingGround =
             curSurface.ExtBoundCond == Ground || curSurface.ExtBoundCond == GroundFCfactorMethod || curSurface.ExtBoundCond == KivaFoundation;
