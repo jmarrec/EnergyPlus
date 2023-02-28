@@ -4,7 +4,8 @@ on: [push]
 
 env:
   CPPCHECK_VERSION: '2.10'
-
+  INCLUDES: '-I src -I src/EnergyPlus/AirflowNetwork/include -I third_party/ObjexxFCL/src'
+#  INCLUDES: '-I src -I src/EnergyPlus/AirflowNetwork/include -I third_party -I third_party/CLI -I third_party/Expat -I third_party/Expat/lib -I third_party/ObjexxFCL/src -I third_party/SQLite -I third_party/Windows-CalcEngine/src/Chromogenics/include -I third_party/Windows-CalcEngine/src/Common/include -I third_party/Windows-CalcEngine/src/Gases/include -I third_party/Windows-CalcEngine/src/MultiLayerOptics/include -I third_party/Windows-CalcEngine/src/SingleLayerOptics/include -I third_party/Windows-CalcEngine/src/SpectralAveraging/include -I third_party/Windows-CalcEngine/src/Tarcog/include -I third_party/Windows-CalcEngine/src/Viewer/include -I third_party/btwxt/src -I third_party/cpgfunctionEP -I third_party/cpgfunctionEP/include -I third_party/doj -I third_party/eigen -I third_party/fast_float -I third_party/fmt-8.0.1/include -I third_party/kiva-ep/src -I third_party/kiva-ep/src/libkiva -I third_party/kiva-ep/vendor/boost-1.77.0 -I third_party/libtk205/include/libtk205 -I third_party/nlohmann -I third_party/penumbra/include -I third_party/penumbra/vendor/glfw/include -I third_party/penumbra/vendor/libtess2/Include -I third_party/re2 -I third_party/ssc -I third_party/ssc/jsoncpp/include -I third_party/valijson'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,24 +52,26 @@ jobs:
       run: |
          cppcheck --cppcheck-build-dir=.cppcheck-build-dir \
           -D__cppcheck__ -UEP_Count_Calls -DEP_NO_OPENGL -UGROUND_PLOT -DLINK_WITH_PYTHON -DMSVC_DEBUG -DSKYLINE_MATRIX_REMOVE_ZERO_COLUMNS -U_OPENMP -Ugeneratetestdata \
-          -DEP_cache_GlycolSpecificHeat -DEP_cache_PsyTsatFnPb -UEP_nocache_Psychrometrics -UEP_psych_errors -UEP_psych_stats  \
-          --force \
+          -DEP_cache_GlycolSpecificHeat -DEP_cache_PsyTsatFnPb -UEP_nocache_Psychrometrics -DEP_psych_errors -UEP_psych_stats -D__linux__ \
+          ${{ env.INCLUDES }} \
+          --max-configs=1 \
           --std=c++17 \
           --inline-suppr \
+          --enable=warning,performance,portability,style \
           --suppress=cppcheckError \
+          --suppress=uninitvar \
+          --suppress=*:third_party/* \
           --suppress=unusedFunction:src/EnergyPlus/api/autosizing.cc \
           --suppress=unusedFunction:src/EnergyPlus/api/datatransfer.cc \
           --suppress=unusedFunction:src/EnergyPlus/api/func.cc \
           --suppress=unusedFunction:src/EnergyPlus/api/runtime.cc \
           --suppress=unusedFunction:src/EnergyPlus/api/state.cc \
           --suppress=unusedFunction:src/EnergyPlus/Psychrometrics.cc \
-          --enable=all \
           -i EnergyPlus/DXCoils.cc \
           -i EnergyPlus/RefrigeratedCase.cc \
           -i EnergyPlus/SolarShading.cc \
           -j $(nproc) \
           --template='[{file}:{line}]:({severity}),[{id}],{message}' \
-          --suppress="uninitvar:*" \
           ./src \
           3>&1 1>&2 2>&3 | tee cppcheck.txt
 
