@@ -1,0 +1,73 @@
+name: Linux Releases
+
+on:
+  push:
+    branches: [ arm64 ]
+    tags:
+      - '*'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  BUILD_TYPE: Release
+  Python_REQUIRED_VERSION: 3.8
+
+jobs:
+  linux_release:
+    runs-on: buildjet-32vcpu-ubuntu-2204-arm
+    permissions:
+      # Needed permission to upload the release asset
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ env.Python_REQUIRED_VERSION }}
+      id: setup-python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.Python_REQUIRED_VERSION }}
+
+    - name: Install System dependencies and LaTeX
+      shell: bash
+      run: |
+        set -x
+        echo "Using Apt to install dependencies"
+        sudo apt-get update
+        sudo apt-get install texlive texlive-xetex texlive-science libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev
+
+    - name: Create Build Directory
+      run: cmake -E make_directory ./build/
+
+    - name: Configure CMake
+      working-directory: ./build
+      shell: bash
+      run: |
+        cmake -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
+              -DLINK_WITH_PYTHON:BOOL=ON -DPython_REQUIRED_VERSION:STRING=${{ steps.setup-python.outputs.python-version }} \
+              -DPython_ROOT_DIR:PATH=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/x64/ \
+              -DBUILD_FORTRAN:BOOL=ON \
+              -DBUILD_PACKAGE:BOOL=ON -DCPACK_BINARY_IFW:BOOL=OFF -DCPACK_BINARY_STGZ:BOOL=OFF -DCPACK_BINARY_TGZ:BOOL=ON \
+              -DDOCUMENTATION_BUILD:STRING="BuildWithAll" -DTEX_INTERACTION:STRING="batchmode" -DENABLE_PCH:BOOL=OFF \
+              ../
+
+    - name: Build Package
+      working-directory: ./build
+      shell: bash
+      run: cmake --build . --target package -j $(nproc)
+
+    - name: Upload Tarball as artifact
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+          name: EnergyPlus-${{ github.sha }}-Linux-Ubuntu22.04-arm64.tar.gz
+          path: build/EnergyPlus-*-arm64.tar.gz
+
+    - name: Upload Tarball to release
+      if: contains(github.ref, 'refs/tags')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: build/EnergyPlus-*-arm64.tar.gz
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
