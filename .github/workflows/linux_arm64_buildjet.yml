@@ -1,4 +1,4 @@
-name: Linux Releases
+name: Linux Buildjet arm64
 
 on:
   push:
@@ -45,7 +45,7 @@ jobs:
         set -x
         echo "Using Apt to install dependencies"
         sudo apt-get update
-        sudo apt-get install texlive texlive-xetex texlive-science libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev
+        sudo apt-get install texlive texlive-xetex texlive-science libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev gfortran-11
 
     - name: Create Build Directory
       run: cmake -E make_directory ./build/
