@@ -27,6 +27,10 @@ jobs:
       # with:
       #   python-version: ${{ env.Python_REQUIRED_VERSION }}
       run: |
+        apt-get update -qq
+        apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl \
+          libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+
         git clone https://github.com/pyenv/pyenv.git ~/.pyenv
         export PATH=$PATH:~/.pyenv/bin
         eval "$(pyenv init -)"
@@ -50,6 +54,10 @@ jobs:
       working-directory: ./build
       shell: bash
       run: |
+        export C=/usr/bin/gcc-11
+        export CXX=/usr/bin/g++-11
+        export FC=/usr/bin/gfortran-11
+
         cmake -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
               -DLINK_WITH_PYTHON:BOOL=ON -DPython_REQUIRED_VERSION:STRING=$Python_REQUIRED_VERSION \
               -DPython_ROOT_DIR:PATH=$HOME/.pyenv/versions/$Python_REQUIRED_VERSION \

@@ -3,7 +3,9 @@ set -e
 set -x
 
 apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
-  apt-get -y install texlive texlive-xetex texlive-science libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev gfortran-11
+  apt-get -y install texlive texlive-xetex texlive-science libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev gfortran-11 \
+  build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev curl \
+    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 export PATH=$PATH:~/.pyenv/bin
@@ -12,7 +14,7 @@ PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install $Python_REQUIRED_VERSION
 
 export C=/usr/bin/gcc-11
 export CXX=/usr/bin/g++-11
-export FC=/usr/bin/f95
+export FC=/usr/bin/gfortran-11
 
 cmake -G Ninja -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
   -DBUILD_TESTING:BOOL=OFF -DBUILD_FORTRAN:BOOL=ON \
