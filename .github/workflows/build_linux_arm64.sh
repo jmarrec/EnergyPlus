@@ -12,6 +12,13 @@ export PATH=$PATH:~/.pyenv/bin
 eval "$(pyenv init -)"
 PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install $Python_REQUIRED_VERSION
 
+
+mkdir EnergyPlus-build-release
+ls -la
+
+
+cd EnergyPlus-build-release
+
 export C=/usr/bin/gcc-11
 export CXX=/usr/bin/g++-11
 export FC=/usr/bin/gfortran-11
@@ -30,7 +37,7 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
   -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc-11 \
   -DCMAKE_Fortran_COMPILER_AR:FILEPATH=/usr/bin/gcc-ar-11 \
   -DCMAKE_Fortran_COMPILER_RANLIB:FILEPATH=/usr/bin/gcc-ranlib-11 \
-  ../
+  ../EnergyPlus
 
 ninja
 
