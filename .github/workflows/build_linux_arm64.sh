@@ -1,3 +1,5 @@
+#!/bin/bash
+set -e
 set -x
 
 apt-get -y install texlive texlive-xetex texlive-science libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev gfortran-11

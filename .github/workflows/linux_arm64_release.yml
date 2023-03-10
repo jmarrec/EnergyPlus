@@ -25,11 +25,11 @@ jobs:
     - name: Create Build Directory
       run: cmake -E make_directory ./build/
 
-    - name: Buildv in Docker
+    - name: Build in Docker
       run: |
         docker run \
           --rm \
-          -v $(pwd):/${{ github.workspace }} \
+          -v $(pwd):${{ github.workspace }} \
           -w ${{ github.workspace }} \
            -e BUILD_TYPE=${{ env.BUILD_TYPE }} \
            -e Python_REQUIRED_VERSION=${{ env.Python_REQUIRED_VERSION }} \
