@@ -1,0 +1,57 @@
+name: Linux Releases
+
+on:
+  push:
+    branches: [ arm64 ]
+    tags:
+      - '*'
+
+env:
+  BUILD_TYPE: Release
+  Python_REQUIRED_VERSION: 3.8
+
+jobs:
+  linux_release:
+    runs-on: ubuntu-22.04
+    permissions:
+      # Needed permission to upload the release asset
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+
+    - name: Create Build Directory
+      run: cmake -E make_directory ./build/
+
+    - name: Buildv in Docker
+      if: ${{ matrix.data.docker }}
+      run: |
+        docker run \
+          --rm \
+          -v $(pwd):/${{ github.workspace }} \
+          -w ${{ github.workspace }} \
+           -e BUILD_TYPE=${{ env.BUILD_TYPE }} \
+           -e Python_REQUIRED_VERSION=${{ env.Python_REQUIRED_VERSION }} \
+          --platform linux/arm64 \
+          jmarrec/cookiecutter-cpp-cmake-conan-gcc11-clang15:jammy \
+          ./.github/workflows/build_linux_arm64.sh
+
+   - name: Upload Tarball as artifact
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v3
+      with:
+          name: EnergyPlus-${{ github.sha }}-Linux-Ubuntu22.04-arm64.tar.gz
+          path: build/EnergyPlus-*-arm64.tar.gz
+
+    - name: Upload Tarball to release
+      if: contains(github.ref, 'refs/tags')
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: build/EnergyPlus-*-arm64.tar.gz
+        tag: ${{ github.ref }}
+        overwrite: true
+        file_glob: true
