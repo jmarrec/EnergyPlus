@@ -2,7 +2,8 @@
 set -e
 set -x
 
-apt-get -y install texlive texlive-xetex texlive-science libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev gfortran-11
+apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
+  apt-get -y install texlive texlive-xetex texlive-science libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev gfortran-11
 
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 export PATH=$PATH:~/.pyenv/bin
