@@ -26,7 +26,6 @@ jobs:
       run: cmake -E make_directory ./build/
 
     - name: Buildv in Docker
-      if: ${{ matrix.data.docker }}
       run: |
         docker run \
           --rm \
