@@ -8,10 +8,10 @@ on:
 
 env:
   BUILD_TYPE: Release
-  Python_REQUIRED_VERSION: 3.8
+  Python_REQUIRED_VERSION: "3.8.12"
 
 jobs:
-  linux_release:
+  arm64_release:
     runs-on: ubuntu-22.04
     permissions:
       # Needed permission to upload the release asset
