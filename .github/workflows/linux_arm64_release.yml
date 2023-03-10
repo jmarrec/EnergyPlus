@@ -16,7 +16,6 @@ jobs:
     permissions:
       # Needed permission to upload the release asset
       contents: write
-
     steps:
     - uses: actions/checkout@v3
 
@@ -39,7 +38,7 @@ jobs:
           jmarrec/cookiecutter-cpp-cmake-conan-gcc11-clang15:jammy \
           ./.github/workflows/build_linux_arm64.sh
 
-   - name: Upload Tarball as artifact
+    - name: Upload Tarball as artifact
       if: ${{ always() }}
       uses: actions/upload-artifact@v3
       with:
