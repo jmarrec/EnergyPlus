@@ -9,7 +9,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   BUILD_TYPE: Release
-  Python_REQUIRED_VERSION: 3.8
+  Python_REQUIRED_VERSION: "3.8.12"
 
 jobs:
   linux_release:
@@ -23,9 +23,17 @@ jobs:
 
     - name: Set up Python ${{ env.Python_REQUIRED_VERSION }}
       id: setup-python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.Python_REQUIRED_VERSION }}
+      # uses: actions/setup-python@v4
+      # with:
+      #   python-version: ${{ env.Python_REQUIRED_VERSION }}
+      run: |
+        git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+        export PATH=$PATH:~/.pyenv/bin
+        eval "$(pyenv init -)"
+        PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install ${{ env.Python_REQUIRED_VERSION }}
+        echo "python-version=${{ env.Python_REQUIRED_VERSION }}" >> $GITHUB_OUTPUT
+        echo "${HOME}/.pyenv/bin" >> $GITHUB_PATH
+        echo "${HOME}/.pyenv/versions/$Python_REQUIRED_VERSION/bin" >> $GITHUB_PATH
 
     - name: Install System dependencies and LaTeX
       shell: bash
@@ -43,8 +51,8 @@ jobs:
       shell: bash
       run: |
         cmake -DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
-              -DLINK_WITH_PYTHON:BOOL=ON -DPython_REQUIRED_VERSION:STRING=${{ steps.setup-python.outputs.python-version }} \
-              -DPython_ROOT_DIR:PATH=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/x64/ \
+              -DLINK_WITH_PYTHON:BOOL=ON -DPython_REQUIRED_VERSION:STRING=$Python_REQUIRED_VERSION \
+              -DPython_ROOT_DIR:PATH=$HOME/.pyenv/versions/$Python_REQUIRED_VERSION \
               -DBUILD_FORTRAN:BOOL=ON \
               -DBUILD_PACKAGE:BOOL=ON -DCPACK_BINARY_IFW:BOOL=OFF -DCPACK_BINARY_STGZ:BOOL=OFF -DCPACK_BINARY_TGZ:BOOL=ON \
               -DDOCUMENTATION_BUILD:STRING="BuildWithAll" -DTEX_INTERACTION:STRING="batchmode" -DENABLE_PCH:BOOL=OFF \
