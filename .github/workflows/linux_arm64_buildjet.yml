@@ -13,7 +13,7 @@ env:
 
 jobs:
   linux_release:
-    runs-on: buildjet-32vcpu-ubuntu-2204-arm
+    runs-on: buildjet-4vcpu-ubuntu-2204-arm
     permissions:
       # Needed permission to upload the release asset
       contents: write
