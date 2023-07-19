@@ -158,6 +158,8 @@ namespace CommandLineInterface {
 
         opt.add("", false, 0, 0, "Run ExpandObjects prior to simulation", "-x", "--expandobjects");
 
+        opt.add("", false, 0, 0, "Print the result of the CLI assignments to the console and exit", "--debug-cli");
+
         opt.example = "energyplus -w weather.epw -r input.idf";
 
         std::string errorFollowUp = "Type 'energyplus --help' for usage.";
@@ -172,6 +174,8 @@ namespace CommandLineInterface {
 
         std::string usage;
         opt.getUsage(usage);
+
+        bool debugCLI = opt.isSet("--debug-only");
 
         // Set path of EnergyPlus program path (if we aren't overriding it)
         if (!state.dataGlobal->installRootOverride) {
@@ -335,15 +339,11 @@ namespace CommandLineInterface {
         }
 
         // File naming scheme
-        fs::path outputFilePrefixFullPath;
+        std::string prefixOutName = "eplus";
         if (opt.isSet("-p")) {
-            std::string prefixOutName;
             opt.get("-p")->getString(prefixOutName);
-            fs::path prefix = FileSystem::makeNativePath(fs::path(prefixOutName)); // Why is this needed?
-            outputFilePrefixFullPath = state.dataStrGlobals->outDirPath / prefixOutName;
-        } else {
-            outputFilePrefixFullPath = state.dataStrGlobals->outDirPath / "eplus";
         }
+        fs::path outputFilePrefixFullPath = state.dataStrGlobals->outDirPath / "eplus";
 
         fs::path outputEpmdetFilePath;
         fs::path outputEpmidfFilePath;
@@ -415,6 +415,49 @@ namespace CommandLineInterface {
                     exit(EXIT_FAILURE);
                 }
             }
+        }
+
+        if (debugCLI) {
+
+            fmt::print(stderr,
+                       R"debug(
+state.dataGlobal->AnnualSimulation = {},
+state.dataGlobal->DDOnlySimulation = {},
+state.dataStrGlobals->outDirPath = '{}',
+state.dataStrGlobals->inputIddFilePath= '{}',
+
+runExpandObjects = {},
+runEPMacro = {},
+prefixOutName = {},
+
+state.dataGlobal->runReadVars={},
+state.dataGlobal->outputEpJSONConversion={},
+state.dataGlobal->outputEpJSONConversionOnly={},
+
+suffixType={},
+
+state.dataGlobal->numThread={},
+state.files.inputWeatherFilePath.filePath='{}',
+state.dataStrGlobals->inputFilePath='{}',
+)debug",
+                       state.dataGlobal->AnnualSimulation,
+                       state.dataGlobal->DDOnlySimulation,
+                       state.dataStrGlobals->outDirPath.generic_string(),
+                       state.dataStrGlobals->inputIddFilePath.generic_string(),
+
+                       runExpandObjects,
+                       runEPMacro,
+                       prefixOutName,
+
+                       state.dataGlobal->runReadVars,
+                       state.dataGlobal->outputEpJSONConversion,
+                       state.dataGlobal->outputEpJSONConversionOnly,
+
+                       suffixType,
+                       state.dataGlobal->numThread,
+                       state.files.inputWeatherFilePath.filePath,
+                       state.dataStrGlobals->inputFilePath);
+            exit(0);
         }
 
         // Helper to construct output file path
