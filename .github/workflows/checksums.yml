@@ -22,22 +22,21 @@ jobs:
     - name: Download binaries
       shell: bash
       run: |
-        set -x
-        TAG_NAME=${{ github.event.inputs.tag }}
-        if [ -z "$TAG_NAME" ]; then
-          url=https://api.github.com/repos/NREL/EnergyPlus/releases/latest
-        else
-          url=https://api.github.com/repos/NREL/EnergyPlus/releases/tags/$TAG_NAME
-        fi;
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Linux-CentOS7.9.2009-x86_64.tar.gz" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Linux-Ubuntu20.04-x86_64.run" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Linux-Ubuntu20.04-x86_64.sh" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Linux-Ubuntu20.04-x86_64.tar.gz" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Linux-Ubuntu22.04-arm64.tar.gz" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Linux-Ubuntu22.04-x86_64.run" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Linux-Ubuntu22.04-x86_64.sh" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Linux-Ubuntu22.04-x86_64.tar.gz" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Windows-i386.exe" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Windows-i386.zip" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Windows-x86_64-HardenedRuntime.exe" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Windows-x86_64-HardenedRuntime.zip" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Windows-x86_64.exe" >> download_lists.txt
+        echo "https://github.com/NREL/EnergyPlus/releases/download/v23.2.0/EnergyPlus-23.2.0-7636e6b3e9-Windows-x86_64.zip" >> download_lists.txt
 
-        echo "Querying url=$url"
-        release_info=$(curl -sL $url)
-
-        # Get the tag name, and use jq -e to throw if can't find
-        TAG_NAME=$(echo $release_info | jq -r -e '.tag_name')
-        echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
-
-        echo $release_info | jq -r '.assets[].browser_download_url | select(. | contains("EnergyPlus-"))' > download_lists.txt
         echo "Found the following assets"
         cat download_lists.txt
         echo "Downloading all via aria"
@@ -45,23 +44,11 @@ jobs:
         echo "Files in current directory:"
         ls
 
-    - name: Compute md5 sums
-      shell: bash
-      run: |
-        md5sum EnergyPlus-* > md5sums.txt
-        cat md5sums.txt
-
-    - name: Compute sha256 sums
-      shell: bash
-      run: |
-        sha256sum EnergyPlus-* > sha256sums.txt
-        cat sha256sums.txt
-
     - name: Upload Sums to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: '*.txt'
-        tag: ${{ env.TAG_NAME }}
-        overwrite: true
+        file: 'EnergyPlus-23.2.0*'
+        tag: v23.2.0-WithMacStaticLibs
+        overwrite: false
         file_glob: true
