@@ -9,12 +9,10 @@ endif()
 
 # Detect OpenMP support in a compiler. If the compiler supports OpenMP, the
 # flags to compile with OpenMP are returned and added.
-if (${USE_OpenMP} OR ${ENABLE_OPENMP})
-  find_package(OpenMP COMPONENTS CXX)
-  if(OpenMP_CXX_FOUND)
-    set(CMAKE_INSTALL_OPENMP_LIBRARIES TRUE PARENT_SCOPE)
-    target_link_libraries(ConvertInputFormat PRIVATE OpenMP::OpenMP_CXX)
-  endif()
+find_package(OpenMP COMPONENTS CXX)
+if(OpenMP_CXX_FOUND)
+  set(CMAKE_INSTALL_OPENMP_LIBRARIES TRUE PARENT_SCOPE)
+  target_link_libraries(ConvertInputFormat PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
 target_link_libraries(ConvertInputFormat PRIVATE energyplusparser project_options project_warnings)
