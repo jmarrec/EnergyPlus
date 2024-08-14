@@ -288,6 +288,11 @@ void freeObjectNames(char **objectNames, unsigned int arraySize)
     delete[] objectNames;
 }
 
+void freeCString(char *c_string)
+{
+    delete[] c_string;
+}
+
 int getNumNodesInCondFDSurfaceLayer(EnergyPlusState state, const char *surfName, const char *matName)
 {
     auto *thisState = static_cast<EnergyPlus::EnergyPlusData *>(state);

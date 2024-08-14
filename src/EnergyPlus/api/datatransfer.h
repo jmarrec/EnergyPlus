@@ -165,6 +165,11 @@ ENERGYPLUSLIB_API char **getObjectNames(EnergyPlusState state, const char *objec
 /// \param[in] arraySize The size of the object name array, which is known after the call to getObjectNames.
 /// \return Nothing, this simply frees the memory
 ENERGYPLUSLIB_API void freeObjectNames(char **objectNames, unsigned int arraySize);
+/// \brief Clears an object names array allocation
+/// \details This function frees an a char*, which is returned from inputFilePath or epwFilePath for eg
+/// \param[in] objectNames A char * as returned from one of the getter functions such as inputFilePath
+/// \return Nothing, this simply frees the memory
+ENERGYPLUSLIB_API void freeCString(char *c_string);
 // ----- FUNCTIONS RELATED TO VARIABLES
 
 /// \brief Gets the number of nodes for a particular CondFD surface layer

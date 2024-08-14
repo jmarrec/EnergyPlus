@@ -110,7 +110,7 @@ class DataExchange:
             #: and represents the control actuation.  For a node setpoint actuation, this could be "temperature" or
             #: "humidity", for example.
             self.type: str = _type
-            #: This represents the unit of measure for this exchange point.  
+            #: This represents the unit of measure for this exchange point.
             #: This is NOT used for plugin variables such as PluginGlobalVariable and PluginTrendVariable.
             self.unit: str = _unit
 
@@ -143,6 +143,8 @@ class DataExchange:
         self.api.inputFilePath.restype = c_char_p
         self.api.epwFilePath.argtypes = [c_void_p]
         self.api.epwFilePath.restype = c_char_p
+        self.api.freeCString.argtypes = [c_char_p]
+        self.api.freeCString.restype = c_void_p
         self.api.requestVariable.argtypes = [c_void_p, c_char_p, c_char_p]
         self.api.getNumNodesInCondFDSurfaceLayer.argtypes = [c_void_p, c_char_p, c_char_p]
         self.api.requestVariable.restype = c_void_p
@@ -374,6 +376,7 @@ class DataExchange:
         """
         c_string = self.api.inputFilePath(state)
         res = Path(c_string.decode('utf-8'))
+        self.api.freeCString(c_string)
         return res
 
     def get_weather_file_path(self, state: c_void_p) -> Path:
@@ -387,6 +390,7 @@ class DataExchange:
         """
         c_string = self.api.epwFilePath(state)
         res = Path(c_string.decode('utf-8'))
+        self.api.freeCString(c_string)
         return res
 
 
