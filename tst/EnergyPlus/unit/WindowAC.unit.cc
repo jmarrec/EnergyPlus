@@ -975,6 +975,7 @@ TEST_F(EnergyPlusFixture, WindowAC_DesignSpecificationZoneHVACSizing)
     EXPECT_NEAR(expected_full_airflow * scaler_cooling_saf, windowAC.MaxAirVolFlow, 0.0001);
     EXPECT_NEAR(expected_full_airflow * scaler_cooling_saf, fan->maxAirFlowRate, 0.0001);
 
+    // NOTE: VSD Coil Sizing is not affected by the DesignSpecification:ZoneHVAC:Sizing Cooling Capacity Sizing Method.
     EXPECT_NEAR(622.505, varSpeedCoil.RatedCapCoolTotal, 0.001);
 
     // VSD Sizing forces it back to Catalog data based on Nominal Speed Level

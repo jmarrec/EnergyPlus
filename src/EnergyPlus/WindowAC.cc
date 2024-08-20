@@ -1008,6 +1008,8 @@ namespace WindowAC {
                 // capacity sizing methods (HeatingDesignCapacity, CapacityPerFloorArea, FractionOfAutosizedCoolingCapacity, and
                 // FractionOfAutosizedHeatingCapacity )
                 int const CapSizingMethod = zoneHVACSizing.CoolingCapMethod;
+                // TODO: SizingMethod is either HVAC::CoolingAirflowSizing or HVAC::CoolingCapacitySizing here...
+                // TODO: should it not be CoolingCapacitySizing all the time?
                 zoneEqSizing.SizingMethod(SizingMethod) = CapSizingMethod;
                 if (CapSizingMethod == CoolingDesignCapacity || CapSizingMethod == CapacityPerFloorArea ||
                     CapSizingMethod == FractionOfAutosizedCoolingCapacity) {
