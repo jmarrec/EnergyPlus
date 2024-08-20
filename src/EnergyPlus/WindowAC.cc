@@ -1063,6 +1063,9 @@ namespace WindowAC {
             // Make the Fan be sized by this
             zoneEqSizing.CoolingAirFlow = true;
             zoneEqSizing.CoolingAirVolFlow = windowAC.MaxAirVolFlow;
+
+            // Force sizing the VSD coil similarly
+            state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).DesCoolVolFlow = windowAC.MaxAirVolFlow;
         }
 
         state.dataSize->DataScalableCapSizingON = false;
