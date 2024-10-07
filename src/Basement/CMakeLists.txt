@@ -78,7 +78,7 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../idd/BasementGHT.idd" DESTINATIO
 
 if(APPLE AND CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION)
   include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/CodeSigning.cmake")
-  register_install_codesign_target(Basement PreProcess/GrndTempCalc)
+  register_install_codesign_target(Basement PreProcess/GrndTempCalc Unspecified)
 endif()
 
 if(BUILD_TESTING)
