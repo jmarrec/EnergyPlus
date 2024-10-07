@@ -382,6 +382,18 @@ endfunction()
 
 function(register_install_codesign_target TARGET_NAME DESTINATION COMPONENT)
 
+  set(prefix "")
+  set(valueLessKeywords "")
+  set(singleValueKeywords ENTITLEMENTS)
+  set(multiValueKeywords "")
+  cmake_parse_arguments(
+    PARSE_ARGV 3 # We have 3 positional keywords that are required
+      "${prefix}"
+      "${valueLessKeywords}"
+      "${singleValueKeywords}"
+      "${multiValueKeywords}"
+  )
+
   if(NOT TARGET ${TARGET_NAME})
     message(FATAL_ERROR "${TARGET_NAME} is not a valid target")
   endif()
@@ -401,17 +413,33 @@ function(register_install_codesign_target TARGET_NAME DESTINATION COMPONENT)
     return()
   endif()
 
-  install(
-    CODE "
-    include(\"${CMAKE_CURRENT_FUNCTION_LIST_FILE}\")
-    codesign_files_macos(
-      FILES \"\${CMAKE_INSTALL_PREFIX}/${DESTINATION}/$<IF:$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},MACOSX_BUNDLE>>,$<TARGET_BUNDLE_DIR_NAME:${TARGET_NAME}>,$<TARGET_FILE_NAME:${TARGET_NAME}>>\"
-      SIGNING_IDENTITY \"${CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION}\"
-      IDENTIFIER \"${CPACK_CODESIGNING_MACOS_IDENTIFIER}.${TARGET_NAME}\"
-      FORCE VERBOSE $<$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},MACOSX_BUNDLE>>:DEEP>
-      )
-  "
-    COMPONENT ${COMPONENT}
-  )
+  if (_ENTITLEMENTS)
+    install(
+      CODE "
+      include(\"${CMAKE_CURRENT_FUNCTION_LIST_FILE}\")
+      codesign_files_macos(
+        FILES \"\${CMAKE_INSTALL_PREFIX}/${DESTINATION}/$<IF:$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},MACOSX_BUNDLE>>,$<TARGET_BUNDLE_DIR_NAME:${TARGET_NAME}>,$<TARGET_FILE_NAME:${TARGET_NAME}>>\"
+        SIGNING_IDENTITY \"${CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION}\"
+        IDENTIFIER \"${CPACK_CODESIGNING_MACOS_IDENTIFIER}.${TARGET_NAME}\"
+        FORCE VERBOSE $<$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},MACOSX_BUNDLE>>:DEEP>
+        ENTITLEMENTS \"${_ENTITLEMENTS}\"
+        )
+    "
+      COMPONENT ${COMPONENT}
+    )
+  else()
+    install(
+      CODE "
+      include(\"${CMAKE_CURRENT_FUNCTION_LIST_FILE}\")
+      codesign_files_macos(
+        FILES \"\${CMAKE_INSTALL_PREFIX}/${DESTINATION}/$<IF:$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},MACOSX_BUNDLE>>,$<TARGET_BUNDLE_DIR_NAME:${TARGET_NAME}>,$<TARGET_FILE_NAME:${TARGET_NAME}>>\"
+        SIGNING_IDENTITY \"${CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION}\"
+        IDENTIFIER \"${CPACK_CODESIGNING_MACOS_IDENTIFIER}.${TARGET_NAME}\"
+        FORCE VERBOSE $<$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},MACOSX_BUNDLE>>:DEEP>
+        )
+    "
+      COMPONENT ${COMPONENT}
+    )
+  endif()
 
 endfunction()
