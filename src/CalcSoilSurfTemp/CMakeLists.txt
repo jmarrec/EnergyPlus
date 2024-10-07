@@ -35,5 +35,5 @@ endif()
 
 if(APPLE AND CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION)
   include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/CodeSigning.cmake")
-  register_install_codesign_target(CalcSoilSurfTemp PreProcess/CalcSoilSurfTemp)
+  register_install_codesign_target(CalcSoilSurfTemp PreProcess/CalcSoilSurfTemp Unspecified)
 endif()
