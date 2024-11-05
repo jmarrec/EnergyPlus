@@ -163,6 +163,9 @@ jobs:
       working-directory: ./build
       shell: bash
       run: |
+        ninja
+        # TODO: workaround for now, otherwise Transition and co do not get signed... not sure what is going on
+        cmake .
         ninja package
 
     - name: Upload Tarball as artifact for testing
