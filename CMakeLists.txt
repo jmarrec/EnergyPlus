@@ -164,6 +164,14 @@ option(ENABLE_GTEST_DEBUG_MODE "Enable options to help debug test failures" ON)
 option(ENABLE_GTEST_SHUFFLE "Enable shuffle to eliminate order dependency" ON)
 option(ENABLE_INSTALL_REMOTE "Enable install_remote and install_remote_plist commands to install files from remote resources on the internet" ON)
 
+if(APPLE AND BUILD_PACKAGE)
+  # Define the codesigning variables early, before any calls to add_subdirectory for something with a dedicated project() or cmake_add_fortran_subdirectory
+  # Otherwise, the register_install_codesign_target isn't added until you reconfigure cmake...
+  include(cmake/CodeSigning.cmake)
+
+  # Defines CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION and CPACK_CODESIGNING_NOTARY_PROFILE_NAME
+  setup_macos_codesigning_variables()
+endif()
 
 if(MSVC AND NOT ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   option(ENABLE_HARDENED_RUNTIME "Enable Control Flow Guard and Buffer Security Check" OFF)
