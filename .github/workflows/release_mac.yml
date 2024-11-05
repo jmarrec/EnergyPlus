@@ -51,6 +51,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: "Reset to develop for git SHA to match the E+ official one"
+      run: |
+        git fetch --all
+        git reset --soft 1c11a3d85f8a3e4ff9918dfe1f6b0e7ec1fd701c
+
 #    - name: Setup QtIFW 4.x
 #      uses: jmarrec/setup-qtifw@v1
 #      with:
@@ -136,7 +141,7 @@ jobs:
 
         if [[ "$BUILD_DOCS" != "false" ]]; then
           echo "Using brew to install mactex and adding it to PATH"
-          brew install --cask mactex-no-gui
+          brew install --cask mactex-no-gui || true
           echo "/Library/TeX/texbin" >> $GITHUB_PATH
           echo "DOCUMENTATION_BUILD=BuildWithAll" >> $GITHUB_ENV
         else
@@ -146,9 +151,9 @@ jobs:
         # We use cmake commands to build some subprojects, so setting it globally
         echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
         echo "Installing gcc@13 for gfortran support of -static-libquadmath"
-        brew list gcc@13 || brew install gcc@13
+        brew list gcc@13 || brew install gcc@13 || true
         which gfortran-13 || echo "FC=$(brew --prefix gcc@13)/bin/gfortran-13" >> $GITHUB_ENV
-        brew install ninja tcl-tk
+        brew install ninja tcl-tk || true
 
     - name: Create Build Directory
       run: cmake -E make_directory ./build/
