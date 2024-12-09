@@ -59,7 +59,7 @@ set(CMAKE_SKIP_RPATH ${FORTRAN_SKIP_RPATH})
 set(SKIP_BUILD_RPATH TRUE)
 
 add_executable(Basement ${SRC})
-target_compile_options(Basement PRIVATE -O1)
+target_compile_options(Basement PRIVATE $<$<CONFIG:Release>:-O1>)
 set_target_properties(Basement PROPERTIES FOLDER Auxiliary)
 
 if(NOT UNIX)  # Need to reinclude it on Windows
