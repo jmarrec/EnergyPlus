@@ -919,6 +919,10 @@ IMPLICIT NONE
        CALL GetEquivSlabInfo
 !     END IF
 
+!*** GET MANUAL GRIDDING INFORMATION
+! Try to get manual grid, if found, AUTOGRID is set to 'FALSE'
+     CALL GetManualGridInfo
+
 !*** GET AUTOGRIDDING INFORMATION
      IF (.not. SameString(AUTOGRID,'FALSE'))THEN
        IF (.not. SameString(EquivSizing,'FALSE'))THEN
@@ -932,11 +936,6 @@ IMPLICIT NONE
          CALL GetAutoGridInfo
 !        print *,'passed auto grid'
        END IF
-
-!*** GET MANUAL GRIDDING INFORMATION
-     ELSE
-       CALL GetManualGridInfo
-!      print *,'passed manual grid'
      END IF
 
 !*** INITIALIZE THE GROUND TEMPERATURE
@@ -1008,7 +1007,7 @@ IMPLICIT NONE
        SimParams%F=.1d0
      ENDIF
      SimParams%IYRS =NumArray(2)
-     
+
      ! Override with environment variable for quicker testing
      CALL GET_ENVIRONMENT_VARIABLE("CI_BASEMENT_NUMYEARS", EnvVarNumYearsString, EnvVarNumYearsStringLength, EnvVarNumYearsStatus)
      SELECT CASE (EnvVarNumYearsStatus)
@@ -1026,7 +1025,7 @@ IMPLICIT NONE
          SimParams%IYRS = EnvVarNumYears
        END IF
      END SELECT
-          
+
      IF (SimParams%IYRS <= 0.d0) THEN
        CALL ShowSevereError('GetSimParams: Entered "IYRS: Maximum number of yearly iterations:" '//  &
           'choice is not valid.'//  &
@@ -1686,6 +1685,8 @@ IMPLICIT NONE
 !*** RETRIEVING THE DATA
      NumNums=GetNumObjectsFound('ManualGrid')
      IF (NumNums > 0) THEN
+       print *,'Using ManualGrid, disabling AutoGridding'
+       AUTOGRID = 'FALSE'
        CALL GetObjectItem('ManualGrid',NUM,AlphArray,NumAlphas,NumArray,NumNums,IOSTAT)
        NX   =NumArray(1)
        NY   =NumArray(2)
@@ -1776,11 +1777,14 @@ IMPLICIT NONE
      INTEGER  :: NumNums   ! Number of elements in the numeric array
      INTEGER  :: IOStat    ! IO Status when calling get input subroutine
      CHARACTER(len=MaxNameLength),DIMENSION(1) :: AlphArray !character string data
-     REAL(r64),DIMENSION(-NZAG:NZBG)     :: NumArray  !numeric data
+     REAL(r64),DIMENSION(136)     :: NumArray  !numeric data
 
 !*** RETRIEVING THE DATA
      CALL GetObjectItem('ZFACE',NUM,AlphArray,NumAlphas,NumArray,NumNums,IOSTAT)
-     ZFACE=NumArray
+     DO COUNT1=1,NumNums
+      ZFACE(-NZAG+COUNT1-1)=NumArray(COUNT1)
+     END DO
+
      RETURN
 END SUBROUTINE GetZFACEData
 
