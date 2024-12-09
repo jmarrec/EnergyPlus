@@ -101,5 +101,6 @@ if(BUILD_TESTING)
   endmacro()
 
   basement_test(DynamiGriddingWhenDepthIsHigh)
+  basement_test(AutoGriddingDepthIsLowish)
 
 endif()
