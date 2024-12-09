@@ -1722,11 +1722,13 @@ IMPLICIT NONE
      INTEGER  :: NumNums   ! Number of elements in the numeric array
      INTEGER  :: IOStat    ! IO Status when calling get input subroutine
      CHARACTER(len=MaxNameLength),DIMENSION(1) :: AlphArray !character string data
-     REAL(r64),DIMENSION(0:NX)           :: NumArray  !numeric data
+     REAL(r64),DIMENSION(0:50)           :: NumArray  !numeric data
 
 !*** RETRIEVING THE DATA
      CALL GetObjectItem('XFACE',NUM,AlphArray,NumAlphas,NumArray,NumNums,IOSTAT)
-     XFACE=NumArray
+     DO COUNT1=0,NX
+       XFACE(COUNT1)=NumArray(COUNT1)
+     END DO
      RETURN
 END SUBROUTINE GetXFACEData
 
@@ -1749,12 +1751,13 @@ IMPLICIT NONE
      INTEGER  :: NumNums   ! Number of elements in the numeric array
      INTEGER  :: IOStat    ! IO Status when calling get input subroutine
      CHARACTER(len=MaxNameLength),DIMENSION(1) :: AlphArray !character string data
-     REAL(r64),DIMENSION(0:NY)           :: NumArray  !numeric data
-
+     REAL(r64),DIMENSION(0:50)           :: NumArray  !numeric data
 
 !*** RETRIEVING THE DATA
      CALL GetObjectItem('YFACE',NUM,AlphArray,NumAlphas,NumArray,NumNums,IOSTAT)
-     YFACE=NumArray
+     DO COUNT1=0,NY
+       YFACE(COUNT1)=NumArray(COUNT1)
+     END DO
      RETURN
 END SUBROUTINE GetYFACEData
 
@@ -11811,6 +11814,33 @@ IMPLICIT NONE
      END DO
 END SUBROUTINE Autogridding
 
+SUBROUTINE PrintEquivalentManualGridding
+USE BasementSimData
+USE General, ONLY: RoundSigDigits
+
+  print *,'Equivalent ManualGrid'
+
+  print *, 'ManualGrid,'
+  print *, '  '//trim(RoundSigDigits(NX,0))//', ! NX: Number of cells in the X direction'
+  print *, '  '//trim(RoundSigDigits(NY,0))//', ! NY: Number of cells in the Y direction'
+  print *, '  '//trim(RoundSigDigits(NZAG,0))//', ! NZAG: Number of cells in the Z direction. above grade'
+  print *, '  '//trim(RoundSigDigits(NZBG,0))//', ! NZBG: Number of cells in the Z direction. below grade'
+  print *, '  '//trim(RoundSigDigits(IBASE,0))//', ! IBASE: X direction cell indicator of slab edge'
+  print *, '  '//trim(RoundSigDigits(JBASE,0))//', ! JBASE: Y direction cell indicator of slab edge'
+  print *, '  '//trim(RoundSigDigits(KBASE,0))//'; ! KBASE: Z direction cell indicator of the top of the floor slab'
+  print *, ''
+
+  WRITE(*,  fmt='("XFACE,"/"  "(*(10(g0.6,:,","),/"  "))";")', advance="no") (XFACE(COUNT1), COUNT1=0,NX)
+  print '(A,/)', ';'
+
+  WRITE(*,  fmt='("YFACE,"/"  "(*(10(g0.6,:,","),/"  "))";")', advance="no") (YFACE(COUNT1), COUNT1=0,NY)
+  print '(A,/)', ';'
+
+  WRITE(*,  fmt='("ZFACE,"/"  "(*(10(g0.6,:,","),/"  "))";")', advance="no") (ZFACE(COUNT1), COUNT1=-NZAG,NZBG)
+  print '(A,/)', ';'
+
+END SUBROUTINE PrintEquivalentManualGridding
+
 !******************************  MINIMUM DZ (PART OF AUTOGRIDDING)  *********************
 SUBROUTINE CalcDZmin(DX,DY,DZINIT)
 !USE MSFLIB
@@ -11905,6 +11935,10 @@ IMPLICIT NONE
          ZFACE(COUNT3)=ZFACEINIT(COUNT3)
        END IF
      END DO
+
+     ! TODO: this is a debug thing
+     CALL PrintEquivalentManualGridding
+
      RETURN
 END SUBROUTINE  CalcDZmin
 

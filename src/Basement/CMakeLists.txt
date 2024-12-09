@@ -102,5 +102,6 @@ if(BUILD_TESTING)
 
   basement_test(DynamiGriddingWhenDepthIsHigh)
   basement_test(AutoGriddingDepthIsLowish)
+  basement_test(ManualGridding)
 
 endif()

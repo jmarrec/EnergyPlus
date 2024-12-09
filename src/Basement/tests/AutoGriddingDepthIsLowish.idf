@@ -1,3 +1,5 @@
+! Regular Auto Grid case, not exceeding any bounds
+
 SimParameters,
   0.1,                                    !- F: Multiplier for the ADI solution
   15;                                     !- IYRS: Maximum number of yearly iterations:
