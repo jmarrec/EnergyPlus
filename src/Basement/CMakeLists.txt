@@ -80,3 +80,26 @@ if(APPLE AND CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION)
   include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/CodeSigning.cmake")
   register_install_codesign_target(Basement PreProcess/GrndTempCalc)
 endif()
+
+if(BUILD_TESTING)
+
+  macro(basement_test GHT_IN_IDF_NAME)
+    set(TEST_DIR "${PROJECT_BINARY_DIR}/tst/${GHT_IN_IDF_NAME}") # build/src/Basement/tst
+    set(IDF_FILE "${PROJECT_SOURCE_DIR}/tests/${GHT_IN_IDF_NAME}.idf")
+
+    file(MAKE_DIRECTORY ${TEST_DIR})
+    file(COPY "${PROJECT_SOURCE_DIR}/../../idd/BasementGHT.idd" DESTINATION "${TEST_DIR}")
+    configure_file("${PROJECT_SOURCE_DIR}/../../weather/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw" "${TEST_DIR}/in.epw" COPYONLY)
+    configure_file(${IDF_FILE} "${TEST_DIR}/BasementGHTIn.idf" COPYONLY)
+
+    set(TEST_NAME "Basement.${GHT_IN_IDF_NAME}")
+    add_test(NAME "${TEST_NAME}"
+      COMMAND $<TARGET_FILE:Basement>
+      WORKING_DIRECTORY ${TEST_DIR}
+    )
+    set_tests_properties("${TEST_NAME}" PROPERTIES FAIL_REGULAR_EXPRESSION "Terminated;Error(s) Detected")
+  endmacro()
+
+  basement_test(AutoGriddingDepthIsHigh)
+
+endif()
