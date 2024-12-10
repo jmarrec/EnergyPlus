@@ -9641,7 +9641,7 @@ SUBROUTINE CalcTearth(IEXT,JEXT,DZ,DZP,TG,CVG)
 
 
 !*** DECLARATIONS:
-     REAL(r64) A(50), B(50), C(50), R(50), X(50), ALB, ALBEDO(2),             &
+     REAL(r64) A(100), B(100), C(100), R(100), X(100), ALB, ALBEDO(2),             &
      & AVGWND, CG, CONST(0:100,2), CPA, DH, DODPG, DW,                   &
      & DZ(-35:100), DZP(-35:100), ELEV, EPS, EPSLN(2),                   &
      & GOFT, GOLD, HRAT(24), IEXT, JEXT, LAT, LONG, MSTD, PBAR(24),      &
