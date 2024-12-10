@@ -767,7 +767,7 @@ SUBROUTINE SimController
      CHARACTER *3 RUNID      ! Run identifier for this run                             []
      CHARACTER *6 TGNAM      ! Name of the 1D ground temperature profile file          []
 
-!*** Variables added with the inclusion of the Autogridding function
+!*** Variables added with the inclusion of the AutoGridding function
      INTEGER XDIM            ! Array dimensioning constant for use with surface        []
                              ! temperature and flux calculation variables
      INTEGER YDIM            ! Array dimensioning constant for use with surface        []
@@ -1602,7 +1602,7 @@ IMPLICIT NONE
        CALL GetObjectItem('EquivAutoGrid',NUM,AlphArray,  &
        &    NumAlphas,NumArray,NumNums,IOSTAT)
        CLEARANCE=NumArray(1)
-       ConcAGHeight=0.0   !This is hard wired to zero for EneergyPlus runs
+       ConcAGHeight=0.0   !This is hard wired to zero for EnergyPlus runs
        SlabDepth=NumArray(2)
        BaseDepth=NumArray(3)
        CALL AutoGridding
@@ -2417,6 +2417,18 @@ IMPLICIT NONE
           DZP(COUNT1)=ZC(COUNT1+1)-ZC(COUNT1)
         END DO
       END IF
+
+      ! TODO: this is a debug thing
+      CALL PrintEquivalentManualGridding
+
+      WRITE(*,  fmt='("ZC,"/"  "(*(10(g0.10,:,","),/"  "))";")', advance="no") (ZC(COUNT1), COUNT1=-NZAG,NZBG-2)
+      print '(A,/)', ';'
+
+      WRITE(*,  fmt='("DZ,"/"  "(*(10(g0.10,:,","),/"  "))";")', advance="no") (ZC(COUNT1), COUNT1=-NZAG,NZBG-2)
+      print '(A,/)', ';'
+
+      WRITE(*,  fmt='("DZP,"/"  "(*(10(g0.10,:,","),/"  "))";")', advance="no") (ZC(COUNT1), COUNT1=-NZAG,NZBG-2)
+      print '(A,/)', ';'
 
       VEXT=0.0
 !      write(*,*) '2115=',VEXT(12,15,-1)
@@ -11812,7 +11824,7 @@ IMPLICIT NONE
      DO COUNT1=NZ1+NZ2+NZ3+NZ4+NZ5+1,NZBG
        ZFACEINIT(COUNT1)=ZFACEINIT(COUNT1-1)+2.0d0
      END DO
-END SUBROUTINE Autogridding
+END SUBROUTINE AutoGridding
 
 SUBROUTINE PrintEquivalentManualGridding
 USE BasementSimData
@@ -11830,13 +11842,13 @@ USE General, ONLY: RoundSigDigits
   print *, '  '//trim(RoundSigDigits(KBASE,0))//'; ! KBASE: Z direction cell indicator of the top of the floor slab'
   print *, ''
 
-  WRITE(*,  fmt='("XFACE,"/"  "(*(10(g0.6,:,","),/"  "))";")', advance="no") (XFACE(COUNT1), COUNT1=0,NX)
+  WRITE(*,  fmt='("XFACE,"/"  "(*(10(g0.10,:,","),/"  "))";")', advance="no") (XFACE(COUNT1), COUNT1=0,NX)
   print '(A,/)', ';'
 
-  WRITE(*,  fmt='("YFACE,"/"  "(*(10(g0.6,:,","),/"  "))";")', advance="no") (YFACE(COUNT1), COUNT1=0,NY)
+  WRITE(*,  fmt='("YFACE,"/"  "(*(10(g0.10,:,","),/"  "))";")', advance="no") (YFACE(COUNT1), COUNT1=0,NY)
   print '(A,/)', ';'
 
-  WRITE(*,  fmt='("ZFACE,"/"  "(*(10(g0.6,:,","),/"  "))";")', advance="no") (ZFACE(COUNT1), COUNT1=-NZAG,NZBG)
+  WRITE(*,  fmt='("ZFACE,"/"  "(*(10(g0.10,:,","),/"  "))";")', advance="no") (ZFACE(COUNT1), COUNT1=-NZAG,NZBG)
   print '(A,/)', ';'
 
 END SUBROUTINE PrintEquivalentManualGridding
@@ -11937,9 +11949,6 @@ IMPLICIT NONE
          ZFACE(COUNT3)=ZFACEINIT(COUNT3)
        END IF
      END DO
-
-     ! TODO: this is a debug thing
-     CALL PrintEquivalentManualGridding
 
      IF(NZBG.GT.52) THEN
       CALL ShowSevereError('AutoGrid BaseDepth is too high, either reduce it below 7.4 meters, or switch to ManualGrid')
