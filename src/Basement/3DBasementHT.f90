@@ -1008,7 +1008,7 @@ IMPLICIT NONE
        SimParams%F=.1d0
      ENDIF
      SimParams%IYRS =NumArray(2)
-     
+
      ! Override with environment variable for quicker testing
      CALL GET_ENVIRONMENT_VARIABLE("CI_BASEMENT_NUMYEARS", EnvVarNumYearsString, EnvVarNumYearsStringLength, EnvVarNumYearsStatus)
      SELECT CASE (EnvVarNumYearsStatus)
@@ -1026,7 +1026,7 @@ IMPLICIT NONE
          SimParams%IYRS = EnvVarNumYears
        END IF
      END SELECT
-          
+
      IF (SimParams%IYRS <= 0.d0) THEN
        CALL ShowSevereError('GetSimParams: Entered "IYRS: Maximum number of yearly iterations:" '//  &
           'choice is not valid.'//  &
@@ -2266,6 +2266,7 @@ IMPLICIT NONE
   REAL(r64) Elapsed_Time
   INTEGER IHrStart
   INTEGER IHrEnd
+  INTEGER CI_BAIL_EARLY_STATUS
 
 
       CALL CPU_TIME(Time_Start)
@@ -2588,6 +2589,12 @@ IMPLICIT NONE
 
 !***  Echo input data
       CALL PrelimOutput(ACEIL,AFLOOR,ARIM,ASILL,AWALL,PERIM,RUNID,TDBH,TDBC)
+
+      CALL GET_ENVIRONMENT_VARIABLE("CI_BAIL_EARLY", status=CI_BAIL_EARLY_STATUS)
+      IF (CI_BAIL_EARLY_STATUS == 0) THEN
+        print *, 'Exiting early because envionment variable CI_BAIL_EARLY was found'
+        CALL EXIT(0)
+      END IF
 
 !***  Initialize temperatures in 3-D domain
 !***  T(X,Y,Z)=TG(Z)

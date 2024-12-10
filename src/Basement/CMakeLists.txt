@@ -97,7 +97,10 @@ if(BUILD_TESTING)
       COMMAND $<TARGET_FILE:Basement>
       WORKING_DIRECTORY ${TEST_DIR}
     )
-    set_tests_properties("${TEST_NAME}" PROPERTIES FAIL_REGULAR_EXPRESSION "Terminated;Error(s) Detected")
+    set_tests_properties("${TEST_NAME}" PROPERTIES
+      FAIL_REGULAR_EXPRESSION "Terminated;Error(s) Detected"
+      ENVIRONMENT "CI_BAIL_EARLY=1"
+    )
   endmacro()
 
   basement_test(AutoGriddingDepthIsHigh)
