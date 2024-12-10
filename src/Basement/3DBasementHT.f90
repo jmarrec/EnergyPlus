@@ -11882,6 +11882,8 @@ IMPLICIT NONE
 
      REAL(r64) SqrtArg
 
+     CHARACTER(len=1000) :: LineOut  ! Reporting XFACE, YFACE, ZFACE
+
 !*** Setting values of derived type variables
      TSTEP=SimParams%TSTEP*3600.
      F=SimParams%F
@@ -11938,6 +11940,38 @@ IMPLICIT NONE
 
      ! TODO: this is a debug thing
      CALL PrintEquivalentManualGridding
+
+     IF(NZBG.GT.52) THEN
+      CALL ShowSevereError('AutoGrid BaseDepth is too high, either reduce it below 7.4 meters, or switch to ManualGrid')
+      CALL ShowContinueError('BaseDepth=['//trim(RoundSigDigits(BaseDepth,4))//'], '&
+        'resulting  NZBG=['//trim(RoundSigDigits(NZBG,0))//'] (max 52).')
+
+      CALL ShowContinueError('Suggested starting point:')
+      CALL ShowContinueError('ManualGrid,')
+      CALL ShowContinueError('  '//trim(RoundSigDigits(NX,0))//', ! NX: Number of cells in the X direction')
+      CALL ShowContinueError('  '//trim(RoundSigDigits(NY,0))//', ! NY: Number of cells in the Y direction')
+      CALL ShowContinueError('  '//trim(RoundSigDigits(NZAG,0))//', ! NZAG: Number of cells in the Z direction. above grade')
+      CALL ShowContinueError('  52, ! NZBG: Number of cells in the Z direction. below grade')
+      CALL ShowContinueError('  '//trim(RoundSigDigits(IBASE,0))//', ! IBASE: X direction cell indicator of slab edge')
+      CALL ShowContinueError('  '//trim(RoundSigDigits(JBASE,0))//', ! JBASE: Y direction cell indicator of slab edge')
+      ! 52 - (NZ2+NZ3+NZ4+NZ5+NZ6)
+      CALL ShowContinueError('  37; ! KBASE: Z direction cell indicator of the top of the floor slab')
+
+      LineOut='ZFACE'
+      DO COUNT1=-NZAG,0
+         LineOut=trim(LineOut)//','//trim(RoundSigDigits(ZFACE(COUNT1), 4))
+      END DO
+      DO COUNT1=1,37
+         LineOut=trim(LineOut)//','//trim(RoundSigDigits(COUNT1 * BaseDepth / 37.0, 4))
+      END DO
+      DO COUNT1=NZBG-14,NZBG
+         LineOut=trim(LineOut)//','//trim(RoundSigDigits(ZFACE(COUNT1), 4))
+         END DO
+      LineOut=trim(LineOut)//';'
+      CALL ShowContinueError(LineOut)
+
+      CALL ShowFatalError('Program terminates due to preceding condition(s).')
+    END IF
 
      RETURN
 END SUBROUTINE  CalcDZmin

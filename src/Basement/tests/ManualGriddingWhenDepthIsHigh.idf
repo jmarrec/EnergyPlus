@@ -1,0 +1,238 @@
+! Same exact simlulation as AutoGriddingDepthIsLowish.idf except it uses a ManualGrid, not an EquivAutoGrid
+
+SimParameters,
+  0.1,                                    !- F: Multiplier for the ADI solution
+  15;                                     !- IYRS: Maximum number of yearly iterations:
+
+MatlProps,
+  3,                                      !- NMAT: Number of materials in this domain
+  2500,                                   !- Density for Foundation Wall {kg/m3}
+  2500,                                   !- density for Floor Slab {kg/m3}
+  2500,                                   !- density for Ceiling {kg/m3}
+  1500,                                   !- density for Soil {kg/m3}
+  2000,                                   !- density for Gravel {kg/m3}
+  449,                                    !- density for Wood {kg/m3}
+  880,                                    !- Specific heat for foundation wall {J/kg-K}
+  880,                                    !- Specific heat for floor slab {J/kg-K}
+  880,                                    !- Specific heat for ceiling {J/kg-K}
+  2000,                                   !- Specific heat for soil {J/kg-K}
+  720,                                    !- Specific heat for gravel {J/kg-K}
+  1530,                                   !- Specific heat for wood {J/kg-K}
+  2.3,                                    !- Thermal conductivity for foundation wall {W/m-K}
+  2.3,                                    !- Thermal conductivity for floor slab {W/m-K}
+  2.3,                                    !- Thermal conductivity for ceiling {W/m-K}
+  1.5,                                    !- thermal conductivity for soil {W/m-K}
+  1.9,                                    !- thermal conductivity for gravel {W/m-K}
+  0.12;                                   !- thermal conductivity for wood {W/m-K}
+
+Insulation,
+  5,                                      !- REXT: R Value of any exterior insulation {m2-K/W}
+  True;                                   !- INSFULL: Flag: Is the wall fully insulated?
+
+SurfaceProps,
+  0.4,                                    !- ALBEDO: Surface albedo for No snow conditions
+  0.4,                                    !- ALBEDO: Surface albedo for snow conditions
+  0.94,                                   !- EPSLN: Surface emissivity No Snow
+  0.86,                                   !- EPSLN: Surface emissivity with Snow
+  6,                                      !- VEGHT: Surface roughness No snow conditions {cm}
+  0.25,                                   !- VEGHT: Surface roughness Snow conditions {cm}
+  True;                                   !- PET: Flag, Potential evapotranspiration on?
+
+BldgData,
+  0.72,                                   !- DWALL: Wall thickness {m}
+  0.25,                                   !- DSLAB: Floor slab thickness {m}
+  0.3,                                    !- DGRAVXY: Width of gravel pit beside basement wall {m}
+  0.2,                                    !- DGRAVZN: Gravel depth extending above the floor slab {m}
+  0.3;                                    !- DGRAVZP: Gravel depth below the floor slab {m}
+
+Interior,
+  True,                                   !- COND: Flag: Is the basement conditioned?
+  0.92,                                   !- HIN: Downward convection only heat transfer coefficient {W/m2-K}
+  4.04,                                   !- HIN: Upward convection only heat transfer coefficient {W/m2-K}
+  3.08,                                   !- HIN: Horizontal convection only heat transfer coefficient {W/m2-K}
+  6.13,                                   !- HIN: Downward combined (convection and radiation) heat transfer coefficient {W/m2-K}
+  9.26,                                   !- HIN: Upward combined (convection and radiation) heat transfer coefficient {W/m2-K}
+  8.29;                                   !- HIN: Horizontal combined (convection and radiation) heat transfer coefficient {W/m2-K}
+
+ComBldg,
+  19.112521,                              !- January average temperature {C}
+  19.3265,                                !- February average temperature {C}
+  19.639847,                              !- March average temperature {C}
+  20.215454,                              !- April average temperature {C}
+  20.415274,                              !- May average temperature {C}
+  21.524396,                              !- June average temperature {C}
+  21.880071,                              !- July average temperature {C}
+  21.659116,                              !- August average temperature {C}
+  21.114287,                              !- September average temperature {C}
+  20.383342,                              !- October average temperature {C}
+  19.553359,                              !- November average temperature {C}
+  19.233107,                              !- December average temperature {C}
+  ;                                       !- Daily variation sine wave amplitude {deltaC}
+
+EquivSlab,
+  20.045326,                              !- APRatio: The area to perimeter ratio for this slab {m}
+  FALSE;                                  !- EquivSizing: Flag
+
+ManualGrid,
+  45,                                     !- NX: Number of cells in the X direction
+  45,                                     !- NY: Number of cells in the Y direction
+  4,                                      !- NZAG: Number of cells in the Z direction. above grade
+  52,                                     !- NZBG: Number of cells in the Z direction. below grade
+  27,                                     !- IBASE: X direction cell indicator of slab edge
+  27,                                     !- JBASE: Y direction cell indicator of slab edge
+  37;                                     !- KBASE: Z direction cell indicator of the top of the floor slab
+
+XFACE,
+  0.000000000,
+  1.090652000,
+  3.090652000,
+  5.090652000,
+  7.090652000,
+  9.090652000,
+  11.09065200,
+  13.09065200,
+  15.09065200,
+  17.09065200,
+  19.09065200,
+  21.09065200,
+  23.09065200,
+  25.09065200,
+  27.09065200,
+  29.09065200,
+  31.09065200,
+  33.09065200,
+  35.09065200,
+  37.09065200,
+  37.59065200,
+  38.09065200,
+  38.59065200,
+  39.09065200,
+  39.49065200,
+  39.69065200,
+  39.89065200,
+  40.09065200,
+  40.16865200,
+  40.24665200,
+  40.81065200,
+  40.96065200,
+  41.11065200,
+  41.36065200,
+  41.61065200,
+  41.86065200,
+  42.11065200,
+  42.61065200,
+  43.11065200,
+  44.11065200,
+  46.11065200,
+  48.11065200,
+  50.11065200,
+  52.11065200,
+  54.11065200,
+  56.11065200;
+
+YFACE,
+  0.000000000,
+  1.090652000,
+  3.090652000,
+  5.090652000,
+  7.090652000,
+  9.090652000,
+  11.09065200,
+  13.09065200,
+  15.09065200,
+  17.09065200,
+  19.09065200,
+  21.09065200,
+  23.09065200,
+  25.09065200,
+  27.09065200,
+  29.09065200,
+  31.09065200,
+  33.09065200,
+  35.09065200,
+  37.09065200,
+  37.59065200,
+  38.09065200,
+  38.59065200,
+  39.09065200,
+  39.49065200,
+  39.69065200,
+  39.89065200,
+  40.09065200,
+  40.16865200,
+  40.24665200,
+  40.81065200,
+  40.96065200,
+  41.11065200,
+  41.36065200,
+  41.61065200,
+  41.86065200,
+  42.11065200,
+  42.61065200,
+  43.11065200,
+  44.11065200,
+  46.11065200,
+  48.11065200,
+  50.11065200,
+  52.11065200,
+  54.11065200,
+  56.11065200;
+
+ZFACE,
+  -0.3170000000,
+  -0.2730000000,
+  -0.3800000000E-1,
+  -0.2250713702E-1,
+  0.000000000,
+  0.2783783784,
+  0.5567567568,
+  0.8351351351,
+  1.113513514,
+  1.391891892,
+  1.670270270,
+  1.948648649,
+  2.227027027,
+  2.505405405,
+  2.783783784,
+  3.062162162,
+  3.340540541,
+  3.618918919,
+  3.897297297,
+  4.175675676,
+  4.454054054,
+  4.732432432,
+  5.010810811,
+  5.289189189,
+  5.567567568,
+  5.845945946,
+  6.124324324,
+  6.402702703,
+  6.681081081,
+  6.959459459,
+  7.237837838,
+  7.516216216,
+  7.794594595,
+  8.072972973,
+  8.351351351,
+  8.629729730,
+  8.908108108,
+  9.186486486,
+  9.464864865,
+  9.743243243,
+  10.02162162,
+  10.30000000,
+  10.55000000,
+  10.75000000,
+  11.00000000,
+  11.25000000,
+  11.50000000,
+  11.75000000,
+  12.25000000,
+  12.75000000,
+  14.75000000,
+  16.75000000,
+  18.75000000,
+  20.75000000,
+  22.75000000,
+  24.75000000,
+  26.75000000
