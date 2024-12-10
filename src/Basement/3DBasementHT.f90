@@ -11444,6 +11444,9 @@ END SUBROUTINE InitializeTemps
 !********************************   AUTOGRIDDING  ***************************************
 SUBROUTINE AutoGridding
 USE BasementSimData
+USE DataGlobals, ONLY: ShowSevereError,ShowContinueError
+USE General, ONLY: RoundSigDigits
+
 IMPLICIT NONE
 ! THIS PROGRAM WILL ESTABLISH THE SIMULATION GRID FOR A BASEMENT FOUNDATION
 ! WHOSE DIMENSIONS ARE INPUT BY THE USER
@@ -11520,6 +11523,7 @@ IMPLICIT NONE
      REAL(r64) RimJoistHeight ! RIM JOIST HEIGHT  (CURRENTLY FIXED)                  [m]
      REAL(r64) SillPlateHeight ! SILL PLATE HEIGHT (CURRENTLY FIXED)                 [m]
 
+     REAL(r64) BelowGradeZCellSize ! Cell size below grade in NZ1 region
 
      LOGICAL ODD         ! ODD NUMBER FLAG FOR EDGEM3. USED TO SPACE THE GRID    []
                          ! INSIDE THE SLAB.
@@ -11771,11 +11775,22 @@ IMPLICIT NONE
        NZAG=NZP+3
      END IF
 
-     IF(MOD(BaseDepth,.200).GT.0.0005d0) THEN
-       NZ1=INT(BaseDepth/0.2d0)+1 ! NZ1 is the number of cells in the basement wall that
-                                ! are below grade
+     ! NZ1 is the number of cells in the basement wall that are below grade
+     BelowGradeZCellSize = 0.2d0
+     IF((BaseDepth / BelowGradeZCellSize) > 37.0) THEN
+       ! NZBG would be > 52, and we get a crash in CalcTearth because A, B, C, D are size 50, and we iterate up to NZBG-2
+       CALL ShowSevereError('AutoGrid BaseDepth is too high (>= 7.4 meters)')
+       CALL ShowContinueError('BaseDepth=['//trim(RoundSigDigits(BaseDepth,4))//'].')
+       NZ1 = 37
+       BelowGradeZCellSize = BaseDepth / 37.0
+       CALL ShowContinueError('Resetting Cell Size in Below Ground region from 0.2 meters to BaseDepth=['//trim(RoundSigDigits(BelowGradeZCellSize,4))//'].')
+       CALL ShowContinueError('It is possible that convergence will not be achieved if the cell size is too high')
      ELSE
-       NZ1=INT(BaseDepth/.2d0)
+       IF(MOD(BaseDepth,BelowGradeZCellSize).GT.0.0005d0) THEN
+         NZ1=INT(BaseDepth/BelowGradeZCellSize)+1
+       ELSE
+         NZ1=INT(BaseDepth/BelowGradeZCellSize)
+       END IF
      END IF
 
      NZ2=1          ! NZ2 is the basement floor slab, one cell thick, by definition
@@ -11794,9 +11809,9 @@ IMPLICIT NONE
        IF (NZAG.EQ.4) THEN
          ZFACEINIT(COUNT3)=0.0
        ELSE IF(COUNT3.EQ.-NZAG+4) THEN
-         ZFACEINIT(COUNT3)=ZFACEINIT(-NZAG+3)+MOD(ConcAGHeight,0.2d0)
+         ZFACEINIT(COUNT3)=ZFACEINIT(-NZAG+3)+MOD(ConcAGHeight,BelowGradeZCellSize)
        ELSE
-         ZFACEINIT(COUNT3)=ZFACEINIT(COUNT3-1)+0.2d0
+         ZFACEINIT(COUNT3)=ZFACEINIT(COUNT3-1)+BelowGradeZCellSize
        END IF
        IF (COUNT3.EQ.0) ZFACEINIT(COUNT3)=0.0
      END DO
@@ -11805,7 +11820,7 @@ IMPLICIT NONE
      !*** BELOW GRADE CELLS
 
      DO COUNT1=1,NZ1
-       ZFACEINIT(COUNT1)=ZFACEINIT(COUNT1-1)+0.2d0
+       ZFACEINIT(COUNT1)=ZFACEINIT(COUNT1-1)+BelowGradeZCellSize
        IF (COUNT1.EQ.NZ1) ZFACEINIT(COUNT1)=BaseDepth
        IF (COUNT1.EQ.NZ1) KBASE=COUNT1 !+NZAG
      END DO
