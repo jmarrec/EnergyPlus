@@ -371,16 +371,19 @@ namespace Window {
             BGBlind = false;
             ExtScreen = false;
             StormWinConst = false;
-            wm->lSimpleGlazingSystem = false;
-
+            
+            bool lSimpleGlazingSystem = false;
+            Real64 SimpleGlazingSHGC = 0.0;
+            Real64 SimpleGlazingU = 0.0;
+            
             if (mat->group == Material::Group::GlassSimple) {
                 auto const *matWin = dynamic_cast<Material::MaterialGlass const *>(mat);
                 assert(matWin != nullptr);
 
                 // what if outside layer is shade, blind, or screen?
-                wm->lSimpleGlazingSystem = true;
-                wm->SimpleGlazingSHGC = matWin->SimpleWindowSHGC;
-                wm->SimpleGlazingU = matWin->SimpleWindowUfactor;
+                lSimpleGlazingSystem = true;
+                SimpleGlazingSHGC = matWin->SimpleWindowSHGC;
+                SimpleGlazingU = matWin->SimpleWindowUfactor;
             }
 
             if (has_prefix(thisConstruct.Name, "BARECONSTRUCTIONWITHSTORMWIN") || has_prefix(thisConstruct.Name, "SHADEDCONSTRUCTIONWITHSTORMWIN"))
@@ -482,7 +485,8 @@ namespace Window {
 
             lquasi = false;
             AllGlassIsSpectralAverage = true;
-            wm->LayerNum = {0};
+
+            std::array<int, Window::maxGlassLayers> LayerNum = {0}; // Glass layer number
 
             // Loop over glass layers in the construction
             for (int IGlass = 1; IGlass <= NGlass; ++IGlass) {
@@ -498,7 +502,7 @@ namespace Window {
                     }
                 }
 
-                wm->LayerNum[IGlass - 1] = LayNum;
+                LayerNum[IGlass - 1] = LayNum;
                 LayPtr = thisConstruct.LayerPoint(LayNum);
                 auto *matGlass = dynamic_cast<Material::MaterialGlass *>(s_mat->materials(LayPtr));
                 assert(matGlass != nullptr);
@@ -540,25 +544,12 @@ namespace Window {
                         ShowContinueError(state,
                                           "then make a duplicate material (with new name) if you want to model those windows  (and reference the new "
                                           "material) using the full spectral data.");
-                        // calc Trans, TransVis, ReflectSolBeamFront, ReflectSolBeamBack, ReflectVisBeamFront, ReflectVisBeamBack
-                        //  assuming wlt same as wle
-                        wm->tmpTrans = solarSpectrumAverage(state, t[0]);
-                        wm->tmpReflectSolBeamFront = solarSpectrumAverage(state, rff[0]);
-                        wm->tmpReflectSolBeamBack = solarSpectrumAverage(state, rbb[0]);
-
-                        // visible properties
-                        wm->tmpTransVis = visibleSpectrumAverage(state, t[0]);
-                        wm->tmpReflectVisBeamFront = visibleSpectrumAverage(state, rff[0]);
-                        wm->tmpReflectVisBeamBack = visibleSpectrumAverage(state, rbb[0]);
 
                         // set this material to average spectral data
                         matGlass->GlassSpectralDataPtr = 0;
-                        matGlass->Trans = wm->tmpTrans;
-                        matGlass->TransVis = wm->tmpTransVis;
-                        matGlass->ReflectSolBeamFront = wm->tmpReflectSolBeamFront;
-                        matGlass->ReflectSolBeamBack = wm->tmpReflectSolBeamBack;
-                        matGlass->ReflectVisBeamFront = wm->tmpReflectVisBeamFront;
-                        matGlass->ReflectVisBeamBack = wm->tmpReflectVisBeamBack;
+                        matGlass->Trans = matGlass->TransVis = solarSpectrumAverage(state, t[0]);
+                        matGlass->ReflectSolBeamFront = matGlass->ReflectVisBeamFront = solarSpectrumAverage(state, rff[0]);
+                        matGlass->ReflectSolBeamBack = matGlass->ReflectVisBeamBack = visibleSpectrumAverage(state, rbb[0]);
                         SpecDataNum = 0;
                     }
                 }
@@ -605,23 +596,12 @@ namespace Window {
                             rff[IGlass - 1][ILam - 1] = Curve::CurveValue(state, matGlass->GlassSpecAngFRefleDataPtr, 0.0, lam);
                             rbb[IGlass - 1][ILam - 1] = Curve::CurveValue(state, matGlass->GlassSpecAngBRefleDataPtr, 0.0, lam);
                         }
-                        wm->tmpTrans = solarSpectrumAverage(state, t[0]);
-                        wm->tmpReflectSolBeamFront = solarSpectrumAverage(state, rff[0]);
-                        wm->tmpReflectSolBeamBack = solarSpectrumAverage(state, rbb[0]);
-
-                        // visible properties
-                        wm->tmpTransVis = visibleSpectrumAverage(state, t[0]);
-                        wm->tmpReflectVisBeamFront = visibleSpectrumAverage(state, rff[0]);
-                        wm->tmpReflectVisBeamBack = visibleSpectrumAverage(state, rbb[0]);
-
+                        
                         // set this material to average spectral data
                         matGlass->windowOpticalData = Window::OpticalDataModel::SpectralAverage;
-                        matGlass->Trans = wm->tmpTrans;
-                        matGlass->TransVis = wm->tmpTransVis;
-                        matGlass->ReflectSolBeamFront = wm->tmpReflectSolBeamFront;
-                        matGlass->ReflectSolBeamBack = wm->tmpReflectSolBeamBack;
-                        matGlass->ReflectVisBeamFront = wm->tmpReflectVisBeamFront;
-                        matGlass->ReflectVisBeamBack = wm->tmpReflectVisBeamBack;
+                        matGlass->Trans = matGlass->TransVis = visibleSpectrumAverage(state, t[0]);
+                        matGlass->ReflectSolBeamFront = matGlass->ReflectVisBeamFront = solarSpectrumAverage(state, rff[0]);
+                        matGlass->ReflectSolBeamBack = matGlass->ReflectVisBeamBack = solarSpectrumAverage(state, rbb[0]);
                         SpecDataNum = 0;
                     }
                 }
@@ -631,9 +611,9 @@ namespace Window {
             // Get glass layer properties, then glazing system properties (which include the
             // effect of inter-reflection among glass layers) at each incidence angle.
 
-	    // Apparently, using pre-calcaulated and hard-coded cosPhis (e.g., Window::cosPhis) causes a bunch of
-	    // diffs, including some big ones
-	    std::array<Real64, numPhis> cosPhisLocal;
+            // Apparently, using pre-calcaulated and hard-coded cosPhis (e.g., Window::cosPhis) causes a bunch of
+            // diffs, including some big ones
+            std::array<Real64, numPhis> cosPhisLocal;
 	    
             for (int iPhi = 0; iPhi < numPhis; ++iPhi) cosPhisLocal[iPhi] = std::cos((double)iPhi * dPhiDeg * Constant::DegToRad);
 	    
@@ -641,7 +621,7 @@ namespace Window {
                 // For each wavelength, get glass layer properties at this angle of incidence
                 // from properties at normal incidence
                 for (int IGlass = 1; IGlass <= NGlass; ++IGlass) {
-                    LayPtr = thisConstruct.LayerPoint(wm->LayerNum[IGlass - 1]);
+                    LayPtr = thisConstruct.LayerPoint(LayerNum[IGlass - 1]);
                     auto *matGlass = dynamic_cast<Material::MaterialGlass *>(s_mat->materials(LayPtr));
                     assert(matGlass != nullptr);
                     if (matGlass->windowOpticalData != Window::OpticalDataModel::SpectralAndAngle) {
@@ -653,9 +633,9 @@ namespace Window {
                                               tPhi[IGlass - 1][ILam - 1],
                                               rfPhi[IGlass - 1][ILam - 1],
                                               rbPhi[IGlass - 1][ILam - 1],
-                                              wm->lSimpleGlazingSystem,
-                                              wm->SimpleGlazingSHGC,
-                                              wm->SimpleGlazingU);
+                                              lSimpleGlazingSystem,
+                                              SimpleGlazingSHGC,
+                                              SimpleGlazingU);
                         }
                     } else {
                         for (int ILam = 1; ILam <= (int)wm->wle.size(); ++ILam) {
@@ -769,7 +749,7 @@ namespace Window {
             //------------------------------------------------------------------------------------------
 
             lquasi = false;
-            wm->LayerNum = {0};
+            LayerNum = {0}; // Glass layer number
 
             // Loop over glass layers in the construction.
             for (int IGlass = 1; IGlass <= NGlass; ++IGlass) {
@@ -785,7 +765,7 @@ namespace Window {
                         if (IGlass == 3) LayNum = 1;
                     }
                 }
-                wm->LayerNum[IGlass - 1] = LayNum;
+                LayerNum[IGlass - 1] = LayNum;
                 LayPtr = thisConstruct.LayerPoint(LayNum);
                 auto const *matGlass = dynamic_cast<Material::MaterialGlass const *>(s_mat->materials(LayPtr));
                 assert(matGlass != nullptr);
@@ -837,7 +817,7 @@ namespace Window {
                 // For each wavelength, get glass layer properties at this angle of incidence
                 // from properties at normal incidence
                 for (int IGlass = 1; IGlass <= NGlass; ++IGlass) {
-                    LayPtr = thisConstruct.LayerPoint(wm->LayerNum[IGlass - 1]);
+                    LayPtr = thisConstruct.LayerPoint(LayerNum[IGlass - 1]);
                     auto const *matGlass = dynamic_cast<Material::MaterialGlass const *>(s_mat->materials(LayPtr));
                     assert(matGlass != nullptr);
                     if (matGlass->windowOpticalData != Window::OpticalDataModel::SpectralAndAngle) {
@@ -850,9 +830,9 @@ namespace Window {
                                               tPhi[IGlass - 1][ILam - 1],
                                               rfPhi[IGlass - 1][ILam - 1],
                                               rbPhi[IGlass - 1][ILam - 1],
-                                              wm->lSimpleGlazingSystem,
-                                              wm->SimpleGlazingSHGC,
-                                              wm->SimpleGlazingU);
+                                              lSimpleGlazingSystem,
+                                              SimpleGlazingSHGC,
+                                              SimpleGlazingU);
                         }
 
                     } else {
@@ -1733,6 +1713,10 @@ namespace Window {
         // back reflectance at angle of incidence
         std::array<std::array<Real64, maxSpectralDataElements>, maxGlassLayers> rbadjPhi = {0.0};
 
+        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> top = {0.0};  // Transmittance matrix for subr. op
+        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> rfop = {0.0}; // Front reflectance matrix for subr. op
+        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> rbop = {0.0}; // Back transmittance matrix for subr. op
+        
         auto const &wm = state.dataWindowManager;
         // For each glass layer find tPhi, rfPhi, and rbPhi at each wavelength
 
@@ -1762,20 +1746,20 @@ namespace Window {
 
             // Set diagonal of matrix for subroutine SystemPropertiesAtLambdaAndPhi
             for (int i = 1; i <= ngllayer; ++i) {
-                wm->top[i - 1][i - 1] = tadjPhi[i - 1][j - 1];
-                wm->rfop[i - 1][i - 1] = rfadjPhi[i - 1][j - 1];
-                wm->rbop[i - 1][i - 1] = rbadjPhi[i - 1][j - 1];
+                top[i - 1][i - 1] = tadjPhi[i - 1][j - 1];
+                rfop[i - 1][i - 1] = rfadjPhi[i - 1][j - 1];
+                rbop[i - 1][i - 1] = rbadjPhi[i - 1][j - 1];
             }
 
             // Calculate glazing system properties
             if (ngllayer == 1) { // Single-layer system
-                stPhi[j - 1] = wm->top[0][0];
-                srfPhi[j - 1] = wm->rfop[0][0];
-                srbPhi[j - 1] = wm->rbop[0][0];
+                stPhi[j - 1] = top[0][0];
+                srfPhi[j - 1] = rfop[0][0];
+                srbPhi[j - 1] = rbop[0][0];
                 sabsPhi(1) = 1.0 - stPhi[j - 1] - srfPhi[j - 1];
             } else { // Multilayer system
                 // Get glazing system properties stPhi, etc., at this wavelength and incidence angle
-                SystemPropertiesAtLambdaAndPhi(state, ngllayer, stPhi[j - 1], srfPhi[j - 1], srbPhi[j - 1], sabsPhi);
+                SystemPropertiesAtLambdaAndPhi(state, ngllayer, stPhi[j - 1], srfPhi[j - 1], srbPhi[j - 1], top, rfop, rbop, sabsPhi);
             }
 
             for (int i = 1; i <= ngllayer; ++i) {
@@ -1792,6 +1776,9 @@ namespace Window {
                                         Real64 &tt,  // System transmittance
                                         Real64 &rft, // System front and back reflectance
                                         Real64 &rbt,
+                                        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &top,
+                                        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &rfop,
+                                        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &rbop,
                                         Array1A<Real64> aft // System absorptance of each glass layer
     )
     {
@@ -1824,22 +1811,22 @@ namespace Window {
         // Calculate perimeter elements of rt matrix
         for (int i = 1; i <= n - 1; ++i) {
             for (int j = i + 1; j <= n; ++j) {
-                denom = 1.0 - wm->rfop[j - 1][j - 1] * wm->rbop[i - 1][j - 2];
+                denom = 1.0 - rfop[j - 1][j - 1] * rbop[i - 1][j - 2];
                 if (denom == 0.0) {
-                    wm->top[j - 1][i - 1] = 0.0;
-                    wm->rfop[j - 1][i - 1] = 1.0;
-                    wm->rbop[i - 1][j - 1] = 1.0;
+                    top[j - 1][i - 1] = 0.0;
+                    rfop[j - 1][i - 1] = 1.0;
+                    rbop[i - 1][j - 1] = 1.0;
                 } else {
-                    wm->top[j - 1][i - 1] = wm->top[j - 2][i - 1] * wm->top[j - 1][j - 1] / denom;
-                    wm->rfop[j - 1][i - 1] = wm->rfop[j - 2][i - 1] + pow_2(wm->top[j - 2][i - 1]) * wm->rfop[j - 1][j - 1] / denom;
-                    wm->rbop[i - 1][j - 1] = wm->rbop[j - 1][j - 1] + pow_2(wm->top[j - 1][j - 1]) * wm->rbop[i - 1][j - 2] / denom;
+                    top[j - 1][i - 1] = top[j - 2][i - 1] * top[j - 1][j - 1] / denom;
+                    rfop[j - 1][i - 1] = rfop[j - 2][i - 1] + pow_2(top[j - 2][i - 1]) * rfop[j - 1][j - 1] / denom;
+                    rbop[i - 1][j - 1] = rbop[j - 1][j - 1] + pow_2(top[j - 1][j - 1]) * rbop[i - 1][j - 2] / denom;
                 }
             }
         }
         // System properties: transmittance, front and back reflectance
-        tt = wm->top[n - 1][0];
-        rft = wm->rfop[n - 1][0];
-        rbt = wm->rbop[0][n - 1];
+        tt = top[n - 1][0];
+        rft = rfop[n - 1][0];
+        rbt = rbop[0][n - 1];
 
         // Absorptance in each layer
         for (int j = 1; j <= n; ++j) {
@@ -1847,25 +1834,25 @@ namespace Window {
                 t0 = 1.0;
                 rb0 = 0.0;
             } else {
-                t0 = wm->top[j - 2][0];
-                rb0 = wm->rbop[0][j - 2];
+                t0 = top[j - 2][0];
+                rb0 = rbop[0][j - 2];
             }
 
             if (j == n) {
                 rf0 = 0.0;
             } else {
-                rf0 = wm->rfop[n - 1][j];
+                rf0 = rfop[n - 1][j];
             }
 
-            af = 1.0 - wm->top[j - 1][j - 1] - wm->rfop[j - 1][j - 1];
-            ab = 1.0 - wm->top[j - 1][j - 1] - wm->rbop[j - 1][j - 1];
-            denom1 = 1.0 - wm->rfop[n - 1][j - 1] * rb0;
-            denom2 = 1.0 - wm->rbop[0][j - 1] * rf0;
+            af = 1.0 - top[j - 1][j - 1] - rfop[j - 1][j - 1];
+            ab = 1.0 - top[j - 1][j - 1] - rbop[j - 1][j - 1];
+            denom1 = 1.0 - rfop[n - 1][j - 1] * rb0;
+            denom2 = 1.0 - rbop[0][j - 1] * rf0;
 
             if (denom1 == 0.0 || denom2 == 0.0) {
                 aft(j) = 0.0;
             } else {
-                aft(j) = (t0 * af) / denom1 + (wm->top[j - 1][0] * rf0 * ab) / denom2;
+                aft(j) = (t0 * af) / denom1 + (top[j - 1][0] * rf0 * ab) / denom2;
             }
         }
     } // SystemPropertiesAtLambdaAndPhi()
@@ -3553,7 +3540,6 @@ namespace Window {
         Real64 CVGap;         // VGap-independent term in pressure balance equation
         Real64 GapHeightChar; // Characteristic height of the gap air temperature profile (m)
         Real64 TAve;          // Average of TGlass and TShade (K)
-        // REAL(r64)            :: AirProps(8)         ! Air properties
         int TotGaps;              // Glass/glass gaps + glass-shade/blind gap
         Real64 con;               // Gap conductivity and derivative
         Real64 gr;                // glass-shade/blind gap Grashof number
@@ -3566,10 +3552,6 @@ namespace Window {
         auto &wm = state.dataWindowManager;
 
         auto &surf = s_surf->Surface(SurfNum);
-
-        // Air properties
-        //               Dens  dDens/dT  Con    dCon/dT   Vis    dVis/dT Prandtl dPrandtl/dT
-        // DATA AirProps / 1.29, -0.4d-2, 2.41d-2, 7.6d-5, 1.73d-5, 1.0d-7, 0.72,   1.8d-3  /
 
         ConstrNumSh = s_surf->SurfWinActiveShadedConstruction(SurfNum);
         ShadeFlag = s_surf->SurfWinShadingFlag(SurfNum);
@@ -3630,8 +3612,8 @@ namespace Window {
             AHolesGap = matShadingDevice->airFlowPermeability * GapHeight * surf.Width;
         }
 
-        RhoAir = wm->AirProps[0] + wm->AirProps[1] * (TGapOld - Constant::Kelvin);
-        ViscAir = wm->AirProps[4] + wm->AirProps[5] * (TGapOld - Constant::Kelvin);
+        RhoAir = AirDens + AirDDensDT * (TGapOld - Constant::Kelvin);
+        ViscAir = AirVis + AirDVisDT * (TGapOld - Constant::Kelvin);
         // The factor 12 in the next line is based on the solution of steady laminar flow between fixed
         // parallel plates given in Sec. 6.9.1 of Fundamentals of Fluid Mechanics, Munson/Young/Okishi, Third Edition
         // Update, John Wiley & Sons, 1998; ISO 15099 has 8 for this factor, which is for flow through a tube.
@@ -3655,7 +3637,7 @@ namespace Window {
         Zinlet = pow_2(AGap / (0.6 * AEqInlet + 0.000001) - 1.0);
         Zoutlet = pow_2(AGap / (0.6 * AEqOutlet + 0.000001) - 1.0);
         AVGap = 0.5 * RhoAir * (1 + Zinlet + Zoutlet);
-        RhoTRef = wm->AirProps[0] * Constant::Kelvin;
+        RhoTRef = AirDens * Constant::Kelvin;
         CVGap = RhoTRef * 9.81 * GapHeight * s_surf->Surface(SurfNum).SinTilt * (TGapOld - TGapInlet) / (TGapOld * TGapInlet);
 
         // Solution of quadratic equation in VGap
@@ -3674,7 +3656,7 @@ namespace Window {
 
         // Convective heat flow from gap to room air for interior shade or blind
         if (ANY_INTERIOR_SHADE_BLIND(ShadeFlag)) {
-            RhoAir = wm->AirProps[0] + wm->AirProps[1] * (TGapNew - Constant::Kelvin);
+            RhoAir = AirDens + AirDens * (TGapNew - Constant::Kelvin);
             QConvGap = RhoAir * AGap * VGap * 1008.0 * (TGapOutlet - TGapInlet);
             // Exclude convection to gap due to divider, if present; divider convection handled
             // separately in CalcWinFrameAndDividerTemps
@@ -3928,15 +3910,10 @@ namespace Window {
         //   is in horizontal plane normal to window.
         Real64 GapHeightChar; // Characteristic height of the airflow gap air temperature profile (m)
         Real64 TAve;          // Average of TGlassFace1 and TGlassFace2 (K)
-        // REAL(r64)            :: AirProps(8)         ! Air properties
         Real64 con; // Gap conductivity and derivative
         Real64 gr;  // Gap air Grashof number
         Real64 pr;  // Gap air Prandtl number
         Real64 nu;  // Gap air Nusselt number
-
-        // Air properties
-        //               Dens  dDens/dT  Con    dCon/dT   Vis    dVis/dT Prandtl dPrandtl/dT
-        // DATA AirProps / 1.29, -0.4d-2, 2.41d-2, 7.6d-5, 1.73d-5, 1.0d-7, 0.72,   1.8d-3  /
 
         auto &s_mat = state.dataMaterial;
         auto &s_surf = state.dataSurface;
@@ -3972,7 +3949,7 @@ namespace Window {
         AGap = GapDepth * surf.Width;
         VGap = s_surf->SurfWinAirflowThisTS(SurfNum) / GapDepth;
         hcv = 2.0 * hGapStill + 4.0 * VGap;
-        RhoAir = wm->AirProps[0] + wm->AirProps[1] * (TGapOld - Constant::Kelvin);
+        RhoAir = AirDens + AirDDensDT * (TGapOld - Constant::Kelvin);
         GapHeightChar = RhoAir * 1008.0 * GapDepth * VGap / (2.0 * hcv);
         // The following avoids divide by zero and exponential underflow
         if (GapHeightChar == 0.0) {
@@ -3984,7 +3961,7 @@ namespace Window {
         }
         TGapNew = TAve - (GapHeightChar / GapHeight) * (TGapOutlet - TGapInlet);
         // Convective heat flow from gap [W]
-        RhoAir = wm->AirProps[0] + wm->AirProps[1] * (TGapNew - Constant::Kelvin);
+        RhoAir = AirDens + AirDDensDT * (TGapNew - Constant::Kelvin);
         QConvGap = RhoAir * AGap * VGap * 1008.0 * (TGapOutlet - TGapInlet);
     } // BetweenGlassForcedFlow()
 
@@ -4050,14 +4027,9 @@ namespace Window {
         Real64 nu;                        // Gap air Nusselt number
         WinShadingType ShadeFlag;         // Shading flag
         int IGapInc;                      // Gap increment; =0, double glass, =1, triple glass
-        // REAL(r64)            :: AirProps(8)         ! Air properties
 
         auto &s_surf = state.dataSurface;
         auto const &wm = state.dataWindowManager;
-
-        // Air properties
-        //               Dens  dDens/dT  Con    dCon/dT   Vis    dVis/dT Prandtl dPrandtl/dT
-        // DATA AirProps / 1.29, -0.4d-2, 2.41d-2, 7.6d-5, 1.73d-5, 1.0d-7, 0.72,   1.8d-3  /
 
         ConstrNumSh = s_surf->Surface(SurfNum).activeShadedConstruction;
         ShadeFlag = s_surf->SurfWinShadingFlag(SurfNum);
@@ -4101,7 +4073,7 @@ namespace Window {
             hGapStill(IGap) = con / wm->gaps[IGap + IGapInc - 1].width * nu;
             // Shade/blind or glass surface to air convection coefficient
             hcv(IGap) = 2.0 * hGapStill(IGap) + 4.0 * VGap;
-            RhoAir(IGap) = wm->AirProps[0] + wm->AirProps[1] * (TGapOld(IGap) - Constant::Kelvin);
+            RhoAir(IGap) = AirDens + AirDDensDT * (TGapOld(IGap) - Constant::Kelvin);
             hcv(IGap) = 2.0 * hGapStill(IGap) + 4.0 * VGap;
             GapHeightChar(IGap) = RhoAir(IGap) * 1008.0 * GapDepth * VGap / (2.0 * hcv(IGap));
             // The following avoids divide by zero and exponential underflow
@@ -4114,7 +4086,7 @@ namespace Window {
             }
             TGapNew(IGap) = TAve(IGap) - (GapHeightChar(IGap) / GapHeight) * (TGapOutlet(IGap) - TGapInlet);
             // Convective heat flow from gap [W]
-            RhoAir(IGap) = wm->AirProps[0] + wm->AirProps[1] * (TGapNew(IGap) - Constant::Kelvin);
+            RhoAir(IGap) = AirDens + AirDDensDT * (TGapNew(IGap) - Constant::Kelvin);
             QConvGap(IGap) = RhoAir(IGap) * AGap * VGap * 1008.0 * (TGapOutlet(IGap) - TGapInlet);
         }
 

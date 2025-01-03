@@ -69,6 +69,15 @@ struct EnergyPlusData;
 
 namespace Window {
 
+    Real64 constexpr AirDens = 1.29;
+    Real64 constexpr AirDDensDT = - 0.4e-2;
+    Real64 constexpr AirCon = 2.41e-2;
+    Real64 constexpr AirDConDT = 7.6e-5;
+    Real64 constexpr AirVis = 1.73e-5;
+    Real64 constexpr AirDVisDT = 1.0e-7;
+    Real64 constexpr AirPrandtl = 0.72;
+    Real64 constexpr AirDPrandtlDT = 1.8e-3;
+  
     int constexpr nume = 107; // Number of wavelength values in solar spectrum
     int constexpr numt3 = 81; // Number of wavelength values in the photopic response
 
@@ -120,6 +129,9 @@ namespace Window {
                                         Real64 &tt,  // System transmittance
                                         Real64 &rft, // System front and back reflectance
                                         Real64 &rbt,
+                                        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &top,
+                                        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &rfop,
+                                        std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &rbop,
                                         Array1A<Real64> aft // System absorptance of each glass layer
     );
 
@@ -415,10 +427,6 @@ namespace Window {
 
 struct WindowManagerData : BaseGlobalStruct
 {
-
-    //                                      Dens  dDens/dT  Con    dCon/dT   Vis    dVis/dT Prandtl dPrandtl/dT
-    std::array<Real64, 8> const AirProps = {1.29, -0.4e-2, 2.41e-2, 7.6e-5, 1.73e-5, 1.0e-7, 0.72, 1.8e-3};
-
     // Air mass 1.5 terrestrial solar global spectral irradiance (W/m2-micron)
     // on a 37 degree tilted surface; corresponds
     // to wavelengths (microns) in following data block (ISO 9845-1 and ASTM E 892;
@@ -503,33 +511,16 @@ struct WindowManagerData : BaseGlobalStruct
     Real64 A67 = 0.0;
 
     // TEMP MOVED FROM DataHeatBalance.hh -BLB
-
-    // for each wavelenth in wle
-    std::array<std::array<Real64, Window::maxGlassLayers>, Window::maxGlassLayers> top = {0.0};  // Transmittance matrix for subr. op
-    std::array<std::array<Real64, Window::maxGlassLayers>, Window::maxGlassLayers> rfop = {0.0}; // Front reflectance matrix for subr. op
-    std::array<std::array<Real64, Window::maxGlassLayers>, Window::maxGlassLayers> rbop = {0.0}; // Back transmittance matrix for subr. op
-
     std::unique_ptr<Window::CWindowModel> inExtWindowModel;       // Information about windows model (interior or exterior)
     std::unique_ptr<Window::CWindowOpticalModel> winOpticalModel; // Information about windows optical model (Simplified or BSDF)
 
     bool RunMeOnceFlag = false;
-    bool lSimpleGlazingSystem = false; // true if using simple glazing system block model
     bool BGFlag = false;               // True if between-glass shade or blind
     bool locTCFlag = false;            // True if this surface is a TC window
     bool DoReport = false;
     bool HasWindows = false;
     bool HasComplexWindows = false;
     bool HasEQLWindows = false;     // equivalent layer window defined
-    Real64 SimpleGlazingSHGC = 0.0; // value of SHGC for simple glazing system block model
-    Real64 SimpleGlazingU = 0.0;    // value of U-factor for simple glazing system block model
-    Real64 tmpTrans = 0.0;          // solar transmittance calculated from spectral data
-    Real64 tmpTransVis = 0.0;       // visible transmittance calculated from spectral data
-    Real64 tmpReflectSolBeamFront = 0.0;
-    Real64 tmpReflectSolBeamBack = 0.0;
-    Real64 tmpReflectVisBeamFront = 0.0;
-    Real64 tmpReflectVisBeamBack = 0.0;
-
-    std::array<int, Window::maxGlassLayers> LayerNum = {0}; // Glass layer number
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {
@@ -569,37 +560,19 @@ struct WindowManagerData : BaseGlobalStruct
         this->A23 = 0.0;
         this->A45 = 0.0;
         this->A67 = 0.0;
-        this->top = {0.0};
-        this->rfop = {0.0};
-        this->rbop = {0.0};
         Window::CWindowConstructionsSimplified::clearState();
         this->RunMeOnceFlag = false;
-        this->lSimpleGlazingSystem = false; // true if using simple glazing system block model
         this->BGFlag = false;               // True if between-glass shade or blind
         this->locTCFlag = false;            // True if this surface is a TC window
         this->DoReport = false;
         this->HasWindows = false;
         this->HasComplexWindows = false;
         this->HasEQLWindows = false; // equivalent layer window defined
-        this->SimpleGlazingSHGC = 0.0;
-        this->SimpleGlazingU = 0.0;
-        this->tmpTrans = 0.0;    // solar transmittance calculated from spectral data
-        this->tmpTransVis = 0.0; // visible transmittance calculated from spectral data
-        this->tmpReflectSolBeamFront = 0.0;
-        this->tmpReflectSolBeamBack = 0.0;
-        this->tmpReflectVisBeamFront = 0.0;
-        this->tmpReflectVisBeamBack = 0.0;
     }
 
     // Default Constructor
     WindowManagerData()
     {
-        SimpleGlazingSHGC = 0.0;
-        SimpleGlazingU = 0.0;
-        tmpReflectSolBeamFront = 0.0;
-        tmpReflectSolBeamBack = 0.0;
-        tmpReflectVisBeamFront = 0.0;
-        tmpReflectVisBeamBack = 0.0;
     }
 };
 
