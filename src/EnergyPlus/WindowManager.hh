@@ -122,7 +122,7 @@ namespace Window {
                                        std::array<Real64, nume> &stPhi,
                                        std::array<Real64, nume> &srfPhi,
                                        std::array<Real64, nume> &srbPhi,
-                                       Array2D<Real64> &saPhi);
+                                       Array1D<std::array<Real64, nume>> &saPhi);
 
     void SystemPropertiesAtLambdaAndPhi(EnergyPlusData &state,
                                         int n,       // Number of glass layers
