@@ -521,13 +521,13 @@ namespace Window {
                     numptDAT = specData.NumOfWavelengths;
                     numpt[IGlass - 1] = numptDAT;
 
-                    for (int ILam = 1; ILam <= numptDAT; ++ILam) {
-                        wlt[IGlass - 1][ILam - 1] = specData.WaveLength(ILam);
-                        t[IGlass - 1][ILam - 1] = specData.Trans(ILam);
+                    for (int iLam = 0; iLam < numptDAT; ++iLam) {
+                        wlt[IGlass - 1][iLam] = specData.WaveLength(iLam+1);
+                        t[IGlass - 1][iLam] = specData.Trans(iLam+1);
                         if ((IGlass == 1 || (IGlass == 2 && StormWinConst)) && (!wm->BGFlag))
-                            t[IGlass - 1][ILam - 1] *= matGlass->GlassTransDirtFactor;
-                        rff[IGlass - 1][ILam - 1] = specData.ReflFront(ILam);
-                        rbb[IGlass - 1][ILam - 1] = specData.ReflBack(ILam);
+                            t[IGlass - 1][iLam] *= matGlass->GlassTransDirtFactor;
+                        rff[IGlass - 1][iLam] = specData.ReflFront(iLam+1);
+                        rbb[IGlass - 1][iLam] = specData.ReflBack(iLam+1);
                     }
 
                     // If there is spectral data for between-glass shades or blinds, calc the average spectral properties for use.
@@ -628,14 +628,14 @@ namespace Window {
                     auto *matGlass = dynamic_cast<Material::MaterialGlass *>(s_mat->materials(LayPtr));
                     assert(matGlass != nullptr);
                     if (matGlass->windowOpticalData != Window::OpticalDataModel::SpectralAndAngle) {
-                        for (int ILam = 1; ILam <= numpt[IGlass - 1]; ++ILam) {
+                        for (int iLam = 0; iLam < numpt[IGlass - 1]; ++iLam) {
                             TransAndReflAtPhi(cosPhisLocal[iPhi],
-                                              t[IGlass - 1][ILam - 1],
-                                              rff[IGlass - 1][ILam - 1],
-                                              rbb[IGlass - 1][ILam - 1],
-                                              tPhi[IGlass - 1][ILam - 1],
-                                              rfPhi[IGlass - 1][ILam - 1],
-                                              rbPhi[IGlass - 1][ILam - 1],
+                                              t[IGlass - 1][iLam],
+                                              rff[IGlass - 1][iLam],
+                                              rbb[IGlass - 1][iLam],
+                                              tPhi[IGlass - 1][iLam],
+                                              rfPhi[IGlass - 1][iLam],
+                                              rbPhi[IGlass - 1][iLam],
                                               lSimpleGlazingSystem,
                                               SimpleGlazingSHGC,
                                               SimpleGlazingU);
@@ -784,12 +784,12 @@ namespace Window {
                     numptDAT = specData.NumOfWavelengths;
                     numpt[IGlass - 1] = numptDAT;
 
-                    for (int ILam = 1; ILam <= numptDAT; ++ILam) {
-                        wlt[IGlass - 1][ILam - 1] = specData.WaveLength(ILam);
-                        t[IGlass - 1][ILam - 1] = specData.Trans(ILam);
-                        if (IGlass == NGlass || (IGlass == (NGlass - 1) && StormWinConst)) t[IGlass - 1][ILam - 1] *= matGlass->GlassTransDirtFactor;
-                        rff[IGlass - 1][ILam - 1] = specData.ReflBack(ILam);
-                        rbb[IGlass - 1][ILam - 1] = specData.ReflFront(ILam);
+                    for (int iLam = 0; iLam < numptDAT; ++iLam) {
+                        wlt[IGlass - 1][iLam] = specData.WaveLength(iLam+1);
+                        t[IGlass - 1][iLam] = specData.Trans(iLam+1);
+                        if (IGlass == NGlass || (IGlass == (NGlass - 1) && StormWinConst)) t[IGlass - 1][iLam] *= matGlass->GlassTransDirtFactor;
+                        rff[IGlass - 1][iLam] = specData.ReflBack(iLam+1);
+                        rbb[IGlass - 1][iLam] = specData.ReflFront(iLam+1);
                     }
 
                     // No spectral data for this layer; use spectral average values
@@ -825,15 +825,15 @@ namespace Window {
                     auto const *matGlass = dynamic_cast<Material::MaterialGlass const *>(s_mat->materials(LayPtr));
                     assert(matGlass != nullptr);
                     if (matGlass->windowOpticalData != Window::OpticalDataModel::SpectralAndAngle) {
-                        for (int ILam = 1; ILam <= numpt[IGlass - 1]; ++ILam) {
+                        for (int iLam = 0; iLam < numpt[IGlass - 1]; ++iLam) {
 
                             TransAndReflAtPhi(cosPhisLocal[iPhi],
-                                              t[IGlass - 1][ILam - 1],
-                                              rff[IGlass - 1][ILam - 1],
-                                              rbb[IGlass - 1][ILam - 1],
-                                              tPhi[IGlass - 1][ILam - 1],
-                                              rfPhi[IGlass - 1][ILam - 1],
-                                              rbPhi[IGlass - 1][ILam - 1],
+                                              t[IGlass - 1][iLam],
+                                              rff[IGlass - 1][iLam],
+                                              rbb[IGlass - 1][iLam],
+                                              tPhi[IGlass - 1][iLam],
+                                              rfPhi[IGlass - 1][iLam],
+                                              rbPhi[IGlass - 1][iLam],
                                               lSimpleGlazingSystem,
                                               SimpleGlazingSHGC,
                                               SimpleGlazingU);
