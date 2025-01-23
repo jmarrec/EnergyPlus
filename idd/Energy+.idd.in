@@ -82047,6 +82047,42 @@ ThermalStorage:ChilledWater:Stratified,
        \units W/K
        \default 0.0
 
+ThermalStorage:PCM,
+      \min-fields 8
+      \memo This thermal storage model is PCM-based
+      \memo It requires PCM material property connection
+      \memo In addition to the object linking, this object needs PCM Latent heat storage capacity and Heat Loss Rate
+      \memo This model needs 4 nodes – 2 plant side nodes and 2 use side nodes
+  A1, \field Name
+      \type alpha
+      \required-field
+      \reference HotThermalStorageEquipment
+      \reference-class-name validBranchEquipmentTypes
+      \reference validBranchEquipmentNames
+  A2, \field Availability Schedule
+      \type object-list
+       \object-list ScheduleNames
+  N1, \field Tank Capacity
+      \required-field
+      \type real
+      \units kg
+  N2, \field Heat Loss Rate
+      \required-field
+      \type real
+      \units Watts
+  A4, \field Plant Side Inlet Node Name
+      \type node
+      \required-field
+  A5; \field Plant Outlet Node Name
+      \type node
+      \required-field
+  A6, \field Use Side Inlet Node Name
+      \type node
+      \required-field
+  A7; \field Use Side Outlet Node Name
+      \type node
+      \required-field
+
 \group Plant-Condenser Loops
 !*****************PLANT AND CONDENSER LOOP SPECIFICATION*********************
 !Plant and condenser loops are specified as follows:
