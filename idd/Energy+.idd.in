@@ -82070,16 +82070,16 @@ ThermalStorage:PCM,
       \required-field
       \type real
       \units W
-  A4, \field Plant Side Inlet Node Name
+  A3, \field Plant Side Inlet Node Name
       \type node
       \required-field
-  A5; \field Plant Outlet Node Name
+  A4, \field Plant Outlet Node Name
       \type node
       \required-field
-  A6, \field Use Side Inlet Node Name
+  A5, \field Use Side Inlet Node Name
       \type node
       \required-field
-  A7; \field Use Side Outlet Node Name
+  A6; \field Use Side Outlet Node Name
       \type node
       \required-field
 
