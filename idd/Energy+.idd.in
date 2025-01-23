@@ -82069,7 +82069,7 @@ ThermalStorage:PCM,
   N2, \field Heat Loss Rate
       \required-field
       \type real
-      \units Watts
+      \units W
   A4, \field Plant Side Inlet Node Name
       \type node
       \required-field
