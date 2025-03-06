@@ -5,9 +5,9 @@
     <key>CFBundleName</key>
     <string>EPLaunch</string>
     <key>CFBundleExecutable</key>
-    <string>launcher.sh</string>
+    <string>EPLaunch</string>
     <key>CFBundleIdentifier</key>
-    <string>com.example.EPLaunch</string>
+    <string>org.nrel.EnergyPlus.EPLaunch</string>
     <key>CFBundleVersion</key>
     <string>1.0</string>
 </dict>
