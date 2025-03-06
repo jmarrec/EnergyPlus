@@ -4,8 +4,12 @@
 <dict>
     <key>CFBundleName</key>
     <string>EPLaunch</string>
+    <key>CFBundleDisplayName</key>
+    <string>EP-Launch</string>
     <key>CFBundleExecutable</key>
     <string>EPLaunch</string>
+    <key>CFBundleIconFile</key>
+    <string>Icon</string>
     <key>CFBundleIdentifier</key>
     <string>org.nrel.EnergyPlus.EPLaunch</string>
     <key>CFBundleVersion</key>
