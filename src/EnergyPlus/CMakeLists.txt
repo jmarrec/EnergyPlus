@@ -1000,34 +1000,9 @@ if(BUILD_PACKAGE)
       install(FILES $<TARGET_FILE_DIR:energyplus>/IDFVersionUpdater.lnk DESTINATION "./" COMPONENT Auxiliary)
     endif()
     if(APPLE AND PYTHON_CLI)
-      add_custom_target(EPLaunchApp ALL
-              COMMAND ${CMAKE_COMMAND}
-              -D PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
-              -D APP_NAME="EPLaunch"
-              -D ARGUMENT="eplaunch"
-              -D PRODUCTS_DIR=$<TARGET_FILE_DIR:energyplus>
-              -P ${PROJECT_SOURCE_DIR}/cmake/create_mac_bundle.cmake
-              COMMENT "Creating macOS app bundle for EPLaunch"
-      )
-      add_dependencies(EPLaunchApp energyplus)
-      install(DIRECTORY $<TARGET_FILE_DIR:energyplus>/EPLaunch.app
-              DESTINATION "."
-              COMPONENT Auxiliary
-              USE_SOURCE_PERMISSIONS)
-      add_custom_target(VersionUpdaterApp ALL
-              COMMAND ${CMAKE_COMMAND}
-              -D PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
-              -D APP_NAME="VersionUpdater"
-              -D ARGUMENT="updater"
-              -D PRODUCTS_DIR=$<TARGET_FILE_DIR:energyplus>
-              -P ${PROJECT_SOURCE_DIR}/cmake/create_mac_bundle.cmake
-              COMMENT "Creating macOS app bundle for VersionUpdater"
-      )
-      add_dependencies(VersionUpdaterApp energyplus)
-      install(DIRECTORY $<TARGET_FILE_DIR:energyplus>/VersionUpdater.app
-              DESTINATION "."
-              COMPONENT Auxiliary
-              USE_SOURCE_PERMISSIONS)
+      # Pre-signed and notarized launcher apps
+      install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/PythonApps/EPLaunch.app" DESTINATION "." COMPONENT Auxiliary)
+      install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/PythonApps/VersionUpdater.app" DESTINATION "." COMPONENT Auxiliary)
     endif()
   endif()
   # we'll want to always provide the C API headers
