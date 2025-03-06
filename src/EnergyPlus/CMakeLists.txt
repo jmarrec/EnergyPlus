@@ -1001,8 +1001,8 @@ if(BUILD_PACKAGE)
     endif()
     if(APPLE AND PYTHON_CLI)
       # Pre-signed and notarized launcher apps
-      install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/PythonApps/EPLaunch.app" DESTINATION "." COMPONENT Auxiliary)
-      install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/PythonApps/VersionUpdater.app" DESTINATION "." COMPONENT Auxiliary)
+      install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/PythonApps/EPLaunch.app" DESTINATION "." COMPONENT Auxiliary USE_SOURCE_PERMISSIONS)
+      install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/PythonApps/VersionUpdater.app" DESTINATION "." COMPONENT Auxiliary USE_SOURCE_PERMISSIONS)
     endif()
   endif()
   # we'll want to always provide the C API headers

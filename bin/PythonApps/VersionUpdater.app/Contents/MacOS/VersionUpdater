@@ -1,3 +1,7 @@
 #!/bin/bash
 SCRIPT_PATH=$(dirname "$0")
-$SCRIPT_PATH/../../../energyplus auxiliary updater
+result=`osascript -e "display dialog \"Script Path $SCRIPT_PATH\" buttons {\"Ok\"}"`
+if [[ "$result" = "button returned:Ok" ]]; then
+    osascript -e 'beep'
+fi
+$SCRIPT_PATH/../../../energyplus auxiliary eplaunch
