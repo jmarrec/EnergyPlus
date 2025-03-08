@@ -276,21 +276,6 @@ namespace Sched {
         return weekSched;
     } // AddWeekSchedule()
 
-    void InitConstantScheduleData(EnergyPlusData &state)
-    {
-        // Create ScheduleAlwaysOn and ScheduleAlwaysOff
-        // Create constant schedules
-        auto *schedOff = AddScheduleConstant(state, "Constant-0.0");
-        assert(schedOff->Num == SchedNum_AlwaysOff);
-        schedOff->currentVal = 0.0;
-        schedOff->isUsed = true; // Suppress unused warnings
-
-        auto *schedOn = AddScheduleConstant(state, "Constant-1.0");
-        assert(schedOn->Num == SchedNum_AlwaysOn);
-        schedOn->currentVal = 1.0;
-        schedOn->isUsed = true; // Suppress unused warnings
-    }
-
     void ProcessScheduleInput(EnergyPlusData &state)
     {
         // SUBROUTINE INFORMATION:
@@ -2465,12 +2450,12 @@ namespace Sched {
 
     Sched::Schedule *GetScheduleAlwaysOn(EnergyPlusData &state)
     {
-        return state.dataSched->schedules[SchedNum_AlwaysOn];
+        return &state.dataSched->SchedAlwaysOn;
     }
 
     Sched::Schedule *GetScheduleAlwaysOff(EnergyPlusData &state)
     {
-        return state.dataSched->schedules[SchedNum_AlwaysOff];
+        return &state.dataSched->SchedAlwaysOff;
     }
 
     Sched::Schedule *GetSchedule(EnergyPlusData &state, std::string const &name)
@@ -2586,11 +2571,7 @@ namespace Sched {
 
     std::vector<Real64> const &ScheduleConstant::getDayVals(EnergyPlusData &state, [[maybe_unused]] int jDay, [[maybe_unused]] int dayofWeek)
     {
-        auto const &s_glob = state.dataGlobal;
-        if ((int)tsVals.size() != Constant::iHoursInDay * s_glob->TimeStepsInHour) {
-            this->tsVals.resize(Constant::iHoursInDay * s_glob->TimeStepsInHour);
-            std::fill(this->tsVals.begin(), this->tsVals.end(), this->currentVal);
-        }
+        assert((int)tsVals.size() == Constant::iHoursInDay * state.dataGlobal->TimeStepsInHour);
         return this->tsVals;
     } // ScheduleConstant::getDayVals()
 
@@ -3487,8 +3468,6 @@ namespace Sched {
             s_sched->DoScheduleReportingSetup = false;
         }
 
-        // TODO: Is this needed?
-        // Why is it doing exactly the same as UpdateScheduleValues?
         UpdateScheduleVals(state);
     }
 
@@ -3861,5 +3840,38 @@ namespace Sched {
     }
 
 } // namespace Sched
+
+void ScheduleManagerData::InitConstantScheduleData()
+{
+    // Create ScheduleAlwaysOn and ScheduleAlwaysOff
+    // Create constant schedules
+    SchedAlwaysOff.Name = "Constant-0.0";
+    SchedAlwaysOff.currentVal = 0.0;
+    SchedAlwaysOff.tsVals.push_back(0.0);
+    SchedAlwaysOff.minVal = 0.0;
+    SchedAlwaysOff.maxVal = 0.0;
+    SchedAlwaysOff.isMinMaxSet = true;
+    SchedAlwaysOff.isUsed = true; // Suppress unused warnings
+    SchedAlwaysOff.Num = Sched::SchedNum_AlwaysOff;
+
+    SchedAlwaysOn.Name = "Constant-1.0";
+    SchedAlwaysOn.currentVal = 1.0;
+    SchedAlwaysOn.tsVals.push_back(1.0);
+    SchedAlwaysOn.minVal = 1.0;
+    SchedAlwaysOn.maxVal = 1.0;
+    SchedAlwaysOn.isMinMaxSet = true;
+    SchedAlwaysOn.isUsed = true; // Suppress unused warnings
+    SchedAlwaysOn.Num = Sched::SchedNum_AlwaysOn;
+}
+
+void ScheduleManagerData::AddConstantSchedulesToContainers() {
+    assert(Sched::SchedNum_AlwaysOff == (int)this->schedules.size());
+    this->schedules.push_back(&this->SchedAlwaysOff);
+    this->scheduleMap.insert_or_assign(std::move(Util::makeUPPER(this->SchedAlwaysOff.Name)), Sched::SchedNum_AlwaysOff);
+
+    assert(Sched::SchedNum_AlwaysOn == (int)this->schedules.size());
+    this->schedules.push_back(&this->SchedAlwaysOn);
+    this->scheduleMap.insert_or_assign(std::move(Util::makeUPPER(this->SchedAlwaysOn.Name)), Sched::SchedNum_AlwaysOn);
+}
 
 } // namespace EnergyPlus
