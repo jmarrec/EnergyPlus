@@ -1219,6 +1219,15 @@ void GetPlantInput(EnergyPlusData &state)
                         this_comp.compPtr = IceThermalStorage::SimpleIceStorageData::factory(state, CompNames(CompNum));
                         break;
                     }
+                    case PlantEquipmentType::TS_PCM: {
+                        if (LoopSideNum == LoopSideLocation::Demand) {
+                            this_comp.CurOpSchemeType = OpScheme::Demand;
+                        } else if (LoopSideNum == LoopSideLocation::Supply) {
+                            this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        }
+                        this_comp.compPtr = WaterThermalTanks::WaterThermalTankData::factory(state, CompNames(CompNum));
+                        break;
+                    }
                     case PlantEquipmentType::TS_IceDetailed: {
                         this_comp.compPtr = IceThermalStorage::DetailedIceStorageData::factory(state, CompNames(CompNum));
                         break;
@@ -4015,6 +4024,11 @@ void SetupBranchControlTypes(EnergyPlusData &state)
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
                     case DataPlant::PlantEquipmentType::TS_IceSimple: { //                    = 29
+                        this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
+                        this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
+                        this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
+                    } break;
+                    case DataPlant::PlantEquipmentType::TS_PCM: { //                    = 30
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;

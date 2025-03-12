@@ -138,6 +138,7 @@ enum class PlantEquipmentType
     PurchHotWater,
     TS_IceDetailed,
     TS_IceSimple,
+    TS_PCM,
     ValveTempering,
     WtrHeaterMixed,
     WtrHeaterStratified,
