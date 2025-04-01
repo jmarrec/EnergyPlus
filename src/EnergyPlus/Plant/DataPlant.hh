@@ -113,6 +113,7 @@ namespace DataPlant {
         "DistrictHeating:Water",
         "ThermalStorage:Ice:Detailed",
         "ThermalStorage:Ice:Simple",
+        "ThermalStorage:PCM",
         "TemperingValve",
         "WaterHeater:Mixed",
         "WaterHeater:Stratified",
@@ -142,7 +143,6 @@ namespace DataPlant {
         "EvaporativeFluidCooler:TwoSpeed",
         "ThermalStorage:ChilledWater:Mixed",
         "ThermalStorage:ChilledWater:Stratified",
-        "ThermalStorage:PCM",
         "SolarCollector:FlatPlate:PhotovoltaicThermal",
         "ZoneHVAC:Baseboard:Convective:Water",
         "ZoneHVAC:Baseboard:RadiantConvective:Steam",
@@ -319,6 +319,7 @@ namespace DataPlant {
         LoopType::Both,  //	"DistrictHeating:Water"
         LoopType::Plant, //	"ThermalStorage:Ice:Detailed"
         LoopType::Plant, //	"ThermalStorage:Ice:Simple"
+        LoopType::Plant, // "ThermalStorage:PCM"
         LoopType::Both,  //	"TemperingValve"
         LoopType::Both,  //	"WaterHeater:Mixed"
         LoopType::Both,  //	"WaterHeater:Stratified"
