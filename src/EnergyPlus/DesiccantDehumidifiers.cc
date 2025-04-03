@@ -2410,8 +2410,8 @@ namespace DesiccantDehumidifiers {
                     CondenserWasteHeat = state.dataHeatBal->HeatReclaimDXCoil(desicDehum.DXCoilIndex).AvailCapacity;
                     state.dataHeatBal->HeatReclaimDXCoil(desicDehum.DXCoilIndex).AvailCapacity = 0.0;
                 } else if (desicDehum.coolingCoil_TypeNum == HVAC::Coil_CoolingAirToAirVariableSpeed) {
-                    CondenserWasteHeat = state.dataHeatBal->HeatReclaimVS_DXCoil(desicDehum.DXCoilIndex).AvailCapacity;
-                    state.dataHeatBal->HeatReclaimVS_DXCoil(desicDehum.DXCoilIndex).AvailCapacity = 0.0;
+                    CondenserWasteHeat = state.dataHeatBal->HeatReclaimVS_Coil(desicDehum.DXCoilIndex).AvailCapacity;
+                    state.dataHeatBal->HeatReclaimVS_Coil(desicDehum.DXCoilIndex).AvailCapacity = 0.0;
                 }
 
                 CpAir = Psychrometrics::PsyCpAirFnW(state.dataLoopNodes->Node(desicDehum.CondenserInletNode).HumRat);

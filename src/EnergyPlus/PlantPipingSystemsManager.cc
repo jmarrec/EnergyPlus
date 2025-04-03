@@ -1093,7 +1093,11 @@ namespace PlantPipingSystemsManager {
             }
 
             // Farfield model
-            thisDomain.groundTempModel = GroundTemp::GetGroundTempModelAndInit(state, gtmType, s_ipsc->cAlphaArgs(3));
+            // Ok, this is a finicky bug, but I have to make a copy here. GetGroundTempModelAndInit takes name (last param) by const ref&
+            // It then calls FiniteDiffGroundTempsModel::FiniteDiffGTMFactory which also takes objectName by const ref&
+            // But it calls getObjectItem with s_ipsc->cAlphaArgs which overrides it, then the comparison fails
+            std::string const groundTempModelName = s_ipsc->cAlphaArgs(3);
+            thisDomain.groundTempModel = GroundTemp::GetGroundTempModelAndInit(state, gtmType, groundTempModelName);
 
             // Other parameters
             thisDomain.SimControls.Convergence_CurrentToPrevIteration = 0.001;

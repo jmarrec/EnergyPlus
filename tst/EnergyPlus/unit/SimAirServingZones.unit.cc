@@ -1908,7 +1908,7 @@ TEST_F(EnergyPlusFixture, InitAirLoops_1AirLoop2Zones3ADU)
     EXPECT_EQ(state->dataZoneEquip->ZoneEquipConfig(2).InletNodeAirLoopNum(1), 1);
 }
 
-TEST_F(EnergyPlusFixture, DISABLED_AirLoop_ReturnFan_MinFlow)
+TEST_F(EnergyPlusFixture, AirLoop_ReturnFan_MinFlow)
 {
     // This test was disabled primarily because it's an incredibly heavy boot stomping on ManageSimulation just
     // to verify that flow is set to zero.  As of the time of disabling, it often fails on my machine with a

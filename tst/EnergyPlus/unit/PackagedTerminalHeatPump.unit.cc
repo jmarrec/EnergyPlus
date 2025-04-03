@@ -117,498 +117,503 @@ using namespace EnergyPlus::ZoneTempPredictorCorrector;
 
 namespace EnergyPlus {
 
-TEST_F(EnergyPlusFixture, DISABLED_PackagedTerminalHP_VSCoils_Sizing)
-{
-    std::string const idf_objects = delimited_string({
-
-        "  Zone, Space, 0.0, 0.0, 0.0, 0.0, 1, 1, 2.4, , autocalculate, , , Yes; ",
-        "  ZoneHVAC:EquipmentConnections, Space, Space Eq, Space In Node, Space Out Node, Space Node, Space Ret Node; ",
-        "  ZoneHVAC:EquipmentList, Space Eq, SequentialLoad, ZoneHVAC:WaterToAirHeatPump, Zone WSHP, 1, 1; ",
-        "  Schedule:Compact, OnSched, Fraction, Through: 12/31, For: AllDays, Until: 24:00, 1.0; ",
-        "  ScheduleTypeLimits, Fraction, 0.0, 1.0, CONTINUOUS; ",
-        "  OutdoorAir:Node, PSZ-AC_1:5 OA Node;",
-        "  OutdoorAir:Node, Lobby_ZN_1_FLR_2 WSHP OA Node;",
-        "  Curve:Exponent, FanPowerCurve, 0.254542407, 0.837259009, 3, 0.458, 1, , , Dimensionless, Dimensionless; ",
-        "  Curve:Quadratic, PLF Curve, 0.85, 0.15, 0, 0, 1, 0.0, 1.0, Dimensionless, Dimensionless; ",
-        "  Curve:Cubic, CubicCurve, 1.0, 0.0, 0.0, 0.0, 0.76, 1.09, , , Dimensionless, Dimensionless; ",
-        "  Curve:Biquadratic, BiquadraticCurve, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10, 25.6, 7.2, 48.9, , , Temperature, Temperature, Dimensionless; ",
-
-        "  ZoneHVAC:WaterToAirHeatPump,",
-        "    Zone WSHP,            !- Name",
-        "    OnSched,              !- Availability Schedule Name",
-        "    Space Out Node,       !- Air Inlet Node Name",
-        "    Space In Node,        !- Air Outlet Node Name",
-        "    ,                     !- Outdoor Air Mixer Object Type",
-        "    ,                     !- Outdoor Air Mixer Name",
-        "    Autosize,             !- Supply Air Flow Rate During Cooling Operation {m3/s}",
-        "    Autosize,             !- Supply Air Flow Rate During Heating Operation {m3/s}",
-        "    ,                     !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
-        "    0.0,                  !- Outdoor Air Flow Rate During Cooling Operation {m3/s}",
-        "    0.0,                  !- Outdoor Air Flow Rate During Heating Operation {m3/s}",
-        "    ,                     !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
-        "    Fan:OnOff,            !- Supply Air Fan Object Type",
-        "    Lobby_ZN_1_FLR_2 WSHP Fan,                                 !- Supply Air Fan Name",
-        "    Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,  !- Heating Coil Object Type",
-        "    Lobby_ZN_1_FLR_2 WSHP Heating Mode,                        !- Heating Coil Name",
-        "    Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,  !- Cooling Coil Object Type",
-        "    Lobby_ZN_1_FLR_2 WSHP Cooling Mode,                        !- Cooling Coil Name",
-        "    Coil:Heating:Electric,                    !- Supplemental Heating Coil Object Type",
-        "    Lobby_ZN_1_FLR_2 WSHP Supp Heating Coil,  !- Supplemental Heating Coil Name",
-        "    50.0,                 !- Maximum Supply Air Temperature from Supplemental Heater {C}",
-        "    20.0,                 !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}",
-        "    Lobby_ZN_1_FLR_2 WSHP OA Node,  !- Outdoor Dry-Bulb Temperature Sensor Node Name",
-        "    BlowThrough,          !- Fan Placement",
-        "    OnSched,              !- Supply Air Fan Operating Mode Schedule Name",
-        "    ,                     !- Heat Pump Coil Water Flow Mode",
-        "    ;                     !- Design Specification ZoneHVAC Sizing Object Name",
-
-        "  Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,",
-        "    Lobby_ZN_1_FLR_2 WSHP Cooling Mode,                    !- Name",
-        "    Lobby_ZN_1_FLR_2 WSHP Cooling Source Side Inlet Node,  !- Water-to-Refrigerant HX Water Inlet Node Name",
-        "    Lobby_ZN_1_FLR_2 WSHP Cooling Source Side Outlet Node, !- Water-to-Refrigerant HX Water Outlet Node Name",
-        "    Lobby_ZN_1_FLR_2 WSHP Cooling Coil Air Inlet Node,     !- Indoor Air Inlet Node Name",
-        "    Lobby_ZN_1_FLR_2 WSHP Heating Coil Air Inlet Node,     !- Indoor Air Outlet Node Name",
-        "    9,                    !- Number of Speeds {dimensionless}",
-        "    9,                    !- Nominal Speed Level {dimensionless}",
-        "    Autosize,             !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {w}",
-        "    Autosize,             !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}",
-        "    Autosize,             !- Rated Water Flow Rate At Selected Nominal Speed Level {m3/s}",
-        "    0.0,                  !- Nominal Time for Condensate to Begin Leaving the Coil {s}",
-        "    0.0,                  !- Initial Moisture Evaporation Rate Divided by Steady-State AC Latent Capacity {dimensionless}",
-        "    2.5,                  !- Maximum Cycling Rate {cycles/hr}",
-        "    60.0,                 !- Latent Capacity Time Constant {s}",
-        "    60,                   !- Fan Delay Time {s}",
-        "    0,                    !- Flag for Using Hot Gas Reheat, 0 or 1 {dimensionless}",
-        "    PLF Curve,            !- Energy Part Load Fraction Curve Name",
-        "    4682.3964854,         !- Speed 1 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.97,                 !- Speed 1 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    8.031554863,          !- Speed 1 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.408706486,          !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 1 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 1 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 1 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 1 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 1 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 1 Waste Heat Function of Temperature Curve Name",
-        "    5733.6424135,         !- Speed 2 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.96,                 !- Speed 2 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    8.132826118,          !- Speed 2 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.449293966,          !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 2 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 2 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 2 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 2 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 2 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 2 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 2 Waste Heat Function of Temperature Curve Name",
-        "    6783.7160573,         !- Speed 3 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.95,                 !- Speed 3 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    8.133952107,          !- Speed 3 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.489881446,          !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 3 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 3 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 3 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 3 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 3 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 3 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 3 Waste Heat Function of Temperature Curve Name",
-        "    7819.1361476,         !- Speed 4 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.91,                 !- Speed 4 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    8.077619987,          !- Speed 4 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.530468926,          !- Speed 4 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 4 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 4 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 4 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 4 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 4 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 4 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 4 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 4 Waste Heat Function of Temperature Curve Name",
-        "    8827.8867705,         !- Speed 5 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.871,                !- Speed 5 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    7.974604129,          !- Speed 5 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.571056406,          !- Speed 5 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 5 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 5 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 5 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 5 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 5 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 5 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 5 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 5 Waste Heat Function of Temperature Curve Name",
-        "    10734.02101,          !- Speed 6 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.816,                !- Speed 6 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    7.661685232,          !- Speed 6 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.652231367,          !- Speed 6 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 6 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 6 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 6 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 6 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 6 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 6 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 6 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve ,    !- Speed 6 Waste Heat Function of Temperature Curve Name",
-        "    12454.348191,         !- Speed 7 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.784,                !- Speed 7 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    7.257778666,          !- Speed 7 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.732934379,          !- Speed 7 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 7 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 7 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 7 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 7 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 7 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 7 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 7 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 7 Waste Heat Function of Temperature Curve Name",
-        "    13963.37113,          !- Speed 8 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.766,                !- Speed 8 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    6.804761759,          !- Speed 8 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.81410934,           !- Speed 8 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 8 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 8 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 8 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 8 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 8 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 8 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 8 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 8 Waste Heat Function of Temperature Curve Name",
-        "    16092.825525,         !- Speed 9 Reference Unit Gross Rated Total Cooling Capacity {w}",
-        "    0.739,                !- Speed 9 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
-        "    5.765971166,          !- Speed 9 Reference Unit Gross Rated Cooling COP {dimensionless}",
-        "    0.891980668,          !- Speed 9 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 9 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 9 Total Cooling Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 9 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 9 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 9 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 9 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 9 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve;     !- Speed 9 Waste Heat Function of Temperature Curve Name",
-
-        "  Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,",
-        "    Lobby_ZN_1_FLR_2 WSHP Heating Mode,                    !- Name",
-        "    Lobby_ZN_1_FLR_2 WSHP Heating Source Side Inlet Node,  !- Water-to-Refrigerant HX Water Inlet Node Name",
-        "    Lobby_ZN_1_FLR_2 WSHP Heating Source Side Outlet Node, !- Water-to-Refrigerant HX Water Outlet Node Name",
-        "    Lobby_ZN_1_FLR_2 WSHP Heating Coil Air Inlet Node,     !- Indoor Air Inlet Node Name",
-        "    Lobby_ZN_1_FLR_2 WSHP SuppHeating Coil Air Inlet Node, !- Indoor Air Outlet Node Name",
-        "    9,                    !- Number of Speeds {dimensionless}",
-        "    9,                    !- Nominal Speed Level {dimensionless}",
-        "    autosize,             !- Rated Heating Capacity At Selected Nominal Speed Level {w}",
-        "    autosize,             !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}",
-        "    autosize,             !- Rated Water Flow Rate At Selected Nominal Speed Level {m3/s}",
-        "    PLF Curve,            !- Energy Part Load Fraction Curve Name",
-        "    6437.5991236,         !- Speed 1 Reference Unit Gross Rated Heating Capacity {w}",
-        "    9.965323721,          !- Speed 1 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.408706486,          !- Speed 1 Reference Unit Rated Air Flow {m3/s}",
-        "    0.0008201726 ,        !- Speed 1 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 1 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 1 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 1 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 1 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 1 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 1 Waste Heat Function of Temperature Curve Name",
-        "    7521.3759405,         !- Speed 2 Reference Unit Gross Rated Heating Capacity {w}",
-        "    9.3549452,            !- Speed 2 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.449293966,          !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 2 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 2 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 2 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 2 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 2 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 2 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 2 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 2 Waste Heat Function of Temperature Curve Name",
-        "    8601.0497624,         !- Speed 3 Reference Unit Gross Rated Heating Capacity {w}",
-        "    8.857929724,          !- Speed 3 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.489881446,          !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 3 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 3 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 3 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 3 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 3 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 3 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 3 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 3 Waste Heat Function of Temperature Curve Name",
-        "    9675.1552339,         !- Speed 4 Reference Unit Gross Rated Heating Capacity {w}",
-        "    8.442543834,          !- Speed 4 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.530468926,          !- Speed 4 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 4 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 4 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 4 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 4 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 4 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 4 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 4 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 4 Waste Heat Function of Temperature Curve Name",
-        "    10743.692355,         !- Speed 5 Reference Unit Gross Rated Heating Capacity {w}",
-        "    8.090129785,          !- Speed 5 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.571056406,          !- Speed 5 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 5 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 5 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 5 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 5 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 5 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 5 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 5 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 5 Waste Heat Function of Temperature Curve Name",
-        "    12861.716978,         !- Speed 6 Reference Unit Gross Rated Heating Capacity {w}",
-        "    7.521471917,          !- Speed 6 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.652231367,          !- Speed 6 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 6 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 6 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 6 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 6 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 6 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 6 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 6 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 6 Waste Heat Function of Temperature Curve Name",
-        "    14951.606778,         !- Speed 7 Reference Unit Gross Rated Heating Capacity {w}",
-        "    7.072661674,          !- Speed 7 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.732934379,          !- Speed 7 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 7 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 7 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 7 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 7 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 7 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 7 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 7 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 7 Waste Heat Function of Temperature Curve Name",
-        "    17011.8964,           !- Speed 8 Reference Unit Gross Rated Heating Capacity {w}",
-        "    6.710807258,          !- Speed 8 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.81410934,           !- Speed 8 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 8 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 8 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 8 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 8 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 8 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 8 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0 ,                 !- Speed 8 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve,     !- Speed 8 Waste Heat Function of Temperature Curve Name",
-        "    20894.501936,         !- Speed 9 Reference Unit Gross Rated Heating Capacity {w}",
-        "    5.89906887,           !- Speed 9 Reference Unit Gross Rated Heating COP {dimensionless}",
-        "    0.891980668,          !- Speed 9 Reference Unit Rated Air Flow Rate {m3/s}",
-        "    0.0008201726 ,        !- Speed 9 Reference Unit Rated Water Flow Rate {m3/s}",
-        "    BiquadraticCurve,     !- Speed 9 Heating Capacity Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 9 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 9 Heating Capacity Function of Water Flow Fraction Curve Name",
-        "    BiquadraticCurve,     !- Speed 9 Energy Input Ratio Function of Temperature Curve Name",
-        "    CubicCurve,           !- Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name",
-        "    CubicCurve,           !- Speed 9 Energy Input Ratio Function of Water Flow Fraction Curve Name",
-        "    0.0,                  !- Speed 9 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
-        "    BiquadraticCurve;     !- Speed 9 Waste Heat Function of Temperature Curve Name",
-
-        "  Fan:OnOff,",
-        "    Lobby_ZN_1_FLR_2 WSHP Fan,              !- Name",
-        "    OnSched,    !- Availability Schedule Name",
-        "    0.7,                     !- Fan Total Efficiency",
-        "    113,                   !- Pressure Rise {Pa}",
-        "    Autosize,                !- Maximum Flow Rate {m3/s}",
-        "    0.9,                     !- Motor Efficiency",
-        "    1.0,                     !- Motor In Airstream Fraction",
-        "    Space Out Node,    !- Air Inlet Node Name",
-        "    Lobby_ZN_1_FLR_2 WSHP Cooling Coil Air Inlet Node,  !- Air Outlet Node Name",
-        "    FanPowerCurve, !- Fan Efficiency Ratio Function of Speed Ratio Curve Name",
-        "    ,",
-        "    WSHP;",
-
-        "  Coil:Heating:Electric,",
-        "    Lobby_ZN_1_FLR_2 WSHP Supp Heating Coil,  !- Name",
-        "    OnSched,    !- Availability Schedule Name",
-        "    1.0,                     !- Gas Burner Efficiency",
-        "    Autosize,                   !- Nominal Capacity {W}",
-        "    Lobby_ZN_1_FLR_2 WSHP SuppHeating Coil Air Inlet Node,  !- Air Inlet Node Name",
-        "    Space In Node;       !- Air Outlet Node Name",
-
-    });
-
-    ASSERT_TRUE(process_idf(idf_objects));
-
-    bool ErrorsFound(false);
-    GetZoneData(*state, ErrorsFound);
-    GetZoneEquipmentData(*state);
-    state->dataZoneEquip->ZoneEquipInputsFilled = true; // denotes zone equipment has been read in
-    HVACSystemData *mySys;
-    mySys = UnitarySystems::UnitarySys::factory(*state, HVAC::UnitarySysType::Unitary_AnyCoilType, "Zone WSHP", true, 0);
-    auto &thisSys(state->dataUnitarySystems->unitarySys[0]);
-    thisSys.getUnitarySystemInput(*state, "Zone WSHP", true, 0);
-    state->dataUnitarySystems->getInputOnceFlag = false;
-
-    // Test for #8812:
-    // Verify zone sizing check if airflow is Autosized to prevent hard crash
-    state->dataSize->CurZoneEqNum = 1;
-    state->dataSize->ZoneEqSizing.allocate(1);
-    state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(35);
-    state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod = 0;
-    state->dataSize->ZoneSizingRunDone = false;
-    thisSys.m_HVACSizingIndex = 0;
-    thisSys.m_CoolOutAirVolFlow = AutoSize;
-    bool firstHVACIteration = false;
-    int airLoopNum = 0;
-    EXPECT_THROW(thisSys.sizeSystem(*state, firstHVACIteration, airLoopNum), std::runtime_error);
-    std::string const error_string = delimited_string({
-        "   ** Severe  ** For autosizing of ZoneHVAC:WaterToAirHeatPump ZONE WSHP, a zone sizing run must be done.",
-        "   **   ~~~   ** No \"Sizing:Zone\" objects were entered.",
-        "   **   ~~~   ** The \"SimulationControl\" object did not have the field \"Do Zone Sizing Calculation\" set to Yes.",
-        "   **  Fatal  ** Program terminates due to previously shown condition(s).",
-        "   ...Summary of Errors that led to program termination:",
-        "   ..... Reference severe error count=1",
-        "   ..... Last severe error=For autosizing of ZoneHVAC:WaterToAirHeatPump ZONE WSHP, a zone sizing run must be done.",
-    });
-
-    EXPECT_TRUE(compare_err_stream(error_string, true));
-
-    // Test for #7053:
-    // Fake that there is at least one UnitarySystemPerformance:Multispeed object
-    UnitarySystems::DesignSpecMSHP fakeDesignSpecMSHP;
-    state->dataUnitarySystems->designSpecMSHP.push_back(fakeDesignSpecMSHP);
-
-    state->dataPlnt->TotNumLoops = 2;
-    state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
-
-    for (int l = 1; l <= state->dataPlnt->TotNumLoops; ++l) {
-        auto &loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
-        loopside.TotalBranches = 1;
-        loopside.Branch.allocate(1);
-        auto &loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
-        loopsidebranch.TotalComponents = 1;
-        loopsidebranch.Comp.allocate(1);
-    }
-    state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "WATER";
-    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
-        state->dataVariableSpeedCoils->VarSpeedCoil(1).Name;
-    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
-        DataPlant::PlantEquipmentType::CoilVSWAHPCoolingEquationFit;
-    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
-        state->dataVariableSpeedCoils->VarSpeedCoil(1).WaterInletNodeNum;
-    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
-        state->dataVariableSpeedCoils->VarSpeedCoil(1).WaterOutletNodeNum;
-
-    state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
-        state->dataVariableSpeedCoils->VarSpeedCoil(2).Name;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
-        DataPlant::PlantEquipmentType::CoilVSWAHPHeatingEquationFit;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
-        state->dataVariableSpeedCoils->VarSpeedCoil(2).WaterInletNodeNum;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
-        state->dataVariableSpeedCoils->VarSpeedCoil(2).WaterOutletNodeNum;
-
-    state->dataSize->ZoneSizingRunDone = true;
-    state->dataSize->FinalZoneSizing.allocate(1);
-    state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolVolFlow = 1.0;
-    state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolCoilInTemp = 24.0;
-    state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolCoilInHumRat = 0.009;
-    state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).ZoneRetTempAtCoolPeak = 24.0;
-    state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).ZoneHumRatAtCoolPeak = 0.009;
-    state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).CoolDesTemp = 12.0;
-    state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).CoolDesHumRat = 0.007807825;
-    state->dataEnvrn->OutBaroPress = 101325;
-    state->dataEnvrn->StdRhoAir = 1.0;
-    OutputReportPredefined::SetPredefinedTables(*state);
-    thisSys.sizeSystem(*state, firstHVACIteration, airLoopNum);
-
-    // This VS coil is rather quirky. It sizes the capacity based on zone sizing air flow rate.
-    // Then uses that capacity to back calculate the air flow needed to keep the reference air flow per capacity ratio constant.
-    // For this reason, the parent object would size to an air flow that was different than the child.
-
-    // identify coil
-    EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).Name, "LOBBY_ZN_1_FLR_2 WSHP COOLING MODE");
-
-    // PTHP sized the VS coil differently. The PTHP uses the design air flow to size VS coil capacity
-    // then back calculates air flow rate. The PTHP would read the coil air flow and capacity and report
-    // those values to the eio. The UnitarySystem sizes the air flow rate and then calls the VS coil,
-    // which sizes, and uses the VS coil capacity to report UnitarySystem capacity to the eio.
-    // This requires and issue to correct.
-
-    // expect the ratio of air flow to capacity to be equal to the reference air flow and capacity ratio specified in coil input
-    Real64 refAirflowCapacityRatio = 0.891980668 / 16092.825525; // speed 9 reference cooling data
-    Real64 sizingAirflowCapacityRatio =
-        state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(9) / state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedTotCap(9);
-    EXPECT_EQ(refAirflowCapacityRatio, sizingAirflowCapacityRatio);
-
-    // this same ratio should also equal the internal flow per capacity variable used to back calculate operating air flow rate
-    EXPECT_EQ(sizingAirflowCapacityRatio, state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowPerRatedTotCap(9));
-
-    // identify coil
-    EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(2).Name, "LOBBY_ZN_1_FLR_2 WSHP HEATING MODE");
-
-    // expect coil air flow to equal PTUnit heating air flow
-    EXPECT_NEAR(state->dataVariableSpeedCoils->VarSpeedCoil(2).RatedAirVolFlowRate,
-                state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).HeatingAirVolFlow,
-                0.3); // DIFF from PTHP
-    EXPECT_NEAR(state->dataVariableSpeedCoils->VarSpeedCoil(2).RatedAirVolFlowRate, thisSys.m_MaxHeatAirVolFlow, 0.3);
-    EXPECT_NEAR(state->dataVariableSpeedCoils->VarSpeedCoil(2).MSRatedAirVolFlowRate(9), thisSys.m_MaxHeatAirVolFlow, 0.3);
-
-    // expect the ratio of air flow to capacity to equal to the reference air flow and capacity specified in coil input
-    refAirflowCapacityRatio = 0.891980668 / 20894.501936; // speed 9 reference heating data
-    sizingAirflowCapacityRatio =
-        state->dataVariableSpeedCoils->VarSpeedCoil(2).MSRatedAirVolFlowRate(9) / state->dataVariableSpeedCoils->VarSpeedCoil(2).MSRatedTotCap(9);
-    EXPECT_EQ(refAirflowCapacityRatio, sizingAirflowCapacityRatio);
-
-    // this same ratio should also equal the internal flow per capacity variable used to back calculate operating air flow rate
-    EXPECT_EQ(sizingAirflowCapacityRatio, state->dataVariableSpeedCoils->VarSpeedCoil(2).MSRatedAirVolFlowPerRatedTotCap(9));
-
-    state->dataFans->fans(1)->set_size(*state);
-    // the fan vol flow rate should equal the max of cooling and heating coil flow rates
-    Real64 maxCoilAirFlow =
-        max(state->dataVariableSpeedCoils->VarSpeedCoil(1).RatedAirVolFlowRate, state->dataVariableSpeedCoils->VarSpeedCoil(2).RatedAirVolFlowRate);
-    EXPECT_NEAR(state->dataFans->fans(1)->maxAirFlowRate, maxCoilAirFlow, 0.000001);
-    EXPECT_NEAR(state->dataFans->fans(1)->maxAirFlowRate, max(thisSys.m_MaxCoolAirVolFlow, thisSys.m_MaxHeatAirVolFlow), 0.000001);
-
-    // Also set BeginEnvrnFlag so code is tested for coil initialization and does not crash
-    state->dataGlobal->BeginEnvrnFlag = true;
-    thisSys.initUnitarySystems(*state, 0, firstHVACIteration, 0.0);
-
-    // check that an intermediate speed has the correct flow ratio
-    Real64 refAirflowRatio = 0.530468926 / 0.891980668; // speed 4 reference cooling data and full flow rate at speed 9
-    Real64 expectedAirFlowRate = refAirflowRatio * thisSys.m_MaxCoolAirVolFlow;
-    EXPECT_NEAR(expectedAirFlowRate, thisSys.m_CoolVolumeFlowRate[4], 0.0000001);
-    EXPECT_NEAR(expectedAirFlowRate, 0.5947088, 0.000001); // DIFF from PTHP
-
-    refAirflowRatio = 0.530468926 / 0.891980668; // speed 4 reference heating data and full flow rate at speed 9
-    expectedAirFlowRate = refAirflowRatio * thisSys.m_MaxHeatAirVolFlow;
-    EXPECT_NEAR(expectedAirFlowRate, thisSys.m_HeatVolumeFlowRate[4], 0.2); // DIFF from PTHP
-    EXPECT_NEAR(expectedAirFlowRate, 0.5947, 0.0001);                       // DIFF from PTHP
-
-    // DIFF - comments for PTHP Variable Speed coil sizing
-    // #6028 child components not sizing correctly on air flow rate
-    // VS coils set SystemAirFlow to true and AirVolFlow to a value.
-    // all PTUnits set CoolingAirFlow and HeatingAirFlow, and CoolingAirVolFlow and HeatingAirVolFlow
-    // UnitarySystem now tracks the way PT units sized coils, which method is correct is for another day
-    EXPECT_FALSE(state->dataSize->ZoneEqSizing(1).SystemAirFlow);
-    EXPECT_NEAR(state->dataSize->ZoneEqSizing(1).AirVolFlow, state->dataVariableSpeedCoils->VarSpeedCoil(1).RatedAirVolFlowRate, 0.000001);
-    EXPECT_FALSE(state->dataSize->ZoneEqSizing(1).CoolingAirFlow);
-    EXPECT_FALSE(state->dataSize->ZoneEqSizing(1).HeatingAirFlow);
-    EXPECT_EQ(state->dataSize->ZoneEqSizing(1).CoolingAirVolFlow, thisSys.m_MaxCoolAirVolFlow);
-    EXPECT_LT(state->dataSize->ZoneEqSizing(1).HeatingAirVolFlow, thisSys.m_MaxHeatAirVolFlow);
-    EXPECT_EQ(state->dataFans->fans(1)->maxAirFlowRate, state->dataSize->ZoneEqSizing(1).AirVolFlow);
-    EXPECT_EQ(state->dataFans->fans(1)->maxAirFlowRate,
-              max(state->dataSize->ZoneEqSizing(1).CoolingAirVolFlow, state->dataSize->ZoneEqSizing(1).HeatingAirVolFlow));
-}
+// TEST_F(EnergyPlusFixture, PackagedTerminalHP_VSCoils_Sizing)
+// {
+//     std::string const idf_objects = delimited_string({
+//
+//         "  Zone, Space, 0.0, 0.0, 0.0, 0.0, 1, 1, 2.4, , autocalculate, , , Yes; ",
+//         "  ZoneHVAC:EquipmentConnections, Space, Space Eq, Space In Node, Space Out Node, Space Node, Space Ret Node; ",
+//         "  ZoneHVAC:EquipmentList, Space Eq, SequentialLoad, ZoneHVAC:WaterToAirHeatPump, Zone WSHP, 1, 1; ",
+//         "  Schedule:Compact, OnSched, Fraction, Through: 12/31, For: AllDays, Until: 24:00, 1.0; ",
+//         "  ScheduleTypeLimits, Fraction, 0.0, 1.0, CONTINUOUS; ",
+//         "  OutdoorAir:Node, PSZ-AC_1:5 OA Node;",
+//         "  OutdoorAir:Node, Lobby_ZN_1_FLR_2 WSHP OA Node;",
+//         "  Curve:Exponent, FanPowerCurve, 0.254542407, 0.837259009, 3, 0.458, 1, , , Dimensionless, Dimensionless; ",
+//         "  Curve:Quadratic, PLF Curve, 0.85, 0.15, 0, 0, 1, 0.0, 1.0, Dimensionless, Dimensionless; ",
+//         "  Curve:Cubic, CubicCurve, 1.0, 0.0, 0.0, 0.0, 0.76, 1.09, , , Dimensionless, Dimensionless; ",
+//         "  Curve:Biquadratic, BiquadraticCurve, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10, 25.6, 7.2, 48.9, , , Temperature, Temperature, Dimensionless; ",
+//
+//         "  ZoneHVAC:WaterToAirHeatPump,",
+//         "    Zone WSHP,            !- Name",
+//         "    OnSched,              !- Availability Schedule Name",
+//         "    Space Out Node,       !- Air Inlet Node Name",
+//         "    Space In Node,        !- Air Outlet Node Name",
+//         "    ,                     !- Outdoor Air Mixer Object Type",
+//         "    ,                     !- Outdoor Air Mixer Name",
+//         "    Autosize,             !- Supply Air Flow Rate During Cooling Operation {m3/s}",
+//         "    Autosize,             !- Supply Air Flow Rate During Heating Operation {m3/s}",
+//         "    ,                     !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
+//         "    ,                     !- New Input Field",
+//         "    0.0,                  !- Outdoor Air Flow Rate During Cooling Operation {m3/s}",
+//         "    0.0,                  !- Outdoor Air Flow Rate During Heating Operation {m3/s}",
+//         "    ,                     !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}",
+//         "    Fan:OnOff,            !- Supply Air Fan Object Type",
+//         "    Lobby_ZN_1_FLR_2 WSHP Fan,                                 !- Supply Air Fan Name",
+//         "    Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,  !- Heating Coil Object Type",
+//         "    Lobby_ZN_1_FLR_2 WSHP Heating Mode,                        !- Heating Coil Name",
+//         "    Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,  !- Cooling Coil Object Type",
+//         "    Lobby_ZN_1_FLR_2 WSHP Cooling Mode,                        !- Cooling Coil Name",
+//         "    Coil:Heating:Electric,                    !- Supplemental Heating Coil Object Type",
+//         "    Lobby_ZN_1_FLR_2 WSHP Supp Heating Coil,  !- Supplemental Heating Coil Name",
+//         "    50.0,                 !- Maximum Supply Air Temperature from Supplemental Heater {C}",
+//         "    20.0,                 !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}",
+//         "    Lobby_ZN_1_FLR_2 WSHP OA Node,  !- Outdoor Dry-Bulb Temperature Sensor Node Name",
+//         "    BlowThrough,          !- Fan Placement",
+//         "    OnSched,              !- Supply Air Fan Operating Mode Schedule Name",
+//         "    ,                     !- Heat Pump Coil Water Flow Mode",
+//         "    ;                     !- Design Specification ZoneHVAC Sizing Object Name",
+//
+//         "  Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,",
+//         "    Lobby_ZN_1_FLR_2 WSHP Cooling Mode,                    !- Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP Cooling Source Side Inlet Node,  !- Water-to-Refrigerant HX Water Inlet Node Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP Cooling Source Side Outlet Node, !- Water-to-Refrigerant HX Water Outlet Node Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP Cooling Coil Air Inlet Node,     !- Indoor Air Inlet Node Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP Heating Coil Air Inlet Node,     !- Indoor Air Outlet Node Name",
+//         "    9,                    !- Number of Speeds {dimensionless}",
+//         "    9,                    !- Nominal Speed Level {dimensionless}",
+//         "    Autosize,             !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {w}",
+//         "    Autosize,             !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}",
+//         "    Autosize,             !- Rated Water Flow Rate At Selected Nominal Speed Level {m3/s}",
+//         "    0.0,                  !- Nominal Time for Condensate to Begin Leaving the Coil {s}",
+//         "    0.0,                  !- Initial Moisture Evaporation Rate Divided by Steady-State AC Latent Capacity {dimensionless}",
+//         "    2.5,                  !- Maximum Cycling Rate {cycles/hr}",
+//         "    60.0,                 !- Latent Capacity Time Constant {s}",
+//         "    60,                   !- Fan Delay Time {s}",
+//         "    0,                    !- Flag for Using Hot Gas Reheat, 0 or 1 {dimensionless}",
+//         "    PLF Curve,            !- Energy Part Load Fraction Curve Name",
+//         "    4682.3964854,         !- Speed 1 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.97,                 !- Speed 1 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    8.031554863,          !- Speed 1 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.408706486,          !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 1 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 1 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 1 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 1 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 1 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 1 Waste Heat Function of Temperature Curve Name",
+//         "    5733.6424135,         !- Speed 2 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.96,                 !- Speed 2 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    8.132826118,          !- Speed 2 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.449293966,          !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 2 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 2 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 2 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 2 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 2 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 2 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 2 Waste Heat Function of Temperature Curve Name",
+//         "    6783.7160573,         !- Speed 3 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.95,                 !- Speed 3 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    8.133952107,          !- Speed 3 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.489881446,          !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 3 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 3 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 3 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 3 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 3 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 3 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 3 Waste Heat Function of Temperature Curve Name",
+//         "    7819.1361476,         !- Speed 4 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.91,                 !- Speed 4 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    8.077619987,          !- Speed 4 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.530468926,          !- Speed 4 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 4 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 4 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 4 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 4 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 4 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 4 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 4 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 4 Waste Heat Function of Temperature Curve Name",
+//         "    8827.8867705,         !- Speed 5 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.871,                !- Speed 5 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    7.974604129,          !- Speed 5 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.571056406,          !- Speed 5 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 5 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 5 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 5 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 5 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 5 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 5 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 5 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 5 Waste Heat Function of Temperature Curve Name",
+//         "    10734.02101,          !- Speed 6 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.816,                !- Speed 6 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    7.661685232,          !- Speed 6 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.652231367,          !- Speed 6 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 6 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 6 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 6 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 6 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 6 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 6 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 6 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve ,    !- Speed 6 Waste Heat Function of Temperature Curve Name",
+//         "    12454.348191,         !- Speed 7 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.784,                !- Speed 7 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    7.257778666,          !- Speed 7 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.732934379,          !- Speed 7 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 7 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 7 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 7 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 7 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 7 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 7 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 7 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 7 Waste Heat Function of Temperature Curve Name",
+//         "    13963.37113,          !- Speed 8 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.766,                !- Speed 8 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    6.804761759,          !- Speed 8 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.81410934,           !- Speed 8 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 8 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 8 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 8 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 8 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 8 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 8 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 8 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 8 Waste Heat Function of Temperature Curve Name",
+//         "    16092.825525,         !- Speed 9 Reference Unit Gross Rated Total Cooling Capacity {w}",
+//         "    0.739,                !- Speed 9 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}",
+//         "    5.765971166,          !- Speed 9 Reference Unit Gross Rated Cooling COP {dimensionless}",
+//         "    0.891980668,          !- Speed 9 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 9 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 9 Total Cooling Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 9 Total Cooling Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 9 Total Cooling Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 9 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 9 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 9 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve;     !- Speed 9 Waste Heat Function of Temperature Curve Name",
+//
+//         "  Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,",
+//         "    Lobby_ZN_1_FLR_2 WSHP Heating Mode,                    !- Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP Heating Source Side Inlet Node,  !- Water-to-Refrigerant HX Water Inlet Node Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP Heating Source Side Outlet Node, !- Water-to-Refrigerant HX Water Outlet Node Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP Heating Coil Air Inlet Node,     !- Indoor Air Inlet Node Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP SuppHeating Coil Air Inlet Node, !- Indoor Air Outlet Node Name",
+//         "    9,                    !- Number of Speeds {dimensionless}",
+//         "    9,                    !- Nominal Speed Level {dimensionless}",
+//         "    autosize,             !- Rated Heating Capacity At Selected Nominal Speed Level {w}",
+//         "    autosize,             !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}",
+//         "    autosize,             !- Rated Water Flow Rate At Selected Nominal Speed Level {m3/s}",
+//         "    PLF Curve,            !- Energy Part Load Fraction Curve Name",
+//         "    6437.5991236,         !- Speed 1 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    9.965323721,          !- Speed 1 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.408706486,          !- Speed 1 Reference Unit Rated Air Flow {m3/s}",
+//         "    0.0008201726 ,        !- Speed 1 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 1 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 1 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 1 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 1 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 1 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 1 Waste Heat Function of Temperature Curve Name",
+//         "    7521.3759405,         !- Speed 2 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    9.3549452,            !- Speed 2 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.449293966,          !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 2 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 2 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 2 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 2 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 2 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 2 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 2 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 2 Waste Heat Function of Temperature Curve Name",
+//         "    8601.0497624,         !- Speed 3 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    8.857929724,          !- Speed 3 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.489881446,          !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 3 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 3 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 3 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 3 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 3 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 3 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 3 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 3 Waste Heat Function of Temperature Curve Name",
+//         "    9675.1552339,         !- Speed 4 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    8.442543834,          !- Speed 4 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.530468926,          !- Speed 4 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 4 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 4 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 4 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 4 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 4 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 4 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 4 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 4 Waste Heat Function of Temperature Curve Name",
+//         "    10743.692355,         !- Speed 5 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    8.090129785,          !- Speed 5 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.571056406,          !- Speed 5 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 5 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 5 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 5 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 5 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 5 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 5 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 5 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 5 Waste Heat Function of Temperature Curve Name",
+//         "    12861.716978,         !- Speed 6 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    7.521471917,          !- Speed 6 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.652231367,          !- Speed 6 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 6 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 6 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 6 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 6 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 6 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 6 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 6 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 6 Waste Heat Function of Temperature Curve Name",
+//         "    14951.606778,         !- Speed 7 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    7.072661674,          !- Speed 7 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.732934379,          !- Speed 7 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 7 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 7 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 7 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 7 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 7 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 7 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 7 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 7 Waste Heat Function of Temperature Curve Name",
+//         "    17011.8964,           !- Speed 8 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    6.710807258,          !- Speed 8 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.81410934,           !- Speed 8 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 8 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 8 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 8 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 8 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 8 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 8 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0 ,                 !- Speed 8 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve,     !- Speed 8 Waste Heat Function of Temperature Curve Name",
+//         "    20894.501936,         !- Speed 9 Reference Unit Gross Rated Heating Capacity {w}",
+//         "    5.89906887,           !- Speed 9 Reference Unit Gross Rated Heating COP {dimensionless}",
+//         "    0.891980668,          !- Speed 9 Reference Unit Rated Air Flow Rate {m3/s}",
+//         "    0.0008201726 ,        !- Speed 9 Reference Unit Rated Water Flow Rate {m3/s}",
+//         "    BiquadraticCurve,     !- Speed 9 Heating Capacity Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 9 Total  Heating Capacity Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 9 Heating Capacity Function of Water Flow Fraction Curve Name",
+//         "    BiquadraticCurve,     !- Speed 9 Energy Input Ratio Function of Temperature Curve Name",
+//         "    CubicCurve,           !- Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name",
+//         "    CubicCurve,           !- Speed 9 Energy Input Ratio Function of Water Flow Fraction Curve Name",
+//         "    0.0,                  !- Speed 9 Reference Unit Waste Heat Fraction of Input Power At Rated Conditions {dimensionless}",
+//         "    BiquadraticCurve;     !- Speed 9 Waste Heat Function of Temperature Curve Name",
+//
+//         "  Fan:OnOff,",
+//         "    Lobby_ZN_1_FLR_2 WSHP Fan,              !- Name",
+//         "    OnSched,    !- Availability Schedule Name",
+//         "    0.7,                     !- Fan Total Efficiency",
+//         "    113,                   !- Pressure Rise {Pa}",
+//         "    Autosize,                !- Maximum Flow Rate {m3/s}",
+//         "    0.9,                     !- Motor Efficiency",
+//         "    1.0,                     !- Motor In Airstream Fraction",
+//         "    Space Out Node,    !- Air Inlet Node Name",
+//         "    Lobby_ZN_1_FLR_2 WSHP Cooling Coil Air Inlet Node,  !- Air Outlet Node Name",
+//         "    FanPowerCurve, !- Fan Efficiency Ratio Function of Speed Ratio Curve Name",
+//         "    ,",
+//         "    WSHP;",
+//
+//         "  Coil:Heating:Electric,",
+//         "    Lobby_ZN_1_FLR_2 WSHP Supp Heating Coil,  !- Name",
+//         "    OnSched,    !- Availability Schedule Name",
+//         "    1.0,                     !- Gas Burner Efficiency",
+//         "    Autosize,                   !- Nominal Capacity {W}",
+//         "    Lobby_ZN_1_FLR_2 WSHP SuppHeating Coil Air Inlet Node,  !- Air Inlet Node Name",
+//         "    Space In Node;       !- Air Outlet Node Name",
+//
+//     });
+//
+//     ASSERT_TRUE(process_idf(idf_objects));
+//     state->init_state(*state);
+//
+//     bool ErrorsFound(false);
+//     GetZoneData(*state, ErrorsFound);
+//     GetZoneEquipmentData(*state);
+//     state->dataZoneEquip->ZoneEquipInputsFilled = true; // denotes zone equipment has been read in
+//     HVACSystemData *mySys;
+//     mySys = UnitarySystems::UnitarySys::factory(*state, HVAC::UnitarySysType::Unitary_AnyCoilType, "Zone WSHP", true, 0);
+//     auto &thisSys(state->dataUnitarySystems->unitarySys[0]);
+//     thisSys.getUnitarySystemInput(*state, "Zone WSHP", true, 0);
+//     state->dataUnitarySystems->getInputOnceFlag = false;
+//
+//     // Test for #8812:
+//     // Verify zone sizing check if airflow is Autosized to prevent hard crash
+//     state->dataSize->CurZoneEqNum = 1;
+//     state->dataSize->ZoneEqSizing.allocate(1);
+//     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(35);
+//     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod = 0;
+//     state->dataSize->ZoneSizingRunDone = false;
+//     thisSys.m_HVACSizingIndex = 0;
+//     thisSys.m_CoolOutAirVolFlow = AutoSize;
+//     bool firstHVACIteration = false;
+//     int airLoopNum = 0;
+//     EXPECT_THROW(thisSys.sizeSystem(*state, firstHVACIteration, airLoopNum), std::runtime_error);
+//     std::string const error_string = delimited_string({
+//         "   ** Severe  ** For autosizing of ZoneHVAC:WaterToAirHeatPump ZONE WSHP, a zone sizing run must be done.",
+//         "   **   ~~~   ** No \"Sizing:Zone\" objects were entered.",
+//         "   **   ~~~   ** The \"SimulationControl\" object did not have the field \"Do Zone Sizing Calculation\" set to Yes.",
+//         "   **  Fatal  ** Program terminates due to previously shown condition(s).",
+//         "   ...Summary of Errors that led to program termination:",
+//         "   ..... Reference severe error count=1",
+//         "   ..... Last severe error=For autosizing of ZoneHVAC:WaterToAirHeatPump ZONE WSHP, a zone sizing run must be done.",
+//     });
+//
+//     EXPECT_TRUE(compare_err_stream(error_string, true));
+//
+//     // Test for #7053:
+//     // Fake that there is at least one UnitarySystemPerformance:Multispeed object
+//     UnitarySystems::DesignSpecMSHP fakeDesignSpecMSHP;
+//     state->dataUnitarySystems->designSpecMSHP.push_back(fakeDesignSpecMSHP);
+//
+//     state->dataPlnt->TotNumLoops = 2;
+//     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
+//
+//     for (int l = 1; l <= state->dataPlnt->TotNumLoops; ++l) {
+//         auto &loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
+//         loopside.TotalBranches = 1;
+//         loopside.Branch.allocate(1);
+//         auto &loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
+//         loopsidebranch.TotalComponents = 1;
+//         loopsidebranch.Comp.allocate(1);
+//     }
+//     state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
+//     state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
+//     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+//     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
+//         state->dataVariableSpeedCoils->VarSpeedCoil(1).Name;
+//     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
+//         DataPlant::PlantEquipmentType::CoilVSWAHPCoolingEquationFit;
+//     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
+//         state->dataVariableSpeedCoils->VarSpeedCoil(1).WaterInletNodeNum;
+//     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
+//         state->dataVariableSpeedCoils->VarSpeedCoil(1).WaterOutletNodeNum;
+//
+//     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
+//     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+//     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+//     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
+//         state->dataVariableSpeedCoils->VarSpeedCoil(2).Name;
+//     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
+//         DataPlant::PlantEquipmentType::CoilVSWAHPHeatingEquationFit;
+//     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
+//         state->dataVariableSpeedCoils->VarSpeedCoil(2).WaterInletNodeNum;
+//     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
+//         state->dataVariableSpeedCoils->VarSpeedCoil(2).WaterOutletNodeNum;
+//
+//     state->dataSize->ZoneSizingRunDone = true;
+//     state->dataSize->FinalZoneSizing.allocate(1);
+//     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolVolFlow = 1.0;
+//     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolCoilInTemp = 24.0;
+//     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolCoilInHumRat = 0.009;
+//     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).ZoneRetTempAtCoolPeak = 24.0;
+//     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).ZoneHumRatAtCoolPeak = 0.009;
+//     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).CoolDesTemp = 12.0;
+//     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).CoolDesHumRat = 0.007807825;
+//     state->dataEnvrn->OutBaroPress = 101325;
+//     state->dataEnvrn->StdRhoAir = 1.0;
+//     OutputReportPredefined::SetPredefinedTables(*state);
+//     thisSys.sizeSystem(*state, firstHVACIteration, airLoopNum);
+//
+//     // This VS coil is rather quirky. It sizes the capacity based on zone sizing air flow rate.
+//     // Then uses that capacity to back calculate the air flow needed to keep the reference air flow per capacity ratio constant.
+//     // For this reason, the parent object would size to an air flow that was different than the child.
+//
+//     // identify coil
+//     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).Name, "LOBBY_ZN_1_FLR_2 WSHP COOLING MODE");
+//
+//     // PTHP sized the VS coil differently. The PTHP uses the design air flow to size VS coil capacity
+//     // then back calculates air flow rate. The PTHP would read the coil air flow and capacity and report
+//     // those values to the eio. The UnitarySystem sizes the air flow rate and then calls the VS coil,
+//     // which sizes, and uses the VS coil capacity to report UnitarySystem capacity to the eio.
+//     // This requires and issue to correct.
+//
+//     // expect the ratio of air flow to capacity to be equal to the reference air flow and capacity ratio specified in coil input
+//     Real64 refAirflowCapacityRatio = 0.891980668 / 16092.825525; // speed 9 reference cooling data
+//     Real64 sizingAirflowCapacityRatio =
+//         state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(9) / state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedTotCap(9);
+//     EXPECT_EQ(refAirflowCapacityRatio, sizingAirflowCapacityRatio);
+//
+//     // this same ratio should also equal the internal flow per capacity variable used to back calculate operating air flow rate
+//     EXPECT_EQ(sizingAirflowCapacityRatio, state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowPerRatedTotCap(9));
+//
+//     // identify coil
+//     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(2).Name, "LOBBY_ZN_1_FLR_2 WSHP HEATING MODE");
+//
+//     // expect coil air flow to equal PTUnit heating air flow
+//     EXPECT_NEAR(state->dataVariableSpeedCoils->VarSpeedCoil(2).RatedAirVolFlowRate,
+//                 state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).HeatingAirVolFlow,
+//                 0.3); // DIFF from PTHP
+//     EXPECT_NEAR(state->dataVariableSpeedCoils->VarSpeedCoil(2).RatedAirVolFlowRate, thisSys.m_MaxHeatAirVolFlow, 0.3);
+//     EXPECT_NEAR(state->dataVariableSpeedCoils->VarSpeedCoil(2).MSRatedAirVolFlowRate(9), thisSys.m_MaxHeatAirVolFlow, 0.3);
+//
+//     // expect the ratio of air flow to capacity to equal to the reference air flow and capacity specified in coil input
+//     refAirflowCapacityRatio = 0.891980668 / 20894.501936; // speed 9 reference heating data
+//     sizingAirflowCapacityRatio =
+//         state->dataVariableSpeedCoils->VarSpeedCoil(2).MSRatedAirVolFlowRate(9) / state->dataVariableSpeedCoils->VarSpeedCoil(2).MSRatedTotCap(9);
+//     EXPECT_EQ(refAirflowCapacityRatio, sizingAirflowCapacityRatio);
+//
+//     // this same ratio should also equal the internal flow per capacity variable used to back calculate operating air flow rate
+//     EXPECT_EQ(sizingAirflowCapacityRatio, state->dataVariableSpeedCoils->VarSpeedCoil(2).MSRatedAirVolFlowPerRatedTotCap(9));
+//
+//     state->dataFans->fans(1)->set_size(*state);
+//     // the fan vol flow rate should equal the max of cooling and heating coil flow rates
+//     Real64 maxCoilAirFlow =
+//         max(state->dataVariableSpeedCoils->VarSpeedCoil(1).RatedAirVolFlowRate,
+//         state->dataVariableSpeedCoils->VarSpeedCoil(2).RatedAirVolFlowRate);
+//     EXPECT_NEAR(state->dataFans->fans(1)->maxAirFlowRate, maxCoilAirFlow, 0.000001);
+//     EXPECT_NEAR(state->dataFans->fans(1)->maxAirFlowRate, max(thisSys.m_MaxCoolAirVolFlow, thisSys.m_MaxHeatAirVolFlow), 0.000001);
+//
+//     // Also set BeginEnvrnFlag so code is tested for coil initialization and does not crash
+//     state->dataGlobal->BeginEnvrnFlag = true;
+//     thisSys.initUnitarySystems(*state, 0, firstHVACIteration, 0.0);
+//
+//     // check that an intermediate speed has the correct flow ratio
+//     Real64 refAirflowRatio = 0.530468926 / 0.891980668; // speed 4 reference cooling data and full flow rate at speed 9
+//     Real64 expectedAirFlowRate = refAirflowRatio * thisSys.m_MaxCoolAirVolFlow;
+//     EXPECT_NEAR(expectedAirFlowRate, thisSys.m_CoolVolumeFlowRate[4], 0.0000001);
+//     EXPECT_NEAR(expectedAirFlowRate, 0.5947088, 0.000001); // DIFF from PTHP
+//
+//     refAirflowRatio = 0.530468926 / 0.891980668; // speed 4 reference heating data and full flow rate at speed 9
+//     expectedAirFlowRate = refAirflowRatio * thisSys.m_MaxHeatAirVolFlow;
+//     EXPECT_NEAR(expectedAirFlowRate, thisSys.m_HeatVolumeFlowRate[4], 0.2); // DIFF from PTHP
+//     EXPECT_NEAR(expectedAirFlowRate, 0.5947, 0.0001);                       // DIFF from PTHP
+//
+//     // DIFF - comments for PTHP Variable Speed coil sizing
+//     // #6028 child components not sizing correctly on air flow rate
+//     // VS coils set SystemAirFlow to true and AirVolFlow to a value.
+//     // all PTUnits set CoolingAirFlow and HeatingAirFlow, and CoolingAirVolFlow and HeatingAirVolFlow
+//     // UnitarySystem now tracks the way PT units sized coils, which method is correct is for another day
+//     EXPECT_FALSE(state->dataSize->ZoneEqSizing(1).SystemAirFlow);
+//     EXPECT_NEAR(state->dataSize->ZoneEqSizing(1).AirVolFlow, state->dataVariableSpeedCoils->VarSpeedCoil(1).RatedAirVolFlowRate, 0.000001);
+//     EXPECT_FALSE(state->dataSize->ZoneEqSizing(1).CoolingAirFlow);
+//     EXPECT_FALSE(state->dataSize->ZoneEqSizing(1).HeatingAirFlow);
+//     EXPECT_EQ(state->dataSize->ZoneEqSizing(1).CoolingAirVolFlow, thisSys.m_MaxCoolAirVolFlow);
+//     EXPECT_LT(state->dataSize->ZoneEqSizing(1).HeatingAirVolFlow, thisSys.m_MaxHeatAirVolFlow);
+//     EXPECT_EQ(state->dataFans->fans(1)->maxAirFlowRate, state->dataSize->ZoneEqSizing(1).AirVolFlow);
+//     EXPECT_EQ(state->dataFans->fans(1)->maxAirFlowRate,
+//               max(state->dataSize->ZoneEqSizing(1).CoolingAirVolFlow, state->dataSize->ZoneEqSizing(1).HeatingAirVolFlow));
+// }
 
 TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimPTAC_HeatingCoilTest)
 {

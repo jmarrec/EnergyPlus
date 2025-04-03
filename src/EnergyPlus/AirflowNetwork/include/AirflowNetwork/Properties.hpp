@@ -57,8 +57,8 @@
 #define AIRCP(W) Psychrometrics::PsyCpAirFnW(W)
 #define AIRDYNAMICVISCOSITY_CONSTEXPR(T) air_dynamic_viscosity(T)
 #ifndef TOKELVIN
-#include "../../../DataGlobals.hh"
-#define TOKELVIN(T) (T + Constant::Kelvin)
+#    include "../../../DataGlobals.hh"
+#    define TOKELVIN(T) (T + Constant::Kelvin)
 #endif
 
 namespace EnergyPlus {

@@ -1551,6 +1551,15 @@ void GetOAControllerInputs(EnergyPlusData &state)
                 }
             }
 
+            if (MechVentZoneCount <= 0) {
+                ShowSevereError(state,
+                                format("{}{}=\"{}\", invalid input. At least one Zone or ZoneList Name must be entered.",
+                                       RoutineName,
+                                       CurrentModuleObject,
+                                       thisVentilationMechanical.Name));
+                ErrorsFound = true;
+            }
+
             //   Overwrite previous number of zones with number that does not include duplicates
             thisVentilationMechanical.NumofVentMechZones = MechVentZoneCount;
 

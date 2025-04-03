@@ -78,15 +78,15 @@ enum class PsychrometricFunction : int
 };
 
 #ifdef EP_nocache_Psychrometrics
-#undef EP_cache_PsyTwbFnTdbWPb
-#undef EP_cache_PsyPsatFnTemp
-#undef EP_cache_PsyTsatFnPb
-#undef EP_cache_PsyTsatFnHPb
+#    undef EP_cache_PsyTwbFnTdbWPb
+#    undef EP_cache_PsyPsatFnTemp
+#    undef EP_cache_PsyTsatFnPb
+#    undef EP_cache_PsyTsatFnHPb
 #else
-#define EP_cache_PsyTwbFnTdbWPb
-#define EP_cache_PsyPsatFnTemp
-#define EP_cache_PsyTsatFnPb
-#define EP_cache_PsyTsatFnHPb
+#    define EP_cache_PsyTwbFnTdbWPb
+#    define EP_cache_PsyPsatFnTemp
+#    define EP_cache_PsyTsatFnPb
+#    define EP_cache_PsyTsatFnHPb
 #endif
 
 #ifdef EP_cache_PsyTwbFnTdbWPb

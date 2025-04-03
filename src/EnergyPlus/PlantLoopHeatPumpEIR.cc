@@ -2079,16 +2079,17 @@ void EIRPlantLoopHeatPump::isPlantInletOrOutlet(EnergyPlusData &state)
         for (auto thisLoopSide : thisPlant.LoopSide) {
             if (this->loadSideNodes.inlet == thisLoopSide.NodeNumIn) {
                 loadSideIsPlantInlet = true;
-                break;
             }
             if (this->sourceSideNodes.outlet == thisLoopSide.NodeNumOut) {
                 sourceSideIsPlantOutlet = true;
-                break;
             }
             if (loadSideIsPlantInlet && sourceSideIsPlantOutlet) {
                 this->heatRecoveryHeatPump = true;
                 break;
             }
+        }
+        if (this->heatRecoveryHeatPump) {
+            break;
         }
     }
 }

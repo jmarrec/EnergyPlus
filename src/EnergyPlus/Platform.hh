@@ -57,18 +57,18 @@
 
 // Clang-Specific
 #ifndef __has_attribute
-#define __has_attribute(x) 0
+#    define __has_attribute(x) 0
 #endif
 
 // Force inlining
 #ifndef ALWAYS_INLINE
-#if defined(__GNUC__) || (defined(__clang__) && __has_attribute(always_inline))
-#define ALWAYS_INLINE inline __attribute__((__always_inline__))
-#elif defined(_MSC_VER) || defined(__INTEL_COMPILER)
-#define ALWAYS_INLINE __forceinline
-#else
-#define ALWAYS_INLINE inline
-#endif
+#    if defined(__GNUC__) || (defined(__clang__) && __has_attribute(always_inline))
+#        define ALWAYS_INLINE inline __attribute__((__always_inline__))
+#    elif defined(_MSC_VER) || defined(__INTEL_COMPILER)
+#        define ALWAYS_INLINE __forceinline
+#    else
+#        define ALWAYS_INLINE inline
+#    endif
 #endif
 
 #endif

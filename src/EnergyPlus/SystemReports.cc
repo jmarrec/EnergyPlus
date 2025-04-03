@@ -3842,8 +3842,9 @@ void ReportVentilationLoads(EnergyPlusData &state)
 
         // retrieve the zone load for each zone
         Real64 ZoneLoad = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(CtrlZoneNum).TotalOutputRequired;
-        Real64 ZoneVolume = state.dataHeatBal->Zone(CtrlZoneNum).Volume * state.dataHeatBal->Zone(CtrlZoneNum).Multiplier *
-                            state.dataHeatBal->Zone(CtrlZoneNum).ListMultiplier; // CR 7170
+        auto const &thisZone = state.dataHeatBal->Zone(CtrlZoneNum);
+        int const zoneMult = thisZone.Multiplier * thisZone.ListMultiplier;
+        Real64 const ZoneVolume = thisZone.Volume * zoneMult; // CR 7170
 
         bool constexpr UseOccSchFlag = true;
         bool constexpr UseMinOASchFlag = true;
@@ -4124,8 +4125,9 @@ void ReportVentilationLoads(EnergyPlusData &state)
                 }
                 state.dataSysRpts->SysVentRepVars(AirLoopNum).TargetVentilationFlowVoz +=
                     termUnitOAFrac * thisZoneVentRepVars.TargetVentilationFlowVoz;
-                Real64 naturalVentFlow =
-                    (state.dataHeatBal->ZnAirRpt(CtrlZoneNum).VentilVolumeStdDensity + thisZonePredefRep.AFNVentVolStdDen) / TimeStepSysSec;
+
+                Real64 naturalVentFlow = (state.dataHeatBal->ZnAirRpt(CtrlZoneNum).VentilVolumeStdDensity + thisZonePredefRep.AFNVentVolStdDen) *
+                                         zoneMult / TimeStepSysSec;
                 state.dataSysRpts->SysVentRepVars(AirLoopNum).NatVentFlow += termUnitOAFrac * naturalVentFlow;
 
                 if (thisZonePredefRep.isOccupied) {
@@ -4176,7 +4178,8 @@ void ReportVentilationLoads(EnergyPlusData &state)
 
         // set time mechanical+natural ventilation is below, at, or above target Voz-dyn
         Real64 totMechNatVentVolStdRho =
-            thisZoneVentRepVars.OAVolStdRho + state.dataHeatBal->ZnAirRpt(CtrlZoneNum).VentilVolumeStdDensity + thisZonePredefRep.AFNVentVolStdDen;
+            thisZoneVentRepVars.OAVolStdRho +
+            (state.dataHeatBal->ZnAirRpt(CtrlZoneNum).VentilVolumeStdDensity + thisZonePredefRep.AFNVentVolStdDen) * zoneMult;
         Real64 targetVoz = thisZoneVentRepVars.TargetVentilationFlowVoz * TimeStepSysSec;
         // Allow 1% tolerance
         if (totMechNatVentVolStdRho < (0.99 * targetVoz)) {

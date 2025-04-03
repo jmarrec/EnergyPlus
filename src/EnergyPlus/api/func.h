@@ -54,8 +54,8 @@
 
 #ifdef __cplusplus
 
-#include <functional>
-#include <string>
+#    include <functional>
+#    include <string>
 
 ENERGYPLUSLIB_API void registerErrorCallback(EnergyPlusState state, std::function<void(EnergyPlus::Error, const std::string &)> f);
 

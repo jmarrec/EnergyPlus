@@ -1526,7 +1526,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
     LSHCAL = 0;
 
     // Visible transmittance at normal incidence
-    s_surf->SurfWinVisTransSelected(IWin) = General::POLYF(1.0, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac;
+    s_surf->SurfWinVisTransSelected(IWin) = Window::POLYF(1.0, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac;
     // For windows with switchable glazing, ratio of visible transmittance at normal
     // incidence for fully switched (dark) state to that of unswitched state
     s_surf->SurfWinVisTransRatio(IWin) = 1.0;
@@ -1534,8 +1534,8 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
         if (ShType == WinShadingType::SwitchableGlazing) {
             int IConstShaded = surf.activeShadedConstruction; // Shaded construction counter
             s_surf->SurfWinVisTransRatio(IWin) =
-                General::SafeDivide(General::POLYF(1.0, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef),
-                                    General::POLYF(1.0, state.dataConstruction->Construct(IConst).TransVisBeamCoef));
+                General::SafeDivide(Window::POLYF(1.0, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef),
+                                    Window::POLYF(1.0, state.dataConstruction->Construct(IConst).TransVisBeamCoef));
         }
     }
 
@@ -1929,7 +1929,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
     } else { // Regular window
         if (s_surf->SurfWinWindowModelType(IWin) != WindowModel::BSDF) {
             // Vis trans of glass for COSB incidence angle
-            TVISB = General::POLYF(COSB, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac * surfWin.lightWellEff;
+            TVISB = Window::POLYF(COSB, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac * surfWin.lightWellEff;
         } else {
             // Complex fenestration needs to use different equation for visible transmittance.  That will be calculated later
             // in the code since it depends on different incoming directions.  For now, just put zero to differentiate from
@@ -1963,7 +1963,7 @@ void FigureDayltgCoeffsAtPointsForWindowElements(
                             IntWinHitNum = 0;
                             continue;
                         }
-                        TVISIntWin = General::POLYF(COSBIntWin, state.dataConstruction->Construct(surfIntWin.Construction).TransVisBeamCoef);
+                        TVISIntWin = Window::POLYF(COSBIntWin, state.dataConstruction->Construct(surfIntWin.Construction).TransVisBeamCoef);
                         TVISB *= TVISIntWin;
                         break; // Ray passes thru interior window; exit from DO loop
                     }
@@ -3114,7 +3114,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                                 continue;
                             }
                             TVISIntWinDisk =
-                                General::POLYF(COSBIntWin, state.dataConstruction->Construct(surfIntWinDisk.Construction).TransVisBeamCoef);
+                                Window::POLYF(COSBIntWin, state.dataConstruction->Construct(surfIntWinDisk.Construction).TransVisBeamCoef);
                             break;
                         } // for (IntWinDisk)
                     }     // for (spaceNum)
@@ -3170,7 +3170,7 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                         TVISS = 0.0;
                     } else {
                         // Beam transmittance for bare window and all types of blinds
-                        TVISS = General::POLYF(COSI, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac *
+                        TVISS = Window::POLYF(COSI, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac *
                                 surfWin.lightWellEff;
                         if (extWinType == ExtWinType::AdjZone && hitIntWinDisk) TVISS *= TVISIntWinDisk;
                     }
@@ -3343,15 +3343,15 @@ void FigureDayltgCoeffsAtPointsForSunPosition(
                             if (s_surf->Surface(ReflSurfNum).Class == SurfaceClass::Window) {
                                 int const ConstrNumRefl = s_surf->SurfActiveConstruction(ReflSurfNum);
                                 SpecReflectance =
-                                    General::POLYF(std::abs(CosIncAngRefl), state.dataConstruction->Construct(ConstrNumRefl).ReflSolBeamFrontCoef);
+                                    Window::POLYF(std::abs(CosIncAngRefl), state.dataConstruction->Construct(ConstrNumRefl).ReflSolBeamFrontCoef);
                             }
                             if (s_surf->Surface(ReflSurfNum).IsShadowing && s_surf->SurfShadowGlazingConstruct(ReflSurfNum) > 0)
                                 SpecReflectance =
                                     s_surf->SurfShadowGlazingFrac(ReflSurfNum) *
-                                    General::POLYF(
+                                    Window::POLYF(
                                         std::abs(CosIncAngRefl),
                                         state.dataConstruction->Construct(s_surf->SurfShadowGlazingConstruct(ReflSurfNum)).ReflSolBeamFrontCoef);
-                            TVisRefl = General::POLYF(CosIncAngRec, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac *
+                            TVisRefl = Window::POLYF(CosIncAngRec, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac *
                                        surfWin.lightWellEff;
                             dl->dirIllum(iHour)[iWinCover_Bare].sunDisk += SunVecMir.z * SpecReflectance * TVisRefl; // Bare window
 
@@ -5804,8 +5804,8 @@ void DayltgInteriorIllum(EnergyPlusData &state,
                 //  based on the master construction. They need to be adjusted by the VTRatio, including:
                 //  ZoneDaylight()%DaylIllFacSky, DaylIllFacSun, DaylIllFacSunDisk; DaylBackFacSky,
                 //  DaylBackFacSun, DaylBackFacSunDisk, DaylSourceFacSky, DaylSourceFacSun, DaylSourceFacSunDisk
-                VTNow = General::POLYF(1.0, construction.TransVisBeamCoef);
-                VTMaster = General::POLYF(1.0, state.dataConstruction->Construct(construction.TCMasterConstrNum).TransVisBeamCoef);
+                VTNow = Window::POLYF(1.0, construction.TransVisBeamCoef);
+                VTMaster = Window::POLYF(1.0, state.dataConstruction->Construct(construction.TCMasterConstrNum).TransVisBeamCoef);
                 VTRatio = VTNow / VTMaster;
             }
         }
@@ -6079,12 +6079,12 @@ void DayltgInteriorIllum(EnergyPlusData &state,
                     int const IConst = s_surf->SurfActiveConstruction(IWin);
                     // Vis trans at normal incidence of unswitched glass
                     shadeGroupLums.unswitchedTvis =
-                        General::POLYF(1.0, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac;
+                        Window::POLYF(1.0, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac;
 
                     // Vis trans at normal incidence of fully switched glass
                     int const IConstShaded = s_surf->Surface(IWin).activeShadedConstruction;
                     shadeGroupLums.switchedTvis =
-                        General::POLYF(1.0, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac;
+                        Window::POLYF(1.0, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac;
 
                     // Reset shading flag to indicate that window is shaded by being partially or fully switched
                     s_surf->SurfWinShadingFlag(IWin) = WinShadingType::SwitchableGlazing;
@@ -6299,12 +6299,12 @@ void DayltgInteriorIllum(EnergyPlusData &state,
                         int const IConst = s_surf->SurfActiveConstruction(IWin);
                         // Vis trans at normal incidence of unswitched glass
                         shadeGroupLums.unswitchedTvis =
-                            General::POLYF(1.0, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac;
+                            Window::POLYF(1.0, state.dataConstruction->Construct(IConst).TransVisBeamCoef) * surfWin.glazedFrac;
 
                         // Vis trans at normal incidence of fully switched glass
                         int const IConstShaded = s_surf->Surface(IWin).activeShadedConstruction;
                         shadeGroupLums.switchedTvis =
-                            General::POLYF(1.0, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac;
+                            Window::POLYF(1.0, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac;
                     } // if (switchableGlazing)
                 }     // if (GlareControlIsActive)
             }         // for (IWin)
@@ -7282,7 +7282,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
 
             } else { // Bare window
                 // Transmittance of bare window for this sky/ground element
-                TVISBR = General::POLYF(COSB, construct.TransVisBeamCoef) * surfWin.glazedFrac * surfWin.lightWellEff;
+                TVISBR = Window::POLYF(COSB, construct.TransVisBeamCoef) * surfWin.glazedFrac * surfWin.lightWellEff;
 
                 if (InShelfSurf > 0) { // Inside daylighting shelf
                     // Daylighting shelf simplification:  All light is diffuse
@@ -7308,8 +7308,8 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
                             if (hitObs) { // disk passes thru
                                 // cosine of incidence angle of light from sky or ground element for
                                 COSBintWin = SPH * std::sin(surfIntWin.phi) + CPH * std::cos(surfIntWin.phi) * std::cos(TH - surfIntWin.theta);
-                                TVISBR *= General::POLYF(COSBintWin,
-                                                         state.dataConstruction->Construct(s_surf->Surface(IntWinNum).Construction).TransVisBeamCoef);
+                                TVISBR *= Window::POLYF(COSBintWin,
+                                                        state.dataConstruction->Construct(s_surf->Surface(IntWinNum).Construction).TransVisBeamCoef);
                                 break;
                             }
                         }
@@ -7382,7 +7382,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
                         transMult = TransTDD(state, PipeNum, COSB, RadType::VisibleBeam) * surfWin.glazedFrac;
                     } else { // Shade only, no TDD
                         // Calculate transmittance of the combined window and shading device for this sky/ground element
-                        transMult = General::POLYF(COSB, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac *
+                        transMult = Window::POLYF(COSB, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac *
                                     surfWin.lightWellEff;
                     }
 
@@ -7443,7 +7443,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
                                     (1.0 - ReflGlDiffDiffFront * ReflBlDiffDiffBack) * surfWin.lightWellEff;
 
                     } else { // Between-glass blind
-                        Real64 t1 = General::POLYF(COSB, construct.tBareVisCoef(1));
+                        Real64 t1 = Window::POLYF(COSB, construct.tBareVisCoef(1));
                         td2 = construct.tBareVisDiff(2);
                         rbd1 = construct.rbBareVisDiff(1);
                         rfd2 = construct.rfBareVisDiff(2);
@@ -7454,7 +7454,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
                         if (construct.TotGlassLayers == 2) { // 2 glass layers
                             transMult = t1 * (tfshBd * (1.0 + rfd2 * rbshd) + rfshB * rbd1 * tfshd) * td2 * surfWin.lightWellEff;
                         } else { // 3 glass layers; blind between layers 2 and 3
-                            Real64 t2 = General::POLYF(COSB, construct.tBareVisCoef(2));
+                            Real64 t2 = Window::POLYF(COSB, construct.tBareVisCoef(2));
                             td3 = construct.tBareVisDiff(3);
                             rfd3 = construct.rfBareVisDiff(3);
                             rbd2 = construct.rbBareVisDiff(2);
@@ -7465,7 +7465,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
 
                     transBmBmMult = TVISBR * matBlind->BeamBeamTrans(ProfAng, surfShade.blind.slatAng);
                 } else { // Diffusing glass
-                    transMult = General::POLYF(COSB, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac *
+                    transMult = Window::POLYF(COSB, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac *
                                 surfWin.lightWellEff;
                 } // End of check if shade, blind or diffusing glass
 
@@ -7589,7 +7589,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
                 FLCW[iWinCover_Bare].sun += ZSU1 * TVISBSun * surfWin.fractionUpgoing;
 
             } else { // Bare window
-                TVISBSun = General::POLYF(COSBSun, construct.TransVisBeamCoef) * surfWin.glazedFrac * surfWin.lightWellEff;
+                TVISBSun = Window::POLYF(COSBSun, construct.TransVisBeamCoef) * surfWin.glazedFrac * surfWin.lightWellEff;
 
                 // Daylighting shelf simplification:  No beam makes it past end of shelf, all light is diffuse
                 if (InShelfSurf > 0) {                  // Inside daylighting shelf
@@ -7635,7 +7635,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
                     } else {
                         int IConstShaded = s_surf->SurfWinActiveShadedConstruction(IWin);
                         if (s_surf->SurfWinSolarDiffusing(IWin)) IConstShaded = surf.Construction;
-                        transMult = General::POLYF(COSBSun, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac *
+                        transMult = Window::POLYF(COSBSun, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac *
                                     surfWin.lightWellEff;
                     }
 
@@ -7670,13 +7670,13 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
                                     surfWin.glazedFrac * surfWin.lightWellEff;
 
                     } else { // Between-glass blind
-                        Real64 t1 = General::POLYF(COSBSun, construct.tBareVisCoef(1));
+                        Real64 t1 = Window::POLYF(COSBSun, construct.tBareVisCoef(1));
                         Real64 tfshBd = Interp(btar.Vis.Ft.Bm[idxLo].DfTra, btar.Vis.Ft.Bm[idxHi].DfTra, interpFac);
                         Real64 rfshB = Interp(btar.Vis.Ft.Bm[idxLo].DfRef, btar.Vis.Ft.Bm[idxHi].DfRef, interpFac);
                         if (construct.TotGlassLayers == 2) { // 2 glass layers
                             transMult = t1 * (tfshBd * (1.0 + rfd2 * rbshd) + rfshB * rbd1 * tfshd) * td2 * surfWin.lightWellEff;
                         } else { // 3 glass layers; blind between layers 2 and 3
-                            Real64 t2 = General::POLYF(COSBSun, construct.tBareVisCoef(2));
+                            Real64 t2 = Window::POLYF(COSBSun, construct.tBareVisCoef(2));
                             transMult = t1 * t2 * (tfshBd * (1.0 + rfd3 * rbshd) + rfshB * (rbd2 * tfshd + td2 * rbd1 * td2 * tfshd)) * td3 *
                                         surfWin.lightWellEff;
                         }
@@ -8679,8 +8679,8 @@ void DayltgInteriorMapIllum(EnergyPlusData &state)
                     //  based on the master construction. They need to be adjusted by the VTRatio, including:
                     //  ZoneDaylight()%DaylIllFacSky, DaylIllFacSun, DaylIllFacSunDisk; DaylBackFacSky,
                     //  DaylBackFacSun, DaylBackFacSunDisk, DaylSourceFacSky, DaylSourceFacSun, DaylSourceFacSunDisk
-                    Real64 VTNow = General::POLYF(1.0, construction.TransVisBeamCoef);
-                    Real64 VTMaster = General::POLYF(1.0, state.dataConstruction->Construct(construction.TCMasterConstrNum).TransVisBeamCoef);
+                    Real64 VTNow = Window::POLYF(1.0, construction.TransVisBeamCoef);
+                    Real64 VTMaster = Window::POLYF(1.0, state.dataConstruction->Construct(construction.TCMasterConstrNum).TransVisBeamCoef);
                     VTRatio = VTNow / VTMaster;
                 }
             }
@@ -8788,7 +8788,7 @@ void DayltgInteriorMapIllum(EnergyPlusData &state)
                     int IConstShaded = s_surf->Surface(IWin).activeShadedConstruction;
                     if (IConstShaded > 0) {
                         // Visible transmittance (VT) of electrochromic (EC) windows in fully dark state
-                        Real64 VTDark = General::POLYF(1.0, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac;
+                        Real64 VTDark = Window::POLYF(1.0, state.dataConstruction->Construct(IConstShaded).TransVisBeamCoef) * surfWin.glazedFrac;
                         if (VTDark > 0) VTMULT = s_surf->SurfWinVisTransSelected(IWin) / VTDark;
                     }
                 }

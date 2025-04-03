@@ -509,6 +509,14 @@ namespace ThermalChimney {
                         state.dataHeatBal->Zone(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).Name);
                     SetupOutputVariable(
                         state,
+                        "Zone Infiltration Outdoor Density Volume Flow Rate",
+                        Constant::Units::m3_s,
+                        state.dataHeatBal->ZnAirRpt(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).InfilVdotOutDensity,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
+                        state.dataHeatBal->Zone(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).Name);
+                    SetupOutputVariable(
+                        state,
                         "Zone Infiltration Current Density Volume",
                         Constant::Units::m3,
                         state.dataHeatBal->ZnAirRpt(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).InfilVolumeCurDensity,
@@ -537,14 +545,30 @@ namespace ThermalChimney {
                                         OutputProcessor::TimeStepType::System,
                                         OutputProcessor::StoreType::Average,
                                         state.dataHeatBal->Zone(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).Name);
-                    SetupOutputVariable(
-                        state,
-                        "Zone Infiltration Air Change Rate",
-                        Constant::Units::ach,
-                        state.dataHeatBal->ZnAirRpt(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).InfilAirChangeRate,
-                        OutputProcessor::TimeStepType::System,
-                        OutputProcessor::StoreType::Average,
-                        state.dataHeatBal->Zone(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).Name);
+                    SetupOutputVariable(state,
+                                        "Zone Infiltration Current Density Air Change Rate",
+                                        Constant::Units::ach,
+                                        state.dataHeatBal->ZnAirRpt(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum))
+                                            .InfilAirChangeRateCurDensity,
+                                        OutputProcessor::TimeStepType::System,
+                                        OutputProcessor::StoreType::Average,
+                                        state.dataHeatBal->Zone(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).Name);
+                    SetupOutputVariable(state,
+                                        "Zone Infiltration Standard Density Air Change Rate",
+                                        Constant::Units::ach,
+                                        state.dataHeatBal->ZnAirRpt(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum))
+                                            .InfilAirChangeRateStdDensity,
+                                        OutputProcessor::TimeStepType::System,
+                                        OutputProcessor::StoreType::Average,
+                                        state.dataHeatBal->Zone(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).Name);
+                    SetupOutputVariable(state,
+                                        "Zone Infiltration Outdoor Density Air Change Rate",
+                                        Constant::Units::ach,
+                                        state.dataHeatBal->ZnAirRpt(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum))
+                                            .InfilAirChangeRateOutDensity,
+                                        OutputProcessor::TimeStepType::System,
+                                        OutputProcessor::StoreType::Average,
+                                        state.dataHeatBal->Zone(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)).Name);
                     RepVarSet(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)) = false;
                 }
             } // DO TCZoneNum = 1, ThermalChimneySys(Loop)%TotZoneToDistrib

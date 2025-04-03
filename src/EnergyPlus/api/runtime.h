@@ -55,8 +55,8 @@
 #ifdef __cplusplus
 
 // if we are building this with C++ in mind, we can make use of these std::function based callback registration functions
-#include <functional>
-#include <string>
+#    include <functional>
+#    include <string>
 ENERGYPLUSLIB_API void callbackBeginNewEnvironment(EnergyPlusState state, std::function<void(EnergyPlusState)> f);
 ENERGYPLUSLIB_API void callbackAfterNewEnvironmentWarmupComplete(EnergyPlusState state, std::function<void(EnergyPlusState)> f);
 ENERGYPLUSLIB_API void callbackBeginZoneTimeStepBeforeInitHeatBalance(EnergyPlusState state, std::function<void(EnergyPlusState)> f);

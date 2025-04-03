@@ -140,10 +140,15 @@ namespace Window {
             }
             SurfInsideTemp = aTemp - Constant::Kelvin;
             if (ANY_INTERIOR_SHADE_BLIND(state.dataSurface->SurfWinShadingFlag(SurfNum))) {
-                auto const &surfShade = state.dataSurface->surfShades(SurfNum);
+                auto &surfShade = state.dataSurface->surfShades(SurfNum);
                 Real64 EffShBlEmiss = surfShade.effShadeEmi;
                 Real64 EffGlEmiss = surfShade.effGlassEmi;
-
+                surfShade.effShadeEmi = Interp(construction.effShadeBlindEmi[surfShade.blind.slatAngIdxLo],
+                                               construction.effShadeBlindEmi[surfShade.blind.slatAngIdxHi],
+                                               surfShade.blind.slatAngInterpFac);
+                surfShade.effGlassEmi = Interp(construction.effGlassEmi[surfShade.blind.slatAngIdxLo],
+                                               construction.effGlassEmi[surfShade.blind.slatAngIdxHi],
+                                               surfShade.blind.slatAngInterpFac);
                 state.dataSurface->SurfWinEffInsSurfTemp(SurfNum) =
                     (EffShBlEmiss * SurfInsideTemp + EffGlEmiss * (state.dataWindowManager->thetas[2 * totSolidLayers - 3] - Constant::Kelvin)) /
                     (EffShBlEmiss + EffGlEmiss);

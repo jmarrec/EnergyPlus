@@ -62,6 +62,7 @@ jobs:
         brew reinstall gcc@13
         echo "FC=$(brew --prefix gcc@13)/bin/gfortran-13" >> $GITHUB_ENV
         echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
+        pip install pytest lxml
 
     - name: Install Dependencies for Linux
       if: runner.os == 'Linux'
@@ -72,6 +73,7 @@ jobs:
           # https://github.com/actions/runner-images/issues/10025
           echo "FC=gfortran-13" >> $GITHUB_ENV
         fi
+        pip install pytest lxml
 
     # BUILD AND TEST INTEGRATION FILES ON THE BASELINE BRANCH
 
@@ -166,7 +168,7 @@ jobs:
 
     - name: Install Regression Tool
       if: always() && matrix.run_regressions && steps.branch_build.outcome != 'failure'  # always run this step as long as we actually built
-      run: pip install energyplus-regressions
+      run: pip install energyplus-regressions>=2.1.2
 
     - name: Run Regressions
       if: always() && matrix.run_regressions && steps.branch_build.outcome != 'failure'  # always run this step as long as we actually built
@@ -199,6 +201,8 @@ jobs:
         script: |
           const script = require('${{ github.workspace }}/regressions/summary.js')
           console.log(script({github, context}))
+
+    # - uses: lhotari/action-upterm@v1
 
     - name: Fail on Regressions from Forked Repository
       if: always() && matrix.run_regressions && steps.regressions.outcome == 'failure' && github.event.pull_request.head.repo.full_name != 'NREL/EnergyPlus'

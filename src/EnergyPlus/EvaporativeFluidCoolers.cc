@@ -1341,14 +1341,10 @@ namespace EvaporativeFluidCoolers {
         Real64 constexpr Acc(0.0001); // Accuracy of result
         std::string const CalledFrom("SizeEvapFluidCooler");
 
-        int SolFla;                      // Flag of solver
-        Real64 UA;                       // Calculated UA value [W/C]
-        Real64 OutWaterTempAtUA0;        // Water outlet temperature at UA0
-        Real64 OutWaterTempAtUA1;        // Water outlet temperature at UA1
-        Real64 DesignEnteringAirWetBulb; // Intermediate variable to check that design exit
-        // temperature specified in the plant:sizing object
-        // is higher than the design entering air wet-bulb temp
-        // when autosize feature is used
+        int SolFla;               // Flag of solver
+        Real64 UA;                // Calculated UA value [W/C]
+        Real64 OutWaterTempAtUA0; // Water outlet temperature at UA0
+        Real64 OutWaterTempAtUA1; // Water outlet temperature at UA1
 
         Real64 DesEvapFluidCoolerLoad = 0.0; // Design evaporative fluid cooler load [W]
         Real64 tmpDesignWaterFlowRate = this->DesignWaterFlowRate;
@@ -1359,6 +1355,33 @@ namespace EvaporativeFluidCoolers {
 
         if (this->DesignWaterFlowRateWasAutoSized && this->PerformanceInputMethod_Num != PIM::StandardDesignCapacity) {
             if (PltSizCondNum > 0) {
+
+                // Check when the user specified Condenser/Evaporative Fluid Cooler water design setpoint
+                // temperature is less than design inlet air wet bulb temperature
+                Real64 DesignEnteringAirWetBulb = 0;
+                if (this->PerformanceInputMethod_Num == PIM::UFactor) {
+                    DesignEnteringAirWetBulb = 25.6;
+                } else {
+                    DesignEnteringAirWetBulb = this->DesignEnteringAirWetBulbTemp;
+                }
+                if (state.dataSize->PlantSizData(PltSizCondNum).ExitTemp <= DesignEnteringAirWetBulb) {
+                    ShowSevereError(state, format("Error when autosizing the UA value for Evaporative Fluid Cooler = {}.", this->Name));
+                    ShowContinueError(state,
+                                      format("Design Loop Exit Temperature ({:.2R} C) must be greater than design entering air wet-bulb temperature "
+                                             "({:.2R} C) when autosizing the Evaporative Fluid Cooler UA.",
+                                             state.dataSize->PlantSizData(PltSizCondNum).ExitTemp,
+                                             DesignEnteringAirWetBulb));
+                    ShowContinueError(
+                        state,
+                        "It is recommended that the Design Loop Exit Temperature = Design Entering Air Wet-bulb Temp plus the Evaporative "
+                        "Fluid Cooler design approach temperature (e.g., 4 C).");
+                    ShowContinueError(
+                        state,
+                        "If using HVACTemplate:Plant:ChilledWaterLoop, then check that input field Condenser Water Design Setpoint must be "
+                        "> Design Entering Air Wet-bulb Temp if autosizing the Evaporative Fluid Cooler.");
+                    ShowFatalError(state, "Review and revise design input values as appropriate.");
+                }
+
                 if (state.dataSize->PlantSizData(PltSizCondNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
                     tmpDesignWaterFlowRate = state.dataSize->PlantSizData(PltSizCondNum).DesVolFlowRate * this->SizFac;
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) this->DesignWaterFlowRate = tmpDesignWaterFlowRate;
@@ -1382,28 +1405,6 @@ namespace EvaporativeFluidCoolers {
                     ShowSevereError(state, format("Autosizing error for evaporative fluid cooler object = {}", this->Name));
                     ShowFatalError(state, "Autosizing of evaporative fluid cooler condenser flow rate requires a loop Sizing:Plant object.");
                 }
-            }
-            // Check when the user specified Condenser/Evaporative Fluid Cooler water design setpoint
-            // temperature is less than design inlet air wet bulb temperature
-            if (this->PerformanceInputMethod_Num == PIM::UFactor) {
-                DesignEnteringAirWetBulb = 25.6;
-            } else {
-                DesignEnteringAirWetBulb = this->DesignEnteringAirWetBulbTemp;
-            }
-            if (state.dataSize->PlantSizData(PltSizCondNum).ExitTemp <= DesignEnteringAirWetBulb) {
-                ShowSevereError(state, format("Error when autosizing the UA value for Evaporative Fluid Cooler = {}.", this->Name));
-                ShowContinueError(state,
-                                  format("Design Loop Exit Temperature ({:.2R} C) must be greater than design entering air wet-bulb temperature "
-                                         "({:.2R} C) when autosizing the Evaporative Fluid Cooler UA.",
-                                         state.dataSize->PlantSizData(PltSizCondNum).ExitTemp,
-                                         DesignEnteringAirWetBulb));
-                ShowContinueError(state,
-                                  "It is recommended that the Design Loop Exit Temperature = Design Entering Air Wet-bulb Temp plus the Evaporative "
-                                  "Fluid Cooler design approach temperature (e.g., 4 C).");
-                ShowContinueError(state,
-                                  "If using HVACTemplate:Plant:ChilledWaterLoop, then check that input field Condenser Water Design Setpoint must be "
-                                  "> Design Entering Air Wet-bulb Temp if autosizing the Evaporative Fluid Cooler.");
-                ShowFatalError(state, "Review and revise design input values as appropriate.");
             }
         }
 

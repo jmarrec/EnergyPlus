@@ -96,7 +96,8 @@ SRC_DIR = os.path.abspath(os.path.join(REPO_ROOT, 'src', 'EnergyPlus'))
 # Files for which to ignore missing header warning
 EXPECT_MISSING_HEADER = ['src/EnergyPlus/main.cc',
                          'src/EnergyPlus/test_ep_as_library.cc',
-                         'EnergyPlusPgm.cc']
+                         'EnergyPlusPgm.cc',
+                         'src/EnergyPlus/WindowsGuiLauncher.cc']
 
 EXPECT_MISSING_NAMESPACE = []
 

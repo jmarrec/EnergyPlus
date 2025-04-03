@@ -315,6 +315,8 @@ namespace HVACVariableRefrigerantFlow {
         int CoolCapFTErrorIndex = 0;   // warning message index
         int HeatEIRFPLRErrorIndex = 0; // warning message index
         int CoolEIRFPLRErrorIndex = 0; // warning message index
+        int LowLoadTeError = 0;
+        int LowLoadTeErrorIndex = 0; // warning message index
         // The following are for the Algorithm Type: VRF model based on physics, applicable for Fluid Temperature Control
         int AlgorithmIUCtrl;             // VRF indoor unit contrl algorithm, 1-High sensible, 2-Te/Tc constant
         Array1D<Real64> CompressorSpeed; // compressor speed array [rps]

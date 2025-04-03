@@ -247,9 +247,6 @@ namespace CondenserLoopTowers {
         Real64 DesInletWaterTemp = 0.0;          // design tower inlet water temperature (C)
         Real64 DesOutletWaterTemp = 0.0;         // design tower outlet water temperature (C)
         Real64 DesInletAirDBTemp = 0.0;          // design tower inlet air dry-bulb temperature (C)
-        Real64 DesInletAirWBTemp = 0.0;          // design tower outlet air wet-bulb temperature (C)
-        Real64 DesApproach = 0.0;                // design tower approach temperature (deltaC)
-        Real64 DesRange = 0.0;                   // design tower range temperature (deltaC)
         bool TowerInletCondsAutoSize = false;    // true if tower inlet condition is autosized or defaulted to autosize
         // Operational fault parameters
         bool FaultyCondenserSWTFlag = false;   // True if the condenser has SWT sensor fault

@@ -49,7 +49,7 @@
 
 #include <fmt/format.h>
 #ifndef NDEBUG
-#include <stdexcept>
+#    include <stdexcept>
 #endif
 
 namespace EnergyPlus {

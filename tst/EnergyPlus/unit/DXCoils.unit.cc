@@ -708,8 +708,10 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedDefrostCOP)
         Curve::Curve *rCurve = state->dataCurveManager->PerfCurve(CurveNum);
         if (rCurve->curveType == CurveType::BiQuadratic) {
             rCurve->interpolationType = InterpType::EvaluateCurveToLimits;
+            rCurve->numDims = 2;
         } else if (rCurve->curveType == CurveType::Quadratic) {
             rCurve->interpolationType = InterpType::EvaluateCurveToLimits;
+            rCurve->numDims = 1;
         }
     }
 
@@ -737,6 +739,22 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedDefrostCOP)
     Real64 COPwDefrost = Coil.TotalHeatingEnergyRate / Coil.ElecHeatingPower;
     EXPECT_LT(COPwDefrost, COPwoDefrost);
 
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideValue = 0.5;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideValue = 0.6;
+    CalcMultiSpeedDXCoilHeating(*state, DXCoilNum, SpeedRatio, CycRatio, SpeedNum, fanOp, 0);
+    Real64 TotCapwoDefrost = Coil.MSRatedTotCap(SpeedNum) * CurveValue(*state, nCapfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) *
+                             CurveValue(*state, nCapfFF2, 1);
+    Real64 elecHeatingPowerwoDefrost = TotCapwoDefrost * 1.0 / Coil.MSRatedCOP(SpeedNum) *
+                                       CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) *
+                                       CurveValue(*state, nEIRfFF2, 1);
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost * 0.6);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost * 0.5);
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+
     // Defroster on, but not running (DefrostTime == 0)
     Coil.DefrostTime = 0.0;
     CalcMultiSpeedDXCoilHeating(*state, DXCoilNum, SpeedRatio, CycRatio, SpeedNum, fanOp, 0);
@@ -744,15 +762,44 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedDefrostCOP)
                    (CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF2, 1));
     COPwDefrost = Coil.TotalHeatingEnergyRate / Coil.ElecHeatingPower;
     EXPECT_NEAR(COPwDefrost, COPwoDefrost, 0.0001);
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost);
+
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideValue = 0.5;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideValue = 0.6;
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost);
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+
     Coil.DefrostTime = 0.058333;
 
     // Defroster off
     state->dataEnvrn->OutDryBulbTemp = 5.0; // not cold enough for defroster
     CalcMultiSpeedDXCoilHeating(*state, DXCoilNum, SpeedRatio, CycRatio, SpeedNum, fanOp, 0);
+    TotCapwoDefrost = Coil.MSRatedTotCap(SpeedNum) * CurveValue(*state, nCapfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) *
+                      CurveValue(*state, nCapfFF2, 1);
+    elecHeatingPowerwoDefrost = TotCapwoDefrost * 1.0 / Coil.MSRatedCOP(SpeedNum) *
+                                CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF2, 1);
     COPwoDefrost = Coil.MSRatedCOP(SpeedNum) /
                    (CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF2, 1));
     COPwDefrost = Coil.TotalHeatingEnergyRate / Coil.ElecHeatingPower;
     EXPECT_DOUBLE_EQ(COPwoDefrost, COPwDefrost);
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost);
+
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideValue = 0.5;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideValue = 0.6;
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost);
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
 
     // Test low speed
     SpeedNum = 1;
@@ -765,13 +812,44 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedDefrostCOP)
     COPwDefrost = Coil.TotalHeatingEnergyRate / Coil.ElecHeatingPower;
     EXPECT_LT(COPwDefrost, COPwoDefrost);
 
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideValue = 0.5;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideValue = 0.6;
+    CalcMultiSpeedDXCoilHeating(*state, DXCoilNum, SpeedRatio, CycRatio, SpeedNum, fanOp, 0);
+    TotCapwoDefrost = Coil.MSRatedTotCap(SpeedNum) * CurveValue(*state, nCapfT1, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) *
+                      CurveValue(*state, nCapfFF1, 1);
+    elecHeatingPowerwoDefrost = TotCapwoDefrost * 1.0 / Coil.MSRatedCOP(SpeedNum) *
+                                CurveValue(*state, nEIRfT1, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF1, 1);
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost * 0.6);
+    EXPECT_NEAR(Coil.TotalHeatingEnergyRate, TotCapwoDefrost * 0.5, 0.0000001);
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+
     // Defroster off
     state->dataEnvrn->OutDryBulbTemp = 5.0; // not cold enough for defroster
     CalcMultiSpeedDXCoilHeating(*state, DXCoilNum, SpeedRatio, CycRatio, SpeedNum, fanOp, 0);
+    TotCapwoDefrost = Coil.MSRatedTotCap(SpeedNum) * CurveValue(*state, nCapfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) *
+                      CurveValue(*state, nCapfFF2, 1);
+    elecHeatingPowerwoDefrost = TotCapwoDefrost * 1.0 / Coil.MSRatedCOP(SpeedNum) *
+                                CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF2, 1);
     COPwoDefrost = Coil.MSRatedCOP(SpeedNum) /
                    (CurveValue(*state, nEIRfT1, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF1, 1));
     COPwDefrost = Coil.TotalHeatingEnergyRate / Coil.ElecHeatingPower;
     EXPECT_DOUBLE_EQ(COPwoDefrost, COPwDefrost);
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost);
+
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideValue = 0.5;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideValue = 0.6;
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost);
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
 
     // Now test that coil output at Speed = 1, CyclingRatio = 1 is the same as Speed = 2 and SpeedRatio = 0
     Real64 DXCoilOutletNodeTemp = Coil.OutletAirTemp;
@@ -824,6 +902,39 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedDefrostCOP)
     EXPECT_DOUBLE_EQ(DXCoilOutletNodeHumRat, DXCoilOutletNodeHumRat2);
     EXPECT_DOUBLE_EQ(DXCoilOutletNodeEnthalpy, DXCoilOutletNodeEnthalpy2);
     EXPECT_DOUBLE_EQ(DXCoilHeatingCapacity, DXCoilHeatingCapacity2);
+
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideValue = 0.5;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideValue = 0.6;
+
+    SpeedRatio = 0.0;
+    CycRatio = 1.0;
+    SpeedNum = 1;
+
+    CalcMultiSpeedDXCoilHeating(*state, DXCoilNum, SpeedRatio, CycRatio, SpeedNum, fanOp, 0);
+
+    DXCoilOutletNodeTemp = Coil.OutletAirTemp;
+    DXCoilOutletNodeHumRat = Coil.OutletAirHumRat;
+    DXCoilOutletNodeEnthalpy = Coil.OutletAirEnthalpy;
+    DXCoilHeatingCapacity = Coil.TotalHeatingEnergyRate;
+
+    SpeedRatio = 0.0;
+    CycRatio = 1.0;
+    SpeedNum = 2;
+
+    CalcMultiSpeedDXCoilHeating(*state, DXCoilNum, SpeedRatio, CycRatio, SpeedNum, fanOp, 0);
+
+    DXCoilOutletNodeTemp2 = Coil.OutletAirTemp;
+    DXCoilOutletNodeHumRat2 = Coil.OutletAirHumRat;
+    DXCoilOutletNodeEnthalpy2 = Coil.OutletAirEnthalpy;
+    DXCoilHeatingCapacity2 = Coil.TotalHeatingEnergyRate;
+
+    EXPECT_NEAR(DXCoilOutletNodeTemp, DXCoilOutletNodeTemp2, 0.0000001);
+    EXPECT_NEAR(DXCoilOutletNodeHumRat, DXCoilOutletNodeHumRat2, 0.0000001);
+    EXPECT_NEAR(DXCoilOutletNodeEnthalpy, DXCoilOutletNodeEnthalpy2, 0.0000001);
+    EXPECT_NEAR(DXCoilHeatingCapacity, DXCoilHeatingCapacity2, 0.0000001);
 }
 
 TEST_F(EnergyPlusFixture, TestSingleSpeedDefrostCOP)
@@ -962,8 +1073,10 @@ TEST_F(EnergyPlusFixture, TestSingleSpeedDefrostCOP)
         Curve::Curve *rCurve = state->dataCurveManager->PerfCurve(CurveNum);
         if (rCurve->curveType == CurveType::BiQuadratic) {
             rCurve->interpolationType = InterpType::EvaluateCurveToLimits;
+            rCurve->numDims = 2;
         } else if (rCurve->curveType == CurveType::Quadratic) {
             rCurve->interpolationType = InterpType::EvaluateCurveToLimits;
+            rCurve->numDims = 1;
         }
     }
 
@@ -979,20 +1092,54 @@ TEST_F(EnergyPlusFixture, TestSingleSpeedDefrostCOP)
     Real64 constexpr PLR = 1.0;
 
     // Defrost Off
-    state->dataEnvrn->OutDryBulbTemp = -5.0; // cold
+    state->dataEnvrn->OutDryBulbTemp = 5.0; // not as cold
     CalcDXHeatingCoil(*state, DXCoilNum, PLR, fanOp);
     Real64 COPwoDefrost =
         Coil.RatedCOP(1) / (CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF2, 1));
     Real64 COPwDefrost = Coil.TotalHeatingEnergyRate / Coil.ElecHeatingPower;
-    EXPECT_LT(COPwDefrost, COPwoDefrost);
+    Real64 TotCapwoDefrost =
+        Coil.RatedTotCap(1) * CurveValue(*state, nCapfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nCapfFF2, 1);
+    Real64 elecHeatingPowerwoDefrost = TotCapwoDefrost * Coil.RatedEIR(1) *
+                                       CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) *
+                                       CurveValue(*state, nEIRfFF2, 1) * Coil.HeatingCoilRuntimeFraction;
+    EXPECT_DOUBLE_EQ(COPwoDefrost, COPwDefrost);
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost);
+
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideValue = 0.5;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideValue = 0.6;
+    CalcDXHeatingCoil(*state, DXCoilNum, PLR, fanOp);
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost);
 
     // Defrost On
-    state->dataEnvrn->OutDryBulbTemp = 5.0; // not as cold
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = false;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = false;
+    state->dataEnvrn->OutDryBulbTemp = -5.0; // cold
     CalcDXHeatingCoil(*state, DXCoilNum, PLR, fanOp);
     COPwoDefrost =
         Coil.RatedCOP(1) / (CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF2, 1));
     COPwDefrost = Coil.TotalHeatingEnergyRate / Coil.ElecHeatingPower;
-    EXPECT_DOUBLE_EQ(COPwoDefrost, COPwDefrost);
+    // Recalculate with new temperatures
+    TotCapwoDefrost =
+        Coil.RatedTotCap(1) * CurveValue(*state, nCapfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nCapfFF2, 1);
+    elecHeatingPowerwoDefrost = TotCapwoDefrost * Coil.RatedEIR(1) *
+                                CurveValue(*state, nEIRfT2, Coil.InletAirTemp, state->dataEnvrn->OutDryBulbTemp) * CurveValue(*state, nEIRfFF2, 1) *
+                                Coil.HeatingCoilRuntimeFraction;
+    EXPECT_LT(COPwDefrost, COPwoDefrost);
+
+    // Frost Multiplier EMS actuators
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingCapacityMultiplierEMSOverrideValue = 0.5;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideOn = true;
+    Coil.FrostHeatingInputPowerMultiplierEMSOverrideValue = 0.6;
+    CalcDXHeatingCoil(*state, DXCoilNum, PLR, fanOp);
+    EXPECT_DOUBLE_EQ(Coil.ElecHeatingPower, elecHeatingPowerwoDefrost * 0.6);
+    EXPECT_DOUBLE_EQ(Coil.TotalHeatingEnergyRate, TotCapwoDefrost * 0.5);
 }
 
 TEST_F(EnergyPlusFixture, TestCalcCBF)
@@ -4712,7 +4859,7 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoilsAutoSizingOutput)
 ! <DX Cooling Coil Standard Rating Information>, Component Type, Component Name, Standard Rating (Net) Cooling Capacity {W}, Standard Rating Net COP {W/W}, EER {Btu/W-h}, SEER User {Btu/W-h}, SEER Standard {Btu/W-h}, IEER {Btu/W-h}
  DX Cooling Coil Standard Rating Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, 31065.3, 3.95, 13.47, 16.52, 16.03, 0
 ! <DX Cooling Coil AHRI 2023 Standard Rating Information>, Component Type, Component Name, Standard Rating (Net) Cooling Capacity {W}, Standard Rating Net COP2 {W/W}, EER2 {Btu/W-h}, SEER2 User {Btu/W-h}, SEER2 Standard {Btu/W-h}, IEER 2022 {Btu/W-h}
- DX Cooling Coil AHRI 2023 Standard Rating Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, 31156.1, 3.73, 12.72, 15.17, 15.98, 15.0
+ DX Cooling Coil AHRI 2023 Standard Rating Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, 30783.3, 3.66, 12.50, 15.17, 15.98, 14.7
 )EIO";
     replace_pipes_with_spaces(clg_coil_eio_output);
     EXPECT_TRUE(compare_eio_stream_substring(clg_coil_eio_output, true));

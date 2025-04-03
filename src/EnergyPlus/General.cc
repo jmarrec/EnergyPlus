@@ -68,7 +68,7 @@
 #include <EnergyPlus/WeatherManager.hh>
 
 #if defined(_WIN32) && _MSC_VER < 1900
-#define snprintf _snprintf
+#    define snprintf _snprintf
 #endif
 
 namespace EnergyPlus::General {
@@ -207,7 +207,7 @@ void SolveRoot(const EnergyPlusData &state,
             break;
         }
         // new estimation
-        switch (state.dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolver) {
+        switch (state.dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod) {
         case HVACSystemRootSolverAlgorithm::RegulaFalsi: {
             XTemp = (Y0 * X1 - Y1 * X0) / DY;
             break;
@@ -236,6 +236,14 @@ void SolveRoot(const EnergyPlusData &state,
             if (AltIte > state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
                 if (AltIte >= 2 * state.dataRootFinder->HVACSystemRootFinding.NumOfIter) AltIte = 0;
+            } else {
+                XTemp = (Y0 * X1 - Y1 * X0) / DY;
+            }
+            break;
+        }
+        case HVACSystemRootSolverAlgorithm::ShortBisectionThenRegulaFalsi: {
+            if (NIte < 3) {
+                XTemp = (X1 + X0) / 2.0;
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
             }

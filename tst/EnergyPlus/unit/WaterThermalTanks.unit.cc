@@ -3145,6 +3145,453 @@ TEST_F(EnergyPlusFixture, Desuperheater_Multispeed_Coil_Test)
     EXPECT_EQ(Tank.SourceRate, 0.0);
 }
 
+TEST_F(EnergyPlusFixture, Desuperheater_WAHP_VSEQ_Coil_Test)
+{
+    std::string const idf_objects = delimited_string({
+        "Schedule:Constant, Ambient Temp Schedule, , 20.0;",
+        "Schedule:Constant, Inlet Water Temperature, , 10.0;",
+        "Schedule:Constant, Desuperheater-Schedule, , 60.0;",
+        "Schedule:Constant, WH Setpoint Temp, , 45.0;",
+
+        "  Zone,",
+        "    Zone_TES,                !- Name",
+        "    0.0000,                  !- Direction of Relative North {deg}",
+        "    10.0,                    !- X Origin {m}",
+        "    10.0,                    !- Y Origin {m}",
+        "    0.0,                     !- Z Origin {m}",
+        "    1,                       !- Type",
+        "    1,                       !- Multiplier",
+        "    3.00,                    !- Ceiling Height {m}",
+        "    300.0,                   !- Volume {m3}",
+        "    100.0;                   !- Floor Area {m2}",
+
+        "  Schedule:Compact,",
+        "    ALWAYS_ON,               !- Name",
+        "    Fraction,                !- Schedule Type Limits Name",
+        "    Through: 12/31,          !- Field 1",
+        "    For: AllDays,            !- Field 2",
+        "    Until: 24:00,1.0;        !- Field 3",
+
+        "WaterHeater:Mixed,",
+        "  Mixed tank with desuperheater,          !- Name",
+        "  0.136274824222915,                      !- Tank Volume {m3}",
+        "  WH Setpoint Temp,                       !- Setpoint Temperature Schedule Name",
+        "  2,                                      !- Deadband Temperature Difference {deltaC}",
+        "  99,                                     !- Maximum Temperature Limit {C}",
+        "  Cycle,                                  !- Heater Control Type",
+        "  5500.06477392209,                       !- Heater Maximum Capacity {W}",
+        "  0,                                      !- Heater Minimum Capacity {W}",
+        "  0,                                      !- Heater Ignition Minimum Flow Rate {m3/s}",
+        "  0,                                      !- Heater Ignition Delay {s}",
+        "  Electricity,                            !- Heater Fuel Type",
+        "  0.8,                                    !- Heater Thermal Efficiency",
+        "  ,                                       !- Part Load Factor Curve Name",
+        "  0,                                      !- Off Cycle Parasitic Fuel Consumption Rate {W}",
+        "  Electricity,                            !- Off Cycle Parasitic Fuel Type",
+        "  0,                                      !- Off Cycle Parasitic Heat Fraction to Tank",
+        "  0,                                      !- On Cycle Parasitic Fuel Consumption Rate {W}",
+        "  Electricity,                            !- On Cycle Parasitic Fuel Type",
+        "  0,                                      !- On Cycle Parasitic Heat Fraction to Tank",
+        "  Schedule,                               !- Ambient Temperature Indicator",
+        "  Ambient Temp Schedule,                  !- Ambient Temperature Schedule Name",
+        "  ,                                 	   !- Ambient Temperature Zone Name",
+        "  ,                                       !- Ambient Temperature Outdoor Air Node Name",
+        "  0.704227539803499,                      !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}",
+        "  1,                                      !- Off Cycle Loss Fraction to Zone",
+        "  0.704227539803499,                      !- On Cycle Loss Coefficient to Ambient Temperature {W/K}",
+        "  1,                                      !- On Cycle Loss Fraction to Zone",
+        "  ,                                       !- Peak Use Flow Rate {m3/s}",
+        "  ALWAYS_ON,                              !- Use Flow Rate Fraction Schedule Name",
+        "  ,                                       !- Cold Water Supply Temperature Schedule Name",
+        "  ,                                       !- Use Side Inlet Node Name",
+        "  ,                                       !- Use Side Outlet Node Name",
+        "  1,                                      !- Use Side Effectiveness",
+        "  DesuperheaterOut,			           !- Source Side Inlet Node Name",
+        "  DesuperheaterIn,         	           !- Source Side Outlet Node Name",
+        "  1,                                      !- Source Side Effectiveness",
+        "  0.00283433494640006,                    !- Use Side Design Flow Rate {m3/s}",
+        "  ,                                       !- Source Side Design Flow Rate {m3/s}",
+        "  1.5,                                    !- Indirect Water Heating Recovery Time {hr}",
+        "  IndirectHeatPrimarySetpoint,            !- Source Side Flow Control Mode",
+        "  ,                                       !- Indirect Alternate Setpoint Temperature Schedule Name",
+        "  General;                                !- End-Use Subcategory",
+
+        "Coil:WaterHeating:Desuperheater,",
+        "    Desuperheater,           !- Name",
+        "    ALWAYS_ON,               !- Availability Schedule Name",
+        "    Desuperheater-Schedule,  !- Setpoint Temperature Schedule Name",
+        "    5,                       !- Dead Band Temperature Difference {deltaC}",
+        "    0.25,                    !- Rated Heat Reclaim Recovery Efficiency",
+        "    50,                      !- Rated Inlet Water Temperature {C}",
+        "    35,                      !- Rated Outdoor Air Temperature {C}",
+        "    60,                      !- Maximum Inlet Water Temperature for Heat Reclaim {C}",
+        "    ,                        !- Heat Reclaim Efficiency Function of Temperature Curve Name",
+        "    DesuperheaterIn,         !- Water Inlet Node Name",
+        "    DesuperheaterOut,        !- Water Outlet Node Name",
+        "    WaterHeater:Mixed,       !- Tank Object Type",
+        "    Mixed tank with desuperheater,  !- Tank Name",
+        "    Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,  !- Heating Source Object Type",
+        "    VarSpeed_WAHP_COIL,              !- Heating Source Name",
+        "    0.0001,                  !- Water Flow Rate {m3/s}",
+        "    ,                        !- Water Pump Power {W}",
+        "    0.2;                     !- Fraction of Pump Heat to Water",
+
+        "Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,",
+        "  VarSpeed_WAHP_COIL,                        !- Name",
+        "  Node 11,          !-Water -  to - Refrigerant HX Water Inlet Node Name",
+        "  Node 12,          !-Water - to - Refrigerant HX Water Outlet Node Name",
+        "  ground source heat pump unitary system Fan - Cooling Coil Node,  !-Indoor Air Inlet Node Name ",
+        "  ground source heat pump unitary system Cooling Coil - Heating Coil Node,  !-Indoor Air Outlet Node Name",
+        "  2,                                      !- Number of Speeds {dimensionless}",
+        "  2,                                      !- Nominal Speed Level {dimensionless}",
+        "  10550.5585262,                          !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {W}",
+        "  0.534280137734362,                      !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}",
+        "  0.000567811767595478,                   !- Rated Water Flow Rate At Selected Nominal Speed Level {m3/s}",
+        "  1000,                                   !- Nominal Time for Condensate to Begin Leaving the Coil {s}",
+        "  1.5,                                    !- Initial Moisture Evaporation Rate Divided by Steady-State AC Latent Capacity {dimensionless}",
+        "  2.5,                                    !- Maximum Cycling Rate {cycles/hr}",
+        "  60,                                     !- Latent Capacity Time Constant {s}",
+        "  60,                                     !- Fan Delay Time {s}",
+        "  0,                                      !- Flag for Using Hot Gas Reheat, 0 or 1 {dimensionless}",
+        "  Cool-PLF-fPLR,                          !- Energy Part Load Fraction Curve Name",
+        "  7757.82568431486,                       !- Speed Reference Unit Gross Rated Total Cooling Capacity 1 {W}",
+        "  0.826314663574395,                      !- Speed Reference Unit Gross Rated Sensible Heat Ratio 1 {dimensionless}",
+        "  6.38335513447988,                       !- Speed Reference Unit Gross Rated Cooling COP 1 {W/W}",
+        "  0.489740135986507,                      !- Speed Reference Unit Rated Air Flow Rate 1 {m3/s}",
+        "  0.000417511992712955,                   !- Speed Reference Unit Rated Water Flow Rate 1 {m3/s}",
+        "  Cool-Cap-fT1,                           !- Speed Total Cooling Capacity Function of Temperature Curve Name 1",
+        "  Cool-Cap-fFF1,                          !- Speed Total Cooling Capacity Function of Air Flow Fraction Curve Name 1",
+        "  Cool-Cap-fWF1,                          !- Speed Total Cooling Capacity Function of Water Flow Fraction Curve Name 1",
+        "  Cool-EIR-fT1,                           !- Speed Energy Input Ratio Function of Temperature Curve Name 1",
+        "  Cool-EIR-fFF1,                          !- Speed Energy Input Ratio Function of Air Flow Fraction Curve Name 1",
+        "  Cool-EIR-fWF1,                          !- Speed Energy Input Ratio Function of Water Flow Fraction Curve Name 1",
+        "  0,                                      !- Speed Reference Unit Waste Heat Fraction of Input Power At Rated Conditions 1 {dimensionless}",
+        "  WasteHeat-FT1,                          !- Speed Waste Heat Function of Temperature Curve Name 1",
+        "  10550.5585262,                          !- Speed Reference Unit Gross Rated Total Cooling Capacity 2 {W}",
+        "  0.729756803683485,                      !- Speed Reference Unit Gross Rated Sensible Heat Ratio 2 {dimensionless}",
+        "  5.78817050916035,                       !- Speed Reference Unit Gross Rated Cooling COP 2 {W/W}",
+        "  0.534280137734362,                      !- Speed Reference Unit Rated Air Flow Rate 2 {m3/s}",
+        "  0.000567811767595478,                   !- Speed Reference Unit Rated Water Flow Rate 2 {m3/s}",
+        "  Cool-Cap-fT2,                           !- Speed Total Cooling Capacity Function of Temperature Curve Name 2",
+        "  Cool-Cap-fFF2,                          !- Speed Total Cooling Capacity Function of Air Flow Fraction Curve Name 2",
+        "  Cool-Cap-fWF2,                          !- Speed Total Cooling Capacity Function of Water Flow Fraction Curve Name 2",
+        "  Cool-EIR-fT2,                           !- Speed Energy Input Ratio Function of Temperature Curve Name 2",
+        "  Cool-EIR-fFF2,                          !- Speed Energy Input Ratio Function of Air Flow Fraction Curve Name 2",
+        "  Cool-EIR-fWF2,                          !- Speed Energy Input Ratio Function of Water Flow Fraction Curve Name 2",
+        "  0,                                      !- Speed Reference Unit Waste Heat Fraction of Input Power At Rated Conditions 2 {dimensionless}",
+        "  WasteHeat-FT2;                          !- Speed Waste Heat Function of Temperature Curve Name 2",
+
+        "Curve:Quadratic,",
+        "  Cool-PLF-fPLR,                         !- Name",
+        "  0.89,                                   !- Coefficient1 Constant",
+        "  0.11,                                   !- Coefficient2 x",
+        "  0,                                      !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  1,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0.7,                                    !- Minimum Curve Output {BasedOnField A3}",
+        "  1;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Biquadratic,",
+        "  Cool-Cap-fT1,                           !- Name",
+        "  0.4091067504,                           !- Coefficient1 Constant",
+        "  0.0387481208,                           !- Coefficient2 x",
+        "  -3.491e-07,                             !- Coefficient3 x**2",
+        "  0.0039166842,                           !- Coefficient4 y",
+        "  -0.0001299475,                          !- Coefficient5 y**2",
+        "  -0.0002883229,                          !- Coefficient6 x*y",
+        "  -100.0,                                 !- Minimum Value of x {BasedOnField A2}",
+        "  100.0,                                  !- Maximum Value of x {BasedOnField A2}",
+        "  -100.0,                                 !- Minimum Value of y {BasedOnField A3}",
+        "  100.0;                                  !- Maximum Value of y {BasedOnField A3}",
+
+        "Curve:Quadratic,",
+        "  Cool-Cap-fFF1,                          !- Name",
+        "  0.9064,                                 !- Coefficient1 Constant",
+        "  0.0793,                                 !- Coefficient2 x",
+        "  0.0143,                                 !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  2,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Curve Output {BasedOnField A3}",
+        "  2;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Quadratic,",
+        "  Cool-Cap-fWF1,                          !- Name",
+        "  0.8387,                                 !- Coefficient1 Constant",
+        "  0.2903,                                 !- Coefficient2 x",
+        "  -0.129,                                 !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  2,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Curve Output {BasedOnField A3}",
+        "  2;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Biquadratic,",
+        "  Cool-EIR-fT1,                           !- Name",
+        "  1.0242580586,                           !- Coefficient1 Constant",
+        "  -0.0549907581,                          !- Coefficient2 x",
+        "  0.0017735749,                           !- Coefficient3 x**2",
+        "  0.0186562274,                           !- Coefficient4 y",
+        "  0.0008900852,                           !- Coefficient5 y**2",
+        "  -0.0016973518,                          !- Coefficient6 x*y",
+        "  -100.0,                                  !- Minimum Value of x {BasedOnField A2}",
+        "  100.0,                                  !- Maximum Value of x {BasedOnField A2}",
+        "  -100.0,                                  !- Minimum Value of y {BasedOnField A3}",
+        "  100.0;                                  !- Maximum Value of y {BasedOnField A3}",
+
+        "Curve:Quadratic,",
+        "  Cool-EIR-fFF1,                          !- Name",
+        "  0.7931,                                 !- Coefficient1 Constant",
+        "  0.2623,                                 !- Coefficient2 x",
+        "  -0.0552,                                !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  2,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Curve Output {BasedOnField A3}",
+        "  2;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Quadratic,",
+        "  Cool-EIR-fWF1,                          !- Name",
+        "  1.7131,                                 !- Coefficient1 Constant",
+        "  -1.3055,                                 !- Coefficient2 x",
+        "  0.5924,                                !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  2,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Curve Output {BasedOnField A3}",
+        "  2;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Biquadratic,",
+        "  WasteHeat-FT1,                          !-Name",
+        "  1,                                      !- Coefficient1 Constant",
+        "  0,                                      !- Coefficient2 x",
+        "  0,                                      !- Coefficient3 x**2",
+        "  0,                                      !- Coefficient4 y",
+        "  0,                                      !- Coefficient5 y**2",
+        "  0,                                      !- Coefficient6 x*y",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  1,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Value of y {BasedOnField A3}",
+        "  1;                                      !- Maximum Value of y {BasedOnField A3}",
+
+        "  Curve:Biquadratic,",
+        "  Cool-Cap-fT2,                           !- Name",
+        "  0.442316103,                            !- Coefficient1 Constant",
+        "  0.0346534683,                           !- Coefficient2 x",
+        "  4.3691e-06,                             !- Coefficient3 x**2",
+        "  0.0046060534,                           !- Coefficient4 y",
+        "  -0.0001393465,                          !- Coefficient5 y**2",
+        "  -0.0002316,                             !- Coefficient6 x*y",
+        "  -100,                                   !- Minimum Value of x {BasedOnField A2}",
+        "  100,                                    !- Maximum Value of x {BasedOnField A2}",
+        "  -100,                                   !- Minimum Value of y {BasedOnField A3}",
+        "  100;                                    !- Maximum Value of y {BasedOnField A3}",
+
+        "Curve:Quadratic,",
+        "  Cool-Cap-fFF2,                          !- Name",
+        "  0.8551,                                 !- Coefficient1 Constant",
+        "  0.1688,                                 !- Coefficient2 x",
+        "  -0.0238,                                !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  2,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Curve Output {BasedOnField A3}",
+        "  2;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Quadratic,",
+        "  Cool-Cap-fWF2,                          !- Name",
+        "  0.815,                                  !- Coefficient1 Constant",
+        "  0.325,                                  !- Coefficient2 x",
+        "  -0.14,                                  !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  2,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Curve Output {BasedOnField A3}",
+        "  2;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Biquadratic,",
+        "  Cool-EIR-fT2,                           !- Name",
+        "  1.0763155558,                           !- Coefficient1 Constant",
+        "  -0.0396246303,                          !- Coefficient2 x",
+        "  0.0010677382,                           !- Coefficient3 x**2",
+        "  0.0074160145,                           !- Coefficient4 y",
+        "  0.0006781567,                           !- Coefficient5 y**2",
+        "  -0.0009009811,                          !- Coefficient6 x*y",
+        "  -100,                                   !- Minimum Value of x {BasedOnField A2}",
+        "  100,                                    !- Maximum Value of x {BasedOnField A2}",
+        "  -100,                                   !- Minimum Value of y {BasedOnField A3}",
+        "  100;                                    !- Maximum Value of y {BasedOnField A3}",
+
+        "Curve:Quadratic,",
+        "  Cool-EIR-fFF2,                          !- Name",
+        "  0.8241,                                 !- Coefficient1 Constant",
+        "  0.1523,                                 !- Coefficient2 x",
+        "  0.0234,                                 !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  2,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Curve Output {BasedOnField A3}",
+        "  2;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Quadratic,",
+        "  Cool-EIR-fWF2,                          !- Name",
+        "  1.5872,                                 !- Coefficient1 Constant",
+        "  -1.055,                                 !- Coefficient2 x",
+        "  0.4678,                                 !- Coefficient3 x**2",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  2,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Curve Output {BasedOnField A3}",
+        "  2;                                      !- Maximum Curve Output {BasedOnField A3}",
+
+        "Curve:Biquadratic,",
+        "  WasteHeat-FT2,                          !- Name",
+        "  1,                                      !- Coefficient1 Constant",
+        "  0,                                      !- Coefficient2 x",
+        "  0,                                      !- Coefficient3 x**2",
+        "  0,                                      !- Coefficient4 y",
+        "  0,                                      !- Coefficient5 y**2",
+        "  0,                                      !- Coefficient6 x*y",
+        "  0,                                      !- Minimum Value of x {BasedOnField A2}",
+        "  1,                                      !- Maximum Value of x {BasedOnField A2}",
+        "  0,                                      !- Minimum Value of y {BasedOnField A3}",
+        "  1;                                      !- Maximum Value of y {BasedOnField A3}",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
+
+    bool ErrorsFound = false;
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound); // read zone data
+    EXPECT_FALSE(ErrorsFound);
+
+    state->dataGlobal->TimeStep = 1;
+    state->dataGlobal->HourOfDay = 1;
+    state->dataEnvrn->Month = 7;
+    state->dataEnvrn->DayOfMonth = 21;
+    state->dataGlobal->HourOfDay = 1;
+    state->dataEnvrn->DSTIndicator = 0;
+    state->dataEnvrn->DayOfWeek = 2;
+    state->dataEnvrn->HolidayIndex = 0;
+    state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
+    Sched::UpdateScheduleVals(*state);
+
+    int TankNum(1);
+    int DXNum(1);
+    int PlantLoopNum(1);
+
+    EXPECT_FALSE(WaterThermalTanks::GetWaterThermalTankInput(*state));
+    // Source name and type successfully passed to DataHeatBalance::HeatReclaimVS_Coil data struct
+
+    DataHeatBalance::HeatReclaimDataBase &HeatReclaim = state->dataHeatBal->HeatReclaimVS_Coil(DXNum);
+    EXPECT_EQ(state->dataHeatBal->HeatReclaimVS_Coil(DXNum).Name, "VARSPEED_WAHP_COIL");
+    EXPECT_EQ(state->dataHeatBal->HeatReclaimVS_Coil(DXNum).SourceType, "Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit");
+
+    // Initiate conditions for multispeed coil calculation
+    state->dataEnvrn->OutDryBulbTemp = 32.0;
+    state->dataEnvrn->OutHumRat = 0.02;
+    state->dataEnvrn->OutBaroPress = 101325.0;
+    state->dataEnvrn->OutWetBulbTemp = Psychrometrics::PsyTwbFnTdbWPb(*state, 32.0, 0.02, 101325.0);
+
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirMassFlowRate(1) =
+        state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(1) * 1.2;
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirMassFlowRate(2) =
+        state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(2) * 1.2;
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedWaterMassFlowRate(1) =
+        state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedWaterVolFlowRate(1) * 1000.0;
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedWaterMassFlowRate(2) =
+        state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedWaterVolFlowRate(2) * 1000.0;
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).DesignAirMassFlowRate = state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirMassFlowRate(2);
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).DesignWaterMassFlowRate =
+        state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedWaterMassFlowRate(2);
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).AirMassFlowRate = state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirMassFlowRate(2);
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).WaterMassFlowRate = state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedWaterMassFlowRate(2);
+
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).InletAirDBTemp = 27.0;
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).InletAirHumRat = 0.005;
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).InletAirEnthalpy = Psychrometrics::PsyHFnTdbW(27.0, 0.005);
+
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).InletWaterTemp = 27.0;
+
+    const Real64 Cp = Fluid::GetWater(*state)->getSpecificHeat(*state, 27.0, "WAHP_VSEQ_SOURCE");
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).InletWaterEnthalpy = 27.0 * Cp;
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).plantLoc.loopNum = PlantLoopNum;
+    state->dataPlnt->PlantLoop.allocate(PlantLoopNum);
+
+    state->dataPlnt->PlantLoop(PlantLoopNum).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(PlantLoopNum).FluidName = "WATER";
+    state->dataLoopNodes->Node(5).MassFlowRate = state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirMassFlowRate(2);
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedCBF(1) =
+        DXCoils::CalcCBF(*state,
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).VarSpeedCoilType,
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).Name,
+                         26.6667,
+                         0.0111847,
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedTotCap(1),
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(1),
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedSHR(1),
+                         true);
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedCBF(2) =
+        DXCoils::CalcCBF(*state,
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).VarSpeedCoilType,
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).Name,
+                         26.6667,
+                         0.0111847,
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedTotCap(2),
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(2),
+                         state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedSHR(2),
+                         true);
+
+    // Calculate multispeed DX cooling coils
+    VariableSpeedCoils::CalcVarSpeedCoilCooling(*state, DXNum, HVAC::FanOp::Cycling, 1000.0, 100.0, HVAC::CompressorOp::On, 1.0, 1.0, 1.0, 2);
+
+    // Source available heat successfully passed to DataHeatBalance::HeatReclaimVS_Coil data struct
+    EXPECT_EQ(state->dataHeatBal->HeatReclaimVS_Coil(DXNum).AvailCapacity,
+              state->dataVariableSpeedCoils->VarSpeedCoil(DXNum).QLoadTotal + state->dataVariableSpeedCoils->Winput);
+
+    // Now move to the water thermal tank calculation
+    WaterThermalTanks::WaterThermalTankData &Tank = state->dataWaterThermalTanks->WaterThermalTank(TankNum);
+    WaterThermalTanks::WaterHeaterDesuperheaterData &Desuperheater = state->dataWaterThermalTanks->WaterHeaterDesuperheater(Tank.DesuperheaterNum);
+
+    // Initialize tank conditions
+    state->dataGlobal->HourOfDay = 0;
+    state->dataGlobal->TimeStep = 1;
+    state->dataGlobal->TimeStepZone = 1;
+    state->dataHVACGlobal->TimeStepSys = state->dataGlobal->TimeStepZone;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
+    state->dataHVACGlobal->SysTimeElapsed = 0.0;
+    Tank.TankTemp = 45.0;
+    Tank.AmbientTemp = 20.0;
+    Tank.UseInletTemp = 10.0;
+    Tank.UseMassFlowRate = 0.00001;
+    Tank.SourceOutletTemp = 45.0;
+    state->dataLoopNodes->Node(Desuperheater.WaterInletNode).Temp = Tank.SourceOutletTemp;
+    Tank.SourceMassFlowRate = 0.003;
+    Tank.TimeElapsed = 0.0;
+    Desuperheater.SetPointTemp = 50.0;
+    Desuperheater.Mode = WaterThermalTanks::TankOperatingMode::Heating;
+
+    Tank.Mode = WaterThermalTanks::TankOperatingMode::Floating;
+    Tank.SetPointTemp = 40.0;
+    Desuperheater.FirstTimeThroughFlag = true;
+    Tank.CalcDesuperheaterWaterHeater(*state, true);
+
+    EXPECT_EQ(Desuperheater.DXSysPLR, state->dataVariableSpeedCoils->VarSpeedCoil(DXNum).PartLoadRatio);
+    // if desuperheater was not on through all the timestep, part load ratio is searched to meet load demand
+    EXPECT_GE(Desuperheater.DXSysPLR, Desuperheater.DesuperheaterPLR);
+    // used desuperheater reclaim heat is successfully stored in HeatReclaimVS_Coil data struct
+    EXPECT_EQ(state->dataHeatBal->HeatReclaimVS_Coil(DXNum).WaterHeatingDesuperheaterReclaimedHeat(Tank.DesuperheaterNum), Desuperheater.HeaterRate);
+    // Desuperheater heater rate is correctly calculated
+    EXPECT_EQ(Desuperheater.HeaterRate,
+              (state->dataHeatBal->HeatReclaimVS_Coil(DXNum).AvailCapacity) / Desuperheater.DXSysPLR * Desuperheater.DesuperheaterPLR * 0.25);
+
+    // Test the float mode
+    Tank.SavedTankTemp = 61.0;
+    Tank.SavedSourceOutletTemp = 61.0;
+    Desuperheater.SaveMode = WaterThermalTanks::TankOperatingMode::Floating;
+    state->dataLoopNodes->Node(Desuperheater.WaterInletNode).Temp = Tank.SavedSourceOutletTemp;
+    Tank.SourceMassFlowRate = 0.003;
+    VariableSpeedCoils::CalcVarSpeedCoilCooling(*state, DXNum, HVAC::FanOp::Cycling, 1000.0, 100.0, HVAC::CompressorOp::On, 1.0, 1.0, 1.0, 2);
+    Tank.CalcDesuperheaterWaterHeater(*state, false);
+    EXPECT_TRUE(Desuperheater.Mode == WaterThermalTanks::TankOperatingMode::Floating);
+    EXPECT_EQ(Desuperheater.HeaterRate, 0.0);
+    EXPECT_EQ(Tank.SourceRate, 0.0);
+}
+
 TEST_F(EnergyPlusFixture, MixedTankAlternateSchedule)
 {
     std::string const idf_objects = delimited_string({

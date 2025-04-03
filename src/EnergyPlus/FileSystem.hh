@@ -56,16 +56,16 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #ifndef __cppcheck__
-#if __has_include(<filesystem>)
-#include <filesystem>
+#    if __has_include(<filesystem>)
+#        include <filesystem>
 namespace fs = std::filesystem;
-#elif __has_include(<experimental/filesystem>)
-#include <experimental/filesystem>
+#    elif __has_include(<experimental/filesystem>)
+#        include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
-#else
+#    else
 // cppcheck-suppress preprocessorErrorDirective
-#error "no filesystem support"
-#endif
+#        error "no filesystem support"
+#    endif
 #endif
 
 #include <EnergyPlus/EnergyPlus.hh>

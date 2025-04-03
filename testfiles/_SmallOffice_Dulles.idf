@@ -3730,9 +3730,9 @@
 
   Output:Variable,*,Zone People Total Heating Energy,annual;
 
-  Output:Variable,*,Zone Infiltration Air Change Rate,monthly;
+  Output:Variable,*,Zone Infiltration Current Density Air Change Rate,monthly;
 
-  Output:Variable,*,Zone Infiltration Air Change Rate,annual;
+  Output:Variable,*,Zone Infiltration Current Density Air Change Rate,annual;
 
   Output:Variable,*,Zone Infiltration Mass,monthly;
 

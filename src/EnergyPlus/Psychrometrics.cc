@@ -63,15 +63,15 @@
 namespace EnergyPlus {
 
 #ifdef EP_nocache_Psychrometrics
-#undef EP_cache_PsyTwbFnTdbWPb
-#undef EP_cache_PsyPsatFnTemp
-#undef EP_cache_PsyTsatFnPb
-#undef EP_cache_PsyTsatFnHPb
+#    undef EP_cache_PsyTwbFnTdbWPb
+#    undef EP_cache_PsyPsatFnTemp
+#    undef EP_cache_PsyTsatFnPb
+#    undef EP_cache_PsyTsatFnHPb
 #else
-#define EP_cache_PsyTwbFnTdbWPb
-#define EP_cache_PsyPsatFnTemp
-#define EP_cache_PsyTsatFnPb
-#define EP_cache_PsyTsatFnHPb
+#    define EP_cache_PsyTwbFnTdbWPb
+#    define EP_cache_PsyPsatFnTemp
+#    define EP_cache_PsyTsatFnPb
+#    define EP_cache_PsyTsatFnHPb
 #endif
 
 namespace Psychrometrics {
@@ -296,9 +296,9 @@ namespace Psychrometrics {
         // FUNCTION PARAMETER DEFINITIONS:
         std::uint64_t constexpr Grid_Shift = 64 - 12 - twbprecision_bits;
 
-#ifdef EP_psych_stats
+#    ifdef EP_psych_stats
         ++state.dataPsychCache->NumTimesCalled[static_cast<int>(PsychrometricFunction::TwbFnTdbWPb_cache)];
-#endif
+#    endif
 
         DISABLE_WARNING_PUSH
         DISABLE_WARNING_STRICT_ALIASING

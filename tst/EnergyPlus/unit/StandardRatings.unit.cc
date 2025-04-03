@@ -11786,7 +11786,7 @@ TEST_F(EnergyPlusFixture, CurveFit_02_Speed_15000W_alternateMode_SEER2_2023_Valu
     state->init_state(*state);
 
     int coilIndex = CoilCoolingDX::factory(*state, "DX Cooling Coil");
-    auto &thisCoil(state->dataCoilCooingDX->coilCoolingDXs[coilIndex]);
+    auto &thisCoil(state->dataCoilCoolingDX->coilCoolingDXs[coilIndex]);
     // size it
     thisCoil.size(*state);
 
@@ -12108,7 +12108,7 @@ TEST_F(EnergyPlusFixture, CurveFit_03_Speed_5000W_SEER2_2023_ValueTest)
     state->init_state(*state);
 
     int coilIndex = CoilCoolingDX::factory(*state, "Sys 2 Furnace DX Cool Cooling Coil");
-    auto &thisCoil(state->dataCoilCooingDX->coilCoolingDXs[coilIndex]);
+    auto &thisCoil(state->dataCoilCoolingDX->coilCoolingDXs[coilIndex]);
 
     // size it
     thisCoil.size(*state);
@@ -12412,7 +12412,7 @@ TEST_F(EnergyPlusFixture, CurveFit_02_Speed_30000W_alternateMode_IEER_2022_Value
     state->init_state(*state);
 
     int coilIndex = CoilCoolingDX::factory(*state, "DX Cooling Coil");
-    auto &thisCoil(state->dataCoilCooingDX->coilCoolingDXs[coilIndex]);
+    auto &thisCoil(state->dataCoilCoolingDX->coilCoolingDXs[coilIndex]);
     // size it
     thisCoil.size(*state);
 
@@ -12732,7 +12732,7 @@ TEST_F(EnergyPlusFixture, CurveFit_03_Speed_20000W_IEER_2022_ValueTest)
     state->init_state(*state);
 
     int coilIndex = CoilCoolingDX::factory(*state, "Sys 2 Furnace DX Cool Cooling Coil");
-    auto &thisCoil(state->dataCoilCooingDX->coilCoolingDXs[coilIndex]);
+    auto &thisCoil(state->dataCoilCoolingDX->coilCoolingDXs[coilIndex]);
 
     // size it
     thisCoil.size(*state);

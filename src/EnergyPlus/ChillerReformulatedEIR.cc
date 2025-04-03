@@ -1469,7 +1469,7 @@ void ReformulatedEIRChillerSpecs::size(EnergyPlusData &state)
             this->CDPlantLoc.loopNum > 0
                 ? state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).LoopSide(this->CDPlantLoc.loopSideNum).Branch(this->CDPlantLoc.branchNum).Name
                 : "N/A");
-        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchChillerMinPLR, this->Name, this->ChillerEIRFPLRPLRMin);
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchChillerMinPLR, this->Name, this->MinPartLoadRat);
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchChillerFuelType, this->Name, "Electricity");
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchChillerRatedEntCondTemp, this->Name, this->TempRefCondIn); // Rated==Ref?
@@ -1623,7 +1623,7 @@ void ReformulatedEIRChillerSpecs::size(EnergyPlusData &state)
 
             //     Output warning message if negative values are found in the EIRFPLR curve output. Results in Fatal error.
             if (FoundNegValue) {
-                ShowWarningError(state, "Energy input to cooing output ratio function of part-load ratio curve shows negative values ");
+                ShowWarningError(state, "Energy input to cooling output ratio function of part-load ratio curve shows negative values ");
                 ShowContinueError(state, format("for  Chiller:Electric:ReformulatedEIR = {}.", equipName));
                 ShowContinueError(state,
                                   "EIR as a function of PLR curve output at various part-load ratios and condenser water temperatures shown below:");

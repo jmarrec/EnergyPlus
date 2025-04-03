@@ -58,7 +58,7 @@
 
 // Penumbra Headers
 #ifndef EP_NO_OPENGL
-#include <penumbra/penumbra.h>
+#    include <penumbra/penumbra.h>
 #endif
 
 // EnergyPlus Headers

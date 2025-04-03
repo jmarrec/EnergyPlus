@@ -160,6 +160,7 @@ namespace WaterThermalTanks {
         CondenserRefrigeration,         // reclaim heating source is detailed refrigeration system condenser
         DXVariableCooling,              // reclaim heating source is Variable Speed DX cooling coil
         AirWaterHeatPumpEQ,             // reclaim heating source is Water to air heat pump cooling coil
+        AirWaterHeatPumpVSEQ,           // reclaim heating source is Water to air heat pump variable speed cooling coil
         Num
     };
 

@@ -109,7 +109,7 @@ namespace HVACUnitaryBypassVAV {
 
     // METHODOLOGY EMPLOYED:
     // Units are modeled as a collection of components: outside air mixer,
-    // supply air fan, DX cooing coil, DX/gas/elec heating coil, and variable volume boxes.
+    // supply air fan, DX cooling coil, DX/gas/elec heating coil, and variable volume boxes.
     // Control is accomplished by calculating the load in all zones to determine a mode of operation.
     // The system will either cool, heat, or operate based on fan mode selection.
 
@@ -745,7 +745,7 @@ namespace HVACUnitaryBypassVAV {
                             ShowContinueError(state, format("...occurs in {} \"{}\"", thisCBVAV.UnitType, thisCBVAV.Name));
                             ErrorsFound = true;
                         } else {
-                            auto const &newCoil = state.dataCoilCooingDX->coilCoolingDXs[thisCBVAV.DXCoolCoilIndexNum];
+                            auto const &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[thisCBVAV.DXCoolCoilIndexNum];
                             thisCBVAV.DXCoilInletNode = newCoil.evapInletNodeIndex;
                             thisCBVAV.DXCoilOutletNode = newCoil.evapOutletNodeIndex;
                             thisCBVAV.CondenserNodeNum = newCoil.condInletNodeIndex;

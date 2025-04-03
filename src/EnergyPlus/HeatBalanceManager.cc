@@ -79,7 +79,6 @@
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/EconomicTariff.hh>
 #include <EnergyPlus/FileSystem.hh>
-#include <EnergyPlus/General.hh>
 #include <EnergyPlus/GlobalNames.hh>
 #include <EnergyPlus/HVACSizingSimulationManager.hh>
 #include <EnergyPlus/HVACSystemRootFindingAlgorithm.hh>
@@ -1213,30 +1212,17 @@ namespace HeatBalanceManager {
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
+            ErrorObjectHeader eoh{routineName, state.dataHeatBalMgr->CurrentModuleObject, AlphaName(1)};
             if (NumAlpha > 0) {
                 HVACSystemRootFinding.Algorithm = AlphaName(1);
-                {
-                    std::string const &SELECT_CASE_var = AlphaName(1);
-                    if ((SELECT_CASE_var == "REGULAFALSI")) {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsi;
-                    } else if (SELECT_CASE_var == "BISECTION") {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::Bisection;
-                    } else if (SELECT_CASE_var == "BISECTIONTHENREGULAFALSI") {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::BisectionThenRegulaFalsi;
-                    } else if (SELECT_CASE_var == "REGULAFALSITHENBISECTION") {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsiThenBisection;
-                    } else if (SELECT_CASE_var == "ALTERNATION") {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::Alternation;
-                    } else {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsi;
-                        ShowWarningError(state,
-                                         format("{}: Invalid input of {}. The default choice is assigned = {}",
-                                                state.dataHeatBalMgr->CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaFieldNames(1),
-                                                AlphaName(1)));
-                        ShowContinueError(
-                            state, "Valid choices are: RegulaFalsi, Bisection, BisectionThenRegulaFalsi, RegulaFalsiThenBisection, or Alternation.");
-                    }
+                HVACSystemRootFinding.HVACSystemRootSolverMethod =
+                    static_cast<HVACSystemRootSolverAlgorithm>(getEnumValue(HVACSystemRootSolverAlgorithmUC, Util::makeUPPER(AlphaName(1))));
+                if (HVACSystemRootFinding.HVACSystemRootSolverMethod == HVACSystemRootSolverAlgorithm::Invalid) {
+                    HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
+                    ShowWarningInvalidKey(
+                        state, eoh, state.dataIPShortCut->cAlphaFieldNames(1), AlphaName(1), "Invalid input. The default choice is assigned.");
+                    ShowContinueError(
+                        state, "Valid choices are: RegulaFalsi, Bisection, BisectionThenRegulaFalsi, RegulaFalsiThenBisection, or Alternation.");
                 }
             }
             if (NumNumber > 0) {
@@ -1244,7 +1230,7 @@ namespace HeatBalanceManager {
             }
         } else {
             HVACSystemRootFinding.Algorithm = "RegulaFalsi";
-            HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsi;
+            HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
         }
 
         // Write Solution Algorithm to the initialization output file for User Verification
@@ -3590,7 +3576,6 @@ namespace HeatBalanceManager {
         // Using/Aliasing
         using namespace DataStringGlobals;
         using DataSystemVariables::CheckForActualFilePath;
-        using General::POLYF; // POLYF       ! Polynomial in cosine of angle of incidence
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         Array1D_string const NumName(5, {"1", "2", "3", "4", "5"});
@@ -3622,26 +3607,31 @@ namespace HeatBalanceManager {
         int FrDivNum;                 // FrameDivider number
         Array1D<Real64> WinHeight(2); // Height, width for glazing system (m)
         Array1D<Real64> WinWidth(2);
-        Array1D<Real64> UValCenter(2);      // Center of glass U-value (W/m2-K) for glazing system
-        Array1D<Real64> SCCenter(2);        // Center of glass shading coefficient for glazing system
-        Array1D<Real64> SHGCCenter(2);      // Center of glass solar heat gain coefficient for glazing system
-        Array1D<Real64> TVisCenter(2);      // Center of glass visible transmittance for glazing system
-        Array1D<Real64> Tsol(11);           // Solar transmittance vs incidence angle; diffuse trans.
-        Array2D<Real64> AbsSol(11, 5);      // Solar absorptance vs inc. angle in each glass layer
-        Array1D<Real64> Rfsol(11);          // Front solar reflectance vs inc. angle
-        Array1D<Real64> Rbsol(11);          // Back solar reflectance vs inc. angle
-        Array1D<Real64> Tvis(11);           // Visible transmittance vs inc. angle
-        Array1D<Real64> Rfvis(11);          // Front visible reflectance vs inc. angle
-        Array1D<Real64> Rbvis(11);          // Back visible reflectance vs inc. angle
-        Array1D<Real64> CosPhiIndepVar(10); // Cosine of incidence angle from 0 to 90 deg in 10 deg increments
-        int IPhi;                           // Incidence angle counter
-        Real64 Phi;                         // Incidence angle (deg)
-        Array1D<Real64> CosPhi(10);         // Cosine of incidence angle
-        Array1D<Real64> tsolFit(10);        // Fitted solar transmittance vs incidence angle
-        Array1D<Real64> tvisFit(10);        // Fitted visible transmittance vs incidence angle
-        Array1D<Real64> rfsolFit(10);       // Fitted solar front reflectance vs incidence angle
-        Array2D<Real64> solabsFit(5, 10);   // Fitted solar absorptance vs incidence angle for each glass layer
-        Array1D_string DividerType(2);      // Divider type: DividedLite or Suspended
+        Array1D<Real64> UValCenter(2);                 // Center of glass U-value (W/m2-K) for glazing system
+        Array1D<Real64> SCCenter(2);                   // Center of glass shading coefficient for glazing system
+        Array1D<Real64> SHGCCenter(2);                 // Center of glass solar heat gain coefficient for glazing system
+        Array1D<Real64> TVisCenter(2);                 // Center of glass visible transmittance for glazing system
+        Array1D<Real64> TsolTemp(Window::numPhis + 1); // Solar transmittance vs incidence angle; diffuse trans.
+        std::array<Real64, Window::numPhis> Tsol;
+        Array2D<Real64> AbsSolTemp(Window::maxGlassLayers, Window::numPhis + 1);     // Solar absorptance vs inc. angle in each glass layer
+        Array1D<std::array<Real64, Window::numPhis>> AbsSol(Window::maxGlassLayers); // Solar absorptance vs inc. angle in each glass layer
+        Array1D<Real64> RfsolTemp(Window::numPhis + 1);                              // Front solar reflectance vs inc. angle
+        std::array<Real64, Window::numPhis> Rfsol;
+        Array1D<Real64> RbsolTemp(Window::numPhis + 1); // Back solar reflectance vs inc. angle
+        std::array<Real64, Window::numPhis> Rbsol;
+        Array1D<Real64> TvisTemp(Window::numPhis + 1); // Visible transmittance vs inc. angle
+        std::array<Real64, Window::numPhis> Tvis;
+        Array1D<Real64> RfvisTemp(Window::numPhis + 1); // Front visible reflectance vs inc. angle
+        std::array<Real64, Window::numPhis> Rfvis;
+        Array1D<Real64> RbvisTemp(Window::numPhis + 1); // Back visible reflectance vs inc. angle
+        std::array<Real64, Window::numPhis> Rbvis;
+
+        std::array<Real64, Window::numPhis> tsolFit;  // Fitted solar transmittance vs incidence angle
+        std::array<Real64, Window::numPhis> tvisFit;  // Fitted visible transmittance vs incidence angle
+        std::array<Real64, Window::numPhis> rfsolFit; // Fitted solar front reflectance vs incidence angle
+        Array1D<std::array<Real64, Window::numPhis>> solabsFit(
+            Window::maxGlassLayers);   // Fitted solar absorptance vs incidence angle for each glass layer
+        Array1D_string DividerType(2); // Divider type: DividedLite or Suspended
         Real64 FrameWidth;
         Real64 MullionWidth;
         Real64 FrameProjectionOut;
@@ -4132,17 +4122,19 @@ namespace HeatBalanceManager {
             if (NextLine.eof) goto Label1000;
             ++FileLineCount;
 
+            // When pulling in develop, the following two blocks appear to have been modified in develop,
+            //  but removed entirely in this branch.  I'm going to leave them commented.
             // Pre-calculate constants
-            for (IPhi = 1; IPhi <= 10; ++IPhi) {
-                CosPhiIndepVar(IPhi) = std::cos((IPhi - 1) * 10.0 * Constant::DegToRad);
-            }
+            // for (IPhi = 1; IPhi <= 10; ++IPhi) {
+            //     CosPhiIndepVar(IPhi) = std::cos((IPhi - 1) * 10.0 * Constant::DegToRad);
+            //}
 
             // Pre-calculate constants
-            for (IPhi = 1; IPhi <= 10; ++IPhi) {
-                Phi = double(IPhi - 1) * 10.0;
-                CosPhi(IPhi) = std::cos(Phi * Constant::DegToRad);
-                if (std::abs(CosPhi(IPhi)) < 0.0001) CosPhi(IPhi) = 0.0;
-            }
+            // for (IPhi = 1; IPhi <= 10; ++IPhi) {
+            //    Phi = double(IPhi - 1) * 10.0;
+            //    CosPhi(IPhi) = std::cos(Phi * Constant::DegToRad);
+            //    if (std::abs(CosPhi(IPhi)) < 0.0001) CosPhi(IPhi) = 0.0;
+            //}
 
             for (IGlSys = 1; IGlSys <= NGlSys; ++IGlSys) {
                 ConstrNum = state.dataHeatBal->TotConstructs - NGlSys + IGlSys;
@@ -4184,7 +4176,7 @@ namespace HeatBalanceManager {
                 thisConstruct.AbsDiffShade = 0.0;
                 thisConstruct.AbsDiffBackShade = 0.0;
                 thisConstruct.ShadeAbsorpThermal = 0.0;
-                thisConstruct.AbsBeamShadeCoef = 0.0;
+                std::fill(thisConstruct.AbsBeamShadeCoef.begin(), thisConstruct.AbsBeamShadeCoef.end(), 0.0);
                 thisConstruct.AbsDiffIn = 0.0;
                 thisConstruct.AbsDiffOut = 0.0;
                 thisConstruct.TransDiff = 0.0;
@@ -4193,20 +4185,18 @@ namespace HeatBalanceManager {
                 thisConstruct.ReflectSolDiffFront = 0.0;
                 thisConstruct.ReflectVisDiffBack = 0.0;
                 thisConstruct.ReflectVisDiffFront = 0.0;
-                thisConstruct.TransSolBeamCoef = 0.0;
-                thisConstruct.TransVisBeamCoef = 0.0;
-                thisConstruct.ReflSolBeamFrontCoef = 0.0;
-                thisConstruct.ReflSolBeamBackCoef = 0.0;
+                std::fill(thisConstruct.TransSolBeamCoef.begin(), thisConstruct.TransSolBeamCoef.end(), 0.0);
+                std::fill(thisConstruct.TransVisBeamCoef.begin(), thisConstruct.TransVisBeamCoef.end(), 0.0);
+                std::fill(thisConstruct.ReflSolBeamFrontCoef.begin(), thisConstruct.ReflSolBeamFrontCoef.end(), 0.0);
+                std::fill(thisConstruct.ReflSolBeamBackCoef.begin(), thisConstruct.ReflSolBeamBackCoef.end(), 0.0);
                 thisConstruct.W5FrameDivider = 0;
                 thisConstruct.TotLayers = NGlass(IGlSys) + NGaps(IGlSys);
                 thisConstruct.TotGlassLayers = NGlass(IGlSys);
                 thisConstruct.TotSolidLayers = NGlass(IGlSys);
 
                 for (int Layer = 1; Layer <= state.dataHeatBal->MaxSolidWinLayers; ++Layer) {
-                    for (int index = 1; index <= DataSurfaces::MaxPolyCoeff; ++index) {
-                        thisConstruct.AbsBeamCoef(Layer)(index) = 0.0;
-                        thisConstruct.AbsBeamBackCoef(Layer)(index) = 0.0;
-                    }
+                    std::fill(thisConstruct.AbsBeamCoef(Layer).begin(), thisConstruct.AbsBeamCoef(Layer).end(), 0.0);
+                    std::fill(thisConstruct.AbsBeamBackCoef(Layer).begin(), thisConstruct.AbsBeamBackCoef(Layer).end(), 0.0);
                 }
 
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
@@ -4240,25 +4230,26 @@ namespace HeatBalanceManager {
                 NextLine = W5DataFile.readLine();
                 if (NextLine.eof) goto Label1000;
                 ++FileLineCount;
-                if (!readItem(NextLine.data.substr(5), Tsol)) {
+                if (!readItem(NextLine.data.substr(5), TsolTemp)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of TSol values.");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount, NextLine.data.substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(Tsol, 0.0) || any_gt(Tsol, 1.0)) {
+                } else if (any_lt(TsolTemp, 0.0) || any_gt(TsolTemp, 1.0)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of TSol values. (out of range [0,1])");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount, NextLine.data.substr(0, 100)));
                     ErrorsFound = true;
                 }
+
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
                     NextLine = W5DataFile.readLine();
                     ++FileLineCount;
-                    if (!readItem(NextLine.data.substr(5), AbsSol(_, IGlass))) {
+                    if (!readItem(NextLine.data.substr(5), AbsSolTemp(IGlass, _))) {
                         ShowSevereError(state,
                                         format("HeatBalanceManager: SearchWindow5DataFile: Error in Read of AbsSol values. For Glass={}", IGlass));
                         ShowContinueError(state,
                                           format("Line (~{}) in error (first 100 characters)={}", FileLineCount, NextLine.data.substr(0, 100)));
                         ErrorsFound = true;
-                    } else if (any_lt(AbsSol(_, IGlass), 0.0) || any_gt(AbsSol(_, IGlass), 1.0)) {
+                    } else if (any_lt(AbsSolTemp(IGlass, _), 0.0) || any_gt(AbsSolTemp(IGlass, _), 1.0)) {
                         ShowSevereError(
                             state,
                             format("HeatBalanceManager: SearchWindow5DataFile: Error in Read of AbsSol values. (out of range [0,1]) For Glass={}",
@@ -4273,48 +4264,48 @@ namespace HeatBalanceManager {
                     DataLine(ILine) = NextLine.data;
                 }
 
-                if (!readItem(DataLine(1).substr(5), Rfsol)) {
+                if (!readItem(DataLine(1).substr(5), RfsolTemp)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of RfSol values.");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 1, DataLine(1).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(Rfsol, 0.0) || any_gt(Rfsol, 1.0)) {
+                } else if (any_lt(RfsolTemp, 0.0) || any_gt(RfsolTemp, 1.0)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of RfSol values. (out of range [0,1])");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 1, DataLine(1).substr(0, 100)));
                     ErrorsFound = true;
                 }
 
-                if (!readItem(DataLine(2).substr(5), Rbsol)) {
+                if (!readItem(DataLine(2).substr(5), RbsolTemp)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of RbSol values.");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 2, DataLine(2).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(Rbsol, 0.0) || any_gt(Rbsol, 1.0)) {
+                } else if (any_lt(RbsolTemp, 0.0) || any_gt(RbsolTemp, 1.0)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of RbSol values. (out of range [0,1])");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 2, DataLine(2).substr(0, 100)));
                     ErrorsFound = true;
                 }
-                if (!readItem(DataLine(3).substr(5), Tvis)) {
+                if (!readItem(DataLine(3).substr(5), TvisTemp)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Tvis values.");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 3, DataLine(3).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(Tvis, 0.0) || any_gt(Tvis, 1.0)) {
+                } else if (any_lt(TvisTemp, 0.0) || any_gt(TvisTemp, 1.0)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Tvis values. (out of range [0,1])");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 3, DataLine(3).substr(0, 100)));
                     ErrorsFound = true;
                 }
-                if (!readItem(DataLine(4).substr(5), Rfvis)) {
+                if (!readItem(DataLine(4).substr(5), RfvisTemp)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Rfvis values.");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 4, DataLine(4).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(Rfvis, 0.0) || any_gt(Rfvis, 1.0)) {
+                } else if (any_lt(RfvisTemp, 0.0) || any_gt(RfvisTemp, 1.0)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Rfvis values. (out of range [0,1])");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 4, DataLine(4).substr(0, 100)));
                     ErrorsFound = true;
                 }
-                if (!readItem(DataLine(5).substr(5), Rbvis)) {
+                if (!readItem(DataLine(5).substr(5), RbvisTemp)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Rbvis values.");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 5, DataLine(5).substr(0, 100)));
                     ErrorsFound = true;
-                } else if (any_lt(Rbvis, 0.0) || any_gt(Rbvis, 1.0)) {
+                } else if (any_lt(RbvisTemp, 0.0) || any_gt(RbvisTemp, 1.0)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of Rbvis values. (out of range [0,1])");
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount + 5, DataLine(5).substr(0, 100)));
                     ErrorsFound = true;
@@ -4328,28 +4319,44 @@ namespace HeatBalanceManager {
                                "of above errors",
                                DesiredConstructionName));
 
-                // Hemis
-                thisConstruct.TransDiff = Tsol(11);
-                thisConstruct.TransDiffVis = Tvis(11);
-                thisConstruct.ReflectSolDiffFront = Rfsol(11);
-                thisConstruct.ReflectSolDiffBack = Rbsol(11);
-                thisConstruct.ReflectVisDiffFront = Rfvis(11);
-                thisConstruct.ReflectVisDiffBack = Rbvis(11);
+                for (int iPhi = 0; iPhi < Window::numPhis; ++iPhi) {
+                    Tsol[iPhi] = TsolTemp(iPhi + 1);
+                    Tvis[iPhi] = TvisTemp(iPhi + 1);
+                    Rfsol[iPhi] = RfsolTemp(iPhi + 1);
+                    Rbsol[iPhi] = RbsolTemp(iPhi + 1);
+                    Rfvis[iPhi] = RfvisTemp(iPhi + 1);
+                    Rbvis[iPhi] = RbvisTemp(iPhi + 1);
+                }
 
-                Window::W5LsqFit(CosPhiIndepVar, Tsol, 6, 1, 10, thisConstruct.TransSolBeamCoef);
-                Window::W5LsqFit(CosPhiIndepVar, Tvis, 6, 1, 10, thisConstruct.TransVisBeamCoef);
-                Window::W5LsqFit(CosPhiIndepVar, Rfsol, 6, 1, 10, thisConstruct.ReflSolBeamFrontCoef);
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
-                    Window::W5LsqFit(CosPhiIndepVar, AbsSol(_, IGlass), 6, 1, 10, thisConstruct.AbsBeamCoef(IGlass));
+                    for (int iPhi = 0; iPhi < Window::numPhis; ++iPhi) {
+                        AbsSol(IGlass)[iPhi] = AbsSolTemp(IGlass, iPhi + 1);
+                    }
+                }
+
+                // Hemis
+                thisConstruct.TransDiff = TsolTemp(11);
+                thisConstruct.TransDiffVis = TvisTemp(11);
+                thisConstruct.ReflectSolDiffFront = RfsolTemp(11);
+                thisConstruct.ReflectSolDiffBack = RbsolTemp(11);
+                thisConstruct.ReflectVisDiffFront = RfvisTemp(11);
+                thisConstruct.ReflectVisDiffBack = RbvisTemp(11);
+
+                // Using pre-calculated/hard-coded cosPhis in this module is okay.  Shrug.
+                Window::W5LsqFit(Window::cosPhis, Tsol, thisConstruct.TransSolBeamCoef);
+                Window::W5LsqFit(Window::cosPhis, Tvis, thisConstruct.TransVisBeamCoef);
+                Window::W5LsqFit(Window::cosPhis, Rfsol, thisConstruct.ReflSolBeamFrontCoef);
+                for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
+                    Window::W5LsqFit(Window::cosPhis, AbsSol(IGlass), thisConstruct.AbsBeamCoef(IGlass));
                 }
 
                 // For comparing fitted vs. input distribution in incidence angle
-                for (IPhi = 1; IPhi <= 10; ++IPhi) {
-                    tsolFit(IPhi) = POLYF(CosPhi(IPhi), thisConstruct.TransSolBeamCoef);
-                    tvisFit(IPhi) = POLYF(CosPhi(IPhi), thisConstruct.TransVisBeamCoef);
-                    rfsolFit(IPhi) = POLYF(CosPhi(IPhi), thisConstruct.ReflSolBeamFrontCoef);
+                for (int iPhi = 0; iPhi < Window::numPhis; ++iPhi) {
+                    tsolFit[iPhi] = Window::POLYF(Window::cosPhis[iPhi], thisConstruct.TransSolBeamCoef);
+                    tvisFit[iPhi] = Window::POLYF(Window::cosPhis[iPhi], thisConstruct.TransVisBeamCoef);
+                    rfsolFit[iPhi] = Window::POLYF(Window::cosPhis[iPhi], thisConstruct.ReflSolBeamFrontCoef);
                     for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
-                        solabsFit(IGlass, IPhi) = POLYF(CosPhi(IPhi), thisConstruct.AbsBeamCoef(IGlass));
+                        solabsFit(IGlass)[iPhi] = Window::POLYF(Window::cosPhis[iPhi], thisConstruct.AbsBeamCoef(IGlass));
                     }
                 }
                 // end

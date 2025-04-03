@@ -338,7 +338,7 @@ struct EnergyPlusData : BaseGlobalStruct
     std::unique_ptr<ChillerIndirectAbsoprtionData> dataChillerIndirectAbsorption;
     std::unique_ptr<ChillerReformulatedEIRData> dataChillerReformulatedEIR;
     std::unique_ptr<ChillerElectricASHRAE205Data> dataChillerElectricASHRAE205;
-    std::unique_ptr<CoilCoolingDXData> dataCoilCooingDX;
+    std::unique_ptr<CoilCoolingDXData> dataCoilCoolingDX;
     std::unique_ptr<CondenserLoopTowersData> dataCondenserLoopTowers;
     std::unique_ptr<ConstructionData> dataConstruction;
     std::unique_ptr<ContaminantBalanceData> dataContaminantBalance;
@@ -574,8 +574,35 @@ struct EnergyPlusData : BaseGlobalStruct
     EnergyPlusData(const EnergyPlusData &) = delete;
     EnergyPlusData(EnergyPlusData &&) = delete;
 
+    // Ok, so what's up with these two?  Why do we need both of them?
+
+    // First, what do they do?  init_constant_state creates and
+    // initalizes state objects that are built into EnergyPlus and do
+    // not appear in the IDF file.  Examples include the AlwaysOn and
+    // AlwaysOff Schedule objects, the Water and Steam FluidProperties
+    // objects, and perhaps other objects that will be identified as
+    // refactoring continues.  init_state creates and initializes
+    // state objects from the IDF file.
+
+    // Why do we need both of them?  We actually don't for normal
+    // EnergyPlus execution.  The EnergyPlus executable calls
+    // init_constant_state() and init_state() back to back in
+    // ManageSimulation() immediately after the IDF file is parsed.
+
+    // The reason these are split is because of the unit testing
+    // framework.  There are a good number of fixture objects that do
+    // a lot of setup before reading the IDF snippet, and that setup
+    // often requires some of hte constant objects.  The unit testing
+    // framework calls init_constant_state in
+    // EnergyPlusFixture::Setup() and then inidividual unit tests call
+    // init_state() after calling process_idf().  In fact, we can
+    // probably move init_state() into process_idf().
+
+    // init_constant_state() also needs to be appropriately called by
+    // the API, e.g., in resetState.
     void init_constant_state(EnergyPlusData &state) override;
     void init_state(EnergyPlusData &state) override;
+
     bool init_state_called = false;
     bool init_constant_state_called = false;
 

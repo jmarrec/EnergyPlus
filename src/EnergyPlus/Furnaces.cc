@@ -1822,7 +1822,7 @@ namespace Furnaces {
                             errFlag = true;
                             ErrorsFound = true;
                         }
-                        auto const &newCoil = state.dataCoilCooingDX->coilCoolingDXs[childCCIndex];
+                        auto const &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[childCCIndex];
 
                         thisFurnace.CondenserNodeNum = newCoil.condInletNodeIndex;
 
@@ -5815,7 +5815,7 @@ namespace Furnaces {
                 if (childCCIndex < 0) {
                     ShowContinueError(state, "Occurs in sizing HeatExchangerAssistedCoolingCoil.");
                 }
-                auto &newCoil = state.dataCoilCooingDX->coilCoolingDXs[childCCIndex];
+                auto &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[childCCIndex];
                 newCoil.size(state);
             }
             HVACHXAssistedCoolingCoil::SimHXAssistedCoolingCoil(
@@ -10842,7 +10842,7 @@ namespace Furnaces {
                     errFlag = true;
                     ErrorsFound = true;
                 }
-                auto const &newCoil = state.dataCoilCooingDX->coilCoolingDXs[childCCIndex_DX];
+                auto const &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[childCCIndex_DX];
                 thisFurnace.MinOATCompressorCooling = newCoil.performance.minOutdoorDrybulb;
             } else if (Util::SameString(ChildCoolingCoilType, "Coil:Cooling:DX:VariableSpeed")) {
                 int childCCIndex_VS = state.dataHVACAssistedCC->HXAssistedCoil(thisFurnace.CoolingCoilIndex).CoolingCoilIndex;

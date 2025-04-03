@@ -290,17 +290,20 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
             "Zone1Infiltration": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 1.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 1"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 1",
+                "density_basis": "Standard"
             },
             "Zone2Infiltration": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 2.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 2"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 2",
+                "density_basis": "Indoor"
             },
             "Space1aInfiltration": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 3.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Space 1a"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Space 1a",
+                "density_basis": "Outdoor"
             },
             "Space1bInfiltration": {
                 "design_flow_rate_calculation_method": "Flow/Area",
@@ -322,17 +325,20 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
             "Zone1Ventilation": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 1.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 1"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 1",
+                "density_basis": "Standard"
             },
             "Zone2Ventilation": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 2.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 2"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 2",
+                "density_basis": "Indoor"
             },
             "Space1aVentilation": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 3.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Space 1a"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Space 1a",
+                "density_basis": "Outdoor"
             },
             "Space1bVentilation": {
                 "design_flow_rate_calculation_method": "Flow/Area",
@@ -505,6 +511,18 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
                                                         Space1bFloorArea * Zone1FlowPerArea,
                                                         Zone2FloorArea * Zone2FlowPerArea};
 
+    // Same density basis for both infiltration and ventilation
+    constexpr std::array<DataHeatBalance::InfVentDensityBasis, numInstances> density = {DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Standard,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Standard,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Indoor};
+
     for (int itemNum = 0; itemNum <= numInstances - 1; ++itemNum) {
         auto &thisInfiltration = state->dataHeatBal->Infiltration[itemNum];
         auto &thisVentilation = state->dataHeatBal->Ventilation[itemNum];
@@ -516,6 +534,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
         EXPECT_EQ(thisVentilation.ZonePtr, zoneNums[itemNum]);
         EXPECT_EQ(thisInfiltration.spaceIndex, spaceNums[itemNum]);
         EXPECT_EQ(thisVentilation.spaceIndex, spaceNums[itemNum]);
+        EXPECT_EQ(thisInfiltration.densityBasis, density[itemNum]);
+        EXPECT_EQ(thisVentilation.densityBasis, density[itemNum]);
     }
 }
 TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)

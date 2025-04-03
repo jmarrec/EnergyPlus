@@ -485,7 +485,9 @@ void GetCoolingPanelInput(EnergyPlusData &state)
         }
 
         thisCP.ColdSetptSchedName = s_ipsc->cAlphaArgs(7);
-        if ((thisCP.coldSetptSched = Sched::GetSchedule(state, thisCP.ColdSetptSchedName)) == nullptr) {
+        if (s_ipsc->lAlphaFieldBlanks(7)) {
+            thisCP.coldSetptSched = Sched::GetScheduleAlwaysOff(state);
+        } else if ((thisCP.coldSetptSched = Sched::GetSchedule(state, thisCP.ColdSetptSchedName)) == nullptr) {
             ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(7), s_ipsc->cAlphaArgs(7));
             ErrorsFound = true;
         }

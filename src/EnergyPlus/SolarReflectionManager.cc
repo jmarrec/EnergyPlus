@@ -887,9 +887,6 @@ namespace SolarReflectionManager {
         // REFERENCES:
         // na
 
-        // Using/Aliasing
-        using General::POLYF;
-
         // Locals
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         Array1D<Real64> ReflBmToDiffSolObs(state.dataSurface->MaxRecPts); // Irradiance at a receiving point for
@@ -1030,7 +1027,7 @@ namespace SolarReflectionManager {
                                 state.dataSolarReflectionManager->SpecReflectance = 0.0;
                                 if (state.dataSurface->Surface(ReflSurfNum).Class == SurfaceClass::Window) {
                                     state.dataSolarReflectionManager->ConstrNumRefl = state.dataSurface->Surface(ReflSurfNum).Construction;
-                                    state.dataSolarReflectionManager->SpecReflectance = POLYF(
+                                    state.dataSolarReflectionManager->SpecReflectance = Window::POLYF(
                                         std::abs(state.dataSolarReflectionManager->CosIncAngRefl),
                                         state.dataConstruction->Construct(state.dataSolarReflectionManager->ConstrNumRefl).ReflSolBeamFrontCoef);
                                 }
@@ -1039,7 +1036,7 @@ namespace SolarReflectionManager {
                                     state.dataSolarReflectionManager->ConstrNumRefl = state.dataSurface->SurfShadowGlazingConstruct(ReflSurfNum);
                                     state.dataSolarReflectionManager->SpecReflectance =
                                         state.dataSurface->SurfShadowGlazingFrac(ReflSurfNum) *
-                                        POLYF(
+                                        Window::POLYF(
                                             std::abs(state.dataSolarReflectionManager->CosIncAngRefl),
                                             state.dataConstruction->Construct(state.dataSolarReflectionManager->ConstrNumRefl).ReflSolBeamFrontCoef);
                                 }

@@ -2147,7 +2147,7 @@
 
   Output:Variable,*,Zone Electric Equipment Total Heating Energy,Monthly;
 
-  Output:Variable,*,Zone Infiltration Air Change Rate,Monthly;
+  Output:Variable,*,Zone Infiltration Current Density Air Change Rate,Monthly;
 
   Output:Variable,*,Zone Infiltration Sensible Heat Loss Energy,Monthly;
 

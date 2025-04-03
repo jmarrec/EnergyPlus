@@ -50,8 +50,8 @@
 // Kiva Headers
 #include <libkiva/Errors.hpp>
 #ifdef GROUND_PLOT
-#include <EnergyPlus/DataStringGlobals.hh>
-#include <libgroundplot/GroundPlot.hpp>
+#    include <EnergyPlus/DataStringGlobals.hh>
+#    include <libgroundplot/GroundPlot.hpp>
 #endif
 
 // EnergyPlus Headers

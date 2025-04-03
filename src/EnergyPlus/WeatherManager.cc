@@ -5971,7 +5971,7 @@ namespace Weather {
                 Real64 testval = desDayInput.MaxDryBulb - desDayInput.DailyDBRange;
                 if (testval < -90.0 || testval > 70.0) {
                     ShowSevereError(state, format("{}: {} = {}", routineName, ipsc->cCurrentModuleObject, desDayInput.Title));
-                    ShowContinueError(state, format("{} ({.2R}) is out of range [-90.0, 70.0]", ipsc->cAlphaFieldNames(3), testval));
+                    ShowContinueError(state, format("{} ({:.2R}) is out of range [-90.0, 70.0]", ipsc->cAlphaFieldNames(3), testval));
                     ErrorsFound = true;
                 }
             }
@@ -6053,7 +6053,7 @@ namespace Weather {
                 if (testval < -90.0 || testval > 70.0) {
                     ShowSevereError(state, format("{}: {} = {}", routineName, ipsc->cCurrentModuleObject, desDayInput.Title));
                     // should this be cNumericFieldNames?
-                    ShowContinueError(state, format("{} = ({.2R}) is out of range [-90.0, 70.0]", ipsc->cAlphaFieldNames(4), testval));
+                    ShowContinueError(state, format("{} = ({:.2R}) is out of range [-90.0, 70.0]", ipsc->cAlphaFieldNames(4), testval));
                     ErrorsFound = true;
                 }
             }
@@ -6074,7 +6074,8 @@ namespace Weather {
                 if (desDayInput.HumIndValue < -90.0 || desDayInput.HumIndValue > 70.0) {
                     ShowSevereError(state, format("{}: {} = {}", routineName, ipsc->cCurrentModuleObject, desDayInput.Title));
                     ShowContinueError(
-                        state, format("{} = {.2R} is out of range [-90.0, 70.0]", ipsc->cAlphaFieldNames(5) + " - WetBulb", desDayInput.HumIndValue));
+                        state,
+                        format("{} = {:.2R} is out of range [-90.0, 70.0]", ipsc->cAlphaFieldNames(5) + " - WetBulb", desDayInput.HumIndValue));
                     ErrorsFound = true;
                 }
             } break;
@@ -6091,7 +6092,7 @@ namespace Weather {
                     ShowSevereError(state, format("{}: {} = {}", routineName, ipsc->cCurrentModuleObject, desDayInput.Title));
                     ShowContinueError(
                         state,
-                        format("{} = {.2R} is out of range [-90.0, 70.0]", ipsc->cAlphaFieldNames(5) + " - DewPoint", desDayInput.HumIndValue));
+                        format("{} = {:.2R} is out of range [-90.0, 70.0]", ipsc->cAlphaFieldNames(5) + " - DewPoint", desDayInput.HumIndValue));
                     ErrorsFound = true;
                 }
             } break;
@@ -6109,7 +6110,7 @@ namespace Weather {
                     ShowSevereError(state, format("{}: {} = {}", routineName, ipsc->cCurrentModuleObject, desDayInput.Title));
                     ShowContinueError(
                         state,
-                        format("{} = {.2R} is out of range [0.0, 0.03]", ipsc->cAlphaFieldNames(5) + " - Humidity-Ratio", desDayInput.HumIndValue));
+                        format("{} = {:.2R} is out of range [0.0, 0.03]", ipsc->cAlphaFieldNames(5) + " - Humidity-Ratio", desDayInput.HumIndValue));
                     ErrorsFound = true;
                 }
             } break;

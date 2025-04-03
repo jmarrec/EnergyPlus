@@ -4914,10 +4914,13 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_IncSolarMultiplier)
 
     int ConstrNum = 1;
     state->dataSurface->Surface(SurfNum).Construction = ConstrNum;
+    auto &constr = state->dataConstruction->Construct(ConstrNum);
+
     state->dataSurface->SurfActiveConstruction(SurfNum) = state->dataSurface->Surface(SurfNum).Construction;
     state->dataConstruction->Construct(ConstrNum).TransDiff = 0.1;
-    state->dataConstruction->Construct(ConstrNum).TransSolBeamCoef = 0.1;
-    state->dataConstruction->Construct(ConstrNum).TransSolBeamCoef = 0.2;
+    // Why is this being written and immediately overwritten?
+    std::fill(constr.TransSolBeamCoef.begin(), constr.TransSolBeamCoef.end(), 0.1);
+    std::fill(constr.TransSolBeamCoef.begin(), constr.TransSolBeamCoef.end(), 0.2);
 
     state->dataSurface->SurfaceWindow.allocate(totSurf);
     state->dataSurface->SurfaceWindow(SurfNum).OutProjSLFracMult[state->dataGlobal->HourOfDay] = 999.0;

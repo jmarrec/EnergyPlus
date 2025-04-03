@@ -1252,7 +1252,7 @@ The SHR is given by:
 SHR = SH{R_{rated}} \cdot SHRFT\left( {{T_{wb,i}},{T_{db,i}}} \right) \cdot SHRFFF\left( {FF} \right)
 \end{equation}
 
-The cooing coil outlet air enthalpy is given by:
+The cooling coil outlet air enthalpy is given by:
 
 \begin{equation}
 {h_{out}} = {h_{in}} - \frac{{{{\dot Q}_{total}}}}{{\dot m}}
@@ -1448,7 +1448,7 @@ where:
 
 \(T_{db,rated}\) is the dry-bulb temperature of air entering the cooling coil at rated conditions (26.7\(^{\circ}\)C)
 
-\(T_{wb,rated}\) is the wet-bulb temperature of air entering the cooing coil at rated conditions (19.4\(^{\circ}\)C).
+\(T_{wb,rated}\) is the wet-bulb temperature of air entering the cooling coil at rated conditions (19.4\(^{\circ}\)C).
 
 The cooling coil on and off times are then calculated based on the maximum number of cycles per hour and the calculated run-time fraction for the coil.
 
@@ -5144,6 +5144,8 @@ Coil:Cooling:DX:TwoStageWithHumidityControlMode
 
 Coil:Cooling:WaterToAirHeatPump:EquationFit
 
+Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit
+
 Refrigeration:CompressorRack
 
 Refrigeration:Condenser* (multiple objects)
@@ -5157,7 +5159,7 @@ To model a desuperheater water heating coil, the input data file must include th
 \begin{itemize}
 \item Coil:WaterHeating:Desuperheater
 \item WaterHeater:Mixed or WaterHeater:Stratified
-\item Coil:Cooling:DX:* or Refrigeration:CompressorRack or Refrigeration:Condenser:* or Coil:Cooling:WaterToAirHeatPump:EquationFit
+\item Coil:Cooling:DX:* or Refrigeration:CompressorRack or Refrigeration:Condenser:* or Coil:Cooling:WaterToAirHeatPump:EquationFit or Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit
 \end{itemize}
 
 A schematic diagram showing the desuperheater water heating coil with its water heater and DX system condenser is shown below.

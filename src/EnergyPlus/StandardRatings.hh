@@ -58,6 +58,9 @@
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/Plant/Enums.hh>
 
+// C++ Headers
+#include <string_view>
+
 namespace EnergyPlus {
 
 // Forward declarations
@@ -75,6 +78,33 @@ namespace StandardRatings {
 
     Real64 constexpr HeatingOutdoorCoilInletAirDBTempH3Test(-8.33); // Outdoor air dry-bulb temp in degrees C (17F)
     // Test H3 (low and High Speed) Std. AHRI 210/240
+
+    static constexpr std::string_view AHRI2017FOOTNOTE = R"html(<p>ANSI/AHRI ratings account for supply air fan heat and electric power.</p>
+<ol>
+  <li>EnergyPlus object type.</li>
+  <li>Capacity less than 65K Btu/h (19050 W) - calculated as per AHRI Standard 210/240-2017.<br>
+      Capacity of 65K Btu/h (19050 W) to less than 135K Btu/h (39565 W) - calculated as per AHRI Standard 340/360-2007.<br>
+      Capacity from 135K (39565 W) to 250K Btu/hr (73268 W) - calculated as per AHRI Standard 365-2009 - Ratings not yet supported in EnergyPlus.
+  </li>
+  <li>SEER (User) is calculated using user-input PLF curve and cooling coefficient of degradation.<br>
+      SEER (Standard) is calculated using the default PLF curve and cooling coefficient of degradation from the appropriate AHRI standard.
+  </li>
+</ol>)html";
+
+    static constexpr std::string_view AHRI2023FOOTNOTE = R"html(<p>ANSI/AHRI ratings account for supply air fan heat and electric power.</p>
+<ol>
+  <li>EnergyPlus object type.</li>
+  <li>
+    Capacity less than 65K Btu/h (19050 W) - calculated as per AHRI Standard 210/240-2023.<br>
+    Capacity of 65K Btu/h (19050 W) to less than 135K Btu/h (39565 W) - calculated as per AHRI Standard 340/360-2022.<br>
+    Capacity from 135K (39565 W) to 250K Btu/hr (73268 W) - calculated as per AHRI Standard 365-2009 - Ratings not yet supported in EnergyPlus.
+  </li>
+  <li>
+    SEER2 (User) is calculated using user-input PLF curve and cooling coefficient of degradation.<br>
+    SEER2 (Standard) is calculated using the default PLF curve and cooling coefficient of degradation from the appropriate AHRI standard.
+  </li>
+  <li>Value for the Full Speed of the coil.</li>
+</ol>)html";
 
     // Defrost strategy (heat pump only)
     enum class DefrostStrat

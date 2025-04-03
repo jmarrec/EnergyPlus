@@ -448,9 +448,9 @@ namespace IndoorGreen {
             switch (ig.lightingMethod) {
             case LightingMethod::LED: {
                 ig.ZPPFD = ig.ledSched->getCurrentVal() * ig.LEDNominalPPFD; // PPFD
-                ig.LEDActualPPFD = ig.LEDNominalPPFD;
-                ig.LEDActualEleP = ig.LEDNominalEleP;
-                ig.LEDActualEleCon = ig.LEDNominalEleP * Timestep;
+                ig.LEDActualPPFD = ig.ZPPFD;
+                ig.LEDActualEleP = ig.ledSched->getCurrentVal() * ig.LEDNominalEleP;
+                ig.LEDActualEleCon = ig.LEDActualEleP * Timestep;
             } break;
             case LightingMethod::Daylighting: {
                 ig.ZPPFD = 0;
@@ -502,7 +502,7 @@ namespace IndoorGreen {
             ZoneAirVol = state.dataHeatBal->Zone(ig.ZonePtr).Volume;
             ZoneNewHum = ZonePreHum + ETTotal / (rhoair * ZoneAirVol);
             Twb = Psychrometrics::PsyTwbFnTdbWPb(state, ZonePreTemp, ZonePreHum, state.dataEnvrn->OutBaroPress);
-            ZoneSatHum = Psychrometrics::PsyWFnTdpPb(state, ZonePreTemp, state.dataEnvrn->OutBaroPress); // saturated humidity ratio
+            ZoneSatHum = Psychrometrics::PsyWFnTdbRhPb(state, Twb, 1.0, state.dataEnvrn->OutBaroPress); // saturated humidity ratio
             HCons = Psychrometrics::PsyHFnTdbW(ZonePreTemp, ZonePreHum);
             if (ZoneNewHum <= ZoneSatHum) {
                 ZoneNewTemp = Psychrometrics::PsyTdbFnHW(HCons, ZoneNewHum);

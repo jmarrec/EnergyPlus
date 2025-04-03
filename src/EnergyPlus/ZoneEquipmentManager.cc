@@ -2346,14 +2346,15 @@ std::string sizingPeakTimeStamp(EnergyPlusData const &state, int timeStepIndex)
 void writeZszSpsz(EnergyPlusData &state,
                   EnergyPlus::InputOutputFile &outputFile,
                   int const numSpacesOrZones,
-                  Array1D<DataZoneEquipment::EquipConfiguration> const &zsEquipConfig,
                   EPVector<DataSizing::ZoneSizingData> const &zsCalcFinalSizing,
-                  Array2D<DataSizing::ZoneSizingData> const &zsCalcSizing)
+                  Array2D<DataSizing::ZoneSizingData> const &zsCalcSizing,
+                  bool const forSpaces)
 {
     char const colSep = state.dataSize->SizingFileColSep;
     print(outputFile, "Time");
     for (int i = 1; i <= numSpacesOrZones; ++i) {
-        if (!zsEquipConfig(i).IsControlled) continue;
+        int zoneNum = (forSpaces) ? state.dataHeatBal->space(i).zoneNum : i;
+        if (!state.dataHeatBal->Zone(zoneNum).IsControlled) continue;
         auto &thisCalcFS = zsCalcFinalSizing(i);
 
         static constexpr std::string_view ZSizeFmt11("{}{}:{}{}{}{}:{}{}{}{}:{}{}{}{}:{}{}{}{}:{}{}{}{}:{}{}{}{}:{}{}{}{}:{}{}{}{}:{}{}{}{}:{"
@@ -2441,7 +2442,8 @@ void writeZszSpsz(EnergyPlusData &state,
             static constexpr std::string_view ZSizeFmt20("{:02}:{:02}:00");
             print(outputFile, ZSizeFmt20, HourPrint, Minutes);
             for (int i = 1; i <= numSpacesOrZones; ++i) {
-                if (!zsEquipConfig(i).IsControlled) continue;
+                int zoneNum = (forSpaces) ? state.dataHeatBal->space(i).zoneNum : i;
+                if (!state.dataHeatBal->Zone(zoneNum).IsControlled) continue;
                 auto &thisCalcFS = zsCalcFinalSizing(i);
                 static constexpr std::string_view ZSizeFmt21("{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12."
                                                              "6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}");
@@ -2506,7 +2508,8 @@ void writeZszSpsz(EnergyPlusData &state,
     print(outputFile, "Peak");
 
     for (int i = 1; i <= numSpacesOrZones; ++i) {
-        if (!zsEquipConfig(i).IsControlled) continue;
+        int zoneNum = (forSpaces) ? state.dataHeatBal->space(i).zoneNum : i;
+        if (!state.dataHeatBal->Zone(zoneNum).IsControlled) continue;
         auto &thisCalcFS = zsCalcFinalSizing(i);
 
         static constexpr std::string_view ZSizeFmt31("{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12.6E}{}{:12."
@@ -2546,7 +2549,8 @@ void writeZszSpsz(EnergyPlusData &state,
 
     print(outputFile, "\nPeak Vol Flow (m3/s)");
     for (int i = 1; i <= numSpacesOrZones; ++i) {
-        if (!zsEquipConfig(i).IsControlled) continue;
+        int zoneNum = (forSpaces) ? state.dataHeatBal->space(i).zoneNum : i;
+        if (!state.dataHeatBal->Zone(zoneNum).IsControlled) continue;
         auto &thisCalcFS = zsCalcFinalSizing(i);
         static constexpr std::string_view ZSizeFmt41("{}{}{}{:12.6E}{}{:12.6E}{}{}{}{:12.6E}{}{:12.6E}{}{}{}{}{}{}{}{}");
         print(outputFile,
@@ -3302,19 +3306,37 @@ void UpdateZoneSizing(EnergyPlusData &state, Constant::CallIndicator const CallI
                 }
             }
 
-            writeZszSpsz(state,
-                         state.files.zsz,
-                         state.dataGlobal->NumOfZones,
-                         state.dataZoneEquip->ZoneEquipConfig,
-                         state.dataSize->CalcFinalZoneSizing,
-                         state.dataSize->CalcZoneSizing);
+            // Write zone sizing (zsz) and space sizing (spsz) outputs
+            if (state.dataSize->SizingFileColSep == DataStringGlobals::CharComma) {
+                state.files.zsz.filePath = state.files.outputZszCsvFilePath;
+            } else if (state.dataSize->SizingFileColSep == DataStringGlobals::CharTab) {
+                state.files.zsz.filePath = state.files.outputZszTabFilePath;
+            } else {
+                state.files.zsz.filePath = state.files.outputZszTxtFilePath;
+            }
+            state.files.zsz.ensure_open(state, "UpdateZoneSizing", state.files.outputControl.zsz);
+
+            bool forSpaces = false;
+            writeZszSpsz(
+                state, state.files.zsz, state.dataGlobal->NumOfZones, state.dataSize->CalcFinalZoneSizing, state.dataSize->CalcZoneSizing, forSpaces);
+
             if (state.dataHeatBal->doSpaceHeatBalanceSizing) {
+                if (state.dataSize->SizingFileColSep == DataStringGlobals::CharComma) {
+                    state.files.spsz.filePath = state.files.outputSpszCsvFilePath;
+                } else if (state.dataSize->SizingFileColSep == DataStringGlobals::CharTab) {
+                    state.files.spsz.filePath = state.files.outputSpszTabFilePath;
+                } else {
+                    state.files.spsz.filePath = state.files.outputSpszTxtFilePath;
+                }
+                state.files.spsz.ensure_open(state, "UpdateZoneSizing", state.files.outputControl.spsz);
+
+                forSpaces = true;
                 writeZszSpsz(state,
                              state.files.spsz,
                              state.dataGlobal->numSpaces,
-                             state.dataZoneEquip->spaceEquipConfig,
                              state.dataSize->CalcFinalSpaceSizing,
-                             state.dataSize->CalcSpaceSizing);
+                             state.dataSize->CalcSpaceSizing,
+                             forSpaces);
             }
 
             // Move sizing data into final sizing array according to sizing method
@@ -5438,9 +5460,6 @@ void CalcAirFlowSimple(EnergyPlusData &state,
         state.dataHeatBal->TotMixing + state.dataHeatBal->TotCrossMixing + state.dataHeatBal->TotRefDoorMixing > 0)
         state.dataContaminantBalance->MixingMassFlowGC = 0.0;
 
-    Real64 IVF = 0.0; // DESIGN INFILTRATION FLOW RATE (M**3/SEC)
-    Real64 VVF = 0.0; // DESIGN VENTILATION FLOW RATE (M**3/SEC)
-
     if (!state.dataHeatBal->AirFlowFlag) return;
     // AirflowNetwork Multizone field /= SIMPLE
     if (!(state.afn->simulation_control.type == AirflowNetwork::ControlType::NoMultizoneOrDistribution ||
@@ -5523,8 +5542,27 @@ void CalcAirFlowSimple(EnergyPlusData &state,
             HumRatExt = state.dataEnvrn->OutHumRat;
             EnthalpyExt = state.dataEnvrn->OutEnthalpy;
         }
-        Real64 AirDensity =
-            PsyRhoAirFnPbTdbW(state, state.dataEnvrn->OutBaroPress, TempExt, HumRatExt, RoutineNameVentilation); // Density of air (kg/m^3)
+
+        Real64 AirDensity = 0.0; // Density of air for converting from volume flow to mass flow (kg/m^3)
+        switch (thisVentilation.densityBasis) {
+        case DataHeatBalance::InfVentDensityBasis::Standard: {
+            AirDensity = state.dataEnvrn->StdRhoAir;
+        } break;
+        case DataHeatBalance::InfVentDensityBasis::Indoor: {
+            if (state.dataHeatBal->doSpaceHeatBalance) {
+                auto &thisSpaceHB = state.dataZoneTempPredictorCorrector->spaceHeatBalance(thisVentilation.spaceIndex);
+                AirDensity = Psychrometrics::PsyRhoAirFnPbTdbW(
+                    state, state.dataEnvrn->OutBaroPress, thisMixingMAT, thisSpaceHB.MixingHumRat, RoutineNameInfiltration);
+            } else {
+                AirDensity = Psychrometrics::PsyRhoAirFnPbTdbW(
+                    state, state.dataEnvrn->OutBaroPress, thisMixingMAT, thisZoneHB.MixingHumRat, RoutineNameInfiltration);
+            }
+        } break;
+        default:
+            AirDensity = PsyRhoAirFnPbTdbW(state, state.dataEnvrn->OutBaroPress, TempExt, HumRatExt, RoutineNameInfiltration);
+            break;
+        }
+
         Real64 CpAir = PsyCpAirFnW(HumRatExt);
 
         // Hybrid ventilation global control
@@ -5620,7 +5658,7 @@ void CalcAirFlowSimple(EnergyPlusData &state,
 
         if (thisVentilation.ModelType == DataHeatBalance::VentilationModelType::DesignFlowRate) {
             // CR6845 if calculated < 0, don't propagate.
-            VVF = thisVentilation.DesignLevel * thisVentilation.availSched->getCurrentVal();
+            Real64 VVF = thisVentilation.DesignLevel * thisVentilation.availSched->getCurrentVal(); // VENTILATION FLOW RATE (M**3/SEC)
 
             if (thisVentilation.EMSSimpleVentOn) VVF = thisVentilation.EMSimpleVentFlowRate;
 
@@ -5766,7 +5804,7 @@ void CalcAirFlowSimple(EnergyPlusData &state,
             Qw = Cw * thisVentilation.OpenArea * thisVentilation.openAreaFracSched->getCurrentVal() * WindSpeedExt;
             Qst = Cd * thisVentilation.OpenArea * thisVentilation.openAreaFracSched->getCurrentVal() *
                   std::sqrt(2.0 * 9.81 * thisVentilation.DH * std::abs(TempExt - thisMixingMAT) / (thisMixingMAT + 273.15));
-            VVF = std::sqrt(Qw * Qw + Qst * Qst);
+            Real64 VVF = std::sqrt(Qw * Qw + Qst * Qst); // VENTILATION FLOW RATE (M**3/SEC)
             if (thisVentilation.EMSSimpleVentOn) VVF = thisVentilation.EMSimpleVentFlowRate;
             if (VVF < 0.0) VVF = 0.0;
             thisVentilation.MCP = VVF * AirDensity * CpAir;
@@ -6406,7 +6444,26 @@ void CalcAirFlowSimple(EnergyPlusData &state,
             HumRatExt = state.dataEnvrn->OutHumRat;
         }
 
-        Real64 AirDensity = PsyRhoAirFnPbTdbW(state, state.dataEnvrn->OutBaroPress, TempExt, HumRatExt, RoutineNameInfiltration);
+        Real64 AirDensity = 0.0; // Density of air for converting from volume flow to mass flow (kg/m^3)
+        switch (thisInfiltration.densityBasis) {
+        case DataHeatBalance::InfVentDensityBasis::Standard: {
+            AirDensity = state.dataEnvrn->StdRhoAir;
+        } break;
+        case DataHeatBalance::InfVentDensityBasis::Indoor: {
+            if (state.dataHeatBal->doSpaceHeatBalance) {
+                auto &thisSpaceHB = state.dataZoneTempPredictorCorrector->spaceHeatBalance(thisInfiltration.spaceIndex);
+                AirDensity = Psychrometrics::PsyRhoAirFnPbTdbW(
+                    state, state.dataEnvrn->OutBaroPress, tempInt, thisSpaceHB.MixingHumRat, RoutineNameInfiltration);
+            } else {
+                AirDensity = Psychrometrics::PsyRhoAirFnPbTdbW(
+                    state, state.dataEnvrn->OutBaroPress, tempInt, thisZoneHB.MixingHumRat, RoutineNameInfiltration);
+            }
+        } break;
+        default:
+            AirDensity = PsyRhoAirFnPbTdbW(state, state.dataEnvrn->OutBaroPress, TempExt, HumRatExt, RoutineNameInfiltration);
+            break;
+        }
+
         Real64 CpAir = PsyCpAirFnW(HumRatExt);
         Real64 MCpI_temp = 0.0;
         Real64 scheduleFrac = thisInfiltration.sched->getCurrentVal();
@@ -6416,7 +6473,7 @@ void CalcAirFlowSimple(EnergyPlusData &state,
             //   CpAir = PsyCpAirFnW(MixingHumRat(NZ),MixingMAT(NZ))
             switch (thisInfiltration.ModelType) {
             case DataHeatBalance::InfiltrationModelType::DesignFlowRate: {
-                IVF = thisInfiltration.DesignLevel * scheduleFrac;
+                Real64 IVF = thisInfiltration.DesignLevel * scheduleFrac; // INFILTRATION FLOW RATE (M**3/SEC)
                 // CR6845 if calculated < 0.0, don't propagate
                 if (IVF < 0.0) IVF = 0.0;
                 MCpI_temp = IVF * AirDensity * CpAir *
@@ -6429,9 +6486,9 @@ void CalcAirFlowSimple(EnergyPlusData &state,
             case DataHeatBalance::InfiltrationModelType::ShermanGrimsrud: {
                 // Sherman Grimsrud model as formulated in ASHRAE HoF
                 WindSpeedExt = state.dataEnvrn->WindSpeed; // formulated to use wind at Meterological Station rather than local
-                IVF = scheduleFrac * thisInfiltration.LeakageArea / 1000.0 *
-                      std::sqrt(thisInfiltration.BasicStackCoefficient * std::abs(TempExt - tempInt) +
-                                thisInfiltration.BasicWindCoefficient * pow_2(WindSpeedExt));
+                Real64 IVF = scheduleFrac * thisInfiltration.LeakageArea / 1000.0 *
+                             std::sqrt(thisInfiltration.BasicStackCoefficient * std::abs(TempExt - tempInt) +
+                                       thisInfiltration.BasicWindCoefficient * pow_2(WindSpeedExt));
                 if (IVF < 0.0) IVF = 0.0;
                 MCpI_temp = IVF * AirDensity * CpAir;
                 if (MCpI_temp < 0.0) MCpI_temp = 0.0;
@@ -6439,7 +6496,7 @@ void CalcAirFlowSimple(EnergyPlusData &state,
             } break;
             case DataHeatBalance::InfiltrationModelType::AIM2: {
                 // Walker Wilson model as formulated in ASHRAE HoF
-                IVF =
+                Real64 IVF =
                     scheduleFrac * std::sqrt(pow_2(thisInfiltration.FlowCoefficient * thisInfiltration.AIM2StackCoefficient *
                                                    std::pow(std::abs(TempExt - tempInt), thisInfiltration.PressureExponent)) +
                                              pow_2(thisInfiltration.FlowCoefficient * thisInfiltration.AIM2WindCoefficient *
@@ -6474,7 +6531,7 @@ void CalcAirFlowSimple(EnergyPlusData &state,
         thisInfiltration.MassFlowRate = thisInfiltration.VolumeFlowRate * AirDensity;
 
         if (thisInfiltration.EMSOverrideOn) {
-            IVF = thisInfiltration.EMSAirFlowRateValue;
+            Real64 IVF = thisInfiltration.EMSAirFlowRateValue; // INFILTRATION FLOW RATE (M**3/SEC)
             if (IVF < 0.0) IVF = 0.0;
             MCpI_temp = IVF * AirDensity * CpAir;
             if (MCpI_temp < 0.0) MCpI_temp = 0.0;

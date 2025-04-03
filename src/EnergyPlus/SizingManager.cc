@@ -219,25 +219,6 @@ void ManageSizing(EnergyPlusData &state)
         state.dataGlobal->ZoneSizingCalc = true;
         Available = true;
 
-        if (state.dataSize->SizingFileColSep == CharComma) {
-            state.files.zsz.filePath = state.files.outputZszCsvFilePath;
-        } else if (state.dataSize->SizingFileColSep == CharTab) {
-            state.files.zsz.filePath = state.files.outputZszTabFilePath;
-        } else {
-            state.files.zsz.filePath = state.files.outputZszTxtFilePath;
-        }
-
-        if (state.dataSize->SizingFileColSep == CharComma) {
-            state.files.spsz.filePath = state.files.outputSpszCsvFilePath;
-        } else if (state.dataSize->SizingFileColSep == CharTab) {
-            state.files.spsz.filePath = state.files.outputSpszTabFilePath;
-        } else {
-            state.files.spsz.filePath = state.files.outputSpszTxtFilePath;
-        }
-
-        state.files.zsz.ensure_open(state, "ManageSizing", state.files.outputControl.zsz);
-        state.files.spsz.ensure_open(state, "ManageSizing", state.files.outputControl.spsz);
-
         ShowMessage(state, "Beginning Zone Sizing Calculations");
 
         Weather::ResetEnvironmentCounter(state);
@@ -1865,11 +1846,12 @@ void ManageSystemVentilationAdjustments(EnergyPlusData &state)
                                                                  4); // Voz-htg
                     }
                     // Outdoor Air Details Report - Design Zone Outdoor Airflow - Voz
+                    int const zoneMult = state.dataHeatBal->Zone(thisTermUnitFinalZoneSizing.ZoneNum).Multiplier *
+                                         state.dataHeatBal->Zone(thisTermUnitFinalZoneSizing.ZoneNum).ListMultiplier;
                     Real64 VozMax = std::max(VozHtg, VozClg); // take larger of the heating and cooling Voz values
                     OutputReportPredefined::PreDefTableEntry(
-                        state, state.dataOutRptPredefined->pdchOaMvDesZnOa, thisTermUnitFinalZoneSizing.ZoneName, VozMax, 4);
-                    state.dataOutRptPredefined->TotalVozMax += VozMax * state.dataHeatBal->Zone(thisTermUnitFinalZoneSizing.ZoneNum).Multiplier *
-                                                               state.dataHeatBal->Zone(thisTermUnitFinalZoneSizing.ZoneNum).ListMultiplier;
+                        state, state.dataOutRptPredefined->pdchOaMvDesZnOa, thisTermUnitFinalZoneSizing.ZoneName, VozMax / zoneMult, 4);
+                    state.dataOutRptPredefined->TotalVozMax += VozMax;
                     OutputReportPredefined::PreDefTableEntry(state,
                                                              state.dataOutRptPredefined->pdchS62zhdZpz,
                                                              thisTermUnitFinalZoneSizing.ZoneName,

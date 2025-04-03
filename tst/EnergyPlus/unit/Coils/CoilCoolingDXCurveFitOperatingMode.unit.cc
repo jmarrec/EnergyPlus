@@ -265,7 +265,7 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXCurveFitCrankcaseHeaterCurve)
     state->init_state(*state);
 
     int coilIndex = CoilCoolingDX::factory(*state, "Coil Cooling DX 1");
-    auto &thisCoil(state->dataCoilCooingDX->coilCoolingDXs[coilIndex]);
+    auto &thisCoil(state->dataCoilCoolingDX->coilCoolingDXs[coilIndex]);
     EXPECT_EQ("COIL COOLING DX 1", thisCoil.name);
     EXPECT_EQ("COIL COOLING DX CURVE FIT PERFORMANCE 1", thisCoil.performance.name);
     EXPECT_EQ("HEATERCAPCURVE", Curve::GetCurveName(*state, thisCoil.performance.crankcaseHeaterCapacityCurveIndex));
@@ -284,6 +284,6 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXCurveFitCrankcaseHeaterCurve)
     auto &condOutletNode = state->dataLoopNodes->Node(thisCoil.condOutletNodeIndex);
     Real64 LoadSHR = 0.0;
     thisCoil.performance.simulate(
-        *state, evapInletNode, evapOutletNode, coilMode, PLR, speedNum, speedRatio, fanOp, condInletNode, condOutletNode, singleMode, LoadSHR);
+        *state, evapInletNode, evapOutletNode, coilMode, speedNum, speedRatio, fanOp, condInletNode, condOutletNode, singleMode, LoadSHR);
     EXPECT_EQ(thisCoil.performance.crankcaseHeaterPower, 120.0);
 }

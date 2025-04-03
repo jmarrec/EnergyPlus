@@ -173,7 +173,7 @@
 // from the SQLite project (http://www.sqlite.org/).
 
 #ifdef _WIN32
-#include <Windows.h>
+#    include <Windows.h>
 #endif
 
 // C++ Headers
@@ -183,11 +183,11 @@
 #include <vector>
 
 #ifdef DEBUG_ARITHM_GCC_OR_CLANG
-#include <EnergyPlus/fenv_missing.h>
+#    include <EnergyPlus/fenv_missing.h>
 #endif
 
 #ifdef DEBUG_ARITHM_MSVC
-#include <cfloat>
+#    include <cfloat>
 #endif
 
 // ObjexxFCL Headers
@@ -218,10 +218,10 @@
 #include <EnergyPlus/api/EnergyPlusPgm.hh>
 
 #ifdef _WIN32
-#include <direct.h>
-#include <stdlib.h>
+#    include <direct.h>
+#    include <stdlib.h>
 #else // Mac or Linux
-#include <unistd.h>
+#    include <unistd.h>
 #endif
 
 int EnergyPlusPgm(const std::vector<std::string> &args, std::string const &filepath)
@@ -269,12 +269,12 @@ void commonInitialize(EnergyPlus::EnergyPlusData &state)
 #endif
 
 #ifdef _MSC_VER
-#ifndef _DEBUG
+#    ifndef _DEBUG
     // If _MSC_VER and not debug then prevent dialogs on error
     SetErrorMode(SEM_NOGPFAULTERRORBOX);
     _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
     _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
-#endif
+#    endif
 #endif
 
     state.dataSysVars->runtimeTimer.tick();

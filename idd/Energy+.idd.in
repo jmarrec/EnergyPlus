@@ -9457,6 +9457,7 @@ Space,
        \reference SpaceNames
        \reference SpaceAndSpaceListNames
        \reference ZoneAndZoneListAndSpaceAndSpaceListNames
+       \reference OutFaceEnvNames
   A2,  \field Zone Name
        \required-field
        \type object-list
@@ -10197,6 +10198,7 @@ BuildingSurface:Detailed,
        \key Adiabatic
        \key Surface
        \key Zone
+       \key Space
        \key Outdoors
        \key Foundation
        \key Ground
@@ -10214,7 +10216,7 @@ BuildingSurface:Detailed,
        \type object-list
        \object-list OutFaceEnvNames
        \note Non-blank only if the field Outside Boundary Condition is Surface,
-       \note Zone, OtherSideCoefficients or OtherSideConditionsModel
+       \note Zone, Space, OtherSideCoefficients or OtherSideConditionsModel
        \note If Surface, specify name of corresponding surface in adjacent zone or
        \note specify current surface name for internal partition separating like zones
        \note If Zone, specify the name of the corresponding zone and
@@ -11381,6 +11383,7 @@ Wall:Detailed,
        \key Adiabatic
        \key Surface
        \key Zone
+       \key Space
        \key Outdoors
        \key Foundation
        \key Ground
@@ -11398,7 +11401,7 @@ Wall:Detailed,
        \type object-list
        \object-list OutFaceEnvNames
        \note Non-blank only if the field Outside Boundary Condition is Surface,
-       \note Zone, OtherSideCoefficients or OtherSideConditionsModel
+       \note Zone, Space, OtherSideCoefficients or OtherSideConditionsModel
        \note If Surface, specify name of corresponding surface in adjacent zone or
        \note specify current surface name for internal partition separating like zones
        \note If Zone, specify the name of the corresponding zone and
@@ -11572,6 +11575,7 @@ RoofCeiling:Detailed,
        \key Adiabatic
        \key Surface
        \key Zone
+       \key Space
        \key Outdoors
        \key Ground
        \key OtherSideCoefficients
@@ -11587,7 +11591,7 @@ RoofCeiling:Detailed,
        \type object-list
        \object-list OutFaceEnvNames
        \note Non-blank only if the field Outside Boundary Condition is Surface,
-       \note Zone, OtherSideCoefficients or OtherSideConditionsModel
+       \note Zone, Space, OtherSideCoefficients or OtherSideConditionsModel
        \note If Surface, specify name of corresponding surface in adjacent zone or
        \note specify current surface name for internal partition separating like zones
        \note If Zone, specify the name of the corresponding zone and
@@ -11761,6 +11765,7 @@ Floor:Detailed,
        \key Adiabatic
        \key Surface
        \key Zone
+       \key Space
        \key Outdoors
        \key Foundation
        \key Ground
@@ -11778,7 +11783,7 @@ Floor:Detailed,
        \type object-list
        \object-list OutFaceEnvNames
        \note Non-blank only if the field Outside Boundary Condition is Surface,
-       \note Zone, OtherSideCoefficients or OtherSideConditionsModel
+       \note Zone, Space, OtherSideCoefficients or OtherSideConditionsModel
        \note If Surface, specify name of corresponding surface in adjacent zone or
        \note specify current surface name for internal partition separating like zones
        \note If Zone, specify the name of the corresponding zone and
@@ -23957,10 +23962,17 @@ ZoneInfiltration:DesignFlowRate,
        \note  "C" in Equation
        \type real
        \default 0
-  N8 ; \field Velocity Squared Term Coefficient
+  N8 , \field Velocity Squared Term Coefficient
        \note  "D" in Equation
        \type real
        \default 0
+  A5 ; \field Density Basis
+       \note The air density to use when converting from volume flow to mass flow.
+       \type choice
+       \key Outdoor
+       \key Standard
+       \key Indoor
+       \default Outdoor
 
 ZoneInfiltration:EffectiveLeakageArea,
        \min-fields 6
@@ -24194,13 +24206,20 @@ ZoneVentilation:DesignFlowRate,
        \object-list ScheduleNames
        \note This schedule contains the outdoor temperature versus time above which
        \note ventilation is shutoff.
-  N16; \field Maximum Wind Speed
+  N16, \field Maximum Wind Speed
        \note this is the outdoor wind speed above which ventilation is shutoff
        \units m/s
        \type real
        \minimum 0
        \maximum 40
        \default 40
+  A11; \field Density Basis
+       \note The air density to use when converting from volume flow to mass flow.
+       \type choice
+       \key Outdoor
+       \key Standard
+       \key Indoor
+       \default Outdoor
 
 ZoneVentilation:WindandStackOpenArea,
   \min-fields 8
@@ -26711,6 +26730,10 @@ AirflowNetwork:Distribution:Component:Coil,
       \key Coil:Heating:Desuperheater
       \key Coil:Heating:Electric:MultiStage
       \key Coil:Heating:Gas:MultiStage
+      \key Coil:Cooling:WaterToAirHeatPump:EquationFit
+      \key Coil:Heating:WaterToAirHeatPump:EquationFit
+      \key Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit
+      \key Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit
       \note Select the type of coil corresponding to the name entered in the field above.
  N1 , \field Air Path Length
       \required-field
@@ -35672,7 +35695,7 @@ ZoneControl:ContaminantController,
        \note million (ppm)
        \note This field is used when the field System Outdoor Air Method =
        \note ProportionalControlBasedOnOccupancySchedule or ProportionalControlBasedOnDesignOccupancy
-       \note or ProportionalControlBasedOnDesignOARate.
+       \note or ProportionalControlBasedOnDesignOARate in Controller:MechanicalVentilation
   A7 , \field Generic Contaminant Control Availability Schedule Name
        \note Availability schedule name for generic contaminant controller. Schedule value > 0 means
        \note the generic contaminant controller is enabled. If this field is blank, then generic
@@ -57720,6 +57743,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \reference CoolingCoilsWaterToAirVSHP
         \reference-class-name validBranchEquipmentTypes
         \reference validBranchEquipmentNames
+        \reference DesuperHeatingWaterOnlySources
    A2,  \field Water-to-Refrigerant HX Water Inlet Node Name
         \required-field
         \type node
@@ -60888,6 +60912,7 @@ Coil:WaterHeating:Desuperheater,
        \key Coil:Cooling:DX:VariableSpeed
        \key Coil:Cooling:DX:MultiSpeed
        \key Coil:Cooling:WaterToAirHeatPump:EquationFit
+       \key Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit
        \key Refrigeration:CompressorRack
        \key Refrigeration:Condenser:AirCooled
        \key Refrigeration:Condenser:EvaporativeCooled
@@ -107058,6 +107083,18 @@ OutputControl:ReportingTolerances,
        \default .2
        \minimum 0
        \maximum 10
+
+OutputControl:ResilienceSummaries,
+       \memo Specifies methods for resilience reporting variables
+       \unique-object
+  A1 ; \field Heat Index Algorithm
+       \note Whether the simplified or the extended method should be used for heat index
+       \note Simplified: based on regression analysis carried out by Lans P. Rothfusz
+       \note Extended: Based on paper by Lu & Romps
+       \type choice
+       \key Simplified
+       \key Extended
+       \default Simplified
 
 Output:Variable,
        \memo each Output:Variable command picks variables to be put onto the standard output file (.eso)

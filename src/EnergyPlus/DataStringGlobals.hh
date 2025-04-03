@@ -76,7 +76,7 @@ namespace DataStringGlobals {
     char constexpr pathChar('/');
     char constexpr altpathChar('\\');
 #else
-#error "Invalid platform detection in DataStringGlobals."
+#    error "Invalid platform detection in DataStringGlobals."
 #endif
     char constexpr CharComma(',');     // comma
     char constexpr CharSemicolon(';'); // semicolon

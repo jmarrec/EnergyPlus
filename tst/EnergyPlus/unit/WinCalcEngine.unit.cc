@@ -66,7 +66,7 @@
 
 using namespace EnergyPlus;
 
-TEST_F(EnergyPlusFixture, DISABLED_WCEClear)
+TEST_F(EnergyPlusFixture, WCEClear)
 {
 
     state->dataIPShortCut->lAlphaFieldBlanks = true;
@@ -128,7 +128,7 @@ TEST_F(EnergyPlusFixture, DISABLED_WCEClear)
     EXPECT_NEAR(0.074854, Rback, 1e-6);
 }
 
-TEST_F(EnergyPlusFixture, DISABLED_WCEVenetian)
+TEST_F(EnergyPlusFixture, WCEVenetian)
 {
 
     state->dataIPShortCut->lAlphaFieldBlanks = true;
@@ -224,7 +224,7 @@ TEST_F(EnergyPlusFixture, DISABLED_WCEVenetian)
     EXPECT_NEAR(0.074853, Rback, 1e-6);
 }
 
-TEST_F(EnergyPlusFixture, DISABLED_WCEShade)
+TEST_F(EnergyPlusFixture, WCEShade)
 {
 
     state->dataIPShortCut->lAlphaFieldBlanks = true;

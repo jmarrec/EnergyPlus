@@ -1788,7 +1788,7 @@
 
   Output:Variable,*,Zone Mean Air Humidity Ratio,Timestep;
 
-  Output:Variable,*,Zone Infiltration Air Change Rate,Timestep;
+  Output:Variable,*,Zone Infiltration Current Density Air Change Rate,Timestep;
 
   Output:Variable,ZONE 1,Zone Infiltration Hybrid Model Air Change Rate,Timestep;
 

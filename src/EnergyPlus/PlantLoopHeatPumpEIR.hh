@@ -412,14 +412,14 @@ namespace EIRPlantLoopHeatPumps {
         int eirAuxElecFPLRErrorIndex = 0;
 
         // Override parent methods to be declared
-        void doPhysics(EnergyPlusData &state, Real64 currentLoad);
+        void doPhysics(EnergyPlusData &state, Real64 currentLoad) override;
         void sizeSrcSideASHP(EnergyPlusData &state); // 2022-05-18: may not need this one
-        void resetReportingVariables();
+        void resetReportingVariables() override;
         static PlantComponent *factory(EnergyPlusData &state, DataPlant::PlantEquipmentType hp_type, const std::string &hp_name);
         static void pairUpCompanionCoils(EnergyPlusData &state);
         static void processInputForEIRPLHP(EnergyPlusData &state);
-        void oneTimeInit(EnergyPlusData &state);
-        void report(EnergyPlusData &state);
+        void oneTimeInit(EnergyPlusData &state) override;
+        void report(EnergyPlusData &state) override;
         Real64 getDynamicMaxCapacity(EnergyPlusData &state) override;
 
         // New or specialized functions for derived struct

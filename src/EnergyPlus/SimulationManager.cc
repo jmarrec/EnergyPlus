@@ -1013,6 +1013,27 @@ namespace SimulationManager {
             }
         }
 
+        state.dataHeatBalMgr->CurrentModuleObject = "OutputControl:ResilienceSummaries";
+        Num = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, state.dataHeatBalMgr->CurrentModuleObject);
+        if (Num > 0) {
+            state.dataInputProcessing->inputProcessor->getObjectItem(state,
+                                                                     state.dataHeatBalMgr->CurrentModuleObject,
+                                                                     1,
+                                                                     Alphas,
+                                                                     NumAlpha,
+                                                                     Number,
+                                                                     NumNumber,
+                                                                     IOStat,
+                                                                     state.dataIPShortCut->lNumericFieldBlanks,
+                                                                     state.dataIPShortCut->lAlphaFieldBlanks,
+                                                                     state.dataIPShortCut->cAlphaFieldNames,
+                                                                     state.dataIPShortCut->cNumericFieldNames);
+            if (NumAlpha > 0) {
+                state.dataHeatBal->heatIndexMethod =
+                    static_cast<DataHeatBalance::HeatIndexMethod>(getEnumValue(DataHeatBalance::HeatIndexMethodUC, Util::makeUPPER(Alphas(1))));
+            }
+        }
+
         state.dataGlobal->DoZoneSizing = false;
         state.dataGlobal->DoSystemSizing = false;
         state.dataGlobal->DoPlantSizing = false;

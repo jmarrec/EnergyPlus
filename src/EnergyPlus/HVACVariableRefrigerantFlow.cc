@@ -1192,10 +1192,9 @@ void CalcVRFCondenser(EnergyPlusData &state, int const VRFCond)
 
         vrf.ElecHeatingPower =
             (vrf.RatedHeatingPower * TotHeatCapTempModFac) * TotHeatEIRTempModFac * EIRFPLRModFac * HREIRAdjustment * VRFRTF * InputPowerMultiplier;
-
-        // adjust defrost power based on heating RTF
-        vrf.DefrostPower *= VRFRTF;
     }
+    // adjust defrost power based on RTF
+    vrf.DefrostPower *= VRFRTF;
     vrf.VRFCondRTF = VRFRTF;
 
     // calculate crankcase heater power
@@ -4354,21 +4353,11 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                             vrfTU.NumOfSpeedCooling = fanSystem->numSpeeds;
                             vrfTU.CoolVolumeFlowRate.resize(fanSystem->numSpeeds + 1);
                             vrfTU.CoolMassFlowRate.resize(fanSystem->numSpeeds + 1);
-                            if (vrfTU.MaxCoolAirVolFlow != DataSizing::AutoSize) {
-                                for (int i = 1; i <= vrfTU.NumOfSpeedCooling; ++i) {
-                                    vrfTU.CoolMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
-                                }
-                            }
                         }
                         if (vrfTU.DXHeatCoilType_Num == HVAC::CoilVRF_Heating) {
                             vrfTU.NumOfSpeedHeating = fanSystem->numSpeeds;
                             vrfTU.HeatVolumeFlowRate.resize(fanSystem->numSpeeds + 1);
                             vrfTU.HeatMassFlowRate.resize(fanSystem->numSpeeds + 1);
-                            if (vrfTU.MaxHeatAirVolFlow != DataSizing::AutoSize) {
-                                for (int i = 1; i <= vrfTU.NumOfSpeedCooling; ++i) {
-                                    vrfTU.HeatMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
-                                }
-                            }
                         }
                         ShowWarningError(state,
                                          cCurrentModuleObject + " = " + thisVrfTU.Name + " with Fan:SystemModel is used in  " + cAlphaArgs(8) + "\"");
@@ -6377,8 +6366,32 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
     // one-time checks of flow rate vs fan flow rate
     if (state.dataHVACVarRefFlow->MyVRFFlag(VRFTUNum)) {
         if (!state.dataGlobal->ZoneSizingCalc && !state.dataGlobal->SysSizingCalc) {
-            if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).fanPlace != HVAC::FanPlace::Invalid) { // was > 0 (is 0 invalid?)
-                if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).ActualFanVolFlowRate != AutoSize) {
+            auto &vrfTU = state.dataHVACVarRefFlow->VRFTU(VRFTUNum);
+            if (vrfTU.fanPlace != HVAC::FanPlace::Invalid) { // was > 0 (is 0 invalid?)
+                if (vrfTU.ActualFanVolFlowRate != AutoSize) {
+
+                    if (vrfTU.fanType == HVAC::FanType::SystemModel) {
+                        auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(vrfTU.FanIndex));
+                        if (fanSystem->speedControl == Fans::SpeedControl::Discrete &&
+                            state.dataHVACVarRefFlow->VRFTU(VRFTUNum).DesignSpecMSHPIndex < 0) {
+                            if (fanSystem->numSpeeds > 1) {
+                                if (vrfTU.DXCoolCoilType_Num == HVAC::CoilVRF_Cooling) {
+                                    if (vrfTU.MaxCoolAirVolFlow != DataSizing::AutoSize) {
+                                        for (int i = 1; i <= vrfTU.NumOfSpeedCooling; ++i) {
+                                            vrfTU.CoolMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
+                                        }
+                                    }
+                                }
+                                if (vrfTU.DXHeatCoilType_Num == HVAC::CoilVRF_Heating) {
+                                    if (vrfTU.MaxHeatAirVolFlow != DataSizing::AutoSize) {
+                                        for (int i = 1; i <= vrfTU.NumOfSpeedCooling; ++i) {
+                                            vrfTU.HeatMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
 
                     if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).MaxCoolAirVolFlow >
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).ActualFanVolFlowRate) {
@@ -7301,11 +7314,10 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
     SetAverageAirFlow(state, VRFTUNum, 0.0, OnOffAirFlowRatio);
 
     if (ErrorsFound) {
-        ShowFatalError(
-            state,
-            format(
-                "{}: Errors found in getting ZoneHVAC:TerminalUnit:VariableRefrigerantFlow system input. Preceding condition(s) causes termination.",
-                RoutineName));
+        ShowFatalError(state,
+                       format("{}: Errors found in getting ZoneHVAC:TerminalUnit:VariableRefrigerantFlow system input. Preceding condition(s) "
+                              "causes termination.",
+                              RoutineName));
     }
 }
 
@@ -7678,7 +7690,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                 } else {
                     auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(state.dataHVACVarRefFlow->VRFTU(VRFTUNum).FanIndex));
                     assert(fanSystem != nullptr);
-                    if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolMassFlowRate[i] == 0.0) {
+                    if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolMassFlowRate[i] == 0.0 && !fanSystem->massFlowAtSpeed.empty()) {
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolVolumeFlowRate[i] =
                             state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
@@ -7764,7 +7776,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                 } else {
                     auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(state.dataHVACVarRefFlow->VRFTU(VRFTUNum).FanIndex));
                     assert(fanSystem != nullptr);
-                    if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatMassFlowRate[i] == 0.0) {
+                    if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatMassFlowRate[i] == 0.0 && !fanSystem->massFlowAtSpeed.empty()) {
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatVolumeFlowRate[i] =
                             state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
@@ -7928,7 +7940,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                 } else {
                     auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(state.dataHVACVarRefFlow->VRFTU(VRFTUNum).FanIndex));
                     assert(fanSystem != nullptr);
-                    if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolMassFlowRate[i] == 0.0) {
+                    if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolMassFlowRate[i] == 0.0 && !fanSystem->massFlowAtSpeed.empty()) {
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolVolumeFlowRate[i] =
                             state.dataHVACVarRefFlow->VRFTU(VRFTUNum).CoolMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
@@ -7966,7 +7978,7 @@ void SizeVRF(EnergyPlusData &state, int const VRFTUNum)
                 } else {
                     auto *fanSystem = dynamic_cast<Fans::FanSystem *>(state.dataFans->fans(state.dataHVACVarRefFlow->VRFTU(VRFTUNum).FanIndex));
                     assert(fanSystem != nullptr);
-                    if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatMassFlowRate[i] == 0.0) {
+                    if (state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatMassFlowRate[i] == 0.0 && !fanSystem->massFlowAtSpeed.empty()) {
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatMassFlowRate[i] = fanSystem->massFlowAtSpeed[i - 1];
                         state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatVolumeFlowRate[i] =
                             state.dataHVACVarRefFlow->VRFTU(VRFTUNum).HeatMassFlowRate[i] / state.dataEnvrn->StdRhoAir;
@@ -11506,7 +11518,8 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
         Tdischarge = this->refrig->getSatTemperature(state, max(min(Pdischarge, RefPHigh), RefPLow), RoutineName);
 
         // Evaporative capacity ranges_Min
-        CapMinPe = min(Pdischarge - this->CompMaxDeltaP, RefMinPe);
+        // suction pressure lower bound need to be no less than both terms in the following
+        CapMinPe = max(Pdischarge - this->CompMaxDeltaP, RefMinPe);
         CapMinTe = this->refrig->getSatTemperature(state, max(min(CapMinPe, RefPHigh), RefPLow), RoutineName);
         CompEvaporatingCAPSpdMin = this->CoffEvapCap * this->RatedEvapCapacity * CurveValue(state, this->OUCoolingCAPFT(1), Tdischarge, CapMinTe);
         CompEvaporatingPWRSpdMin = this->RatedCompPower * CurveValue(state, this->OUCoolingPWRFT(1), Tdischarge, CapMinTe);
@@ -11578,8 +11591,7 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
                                   Tdischarge,
                                   h_IU_cond_out_ave,
                                   this->IUCondensingTemp,
-                                  // Te can't be smaller than user input lower bound
-                                  max(this->IUEvapTempLow, CapMinTe),
+                                  CapMinTe,
                                   Tfs,
                                   Pipe_Q_h,
                                   Q_c_OU,
@@ -11611,7 +11623,6 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
         }
 
         // Key outputs of this subroutine
-        Ncomp *= CyclingRatio;
         Q_c_OU *= CyclingRatio;
         this->CompActSpeed = max(CompSpdActual, 0.0);
         this->Ncomp = max(Ncomp, 0.0) / this->EffCompInverter;
@@ -12151,6 +12162,7 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
         this->ElecHeatingPower = 0;
     }
     this->VRFCondRTF = VRFRTF;
+    this->DefrostPower *= VRFRTF;
 
     // Calculate CrankCaseHeaterPower: VRF Heat Pump Crankcase Heater Electric Power [W]
     if (this->MaxOATCCHeater > OutdoorDryBulb) {
@@ -13953,10 +13965,35 @@ void VRFCondenserEquipment::VRFOU_CalcCompC(EnergyPlusData &state,
                     ShowContinueErrorTimeStamp(state, "");
                     ShowContinueError(state, format("  Iteration limit [{}] exceeded in calculating OU evaporating temperature", MaxIter));
                 } else if (SolFla == -2) {
-                    // demand < capacity at both endpoints of the Te range, assuming f(x) is roughly monotonic than this is the low load case
-                    assert(f(T_suction) < 0);
-                    // TeTol is added to prevent the final updated Te to go out of bounds
-                    SmallLoadTe = 6 + TeTol; // MinOutdoorUnitTe; //SmallLoadTe( Te'_new ) is constant during iterations
+                    this->LowLoadTeError++;
+                    if (LowLoadTeError < 5) {
+                        ShowWarningMessage(state,
+                                           format("{}: no Te solution was found for {} f({})={} and f({})={} are the same sign",
+                                                  RoutineName,
+                                                  this->Name,
+                                                  MinOutdoorUnitTe,
+                                                  f(MinOutdoorUnitTe),
+                                                  T_suction,
+                                                  f(T_suction)));
+                        ShowContinueErrorTimeStamp(state, "");
+                    }
+                    ShowRecurringWarningErrorAtEnd(state,
+                                                   "Low load calculation Te solution not found as end points have the same sign",
+                                                   this->LowLoadTeErrorIndex,
+                                                   SolFla,
+                                                   SolFla);
+                    if (f(T_suction) < 0) {
+                        // demand < capacity at both endpoints of the Te range, assuming f(x) is roughly monotonic than this is the low load case
+                        // TeTol is added to prevent the final updated Te to go out of bounds
+                        SmallLoadTe = MinOutdoorUnitTe + TeTol; // MinOutdoorUnitTe; //SmallLoadTe( Te'_new ) is constant during iterations
+                    } else {
+                        // demand > capacity at both endpoints of the Te range, take the end point x where f(x) is closer to zero
+                        if (f(MinOutdoorUnitTe) > f(T_suction)) { // f(T_suction > 0, not equal as SolFla will not be -2
+                            SmallLoadTe = T_suction;
+                        } else {
+                            SmallLoadTe = MinOutdoorUnitTe;
+                        }
+                    }
                 }
 
                 // Get an updated Te corresponding to the updated Te'
@@ -14003,10 +14040,14 @@ void VRFCondenserEquipment::VRFOU_CalcCompC(EnergyPlusData &state,
                                 state, max(RefTSat, Pipe_Te_assumed + Modifi_SHin), max(min(Pipe_Pe_assumed, RefPHigh), RefPLow), RoutineName);
 
                             if (Pipe_h_IU_out_i > Pipe_h_IU_in) {
+                                Real64 min_speed_capacity =
+                                    this->CoffEvapCap * this->RatedEvapCapacity * CurveValue(state, this->OUCoolingCAPFT(1), T_discharge, T_suction);
                                 Pipe_m_ref_i = (state.dataHVACVarRefFlow->TerminalUnitList(TUListNum).TotalCoolLoad(NumTU) <= 0.0)
                                                    ? 0.0
-                                                   : (state.dataHVACVarRefFlow->TerminalUnitList(TUListNum).TotalCoolLoad(NumTU) /
-                                                      (Pipe_h_IU_out_i - Pipe_h_IU_in));
+                                                   // refrigerant flow rate do not get smaller when the compressor needs to cycle.
+                                                   : max(min_speed_capacity,
+                                                         (state.dataHVACVarRefFlow->TerminalUnitList(TUListNum).TotalCoolLoad(NumTU)) /
+                                                             (Pipe_h_IU_out_i - Pipe_h_IU_in));
                                 Pipe_m_ref = Pipe_m_ref + Pipe_m_ref_i;
                                 Pipe_SH_merged = Pipe_SH_merged + Pipe_m_ref_i * Modifi_SHin;
                                 Pipe_h_IU_out = Pipe_h_IU_out + Pipe_m_ref_i * Pipe_h_IU_out_i;
@@ -14299,7 +14340,7 @@ void VRFCondenserEquipment::VRFOU_CalcCompH(
                     CyclingRatio = 1.0;
                 }
 
-                Ncomp = this->RatedCompPower * CurveValue(state, this->OUCoolingPWRFT(CounterCompSpdTemp), T_discharge, T_suction);
+                Ncomp = this->RatedCompPower * CurveValue(state, this->OUCoolingPWRFT(CounterCompSpdTemp), T_discharge, T_suction) * CyclingRatio;
                 // Cap_Eva1 is the updated compressor min speed capacity
                 OUEvapHeatExtract = Cap_Eva1;
                 this->EvaporatingTemp = T_suction;
@@ -14890,6 +14931,20 @@ void VRFCondenserEquipment::VRFOU_PipeLossC(
                          (1 / Pipe_Coe_k1 + 1 / Pipe_Coe_k2 + 1 / Pipe_Coe_k3));
 
         Pipe_h_comp_in = Pipe_h_IU_out + Pipe_Q / Pipe_m_ref;
+        // when Pipe_m_ref is close to 0, there will still be Pipe_Q, Pipe_Q / Pipe_m_ref will blow up
+        // At low flow rate (stationary flow)
+        // Pipe_h_comp_in = Pipe_h_IU_out + Cp * deltaT
+        // where deltaT is the refrigerant temperature change over time t,
+        // deltaT = Pipe_Q * t / (refrigerant_mass_in_pipe * Cp)
+        // so Pipe_h_comp_in = Pipe_h_IU_out + Cp * Pipe_Q / refrigerant_mass_in_pipe
+        // assume 0.001 is the cutoff Re for stationary flow
+        if (Pipe_Num_Re < 0.001) { // low flow rate calculation
+            Pipe_h_comp_in =
+                Pipe_h_IU_out + Pipe_Q * state.dataHVACGlobal->TimeStepSysSec /
+                                    ((Constant::Pi * std::pow(this->RefPipDiaSuc / 2, 2) * this->RefPipLen *
+                                      this->refrig->getSupHeatDensity(
+                                          state, this->EvaporatingTemp + Pipe_SH_merged, max(min(Pevap, RefPHigh), RefPLow), RoutineName)));
+        }
 
     } else {
         Pipe_DeltP = 0;

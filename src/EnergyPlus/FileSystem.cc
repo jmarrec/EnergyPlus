@@ -56,14 +56,14 @@
 #include <type_traits>
 
 #ifdef _WIN32
-#include <Shlwapi.h>
-#include <windows.h>
+#    include <Shlwapi.h>
+#    include <windows.h>
 #else
-#include <unistd.h>
+#    include <unistd.h>
 #endif
 
 #ifdef __APPLE__
-#include <mach-o/dyld.h>
+#    include <mach-o/dyld.h>
 #endif
 
 // EnergyPlus Headers

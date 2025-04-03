@@ -1234,10 +1234,10 @@ TEST_F(EnergyPlusFixture, Furnaces_SetMinOATCompressor)
     state->dataHVACAssistedCC->HXAssistedCoil(1).CoolingCoilType = "COIL:COOLING:DX";
     state->dataHVACAssistedCC->HXAssistedCoil(1).CoolingCoilName = "Dummy_Name";
 
-    state->dataCoilCooingDX->coilCoolingDXGetInputFlag = false;
+    state->dataCoilCoolingDX->coilCoolingDXGetInputFlag = false;
     CoilCoolingDX thisCoil;
     thisCoil.name = "Dummy_Name";
-    state->dataCoilCooingDX->coilCoolingDXs.push_back(thisCoil);
+    state->dataCoilCoolingDX->coilCoolingDXs.push_back(thisCoil);
 
     int FurnaceNum = 1;
     std::string cCurModObj = "Furnace_Test";

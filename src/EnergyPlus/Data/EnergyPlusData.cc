@@ -78,7 +78,7 @@ EnergyPlusData::EnergyPlusData()
     this->dataChillerIndirectAbsorption = std::make_unique<ChillerIndirectAbsoprtionData>();
     this->dataChillerReformulatedEIR = std::make_unique<ChillerReformulatedEIRData>();
     this->dataChillerElectricASHRAE205 = std::make_unique<ChillerElectricASHRAE205Data>();
-    this->dataCoilCooingDX = std::make_unique<CoilCoolingDXData>();
+    this->dataCoilCoolingDX = std::make_unique<CoilCoolingDXData>();
     this->dataCondenserLoopTowers = std::make_unique<CondenserLoopTowersData>();
     this->dataConstruction = std::make_unique<ConstructionData>();
     this->dataContaminantBalance = std::make_unique<ContaminantBalanceData>();
@@ -310,6 +310,7 @@ void EnergyPlusData::clear_state()
 {
     this->ready = true;
     this->init_state_called = false;
+    this->init_constant_state_called = false;
     this->dataAirLoop->clear_state();
     this->dataAirLoopHVACDOAS->clear_state();
     this->dataAirSystemsData->clear_state();
@@ -334,7 +335,7 @@ void EnergyPlusData::clear_state()
     this->dataChillerIndirectAbsorption->clear_state();
     this->dataChillerReformulatedEIR->clear_state();
     this->dataChillerElectricASHRAE205->clear_state();
-    this->dataCoilCooingDX->clear_state();
+    this->dataCoilCoolingDX->clear_state();
     this->dataCondenserLoopTowers->clear_state();
     this->dataConstruction->clear_state();
     this->dataContaminantBalance->clear_state();
@@ -609,7 +610,7 @@ void EnergyPlusData::init_constant_state(EnergyPlusData &state)
     this->dataChillerIndirectAbsorption->init_constant_state(state);
     this->dataChillerReformulatedEIR->init_constant_state(state);
     this->dataChillerElectricASHRAE205->init_constant_state(state);
-    this->dataCoilCooingDX->init_constant_state(state);
+    this->dataCoilCoolingDX->init_constant_state(state);
     this->dataCondenserLoopTowers->init_constant_state(state);
     this->dataConstruction->init_constant_state(state);
     this->dataContaminantBalance->init_constant_state(state);
@@ -872,7 +873,7 @@ void EnergyPlusData::init_state(EnergyPlusData &state)
     this->dataChillerIndirectAbsorption->init_state(state);
     this->dataChillerReformulatedEIR->init_state(state);
     this->dataChillerElectricASHRAE205->init_state(state);
-    this->dataCoilCooingDX->init_state(state);
+    this->dataCoilCoolingDX->init_state(state);
     this->dataCondenserLoopTowers->init_state(state);
     this->dataConstruction->init_state(state);
     this->dataContaminantBalance->init_state(state);

@@ -687,12 +687,12 @@ namespace DElightManagerF {
                   iWndoConstIndexes(iconst) + 10000,
                   state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransDiffVis,
                   state.dataConstruction->Construct(iWndoConstIndexes(iconst)).ReflectVisDiffBack,
-                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef(1),
-                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef(2),
-                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef(3),
-                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef(4),
-                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef(5),
-                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef(6));
+                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef[0],
+                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef[1],
+                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef[2],
+                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef[3],
+                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef[4],
+                  state.dataConstruction->Construct(iWndoConstIndexes(iconst)).TransVisBeamCoef[5]);
 
         } // Glass Type loop
 

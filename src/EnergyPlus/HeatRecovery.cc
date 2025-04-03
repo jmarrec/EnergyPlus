@@ -1480,8 +1480,8 @@ namespace HeatRecovery {
                     state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataVariableSpeedCoils->VarSpeedCoil(CompanionCoilIndex).OutletAirHumRat;
                 } else if (CompanionCoilType_Num == HVAC::CoilDX_Cooling) {
                     // Use the new coil option:
-                    state.dataHeatRecovery->FullLoadOutAirTemp = state.dataCoilCooingDX->coilCoolingDXs[CompanionCoilIndex].outletAirDryBulbTemp;
-                    state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataCoilCooingDX->coilCoolingDXs[CompanionCoilIndex].outletAirHumRat;
+                    state.dataHeatRecovery->FullLoadOutAirTemp = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].outletAirDryBulbTemp;
+                    state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].outletAirHumRat;
                 } else {
                     //
                 }
@@ -2609,7 +2609,7 @@ namespace HeatRecovery {
 
             } else if (CompanionCoilType > 0 && CompanionCoilIndex > -1) {
                 if (CompanionCoilType == HVAC::CoilDX_Cooling) {
-                    HXPartLoadRatio = state.dataCoilCooingDX->coilCoolingDXs[CompanionCoilIndex].partLoadRatioReport;
+                    HXPartLoadRatio = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].partLoadRatioReport;
                 } else if (CompanionCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) {
                     HXPartLoadRatio = state.dataVariableSpeedCoils->VarSpeedCoil(CompanionCoilIndex).PartLoadRatio;
                 } else {

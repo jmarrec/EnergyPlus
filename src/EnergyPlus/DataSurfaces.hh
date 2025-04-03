@@ -83,9 +83,6 @@ namespace DataSurfaces {
     using DataBSDFWindow::BSDFWindowDescript;
     using DataVectorTypes::Vector;
 
-    // MODULE PARAMETER DEFINITIONS:
-    constexpr int MaxPolyCoeff(6);
-
     // Not sure this is the right module for this stuff, may move it later
     enum class Compass4
     {

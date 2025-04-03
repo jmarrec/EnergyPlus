@@ -958,7 +958,7 @@ void GetDemandManagerInput(EnergyPlusData &state)
                 ShowSevereError(state, format("Invalid input for {} = {}", CurrentModuleObject, AlphArray(1)));
                 ShowContinueError(
                     state,
-                    format("{} [{:.R2}] > {} [{.R2}]", s_ipsc->cNumericFieldNames(2), NumArray(2), s_ipsc->cNumericFieldNames(3), NumArray(3)));
+                    format("{} [{:.2R}] > {} [{:.2R}]", s_ipsc->cNumericFieldNames(2), NumArray(2), s_ipsc->cNumericFieldNames(3), NumArray(3)));
                 ShowContinueError(state, format("{} cannot be greater than {}", s_ipsc->cNumericFieldNames(2), s_ipsc->cNumericFieldNames(3)));
                 ErrorsFound = true;
             }
