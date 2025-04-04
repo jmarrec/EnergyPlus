@@ -92,6 +92,7 @@ namespace DataPlant {
         false, //	"DistrictHeating:Water" (steam is at the end)
         false, //	"ThermalStorage:Ice:Detailed"
         false, //	"ThermalStorage:Ice:Simple"
+        false, //   "ThermalStorage:PCM"
         false, //	"TemperingValve"
         false, //	"WaterHeater:Mixed"
         false, //	"WaterHeater:Stratified"
