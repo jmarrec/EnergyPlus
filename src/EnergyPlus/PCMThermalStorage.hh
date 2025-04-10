@@ -18,12 +18,13 @@ namespace PCMStorage {
         // Inputs
         std::string Name;
         std::string AvailabilityScheduleName;
-        Real64 TankCapacity = 0.0; // kg
-        Real64 HeatLossRate = 0.0; // W
-        Real64 MeltingTemp = 0.0;  // C
-        Real64 FreezingTemp = 0.0; // C
-        Real64 LatentHeat = 0.0;   // J/kg
-        Real64 SpecificHeat = 0.0; // J/kg-C
+        Real64 TankCapacity = 0.0;  // kg
+        Real64 HeatLossRate = 0.0;  // W
+        Real64 MeltingTemp = 0.0;   // C
+        Real64 FreezingTemp = 0.0;  // C
+        Real64 LatentHeat = 0.0;    // J/kg
+        Real64 SpecificHeat = 0.0;  // J/kg-C
+        Real64 Effectiveness = 0.9; // Will probably change it later as an input
 
         EnergyPlus::PlantLocation plantLoc;
         // Node numbers
@@ -52,11 +53,11 @@ namespace PCMStorage {
         static PlantComponent *factory(EnergyPlusData &state, std::string const &objectName);
 
         // Required overrides from PlantComponent
-        void simulate(EnergyPlusData &state, const PlantLocation &calledFromLocation, bool FirstHVACIteration, Real64 &CurLoad, bool RunFlag) override;
+        void
+        simulate(EnergyPlusData &state, const PlantLocation &calledFromLocation, bool FirstHVACIteration, Real64 &CurLoad, bool RunFlag) override;
 
         void oneTimeInit(EnergyPlusData &state) override;
-        
-   };
+    };
 
     void SimulatePCMStorage(EnergyPlusData &state, PlantLocation const &plantLoc, bool FirstHVACIteration, Real64 &CurLoad, bool RunFlag);
 

@@ -1,21 +1,21 @@
 // PCM Thermal Storage Module - PCMThermalStorage.cc
 
 #include "PCMThermalStorage.hh"
+#include <EnergyPlus/BranchNodeConnections.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataGlobals.hh>
-#include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
+#include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
+#include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantComponent.hh>
 #include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
-#include <EnergyPlus/DataIPShortCuts.hh>
-#include <EnergyPlus/BranchNodeConnections.hh>
 
 namespace EnergyPlus {
 namespace PCMStorage {
@@ -45,7 +45,7 @@ namespace PCMStorage {
             PCM.Init(state);
         }
 
-       PCM.Calculate(state, plantLoc);
+        PCM.Calculate(state, plantLoc);
     }
 
     void
@@ -65,8 +65,7 @@ namespace PCMStorage {
         if (this->MyPlantScanFlag) {
             bool errFlag = false;
 
-            PlantUtilities::ScanPlantLoopsForObject(
-                state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->plantLoc, errFlag, _, _, _, _, _);
+            PlantUtilities::ScanPlantLoopsForObject(state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->plantLoc, errFlag, _, _, _, _, _);
 
             if (errFlag) {
                 ShowFatalError(state, "PCMStorageData::Init: Error scanning plant loops for PCM tank named: " + this->Name);
@@ -100,7 +99,7 @@ namespace PCMStorage {
             // Reset state
             this->EnergyStored = 0.0;
             this->PercentCapacity = 100.0;
-            
+
             this->MyEnvrnFlag = false;
         }
 
@@ -114,7 +113,6 @@ namespace PCMStorage {
             ShowFatalError(state, "PCMStorageData::Init: Invalid schedule name: " + this->AvailabilityScheduleName);
         }
     }
-
 
     void PCMStorageData::Calculate(EnergyPlusData &state, PlantLocation const &)
     {
@@ -134,17 +132,23 @@ namespace PCMStorage {
         Real64 CpWater = 4180.0; // J/kg-C
         Real64 massFlowUse = useInlet.MassFlowRate;
         Real64 massFlowPlant = plantInlet.MassFlowRate;
-        Real64 deltaTUse = useInlet.Temp - useOutlet.Temp; // Heat to Water Heater
-        Real64 deltaTPlant = plantInlet.Temp - plantOutlet.Temp; // Heat to PCM Tank
 
-        Real64 useheatTransfer = massFlowUse * CpWater * deltaTUse; //Heat to Water Heater
+        Real64 plantOutletTemp = plantInlet.Temp - (Effectiveness * (plantInlet.Temp - FreezingTemp)); // Calculate Plant Outlet Temperature
+        Real64 useOutletTemp = useInlet.Temp + (Effectiveness * (MeltingTemp - useInlet.Temp));        // Calculate Use Outlet Temperature
+
+        Real64 deltaTUse = useInlet.Temp - useOutletTemp;       // Heat to Water Heater
+        Real64 deltaTPlant = plantInlet.Temp - plantOutletTemp; // Heat to PCM Tank
+
+        Real64 useheatTransfer = massFlowUse * CpWater * deltaTUse;       // Heat to Water Heater
         Real64 plantheatTransfer = massFlowPlant * CpWater * deltaTPlant; // Heat to PCM Tank
         HeatLossRate_W = HeatLossRate;
 
-        if (useheatTransfer < 0.0 && useInlet.Temp < FreezingTemp) {
+        if (useheatTransfer < 0.0) {
             EnergyStored += useheatTransfer - HeatLossRate_W;
-        } else if (plantheatTransfer > 0.0 && plantInlet.Temp > FreezingTemp) {
+            useOutlet.Temp = useOutletTemp;
+        } else if (plantheatTransfer > 0.0) {
             EnergyStored += plantheatTransfer - HeatLossRate_W;
+            plantOutlet.Temp = plantOutletTemp;
         } else {
             EnergyStored -= HeatLossRate_W;
         }
@@ -170,11 +174,21 @@ namespace PCMStorage {
         SetupOutputVariable(
             state, "Thermal Energy Storage Energy Stored", Units::W, PCM.EnergyStored, TimeStepType::System, StoreType::Average, PCM.Name);
 
-        SetupOutputVariable(
-            state, "Thermal Energy Storage Use Side Heat Transfer Rate", Units::W, PCM.useheatTransfer, TimeStepType::System, StoreType::Average, PCM.Name);
-        
-        SetupOutputVariable(
-        state, "Thermal Energy Storage Plant Side Heat Transfer Rate", Units::W, PCM.plantheatTransfer, TimeStepType::System, StoreType::Average, PCM.Name);
+        SetupOutputVariable(state,
+                            "Thermal Energy Storage Use Side Heat Transfer Rate",
+                            Units::W,
+                            PCM.useheatTransfer,
+                            TimeStepType::System,
+                            StoreType::Average,
+                            PCM.Name);
+
+        SetupOutputVariable(state,
+                            "Thermal Energy Storage Plant Side Heat Transfer Rate",
+                            Units::W,
+                            PCM.plantheatTransfer,
+                            TimeStepType::System,
+                            StoreType::Average,
+                            PCM.Name);
 
         SetupOutputVariable(
             state, "Thermal Energy Storage Latent Heat Capacity", Units::J, PCM.EnergyStored, TimeStepType::System, StoreType::Sum, PCM.Name);
@@ -278,16 +292,15 @@ namespace PCMStorage {
         PCM.LatentHeat = state.dataIPShortCut->rNumericArgs(5);
         PCM.SpecificHeat = state.dataIPShortCut->rNumericArgs(6);
 
-        PCM.PlantSideInletNode =
-            NodeInputManager::GetOnlySingleNode(state,
-                                                state.dataIPShortCut->cAlphaArgs(3),
-                                                ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::ThermalStoragePCM,
-                                                PCM.Name,
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
+        PCM.PlantSideInletNode = NodeInputManager::GetOnlySingleNode(state,
+                                                                     state.dataIPShortCut->cAlphaArgs(3),
+                                                                     ErrorsFound,
+                                                                     DataLoopNode::ConnectionObjectType::ThermalStoragePCM,
+                                                                     PCM.Name,
+                                                                     DataLoopNode::NodeFluidType::Water,
+                                                                     DataLoopNode::ConnectionType::Inlet,
+                                                                     NodeInputManager::CompFluidStream::Primary,
+                                                                     DataLoopNode::ObjectIsNotParent);
 
         PCM.PlantSideOutletNode = NodeInputManager::GetOnlySingleNode(state,
                                                                       state.dataIPShortCut->cAlphaArgs(4),
