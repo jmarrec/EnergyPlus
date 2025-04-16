@@ -230,6 +230,9 @@ namespace PCMStorage {
         } else {
             EnergyStored -= HeatLossRate_W;
         }
+
+        EnergyStored = max(0.0, min(EnergyStored, TankCapacity * LatentHeat));
+        PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
     }
 
     void RegisterPCMStorageOutputVariables(EnergyPlusData &state)
