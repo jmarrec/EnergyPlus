@@ -57,6 +57,7 @@
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
+#include <EnergyPlus/PhaseChangeModeling/HysteresisModel.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantComponent.hh>
@@ -190,18 +191,45 @@ namespace PCMStorage {
         Real64 plantheatTransfer = massFlowPlant * CpWater * deltaTPlant; // Heat to PCM Tank
         HeatLossRate_W = HeatLossRate;
 
-        if (useheatTransfer < 0.0) {
+        // Calculate tank temperature from stored energy
+        if (this->PCMmat) {
+            Real64 targetEnthalpy = EnergyStored / TankCapacity;
+            Real64 Tlow = this->PCMmat->peakTempMelting - 30.0;
+            Real64 Thigh = this->PCMmat->peakTempMelting + 30.0;
+            Real64 approxTemp = this->PCMmat->peakTempMelting;
+
+            for (int i = 0; i < 25; ++i) {
+                Real64 Tmid = 0.5 * (Tlow + Thigh);
+                Real64 hMid = this->PCMmat->getEnthalpy(
+                    Tmid, this->PCMmat->peakTempMelting, this->PCMmat->deltaTempMeltingLow, this->PCMmat->deltaTempMeltingHigh);
+                if (std::abs(hMid - targetEnthalpy) < 0.1) {
+                    approxTemp = Tmid;
+                    break;
+                }
+                if (hMid > targetEnthalpy) {
+                    Thigh = Tmid;
+                } else {
+                    Tlow = Tmid;
+                }
+            }
+
+            this->PCM_TankTemp = approxTemp;
+        }
+
+        // Use PCM_TankTemp to determine operation mode
+        bool charging = plantheatTransfer > 0.0 && PCM_TankTemp < MeltingTemp;
+        bool discharging = useheatTransfer < 0.0 && PCM_TankTemp > FreezingTemp;
+
+        // Apply operation mode
+        if (discharging) {
             EnergyStored += useheatTransfer - HeatLossRate_W;
             useOutlet.Temp = useOutletTemp;
-        } else if (plantheatTransfer > 0.0) {
+        } else if (charging) {
             EnergyStored += plantheatTransfer - HeatLossRate_W;
             plantOutlet.Temp = plantOutletTemp;
         } else {
             EnergyStored -= HeatLossRate_W;
         }
-
-        EnergyStored = max(0.0, min(EnergyStored, TankCapacity * LatentHeat));
-        PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
     }
 
     void RegisterPCMStorageOutputVariables(EnergyPlusData &state)
@@ -220,6 +248,9 @@ namespace PCMStorage {
 
         SetupOutputVariable(
             state, "Thermal Energy Storage Energy Stored", Units::W, PCM.EnergyStored, TimeStepType::System, StoreType::Average, PCM.Name);
+
+        SetupOutputVariable(
+            state, "Thermal Energy Storage Tank Temperature", Units::C, PCM.PCM_TankTemp, TimeStepType::System, StoreType::Average, PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Use Side Heat Transfer Rate",
@@ -332,12 +363,32 @@ namespace PCMStorage {
 
         PCM.Name = state.dataIPShortCut->cAlphaArgs(1);
         PCM.AvailabilityScheduleName = state.dataIPShortCut->cAlphaArgs(2);
+
+        int matNum = Material::GetMaterialNum(state, state.dataIPShortCut->cAlphaArgs(7));
+        if (matNum == 0) {
+            ShowSevereError(
+                state, format("{}: Invalid PCM material name: {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(7)));
+            ErrorsFound = true;
+            return;
+        }
+
+        auto *mat = state.dataMaterial->materials(matNum);
+        if (!mat->hasPCM) {
+            ShowSevereError(state, format("{}: Material {} is not a phase change material.", state.dataIPShortCut->cCurrentModuleObject, mat->Name));
+            ErrorsFound = true;
+            return;
+        }
+
+        PCM.PCMMaterialNum = matNum;
+        PCM.PCMmat = dynamic_cast<Material::MaterialPhaseChange *>(mat);
+
         PCM.TankCapacity = state.dataIPShortCut->rNumericArgs(1);
         PCM.HeatLossRate = state.dataIPShortCut->rNumericArgs(2);
-        PCM.MeltingTemp = state.dataIPShortCut->rNumericArgs(3);
-        PCM.FreezingTemp = state.dataIPShortCut->rNumericArgs(4);
-        PCM.LatentHeat = state.dataIPShortCut->rNumericArgs(5);
-        PCM.SpecificHeat = state.dataIPShortCut->rNumericArgs(6);
+
+        PCM.MeltingTemp = PCM.PCMmat->peakTempMelting;
+        PCM.FreezingTemp = PCM.PCMmat->peakTempFreezing;
+        PCM.LatentHeat = PCM.PCMmat->totalLatentHeat;
+        PCM.SpecificHeat = (PCM.PCMmat->specificHeatSolid + PCM.PCMmat->specificHeatLiquid) / 2.0;
 
         PCM.PlantSideInletNode = NodeInputManager::GetOnlySingleNode(state,
                                                                      state.dataIPShortCut->cAlphaArgs(3),
@@ -395,11 +446,6 @@ namespace PCMStorage {
 
         if (PCM.TankCapacity <= 0.0) {
             ShowSevereError(state, format("{}={}, Tank Capacity must be > 0.0.", state.dataIPShortCut->cCurrentModuleObject, PCM.Name));
-            ErrorsFound = true;
-        }
-
-        if (PCM.LatentHeat <= 0.0) {
-            ShowSevereError(state, format("{}={}, Latent Heat must be > 0.0.", state.dataIPShortCut->cCurrentModuleObject, PCM.Name));
             ErrorsFound = true;
         }
 
