@@ -41,7 +41,7 @@ namespace PCMStorage {
         int AvailabilityScheduleIndex = 0;
 
         // Dynamic State Variables
-        Real64 PCM_TankTemp = 0.0;       // °C, estimated from enthalpy
+        Real64 PCM_TankTemp = 0.0;       // C, estimated from enthalpy
         Real64 EnergyStored = 0.0;       // J
         Real64 PercentCapacity = 0.0;    // %
         Real64 HeatLossRate_W = 0.0;     // W
