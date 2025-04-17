@@ -24,8 +24,8 @@ namespace PCMStorage {
         Material::MaterialPhaseChange *PCMmat = nullptr; // Pointer to PCM material
         Real64 TankCapacity = 0.0;                       // kg
         Real64 HeatLossRate = 0.0;                       // W
-        Real64 MeltingTemp = 0.0;                        // °C (gets overwritten by PCMmat->peakTempMelting)
-        Real64 FreezingTemp = 0.0;                       // °C
+        Real64 MeltingTemp = 0.0;                        // C (gets overwritten by PCMmat->peakTempMelting)
+        Real64 FreezingTemp = 0.0;                       // C
         Real64 LatentHeat = 0.0;                         // J/kg (typically from PCMmat)
         Real64 SpecificHeat = 0.0;                       // J/kg-K (backup if needed)
         Real64 Effectiveness = 0.9;                      // HX effectiveness (optional input)
