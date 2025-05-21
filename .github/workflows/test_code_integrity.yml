@@ -17,14 +17,14 @@ jobs:
         uses: jidicula/clang-format-action@v4.15.0
         if: always()
         with:
-          clang-format-version: '10'
+          clang-format-version: '18'
           check-path: 'src/EnergyPlus'
 
       - name: Run clang-format style check for C/C++ unit test code.
         uses: jidicula/clang-format-action@v4.15.0
         if: always()
         with:
-          clang-format-version: '10'
+          clang-format-version: '18'
           check-path: 'tst/EnergyPlus/unit'
 
       - name: Custom Check
