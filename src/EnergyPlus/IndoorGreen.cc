@@ -532,7 +532,7 @@ namespace IndoorGreen {
 
         Real64 hfg = Psychrometrics::PsyHfgAirFnWTdb(ZonePreHum, ZonePreTemp) / std::pow(10, 6); // Latent heat of vaporization (MJ/kg)
         Real64 slopepat =
-            0.200 * std::pow((0.00738 * ZonePreTemp + 0.8072), 7) - 0.000116; // Slope of the saturation vapor pressure-temperature curve (kPa/°C)
+            0.200 * std::pow((0.00738 * ZonePreTemp + 0.8072), 7) - 0.000116;     // Slope of the saturation vapor pressure-temperature curve (kPa/°C)
         Real64 CpAir = Psychrometrics::PsyCpAirFnW(ZonePreHum) / std::pow(10, 6); // specific heat of air at constant pressure (MJ kg−1 °C−1)
         Real64 OutPb = state.dataEnvrn->OutBaroPress / 1000;                      // outdoor pressure (kPa)
         Real64 constexpr mw(0.622);                                               // ratio molecular weight of water vapor / dry air = 0.622.
