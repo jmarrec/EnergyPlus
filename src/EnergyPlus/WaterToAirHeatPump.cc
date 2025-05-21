@@ -1281,9 +1281,12 @@ namespace WaterToAirHeatPump {
             state.dataWaterToAirHeatPump->initialQLoadTotal_calc = heatPump.CoolingCapacity;
         }
 
-        if (state.dataWaterToAirHeatPump->initialQLoadTotal_calc == 0.0)
+        if (state.dataWaterToAirHeatPump->initialQLoadTotal_calc == 0.0) {
             state.dataWaterToAirHeatPump->initialQLoadTotal_calc = heatPump.CoolingCapacity;
-        if (state.dataWaterToAirHeatPump->initialQSource_calc == 0.0) state.dataWaterToAirHeatPump->initialQSource_calc = heatPump.CoolingCapacity;
+        }
+        if (state.dataWaterToAirHeatPump->initialQSource_calc == 0.0) {
+            state.dataWaterToAirHeatPump->initialQSource_calc = heatPump.CoolingCapacity;
+        }
 
         // Loop the calculation at least twice depending whether the latent degradation model
         // is enabled. 1st iteration to calculate the QLatent(rated) at (TDB,TWB)indoorair=(26.7C,19.4C)
@@ -1342,10 +1345,14 @@ namespace WaterToAirHeatPump {
             StillSimulatingFlag = true;
             SourceResidual = 1.0;
             while (StillSimulatingFlag) {
-                if (Converged) StillSimulatingFlag = false;
+                if (Converged) {
+                    StillSimulatingFlag = false;
+                }
 
                 ++NumIteration2;
-                if (NumIteration2 == 1) RelaxParam = 0.5;
+                if (NumIteration2 == 1) {
+                    RelaxParam = 0.5;
+                }
 
                 if (NumIteration2 > STOP2) {
                     heatPump.SimFlag = false;
@@ -1512,7 +1519,9 @@ namespace WaterToAirHeatPump {
                                    state.dataWaterToAirHeatPump->initialQLoadTotal_calc;
                     state.dataWaterToAirHeatPump->initialQLoadTotal_calc +=
                         RelaxParam * (QLoadTotal - state.dataWaterToAirHeatPump->initialQLoadTotal_calc);
-                    if (NumIteration3 > 8) RelaxParam = 0.3;
+                    if (NumIteration3 > 8) {
+                        RelaxParam = 0.3;
+                    }
                 }
 
                 // Determine the Power Consumption
@@ -1537,9 +1546,13 @@ namespace WaterToAirHeatPump {
                 QSource = Power + QLoadTotal;
                 SourceResidual =
                     std::abs(QSource - state.dataWaterToAirHeatPump->initialQSource_calc) / state.dataWaterToAirHeatPump->initialQSource_calc;
-                if (SourceResidual < ERR) Converged = true;
+                if (SourceResidual < ERR) {
+                    Converged = true;
+                }
                 state.dataWaterToAirHeatPump->initialQSource_calc += RelaxParam * (QSource - state.dataWaterToAirHeatPump->initialQSource_calc);
-                if (NumIteration2 > 8) RelaxParam = 0.2;
+                if (NumIteration2 > 8) {
+                    RelaxParam = 0.2;
+                }
             }
 
             if (SuctionPr < heatPump.LowPressCutoff) {
@@ -1723,8 +1736,12 @@ namespace WaterToAirHeatPump {
             state.dataWaterToAirHeatPump->initialQSource = heatPump.HeatingCapacity;
         }
 
-        if (state.dataWaterToAirHeatPump->initialQLoad == 0.0) state.dataWaterToAirHeatPump->initialQLoad = heatPump.HeatingCapacity;
-        if (state.dataWaterToAirHeatPump->initialQSource == 0.0) state.dataWaterToAirHeatPump->initialQSource = heatPump.HeatingCapacity;
+        if (state.dataWaterToAirHeatPump->initialQLoad == 0.0) {
+            state.dataWaterToAirHeatPump->initialQLoad = heatPump.HeatingCapacity;
+        }
+        if (state.dataWaterToAirHeatPump->initialQSource == 0.0) {
+            state.dataWaterToAirHeatPump->initialQSource = heatPump.HeatingCapacity;
+        }
 
         // Tuned Hoisted quantities out of nested loop that don't change
         Real64 const LoadSideMassFlowRate_CpAir_inv(1.0 / (heatPump.InletAirMassFlowRate * CpAir));
@@ -1739,10 +1756,14 @@ namespace WaterToAirHeatPump {
         StillSimulatingFlag = true;
         LoadResidual = 1.0;
         while (StillSimulatingFlag) {
-            if (Converged) StillSimulatingFlag = false;
+            if (Converged) {
+                StillSimulatingFlag = false;
+            }
 
             ++NumIteration3;
-            if (NumIteration3 == 1) RelaxParam = 0.5;
+            if (NumIteration3 == 1) {
+                RelaxParam = 0.5;
+            }
 
             if (NumIteration3 > STOP3) {
                 heatPump.SimFlag = false;
@@ -1908,7 +1929,9 @@ namespace WaterToAirHeatPump {
                 QSource = MassRef * (SourceSideOutletEnth - LoadSideOutletEnth);
                 SourceResidual = std::abs(QSource - state.dataWaterToAirHeatPump->initialQSource) / state.dataWaterToAirHeatPump->initialQSource;
                 state.dataWaterToAirHeatPump->initialQSource += RelaxParam * (QSource - state.dataWaterToAirHeatPump->initialQSource);
-                if (NumIteration2 > 8) RelaxParam = 0.3;
+                if (NumIteration2 > 8) {
+                    RelaxParam = 0.3;
+                }
             }
 
             // Determine the Power Consumption
@@ -1932,9 +1955,13 @@ namespace WaterToAirHeatPump {
             // Determine the Load Side Heat Rate
             QLoadTotal = Power + QSource;
             LoadResidual = std::abs(QLoadTotal - state.dataWaterToAirHeatPump->initialQLoad) / state.dataWaterToAirHeatPump->initialQLoad;
-            if (LoadResidual < ERR) Converged = true;
+            if (LoadResidual < ERR) {
+                Converged = true;
+            }
             state.dataWaterToAirHeatPump->initialQLoad += RelaxParam * (QLoadTotal - state.dataWaterToAirHeatPump->initialQLoad);
-            if (NumIteration3 > 8) RelaxParam = 0.2;
+            if (NumIteration3 > 8) {
+                RelaxParam = 0.2;
+            }
         }
 
         if (SuctionPr < heatPump.LowPressCutoff && !FirstHVACIteration) {
@@ -2191,8 +2218,12 @@ namespace WaterToAirHeatPump {
         //  Calculate part-load or "effective" sensible heat ratio
         SHReff = 1.0 - (1.0 - SHRss) * LHRmult;
 
-        if (SHReff < SHRss) SHReff = SHRss; // Effective SHR can be less than the steady-state SHR
-        if (SHReff > 1.0) SHReff = 1.0;     // Effective sensible heat ratio can't be greater than 1.0
+        if (SHReff < SHRss) {
+            SHReff = SHRss; // Effective SHR can be less than the steady-state SHR
+        }
+        if (SHReff > 1.0) {
+            SHReff = 1.0; // Effective sensible heat ratio can't be greater than 1.0
+        }
 
         return SHReff;
     }

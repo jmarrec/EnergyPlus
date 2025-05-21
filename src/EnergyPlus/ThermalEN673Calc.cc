@@ -222,8 +222,9 @@ namespace ThermalEN673Calc {
                 solar_EN673(dir, totsol, rtot, rs, nlayer, asol, sft, standard, nperr, ErrorMessage);
                 if (GoAhead(nperr)) {
                     shgc = sft;
-                    if (files.WriteDebugOutput)
+                    if (files.WriteDebugOutput) {
                         WriteOutputEN673(files.DebugOutputFile, files.DBGD, nlayer, ufactor, hout, hin, Ra, Nu, hg, hr, hs, nperr);
+                    }
                 } // GoAhead after solar
             } // GoAhead after EN673ISO10292
         } // GopAhead after propcon90
@@ -512,7 +513,9 @@ namespace ThermalEN673Calc {
                 ++iter; // end of next iteration
                 diff = std::abs(sumRs - sumRsold);
                 // bi: perhaps we should also limit No. of iterations?
-                if (diff < eps) break; // tolerance was met - exit loop
+                if (diff < eps) {
+                    break; // tolerance was met - exit loop
+                }
             } // remaining iterations
         }
 

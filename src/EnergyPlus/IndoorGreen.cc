@@ -119,7 +119,9 @@ namespace IndoorGreen {
         int IOStat;                                                 // Status flag from GetObjectItem
 
         s_lw->NumIndoorGreen = s_ip->getNumObjectsFound(state, cCurrentModuleObject);
-        if (s_lw->NumIndoorGreen > 0) s_lw->indoorGreens.allocate(s_lw->NumIndoorGreen); // Allocate the IndoorGreen input data array
+        if (s_lw->NumIndoorGreen > 0) {
+            s_lw->indoorGreens.allocate(s_lw->NumIndoorGreen); // Allocate the IndoorGreen input data array
+        }
         for (int IndoorGreenNum = 1; IndoorGreenNum <= s_lw->NumIndoorGreen; ++IndoorGreenNum) {
             auto &ig = s_lw->indoorGreens(IndoorGreenNum);
             s_ip->getObjectItem(state,

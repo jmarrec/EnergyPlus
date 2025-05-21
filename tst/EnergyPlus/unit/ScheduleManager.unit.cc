@@ -111,11 +111,13 @@ TEST_F(EnergyPlusFixture, ScheduleManager_UpdateScheduleVals)
     auto *daySched2 = Sched::AddDaySchedule(*state, "Day-2");
     auto *daySched3 = Sched::AddDaySchedule(*state, "Day-3");
 
-    for (int i = 1; i <= 249; i++)
+    for (int i = 1; i <= 249; i++) {
         sched1->weekScheds[i] = weekSched1;
+    }
     sched1->weekScheds[250] = weekSched2;
-    for (int i = 251; i <= 366; i++)
+    for (int i = 251; i <= 366; i++) {
         sched1->weekScheds[i] = weekSched3;
+    }
 
     std::fill(weekSched1->dayScheds.begin() + 1, weekSched1->dayScheds.end(), daySched1);
     std::fill(weekSched2->dayScheds.begin() + 1, weekSched2->dayScheds.end(), daySched2);
@@ -1175,10 +1177,12 @@ TEST_F(EnergyPlusFixture, Schedule_GetCurrentScheduleValue_DST_RampUp_NoLeap)
 
     auto *sched1 = Sched::AddScheduleDetailed(*state, "SCHED-1");
 
-    for (int i = 1; i <= 366; ++i)
+    for (int i = 1; i <= 366; ++i) {
         Sched::AddWeekSchedule(*state, format("WEEK_{}", i));
-    for (int i = 1; i <= 365; ++i)
+    }
+    for (int i = 1; i <= 365; ++i) {
         Sched::AddDaySchedule(*state, format("DAY_{}", i));
+    }
 
     Array1D_int EndDayOfMonth(12, {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31});
 

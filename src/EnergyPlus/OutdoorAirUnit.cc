@@ -1921,8 +1921,12 @@ namespace OutdoorAirUnit {
                         QCompReq = 0.0;
                     } else {
                         QCompReq = CpAirZn * OAMassFlow * ((CompAirOutTemp - whCoilInletNode.Temp) - FanEffect);
-                        if (std::abs(QCompReq) < SmallLoad) QCompReq = 0.0;
-                        if (QCompReq < 0.0) QCompReq = 0.0; // coil can heat only
+                        if (std::abs(QCompReq) < SmallLoad) {
+                            QCompReq = 0.0;
+                        }
+                        if (QCompReq < 0.0) {
+                            QCompReq = 0.0; // coil can heat only
+                        }
                     }
 
                     ControlCompOutput(state,
@@ -1983,8 +1987,12 @@ namespace OutdoorAirUnit {
                     } else {
 
                         QCompReq = CpAirZn * OAMassFlow * ((CompAirOutTemp - wcCoilInletNode.Temp) - FanEffect);
-                        if (std::abs(QCompReq) < SmallLoad) QCompReq = 0.0;
-                        if (QCompReq > 0.0) QCompReq = 0.0; // coil can cool only
+                        if (std::abs(QCompReq) < SmallLoad) {
+                            QCompReq = 0.0;
+                        }
+                        if (QCompReq > 0.0) {
+                            QCompReq = 0.0; // coil can cool only
+                        }
                     }
 
                     ControlCompOutput(state,
@@ -2028,8 +2036,12 @@ namespace OutdoorAirUnit {
                     } else {
 
                         QCompReq = CpAirZn * OAMassFlow * ((CompAirOutTemp - wcCoilInletNode.Temp) - FanEffect);
-                        if (std::abs(QCompReq) < SmallLoad) QCompReq = 0.0;
-                        if (QCompReq > 0.0) QCompReq = 0.0; // coil can cool only
+                        if (std::abs(QCompReq) < SmallLoad) {
+                            QCompReq = 0.0;
+                        }
+                        if (QCompReq > 0.0) {
+                            QCompReq = 0.0; // coil can cool only
+                        }
                     }
 
                     ControlCompOutput(state,
@@ -2071,8 +2083,12 @@ namespace OutdoorAirUnit {
                         QCompReq = 0.0;
                     } else {
                         QCompReq = CpAirZn * OAMassFlow * ((CompAirOutTemp - wcCoilInletNode.Temp) - FanEffect);
-                        if (std::abs(QCompReq) < SmallLoad) QCompReq = 0.0;
-                        if (QCompReq > 0.0) QCompReq = 0.0; // coil can cool only
+                        if (std::abs(QCompReq) < SmallLoad) {
+                            QCompReq = 0.0;
+                        }
+                        if (QCompReq > 0.0) {
+                            QCompReq = 0.0; // coil can cool only
+                        }
                     }
                     ControlCompOutput(state,
                                       thisOutAirUnit.Name,

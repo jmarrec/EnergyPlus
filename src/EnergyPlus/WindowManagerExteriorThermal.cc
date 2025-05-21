@@ -951,16 +951,18 @@ namespace Window {
             ShadeFlag = WinShadingType::IntBlind;
         } else if (TotGlassLay == 2) {
             auto const *mat3 = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(3));
-            if (mat3->group == Material::Group::Shade)
+            if (mat3->group == Material::Group::Shade) {
                 ShadeFlag = WinShadingType::BGShade;
-            else if (mat3->group == Material::Group::Blind)
+            } else if (mat3->group == Material::Group::Blind) {
                 ShadeFlag = WinShadingType::BGBlind;
+            }
         } else if (TotGlassLay == 3) {
             auto const *mat5 = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(5));
-            if (mat5->group == Material::Group::Shade)
+            if (mat5->group == Material::Group::Shade) {
                 ShadeFlag = WinShadingType::BGShade;
-            else if (mat5->group == Material::Group::Blind)
+            } else if (mat5->group == Material::Group::Blind) {
                 ShadeFlag = WinShadingType::BGBlind;
+            }
         }
 
         return ShadeFlag;

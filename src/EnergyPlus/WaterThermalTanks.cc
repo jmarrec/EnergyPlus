@@ -559,7 +559,9 @@ void SimHeatPumpWaterHeater(EnergyPlusData &state,
     // Plant connected HPWHs are called by PlantLoopEquipments (but only those on supply side ).
     // HPWH will not be included in sizing calculations, fan is initialized only during BeginEnvrnFlag (FALSE during sizing)
     // (fan will be turned off during Standard Ratings procedure yielding incorrect results)
-    if (state.dataGlobal->DoingSizing) return;
+    if (state.dataGlobal->DoingSizing) {
+        return;
+    }
 
     // For HPWHs, StandAlone means not connected to a plant loop (use nodes are not used, source nodes are connected to a HPWH)
     if (state.dataWaterThermalTanks->HPWaterHeater(HeatPumpNum).StandAlone) {
@@ -604,7 +606,9 @@ void CalcWaterThermalTankZoneGains(EnergyPlusData &state)
                 GetWaterThermalTankInput(state);
                 state.dataWaterThermalTanks->getWaterThermalTankInputFlag = false;
             }
-            if (state.dataWaterThermalTanks->numWaterThermalTank == 0) return;
+            if (state.dataWaterThermalTanks->numWaterThermalTank == 0) {
+                return;
+            }
         }
     }
 
@@ -618,11 +622,15 @@ void CalcWaterThermalTankZoneGains(EnergyPlusData &state)
         state.dataWaterThermalTanks->calcWaterThermalTankZoneGainsMyEnvrnFlag = false;
     }
 
-    if (!state.dataGlobal->BeginEnvrnFlag) state.dataWaterThermalTanks->calcWaterThermalTankZoneGainsMyEnvrnFlag = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        state.dataWaterThermalTanks->calcWaterThermalTankZoneGainsMyEnvrnFlag = true;
+    }
 
     for (int WaterThermalTankNum = 1; WaterThermalTankNum <= state.dataWaterThermalTanks->numWaterThermalTank; ++WaterThermalTankNum) {
         auto &Tank = state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum);
-        if (Tank.AmbientTempZone == 0) continue;
+        if (Tank.AmbientTempZone == 0) {
+            continue;
+        }
         auto const &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(Tank.AmbientTempZone);
         if (state.dataGlobal->DoingSizing) {
             // Initialize tank temperature to setpoint
@@ -852,15 +860,18 @@ bool getDesuperHtrInput(EnergyPlusData &state)
         if (Util::SameString(heatSourceObjType, "Refrigeration:CompressorRack")) {
             DesupHtr.ReclaimHeatingSource = ReclaimHeatObjectType::CompressorRackRefrigeratedCase;
             for (int RackNum = 1; RackNum <= state.dataRefrigCase->NumRefrigeratedRacks; ++RackNum) {
-                if (!Util::SameString(state.dataHeatBal->HeatReclaimRefrigeratedRack(RackNum).Name, cAlphaArgs(10))) continue;
+                if (!Util::SameString(state.dataHeatBal->HeatReclaimRefrigeratedRack(RackNum).Name, cAlphaArgs(10))) {
+                    continue;
+                }
                 DesupHtr.ReclaimHeatingSourceIndexNum = RackNum;
                 if (allocated(state.dataHeatBal->HeatReclaimRefrigeratedRack)) {
                     DataHeatBalance::HeatReclaimDataBase &HeatReclaim =
                         state.dataHeatBal->HeatReclaimRefrigeratedRack(DesupHtr.ReclaimHeatingSourceIndexNum);
                     if (!allocated(HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)) {
                         HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat.allocate(state.dataWaterThermalTanks->numWaterHeaterDesuperheater);
-                        for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)
+                        for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat) {
                             num = 0.0;
+                        }
                     }
                     DesupHtr.ValidSourceType = true;
                     HeatReclaim.ReclaimEfficiencyTotal += DesupHtr.HeatReclaimRecoveryEff;
@@ -881,15 +892,18 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                    (Util::SameString(heatSourceObjType, "Refrigeration:Condenser:WaterCooled"))) {
             DesupHtr.ReclaimHeatingSource = ReclaimHeatObjectType::CondenserRefrigeration;
             for (int CondNum = 1; CondNum <= state.dataRefrigCase->NumRefrigCondensers; ++CondNum) {
-                if (!Util::SameString(state.dataHeatBal->HeatReclaimRefrigCondenser(CondNum).Name, cAlphaArgs(10))) continue;
+                if (!Util::SameString(state.dataHeatBal->HeatReclaimRefrigCondenser(CondNum).Name, cAlphaArgs(10))) {
+                    continue;
+                }
                 DesupHtr.ReclaimHeatingSourceIndexNum = CondNum;
                 if (allocated(state.dataHeatBal->HeatReclaimRefrigCondenser)) {
                     DataHeatBalance::HeatReclaimDataBase &HeatReclaim =
                         state.dataHeatBal->HeatReclaimRefrigCondenser(DesupHtr.ReclaimHeatingSourceIndexNum);
                     if (!allocated(HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)) {
                         HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat.allocate(state.dataWaterThermalTanks->numWaterHeaterDesuperheater);
-                        for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)
+                        for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat) {
                             num = 0.0;
+                        }
                     }
                     DesupHtr.ValidSourceType = true;
                     HeatReclaim.ReclaimEfficiencyTotal += DesupHtr.HeatReclaimRecoveryEff;
@@ -922,8 +936,9 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                 DataHeatBalance::HeatReclaimDataBase &HeatReclaim = state.dataHeatBal->HeatReclaimDXCoil(DesupHtr.ReclaimHeatingSourceIndexNum);
                 if (!allocated(HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)) {
                     HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat.allocate(state.dataWaterThermalTanks->numWaterHeaterDesuperheater);
-                    for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)
+                    for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat) {
                         num = 0.0;
+                    }
                 }
                 DesupHtr.ValidSourceType = true;
                 HeatReclaim.ReclaimEfficiencyTotal += DesupHtr.HeatReclaimRecoveryEff;
@@ -949,8 +964,9 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                 DataHeatBalance::HeatReclaimDataBase &HeatReclaim = state.dataHeatBal->HeatReclaimVS_Coil(DesupHtr.ReclaimHeatingSourceIndexNum);
                 if (!allocated(HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)) {
                     HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat.allocate(state.dataWaterThermalTanks->numWaterHeaterDesuperheater);
-                    for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)
+                    for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat) {
                         num = 0.0;
+                    }
                 }
                 DesupHtr.ValidSourceType = true;
                 HeatReclaim.ReclaimEfficiencyTotal += DesupHtr.HeatReclaimRecoveryEff;
@@ -971,8 +987,9 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                     state.dataHeatBal->HeatReclaimSimple_WAHPCoil(DesupHtr.ReclaimHeatingSourceIndexNum);
                 if (!allocated(HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)) {
                     HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat.allocate(state.dataWaterThermalTanks->numWaterHeaterDesuperheater);
-                    for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)
+                    for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat) {
                         num = 0.0;
+                    }
                 }
                 DesupHtr.ValidSourceType = true;
                 HeatReclaim.ReclaimEfficiencyTotal += DesupHtr.HeatReclaimRecoveryEff;
@@ -998,8 +1015,9 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                     state.dataCoilCoolingDX->coilCoolingDXs[DesupHtr.ReclaimHeatingSourceIndexNum].reclaimHeat;
                 if (!allocated(HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)) {
                     HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat.allocate(state.dataWaterThermalTanks->numWaterHeaterDesuperheater);
-                    for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat)
+                    for (auto &num : HeatReclaim.WaterHeatingDesuperheaterReclaimedHeat) {
                         num = 0.0;
+                    }
                 }
                 DesupHtr.ValidSourceType = true;
                 HeatReclaim.ReclaimEfficiencyTotal += DesupHtr.HeatReclaimRecoveryEff;
@@ -1961,11 +1979,15 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                 int ZoneNum = HPWH.AmbientTempZone;
                 if (ZoneNum <= state.dataGlobal->NumOfZones) {
                     for (int SupAirIn = 1; SupAirIn <= state.dataZoneEquip->ZoneEquipConfig(ZoneNum).NumInletNodes; ++SupAirIn) {
-                        if (HPWH.HeatPumpAirOutletNode != state.dataZoneEquip->ZoneEquipConfig(ZoneNum).InletNode(SupAirIn)) continue;
+                        if (HPWH.HeatPumpAirOutletNode != state.dataZoneEquip->ZoneEquipConfig(ZoneNum).InletNode(SupAirIn)) {
+                            continue;
+                        }
                         FoundOutletNode = true;
                     }
                     for (int ExhAirOut = 1; ExhAirOut <= state.dataZoneEquip->ZoneEquipConfig(ZoneNum).NumExhaustNodes; ++ExhAirOut) {
-                        if (HPWH.HeatPumpAirInletNode != state.dataZoneEquip->ZoneEquipConfig(ZoneNum).ExhaustNode(ExhAirOut)) continue;
+                        if (HPWH.HeatPumpAirInletNode != state.dataZoneEquip->ZoneEquipConfig(ZoneNum).ExhaustNode(ExhAirOut)) {
+                            continue;
+                        }
                         FoundInletNode = true;
                     }
                     if (!FoundInletNode) {
@@ -2124,9 +2146,10 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
         }
 
         // set the max mass flow rate for outdoor fans
-        if (HPWH.FanOutletNode > 0)
+        if (HPWH.FanOutletNode > 0) {
             state.dataLoopNodes->Node(HPWH.FanOutletNode).MassFlowRateMax =
                 HPWH.OperatingAirFlowRate * Psychrometrics::PsyRhoAirFnPbTdbW(state, state.dataEnvrn->OutBaroPress, 20.0, 0.0);
+        }
 
         if (HPWH.fanPlace == HVAC::FanPlace::BlowThru) {
             if (HPWH.InletAirMixerNode > 0) {
@@ -3165,8 +3188,9 @@ bool getWaterHeaterStratifiedInput(EnergyPlusData &state)
 
         // If no plant nodes are connected, simulate in stand-alone mode.
         if (state.dataIPShortCut->cAlphaArgs(16).empty() && state.dataIPShortCut->cAlphaArgs(17).empty() &&
-            state.dataIPShortCut->cAlphaArgs(18).empty() && state.dataIPShortCut->cAlphaArgs(19).empty())
+            state.dataIPShortCut->cAlphaArgs(18).empty() && state.dataIPShortCut->cAlphaArgs(19).empty()) {
             Tank.StandAlone = true;
+        }
 
         if (!state.dataIPShortCut->lNumericFieldBlanks(29)) {
             Tank.UseDesignVolFlowRate = state.dataIPShortCut->rNumericArgs(29);
@@ -4072,12 +4096,21 @@ bool GetWaterThermalTankInput(EnergyPlusData &state)
                 "Inlets,Number Of Outlets\n");
 
             // Write water heater header for EIO
-            if ((state.dataWaterThermalTanks->numWaterHeaterMixed > 0) || (state.dataWaterThermalTanks->numWaterHeaterStratified > 0))
+            if ((state.dataWaterThermalTanks->numWaterHeaterMixed > 0) || (state.dataWaterThermalTanks->numWaterHeaterStratified > 0)) {
                 print(state.files.eio, Format_720);
-            if (state.dataWaterThermalTanks->numHeatPumpWaterHeater > 0) print(state.files.eio, Format_721);
-            if (state.dataWaterThermalTanks->numWaterHeaterStratified > 0) print(state.files.eio, Format_722);
-            if (state.dataWaterThermalTanks->numChilledWaterMixed > 0) print(state.files.eio, Format_725);
-            if (state.dataWaterThermalTanks->numChilledWaterStratified > 0) print(state.files.eio, Format_726);
+            }
+            if (state.dataWaterThermalTanks->numHeatPumpWaterHeater > 0) {
+                print(state.files.eio, Format_721);
+            }
+            if (state.dataWaterThermalTanks->numWaterHeaterStratified > 0) {
+                print(state.files.eio, Format_722);
+            }
+            if (state.dataWaterThermalTanks->numChilledWaterMixed > 0) {
+                print(state.files.eio, Format_725);
+            }
+            if (state.dataWaterThermalTanks->numChilledWaterStratified > 0) {
+                print(state.files.eio, Format_726);
+            }
         }
 
         if (state.dataWaterThermalTanks->numWaterThermalTank > 0) {
@@ -4129,12 +4162,16 @@ bool GetWaterThermalTankInput(EnergyPlusData &state)
                 auto &DesuperHtr = state.dataWaterThermalTanks->WaterHeaterDesuperheater(DesuperheaterNum);
                 for (int WtrHtrNum = 1; WtrHtrNum <= state.dataWaterThermalTanks->numWaterThermalTank; ++WtrHtrNum) {
                     auto &Tank = state.dataWaterThermalTanks->WaterThermalTank(WtrHtrNum);
-                    if (!Util::SameString(DesuperHtr.TankName, Tank.Name) || !Util::SameString(DesuperHtr.TankType, Tank.Type)) continue;
+                    if (!Util::SameString(DesuperHtr.TankName, Tank.Name) || !Util::SameString(DesuperHtr.TankType, Tank.Type)) {
+                        continue;
+                    }
                     Tank.DesuperheaterNum = DesuperheaterNum;
                     DesuperHtr.WaterHeaterTankNum = WtrHtrNum;
                     DesuperHtr.TankTypeNum = Tank.WaterThermalTankType;
                     DesuperHtr.BackupElementCapacity = Tank.MaxCapacity;
-                    if (Tank.UseInletNode == 0 && Tank.UseOutletNode == 0) DesuperHtr.StandAlone = true;
+                    if (Tank.UseInletNode == 0 && Tank.UseOutletNode == 0) {
+                        DesuperHtr.StandAlone = true;
+                    }
 
                     //         verify Desuperheater/tank source node connections
                     if (DesuperHtr.WaterInletNode != Tank.SourceOutletNode) {
@@ -4196,7 +4233,9 @@ bool GetWaterThermalTankInput(EnergyPlusData &state)
 
                     auto &Tank = state.dataWaterThermalTanks->WaterThermalTank(CheckWaterHeaterNum);
 
-                    if (!(Util::SameString(HPWH.TankName, Tank.Name) && Util::SameString(HPWH.TankType, Tank.Type))) continue;
+                    if (!(Util::SameString(HPWH.TankName, Tank.Name) && Util::SameString(HPWH.TankType, Tank.Type))) {
+                        continue;
+                    }
 
                     // save backup element and on/off-cycle parasitic properties for use during standard rating procedure
                     HPWH.BackupElementCapacity = Tank.MaxCapacity;
@@ -4308,7 +4347,9 @@ bool GetWaterThermalTankInput(EnergyPlusData &state)
                     }
 
                     // Set HPWH structure variable StandAlone to TRUE if use nodes are not connected
-                    if (Tank.UseInletNode == 0 && Tank.UseOutletNode == 0) HPWH.StandAlone = true;
+                    if (Tank.UseInletNode == 0 && Tank.UseOutletNode == 0) {
+                        HPWH.StandAlone = true;
+                    }
 
                     if (HPWH.WHUseInletNode != Tank.UseInletNode || HPWH.WHUseOutletNode != Tank.UseOutletNode) {
                         ShowSevereError(state, format("{} = {}:", state.dataIPShortCut->cCurrentModuleObject, HPWH.Name));
@@ -4382,7 +4423,9 @@ bool GetWaterThermalTankInput(EnergyPlusData &state)
                             int TankHeatingPriority = 0;
                             auto const &zoneEquipList = state.dataZoneEquip->ZoneEquipList(ZoneEquipListNum);
                             for (int EquipmentTypeNum = 1; EquipmentTypeNum <= zoneEquipList.NumOfEquipTypes; ++EquipmentTypeNum) {
-                                if (zoneEquipList.EquipName(EquipmentTypeNum) != HPWH.Name) continue;
+                                if (zoneEquipList.EquipName(EquipmentTypeNum) != HPWH.Name) {
+                                    continue;
+                                }
                                 FoundTankInList = true;
                                 TankCoolingPriority = zoneEquipList.CoolingPriority(EquipmentTypeNum);
                                 TankHeatingPriority = zoneEquipList.HeatingPriority(EquipmentTypeNum);
@@ -4399,8 +4442,9 @@ bool GetWaterThermalTankInput(EnergyPlusData &state)
                             //                     check that tank has lower priority than all other non-HPWH objects in Zone
                             //                     Equipment List
                             for (int EquipmentTypeNum = 1; EquipmentTypeNum <= zoneEquipList.NumOfEquipTypes; ++EquipmentTypeNum) {
-                                if (Util::SameString(zoneEquipList.EquipTypeName(EquipmentTypeNum), state.dataIPShortCut->cCurrentModuleObject))
+                                if (Util::SameString(zoneEquipList.EquipTypeName(EquipmentTypeNum), state.dataIPShortCut->cCurrentModuleObject)) {
                                     continue;
+                                }
                                 if (TankCoolingPriority > zoneEquipList.CoolingPriority(EquipmentTypeNum) ||
                                     TankHeatingPriority > zoneEquipList.HeatingPriority(EquipmentTypeNum)) {
                                     TankNotLowestPriority = true;
@@ -5664,8 +5708,12 @@ void WaterThermalTankData::ValidatePLFCurve(EnergyPlusData &state, int const Cur
     IsValid = true;
 
     // Check 0 and 1
-    if (Curve::CurveValue(state, CurveIndex, 0.0) <= 0) IsValid = false;
-    if (Curve::CurveValue(state, CurveIndex, 1.0) <= 0) IsValid = false;
+    if (Curve::CurveValue(state, CurveIndex, 0.0) <= 0) {
+        IsValid = false;
+    }
+    if (Curve::CurveValue(state, CurveIndex, 1.0) <= 0) {
+        IsValid = false;
+    }
 }
 
 void WaterThermalTankData::SetupStratifiedNodes(EnergyPlusData &state)
@@ -5858,13 +5906,17 @@ void WaterThermalTankData::SetupStratifiedNodes(EnergyPlusData &state)
         if ((this->UseInletHeight <= H0) && (this->UseInletHeight > H)) {
             this->UseInletStratNode = NodeNum;
 
-            if ((this->UseInletNode > 0) || (this->MassFlowRateMax > 0.0)) ++this->Node(NodeNum).Inlets;
+            if ((this->UseInletNode > 0) || (this->MassFlowRateMax > 0.0)) {
+                ++this->Node(NodeNum).Inlets;
+            }
         }
 
         if ((this->UseOutletHeight <= H0) && (this->UseOutletHeight > H)) {
             this->UseOutletStratNode = NodeNum;
 
-            if ((this->UseOutletNode > 0) || (this->MassFlowRateMax > 0.0)) ++this->Node(NodeNum).Outlets;
+            if ((this->UseOutletNode > 0) || (this->MassFlowRateMax > 0.0)) {
+                ++this->Node(NodeNum).Outlets;
+            }
         }
 
         if ((this->SourceInletHeight <= H0) && (this->SourceInletHeight > H) && (this->SourceInletNode > 0)) {
@@ -5987,7 +6039,9 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         if (((this->SourceInletNode > 0) && (this->DesuperheaterNum > 0)) || (this->HeatPumpNum > 0)) {
             this->SetLoopIndexFlag = false;
         }
-        if (state.dataPlnt->PlantFirstSizesOkayToFinalize) this->SetLoopIndexFlag = false;
+        if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
+            this->SetLoopIndexFlag = false;
+        }
         if (this->StandAlone) {
             this->SizeStandAloneWaterHeater(state);
             this->SetLoopIndexFlag = false;
@@ -6137,7 +6191,9 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         this->NetHeatTransferEnergy = 0.0;
     }
 
-    if (!state.dataGlobal->BeginEnvrnFlag) this->MyEnvrnFlag = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        this->MyEnvrnFlag = true;
+    }
 
     if (this->WarmupFlag && (!state.dataGlobal->WarmupFlag)) {
         // reInitialize tank temperature to setpoint of first hour (use HPWH or Desuperheater heating coil set point if applicable)
@@ -6183,7 +6239,9 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         this->SavedMode = TankOperatingMode::Floating;
         this->WarmupFlag = false;
     }
-    if (state.dataGlobal->WarmupFlag) this->WarmupFlag = true;
+    if (state.dataGlobal->WarmupFlag) {
+        this->WarmupFlag = true;
+    }
 
     if (FirstHVACIteration) {
         // Get all scheduled values
@@ -6252,7 +6310,9 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
             this->UseInletTemp = (this->useInletTempSched != nullptr) ? this->useInletTempSched->getCurrentVal() : state.dataEnvrn->WaterMainsTemp;
 
             this->UseMassFlowRate = this->MassFlowRateMax;
-            if (this->flowRateSched != nullptr) this->UseMassFlowRate *= this->flowRateSched->getCurrentVal();
+            if (this->flowRateSched != nullptr) {
+                this->UseMassFlowRate *= this->flowRateSched->getCurrentVal();
+            }
             this->VolFlowRate = this->UseMassFlowRate / Psychrometrics::RhoH2O(Constant::InitConvTemp);
         }
 
@@ -6377,7 +6437,9 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
                 ZoneEqSizing(state.dataSize->CurZoneEqNum).CoolingAirFlow = true;
                 ZoneEqSizing(state.dataSize->CurZoneEqNum).CoolingAirVolFlow = state.dataSize->DataNonZoneNonAirloopValue;
             }
-            if (state.dataPlnt->PlantFirstSizesOkayToReport || !state.dataGlobal->AnyPlantInModel || this->AlreadyRated) this->MyHPSizeFlag = false;
+            if (state.dataPlnt->PlantFirstSizesOkayToReport || !state.dataGlobal->AnyPlantInModel || this->AlreadyRated) {
+                this->MyHPSizeFlag = false;
+            }
         }
 
         int HPAirInletNode = state.dataWaterThermalTanks->HPWaterHeater(HPNum).HeatPumpAirInletNode;
@@ -6490,7 +6552,9 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
             }
         }
 
-        if (OutletAirSplitterNode > 0) state.dataLoopNodes->Node(OutletAirSplitterNode).MassFlowRate = 0.0;
+        if (OutletAirSplitterNode > 0) {
+            state.dataLoopNodes->Node(OutletAirSplitterNode).MassFlowRate = 0.0;
+        }
         // these are water nodes are not managed by plant. the HP connects
         // directly to the WH without using plant.
         if (state.dataWaterThermalTanks->HPWaterHeater(HPNum).HPWHType == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterPumped) {
@@ -6539,10 +6603,11 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
 
         if (state.dataWaterThermalTanks->HPWaterHeater(HPNum).NumofSpeed > 0) {
             int VSCoilID;
-            if (state.dataWaterThermalTanks->HPWaterHeater(HPNum).bIsIHP)
+            if (state.dataWaterThermalTanks->HPWaterHeater(HPNum).bIsIHP) {
                 VSCoilID = state.dataIntegratedHP->IntegratedHeatPumps(state.dataWaterThermalTanks->HPWaterHeater(HPNum).DXCoilNum).SCWHCoilIndex;
-            else
+            } else {
                 VSCoilID = state.dataWaterThermalTanks->HPWaterHeater(HPNum).DXCoilNum;
+            }
 
             // scale air flow rates
             Real64 MulSpeedFlowScale = state.dataVariableSpeedCoils->VarSpeedCoil(VSCoilID).RatedAirVolFlowRate /
@@ -6916,7 +6981,9 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
             Eunmet += Qunmet * TimeNeeded;
             Eoncycfuel += Qoncycfuel * TimeNeeded;
 
-            if (Qmaxcap > 0.0) PLR = Qheater / Qmaxcap;
+            if (Qmaxcap > 0.0) {
+                PLR = Qheater / Qmaxcap;
+            }
             PLF = this->PartLoadFactor(state, PLR);
             Efuel += Qheater * TimeNeeded / (PLF * this->Efficiency);
 
@@ -6925,7 +6992,9 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
 
             if (!this->FirstRecoveryDone) {
                 this->FirstRecoveryFuel += Efuel + Eoffcycfuel + Eoncycfuel;
-                if (SetPointRecovered) this->FirstRecoveryDone = true;
+                if (SetPointRecovered) {
+                    this->FirstRecoveryDone = true;
+                }
             }
             break;
 
@@ -7037,7 +7106,9 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
                 TimeNeeded = TimeRemaining;
             } else if ((TankTemp_loc <= DeadBandTemp) && (this->IsChilledWaterTank)) {
 
-                if (TankTemp_loc < SetPointTemp_loc) Mode_loc = TankOperatingMode::Floating;
+                if (TankTemp_loc < SetPointTemp_loc) {
+                    Mode_loc = TankOperatingMode::Floating;
+                }
 
                 Qheat = Qheatpump;
 
@@ -7232,7 +7303,9 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
     this->OnCycParaFuelRate = Qoncycfuel;
 
     // Add water heater skin losses and venting losses to ambient zone, if specified
-    if (this->AmbientTempZone > 0) this->AmbientZoneGain = -Qlosszone - Qvent;
+    if (this->AmbientTempZone > 0) {
+        this->AmbientZoneGain = -Qlosszone - Qvent;
+    }
 }
 
 void WaterThermalTankData::CalcMixedTankSourceSideHeatTransferRate(
@@ -7355,7 +7428,9 @@ Real64 WaterThermalTankData::CalcTimeNeeded(Real64 const Ti, // Initial tank tem
             }
         }
 
-        if (t < 0.0) t = Infinity; // If negative time, Tf can never be reached in the future
+        if (t < 0.0) {
+            t = Infinity; // If negative time, Tf can never be reached in the future
+        }
     }
 
     CalcTimeNeeded = t;
@@ -7540,8 +7615,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
     if (this->TimeElapsed != TimeElapsed_loc) {
         // The simulation has advanced to the next system DataGlobals::TimeStep.  Save conditions from the end of the previous system
         // DataGlobals::TimeStep for use as the initial conditions of each iteration that does not advance the system DataGlobals::TimeStep.
-        for (auto &e : this->Node)
+        for (auto &e : this->Node) {
             e.SavedTemp = e.Temp;
+        }
 
         this->SavedHeaterOn1 = this->HeaterOn1;
         this->SavedHeaterOn2 = this->HeaterOn2;
@@ -7554,8 +7630,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
     }
 
     // Reset node temperatures to what they were at the beginning of the system DataGlobals::TimeStep.
-    for (auto &e : this->Node)
+    for (auto &e : this->Node) {
         e.Temp = e.SavedTemp;
+    }
 
     this->HeaterOn1 = this->SavedHeaterOn1;
     this->HeaterOn2 = this->SavedHeaterOn2;
@@ -7566,7 +7643,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
 
     // Heat rate from the heat pump (W)
     const Real64 Qheatpump = [&, this] { // BLB
-        if (this->HeatPumpNum == 0) return 0.0;
+        if (this->HeatPumpNum == 0) {
+            return 0.0;
+        }
         HeatPumpWaterHeaterData const &HPWH = state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum);
         Real64 CoilTotalHeatingEnergyRate;
         if (HPWH.NumofSpeed > 0) {
@@ -7615,7 +7694,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
     Real64 Qheater1;                      // Heating rate of burner or electric heating element 1 (W)
     Real64 Qheater2;                      // Heating rate of burner or electric heating element 2 (W)
 
-    if (this->InletMode == InletPositionMode::Fixed) CalcNodeMassFlows(InletPositionMode::Fixed);
+    if (this->InletMode == InletPositionMode::Fixed) {
+        CalcNodeMassFlows(InletPositionMode::Fixed);
+    }
 
     // Time remaining in the current DataGlobals::TimeStep (s)
     Real64 TimeRemaining = SecInTimeStep;
@@ -7643,7 +7724,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
         bool PrevHeaterOn1 = this->HeaterOn1;
         bool PrevHeaterOn2 = this->HeaterOn2;
 
-        if (this->InletMode == InletPositionMode::Seeking) CalcNodeMassFlows(InletPositionMode::Seeking);
+        if (this->InletMode == InletPositionMode::Seeking) {
+            CalcNodeMassFlows(InletPositionMode::Seeking);
+        }
 
         // Heater control logic
         if (this->IsChilledWaterTank) {
@@ -7788,7 +7871,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
             dt = TimeRemaining;
             for (int i = 0; i < nTankNodes; ++i) {
                 const Real64 Denominator = fabs(A[i] * Tavg[i] + B[i]);
-                if (Denominator != 0.0) dt = min(dt, dT_max / Denominator);
+                if (Denominator != 0.0) {
+                    dt = min(dt, dT_max / Denominator);
+                }
             }
             dt = max(min(SubTimestepMin, TimeRemaining), dt);
             dt = min(SubTimestepMax, dt);
@@ -7831,8 +7916,12 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
 
                 // Conduction to adjacent nodes
                 A[i] += -(tank_node.CondCoeffDn + tank_node.CondCoeffUp);
-                if (NodeNum > 1) B[i] += tank_node.CondCoeffUp * Tavg[i - 1];
-                if (NodeNum < nTankNodes) B[i] += tank_node.CondCoeffDn * Tavg[i + 1];
+                if (NodeNum > 1) {
+                    B[i] += tank_node.CondCoeffUp * Tavg[i - 1];
+                }
+                if (NodeNum < nTankNodes) {
+                    B[i] += tank_node.CondCoeffDn * Tavg[i + 1];
+                }
 
                 // Use side plant connection
                 const Real64 use_e_mdot_cp = tank_node.UseMassFlowRate * Cp;
@@ -7842,7 +7931,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
                 // Source side heat transfer rate
                 if ((this->HeatPumpNum > 0) && (HPWHCondenserConfig == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterPumped)) {
                     // Pumped Condenser Heat Pump Water Heater
-                    if (tank_node.SourceMassFlowRate > 0.0) B[i] += Qheatpump;
+                    if (tank_node.SourceMassFlowRate > 0.0) {
+                        B[i] += Qheatpump;
+                    }
                 } else {
                     // Source side plant connection (constant temperature)
                     const Real64 src_e_mdot_cp = tank_node.SourceMassFlowRate * Cp;
@@ -7857,8 +7948,12 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
 
                 // Internodal flow
                 A[i] += -(tank_node.MassFlowFromUpper + tank_node.MassFlowFromLower) * Cp;
-                if (NodeNum > 1) B[i] += tank_node.MassFlowFromUpper * Cp * Tavg[i - 1];
-                if (NodeNum < nTankNodes) B[i] += tank_node.MassFlowFromLower * Cp * Tavg[i + 1];
+                if (NodeNum > 1) {
+                    B[i] += tank_node.MassFlowFromUpper * Cp * Tavg[i - 1];
+                }
+                if (NodeNum < nTankNodes) {
+                    B[i] += tank_node.MassFlowFromLower * Cp * Tavg[i + 1];
+                }
 
                 // Divide by mass and specific heat
                 // m * cp * dT/dt = q_net  =>  dT/dt = a * T + b
@@ -7879,7 +7974,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
                 TfinalDiff = max(fabs(Tfinal[i] - Tfinal_old), TfinalDiff);
             }
 
-            if (TfinalDiff < TemperatureConvergenceCriteria) break;
+            if (TfinalDiff < TemperatureConvergenceCriteria) {
+                break;
+            }
 
             if (this->DesuperheaterNum > 0) {
                 DesuperheaterPLR = state.dataWaterThermalTanks->WaterHeaterDesuperheater(this->DesuperheaterNum).DesuperheaterPLR;
@@ -7915,7 +8012,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
                     for (m = j; m < nTankNodes; ++m) {
                         Tmixed += Tfinal[m] * this->Node[m].Mass;
                         MassMixed += this->Node[m].Mass;
-                        if ((m == nTankNodes - 1) || (Tmixed / MassMixed > Tfinal[m + 1])) break;
+                        if ((m == nTankNodes - 1) || (Tmixed / MassMixed > Tfinal[m + 1])) {
+                            break;
+                        }
                     }
                     Tmixed /= MassMixed;
 
@@ -8023,9 +8122,15 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
             }
         }();
         Esource += Qsource * dt;
-        if (this->HeaterOn1) Runtime1 += dt;
-        if (this->HeaterOn2) Runtime2 += dt;
-        if (this->HeaterOn1 || this->HeaterOn2) Runtime += dt;
+        if (this->HeaterOn1) {
+            Runtime1 += dt;
+        }
+        if (this->HeaterOn2) {
+            Runtime2 += dt;
+        }
+        if (this->HeaterOn1 || this->HeaterOn2) {
+            Runtime += dt;
+        }
         Eheater1 += Qheater1 * dt;
         Eheater2 += Qheater2 * dt;
 
@@ -8038,7 +8143,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
                 Qrecovery = this->OffCycParaLoad;
             }
             this->FirstRecoveryFuel += Qrecovery * dt;
-            if (SetPointRecovered) this->FirstRecoveryDone = true;
+            if (SetPointRecovered) {
+                this->FirstRecoveryDone = true;
+            }
         }
     } // end while TimeRemaining > 0.0
 
@@ -8148,7 +8255,9 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
     this->FuelRate = (Eheater1 + Eheater2) / this->Efficiency / SecInTimeStep;
 
     // Add water heater skin losses and venting losses to ambient zone, if specified
-    if (this->AmbientTempZone > 0) this->AmbientZoneGain = -this->LossRate * this->SkinLossFracToZone - this->VentRate;
+    if (this->AmbientTempZone > 0) {
+        this->AmbientZoneGain = -this->LossRate * this->SkinLossFracToZone - this->VentRate;
+    }
 }
 
 void WaterThermalTankData::CalcNodeMassFlows(InletPositionMode inletMode)
@@ -8230,8 +8339,12 @@ void WaterThermalTankData::CalcNodeMassFlows(InletPositionMode inletMode)
         }
     }
 
-    if (useInletStratNod > 0) this->Node(useInletStratNod).UseMassFlowRate = useMassFlowRate;
-    if (sourceInletStratNode > 0) this->Node(sourceInletStratNode).SourceMassFlowRate = sourceMassFlowRate;
+    if (useInletStratNod > 0) {
+        this->Node(useInletStratNod).UseMassFlowRate = useMassFlowRate;
+    }
+    if (sourceInletStratNode > 0) {
+        this->Node(sourceInletStratNode).SourceMassFlowRate = sourceMassFlowRate;
+    }
 
     if (useMassFlowRate > 0.0) {
         if (useOutletStratNode > useInletStratNod) {
@@ -8419,9 +8532,13 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
 
     // set limits on heat recovery efficiency
     if (DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::CondenserRefrigeration) {
-        if ((HEffFTemp * Effic) > 0.9) HEffFTemp = 0.9 / Effic;
+        if ((HEffFTemp * Effic) > 0.9) {
+            HEffFTemp = 0.9 / Effic;
+        }
     } else { // max is 0.3 for all other sources
-        if ((HEffFTemp * Effic) > 0.3) HEffFTemp = 0.3 / Effic;
+        if ((HEffFTemp * Effic) > 0.3) {
+            HEffFTemp = 0.3 / Effic;
+        }
     } // setting limits on heat recovery efficiency
 
     // Access the appropriate structure to find the average heating capacity of the desuperheater heating coil
@@ -8743,7 +8860,9 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
         }
     }
 
-    if (QHeatRate == 0) partLoadRatio = 0.0;
+    if (QHeatRate == 0) {
+        partLoadRatio = 0.0;
+    }
 
     state.dataLoopNodes->Node(WaterOutletNode).MassFlowRate = MdotWater * partLoadRatio;
     DesupHtr.HEffFTempOutput = HEffFTemp;
@@ -8772,40 +8891,46 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
         if (DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::CompressorRackRefrigeratedCase) {
             state.dataHeatBal->HeatReclaimRefrigeratedRack(SourceID).WaterHeatingDesuperheaterReclaimedHeat(DesuperheaterNum) = DesupHtr.HeaterRate;
             state.dataHeatBal->HeatReclaimRefrigeratedRack(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal = 0.0;
-            for (auto const &num : state.dataHeatBal->HeatReclaimRefrigeratedRack(SourceID).WaterHeatingDesuperheaterReclaimedHeat)
+            for (auto const &num : state.dataHeatBal->HeatReclaimRefrigeratedRack(SourceID).WaterHeatingDesuperheaterReclaimedHeat) {
                 state.dataHeatBal->HeatReclaimRefrigeratedRack(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal += num;
+            }
         } else if (DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::CondenserRefrigeration) {
             state.dataHeatBal->HeatReclaimRefrigCondenser(SourceID).WaterHeatingDesuperheaterReclaimedHeat(DesuperheaterNum) = DesupHtr.HeaterRate;
             state.dataHeatBal->HeatReclaimRefrigCondenser(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal = 0.0;
-            for (auto const &num : state.dataHeatBal->HeatReclaimRefrigCondenser(SourceID).WaterHeatingDesuperheaterReclaimedHeat)
+            for (auto const &num : state.dataHeatBal->HeatReclaimRefrigCondenser(SourceID).WaterHeatingDesuperheaterReclaimedHeat) {
                 state.dataHeatBal->HeatReclaimRefrigCondenser(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal += num;
+            }
         } else if (DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::DXCooling ||
                    DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::DXMultiSpeed ||
                    DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::DXMultiMode) {
             state.dataHeatBal->HeatReclaimDXCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeat(DesuperheaterNum) = DesupHtr.HeaterRate;
             state.dataHeatBal->HeatReclaimDXCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal = 0.0;
-            for (auto const &num : state.dataHeatBal->HeatReclaimDXCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeat)
+            for (auto const &num : state.dataHeatBal->HeatReclaimDXCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeat) {
                 state.dataHeatBal->HeatReclaimDXCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal += num;
+            }
         } else if (DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::DXVariableCooling ||
                    DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::AirWaterHeatPumpVSEQ) {
             state.dataHeatBal->HeatReclaimVS_Coil(SourceID).WaterHeatingDesuperheaterReclaimedHeat(DesuperheaterNum) = DesupHtr.HeaterRate;
             state.dataHeatBal->HeatReclaimVS_Coil(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal = 0.0;
-            for (auto const &num : state.dataHeatBal->HeatReclaimVS_Coil(SourceID).WaterHeatingDesuperheaterReclaimedHeat)
+            for (auto const &num : state.dataHeatBal->HeatReclaimVS_Coil(SourceID).WaterHeatingDesuperheaterReclaimedHeat) {
                 state.dataHeatBal->HeatReclaimVS_Coil(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal += num;
+            }
         } else if (DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::AirWaterHeatPumpEQ) {
             state.dataHeatBal->HeatReclaimSimple_WAHPCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeat(DesuperheaterNum) = DesupHtr.HeaterRate;
             state.dataHeatBal->HeatReclaimSimple_WAHPCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal = 0.0;
-            for (auto const &num : state.dataHeatBal->HeatReclaimSimple_WAHPCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeat)
+            for (auto const &num : state.dataHeatBal->HeatReclaimSimple_WAHPCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeat) {
                 state.dataHeatBal->HeatReclaimSimple_WAHPCoil(SourceID).WaterHeatingDesuperheaterReclaimedHeatTotal += num;
+            }
         } else if (DesupHtr.ReclaimHeatingSource == ReclaimHeatObjectType::CoilCoolingDX) {
             state.dataCoilCoolingDX->coilCoolingDXs[DesupHtr.ReclaimHeatingSourceIndexNum].reclaimHeat.WaterHeatingDesuperheaterReclaimedHeat(
                 DesuperheaterNum) = DesupHtr.HeaterRate;
             state.dataCoilCoolingDX->coilCoolingDXs[DesupHtr.ReclaimHeatingSourceIndexNum].reclaimHeat.WaterHeatingDesuperheaterReclaimedHeatTotal =
                 0.0;
             for (auto const &num :
-                 state.dataCoilCoolingDX->coilCoolingDXs[DesupHtr.ReclaimHeatingSourceIndexNum].reclaimHeat.WaterHeatingDesuperheaterReclaimedHeat)
+                 state.dataCoilCoolingDX->coilCoolingDXs[DesupHtr.ReclaimHeatingSourceIndexNum].reclaimHeat.WaterHeatingDesuperheaterReclaimedHeat) {
                 state.dataCoilCoolingDX->coilCoolingDXs[DesupHtr.ReclaimHeatingSourceIndexNum]
                     .reclaimHeat.WaterHeatingDesuperheaterReclaimedHeatTotal += num;
+            }
         }
     }
 }
@@ -8870,7 +8995,9 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
         HeatPump.FirstTimeThroughFlag = false;
     }
 
-    if (!FirstHVACIteration) HeatPump.FirstTimeThroughFlag = true;
+    if (!FirstHVACIteration) {
+        HeatPump.FirstTimeThroughFlag = true;
+    }
 
     // check if HPWH is off for some reason and simulate HPWH air- and water-side mass flow rates of 0
     // simulate only water heater tank if HP compressor is scheduled off
@@ -8903,7 +9030,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                 state.dataFans->fans(HeatPump.FanNum)->simulate(state, FirstHVACIteration, _, _);
 
                 this->SetVSHPWHFlowRates(state, HeatPump, SpeedNum, SpeedRatio, RhoWater, MdotWater, FirstHVACIteration);
-                if (HeatPump.bIsIHP)
+                if (HeatPump.bIsIHP) {
                     VariableSpeedCoils::SimVariableSpeedCoils(state,
                                                               "",
                                                               VSCoilNum,
@@ -8915,7 +9042,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                                               0.0,
                                                               0.0,
                                                               1.0);
-                else
+                } else {
                     VariableSpeedCoils::SimVariableSpeedCoils(state,
                                                               HeatPump.DXCoilName,
                                                               VSCoilNum,
@@ -8927,9 +9054,10 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                                               0.0,
                                                               0.0,
                                                               1.0);
+                }
             } else {
                 this->SetVSHPWHFlowRates(state, HeatPump, SpeedNum, SpeedRatio, RhoWater, MdotWater, FirstHVACIteration);
-                if (HeatPump.bIsIHP)
+                if (HeatPump.bIsIHP) {
                     VariableSpeedCoils::SimVariableSpeedCoils(state,
                                                               "",
                                                               VSCoilNum,
@@ -8941,7 +9069,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                                               0.0,
                                                               0.0,
                                                               1.0);
-                else
+                } else {
                     VariableSpeedCoils::SimVariableSpeedCoils(state,
                                                               HeatPump.DXCoilName,
                                                               VSCoilNum,
@@ -8953,6 +9081,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                                               0.0,
                                                               0.0,
                                                               1.0);
+                }
                 state.dataFans->fans(HeatPump.FanNum)->simulate(state, FirstHVACIteration, _, _);
             }
 
@@ -9215,10 +9344,11 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
     if (HeatPump.bIsIHP) // mark the water heating call, if existing
     {
         if (state.dataIntegratedHP->IntegratedHeatPumps(HeatPump.DXCoilNum).CheckWHCall) {
-            if (HeatPump.Mode == TankOperatingMode::Heating)
+            if (HeatPump.Mode == TankOperatingMode::Heating) {
                 state.dataIntegratedHP->IntegratedHeatPumps(HeatPump.DXCoilNum).IsWHCallAvail = true;
-            else
+            } else {
                 state.dataIntegratedHP->IntegratedHeatPumps(HeatPump.DXCoilNum).IsWHCallAvail = false;
+            }
         }
     }
 
@@ -9341,10 +9471,11 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
             if (MaxSpeedNum > 0) {
                 // square the solving, and avoid warning
                 // due to very small capacity at lowest speed of VSHPWH coil
-                if (bIterSpeed)
+                if (bIterSpeed) {
                     zeroResidual = this->PLRResidualHPWH(state, 0.0, HPSetPointTemp, tmpMode, MdotWater);
-                else
+                } else {
                     zeroResidual = -1.0;
+                }
             }
 
             if (zeroResidual > 0.0) { // then iteration
@@ -9626,7 +9757,9 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                 }
                 // update inlet temp
                 state.dataLoopNodes->Node(HPWaterInletNode).Temp = this->SourceOutletTemp;
-                if (std::abs(state.dataLoopNodes->Node(HPWaterInletNode).Temp - HPWHCondInletNodeLast) < HVAC::SmallTempDiff) break;
+                if (std::abs(state.dataLoopNodes->Node(HPWaterInletNode).Temp - HPWHCondInletNodeLast) < HVAC::SmallTempDiff) {
+                    break;
+                }
                 HPWHCondInletNodeLast = state.dataLoopNodes->Node(HPWaterInletNode).Temp;
             }
 
@@ -9651,8 +9784,9 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
         state.dataLoopNodes->Node(OutdoorAirNode).MassFlowRate =
             state.dataWaterThermalTanks->mdotAir * state.dataWaterThermalTanks->hpPartLoadRatio * state.dataWaterThermalTanks->mixerInletAirSchedule;
         //   IF HPWH is off, pass zone node conditions through HPWH air-side
-        if (state.dataWaterThermalTanks->hpPartLoadRatio == 0)
+        if (state.dataWaterThermalTanks->hpPartLoadRatio == 0) {
             state.dataLoopNodes->Node(InletAirMixerNode) = state.dataLoopNodes->Node(HPAirInletNode);
+        }
     } else {
         if (OutdoorAirNode == 0) {
             state.dataLoopNodes->Node(HPAirInletNode).MassFlowRate =
@@ -9662,7 +9796,9 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                 state.dataWaterThermalTanks->mdotAir * state.dataWaterThermalTanks->hpPartLoadRatio;
         }
     }
-    if (state.dataWaterThermalTanks->hpPartLoadRatio == 0) this->SourceInletTemp = this->SourceOutletTemp;
+    if (state.dataWaterThermalTanks->hpPartLoadRatio == 0) {
+        this->SourceInletTemp = this->SourceOutletTemp;
+    }
 
     // set water-side mass flow rate for final calculation
     state.dataLoopNodes->Node(HPWaterInletNode).MassFlowRate = MdotWater * state.dataWaterThermalTanks->hpPartLoadRatio;
@@ -10004,7 +10140,9 @@ void WaterThermalTankData::SetVSHPWHFlowRates(EnergyPlusData &state,
     //  calculate resultant HPWH coil output
 
     int SpeedLow = SpeedNum - 1;
-    if (SpeedLow < 1) SpeedLow = 1;
+    if (SpeedLow < 1) {
+        SpeedLow = 1;
+    }
 
     int HPWaterInletNode = HPWH.CondWaterInletNode;
     int DXCoilAirInletNode = HPWH.DXCoilAirInletNode;
@@ -10169,10 +10307,11 @@ Real64 WaterThermalTankData::PLRResidualHPWH(
         // Here we create a pointer to the TotalHeatingEnergyRate for the appropriate coil type.
         Real64 *CoilTotalHeatingEnergyRatePtr;
         if (isVariableSpeed) {
-            if (HeatPump.bIsIHP)
+            if (HeatPump.bIsIHP) {
                 CoilTotalHeatingEnergyRatePtr = &state.dataIntegratedHP->IntegratedHeatPumps(HeatPump.DXCoilNum).TotalWaterHeatingRate;
-            else
+            } else {
                 CoilTotalHeatingEnergyRatePtr = &state.dataVariableSpeedCoils->VarSpeedCoil(HeatPump.DXCoilNum).TotalHeatingEnergyRate;
+            }
         } else {
             CoilTotalHeatingEnergyRatePtr = &state.dataDXCoils->DXCoil(HeatPump.DXCoilNum).TotalHeatingEnergyRate;
         }
@@ -10444,7 +10583,9 @@ Real64 WaterThermalTankData::PlantMassFlowRatesFunc(EnergyPlusData &state,
         break;
     }
 
-    if (FlowResult < HVAC::VerySmallMassFlow) FlowResult = 0.0; // Catch underflow problems
+    if (FlowResult < HVAC::VerySmallMassFlow) {
+        FlowResult = 0.0; // Catch underflow problems
+    }
 
     return FlowResult;
 }
@@ -10717,106 +10858,202 @@ void WaterThermalTankData::SizeTankForDemandSide(EnergyPlusData &state)
 
         if (this->Sizing.NumberOfBedrooms == 1) {
             if (this->FuelType == Constant::eFuel::Electricity) {
-                if (this->VolumeWasAutoSized) tmpTankVolume = 20.0 * GalTocubicMeters;
-                if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 2.5 * 1000.0; // 2.5 kW
+                if (this->VolumeWasAutoSized) {
+                    tmpTankVolume = 20.0 * GalTocubicMeters;
+                }
+                if (this->MaxCapacityWasAutoSized) {
+                    tmpMaxCapacity = 2.5 * 1000.0; // 2.5 kW
+                }
             } else if (FuelTypeIsLikeGas) {
-                if (this->VolumeWasAutoSized) tmpTankVolume = 20.0 * GalTocubicMeters;
-                if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 27.0 * kBtuPerHrToWatts; // 27kBtu/hr
+                if (this->VolumeWasAutoSized) {
+                    tmpTankVolume = 20.0 * GalTocubicMeters;
+                }
+                if (this->MaxCapacityWasAutoSized) {
+                    tmpMaxCapacity = 27.0 * kBtuPerHrToWatts; // 27kBtu/hr
+                }
             }
 
         } else if (this->Sizing.NumberOfBedrooms == 2) {
             if (this->Sizing.NumberOfBathrooms <= 1.5) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 30.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 3.5 * 1000.0; // 3.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 30.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 3.5 * 1000.0; // 3.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 30.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 30.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    }
                 }
             } else if ((this->Sizing.NumberOfBathrooms > 1.5) && (this->Sizing.NumberOfBathrooms < 3.0)) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 4.5 * 1000.0; // 4.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 40.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 4.5 * 1000.0; // 4.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 30.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 30.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    }
                 }
             } else if (this->Sizing.NumberOfBathrooms >= 3.0) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 50.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 40.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    }
                 }
             }
         } else if (this->Sizing.NumberOfBedrooms == 3) {
             if (this->Sizing.NumberOfBathrooms <= 1.5) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 4.5 * 1000.0; // 4.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 40.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 4.5 * 1000.0; // 4.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 30.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 30.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    }
                 }
             } else if ((this->Sizing.NumberOfBathrooms > 1.5) && (this->Sizing.NumberOfBathrooms < 3.0)) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 50.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 40.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    }
                 }
             } else if (this->Sizing.NumberOfBathrooms >= 3.0) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 50.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 40.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                    }
                 }
             }
         } else if (this->Sizing.NumberOfBedrooms == 4) {
             if (this->Sizing.NumberOfBathrooms <= 1.5) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 50.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 40.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                    }
                 }
             } else if ((this->Sizing.NumberOfBathrooms > 1.5) && (this->Sizing.NumberOfBathrooms < 3.0)) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 50.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 40.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                    }
                 }
             } else if (this->Sizing.NumberOfBathrooms >= 3.0) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 66.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 66.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 50.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                    }
                 }
             }
         } else if (this->Sizing.NumberOfBedrooms == 5) {
             if (this->FuelType == Constant::eFuel::Electricity) {
-                if (this->VolumeWasAutoSized) tmpTankVolume = 66.0 * GalTocubicMeters;
-                if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                if (this->VolumeWasAutoSized) {
+                    tmpTankVolume = 66.0 * GalTocubicMeters;
+                }
+                if (this->MaxCapacityWasAutoSized) {
+                    tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                }
             } else if (FuelTypeIsLikeGas) {
-                if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 47.0 * kBtuPerHrToWatts; // 47 kBtu/hr
+                if (this->VolumeWasAutoSized) {
+                    tmpTankVolume = 50.0 * GalTocubicMeters;
+                }
+                if (this->MaxCapacityWasAutoSized) {
+                    tmpMaxCapacity = 47.0 * kBtuPerHrToWatts; // 47 kBtu/hr
+                }
             }
         } else if (this->Sizing.NumberOfBedrooms >= 6) {
             if (this->FuelType == Constant::eFuel::Electricity) {
-                if (this->VolumeWasAutoSized) tmpTankVolume = 66.0 * GalTocubicMeters;
-                if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                if (this->VolumeWasAutoSized) {
+                    tmpTankVolume = 66.0 * GalTocubicMeters;
+                }
+                if (this->MaxCapacityWasAutoSized) {
+                    tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                }
             } else if (FuelTypeIsLikeGas) {
-                if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 50.0 * kBtuPerHrToWatts; // 50 kBtu/hr
+                if (this->VolumeWasAutoSized) {
+                    tmpTankVolume = 50.0 * GalTocubicMeters;
+                }
+                if (this->MaxCapacityWasAutoSized) {
+                    tmpMaxCapacity = 50.0 * kBtuPerHrToWatts; // 50 kBtu/hr
+                }
             }
         }
 
@@ -10848,7 +11085,9 @@ void WaterThermalTankData::SizeTankForDemandSide(EnergyPlusData &state)
         for (auto const &thisZone : state.dataHeatBal->Zone) {
             SumPeopleAllZones += thisZone.TotOccupants;
         }
-        if (this->VolumeWasAutoSized) tmpTankVolume = this->Sizing.TankCapacityPerPerson * SumPeopleAllZones;
+        if (this->VolumeWasAutoSized) {
+            tmpTankVolume = this->Sizing.TankCapacityPerPerson * SumPeopleAllZones;
+        }
 
         if (this->MaxCapacityWasAutoSized) {
             Real64 rho;
@@ -10892,7 +11131,9 @@ void WaterThermalTankData::SizeTankForDemandSide(EnergyPlusData &state)
         for (auto const &thisZone : state.dataHeatBal->Zone) {
             SumFloorAreaAllZones += thisZone.FloorArea;
         }
-        if (this->VolumeWasAutoSized) tmpTankVolume = this->Sizing.TankCapacityPerArea * SumFloorAreaAllZones;
+        if (this->VolumeWasAutoSized) {
+            tmpTankVolume = this->Sizing.TankCapacityPerArea * SumFloorAreaAllZones;
+        }
         if (this->MaxCapacityWasAutoSized) {
             Real64 rho;
             Real64 Cp;
@@ -10928,7 +11169,9 @@ void WaterThermalTankData::SizeTankForDemandSide(EnergyPlusData &state)
     }
     case SizingMode::PerUnit: {
 
-        if (this->VolumeWasAutoSized) tmpTankVolume = this->Sizing.TankCapacityPerUnit * this->Sizing.NumberOfUnits;
+        if (this->VolumeWasAutoSized) {
+            tmpTankVolume = this->Sizing.TankCapacityPerUnit * this->Sizing.NumberOfUnits;
+        }
 
         if (this->MaxCapacityWasAutoSized) {
             Real64 rho;
@@ -10971,7 +11214,9 @@ void WaterThermalTankData::SizeTankForDemandSide(EnergyPlusData &state)
         break;
     }
 
-    if (this->MaxCapacityWasAutoSized) this->setBackupElementCapacity(state);
+    if (this->MaxCapacityWasAutoSized) {
+        this->setBackupElementCapacity(state);
+    }
 
     // if stratified, might set height.
     if ((this->VolumeWasAutoSized) && (this->WaterThermalTankType == DataPlant::PlantEquipmentType::WtrHeaterStratified) &&
@@ -11020,8 +11265,9 @@ void WaterThermalTankData::SizeTankForSupplySide(EnergyPlusData &state)
     Real64 tmpMaxCapacity = this->MaxCapacity;
 
     if (this->Sizing.DesignMode == SizingMode::PeakDraw) {
-        if (this->VolumeWasAutoSized)
+        if (this->VolumeWasAutoSized) {
             tmpTankVolume = this->Sizing.TankDrawTime * this->UseDesignVolFlowRate * Constant::rSecsInHour; // hours | m3/s | (3600 s/1 hour)
+        }
         if (this->VolumeWasAutoSized && state.dataPlnt->PlantFirstSizesOkayToFinalize) {
             this->Volume = tmpTankVolume;
             if (state.dataPlnt->PlantFinalSizesOkayToReport) {
@@ -11422,106 +11668,202 @@ void WaterThermalTankData::SizeStandAloneWaterHeater(EnergyPlusData &state)
 
             if (this->Sizing.NumberOfBedrooms == 1) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 20.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 2.5 * 1000.0; // 2.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 20.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 2.5 * 1000.0; // 2.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 20.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 27.0 * kBtuPerHrToWatts; // 27kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 20.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 27.0 * kBtuPerHrToWatts; // 27kBtu/hr
+                    }
                 }
 
             } else if (this->Sizing.NumberOfBedrooms == 2) {
                 if (this->Sizing.NumberOfBathrooms <= 1.5) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 30.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 3.5 * 1000.0; // 3.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 30.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 3.5 * 1000.0; // 3.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 30.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 30.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        }
                     }
                 } else if ((this->Sizing.NumberOfBathrooms > 1.5) && (this->Sizing.NumberOfBathrooms < 3.0)) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 4.5 * 1000.0; // 4.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 40.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 4.5 * 1000.0; // 4.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 30.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 30.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        }
                     }
                 } else if (this->Sizing.NumberOfBathrooms >= 3.0) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 50.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 40.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        }
                     }
                 }
             } else if (this->Sizing.NumberOfBedrooms == 3) {
                 if (this->Sizing.NumberOfBathrooms <= 1.5) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 4.5 * 1000.0; // 4.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 40.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 4.5 * 1000.0; // 4.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 30.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 30.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        }
                     }
                 } else if ((this->Sizing.NumberOfBathrooms > 1.5) && (this->Sizing.NumberOfBathrooms < 3.0)) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 50.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 40.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        }
                     }
                 } else if (this->Sizing.NumberOfBathrooms >= 3.0) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 50.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 40.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                        }
                     }
                 }
             } else if (this->Sizing.NumberOfBedrooms == 4) {
                 if (this->Sizing.NumberOfBathrooms <= 1.5) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 50.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 40.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 36.0 * kBtuPerHrToWatts; // 36 kBtu/hr
+                        }
                     }
                 } else if ((this->Sizing.NumberOfBathrooms > 1.5) && (this->Sizing.NumberOfBathrooms < 3.0)) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 50.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 40.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 40.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                        }
                     }
                 } else if (this->Sizing.NumberOfBathrooms >= 3.0) {
                     if (this->FuelType == Constant::eFuel::Electricity) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 66.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 66.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                        }
                     } else if (FuelTypeIsLikeGas) {
-                        if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                        if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                        if (this->VolumeWasAutoSized) {
+                            tmpTankVolume = 50.0 * GalTocubicMeters;
+                        }
+                        if (this->MaxCapacityWasAutoSized) {
+                            tmpMaxCapacity = 38.0 * kBtuPerHrToWatts; // 38 kBtu/hr
+                        }
                     }
                 }
             } else if (this->Sizing.NumberOfBedrooms == 5) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 66.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 66.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 47.0 * kBtuPerHrToWatts; // 47 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 50.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 47.0 * kBtuPerHrToWatts; // 47 kBtu/hr
+                    }
                 }
             } else if (this->Sizing.NumberOfBedrooms >= 6) {
                 if (this->FuelType == Constant::eFuel::Electricity) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 66.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 66.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 5.5 * 1000.0; // 5.5 kW
+                    }
                 } else if (FuelTypeIsLikeGas) {
-                    if (this->VolumeWasAutoSized) tmpTankVolume = 50.0 * GalTocubicMeters;
-                    if (this->MaxCapacityWasAutoSized) tmpMaxCapacity = 50.0 * kBtuPerHrToWatts; // 50 kBtu/hr
+                    if (this->VolumeWasAutoSized) {
+                        tmpTankVolume = 50.0 * GalTocubicMeters;
+                    }
+                    if (this->MaxCapacityWasAutoSized) {
+                        tmpMaxCapacity = 50.0 * kBtuPerHrToWatts; // 50 kBtu/hr
+                    }
                 }
             }
             if (this->VolumeWasAutoSized) {
@@ -11593,7 +11935,9 @@ void WaterThermalTankData::SizeStandAloneWaterHeater(EnergyPlusData &state)
         }
         case SizingMode::PerUnit: {
 
-            if (this->VolumeWasAutoSized) tmpTankVolume = this->Sizing.TankCapacityPerUnit * this->Sizing.NumberOfUnits;
+            if (this->VolumeWasAutoSized) {
+                tmpTankVolume = this->Sizing.TankCapacityPerUnit * this->Sizing.NumberOfUnits;
+            }
 
             if (this->MaxCapacityWasAutoSized) {
                 Real64 rho = this->water->getDensity(state, ((Tfinish + Tstart) / 2.0), routineName);
@@ -11755,9 +12099,11 @@ void WaterThermalTankData::CalcStandardRatings(EnergyPlusData &state)
         this->SetPointTemp = 57.2222;  // 135 F
         this->SetPointTemp2 = 57.2222; // 135 F
         this->TankTemp = 57.2222;      // Initialize tank temperature
-        if (this->Nodes > 0)
-            for (auto &e : this->Node)
+        if (this->Nodes > 0) {
+            for (auto &e : this->Node) {
                 e.Temp = 57.2222;
+            }
+        }
 
         Real64 TotalDrawMass = 0.243402 * Psychrometrics::RhoH2O(Constant::InitConvTemp); // 64.3 gal * rho
         Real64 DrawMass = TotalDrawMass / 6.0;                                            // 6 equal draws
@@ -11781,8 +12127,9 @@ void WaterThermalTankData::CalcStandardRatings(EnergyPlusData &state)
             this->SavedTankTemp = this->TankTemp;
             this->SavedMode = this->Mode;
             if (this->Nodes > 0) {
-                for (auto &e : this->Node)
+                for (auto &e : this->Node) {
                     e.SavedTemp = e.Temp;
+                }
                 this->SavedHeaterOn1 = this->HeaterOn1;
                 this->SavedHeaterOn2 = this->HeaterOn2;
             }
@@ -12031,10 +12378,14 @@ void WaterThermalTankData::CalcStandardRatings(EnergyPlusData &state)
                 this->PLFCurve = state.dataWaterThermalTanks->HPWaterHeater(HPNum).DXCoilPLFFPLR;
 
                 if (this->WaterThermalTankType == DataPlant::PlantEquipmentType::WtrHeaterMixed) {
-                    if (this->Efficiency > 0.0) this->CalcWaterThermalTankMixed(state);
+                    if (this->Efficiency > 0.0) {
+                        this->CalcWaterThermalTankMixed(state);
+                    }
 
                 } else if (this->WaterThermalTankType == DataPlant::PlantEquipmentType::WtrHeaterStratified) {
-                    if (this->Efficiency > 0.0) this->CalcWaterThermalTankStratified(state);
+                    if (this->Efficiency > 0.0) {
+                        this->CalcWaterThermalTankStratified(state);
+                    }
                 }
 
                 //       reset the water heater data to original values
@@ -12219,7 +12570,9 @@ void WaterThermalTankData::setBackupElementCapacity(EnergyPlusData &state)
     // negative electric consumption.  Using a test for any negative numbers here instead of just -99999 for safety.
     // Only reset the backup element capacity if a problem has been occured.
     if (this->HeatPumpNum > 0) {
-        if (state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).HPWHType == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterWrapped) return;
+        if (state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).HPWHType == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterWrapped) {
+            return;
+        }
         if (state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).BackupElementCapacity < 0.0) {
             state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).BackupElementCapacity = this->MaxCapacity;
         }

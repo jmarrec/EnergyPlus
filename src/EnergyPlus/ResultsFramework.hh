@@ -554,10 +554,16 @@ namespace ResultsFramework {
 
         inline bool hasAnyTSData() const
         {
-            for (int iTimeStep = 0; iTimeStep < (int)TimeStepType::Num; ++iTimeStep)
-                if (detailedTSData[iTimeStep].dataFrameEnabled()) return true;
-            for (int iFreq = (int)ReportFreq::TimeStep; iFreq < (int)ReportFreq::Num; ++iFreq)
-                if (freqTSData[iFreq].dataFrameEnabled()) return true;
+            for (int iTimeStep = 0; iTimeStep < (int)TimeStepType::Num; ++iTimeStep) {
+                if (detailedTSData[iTimeStep].dataFrameEnabled()) {
+                    return true;
+                }
+            }
+            for (int iFreq = (int)ReportFreq::TimeStep; iFreq < (int)ReportFreq::Num; ++iFreq) {
+                if (freqTSData[iFreq].dataFrameEnabled()) {
+                    return true;
+                }
+            }
             return false;
         };
 

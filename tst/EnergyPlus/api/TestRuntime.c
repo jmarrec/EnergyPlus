@@ -228,7 +228,9 @@ int main(int argc, const char *argv[])
 
     // OK, now just try to run one of the dirty states and it should fail
     int bad = energyplus(state3, argc, argv);
-    if (bad == 0) return 1;
+    if (bad == 0) {
+        return 1;
+    }
 
     // OK, so now let's run with a callback that stops the simulation
     EnergyPlusState state5 = stateNew();

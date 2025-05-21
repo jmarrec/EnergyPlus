@@ -102,7 +102,9 @@ void ReportSurfaces(EnergyPlusData &state)
     bool DoReport;
 
     General::ScanForReports(state, "Surfaces", DoReport, "Lines", Option1);
-    if (DoReport) LinesOut(state, Option1);
+    if (DoReport) {
+        LinesOut(state, Option1);
+    }
 
     General::ScanForReports(state, "Surfaces", DoReport, "Vertices");
     if (DoReport) {
@@ -215,8 +217,12 @@ void LinesOut(EnergyPlusData &state, std::string const &option)
     if (option != "IDF") {
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) continue;
-            if (thisSurface.Sides == 0) continue;
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) {
+                continue;
+            }
+            if (thisSurface.Sides == 0) {
+                continue;
+            }
             print<FormatSyntax::FMT>(slnfile, "{}:{}\n", thisSurface.ZoneName, thisSurface.Name);
             for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                 static constexpr std::string_view fmt700("{:10.2F},{:10.2F},{:10.2F},{:10.2F},{:10.2F},{:10.2F}\n");
@@ -247,14 +253,20 @@ void LinesOut(EnergyPlusData &state, std::string const &option)
         print<FormatSyntax::FMT>(slnfile, "{}\n", "GlobalGeometryRules,UpperLeftCorner,CounterClockwise,WorldCoordinates;");
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) continue;
-            if (thisSurface.Sides == 0) continue;
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) {
+                continue;
+            }
+            if (thisSurface.Sides == 0) {
+                continue;
+            }
             // process heat transfer surfaces
             print(slnfile, " Surface={}, Name={}, Azimuth={:.1R}\n", cSurfaceClass(thisSurface.Class), thisSurface.Name, thisSurface.Azimuth);
             print<FormatSyntax::FMT>(slnfile, "  {},  !- Number of (X,Y,Z) groups in this surface\n", thisSurface.Sides);
             for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                 std::string optcommasemi = ",";
-                if (vert == thisSurface.Sides) optcommasemi = ";";
+                if (vert == thisSurface.Sides) {
+                    optcommasemi = ";";
+                }
                 static constexpr std::string_view fmtcoord("  {:10.2F},{:10.2F},{:10.2F}{}  !- {} {}\n");
                 print<check_syntax(fmtcoord)>(slnfile,
                                               fmtcoord,
@@ -324,7 +336,9 @@ static void WriteDXFCommon(EnergyPlusData &state, InputOutputFile &of, const std
     Real64 miny = 99999.0;
     for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
         auto &thisSurface = state.dataSurface->Surface(surf);
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) continue;
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) {
+            continue;
+        }
         for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
             minx = min(minx, thisSurface.Vertex(vert).x);
             miny = min(miny, thisSurface.Vertex(vert).y);
@@ -539,12 +553,24 @@ void DXFOut(EnergyPlusData &state,
         std::string ShadeType;
         auto &thisSurface = state.dataSurface->Surface(surf);
 
-        if (thisSurface.HeatTransSurf) continue;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Shading) continue;
-        if (thisSurface.Sides == 0) continue;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) colorindex = DataSurfaceColors::ColorNo::ShdDetFix;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_B) colorindex = DataSurfaceColors::ColorNo::ShdDetBldg;
-        if (state.dataSurface->SurfIsPV(surf)) colorindex = DataSurfaceColors::ColorNo::PV;
+        if (thisSurface.HeatTransSurf) {
+            continue;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Shading) {
+            continue;
+        }
+        if (thisSurface.Sides == 0) {
+            continue;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) {
+            colorindex = DataSurfaceColors::ColorNo::ShdDetFix;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_B) {
+            colorindex = DataSurfaceColors::ColorNo::ShdDetBldg;
+        }
+        if (state.dataSurface->SurfIsPV(surf)) {
+            colorindex = DataSurfaceColors::ColorNo::PV;
+        }
         if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) {
             ShadeType = "Fixed Shading";
             print(dxffile, Format_710, "Fixed Shading:" + thisSurface.Name);
@@ -614,20 +640,44 @@ void DXFOut(EnergyPlusData &state,
 
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
-            if (thisSurface.Zone != zones) continue;
-            if (thisSurface.Sides == 0) continue;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) continue;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Wall) colorindex = DataSurfaceColors::ColorNo::Wall;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Roof) colorindex = DataSurfaceColors::ColorNo::Roof;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Floor) colorindex = DataSurfaceColors::ColorNo::Floor;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Door) colorindex = DataSurfaceColors::ColorNo::Door;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Window) {
-                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::Window) colorindex = DataSurfaceColors::ColorNo::Window;
-                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::GlassDoor) colorindex = DataSurfaceColors::ColorNo::GlassDoor;
-                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::TDD_Dome) colorindex = DataSurfaceColors::ColorNo::TDDDome;
-                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::TDD_Diffuser) colorindex = DataSurfaceColors::ColorNo::TDDDiffuser;
+            if (thisSurface.Zone != zones) {
+                continue;
             }
-            if (state.dataSurface->SurfIsPV(surf)) colorindex = DataSurfaceColors::ColorNo::PV;
+            if (thisSurface.Sides == 0) {
+                continue;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) {
+                continue;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Wall) {
+                colorindex = DataSurfaceColors::ColorNo::Wall;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Roof) {
+                colorindex = DataSurfaceColors::ColorNo::Roof;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Floor) {
+                colorindex = DataSurfaceColors::ColorNo::Floor;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Door) {
+                colorindex = DataSurfaceColors::ColorNo::Door;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Window) {
+                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::Window) {
+                    colorindex = DataSurfaceColors::ColorNo::Window;
+                }
+                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::GlassDoor) {
+                    colorindex = DataSurfaceColors::ColorNo::GlassDoor;
+                }
+                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::TDD_Dome) {
+                    colorindex = DataSurfaceColors::ColorNo::TDDDome;
+                }
+                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::TDD_Diffuser) {
+                    colorindex = DataSurfaceColors::ColorNo::TDDDiffuser;
+                }
+            }
+            if (state.dataSurface->SurfIsPV(surf)) {
+                colorindex = DataSurfaceColors::ColorNo::PV;
+            }
 
             print(dxffile, Format_710, thisSurface.ZoneName + ':' + thisSurface.Name);
             if (thisSurface.Sides <= 4) {
@@ -689,11 +739,19 @@ void DXFOut(EnergyPlusData &state,
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
             // if (surface(surf)%heattranssurf) CYCLE ! Shading with a construction is allowed to be HT surf for daylighting shelves
-            if (thisSurface.Class != DataSurfaces::SurfaceClass::Shading) continue;
-            if (thisSurface.ZoneName != state.dataHeatBal->Zone(zones).Name) continue;
-            if (thisSurface.Sides == 0) continue;
+            if (thisSurface.Class != DataSurfaces::SurfaceClass::Shading) {
+                continue;
+            }
+            if (thisSurface.ZoneName != state.dataHeatBal->Zone(zones).Name) {
+                continue;
+            }
+            if (thisSurface.Sides == 0) {
+                continue;
+            }
             colorindex = DataSurfaceColors::ColorNo::ShdAtt;
-            if (state.dataSurface->SurfIsPV(surf)) colorindex = DataSurfaceColors::ColorNo::PV;
+            if (state.dataSurface->SurfIsPV(surf)) {
+                colorindex = DataSurfaceColors::ColorNo::PV;
+            }
             print(dxffile, Format_710, thisSurface.ZoneName + ':' + thisSurface.Name);
             if (thisSurface.Sides <= 4) {
                 print(dxffile, Format_704_0, TempZoneName, DXFcolorno[static_cast<int>(colorindex)]);
@@ -769,7 +827,9 @@ void DXFOut(EnergyPlusData &state,
         const DataSurfaceColors::ColorNo curcolorno = DataSurfaceColors::ColorNo::DaylSensor1;
 
         for (auto const &illumMap : state.dataDayltg->illumMaps) {
-            if (illumMap.zoneIndex != zones) continue;
+            if (illumMap.zoneIndex != zones) {
+                continue;
+            }
             int numRefPt = 0;
             for (auto const &refPt : illumMap.refPts) {
                 print(dxffile, Format_710, format("{}:MapRefPt:{}", state.dataHeatBal->Zone(zones).Name, ++numRefPt));
@@ -839,11 +899,21 @@ void DXFOutWireFrame(EnergyPlusData &state, std::string const &ColorScheme)
     for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
         std::string ShadeType;
         auto &thisSurface = state.dataSurface->Surface(surf);
-        if (thisSurface.HeatTransSurf) continue;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Shading) continue;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) colorindex = DataSurfaceColors::ColorNo::ShdDetFix;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_B) colorindex = DataSurfaceColors::ColorNo::ShdDetBldg;
-        if (state.dataSurface->SurfIsPV(surf)) colorindex = DataSurfaceColors::ColorNo::PV;
+        if (thisSurface.HeatTransSurf) {
+            continue;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Shading) {
+            continue;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) {
+            colorindex = DataSurfaceColors::ColorNo::ShdDetFix;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_B) {
+            colorindex = DataSurfaceColors::ColorNo::ShdDetBldg;
+        }
+        if (state.dataSurface->SurfIsPV(surf)) {
+            colorindex = DataSurfaceColors::ColorNo::PV;
+        }
         if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) {
             ShadeType = "Fixed Shading";
             print(dxffile, Format_710, "Fixed Shading:" + thisSurface.Name);
@@ -872,19 +942,41 @@ void DXFOutWireFrame(EnergyPlusData &state, std::string const &ColorScheme)
         surfcount = 0;
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
-            if (thisSurface.Zone != zones) continue;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) continue;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Wall) colorindex = DataSurfaceColors::ColorNo::Wall;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Roof) colorindex = DataSurfaceColors::ColorNo::Roof;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Floor) colorindex = DataSurfaceColors::ColorNo::Floor;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Door) colorindex = DataSurfaceColors::ColorNo::Door;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Window) {
-                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::Window) colorindex = DataSurfaceColors::ColorNo::Window;
-                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::GlassDoor) colorindex = DataSurfaceColors::ColorNo::GlassDoor;
-                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::TDD_Dome) colorindex = DataSurfaceColors::ColorNo::TDDDome;
-                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::TDD_Diffuser) colorindex = DataSurfaceColors::ColorNo::TDDDiffuser;
+            if (thisSurface.Zone != zones) {
+                continue;
             }
-            if (state.dataSurface->SurfIsPV(surf)) colorindex = DataSurfaceColors::ColorNo::PV;
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) {
+                continue;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Wall) {
+                colorindex = DataSurfaceColors::ColorNo::Wall;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Roof) {
+                colorindex = DataSurfaceColors::ColorNo::Roof;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Floor) {
+                colorindex = DataSurfaceColors::ColorNo::Floor;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Door) {
+                colorindex = DataSurfaceColors::ColorNo::Door;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Window) {
+                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::Window) {
+                    colorindex = DataSurfaceColors::ColorNo::Window;
+                }
+                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::GlassDoor) {
+                    colorindex = DataSurfaceColors::ColorNo::GlassDoor;
+                }
+                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::TDD_Dome) {
+                    colorindex = DataSurfaceColors::ColorNo::TDDDome;
+                }
+                if (thisSurface.OriginalClass == DataSurfaces::SurfaceClass::TDD_Diffuser) {
+                    colorindex = DataSurfaceColors::ColorNo::TDDDiffuser;
+                }
+            }
+            if (state.dataSurface->SurfIsPV(surf)) {
+                colorindex = DataSurfaceColors::ColorNo::PV;
+            }
             ++surfcount;
 
             print(dxffile, Format_710, thisSurface.ZoneName + ':' + thisSurface.Name);
@@ -905,10 +997,16 @@ void DXFOutWireFrame(EnergyPlusData &state, std::string const &ColorScheme)
         surfcount = 0;
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
-            if (thisSurface.Class != DataSurfaces::SurfaceClass::Shading) continue;
-            if (thisSurface.ZoneName != state.dataHeatBal->Zone(zones).Name) continue;
+            if (thisSurface.Class != DataSurfaces::SurfaceClass::Shading) {
+                continue;
+            }
+            if (thisSurface.ZoneName != state.dataHeatBal->Zone(zones).Name) {
+                continue;
+            }
             colorindex = DataSurfaceColors::ColorNo::ShdAtt;
-            if (state.dataSurface->SurfIsPV(surf)) colorindex = DataSurfaceColors::ColorNo::PV;
+            if (state.dataSurface->SurfIsPV(surf)) {
+                colorindex = DataSurfaceColors::ColorNo::PV;
+            }
             ++surfcount;
 
             print(dxffile, Format_710, thisSurface.ZoneName + ':' + thisSurface.Name);
@@ -1028,7 +1126,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
     for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
         surf2 = surf;
         auto const &thisSurface = state.dataSurface->Surface(surf);
-        if (thisSurface.Zone != 0) break;
+        if (thisSurface.Zone != 0) {
+            break;
+        }
     }
     if ((surf2 - 1) > 0) {
         std::string ScheduleName;
@@ -1038,7 +1138,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                    << "Number of Shading Surfaces," << surf2 - 1 << '\n';
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
-            if (thisSurface.Zone != 0) break;
+            if (thisSurface.Zone != 0) {
+                break;
+            }
             AlgoName = "None";
             *eiostream << "Shading Surface," << thisSurface.Name << "," << cSurfaceClass(thisSurface.Class) << "," << thisSurface.BaseSurfName << ","
                        << AlgoName << ",";
@@ -1075,7 +1177,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                            << format("{:.2R}", thisSurface.Width) << "," << format("{:.2R}", thisSurface.Height) << ",";
                 *eiostream << ",,,,,,,,,," << fmt::to_string(thisSurface.Sides) << ",";
             }
-            if (RptType == 10) continue;
+            if (RptType == 10) {
+                continue;
+            }
             for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                 if (vert != thisSurface.Sides) {
                     *eiostream << format("{:.2R}", thisSurface.Vertex(vert).x) << "," << format("{:.2R}", thisSurface.Vertex(vert).y) << ","
@@ -1086,7 +1190,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                 }
             }
             //  This shouldn't happen with shading surface -- always have vertices
-            if (thisSurface.Sides == 0) *eiostream << '\n';
+            if (thisSurface.Sides == 0) {
+                *eiostream << '\n';
+            }
         }
     }
 
@@ -1095,7 +1201,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                    << (state.dataHeatBal->Zone(ZoneNum).AllSurfaceLast - state.dataHeatBal->Zone(ZoneNum).AllSurfaceFirst + 1) << '\n';
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
-            if (thisSurface.Zone != ZoneNum) continue;
+            if (thisSurface.Zone != ZoneNum) {
+                continue;
+            }
             SolarDiffusing = "";
             if (RptType == 10 || RptType == 11) { // Details and Details with Vertices
                 if (thisSurface.BaseSurf == surf) {
@@ -1193,14 +1301,18 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                     IntConvCoeffCalc = overrideTypeStrs[(int)state.dataSurface->userIntConvModels(surfIntConv.userModelNum).overrideType];
                 } else {
                     Convect::HcInt hcInt = surfIntConv.model;
-                    if (hcInt == Convect::HcInt::SetByZone) hcInt = state.dataHeatBal->Zone(ZoneNum).IntConvAlgo;
+                    if (hcInt == Convect::HcInt::SetByZone) {
+                        hcInt = state.dataHeatBal->Zone(ZoneNum).IntConvAlgo;
+                    }
                     IntConvCoeffCalc = ConvCoeffCalcs[Convect::HcIntReportVals[(int)hcInt] - 1];
                 }
                 if (surfExtConv.userModelNum != 0) {
                     ExtConvCoeffCalc = overrideTypeStrs[(int)state.dataSurface->userExtConvModels(surfExtConv.userModelNum).overrideType];
                 } else {
                     Convect::HcExt hcExt = surfExtConv.model;
-                    if (hcExt == Convect::HcExt::SetByZone) hcExt = state.dataHeatBal->Zone(ZoneNum).ExtConvAlgo;
+                    if (hcExt == Convect::HcExt::SetByZone) {
+                        hcExt = state.dataHeatBal->Zone(ZoneNum).ExtConvAlgo;
+                    }
                     ExtConvCoeffCalc = ConvCoeffCalcs[Convect::HcExtReportVals[static_cast<int>(hcExt)] - 1];
                 }
                 if (thisSurface.ExtBoundCond == DataSurfaces::ExternalEnvironment) {
@@ -1266,7 +1378,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                                        << format("{:.2R}", thisSurface.Vertex(vert).z) << '\n';
                         }
                     }
-                    if (thisSurface.Sides == 0) *eiostream << '\n';
+                    if (thisSurface.Sides == 0) {
+                        *eiostream << '\n';
+                    }
                 }
                 // if window, report frame/divider as appropriate
                 if (thisSurface.FrameDivider > 0) {
@@ -1315,7 +1429,9 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                                    << format("{:.2R}", thisSurface.Vertex(vert).z) << '\n';
                     }
                 }
-                if (thisSurface.Sides == 0) *eiostream << '\n';
+                if (thisSurface.Sides == 0) {
+                    *eiostream << '\n';
+                }
             }
         } // surfaces
     } // zones
@@ -1371,7 +1487,9 @@ void CostInfoOut(EnergyPlusData &state)
 
     for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
         // if (surface(surf)%class .eq. DataSurfaces::SurfaceClass::IntMass) CYCLE
-        if (!uniqueSurf(surf)) continue;
+        if (!uniqueSurf(surf)) {
+            continue;
+        }
         // why the heck are constructions == 0 ?
         auto &thisSurface = state.dataSurface->Surface(surf);
         if (thisSurface.Construction != 0) {
@@ -1494,12 +1612,24 @@ void VRMLOut(EnergyPlusData &state, const std::string &PolygonAction, const std:
     //  Do all detached shading surfaces first
     for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
         auto &thisSurface = state.dataSurface->Surface(surf);
-        if (thisSurface.HeatTransSurf) continue;
-        if (thisSurface.IsAirBoundarySurf) continue;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Shading) continue;
-        if (thisSurface.Sides == 0) continue;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) colorindex = Color::FixedShade;
-        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_B) colorindex = Color::BldgShade;
+        if (thisSurface.HeatTransSurf) {
+            continue;
+        }
+        if (thisSurface.IsAirBoundarySurf) {
+            continue;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Shading) {
+            continue;
+        }
+        if (thisSurface.Sides == 0) {
+            continue;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) {
+            colorindex = Color::FixedShade;
+        }
+        if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_B) {
+            colorindex = Color::BldgShade;
+        }
         if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_F) {
             print(wrlfile, "# Fixed Shading:{}\n", thisSurface.Name);
         } else if (thisSurface.Class == DataSurfaces::SurfaceClass::Detached_B) {
@@ -1513,7 +1643,9 @@ void VRMLOut(EnergyPlusData &state, const std::string &PolygonAction, const std:
         if (thisSurface.Sides <= 4 || !TriangulateFace) {
             for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                 print<FormatSyntax::FMT>(wrlfile, " {}", vert - 1);
-                if (vert == thisSurface.Sides) print(wrlfile, " -1\n");
+                if (vert == thisSurface.Sides) {
+                    print(wrlfile, " -1\n");
+                }
             }
             print<check_syntax(Format_805)>(wrlfile, Format_805);
         } else { // will be >4 sided polygon with triangulate option
@@ -1542,15 +1674,33 @@ void VRMLOut(EnergyPlusData &state, const std::string &PolygonAction, const std:
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
             ++oldSurfNum;
-            if (thisSurface.Zone != zoneNum) continue;
-            if (thisSurface.Sides == 0) continue;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) continue;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Wall) colorindex = Color::Wall;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Roof) colorindex = Color::Roof;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::TDD_Dome) colorindex = Color::Window;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Floor) colorindex = Color::Floor;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Window) colorindex = Color::Window;
-            if (thisSurface.Class == DataSurfaces::SurfaceClass::Door) colorindex = Color::Window;
+            if (thisSurface.Zone != zoneNum) {
+                continue;
+            }
+            if (thisSurface.Sides == 0) {
+                continue;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::IntMass) {
+                continue;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Wall) {
+                colorindex = Color::Wall;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Roof) {
+                colorindex = Color::Roof;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::TDD_Dome) {
+                colorindex = Color::Window;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Floor) {
+                colorindex = Color::Floor;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Window) {
+                colorindex = Color::Window;
+            }
+            if (thisSurface.Class == DataSurfaces::SurfaceClass::Door) {
+                colorindex = Color::Window;
+            }
 
             print(wrlfile, "# {}:{}\n", thisSurface.ZoneName, thisSurface.Name);
             print<check_syntax(Format_801)>(wrlfile, Format_801, colorstring[static_cast<int>(colorindex)], "Surf", oldSurfNum);
@@ -1561,7 +1711,9 @@ void VRMLOut(EnergyPlusData &state, const std::string &PolygonAction, const std:
             if (thisSurface.Sides <= 4 || !TriangulateFace) {
                 for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                     print(wrlfile, " {}", vert - 1);
-                    if (vert == thisSurface.Sides) print(wrlfile, " -1\n");
+                    if (vert == thisSurface.Sides) {
+                        print(wrlfile, " -1\n");
+                    }
                 }
                 print<check_syntax(Format_805)>(wrlfile, Format_805);
             } else { // will be >4 sided polygon with triangulate option
@@ -1589,9 +1741,15 @@ void VRMLOut(EnergyPlusData &state, const std::string &PolygonAction, const std:
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
             //      !if (surface(surf)%heattranssurf) CYCLE ! Shading with a construction is allowed to be HT surf for daylighting shelves
-            if (thisSurface.Class != DataSurfaces::SurfaceClass::Shading) continue;
-            if (thisSurface.ZoneName != state.dataHeatBal->Zone(zoneNum).Name) continue;
-            if (thisSurface.Sides == 0) continue;
+            if (thisSurface.Class != DataSurfaces::SurfaceClass::Shading) {
+                continue;
+            }
+            if (thisSurface.ZoneName != state.dataHeatBal->Zone(zoneNum).Name) {
+                continue;
+            }
+            if (thisSurface.Sides == 0) {
+                continue;
+            }
             print(wrlfile, "# {}:{}\n", thisSurface.ZoneName, thisSurface.Name);
             print<check_syntax(Format_801)>(wrlfile, Format_801, colorstring[static_cast<int>(colorindex)], "Surf", surf);
             for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
@@ -1601,7 +1759,9 @@ void VRMLOut(EnergyPlusData &state, const std::string &PolygonAction, const std:
             if (thisSurface.Sides <= 4 || !TriangulateFace) {
                 for (int vert = 1; vert <= thisSurface.Sides; ++vert) {
                     print(wrlfile, " {}", vert - 1);
-                    if (vert == thisSurface.Sides) print(wrlfile, " -1\n");
+                    if (vert == thisSurface.Sides) {
+                        print(wrlfile, " -1\n");
+                    }
                 }
                 print(wrlfile, Format_805);
             } else { // will be >4 sided polygon with triangulate option

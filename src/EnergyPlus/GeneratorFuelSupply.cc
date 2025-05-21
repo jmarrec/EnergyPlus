@@ -174,8 +174,9 @@ namespace GeneratorFuelSupply {
                     ErrorsFound = true;
                 }
 
-                for (auto &e : state.dataGenerator->FuelSupply)
+                for (auto &e : state.dataGenerator->FuelSupply) {
                     e.CompPowerLossFactor = NumArray(1);
+                }
 
                 if (Util::SameString(AlphArray(6), "GaseousConstituents")) {
                     state.dataGenerator->FuelSupply(FuelSupNum).FuelTypeMode = DataGenerators::FuelMode::GaseousConstituents;

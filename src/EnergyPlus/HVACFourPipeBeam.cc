@@ -460,7 +460,9 @@ namespace FourPipeBeam {
 
             // Fill the Zone Equipment data with the supply air inlet node number of this unit.
             for (int ctrlZone = 1; ctrlZone <= state.dataGlobal->NumOfZones; ++ctrlZone) {
-                if (!state.dataZoneEquip->ZoneEquipConfig(ctrlZone).IsControlled) continue;
+                if (!state.dataZoneEquip->ZoneEquipConfig(ctrlZone).IsControlled) {
+                    continue;
+                }
                 for (int supAirIn = 1; supAirIn <= state.dataZoneEquip->ZoneEquipConfig(ctrlZone).NumInletNodes; ++supAirIn) {
                     if (thisBeam->airOutNodeNum == state.dataZoneEquip->ZoneEquipConfig(ctrlZone).InletNode(supAirIn)) {
                         thisBeam->zoneIndex = ctrlZone;

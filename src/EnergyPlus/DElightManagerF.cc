@@ -323,9 +323,15 @@ namespace DElightManagerF {
                         auto const &thisSpace = state.dataHeatBal->space(spaceNum);
                         for (int isurf = thisSpace.HTSurfaceFirst; isurf <= thisSpace.HTSurfaceLast; ++isurf) {
                             auto const &surf(state.dataSurface->Surface(isurf));
-                            if (surf.Class == SurfaceClass::Wall) ++iNumOpaqueSurfs;
-                            if (surf.Class == SurfaceClass::Roof) ++iNumOpaqueSurfs;
-                            if (surf.Class == SurfaceClass::Floor) ++iNumOpaqueSurfs;
+                            if (surf.Class == SurfaceClass::Wall) {
+                                ++iNumOpaqueSurfs;
+                            }
+                            if (surf.Class == SurfaceClass::Roof) {
+                                ++iNumOpaqueSurfs;
+                            }
+                            if (surf.Class == SurfaceClass::Floor) {
+                                ++iNumOpaqueSurfs;
+                            }
                         }
                     } // Zone Opaque Surface loop
 
@@ -461,7 +467,9 @@ namespace DElightManagerF {
                                                     // Has the current Construction index been encountered before?
                                                     lWndoConstFound = false;
                                                     for (int iconst = 1; iconst <= iNumWndoConsts; ++iconst) {
-                                                        if (iconstruct == iWndoConstIndexes(iconst)) lWndoConstFound = true;
+                                                        if (iconstruct == iWndoConstIndexes(iconst)) {
+                                                            lWndoConstFound = true;
+                                                        }
                                                     }
                                                     if (!lWndoConstFound) {
                                                         ++iNumWndoConsts;
@@ -696,7 +704,9 @@ namespace DElightManagerF {
 
         } // Glass Type loop
 
-        if (ErrorsFound) ShowFatalError(state, "Problems with Daylighting:DElight input, see previous error messages");
+        if (ErrorsFound) {
+            ShowFatalError(state, "Problems with Daylighting:DElight input, see previous error messages");
+        }
     }
 
     void GenerateDElightDaylightCoefficients(Real64 &dLatitude, int &iErrorFlag)

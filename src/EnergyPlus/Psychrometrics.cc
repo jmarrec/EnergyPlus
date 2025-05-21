@@ -983,7 +983,9 @@ namespace Psychrometrics {
 
         switch (CaseIndex) {
         case 1: // -2.2138e4 > HH > -4.24e4
-            if (HH < -4.24e4) HH = -4.24e4;
+            if (HH < -4.24e4) {
+                HH = -4.24e4;
+            }
             T = F6(HH, -19.44, 8.53675e-4, -5.12637e-9, -9.85546e-14, -1.00102e-18, -4.2705e-24);
             break;
         case 2: // -6.7012e2 > HH > -2.2138e4
@@ -1008,7 +1010,9 @@ namespace Psychrometrics {
             T = F6(HH, 4.88446e1, 3.85534e-5, -1.78805e-11, 4.87224e-18, -7.15283e-25, 4.36246e-32);
             break;
         case 9:
-            if (HH > 4.5866e7) HH = 4.5866e7;
+            if (HH > 4.5866e7) {
+                HH = 4.5866e7;
+            }
             T = F7(HH, 7.60565e11, 5.80534e4, -7.36433e-3, 5.11531e-10, -1.93619e-17, 3.70511e-25, -2.77313e-33);
             break;
         }
@@ -1383,7 +1387,9 @@ namespace Psychrometrics {
                     Iterate(ResultX, convTol, tSat, error, X1, Y1, iter, icvg);
                     tSat = ResultX;
                     // If converged leave loop iteration
-                    if (icvg == 1) break;
+                    if (icvg == 1) {
+                        break;
+                    }
 
                     // Water temperature not converged, repeat calculations with new
                     // estimate of water temperature
@@ -1443,8 +1449,12 @@ namespace Psychrometrics {
         int x_int = static_cast<int>(x);
         //********continous sample start
         int j = (x_int >> 6) - 1; // sample bin 64, sample size=1651
-        if (j < 0) j = 0;
-        if (j > (n - 2)) j = n - 2;
+        if (j < 0) {
+            j = 0;
+        }
+        if (j > (n - 2)) {
+            j = n - 2;
+        }
         static constexpr Real64 h(64); // sample bin 64, sample size=1651
         //********continous sample end
         int tsat_fn_pb_x_j1 = 64 * (j + 1); // sample data for pressure

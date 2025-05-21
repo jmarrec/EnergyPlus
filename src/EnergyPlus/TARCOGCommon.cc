@@ -289,7 +289,9 @@ namespace TARCOGCommon {
         ludcmp(state, a, n, indx, d, nperr, ErrorMessage);
 
         // Exit on error
-        if ((nperr > 0) && (nperr <= 1000)) return;
+        if ((nperr > 0) && (nperr <= 1000)) {
+            return;
+        }
 
         lubksb(a, n, indx, b);
     }
@@ -312,7 +314,9 @@ namespace TARCOGCommon {
         for (i = 1; i <= n; ++i) {
             aamax = 0.0;
             for (j = 1; j <= n; ++j) {
-                if (std::abs(a(j, i)) > aamax) aamax = std::abs(a(j, i));
+                if (std::abs(a(j, i)) > aamax) {
+                    aamax = std::abs(a(j, i));
+                }
             } // j
             if (aamax == 0.0) {
                 nperr = 13;
@@ -353,7 +357,9 @@ namespace TARCOGCommon {
                 state.dataTARCOGCommon->vv(imax) = state.dataTARCOGCommon->vv(j);
             }
             indx(j) = imax;
-            if (a(j, j) == 0.0) a(j, j) = TINY;
+            if (a(j, j) == 0.0) {
+                a(j, j) = TINY;
+            }
             if (j != n) {
                 dum = 1.0 / a(j, j);
                 for (i = j + 1; i <= n; ++i) {

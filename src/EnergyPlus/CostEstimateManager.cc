@@ -126,7 +126,9 @@ namespace CostEstimateManager {
 
         // Need to add check Costs before this will work properly
 
-        if (state.dataGlobal->KickOffSimulation) return;
+        if (state.dataGlobal->KickOffSimulation) {
+            return;
+        }
 
         if (state.dataCostEstimateManager->DoCostEstimate) {
             CalcCostEstimate(state);
@@ -358,7 +360,9 @@ namespace CostEstimateManager {
                     auto &parentObjName = state.dataCostEstimateManager->CostLineItem(Item).ParentObjName;
                     if ((state.dataCostEstimateManager->CostLineItem(Item).ParentObjType == ParentObject::CoilDX) ||
                         (state.dataCostEstimateManager->CostLineItem(Item).ParentObjType == ParentObject::CoilCoolingDXSingleSpeed)) {
-                        if (Util::FindItem(parentObjName, state.dataDXCoils->DXCoil) > 0) coilFound = true;
+                        if (Util::FindItem(parentObjName, state.dataDXCoils->DXCoil) > 0) {
+                            coilFound = true;
+                        }
                     } else if (state.dataCostEstimateManager->CostLineItem(Item).ParentObjType == ParentObject::CoilCoolingDX) {
                         if (CoilCoolingDX::factory(state, parentObjName) != -1) {
                             coilFound = true;
@@ -631,7 +635,9 @@ namespace CostEstimateManager {
                 Real64 Qty(0.0);
                 for (int i = 1; i <= state.dataSurface->TotSurfaces; ++i) {
                     auto const &s(state.dataSurface->Surface(i));
-                    if (uniqueSurfMask(i) && (s.Construction == ThisConstructID)) Qty += s.Area * SurfMultipleARR(i);
+                    if (uniqueSurfMask(i) && (s.Construction == ThisConstructID)) {
+                        Qty += s.Area * SurfMultipleARR(i);
+                    }
                 }
                 state.dataCostEstimateManager->CostLineItem(Item).Qty = Qty;
                 state.dataCostEstimateManager->CostLineItem(Item).Units = "m2";
@@ -656,8 +662,9 @@ namespace CostEstimateManager {
                 if (state.dataCostEstimateManager->CostLineItem(Item).PerKiloWattCap > 0.0) {
                     if (WildcardObjNames) {
                         Real64 Qty(0.0);
-                        for (auto const &e : state.dataDXCoils->DXCoil)
+                        for (auto const &e : state.dataDXCoils->DXCoil) {
                             Qty += e.RatedTotCap(1);
+                        }
                         state.dataCostEstimateManager->CostLineItem(Item).Qty = Qty / 1000.0;
                         state.dataCostEstimateManager->CostLineItem(Item).Units = "kW (tot cool cap.)";
                         state.dataCostEstimateManager->CostLineItem(Item).ValuePer = state.dataCostEstimateManager->CostLineItem(Item).PerKiloWattCap;
@@ -674,8 +681,12 @@ namespace CostEstimateManager {
                 }
 
                 if (state.dataCostEstimateManager->CostLineItem(Item).PerEach > 0.0) {
-                    if (WildcardObjNames) state.dataCostEstimateManager->CostLineItem(Item).Qty = double(state.dataDXCoils->NumDXCoils);
-                    if (thisCoil > 0) state.dataCostEstimateManager->CostLineItem(Item).Qty = 1.0;
+                    if (WildcardObjNames) {
+                        state.dataCostEstimateManager->CostLineItem(Item).Qty = double(state.dataDXCoils->NumDXCoils);
+                    }
+                    if (thisCoil > 0) {
+                        state.dataCostEstimateManager->CostLineItem(Item).Qty = 1.0;
+                    }
                     state.dataCostEstimateManager->CostLineItem(Item).ValuePer = state.dataCostEstimateManager->CostLineItem(Item).PerEach;
                     state.dataCostEstimateManager->CostLineItem(Item).LineSubTotal =
                         state.dataCostEstimateManager->CostLineItem(Item).Qty * state.dataCostEstimateManager->CostLineItem(Item).ValuePer;
@@ -730,8 +741,9 @@ namespace CostEstimateManager {
                 if (state.dataCostEstimateManager->CostLineItem(Item).PerKiloWattCap > 0.0) {
                     if (WildcardObjNames) {
                         Real64 Qty(0.0);
-                        for (auto const &e : state.dataCoilCoolingDX->coilCoolingDXs)
+                        for (auto const &e : state.dataCoilCoolingDX->coilCoolingDXs) {
                             Qty += e.performance.normalMode.ratedGrossTotalCap;
+                        }
                         state.dataCostEstimateManager->CostLineItem(Item).Qty = Qty / 1000.0;
                         state.dataCostEstimateManager->CostLineItem(Item).Units = "kW (tot cool cap.)";
                         state.dataCostEstimateManager->CostLineItem(Item).ValuePer = state.dataCostEstimateManager->CostLineItem(Item).PerKiloWattCap;
@@ -749,9 +761,12 @@ namespace CostEstimateManager {
                 }
 
                 if (state.dataCostEstimateManager->CostLineItem(Item).PerEach > 0.0) {
-                    if (WildcardObjNames)
+                    if (WildcardObjNames) {
                         state.dataCostEstimateManager->CostLineItem(Item).Qty = double(state.dataCoilCoolingDX->coilCoolingDXs.size());
-                    if (coilFound) state.dataCostEstimateManager->CostLineItem(Item).Qty = 1.0;
+                    }
+                    if (coilFound) {
+                        state.dataCostEstimateManager->CostLineItem(Item).Qty = 1.0;
+                    }
                     state.dataCostEstimateManager->CostLineItem(Item).ValuePer = state.dataCostEstimateManager->CostLineItem(Item).PerEach;
                     state.dataCostEstimateManager->CostLineItem(Item).LineSubTotal =
                         state.dataCostEstimateManager->CostLineItem(Item).Qty * state.dataCostEstimateManager->CostLineItem(Item).ValuePer;
@@ -797,8 +812,11 @@ namespace CostEstimateManager {
                 if (state.dataCostEstimateManager->CostLineItem(Item).PerKiloWattCap > 0.0) {
                     if (WildcardObjNames) {
                         Real64 Qty(0.0);
-                        for (auto const &e : state.dataHeatingCoils->HeatingCoil)
-                            if (e.HCoilType_Num == 1) Qty += e.NominalCapacity;
+                        for (auto const &e : state.dataHeatingCoils->HeatingCoil) {
+                            if (e.HCoilType_Num == 1) {
+                                Qty += e.NominalCapacity;
+                            }
+                        }
                         state.dataCostEstimateManager->CostLineItem(Item).Qty = Qty / 1000.0;
                         state.dataCostEstimateManager->CostLineItem(Item).Units = "kW (tot heat cap.)";
                         state.dataCostEstimateManager->CostLineItem(Item).ValuePer = state.dataCostEstimateManager->CostLineItem(Item).PerKiloWattCap;
@@ -816,8 +834,12 @@ namespace CostEstimateManager {
                 }
 
                 if (state.dataCostEstimateManager->CostLineItem(Item).PerEach > 0.0) {
-                    if (WildcardObjNames) state.dataCostEstimateManager->CostLineItem(Item).Qty = state.dataHeatingCoils->NumHeatingCoils;
-                    if (thisCoil > 0) state.dataCostEstimateManager->CostLineItem(Item).Qty = 1.0;
+                    if (WildcardObjNames) {
+                        state.dataCostEstimateManager->CostLineItem(Item).Qty = state.dataHeatingCoils->NumHeatingCoils;
+                    }
+                    if (thisCoil > 0) {
+                        state.dataCostEstimateManager->CostLineItem(Item).Qty = 1.0;
+                    }
                     state.dataCostEstimateManager->CostLineItem(Item).ValuePer = state.dataCostEstimateManager->CostLineItem(Item).PerEach;
                     state.dataCostEstimateManager->CostLineItem(Item).LineSubTotal =
                         state.dataCostEstimateManager->CostLineItem(Item).Qty * state.dataCostEstimateManager->CostLineItem(Item).ValuePer;
@@ -827,8 +849,11 @@ namespace CostEstimateManager {
                 if (state.dataCostEstimateManager->CostLineItem(Item).PerKWCapPerCOP > 0.0) {
                     if (WildcardObjNames) {
                         Real64 Qty(0.0);
-                        for (auto const &e : state.dataHeatingCoils->HeatingCoil)
-                            if (e.HCoilType_Num == 1) Qty += e.Efficiency * e.NominalCapacity;
+                        for (auto const &e : state.dataHeatingCoils->HeatingCoil) {
+                            if (e.HCoilType_Num == 1) {
+                                Qty += e.Efficiency * e.NominalCapacity;
+                            }
+                        }
                         state.dataCostEstimateManager->CostLineItem(Item).Qty = Qty / 1000.0;
                         state.dataCostEstimateManager->CostLineItem(Item).Units = "kW*Eff (total, rated) ";
                         state.dataCostEstimateManager->CostLineItem(Item).ValuePer = state.dataCostEstimateManager->CostLineItem(Item).PerKWCapPerCOP;
@@ -924,8 +949,11 @@ namespace CostEstimateManager {
                         ThisZoneID = Util::FindItem(state.dataCostEstimateManager->CostLineItem(Item).ParentObjName, Zone);
                         if (ThisZoneID > 0) {
                             Real64 Qty(0.0);
-                            for (auto const &e : state.dataHeatBal->Lights)
-                                if (e.ZonePtr == ThisZoneID) Qty += e.DesignLevel;
+                            for (auto const &e : state.dataHeatBal->Lights) {
+                                if (e.ZonePtr == ThisZoneID) {
+                                    Qty += e.DesignLevel;
+                                }
+                            }
                             state.dataCostEstimateManager->CostLineItem(Item).Qty =
                                 (Zone(ThisZoneID).Multiplier * Zone(ThisZoneID).ListMultiplier / 1000.0) *
                                 Qty; // this handles more than one light object per zone.

@@ -1774,8 +1774,9 @@ namespace OutputProcessor {
              {"29", "0", "Avg", "indexGroup", timeStepSystemString, "keyedValue", "variableName", "Run Period", "", "m3/s"}});
 
         EXPECT_EQ(reportDataDictionary.size(), reportDataDictionaryResults.size());
-        for (int i = 0; i < reportDataDictionary.size(); ++i)
+        for (int i = 0; i < reportDataDictionary.size(); ++i) {
             EXPECT_EQ(reportDataDictionary[i], reportDataDictionaryResults[i]);
+        }
     }
 
     TEST_F(SQLiteFixture, OutputProcessor_writeCumulativeReportMeterData)
@@ -3897,8 +3898,9 @@ namespace OutputProcessor {
             {"5", "", "", "", "", "", "", "525600", "4", "365", "", "0", "0"},
         });
 
-        for (int i = 0; i < (int)timeData.size(); ++i)
+        for (int i = 0; i < (int)timeData.size(); ++i) {
             EXPECT_EQ(timeData[i], timeResults[i]);
+        }
 
         auto reportDataDictionaryResults = queryResult("SELECT * FROM ReportDataDictionary;", "ReportDataDictionary");
 
@@ -3915,8 +3917,9 @@ namespace OutputProcessor {
             {"12", "1", "Sum", "Facility:Electricity", "Zone", "", "Electricity:Facility", "Run Period", "", "J"},
         });
 
-        for (int i = 0; i < (int)reportDataDictionary.size(); ++i)
+        for (int i = 0; i < (int)reportDataDictionary.size(); ++i) {
             EXPECT_EQ(reportDataDictionary[i], reportDataDictionaryResults[i]);
+        }
 
         auto reportDataResults = queryResult("SELECT * FROM ReportData;", "ReportData");
         auto reportExtendedDataResults = queryResult("SELECT * FROM ReportExtendedData;", "ReportExtendedData");
@@ -3942,11 +3945,13 @@ namespace OutputProcessor {
              {"5", "9", "0.0", "12", "31", "24", "", "0", "0.0", "12", "31", "24", "", "0"},
              {"6", "10", "4995.0", "12", "31", "24", "-9", "0", "4995.0", "12", "31", "24", "-9", "0"}});
 
-        for (int i = 0; i < (int)reportData.size(); ++i)
+        for (int i = 0; i < (int)reportData.size(); ++i) {
             EXPECT_EQ(reportData[i], reportDataResults[i]);
+        }
 
-        for (int i = 0; i < (int)reportExtendedData.size(); ++i)
+        for (int i = 0; i < (int)reportExtendedData.size(); ++i) {
             EXPECT_EQ(reportExtendedData[i], reportExtendedDataResults[i]);
+        }
 
         compare_eso_stream(delimited_string(
             {
@@ -4214,8 +4219,9 @@ namespace OutputProcessor {
             {"241", "0", "Avg", "System", "HVAC System", "Boiler1", "Boiler NaturalGas Rate", "HVAC System Timestep", "", "W"},
         });
 
-        for (int i = 0; i < (int)reportDataDictionary.size(); ++i)
+        for (int i = 0; i < (int)reportDataDictionary.size(); ++i) {
             EXPECT_EQ(reportDataDictionary[i], reportDataDictionaryResults[i]);
+        }
 
         auto reportDataResults = queryResult("SELECT * FROM ReportData;", "ReportData");
         auto reportExtendedDataResults = queryResult("SELECT * FROM ReportExtendedData;", "ReportExtendedData");
@@ -4243,11 +4249,13 @@ namespace OutputProcessor {
             {"6", "11", "4995.0", "12", "31", "24", "-9", "0", "4995.0", "12", "31", "24", "-9", "0"},
         });
 
-        for (int i = 0; i < (int)reportData.size(); ++i)
+        for (int i = 0; i < (int)reportData.size(); ++i) {
             EXPECT_EQ(reportData[i], reportDataResults[i]);
+        }
 
-        for (int i = 0; i < (int)reportExtendedData.size(); ++i)
+        for (int i = 0; i < (int)reportExtendedData.size(); ++i) {
             EXPECT_EQ(reportExtendedData[i], reportExtendedDataResults[i]);
+        }
 
         compare_eso_stream(delimited_string(
             {
@@ -5358,8 +5366,9 @@ namespace OutputProcessor {
              {"125", "0", "Sum", "Zone", "Zone", "LIGHTS 1", "Lights Electricity Energy", "Zone Timestep", "", "J"},
              {"126", "0", "Sum", "System", "HVAC System", "Site", "Environmental Impact Fuel Oil No 2 CO2 Emissions Mass", "Run Period", "", "kg"}});
 
-        for (int i = 0; i < (int)reportDataDictionary.size(); ++i)
+        for (int i = 0; i < (int)reportDataDictionary.size(); ++i) {
             EXPECT_EQ(reportDataDictionary[i], reportDataDictionaryResults[i]);
+        }
     }
 
     TEST_F(EnergyPlusFixture, OutputProcessor_StdoutRecordCount)

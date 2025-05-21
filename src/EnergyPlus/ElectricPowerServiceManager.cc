@@ -122,7 +122,9 @@ void ElectricPowerServiceManager::manageElectricPowerService(
         reinitAtBeginEnvironment();
         newEnvironmentFlag_ = false;
     }
-    if (!state.dataGlobal->BeginEnvrnFlag) newEnvironmentFlag_ = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        newEnvironmentFlag_ = true;
+    }
 
     // retrieve data from meters for demand and production
     totalBldgElecDemand_ =
@@ -493,16 +495,24 @@ void ElectricPowerServiceManager::updateWholeBuildingRecords(EnergyPlusData &sta
     // Report the Total Electric Power Purchased [W], If negative then there is extra power to be sold or stored.
     electPurchRate_ = totalElectricDemand_ - electProdRate_;
     // Check this value against a tolerance to aid in reporting.
-    if (std::abs(electPurchRate_) < 0.0001) electPurchRate_ = 0.0;
-    if (electPurchRate_ < 0.0) electPurchRate_ = 0.0; // don't want negative purchased...
+    if (std::abs(electPurchRate_) < 0.0001) {
+        electPurchRate_ = 0.0;
+    }
+    if (electPurchRate_ < 0.0) {
+        electPurchRate_ = 0.0; // don't want negative purchased...
+    }
 
     // Report the Total Electric Energy Purchased [J]
     electricityPurch_ = electPurchRate_ * state.dataHVACGlobal->TimeStepSysSec;
 
     // report the total electric surplus....
     electSurplusRate_ = electProdRate_ - totalElectricDemand_;
-    if (std::abs(electSurplusRate_) < 0.0001) electSurplusRate_ = 0.0;
-    if (electSurplusRate_ < 0.0) electSurplusRate_ = 0.0; // don't want negative surplus
+    if (std::abs(electSurplusRate_) < 0.0001) {
+        electSurplusRate_ = 0.0;
+    }
+    if (electSurplusRate_ < 0.0) {
+        electSurplusRate_ = 0.0; // don't want negative surplus
+    }
 
     electricitySurplus_ = electSurplusRate_ * state.dataHVACGlobal->TimeStepSysSec;
 
@@ -898,7 +908,9 @@ ElectPowerLoadCenter::ElectPowerLoadCenter(EnergyPlusData &state, int const obje
 
         // Calculate the number of generators in list
         numGenerators = numNums / 2; // note IDD needs Min Fields = 6
-        if (mod((numAlphas - 1 + numNums), 5) != 0) ++numGenerators;
+        if (mod((numAlphas - 1 + numNums), 5) != 0) {
+            ++numGenerators;
+        }
         int alphaCount = 2;
         for (int genCount = 1; genCount <= numGenerators; ++genCount) {
             // call constructor in place
@@ -2015,7 +2027,9 @@ Real64 ElectPowerLoadCenter::calcLoadCenterThermalLoad(EnergyPlusData &state)
         for (auto &g : elecGenCntrlObj) {
             bool plantNotFound = false;
             PlantUtilities::ScanPlantLoopsForObject(state, g->compPlantName, g->compPlantType, g->cogenLocation, plantNotFound, _, _, _, _, _);
-            if (!plantNotFound) g->plantInfoFound = true;
+            if (!plantNotFound) {
+                g->plantInfoFound = true;
+            }
         }
         myCoGenSetupFlag_ = false;
     } // cogen setup
@@ -2247,7 +2261,9 @@ void GeneratorController::simGeneratorGetPowerOutput(EnergyPlusData &state,
         // simulate
         dynamic_cast<MicroCHPElectricGenerator::MicroCHPDataStruct *>(thisMCHP)->InitMicroCHPNoNormalizeGenerators(state);
 
-        if (!state.dataPlnt->PlantFirstSizeCompleted) break;
+        if (!state.dataPlnt->PlantFirstSizeCompleted) {
+            break;
+        }
 
         dynamic_cast<MicroCHPElectricGenerator::MicroCHPDataStruct *>(thisMCHP)->CalcMicroCHPNoNormalizeGeneratorModel(
             state, runFlag, false, myElecLoadRequest, DataPrecisionGlobals::constant_zero);
@@ -2741,7 +2757,9 @@ void DCtoACInverter::calcEfficiency(EnergyPlusData &state)
                 ac = ratedPower_;
             }
             // make sure no negative AC values (no parasitic nighttime losses calculated)
-            if (ac < 0) ac = 0;
+            if (ac < 0) {
+                ac = 0;
+            }
             efficiency_ = ac / dCPowerIn_;
         } else {
             efficiency_ = 1.0; // Set to a non-zero reasonable value (to avoid divide by zero error)
@@ -3254,8 +3272,9 @@ ElectricStorage::ElectricStorage( // main constructor
             maxChargeRate_ = state.dataIPShortCut->rNumericArgs(13);
 
             // Check charging and discharging curves to make sure charging curve always gives a higher voltage (#8817)
-            if (!errorsFound && chargeCurve_ != nullptr && dischargeCurve_ != nullptr)
+            if (!errorsFound && chargeCurve_ != nullptr && dischargeCurve_ != nullptr) {
                 checkChargeDischargeVoltageCurves(state, name_, chargedOCV_, dischargedOCV_, chargeCurve_, dischargeCurve_);
+            }
 
             break;
         }
@@ -4372,8 +4391,10 @@ void ElectricStorage::rainflow(int const numbin,           // numbin = constant 
             shift(X, count, count, X);     // Get rid of two data points one by one
             shift(X, count - 1, count, X); // Delete one point
 
-            count -= 2;           // If one cycle is counted, two data points are deleted.
-            if (count < 4) break; // When only three data points exists, one cycle cannot be counted.
+            count -= 2; // If one cycle is counted, two data points are deleted.
+            if (count < 4) {
+                break; // When only three data points exists, one cycle cannot be counted.
+            }
         }
     }
 
@@ -4741,7 +4762,9 @@ void ElectricTransformer::manageTransformers(EnergyPlusData &state, Real64 const
             if (specialMeter_[meterNum]) {
                 elecLoad = elecLoad - loadLossRate_ - noLoadLossRate_;
 
-                if (elecLoad < 0) elecLoad = 0.0; // Essential check.
+                if (elecLoad < 0) {
+                    elecLoad = 0.0; // Essential check.
+                }
             }
         }
 
@@ -4835,7 +4858,9 @@ void ElectricTransformer::manageTransformers(EnergyPlusData &state, Real64 const
     case TransformerUse::PowerBetweenLoadCenterAndBldg: {
         powerOut_ = elecLoad - totalLossRate_;
 
-        if (powerOut_ < 0) powerOut_ = 0.0;
+        if (powerOut_ < 0) {
+            powerOut_ = 0.0;
+        }
 
         powerConversionMeteredLosses_ = -1.0 * totalLossRate_ * state.dataHVACGlobal->TimeStepSysSec;
 

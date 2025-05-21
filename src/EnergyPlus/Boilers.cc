@@ -101,7 +101,9 @@ BoilerSpecs *BoilerSpecs::factory(EnergyPlusData &state, std::string const &obje
     auto myBoiler = std::find_if(state.dataBoilers->Boiler.begin(), state.dataBoilers->Boiler.end(), [&objectName](const BoilerSpecs &boiler) {
         return boiler.Name == objectName;
     });
-    if (myBoiler != state.dataBoilers->Boiler.end()) return myBoiler;
+    if (myBoiler != state.dataBoilers->Boiler.end()) {
+        return myBoiler;
+    }
 
     // If we didn't find it, fatal
     ShowFatalError(state, format("LocalBoilerFactory: Error getting inputs for boiler named: {}", objectName)); // LCOV_EXCL_LINE
@@ -175,7 +177,9 @@ void GetBoilerInput(EnergyPlusData &state)
     }
 
     // See if load distribution manager has already gotten the input
-    if (allocated(state.dataBoilers->Boiler)) return;
+    if (allocated(state.dataBoilers->Boiler)) {
+        return;
+    }
 
     state.dataBoilers->Boiler.allocate(numBoilers);
 
@@ -299,7 +303,9 @@ void GetBoilerInput(EnergyPlusData &state)
         }
 
         thisBoiler.SizFac = s_ipsc->rNumericArgs(9);
-        if (thisBoiler.SizFac == 0.0) thisBoiler.SizFac = 1.0;
+        if (thisBoiler.SizFac == 0.0) {
+            thisBoiler.SizFac = 1.0;
+        }
 
         thisBoiler.BoilerInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
                                                                             s_ipsc->cAlphaArgs(5),
@@ -603,7 +609,9 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
             tmpNomCap =
                 Cp * rho * this->SizFac * state.dataSize->PlantSizData(PltSizNum).DeltaT * state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate;
         } else {
-            if (this->NomCapWasAutoSized) tmpNomCap = 0.0;
+            if (this->NomCapWasAutoSized) {
+                tmpNomCap = 0.0;
+            }
         }
         if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
             if (this->NomCapWasAutoSized) {
@@ -653,7 +661,9 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
         if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
             tmpBoilerVolFlowRate = state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate * this->SizFac;
         } else {
-            if (this->VolFlowRateWasAutoSized) tmpBoilerVolFlowRate = 0.0;
+            if (this->VolFlowRateWasAutoSized) {
+                tmpBoilerVolFlowRate = 0.0;
+            }
         }
         if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
             if (this->VolFlowRateWasAutoSized) {
@@ -788,8 +798,9 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
     // if the component control is SERIESACTIVE we set the component flow to inlet flow so that flow resolver
     // will not shut down the branch
     if (MyLoad <= 0.0 || !RunFlag) {
-        if (EquipFlowCtrl == DataBranchAirLoopPlant::ControlType::SeriesActive)
+        if (EquipFlowCtrl == DataBranchAirLoopPlant::ControlType::SeriesActive) {
             this->BoilerMassFlowRate = state.dataLoopNodes->Node(BoilerInletNode).MassFlowRate;
+        }
         return;
     }
 
@@ -856,8 +867,12 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
 
         if ((MyLoad > 0.0) && (this->BoilerMassFlowRate > 0.0)) { // this boiler has a heat load
             this->BoilerLoad = MyLoad;
-            if (this->BoilerLoad > BoilerNomCap * BoilerMaxPLR) this->BoilerLoad = BoilerNomCap * BoilerMaxPLR;
-            if (this->BoilerLoad < BoilerNomCap * BoilerMinPLR) this->BoilerLoad = BoilerNomCap * BoilerMinPLR;
+            if (this->BoilerLoad > BoilerNomCap * BoilerMaxPLR) {
+                this->BoilerLoad = BoilerNomCap * BoilerMaxPLR;
+            }
+            if (this->BoilerLoad < BoilerNomCap * BoilerMinPLR) {
+                this->BoilerLoad = BoilerNomCap * BoilerMinPLR;
+            }
             this->BoilerOutletTemp = state.dataLoopNodes->Node(BoilerInletNode).Temp + this->BoilerLoad / (this->BoilerMassFlowRate * Cp);
         } else {
             this->BoilerLoad = 0.0;
@@ -962,7 +977,9 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
 
     // calculate fuel used based on normalized boiler efficiency curve (=1 when no curve used)
     this->FuelUsed = TheorFuelUse / EffCurveOutput;
-    if (this->BoilerLoad > 0.0) this->ParasiticElecPower = this->ParasiticElecLoad * this->BoilerPLR;
+    if (this->BoilerLoad > 0.0) {
+        this->ParasiticElecPower = this->ParasiticElecLoad * this->BoilerPLR;
+    }
     this->ParasiticFuelRate = this->ParasiticFuelCapacity * (1.0 - this->BoilerPLR);
 }
 

@@ -124,7 +124,9 @@ namespace ThermalChimney {
             state.dataThermalChimneys->ThermalChimneyGetInputFlag = false;
         }
 
-        if (state.dataThermalChimneys->TotThermalChimney == 0) return;
+        if (state.dataThermalChimneys->TotThermalChimney == 0) {
+            return;
+        }
 
         CalcThermalChimney(state);
 
@@ -282,8 +284,9 @@ namespace ThermalChimney {
                     state.dataIPShortCut->rNumericArgs(3 * TCZoneNum + 1);
                 state.dataThermalChimneys->ThermalChimneySys(Loop).RatioThermChimAirFlow(TCZoneNum) =
                     state.dataIPShortCut->rNumericArgs(3 * TCZoneNum + 2);
-                if (state.dataIPShortCut->lNumericFieldBlanks(3 * TCZoneNum + 2))
+                if (state.dataIPShortCut->lNumericFieldBlanks(3 * TCZoneNum + 2)) {
                     state.dataThermalChimneys->ThermalChimneySys(Loop).RatioThermChimAirFlow(TCZoneNum) = 1.0;
+                }
                 state.dataThermalChimneys->ThermalChimneySys(Loop).EachAirInletCrossArea(TCZoneNum) =
                     state.dataIPShortCut->rNumericArgs(3 * TCZoneNum + 3);
 
@@ -749,7 +752,9 @@ namespace ThermalChimney {
             for (int spaceNum : state.dataHeatBal->Zone(ZoneNum).spaceIndexes) {
                 auto const &thisSpace = state.dataHeatBal->space(spaceNum);
                 for (int SurfNum = thisSpace.HTSurfaceFirst; SurfNum <= thisSpace.HTSurfaceLast; ++SurfNum) {
-                    if (state.dataSurface->Surface(SurfNum).Class != SurfaceClass::Wall) continue;
+                    if (state.dataSurface->Surface(SurfNum).Class != SurfaceClass::Wall) {
+                        continue;
+                    }
 
                     if (state.dataSurface->Surface(SurfNum).Width > majorW) {
                         majorW = state.dataSurface->Surface(SurfNum).Width;

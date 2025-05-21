@@ -549,7 +549,9 @@ namespace ExtendedHI {
 
         Real64 T = find_T(state, eqvar_name, eqvar_value);
 
-        if (Ta == 0.0) T = 0.0;
+        if (Ta == 0.0) {
+            T = 0.0;
+        }
 
         state.dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverMethodBackup;
         return T;

@@ -677,7 +677,9 @@ namespace HVACHXAssistedCoolingCoil {
                     WaterCoils::GetCoilWaterInletNode(state, thisHXCoil.CoolingCoilType, thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
                 HVACControllers::GetControllerNameAndIndex(
                     state, CoolingCoilWaterInletNodeNum, thisHXCoil.ControllerName, thisHXCoil.ControllerIndex, CoolingCoilErrFlag);
-                if (CoolingCoilErrFlag) ShowContinueError(state, format("...occurs in {} \"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                if (CoolingCoilErrFlag) {
+                    ShowContinueError(state, format("...occurs in {} \"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                }
                 if (SupplyAirOutletNode != CoolingCoilInletNodeNum) {
                     ShowSevereError(state, format("{}{}=\"{}\"", RoutineName, CurrentModuleObject, thisHXCoil.Name));
                     ShowContinueError(state, "Node names are inconsistent in heat exchanger and cooling coil object.");
@@ -697,7 +699,9 @@ namespace HVACHXAssistedCoolingCoil {
                 CoolingCoilErrFlag = false;
                 CoolingCoilOutletNodeNum =
                     WaterCoils::GetCoilOutletNode(state, thisHXCoil.CoolingCoilType, thisHXCoil.CoolingCoilName, CoolingCoilErrFlag);
-                if (CoolingCoilErrFlag) ShowContinueError(state, format("...occurs in {} \"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                if (CoolingCoilErrFlag) {
+                    ShowContinueError(state, format("...occurs in {} \"{}\"", CurrentModuleObject, thisHXCoil.Name));
+                }
                 if (SecondaryAirInletNode != CoolingCoilOutletNodeNum) {
                     ShowSevereError(state, format("{}{}=\"{}\"", RoutineName, CurrentModuleObject, thisHXCoil.Name));
                     ShowContinueError(state, "Node names are inconsistent in heat exchanger and cooling coil object.");
@@ -976,7 +980,9 @@ namespace HVACHXAssistedCoolingCoil {
                 Real64 QLatReq(0.0);           // Zone latent load, input to variable-speed DX coil
                 Real64 OnOffAirFlowRatio(1.0); // ratio of compressor on flow to average flow over time step
                 HVAC::CompressorOp compressorOn = compressorOp;
-                if (PartLoadRatio == 0.0) compressorOn = HVAC::CompressorOp::Off;
+                if (PartLoadRatio == 0.0) {
+                    compressorOn = HVAC::CompressorOp::Off;
+                }
                 VariableSpeedCoils::SimVariableSpeedCoils(state,
                                                           thisHXCoil.CoolingCoilName,
                                                           thisHXCoil.CoolingCoilIndex,
@@ -993,8 +999,9 @@ namespace HVACHXAssistedCoolingCoil {
 
             Error = state.dataHVACAssistedCC->CoilOutputTempLast - state.dataLoopNodes->Node(thisHXCoil.HXExhaustAirInletNodeNum).Temp;
             if (Iter > 40) { // check for oscillation (one of these being negative and one positive) before hitting max iteration limit
-                if (Error + ErrorLast < 0.000001)
+                if (Error + ErrorLast < 0.000001) {
                     Error = 0.0; // result bounced back and forth with same positive and negative result, no possible solution without this check
+                }
             }
             ErrorLast = Error;
             state.dataHVACAssistedCC->CoilOutputTempLast = state.dataLoopNodes->Node(thisHXCoil.HXExhaustAirInletNodeNum).Temp;
@@ -1206,7 +1213,9 @@ namespace HVACHXAssistedCoolingCoil {
             CoilCapacity = -1000.0;
         }
 
-        if (errFlag) ErrorsFound = true;
+        if (errFlag) {
+            ErrorsFound = true;
+        }
 
         return CoilCapacity;
     }

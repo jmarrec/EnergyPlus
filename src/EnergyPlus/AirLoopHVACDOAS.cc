@@ -1014,7 +1014,9 @@ namespace AirLoopHVACDOAS {
     void AirLoopDOAS::GetDesignDayConditions(EnergyPlusData &state)
     {
         for (auto &env : state.dataWeather->Environment) {
-            if (env.KindOfEnvrn != Constant::KindOfSim::DesignDay && env.KindOfEnvrn != Constant::KindOfSim::RunPeriodDesign) continue;
+            if (env.KindOfEnvrn != Constant::KindOfSim::DesignDay && env.KindOfEnvrn != Constant::KindOfSim::RunPeriodDesign) {
+                continue;
+            }
             if (env.maxCoolingOATSizing > this->SizingCoolOATemp) {
                 this->SizingCoolOATemp = env.maxCoolingOATSizing;
                 // DesignDayNum = 0 for KindOfSim == RunPeriodDesign
