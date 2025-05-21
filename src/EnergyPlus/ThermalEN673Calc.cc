@@ -225,8 +225,8 @@ namespace ThermalEN673Calc {
                     if (files.WriteDebugOutput)
                         WriteOutputEN673(files.DebugOutputFile, files.DBGD, nlayer, ufactor, hout, hin, Ra, Nu, hg, hr, hs, nperr);
                 } // GoAhead after solar
-            }     // GoAhead after EN673ISO10292
-        }         // GopAhead after propcon90
+            } // GoAhead after EN673ISO10292
+        } // GopAhead after propcon90
     }
 
     void EN673ISO10292(EnergyPlusData &state,
@@ -513,7 +513,7 @@ namespace ThermalEN673Calc {
                 diff = std::abs(sumRs - sumRsold);
                 // bi: perhaps we should also limit No. of iterations?
                 if (diff < eps) break; // tolerance was met - exit loop
-            }                          // remaining iterations
+            } // remaining iterations
         }
 
         // dr...END OF ITERATIONS

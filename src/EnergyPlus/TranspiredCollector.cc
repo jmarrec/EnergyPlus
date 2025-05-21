@@ -405,8 +405,8 @@ namespace TranspiredCollector {
 
                     } // Each OA System in a Multisystem
                       // DEALLOCATE(AlphasSplit)
-                }     // each Multisystem present
-            }         // any UTSC Multisystem present
+                } // each Multisystem present
+            } // any UTSC Multisystem present
 
             state.dataTranspiredCollector->UTSC(Item).OSCMName = Alphas(2);
             Found = Util::FindItemInList(state.dataTranspiredCollector->UTSC(Item).OSCMName, state.dataSurface->OSCM);

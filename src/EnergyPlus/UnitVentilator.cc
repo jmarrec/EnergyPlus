@@ -602,7 +602,7 @@ namespace UnitVentilator {
                     ShowContinueError(state, format("a heating coil is required for {}=\"{}\".", cAlphaFields(13), Alphas(13)));
                     ErrorsFound = true;
                 } // IF (.NOT. lAlphaBlanks(15)) THEN - from the start of heating coil information
-            }     // is option both or heating only
+            } // is option both or heating only
 
             if (unitVent.CoilOption == CoilsUsed::Both || unitVent.CoilOption == CoilsUsed::Cooling) {
                 if (!lAlphaBlanks(18)) {

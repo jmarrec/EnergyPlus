@@ -184,7 +184,7 @@ namespace Sched {
         Real64 minVal = 0.0; // minimum of all TSValue's
         bool isMinMaxSet = false;
 
-        ScheduleBase(){};
+        ScheduleBase() {};
 
         virtual void can_instantiate() = 0; // abstract base class
 
@@ -199,8 +199,8 @@ namespace Sched {
 
     struct DayOrYearSchedule : ScheduleBase
     {
-        DayOrYearSchedule(){};
-        virtual ~DayOrYearSchedule(){};
+        DayOrYearSchedule() {};
+        virtual ~DayOrYearSchedule() {};
 
         virtual std::vector<Real64> const &getDayVals([[maybe_unused]] EnergyPlusData &state, int jDay = -1, int dayOfWeek = -1) = 0;
     };
@@ -268,7 +268,7 @@ namespace Sched {
             type = SchedType::Constant;
         }
 
-        virtual ~Schedule(){};
+        virtual ~Schedule() {};
 
         Real64 getCurrentVal() const
         {
@@ -299,7 +299,7 @@ namespace Sched {
             type = SchedType::Constant;
         }
 
-        virtual ~ScheduleConstant(){};
+        virtual ~ScheduleConstant() {};
 
         void can_instantiate()
         {
@@ -340,7 +340,7 @@ namespace Sched {
             type = SchedType::Year;
         }
 
-        virtual ~ScheduleDetailed(){};
+        virtual ~ScheduleDetailed() {};
 
         void can_instantiate()
         {

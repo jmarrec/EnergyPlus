@@ -2586,7 +2586,7 @@ namespace HVACMultiSpeedHeatPump {
                     SteamCoils::GetCoilCapacity(state, "Coil:Heating:Steam", MSHeatPump(MSHeatPumpNum).SuppHeatCoilName, ErrorsFound);
 
             } // from IF(MSHeatPump(MSHeatPumpNum)%SuppHeatCoilType == Coil_HeatingSteam) THEN
-        }     // from IF( FirstHVACIteration ) THEN
+        } // from IF( FirstHVACIteration ) THEN
     }
 
     //******************************************************************************

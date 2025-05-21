@@ -359,9 +359,9 @@ namespace PlantValves {
                                 } // found item
 
                             } // comps
-                        }     // Branches
-                    }         // Loop Sides
-                }             // Plant loops
+                        } // Branches
+                    } // Loop Sides
+                } // Plant loops
 
                 if (!IsBranchActive) {
                     ShowSevereError(state, "TemperingValve object needs to be on an ACTIVE branch");

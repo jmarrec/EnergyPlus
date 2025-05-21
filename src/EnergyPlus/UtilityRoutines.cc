@@ -150,8 +150,7 @@ namespace Util {
                 // make FORTRAN floating point number (containing 'd' or 'D')
                 // standardized by replacing 'd' or 'D' with 'e'
                 std::string str{String};
-                std::replace_if(
-                    str.begin(), str.end(), [](const char c) { return c == 'D' || c == 'd'; }, 'e');
+                std::replace_if(str.begin(), str.end(), [](const char c) { return c == 'D' || c == 'd'; }, 'e');
                 return ProcessNumber(str, ErrorFlag);
             } else if (*result.ptr == 'e' || *result.ptr == 'E') {
                 ++result.ptr;

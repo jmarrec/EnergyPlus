@@ -761,7 +761,7 @@ namespace Dayltg {
                     state.dataDayltg->TDDFluxInc(hr, tddNum) = Illums();
                     state.dataDayltg->TDDFluxTrans(hr, tddNum) = Illums();
                 } // for (tddNum)
-            }     // for (hr)
+            } // for (hr)
         }
     }
 
@@ -1146,7 +1146,7 @@ namespace Dayltg {
             FluxTrans += trans * P * SINI * dPH;
 
             PH += dPH; // Increment the altitude angle
-        }              // N
+        } // N
 
         CalcTDDTransSolIso = FluxTrans / FluxInc;
 
@@ -1215,7 +1215,7 @@ namespace Dayltg {
                 FluxTrans += trans * COSI * dTH;
 
                 TH += dTH; // Increment the azimuth angle
-            }              // N
+            } // N
 
             CalcTDDTransSolHorizon = FluxTrans / FluxInc;
 

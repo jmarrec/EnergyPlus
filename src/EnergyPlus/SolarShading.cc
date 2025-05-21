@@ -2358,7 +2358,7 @@ void AllocateModuleArrays(EnergyPlusData &state)
                                         surf.Name);
                 }
             } // end non extsolar reporting as advanced variables
-        }     // Window Reporting
+        } // Window Reporting
         if (surf.Class == SurfaceClass::Window && surf.ExtBoundCond > 0 && surf.ExtBoundCond != SurfLoop) { // Interzone window
                                                                                                             // CurrentModuleObject='InterzoneWindows'
             SetupOutputVariable(state,
@@ -4820,9 +4820,9 @@ void CalcPerSolarBeam(EnergyPlusData &state,
                             }
                         }
                     } // for (timestep)
-                }     // for (hour)
-            }         // for (spaceNum)
-        }             // for (zoneNum)
+                } // for (hour)
+            } // for (spaceNum)
+        } // for (zoneNum)
 
         for (auto &e : s_surf->SurfaceWindow) {
             std::fill(e.OutProjSLFracMult.begin(), e.OutProjSLFracMult.end(), 1.0);
@@ -4874,7 +4874,7 @@ void CalcPerSolarBeam(EnergyPlusData &state,
             for (TS = 1; TS <= state.dataGlobal->TimeStepsInHour; ++TS) {
                 FigureSolarBeamAtTimestep(state, iHour, TS);
             } // TimeStep Loop
-        }     // Hour Loop
+        } // Hour Loop
     } else {
         FigureSolarBeamAtTimestep(state, state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep);
     }
@@ -5043,8 +5043,8 @@ void FigureSolarBeamAtTimestep(EnergyPlusData &state, int const iHour, int const
                         state.dataSolarShading->SurfWoShdgHoriz(SurfNum) += Fac1WoShdg;
                     }
                 } // End of surface loop
-            }     // End of Theta loop
-        }         // End of Phi loop
+            } // End of Theta loop
+        } // End of Phi loop
 
         for (int SurfNum : s_surf->AllExtSolAndShadingSurfaceList) {
             // Original conditions:
@@ -5330,7 +5330,7 @@ void DetermineShadowingCombinations(EnergyPlusData &state)
                     }
                 }
 
-            }    // ...end of surfaces DO loop (GSSNR)
+            } // ...end of surfaces DO loop (GSSNR)
         } else { // Simplified Distribution -- still check for Shading Subsurfaces
 
             for (GSSNR = 1; GSSNR <= s_surf->TotSurfaces; ++GSSNR) { // Loop through all surfaces (looking for surfaces which could shade GRSNR) ...
@@ -6479,7 +6479,7 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                         BackBeamAbs = Interp(btarBack1Lo.Abs, btarBack1Hi.Abs, profInterpFac);
                     }
                 } // if (SunLitFrac > 0.0)
-            }     // if (ANY_BLIND)
+            } // if (ANY_BLIND)
 
             if (SunlitFracWithoutReveal) {
 
@@ -6772,7 +6772,7 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                                     AbsShade * CosInc * SunLitFract * InOutProjSLFracMult +
                                     s_surf->SurfWinOutsRevealDiffOntoGlazing(SurfNum) * AbsShadeDiff;
                             } // End of check if blind is interior, exterior or between-glass
-                        }     // End of check if a blind is on
+                        } // End of check if a blind is on
 
                         if (ShadeFlag != WinShadingType::SwitchableGlazing) {
                             // Interior or between glass shade or blind on
@@ -7176,8 +7176,8 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                             }
                         }
                     } // End of check if ShadeFlag > 0 and ShadeFlag < 10
-                }     // end of checking if not eql window model
-            }         // end of checking if sunlitfract > 0
+                } // end of checking if not eql window model
+            } // end of checking if sunlitfract > 0
 
             if (ShadeFlag == WinShadingType::SwitchableGlazing) {
                 // Switchable glazing
@@ -8106,7 +8106,7 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
 
                         //  *****************************
 
-                    }    // IF (SurfaceWindow(SurfNum)%WindowModelType /= WindowModel:: BSDF) THEN
+                    } // IF (SurfaceWindow(SurfNum)%WindowModelType /= WindowModel:: BSDF) THEN
                 } else { // Simple interior solar distribution. All beam from exterior windows falls on floor;
                     // some of this is absorbed/transmitted, rest is reflected to other surfaces.
 
@@ -8167,10 +8167,10 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                         }
 
                     } // End of loop over floor sections
-                }     // End of check on complex vs. simple interior solar distribution
+                } // End of check on complex vs. simple interior solar distribution
 
             } // End of sunlit fraction > 0 test
-        }     // End of first loop over surfaces in zone
+        } // End of first loop over surfaces in zone
 
         Real64 BABSZoneSSG = 0.0; // Beam radiation from exterior windows absorbed in a zone (only for scheduled surface gains)
         Real64 BTOTZoneSSG = 0.0; // Solar entering a zone in case of scheduled surface gains
@@ -10120,8 +10120,8 @@ void WindowGapAirflowControl(EnergyPlusData &state)
                     break;
                 }
             } // End of surface loop
-        }     // End of space loop
-    }         // End of zone loop
+        } // End of space loop
+    } // End of zone loop
 }
 
 void SkyDifSolarShading(EnergyPlusData &state)
@@ -10297,8 +10297,8 @@ void SkyDifSolarShading(EnergyPlusData &state)
                     state.dataSolarShading->SurfWoShdgHoriz(SurfNum) += Fac1WoShdg;
                 }
             } // End of surface loop
-        }     // End of Theta loop
-    }         // End of Phi loop
+        } // End of Theta loop
+    } // End of Phi loop
 
     for (int SurfNum : s_surf->AllExtSolAndShadingSurfaceList) {
 

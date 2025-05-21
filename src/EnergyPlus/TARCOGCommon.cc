@@ -92,7 +92,7 @@ namespace TARCOGCommon {
             for (j = 1; j <= TARCOGParams::NMax; j += 2) {
                 LDSumMax += (sin_i * std::sin(j * Constant::PiOvr2)) / (i * j * pow_2(pow_i_W + pow_2(j / Height)));
             } // do j = 1, DeflectionParameters::NMax, 2
-        }     // do i = 1, DeflectionParameters::MMax, 2
+        } // do i = 1, DeflectionParameters::MMax, 2
 
         return LDSumMax;
     }
@@ -121,7 +121,7 @@ namespace TARCOGCommon {
             for (j = 1; j <= TARCOGParams::NMax; j += 2) {
                 LDSumMean += 4.0 / (pow_i_Pi_2 * pow_2(j) * pow_2(pow_i_W + pow_2(j / Height)));
             } // do j = 1, DeflectionParameters::NMax, 2
-        }     // do i = 1, MMax, 2
+        } // do i = 1, MMax, 2
 
         return LDSumMean;
     }

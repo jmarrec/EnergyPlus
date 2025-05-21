@@ -2607,7 +2607,7 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                         }
 
                     } // Equipment on List
-                }     // List
+                } // List
                 if (this_op_scheme.Type == OpScheme::ChillerHeaterSupervisory) {
                     // do one time set up for custom chillerheater controls
                     bool found = false;
@@ -2629,7 +2629,7 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                     }
                 }
             } // operation scheme
-        }     // loop
+        } // loop
 
         // second loop, fill op schemes info at each component.
         for (int LoopNum = 1; LoopNum <= state.dataPlnt->TotNumLoops; ++LoopNum) {
@@ -2692,9 +2692,9 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                         }
 
                     } // Equipment on List
-                }     // List
-            }         // operation scheme
-        }             // loop
+                } // List
+            } // operation scheme
+        } // loop
 
         // check the pointers to see if a single component is attached to more than one type of control scheme
         for (int LoopNum = 1; LoopNum <= state.dataPlnt->TotNumLoops; ++LoopNum) {
@@ -2749,7 +2749,7 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                     }
                 }
             } // operation scheme
-        }     // loop
+        } // loop
 
         state.dataPlantCondLoopOp->InitLoadDistributionOneTimeFlag = false;
     }
@@ -2772,7 +2772,7 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                     if (!state.dataGlobal->BeginEnvrnFlag) this_op_scheme.MyEnvrnFlag = true;
                 }
             } // operation scheme
-        }     // loop
+        } // loop
     }
 
     // FIRST HVAC INITS
@@ -4252,7 +4252,7 @@ void ActivateEMSControls(EnergyPlusData &state, PlantLocation const &plantLoc, b
             }
             return;
         } // EMSValue <=> 0
-    }     // EMSFlag
+    } // EMSFlag
 }
 
 void AdjustChangeInLoadByEMSControls(EnergyPlusData &state,

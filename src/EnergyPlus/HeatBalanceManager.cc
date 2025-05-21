@@ -1961,7 +1961,7 @@ namespace HeatBalanceManager {
                                 ErrorsFound = true;
                             }
                         } // Loop
-                    }     // ZoneNum
+                    } // ZoneNum
                 }
 
             } // ListNum
@@ -2149,7 +2149,7 @@ namespace HeatBalanceManager {
                 ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2));
             }
         } // for (Loop)
-    }     // GetIncidentSolarMultiplier()
+    } // GetIncidentSolarMultiplier()
 
     void GetZoneLocalEnvData(EnergyPlusData &state, bool &ErrorsFound) // Error flag indicator (true if errors found)
     {

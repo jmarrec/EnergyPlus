@@ -302,7 +302,7 @@ void ConstructionProps::calculateTransferFunction(EnergyPlusData &state, bool &E
                 }
             }
         } // ... end of resistive layer determination IF-THEN block.
-    }     // ... end of layer loop.
+    } // ... end of layer loop.
 
     // If errors have been found, just return
 

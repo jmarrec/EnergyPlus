@@ -2623,7 +2623,7 @@ void CreateEnergyReportStructure(EnergyPlusData &state)
                 } // for (SubCompNum)
             }
         } // for (CompNum)
-    }     // for (CtrlZoneNum)
+    } // for (CtrlZoneNum)
 
     for (CtrlZoneNum = 1; CtrlZoneNum <= state.dataGlobal->NumOfZones; ++CtrlZoneNum) {
         if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZoneNum).IsControlled) continue;
@@ -2697,10 +2697,10 @@ void CreateEnergyReportStructure(EnergyPlusData &state)
 
                         meteredVars.deallocate();
                     } // if (NumVariables > 0)
-                }     // for (SubSubCompNum)
-            }         // for (SubCompNum)
-        }             // for (CompNum)
-    }                 // for (CtrlZoneNum)
+                } // for (SubSubCompNum)
+            } // for (SubCompNum)
+        } // for (CompNum)
+    } // for (CtrlZoneNum)
 
     //***Plant Loops
 
@@ -2932,10 +2932,10 @@ void CreateEnergyReportStructure(EnergyPlusData &state)
 
                         thisComp.SubComp(SubCompNum).NumMeteredVars = NumVariables;
                     } // for (SubCompNum)
-                }     // for (CompNum)
-            }         // for (BranchNum)
-        }             // for (LoopSide)
-    }                 // for (PlantLoopNum)
+                } // for (CompNum)
+            } // for (BranchNum)
+        } // for (LoopSide)
+    } // for (PlantLoopNum)
 } // CreateEnergyReportStructure()
 
 // End Initialization Section of the Module
@@ -3100,10 +3100,10 @@ void ReportSystemEnergyUse(EnergyPlusData &state)
                             CalcSystemEnergyUse(state, CompLoadFlag, AirLoopNum, pasBranchSubSubComp.TypeOf, EnergyType, CompLoad, CompEnergyUse);
                         }
                     } // for (SubSubCompNum)
-                }     // for (SubCompNum)
-            }         // for (CompNum)
-        }             // for (BranchNum)
-    }                 // for (AirLoopNum)
+                } // for (SubCompNum)
+            } // for (CompNum)
+        } // for (BranchNum)
+    } // for (AirLoopNum)
 
     for (int CtrlZoneNum = 1; CtrlZoneNum <= state.dataGlobal->NumOfZones; ++CtrlZoneNum) {
         auto const &zecCtrlZone = state.dataZoneEquip->ZoneEquipConfig(CtrlZoneNum);
@@ -3216,10 +3216,10 @@ void ReportSystemEnergyUse(EnergyPlusData &state)
                             CalcSystemEnergyUse(state, CompLoadFlag, AirLoopNum, zelSubSubEquipData.TypeOf, EnergyType, CompLoad, CompEnergyUse);
                         }
                     } // SubSubCompNum
-                }     // SubCompNum
-            }         // Idx
-        }             // ZoneInNum
-    }                 // Controlled Zone Loop
+                } // SubCompNum
+            } // Idx
+        } // ZoneInNum
+    } // Controlled Zone Loop
 
     for (int airLoopNum = 1; airLoopNum <= state.dataHVACGlobal->NumPrimaryAirSys; ++airLoopNum) {
         auto &thisSysLoadRepVars = state.dataSysRpts->SysLoadRepVars(airLoopNum);

@@ -1808,7 +1808,7 @@ namespace Fluid {
             glycol->ViscTempRatios.allocate(glycol->NumViscTempPoints);
             for (int i = 1; i < glycol->NumCondTempPoints; ++i)
                 glycol->ViscTempRatios(i) = (glycol->ViscValues(i + 1) - glycol->ViscValues(i)) / (glycol->ViscTemps(i + 1) - glycol->ViscTemps(i));
-#endif    // PERFORMANCE_OPT
+#endif // PERFORMANCE_OPT
         } // for (Loop)
 
         FluidTemps.deallocate();

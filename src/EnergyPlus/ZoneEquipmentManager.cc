@@ -4005,7 +4005,7 @@ void SimZoneEquipment(EnergyPlusData &state, bool const FirstHVACIteration, bool
 
             state.dataSize->CurTermUnitSizingNum = 0;
         } // zone equipment loop
-    }     // End of controlled zone loop
+    } // End of controlled zone loop
 
     // If SpaceHVAC is active calculate SpaceHVAC:EquipmentMixer inlet flow rates after simulating zone equipment
     if (state.dataHeatBal->doSpaceHeatBalanceSimulation && !state.dataGlobal->DoingSizing) {
@@ -6417,8 +6417,8 @@ void CalcAirFlowSimple(EnergyPlusData &state,
                 }
 
             } // J=1,RefDoorMixing(ZoneA)%NumRefDoorConnections
-        }     // ZoneA=1,(NumOfZones - 1)
-    }         //(TotRefrigerationDoorMixing > 0) THEN
+        } // ZoneA=1,(NumOfZones - 1)
+    } //(TotRefrigerationDoorMixing > 0) THEN
 
     // Process the scheduled Infiltration for air heat balance depending on model type
     for (int j = 1; j <= state.dataHeatBal->TotInfiltration; ++j) {

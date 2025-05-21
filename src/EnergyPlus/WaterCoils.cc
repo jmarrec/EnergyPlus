@@ -3615,7 +3615,7 @@ void CoolingCoil(EnergyPlusData &state,
                                        PartLoadRatio);
 
                 } // End if for part wet part dry coil
-            }     // End if for dry coil
+            } // End if for dry coil
 
         } else if (waterCoil.CoolingCoilAnalysisMode == state.dataWaterCoils->SimpleAnalysis) {
             // Coil is completely dry if AirDewPointTemp is less than InletWaterTemp,hence Call CoilCompletelyDry
@@ -5034,13 +5034,13 @@ void CalcPolynomCoef(EnergyPlusData &state, Array2<Real64> const &OrderedPair, A
                                                                      state.dataWaterCoils->OrdPairSumMatrix(CurrentOrder, II) /
                                                                      state.dataWaterCoils->OrdPairSumMatrix(CurrentOrder, 1);
                 } // End of J loop
-            }     // End of II loop
+            } // End of II loop
             for (II = 1; II <= PolynomOrder + 1; ++II) {
                 for (J = CurrentOrder + 1; J <= PolynomOrder + 2; ++J) {
                     state.dataWaterCoils->OrdPairSumMatrix(J, II) = state.dataWaterCoils->OrdPairSumMatrix(J, II + 1);
                 } // End of J loop
-            }     // End of II loop
-        }         // End of CurrentOrder loop
+            } // End of II loop
+        } // End of CurrentOrder loop
 
         S2 = 0.0;
         for (CurrentOrdPair = 1; CurrentOrdPair <= WaterCoils::MaxOrderedPairs; ++CurrentOrdPair) {

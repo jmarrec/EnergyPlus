@@ -3836,7 +3836,7 @@ void VB_SOL46_CURVE(EnergyPlusData const &state,
                 TAU_BB = 0.0;
                 VB_SOL6(state, S, W, OMEGA, DE, PHI, RHODFS_SLAT, RHOUFS_SLAT, TAU_SLAT, RHO_BD, TAU_BD);
             } //  END CHECK FOR DIRECT BEAM TRANSMISSION
-        }     // END CHECK TO SEE IF BEAM ALLIGNED WITH SLATS
+        } // END CHECK TO SEE IF BEAM ALLIGNED WITH SLATS
     }
 }
 
@@ -5138,7 +5138,7 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
                          // of tau_lw > 0.001 (ie 0.1%)
                          // Note:  ISDL(0) and ISDL(NL+1)
                          //        must both be zero
-    }                    // end loop to calculate ISDL(i)
+    } // end loop to calculate ISDL(i)
 
     //  determine the largest number of consecutive diathermanous layers, NDLIAR
     //                   i.e., the number of diathermanous layers in a row
@@ -5192,9 +5192,9 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
                 } else { // some intermediate layer is diathermanous
                     DL_RES_r2(T(I), T(I + 1), T(I + 2), RHOB(I), RHOF(I + 1), RHOB(I + 1), TAU(I + 1), RHOF(I + 2), HJR(I + 1), HR(I), HR(I + 1));
                 } //   end of IF/ELSE (I .EQ. NL-1)
-            }     //  end of IF/ELSE (I .EQ. 0)
-        }         //  end of IF(ISDL(I) .EQ. 0) .AND. .....
-    }             //   end of scan through all layers
+            } //  end of IF/ELSE (I .EQ. 0)
+        } //  end of IF(ISDL(I) .EQ. 0) .AND. .....
+    } //   end of scan through all layers
 
     //   calculate radiant heat transfer coefficients at double diathermanous
     //   layers,six coefficients in each case
@@ -5212,9 +5212,9 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
                     } else {
                         //                CALL DL2_RES(T(I), T(I+1), T(I+2), T(I+3) etc)
                     } //   end of IF/ELSE (I .EQ. NL-1)
-                }     //  end of IF/ELSE (I .EQ. 0)
-            }         //  end of IF(ISDL(I) .EQ. 0) .AND. .....
-        }             //   end of scan through all layers
+                } //  end of IF/ELSE (I .EQ. 0)
+            } //  end of IF(ISDL(I) .EQ. 0) .AND. .....
+        } //   end of scan through all layers
 
         //  calculate convective OCF/jump heat transfer coefficients
         // no OCF unless at least two layers exist

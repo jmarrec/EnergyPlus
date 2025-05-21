@@ -338,7 +338,7 @@ namespace WindowComplexManager {
                 }
 
             } // State loop
-        }     // Complex Window loop
+        } // Complex Window loop
         //  Allocate all beam-dependent complex fenestration quantities
         for (int IWind = 1; IWind <= state.dataWindowComplexManager->NumComplexWind; ++IWind) {
             int ISurf = state.dataWindowComplexManager->WindowList(IWind).SurfNo;
@@ -346,7 +346,7 @@ namespace WindowComplexManager {
             for (int IState = 1; IState <= NumStates; ++IState) {
                 AllocateCFSStateHourlyData(state, ISurf, IState);
             } // State loop
-        }     // Complex Window loop
+        } // Complex Window loop
     }
 
     void AllocateCFSStateHourlyData(EnergyPlusData &state,
@@ -555,7 +555,7 @@ namespace WindowComplexManager {
             for (IState = 1; IState <= NumStates; ++IState) {
                 CFSShadeAndBeamInitialization(state, ISurf, IState);
             } // State loop
-        }     // window loop
+        } // window loop
     }
 
     void CFSShadeAndBeamInitialization(EnergyPlusData &state,
@@ -642,8 +642,8 @@ namespace WindowComplexManager {
                     // update window beam properties
                     CalculateWindowBeamProperties(state, iSurf, iState, complexWindow, complexWindowGeom, surfaceWindowState, Hour, TS);
                 } // Timestep loop
-            }     // Hour loop
-        } else {  // detailed timestep integration
+            } // Hour loop
+        } else { // detailed timestep integration
             std::size_t const lHT(
                 complexWindowGeom.ThetaBm.index(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep)); // [ lHT ] == ( HourOfDay, TimeStep )
             SunDir = state.dataBSDFWindow->SUNCOSTS(state.dataGlobal->TimeStep, state.dataGlobal->HourOfDay);
@@ -1146,7 +1146,7 @@ namespace WindowComplexManager {
                     Basis.Lamda(ElemNo) = Lamda;
                     Basis.SolAng(ElemNo) = SolAng;
                 }
-            }    // BST
+            } // BST
         } else { // BTW
             ShowFatalError(state, "WindowComplexManager: Non-Window6 basis type not yet implemented.");
         } // BTW
@@ -1662,7 +1662,7 @@ namespace WindowComplexManager {
             for (M = 1; M <= Geom.Trn.NBasis; ++M) { // Outgoing ray loop
                 Sum1 += Geom.Inc.Lamda(J) * Geom.Trn.Lamda(M) * state.dataConstruction->Construct(IConst).BSDFInput.SolFrtTrans(M, J);
             } // Outgoing ray loop
-        }     // Incident ray loop
+        } // Incident ray loop
         if (Sum2 > 0) {
             State.WinDiffTrans = Sum1 / Sum2;
         } else {
@@ -1679,7 +1679,7 @@ namespace WindowComplexManager {
             for (M = 1; M <= Geom.Trn.NBasis; ++M) { // Outgoing ray loop
                 Sum1 += Geom.Inc.Lamda(J) * Geom.Trn.Lamda(M) * state.dataConstruction->Construct(IConst).BSDFInput.VisFrtTrans(M, J);
             } // Outgoing ray loop
-        }     // Incident ray loop
+        } // Incident ray loop
         if (Sum2 > 0.0) {
             State.WinDiffVisTrans = Sum1 / Sum2;
         } else {
@@ -1893,7 +1893,7 @@ namespace WindowComplexManager {
                     Sum1 += Geom.Trn.Lamda(Geom.SurfInt(J, KBkSurf)) * Geom.Inc.Lamda(M) *
                             state.dataConstruction->Construct(IConst).BSDFInput.SolBkRefl(Geom.SurfInt(J, KBkSurf), M);
                 } // Outgoing Ray loop
-            }     // Inc Ray loop
+            } // Inc Ray loop
             if (Sum2 > 0.0) {
                 Hold = Sum1 / Sum2;
                 for (I = 1; I <= 24; ++I) {
@@ -1934,7 +1934,7 @@ namespace WindowComplexManager {
                 }
 
             } // layer loop
-        }     // back surface loop
+        } // back surface loop
 
         // ********************************************************************************
         // Allocation and calculation of integrated values for front of window surface

@@ -234,12 +234,11 @@ namespace HVACMultiSpeedHeatPump {
               HeatRecoveryRate(0.0), HeatRecoveryInletTemp(0.0), HeatRecoveryOutletTemp(0.0), HeatRecoveryMassFlowRate(0.0),
               AirFlowControl(AirflowControl::Invalid), ErrIndexCyc(0), ErrIndexVar(0), LoadLoss(0.0), SuppCoilAirInletNode(0),
               SuppCoilAirOutletNode(0), SuppHeatCoilType_Num(0), SuppHeatCoilIndex(0), SuppCoilControlNode(0), MaxSuppCoilFluidFlow(0.0),
-              SuppCoilOutletNode(0), CoilAirInletNode(0), CoilControlNode(0), MaxCoilFluidFlow(0.0), CoilOutletNode(0),
-              HotWaterCoilControlNode(0), plantLoc{}, SuppPlantLoc{}, HotWaterPlantLoc{}, HotWaterCoilMaxIterIndex(0), HotWaterCoilMaxIterIndex2(0),
-              StageNum(0), Staged(false), CoolCountAvail(0), CoolIndexAvail(0), HeatCountAvail(0), HeatIndexAvail(0), FirstPass(true),
-              MinOATCompressorCooling(0.0), MinOATCompressorHeating(0.0), MyEnvrnFlag(true), MySizeFlag(true), MyCheckFlag(true),
-              MyFlowFracFlag(true), MyPlantScantFlag(true), MyStagedFlag(true), EMSOverrideCoilSpeedNumOn(false), EMSOverrideCoilSpeedNumValue(0.0),
-              CoilSpeedErrIndex(0)
+              SuppCoilOutletNode(0), CoilAirInletNode(0), CoilControlNode(0), MaxCoilFluidFlow(0.0), CoilOutletNode(0), HotWaterCoilControlNode(0),
+              plantLoc{}, SuppPlantLoc{}, HotWaterPlantLoc{}, HotWaterCoilMaxIterIndex(0), HotWaterCoilMaxIterIndex2(0), StageNum(0), Staged(false),
+              CoolCountAvail(0), CoolIndexAvail(0), HeatCountAvail(0), HeatIndexAvail(0), FirstPass(true), MinOATCompressorCooling(0.0),
+              MinOATCompressorHeating(0.0), MyEnvrnFlag(true), MySizeFlag(true), MyCheckFlag(true), MyFlowFracFlag(true), MyPlantScantFlag(true),
+              MyStagedFlag(true), EMSOverrideCoilSpeedNumOn(false), EMSOverrideCoilSpeedNumValue(0.0), CoilSpeedErrIndex(0)
         {
         }
     };

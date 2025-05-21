@@ -3425,7 +3425,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 // Last field is index key, no indexing here so mimic weather output data
 
             } // RuntimeReportVarNum
-        }     // NumEMSOutputVariables > 0
+        } // NumEMSOutputVariables > 0
 
         if (state.dataRuntimeLang->NumEMSMeteredOutputVariables > 0) {
             cCurrentModuleObject = "EnergyManagementSystem:MeteredOutputVariable";

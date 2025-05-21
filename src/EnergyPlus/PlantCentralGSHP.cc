@@ -2017,7 +2017,7 @@ void WrapperSpecs::CalcChillerModel(EnergyPlusData &state)
                         }
                         EvapOutletTemp = EvapOutletTempCalc;
                     } // End of flow control decision
-                }     // End of operation mode
+                } // End of operation mode
             } else {
                 QEvaporator = 0.0;
                 EvapOutletTemp = EvapInletTemp;
@@ -2296,7 +2296,7 @@ void WrapperSpecs::CalcChillerHeaterModel(EnergyPlusData &state)
                     CurrentMode = 4; // Simultaneous cooling dominant mode: 4
                 }
             } // End of mode determination
-        }     // End of system operation determinatoin
+        } // End of system operation determinatoin
 
         if (IsLoadHeatRemaining && CondMassFlowRate > 0.0 && (this->WrapperComp(CompNum).chSched->getCurrentVal() > 0)) { // System is on
             // Operation mode

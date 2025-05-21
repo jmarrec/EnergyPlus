@@ -1491,7 +1491,7 @@ namespace HVACUnitaryBypassVAV {
                 PlantUtilities::InitComponentNodes(state, 0.0, cBVAV.MaxHeatCoilFluidFlow, cBVAV.CoilControlNode, cBVAV.CoilOutletNode);
 
             } // end of IF(cBVAV%CoilControlNode .GT. 0)THEN
-        }     // end one time inits
+        } // end one time inits
 
         if (!state.dataGlobal->BeginEnvrnFlag) {
             state.dataHVACUnitaryBypassVAV->MyEnvrnFlag(CBVAVNum) = true;
@@ -1802,7 +1802,7 @@ namespace HVACUnitaryBypassVAV {
                 cBVAV.DesignSuppHeatingCapacity = QCoilActual;
 
             } // from IF(cBVAV%HeatCoilType == HVAC::Coil_HeatingSteam) THEN
-        }     // from IF( FirstHVACIteration ) THEN
+        } // from IF( FirstHVACIteration ) THEN
 
         if ((cBVAV.HeatCoolMode == 0 && cBVAV.fanOp == HVAC::FanOp::Cycling) || state.dataHVACUnitaryBypassVAV->CompOnMassFlow == 0.0) {
             state.dataHVACUnitaryBypassVAV->PartLoadFrac = 0.0;

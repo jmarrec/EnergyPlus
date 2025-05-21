@@ -292,7 +292,7 @@ namespace Avail {
                 }
             }
         } // for (ZoneEquipType)
-    }     // ManageSystemAvailability()
+    } // ManageSystemAvailability()
 
     void GetSysAvailManagerInputs(EnergyPlusData &state)
     {
@@ -2031,9 +2031,9 @@ namespace Avail {
                         default: {
                             availStatus = Status::NoAction;
                         }
-                        }                                          // end select on thermostat control
+                        } // end select on thermostat control
                         if (availStatus == Status::CycleOn) break; // loop break
-                    }                                              // end loop over zones in system
+                    } // end loop over zones in system
                 } break;
 
                 case NightCycleControlType::OnControlZone: {

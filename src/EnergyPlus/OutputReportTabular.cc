@@ -937,8 +937,8 @@ void InitializeTabularMonthly(EnergyPlusData &state)
                 //     DEALLOCATE(IndexesForKeyVar)
                 // #endif
             } // ColNum
-        }     // kUniqueKey
-    }         // TabNum the end of the loop through the inputs objects
+        } // kUniqueKey
+    } // TabNum the end of the loop through the inputs objects
 
     // #ifdef ITM_KEYCACHE
     //  DEALLOCATE(NamesOfKeys)
@@ -7305,7 +7305,7 @@ void WriteMonthlyTables(EnergyPlusData &state)
                     }
                 }
             } // jTables
-        }     // iInput
+        } // iInput
     }
 }
 
@@ -10127,7 +10127,7 @@ void WriteSourceEnergyEndUseSummary(EnergyPlusData &state)
                 }
             }
         } // End of Normalized by Total Area
-    }     // End of Dual Units reporting
+    } // End of Dual Units reporting
 }
 
 void WriteDemandEndUseSummary(EnergyPlusData &state)

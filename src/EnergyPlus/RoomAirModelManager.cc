@@ -609,7 +609,7 @@ namespace RoomAir {
                             state.dataZoneEquip->ZoneEquipConfig(found).NumExhaustNodes);
                         state.dataRoomAir->AirPatternZoneInfo(i).ExhaustAirNodeID = state.dataZoneEquip->ZoneEquipConfig(found).ExhaustNode;
                     } // exhaust nodes present
-                }     // found ZoneEquipConf
+                } // found ZoneEquipConf
 
                 // second get zone height values
                 state.dataRoomAir->AirPatternZoneInfo(i).ZoneHeight = state.dataHeatBal->Zone(i).CeilingHeight;
@@ -1056,8 +1056,8 @@ namespace RoomAir {
                         }
                     }
                 } // if
-            }     // for (iLink)
-        }         // for (Loop)
+            } // for (iLink)
+        } // for (Loop)
     }
 
     void GetUFADZoneData(EnergyPlusData &state, bool &ErrorsFound) // True if errors found during this get input routine
@@ -1556,8 +1556,8 @@ namespace RoomAir {
                         ErrorsFound = true;
                     }
                 } // for (gainsLoop)
-            }     // for (iZone)
-        }         // loop thru TotNumOfRAFNNodeGainsLists
+            } // for (iZone)
+        } // loop thru TotNumOfRAFNNodeGainsLists
 
         // Get data of HVAC equipment
         std::string const cCurrentModuleObject = "RoomAir:Node:AirflowNetwork:HVACEquipment";
@@ -1655,8 +1655,8 @@ namespace RoomAir {
                     // TYPE RoomAirflowNetworkHVACStruct
                     // INTEGER::EquipConfigIndex = 0
                 } // for (iEquip)
-            }     // for (Zone)
-        }         // loop thru TotNumOfRAFNNodeHVACLists
+            } // for (Zone)
+        } // loop thru TotNumOfRAFNNodeHVACLists
 
         // do some checks on input data
         for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
@@ -1707,8 +1707,8 @@ namespace RoomAir {
                         ErrorsFound = true;
                     }
                 } // for (iGain)
-            }     // for (iRoomAFNNode)
-        }         // for (iZone)
+            } // for (iRoomAFNNode)
+        } // for (iZone)
 
         if (ErrorsFound) return;
 
@@ -1740,7 +1740,7 @@ namespace RoomAir {
                                     OutputProcessor::StoreType::Average,
                                     roomAFNZoneNode.Name);
             } // for (iAirNodE)
-        }     // for (iZone)
+        } // for (iZone)
     }
 
     void SharedDVCVUFDataInit(EnergyPlusData &state, int const ZoneNum)
@@ -2031,7 +2031,7 @@ namespace RoomAir {
                         }
                     }
                 } // for (Loop2)
-            }     // for (iZone)
+            } // for (iZone)
 
             AuxSurf.deallocate();
 
@@ -2200,7 +2200,7 @@ namespace RoomAir {
                                         OutputProcessor::StoreType::Average,
                                         state.dataHeatBal->Zone(iZone).Name);
                 } // for (iZone)
-            }     // if (any(IsZoneDV))
+            } // if (any(IsZoneDV))
 
             if (any(state.dataRoomAir->IsZoneUFAD)) {
                 state.dataRoomAir->ZoneUFADMixedFlag.allocate(state.dataGlobal->NumOfZones);
@@ -2520,7 +2520,7 @@ namespace RoomAir {
                         }
                     }
                 } // for (iZone)
-            }     // if (any(isZoneCV))
+            } // if (any(isZoneCV))
 
             state.dataRoomAir->MyEnvrnFlag = true;
 

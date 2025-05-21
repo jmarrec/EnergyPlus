@@ -260,8 +260,8 @@ namespace Window {
                 //                                constrSh.effGlassEmi[surfShade.blind.slatAngIdxHi],
                 //                                surfShade.blind.slatAngInterpFac);
             } // End of check if interior shade or interior blind
-        }     // End of surface loop
-    }         // InitWCE_SimplifiedOpticalData()
+        } // End of surface loop
+    } // InitWCE_SimplifiedOpticalData()
 
     Real64 GetSolarTransDirectHemispherical(EnergyPlusData &state, int ConstrNum)
     {

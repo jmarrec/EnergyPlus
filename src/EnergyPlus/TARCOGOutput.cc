@@ -435,7 +435,7 @@ void WriteInputArguments(EnergyPlusData &state,
             print(InArgumentsFile, Format_1133, xgcp(1, iprop(j, i)), xgcp(2, iprop(j, i)), xgcp(3, iprop(j, i)));
             print(InArgumentsFile, Format_1134, xwght(iprop(j, i)));
         } // - j - one mix
-    }     // i - gas loop
+    } // i - gas loop
 
     print(InArgumentsFile, "\n");
     print(InArgumentsFile, Format_1198);
@@ -539,7 +539,7 @@ void WriteModifiedArguments(InputOutputFile &InArgumentsFile,
             print(InArgumentsFile, Format_1133, xgcp(1, j), xgcp(2, j), xgcp(3, j));
             print(InArgumentsFile, Format_1134, xwght(j));
         } // j - gas mix
-    }     // i - gaps
+    } // i - gaps
     print(InArgumentsFile, "\n");
     print(InArgumentsFile, Format_1198);
 }

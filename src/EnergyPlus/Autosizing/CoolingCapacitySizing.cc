@@ -437,8 +437,8 @@ Real64 CoolingCapacitySizer::size(EnergyPlusData &state, Real64 _originalValue, 
                     }
                     this->autoSizedValue =
                         NominalCapacityDes * this->dataFracOfAutosizedCoolingCapacity; // Fixed Moved up 1 line inside block per Richard Raustad
-                }                                                                      // IF(OASysFlag) THEN or ELSE IF(AirLoopSysFlag) THEN
-                this->dataDesAccountForFanHeat = true;                                 // reset for next water coil
+                } // IF(OASysFlag) THEN or ELSE IF(AirLoopSysFlag) THEN
+                this->dataDesAccountForFanHeat = true; // reset for next water coil
                 if (state.dataGlobal->DisplayExtraWarnings && this->autoSizedValue <= 0.0) {
                     ShowWarningMessage(state,
                                        this->callingRoutine + ": Potential issue with equipment sizing for " + this->compType + ' ' + this->compName);

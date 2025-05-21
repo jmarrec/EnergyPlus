@@ -6978,7 +6978,7 @@ namespace AirflowNetwork {
                                        0.131 * pow_3(std::sin(2.0 * IncRad * SideRatioFac)) + 0.769 * std::cos(IncRad / 2.0) +
                                        0.07 * pow_2(SideRatioFac * std::sin(IncRad / 2.0)) + 0.717 * pow_2(std::cos(IncRad / 2.0)));
                 } // End of wind direction loop
-            }     // End of facade number loop
+            } // End of facade number loop
             // Add a roof
             FacadeNum = 5;
             SR = min(max(SideRatio, 0.25), 1.0);

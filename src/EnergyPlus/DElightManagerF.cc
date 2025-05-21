@@ -421,8 +421,8 @@ namespace DElightManagerF {
                                             }
 
                                         } // Surface hosts Window test
-                                    }     // Window test
-                                }         // Window loop
+                                    } // Window test
+                                } // Window loop
 
                                 print(delightInFile, Format_909, iNumWindows);
 
@@ -484,10 +484,10 @@ namespace DElightManagerF {
                                                               wndo2.Vertex(ivert).z * M2FT);
                                                     }
                                                 } //! lWndoIsDoppelganger
-                                            }     // Surface hosts Window2 test
-                                        }         // Window2 Class test
-                                    }             // Window2 loop
-                                }                 // Hosted Windows test
+                                            } // Surface hosts Window2 test
+                                        } // Window2 Class test
+                                    } // Window2 loop
+                                } // Hosted Windows test
 
                                 // Write the number of CFS hosted by the current Opaque Bounding Surface
                                 iHostedCFS = 0;
@@ -554,8 +554,8 @@ namespace DElightManagerF {
                                             ErrorsFound = true;
                                         }
                                     } // The current Opaque Bounding Surface hosts the current CFS object?
-                                }     // CFS object loop 2
-                            }         // Opaque Bounding Surface test
+                                } // CFS object loop 2
+                            } // Opaque Bounding Surface test
                         }
                     } // Zone Surface loop
 
@@ -666,11 +666,11 @@ namespace DElightManagerF {
                                           znDayl.LightControlType); // should never happen but just in case send zero fraction and illuminance
                                 }
                             } // Max 100 RefPt test
-                        }     // RefPt in current DElight Zone test
-                    }         // traverse reference points loop
-                }             // if in a zone
-            }                 // Zone hosts DElight object test
-        }                     // traverse ZoneDayLight object loop
+                        } // RefPt in current DElight Zone test
+                    } // traverse reference points loop
+                } // if in a zone
+            } // Zone hosts DElight object test
+        } // traverse ZoneDayLight object loop
 
         // Write BUILDING SHADES
         print(delightInFile, Format_914);

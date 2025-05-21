@@ -1032,7 +1032,7 @@ namespace HVACDXHeatPumpSystem {
                     }
                 }
             } // End of cooling load type (sensible or latent) if block
-        }     // End of If DXheatingSystem is scheduled on and there is flow
+        } // End of If DXheatingSystem is scheduled on and there is flow
 
         // Set the final results
         DXHeatPumpSystem.PartLoadFrac = PartLoadFrac;

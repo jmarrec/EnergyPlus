@@ -6167,7 +6167,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
             state.dataHVACVarRefFlow->TerminalUnitList(TUListIndex).TerminalUnitNotSizedYet(IndexToTUInTUList) = false;
             state.dataHVACVarRefFlow->MySizeFlag(VRFTUNum) = false;
         } // IF ( .NOT. ZoneSizingCalc) THEN
-    }     // IF (MySizeFlag(VRFTUNum)) THEN
+    } // IF (MySizeFlag(VRFTUNum)) THEN
 
     // Do the Begin Environment initializations
     if (state.dataGlobal->BeginEnvrnFlag && state.dataHVACVarRefFlow->MyEnvrnFlag(VRFTUNum)) {

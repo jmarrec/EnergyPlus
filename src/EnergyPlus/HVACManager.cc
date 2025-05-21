@@ -1112,8 +1112,8 @@ void SimHVAC(EnergyPlusData &state)
                                         }
                                     }
                                 } // significant slope in iterates
-                            }     // no osciallation
-                        }         // last value does not equal average of stack.
+                            } // no osciallation
+                        } // last value does not equal average of stack.
 
                         if (MonotonicDecreaseFound || MonotonicIncreaseFound || FoundOscillationByDuplicate) {
                             std::string HistoryTrace;
@@ -1198,8 +1198,8 @@ void SimHVAC(EnergyPlusData &state)
                                         }
                                     }
                                 } // significant slope in iterates
-                            }     // no oscillation
-                        }         // last value does not equal average of stack.
+                            } // no oscillation
+                        } // last value does not equal average of stack.
 
                         if (MonotonicDecreaseFound || MonotonicIncreaseFound || FoundOscillationByDuplicate) {
                             std::string HistoryTrace;
@@ -1284,8 +1284,8 @@ void SimHVAC(EnergyPlusData &state)
                                         }
                                     }
                                 } // significant slope in iterates
-                            }     // no osciallation
-                        }         // last value does not equal average of stack.
+                            } // no osciallation
+                        } // last value does not equal average of stack.
 
                         if (MonotonicDecreaseFound || MonotonicIncreaseFound || FoundOscillationByDuplicate) {
                             std::string HistoryTrace;
@@ -1301,7 +1301,7 @@ void SimHVAC(EnergyPlusData &state)
                           // end Temperature checks
 
                     } // loop over zone inlet nodes
-                }     // loop over zones
+                } // loop over zones
 
                 for (int LoopNum = 1; LoopNum <= state.dataPlnt->TotNumLoops; ++LoopNum) {
                     bool FoundOscillationByDuplicate;
@@ -1395,7 +1395,7 @@ void SimHVAC(EnergyPlusData &state)
                                         }
                                     }
                                 } // significant slope found
-                            }     // no oscillation found
+                            } // no oscillation found
 
                             if (MonotonicDecreaseFound || MonotonicIncreaseFound || FoundOscillationByDuplicate) {
                                 HistoryTrace = "";
@@ -1471,7 +1471,7 @@ void SimHVAC(EnergyPlusData &state)
                                         }
                                     }
                                 } // significant slope found
-                            }     // no oscillation found
+                            } // no oscillation found
 
                             if (MonotonicDecreaseFound || MonotonicIncreaseFound || FoundOscillationByDuplicate) {
                                 HistoryTrace = "";
@@ -1576,7 +1576,7 @@ void SimHVAC(EnergyPlusData &state)
                                         }
                                     }
                                 } // significant slope found
-                            }     // no oscillation found
+                            } // no oscillation found
 
                             if (MonotonicDecreaseFound || MonotonicIncreaseFound || FoundOscillationByDuplicate) {
                                 HistoryTrace = "";
@@ -1656,7 +1656,7 @@ void SimHVAC(EnergyPlusData &state)
                                         }
                                     }
                                 } // significant slope found
-                            }     // no oscillation found
+                            } // no oscillation found
 
                             if (MonotonicDecreaseFound || MonotonicIncreaseFound || FoundOscillationByDuplicate) {
                                 HistoryTrace = "";
@@ -1673,7 +1673,7 @@ void SimHVAC(EnergyPlusData &state)
                         } // plant loop sides
 
                     } // temperature not converged
-                }     // loop over plant loop systems
+                } // loop over plant loop systems
             }
         } else {
             if (state.dataEnvrn->EnvironmentName == state.dataHVACMgr->ErrEnvironmentName) {
@@ -2147,7 +2147,7 @@ void UpdateZoneListAndGroupLoads(EnergyPlusData &state)
             state.dataHeatBal->ZoneListSNLoadHeatRate(ListNum) += zoneSysEnergyDemand.airSysHeatRate * Mult;
             state.dataHeatBal->ZoneListSNLoadCoolRate(ListNum) += zoneSysEnergyDemand.airSysCoolRate * Mult;
         } // ZoneNum
-    }     // ListNum
+    } // ListNum
 
     for (GroupNum = 1; GroupNum <= state.dataHeatBal->NumOfZoneGroups; ++GroupNum) {
         auto &zoneGroup = state.dataHeatBal->ZoneGroup(GroupNum);
@@ -2655,8 +2655,8 @@ void reportAirHeatBal2(EnergyPlusData &state,
                         szAirRpt.MixSenLoad += refDoorMixing.VolRefDoorFlowRate(j) * AirDensity * CpAir * (szHeatBal.MAT - szBMAT);
                         szAirRpt.MixLatLoad += refDoorMixing.VolRefDoorFlowRate(j) * AirDensity * (szHeatBal.airHumRat - szBHumRat) * H2OHtOfVap;
                     } // flow > 0
-                }     // J-1, numref connections
-            }         // zone A (zoneptr = zoneNum)
+                } // J-1, numref connections
+            } // zone A (zoneptr = zoneNum)
             for (int ZoneA = 1; ZoneA <= (zoneNum - 1); ++ZoneA) {
                 auto &refDoorMixingA = state.dataHeatBal->RefDoorMixing(ZoneA);
                 //    Capture impact when zoneNum is the 'mating zone'
@@ -2693,12 +2693,12 @@ void reportAirHeatBal2(EnergyPlusData &state,
                                 szAirRpt.MixLatLoad +=
                                     refDoorMixingA.VolRefDoorFlowRate(j) * AirDensity * (szHeatBal.airHumRat - szAHumRat) * H2OHtOfVap;
                             } // volflowrate > 0
-                        }     // matezoneptr (zoneB) = Zonelooop
-                    }         // NumRefDoorConnections
-                }             // Refdoormix flag on ZoneA
-            }                 // zone A from 1 to (zoneNum - 1)
-        }                     // Refdoormix flag on zoneNum
-    }                         //(TotRefDoorMixing .GT. 0)
+                        } // matezoneptr (zoneB) = Zonelooop
+                    } // NumRefDoorConnections
+                } // Refdoormix flag on ZoneA
+            } // zone A from 1 to (zoneNum - 1)
+        } // Refdoormix flag on zoneNum
+    } //(TotRefDoorMixing .GT. 0)
     // end refrigeration door mixing reports
 
     //    MixingLoad(zoneNum) = MCPM(zoneNum)*MAT(zoneNum) - szAirRpt.MixSenLoad(zoneNum)

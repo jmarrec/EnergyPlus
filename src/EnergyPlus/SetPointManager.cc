@@ -1445,7 +1445,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
             } // switch (spm->type)
 
         } // for (instance)
-    }     // for (iSPM)
+    } // for (iSPM)
 
 } // GetSetPointManagerInputData()
 
@@ -2002,9 +2002,9 @@ void InitSetPointManagers(EnergyPlusData &state)
                                         break;
                                     }
                                 } // for (comp)
-                            }     // for (branch)
-                        }         // if (
-                    }             // for (LoopNum)
+                            } // for (branch)
+                        } // if (
+                    } // for (LoopNum)
                 } break;
 
                 case SPMType::IdealCondenserEnteringTemp: {
@@ -2107,17 +2107,17 @@ void InitSetPointManagers(EnergyPlusData &state)
                                     default:
                                         break;
                                     } // switch (InitType)
-                                }     // for (CompNum)
-                            }         // for (BranchNum)
+                                } // for (CompNum)
+                            } // for (BranchNum)
                             NumChiller = 0;
                         } // for (iNode)
-                    }     // for (LoopNum)
+                    } // for (LoopNum)
                 } break;
 
                 default:
                     break;
                 } // switch (spm->type)
-            }     // for (spm)
+            } // for (spm)
 
             VerifySetPointManagers(state, ErrorsFound);
 
@@ -2538,7 +2538,7 @@ void InitSetPointManagers(EnergyPlusData &state)
             default:
                 break;
             } // switch (spm->type)
-        }     // for (spm)
+        } // for (spm)
 
         state.dataSetPointManager->InitSetPointManagersMyEnvrnFlag = false;
         if (!state.dataSetPointManager->InitSetPointManagersOneTimeFlag) state.dataSetPointManager->InitSetPointManagersOneTimeFlag2 = false;
@@ -4198,7 +4198,7 @@ void UpdateSetPointManagers(EnergyPlusData &state)
         default:
             break;
         } // switch (sys->type)
-    }     // for (spm)
+    } // for (spm)
 } // UpdateSetPointManagers()
 
 void UpdateMixedAirSetPoints(EnergyPlusData &state)

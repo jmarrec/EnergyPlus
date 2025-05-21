@@ -1880,7 +1880,7 @@ namespace Weather {
                                 envCurr.minHeatingOADPSizing = Tdp;
                             }
                         } // for (iTS)
-                    }     // for (iHr)
+                    } // for (iHr)
                 }
             }
 
@@ -3785,7 +3785,7 @@ namespace Weather {
                 tomorrowTs.DifSolarRad = DiffRad;
 
             } // Timestep (TS) Loop
-        }     // Hour Loop
+        } // Hour Loop
 
         // back-fill hour values from timesteps
         // hour values = integrated over hour ending at time of hour
@@ -3848,7 +3848,7 @@ namespace Weather {
             default: {
             } break;
             } // switch (skyTempModel)
-        }     // if (envCurr.WP_Type1 != 0)
+        } // if (envCurr.WP_Type1 != 0)
 
         state.dataGlobal->WarmupFlag = SaveWarmupFlag;
     }
@@ -6238,7 +6238,7 @@ namespace Weather {
                     default: {
                     } break;
                     } // switch (desDayInput.HumIndType)
-                }     // if (desDayInput.HumIndSchPtr == 0)
+                } // if (desDayInput.HumIndSchPtr == 0)
 
             } else if (desDayInput.HumIndType == DesDayHumIndType::WBProfDef) {
                 // re WetBulbProfileDefaultMultipliers
@@ -8261,7 +8261,7 @@ namespace Weather {
             envCurr.UseRain = runPer.useRain;
             envCurr.UseSnow = runPer.useSnow;
             envCurr.firstHrInterpUseHr1 = runPer.firstHrInterpUsingHr1; // first hour interpolation choice
-        }                                                               // for (i)
+        } // for (i)
     }
 
     bool isLeapYear(int const Year)

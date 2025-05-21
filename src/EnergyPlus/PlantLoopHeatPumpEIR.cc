@@ -2549,7 +2549,7 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
                 PlantUtilities::SetComponentFlowRate(
                     state, this->loadSideMassFlowRate, this->loadSideNodes.inlet, this->loadSideNodes.outlet, this->loadSidePlantLoc);
 
-            }    // End of Constant/Variable Flow If Block
+            } // End of Constant/Variable Flow If Block
         } else { // If FlowLock is True
             // Set the boiler flow rate from inlet node and then check performance
             this->loadSideMassFlowRate = thisInletNode.MassFlowRate;

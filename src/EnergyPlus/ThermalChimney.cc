@@ -572,7 +572,7 @@ namespace ThermalChimney {
                     RepVarSet(state.dataThermalChimneys->ThermalChimneySys(Loop).ZonePtr(TCZoneNum)) = false;
                 }
             } // DO TCZoneNum = 1, ThermalChimneySys(Loop)%TotZoneToDistrib
-        }     // DO Loop=1, TotThermalChimney
+        } // DO Loop=1, TotThermalChimney
 
         //! LKL-more renaming effort and code review might be possible here
         // Check to make sure there is only one thermal chimney statement per zone
@@ -616,8 +616,8 @@ namespace ThermalChimney {
                     } // IF ( ThermalChimneySys(Loop)%TotZoneToDistrib >= (TCZoneNum+1) ) THEN
 
                 } // DO TCZoneNum = 1, ThermalChimneySys(Loop)%TotZoneToDistrib
-            }     // IF (ThermalChimneySys(Loop)%TotZoneToDistrib > 1) THEN
-        }         // DO Loop = 1, TotThermalChimney
+            } // IF (ThermalChimneySys(Loop)%TotZoneToDistrib > 1) THEN
+        } // DO Loop = 1, TotThermalChimney
 
         // Check to make sure there is only one thermal chimney statement per zone
         if (state.dataThermalChimneys->TotThermalChimney > 1) {
@@ -670,7 +670,7 @@ namespace ThermalChimney {
                 } // IF ( TotThermalChimney >= (Loop+1) ) THEN
 
             } // DO Loop = 1, TotThermalChimney
-        }     // IF (TotThermalChimney > 1) THEN
+        } // IF (TotThermalChimney > 1) THEN
 
         if (ErrorsFound) {
             ShowFatalError(state, format("{} Errors found in input.  Preceding condition(s) cause termination.", cCurrentModuleObject));

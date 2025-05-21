@@ -1231,9 +1231,9 @@ void ElectricEIRChillerSpecs::initEachEnvironment(EnergyPlusData &state)
                         }
                     }
                 } // IF (.NOT. AnyEnergyManagementSystemInModel) THEN
-            }     // IF(THeatRecSetPoint == SensedNodeFlagValue)THEN
-        }         // IF(ElectricEIRChiller(EIRChillNum)%HeatRecSetPointNodeNum > 0)THEN
-    }             // IF (ElectricEIRChiller(EIRChillNum)%HeatRecActive) THEN
+            } // IF(THeatRecSetPoint == SensedNodeFlagValue)THEN
+        } // IF(ElectricEIRChiller(EIRChillNum)%HeatRecSetPointNodeNum > 0)THEN
+    } // IF (ElectricEIRChiller(EIRChillNum)%HeatRecActive) THEN
 }
 
 void ElectricEIRChillerSpecs::initialize(EnergyPlusData &state, bool const RunFlag, Real64 const MyLoad)

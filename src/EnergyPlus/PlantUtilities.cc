@@ -1191,7 +1191,7 @@ void InterConnectTwoPlantLoopSides(EnergyPlusData &state,
     if (Loop1PlantLoc.loopNum == 0 || Loop1PlantLoc.loopSideNum == DataPlant::LoopSideLocation::Invalid || Loop2PlantLoc.loopNum == 0 ||
         Loop2PlantLoc.loopSideNum == DataPlant::LoopSideLocation::Invalid) {
         return; // Associated ScanPlantLoopsForObject couldn't find the component in the the plant loop structure...
-    }           // This is a Fatal error condition
+    } // This is a Fatal error condition
 
     bool const Loop2DemandsOnLoop1(!Loop1DemandsOnLoop2);
 

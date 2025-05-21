@@ -1384,7 +1384,7 @@ void ElectPowerLoadCenter::dispatchGenerators(EnergyPlusData &state,
             }
             remainingLoad -= g->electProdRate;             // Update remaining load to be met by this load center
             remainingWholePowerDemand -= g->electProdRate; // Update whole building remaining load
-        }                                                  // end for
+        } // end for
         break;
     }
     case GeneratorOpScheme::ThermalFollow: {
@@ -4338,7 +4338,7 @@ void ElectricStorage::rainflow(int const numbin,           // numbin = constant 
             shift(B1, count - 1, count, B1); // Get rid of (count-1) row in B1
             shift(X, count, count, X);
             --count; // If the value keep increasing or decreasing, get rid of the middle point.
-        }            // Only valley and peak will be stored in the matrix, B1
+        } // Only valley and peak will be stored in the matrix, B1
 
         if ((count == 3) && (std::abs(X[2]) <= std::abs(X[3]))) {
             //  This means the starting point is included in X(2), a half cycle is counted according to the rain flow

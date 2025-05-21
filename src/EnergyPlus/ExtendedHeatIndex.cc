@@ -513,8 +513,7 @@ namespace ExtendedHI {
         constexpr Real64 Pa0 = 1.6e3; // Pa        , reference air vapor pressure in regions III, IV, V, VI, steadman1979
 
         if (eqvar_name == EqvarName::Phi) {
-            General::SolveRoot(
-                state, tol, maxIter, SolFla, T, [&](Real64 T) { return find_eqvar_phi(state, T, 1.0) - eqvar; }, 0.0, 240.0);
+            General::SolveRoot(state, tol, maxIter, SolFla, T, [&](Real64 T) { return find_eqvar_phi(state, T, 1.0) - eqvar; }, 0.0, 240.0);
         } else if (eqvar_name == EqvarName::Rf) {
             General::SolveRoot(
                 state,

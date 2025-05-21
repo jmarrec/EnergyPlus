@@ -91,7 +91,7 @@ namespace OutputReportTabularAnnual {
     {
     public:
         // Default Constructor
-        AnnualTable() : m_name(""), m_filter(""){};
+        AnnualTable() : m_name(""), m_filter("") {};
 
         // Member Constructor
         AnnualTable(EnergyPlusData &state, std::string name, std::string filter, std::string schedName)

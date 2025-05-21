@@ -288,7 +288,7 @@ void SolveRoot(const EnergyPlusData &state,
                 Y0 = YTemp;
             }
         } // ( Y0 < 0 )
-    }     // Cont
+    } // Cont
 
     // if we make it here we haven't converged, so just set the flag and leave
     Flag = -1;

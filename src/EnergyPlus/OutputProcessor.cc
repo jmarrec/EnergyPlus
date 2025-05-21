@@ -984,10 +984,10 @@ namespace OutputProcessor {
                             }
                         }
                     } // if (keyIsStar)
-                }     // if (meter or variable)
+                } // if (meter or variable)
 
             } // for (fldIndex)
-        }     // for (Loop)
+        } // for (Loop)
 
         ipsc->cCurrentModuleObject = "Meter:CustomDecrement";
         for (int Loop = 1; Loop <= numCustomDecMeters; ++Loop) {
@@ -1319,7 +1319,7 @@ namespace OutputProcessor {
                             }
                         }
                     } // if (keyIsStar)
-                }     // if (meter or variable)
+                } // if (meter or variable)
 
             } // for (fldIndex)
         }
@@ -1481,9 +1481,9 @@ namespace OutputProcessor {
                         AddMeter(state, subEnduseSpaceMeterName, units, resource, endUseCat, endUseSub, Group::SpaceType, outVarNum);
                     }
                 } // if (sovGroup == Building)
-            }     // if (!endUseSub.empty())
-        }         // if (sovEndUseCat != Invalid)
-    }             // AttachMeters()
+            } // if (!endUseSub.empty())
+        } // if (sovEndUseCat != Invalid)
+    } // AttachMeters()
 
     std::string standardizeEndUseSub(EndUseCat endUseCat, std::string_view endUseSubName)
     {
@@ -1944,7 +1944,7 @@ namespace OutputProcessor {
                 rfMeters.pushVariableValue(period.accRptNum, meter->periods[(int)ReportFreq::Simulation].Value);
             }
         } // for (meter)
-    }     // ReportMeters()
+    } // ReportMeters()
 
     void ReportForTabularReports(EnergyPlusData &state)
     {
@@ -2068,8 +2068,8 @@ namespace OutputProcessor {
                     state, state.dataOutRptPredefined->pdchEMotherJmaxvaluetime, meter->Name, DateToStringWithMonth(period.MaxValDate));
             } break;
             } // switch
-        }     // for (meter)
-    }         // ReportForTabularReports()
+        } // for (meter)
+    } // ReportForTabularReports()
 
     std::string DateToStringWithMonth(int const codedDate) // word containing encoded month, day, hour, minute
     {
@@ -2230,7 +2230,7 @@ namespace OutputProcessor {
                 }
             }
         } // for (meter)
-    }     // ReportMeterDetails()
+    } // ReportMeterDetails()
 
     // *****************************************************************************
     // End of routines for Energy Meters implementation in EnergyPlus.
@@ -2390,7 +2390,7 @@ namespace OutputProcessor {
             }
         } break;
         } // switch (reportFreq)
-    }     // WriteTimeStampFormatData()
+    } // WriteTimeStampFormatData()
 
     void WriteYearlyTimeStamp(EnergyPlusData &state,
                               InputOutputFile &outputFile,
@@ -3336,7 +3336,7 @@ void UpdateDataandReport(EnergyPlusData &state, OutputProcessor::TimeStepType co
                     assert(false);
                 }
             } // for (iMeter)
-        }     // if (op->meterValues.capacity() > 0)
+        } // if (op->meterValues.capacity() > 0)
 
         for (auto *var : op->outVars) {
             if (var->timeStepType != TimeStepType::Zone && var->timeStepType != TimeStepType::System) continue;
@@ -4610,9 +4610,9 @@ void ProduceRDDMDD(EnergyPlusData &state)
                     }
                     ddVar->ReportedOnDDFile = true;
                 } // while (ddVar->Next != 0)
-            }     // if (SortByName)
-        }         // for (aiVar, miVar)
-    }             // if (produceReportVDD)
+            } // if (SortByName)
+        } // for (aiVar, miVar)
+    } // if (produceReportVDD)
     state.files.rdd.close();
 
     auto miMeter = op->meterMap.begin();
@@ -4708,7 +4708,7 @@ int AddDDOutVar(EnergyPlusData const &state,
         } else {
             return dup2;
         } // if (dup2 == 0)
-    }     // if (unitsForVar)
+    } // if (unitsForVar)
 } // AddDDOutVar()
 
 int initErrorFile(EnergyPlusData &state)

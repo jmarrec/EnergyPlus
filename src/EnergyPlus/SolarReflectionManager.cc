@@ -495,7 +495,7 @@ namespace SolarReflectionManager {
                                 }
                             }
                         } // End of check if obstruction was hit
-                    }     // End of loop over possible obstructions for this ray
+                    } // End of loop over possible obstructions for this ray
 
                     if (TotObstructionsHit > 0) {
                         // One or more obstructions were hit by this ray
@@ -550,10 +550,10 @@ namespace SolarReflectionManager {
                                 state.dataEnvrn->GndReflectance;
                             state.dataSolarReflectionManager->SolReflRecSurf(RecSurfNum).HitPtNormVec(RayNum, RecPtNum) = unit_z;
                         } // End of check if ray hits ground
-                    }     // End of check if obstruction hit
-                }         // End of RayNum loop
-            }             // End of receiving point loop
-        }                 // End of receiving surface loop
+                    } // End of check if obstruction hit
+                } // End of RayNum loop
+            } // End of receiving point loop
+        } // End of receiving surface loop
     }
 
     //=====================================================================================================
@@ -583,7 +583,7 @@ namespace SolarReflectionManager {
             state.dataSurface->SurfReflFacBmToDiffSolGnd = 0.0;
             for (state.dataSolarReflectionManager->IHr = 1; state.dataSolarReflectionManager->IHr <= 24; ++state.dataSolarReflectionManager->IHr) {
                 FigureBeamSolDiffuseReflFactors(state, state.dataSolarReflectionManager->IHr);
-            }    // End of IHr loop
+            } // End of IHr loop
         } else { // timestep integrated solar, use current hour of day
             state.dataSurface->SurfReflFacBmToDiffSolObs(state.dataGlobal->HourOfDay, {1, state.dataSurface->TotSurfaces}) = 0.0;
             state.dataSurface->SurfReflFacBmToDiffSolGnd(state.dataGlobal->HourOfDay, {1, state.dataSurface->TotSurfaces}) = 0.0;
@@ -796,7 +796,7 @@ namespace SolarReflectionManager {
                         }
                     }
                 } // End of loop over rays from receiving point
-            }     // End of loop over receiving points
+            } // End of loop over receiving points
 
             // Average over receiving points
             state.dataSurface->SurfReflFacBmToDiffSolObs(iHour, state.dataSolarReflectionManager->SurfNum) = 0.0;
@@ -855,7 +855,7 @@ namespace SolarReflectionManager {
             for (state.dataSolarReflectionManager->NumHr = 1; state.dataSolarReflectionManager->NumHr <= 24;
                  ++state.dataSolarReflectionManager->NumHr) {
                 FigureBeamSolSpecularReflFactors(state, state.dataSolarReflectionManager->NumHr);
-            }    // End of NumHr loop
+            } // End of NumHr loop
         } else { // timestep integrated solar, use current hour of day
             state.dataSurface->SurfReflFacBmToBmSolObs(state.dataGlobal->HourOfDay, {1, state.dataSurface->TotSurfaces}) = 0.0;
             state.dataSurface->SurfCosIncAveBmToBmSolObs(state.dataGlobal->HourOfDay, {1, state.dataSurface->TotSurfaces}) = 0.0;
@@ -1051,9 +1051,9 @@ namespace SolarReflectionManager {
                                 ReflFacTimesCosIncSum(RecPtNum) +=
                                     state.dataSolarReflectionManager->ReflFac * state.dataSolarReflectionManager->CosIncAngRec;
                             } // End of check if reflecting surface was hit
-                        }     // End of loop over receiving points
-                    }         // End of check if valid reflecting surface
-                }             // End of loop over obstructing surfaces
+                        } // End of loop over receiving points
+                    } // End of check if valid reflecting surface
+                } // End of loop over obstructing surfaces
                 // Average over receiving points
 
                 for (int RecPtNum = 1; RecPtNum <= NumRecPts; ++RecPtNum) {
@@ -1068,7 +1068,7 @@ namespace SolarReflectionManager {
                 state.dataSurface->SurfReflFacBmToBmSolObs(iHour, SurfNum) /= double(NumRecPts);
                 state.dataSurface->SurfCosIncAveBmToBmSolObs(iHour, SurfNum) /= double(NumRecPts);
             } // End of check if number of possible obstructions > 0
-        }     // End of loop over receiving surfaces
+        } // End of loop over receiving surfaces
     }
 
     //=================================================================================================
@@ -1248,7 +1248,7 @@ namespace SolarReflectionManager {
                                 // Sky is hit
                                 dReflSkyGnd += CosIncAngRayToSky * dOmega / Constant::Pi;
                             } // End of azimuth loop
-                        }     // End of altitude loop
+                        } // End of altitude loop
                         ReflSkySolGnd(state.dataSolarReflectionManager->iRecPtNum) +=
                             dReflSkyGnd *
                             state.dataSolarReflectionManager->SolReflRecSurf(state.dataSolarReflectionManager->iRecSurfNum)
@@ -1257,8 +1257,8 @@ namespace SolarReflectionManager {
                                 .CosIncAngRay(state.dataSolarReflectionManager->iRayNum) /
                             Constant::Pi;
                     } // End of check if ray from receiving point hits obstruction or ground
-                }     // End of loop over rays from receiving point
-            }         // End of loop over receiving points
+                } // End of loop over rays from receiving point
+            } // End of loop over receiving points
 
             // Average over receiving points
             state.dataSurface->SurfReflFacSkySolObs(state.dataSolarReflectionManager->iSurfNum) = 0.0;

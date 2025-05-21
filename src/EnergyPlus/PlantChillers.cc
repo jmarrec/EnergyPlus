@@ -939,9 +939,9 @@ namespace PlantChillers {
                                 }
                             }
                         } // IF (.NOT. AnyEnergyManagementSystemInModel) THEN
-                    }     // IF(THeatRecSetpoint == DataLoopNode::SensedNodeFlagValue)THEN
-                }         // IF(ElectricChiller(ChillNum)%HeatRecSetpointNodeNum > 0)THEN
-            }             // IF (ElectricChiller(ChillNum)%HeatRecActive) THEN
+                    } // IF(THeatRecSetpoint == DataLoopNode::SensedNodeFlagValue)THEN
+                } // IF(ElectricChiller(ChillNum)%HeatRecSetpointNodeNum > 0)THEN
+            } // IF (ElectricChiller(ChillNum)%HeatRecActive) THEN
 
             this->MyEnvrnFlag = false;
         }

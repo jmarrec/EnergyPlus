@@ -371,7 +371,7 @@ void PluginManager::setupOutputVariables([[maybe_unused]] EnergyPlusData &state)
                 }
             }
         } // for (instance)
-    }     // if (OutputVarInstances > 0)
+    } // if (OutputVarInstances > 0)
 #endif
 } // setupOutputVariables()
 

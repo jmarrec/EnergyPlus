@@ -85,7 +85,7 @@ namespace ResultsFramework {
     class BaseResultObject
     {
     public:
-        BaseResultObject(){};
+        BaseResultObject() {};
     };
 
     class SimInfo : public BaseResultObject
@@ -249,7 +249,7 @@ namespace ResultsFramework {
     class MeterDataFrame : public DataFrame
     {
     public:
-        explicit MeterDataFrame(const std::string &ReportFreq) : DataFrame(ReportFreq){};
+        explicit MeterDataFrame(const std::string &ReportFreq) : DataFrame(ReportFreq) {};
         virtual ~MeterDataFrame() = default;
 
         void addVariable(MeterVariable const &var);

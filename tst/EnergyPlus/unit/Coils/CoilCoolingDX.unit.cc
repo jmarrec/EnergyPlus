@@ -1862,7 +1862,7 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDX_LowerSpeedFlowSizingTest)
     {
         TestQuery(std::string t_description, std::string t_units, Real64 t_value)
             : description(t_description), units(t_units), expectedValue(t_value),
-              displayString("Description='" + description + "'; Units='" + units + "'"){};
+              displayString("Description='" + description + "'; Units='" + units + "'") {};
 
         const std::string description;
         const std::string units;

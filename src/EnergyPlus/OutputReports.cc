@@ -1318,7 +1318,7 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                 if (thisSurface.Sides == 0) *eiostream << '\n';
             }
         } // surfaces
-    }     // zones
+    } // zones
 
     print(state.files.eio, "{}", eiostream->str());
 }

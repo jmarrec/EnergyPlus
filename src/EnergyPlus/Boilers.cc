@@ -254,26 +254,26 @@ void GetBoilerInput(EnergyPlusData &state)
             ErrorsFound = true;
         } else
             // if curve uses temperature, make sure water temp mode has been set
-            if (thisBoiler.EfficiencyCurve->numDims == 2) {     // curve uses water temperature
-            if (thisBoiler.CurveTempMode == TempMode::NOTSET) { // throw error
-                if (!s_ipsc->lAlphaFieldBlanks(3)) {
-                    ShowSevereError(state, fmt::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-                    ShowContinueError(state, format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
-                    ShowContinueError(state,
-                                      format("boilers.Boiler using curve type of {} must specify {}",
-                                             Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType],
-                                             s_ipsc->cAlphaFieldNames(3)));
-                    ShowContinueError(state, "Available choices are EnteringBoiler or LeavingBoiler");
-                } else {
-                    ShowSevereError(state, fmt::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-                    ShowContinueError(state, format("Field {} is blank", s_ipsc->cAlphaFieldNames(3)));
-                    ShowContinueError(state,
-                                      format("boilers.Boiler using curve type of {} must specify either EnteringBoiler or LeavingBoiler",
-                                             Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType]));
+            if (thisBoiler.EfficiencyCurve->numDims == 2) {         // curve uses water temperature
+                if (thisBoiler.CurveTempMode == TempMode::NOTSET) { // throw error
+                    if (!s_ipsc->lAlphaFieldBlanks(3)) {
+                        ShowSevereError(state, fmt::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                        ShowContinueError(state, format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
+                        ShowContinueError(state,
+                                          format("boilers.Boiler using curve type of {} must specify {}",
+                                                 Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType],
+                                                 s_ipsc->cAlphaFieldNames(3)));
+                        ShowContinueError(state, "Available choices are EnteringBoiler or LeavingBoiler");
+                    } else {
+                        ShowSevereError(state, fmt::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                        ShowContinueError(state, format("Field {} is blank", s_ipsc->cAlphaFieldNames(3)));
+                        ShowContinueError(state,
+                                          format("boilers.Boiler using curve type of {} must specify either EnteringBoiler or LeavingBoiler",
+                                                 Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType]));
+                    }
+                    ErrorsFound = true;
                 }
-                ErrorsFound = true;
             }
-        }
 
         thisBoiler.VolFlowRate = s_ipsc->rNumericArgs(3);
         if (thisBoiler.VolFlowRate == DataSizing::AutoSize) {

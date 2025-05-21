@@ -1622,9 +1622,9 @@ void GLHESlinky::calcGFunctions(EnergyPlusData &state)
                         gFunc += gFuncin;
 
                     } // n
-                }     // m
-            }         // n1
-        }             // m1
+                } // m
+            } // n1
+        } // m1
 
         this->myRespFactors->GFNC[NT - 1] = (gFunc * (this->coilDiameter / 2.0)) / (4 * Constant::Pi * fraction * this->numTrenches * this->numCoils);
         this->myRespFactors->LNTTS[NT - 1] = tLg;
@@ -2207,7 +2207,7 @@ void GLHEBase::calcGroundHeatExchanger(EnergyPlusData &state)
                 this->ToutNew = C1 + (C2 - C0 - this->HXResistance) * tmpQnSubHourly;
             }
         } //  end of AGG OR NO AGG
-    }     // end of N  = 1 branch
+    } // end of N  = 1 branch
     this->bhTemp = this->tempGround - sumTotal;
 
     // Load the QnSubHourly Array with a new value at end of every timestep

@@ -773,7 +773,7 @@ namespace FourPipeBeam {
                     // should not come here, developer exception
                 }
             } // no air flow rate
-        }     // no beam length
+        } // no beam length
 
         if (noHardSizeAnchorAvailable && (state.dataSize->CurZoneEqNum > 0) &&
             (state.dataSize->CurTermUnitSizingNum > 0)) { // need to use central sizing results to calculate

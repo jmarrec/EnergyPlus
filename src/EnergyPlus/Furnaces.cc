@@ -5218,7 +5218,7 @@ namespace Furnaces {
                     SteamCoils::GetCoilCapacity(state, thisFurnace.SuppHeatCoilType, thisFurnace.SuppHeatCoilName, ErrorsFound);
 
             } // from IF(Furnace(FurnaceNum)%SuppHeatCoilType_Num == Coil_HeatingSteam) THEN
-        }     // from IF( FirstHVACIteration ) THEN
+        } // from IF( FirstHVACIteration ) THEN
 
         if (thisFurnace.NumOfSpeedCooling > 0) { // BoS, variable-speed water source hp
             // Furnace(FurnaceNum)%IdleMassFlowRate = RhoAir*Furnace(FurnaceNum)%IdleVolumeAirRate
@@ -5551,7 +5551,7 @@ namespace Furnaces {
                            std::abs(SensibleOutput - QToHeatSetPt) < (Small5WLoad / thisFurnace.ControlZoneMassFlowFrac)) {
                     state.dataFurnaces->HeatingLoad = false;
                 } // SensibleOutput .GT. 0.0d0 .AND. QToCoolSetPt .GT. 0.0d0
-            }     // Furnace(FurnaceNum)%ControlZoneMassFlowFrac .GT. 0.0d0
+            } // Furnace(FurnaceNum)%ControlZoneMassFlowFrac .GT. 0.0d0
             ZoneLoad = QZnReq;
         } // fanOp .EQ. FanOp::Continuous
 

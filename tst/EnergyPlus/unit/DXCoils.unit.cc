@@ -3481,7 +3481,7 @@ TEST_F(SQLiteFixture, DXCoils_TestComponentSizingOutput_TwoSpeed)
     {
         TestQuery(std::string t_description, std::string t_units, Real64 t_value)
             : description(t_description), units(t_units), expectedValue(t_value),
-              displayString("Description='" + description + "'; Units='" + units + "'"){};
+              displayString("Description='" + description + "'; Units='" + units + "'") {};
 
         const std::string description;
         const std::string units;
@@ -3700,7 +3700,7 @@ TEST_F(SQLiteFixture, DXCoils_TestComponentSizingOutput_SingleSpeed)
     {
         TestQuery(std::string t_description, std::string t_units, Real64 t_value)
             : description(t_description), units(t_units), expectedValue(t_value),
-              displayString("Description='" + description + "'; Units='" + units + "'"){};
+              displayString("Description='" + description + "'; Units='" + units + "'") {};
 
         const std::string description;
         const std::string units;

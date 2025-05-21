@@ -246,7 +246,7 @@ void ManagePlantLoops(EnergyPlusData &state,
         ++IterPlant; // Increment the iteration counter
         if (IterPlant < CurntMinPlantSubIterations) SimPlantLoops = true;
         ++state.dataPlnt->PlantManageSubIterations; // these are summed across all half loops for reporting
-    }                                               // while
+    } // while
 
     // add check for non-plant system sim flag updates
     //  could set SimAirLoops, SimElecCircuits, SimZoneEquipment flags for now
@@ -2323,7 +2323,7 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
                             .initLoopEquip(state, state.dataPlantMgr->GetCompSizFac);
                         state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).Branch(BranchNum).Comp(CompNum).simulate(state, FirstHVACIteration);
                     } //-CompNum
-                }     //-BranchNum
+                } //-BranchNum
             }
 
             // step 3, revise calling order
@@ -2375,7 +2375,7 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
                         .initLoopEquip(state, state.dataPlantMgr->GetCompSizFac);
                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).Branch(BranchNum).Comp(CompNum).simulate(state, FirstHVACIteration);
                 } //-CompNum
-            }     //-BranchNum
+            } //-BranchNum
             //                if ( PlantLoop( LoopNum ).PlantSizNum > 0 ) PlantSizData( PlantLoop( LoopNum ).PlantSizNum
             //).VolFlowSizingDone = true;
         }
@@ -2408,7 +2408,7 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
 
                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).Branch(BranchNum).Comp(CompNum).simulate(state, FirstHVACIteration);
                 } //-CompNum
-            }     //-BranchNum
+            } //-BranchNum
         }
 
         // reset loop level
@@ -2432,7 +2432,7 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
                         .initLoopEquip(state, state.dataPlantMgr->GetCompSizFac);
                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).Branch(BranchNum).Comp(CompNum).simulate(state, FirstHVACIteration);
                 } //-CompNum
-            }     //-BranchNum
+            } //-BranchNum
             // pumps are special so call them directly
             state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).SimulateAllLoopSidePumps(state);
         }
@@ -2471,8 +2471,8 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
                             ShowContinueError(state, "Or add EMS Actuator for Temperature Maximum Setpoint");
 
                         } // SetPointErrorFlag
-                    }     // Not EMS
-                }         // Node TSPhi = Sensed
+                    } // Not EMS
+                } // Node TSPhi = Sensed
                 if (state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(LoopNum).TempSetPointNodeNum).TempSetPointLo == SensedNodeFlagValue) {
                     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                         ShowSevereError(state, "Plant Loop: missing low temperature setpoint for dual setpoint deadband demand scheme");
@@ -2493,10 +2493,10 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
                             ShowContinueError(state, "Or add EMS Actuator for Temperature Minimum Setpoint");
 
                         } // SetPointErrorFlag
-                    }     // NOT EMS
-                }         // Node TSPtLo = Sensed...
-            }             // LoopDemandScheme = DualSPDB
-        }                 // PLANT LOOP
+                    } // NOT EMS
+                } // Node TSPtLo = Sensed...
+            } // LoopDemandScheme = DualSPDB
+        } // PLANT LOOP
 
         // Any per-environment load distribution init should be OK here
         // Just clear away any trailing MyLoad for now...
@@ -2713,9 +2713,9 @@ void ReInitPlantLoopsAtFirstHVACIteration(EnergyPlusData &state)
                         state.dataLoopNodes->Node(ComponentOutlet).Enthalpy = StartEnthalpy;
                         state.dataLoopNodes->Node(ComponentOutlet).HumRat = StartHumRat;
                     } // COMPONENT LOOP
-                }     // BRANCH LOOP
-            }         // LOOPSIDE
-        }             // PLANT LOOP
+                } // BRANCH LOOP
+            } // LOOPSIDE
+        } // PLANT LOOP
         for (auto &loop : state.dataPlnt->PlantLoop) {
             loop.CoolingDemand = 0.0;
             loop.HeatingDemand = 0.0;
@@ -2990,8 +2990,8 @@ void CheckPlantOnAbort(EnergyPlusData &state)
                                 break;
                             }
                         } // should be active
-                    }     // comp num loop
-                }         // demand side
+                    } // comp num loop
+                } // demand side
 
             } // splitter outlet nodes
 
@@ -3004,7 +3004,7 @@ void CheckPlantOnAbort(EnergyPlusData &state)
                 }
             }
         } // loop sides
-    }     // plant loops
+    } // plant loops
 }
 
 void InitOneTimePlantSizingInfo(EnergyPlusData &state, int const LoopNum) // loop being initialized for sizing

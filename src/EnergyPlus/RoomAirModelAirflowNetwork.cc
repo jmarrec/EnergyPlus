@@ -413,7 +413,7 @@ namespace RoomAir {
                     ShowFatalError(state, "GetRoomAirflowNetworkData: Errors found getting air model input.  Program terminates.");
                 }
             } // if (allocated)
-        }     // if (OneTimeFlagConf)
+        } // if (OneTimeFlagConf)
 
         if (state.dataGlobal->BeginEnvrnFlag && state.dataRoomAirflowNetModel->EnvrnFlag) {
             for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
@@ -740,7 +740,7 @@ namespace RoomAir {
                         SumSysMW += MassFlowRate * inletNode.HumRat;
                     }
                 } // EquipLoop
-            }     // NodeNum
+            } // NodeNum
         } else if (zoneRetPlenumNum != 0) {
             auto const &zoneRetPlenum = state.dataZonePlenum->ZoneRetPlenCond(zoneRetPlenumNum);
             for (int iNode = 1; iNode <= zoneRetPlenum.NumInletNodes; ++iNode) {
@@ -995,7 +995,7 @@ namespace RoomAir {
                     SumHmARaW += HMassConvInFD * surf.Area * RhoVaporSurfIn;
                 }
             } // for (SurfNum)
-        }     // for (spaceNum)
+        } // for (spaceNum)
 
     } // CalcSurfaceMoistureSums
 

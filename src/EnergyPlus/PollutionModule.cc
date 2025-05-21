@@ -600,7 +600,7 @@ void CalcPollution(EnergyPlusData &state)
 
             pm->pollutantVals[iPoll] += pollComp.pollutantVals[iPoll];
         } // for (iPollFactor)
-    }     // for (iPoll)
+    } // for (iPoll)
 
     pm->TotCarbonEquivFromN2O = pm->pollutantVals[(int)Pollutant::N2O] * pm->CarbonEquivN2O;
     pm->TotCarbonEquivFromCH4 = pm->pollutantVals[(int)Pollutant::CH4] * pm->CarbonEquivCH4;

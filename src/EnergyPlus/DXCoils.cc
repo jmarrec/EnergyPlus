@@ -1857,7 +1857,7 @@ void GetDXCoils(EnergyPlusData &state)
                     } // end of valid performance object check
                     AlphaIndex += 2;
                 } // end of sufficient number of fields entered check
-            }     // End of multimode DX capacity stages loop
+            } // End of multimode DX capacity stages loop
             // Warn if inputs entered for unused capacity stages
             for (CapacityStageNum = (thisDXCoil.NumCapacityStages + 1); CapacityStageNum <= MaxCapacityStages; ++CapacityStageNum) {
                 if ((AlphaIndex <= NumAlphas) && ((!Alphas(AlphaIndex).empty()) || (!Alphas(AlphaIndex + 1).empty()))) {
@@ -1867,7 +1867,7 @@ void GetDXCoils(EnergyPlusData &state)
                 }
                 AlphaIndex += 2;
             } // End of unused capacity stages loop
-        }     // End of multimode DX dehumidification modes loo
+        } // End of multimode DX dehumidification modes loo
 
         // Get Water System tank connections
         //  A14, \field Name of Water Storage Tank for Supply
@@ -6823,7 +6823,7 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
             }
             state.dataDXCoils->CrankcaseHeaterReportVarFlag = false;
         } //(AirLoopInputsFilled)THEN
-    }     //(CrankcaseHeaterReportVarFlag)THEN
+    } //(CrankcaseHeaterReportVarFlag)THEN
 
     if (!state.dataGlobal->SysSizingCalc && state.dataDXCoils->MySizeFlag(DXCoilNum)) {
         // for each coil, do the sizing once.
@@ -6998,7 +6998,7 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                                                         thisDXCoil.RatedAirVolFlowRate(Mode),
                                                         thisDXCoil.RatedSHR(Mode));
                 } // End capacity stages loop
-            }     // End dehumidification modes loop
+            } // End dehumidification modes loop
         }
 
         if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_HeatingEmpirical || thisDXCoil.DXCoilType_Num == HVAC::CoilVRF_Heating ||
@@ -7903,7 +7903,7 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
             }
 
         } // End capacity stages loop
-    }     // End dehumidification modes loop
+    } // End dehumidification modes loop
 
     // Autosizing for multispeed cooling coil
     if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_MultiSpeedCooling) {

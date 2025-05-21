@@ -608,7 +608,7 @@ namespace SurfaceGeometry {
                     ++state.dataHeatBal->Zone(ZoneNum).NumSubSurfaces;
 
             } // surfaces
-        }     // zones
+        } // zones
 
         for (int const SurfNum : state.dataSurface->AllSurfaceListReportOrder) {
             auto const &thisSurface = state.dataSurface->Surface(SurfNum);
@@ -5729,11 +5729,11 @@ namespace SurfaceGeometry {
                                         state.dataSurface->FrameDivider(surfTemp.FrameDivider).DividerWidth = 0.0;
                                     }
                                 } // End of check if window has divider
-                            }     // End of check if window has a between-glass shade or blind
-                        }         // End of check if window has a shaded construction
-                    }             // end of looping through window shading controls of window
-                }                 // End of check if window has an associated FrameAndDivider
-            }                     // End of check if window has a construction
+                            } // End of check if window has a between-glass shade or blind
+                        } // End of check if window has a shaded construction
+                    } // end of looping through window shading controls of window
+                } // End of check if window has an associated FrameAndDivider
+            } // End of check if window has a construction
         }
 
         if (state.dataConstruction->Construct(surfTemp.Construction).WindowTypeEQL) {
@@ -11500,7 +11500,7 @@ namespace SurfaceGeometry {
                 ErrorsFound = true;
             }
         } // for (Loop)
-    }     // GetMovableInsulationData()
+    } // GetMovableInsulationData()
 
     // Calculates the volume (m3) of a zone using the surfaces as possible.
     void CalculateZoneVolume(EnergyPlusData &state)
@@ -13131,7 +13131,7 @@ namespace SurfaceGeometry {
                     surf.shadedStormWinConstructionList[iConstruction] = ConstrNewStSh; // put in same index as the shaded construction
                 }
             } // end of loop for shaded constructions
-        }     // end of loop over storm window objects
+        } // end of loop over storm window objects
     }
 
     int createAirMaterialFromDistance(EnergyPlusData &state, Real64 distance, std::string_view namePrefix)
@@ -14964,7 +14964,7 @@ namespace SurfaceGeometry {
                     (abs(matGlass->PoissonsRatio - matGlassRev->PoissonsRatio) > SmallDiff)) {
                     RevLayerDiffs = true;
                     break; // exit when diff
-                }          // If none of the above conditions is met, then these should be the same layers in reverse (RevLayersDiffs = false)
+                } // If none of the above conditions is met, then these should be the same layers in reverse (RevLayersDiffs = false)
             } else if ((mat->group == Material::Group::GlassEQL) && (matRev->group == Material::Group::GlassEQL)) {
                 auto const *matGlass = dynamic_cast<Material::MaterialGlassEQL const *>(mat);
                 auto const *matGlassRev = dynamic_cast<Material::MaterialGlassEQL const *>(matRev);
@@ -14997,14 +14997,14 @@ namespace SurfaceGeometry {
                     (abs(matGlass->Resistance - matGlassRev->Resistance) > SmallDiff)) {
                     RevLayerDiffs = true;
                     break; // exit when diff
-                }          // If none of the above conditions is met, then these should be the same layers in reverse (RevLayersDiffs = false)
+                } // If none of the above conditions is met, then these should be the same layers in reverse (RevLayersDiffs = false)
 
             } else {
                 // Other material types do not have reversed constructions so if they are not the same layer there is a problem
                 // (RevLayersDiffs = true)
                 RevLayerDiffs = true;
                 break; // exit when diff
-            }          // End check of whether or not these are WindowGlass
+            } // End check of whether or not these are WindowGlass
         }
     }
 

@@ -759,7 +759,7 @@ namespace HeatBalFiniteDiffManager {
 
                 TotNodes += Ipts1;                           //  number of full size nodes
                 thisConstructFD.NodeNumPoint(Layer) = Ipts1; //  number of full size nodes
-            }                                                //  end of layer loop.
+            } //  end of layer loop.
 
             thisConstructFD.TotNodes = TotNodes;
             thisConstructFD.DeltaTime = Delt;

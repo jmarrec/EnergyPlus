@@ -354,7 +354,7 @@ void ControlCompOutput(EnergyPlusData &state,
                     ZoneInterHalf.MidFlow = (ZoneInterHalf.MinFlow + ZoneInterHalf.MidFlow) / 2.0;
 
                 } // End of the Conditional for the actual interval halving scheme itself
-            }     // end of max > min check
+            } // end of max > min check
 
         } // End of the Conditinal for the first 3 iterations for the interval halving
 

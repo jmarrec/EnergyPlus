@@ -479,7 +479,7 @@ namespace TarcogShading {
                     vfreevent(i) = speed1;
                     vfreevent(i + 1) = speed2;
                 } // if ((i.gt.1).and.(i.lt.nlayer)) then
-            }     // if (LayerType(i).eq.SHADING) then
+            } // if (LayerType(i).eq.SHADING) then
         }
     }
 

@@ -4006,8 +4006,8 @@ namespace LowTempRadiantSystem {
                         }
                     }
                 } // Condensation Predicted in Variable Shut-Off Control Type
-            }     // In cooling mode and one of the condensation control types
-        }         // There was a non-zero flow
+            } // In cooling mode and one of the condensation control types
+        } // There was a non-zero flow
 
         // Now that we have the source/sink term, we must redo the heat balances to obtain
         // the new SumHATsurf value for the zone.  Note that the difference between the new

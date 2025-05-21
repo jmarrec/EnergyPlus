@@ -3547,8 +3547,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                  state.dataHeatBal->Zone(ZoneNumB).Name));
                         ErrorsFound = true;
                     } // ConnectTest
-                }     // NumRefDoorconnections > 1
-            } else {  // Both zones need to be flagged with ref doors
+                } // NumRefDoorconnections > 1
+            } else { // Both zones need to be flagged with ref doors
                 zoneA.RefDoorMixFlag = true;
                 zoneB.RefDoorMixFlag = true;
             } // Both zones already flagged with ref doors
@@ -3635,7 +3635,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                            cAlphaArgs(5)));
                     ErrorsFound = true;
                 } // =none, etc.
-            }     // Blank
+            } // Blank
 
             if (ZoneNumA > 0) {
                 if (RepVarSet(ZoneNumA)) {
@@ -3821,7 +3821,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                  state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorFlowRate(ConnectionNumber));
             }
         } // DO Loop=1,TotRefDoorMixing
-    }     // TotRefDoorMixing > 0)
+    } // TotRefDoorMixing > 0)
 
     RepVarSet.deallocate();
     cAlphaArgs.deallocate();
@@ -4052,8 +4052,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                       state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea(ConnectionNumber),
                       state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName(ConnectionNumber));
             } // ConnectionNumber
-        }     // ZoneNumA
-    }         //(TotRefDoorMixing .GT. 0)
+        } // ZoneNumA
+    } //(TotRefDoorMixing .GT. 0)
 
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
         state.dataHeatBal->Zone(ZoneNum).NominalInfilVent = TotInfilVentFlow(ZoneNum);

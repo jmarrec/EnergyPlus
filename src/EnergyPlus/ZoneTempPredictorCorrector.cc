@@ -507,7 +507,7 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                 }
             }
         } // NumTStatStatements
-    }     // Check on number of TempControlledZones
+    } // Check on number of TempControlledZones
 
     s_ipsc->cCurrentModuleObject = setptTypeNamesUC[(int)HVAC::SetptType::SingleHeat];
     s_ztpc->NumTempControls[(int)HVAC::SetptType::SingleHeat] = s_ip->getNumObjectsFound(state, s_ipsc->cCurrentModuleObject);
@@ -1345,7 +1345,7 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                 ErrorsFound = true;
             }
         } // for (setptType)
-    }     // for (ComfortControlledZoneNum)
+    } // for (ComfortControlledZoneNum)
 
     for (int ComfortControlledZoneNum = 1; ComfortControlledZoneNum <= state.dataZoneCtrls->NumComfortControlledZones; ++ComfortControlledZoneNum) {
 
@@ -1677,7 +1677,7 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                 ErrorsFound = true;
             }
         } // loop over NumOpTempControlledZones
-    }     // NumOpTempControlledZones > 0
+    } // NumOpTempControlledZones > 0
 
     // Overcool dehumidificaton GetInput starts here
     s_ipsc->cCurrentModuleObject = cZControlTypes((int)ZoneControlTypes::TandHStat);
@@ -1836,9 +1836,9 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                         }
                     }
                 } // TStat Objects Loop
-            }     // found thermostat reference
-        }         // loop over NumTempAndHumidityControlledZones
-    }             // NumTempAndHumidityControlledZones > 0
+            } // found thermostat reference
+        } // loop over NumTempAndHumidityControlledZones
+    } // NumTempAndHumidityControlledZones > 0
 
     // Staged thermostat control inputs start
     s_ipsc->cCurrentModuleObject = cZControlTypes((int)ZoneControlTypes::StagedDual);
@@ -2702,7 +2702,7 @@ void InitZoneAirSetPoints(EnergyPlusData &state)
             default: {
             } break;
             } // switch
-        }     // Demand manager
+        } // Demand manager
     }
 
     if (s_ztpc->ErrorsFound) {

@@ -1959,7 +1959,7 @@ void InitAirLoops(EnergyPlusData &state, bool const FirstHVACIteration) // TRUE 
                         }
                     }
                 } // for (CompNum)
-            }     // for (BranchNum)
+            } // for (BranchNum)
         EndOfAirLoop:;
 
             thisPrimaryAirSys.supFanNum = SupFanIndex;
@@ -2009,7 +2009,7 @@ void InitAirLoops(EnergyPlusData &state, bool const FirstHVACIteration) // TRUE 
                         break;
                     }
                 } // end of component loop
-            }     // end of Branch loop
+            } // end of Branch loop
             thisPrimaryAirSys.CentralHeatCoilExists = FoundCentralHeatCoil;
         } // end of AirLoop loop
 
@@ -2045,7 +2045,7 @@ void InitAirLoops(EnergyPlusData &state, bool const FirstHVACIteration) // TRUE 
                         break;
                     }
                 } // end of component loop
-            }     // end of Branch loop
+            } // end of Branch loop
             thisPrimaryAirSys.CentralCoolCoilExists = FoundCentralCoolCoil;
         } // end of AirLoop loop
 
@@ -2336,7 +2336,7 @@ void ConnectReturnNodes(EnergyPlusData &state)
                 }
             }
         } // return nodes loop
-    }     // controlled zones loop
+    } // controlled zones loop
 
     // Check for any air loops that may be connected directly to a zone return node
     for (int airLoopNum = 1; airLoopNum <= NumPrimaryAirSys; ++airLoopNum) {
@@ -5139,7 +5139,7 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
                                                      state.dataSize->ZoneSizing(state.dataSize->CurOverallSimDay, CtrlZoneNum).DesHeatMassFlowNoOA);
                     state.dataSize->SysSizing(state.dataSize->CurOverallSimDay, AirLoopNum).NonCoinHeatMassFlow +=
                         adjHeatMassFlow / (1.0 + state.dataSize->TermUnitSizing(TermUnitSizingIndex).InducRat);
-                }                                                                                  // end of loop over heated zones
+                } // end of loop over heated zones
             } else {                                                                               // otherwise use cool supply zones
                 for (int ZonesCooledNum = 1; ZonesCooledNum <= NumZonesCooled; ++ZonesCooledNum) { // loop over cooled zones
                     int CtrlZoneNum = airToZoneNodeInfo.CoolCtrlZoneNums(ZonesCooledNum);
@@ -5151,7 +5151,7 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
                     state.dataSize->SysSizing(state.dataSize->CurOverallSimDay, AirLoopNum).NonCoinHeatMassFlow +=
                         adjHeatMassFlow / (1.0 + state.dataSize->TermUnitSizing(TermUnitSizingIndex).InducRat);
                 } // end of loop over cooled zones
-            }     // End of heat / cool zone if - else
+            } // End of heat / cool zone if - else
 
         } // End of begin day loop over primary air systems
     } break;

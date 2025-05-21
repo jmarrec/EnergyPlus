@@ -2346,7 +2346,7 @@ void CalcPurchAirLoads(EnergyPlusData &state,
                                 // CoolSensOutput = SupplyMassFlowRate * CpAir * (MixedAirTemp - SupplyTemp)
                                 // CoolTotOutput = SupplyMassFlowRate * (MixedAirEnthalpy - SupplyEnthalpy)
                             }
-                        }    // Capacity limit exceeded
+                        } // Capacity limit exceeded
                     } else { // Not dehumidifying
                         // If not dehumidifying, compare sensible cooling to the limit
                         // This section will only increase supply temp, so no need to recheck for super-saturation
@@ -2356,8 +2356,8 @@ void CalcPurchAirLoads(EnergyPlusData &state,
                             CoolSensOutput = PurchAir.MaxCoolTotCap;
                             PurchAir.SupplyTemp = PurchAir.MixedAirTemp - CoolSensOutput / (SupplyMassFlowRate * CpAir);
                         } // Capacity limit exceeded
-                    }     // Dehumidifying or not
-                }         // Capacity limit active
+                    } // Dehumidifying or not
+                } // Capacity limit active
 
             } else { // SupplyMassFlowRate is zero
                 SupplyEnthalpy = MixedAirEnthalpy;

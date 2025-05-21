@@ -472,7 +472,7 @@ namespace PlantPipingSystemsManager {
                             format("Corrected pipe location: ( x,y )=( {:.2T},{:.2T} )", thisSegment->PipeLocation.X, thisSegment->PipeLocation.Y));
                     }
                 } // segment loop
-            }     // circuit loop
+            } // circuit loop
 
         } // domain loop
 
@@ -3580,8 +3580,8 @@ namespace PlantPipingSystemsManager {
                     }
 
                 } //'z
-            }     //'y
-        }         //'x
+            } //'y
+        } //'x
 
         this->NumDomainCells = TotNumCells;
         this->NumGroundSurfCells = NumGroundSurfaceCells;

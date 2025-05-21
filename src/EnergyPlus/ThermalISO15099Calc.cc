@@ -1043,8 +1043,8 @@ void Calc_ISO15099(EnergyPlusData &state,
                                      NumOfIter_NOSD); // Autodesk:Uninit shgc_NOSD, sc_NOSD, hflux_NOSD,
                                                       // ShadeHcRatioIn_NOSD, ShadeHcRatioOut_NOSD were
                                                       // uninitialized
-            }                                         // end if UnshadedDebug = 1
-        }                                             // end if NeedUnshadedRun...
+            } // end if UnshadedDebug = 1
+        } // end if NeedUnshadedRun...
 
         // bi Set T6-related quantities keff, keffc: (using non-solar pass results)
         if (nlayer > 1) {

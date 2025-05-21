@@ -355,8 +355,8 @@ void InitIntConvCoeff(EnergyPlusData &state,
                 }
 
             } // for (surface)
-        }     // for (space)
-    }         // for (zone)
+        } // for (space)
+    } // for (zone)
 
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
         for (int spaceNum : state.dataHeatBal->Zone(ZoneNum).spaceIndexes) {
@@ -1265,9 +1265,9 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     ApplyIntConvValue(state, surfNum, hcInt, state.dataSurface->TotUserIntConvModels);
                 } break;
                 } // switch(HcInt)
-            }     // if ("INSIDE")
-        }         // for (pass)
-    }             // for (Loop)
+            } // if ("INSIDE")
+        } // for (pass)
+    } // for (Loop)
 
     CurrentModuleObject = "SurfaceProperty:ConvectionCoefficients:MultipleSurface";
     Count = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, CurrentModuleObject);
@@ -1521,7 +1521,7 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ErrorsFound = true;
             }
         } // for (Pass)
-    }     // for (Loop)
+    } // for (Loop)
 
     if (state.dataHeatBal->DefaultExtConvAlgo == HcExt::ASHRAESimple ||
         std::any_of(Zone.begin(), Zone.end(), [](DataHeatBalance::ZoneData const &e) { return e.ExtConvAlgo == HcExt::ASHRAESimple; })) {
@@ -1629,7 +1629,7 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 }
             }
         } // for (iOutConvClass)
-    }     // if (Count == 1)
+    } // if (Count == 1)
 
     if (ErrorsFound) {
         ShowFatalError(state, format("{}Errors found getting input.  Program termination.", RoutineName));
@@ -2389,7 +2389,7 @@ void CalcTrombeWallIntConvCoeff(EnergyPlusData &state,
             if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
                 state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
         } // for (surfNum)
-    }     // for (spaceNum)
+    } // for (spaceNum)
 }
 
 Real64 CalcNusselt(EnergyPlusData &state,
@@ -3012,7 +3012,7 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
                   geoSummaryRoof.Tilt,
                   geoSummaryRoof.Azimuth);
         } // Display
-    }     // Do Report
+    } // Do Report
 }
 
 void SetupAdaptiveConvRadiantSurfaceData(EnergyPlusData &state)
@@ -4065,9 +4065,9 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
                                     CoolingPriorityStack[EquipOnCount] = zoneEquipList.CoolingPriority(EquipNum);
                                     break;
                                 } // if (DeltaTemp)
-                            }     // for (SurfLoop)
-                        }         // for (spaceNumLoop)
-                    }             // if (InFloorActiveElement)
+                            } // for (SurfLoop)
+                        } // for (spaceNumLoop)
+                    } // if (InFloorActiveElement)
 
                     if (zoneEquipConfig.InCeilingActiveElement) {
                         for (int spaceNumLoop : zone.spaceIndexes) {
@@ -4088,9 +4088,9 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
                                     CoolingPriorityStack[EquipOnCount] = zoneEquipList.CoolingPriority(EquipNum);
                                     break;
                                 } // if (DeltaTempLoop)
-                            }     // for (SurfLoop)
-                        }         // for (spaceNumLoop)
-                    }             // if (InCeilingActiveElement)
+                            } // for (SurfLoop)
+                        } // for (spaceNumLoop)
+                    } // if (InCeilingActiveElement)
 
                     if (zoneEquipConfig.InWallActiveElement) {
                         for (int spaceNumLoop : zone.spaceIndexes) {
@@ -4115,9 +4115,9 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
                                     HeatingPriorityStack[EquipOnCount] = zoneEquipList.HeatingPriority(EquipNum);
                                     CoolingPriorityStack[EquipOnCount] = zoneEquipList.CoolingPriority(EquipNum);
                                 } // else (DeltaTemp)
-                            }     // for (SurfLoop)
-                        }         // for (spaceNumLoop)
-                    }             // if (InWallActiveElement)
+                            } // for (SurfLoop)
+                        } // for (spaceNumLoop)
+                    } // if (InWallActiveElement)
                 } break;
                 default:; // nothing
                 }

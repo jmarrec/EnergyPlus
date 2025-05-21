@@ -3557,9 +3557,9 @@ void InitSolarHeatGains(EnergyPlusData &state)
                             }
                         }
                     } // Surface(SurfNum)%ExtSolar
-                }     // end of surface window loop
-            }         // end of space loop
-        }             // end of zone loop
+                } // end of surface window loop
+            } // end of space loop
+        } // end of zone loop
         for (int PipeNum = 1; PipeNum <= (int)state.dataDaylightingDevicesData->TDDPipe.size(); ++PipeNum) {
             int const SurfNum = state.dataDaylightingDevicesData->TDDPipe(PipeNum).Dome; // TDD: DOME object number
             int const ConstrNum = Surface(SurfNum).Construction;
@@ -4324,7 +4324,7 @@ void ComputeIntSWAbsorpFactors(EnergyPlusData &state)
                     SUM1 += thisSurf.Area * (TransDiffWin + AbsDiffTotWin);
                 }
             } // End of check if opaque surface or window
-        }     // End of loop over surfaces in zone
+        } // End of loop over surfaces in zone
 
         if (SUM1 > SmallestAreaAbsProductAllowed) { // Everything is okay, proceed with the regular calculation
             thisSolEnclosure.solVMULT = 1.0 / SUM1;
@@ -5369,7 +5369,7 @@ void UpdateThermalHistories(EnergyPlusData &state)
                 }
             }
         } // ...end of loop over all (heat transfer) surfaces...
-    }     // ...end of AnyInternalHeatSourceInInput
+    } // ...end of AnyInternalHeatSourceInInput
 }
 
 void CalculateZoneMRT(EnergyPlusData &state,

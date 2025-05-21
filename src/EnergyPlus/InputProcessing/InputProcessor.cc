@@ -1621,7 +1621,7 @@ void InputProcessor::reportIDFRecordsStats(EnergyPlusData &state)
             } // End extensible fields
 
         } // End loop on each object of a given objectType
-    }     // End loop on all objectTypes
+    } // End loop on all objectTypes
 }
 
 void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)

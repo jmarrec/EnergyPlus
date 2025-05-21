@@ -2091,7 +2091,7 @@ void DetermineSystemPopulationDiversity(EnergyPlusData &state)
                             state.dataSize->PeakPsOccurrenceEnvironmentStringBySys(AirLoopNum) = "Full Year Schedule";
                         }
                     } // if autosized and VRP
-                }     // air loops
+                } // air loops
             }
         }
     }

@@ -1557,8 +1557,8 @@ void SQLite::createSQLiteReportDataRecord(int const recordIndex,
                 sqliteWriteMessage(ss.str());
             } break;
             } // switch (reportFreq)
-        }     // if (minutesPerTimeStep != -1)
-    }         // if (minDataValue != 0)
+        } // if (minutesPerTimeStep != -1)
+    } // if (minDataValue != 0)
 } // SQLite::createSQLiteReportDataRecord()
 
 void SQLite::createSQLiteTimeIndexRecord(OutputProcessor::ReportFreq const reportFreq,

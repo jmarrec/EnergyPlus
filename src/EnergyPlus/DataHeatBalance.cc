@@ -619,10 +619,10 @@ void CheckAndSetConstructionProperties(EnergyPlusData &state,
                                 ShowContinueError(state, "the sum of the widths of the gas layers adjacent to the blind.");
                             }
                         } // End of check if material is window blind
-                    }     // End of check if WrongWindowLayering
-                }         // End of check if WrongWindowLayering
-            }             // End of check on total glass layers
-        }                 // End of check if construction has between-glass shade/blind
+                    } // End of check if WrongWindowLayering
+                } // End of check if WrongWindowLayering
+            } // End of check on total glass layers
+        } // End of check if construction has between-glass shade/blind
 
         // Check Simple Windows,
         if (s_mat->materials(thisConstruct.LayerPoint(1))->group == Material::Group::GlassSimple) {
@@ -879,7 +879,7 @@ Real64 ComputeNominalUwithConvCoeffs(EnergyPlusData &state,
         0.0,       // Fin
         0.0,       // TDD_Dome
         0.0        // TDD_Diffuser
-    };             // If anything added to the enum SurfaceClass, adjust this list appropriately
+    }; // If anything added to the enum SurfaceClass, adjust this list appropriately
 
     Real64 insideFilm;
     Real64 outsideFilm;
