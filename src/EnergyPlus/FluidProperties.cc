@@ -657,17 +657,21 @@ namespace Fluid {
 #ifdef PERFORMANCE_OPT
         // This is a speed optimization.  Maybe.
         water->CpTempRatios.allocate(water->NumCpTempPoints);
-        for (int i = 1; i < water->NumCpTempPoints; ++i)
+        for (int i = 1; i < water->NumCpTempPoints; ++i) {
             water->CpTempRatios(i) = (water->CpValues(i + 1) - water->CpValues(i)) / (water->CpTemps(i + 1) - water->CpTemps(i));
+        }
         water->RhoTempRatios.allocate(water->NumRhoTempPoints);
-        for (int i = 1; i < water->NumRhoTempPoints; ++i)
+        for (int i = 1; i < water->NumRhoTempPoints; ++i) {
             water->RhoTempRatios(i) = (water->RhoValues(i + 1) - water->RhoValues(i)) / (water->RhoTemps(i + 1) - water->RhoTemps(i));
+        }
         water->CondTempRatios.allocate(water->NumCondTempPoints);
-        for (int i = 1; i < water->NumCondTempPoints; ++i)
+        for (int i = 1; i < water->NumCondTempPoints; ++i) {
             water->CondTempRatios(i) = (water->CondValues(i + 1) - water->CondValues(i)) / (water->CondTemps(i + 1) - water->CondTemps(i));
+        }
         water->ViscTempRatios.allocate(water->NumViscTempPoints);
-        for (int i = 1; i < water->NumCondTempPoints; ++i)
+        for (int i = 1; i < water->NumCondTempPoints; ++i) {
             water->ViscTempRatios(i) = (water->ViscValues(i + 1) - water->ViscValues(i)) / (water->ViscTemps(i + 1) - water->ViscTemps(i));
+        }
 #endif // PERFORMANCE_OPT
 
     } // InitConstantFluidPropertiesData()
@@ -1814,17 +1818,21 @@ namespace Fluid {
 #ifdef PERFORMANCE_OPT
             // This is a speed optimization.  Maybe.
             glycol->CpTempRatios.allocate(glycol->NumCpTempPoints);
-            for (int i = 1; i < glycol->NumCpTempPoints; ++i)
+            for (int i = 1; i < glycol->NumCpTempPoints; ++i) {
                 glycol->CpTempRatios(i) = (glycol->CpValues(i + 1) - glycol->CpValues(i)) / (glycol->CpTemps(i + 1) - glycol->CpTemps(i));
+            }
             glycol->RhoTempRatios.allocate(glycol->NumRhoTempPoints);
-            for (int i = 1; i < glycol->NumRhoTempPoints; ++i)
+            for (int i = 1; i < glycol->NumRhoTempPoints; ++i) {
                 glycol->RhoTempRatios(i) = (glycol->RhoValues(i + 1) - glycol->RhoValues(i)) / (glycol->RhoTemps(i + 1) - glycol->RhoTemps(i));
+            }
             glycol->CondTempRatios.allocate(glycol->NumCondTempPoints);
-            for (int i = 1; i < glycol->NumCondTempPoints; ++i)
+            for (int i = 1; i < glycol->NumCondTempPoints; ++i) {
                 glycol->CondTempRatios(i) = (glycol->CondValues(i + 1) - glycol->CondValues(i)) / (glycol->CondTemps(i + 1) - glycol->CondTemps(i));
+            }
             glycol->ViscTempRatios.allocate(glycol->NumViscTempPoints);
-            for (int i = 1; i < glycol->NumCondTempPoints; ++i)
+            for (int i = 1; i < glycol->NumCondTempPoints; ++i) {
                 glycol->ViscTempRatios(i) = (glycol->ViscValues(i + 1) - glycol->ViscValues(i)) / (glycol->ViscTemps(i + 1) - glycol->ViscTemps(i));
+            }
 #endif // PERFORMANCE_OPT
         } // for (Loop)
 

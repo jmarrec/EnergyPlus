@@ -148,15 +148,21 @@ private:
         //    [[fill]align]
         switch (specs_.align) {
         case align_t::left:
-            if (specs_.fill.size()) buffer.append(specs_.fill);
+            if (specs_.fill.size()) {
+                buffer.append(specs_.fill);
+            }
             buffer.push_back('<');
             break;
         case align_t::right:
-            if (specs_.fill.size()) buffer.append(specs_.fill);
+            if (specs_.fill.size()) {
+                buffer.append(specs_.fill);
+            }
             buffer.push_back('>');
             break;
         case align_t::center:
-            if (specs_.fill.size()) buffer.append(specs_.fill);
+            if (specs_.fill.size()) {
+                buffer.append(specs_.fill);
+            }
             buffer.push_back('^');
             break;
         case align_t::none:
@@ -229,7 +235,9 @@ public:
     {
         auto begin = ctx.begin(), end = ctx.end();
         format_str_ = begin;
-        if (begin == end) return begin;
+        if (begin == end) {
+            return begin;
+        }
         using handler_type = fmt::detail::dynamic_specs_handler<ParseContext>;
         auto it = fmt::detail::parse_format_specs(begin, end, handler_type(specs_, ctx));
         return it;
@@ -258,9 +266,15 @@ public:
         handle_specs(ctx);
         detail::specs_checker<null_handler> checker(null_handler(), detail::mapped_type_constant<double, FormatContext>::value);
         checker.on_align(specs_.align);
-        if (specs_.sign != sign::none) checker.on_sign(specs_.sign);
-        if (specs_.alt) checker.on_hash();
-        if (specs_.precision >= 0) checker.end_precision();
+        if (specs_.sign != sign::none) {
+            checker.on_sign(specs_.sign);
+        }
+        if (specs_.alt) {
+            checker.on_hash();
+        }
+        if (specs_.precision >= 0) {
+            checker.end_precision();
+        }
 
         // matches Fortran's 'E' format
         if (specs_.type == 'Z') {

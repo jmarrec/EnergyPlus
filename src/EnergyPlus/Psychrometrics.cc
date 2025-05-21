@@ -171,12 +171,16 @@ namespace Psychrometrics {
         int Loop;
         Real64 AverageIterations;
 
-        if (!auditFile.good()) return;
+        if (!auditFile.good()) {
+            return;
+        }
         for (int item : state.dataPsychCache->NumTimesCalled) {
             if (item) { // if item is greater than 0
                 print(auditFile, "RoutineName,#times Called,Avg Iterations\n");
                 for (Loop = 0; Loop < static_cast<int>(PsychrometricFunction::Num); ++Loop) {
-                    if (!PsyReportIt[Loop]) continue;
+                    if (!PsyReportIt[Loop]) {
+                        continue;
+                    }
                     const std::string istring = fmt::to_string(state.dataPsychCache->NumTimesCalled[Loop]);
                     if (state.dataPsychCache->NumIterations[Loop] > 0) {
                         AverageIterations = double(state.dataPsychCache->NumIterations[Loop]) / double(state.dataPsychCache->NumTimesCalled[Loop]);
