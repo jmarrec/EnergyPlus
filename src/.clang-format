@@ -1,39 +1,39 @@
 ---
 Language: Cpp
 Standard: Cpp11
-IndentWidth: 4
 AccessModifierOffset: -4
-ColumnLimit: 150
-CommentPragmas: '^ IWYU pragma:'
-UseTab: Never
-SpacesInParentheses: false
-SpaceBeforeParens: ControlStatements
-SpaceInEmptyParentheses: false
-SpacesInAngles: false
-CompactNamespaces: false
-NamespaceIndentation: Inner
-FixNamespaceComments: true
-BreakBeforeBraces: Custom
-# BreakConstructorInitializers: 'AfterColon'
-AllowShortFunctionsOnASingleLine: None
-AllowShortCaseLabelsOnASingleLine: false
-AllowShortIfStatementsOnASingleLine: true
 AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: true
 BinPackArguments: false
 BinPackParameters: false
 BraceWrapping:
   AfterClass: true
   AfterControlStatement: false
   AfterEnum: true
+#  AfterExternBlock: true
   AfterFunction: true
   AfterNamespace: false
   AfterStruct: true
   AfterUnion: true
-#  AfterExternBlock: true
   BeforeCatch: false
   BeforeElse: false
   IndentBraces: false
   SplitEmptyFunction: true
-  SplitEmptyRecord: true
   SplitEmptyNamespace: true
+  SplitEmptyRecord: true
+BreakBeforeBraces: Custom
+# BreakConstructorInitializers: 'AfterColon'
+ColumnLimit: 150
+CommentPragmas: '^ IWYU pragma:'
+CompactNamespaces: false
+FixNamespaceComments: true
 IndentPPDirectives: AfterHash
+IndentWidth: 4
+NamespaceIndentation: Inner
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInParentheses: false
+UseTab: Never
