@@ -75,7 +75,9 @@ struct DoubleWrapper
 {
     // this cannot be marked explicit
     // we need the implicit conversion for it to work
+    // clang-format off
     DoubleWrapper(double val) : value(val) {};
+    // clang-format on
     operator double() const
     {
         return value;

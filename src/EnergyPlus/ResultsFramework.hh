@@ -249,7 +249,9 @@ namespace ResultsFramework {
     class MeterDataFrame : public DataFrame
     {
     public:
+        // clang-format off
         explicit MeterDataFrame(const std::string &ReportFreq) : DataFrame(ReportFreq) {};
+        // clang-format on
         virtual ~MeterDataFrame() = default;
 
         void addVariable(MeterVariable const &var);
