@@ -5,7 +5,7 @@ AccessModifierOffset: -4
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortIfStatementsOnASingleLine: Never
 BinPackArguments: false
 BinPackParameters: false
 BraceWrapping:
