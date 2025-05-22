@@ -85,7 +85,7 @@ namespace ResultsFramework {
     class BaseResultObject
     {
     public:
-        BaseResultObject() {};
+        BaseResultObject() = default;
     };
 
     class SimInfo : public BaseResultObject

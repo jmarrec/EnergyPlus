@@ -464,7 +464,7 @@ namespace OutputProcessor {
 
         std::vector<int> meterNums; // Meter Numbers
 
-        virtual ~OutVar() {};
+        virtual ~OutVar() = default;
 
         std::string multiplierString() const;
 
