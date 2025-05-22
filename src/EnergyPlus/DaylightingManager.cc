@@ -5187,7 +5187,8 @@ Real64 DayltgGlare(EnergyPlusData &state,
         // Conversion from ft-L to cd/m2, with cd/m2 = 0.2936 ft-L, gives the 0.4794 factor
         // below, which is (0.2936)**0.6
         auto const &extWin = thisDayltgCtrl.refPts(IL).extWins(loop);
-        Real64 GTOT1 = 0.4794 * (std::pow(extWin.lums[iLum_Source][(int)winCover], 1.6))*std::pow(extWin.solidAngWtd, 0.8);
+        Real64 GTOT1 = 0.4794 * std::pow(extWin.lums[iLum_Source][(int)winCover], 1.6) //
+                       * std::pow(extWin.solidAngWtd, 0.8);
         Real64 GTOT2 = BLUM + 0.07 * std::sqrt(extWin.solidAng) * extWin.lums[iLum_Source][(int)winCover];
         GTOT += GTOT1 / (GTOT2 + 0.000001);
     }
@@ -5237,7 +5238,8 @@ void DayltgGlareWithIntWins(EnergyPlusData &state,
             // Conversion from ft-L to cd/m2, with cd/m2 = 0.2936 ft-L, gives the 0.4794 factor
             // below, which is (0.2936)**0.6
             auto const &extWin = thisDayltgCtrl.refPts(IL).extWins(loop);
-            Real64 GTOT1 = 0.4794 * (std::pow(extWin.lums[iLum_Source][(int)winCover], 1.6))*std::pow(extWin.solidAngWtd, 0.8);
+            Real64 GTOT1 = 0.4794 * (std::pow(extWin.lums[iLum_Source][(int)winCover], 1.6)) //
+                           * std::pow(extWin.solidAngWtd, 0.8);
             Real64 GTOT2 = BackgroundLum + 0.07 * std::sqrt(extWin.solidAng) * extWin.lums[iLum_Source][(int)winCover];
             GTOT += GTOT1 / (GTOT2 + 0.000001);
         }

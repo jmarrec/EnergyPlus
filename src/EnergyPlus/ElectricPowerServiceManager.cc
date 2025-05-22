@@ -1440,8 +1440,8 @@ void ElectPowerLoadCenter::dispatchGenerators(EnergyPlusData &state,
                 state, g->onThisTimestep, g->powerRequestThisTimestep, firstHVACIteration, g->electProdRate, g->thermProdRate);
 
             if (g->eMSRequestOn) {
-                totalThermalPowerRequest_ += (max(g->eMSPowerRequest, 0.0))*g->nominalThermElectRatio;
-                totalPowerRequest_ += (max(g->eMSPowerRequest, 0.0));
+                totalThermalPowerRequest_ += max(g->eMSPowerRequest, 0.0) * g->nominalThermElectRatio;
+                totalPowerRequest_ += max(g->eMSPowerRequest, 0.0);
             } else {
                 if (totalThermalPowerRequest_ < loadCenterThermalLoad && g->powerRequestThisTimestep > 0.0) {
                     Real64 excessThermalPowerRequest = totalThermalPowerRequest_ + g->maxPowerOut * g->nominalThermElectRatio - loadCenterThermalLoad;
@@ -1504,7 +1504,7 @@ void ElectPowerLoadCenter::dispatchGenerators(EnergyPlusData &state,
                 state, g->onThisTimestep, g->powerRequestThisTimestep, firstHVACIteration, g->electProdRate, g->thermProdRate);
 
             if (g->eMSRequestOn) {
-                totalThermalPowerRequest_ += (max(g->eMSPowerRequest, 0.0))*g->nominalThermElectRatio;
+                totalThermalPowerRequest_ += max(g->eMSPowerRequest, 0.0) * g->nominalThermElectRatio;
                 totalPowerRequest_ += (max(g->eMSPowerRequest, 0.0));
             } else {
                 if (totalThermalPowerRequest_ < loadCenterThermalLoad && g->powerRequestThisTimestep > 0.0) {
