@@ -3479,9 +3479,11 @@ TEST_F(SQLiteFixture, DXCoils_TestComponentSizingOutput_TwoSpeed)
 
     struct TestQuery
     {
+        // clang-format off
         TestQuery(std::string t_description, std::string t_units, Real64 t_value)
             : description(t_description), units(t_units), expectedValue(t_value),
               displayString("Description='" + description + "'; Units='" + units + "'") {};
+        // clang-format on
 
         const std::string description;
         const std::string units;
@@ -3698,9 +3700,11 @@ TEST_F(SQLiteFixture, DXCoils_TestComponentSizingOutput_SingleSpeed)
 
     struct TestQuery
     {
+        // clang-format off
         TestQuery(std::string t_description, std::string t_units, Real64 t_value)
             : description(t_description), units(t_units), expectedValue(t_value),
               displayString("Description='" + description + "'; Units='" + units + "'") {};
+        // clang-format on
 
         const std::string description;
         const std::string units;
