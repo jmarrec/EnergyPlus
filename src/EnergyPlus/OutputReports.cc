@@ -1134,8 +1134,7 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
         std::string ScheduleName;
         std::string cSchedMin;
         std::string cSchedMax;
-        *eiostream << "Shading Surfaces,"
-                   << "Number of Shading Surfaces," << surf2 - 1 << '\n';
+        *eiostream << "Shading Surfaces," << "Number of Shading Surfaces," << surf2 - 1 << '\n';
         for (int surf : state.dataSurface->AllSurfaceListReportOrder) {
             auto &thisSurface = state.dataSurface->Surface(surf);
             if (thisSurface.Zone != 0) {
@@ -1316,50 +1315,30 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                     ExtConvCoeffCalc = ConvCoeffCalcs[Convect::HcExtReportVals[static_cast<int>(hcExt)] - 1];
                 }
                 if (thisSurface.ExtBoundCond == DataSurfaces::ExternalEnvironment) {
-                    *eiostream << "ExternalEnvironment"
-                               << "," << ExtConvCoeffCalc << "," << IntConvCoeffCalc << ",";
+                    *eiostream << "ExternalEnvironment" << "," << ExtConvCoeffCalc << "," << IntConvCoeffCalc << ",";
                 } else if (thisSurface.ExtBoundCond == DataSurfaces::Ground) {
-                    *eiostream << "Ground"
-                               << ","
-                               << "N/A-Ground"
-                               << "," << IntConvCoeffCalc << ",";
+                    *eiostream << "Ground" << "," << "N/A-Ground" << "," << IntConvCoeffCalc << ",";
                 } else if (thisSurface.ExtBoundCond == DataSurfaces::GroundFCfactorMethod) {
-                    *eiostream << "FCGround"
-                               << ","
-                               << "N/A-FCGround"
-                               << "," << IntConvCoeffCalc << ",";
+                    *eiostream << "FCGround" << "," << "N/A-FCGround" << "," << IntConvCoeffCalc << ",";
                 } else if (thisSurface.ExtBoundCond == DataSurfaces::KivaFoundation) {
-                    *eiostream << "Foundation"
-                               << ","
-                               << "N/A-Foundation"
-                               << "," << IntConvCoeffCalc << ",";
+                    *eiostream << "Foundation" << "," << "N/A-Foundation" << "," << IntConvCoeffCalc << ",";
                 } else if (thisSurface.ExtBoundCond == DataSurfaces::OtherSideCoefNoCalcExt ||
                            thisSurface.ExtBoundCond == DataSurfaces::OtherSideCoefCalcExt) {
-                    *eiostream << state.dataSurface->OSC(thisSurface.OSCPtr).Name << ","
-                               << "N/A-OSC"
-                               << "," << IntConvCoeffCalc << ",";
+                    *eiostream << state.dataSurface->OSC(thisSurface.OSCPtr).Name << "," << "N/A-OSC" << "," << IntConvCoeffCalc << ",";
                 } else if (thisSurface.ExtBoundCond == DataSurfaces::OtherSideCondModeledExt) {
-                    *eiostream << state.dataSurface->OSCM(thisSurface.OSCMPtr).Name << ","
-                               << "N/A-OSCM"
-                               << "," << IntConvCoeffCalc << ",";
+                    *eiostream << state.dataSurface->OSCM(thisSurface.OSCMPtr).Name << "," << "N/A-OSCM" << "," << IntConvCoeffCalc << ",";
                 } else {
-                    *eiostream << thisSurface.ExtBoundCondName << ","
-                               << "Other/Same Surface Int Conv"
-                               << "," << IntConvCoeffCalc << ",";
+                    *eiostream << thisSurface.ExtBoundCondName << "," << "Other/Same Surface Int Conv" << "," << IntConvCoeffCalc << ",";
                 }
                 if (thisSurface.ExtSolar) {
-                    *eiostream << "SunExposed"
-                               << ",";
+                    *eiostream << "SunExposed" << ",";
                 } else {
-                    *eiostream << "NoSun"
-                               << ",";
+                    *eiostream << "NoSun" << ",";
                 }
                 if (thisSurface.ExtWind) {
-                    *eiostream << "WindExposed"
-                               << ",";
+                    *eiostream << "WindExposed" << ",";
                 } else {
-                    *eiostream << "NoWind"
-                               << ",";
+                    *eiostream << "NoWind" << ",";
                 }
                 if (RptType == 10) {
                     *eiostream << format("{:.2R}", thisSurface.ViewFactorGround) << "," << format("{:.2R}", thisSurface.ViewFactorSky) << ","
@@ -1387,24 +1366,22 @@ void DetailsForSurfaces(EnergyPlusData &state, int const RptType) // (1=Vertices
                     int fd = thisSurface.FrameDivider;
                     if (state.dataSurface->FrameDivider(fd).FrameWidth > 0.0) {
                         AlgoName = DataSurfaces::HeatTransAlgoStrs[(int)thisSurface.HeatTransferAlgorithm];
-                        *eiostream << "Frame/Divider Surface," << state.dataSurface->FrameDivider(fd).Name << ","
-                                   << "Frame," << thisSurface.Name << "," << AlgoName << ",";
+                        *eiostream << "Frame/Divider Surface," << state.dataSurface->FrameDivider(fd).Name << "," << "Frame," << thisSurface.Name
+                                   << "," << AlgoName << ",";
                         *eiostream << ",N/A,N/A,," << format("{:.2R}", state.dataSurface->SurfWinFrameArea(surf)) << ","
-                                   << format("{:.2R}", state.dataSurface->SurfWinFrameArea(surf) / thisSurface.Multiplier) << ",*"
-                                   << ",N/A"
+                                   << format("{:.2R}", state.dataSurface->SurfWinFrameArea(surf) / thisSurface.Multiplier) << ",*" << ",N/A"
                                    << ",N/A," << format("{:.2R}", state.dataSurface->FrameDivider(fd).FrameWidth) << ",N/A" << '\n';
                     }
                     if (state.dataSurface->FrameDivider(fd).DividerWidth > 0.0) {
                         if (state.dataSurface->FrameDivider(fd).DividerType == DataSurfaces::FrameDividerType::DividedLite) {
-                            *eiostream << "Frame/Divider Surface," << state.dataSurface->FrameDivider(fd).Name << ","
-                                       << "Divider:DividedLite," << thisSurface.Name << ",,";
+                            *eiostream << "Frame/Divider Surface," << state.dataSurface->FrameDivider(fd).Name << "," << "Divider:DividedLite,"
+                                       << thisSurface.Name << ",,";
                         } else {
-                            *eiostream << "Frame/Divider Surface," << state.dataSurface->FrameDivider(fd).Name << ","
-                                       << "Divider:Suspended," << thisSurface.Name << ",,";
+                            *eiostream << "Frame/Divider Surface," << state.dataSurface->FrameDivider(fd).Name << "," << "Divider:Suspended,"
+                                       << thisSurface.Name << ",,";
                         }
                         *eiostream << ",N/A,N/A,," << format("{:.2R}", state.dataSurface->SurfWinDividerArea(surf)) << ","
-                                   << format("{:.2R}", state.dataSurface->SurfWinDividerArea(surf) / thisSurface.Multiplier) << ",*"
-                                   << ",N/A"
+                                   << format("{:.2R}", state.dataSurface->SurfWinDividerArea(surf) / thisSurface.Multiplier) << ",*" << ",N/A"
                                    << ",N/A," << format("{:.2R}", state.dataSurface->FrameDivider(fd).DividerWidth) << ",N/A" << '\n';
                     }
                 }

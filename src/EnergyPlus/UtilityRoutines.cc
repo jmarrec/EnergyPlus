@@ -558,8 +558,7 @@ int AbortEnergyPlus(EnergyPlusData &state)
 
     state.dataResultsFramework->resultsFramework->writeOutputs(state);
 
-    std::cerr << "Program terminated: "
-              << "EnergyPlus Terminated--Error(s) Detected." << std::endl;
+    std::cerr << "Program terminated: " << "EnergyPlus Terminated--Error(s) Detected." << std::endl;
     // Close the socket used by ExternalInterface. This call also sends the flag "-1" to the ExternalInterface,
     // indicating that E+ terminated with an error.
     if (state.dataExternalInterface->NumExternalInterfaces > 0) {

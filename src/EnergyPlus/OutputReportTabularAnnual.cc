@@ -1210,9 +1210,7 @@ void AddAnnualTableOfContents(EnergyPlusData &state, std::ostream &nameOfStream)
 void AnnualTable::addTableOfContents(std::ostream &nameOfStream)
 {
     nameOfStream << "<p><b>" << m_name << "</b></p> |\n";
-    nameOfStream << "<a href=\"#" << OutputReportTabular::MakeAnchorName(m_name, "Entire Facility") << "\">"
-                 << "Entire Facility"
-                 << "</a>    |   \n";
+    nameOfStream << "<a href=\"#" << OutputReportTabular::MakeAnchorName(m_name, "Entire Facility") << "\">" << "Entire Facility" << "</a>    |   \n";
 }
 
 void AnnualTable::computeBinColumns(EnergyPlusData &state, OutputReportTabular::UnitsStyle const unitsStyle_para)

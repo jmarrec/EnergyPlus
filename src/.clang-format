@@ -1,5 +1,4 @@
 ---
-Language: Cpp
 Standard: c++17
 AccessModifierOffset: -4
 AllowShortBlocksOnASingleLine: Never
@@ -9,6 +8,7 @@ AllowShortIfStatementsOnASingleLine: Never
 BinPackArguments: false
 BinPackParameters: false
 BraceWrapping:
+  AfterCaseLabel: false
   AfterClass: true
   AfterControlStatement: Never
   AfterEnum: true
@@ -19,6 +19,8 @@ BraceWrapping:
   AfterUnion: true
   BeforeCatch: false
   BeforeElse: false
+  BeforeLambdaBody: false
+  BeforeWhile: false
   IndentBraces: false
   SplitEmptyFunction: true
   SplitEmptyNamespace: true

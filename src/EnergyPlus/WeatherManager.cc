@@ -8788,9 +8788,7 @@ namespace Weather {
             break;
         case WaterMainsTempCalcMethod::Correlation:
             *eiostream << "Site Water Mains Temperature Information,";
-            *eiostream << waterMainsCalcMethodNames[static_cast<int>(state.dataWeather->WaterMainsTempsMethod)] << ","
-                       << "NA"
-                       << ",";
+            *eiostream << waterMainsCalcMethodNames[static_cast<int>(state.dataWeather->WaterMainsTempsMethod)] << "," << "NA" << ",";
             *eiostream << format("{:.2R}", state.dataWeather->WaterMainsTempsAnnualAvgAirTemp) << ","
                        << format("{:.2R}", state.dataWeather->WaterMainsTempsMaxDiffAirTemp) << ",";
             *eiostream << "NA\n";
@@ -8798,34 +8796,17 @@ namespace Weather {
         case WaterMainsTempCalcMethod::CorrelationFromWeatherFile:
             if (state.dataWeather->OADryBulbAverage.OADryBulbWeatherDataProcessed) {
                 *eiostream << "Site Water Mains Temperature Information,";
-                *eiostream << waterMainsCalcMethodNames[static_cast<int>(state.dataWeather->WaterMainsTempsMethod)] << ","
-                           << "NA"
-                           << ",";
+                *eiostream << waterMainsCalcMethodNames[static_cast<int>(state.dataWeather->WaterMainsTempsMethod)] << "," << "NA" << ",";
                 *eiostream << format("{:.2R}", state.dataWeather->OADryBulbAverage.AnnualAvgOADryBulbTemp) << ","
-                           << format("{:.2R}", state.dataWeather->OADryBulbAverage.MonthlyAvgOADryBulbTempMaxDiff) << ","
-                           << "NA\n";
+                           << format("{:.2R}", state.dataWeather->OADryBulbAverage.MonthlyAvgOADryBulbTempMaxDiff) << "," << "NA\n";
             } else {
                 *eiostream << "Site Water Mains Temperature Information,";
-                *eiostream << "FixedDefault"
-                           << ","
-                           << "NA"
-                           << ","
-                           << "NA"
-                           << ","
-                           << "NA"
-                           << "," << format("{:.1R}", 10.0) << '\n';
+                *eiostream << "FixedDefault" << "," << "NA" << "," << "NA" << "," << "NA" << "," << format("{:.1R}", 10.0) << '\n';
             }
             break;
         default:
             *eiostream << "Site Water Mains Temperature Information,";
-            *eiostream << "FixedDefault"
-                       << ","
-                       << "NA"
-                       << ","
-                       << "NA"
-                       << ","
-                       << "NA"
-                       << "," << format("{:.1R}", 10.0) << '\n';
+            *eiostream << "FixedDefault" << "," << "NA" << "," << "NA" << "," << "NA" << "," << format("{:.1R}", 10.0) << '\n';
             break;
         }
 

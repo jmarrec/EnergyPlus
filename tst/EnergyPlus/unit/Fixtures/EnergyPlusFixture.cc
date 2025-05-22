@@ -228,9 +228,7 @@ bool EnergyPlusFixture::compare_err_stream_substring(std::string const &search_s
 {
     auto const stream_str = this->err_stream->str();
     bool const found = stream_str.find(search_string) != std::string::npos;
-    EXPECT_TRUE(found) << "Not found in:"
-                       << "\n"
-                       << stream_str;
+    EXPECT_TRUE(found) << "Not found in:" << "\n" << stream_str;
     if (reset_stream) {
         this->err_stream->str(std::string());
     }
