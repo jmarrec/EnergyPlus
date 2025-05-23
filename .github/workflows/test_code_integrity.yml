@@ -34,7 +34,10 @@ jobs:
 
             begin_group "Find changed files"
             echo "GITHUB_REF=$GITHUB_REF GITHUB_BASE_REF=$GITHUB_BASE_REF GITHUB_HEAD_REF=$GITHUB_HEAD_REF"
-            git fetch --all --quiet
+            # too slow on E+: git fetch --all --quiet
+            # Fetch only base and head branches
+            git fetch origin "$GITHUB_BASE_REF":"refs/remotes/origin/$GITHUB_BASE_REF" --quiet
+            git fetch origin "$GITHUB_HEAD_REF":"refs/remotes/origin/$GITHUB_HEAD_REF" --quiet
             PR_BRANCH_NAME=remotes/origin/$GITHUB_HEAD_REF
             TARGET_BRANCH_NAME=remotes/origin/$GITHUB_BASE_REF
             # first find if any files changed
