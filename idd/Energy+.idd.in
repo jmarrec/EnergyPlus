@@ -82109,12 +82109,12 @@ ThermalStorage:PCM,
        \type real
        \units kg
        \minimum > 0
-	   \required-field
+       \required-field
   N2 ;\field Heat Loss Rate
        \type real
        \units W
        \default 0.0
-	   \required-field
+       \required-field
 
 \group Plant-Condenser Loops
 !*****************PLANT AND CONDENSER LOOP SPECIFICATION*********************
