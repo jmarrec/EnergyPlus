@@ -82073,7 +82073,7 @@ ThermalStorage:ChilledWater:Stratified,
        \default 0.0
 
 ThermalStorage:PCM,
-      \min-fields 8
+      \min-fields 9
       \memo This thermal storage model is PCM-based
       \memo It requires PCM material property connection
       \memo In addition to the object linking, this object needs PCM Latent heat storage capacity and Heat Loss Rate
@@ -82081,32 +82081,40 @@ ThermalStorage:PCM,
   A1, \field Name
       \type alpha
       \required-field
-      \reference HotThermalStorageEquipment
+      \reference-class-name validPlantEquipmentTypes
+      \reference validPlantEquipmentNames
       \reference-class-name validBranchEquipmentTypes
       \reference validBranchEquipmentNames
-  A2, \field Availability Schedule
-      \type object-list
+  A2 , \field Availability Schedule Name
+	   \required-field
+       \type object-list
        \object-list ScheduleNames
-  N1, \field Tank Capacity
-      \required-field
-      \type real
-      \units kg
-  N2, \field Heat Loss Rate
-      \required-field
-      \type real
-      \units W
-  A3, \field Plant Side Inlet Node Name
-      \type node
-      \required-field
-  A4, \field Plant Outlet Node Name
-      \type node
-      \required-field
-  A5, \field Use Side Inlet Node Name
-      \type node
-      \required-field
-  A6; \field Use Side Outlet Node Name
-      \type node
-      \required-field
+  A3 , \field Plant Side Inlet Node Name
+       \type node
+       \required-field
+  A4 , \field Plant Side Outlet Node Name
+       \type node
+       \required-field
+  A5 , \field Use Side Inlet Node Name
+       \type node
+       \required-field
+  A6 , \field Use Side Outlet Node Name
+       \type node
+       \required-field
+  A7 , \field PCM Material Name
+       \type alpha
+       \required-field
+       \object-list MaterialName
+  N1 , \field Tank Capacity
+       \type real
+       \units kg
+       \minimum > 0
+	   \required-field
+  N2 ;\field Heat Loss Rate
+       \type real
+       \units W
+       \default 0.0
+	   \required-field
 
 \group Plant-Condenser Loops
 !*****************PLANT AND CONDENSER LOOP SPECIFICATION*********************
