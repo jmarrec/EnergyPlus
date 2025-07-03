@@ -62,6 +62,7 @@
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantComponent.hh>
 #include <EnergyPlus/PlantUtilities.hh>
+#include <EnergyPlus/HeatBalFiniteDiffManager.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
@@ -372,26 +373,39 @@ namespace PCMStorage {
             ShowSevereError(
                 state, format("{}: Invalid PCM material name: {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(7)));
             ErrorsFound = true;
-            return;
+           } else {
+            // Obtains conduction FD related parameters from input file
+            if (state.dataHeatBalFiniteDiffMgr->GetHBFiniteDiffInputFlag) {
+                HeatBalFiniteDiffManager::GetCondFDInput(state);
+                state.dataHeatBalFiniteDiffMgr->GetHBFiniteDiffInputFlag = false;
+            }
+
+            auto *mat = state.dataMaterial->materials(matNum);
+
+            // If using MaterialProperty:PhaseChange, set hasPCM manually after FD input is read
+            if (!mat->hasPCM) {
+                if (dynamic_cast<Material::MaterialPhaseChange *>(mat) != nullptr) {
+                    mat->hasPCM = true;
+                }
+            }
+
+            if (!mat->hasPCM) {
+                ShowSevereError(state,
+                                format("{}: Material {} is not a phase change material.", state.dataIPShortCut->cCurrentModuleObject, mat->Name));
+                ErrorsFound = true;
+            } else {
+                PCM.PCMMaterialNum = matNum;
+                PCM.PCMmat = dynamic_cast<Material::MaterialPhaseChange *>(mat);
+
+                PCM.TankCapacity = state.dataIPShortCut->rNumericArgs(1);
+                PCM.HeatLossRate = state.dataIPShortCut->rNumericArgs(2);
+
+                PCM.MeltingTemp = PCM.PCMmat->peakTempMelting;
+                PCM.FreezingTemp = PCM.PCMmat->peakTempFreezing;
+                PCM.LatentHeat = PCM.PCMmat->totalLatentHeat;
+                PCM.SpecificHeat = (PCM.PCMmat->specificHeatSolid + PCM.PCMmat->specificHeatLiquid) / 2.0;
+            }
         }
-
-        auto *mat = state.dataMaterial->materials(matNum);
-        if (!mat->hasPCM) {
-            ShowSevereError(state, format("{}: Material {} is not a phase change material.", state.dataIPShortCut->cCurrentModuleObject, mat->Name));
-            ErrorsFound = true;
-            return;
-        }
-
-        PCM.PCMMaterialNum = matNum;
-        PCM.PCMmat = dynamic_cast<Material::MaterialPhaseChange *>(mat);
-
-        PCM.TankCapacity = state.dataIPShortCut->rNumericArgs(1);
-        PCM.HeatLossRate = state.dataIPShortCut->rNumericArgs(2);
-
-        PCM.MeltingTemp = PCM.PCMmat->peakTempMelting;
-        PCM.FreezingTemp = PCM.PCMmat->peakTempFreezing;
-        PCM.LatentHeat = PCM.PCMmat->totalLatentHeat;
-        PCM.SpecificHeat = (PCM.PCMmat->specificHeatSolid + PCM.PCMmat->specificHeatLiquid) / 2.0;
 
         PCM.PlantSideInletNode = NodeInputManager::GetOnlySingleNode(state,
                                                                      state.dataIPShortCut->cAlphaArgs(3),
