@@ -82103,8 +82103,8 @@ ThermalStorage:PCM,
        \required-field
   A7 , \field PCM Material Name
        \type alpha
-       \required-field
        \object-list MaterialName
+	   \required-field
   N1 , \field Tank Capacity
        \type real
        \units kg
