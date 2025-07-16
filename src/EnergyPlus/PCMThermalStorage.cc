@@ -375,24 +375,12 @@ namespace PCMStorage {
             ErrorsFound = true;
            } else {
             // Obtains conduction FD related parameters from input file
-               std::string savedModuleObj = state.dataIPShortCut->cCurrentModuleObject;
+            std::string savedModuleObj = state.dataIPShortCut->cCurrentModuleObject;
 
-               if (state.dataHeatBalFiniteDiffMgr->GetHBFiniteDiffInputFlag) {
-                   HeatBalFiniteDiffManager::GetCondFDInput(state);
-                   state.dataHeatBalFiniteDiffMgr->GetHBFiniteDiffInputFlag = false;
-               }
-
-               // --- Restore the module name for proper error reporting
-               state.dataIPShortCut->cCurrentModuleObject = savedModuleObj;
+           // --- Restore the module name for proper error reporting
+            state.dataIPShortCut->cCurrentModuleObject = savedModuleObj;
 
             auto *mat = state.dataMaterial->materials(matNum);
-
-            // If using MaterialProperty:PhaseChange, set hasPCM manually after FD input is read
-            if (!mat->hasPCM) {
-                if (dynamic_cast<Material::MaterialPhaseChange *>(mat) != nullptr) {
-                    mat->hasPCM = true;
-                }
-            }
 
             if (!mat->hasPCM) {
                 ShowSevereError(state,
