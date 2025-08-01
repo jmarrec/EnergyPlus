@@ -117,45 +117,6 @@ namespace PCMStorage {
             PlantUtilities::ScanPlantLoopsForObject(
                 state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->usePlantLoc, errFlag, _, _, UseSideInletNode, _, _);
 
-            if (errFlag) {
-                ShowFatalError(state, "PCMStorageData::Init: Error scanning plant loops for PCM tank named: " + this->Name);
-            }
-
-            RegisterPCMStorageOutputVariables(state);
-            this->MyPlantScanFlag = false;
-        }
-
-        // Reset at the start of each environment (e.g. design day)
-        if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
-            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).MaxMassFlowRate;
-
-            PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
-
-            /* if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-                 (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
-                 for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                                                      .LoopSide(DataPlant::LoopSideLocation::Supply)
-                                                      .Branch(this->usePlantLoc.branchNum)
-                                                      .TotalComponents;
-                      ++compNum) {
-                     state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                         .LoopSide(DataPlant::LoopSideLocation::Supply)
-                         .Branch(this->usePlantLoc.branchNum)
-                         .Comp(compNum)
-                         .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
-                 }
-             }*/
-
-            // Reset state
-            this->EnergyStored = TankCapacity * LatentHeat;
-            this->PercentCapacity = 100.0;
-
-            this->MyEnvrnFlag = false;
-        }
-
-        if (this->MyPlantScanFlag) {
-            bool errFlag = false;
-
             PlantUtilities::ScanPlantLoopsForObject(
                 state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->sourcePlantLoc, errFlag, _, _, PlantSideInletNode, _, _);
 
@@ -171,22 +132,50 @@ namespace PCMStorage {
         if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
             this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).MaxMassFlowRate;
 
-            PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
+            PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->UseSideInletNode, this->UseSideOutletNode);
 
             /*if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-                (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand)) {
+                (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
                 for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                                                     .LoopSide(DataPlant::LoopSideLocation::Demand)
+                                                     .LoopSide(DataPlant::LoopSideLocation::Supply)
                                                      .Branch(this->usePlantLoc.branchNum)
                                                      .TotalComponents;
                      ++compNum) {
                     state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                        .LoopSide(DataPlant::LoopSideLocation::Demand)
+                        .LoopSide(DataPlant::LoopSideLocation::Supply)
                         .Branch(this->usePlantLoc.branchNum)
                         .Comp(compNum)
                         .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                 }
             }*/
+
+            // Reset state
+            this->EnergyStored = TankCapacity * LatentHeat;
+            this->PercentCapacity = 100.0;
+
+            this->MyEnvrnFlag = false;
+        }
+
+        // Reset at the start of each environment (e.g. design day)
+        if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
+            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum).MaxMassFlowRate;
+
+            PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
+
+            /* if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+                 (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand)) {
+                 for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
+                                                      .LoopSide(DataPlant::LoopSideLocation::Demand)
+                                                      .Branch(this->usePlantLoc.branchNum)
+                                                      .TotalComponents;
+                      ++compNum) {
+                     state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
+                         .LoopSide(DataPlant::LoopSideLocation::Demand)
+                         .Branch(this->usePlantLoc.branchNum)
+                         .Comp(compNum)
+                         .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+                 }
+             }*/
 
             // Reset state
             this->EnergyStored = TankCapacity * LatentHeat;
