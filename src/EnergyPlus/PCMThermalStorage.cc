@@ -54,6 +54,7 @@
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
+#include <EnergyPlus/HeatBalFiniteDiffManager.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
@@ -62,7 +63,6 @@
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantComponent.hh>
 #include <EnergyPlus/PlantUtilities.hh>
-#include <EnergyPlus/HeatBalFiniteDiffManager.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
@@ -114,7 +114,8 @@ namespace PCMStorage {
         if (this->MyPlantScanFlag) {
             bool errFlag = false;
 
-            PlantUtilities::ScanPlantLoopsForObject(state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->plantLoc, errFlag, _, _, _, _, _);
+            PlantUtilities::ScanPlantLoopsForObject(
+                state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->usePlantLoc, errFlag, _, _, UseSideInletNode, _, _);
 
             if (errFlag) {
                 ShowFatalError(state, "PCMStorageData::Init: Error scanning plant loops for PCM tank named: " + this->Name);
@@ -126,27 +127,69 @@ namespace PCMStorage {
 
         // Reset at the start of each environment (e.g. design day)
         if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
-            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).MaxMassFlowRate;
+            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).MaxMassFlowRate;
 
             PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
 
-            if ((state.dataPlnt->PlantLoop(this->plantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-                (this->plantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
-                for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                                                     .LoopSide(DataPlant::LoopSideLocation::Supply)
-                                                     .Branch(this->plantLoc.branchNum)
+            /* if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+                 (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
+                 for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
+                                                      .LoopSide(DataPlant::LoopSideLocation::Supply)
+                                                      .Branch(this->usePlantLoc.branchNum)
+                                                      .TotalComponents;
+                      ++compNum) {
+                     state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
+                         .LoopSide(DataPlant::LoopSideLocation::Supply)
+                         .Branch(this->usePlantLoc.branchNum)
+                         .Comp(compNum)
+                         .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+                 }
+             }*/
+
+            // Reset state
+            this->EnergyStored = TankCapacity * LatentHeat;
+            this->PercentCapacity = 100.0;
+
+            this->MyEnvrnFlag = false;
+        }
+
+        if (this->MyPlantScanFlag) {
+            bool errFlag = false;
+
+            PlantUtilities::ScanPlantLoopsForObject(
+                state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->sourcePlantLoc, errFlag, _, _, PlantSideInletNode, _, _);
+
+            if (errFlag) {
+                ShowFatalError(state, "PCMStorageData::Init: Error scanning plant loops for PCM tank named: " + this->Name);
+            }
+
+            RegisterPCMStorageOutputVariables(state);
+            this->MyPlantScanFlag = false;
+        }
+
+        // Reset at the start of each environment (e.g. design day)
+        if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
+            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).MaxMassFlowRate;
+
+            PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
+
+            /*if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+                (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand)) {
+                for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
+                                                     .LoopSide(DataPlant::LoopSideLocation::Demand)
+                                                     .Branch(this->usePlantLoc.branchNum)
                                                      .TotalComponents;
                      ++compNum) {
-                    state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                        .LoopSide(DataPlant::LoopSideLocation::Supply)
-                        .Branch(this->plantLoc.branchNum)
+                    state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
+                        .LoopSide(DataPlant::LoopSideLocation::Demand)
+                        .Branch(this->usePlantLoc.branchNum)
                         .Comp(compNum)
                         .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                 }
-            }
+            }*/
 
             // Reset state
-            this->EnergyStored = 0.0;
+            this->EnergyStored = TankCapacity * LatentHeat;
             this->PercentCapacity = 100.0;
 
             this->MyEnvrnFlag = false;
@@ -156,25 +199,35 @@ namespace PCMStorage {
             this->MyEnvrnFlag = true;
         }
 
-        // Always recheck schedule (safe, and efficient)
-        this->AvailabilityScheduleIndex = Sched::GetScheduleNum(state, this->AvailabilityScheduleName);
-        if (this->AvailabilityScheduleIndex == 0) {
-            ShowFatalError(state, "PCMStorageData::Init: Invalid schedule name: " + this->AvailabilityScheduleName);
+        Real64 avail = this->AvailabilitySchedule->getCurrentVal();
+        Real64 FlowResult = 0.0;
+        if (this->UseSideInletNode > 0) { // setup mass flows for plant connections
+            if (avail <= 0.0) {
+                FlowResult = 0.0;
+            } else {
+                FlowResult = state.dataLoopNodes->Node(this->UseSideInletNode).MassFlowRate;
+            }
+            PlantUtilities::SetComponentFlowRate(state, FlowResult, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
+        }
+
+        if (this->PlantSideInletNode > 0) { // setup mass flows for plant connections
+            if (avail <= 0.0) {
+                FlowResult = 0.0;
+            } else {
+                FlowResult = state.dataLoopNodes->Node(this->PlantSideInletNode).MassFlowRate;
+            }
+            PlantUtilities::SetComponentFlowRate(state, FlowResult, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
         }
     }
 
-    void PCMStorageData::Calculate(EnergyPlusData &state, PlantLocation const &)
+    void PCMStorageData::Calculate(EnergyPlusData &state, PlantLocation const &plantLoc)
     {
         auto &useInlet = state.dataLoopNodes->Node(UseSideInletNode);
         auto &useOutlet = state.dataLoopNodes->Node(UseSideOutletNode);
         auto &plantInlet = state.dataLoopNodes->Node(PlantSideInletNode);
         auto &plantOutlet = state.dataLoopNodes->Node(PlantSideOutletNode);
 
-        int index = Sched::GetScheduleNum(state, this->AvailabilityScheduleName);
-
-        Sched::Schedule *schedPtr = state.dataSched->schedules[index];
-
-        Real64 avail = schedPtr->getCurrentVal();
+        Real64 avail = this->AvailabilitySchedule->getCurrentVal();
 
         if (avail <= 0.0) return;
 
@@ -368,16 +421,24 @@ namespace PCMStorage {
         PCM.Name = state.dataIPShortCut->cAlphaArgs(1);
         PCM.AvailabilityScheduleName = state.dataIPShortCut->cAlphaArgs(2);
 
+        ErrorObjectHeader eoh{RoutineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(2)};
+        if (state.dataIPShortCut->lAlphaFieldBlanks(2)) {
+            PCM.AvailabilitySchedule = Sched::GetScheduleAlwaysOn(state);
+        } else if ((PCM.AvailabilitySchedule = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(2))) == nullptr) {
+            ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2));
+            ErrorsFound = true;
+        }
+
         int matNum = Material::GetMaterialNum(state, state.dataIPShortCut->cAlphaArgs(7));
         if (matNum == 0) {
             ShowSevereError(
                 state, format("{}: Invalid PCM material name: {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(7)));
             ErrorsFound = true;
-           } else {
+        } else {
             // Obtains conduction FD related parameters from input file
             std::string savedModuleObj = state.dataIPShortCut->cCurrentModuleObject;
 
-           // --- Restore the module name for proper error reporting
+            // --- Restore the module name for proper error reporting
             state.dataIPShortCut->cCurrentModuleObject = savedModuleObj;
 
             auto *mat = state.dataMaterial->materials(matNum);

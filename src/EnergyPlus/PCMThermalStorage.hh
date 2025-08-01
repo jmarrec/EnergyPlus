@@ -80,14 +80,15 @@ namespace PCMStorage {
         Real64 Effectiveness = 0.9;                      // HX effectiveness (optional input)
 
         // Plant loop connection info
-        EnergyPlus::PlantLocation plantLoc;
+        EnergyPlus::PlantLocation sourcePlantLoc;
         int PlantSideInletNode = 0;
         int PlantSideOutletNode = 0;
+        EnergyPlus::PlantLocation usePlantLoc;
         int UseSideInletNode = 0;
         int UseSideOutletNode = 0;
 
         // Schedule reference
-        int AvailabilityScheduleIndex = 0;
+        Sched::Schedule *AvailabilitySchedule = nullptr;
 
         // Dynamic State Variables
         Real64 PCM_TankTemp = 0.0;       // C, estimated from enthalpy
