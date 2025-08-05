@@ -115,10 +115,10 @@ namespace PCMStorage {
             bool errFlag = false;
 
             PlantUtilities::ScanPlantLoopsForObject(
-                state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->usePlantLoc, errFlag, _, _, UseSideInletNode, _, _);
+                state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->usePlantLoc, errFlag, _, _, _, UseSideInletNode, _, _);
 
             PlantUtilities::ScanPlantLoopsForObject(
-                state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->sourcePlantLoc, errFlag, _, _, PlantSideInletNode, _, _);
+                state, this->Name, DataPlant::PlantEquipmentType::TS_PCM, this->sourcePlantLoc, errFlag, _, _, _, PlantSideInletNode, _, _);
 
             if (errFlag) {
                 ShowFatalError(state, "PCMStorageData::Init: Error scanning plant loops for PCM tank named: " + this->Name);
@@ -274,25 +274,24 @@ namespace PCMStorage {
         // Apply operation mode
         if (discharging) {
             EnergyStored += useheatTransfer - HeatLossRate_W;
-            PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
             useOutlet.Temp = useOutletTemp;
             massFlowPlant = 0.0;
             PlantUtilities::SetComponentFlowRate(state, massFlowPlant, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
         } else if (charging) {
             EnergyStored += plantheatTransfer - HeatLossRate_W;
-            PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
             plantOutlet.Temp = plantOutletTemp;
             plantOutlet.MassFlowRate = plantInlet.MassFlowRate;
             massFlowUse = 0.0;
             PlantUtilities::SetComponentFlowRate(state, massFlowUse, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         } else {
             EnergyStored -= HeatLossRate_W;
-            PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
             massFlowPlant = 0.0;
             PlantUtilities::SetComponentFlowRate(state, massFlowPlant, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
             massFlowUse = 0.0;
             PlantUtilities::SetComponentFlowRate(state, massFlowUse, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         }
+        EnergyStored = max(0.0, min(EnergyStored, TankCapacity * LatentHeat));
+        PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
     }
 
     void RegisterPCMStorageOutputVariables(EnergyPlusData &state)
