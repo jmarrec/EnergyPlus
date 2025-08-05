@@ -124,7 +124,7 @@ namespace PCMStorage {
                 ShowFatalError(state, "PCMStorageData::Init: Error scanning plant loops for PCM tank named: " + this->Name);
             }
 
-            RegisterPCMStorageOutputVariables(state);
+            EnergyPlus::PCMStorage::RegisterPCMStorageOutputVariables(state);
             this->MyPlantScanFlag = false;
         }
 
@@ -229,7 +229,15 @@ namespace PCMStorage {
 
         Real64 deltaTUse = useInlet.Temp - useOutletTemp;       // Heat to Water Heater
         Real64 deltaTPlant = plantInlet.Temp - plantOutletTemp; // Heat to PCM Tank
-
+        if (avail <= 0.0) {
+            useInlet.MassFlowRate = 0.0;
+            useOutlet.MassFlowRate = 0.0;
+            plantInlet.MassFlowRate = 0.0;
+            plantOutlet.MassFlowRate = 0.0;
+            return;
+        }
+        PlantUtilities::SafeCopyPlantNode(state, this->UseSideInletNode, this->UseSideOutletNode);
+        PlantUtilities::SafeCopyPlantNode(state, this->PlantSideInletNode, this->PlantSideOutletNode);
         Real64 useheatTransfer = massFlowUse * CpWater * deltaTUse;       // Heat to Water Heater
         Real64 plantheatTransfer = massFlowPlant * CpWater * deltaTPlant; // Heat to PCM Tank
         HeatLossRate_W = HeatLossRate;
@@ -266,21 +274,30 @@ namespace PCMStorage {
         // Apply operation mode
         if (discharging) {
             EnergyStored += useheatTransfer - HeatLossRate_W;
+            PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
             useOutlet.Temp = useOutletTemp;
+            massFlowPlant = 0.0;
+            PlantUtilities::SetComponentFlowRate(state, massFlowPlant, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
         } else if (charging) {
             EnergyStored += plantheatTransfer - HeatLossRate_W;
+            PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
             plantOutlet.Temp = plantOutletTemp;
+            plantOutlet.MassFlowRate = plantInlet.MassFlowRate;
+            massFlowUse = 0.0;
+            PlantUtilities::SetComponentFlowRate(state, massFlowUse, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         } else {
             EnergyStored -= HeatLossRate_W;
+            PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
+            massFlowPlant = 0.0;
+            PlantUtilities::SetComponentFlowRate(state, massFlowPlant, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
+            massFlowUse = 0.0;
+            PlantUtilities::SetComponentFlowRate(state, massFlowUse, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         }
-
-        EnergyStored = max(0.0, min(EnergyStored, TankCapacity * LatentHeat));
-        PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
     }
 
     void RegisterPCMStorageOutputVariables(EnergyPlusData &state)
     {
-        auto &PCM = PCMStorageData::instance();
+        auto &PCM = EnergyPlus::PCMStorage::PCMStorageData::instance();
 
         using Constant::Units;
         using OutputProcessor::StoreType;
@@ -366,9 +383,9 @@ namespace PCMStorage {
                             PCM.Name);
     }
 
-    PCMStorageData &PCMStorageData::instance()
+    EnergyPlus::PCMStorage::PCMStorageData &EnergyPlus::PCMStorage::PCMStorageData::instance()
     {
-        static PCMStorageData inst;
+        static EnergyPlus::PCMStorage::PCMStorageData inst;
         return inst;
     }
 
@@ -376,7 +393,7 @@ namespace PCMStorage {
     {
         constexpr std::string_view RoutineName = "GetPCMStorageInput";
 
-        auto &PCM = PCMStorageData::instance();
+        auto &PCM = EnergyPlus::PCMStorage::PCMStorageData::instance();
         bool ErrorsFound = false;
 
         int NumPCMObjs = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "ThermalStorage:PCM");
@@ -513,6 +530,5 @@ namespace PCMStorage {
             ShowFatalError(state, format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
         }
     }
-
 } // namespace PCMStorage
 } // namespace EnergyPlus
