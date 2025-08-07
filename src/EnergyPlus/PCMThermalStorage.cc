@@ -127,27 +127,27 @@ namespace PCMStorage {
             EnergyPlus::PCMStorage::RegisterPCMStorageOutputVariables(state);
             this->MyPlantScanFlag = false;
         }
-
+        Real64 rho = 998.2;
         // Reset at the start of each environment (e.g. design day)
         if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
-            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).MaxMassFlowRate;
 
-            PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->UseSideInletNode, this->UseSideOutletNode);
+            this->UseSideMassFlowRate = this->UseSideDesignFlowRate * rho;
+            PlantUtilities::InitComponentNodes(state, 0.0, this->UseSideMassFlowRate, this->UseSideInletNode, this->UseSideOutletNode);
 
             /*if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-                (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
-                for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                                                     .LoopSide(DataPlant::LoopSideLocation::Supply)
-                                                     .Branch(this->usePlantLoc.branchNum)
-                                                     .TotalComponents;
-                     ++compNum) {
-                    state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                        .LoopSide(DataPlant::LoopSideLocation::Supply)
-                        .Branch(this->usePlantLoc.branchNum)
-                        .Comp(compNum)
-                        .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
-                }
-            }*/
+    (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {*/
+            for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
+                                                 .LoopSide(this->usePlantLoc.loopSideNum)
+                                                 .Branch(this->usePlantLoc.branchNum)
+                                                 .TotalComponents;
+                 ++compNum) {
+                state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
+                    .LoopSide(this->usePlantLoc.loopSideNum)
+                    .Branch(this->usePlantLoc.branchNum)
+                    .Comp(compNum)
+                    .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+            }
+            /*}*/
 
             // Reset state
             this->EnergyStored = TankCapacity * LatentHeat;
@@ -158,24 +158,25 @@ namespace PCMStorage {
 
         // Reset at the start of each environment (e.g. design day)
         if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
-            this->DesignMassFlowRate = state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum).MaxMassFlowRate;
 
-            PlantUtilities::InitComponentNodes(state, 0.0, this->DesignMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
+            this->PlantSideMassFlowRate = this->PlantSideDesignFlowRate * rho;
 
-            /* if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-                 (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand)) {
-                 for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                                                      .LoopSide(DataPlant::LoopSideLocation::Demand)
-                                                      .Branch(this->usePlantLoc.branchNum)
-                                                      .TotalComponents;
-                      ++compNum) {
-                     state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                         .LoopSide(DataPlant::LoopSideLocation::Demand)
-                         .Branch(this->usePlantLoc.branchNum)
-                         .Comp(compNum)
-                         .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
-                 }
-             }*/
+            PlantUtilities::InitComponentNodes(state, 0.0, this->PlantSideMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
+
+            /*if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+                (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand)) {*/
+            for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum)
+                                                 .LoopSide(this->sourcePlantLoc.loopSideNum)
+                                                 .Branch(this->sourcePlantLoc.branchNum)
+                                                 .TotalComponents;
+                 ++compNum) {
+                state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum)
+                    .LoopSide(this->sourcePlantLoc.loopSideNum)
+                    .Branch(this->sourcePlantLoc.branchNum)
+                    .Comp(compNum)
+                    .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+            }
+            /*}*/
 
             // Reset state
             this->EnergyStored = TankCapacity * LatentHeat;
@@ -189,14 +190,17 @@ namespace PCMStorage {
         }
 
         Real64 avail = this->AvailabilitySchedule->getCurrentVal();
-        Real64 FlowResult = 0.0;
+        Real64 FlowResult = this->DesignMassFlowRate;
         if (this->UseSideInletNode > 0) { // setup mass flows for plant connections
             if (avail <= 0.0) {
                 FlowResult = 0.0;
             } else {
                 FlowResult = state.dataLoopNodes->Node(this->UseSideInletNode).MassFlowRate;
             }
-            PlantUtilities::SetComponentFlowRate(state, FlowResult, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
+            /*PlantUtilities::SetComponentFlowRate(state, FlowResult, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);*/
+            Real64 useSideFlow = (avail > 0.0) ? this->UseSideDesignFlowRate : 0.0;
+
+            PlantUtilities::SetComponentFlowRate(state, useSideFlow, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         }
 
         if (this->PlantSideInletNode > 0) { // setup mass flows for plant connections
@@ -205,7 +209,10 @@ namespace PCMStorage {
             } else {
                 FlowResult = state.dataLoopNodes->Node(this->PlantSideInletNode).MassFlowRate;
             }
-            PlantUtilities::SetComponentFlowRate(state, FlowResult, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
+            /*PlantUtilities::SetComponentFlowRate(state, FlowResult, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);*/
+            Real64 plantSideFlow = (avail > 0.0) ? this->PlantSideDesignFlowRate : 0.0;
+
+            PlantUtilities::SetComponentFlowRate(state, plantSideFlow, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
         }
     }
 
@@ -292,6 +299,8 @@ namespace PCMStorage {
         }
         EnergyStored = max(0.0, min(EnergyStored, TankCapacity * LatentHeat));
         PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
+        Real64 maxLoopTemp = state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp;
+        plantOutlet.Temp = min(plantOutlet.Temp, maxLoopTemp);
     }
 
     void RegisterPCMStorageOutputVariables(EnergyPlusData &state)
@@ -458,6 +467,19 @@ namespace PCMStorage {
 
                 PCM.TankCapacity = state.dataIPShortCut->rNumericArgs(1);
                 PCM.HeatLossRate = state.dataIPShortCut->rNumericArgs(2);
+                PCM.UseSideDesignFlowRate = state.dataIPShortCut->rNumericArgs(3);
+                PCM.PlantSideDesignFlowRate = state.dataIPShortCut->rNumericArgs(4);
+
+                if (PCM.UseSideDesignFlowRate <= 0.0) {
+                    ShowSevereError(state,
+                                    format("{}={}, Use Side Design Flow Rate must be > 0.0.", state.dataIPShortCut->cCurrentModuleObject, PCM.Name));
+                    ErrorsFound = true;
+                }
+                if (PCM.PlantSideDesignFlowRate <= 0.0) {
+                    ShowSevereError(
+                        state, format("{}={}, Plant Side Design Flow Rate must be > 0.0.", state.dataIPShortCut->cCurrentModuleObject, PCM.Name));
+                    ErrorsFound = true;
+                }
 
                 PCM.MeltingTemp = PCM.PCMmat->peakTempMelting;
                 PCM.FreezingTemp = PCM.PCMmat->peakTempFreezing;

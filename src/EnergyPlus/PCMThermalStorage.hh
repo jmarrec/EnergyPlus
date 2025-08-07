@@ -98,6 +98,10 @@ namespace PCMStorage {
         Real64 useheatTransfer = 0.0;    // W
         Real64 plantheatTransfer = 0.0;  // W
         Real64 DesignMassFlowRate = 0.0; // kg/s
+        Real64 UseSideDesignFlowRate = 0.0;
+        Real64 PlantSideDesignFlowRate = 0.0;
+        Real64 UseSideMassFlowRate = 0.0;
+        Real64 PlantSideMassFlowRate = 0.0;
 
         // Required functions
         void Init(EnergyPlusData &state);
