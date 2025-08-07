@@ -134,8 +134,8 @@ namespace PCMStorage {
             this->UseSideMassFlowRate = this->UseSideDesignFlowRate * rho;
             PlantUtilities::InitComponentNodes(state, 0.0, this->UseSideMassFlowRate, this->UseSideInletNode, this->UseSideOutletNode);
 
-            /*if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-    (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {*/
+            // if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+            //(this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
             for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
                                                  .LoopSide(this->usePlantLoc.loopSideNum)
                                                  .Branch(this->usePlantLoc.branchNum)
@@ -147,7 +147,6 @@ namespace PCMStorage {
                     .Comp(compNum)
                     .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
             }
-            /*}*/
 
             // Reset state
             this->EnergyStored = TankCapacity * LatentHeat;
@@ -163,8 +162,8 @@ namespace PCMStorage {
 
             PlantUtilities::InitComponentNodes(state, 0.0, this->PlantSideMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
 
-            /*if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-                (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand)) {*/
+            // if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
+            //   (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand)) {
             for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum)
                                                  .LoopSide(this->sourcePlantLoc.loopSideNum)
                                                  .Branch(this->sourcePlantLoc.branchNum)
@@ -176,7 +175,6 @@ namespace PCMStorage {
                     .Comp(compNum)
                     .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
             }
-            /*}*/
 
             // Reset state
             this->EnergyStored = TankCapacity * LatentHeat;
@@ -197,7 +195,7 @@ namespace PCMStorage {
             } else {
                 FlowResult = state.dataLoopNodes->Node(this->UseSideInletNode).MassFlowRate;
             }
-            /*PlantUtilities::SetComponentFlowRate(state, FlowResult, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);*/
+            // PlantUtilities::SetComponentFlowRate(state, FlowResult, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
             Real64 useSideFlow = (avail > 0.0) ? this->UseSideDesignFlowRate : 0.0;
 
             PlantUtilities::SetComponentFlowRate(state, useSideFlow, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
@@ -209,7 +207,7 @@ namespace PCMStorage {
             } else {
                 FlowResult = state.dataLoopNodes->Node(this->PlantSideInletNode).MassFlowRate;
             }
-            /*PlantUtilities::SetComponentFlowRate(state, FlowResult, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);*/
+            // PlantUtilities::SetComponentFlowRate(state, FlowResult, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
             Real64 plantSideFlow = (avail > 0.0) ? this->PlantSideDesignFlowRate : 0.0;
 
             PlantUtilities::SetComponentFlowRate(state, plantSideFlow, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
@@ -225,8 +223,6 @@ namespace PCMStorage {
 
         Real64 avail = this->AvailabilitySchedule->getCurrentVal();
 
-        if (avail <= 0.0) return;
-
         Real64 CpWater = 4180.0; // J/kg-C
         Real64 massFlowUse = useInlet.MassFlowRate;
         Real64 massFlowPlant = plantInlet.MassFlowRate;
@@ -236,6 +232,9 @@ namespace PCMStorage {
 
         Real64 deltaTUse = useInlet.Temp - useOutletTemp;       // Heat to Water Heater
         Real64 deltaTPlant = plantInlet.Temp - plantOutletTemp; // Heat to PCM Tank
+        PlantUtilities::SafeCopyPlantNode(state, this->UseSideInletNode, this->UseSideOutletNode);
+        PlantUtilities::SafeCopyPlantNode(state, this->PlantSideInletNode, this->PlantSideOutletNode);
+
         if (avail <= 0.0) {
             useInlet.MassFlowRate = 0.0;
             useOutlet.MassFlowRate = 0.0;
@@ -243,8 +242,7 @@ namespace PCMStorage {
             plantOutlet.MassFlowRate = 0.0;
             return;
         }
-        PlantUtilities::SafeCopyPlantNode(state, this->UseSideInletNode, this->UseSideOutletNode);
-        PlantUtilities::SafeCopyPlantNode(state, this->PlantSideInletNode, this->PlantSideOutletNode);
+
         Real64 useheatTransfer = massFlowUse * CpWater * deltaTUse;       // Heat to Water Heater
         Real64 plantheatTransfer = massFlowPlant * CpWater * deltaTPlant; // Heat to PCM Tank
         HeatLossRate_W = HeatLossRate;
@@ -305,89 +303,110 @@ namespace PCMStorage {
 
     void RegisterPCMStorageOutputVariables(EnergyPlusData &state)
     {
-        auto &PCM = EnergyPlus::PCMStorage::PCMStorageData::instance();
+        EnergyPlus::PCMStorage::PCMStorageData &PCM = EnergyPlus::PCMStorage::PCMStorageData::instance();
 
-        using Constant::Units;
-        using OutputProcessor::StoreType;
-        using OutputProcessor::TimeStepType;
+        SetupOutputVariable(state,
+                            "Thermal Energy Storage Percent Capacity",
+                            Constant::Units::None,
+                            PCM.PercentCapacity,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
+                            PCM.Name);
 
-        SetupOutputVariable(
-            state, "Thermal Energy Storage Percent Capacity", Units::None, PCM.PercentCapacity, TimeStepType::System, StoreType::Average, PCM.Name);
+        SetupOutputVariable(state,
+                            "Thermal Energy Storage Heat Loss Rate",
+                            Constant::Units::W,
+                            PCM.HeatLossRate_W,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
+                            PCM.Name);
 
-        SetupOutputVariable(
-            state, "Thermal Energy Storage Heat Loss Rate", Units::W, PCM.HeatLossRate_W, TimeStepType::System, StoreType::Average, PCM.Name);
+        SetupOutputVariable(state,
+                            "Thermal Energy Storage Energy Stored",
+                            Constant::Units::W,
+                            PCM.EnergyStored,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
+                            PCM.Name);
 
-        SetupOutputVariable(
-            state, "Thermal Energy Storage Energy Stored", Units::W, PCM.EnergyStored, TimeStepType::System, StoreType::Average, PCM.Name);
-
-        SetupOutputVariable(
-            state, "Thermal Energy Storage Tank Temperature", Units::C, PCM.PCM_TankTemp, TimeStepType::System, StoreType::Average, PCM.Name);
+        SetupOutputVariable(state,
+                            "Thermal Energy Storage Tank Temperature",
+                            Constant::Units::C,
+                            PCM.PCM_TankTemp,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
+                            PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Use Side Heat Transfer Rate",
-                            Units::W,
+                            Constant::Units::W,
                             PCM.useheatTransfer,
-                            TimeStepType::System,
-                            StoreType::Average,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Plant Side Heat Transfer Rate",
-                            Units::W,
+                            Constant::Units::W,
                             PCM.plantheatTransfer,
-                            TimeStepType::System,
-                            StoreType::Average,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
 
-        SetupOutputVariable(
-            state, "Thermal Energy Storage Latent Heat Capacity", Units::J, PCM.EnergyStored, TimeStepType::System, StoreType::Sum, PCM.Name);
+        SetupOutputVariable(state,
+                            "Thermal Energy Storage Latent Heat Capacity",
+                            Constant::Units::J,
+                            PCM.EnergyStored,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Sum,
+                            PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Use Side Inlet Temperature",
-                            Units::C,
+                            Constant::Units::C,
                             state.dataLoopNodes->Node(PCM.UseSideInletNode).Temp,
-                            TimeStepType::System,
-                            StoreType::Average,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Use Side Outlet Temperature",
-                            Units::C,
+                            Constant::Units::C,
                             state.dataLoopNodes->Node(PCM.UseSideOutletNode).Temp,
-                            TimeStepType::System,
-                            StoreType::Average,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Use Side Mass Flow Rate",
-                            Units::kg_s,
+                            Constant::Units::kg_s,
                             state.dataLoopNodes->Node(PCM.UseSideInletNode).MassFlowRate,
-                            TimeStepType::System,
-                            StoreType::Average,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Plant Side Inlet Temperature",
-                            Units::C,
+                            Constant::Units::C,
                             state.dataLoopNodes->Node(PCM.PlantSideInletNode).Temp,
-                            TimeStepType::System,
-                            StoreType::Average,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Plant Side Outlet Temperature",
-                            Units::C,
+                            Constant::Units::C,
                             state.dataLoopNodes->Node(PCM.PlantSideOutletNode).Temp,
-                            TimeStepType::System,
-                            StoreType::Average,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Plant Side Mass Flow Rate",
-                            Units::kg_s,
+                            Constant::Units::kg_s,
                             state.dataLoopNodes->Node(PCM.PlantSideInletNode).MassFlowRate,
-                            TimeStepType::System,
-                            StoreType::Average,
+                            EnergyPlus::OutputProcessor::TimeStepType::System,
+                            EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
     }
 

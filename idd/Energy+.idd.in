@@ -82073,7 +82073,7 @@ ThermalStorage:ChilledWater:Stratified,
        \default 0.0
 
 ThermalStorage:PCM,
-      \min-fields 9
+      \min-fields 11
       \memo This thermal storage model is PCM-based
       \memo It requires PCM material property connection
       \memo In addition to the object linking, this object needs PCM Latent heat storage capacity and Heat Loss Rate
@@ -82110,10 +82110,19 @@ ThermalStorage:PCM,
        \units kg
        \minimum > 0
        \required-field
-  N2 ; \field Heat Loss Rate
+  N2 , \field Heat Loss Rate
        \type real
        \units W
        \default 0.0
+  N3 , \field Use Side Design Flow Rate
+       \type real
+       \units m3/s
+       \minimum > 0
+       \required-field
+  N4 ; \field Plant Side Design Flow Rate
+       \type real
+       \units m3/s
+       \minimum > 0
        \required-field
   
 
