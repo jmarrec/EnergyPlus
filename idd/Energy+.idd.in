@@ -82109,6 +82109,7 @@ ThermalStorage:PCM,
        \type real
        \units kg
        \minimum > 0
+	   \autosizable
        \required-field
   N2 , \field Heat Loss Rate
        \type real
@@ -82118,11 +82119,13 @@ ThermalStorage:PCM,
        \type real
        \units m3/s
        \minimum > 0
+	   \autosizable
        \required-field
   N4 ; \field Plant Side Design Flow Rate
        \type real
        \units m3/s
        \minimum > 0
+	   \autosizable
        \required-field
   
 

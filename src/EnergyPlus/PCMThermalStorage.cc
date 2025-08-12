@@ -66,6 +66,8 @@
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
+#include <algorithm> // for std::max used in autosizing
+
 namespace EnergyPlus {
 namespace PCMStorage {
 
@@ -128,14 +130,56 @@ namespace PCMStorage {
             this->MyPlantScanFlag = false;
         }
         Real64 rho = 998.2;
-        // Reset at the start of each environment (e.g. design day)
+        // At the beginning of each new environment (e.g. design day) perform one-time initializations.
         if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
-
+            // Determine design flow rates when the user has requested autosizing (indicated by a value <= 0).
+            // If the design flow rates are already positive the code will use them as-is.  Otherwise it will
+            // attempt to infer a reasonable flow from the connected plant loop or use a small default value.
+            if (this->UseSideDesignFlowRate <= 0.0) {
+                // Try to use the current inlet mass flow rate from the plant loop as a starting point.
+                Real64 initMassFlow = 0.0;
+                if (this->UseSideInletNode > 0) {
+                    initMassFlow = state.dataLoopNodes->Node(this->UseSideInletNode).MassFlowRate;
+                }
+                if (initMassFlow > 0.0) {
+                    this->UseSideDesignFlowRate = initMassFlow / rho;
+                } else if (this->PlantSideDesignFlowRate > 0.0) {
+                    this->UseSideDesignFlowRate = this->PlantSideDesignFlowRate;
+                } else {
+                    // Fall back to a nominal small flow of 1.0e-4 m3/s if no information is available.
+                    this->UseSideDesignFlowRate = 1.0e-4;
+                }
+            }
+            if (this->PlantSideDesignFlowRate <= 0.0) {
+                Real64 initMassFlow = 0.0;
+                if (this->PlantSideInletNode > 0) {
+                    initMassFlow = state.dataLoopNodes->Node(this->PlantSideInletNode).MassFlowRate;
+                }
+                if (initMassFlow > 0.0) {
+                    this->PlantSideDesignFlowRate = initMassFlow / rho;
+                } else {
+                    // If nothing else is known use the use side design flow rate as the plant side design flow rate.
+                    this->PlantSideDesignFlowRate = this->UseSideDesignFlowRate;
+                }
+            }
+            // Convert design volumetric flow rates (m3/s) to mass flow rates (kg/s).
             this->UseSideMassFlowRate = this->UseSideDesignFlowRate * rho;
-            PlantUtilities::InitComponentNodes(state, 0.0, this->UseSideMassFlowRate, this->UseSideInletNode, this->UseSideOutletNode);
+            this->PlantSideMassFlowRate = this->PlantSideDesignFlowRate * rho;
 
-            // if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-            //(this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply)) {
+            // If the tank capacity has been set to zero or negative (autosize request), estimate a capacity.
+            // The estimate here is based on storing one hour of flow on the larger of the use side or plant side.
+            // This provides a reasonable latent mass storage size without relying on external sizing objects.
+            if (this->TankCapacity <= 0.0) {
+                Real64 designMassFlow = std::max(this->UseSideMassFlowRate, this->PlantSideMassFlowRate);
+                // Store one hour (3600 s) of flow.
+                this->TankCapacity = designMassFlow * 3600.0;
+            }
+
+            // Initialize the component nodes with the calculated maximum mass flow limits.
+            PlantUtilities::InitComponentNodes(state, 0.0, this->UseSideMassFlowRate, this->UseSideInletNode, this->UseSideOutletNode);
+            PlantUtilities::InitComponentNodes(state, 0.0, this->PlantSideMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
+
+            // Set the component flow priorities so that the plant loop will attempt to deliver the required flow.
             for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
                                                  .LoopSide(this->usePlantLoc.loopSideNum)
                                                  .Branch(this->usePlantLoc.branchNum)
@@ -147,23 +191,6 @@ namespace PCMStorage {
                     .Comp(compNum)
                     .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
             }
-
-            // Reset state
-            this->EnergyStored = TankCapacity * LatentHeat;
-            this->PercentCapacity = 100.0;
-
-            this->MyEnvrnFlag = false;
-        }
-
-        // Reset at the start of each environment (e.g. design day)
-        if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
-
-            this->PlantSideMassFlowRate = this->PlantSideDesignFlowRate * rho;
-
-            PlantUtilities::InitComponentNodes(state, 0.0, this->PlantSideMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
-
-            // if ((state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).CommonPipeType == DataPlant::CommonPipeType::TwoWay) &&
-            //   (this->usePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand)) {
             for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum)
                                                  .LoopSide(this->sourcePlantLoc.loopSideNum)
                                                  .Branch(this->sourcePlantLoc.branchNum)
@@ -176,41 +203,33 @@ namespace PCMStorage {
                     .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
             }
 
-            // Reset state
-            this->EnergyStored = TankCapacity * LatentHeat;
+            // Reset state variables for the start of the new environment.
+            this->EnergyStored = this->TankCapacity * this->LatentHeat;
             this->PercentCapacity = 100.0;
 
+            // Flag that the initialization for this environment is complete.
             this->MyEnvrnFlag = false;
         }
 
+        // When BeginEnvrnFlag is reset at the end of a sizing period, allow the initialization to occur again for the next environment.
         if (!state.dataGlobal->BeginEnvrnFlag) {
             this->MyEnvrnFlag = true;
         }
 
         Real64 avail = this->AvailabilitySchedule->getCurrentVal();
-        Real64 FlowResult = this->DesignMassFlowRate;
-        if (this->UseSideInletNode > 0) { // setup mass flows for plant connections
-            if (avail <= 0.0) {
-                FlowResult = 0.0;
-            } else {
-                FlowResult = state.dataLoopNodes->Node(this->UseSideInletNode).MassFlowRate;
-            }
-            // PlantUtilities::SetComponentFlowRate(state, FlowResult, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
-            Real64 useSideFlow = (avail > 0.0) ? this->UseSideDesignFlowRate : 0.0;
-
-            PlantUtilities::SetComponentFlowRate(state, useSideFlow, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
+        // Establish component flow requests on each side of the storage tank.  Use the
+        // design mass flow rates computed above and apply availability scheduling.  Note
+        // that SetComponentFlowRate expects a mass flow (kg/s), not a volumetric flow.  The
+        // previous implementation passed the design volumetric flow rate directly which
+        // resulted in very small mass flows and in some cases zero flow on the use side.  Here
+        // we convert to mass flow and schedule it off when the availability schedule is zero.
+        if (this->UseSideInletNode > 0) {
+            Real64 massFlowRequest = (avail > 0.0) ? this->UseSideMassFlowRate : 0.0;
+            PlantUtilities::SetComponentFlowRate(state, massFlowRequest, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         }
-
-        if (this->PlantSideInletNode > 0) { // setup mass flows for plant connections
-            if (avail <= 0.0) {
-                FlowResult = 0.0;
-            } else {
-                FlowResult = state.dataLoopNodes->Node(this->PlantSideInletNode).MassFlowRate;
-            }
-            // PlantUtilities::SetComponentFlowRate(state, FlowResult, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
-            Real64 plantSideFlow = (avail > 0.0) ? this->PlantSideDesignFlowRate : 0.0;
-
-            PlantUtilities::SetComponentFlowRate(state, plantSideFlow, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
+        if (this->PlantSideInletNode > 0) {
+            Real64 massFlowRequest = (avail > 0.0) ? this->PlantSideMassFlowRate : 0.0;
+            PlantUtilities::SetComponentFlowRate(state, massFlowRequest, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
         }
     }
 
@@ -272,30 +291,46 @@ namespace PCMStorage {
             this->PCM_TankTemp = approxTemp;
         }
 
-        // Use PCM_TankTemp to determine operation mode
-        bool charging = plantheatTransfer > 0.0 && PCM_TankTemp < MeltingTemp;
-        bool discharging = useheatTransfer < 0.0 && PCM_TankTemp > FreezingTemp;
+        // Determine operation mode.  The sign of the heat transfer on each side dictates whether the unit should
+        // charge or discharge.  In the original implementation a second condition on the tank temperature
+        // prevented charging unless the PCM temperature was below the melting point, which caused the plant
+        // side flow to be ignored even when the PCM should have been storing energy.  Here we rely solely
+        // on the direction of heat transfer to set the mode.
+        bool charging = plantheatTransfer > 0.0;
+        bool discharging = useheatTransfer < 0.0;
 
         // Apply operation mode
         if (discharging) {
+            // Remove energy from the PCM (negative heat transfer) and send it to the use side
             EnergyStored += useheatTransfer - HeatLossRate_W;
             useOutlet.Temp = useOutletTemp;
+            // Turn off the plant side flow and request the full use side mass flow for discharging
             massFlowPlant = 0.0;
             PlantUtilities::SetComponentFlowRate(state, massFlowPlant, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
+            PlantUtilities::SetComponentFlowRate(
+                state, this->UseSideMassFlowRate, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         } else if (charging) {
+            // Add energy to the PCM (positive heat transfer) and discharge the plant side fluid
             EnergyStored += plantheatTransfer - HeatLossRate_W;
             plantOutlet.Temp = plantOutletTemp;
             plantOutlet.MassFlowRate = plantInlet.MassFlowRate;
+            // Turn off the use side flow and request the full plant side mass flow for charging
             massFlowUse = 0.0;
             PlantUtilities::SetComponentFlowRate(state, massFlowUse, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
+            PlantUtilities::SetComponentFlowRate(
+                state, this->PlantSideMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
         } else {
+            // No significant heat transfer on either side.  Account for heat loss only and shut flows off.
             EnergyStored -= HeatLossRate_W;
             massFlowPlant = 0.0;
             PlantUtilities::SetComponentFlowRate(state, massFlowPlant, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
             massFlowUse = 0.0;
             PlantUtilities::SetComponentFlowRate(state, massFlowUse, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         }
-        EnergyStored = max(0.0, min(EnergyStored, TankCapacity * LatentHeat));
+        this->useheatTransfer = useheatTransfer;
+        this->plantheatTransfer = plantheatTransfer;
+        // Constrain the stored energy to the physical limits of the tank.  Use std::min and std::max explicitly.
+        EnergyStored = std::max(0.0, std::min(EnergyStored, TankCapacity * LatentHeat));
         PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
         Real64 maxLoopTemp = state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp;
         plantOutlet.Temp = min(plantOutlet.Temp, maxLoopTemp);
@@ -484,20 +519,31 @@ namespace PCMStorage {
                 PCM.PCMMaterialNum = matNum;
                 PCM.PCMmat = dynamic_cast<Material::MaterialPhaseChange *>(mat);
 
+                // Read the numeric fields for tank capacity, heat loss rate and design flow rates.  Allow the
+                // fields for tank capacity and flow rates to be autosized by accepting values less than or
+                // equal to zero.  When these inputs are autosized the actual values will be determined during
+                // the Init() routine based on the connected plant loop flow rates.  Only the heat loss rate
+                // is strictly required to be non-negative.
                 PCM.TankCapacity = state.dataIPShortCut->rNumericArgs(1);
                 PCM.HeatLossRate = state.dataIPShortCut->rNumericArgs(2);
                 PCM.UseSideDesignFlowRate = state.dataIPShortCut->rNumericArgs(3);
                 PCM.PlantSideDesignFlowRate = state.dataIPShortCut->rNumericArgs(4);
 
-                if (PCM.UseSideDesignFlowRate <= 0.0) {
-                    ShowSevereError(state,
-                                    format("{}={}, Use Side Design Flow Rate must be > 0.0.", state.dataIPShortCut->cCurrentModuleObject, PCM.Name));
-                    ErrorsFound = true;
+                // Report warnings instead of fatal errors for design flows <= 0.0 indicating an autosize request.
+                if (PCM.UseSideDesignFlowRate < 0.0) {
+                    ShowWarningError(state,
+                                     format("{}={}, Use Side Design Flow Rate was entered as {:.6R}.  This will be autosized during initialization.",
+                                            state.dataIPShortCut->cCurrentModuleObject,
+                                            PCM.Name,
+                                            PCM.UseSideDesignFlowRate));
                 }
-                if (PCM.PlantSideDesignFlowRate <= 0.0) {
-                    ShowSevereError(
-                        state, format("{}={}, Plant Side Design Flow Rate must be > 0.0.", state.dataIPShortCut->cCurrentModuleObject, PCM.Name));
-                    ErrorsFound = true;
+                if (PCM.PlantSideDesignFlowRate < 0.0) {
+                    ShowWarningError(
+                        state,
+                        format("{}={}, Plant Side Design Flow Rate was entered as {:.6R}.  This will be autosized during initialization.",
+                               state.dataIPShortCut->cCurrentModuleObject,
+                               PCM.Name,
+                               PCM.PlantSideDesignFlowRate));
                 }
 
                 PCM.MeltingTemp = PCM.PCMmat->peakTempMelting;
@@ -561,9 +607,15 @@ namespace PCMStorage {
                                            state.dataIPShortCut->cAlphaArgs(6),
                                            "PCM Storage Use Side");
 
+        // Allow the tank capacity to be autosized by entering a value <= 0.  A negative or zero
+        // entry signals that the capacity should be determined automatically during initialization.
+        // Issue a warning to let the user know that autosizing will occur but do not halt execution.
         if (PCM.TankCapacity <= 0.0) {
-            ShowSevereError(state, format("{}={}, Tank Capacity must be > 0.0.", state.dataIPShortCut->cCurrentModuleObject, PCM.Name));
-            ErrorsFound = true;
+            ShowWarningError(state,
+                             format("{}={}, Tank Capacity was entered as {:.6R} and will be autosized during initialization.",
+                                    state.dataIPShortCut->cCurrentModuleObject,
+                                    PCM.Name,
+                                    PCM.TankCapacity));
         }
 
         if (ErrorsFound) {

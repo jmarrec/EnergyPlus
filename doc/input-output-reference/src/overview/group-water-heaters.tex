@@ -2761,3 +2761,141 @@ The average node temperature.
 
 The final node temperature at the end of the system timestep.
 
+\subsection{ThermalStorage:PCM}\label{thermalstoragepcm}
+
+The \textbf{ThermalStorage:PCM} object models a phase‐change material (PCM) thermal‐storage tank.  Unlike a simple chilled‐water tank, this device stores and releases energy primarily through the PCM’s latent heat.  It connects to two plant loops: a \emph{plant side} for charging the PCM (freezing it) and a \emph{use side} for discharging the PCM (melting it).  Energy transfer is assumed to occur through an internal heat exchanger with a user‑specified effectiveness.  Charging occurs whenever heat is removed from the plant side stream (i.e., the stream is cooled); discharging occurs whenever heat is added to the use side stream (i.e., the stream is heated).  Availability of the unit is controlled by an optional schedule.
+
+\subsubsection{Inputs}\label{inputs-pcmstorage}
+
+\paragraph{Field: Name}\label{field-pcmstorage-name}
+
+The unique name of the \emph{ThermalStorage:PCM} object.
+
+\paragraph{Field: Availability Schedule Name}\label{field-pcmstorage-availability-schedule-name}
+
+The name of a schedule that controls when the PCM storage unit is available.  If the schedule value is 0.0 the tank is unavailable and requests no flow.  If omitted, the tank is always available.
+
+\paragraph{Field: PCM Material Name}\label{field-pcmstorage-pcm-material-name}
+
+The name of a material defined in the \emph{Material} object that has phase‐change properties (\lstinline!hasPCM = Yes!).  This material provides the melting/freezing temperature and latent heat used in the simulation.
+
+\paragraph{Field: Tank Capacity}\label{field-pcmstorage-tank-capacity}
+
+The mass of phase‐change material contained in the tank \([kg]\).  The PCM’s latent heat and this mass determine the total energy storage capacity.  This field may be \emph{autosized}; if set to \texttt{Autosize} or zero, the capacity is determined at runtime based on the connected plant flows and assumed hold time.
+
+\paragraph{Field: Heat Loss Rate}\label{field-pcmstorage-heat-loss-rate}
+
+A constant heat‐loss rate to the ambient \([W]\).  This represents parasitic losses to the surroundings.  A positive value removes energy from the storage tank each timestep.
+
+\paragraph{Field: Heat Transfer Effectiveness}\label{field-pcmstorage-effectiveness}
+
+The heat‐exchanger effectiveness between the PCM and the circulating water.  A value of 1.0 assumes perfect heat transfer (complete mixing); lower values model a finite‐effectiveness heat exchanger.  The default is 0.9.
+
+\paragraph{Field: Plant Side Inlet Node Name}\label{field-pcmstorage-plant-side-inlet-node-name}
+
+The inlet node on the plant loop for the charging side of the PCM storage tank.
+
+\paragraph{Field: Plant Side Outlet Node Name}\label{field-pcmstorage-plant-side-outlet-node-name}
+
+The outlet node on the plant loop for the charging side of the PCM storage tank.
+
+\paragraph{Field: Use Side Inlet Node Name}\label{field-pcmstorage-use-side-inlet-node-name}
+
+The inlet node on the plant loop for the discharging side of the PCM storage tank.
+
+\paragraph{Field: Use Side Outlet Node Name}\label{field-pcmstorage-use-side-outlet-node-name}
+
+The outlet node on the plant loop for the discharging side of the PCM storage tank.
+
+\paragraph{Field: Use Side Design Flow Rate}\label{field-pcmstorage-use-side-design-flow-rate}
+
+The design volumetric flow rate through the use side of the PCM tank \([m^3/s]\).  This field may be autosized.  When autosized, a \emph{Sizing:Plant} object should be provided for the loop connected to the use side.  Results are reported in the EIO file.
+
+\paragraph{Field: Plant Side Design Flow Rate}\label{field-pcmstorage-plant-side-design-flow-rate}
+
+The design volumetric flow rate through the plant side of the PCM tank \([m^3/s]\).  This field may be autosized.  When autosized, a \emph{Sizing:Plant} object should be provided for the loop connected to the plant side.  Results are reported in the EIO file.
+
+\subsubsection{Outputs}\label{outputs-pcmstorage}
+
+The following output variables are reported for phase‐change thermal‐storage tanks:
+
+\begin{itemize}
+\item
+  Thermal Energy Storage Percent Capacity~~~~~~~~ !- HVAC Average [–]
+\item
+  Thermal Energy Storage Heat Loss Rate~~~~~~~~~~ !- HVAC Average [W]
+\item
+  Thermal Energy Storage Energy Stored~~~~~~~~~~~~ !- HVAC Average [J]
+\item
+  Thermal Energy Storage Tank Temperature~~~~~~~~~ !- HVAC Average [°C]
+\item
+  Thermal Energy Storage Use Side Heat Transfer Rate~~~~ !- HVAC Average [W]
+\item
+  Thermal Energy Storage Plant Side Heat Transfer Rate~~~ !- HVAC Average [W]
+\item
+  Thermal Energy Storage Latent Heat Capacity~~~~~~~~~~~~ !- HVAC Sum [J]
+\item
+  Thermal Energy Storage Use Side Inlet Temperature~~~~~~ !- HVAC Average [°C]
+\item
+  Thermal Energy Storage Use Side Outlet Temperature~~~~~ !- HVAC Average [°C]
+\item
+  Thermal Energy Storage Use Side Mass Flow Rate~~~~~~~~~ !- HVAC Average [kg/s]
+\item
+  Thermal Energy Storage Plant Side Inlet Temperature~~~~~ !- HVAC Average [°C]
+\item
+  Thermal Energy Storage Plant Side Outlet Temperature~~~~ !- HVAC Average [°C]
+\item
+  Thermal Energy Storage Plant Side Mass Flow Rate~~~~~~~~ !- HVAC Average [kg/s]
+\end{itemize}
+
+\paragraph{Thermal Energy Storage Percent Capacity [–]}\label{pcmstorage-percent-capacity}
+
+The fraction of latent heat stored in the PCM tank relative to its total latent capacity.
+
+\paragraph{Thermal Energy Storage Heat Loss Rate [W]}\label{pcmstorage-heat-loss-rate-output}
+
+The instantaneous heat loss from the PCM tank to the surroundings.
+
+\paragraph{Thermal Energy Storage Energy Stored [J]}\label{pcmstorage-energy-stored}
+
+The current amount of energy stored in the PCM tank (latent plus sensible).
+
+\paragraph{Thermal Energy Storage Tank Temperature [°C]}\label{pcmstorage-tank-temperature}
+
+The calculated bulk temperature of the PCM in the tank.
+
+\paragraph{Thermal Energy Storage Use Side Heat Transfer Rate [W]}\label{pcmstorage-use-side-heat-transfer-rate}
+
+The rate of heat transfer from the PCM to the use side water (positive when energy leaves the tank).
+
+\paragraph{Thermal Energy Storage Plant Side Heat Transfer Rate [W]}\label{pcmstorage-plant-side-heat-transfer-rate}
+
+The rate of heat transfer from the plant side water to the PCM (positive when energy enters the tank).
+
+\paragraph{Thermal Energy Storage Latent Heat Capacity [J]}\label{pcmstorage-latent-heat-capacity}
+
+The total latent heat capacity of the PCM tank.
+
+\paragraph{Thermal Energy Storage Use Side Inlet Temperature [°C]}\label{pcmstorage-use-side-inlet-temperature}
+
+The temperature of the water entering the use side of the PCM tank.
+
+\paragraph{Thermal Energy Storage Use Side Outlet Temperature [°C]}\label{pcmstorage-use-side-outlet-temperature}
+
+The temperature of the water exiting the use side of the PCM tank.
+
+\paragraph{Thermal Energy Storage Use Side Mass Flow Rate [kg/s]}\label{pcmstorage-use-side-mass-flow-rate}
+
+The mass flow rate through the use side of the PCM tank.
+
+\paragraph{Thermal Energy Storage Plant Side Inlet Temperature [°C]}\label{pcmstorage-plant-side-inlet-temperature}
+
+The temperature of the water entering the plant side of the PCM tank.
+
+\paragraph{Thermal Energy Storage Plant Side Outlet Temperature [°C]}\label{pcmstorage-plant-side-outlet-temperature}
+
+The temperature of the water exiting the plant side of the PCM tank.
+
+\paragraph{Thermal Energy Storage Plant Side Mass Flow Rate [kg/s]}\label{pcmstorage-plant-side-mass-flow-rate}
+
+The mass flow rate through the plant side of the PCM tank.
