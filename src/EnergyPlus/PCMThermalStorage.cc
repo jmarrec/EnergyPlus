@@ -223,14 +223,6 @@ namespace PCMStorage {
         // previous implementation passed the design volumetric flow rate directly which
         // resulted in very small mass flows and in some cases zero flow on the use side.  Here
         // we convert to mass flow and schedule it off when the availability schedule is zero.
-        if (this->UseSideInletNode > 0) {
-            Real64 massFlowRequest = (avail > 0.0) ? this->UseSideMassFlowRate : 0.0;
-            PlantUtilities::SetComponentFlowRate(state, massFlowRequest, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
-        }
-        if (this->PlantSideInletNode > 0) {
-            Real64 massFlowRequest = (avail > 0.0) ? this->PlantSideMassFlowRate : 0.0;
-            PlantUtilities::SetComponentFlowRate(state, massFlowRequest, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
-        }
     }
 
     void PCMStorageData::Calculate(EnergyPlusData &state, PlantLocation const &plantLoc)
@@ -241,6 +233,7 @@ namespace PCMStorage {
         auto &plantOutlet = state.dataLoopNodes->Node(PlantSideOutletNode);
 
         Real64 avail = this->AvailabilitySchedule->getCurrentVal();
+        Real64 dt_seconds = state.dataHVACGlobal->TimeStepSys * 3600.0;
 
         Real64 CpWater = 4180.0; // J/kg-C
         Real64 massFlowUse = useInlet.MassFlowRate;
@@ -296,44 +289,58 @@ namespace PCMStorage {
         // prevented charging unless the PCM temperature was below the melting point, which caused the plant
         // side flow to be ignored even when the PCM should have been storing energy.  Here we rely solely
         // on the direction of heat transfer to set the mode.
-        bool charging = plantheatTransfer > 0.0;
-        bool discharging = useheatTransfer < 0.0;
+        // SOC as fraction 0–1
+        Real64 soc = EnergyStored / (TankCapacity * LatentHeat);
+        soc = std::clamp(soc, 0.0, 1.0);
 
-        // Apply operation mode
-        if (discharging) {
-            // Remove energy from the PCM (negative heat transfer) and send it to the use side
-            EnergyStored += useheatTransfer - HeatLossRate_W;
-            useOutlet.Temp = useOutletTemp;
-            // Turn off the plant side flow and request the full use side mass flow for discharging
-            massFlowPlant = 0.0;
-            PlantUtilities::SetComponentFlowRate(state, massFlowPlant, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
-            PlantUtilities::SetComponentFlowRate(
-                state, this->UseSideMassFlowRate, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
-        } else if (charging) {
-            // Add energy to the PCM (positive heat transfer) and discharge the plant side fluid
-            EnergyStored += plantheatTransfer - HeatLossRate_W;
-            plantOutlet.Temp = plantOutletTemp;
-            plantOutlet.MassFlowRate = plantInlet.MassFlowRate;
-            // Turn off the use side flow and request the full plant side mass flow for charging
-            massFlowUse = 0.0;
-            PlantUtilities::SetComponentFlowRate(state, massFlowUse, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
-            PlantUtilities::SetComponentFlowRate(
-                state, this->PlantSideMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
+        // Hysteresis thresholds (tune as needed)
+        const Real64 cutInSOC = 0.40;  // start charging when SOC <= 40%
+        const Real64 cutOutSOC = 0.95; // stop charging when SOC >= 95%
+
+        // Persistent mode
+        static bool chargingMode = false;
+        if (soc <= cutInSOC) chargingMode = true;
+        if (soc >= cutOutSOC) chargingMode = false;
+
+        // Decide flows: charge => plant flows only; discharge => use flows only
+        Real64 mUseReq = 0.0;
+        Real64 mPlantReq = 0.0;
+
+        if (chargingMode) {
+            mPlantReq = this->PlantSideMassFlowRate;
         } else {
-            // No significant heat transfer on either side.  Account for heat loss only and shut flows off.
-            EnergyStored -= HeatLossRate_W;
-            massFlowPlant = 0.0;
-            PlantUtilities::SetComponentFlowRate(state, massFlowPlant, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
-            massFlowUse = 0.0;
-            PlantUtilities::SetComponentFlowRate(state, massFlowUse, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
+            mUseReq = this->UseSideMassFlowRate;
         }
-        this->useheatTransfer = useheatTransfer;
-        this->plantheatTransfer = plantheatTransfer;
-        // Constrain the stored energy to the physical limits of the tank.  Use std::min and std::max explicitly.
-        EnergyStored = std::max(0.0, std::min(EnergyStored, TankCapacity * LatentHeat));
+
+        // Issue flow requests (mass flow, kg/s)
+        PlantUtilities::SetComponentFlowRate(state, mUseReq, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
+        PlantUtilities::SetComponentFlowRate(state, mPlantReq, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
+
+        // Recompute heat-transfer rates using the requested flows (W)
+        // (deltaTUse/deltaTPlant were computed above; keep your existing outlet temp calcs)
+        Real64 useheatTransfer_req = mUseReq * CpWater * (useInlet.Temp - useOutletTemp);
+        Real64 plantheatTransfer_req = mPlantReq * CpWater * (plantInlet.Temp - plantOutletTemp);
+
+        // Only one side should contribute per timestep by construction; but compute net formally:
+        Real64 netPowerW = plantheatTransfer_req + useheatTransfer_req - HeatLossRate_W;
+
+        // Update stored energy (J)
+        EnergyStored += netPowerW * dt_seconds;
+
+        // Update node temps for the side that actually flowed
+        if (mUseReq > 0.0) {
+            useOutlet.Temp = useOutletTemp;
+        } else if (mPlantReq > 0.0) {
+            plantOutlet.Temp = std::min(plantOutletTemp, state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp);
+        }
+
+        // Persist rates for reporting
+        this->useheatTransfer = useheatTransfer_req;
+        this->plantheatTransfer = plantheatTransfer_req;
+
+        // Enforce bounds and update percent capacity (0–100)
+        EnergyStored = std::clamp(EnergyStored, 0.0, TankCapacity * LatentHeat);
         PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
-        Real64 maxLoopTemp = state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp;
-        plantOutlet.Temp = min(plantOutlet.Temp, maxLoopTemp);
     }
 
     void RegisterPCMStorageOutputVariables(EnergyPlusData &state)
@@ -358,7 +365,7 @@ namespace PCMStorage {
 
         SetupOutputVariable(state,
                             "Thermal Energy Storage Energy Stored",
-                            Constant::Units::W,
+                            Constant::Units::J,
                             PCM.EnergyStored,
                             EnergyPlus::OutputProcessor::TimeStepType::System,
                             EnergyPlus::OutputProcessor::StoreType::Average,
@@ -386,14 +393,6 @@ namespace PCMStorage {
                             PCM.plantheatTransfer,
                             EnergyPlus::OutputProcessor::TimeStepType::System,
                             EnergyPlus::OutputProcessor::StoreType::Average,
-                            PCM.Name);
-
-        SetupOutputVariable(state,
-                            "Thermal Energy Storage Latent Heat Capacity",
-                            Constant::Units::J,
-                            PCM.EnergyStored,
-                            EnergyPlus::OutputProcessor::TimeStepType::System,
-                            EnergyPlus::OutputProcessor::StoreType::Sum,
                             PCM.Name);
 
         SetupOutputVariable(state,
