@@ -299,8 +299,12 @@ namespace PCMStorage {
 
         // Persistent mode
         static bool chargingMode = false;
-        if (soc <= cutInSOC) chargingMode = true;
-        if (soc >= cutOutSOC) chargingMode = false;
+        if (soc <= cutInSOC) {
+            chargingMode = true;
+        }
+        if (soc >= cutOutSOC) {
+            chargingMode = false;
+        }
 
         // Decide flows: charge => plant flows only; discharge => use flows only
         Real64 mUseReq = 0.0;
