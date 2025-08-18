@@ -294,8 +294,8 @@ namespace PCMStorage {
         soc = std::clamp(soc, 0.0, 1.0);
 
         // Hysteresis thresholds (tune as needed)
-        const Real64 cutInSOC = 0.40;  // start charging when SOC <= 40%
-        const Real64 cutOutSOC = 0.95; // stop charging when SOC >= 95%
+        constexpr Real64 cutInSOC = 0.40;  // start charging when SOC <= 40%
+        constexpr Real64 cutOutSOC = 0.95; // stop charging when SOC >= 95%
 
         // Persistent mode
         static bool chargingMode = false;
