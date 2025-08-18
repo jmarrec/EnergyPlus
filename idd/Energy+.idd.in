@@ -82077,7 +82077,7 @@ ThermalStorage:PCM,
       \memo This thermal storage model is PCM-based
       \memo It requires PCM material property connection
       \memo In addition to the object linking, this object needs PCM Latent heat storage capacity and Heat Loss Rate
-      \memo This model needs 4 nodes – 2 plant side nodes and 2 use side nodes
+      \memo This model needs 4 nodes: 2 plant side nodes and 2 use side nodes.
   A1, \field Name
       \type alpha
       \required-field
@@ -82086,7 +82086,7 @@ ThermalStorage:PCM,
       \reference-class-name validBranchEquipmentTypes
       \reference validBranchEquipmentNames
   A2 , \field Availability Schedule Name
-	   \required-field
+       \required-field
        \type object-list
        \object-list ScheduleNames
   A3 , \field Plant Side Inlet Node Name
@@ -82104,7 +82104,7 @@ ThermalStorage:PCM,
   A7 , \field PCM Material Name
        \type alpha
        \object-list MaterialName
-	   \required-field
+       \required-field
   N1 , \field Tank Capacity
        \type real
        \units kg

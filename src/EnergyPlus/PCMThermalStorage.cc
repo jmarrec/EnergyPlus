@@ -289,7 +289,7 @@ namespace PCMStorage {
         // prevented charging unless the PCM temperature was below the melting point, which caused the plant
         // side flow to be ignored even when the PCM should have been storing energy.  Here we rely solely
         // on the direction of heat transfer to set the mode.
-        // SOC as fraction 0–1
+        // SOC as fraction 0â€“1
         Real64 soc = EnergyStored / (TankCapacity * LatentHeat);
         soc = std::clamp(soc, 0.0, 1.0);
 
@@ -338,7 +338,7 @@ namespace PCMStorage {
         this->useheatTransfer = useheatTransfer_req;
         this->plantheatTransfer = plantheatTransfer_req;
 
-        // Enforce bounds and update percent capacity (0–100)
+        // Enforce bounds and update percent capacity (0â€“100)
         EnergyStored = std::clamp(EnergyStored, 0.0, TankCapacity * LatentHeat);
         PercentCapacity = 100.0 * EnergyStored / (TankCapacity * LatentHeat);
     }
