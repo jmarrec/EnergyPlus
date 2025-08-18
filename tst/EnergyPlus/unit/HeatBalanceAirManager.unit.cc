@@ -62,9 +62,11 @@
 #include <EnergyPlus/SimulationManager.hh>
 #include <EnergyPlus/SurfaceGeometry.hh>
 
-#include <nlohmann/json_literals.hpp>
+#include <nlohmann/json.hpp>
 
 #include "Fixtures/EnergyPlusFixture.hh"
+
+using namespace nlohmann::literals;
 
 namespace EnergyPlus {
 

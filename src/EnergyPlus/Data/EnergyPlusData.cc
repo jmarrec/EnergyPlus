@@ -585,6 +585,7 @@ void EnergyPlusData::init_constant_state(EnergyPlusData &state)
     this->dataPsychrometrics->init_constant_state(state);
     this->dataFluid->init_constant_state(state);
     this->dataSched->init_constant_state(state);
+    this->dataCurveManager->init_constant_state(state);
 
     this->dataAirLoop->init_constant_state(state);
     this->dataAirLoopHVACDOAS->init_constant_state(state);
@@ -619,7 +620,6 @@ void EnergyPlusData::init_constant_state(EnergyPlusData &state)
     this->dataCoolTower->init_constant_state(state);
     this->dataCostEstimateManager->init_constant_state(state);
     this->dataCrossVentMgr->init_constant_state(state);
-    this->dataCurveManager->init_constant_state(state);
     this->dataDXCoils->init_constant_state(state);
     this->dataDXFEarClipping->init_constant_state(state);
     this->dataDaylightingDevices->init_constant_state(state);
@@ -848,6 +848,7 @@ void EnergyPlusData::init_state(EnergyPlusData &state)
     this->dataPsychrometrics->init_state(state);    // InitializePsychRoutines
     this->dataFluid->init_state(state);             // GetFluidPropertiesData
     this->dataSched->init_state(state);             // GetScheduleData
+    this->dataCurveManager->init_state(state);      // GetCurveInput
 
     this->dataAirLoop->init_state(state);
     this->dataAirLoopHVACDOAS->init_state(state);
@@ -882,7 +883,6 @@ void EnergyPlusData::init_state(EnergyPlusData &state)
     this->dataCoolTower->init_state(state);
     this->dataCostEstimateManager->init_state(state);
     this->dataCrossVentMgr->init_state(state);
-    this->dataCurveManager->init_state(state);
     this->dataDXCoils->init_state(state);
     this->dataDXFEarClipping->init_state(state);
     this->dataDaylightingDevices->init_state(state);

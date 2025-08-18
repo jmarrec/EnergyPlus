@@ -729,7 +729,7 @@ TEST_F(EnergyPlusFixture, ThermalComfort_CalcThermalComfortFanger)
     CalcThermalComfortFanger(*state);
 
     EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPMV, -1.262, 0.005);
-    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 38.3, 0.1);
+    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 38.1, 0.1);
 
     zoneHB1.ZTAVComf = 26.0;
     zoneHB1.MRT = 27.0;
@@ -739,7 +739,7 @@ TEST_F(EnergyPlusFixture, ThermalComfort_CalcThermalComfortFanger)
     CalcThermalComfortFanger(*state);
 
     EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPMV, -0.860, 0.005);
-    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 20.6, 0.1);
+    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 20.5, 0.1);
 
     zoneHB1.ZTAVComf = 27.0;
     zoneHB1.MRT = 28.0;
@@ -749,7 +749,7 @@ TEST_F(EnergyPlusFixture, ThermalComfort_CalcThermalComfortFanger)
     CalcThermalComfortFanger(*state);
 
     EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPMV, -0.460, 0.005);
-    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 9.4, 0.1);
+    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 9.3, 0.1);
 
     zoneHB1.ZTAVComf = 25.0;
     zoneHB1.MRT = 26.0;
@@ -759,7 +759,7 @@ TEST_F(EnergyPlusFixture, ThermalComfort_CalcThermalComfortFanger)
     CalcThermalComfortFanger(*state);
 
     EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPMV, -1.201, 0.005);
-    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 35.3, 0.1);
+    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 35.1, 0.1);
 }
 
 TEST_F(EnergyPlusFixture, ThermalComfort_CalcSurfaceWeightedMRT)
@@ -1623,7 +1623,7 @@ TEST_F(EnergyPlusFixture, ThermalComfort_CalcThermalComfortFanger_Correct_TimeSt
 
     EXPECT_NEAR(state->dataZoneTempPredictorCorrector->zoneHeatBalance(1).airHumRatAvgComf, 0.010564839505489259, 0.0001);
 
-    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPMV, -5.5896341565108720, 0.001);
+    EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPMV, -5.5851444408083006, 0.001);
 
     EXPECT_NEAR(state->dataThermalComforts->ThermalComfortData(1).FangerPPD, 100.0, 0.001);
 }
@@ -2073,4 +2073,43 @@ TEST_F(EnergyPlusFixture, ThermalComfort_CalcSurfaceWeightedMRT_Enclosure_Based)
     state->dataThermalComforts->clear_state();
     RadTemp = CalcSurfaceWeightedMRT(*state, SurfNum, false);
     EXPECT_NEAR(RadTemp, 14.545, 0.1);
+}
+
+TEST_F(EnergyPlusFixture, CalcFangerPMVTest)
+{
+    // Test of Fix for Defect #11112 (update PMV calculation to match current ASHRAE 55/ISO 7730
+    Real64 airTemp;
+    Real64 radTemp;
+    Real64 relHum;
+    Real64 airVel;
+    Real64 actLevel;
+    Real64 cloUnit;
+    Real64 workEff;
+    Real64 expectedAnswer;
+    Real64 actualAnswer;
+    Real64 constexpr closeEnough = 0.00001;
+
+    // Test 1: representative winter-ish conditions
+    airTemp = 20.0;
+    radTemp = 18.0;
+    relHum = 0.50;
+    airVel = 1.0;
+    actLevel = 58.2;
+    cloUnit = 1.5;
+    workEff = 0.0;
+    expectedAnswer = -0.715102;
+    actualAnswer = CalcFangerPMV(*state, airTemp, radTemp, relHum, airVel, actLevel, cloUnit, workEff);
+    EXPECT_NEAR(actualAnswer, expectedAnswer, closeEnough);
+
+    // Test 2: representative summer-ish conditions
+    airTemp = 25.0;
+    radTemp = 28.0;
+    relHum = 0.75;
+    airVel = 1.0;
+    actLevel = 80.0;
+    cloUnit = 0.8;
+    workEff = 0.0;
+    expectedAnswer = 0.644378;
+    actualAnswer = CalcFangerPMV(*state, airTemp, radTemp, relHum, airVel, actLevel, cloUnit, workEff);
+    EXPECT_NEAR(actualAnswer, expectedAnswer, closeEnough);
 }

@@ -302,7 +302,6 @@ TEST_F(EnergyPlusFixture, OutdoorAirUnit_AutoSize)
 
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand.allocate(1);
 
-    GetCurveInput(*state);            // read curves
     GetZoneData(*state, ErrorsFound); // read zone data
     EXPECT_FALSE(ErrorsFound);
 

@@ -67,27 +67,12 @@ namespace PurchasedAirManager {
     enum class LimitType
     {
         Invalid = -1,
-        NoLimit,
-        LimitFlowRate,
-        LimitCapacity,
-        LimitFlowRateAndCapacity,
+        None,
+        FlowRate,
+        Capacity,
+        FlowRateAndCapacity,
         Num
     };
-    constexpr const char *cLimitType(LimitType l)
-    {
-        switch (l) {
-        case LimitType::NoLimit:
-            return "NoLimit";
-        case LimitType::LimitFlowRate:
-            return "LimitFlowRate";
-        case LimitType::LimitCapacity:
-            return "LimitCapacity";
-        case LimitType::LimitFlowRateAndCapacity:
-            return "LimitFlowRateAndCapacity";
-        default:
-            return "UNKNOWN!";
-        }
-    }
 
     // Dehumidification and Humidification control type parameters
     enum class HumControl

@@ -486,7 +486,9 @@ namespace HVACMultiSpeedHeatPump {
 
         auto &MSHeatPump(state.dataHVACMultiSpdHP->MSHeatPump);
 
-        if (MSHeatPump.allocated()) return;
+        if (MSHeatPump.allocated()) {
+            return;
+        }
 
         state.dataHVACMultiSpdHP->CurrentModuleObject =
             "AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed"; // Object type for getting and error messages
@@ -606,29 +608,40 @@ namespace HVACMultiSpeedHeatPump {
                                                       thisMSHP.Name) ||
                                     !Util::SameString(
                                         state.dataAirSystemsData->PrimaryAirSystems(AirLoopNumber).Branch(BranchNum).Comp(CompNum).TypeOf,
-                                        state.dataHVACMultiSpdHP->CurrentModuleObject))
+                                        state.dataHVACMultiSpdHP->CurrentModuleObject)) {
                                     continue;
+                                }
                                 AirLoopFound = true;
                                 thisMSHP.AirLoopNumber = AirLoopNumber;
                                 break;
                             }
                             thisMSHP.ZoneInletNode = state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).InletNode(zoneInNode);
-                            if (AirLoopFound) break;
+                            if (AirLoopFound) {
+                                break;
+                            }
                         }
                         for (int TstatZoneNum = 1; TstatZoneNum <= state.dataZoneCtrls->NumTempControlledZones; ++TstatZoneNum) {
-                            if (state.dataZoneCtrls->TempControlledZone(TstatZoneNum).ActualZoneNum != thisMSHP.ControlZoneNum) continue;
+                            if (state.dataZoneCtrls->TempControlledZone(TstatZoneNum).ActualZoneNum != thisMSHP.ControlZoneNum) {
+                                continue;
+                            }
                             AirNodeFound = true;
                         }
                         for (int TstatZoneNum = 1; TstatZoneNum <= state.dataZoneCtrls->NumComfortControlledZones; ++TstatZoneNum) {
-                            if (state.dataZoneCtrls->ComfortControlledZone(TstatZoneNum).ActualZoneNum != thisMSHP.ControlZoneNum) continue;
+                            if (state.dataZoneCtrls->ComfortControlledZone(TstatZoneNum).ActualZoneNum != thisMSHP.ControlZoneNum) {
+                                continue;
+                            }
                             AirNodeFound = true;
                         }
                         for (int TstatZoneNum = 1; TstatZoneNum <= state.dataZoneTempPredictorCorrector->NumStageCtrZone; ++TstatZoneNum) {
-                            if (state.dataZoneCtrls->StageControlledZone(TstatZoneNum).ActualZoneNum != thisMSHP.ControlZoneNum) continue;
+                            if (state.dataZoneCtrls->StageControlledZone(TstatZoneNum).ActualZoneNum != thisMSHP.ControlZoneNum) {
+                                continue;
+                            }
                             AirNodeFound = true;
                         }
                     }
-                    if (AirLoopFound) break;
+                    if (AirLoopFound) {
+                        break;
+                    }
                 }
                 if (!AirNodeFound) {
                     ShowSevereError(state,
@@ -1371,7 +1384,9 @@ namespace HVACMultiSpeedHeatPump {
                 }
                 // Ensure flow rate at high speed should be greater or equal to the flow rate at low speed
                 for (i = 2; i <= thisMSHP.NumOfSpeedHeating; ++i) {
-                    if (thisMSHP.HeatVolumeFlowRate(i) == DataSizing::AutoSize) continue;
+                    if (thisMSHP.HeatVolumeFlowRate(i) == DataSizing::AutoSize) {
+                        continue;
+                    }
                     Found = false;
                     for (j = i - 1; j >= 1; --j) {
                         if (thisMSHP.HeatVolumeFlowRate(i) != DataSizing::AutoSize) {
@@ -1415,7 +1430,9 @@ namespace HVACMultiSpeedHeatPump {
                 }
                 // Ensure flow rate at high speed should be greater or equal to the flow rate at low speed
                 for (i = 2; i <= thisMSHP.NumOfSpeedCooling; ++i) {
-                    if (thisMSHP.CoolVolumeFlowRate(i) == DataSizing::AutoSize) continue;
+                    if (thisMSHP.CoolVolumeFlowRate(i) == DataSizing::AutoSize) {
+                        continue;
+                    }
                     Found = false;
                     for (j = i - 1; j >= 1; --j) {
                         if (thisMSHP.CoolVolumeFlowRate(i) != DataSizing::AutoSize) {
@@ -1788,7 +1805,9 @@ namespace HVACMultiSpeedHeatPump {
         int NumOfSpeedHeating = MSHeatPump(MSHeatPumpNum).NumOfSpeedHeating;
 
         ++state.dataHVACMultiSpdHP->AirLoopPass;
-        if (state.dataHVACMultiSpdHP->AirLoopPass > 2) state.dataHVACMultiSpdHP->AirLoopPass = 1;
+        if (state.dataHVACMultiSpdHP->AirLoopPass > 2) {
+            state.dataHVACMultiSpdHP->AirLoopPass = 1;
+        }
 
         if (MSHeatPump(MSHeatPumpNum).MyPlantScantFlag && allocated(state.dataPlnt->PlantLoop)) {
             bool errFlag;
@@ -2253,7 +2272,9 @@ namespace HVACMultiSpeedHeatPump {
             int ZoneInNode = MSHeatPump(MSHeatPumpNum).ZoneInletNode;
             DeltaMassRate = state.dataLoopNodes->Node(OutNode).MassFlowRate -
                             state.dataLoopNodes->Node(ZoneInNode).MassFlowRate / MSHeatPump(MSHeatPumpNum).FlowFraction;
-            if (DeltaMassRate < 0.0) DeltaMassRate = 0.0;
+            if (DeltaMassRate < 0.0) {
+                DeltaMassRate = 0.0;
+            }
             Real64 MassFlowRate(0.0);        // parent mass flow rate
             Real64 LatentOutput(0.0);        // latent output rate
             Real64 TotalOutput(0.0);         // total output rate
@@ -2262,8 +2283,9 @@ namespace HVACMultiSpeedHeatPump {
             Real64 TotalOutputDelta(0.0);    // delta total output rate
             MassFlowRate = state.dataLoopNodes->Node(ZoneInNode).MassFlowRate / MSHeatPump(MSHeatPumpNum).FlowFraction;
             Real64 MinHumRat = state.dataLoopNodes->Node(ZoneInNode).HumRat;
-            if (state.dataLoopNodes->Node(OutNode).Temp < state.dataLoopNodes->Node(MSHeatPump(MSHeatPumpNum).NodeNumOfControlledZone).Temp)
+            if (state.dataLoopNodes->Node(OutNode).Temp < state.dataLoopNodes->Node(MSHeatPump(MSHeatPumpNum).NodeNumOfControlledZone).Temp) {
                 MinHumRat = state.dataLoopNodes->Node(OutNode).HumRat;
+            }
             CalcZoneSensibleLatentOutput(MassFlowRate,
                                          state.dataLoopNodes->Node(OutNode).Temp,
                                          MinHumRat,
@@ -2281,7 +2303,9 @@ namespace HVACMultiSpeedHeatPump {
                                          LatentOutputDelta,
                                          TotalOutputDelta);
             MSHeatPump(MSHeatPumpNum).LoadLoss = MSHeatPump(MSHeatPumpNum).LoadLoss + SensibleOutputDelta;
-            if (std::abs(MSHeatPump(MSHeatPumpNum).LoadLoss) < 1.0e-6) MSHeatPump(MSHeatPumpNum).LoadLoss = 0.0;
+            if (std::abs(MSHeatPump(MSHeatPumpNum).LoadLoss) < 1.0e-6) {
+                MSHeatPump(MSHeatPumpNum).LoadLoss = 0.0;
+            }
         }
 
         // Returns load only for zones requesting cooling (heating). If in deadband, Qzoneload = 0.
@@ -2304,7 +2328,9 @@ namespace HVACMultiSpeedHeatPump {
         } else {
             QZnReq = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(ZoneNum).RemainingOutputRequired / MSHeatPump(MSHeatPumpNum).FlowFraction;
         }
-        if (state.dataZoneEnergyDemand->CurDeadBandOrSetback(ZoneNum)) QZnReq = 0.0;
+        if (state.dataZoneEnergyDemand->CurDeadBandOrSetback(ZoneNum)) {
+            QZnReq = 0.0;
+        }
 
         if (QZnReq > HVAC::SmallLoad) {
             MSHeatPump(MSHeatPumpNum).HeatCoolMode = ModeOfOperation::HeatingMode;
@@ -2586,7 +2612,7 @@ namespace HVACMultiSpeedHeatPump {
                     SteamCoils::GetCoilCapacity(state, "Coil:Heating:Steam", MSHeatPump(MSHeatPumpNum).SuppHeatCoilName, ErrorsFound);
 
             } // from IF(MSHeatPump(MSHeatPumpNum)%SuppHeatCoilType == Coil_HeatingSteam) THEN
-        }     // from IF( FirstHVACIteration ) THEN
+        } // from IF( FirstHVACIteration ) THEN
     }
 
     //******************************************************************************
@@ -2979,7 +3005,9 @@ namespace HVACMultiSpeedHeatPump {
         auto &MSHeatPump = state.dataHVACMultiSpdHP->MSHeatPump(MSHeatPumpNum);
 
         //!!LKL Discrepancy with < 0
-        if (MSHeatPump.availSched->getCurrentVal() == 0.0) return;
+        if (MSHeatPump.availSched->getCurrentVal() == 0.0) {
+            return;
+        }
 
         // Get result when DX coil is off
         CalcMSHeatPump(state,
@@ -3008,14 +3036,18 @@ namespace HVACMultiSpeedHeatPump {
             SpeedNum = MSHeatPump.NumOfSpeedHeating;
             if (MSHeatPump.Staged && std::abs(MSHeatPump.StageNum) < SpeedNum) {
                 SpeedNum = std::abs(MSHeatPump.StageNum);
-                if (SpeedNum == 1) SpeedRatio = 0.0;
+                if (SpeedNum == 1) {
+                    SpeedRatio = 0.0;
+                }
             }
         }
         if (MSHeatPump.HeatCoolMode == ModeOfOperation::CoolingMode) {
             SpeedNum = MSHeatPump.NumOfSpeedCooling;
             if (MSHeatPump.Staged && std::abs(MSHeatPump.StageNum) < SpeedNum) {
                 SpeedNum = std::abs(MSHeatPump.StageNum);
-                if (SpeedNum == 1) SpeedRatio = 0.0;
+                if (SpeedNum == 1) {
+                    SpeedRatio = 0.0;
+                }
             }
         }
 
@@ -3044,7 +3076,9 @@ namespace HVACMultiSpeedHeatPump {
             if (QZnReq <= FullOutput) {
                 PartLoadFrac = 1.0;
                 SpeedRatio = 1.0;
-                if (MSHeatPump.Staged && SpeedNum == 1) SpeedRatio = 0.0;
+                if (MSHeatPump.Staged && SpeedNum == 1) {
+                    SpeedRatio = 0.0;
+                }
                 state.dataHVACMultiSpdHP->MSHeatPumpReport(MSHeatPumpNum).CycRatio = PartLoadFrac;
                 state.dataHVACMultiSpdHP->MSHeatPumpReport(MSHeatPumpNum).SpeedRatio = SpeedRatio;
                 state.dataHVACMultiSpdHP->MSHeatPumpReport(MSHeatPumpNum).SpeedNum = SpeedNum;
@@ -3493,7 +3527,9 @@ namespace HVACMultiSpeedHeatPump {
         if ((QZnReq > HVAC::SmallLoad && QZnReq > FullOutput)) {
             PartLoadFrac = 1.0;
             SpeedRatio = 1.0;
-            if (MSHeatPump.Staged && SpeedNum == 1) SpeedRatio = 0.0;
+            if (MSHeatPump.Staged && SpeedNum == 1) {
+                SpeedRatio = 0.0;
+            }
             if (OutsideDryBulbTemp <= MSHeatPump.SuppMaxAirTemp) {
                 SupHeaterLoad = QZnReq - FullOutput;
             } else {
@@ -3787,8 +3823,9 @@ namespace HVACMultiSpeedHeatPump {
         Real64 SensibleOutput(0.0); // sensible output rate
         // calculate sensible load met using delta enthalpy at a constant (minimum) humidity ratio)
         Real64 MinHumRat = state.dataLoopNodes->Node(MSHeatPump.NodeNumOfControlledZone).HumRat;
-        if (state.dataLoopNodes->Node(OutletNode).Temp < state.dataLoopNodes->Node(MSHeatPump.NodeNumOfControlledZone).Temp)
+        if (state.dataLoopNodes->Node(OutletNode).Temp < state.dataLoopNodes->Node(MSHeatPump.NodeNumOfControlledZone).Temp) {
             MinHumRat = state.dataLoopNodes->Node(OutletNode).HumRat;
+        }
         SensibleOutput = AirMassFlow * Psychrometrics::PsyDeltaHSenFnTdb2W2Tdb1W1(state.dataLoopNodes->Node(OutletNode).Temp,
                                                                                   MinHumRat,
                                                                                   state.dataLoopNodes->Node(MSHeatPump.NodeNumOfControlledZone).Temp,

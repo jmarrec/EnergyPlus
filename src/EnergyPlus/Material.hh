@@ -60,6 +60,11 @@
 
 namespace EnergyPlus {
 
+// Forward declarations
+namespace Curve {
+    struct Curve;
+}
+
 namespace Material {
 
     // Parameters to indicate material group type for use with the Material
@@ -257,9 +262,9 @@ namespace Material {
         // dynamic thermal and solar absorptance coating parameters
         VariableAbsCtrlSignal absorpVarCtrlSignal = VariableAbsCtrlSignal::Invalid;
         Sched::Schedule *absorpThermalVarSched = nullptr;
-        int absorpThermalVarFuncIdx = 0;
+        Curve::Curve *absorpThermalVarCurve = nullptr;
         Sched::Schedule *absorpSolarVarSched = nullptr;
-        int absorpSolarVarFuncIdx = 0;
+        Curve::Curve *absorpSolarVarCurve = nullptr;
 
         bool hasEMPD = false;
         bool hasHAMT = false;
@@ -437,8 +442,9 @@ namespace Material {
 
         void interpSlatAng(BlindBmDf const &t1, BlindBmDf const &t2, Real64 interpFac)
         {
-            for (int i = 0; i < ProfAngs; ++i)
+            for (int i = 0; i < ProfAngs; ++i) {
                 Bm[i].interpSlatAng(t1.Bm[i], t2.Bm[i], interpFac);
+            }
             Df.interpSlatAng(t1.Df, t2.Df, interpFac);
         }
     };
@@ -839,15 +845,12 @@ namespace Material {
         Real64 PoissonsRatio = 0.0; // Poisson's ratio - used in window deflection calculations
 
         // Added 12/22/2008 for thermochromic window glazing material
-        Real64 SpecTemp = 0.0;        // Temperature corresponding to the specified material properties
-        int TCParentMatNum = 0;       // Reference to the parent object WindowMaterial:Glazing:Thermochromic
-        int GlassSpectralDataPtr = 0; // Number of a spectral data set associated with a window glass material
-        int GlassSpecAngTransDataPtr =
-            0; // Data set index of transmittance as a function of spectral and angle associated with a window glass material
-        int GlassSpecAngFRefleDataPtr = 0; // Data set index of front reflectance as a function of spectral and angle associated with a window glass
-        // material
-        int GlassSpecAngBRefleDataPtr = 0; // Data set index of back reflectance as a function of spectral and angle associated with a window glass
-        // material
+        Real64 SpecTemp = 0.0;                          // Temperature corresponding to the specified material properties
+        int TCParentMatNum = 0;                         // Reference to the parent object WindowMaterial:Glazing:Thermochromic
+        int GlassSpectralDataPtr = 0;                   // Number of a spectral data set associated with a window glass material
+        Curve::Curve *GlassSpecAngTransCurve = nullptr; // Transmittance as a function of spectral and angle associated with a glass material
+        Curve::Curve *GlassSpecAngFReflCurve = nullptr; // Front reflectance as a function of spectral and angle associated with a glass material
+        Curve::Curve *GlassSpecAngBReflCurve = nullptr; // Back reflectance as a function of spectral and angle associated with a glass material
 
         // TODO: these and others need to be moved to a child class
         // Simple Glazing System

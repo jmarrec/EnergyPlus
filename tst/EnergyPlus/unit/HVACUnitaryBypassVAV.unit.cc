@@ -290,10 +290,9 @@ protected:
         cbvav.CBVAVBoxOutletNode.allocate(1);
         cbvav.CBVAVBoxOutletNode(1) = 11;
 
-        state->dataCurveManager->allocateCurveVector(1);
-        state->dataCurveManager->PerfCurve(1)->interpolationType = Curve::InterpType::EvaluateCurveToLimits;
-        state->dataCurveManager->PerfCurve(1)->curveType = Curve::CurveType::Linear;
-        state->dataCurveManager->PerfCurve(1)->coeff[0] = 1.0;
+        auto *curve1 = Curve::AddCurve(*state, "Curve1");
+        curve1->curveType = Curve::CurveType::Linear;
+        curve1->coeff[0] = 1.0;
 
         state->dataEnvrn->OutDryBulbTemp = 35.0;
         state->dataEnvrn->OutHumRat = 0.0141066;

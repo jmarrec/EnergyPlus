@@ -1661,7 +1661,25 @@ TEST_F(EnergyPlusFixture, ASIHP_GetIHPInput)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     EXPECT_NO_THROW(GetIHPInput(*state));
-    compare_err_stream("");
+
+    std::string const err_string =
+        delimited_string({"   ** Warning ** ProcessScheduleInput: Schedule:Compact = PLANTHPWHSCH",
+                          "   **   ~~~   ** Schedule Type Limits Name = ANY NUMBER, item not found.",
+                          "   **   ~~~   ** Schedule will not be validated.",
+                          "   ** Warning ** ProcessScheduleInput: Schedule:Compact = HPWHTEMPSCH",
+                          "   **   ~~~   ** Schedule Type Limits Name = ANY NUMBER, item not found.",
+                          "   **   ~~~   ** Schedule will not be validated.",
+                          "   ** Warning ** ProcessScheduleInput: Schedule:Compact = HOT WATER DEMAND SCHEDULE",
+                          "   **   ~~~   ** Schedule Type Limits Name = FRACTION, item not found.",
+                          "   **   ~~~   ** Schedule will not be validated.",
+                          "   ** Warning ** ProcessScheduleInput: DecodeHHMMField, Invalid \"until\" field value is not a multiple of the minutes "
+                          "for each timestep: UNTIL: 13:10",
+                          "   **   ~~~   ** Other errors may result. Occurred in Day Schedule=HOT WATER DEMAND SCHEDULE_dy_1",
+                          "   ** Warning ** ProcessScheduleInput: Schedule:Compact = HOT WATER SETPOINT TEMP SCHEDULE",
+                          "   **   ~~~   ** Schedule Type Limits Name = ANY NUMBER, item not found.",
+                          "   **   ~~~   ** Schedule will not be validated."});
+    compare_err_stream(err_string);
 }

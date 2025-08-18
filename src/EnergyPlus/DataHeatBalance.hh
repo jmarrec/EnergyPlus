@@ -158,6 +158,11 @@ namespace DataHeatBalance {
         Num
     };
 
+    constexpr std::array<std::string_view, (int)RefrigCondenserType::Num> refrigCondenserTypeNames = {
+        "AirCooled", "EvaporativelyCooled", "WaterCooled", "Cascade", "WaterHeater"}; // Are the last two used?
+    constexpr std::array<std::string_view, (int)RefrigCondenserType::Num> refrigCondenserTypeNamesUC = {
+        "AIRCOOLED", "EVAPORATIVELYCOOLED", "WATERCOOLED", "CASCADE", "WATERHEATER"}; // Are the last two used?
+
     // Parameters for type of infiltration model
     enum class InfiltrationModelType
     {

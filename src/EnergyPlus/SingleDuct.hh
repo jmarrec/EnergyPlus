@@ -403,20 +403,6 @@ struct SingleDuctData : BaseGlobalStruct
     Real64 ZoneTempSCV = 0.0;                      // Zone temperature [C]
     Real64 QMax2SCV = 0.0;
     int SysNumSATM = 0;
-    Real64 PriMassFlowRateCATM = 0.0;
-    Real64 PriEnthalpyCATM = 0.0;
-    Real64 PriHumRatCATM = 0.0;
-    Real64 PriTempCATM = 0.0;
-
-    Real64 SecAirMassFlowRateCATM = 0.0;
-    Real64 SecAirEnthalpyCATM = 0.0;
-    Real64 SecAirHumRatCATM = 0.0;
-    Real64 SecAirTempCATM = 0.0;
-
-    Real64 MixedAirMassFlowRateCATM = 0.0;
-    Real64 MixedAirEnthalpyCATM = 0.0;
-    Real64 MixedAirHumRatCATM = 0.0;
-    Real64 MixedAirTempCATM = 0.0;
 
     Real64 ZoneTempSDAT = 0.0;                      // zone air temperature [C]
     Real64 MaxHeatTempSDAT = 0.0;                   // maximum supply air temperature [C]

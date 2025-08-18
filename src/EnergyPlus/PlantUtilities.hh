@@ -169,6 +169,8 @@ namespace PlantUtilities {
 
     void LogPlantConvergencePoints(EnergyPlusData &state, bool FirstHVACIteration);
 
+    void SetPlantLocationLinks(EnergyPlusData &state, PlantLocation &plantLoc);
+
     void ScanPlantLoopsForObject(EnergyPlusData &state,
                                  std::string_view CompName,
                                  DataPlant::PlantEquipmentType CompType,

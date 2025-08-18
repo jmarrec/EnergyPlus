@@ -90,14 +90,11 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
     bool TestResult;
 
     // Allocate
-    state->dataCurveManager->allocateCurveVector(1);
-
     state->dataFaultsMgr->FaultsFouledAirFilters.allocate(numFans);
 
     // Inputs: fan curve
-    auto *curve = state->dataCurveManager->PerfCurve(1);
+    auto *curve = AddCurve(*state, "Curve1");
     curve->curveType = CurveType::Cubic;
-    curve->interpolationType = InterpType::EvaluateCurveToLimits;
     curve->coeff[0] = 1151.1;
     curve->coeff[1] = 13.509;
     curve->coeff[2] = -0.9105;
@@ -145,7 +142,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
     EXPECT_FALSE(TestResult);
 
     // Clean up
-    state->dataCurveManager->PerfCurve.deallocate();
+    state->dataCurveManager->curves.deallocate();
 }
 
 TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFilterFanCurve_AutosizedFan)
@@ -345,15 +342,9 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CalFaultyFanAirFl
     double FanDesignFlowRateDec;
     double FanFaultyDeltaPressInc = 0.10; // Increase by 10%
 
-    state->init_state(*state);
-
-    // Allocate
-    state->dataCurveManager->allocateCurveVector(1);
-
     // Inputs: fan curve
-    auto *curve = state->dataCurveManager->PerfCurve(1);
+    auto *curve = AddCurve(*state, "Curve1");
     curve->curveType = CurveType::Cubic;
-    curve->interpolationType = InterpType::EvaluateCurveToLimits;
     curve->coeff[0] = 1151.1;
     curve->coeff[1] = 13.509;
     curve->coeff[2] = -0.9105;
@@ -380,7 +371,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CalFaultyFanAirFl
     EXPECT_NEAR(3.845, FanDesignFlowRateDec, 0.005);
 
     // Clean up
-    state->dataCurveManager->PerfCurve.deallocate();
+    state->dataCurveManager->curves.deallocate();
 }
 
 TEST_F(EnergyPlusFixture, FaultsManager_TemperatureSensorOffset_CoilSAT)

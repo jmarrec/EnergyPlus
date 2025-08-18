@@ -138,8 +138,7 @@ TEST_F(EnergyPlusFixture, ExerciseHVACDXHeatPumpSystem)
     state->dataDXCoils->DXCoil(1).DXCoilType_Num = HVAC::CoilDX_HeatingEmpirical;
 
     // manually add a curve
-    state->dataCurveManager->allocateCurveVector(1);
-    state->dataCurveManager->PerfCurve(1)->interpolationType = Curve::InterpType::EvaluateCurveToLimits;
+    auto *curve = Curve::AddCurve(*state, "Curve1");
 
     // setup some outputs
     OutputReportPredefined::SetPredefinedTables(*state);

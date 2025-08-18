@@ -82,7 +82,7 @@
 #include <EnergyPlus/ZoneEquipmentManager.hh>
 #include <EnergyPlus/ZoneTempPredictorCorrector.hh>
 
-#include <nlohmann/json_literals.hpp>
+#include <nlohmann/json.hpp>
 
 #include "Fixtures/EnergyPlusFixture.hh"
 
@@ -95,6 +95,7 @@ using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataAirLoop;
 using namespace EnergyPlus::DataAirSystems;
+using namespace nlohmann::literals;
 
 namespace EnergyPlus {
 

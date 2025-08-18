@@ -168,7 +168,7 @@ jobs:
 
     - name: Install Regression Tool
       if: always() && matrix.run_regressions && steps.branch_build.outcome != 'failure'  # always run this step as long as we actually built
-      run: pip install energyplus-regressions>=2.1.2
+      run: pip install energyplus-regressions>=2.1.4
 
     - name: Run Regressions
       if: always() && matrix.run_regressions && steps.branch_build.outcome != 'failure'  # always run this step as long as we actually built

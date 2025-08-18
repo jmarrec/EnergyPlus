@@ -116,13 +116,13 @@ namespace DataGenerators {
         Num
     };
 
-    enum class WaterTemperatureMode
+    enum class WaterTempMode
     {
         Invalid = -1,
-        WaterInReformMains,
-        WaterInReformAirNode,
-        WaterInReformWaterNode,
-        WaterInReformSchedule,
+        Mains,
+        AirNode,
+        WaterNode,
+        Schedule,
         Num
     };
 

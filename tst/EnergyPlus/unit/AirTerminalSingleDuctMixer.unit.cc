@@ -3314,7 +3314,7 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRF_ATMSupplySide)
     // check the terminal air mixer outlet air mass flow rate
     ATMixerOutletMassFlowRate = SecondaryAirMassFlowRate + PrimaryAirMassFlowRate;
     ASSERT_EQ(ATMixerOutletMassFlowRate, state->dataSingleDuct->SysATMixer(1).MixedAirMassFlowRate);
-    // check the cooling output delivered is within 2.0 Watt of zone cooling load
+    // check the cooling output delivered is within 4.0 Watt of zone cooling load
     ASSERT_NEAR(QZnReq, QUnitOutVRFTU, 4.0);
 }
 
@@ -5094,6 +5094,7 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRFfluidCntrl_ATMInletSi
     ASSERT_EQ(HVACInletMassFlowRate, state->dataSingleDuct->SysATMixer(1).MixedAirMassFlowRate);
     // check the cooling output delivered is within 5.0 Watt of zone cooling load
     ASSERT_NEAR(QZnReq, QUnitOutVRFTU, 5.0);
+    EXPECT_NEAR(0.965, state->dataDXCoils->DXCoil(1).PartLoadRatio, 0.001);
 }
 
 TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRFfluidCntrl_ATMSupplySide)

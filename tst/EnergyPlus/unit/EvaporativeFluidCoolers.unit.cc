@@ -58,6 +58,7 @@
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataSizing.hh>
 #include <EnergyPlus/EvaporativeFluidCoolers.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/SimAirServingZones.hh>
 
@@ -79,6 +80,30 @@ TEST_F(EnergyPlusFixture, EvapFluidCoolerSpecs_getDesignCapacitiesTest)
     Real64 ExpectedMinLoad;
     Real64 ExpectedOptLoad;
 
+    state->dataEnvrn->OutDryBulbTemp = 20.0;
+    state->dataEnvrn->OutHumRat = 0.02;
+    state->dataEnvrn->OutBaroPress = 101325.;
+    state->dataEnvrn->OutWetBulbTemp = 8.0;
+
+    state->dataPlnt->PlantLoop.allocate(1);
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).FlowLock = DataPlant::FlowLock::Locked;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1).MyLoad = 1.0;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1).ON = false;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1).CurOpSchemeType = DataPlant::OpScheme::Invalid;
+    state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
+    state->dataPlnt->PlantFinalSizesOkayToReport = false;
+    state->dataSize->SaveNumPlantComps = 0;
+
+    state->dataSize->PlantSizData.allocate(1);
+    state->dataSize->PlantSizData(1).DeltaT = 5.0;
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+    state->dataSize->PlantSizData(1).ExitTemp = 20.0;
+
     // Set up information required to actually run the routines that get called as a result of running this test.
     // In general, values set here attempt to avoid as much code as possible so that only the defect code is run.
     // Obviously, not everything can be skipped so some of this information is needed to avoid crashes in other routines.
@@ -96,11 +121,15 @@ TEST_F(EnergyPlusFixture, EvapFluidCoolerSpecs_getDesignCapacitiesTest)
     thisEFC.plantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
     thisEFC.plantLoc.branchNum = 1;
     thisEFC.plantLoc.compNum = 1;
-    PlantLocation pl;
-    state->dataEnvrn->OutDryBulbTemp = 20.0;
-    state->dataEnvrn->OutHumRat = 0.02;
-    state->dataEnvrn->OutBaroPress = 101325.;
-    state->dataEnvrn->OutWetBulbTemp = 8.0;
+    PlantUtilities::SetPlantLocationLinks(*state, thisEFC.plantLoc);
+
+    thisEFC.DesignWaterFlowRateWasAutoSized = false;
+    thisEFC.LowSpeedAirFlowRateWasAutoSized = false;
+    thisEFC.HighSpeedEvapFluidCoolerUAWasAutoSized = false;
+    thisEFC.PerformanceInputMethod_Num = PIM::UFactor;
+
+    thisEFC.DesignWaterFlowRate = 0.001;
+
     state->dataLoopNodes->Node.allocate(2);
     state->dataLoopNodes->Node(thisEFC.WaterInletNodeNum).Temp = 20.0;
     state->dataLoopNodes->Node(1).Temp = 23.0;
@@ -109,29 +138,6 @@ TEST_F(EnergyPlusFixture, EvapFluidCoolerSpecs_getDesignCapacitiesTest)
     state->dataLoopNodes->Node(1).MassFlowRateMin = 0.0;
     state->dataLoopNodes->Node(1).MassFlowRateMax = 0.05;
     state->dataLoopNodes->Node(1).MassFlowRateMaxAvail = 0.05;
-
-    state->dataPlnt->PlantLoop.allocate(1);
-    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
-    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).FlowLock = DataPlant::FlowLock::Locked;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1).MyLoad = 1.0;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1).ON = false;
-    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1).CurOpSchemeType = DataPlant::OpScheme::Invalid;
-    thisEFC.DesignWaterFlowRateWasAutoSized = false;
-    thisEFC.LowSpeedAirFlowRateWasAutoSized = false;
-    thisEFC.HighSpeedEvapFluidCoolerUAWasAutoSized = false;
-    thisEFC.PerformanceInputMethod_Num = PIM::UFactor;
-    state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
-    state->dataPlnt->PlantFinalSizesOkayToReport = false;
-    state->dataSize->SaveNumPlantComps = 0;
-    thisEFC.DesignWaterFlowRate = 0.001;
-    state->dataSize->PlantSizData.allocate(1);
-    state->dataSize->PlantSizData(1).DeltaT = 5.0;
-    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
-    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
-    state->dataSize->PlantSizData(1).ExitTemp = 20.0;
 
     // Now set the specific data for the actual test
     MaxLoad = 0.0;
@@ -145,8 +151,10 @@ TEST_F(EnergyPlusFixture, EvapFluidCoolerSpecs_getDesignCapacitiesTest)
 
     // Call the routine to be tested and see if the fix is correct
     PlantLocation loc = PlantLocation(1, DataPlant::LoopSideLocation::Supply, 1, 1);
+    PlantUtilities::SetPlantLocationLinks(*state, loc);
+
     thisEFC.onInitLoopEquip(*state, loc);
-    thisEFC.getDesignCapacities(*state, pl, MaxLoad, MinLoad, OptLoad);
+    thisEFC.getDesignCapacities(*state, loc, MaxLoad, MinLoad, OptLoad);
     EXPECT_NEAR(MaxLoad, ExpectedMaxLoad, 0.01);
     EXPECT_NEAR(MinLoad, ExpectedMinLoad, 0.01);
     EXPECT_NEAR(OptLoad, ExpectedOptLoad, 0.01);
@@ -178,15 +186,17 @@ TEST_F(EnergyPlusFixture, ExerciseSingleSpeedEvapFluidCooler)
     EvapFluidCoolerSpecs *ptr =
         EvapFluidCoolerSpecs::factory(*state, DataPlant::PlantEquipmentType::EvapFluidCooler_SingleSpd, "BIG EVAPORATIVEFLUIDCOOLER");
 
-    PlantLocation pl{1, EnergyPlus::DataPlant::LoopSideLocation::Supply, 1, 1};
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(EnergyPlus::DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
     state->dataPlnt->PlantLoop(1).LoopSide(EnergyPlus::DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
 
+    PlantLocation loc{1, EnergyPlus::DataPlant::LoopSideLocation::Supply, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, loc);
+
     Real64 max, opt, min = 0.0;
-    ptr->getDesignCapacities(*state, pl, max, min, opt);
+    ptr->getDesignCapacities(*state, loc, max, min, opt);
     EXPECT_NEAR(max, 1250, 1.0);
     EXPECT_NEAR(min, 0.0, 1.0);
     EXPECT_NEAR(opt, 1000.0, 1.0);
@@ -219,10 +229,12 @@ TEST_F(EnergyPlusFixture, ExerciseSingleSpeedEvapFluidCooler)
     ptr->plantLoc.loopSideNum = EnergyPlus::DataPlant::LoopSideLocation::Supply;
     ptr->plantLoc.branchNum = 1;
     ptr->plantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, ptr->plantLoc);
+
     ptr->DesWaterMassFlowRate = 3.141;
     ptr->WaterMassFlowRate = 3.141;
-    ptr->onInitLoopEquip(*state, pl);
-    ptr->simulate(*state, pl, firstHVAC, curLoad, true);
+    ptr->onInitLoopEquip(*state, loc);
+    ptr->simulate(*state, loc, firstHVAC, curLoad, true);
 }
 TEST_F(EnergyPlusFixture, ExerciseTwoSpeedEvapFluidCooler)
 {

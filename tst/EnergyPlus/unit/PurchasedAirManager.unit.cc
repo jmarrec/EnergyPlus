@@ -180,10 +180,10 @@ TEST_F(EnergyPlusFixture, SizePurchasedAirTest_Test1)
 
     state->dataSize->ZoneSizingRunDone = true;
 
-    state->dataPurchasedAirMgr->PurchAir(PurchAirNum).HeatingLimit = LimitType::LimitFlowRateAndCapacity;
+    state->dataPurchasedAirMgr->PurchAir(PurchAirNum).HeatingLimit = LimitType::FlowRateAndCapacity;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).MaxHeatVolFlowRate = AutoSize;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).MaxHeatSensCap = AutoSize;
-    state->dataPurchasedAirMgr->PurchAir(PurchAirNum).CoolingLimit = LimitType::LimitFlowRateAndCapacity;
+    state->dataPurchasedAirMgr->PurchAir(PurchAirNum).CoolingLimit = LimitType::FlowRateAndCapacity;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).MaxCoolVolFlowRate = AutoSize;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).MaxCoolTotCap = AutoSize;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).cObjectName = "ZONEHVAC:IDEALLOADSAIRSYSTEM";
@@ -236,10 +236,10 @@ TEST_F(EnergyPlusFixture, SizePurchasedAirTest_Test2)
 
     state->dataSize->ZoneSizingRunDone = true;
 
-    state->dataPurchasedAirMgr->PurchAir(PurchAirNum).HeatingLimit = LimitType::LimitFlowRateAndCapacity;
+    state->dataPurchasedAirMgr->PurchAir(PurchAirNum).HeatingLimit = LimitType::FlowRateAndCapacity;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).MaxHeatVolFlowRate = AutoSize;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).MaxHeatSensCap = AutoSize;
-    state->dataPurchasedAirMgr->PurchAir(PurchAirNum).CoolingLimit = LimitType::LimitFlowRateAndCapacity;
+    state->dataPurchasedAirMgr->PurchAir(PurchAirNum).CoolingLimit = LimitType::FlowRateAndCapacity;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).MaxCoolVolFlowRate = AutoSize;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).MaxCoolTotCap = AutoSize;
     state->dataPurchasedAirMgr->PurchAir(PurchAirNum).cObjectName = "ZONEHVAC:IDEALLOADSAIRSYSTEM";
@@ -299,8 +299,8 @@ TEST_F(EnergyPlusFixture, IdealLoadsAirSystem_GetInput)
     EXPECT_EQ(PurchAir(1).MinCoolSuppAirTemp, 13.0);
     EXPECT_EQ(PurchAir(1).MaxHeatSuppAirHumRat, 0.015);
     EXPECT_EQ(PurchAir(1).MinCoolSuppAirHumRat, 0.009);
-    EXPECT_ENUM_EQ(PurchAir(1).HeatingLimit, LimitType::NoLimit);
-    EXPECT_ENUM_EQ(PurchAir(1).CoolingLimit, LimitType::NoLimit);
+    EXPECT_ENUM_EQ(PurchAir(1).HeatingLimit, LimitType::None);
+    EXPECT_ENUM_EQ(PurchAir(1).CoolingLimit, LimitType::None);
     EXPECT_ENUM_EQ(PurchAir(1).DehumidCtrlType, HumControl::ConstantSupplyHumidityRatio);
     EXPECT_ENUM_EQ(PurchAir(1).HumidCtrlType, HumControl::ConstantSupplyHumidityRatio);
 }
