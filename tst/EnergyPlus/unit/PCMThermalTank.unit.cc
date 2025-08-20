@@ -111,6 +111,11 @@ TEST_F(EnergyPlusFixture, PCMThermalTankUseEnergy)
 
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
+    bool ErrorsFound = false;
+    Material::GetMaterialData(*state, ErrorsFound);
+    EXPECT_FALSE(ErrorsFound);
+    Material::GetHysteresisData(*state, ErrorsFound);
+    EXPECT_FALSE(ErrorsFound);
 
     // Input routine (fatal on bad input; consistent with WH tests that just call Get...Input)
     PCMStorage::GetPCMStorageInput(*state);
@@ -119,7 +124,7 @@ TEST_F(EnergyPlusFixture, PCMThermalTankUseEnergy)
     auto &pcm = PCMStorageData::instance();
 
     // Names / basic numerics
-    EXPECT_EQ("PCM Tank", pcm.Name);
+    EXPECT_EQ("PCM TANK", pcm.Name);
     EXPECT_DOUBLE_EQ(400.0, pcm.TankCapacity);
     EXPECT_DOUBLE_EQ(25.0, pcm.HeatLossRate);
 
