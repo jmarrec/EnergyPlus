@@ -202,18 +202,11 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
         state->dataGlobal->MinutesInTimeStep = 60;
 
         // Since I need to check the error message, set the callback
-        state->dataGlobal->errorCallback = [](EnergyPlus::Error errorCode, const std::string description) -> void { std::cerr << description; };
+        //Check to see if there are two zeros in a row, if so, then the formatting is truncating too much
+        state->dataGlobal->errorCallback = [](EnergyPlus::Error errorCode, const std::string description) -> void {EXPECT_EQ((description.find("0.00,   0.00") == std::string::npos), true); };
         
 
         state->init_state(*state);
-        // Capture original cout before redirecting
-        std::streambuf* old_cout_buf = std::cout.rdbuf();
-
-        // Redirect cout to check that the error displays correctly
-        std::stringstream ss;
-        std::cerr.rdbuf(ss.rdbuf());
-
-        //EXPECT_TRUE(false) << "Here";
         // This should throw a negative value error, check that the display isn't 0 0, 
         // but instead displays the negative number
         try {
@@ -222,14 +215,6 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
         catch (const std::exception& e) {
             // An error is expected with this data
         }
-        // Reset cout location
-        std::cerr.rdbuf(old_cout_buf);
-
-        // Get the expected error
-        std::string error_output = ss.str();
-
-        //Check to see if there are two zeros in a row, if so, then the formatting is truncating too much
-        EXPECT_EQ((error_output.find("0.00,   0.00") == std::string::npos), true);
     }
     catch (const std::exception& e) {
         EXPECT_TRUE(false) << "Caught exception: " << e.what() << std::endl;
