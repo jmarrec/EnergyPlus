@@ -193,7 +193,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
             "    0.0,                     !- Minimum Value of x",
             "    1.0;                     !- Maximum Value of x",
             });
- 
+
         EXPECT_TRUE(process_idf(idf_objects, false));
 
 
@@ -201,7 +201,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
         state->dataGlobal->TimeStep = 1;
         state->dataGlobal->MinutesInTimeStep = 60;
 
-        
+
 
         state->init_state(*state);
         // This should throw a negative value error, check that the display isn't 0 0, 
@@ -220,7 +220,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
 TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestOutletNodeConditions)
 {
     state->dataChillerElectricEIR->ElectricEIRChiller.allocate(1);
-    auto &thisEIR = state->dataChillerElectricEIR->ElectricEIRChiller(1);
+    auto& thisEIR = state->dataChillerElectricEIR->ElectricEIRChiller(1);
 
     thisEIR.EvapInletNodeNum = 1;
     thisEIR.EvapOutletNodeNum = 2;
@@ -263,7 +263,7 @@ TEST_F(EnergyPlusFixture, ElectricEIRChiller_HeatRecoveryAutosizeTest)
     state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
     // unit test for autosizing heat recovery in Chiller:Electric:EIR
     state->dataChillerElectricEIR->ElectricEIRChiller.allocate(1);
-    auto &thisEIR = state->dataChillerElectricEIR->ElectricEIRChiller(1);
+    auto& thisEIR = state->dataChillerElectricEIR->ElectricEIRChiller(1);
 
     thisEIR.SizFac = 1.0;
     thisEIR.DesignHeatRecVolFlowRateWasAutoSized = true;
@@ -345,7 +345,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_AirCooledChiller)
         "Curve:Biquadratic, Air cooled CentEIRFT, 0.933884, -0.058212,  0.00450036, 0.00243,    0.000486,   -0.001215,   5, 10, 24, 35, , , , , ;",
         "Curve:Quadratic, Air cooled CentEIRFPLR, 0.222903,  0.313387,  0.46371,    0, 1, , , , ;",
 
-    });
+        });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
 
@@ -358,16 +358,16 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_AirCooledChiller)
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     for (int l = 1; l <= state->dataPlnt->TotNumLoops; ++l) {
-        auto &loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
+        auto& loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
         loopside.TotalBranches = 1;
         loopside.Branch.allocate(1);
-        auto &loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
+        auto& loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
         loopsidebranch.TotalComponents = 1;
         loopsidebranch.Comp.allocate(1);
     }
 
     GetElectricEIRChillerInput(*state);
-    auto &thisEIR = state->dataChillerElectricEIR->ElectricEIRChiller(1);
+    auto& thisEIR = state->dataChillerElectricEIR->ElectricEIRChiller(1);
 
     state->dataPlnt->PlantLoop(1).Name = "ChilledWaterLoop";
     state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
@@ -479,7 +479,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_EvaporativelyCooled_Calculate)
         "Curve:Biquadratic, Evap cooled CentEIRFT, 0.933884, -0.058212,  0.00450036, 0.00243,    0.000486,   -0.001215,   5, 10, 24, 35, , , , , ;",
         "Curve:Quadratic, Evap cooled CentEIRFPLR, 0.222903,  0.313387,  0.46371,    0, 1, , , , ;",
 
-    });
+        });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
 
@@ -495,16 +495,16 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_EvaporativelyCooled_Calculate)
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     for (int l = 1; l <= state->dataPlnt->TotNumLoops; ++l) {
-        auto &loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
+        auto& loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
         loopside.TotalBranches = 1;
         loopside.Branch.allocate(1);
-        auto &loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
+        auto& loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
         loopsidebranch.TotalComponents = 1;
         loopsidebranch.Comp.allocate(1);
     }
 
     GetElectricEIRChillerInput(*state);
-    auto &thisEIRChiller = state->dataChillerElectricEIR->ElectricEIRChiller(1);
+    auto& thisEIRChiller = state->dataChillerElectricEIR->ElectricEIRChiller(1);
 
     state->dataPlnt->PlantLoop(1).Name = "ChilledWaterLoop";
     state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
@@ -557,7 +557,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_EvaporativelyCooled_Calculate)
     thisEIRChiller.calculate(*state, MyLoad, RunFlag);
     // calc evap-cooler water consumption rate
     Real64 EvapCondWaterVolFlowRate = thisEIRChiller.CondMassFlowRate * (thisEIRChiller.CondOutletHumRat - state->dataEnvrn->OutHumRat) /
-                                      Psychrometrics::RhoH2O(Constant::InitConvTemp);
+        Psychrometrics::RhoH2O(Constant::InitConvTemp);
     // check evap-cooled condenser water consumption rate
     EXPECT_NEAR(2.31460814, thisEIRChiller.CondMassFlowRate, 0.0000001);
     EXPECT_NEAR(6.22019725E-06, EvapCondWaterVolFlowRate, 0.000000001);
@@ -626,7 +626,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_WaterCooledChillerVariableSpeedCond
         "Curve:Biquadratic, DummyEIRfT, 1, 0,  0, 0, 0, 0,   5, 10, 24, 35, , , , , ;",
         "Curve:Quadratic, DummyEIRfPLR, 1,  0,  0, 0, 1, , , , ;",
 
-    });
+        });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
 
@@ -635,16 +635,16 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_WaterCooledChillerVariableSpeedCond
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     for (int l = 1; l <= state->dataPlnt->TotNumLoops; ++l) {
-        auto &loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
+        auto& loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
         loopside.TotalBranches = 1;
         loopside.Branch.allocate(1);
-        auto &loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
+        auto& loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
         loopsidebranch.TotalComponents = 1;
         loopsidebranch.Comp.allocate(1);
     }
 
     GetElectricEIRChillerInput(*state);
-    auto &thisChiller = state->dataChillerElectricEIR->ElectricEIRChiller(1);
+    auto& thisChiller = state->dataChillerElectricEIR->ElectricEIRChiller(1);
     state->dataLoopNodes->Node.allocate(10);
 
     state->dataPlnt->PlantLoop(1).Name = "ChilledWaterLoop";
@@ -821,7 +821,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_OutputReport)
         "Curve:Biquadratic, DummyEIRfT, 1, 0,  0, 0, 0, 0,   5, 10, 24, 35, , , , , ;",
         "Curve:Quadratic, DummyEIRfPLR, 1,  0,  0, 0, 1, , , , ;",
 
-    });
+        });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
     state->init_state(*state);
@@ -832,16 +832,16 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_OutputReport)
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     state->dataSize->PlantSizData.allocate(state->dataPlnt->TotNumLoops);
     for (int l = 1; l <= state->dataPlnt->TotNumLoops; ++l) {
-        auto &loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
+        auto& loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
         loopside.TotalBranches = 1;
         loopside.Branch.allocate(1);
-        auto &loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
+        auto& loopsidebranch(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1));
         loopsidebranch.TotalComponents = 1;
         loopsidebranch.Comp.allocate(1);
     }
 
     GetElectricEIRChillerInput(*state);
-    auto &thisChiller = state->dataChillerElectricEIR->ElectricEIRChiller(1);
+    auto& thisChiller = state->dataChillerElectricEIR->ElectricEIRChiller(1);
     int constexpr num_nodes = 10;
     state->dataLoopNodes->Node.allocate(num_nodes);
 
@@ -914,7 +914,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_OutputReport)
     thisChiller.size(*state);
 
     // compare_err_stream("");
-    auto &orp = *state->dataOutRptPredefined;
+    auto& orp = *state->dataOutRptPredefined;
     std::string const ChillerName = thisChiller.Name;
     // Type
     EXPECT_EQ("Chiller:Electric:EIR", OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerType, ChillerName));
@@ -951,17 +951,17 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_OutputReport)
     EXPECT_EQ("ChilledWaterLoop", OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerPlantloopName, ChillerName));
     // Plantloop Branch Name
     EXPECT_EQ("WaterChiller Supply Branch",
-              OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerPlantloopBranchName, ChillerName));
+        OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerPlantloopBranchName, ChillerName));
     // Condenser Loop Name
     EXPECT_EQ("CondenserWaterLoop", OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerCondLoopName, ChillerName));
     // Condenser Loop Branch Name
     EXPECT_EQ("WaterChiller Condenser Branch",
-              OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerCondLoopBranchName, ChillerName));
+        OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerCondLoopBranchName, ChillerName));
     // Heat Recovery Plantloop Name
     EXPECT_EQ("HecRecWaterLoop", OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerHeatRecPlantloopName, ChillerName));
     // Heat Recovery Plantloop Branch Name
     EXPECT_EQ("WaterChiller HecRec Branch",
-              OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerHeatRecPlantloopBranchName, ChillerName));
+        OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerHeatRecPlantloopBranchName, ChillerName));
     // Recovery Relative Capacity Fraction
     EXPECT_EQ("0.30", OutputReportPredefined::RetrievePreDefTableEntry(*state, orp.pdchChillerRecRelCapFrac, ChillerName));
 }
