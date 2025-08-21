@@ -201,9 +201,6 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
         state->dataGlobal->TimeStep = 1;
         state->dataGlobal->MinutesInTimeStep = 60;
 
-        // Since I need to check the error message, set the callback
-        // Check to see if there are two zeros in a row, if so, then the formatting is truncating too much
-        state->dataGlobal->errorCallback = [](EnergyPlus::Error errorCode, const std::string description) -> void {EXPECT_EQ((description.find("0.00,   0.00") == std::string::npos), true); };
         
 
         state->init_state(*state);
@@ -215,6 +212,8 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
         catch (const std::exception& e) {
             // An error is expected with this data
         }
+        // Check to see if there are two zeros in a row, if so, then the formatting is truncating too much
+        EXPECT_EQ(compare_err_stream_substring("0.00,   0.00", true, false), false);
     }
     catch (const std::exception& e) {
         EXPECT_TRUE(false) << "Caught exception: " << e.what() << std::endl;
