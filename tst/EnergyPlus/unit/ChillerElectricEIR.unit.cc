@@ -209,7 +209,7 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
         try {
             GetElectricEIRChillerInput(*state);
         }
-        catch (const std::exception& e) {
+        catch (const EnergyPlus::FatalError& e) {
             // An error is expected with this data
         }
         // Check to see if there are two zeros in a row, if so, then the formatting is truncating too much
