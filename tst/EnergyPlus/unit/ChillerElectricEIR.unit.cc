@@ -206,12 +206,9 @@ TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
         state->init_state(*state);
         // This should throw a negative value error, check that the display isn't 0 0, 
         // but instead displays the negative number
-        try {
-            GetElectricEIRChillerInput(*state);
-        }
-        catch (const EnergyPlus::FatalError& e) {
-            // An error is expected with this data
-        }
+        // An error is expected with this data
+        EXPECT_THROW(GetElectricEIRChillerInput(*state), EnergyPlus::FatalError);
+
         // Check to see if there are two zeros in a row, if so, then the formatting is truncating too much
         EXPECT_EQ(compare_err_stream_substring("0.00,   0.00", true, false), false);
     }
