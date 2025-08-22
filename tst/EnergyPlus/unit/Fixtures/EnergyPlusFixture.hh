@@ -65,256 +65,256 @@
 
 namespace EnergyPlus {
 
-    template <typename T, typename = typename std::enable_if_t<std::is_enum_v<T>, T>> constexpr std::ostream& operator<<(std::ostream& stream, T e)
+template <typename T, typename = typename std::enable_if_t<std::is_enum_v<T>, T>> constexpr std::ostream &operator<<(std::ostream &stream, T e)
+{
+    return stream << static_cast<typename std::underlying_type_t<T>>(e);
+}
+
+struct EnergyPlusData;
+
+// This is a helper struct to redirect std::cout. This makes sure std::cout is redirected back and
+// everything is cleaned up properly
+struct RedirectCout
+{
+    RedirectCout(std::unique_ptr<std::ostringstream> const &m_buffer) : m_old_buffer(std::cout.rdbuf(m_buffer->rdbuf()))
     {
-        return stream << static_cast<typename std::underlying_type_t<T>>(e);
     }
 
-    struct EnergyPlusData;
-
-    // This is a helper struct to redirect std::cout. This makes sure std::cout is redirected back and
-    // everything is cleaned up properly
-    struct RedirectCout
+    ~RedirectCout()
     {
-        RedirectCout(std::unique_ptr<std::ostringstream> const& m_buffer) : m_old_buffer(std::cout.rdbuf(m_buffer->rdbuf()))
-        {
-        }
+        std::cout.rdbuf(m_old_buffer.release());
+    }
 
-        ~RedirectCout()
-        {
-            std::cout.rdbuf(m_old_buffer.release());
-        }
+private:
+    std::unique_ptr<std::streambuf> m_old_buffer;
+};
 
-    private:
-        std::unique_ptr<std::streambuf> m_old_buffer;
-    };
-
-    // This is a helper struct to redirect std::cerr. This makes sure std::cerr is redirected back and
-    // everything is cleaned up properly
-    struct RedirectCerr
+// This is a helper struct to redirect std::cerr. This makes sure std::cerr is redirected back and
+// everything is cleaned up properly
+struct RedirectCerr
+{
+    RedirectCerr(std::unique_ptr<std::ostringstream> const &m_buffer) : m_old_buffer(std::cerr.rdbuf(m_buffer->rdbuf()))
     {
-        RedirectCerr(std::unique_ptr<std::ostringstream> const& m_buffer) : m_old_buffer(std::cerr.rdbuf(m_buffer->rdbuf()))
-        {
-        }
+    }
 
-        ~RedirectCerr()
-        {
-            std::cerr.rdbuf(m_old_buffer.release());
-        }
-
-    private:
-        std::unique_ptr<std::streambuf> m_old_buffer;
-    };
-
-    class EnergyPlusFixture : public testing::Test
+    ~RedirectCerr()
     {
-    protected:
-        // static void SetUpTestCase();
-        static void TearDownTestCase()
-        {
+        std::cerr.rdbuf(m_old_buffer.release());
+    }
+
+private:
+    std::unique_ptr<std::streambuf> m_old_buffer;
+};
+
+class EnergyPlusFixture : public testing::Test
+{
+protected:
+    // static void SetUpTestCase();
+    static void TearDownTestCase()
+    {
+    }
+
+    // This is run every unit test for this fixture.
+    // It sets up the various stream redirections.
+    // It also calls show_message every unit test to output a begin message to the error file.
+    virtual void SetUp();
+
+    // This is run every unit test and makes sure to clear all state in global variables this fixture touches.
+    virtual void TearDown();
+
+    // This will output the "Begin Test" ShowMessage for every unit test that uses or inherits from this fixture.
+    // Now this does not need to be manually entered for every unit test as well as it will automatically be updated as the
+    // unit test names change.
+    void show_message();
+
+    // This will compare either a STL container or ObjexxFCL container
+    // Pass a container you want to compare against an expected container. You can pass in an existing
+    // container or use an initializer list like below.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if containers are equal and false if they are not.
+    // Example Usage:
+    // 		EXPECT_TRUE( compare_containers( std::vector< bool >( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
+    // 		EXPECT_TRUE( compare_containers( Array1D_bool( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
+    template <class T, class T2> bool compare_containers(T const &expected_container, T2 const &actual_container)
+    {
+        bool is_valid = (expected_container.size() == actual_container.size());
+        EXPECT_EQ(expected_container.size(), actual_container.size()) << "Containers are not equal size.";
+        auto expected = expected_container.begin();
+        auto actual = actual_container.begin();
+        for (; expected != expected_container.end(); ++expected, ++actual) {
+            // This may fail due to floating point issues for float and double...
+            EXPECT_EQ(*expected, *actual) << "Incorrect 0-based index: " << (expected - expected_container.begin());
+            is_valid = (*expected == *actual);
         }
+        return is_valid;
+    }
 
-        // This is run every unit test for this fixture.
-        // It sets up the various stream redirections.
-        // It also calls show_message every unit test to output a begin message to the error file.
-        virtual void SetUp();
+    // This function creates a string based on a vector of string inputs that is delimited by DataStringGlobals::NL by default, but any
+    // delimiter can be passed in to this function. This allows for cross platform output string comparisons.
+    static std::string delimited_string(std::vector<std::string> const &strings, std::string const &delimiter = "\n");
 
-        // This is run every unit test and makes sure to clear all state in global variables this fixture touches.
-        virtual void TearDown();
+    // This function reads all the lines in the supplied filePath. It puts each line into the vector.
+    std::vector<std::string> read_lines_in_file(fs::path const &filePath);
 
-        // This will output the "Begin Test" ShowMessage for every unit test that uses or inherits from this fixture.
-        // Now this does not need to be manually entered for every unit test as well as it will automatically be updated as the
-        // unit test names change.
-        void show_message();
+    // Compare an expected string against the ESO stream. The default is to reset the ESO stream after every call.
+    // It is easier to test successive functions if the ESO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eso_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // This will compare either a STL container or ObjexxFCL container
-        // Pass a container you want to compare against an expected container. You can pass in an existing
-        // container or use an initializer list like below.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if containers are equal and false if they are not.
-        // Example Usage:
-        // 		EXPECT_TRUE( compare_containers( std::vector< bool >( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
-        // 		EXPECT_TRUE( compare_containers( Array1D_bool( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
-        template <class T, class T2> bool compare_containers(T const& expected_container, T2 const& actual_container)
-        {
-            bool is_valid = (expected_container.size() == actual_container.size());
-            EXPECT_EQ(expected_container.size(), actual_container.size()) << "Containers are not equal size.";
-            auto expected = expected_container.begin();
-            auto actual = actual_container.begin();
-            for (; expected != expected_container.end(); ++expected, ++actual) {
-                // This may fail due to floating point issues for float and double...
-                EXPECT_EQ(*expected, *actual) << "Incorrect 0-based index: " << (expected - expected_container.begin());
-                is_valid = (*expected == *actual);
-            }
-            return is_valid;
-        }
+    // Compare an expected string against the EIO stream. The default is to reset the EIO stream after every call.
+    // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eio_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // This function creates a string based on a vector of string inputs that is delimited by DataStringGlobals::NL by default, but any
-        // delimiter can be passed in to this function. This allows for cross platform output string comparisons.
-        static std::string delimited_string(std::vector<std::string> const& strings, std::string const& delimiter = "\n");
+    // Check if EIO string contains a substring. The default is to reset the EIO stream after every call.
+    // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eio_stream_substring(std::string const &expected_string, bool reset_stream = true);
 
-        // This function reads all the lines in the supplied filePath. It puts each line into the vector.
-        std::vector<std::string> read_lines_in_file(fs::path const& filePath);
+    // Compare an expected string against the MTR stream. The default is to reset the MTR stream after every call.
+    // It is easier to test successive functions if the MTR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_mtr_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the ESO stream. The default is to reset the ESO stream after every call.
-        // It is easier to test successive functions if the ESO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eso_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the ERR stream. The default is to reset the ERR stream after every call.
+    // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_err_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the EIO stream. The default is to reset the EIO stream after every call.
-        // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eio_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if ERR stream contains a substring. The default is to reset the ERR stream after every call.
+    // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string is found in the stream and false if it is not
+    bool compare_err_stream_substring(std::string const &search_string, bool reset_stream = true, bool call_expect = true);
 
-        // Check if EIO string contains a substring. The default is to reset the EIO stream after every call.
-        // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eio_stream_substring(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the COUT stream. The default is to reset the COUT stream after every call.
+    // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_cout_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the MTR stream. The default is to reset the MTR stream after every call.
-        // It is easier to test successive functions if the MTR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_mtr_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if COUT stream contains a substring. The default is to reset the COUT stream after every call.
+    // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
+    // This returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string is found in the stream and false if it is not
+    bool compare_cout_stream_substring(std::string const &search_string, bool reset_stream = true);
 
-        // Compare an expected string against the ERR stream. The default is to reset the ERR stream after every call.
-        // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_err_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the CERR stream. The default is to reset the CERR stream after every call.
+    // It is easier to test successive functions if the CERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_cerr_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Check if ERR stream contains a substring. The default is to reset the ERR stream after every call.
-        // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string is found in the stream and false if it is not
-        bool compare_err_stream_substring(std::string const& search_string, bool reset_stream = true, bool call_expect = true);
+    // Compare an expected string against the delightin stream. The default is to reset the delightin stream after every call.
+    // It is easier to test successive functions if the delightin stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_delightin_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the COUT stream. The default is to reset the COUT stream after every call.
-        // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_cout_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the DFS stream. The default is to reset the DFS stream after every call.
+    // It is easier to test successive functions if the DFS stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_dfs_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Check if COUT stream contains a substring. The default is to reset the COUT stream after every call.
-        // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
-        // This returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string is found in the stream and false if it is not
-        bool compare_cout_stream_substring(std::string const& search_string, bool reset_stream = true);
+    // Check if ESO stream has any output. Useful to make sure there are or are not outputs to ESO.
+    bool has_eso_output(bool reset_stream = true);
 
-        // Compare an expected string against the CERR stream. The default is to reset the CERR stream after every call.
-        // It is easier to test successive functions if the CERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_cerr_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if EIO stream has any output. Useful to make sure there are or are not outputs to EIO.
+    bool has_eio_output(bool reset_stream = true);
 
-        // Compare an expected string against the delightin stream. The default is to reset the delightin stream after every call.
-        // It is easier to test successive functions if the delightin stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_delightin_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if MTR stream has any output. Useful to make sure there are or are not outputs to MTR.
+    bool has_mtr_output(bool reset_stream = true);
 
-        // Compare an expected string against the DFS stream. The default is to reset the DFS stream after every call.
-        // It is easier to test successive functions if the DFS stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_dfs_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if ERR stream has any output. Useful to make sure there are or are not outputs to ERR.
+    bool has_err_output(bool reset_stream = true);
 
-        // Check if ESO stream has any output. Useful to make sure there are or are not outputs to ESO.
-        bool has_eso_output(bool reset_stream = true);
+    // Check if COUT stream has any output. Useful to make sure there are or are not outputs to COUT.
+    bool has_cout_output(bool reset_stream = true);
 
-        // Check if EIO stream has any output. Useful to make sure there are or are not outputs to EIO.
-        bool has_eio_output(bool reset_stream = true);
+    // Check if CERR stream has any output. Useful to make sure there are or are not outputs to CERR.
+    bool has_cerr_output(bool reset_stream = true);
 
-        // Check if MTR stream has any output. Useful to make sure there are or are not outputs to MTR.
-        bool has_mtr_output(bool reset_stream = true);
+    // Check if delightin stream has any output. Useful to make sure there are or are not outputs to delightin.
+    bool has_delightin_output(bool reset_stream = true);
 
-        // Check if ERR stream has any output. Useful to make sure there are or are not outputs to ERR.
-        bool has_err_output(bool reset_stream = true);
+    // Check if DFS stream has any output. Useful to make sure there are or are not outputs to DFS.
+    bool has_dfs_output(bool reset_stream = true);
 
-        // Check if COUT stream has any output. Useful to make sure there are or are not outputs to COUT.
-        bool has_cout_output(bool reset_stream = true);
+    // Look for a match of an expected string within the ERR stream. The default here does NOT reset the ERR stream after every call.
+    // Will return true if string matches the stream and false if it does not
+    bool match_err_stream(std::string const &expected_match, bool use_regex = false, bool reset_stream = false);
 
-        // Check if CERR stream has any output. Useful to make sure there are or are not outputs to CERR.
-        bool has_cerr_output(bool reset_stream = true);
+    // This function processes an idf snippet and defaults to using the idd cache for the fixture.
+    // The cache should be used for nearly all calls to this function.
+    // This more or less replicates inputProcessor->processInput() but in a more usable fashion for unit testing
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // This will add the required objects if not specified: Version, Building, GlobalGeometryRules
+    // Will return false if no errors found and true if errors found
+    bool process_idf(std::string_view const idf_snippet, bool use_assertions = true);
 
-        // Check if delightin stream has any output. Useful to make sure there are or are not outputs to delightin.
-        bool has_delightin_output(bool reset_stream = true);
+    // Opens output files as stringstreams
+    void openOutputFiles(EnergyPlusData &state);
 
-        // Check if DFS stream has any output. Useful to make sure there are or are not outputs to DFS.
-        bool has_dfs_output(bool reset_stream = true);
+    // A worker function that keeps trailing spaces in multiline raw string literals
+    void replace_pipes_with_spaces(std::string &stringLiteral)
+    {
+        // C++ now allows nice raw multiline string literals
+        // These are very useful for unit tests that compare against a long chunk of text
+        // For example, if you have an EIO output to compare, you can just paste it right into a variable and compare
+        // However, if the raw literal has trailing spaces on any line, editors tend to remove them
+        // I tried disabling clang-format for sections of code, I tried using an .editorconfig file, and still
+        // the editor would remove them on saving the file.  And for my editor, I _can_ disable that, but only for all
+        // files, which is not preferred.  We do want trailing spaces stripped, just not inside raw string literals.
+        // Anyway, the solution I came up with is a small worker function here.  In the string literal, just put in
+        // pipe characters ( "|" ) where the trailing spaces would be.  Then pass your string literal into this
+        // function, and it will programmatically replace them with strings.  You can then do asserts as needed.
+        std::replace(stringLiteral.begin(), stringLiteral.end(), '|', ' '); // replace the trailing || with spaces
+    }
 
-        // Look for a match of an expected string within the ERR stream. The default here does NOT reset the ERR stream after every call.
-        // Will return true if string matches the stream and false if it does not
-        bool match_err_stream(std::string const& expected_match, bool use_regex = false, bool reset_stream = false);
+public:
+    EnergyPlusData *state;
 
-        // This function processes an idf snippet and defaults to using the idd cache for the fixture.
-        // The cache should be used for nearly all calls to this function.
-        // This more or less replicates inputProcessor->processInput() but in a more usable fashion for unit testing
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // This will add the required objects if not specified: Version, Building, GlobalGeometryRules
-        // Will return false if no errors found and true if errors found
-        bool process_idf(std::string_view const idf_snippet, bool use_assertions = true);
+private:
+    friend class InputProcessorFixture;
 
-        // Opens output files as stringstreams
-        void openOutputFiles(EnergyPlusData& state);
+    // Function to process the Energy+.schema.epJSON, should not normally be called.
+    // This will always grab the Energy+.schema.epJSON that is part of the Products folder
+    // This function should be called by process_idf() so unit tests can take advantage of caching
+    // To test this function use InputProcessorFixture
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return false if no errors found and true if errors found
 
-        // A worker function that keeps trailing spaces in multiline raw string literals
-        void replace_pipes_with_spaces(std::string& stringLiteral)
-        {
-            // C++ now allows nice raw multiline string literals
-            // These are very useful for unit tests that compare against a long chunk of text
-            // For example, if you have an EIO output to compare, you can just paste it right into a variable and compare
-            // However, if the raw literal has trailing spaces on any line, editors tend to remove them
-            // I tried disabling clang-format for sections of code, I tried using an .editorconfig file, and still
-            // the editor would remove them on saving the file.  And for my editor, I _can_ disable that, but only for all
-            // files, which is not preferred.  We do want trailing spaces stripped, just not inside raw string literals.
-            // Anyway, the solution I came up with is a small worker function here.  In the string literal, just put in
-            // pipe characters ( "|" ) where the trailing spaces would be.  Then pass your string literal into this
-            // function, and it will programmatically replace them with strings.  You can then do asserts as needed.
-            std::replace(stringLiteral.begin(), stringLiteral.end(), '|', ' '); // replace the trailing || with spaces
-        }
+    //    static bool process_idd(std::string const &idd, bool &errors_found);
 
-    public:
-        EnergyPlusData* state;
+    // Note that these are non-owning raw pointers. The `state` object owns the underlying streams.
+    std::ostringstream *err_stream;
 
-    private:
-        friend class InputProcessorFixture;
-
-        // Function to process the Energy+.schema.epJSON, should not normally be called.
-        // This will always grab the Energy+.schema.epJSON that is part of the Products folder
-        // This function should be called by process_idf() so unit tests can take advantage of caching
-        // To test this function use InputProcessorFixture
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return false if no errors found and true if errors found
-
-        //    static bool process_idd(std::string const &idd, bool &errors_found);
-
-        // Note that these are non-owning raw pointers. The `state` object owns the underlying streams.
-        std::ostringstream* err_stream;
-
-        std::unique_ptr<std::ostringstream> m_cout_buffer;
-        std::unique_ptr<std::ostringstream> m_cerr_buffer;
-        std::unique_ptr<std::ostringstream> m_delightin_stream;
-        std::unique_ptr<RedirectCout> m_redirect_cout;
-        std::unique_ptr<RedirectCerr> m_redirect_cerr;
-    };
+    std::unique_ptr<std::ostringstream> m_cout_buffer;
+    std::unique_ptr<std::ostringstream> m_cerr_buffer;
+    std::unique_ptr<std::ostringstream> m_delightin_stream;
+    std::unique_ptr<RedirectCout> m_redirect_cout;
+    std::unique_ptr<RedirectCerr> m_redirect_cerr;
+};
 
 } // namespace EnergyPlus
 
@@ -386,256 +386,256 @@ namespace EnergyPlus {
 
 namespace EnergyPlus {
 
-    template <typename T, typename = typename std::enable_if_t<std::is_enum_v<T>, T>> constexpr std::ostream& operator<<(std::ostream& stream, T e)
+template <typename T, typename = typename std::enable_if_t<std::is_enum_v<T>, T>> constexpr std::ostream &operator<<(std::ostream &stream, T e)
+{
+    return stream << static_cast<typename std::underlying_type_t<T>>(e);
+}
+
+struct EnergyPlusData;
+
+// This is a helper struct to redirect std::cout. This makes sure std::cout is redirected back and
+// everything is cleaned up properly
+struct RedirectCout
+{
+    RedirectCout(std::unique_ptr<std::ostringstream> const &m_buffer) : m_old_buffer(std::cout.rdbuf(m_buffer->rdbuf()))
     {
-        return stream << static_cast<typename std::underlying_type_t<T>>(e);
     }
 
-    struct EnergyPlusData;
-
-    // This is a helper struct to redirect std::cout. This makes sure std::cout is redirected back and
-    // everything is cleaned up properly
-    struct RedirectCout
+    ~RedirectCout()
     {
-        RedirectCout(std::unique_ptr<std::ostringstream> const& m_buffer) : m_old_buffer(std::cout.rdbuf(m_buffer->rdbuf()))
-        {
-        }
+        std::cout.rdbuf(m_old_buffer.release());
+    }
 
-        ~RedirectCout()
-        {
-            std::cout.rdbuf(m_old_buffer.release());
-        }
+private:
+    std::unique_ptr<std::streambuf> m_old_buffer;
+};
 
-    private:
-        std::unique_ptr<std::streambuf> m_old_buffer;
-    };
-
-    // This is a helper struct to redirect std::cerr. This makes sure std::cerr is redirected back and
-    // everything is cleaned up properly
-    struct RedirectCerr
+// This is a helper struct to redirect std::cerr. This makes sure std::cerr is redirected back and
+// everything is cleaned up properly
+struct RedirectCerr
+{
+    RedirectCerr(std::unique_ptr<std::ostringstream> const &m_buffer) : m_old_buffer(std::cerr.rdbuf(m_buffer->rdbuf()))
     {
-        RedirectCerr(std::unique_ptr<std::ostringstream> const& m_buffer) : m_old_buffer(std::cerr.rdbuf(m_buffer->rdbuf()))
-        {
-        }
+    }
 
-        ~RedirectCerr()
-        {
-            std::cerr.rdbuf(m_old_buffer.release());
-        }
-
-    private:
-        std::unique_ptr<std::streambuf> m_old_buffer;
-    };
-
-    class EnergyPlusFixture : public testing::Test
+    ~RedirectCerr()
     {
-    protected:
-        // static void SetUpTestCase();
-        static void TearDownTestCase()
-        {
+        std::cerr.rdbuf(m_old_buffer.release());
+    }
+
+private:
+    std::unique_ptr<std::streambuf> m_old_buffer;
+};
+
+class EnergyPlusFixture : public testing::Test
+{
+protected:
+    // static void SetUpTestCase();
+    static void TearDownTestCase()
+    {
+    }
+
+    // This is run every unit test for this fixture.
+    // It sets up the various stream redirections.
+    // It also calls show_message every unit test to output a begin message to the error file.
+    virtual void SetUp();
+
+    // This is run every unit test and makes sure to clear all state in global variables this fixture touches.
+    virtual void TearDown();
+
+    // This will output the "Begin Test" ShowMessage for every unit test that uses or inherits from this fixture.
+    // Now this does not need to be manually entered for every unit test as well as it will automatically be updated as the
+    // unit test names change.
+    void show_message();
+
+    // This will compare either a STL container or ObjexxFCL container
+    // Pass a container you want to compare against an expected container. You can pass in an existing
+    // container or use an initializer list like below.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if containers are equal and false if they are not.
+    // Example Usage:
+    // 		EXPECT_TRUE( compare_containers( std::vector< bool >( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
+    // 		EXPECT_TRUE( compare_containers( Array1D_bool( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
+    template <class T, class T2> bool compare_containers(T const &expected_container, T2 const &actual_container)
+    {
+        bool is_valid = (expected_container.size() == actual_container.size());
+        EXPECT_EQ(expected_container.size(), actual_container.size()) << "Containers are not equal size.";
+        auto expected = expected_container.begin();
+        auto actual = actual_container.begin();
+        for (; expected != expected_container.end(); ++expected, ++actual) {
+            // This may fail due to floating point issues for float and double...
+            EXPECT_EQ(*expected, *actual) << "Incorrect 0-based index: " << (expected - expected_container.begin());
+            is_valid = (*expected == *actual);
         }
+        return is_valid;
+    }
 
-        // This is run every unit test for this fixture.
-        // It sets up the various stream redirections.
-        // It also calls show_message every unit test to output a begin message to the error file.
-        virtual void SetUp();
+    // This function creates a string based on a vector of string inputs that is delimited by DataStringGlobals::NL by default, but any
+    // delimiter can be passed in to this function. This allows for cross platform output string comparisons.
+    static std::string delimited_string(std::vector<std::string> const &strings, std::string const &delimiter = "\n");
 
-        // This is run every unit test and makes sure to clear all state in global variables this fixture touches.
-        virtual void TearDown();
+    // This function reads all the lines in the supplied filePath. It puts each line into the vector.
+    std::vector<std::string> read_lines_in_file(fs::path const &filePath);
 
-        // This will output the "Begin Test" ShowMessage for every unit test that uses or inherits from this fixture.
-        // Now this does not need to be manually entered for every unit test as well as it will automatically be updated as the
-        // unit test names change.
-        void show_message();
+    // Compare an expected string against the ESO stream. The default is to reset the ESO stream after every call.
+    // It is easier to test successive functions if the ESO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eso_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // This will compare either a STL container or ObjexxFCL container
-        // Pass a container you want to compare against an expected container. You can pass in an existing
-        // container or use an initializer list like below.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if containers are equal and false if they are not.
-        // Example Usage:
-        // 		EXPECT_TRUE( compare_containers( std::vector< bool >( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
-        // 		EXPECT_TRUE( compare_containers( Array1D_bool( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
-        template <class T, class T2> bool compare_containers(T const& expected_container, T2 const& actual_container)
-        {
-            bool is_valid = (expected_container.size() == actual_container.size());
-            EXPECT_EQ(expected_container.size(), actual_container.size()) << "Containers are not equal size.";
-            auto expected = expected_container.begin();
-            auto actual = actual_container.begin();
-            for (; expected != expected_container.end(); ++expected, ++actual) {
-                // This may fail due to floating point issues for float and double...
-                EXPECT_EQ(*expected, *actual) << "Incorrect 0-based index: " << (expected - expected_container.begin());
-                is_valid = (*expected == *actual);
-            }
-            return is_valid;
-        }
+    // Compare an expected string against the EIO stream. The default is to reset the EIO stream after every call.
+    // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eio_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // This function creates a string based on a vector of string inputs that is delimited by DataStringGlobals::NL by default, but any
-        // delimiter can be passed in to this function. This allows for cross platform output string comparisons.
-        static std::string delimited_string(std::vector<std::string> const& strings, std::string const& delimiter = "\n");
+    // Check if EIO string contains a substring. The default is to reset the EIO stream after every call.
+    // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eio_stream_substring(std::string const &expected_string, bool reset_stream = true);
 
-        // This function reads all the lines in the supplied filePath. It puts each line into the vector.
-        std::vector<std::string> read_lines_in_file(fs::path const& filePath);
+    // Compare an expected string against the MTR stream. The default is to reset the MTR stream after every call.
+    // It is easier to test successive functions if the MTR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_mtr_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the ESO stream. The default is to reset the ESO stream after every call.
-        // It is easier to test successive functions if the ESO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eso_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the ERR stream. The default is to reset the ERR stream after every call.
+    // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_err_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the EIO stream. The default is to reset the EIO stream after every call.
-        // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eio_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if ERR stream contains a substring. The default is to reset the ERR stream after every call.
+    // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string is found in the stream and false if it is not
+    bool compare_err_stream_substring(std::string const &search_string, bool reset_stream = true, bool call_expect = true);
 
-        // Check if EIO string contains a substring. The default is to reset the EIO stream after every call.
-        // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eio_stream_substring(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the COUT stream. The default is to reset the COUT stream after every call.
+    // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_cout_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the MTR stream. The default is to reset the MTR stream after every call.
-        // It is easier to test successive functions if the MTR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_mtr_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if COUT stream contains a substring. The default is to reset the COUT stream after every call.
+    // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
+    // This returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string is found in the stream and false if it is not
+    bool compare_cout_stream_substring(std::string const &search_string, bool reset_stream = true);
 
-        // Compare an expected string against the ERR stream. The default is to reset the ERR stream after every call.
-        // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_err_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the CERR stream. The default is to reset the CERR stream after every call.
+    // It is easier to test successive functions if the CERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_cerr_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Check if ERR stream contains a substring. The default is to reset the ERR stream after every call.
-        // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string is found in the stream and false if it is not
-        bool compare_err_stream_substring(std::string const& search_string, bool reset_stream = true, bool call_expect = true);
+    // Compare an expected string against the delightin stream. The default is to reset the delightin stream after every call.
+    // It is easier to test successive functions if the delightin stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_delightin_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the COUT stream. The default is to reset the COUT stream after every call.
-        // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_cout_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the DFS stream. The default is to reset the DFS stream after every call.
+    // It is easier to test successive functions if the DFS stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_dfs_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Check if COUT stream contains a substring. The default is to reset the COUT stream after every call.
-        // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
-        // This returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string is found in the stream and false if it is not
-        bool compare_cout_stream_substring(std::string const& search_string, bool reset_stream = true);
+    // Check if ESO stream has any output. Useful to make sure there are or are not outputs to ESO.
+    bool has_eso_output(bool reset_stream = true);
 
-        // Compare an expected string against the CERR stream. The default is to reset the CERR stream after every call.
-        // It is easier to test successive functions if the CERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_cerr_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if EIO stream has any output. Useful to make sure there are or are not outputs to EIO.
+    bool has_eio_output(bool reset_stream = true);
 
-        // Compare an expected string against the delightin stream. The default is to reset the delightin stream after every call.
-        // It is easier to test successive functions if the delightin stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_delightin_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if MTR stream has any output. Useful to make sure there are or are not outputs to MTR.
+    bool has_mtr_output(bool reset_stream = true);
 
-        // Compare an expected string against the DFS stream. The default is to reset the DFS stream after every call.
-        // It is easier to test successive functions if the DFS stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_dfs_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if ERR stream has any output. Useful to make sure there are or are not outputs to ERR.
+    bool has_err_output(bool reset_stream = true);
 
-        // Check if ESO stream has any output. Useful to make sure there are or are not outputs to ESO.
-        bool has_eso_output(bool reset_stream = true);
+    // Check if COUT stream has any output. Useful to make sure there are or are not outputs to COUT.
+    bool has_cout_output(bool reset_stream = true);
 
-        // Check if EIO stream has any output. Useful to make sure there are or are not outputs to EIO.
-        bool has_eio_output(bool reset_stream = true);
+    // Check if CERR stream has any output. Useful to make sure there are or are not outputs to CERR.
+    bool has_cerr_output(bool reset_stream = true);
 
-        // Check if MTR stream has any output. Useful to make sure there are or are not outputs to MTR.
-        bool has_mtr_output(bool reset_stream = true);
+    // Check if delightin stream has any output. Useful to make sure there are or are not outputs to delightin.
+    bool has_delightin_output(bool reset_stream = true);
 
-        // Check if ERR stream has any output. Useful to make sure there are or are not outputs to ERR.
-        bool has_err_output(bool reset_stream = true);
+    // Check if DFS stream has any output. Useful to make sure there are or are not outputs to DFS.
+    bool has_dfs_output(bool reset_stream = true);
 
-        // Check if COUT stream has any output. Useful to make sure there are or are not outputs to COUT.
-        bool has_cout_output(bool reset_stream = true);
+    // Look for a match of an expected string within the ERR stream. The default here does NOT reset the ERR stream after every call.
+    // Will return true if string matches the stream and false if it does not
+    bool match_err_stream(std::string const &expected_match, bool use_regex = false, bool reset_stream = false);
 
-        // Check if CERR stream has any output. Useful to make sure there are or are not outputs to CERR.
-        bool has_cerr_output(bool reset_stream = true);
+    // This function processes an idf snippet and defaults to using the idd cache for the fixture.
+    // The cache should be used for nearly all calls to this function.
+    // This more or less replicates inputProcessor->processInput() but in a more usable fashion for unit testing
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // This will add the required objects if not specified: Version, Building, GlobalGeometryRules
+    // Will return false if no errors found and true if errors found
+    bool process_idf(std::string_view const idf_snippet, bool use_assertions = true);
 
-        // Check if delightin stream has any output. Useful to make sure there are or are not outputs to delightin.
-        bool has_delightin_output(bool reset_stream = true);
+    // Opens output files as stringstreams
+    void openOutputFiles(EnergyPlusData &state);
 
-        // Check if DFS stream has any output. Useful to make sure there are or are not outputs to DFS.
-        bool has_dfs_output(bool reset_stream = true);
+    // A worker function that keeps trailing spaces in multiline raw string literals
+    void replace_pipes_with_spaces(std::string &stringLiteral)
+    {
+        // C++ now allows nice raw multiline string literals
+        // These are very useful for unit tests that compare against a long chunk of text
+        // For example, if you have an EIO output to compare, you can just paste it right into a variable and compare
+        // However, if the raw literal has trailing spaces on any line, editors tend to remove them
+        // I tried disabling clang-format for sections of code, I tried using an .editorconfig file, and still
+        // the editor would remove them on saving the file.  And for my editor, I _can_ disable that, but only for all
+        // files, which is not preferred.  We do want trailing spaces stripped, just not inside raw string literals.
+        // Anyway, the solution I came up with is a small worker function here.  In the string literal, just put in
+        // pipe characters ( "|" ) where the trailing spaces would be.  Then pass your string literal into this
+        // function, and it will programmatically replace them with strings.  You can then do asserts as needed.
+        std::replace(stringLiteral.begin(), stringLiteral.end(), '|', ' '); // replace the trailing || with spaces
+    }
 
-        // Look for a match of an expected string within the ERR stream. The default here does NOT reset the ERR stream after every call.
-        // Will return true if string matches the stream and false if it does not
-        bool match_err_stream(std::string const& expected_match, bool use_regex = false, bool reset_stream = false);
+public:
+    EnergyPlusData *state;
 
-        // This function processes an idf snippet and defaults to using the idd cache for the fixture.
-        // The cache should be used for nearly all calls to this function.
-        // This more or less replicates inputProcessor->processInput() but in a more usable fashion for unit testing
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // This will add the required objects if not specified: Version, Building, GlobalGeometryRules
-        // Will return false if no errors found and true if errors found
-        bool process_idf(std::string_view const idf_snippet, bool use_assertions = true);
+private:
+    friend class InputProcessorFixture;
 
-        // Opens output files as stringstreams
-        void openOutputFiles(EnergyPlusData& state);
+    // Function to process the Energy+.schema.epJSON, should not normally be called.
+    // This will always grab the Energy+.schema.epJSON that is part of the Products folder
+    // This function should be called by process_idf() so unit tests can take advantage of caching
+    // To test this function use InputProcessorFixture
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return false if no errors found and true if errors found
 
-        // A worker function that keeps trailing spaces in multiline raw string literals
-        void replace_pipes_with_spaces(std::string& stringLiteral)
-        {
-            // C++ now allows nice raw multiline string literals
-            // These are very useful for unit tests that compare against a long chunk of text
-            // For example, if you have an EIO output to compare, you can just paste it right into a variable and compare
-            // However, if the raw literal has trailing spaces on any line, editors tend to remove them
-            // I tried disabling clang-format for sections of code, I tried using an .editorconfig file, and still
-            // the editor would remove them on saving the file.  And for my editor, I _can_ disable that, but only for all
-            // files, which is not preferred.  We do want trailing spaces stripped, just not inside raw string literals.
-            // Anyway, the solution I came up with is a small worker function here.  In the string literal, just put in
-            // pipe characters ( "|" ) where the trailing spaces would be.  Then pass your string literal into this
-            // function, and it will programmatically replace them with strings.  You can then do asserts as needed.
-            std::replace(stringLiteral.begin(), stringLiteral.end(), '|', ' '); // replace the trailing || with spaces
-        }
+    //    static bool process_idd(std::string const &idd, bool &errors_found);
 
-    public:
-        EnergyPlusData* state;
+    // Note that these are non-owning raw pointers. The `state` object owns the underlying streams.
+    std::ostringstream *err_stream;
 
-    private:
-        friend class InputProcessorFixture;
-
-        // Function to process the Energy+.schema.epJSON, should not normally be called.
-        // This will always grab the Energy+.schema.epJSON that is part of the Products folder
-        // This function should be called by process_idf() so unit tests can take advantage of caching
-        // To test this function use InputProcessorFixture
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return false if no errors found and true if errors found
-
-        //    static bool process_idd(std::string const &idd, bool &errors_found);
-
-        // Note that these are non-owning raw pointers. The `state` object owns the underlying streams.
-        std::ostringstream* err_stream;
-
-        std::unique_ptr<std::ostringstream> m_cout_buffer;
-        std::unique_ptr<std::ostringstream> m_cerr_buffer;
-        std::unique_ptr<std::ostringstream> m_delightin_stream;
-        std::unique_ptr<RedirectCout> m_redirect_cout;
-        std::unique_ptr<RedirectCerr> m_redirect_cerr;
-    };
+    std::unique_ptr<std::ostringstream> m_cout_buffer;
+    std::unique_ptr<std::ostringstream> m_cerr_buffer;
+    std::unique_ptr<std::ostringstream> m_delightin_stream;
+    std::unique_ptr<RedirectCout> m_redirect_cout;
+    std::unique_ptr<RedirectCerr> m_redirect_cerr;
+};
 
 } // namespace EnergyPlus
 
@@ -707,256 +707,256 @@ namespace EnergyPlus {
 
 namespace EnergyPlus {
 
-    template <typename T, typename = typename std::enable_if_t<std::is_enum_v<T>, T>> constexpr std::ostream& operator<<(std::ostream& stream, T e)
+template <typename T, typename = typename std::enable_if_t<std::is_enum_v<T>, T>> constexpr std::ostream &operator<<(std::ostream &stream, T e)
+{
+    return stream << static_cast<typename std::underlying_type_t<T>>(e);
+}
+
+struct EnergyPlusData;
+
+// This is a helper struct to redirect std::cout. This makes sure std::cout is redirected back and
+// everything is cleaned up properly
+struct RedirectCout
+{
+    RedirectCout(std::unique_ptr<std::ostringstream> const &m_buffer) : m_old_buffer(std::cout.rdbuf(m_buffer->rdbuf()))
     {
-        return stream << static_cast<typename std::underlying_type_t<T>>(e);
     }
 
-    struct EnergyPlusData;
-
-    // This is a helper struct to redirect std::cout. This makes sure std::cout is redirected back and
-    // everything is cleaned up properly
-    struct RedirectCout
+    ~RedirectCout()
     {
-        RedirectCout(std::unique_ptr<std::ostringstream> const& m_buffer) : m_old_buffer(std::cout.rdbuf(m_buffer->rdbuf()))
-        {
-        }
+        std::cout.rdbuf(m_old_buffer.release());
+    }
 
-        ~RedirectCout()
-        {
-            std::cout.rdbuf(m_old_buffer.release());
-        }
+private:
+    std::unique_ptr<std::streambuf> m_old_buffer;
+};
 
-    private:
-        std::unique_ptr<std::streambuf> m_old_buffer;
-    };
-
-    // This is a helper struct to redirect std::cerr. This makes sure std::cerr is redirected back and
-    // everything is cleaned up properly
-    struct RedirectCerr
+// This is a helper struct to redirect std::cerr. This makes sure std::cerr is redirected back and
+// everything is cleaned up properly
+struct RedirectCerr
+{
+    RedirectCerr(std::unique_ptr<std::ostringstream> const &m_buffer) : m_old_buffer(std::cerr.rdbuf(m_buffer->rdbuf()))
     {
-        RedirectCerr(std::unique_ptr<std::ostringstream> const& m_buffer) : m_old_buffer(std::cerr.rdbuf(m_buffer->rdbuf()))
-        {
-        }
+    }
 
-        ~RedirectCerr()
-        {
-            std::cerr.rdbuf(m_old_buffer.release());
-        }
-
-    private:
-        std::unique_ptr<std::streambuf> m_old_buffer;
-    };
-
-    class EnergyPlusFixture : public testing::Test
+    ~RedirectCerr()
     {
-    protected:
-        // static void SetUpTestCase();
-        static void TearDownTestCase()
-        {
+        std::cerr.rdbuf(m_old_buffer.release());
+    }
+
+private:
+    std::unique_ptr<std::streambuf> m_old_buffer;
+};
+
+class EnergyPlusFixture : public testing::Test
+{
+protected:
+    // static void SetUpTestCase();
+    static void TearDownTestCase()
+    {
+    }
+
+    // This is run every unit test for this fixture.
+    // It sets up the various stream redirections.
+    // It also calls show_message every unit test to output a begin message to the error file.
+    virtual void SetUp();
+
+    // This is run every unit test and makes sure to clear all state in global variables this fixture touches.
+    virtual void TearDown();
+
+    // This will output the "Begin Test" ShowMessage for every unit test that uses or inherits from this fixture.
+    // Now this does not need to be manually entered for every unit test as well as it will automatically be updated as the
+    // unit test names change.
+    void show_message();
+
+    // This will compare either a STL container or ObjexxFCL container
+    // Pass a container you want to compare against an expected container. You can pass in an existing
+    // container or use an initializer list like below.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if containers are equal and false if they are not.
+    // Example Usage:
+    // 		EXPECT_TRUE( compare_containers( std::vector< bool >( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
+    // 		EXPECT_TRUE( compare_containers( Array1D_bool( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
+    template <class T, class T2> bool compare_containers(T const &expected_container, T2 const &actual_container)
+    {
+        bool is_valid = (expected_container.size() == actual_container.size());
+        EXPECT_EQ(expected_container.size(), actual_container.size()) << "Containers are not equal size.";
+        auto expected = expected_container.begin();
+        auto actual = actual_container.begin();
+        for (; expected != expected_container.end(); ++expected, ++actual) {
+            // This may fail due to floating point issues for float and double...
+            EXPECT_EQ(*expected, *actual) << "Incorrect 0-based index: " << (expected - expected_container.begin());
+            is_valid = (*expected == *actual);
         }
+        return is_valid;
+    }
 
-        // This is run every unit test for this fixture.
-        // It sets up the various stream redirections.
-        // It also calls show_message every unit test to output a begin message to the error file.
-        virtual void SetUp();
+    // This function creates a string based on a vector of string inputs that is delimited by DataStringGlobals::NL by default, but any
+    // delimiter can be passed in to this function. This allows for cross platform output string comparisons.
+    static std::string delimited_string(std::vector<std::string> const &strings, std::string const &delimiter = "\n");
 
-        // This is run every unit test and makes sure to clear all state in global variables this fixture touches.
-        virtual void TearDown();
+    // This function reads all the lines in the supplied filePath. It puts each line into the vector.
+    std::vector<std::string> read_lines_in_file(fs::path const &filePath);
 
-        // This will output the "Begin Test" ShowMessage for every unit test that uses or inherits from this fixture.
-        // Now this does not need to be manually entered for every unit test as well as it will automatically be updated as the
-        // unit test names change.
-        void show_message();
+    // Compare an expected string against the ESO stream. The default is to reset the ESO stream after every call.
+    // It is easier to test successive functions if the ESO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eso_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // This will compare either a STL container or ObjexxFCL container
-        // Pass a container you want to compare against an expected container. You can pass in an existing
-        // container or use an initializer list like below.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if containers are equal and false if they are not.
-        // Example Usage:
-        // 		EXPECT_TRUE( compare_containers( std::vector< bool >( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
-        // 		EXPECT_TRUE( compare_containers( Array1D_bool( { true } ) , ObjectDef( index ).AlphaOrNumeric ) );
-        template <class T, class T2> bool compare_containers(T const& expected_container, T2 const& actual_container)
-        {
-            bool is_valid = (expected_container.size() == actual_container.size());
-            EXPECT_EQ(expected_container.size(), actual_container.size()) << "Containers are not equal size.";
-            auto expected = expected_container.begin();
-            auto actual = actual_container.begin();
-            for (; expected != expected_container.end(); ++expected, ++actual) {
-                // This may fail due to floating point issues for float and double...
-                EXPECT_EQ(*expected, *actual) << "Incorrect 0-based index: " << (expected - expected_container.begin());
-                is_valid = (*expected == *actual);
-            }
-            return is_valid;
-        }
+    // Compare an expected string against the EIO stream. The default is to reset the EIO stream after every call.
+    // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eio_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // This function creates a string based on a vector of string inputs that is delimited by DataStringGlobals::NL by default, but any
-        // delimiter can be passed in to this function. This allows for cross platform output string comparisons.
-        static std::string delimited_string(std::vector<std::string> const& strings, std::string const& delimiter = "\n");
+    // Check if EIO string contains a substring. The default is to reset the EIO stream after every call.
+    // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_eio_stream_substring(std::string const &expected_string, bool reset_stream = true);
 
-        // This function reads all the lines in the supplied filePath. It puts each line into the vector.
-        std::vector<std::string> read_lines_in_file(fs::path const& filePath);
+    // Compare an expected string against the MTR stream. The default is to reset the MTR stream after every call.
+    // It is easier to test successive functions if the MTR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_mtr_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the ESO stream. The default is to reset the ESO stream after every call.
-        // It is easier to test successive functions if the ESO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eso_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the ERR stream. The default is to reset the ERR stream after every call.
+    // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_err_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the EIO stream. The default is to reset the EIO stream after every call.
-        // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eio_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if ERR stream contains a substring. The default is to reset the ERR stream after every call.
+    // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string is found in the stream and false if it is not
+    bool compare_err_stream_substring(std::string const &search_string, bool reset_stream = true, bool call_expect = true);
 
-        // Check if EIO string contains a substring. The default is to reset the EIO stream after every call.
-        // It is easier to test successive functions if the EIO stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_eio_stream_substring(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the COUT stream. The default is to reset the COUT stream after every call.
+    // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_cout_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the MTR stream. The default is to reset the MTR stream after every call.
-        // It is easier to test successive functions if the MTR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_mtr_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if COUT stream contains a substring. The default is to reset the COUT stream after every call.
+    // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
+    // This returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string is found in the stream and false if it is not
+    bool compare_cout_stream_substring(std::string const &search_string, bool reset_stream = true);
 
-        // Compare an expected string against the ERR stream. The default is to reset the ERR stream after every call.
-        // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_err_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the CERR stream. The default is to reset the CERR stream after every call.
+    // It is easier to test successive functions if the CERR stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_cerr_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Check if ERR stream contains a substring. The default is to reset the ERR stream after every call.
-        // It is easier to test successive functions if the ERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string is found in the stream and false if it is not
-        bool compare_err_stream_substring(std::string const& search_string, bool reset_stream = true, bool call_expect = true);
+    // Compare an expected string against the delightin stream. The default is to reset the delightin stream after every call.
+    // It is easier to test successive functions if the delightin stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_delightin_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Compare an expected string against the COUT stream. The default is to reset the COUT stream after every call.
-        // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_cout_stream(std::string const& expected_string, bool reset_stream = true);
+    // Compare an expected string against the DFS stream. The default is to reset the DFS stream after every call.
+    // It is easier to test successive functions if the DFS stream is 'empty' before the next call.
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return true if string matches the stream and false if it does not
+    bool compare_dfs_stream(std::string const &expected_string, bool reset_stream = true);
 
-        // Check if COUT stream contains a substring. The default is to reset the COUT stream after every call.
-        // It is easier to test successive functions if the COUT stream is 'empty' before the next call.
-        // This returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string is found in the stream and false if it is not
-        bool compare_cout_stream_substring(std::string const& search_string, bool reset_stream = true);
+    // Check if ESO stream has any output. Useful to make sure there are or are not outputs to ESO.
+    bool has_eso_output(bool reset_stream = true);
 
-        // Compare an expected string against the CERR stream. The default is to reset the CERR stream after every call.
-        // It is easier to test successive functions if the CERR stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_cerr_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if EIO stream has any output. Useful to make sure there are or are not outputs to EIO.
+    bool has_eio_output(bool reset_stream = true);
 
-        // Compare an expected string against the delightin stream. The default is to reset the delightin stream after every call.
-        // It is easier to test successive functions if the delightin stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_delightin_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if MTR stream has any output. Useful to make sure there are or are not outputs to MTR.
+    bool has_mtr_output(bool reset_stream = true);
 
-        // Compare an expected string against the DFS stream. The default is to reset the DFS stream after every call.
-        // It is easier to test successive functions if the DFS stream is 'empty' before the next call.
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return true if string matches the stream and false if it does not
-        bool compare_dfs_stream(std::string const& expected_string, bool reset_stream = true);
+    // Check if ERR stream has any output. Useful to make sure there are or are not outputs to ERR.
+    bool has_err_output(bool reset_stream = true);
 
-        // Check if ESO stream has any output. Useful to make sure there are or are not outputs to ESO.
-        bool has_eso_output(bool reset_stream = true);
+    // Check if COUT stream has any output. Useful to make sure there are or are not outputs to COUT.
+    bool has_cout_output(bool reset_stream = true);
 
-        // Check if EIO stream has any output. Useful to make sure there are or are not outputs to EIO.
-        bool has_eio_output(bool reset_stream = true);
+    // Check if CERR stream has any output. Useful to make sure there are or are not outputs to CERR.
+    bool has_cerr_output(bool reset_stream = true);
 
-        // Check if MTR stream has any output. Useful to make sure there are or are not outputs to MTR.
-        bool has_mtr_output(bool reset_stream = true);
+    // Check if delightin stream has any output. Useful to make sure there are or are not outputs to delightin.
+    bool has_delightin_output(bool reset_stream = true);
 
-        // Check if ERR stream has any output. Useful to make sure there are or are not outputs to ERR.
-        bool has_err_output(bool reset_stream = true);
+    // Check if DFS stream has any output. Useful to make sure there are or are not outputs to DFS.
+    bool has_dfs_output(bool reset_stream = true);
 
-        // Check if COUT stream has any output. Useful to make sure there are or are not outputs to COUT.
-        bool has_cout_output(bool reset_stream = true);
+    // Look for a match of an expected string within the ERR stream. The default here does NOT reset the ERR stream after every call.
+    // Will return true if string matches the stream and false if it does not
+    bool match_err_stream(std::string const &expected_match, bool use_regex = false, bool reset_stream = false);
 
-        // Check if CERR stream has any output. Useful to make sure there are or are not outputs to CERR.
-        bool has_cerr_output(bool reset_stream = true);
+    // This function processes an idf snippet and defaults to using the idd cache for the fixture.
+    // The cache should be used for nearly all calls to this function.
+    // This more or less replicates inputProcessor->processInput() but in a more usable fashion for unit testing
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // This will add the required objects if not specified: Version, Building, GlobalGeometryRules
+    // Will return false if no errors found and true if errors found
+    bool process_idf(std::string_view const idf_snippet, bool use_assertions = true);
 
-        // Check if delightin stream has any output. Useful to make sure there are or are not outputs to delightin.
-        bool has_delightin_output(bool reset_stream = true);
+    // Opens output files as stringstreams
+    void openOutputFiles(EnergyPlusData &state);
 
-        // Check if DFS stream has any output. Useful to make sure there are or are not outputs to DFS.
-        bool has_dfs_output(bool reset_stream = true);
+    // A worker function that keeps trailing spaces in multiline raw string literals
+    void replace_pipes_with_spaces(std::string &stringLiteral)
+    {
+        // C++ now allows nice raw multiline string literals
+        // These are very useful for unit tests that compare against a long chunk of text
+        // For example, if you have an EIO output to compare, you can just paste it right into a variable and compare
+        // However, if the raw literal has trailing spaces on any line, editors tend to remove them
+        // I tried disabling clang-format for sections of code, I tried using an .editorconfig file, and still
+        // the editor would remove them on saving the file.  And for my editor, I _can_ disable that, but only for all
+        // files, which is not preferred.  We do want trailing spaces stripped, just not inside raw string literals.
+        // Anyway, the solution I came up with is a small worker function here.  In the string literal, just put in
+        // pipe characters ( "|" ) where the trailing spaces would be.  Then pass your string literal into this
+        // function, and it will programmatically replace them with strings.  You can then do asserts as needed.
+        std::replace(stringLiteral.begin(), stringLiteral.end(), '|', ' '); // replace the trailing || with spaces
+    }
 
-        // Look for a match of an expected string within the ERR stream. The default here does NOT reset the ERR stream after every call.
-        // Will return true if string matches the stream and false if it does not
-        bool match_err_stream(std::string const& expected_match, bool use_regex = false, bool reset_stream = false);
+public:
+    EnergyPlusData *state;
 
-        // This function processes an idf snippet and defaults to using the idd cache for the fixture.
-        // The cache should be used for nearly all calls to this function.
-        // This more or less replicates inputProcessor->processInput() but in a more usable fashion for unit testing
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // This will add the required objects if not specified: Version, Building, GlobalGeometryRules
-        // Will return false if no errors found and true if errors found
-        bool process_idf(std::string_view const idf_snippet, bool use_assertions = true);
+private:
+    friend class InputProcessorFixture;
 
-        // Opens output files as stringstreams
-        void openOutputFiles(EnergyPlusData& state);
+    // Function to process the Energy+.schema.epJSON, should not normally be called.
+    // This will always grab the Energy+.schema.epJSON that is part of the Products folder
+    // This function should be called by process_idf() so unit tests can take advantage of caching
+    // To test this function use InputProcessorFixture
+    // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
+    // if it makes sense for the unit test to continue after returning from function.
+    // Will return false if no errors found and true if errors found
 
-        // A worker function that keeps trailing spaces in multiline raw string literals
-        void replace_pipes_with_spaces(std::string& stringLiteral)
-        {
-            // C++ now allows nice raw multiline string literals
-            // These are very useful for unit tests that compare against a long chunk of text
-            // For example, if you have an EIO output to compare, you can just paste it right into a variable and compare
-            // However, if the raw literal has trailing spaces on any line, editors tend to remove them
-            // I tried disabling clang-format for sections of code, I tried using an .editorconfig file, and still
-            // the editor would remove them on saving the file.  And for my editor, I _can_ disable that, but only for all
-            // files, which is not preferred.  We do want trailing spaces stripped, just not inside raw string literals.
-            // Anyway, the solution I came up with is a small worker function here.  In the string literal, just put in
-            // pipe characters ( "|" ) where the trailing spaces would be.  Then pass your string literal into this
-            // function, and it will programmatically replace them with strings.  You can then do asserts as needed.
-            std::replace(stringLiteral.begin(), stringLiteral.end(), '|', ' '); // replace the trailing || with spaces
-        }
+    //    static bool process_idd(std::string const &idd, bool &errors_found);
 
-    public:
-        EnergyPlusData* state;
+    // Note that these are non-owning raw pointers. The `state` object owns the underlying streams.
+    std::ostringstream *err_stream;
 
-    private:
-        friend class InputProcessorFixture;
-
-        // Function to process the Energy+.schema.epJSON, should not normally be called.
-        // This will always grab the Energy+.schema.epJSON that is part of the Products folder
-        // This function should be called by process_idf() so unit tests can take advantage of caching
-        // To test this function use InputProcessorFixture
-        // This calls EXPECT_* within the function as well as returns a boolean so you can call [ASSERT/EXPECT]_[TRUE/FALSE] depending
-        // if it makes sense for the unit test to continue after returning from function.
-        // Will return false if no errors found and true if errors found
-
-        //    static bool process_idd(std::string const &idd, bool &errors_found);
-
-        // Note that these are non-owning raw pointers. The `state` object owns the underlying streams.
-        std::ostringstream* err_stream;
-
-        std::unique_ptr<std::ostringstream> m_cout_buffer;
-        std::unique_ptr<std::ostringstream> m_cerr_buffer;
-        std::unique_ptr<std::ostringstream> m_delightin_stream;
-        std::unique_ptr<RedirectCout> m_redirect_cout;
-        std::unique_ptr<RedirectCerr> m_redirect_cerr;
-    };
+    std::unique_ptr<std::ostringstream> m_cout_buffer;
+    std::unique_ptr<std::ostringstream> m_cerr_buffer;
+    std::unique_ptr<std::ostringstream> m_delightin_stream;
+    std::unique_ptr<RedirectCout> m_redirect_cout;
+    std::unique_ptr<RedirectCerr> m_redirect_cerr;
+};
 
 } // namespace EnergyPlus
 
