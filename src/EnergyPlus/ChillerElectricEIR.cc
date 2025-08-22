@@ -685,7 +685,7 @@ void GetElectricEIRChillerInput(EnergyPlusData &state)
 
         if (thisChiller.ChillerEIRFPLRIndex > 0) {
             bool FoundNegValue = false;
-            int DecimalPercision = 2;
+            int DecimalPrecision = 2;
             Array1D<Real64> CurveValArray(11); // Used to evaluate PLFFPLR curve objects
             for (int CurveCheck = 0; CurveCheck <= 10; ++CurveCheck) {
                 Real64 CurveValTmp = Curve::CurveValue(state, thisChiller.ChillerEIRFPLRIndex, double(CurveCheck / 10.0));
@@ -697,13 +697,13 @@ void GetElectricEIRChillerInput(EnergyPlusData &state)
                     // small negative numbers displaying as 0, making it difficult to see the cause of the error
 
                     // Adding additional precision so you can at least see one digit for small numbers, stopping a 8
-                    if (DecimalPercision < 8) {
-                        for (int i = DecimalPercision; i < 9; ++i) {
+                    if (DecimalPrecision < 8) {
+                        for (int i = DecimalPrecision; i < 9; ++i) {
                             // Multiply it by a power of 10 to see if you have a value
                             int MultipliedValue = abs(int(CurveValTmp * (10 ^ i)));
                             if (MultipliedValue > 0) {
                                 // There's a value, so set the percision needed
-                                DecimalPercision = i;
+                                DecimalPrecision = i;
                                 break;
                             }
                         }
@@ -726,8 +726,8 @@ void GetElectricEIRChillerInput(EnergyPlusData &state)
                 ShowSevereError(state, format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "Energy input ratio as a function of part-load ratio curve shows negative values.");
                 ShowContinueError(state, "EIR as a function of PLR curve output at various part-load ratios shown below:");
-                ShowContinueError(state, fmt::format("PLR          = {:7." + std::to_string(DecimalPercision) + "F}", fmt::join(PLRArray, ",")));
-                ShowContinueError(state, fmt::format("Curve Output = {:7." + std::to_string(DecimalPercision) + "F}", fmt::join(CurveValArray, ",")));
+                ShowContinueError(state, fmt::format("PLR          = {:7." + std::to_string(DecimalPrecision) + "F}", fmt::join(PLRArray, ",")));
+                ShowContinueError(state, fmt::format("Curve Output = {:7." + std::to_string(DecimalPrecision) + "F}", fmt::join(CurveValArray, ",")));
                 ErrorsFound = true;
             }
         }
