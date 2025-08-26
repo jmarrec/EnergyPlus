@@ -138,6 +138,8 @@ Set SortIDD = yes
 
 Setting to ``yes'' (internal default is ``no'') causes the program to display some different information that could be useful to developers. In particular, this will cause the Warmup Convergence output to show the last day for each zone, each timestep. There is no Output:Diagnostics equivalent.
 
+It will also enable the automatic flushing of `eplusout.err` in Release mode (in Debug, this is enabled by default), so you can see the output the output while the program is running, and it will capture the content up to a segfault if any.
+
 \begin{lstlisting}
 Set DeveloperFlag = yes
 \end{lstlisting}
