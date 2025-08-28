@@ -104,14 +104,6 @@ runs:
       ccache --show-stats -vv || ccache --show-stats
       ccache --zero-stats
 
-  - name: Baseline Checkout
-    id: develop_checkout
-    if: matrix.run_regressions
-    uses: actions/checkout@v5
-    with:
-      ref: develop
-      path: baseline
-
   - name: Get Baseline Git SHA
     working-directory: ./baseline/build
     shell: bash
