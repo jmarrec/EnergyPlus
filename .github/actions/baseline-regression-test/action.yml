@@ -113,6 +113,7 @@ runs:
       echo "develop-sha=$DEVELOP_SHA" >> $GITHUB_OUTPUT
 
   - name: Baseline Regression Testing caching
+    uses: actions/cache@v4
     id: cachebaselineregression
     with:
       path: |
@@ -128,11 +129,13 @@ runs:
 
   - name: Baseline Create Build Directory
     if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
+    shell: bash
     run: cmake -E make_directory ./baseline/build/
 
   - name: Baseline Configure CMake
     if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
     working-directory: ./baseline/build
+    shell: bash
     run: >
       cmake
       -G Ninja
@@ -153,16 +156,19 @@ runs:
   - name: Baseline Build on Windows
     if: inputs.run_regression && runner.os == 'Windows' && steps.cachebaselineregression.outputs.cache-hit != 'true'
     working-directory: ./baseline/build
+    shell: bash
     run: ninja energyplus ExpandObjects_build ReadVars_build Slab_build Basement_build AppGPostProcess_build ParametricPreprocessor_build
 
   - name: Baseline Build on Mac/Linux
     if: inputs.run_regression && runner.os != 'Windows' && steps.cachebaselineregression.outputs.cache-hit != 'true'
     working-directory: ./baseline/build
+    shell: bash
     run: ninja energyplus ExpandObjects ReadVarsESO Slab Basement AppGPostProcess ParametricPreprocessor
 
   - name: Baseline Test
     if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
     working-directory: ./baseline/build
+    shell: bash
     run: ctest -C Release -R integration -j ${{ env.N }}  # TODO: Speed up basement so we don't have to skip it.
 
   - name: Produce outputs
