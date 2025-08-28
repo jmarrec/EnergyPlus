@@ -47,6 +47,6 @@ jobs:
 
     - name: Run shared steps to setup System and retrieve or produce Baseline Regression Results
       id: setup-baseline
-      uses: ./.github/actions/my-shared-action
+      uses: ./.github/actions/baseline-regression-test
       with:
         run_regression: ${{ matrix.run_regressions }}
