@@ -1,0 +1,52 @@
+name: Build and Test Develop
+
+on:
+  push:
+    branches: [ develop ]
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  FC: gfortran-13
+  Python_REQUIRED_VERSION: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
+
+jobs:
+  build_and_test:
+    name: Testing on ${{ matrix.pretty }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: macos-14
+          macos_dev_target: 13.0
+          arch: arm64
+          python-arch: arm64
+          generator: "Unix Makefiles"
+          run_regressions: true
+          pretty: "Mac arm64"
+#        - os: ubuntu-24.04
+#          arch: x86_64
+#          python-arch: x64
+#          generator: "Unix Makefiles"
+#          run_regressions: false
+#          pretty: "Ubuntu 24.04"
+#        - os: windows-2022
+#          arch: x86_64
+#          python-arch: x64
+#          generator: "Visual Studio 17 2022"
+#          run_regressions: false
+#          pretty: "Windows x64"
+
+    steps:
+
+    - name: Run shared steps to setup System and retrieve or produce Baseline Regression Results
+      id: setup-baseline
+      uses: ./.github/actions/my-shared-action
+      with:
+        run_regression: ${{ matrix.run_regressions }}

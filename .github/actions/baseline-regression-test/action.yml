@@ -1,0 +1,182 @@
+name: "Setup Baseline and Cache Regression"
+description: "Reusable steps"
+
+inputs:
+  run_regression:
+    description: "Whether to run regression tests"
+    required: true
+    type: boolean
+    default: true
+
+outputs:
+  baselineregression-cache-hit:
+    description: "Whether the Baseline Regression Tests were retrieved for the develop SHA or not"
+  ccache-cache-hit:
+    description: "Whether the CCache cache was retrieved or not"
+  develop-sha:
+    description: "The Short (10 chars) GIT SHA for the checked out baseline develop branch"
+  nproc:
+    description: "The number of processors"
+
+runs:
+  using: "composite"
+  steps:
+
+  - name: Set up Python ${{ env.Python_REQUIRED_VERSION }}
+    id: setup-python
+    uses: actions/setup-python@v5
+    with:
+      python-version: ${{ env.Python_REQUIRED_VERSION }}
+
+  - name: Add msbuild to PATH
+    if: runner.os == 'Windows'
+    uses: microsoft/setup-msbuild@v2
+    with:
+      msbuild-architecture: x64
+
+  - name: Install Dependencies
+    shell: bash
+    run: |
+      N=$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
+      echo "There are $N threads available"
+      echo "N=$N" >> $GITHUB_ENV
+      echo "nproc=${{ steps.cacheccache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
+
+      if [ "$RUNNER_OS" == "Windows" ]; then
+        DIR_SEP="\\"
+      else
+        DIR_SEP="/"
+      fi
+
+      CCACHE_DIR="${{ github.workspace }}${DIR_SEP}.ccache"
+      echo CCACHE_DIR=$CCACHE_DIR >> $GITHUB_ENV
+
+      if [ "$RUNNER_OS" == "Linux" ]; then
+        echo "FC=gfortran-13" >> $GITHUB_ENV
+        sudo apt-get update -qq
+        sudo apt-get install -y libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev ccache
+
+        ccache --set-config=cache_dir=$CCACHE_DIR
+        ccache --set-config=max_size=500M
+        ccache --set-config=compression=true
+      elif [ "$RUNNER_OS" == "Windows" ]; then
+        choco install ninja ccache
+
+        ccache --set-config=cache_dir=$CCACHE_DIR
+        ccache --set-config=max_size=500M
+        ccache --set-config=compression=true
+      elif [ "$RUNNER_OS" == "macOS" ]; then
+        # The MACOSX_DEPLOYMENT_TARGET environment variable sets the default value for the CMAKE_OSX_DEPLOYMENT_TARGET variable.
+        echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.MACOSX_DEPLOYMENT_TARGET }} >> $GITHUB_ENV
+
+        brew update
+        brew install tcl-tk
+        brew reinstall gcc@13
+        echo "FC=$(brew --prefix gcc@13)/bin/gfortran-13" >> $GITHUB_ENV
+        echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
+
+        brew install ccache
+        ccache --set-config=compiler_check=content # darwin only
+      fi;
+
+      # Setup ccache, common
+      ccache --set-config=cache_dir=$CCACHE_DIR
+      ccache --set-config=max_size=500M
+      ccache --set-config=compression=true
+
+      pip install pytest lxml
+
+  - name: Cache CCACHE
+    uses: actions/cache@v4
+    id: cacheccache
+    with:
+      path: |
+        ${{ env.CCACHE_DIR }}
+      key: ccache-${{ matrix.pretty }}-${{ env.DEVELOP_SHA }}
+      restore-keys: |
+        ccache-${{ matrix.pretty }}-
+
+  - name: Did restoring the CCache-cache work? Yes
+    # If the SDK wasn't found in the cache
+    if: steps.cacheccache.outputs.cache-hit == 'true'
+    shell: bash
+    run: |
+      ccache --show-stats -vv || ccache --show-stats
+      ccache --zero-stats
+
+  - name: Baseline Checkout
+    id: develop_checkout
+    if: matrix.run_regressions
+    uses: actions/checkout@v5
+    with:
+      ref: develop
+      path: baseline
+
+  - name: Get Baseline Git SHA
+    working-directory: ./baseline/build
+    shell: bash
+    run: |
+      DEVELOP_SHA=$(git rev-parse --short HEAD)
+      echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
+      echo "develop-sha=$DEVELOP_SHA" >> $GITHUB_OUTPUT
+
+  - name: Baseline Regression Testing caching
+    id: cachebaselineregression
+    with:
+      path: |
+        ./baseline/build/testfiles
+      key: ccache-${{ matrix.pretty }}-${{ env.DEVELOP_SHA }}
+
+  - name: Did restoring the Baseline Regression Tests work? Yes
+    # If the SDK wasn't found in the cache
+    if: steps.cachebaselineregression.outputs.cache-hit == 'true'
+    shell: bash
+    run: |
+      echo "Found the regression tests!"
+
+  - name: Baseline Create Build Directory
+    if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
+    run: cmake -E make_directory ./baseline/build/
+
+  - name: Baseline Configure CMake
+    if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
+    working-directory: ./baseline/build
+    run: >
+      cmake
+      -G Ninja
+      -DCMAKE_BUILD_TYPE:STRING=Release
+      -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=${{ matrix.macos_dev_target }}
+      -DLINK_WITH_PYTHON:BOOL=ON
+      -DPYTHON_CLI:BOOL=ON
+      -DPython_REQUIRED_VERSION:STRING=${{ steps.setup-python.outputs.python-version }}
+      -DPython_ROOT_DIR:PATH=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/${{ matrix.python-arch }}/
+      -DBUILD_TESTING:BOOL=ON
+      -DBUILD_FORTRAN:BOOL=ON
+      -DBUILD_PACKAGE:BOOL=OFF
+      -DDOCUMENTATION_BUILD:STRING=DoNotBuild
+      -DENABLE_OPENMP:BOOL=OFF
+      -DUSE_OpenMP:BOOL=OFF
+      ../
+
+  - name: Baseline Build on Windows
+    if: inputs.run_regression && runner.os == 'Windows' && steps.cachebaselineregression.outputs.cache-hit != 'true'
+    working-directory: ./baseline/build
+    run: ninja energyplus ExpandObjects_build ReadVars_build Slab_build Basement_build AppGPostProcess_build ParametricPreprocessor_build
+
+  - name: Baseline Build on Mac/Linux
+    if: inputs.run_regression && runner.os != 'Windows' && steps.cachebaselineregression.outputs.cache-hit != 'true'
+    working-directory: ./baseline/build
+    run: ninja energyplus ExpandObjects ReadVarsESO Slab Basement AppGPostProcess ParametricPreprocessor
+
+  - name: Baseline Test
+    if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
+    working-directory: ./baseline/build
+    run: ctest -C Release -R integration -j ${{ env.N }}  # TODO: Speed up basement so we don't have to skip it.
+
+  - name: Produce outputs
+    shell: bash
+    run: |
+      echo "baselineregression-cache-hit=${{ steps.cachebaselineregression.outputs.cache-hit }}" >> $GITHUB_OUTPUT
+      echo "ccache-cache-hit=${{ steps.cacheccache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
+
+
