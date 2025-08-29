@@ -45,17 +45,17 @@ jobs:
 
     steps:
 
-    - name: Run shared steps to setup System and retrieve or produce Baseline Regression Results
-      id: setup-baseline
-      uses: ./baseline/.github/actions/baseline-regression-test
-      with:
-        run_regression: ${{ matrix.run_regressions }}
-
     # BUILD AND TEST EVERYTHING ON THE CURRENT BRANCH
     - name: Branch Checkout
       uses: actions/checkout@v5
       with:
         path: branch
+
+    - name: Run shared steps to setup System and retrieve or produce Baseline Regression Results
+      id: setup-baseline
+      uses: ${{ github.repository }}/.github/actions/baseline-regression-test@develop
+      with:
+        run_regression: ${{ matrix.run_regressions }}
 
     - name: Branch Create Build Directory And Configure CCACHE_BASEDIR
       shell: bash
