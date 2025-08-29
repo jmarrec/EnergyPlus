@@ -80,7 +80,8 @@ jobs:
       run: |
         echo "Found the regression tests!"
         # We turn off the PCH in that case, since that's how develop builds it
-        echo "ENABLE_PCH=OFF" >> $GITHUB_ENV
+        # TODO: explicitly trying with ON
+        echo "ENABLE_PCH=ON" >> $GITHUB_ENV
 
     - name: Cache CCACHE
       uses: actions/cache@v4
@@ -147,7 +148,7 @@ jobs:
       id: branch_build
       uses: ./.github/actions/configure-and-build
       with:
-        enable-pch: ON # ${{ env.ENABLE_PCH }}
+        enable-pch: ${{ env.ENABLE_PCH }}
         minimal-targets: false
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}
