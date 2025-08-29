@@ -46,8 +46,6 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
-#include <math.h>
-
 #include <cmath>
 
 // ObjexxFCL Headers
