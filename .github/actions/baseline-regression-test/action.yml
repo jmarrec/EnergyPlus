@@ -40,10 +40,10 @@ runs:
   - name: Install Dependencies
     shell: bash
     run: |
-      N=$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
+      NPROC=$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
       echo "There are $N threads available"
-      echo "N=$N" >> $GITHUB_ENV
-      echo "nproc=${{ steps.cacheccache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
+      echo "NPROC=$NPROC" >> $GITHUB_ENV
+      echo "nproc=$NPROC" >> $GITHUB_OUTPUT
 
       if [ "$RUNNER_OS" == "Windows" ]; then
         DIR_SEP="\\"
