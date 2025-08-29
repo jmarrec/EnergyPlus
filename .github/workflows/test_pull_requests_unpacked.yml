@@ -147,7 +147,7 @@ jobs:
       id: branch_build
       uses: ./.github/actions/configure-and-build
       with:
-        enable-pch: ${{ env.ENABLE_PCH }}
+        enable-pch: ON # ${{ env.ENABLE_PCH }}
         minimal-targets: false
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}

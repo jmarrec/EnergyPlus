@@ -84,6 +84,7 @@ jobs:
     - name: Configure and Build
       uses: ./.github/actions/configure-and-build
       with:
+        enable-pch: ON
         minimal-targets: false
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}

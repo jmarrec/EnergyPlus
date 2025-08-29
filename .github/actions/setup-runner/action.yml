@@ -63,9 +63,6 @@ runs:
         sudo apt-get -qq update
         sudo apt-get -qq install -y libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev ccache
 
-        ccache --set-config=cache_dir=$CCACHE_DIR
-        ccache --set-config=max_size=500M
-        ccache --set-config=compression=true
         COMPILER="gcc-$(gcc -dumpversion)"
       elif [ "$RUNNER_OS" == "Windows" ]; then
         choco install ninja ccache
@@ -100,6 +97,8 @@ runs:
       ccache --set-config=cache_dir=$CCACHE_DIR
       ccache --set-config=max_size=500M
       ccache --set-config=compression=true
+      ccache --set-config=sloppiness=pch_defines,time_macros
+
       echo "::endgroup::"
 
       begin_group "App Python_ROOT_DIR env variable"
