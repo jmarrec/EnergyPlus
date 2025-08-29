@@ -122,6 +122,7 @@ runs:
     run: |
       ccache --show-stats -vv || ccache --show-stats
       ccache --zero-stats
+      ccache -p
 
   - name: Baseline Regression Testing caching
     uses: actions/cache@v4
