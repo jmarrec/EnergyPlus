@@ -79,13 +79,11 @@ runs:
         # msvc-2022
         COMPILER="msvc-$(vswhere -products '*' -requires Microsoft.Component.MSBuild -latest -property catalog_productLineVersion)"
       elif [ "$RUNNER_OS" == "macOS" ]; then
-        # The MACOSX_DEPLOYMENT_TARGET environment variable sets the default value for the CMAKE_OSX_DEPLOYMENT_TARGET variable.
-        echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.MACOSX_DEPLOYMENT_TARGET }} >> $GITHUB_ENV
-
         brew update
         brew install tcl-tk
         brew reinstall gcc@13
         echo "FC=$(brew --prefix gcc@13)/bin/gfortran-13" >> $GITHUB_ENV
+        # The MACOSX_DEPLOYMENT_TARGET environment variable sets the default value for the CMAKE_OSX_DEPLOYMENT_TARGET variable.
         echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
 
         brew install ccache
@@ -117,7 +115,7 @@ runs:
       begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
 
       begin_group "Get develop GIT SHA without checkout"
-      git ls-remote https://github.com/$GITHUB_REPOSITORY.git develop | cut -f1 | cut -c1-10
+      DEVELOP_SHA=$(git ls-remote https://github.com/$GITHUB_REPOSITORY.git develop | cut -f1 | cut -c1-10)
       # DEVELOP_SHA=$(git rev-parse --short=10 HEAD)
       echo "Develop GIT SHA is '${DEVELOP_SHA}'"
       echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
