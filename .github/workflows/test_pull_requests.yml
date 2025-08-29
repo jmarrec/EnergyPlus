@@ -60,7 +60,7 @@ jobs:
     - name: Branch Create Build Directory And Configure CCACHE_BASEDIR
       shell: bash
       run: |
-        cmake -E make_directory ./baseline/build/
+        cmake -E make_directory ./branch/build/
         CCACHE_BASEDIR="${{ github.workspace }}${{ env.DIR_SEP }}branch"
         ccache --set-config=base_dir=$CCACHE_BASEDIR
         ccache -p
