@@ -117,7 +117,7 @@ runs:
       begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
 
       begin_group "Get develop GIT SHA without checkout"
-      git ls-remote git@github.com:$GITHUB_REPOSITORY.git develop | cut -f1 | cut -c1-10
+      git ls-remote https://github.com/$GITHUB_REPOSITORY.git develop | cut -f1 | cut -c1-10
       # DEVELOP_SHA=$(git rev-parse --short=10 HEAD)
       echo "Develop GIT SHA is '${DEVELOP_SHA}'"
       echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
