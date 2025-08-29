@@ -2,8 +2,6 @@ name: "CMake Configure and Build"
 description: "Run CMake Configure and Build the targets"
 
 inputs:
-
-inputs:
   build-directory:
     description: "the E+ working directory, top level of the repo"
   nproc:
