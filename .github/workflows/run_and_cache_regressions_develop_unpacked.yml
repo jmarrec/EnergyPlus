@@ -1,0 +1,107 @@
+name: Build and Test Develop
+
+on:
+  push:
+    branches: [ develop ]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  FC: gfortran-13
+  Python_REQUIRED_VERSION: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
+
+jobs:
+  build_and_test:
+    name: Testing on ${{ matrix.pretty }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+#        - os: macos-14
+#          macos_dev_target: 13.0
+#          arch: arm64
+#          python-arch: arm64
+#          run_regressions: true
+#          pretty: "Mac arm64"
+        - os: ubuntu-24.04
+          arch: x86_64
+          python-arch: x64
+          run_regressions: false
+          pretty: "Ubuntu 24.04"
+#        - os: windows-2022
+#          arch: x86_64
+#          python-arch: x64
+#          run_regressions: false
+#          pretty: "Windows x64"
+
+    steps:
+
+    - uses: actions/checkout@v5
+
+    - name: Setup System
+      id: setup-runner
+      uses: ./github/actions/setup-runner
+      with:
+        python-version: ${{ env.Python_REQUIRED_VERSION }}
+        python-arch: ${{ matrix.python-arch }}
+
+    - name: Get Current SHA
+      shell: bash
+      run: |
+        echo "Figuring out the develop GIT SHA"
+        CURRENT_SHA=$(git rev-parse --short=10 HEAD)
+        echo "Develop GIT SHA is '${CURRENT_SHA}'"
+        echo "CURRENT_SHA=$CURRENT_SHA" >> $GITHUB_ENV
+
+    - name: Cache CCACHE
+      uses: actions/cache@v4
+      id: cacheccache
+      with:
+        path: |
+          ${{ steps.setup-runner.outputs.ccache-dir }}
+        key: ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.CURRENT_SHA }}
+        restore-keys: |
+          ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
+          ccache-${{ runner.os }}-
+
+    - name: Did restoring the CCache-cache work? Yes
+      # If the SDK wasn't found in the cache
+      if: steps.cacheccache.outputs.cache-hit == 'true'
+      shell: bash
+      run: |
+        ccache --show-stats -vv || ccache --show-stats
+        ccache --zero-stats
+        ccache -p
+
+    - name: Create Build Directory
+      shell: bash
+      run: |
+        cmake -E make_directory ./build/
+        if [ "$RUNNER_OS" == "macOS" ]; then
+          # The MACOSX_DEPLOYMENT_TARGET environment variable sets the default value for the CMAKE_OSX_DEPLOYMENT_TARGET variable.
+          echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
+        fi;
+
+    - name: Configure and Build
+      uses: ./github/actions/configure-and-build
+      with:
+        minimal-targets: false
+        build-directory: ./build
+        nproc: ${{ steps.setup-runner.outputs.nproc }}
+        python-version: ${{ env.Python_REQUIRED_VERSION }}
+        python-arch: ${{ steps.setup-runner.outputs.python-root-dir }}
+
+    - name: Run Tests
+      working-directory: ./build
+      shell: bash
+      run: |
+        ctest -R integration.1ZoneUncontrolled -j ${{ env.NPROC }} # TODO: revert filter # TODO: Speed up basement so we don't have to skip it.
+        mv testfiles testfiles-develop
+
+    - uses: actions/cache/save@v4
+      with:
+        path: |
+          ./build/testfiles-develop
+        key: baselineregression-${{ runner.os }}-${{ env.CURRENT_SHA }}

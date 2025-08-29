@@ -1,0 +1,92 @@
+name: "CMake Configure and Build"
+description: "Run CMake Configure and Build the targets"
+
+inputs:
+
+inputs:
+  build-directory:
+    description: "the E+ working directory, top level of the repo"
+  nproc:
+    required: true
+  minimal-targets:
+    description: "If true will build only energyplus and a couple of fortran ones, just enough to run reg tests"
+    required: true
+    type: boolean
+    default: false
+  python-version:
+    required: true
+  python-root-dir:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+  # PCH is off for proper ccache usage
+  - name: Configure CMake on Windows
+    if: runner.os == 'Windows'
+    working-directory: ${{ inputs.build-directory }}
+    shell: cmd
+    run: |
+      echo "Using vcvarsall to initialize the development environment"
+      call vcvarsall.bat x64
+      cmake ^
+        -G Ninja ^
+        -DENABLE_PCH:BOOL=OFF ^
+        -DCMAKE_BUILD_TYPE:STRING=Release ^
+        -DLINK_WITH_PYTHON:BOOL=ON ^
+        -DPYTHON_CLI:BOOL=ON ^
+        -DPython_REQUIRED_VERSION:STRING=${{ inputs.python-version }} ^
+        -DPython_ROOT_DIR:PATH=${{ inputs.python-root-dir }} ^
+        -DBUILD_TESTING:BOOL=ON ^
+        -DBUILD_FORTRAN:BOOL=ON ^
+        -DBUILD_PACKAGE:BOOL=OFF ^
+        -DDOCUMENTATION_BUILD:STRING=DoNotBuild ^
+        -DENABLE_OPENMP:BOOL=OFF ^
+        -DUSE_OpenMP:BOOL=OFF ^
+        ../
+
+  - name: Configure CMake on Unix
+    if: runner.os != 'Windows'
+    working-directory: ${{ inputs.build-directory }}
+    shell: bash
+    run: |
+      cmake \
+        -G Ninja \
+        -DENABLE_PCH:BOOL=OFF \
+        -DCMAKE_BUILD_TYPE:STRING=Release \
+        -DLINK_WITH_PYTHON:BOOL=ON \
+        -DPYTHON_CLI:BOOL=ON \
+        -DPython_REQUIRED_VERSION:STRING=${{ inputs.python-version }} \
+        -DPython_ROOT_DIR:PATH=${{ inputs.python-root-dir }} \
+        -DBUILD_TESTING:BOOL=ON \
+        -DBUILD_FORTRAN:BOOL=ON \
+        -DBUILD_PACKAGE:BOOL=OFF \
+        -DDOCUMENTATION_BUILD:STRING=DoNotBuild \
+        -DENABLE_OPENMP:BOOL=OFF \
+        -DUSE_OpenMP:BOOL=OFF \
+        ../
+
+  - name: Build
+    working-directory: ${{ inputs.build-directory }}
+    shell: bash
+    run: |
+      begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+
+      if [ "${{ inputs.minimal-targets }}" == "true" ]; then
+        begin_group "Builing only energyplus and fortran targets"
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          suffix="_build"
+        fi;
+        ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
+        echo "::endgroup::"
+      else
+        begin_group "Builing full energyplus"
+        ninja
+        echo "::endgroup::"
+      fi;
+
+      begin_group "Showing CCache Stats"
+      ccache --show-stats -vv || ccache --show-stats || true
+      ccache --zero-stats
+      echo "::endgroup::"
