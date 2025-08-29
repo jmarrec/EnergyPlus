@@ -65,24 +65,47 @@ jobs:
     - name: Branch Create Build Directory
       run: cmake -E make_directory ./branch/build/
 
-    - name: Branch Configure CMake
+    - name: Branch Configure CMake on Windows
+      if: inputs.run_regression && runner.os == 'Windows'
       working-directory: ./branch/build
-      run: >
-        cmake
-        -G "${{ matrix.generator }}"
-        -DCMAKE_BUILD_TYPE:STRING=Release
-        -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=${{ matrix.macos_dev_target }}
-        -DLINK_WITH_PYTHON:BOOL=ON
-        -DPYTHON_CLI:BOOL=ON
-        -DPython_REQUIRED_VERSION:STRING=${{ steps.setup-python.outputs.python-version }}
-        -DPython_ROOT_DIR:PATH=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/${{ matrix.python-arch }}/
-        -DBUILD_TESTING:BOOL=ON
-        -DBUILD_FORTRAN:BOOL=ON
-        -DBUILD_PACKAGE:BOOL=OFF
-        -DDOCUMENTATION_BUILD:STRING=DoNotBuild
-        -DENABLE_OPENMP:BOOL=OFF
-        -DUSE_OpenMP:BOOL=OFF
-        ../
+      shell: cmd
+      run: |
+        echo "Using vcvarsall to initialize the development environment"
+        call vcvarsall.bat x64
+        cmake ^
+          -G Ninja ^
+          -DCMAKE_BUILD_TYPE:STRING=Release ^
+          -DLINK_WITH_PYTHON:BOOL=ON ^
+          -DPYTHON_CLI:BOOL=ON ^
+          -DPython_REQUIRED_VERSION:STRING=${{ env.Python_REQUIRED_VERSION }} ^
+          -DPython_ROOT_DIR:PATH=${{ env.Python_ROOT_DIR }} ^
+          -DBUILD_TESTING:BOOL=ON ^
+          -DBUILD_FORTRAN:BOOL=ON ^
+          -DBUILD_PACKAGE:BOOL=OFF ^
+          -DDOCUMENTATION_BUILD:STRING=DoNotBuild ^
+          -DENABLE_OPENMP:BOOL=OFF ^
+          -DUSE_OpenMP:BOOL=OFF ^
+          ../
+
+    - name: Branch Configure CMake on Unix
+      if: inputs.run_regression && runner.os != 'Windows'
+      working-directory: ./branch/build
+      shell: bash
+      run: |
+        cmake \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE:STRING=Release \
+          -DLINK_WITH_PYTHON:BOOL=ON \
+          -DPYTHON_CLI:BOOL=ON \
+          -DPython_REQUIRED_VERSION:STRING=${{ env.Python_REQUIRED_VERSION }} \
+          -DPython_ROOT_DIR:PATH=${{ env.Python_ROOT_DIR }} \
+          -DBUILD_TESTING:BOOL=ON \
+          -DBUILD_FORTRAN:BOOL=ON \
+          -DBUILD_PACKAGE:BOOL=OFF \
+          -DDOCUMENTATION_BUILD:STRING=DoNotBuild \
+          -DENABLE_OPENMP:BOOL=OFF \
+          -DUSE_OpenMP:BOOL=OFF \
+          ../
 
     - name: Branch Build
       id: branch_build
@@ -99,7 +122,7 @@ jobs:
 
     - name: Branch Test
       working-directory: ./branch/build
-      run: ctest -j ${{ steps.setup-baseline.outputs.nproc }}
+      run: ctest -j ${{ env.NPROC }}
 
     - name: Install Regression Tool
       if: always() && matrix.run_regressions && steps.branch_build.outcome != 'failure'  # always run this step as long as we actually built

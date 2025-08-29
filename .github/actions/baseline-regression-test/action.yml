@@ -35,6 +35,7 @@ runs:
       DEVELOP_SHA=$(git rev-parse --short HEAD)
       echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
       echo "develop-sha=$DEVELOP_SHA" >> $GITHUB_OUTPUT
+      echo "Python_ROOT_DIR=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/${{ matrix.python-arch }}" >> $GITHUB_ENV
 
   - name: Install Dependencies
     shell: bash
@@ -144,6 +145,7 @@ runs:
     shell: bash
     run: cmake -E make_directory ./baseline/build/
 
+  # PCH is off for proper ccache usage
   - name: Baseline Configure CMake on Windows
     if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true' && runner.os == 'Windows'
     working-directory: ./baseline/build
@@ -153,12 +155,12 @@ runs:
       call vcvarsall.bat x64
       cmake ^
         -G Ninja ^
+        -DENABLE_PCH:BOOL=OFF ^
         -DCMAKE_BUILD_TYPE:STRING=Release ^
-        -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=${{ matrix.macos_dev_target }} ^
         -DLINK_WITH_PYTHON:BOOL=ON ^
         -DPYTHON_CLI:BOOL=ON ^
-        -DPython_REQUIRED_VERSION:STRING=${{ steps.setup-python.outputs.python-version }} ^
-        -DPython_ROOT_DIR:PATH=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/${{ matrix.python-arch }}/ ^
+        -DPython_REQUIRED_VERSION:STRING=${{ env.Python_REQUIRED_VERSION }} ^
+        -DPython_ROOT_DIR:PATH=${{ env.Python_ROOT_DIR }} ^
         -DBUILD_TESTING:BOOL=ON ^
         -DBUILD_FORTRAN:BOOL=ON ^
         -DBUILD_PACKAGE:BOOL=OFF ^
@@ -174,12 +176,12 @@ runs:
     run: |
       cmake \
         -G Ninja \
+        -DENABLE_PCH:BOOL=OFF \
         -DCMAKE_BUILD_TYPE:STRING=Release \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET:STRING=${{ matrix.macos_dev_target }} \
         -DLINK_WITH_PYTHON:BOOL=ON \
         -DPYTHON_CLI:BOOL=ON \
-        -DPython_REQUIRED_VERSION:STRING=${{ steps.setup-python.outputs.python-version }} \
-        -DPython_ROOT_DIR:PATH=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/${{ matrix.python-arch }}/ \
+        -DPython_REQUIRED_VERSION:STRING=${{ env.Python_REQUIRED_VERSION }} \
+        -DPython_ROOT_DIR:PATH=${{ env.Python_ROOT_DIR }} \
         -DBUILD_TESTING:BOOL=ON \
         -DBUILD_FORTRAN:BOOL=ON \
         -DBUILD_PACKAGE:BOOL=OFF \
@@ -211,7 +213,7 @@ runs:
     if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
     working-directory: ./baseline/build
     shell: bash
-    run: ctest -R integration -j ${{ env.N }}  # TODO: Speed up basement so we don't have to skip it.
+    run: ctest -R integration -j ${{ env.NPROC }}  # TODO: Speed up basement so we don't have to skip it.
 
   - name: Produce outputs
     shell: bash
