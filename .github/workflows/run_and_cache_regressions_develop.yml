@@ -54,5 +54,4 @@ jobs:
       id: setup-baseline
       uses: ./baseline/.github/actions/baseline-regression-test
       with:
-        is_develop: true
         run_regression: ${{ matrix.run_regressions }}
