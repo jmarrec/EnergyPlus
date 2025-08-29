@@ -90,7 +90,7 @@ jobs:
       id: cachebaselineregression
       with:
         path: |
-          ./baseline/build/testfiles
+          ./build/testfiles-develop
         key: baselineregression-${{ runner.os }}-${{ env.DEVELOP_SHA }}
 
     - name: Did restoring the Baseline Regression Tests work? Yes
@@ -138,6 +138,7 @@ jobs:
       uses: actions/checkout@v5
 
     - name: Configure and Build
+      id: branch_build
       uses: ./.github/actions/configure-and-build
       with:
         minimal-targets: false
@@ -161,7 +162,7 @@ jobs:
       id: regressions
       # steps.regressions.conclusion is always "success", but if no regressions, steps.regressions.outcome is "success"
       continue-on-error: true
-      run: python ./branch/scripts/dev/gha_regressions.py ./baseline/build/testfiles ./branch/build/testfiles/ ./regressions
+      run: python ./scripts/dev/gha_regressions.py ./build/testfiles-develop ./build/testfiles ./regressions
 
     - uses: actions/upload-artifact@v4
       id: upload_regressions
@@ -173,7 +174,7 @@ jobs:
     - name: Generate Regression Summary GitHub Script
       if: always() && matrix.run_regressions && steps.regressions.outcome == 'failure'
       run: >
-        python ./branch/scripts/dev/build_regression_summary.py
+        python ./scripts/dev/build_regression_summary.py
         ${{ github.workspace }}/regressions/summary.md
         ${{ github.workspace }}/regressions/summary.js
         ${{ matrix.os }}
