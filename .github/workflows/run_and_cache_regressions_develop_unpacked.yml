@@ -91,7 +91,7 @@ jobs:
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}
         python-version: ${{ env.Python_REQUIRED_VERSION }}
-        python-arch: ${{ steps.setup-runner.outputs.python-root-dir }}
+        python-root-dir: ${{ steps.setup-runner.outputs.python-root-dir }}
 
     - name: Run Tests
       working-directory: ./build

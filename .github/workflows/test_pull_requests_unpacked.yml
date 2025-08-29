@@ -116,7 +116,7 @@ jobs:
       with:
         ref: develop
 
-    - name: Configure and Build
+    - name: Baseline Configure and Build
       if: matrix.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
       uses: ./.github/actions/configure-and-build
       with:
@@ -124,7 +124,7 @@ jobs:
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}
         python-version: ${{ env.Python_REQUIRED_VERSION }}
-        python-arch: ${{ steps.setup-runner.outputs.python-root-dir }}
+        python-root-dir: ${{ steps.setup-runner.outputs.python-root-dir }}
 
     - name: Baseline Test
       if: matrix.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
@@ -145,7 +145,7 @@ jobs:
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}
         python-version: ${{ env.Python_REQUIRED_VERSION }}
-        python-arch: ${{ steps.setup-runner.outputs.python-root-dir }}
+        python-root-dir: ${{ steps.setup-runner.outputs.python-root-dir }}
 
     - name: Run Tests
       working-directory: ./build

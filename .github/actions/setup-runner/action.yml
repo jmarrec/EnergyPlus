@@ -61,7 +61,7 @@ runs:
       if [ "$RUNNER_OS" == "Linux" ]; then
         echo "FC=gfortran-13" >> $GITHUB_ENV
         sudo apt-get update -qq
-        sudo apt-get install -y libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev ccache
+        sudo apt-get install -y -qq libxkbcommon-x11-0 xorg-dev libgl1-mesa-dev ccache
 
         ccache --set-config=cache_dir=$CCACHE_DIR
         ccache --set-config=max_size=500M
@@ -69,10 +69,6 @@ runs:
         COMPILER="gcc-$(gcc -dumpversion)"
       elif [ "$RUNNER_OS" == "Windows" ]; then
         choco install ninja ccache
-
-        ccache --set-config=cache_dir=$CCACHE_DIR
-        ccache --set-config=max_size=500M
-        ccache --set-config=compression=true
 
         # C:\Program Files\Microsoft Visual Studio\2022\Enterprise
         MSVC_DIR=$(vswhere -products '*' -requires Microsoft.Component.MSBuild -latest -property installationPath)
