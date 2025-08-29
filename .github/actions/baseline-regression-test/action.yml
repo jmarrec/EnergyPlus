@@ -110,10 +110,10 @@ runs:
     with:
       path: |
         ${{ env.CCACHE_DIR }}
-      key: ccache-${{ matrix.pretty }}-${{ env.COMPILER }}-${{ env.DEVELOP_SHA }}
+      key: ccache-${{ runner.os }}-${{ env.COMPILER }}-${{ env.DEVELOP_SHA }}
       restore-keys: |
-        ccache-${{ matrix.pretty }}-${{ env.COMPILER }}-
-        ccache-${{ matrix.pretty }}-
+        ccache-${{ runner.os }}-${{ env.COMPILER }}-
+        ccache-${{ runner.os }}-
 
   - name: Did restoring the CCache-cache work? Yes
     # If the SDK wasn't found in the cache
@@ -129,7 +129,7 @@ runs:
     with:
       path: |
         ./baseline/build/testfiles
-      key: baselineregression-${{ matrix.pretty }}-${{ env.DEVELOP_SHA }}
+      key: baselineregression-${{ runner.os }}-${{ env.DEVELOP_SHA }}
 
   - name: Did restoring the Baseline Regression Tests work? Yes
     # If the SDK wasn't found in the cache
