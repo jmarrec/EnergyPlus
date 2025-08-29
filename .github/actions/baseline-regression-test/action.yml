@@ -32,18 +32,32 @@ runs:
     working-directory: ./baseline
     shell: bash
     run: |
-      DEVELOP_SHA=$(git rev-parse --short HEAD)
+      echo "Figuring out the develop GIT SHA"
+      begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+
+      begin_group "Get develop GIT SHA"
+      DEVELOP_SHA=$(git rev-parse --short=10 HEAD)
+      echo "Develop GIT SHA is '${DEVELOP_SHA}'"
       echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
       echo "develop-sha=$DEVELOP_SHA" >> $GITHUB_OUTPUT
+      echo "::endgroup::"
+
+      begin_group "App Python_ROOT_DIR env variable"
       echo "Python_ROOT_DIR=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/${{ matrix.python-arch }}" >> $GITHUB_ENV
+      echo "::endgroup::"
 
   - name: Install Dependencies
     shell: bash
     run: |
+      echo "Configuring"
+      begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+
+      begin_group "Figure out NPROC"
       NPROC=$(nproc 2>/dev/null || sysctl -n hw.logicalcpu)
-      echo "There are $N threads available"
+      echo "There are $NPROC threads available"
       echo "NPROC=$NPROC" >> $GITHUB_ENV
       echo "nproc=$NPROC" >> $GITHUB_OUTPUT
+      echo "::endgroup::"
 
       if [ "$RUNNER_OS" == "Windows" ]; then
         DIR_SEP="\\"
@@ -51,6 +65,7 @@ runs:
         DIR_SEP="/"
       fi
 
+      begin_group "Install system dependencies such as ninja and ccache"
       CCACHE_DIR="${{ github.workspace }}${DIR_SEP}.ccache"
       echo CCACHE_DIR=$CCACHE_DIR >> $GITHUB_ENV
 
@@ -102,8 +117,11 @@ runs:
       ccache --set-config=cache_dir=$CCACHE_DIR
       ccache --set-config=max_size=500M
       ccache --set-config=compression=true
+      echo "::endgroup::"
 
+      begin_group "Install python dependencies"
       pip install pytest lxml
+      echo "::endgroup::"
 
   - name: Cache CCACHE
     uses: actions/cache@v4
