@@ -8,13 +8,15 @@ inputs:
     required: true
   minimal-targets:
     description: "If true will build only energyplus and a couple of fortran ones, just enough to run reg tests"
-    required: true
     type: boolean
     default: false
   python-version:
     required: true
   python-root-dir:
     required: true
+  enable-pch:
+    description: "Turn on ENABLE_PCH to have pre-compiled headers. Pass ON or OFF"
+    default: "OFF"
 
 runs:
   using: "composite"
@@ -30,7 +32,7 @@ runs:
       call vcvarsall.bat x64
       cmake ^
         -G Ninja ^
-        -DENABLE_PCH:BOOL=OFF ^
+        -DENABLE_PCH:BOOL=${{ inputs.enable-pch }} ^
         -DCMAKE_BUILD_TYPE:STRING=Release ^
         -DLINK_WITH_PYTHON:BOOL=ON ^
         -DPYTHON_CLI:BOOL=ON ^
@@ -51,7 +53,7 @@ runs:
     run: |
       cmake \
         -G Ninja \
-        -DENABLE_PCH:BOOL=OFF \
+        -DENABLE_PCH:BOOL=${{ inputs.enable-pch }} \
         -DCMAKE_BUILD_TYPE:STRING=Release \
         -DLINK_WITH_PYTHON:BOOL=ON \
         -DPYTHON_CLI:BOOL=ON \

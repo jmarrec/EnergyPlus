@@ -63,27 +63,8 @@ jobs:
 
         echo "Current merge commit SHA is '${GITHUB_SHA}'"
         echo "::endgroup::"
-
-    - name: Cache CCACHE
-      uses: actions/cache@v4
-      id: cacheccache
-      with:
-        path: |
-          ${{ steps.setup-runner.outputs.ccache-dir }}
-        key: ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ github.head_ref }}
-        restore-keys: |
-          ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.DEVELOP_SHA }}
-          ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
-          ccache-${{ runner.os }}-
-
-    - name: Did restoring the CCache-cache work? Yes
-      # If the SDK wasn't found in the cache
-      if: steps.cacheccache.outputs.cache-hit == 'true'
-      shell: bash
-      run: |
-        ccache --show-stats -vv || ccache --show-stats
-        ccache --zero-stats
-        ccache -p
+        # We default to using PCH, in case we don't find the baseline reg tests, since it speeds up the build a lot and we'll build TWICE
+        echo "ENABLE_PCH=ON" >> $GITHUB_ENV
 
     - name: Baseline Regression Testing caching
       uses: actions/cache@v4
@@ -98,6 +79,30 @@ jobs:
       shell: bash
       run: |
         echo "Found the regression tests!"
+        # We turn off the PCH in that case, since that's how develop builds it
+        echo "ENABLE_PCH=OFF" >> $GITHUB_ENV
+
+    - name: Cache CCACHE
+      uses: actions/cache@v4
+      id: cacheccache
+      with:
+        path: |
+          ${{ steps.setup-runner.outputs.ccache-dir }}
+        key: ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ github.head_ref }}-pch=${{ env.ENABLE_PCH }}
+        restore-keys: |
+          ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ github.head_ref }}
+          ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.DEVELOP_SHA }}
+          ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
+          ccache-${{ runner.os }}-
+
+    - name: Did restoring the CCache-cache work? Yes
+      # If the SDK wasn't found in the cache
+      if: steps.cacheccache.outputs.cache-hit == 'true'
+      shell: bash
+      run: |
+        ccache --show-stats -vv || ccache --show-stats
+        ccache --zero-stats
+        ccache -p
 
     - name: Create Build Directory
       shell: bash
@@ -119,6 +124,7 @@ jobs:
       if: matrix.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
       uses: ./.github/actions/configure-and-build
       with:
+        enable-pch: ${{ env.ENABLE_PCH }} # this is 'ON' in this case
         minimal-targets: true
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}
@@ -141,6 +147,7 @@ jobs:
       id: branch_build
       uses: ./.github/actions/configure-and-build
       with:
+        enable-pch: ${{ env.ENABLE_PCH }}
         minimal-targets: false
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}
