@@ -98,7 +98,7 @@ BoilerSpecs *BoilerSpecs::factory(EnergyPlusData &state, std::string const &obje
         state.dataBoilers->getBoilerInputFlag = false;
     }
     // Now look for this particular boiler in the list
-    auto myBoiler = std::find_if(state.dataBoilers->Boiler.begin(), state.dataBoilers->Boiler.end(), [&objectName](const BoilerSpecs &boiler) {
+    auto *myBoiler = std::find_if(state.dataBoilers->Boiler.begin(), state.dataBoilers->Boiler.end(), [&objectName](const BoilerSpecs &boiler) {
         return boiler.Name == objectName;
     });
     if (myBoiler != state.dataBoilers->Boiler.end()) {
