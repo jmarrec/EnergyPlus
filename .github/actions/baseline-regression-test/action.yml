@@ -105,7 +105,7 @@ runs:
       ccache --zero-stats
 
   - name: Get Baseline Git SHA
-    working-directory: ./baseline/build
+    working-directory: ./baseline
     shell: bash
     run: |
       DEVELOP_SHA=$(git rev-parse --short HEAD)
