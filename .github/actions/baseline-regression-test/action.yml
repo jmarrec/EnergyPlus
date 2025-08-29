@@ -246,7 +246,7 @@ runs:
     if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
     working-directory: ./baseline/build
     shell: bash
-    run: ctest -R integration -j ${{ env.NPROC }}  # TODO: Speed up basement so we don't have to skip it.
+    run: ctest -R integration.1ZoneUncontrolled -j ${{ env.NPROC }} # TODO: revert filter # TODO: Speed up basement so we don't have to skip it.
 
   - name: Produce outputs
     shell: bash

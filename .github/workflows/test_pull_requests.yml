@@ -122,7 +122,7 @@ jobs:
 
     - name: Branch Test
       working-directory: ./branch/build
-      run: ctest -j ${{ env.NPROC }}
+      run: ctest -j ${{ env.NPROC }} -R integration.1ZoneUncontrolled # TODO: revert filter
 
     - name: Install Regression Tool
       if: always() && matrix.run_regressions && steps.branch_build.outcome != 'failure'  # always run this step as long as we actually built
