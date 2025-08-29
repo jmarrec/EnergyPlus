@@ -235,7 +235,7 @@ runs:
         fi;
         ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
         echo "::endgroup::"
-      end
+      fi;
 
       begin_group "Showing CCache Stats"
       ccache --show-stats -vv || ccache --show-stats || true
