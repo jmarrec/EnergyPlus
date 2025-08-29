@@ -118,7 +118,7 @@ runs:
     with:
       path: |
         ./baseline/build/testfiles
-      key: ccache-${{ matrix.pretty }}-${{ env.DEVELOP_SHA }}
+      key: baselineregression-${{ matrix.pretty }}-${{ env.DEVELOP_SHA }}
 
   - name: Did restoring the Baseline Regression Tests work? Yes
     # If the SDK wasn't found in the cache
