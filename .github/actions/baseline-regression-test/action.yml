@@ -160,7 +160,7 @@ runs:
       echo "Found the regression tests!"
 
   - name: Baseline Checkout
-    if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
+    if: inputs.run_regression && github.event_name == 'pull_request' && steps.cachebaselineregression.outputs.cache-hit != 'true'
     uses: actions/checkout@v5
     with:
       path: baseline
