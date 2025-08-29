@@ -74,6 +74,7 @@ jobs:
         call vcvarsall.bat x64
         cmake ^
           -G Ninja ^
+          -DENABLE_PCH:BOOL=OFF ^
           -DCMAKE_BUILD_TYPE:STRING=Release ^
           -DLINK_WITH_PYTHON:BOOL=ON ^
           -DPYTHON_CLI:BOOL=ON ^
@@ -94,6 +95,7 @@ jobs:
       run: |
         cmake \
           -G Ninja \
+          -DENABLE_PCH:BOOL=OFF \
           -DCMAKE_BUILD_TYPE:STRING=Release \
           -DLINK_WITH_PYTHON:BOOL=ON \
           -DPYTHON_CLI:BOOL=ON \
