@@ -98,6 +98,7 @@ runs:
       ccache --set-config=max_size=500M
       ccache --set-config=compression=true
       ccache --set-config=sloppiness=pch_defines,time_macros
+      ccache --set-config=base_dir=${{ github.workspace }}
 
       echo "::endgroup::"
 
