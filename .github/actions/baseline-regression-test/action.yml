@@ -198,7 +198,7 @@ runs:
       if [ "$RUNNER_OS" == "Windows" ]; then
         suffix="_build"
       fi;
-      ninja energyplus ExpandObjects${suffix} ReadVars${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
+      ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
       echo "::endgroup::"
 
       begin_group "Showing CCache Stats"
