@@ -1,4 +1,4 @@
-name: Build and Test Develop
+name: Build and Test Develop Unpacked
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
 
     - name: Setup System
       id: setup-runner
-      uses: ./github/actions/setup-runner
+      uses: ./.github/actions/setup-runner
       with:
         python-version: ${{ env.Python_REQUIRED_VERSION }}
         python-arch: ${{ matrix.python-arch }}
@@ -85,7 +85,7 @@ jobs:
         fi;
 
     - name: Configure and Build
-      uses: ./github/actions/configure-and-build
+      uses: ./.github/actions/configure-and-build
       with:
         minimal-targets: false
         build-directory: ./build
