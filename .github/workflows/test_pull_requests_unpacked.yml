@@ -106,8 +106,7 @@ jobs:
         if [ "$RUNNER_OS" == "macOS" ]; then
           # The MACOSX_DEPLOYMENT_TARGET environment variable sets the default value for the CMAKE_OSX_DEPLOYMENT_TARGET variable.
           echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
-      fi;
-
+        fi;
 
     # Checkout baseline, overrides the branch basically
     - name: Baseline Checkout
