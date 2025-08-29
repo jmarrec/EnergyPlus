@@ -46,6 +46,8 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <math.h>
+
 #include <cmath>
 
 // ObjexxFCL Headers
@@ -186,9 +188,9 @@ void GetBoilerInput(EnergyPlusData &state)
     // LOAD ARRAYS WITH CURVE FIT Boiler DATA
 
     for (int BoilerNum = 1; BoilerNum <= numBoilers; ++BoilerNum) {
-        int NumAlphas; // Number of elements in the alpha array
-        int NumNums;   // Number of elements in the numeric array
-        int IOStat;    // IO Status when calling get input subroutine
+        int NumAlphas = 0; // Number of elements in the alpha array
+        int NumNums = 0;   // Number of elements in the numeric array
+        int IOStat = 0;    // IO Status when calling get input subroutine
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                  s_ipsc->cCurrentModuleObject,
                                                                  BoilerNum,
@@ -823,7 +825,7 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
     this->BoilerLoad = MyLoad;
 
     // Initialize the delta temperature to zero
-    Real64 BoilerDeltaTemp; // C - boiler inlet to outlet temperature difference, set in all necessary code paths so no initialization required
+    Real64 BoilerDeltaTemp = 0.0; // C - boiler inlet to outlet temperature difference, set in all necessary code paths so no initialization required
 
     if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).FlowLock == DataPlant::FlowLock::Unlocked) {
         // Either set the flow to the Constant value or calculate the flow for the variable volume
