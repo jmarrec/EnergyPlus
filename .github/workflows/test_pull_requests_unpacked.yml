@@ -28,7 +28,7 @@ jobs:
         - os: ubuntu-24.04
           arch: x86_64
           python-arch: x64
-          run_regressions: false
+          run_regressions: true
           pretty: "Ubuntu 24.04"
 #        - os: windows-2022
 #          arch: x86_64
