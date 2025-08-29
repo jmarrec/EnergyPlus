@@ -44,11 +44,6 @@ jobs:
 #          pretty: "Windows x64"
 
     steps:
-    - name: Baseline Checkout
-      uses: actions/checkout@v5
-      with:
-        ref: develop
-        path: baseline
 
     - name: Run shared steps to setup System and retrieve or produce Baseline Regression Results
       id: setup-baseline
@@ -62,11 +57,16 @@ jobs:
       with:
         path: branch
 
-    - name: Branch Create Build Directory
-      run: cmake -E make_directory ./branch/build/
+    - name: Branch Create Build Directory And Configure CCACHE_BASEDIR
+      shell: bash
+      run: |
+        cmake -E make_directory ./baseline/build/
+        CCACHE_BASEDIR="${{ github.workspace }}${{ env.DIR_SEP }}branch"
+        ccache --set-config=base_dir=$CCACHE_BASEDIR
+        ccache -p
 
     - name: Branch Configure CMake on Windows
-      if: inputs.run_regression && runner.os == 'Windows'
+      if: runner.os == 'Windows'
       working-directory: ./branch/build
       shell: cmd
       run: |
@@ -88,7 +88,7 @@ jobs:
           ../
 
     - name: Branch Configure CMake on Unix
-      if: inputs.run_regression && runner.os != 'Windows'
+      if: runner.os != 'Windows'
       working-directory: ./branch/build
       shell: bash
       run: |

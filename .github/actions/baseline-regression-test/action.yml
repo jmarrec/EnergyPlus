@@ -28,24 +28,6 @@ runs:
     with:
       python-version: ${{ env.Python_REQUIRED_VERSION }}
 
-  - name: Get Baseline Git SHA
-    working-directory: ./baseline
-    shell: bash
-    run: |
-      echo "Figuring out the develop GIT SHA"
-      begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
-
-      begin_group "Get develop GIT SHA"
-      DEVELOP_SHA=$(git rev-parse --short=10 HEAD)
-      echo "Develop GIT SHA is '${DEVELOP_SHA}'"
-      echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
-      echo "develop-sha=$DEVELOP_SHA" >> $GITHUB_OUTPUT
-      echo "::endgroup::"
-
-      begin_group "App Python_ROOT_DIR env variable"
-      echo "Python_ROOT_DIR=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/${{ matrix.python-arch }}" >> $GITHUB_ENV
-      echo "::endgroup::"
-
   - name: Install Dependencies
     shell: bash
     run: |
@@ -64,6 +46,7 @@ runs:
       else
         DIR_SEP="/"
       fi
+      echo "DIR_SEP=$DIR_SEP" >> $GITHUB_ENV
 
       begin_group "Install system dependencies such as ninja and ccache"
       CCACHE_DIR="${{ github.workspace }}${DIR_SEP}.ccache"
@@ -119,8 +102,26 @@ runs:
       ccache --set-config=compression=true
       echo "::endgroup::"
 
+      begin_group "App Python_ROOT_DIR env variable"
+      echo "Python_ROOT_DIR=$RUNNER_TOOL_CACHE/Python/${{ steps.setup-python.outputs.python-version }}/${{ matrix.python-arch }}" >> $GITHUB_ENV
+      echo "::endgroup::"
+
       begin_group "Install python dependencies"
       pip install pytest lxml
+      echo "::endgroup::"
+
+  - name: Get Baseline Git SHA
+    shell: bash
+    run: |
+      echo "Figuring out the develop GIT SHA"
+      begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+
+      begin_group "Get develop GIT SHA without checkout"
+      git ls-remote git@github.com:$GITHUB_REPOSITORY.git develop | cut -f1 | cut -c1-10
+      # DEVELOP_SHA=$(git rev-parse --short=10 HEAD)
+      echo "Develop GIT SHA is '${DEVELOP_SHA}'"
+      echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
+      echo "develop-sha=$DEVELOP_SHA" >> $GITHUB_OUTPUT
       echo "::endgroup::"
 
   - name: Cache CCACHE
@@ -158,10 +159,19 @@ runs:
     run: |
       echo "Found the regression tests!"
 
-  - name: Baseline Create Build Directory
+  - name: Baseline Checkout
+    if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
+    uses: actions/checkout@v5
+    with:
+      path: baseline
+
+  - name: Baseline Create Build Directory And Configure CCACHE_BASEDIR
     if: inputs.run_regression && steps.cachebaselineregression.outputs.cache-hit != 'true'
     shell: bash
-    run: cmake -E make_directory ./baseline/build/
+    run: |
+      cmake -E make_directory ./baseline/build/
+      CCACHE_BASEDIR="${{ github.workspace }}${{ env.DIR_SEP }}baseline"
+      ccache --set-config=base_dir=$CCACHE_BASEDIR
 
   # PCH is off for proper ccache usage
   - name: Baseline Configure CMake on Windows
@@ -215,12 +225,17 @@ runs:
     run: |
       begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
 
-      begin_group "Builing develop targets"
-      if [ "$RUNNER_OS" == "Windows" ]; then
-        suffix="_build"
-      fi;
-      ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
-      echo "::endgroup::"
+      if [ "$GITHUB_EVENT_NAME" == "push" ]; then
+        begin_group "Builing full energyplus"
+        ninja
+      else
+        begin_group "Builing only energyplus and fortran targets"
+        if [ "$RUNNER_OS" == "Windows" ]; then
+          suffix="_build"
+        fi;
+        ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
+        echo "::endgroup::"
+      end
 
       begin_group "Showing CCache Stats"
       ccache --show-stats -vv || ccache --show-stats || true
@@ -238,5 +253,3 @@ runs:
     run: |
       echo "baselineregression-cache-hit=${{ steps.cachebaselineregression.outputs.cache-hit }}" >> $GITHUB_OUTPUT
       echo "ccache-cache-hit=${{ steps.cacheccache.outputs.cache-hit }}" >> $GITHUB_OUTPUT
-
-

@@ -45,11 +45,6 @@ jobs:
 
     steps:
 
-    - name: Baseline Checkout
-      uses: actions/checkout@v5
-      with:
-        path: baseline
-
     - name: Run shared steps to setup System and retrieve or produce Baseline Regression Results
       id: setup-baseline
       uses: ./baseline/.github/actions/baseline-regression-test
