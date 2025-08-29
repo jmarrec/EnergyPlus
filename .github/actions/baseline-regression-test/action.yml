@@ -28,6 +28,14 @@ runs:
     with:
       python-version: ${{ env.Python_REQUIRED_VERSION }}
 
+  - name: Get Baseline Git SHA
+    working-directory: ./baseline
+    shell: bash
+    run: |
+      DEVELOP_SHA=$(git rev-parse --short HEAD)
+      echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
+      echo "develop-sha=$DEVELOP_SHA" >> $GITHUB_OUTPUT
+
   - name: Install Dependencies
     shell: bash
     run: |
@@ -114,14 +122,6 @@ runs:
     run: |
       ccache --show-stats -vv || ccache --show-stats
       ccache --zero-stats
-
-  - name: Get Baseline Git SHA
-    working-directory: ./baseline
-    shell: bash
-    run: |
-      DEVELOP_SHA=$(git rev-parse --short HEAD)
-      echo "DEVELOP_SHA=$DEVELOP_SHA" >> $GITHUB_ENV
-      echo "develop-sha=$DEVELOP_SHA" >> $GITHUB_OUTPUT
 
   - name: Baseline Regression Testing caching
     uses: actions/cache@v4
