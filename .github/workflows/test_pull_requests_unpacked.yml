@@ -70,7 +70,7 @@ jobs:
       with:
         path: |
           ${{ steps.setup-runner.outputs.ccache-dir }}
-        key: ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.CURRENT_HEAD_SHA }}
+        key: ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ github.head_ref }}
         restore-keys: |
           ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.DEVELOP_SHA }}
           ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
