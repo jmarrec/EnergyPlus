@@ -41,7 +41,7 @@ runs:
 
       Begin-Group "Entering a VS Dev Shell"
       Import-Module "$env:MSVC_DIR\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-      Enter-VsDevShell -VsInstallPath "$env:MSVC_DIR" -SkipAutomaticLocation -devCmdArguments -arch=$target_arch
+      Enter-VsDevShell -VsInstallPath "$env:MSVC_DIR" -SkipAutomaticLocation -devCmdArguments "-arch=$target_arch"
       Write-Output "::endgroup::"
 
       Begin-Group "CMake configure"
@@ -68,19 +68,18 @@ runs:
           $suffix = "_build"
 
           ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
-          End-Group
+          Write-Output "::endgroup::"
       }
       else {
           Begin-Group "Building full energyplus"
           ninja
-          End-Group
+          Write-Output "::endgroup::"
       }
 
       Begin-Group "Showing CCache Stats"
       try { ccache --show-stats -vv } catch { ccache --show-stats }
       ccache --zero-stats
-      End-Group
-
+      Write-Output "::endgroup::"
 
   - name: Configure CMake And Build on Unix
     if: runner.os != 'Windows'

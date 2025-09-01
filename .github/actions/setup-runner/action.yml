@@ -30,6 +30,7 @@ runs:
     uses: actions/setup-python@v5
     with:
       python-version: ${{ inputs.python-version }}
+      architecture: ${{ inputs.python-arch }}
 
   - name: Install Dependencies
     id: install-deps

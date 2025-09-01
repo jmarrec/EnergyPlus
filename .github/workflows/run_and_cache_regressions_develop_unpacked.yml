@@ -7,7 +7,6 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   FC: gfortran-13
-  Python_REQUIRED_VERSION: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
 
 jobs:
   build_and_test:
@@ -24,22 +23,27 @@ jobs:
           arch: arm64
           python-arch: arm64
           pretty: "Mac arm64"
+          python-version: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
         - os: ubuntu-24.04
           arch: x86_64
           python-arch: x64
           pretty: "Ubuntu 24.04"
+          python-version: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
         - os: windows-2022
           arch: x86_64
           python-arch: x64
           pretty: "Windows x64"
+          python-version: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
         - os: ubuntu-24.04-arm
           arch: arm64
           python-arch: arm64
           pretty: "Ubuntu 24.04 arm64"
+          python-version: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
         - os: windows-11-arm
           arch: arm64
           python-arch: arm64
           pretty: "Windows arm64"
+          python-version: 3.12.10
 
     steps:
 
@@ -49,7 +53,7 @@ jobs:
       id: setup-runner
       uses: ./.github/actions/setup-runner
       with:
-        python-version: ${{ env.Python_REQUIRED_VERSION }}
+        python-version: ${{ matrix.python-version }}
         python-arch: ${{ matrix.python-arch }}
 
     - name: Get Current SHA
@@ -96,7 +100,7 @@ jobs:
         minimal-targets: false
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}
-        python-version: ${{ env.Python_REQUIRED_VERSION }}
+        python-version: ${{ matrix.python-version }}
         python-root-dir: ${{ steps.setup-runner.outputs.python-root-dir }}
 
     - name: Run Tests
