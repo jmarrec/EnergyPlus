@@ -66,10 +66,10 @@ jobs:
       with:
         path: |
           ${{ steps.setup-runner.outputs.ccache-dir }}
-        key: ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.CURRENT_SHA }}
+        key: ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.CURRENT_SHA }}
         restore-keys: |
-          ccache-${{ runner.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
-          ccache-${{ runner.os }}-
+          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
+          ccache-${{ matrix.os }}-
 
     - name: Did restoring the CCache-cache work? Yes
       # If the SDK wasn't found in the cache
@@ -110,4 +110,4 @@ jobs:
       with:
         path: |
           ./build/testfiles-develop
-        key: baselineregression-${{ runner.os }}-${{ env.CURRENT_SHA }}
+        key: baselineregression-${{ matrix.os }}-${{ env.CURRENT_SHA }}
