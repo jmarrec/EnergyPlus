@@ -69,7 +69,7 @@ runs:
 
         # C:\Program Files\Microsoft Visual Studio\2022\Enterprise
         MSVC_DIR=$(vswhere -products '*' -requires Microsoft.Component.MSBuild -latest -property installationPath)
-        echo "Latest is: $MSVC_DIR"
+        echo "Latest MSVC_DIR is: $MSVC_DIR"
         echo "MSVC_DIR=$MSVC_DIR" >> $GITHUB_ENV
         # add folder containing vcvarsall.bat
         echo "$MSVC_DIR\VC\Auxiliary\Build" >> $GITHUB_PATH
@@ -98,7 +98,7 @@ runs:
       ccache --set-config=max_size=500M
       ccache --set-config=compression=true
       ccache --set-config=sloppiness=pch_defines,time_macros
-      ccache --set-config=base_dir=${{ github.workspace }}
+      ccache --set-config=base_dir="${{ github.workspace }}"
 
       echo "::endgroup::"
 
