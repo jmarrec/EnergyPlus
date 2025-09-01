@@ -19,23 +19,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
-#        - os: macos-14
-#          macos_dev_target: 13.0
-#          arch: arm64
-#          python-arch: arm64
-#          run_regressions: true
-#          pretty: "Mac arm64"
+        - os: macos-14
+          macos_dev_target: 13.0
+          arch: arm64
+          python-arch: arm64
+          run_regressions: true
+          pretty: "Mac arm64"
         - os: ubuntu-24.04
           arch: x86_64
           python-arch: x64
           run_regressions: true
           pretty: "Ubuntu 24.04"
-#        - os: windows-2022
-#          arch: x86_64
-#          python-arch: x64
-#          run_regressions: false
-#          pretty: "Windows x64"
-
+        - os: windows-2022
+          arch: x86_64
+          python-arch: x64
+          run_regressions: true
+          pretty: "Windows x64"
 
     steps:
 
@@ -63,7 +62,8 @@ jobs:
 
         echo "Current merge commit SHA is '${GITHUB_SHA}'"
         echo "::endgroup::"
-        # We default to using PCH, in case we don't find the baseline reg tests, since it speeds up the build a lot and we'll build TWICE
+        # We default to using PCH, in case we don't find the baseline reg tests,
+        # since it speeds up the build significantly and we'll build TWICE
         echo "ENABLE_PCH=ON" >> $GITHUB_ENV
 
     - name: Baseline Regression Testing caching
@@ -80,8 +80,7 @@ jobs:
       run: |
         echo "Found the regression tests!"
         # We turn off the PCH in that case, since that's how develop builds it
-        # TODO: explicitly trying with ON
-        echo "ENABLE_PCH=ON" >> $GITHUB_ENV
+        echo "ENABLE_PCH=OFF" >> $GITHUB_ENV
 
     - name: Cache CCACHE
       uses: actions/cache@v4

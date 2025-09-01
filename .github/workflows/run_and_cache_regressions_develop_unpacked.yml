@@ -1,4 +1,4 @@
-name: Build and Test Develop Unpacked
+name: Build, Run and Cache Develop Regressions
 
 on:
   push:
@@ -19,19 +19,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-#        - os: macos-14
-#          macos_dev_target: 13.0
-#          arch: arm64
-#          python-arch: arm64
-#          pretty: "Mac arm64"
+        - os: macos-14
+          macos_dev_target: 13.0
+          arch: arm64
+          python-arch: arm64
+          pretty: "Mac arm64"
         - os: ubuntu-24.04
           arch: x86_64
           python-arch: x64
           pretty: "Ubuntu 24.04"
-#        - os: windows-2022
-#          arch: x86_64
-#          python-arch: x64
-#          pretty: "Windows x64"
+        - os: windows-2022
+          arch: x86_64
+          python-arch: x64
+          pretty: "Windows x64"
 
     steps:
 
@@ -84,7 +84,7 @@ jobs:
     - name: Configure and Build
       uses: ./.github/actions/configure-and-build
       with:
-        enable-pch: ON
+        enable-pch: OFF
         minimal-targets: false
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}

@@ -22,35 +22,68 @@ runs:
   using: "composite"
   steps:
 
-  # PCH is off for proper ccache usage
-  - name: Configure CMake on Windows
+  - name: Configure CMake And Build on Windows
     if: runner.os == 'Windows'
     working-directory: ${{ inputs.build-directory }}
-    shell: cmd
+    shell: pwsh
     run: |
-      echo "Using vcvarsall to initialize the development environment"
-      call vcvarsall.bat x64
-      cmake ^
-        -G Ninja ^
-        -DENABLE_PCH:BOOL=${{ inputs.enable-pch }} ^
-        -DCMAKE_BUILD_TYPE:STRING=Release ^
-        -DLINK_WITH_PYTHON:BOOL=ON ^
-        -DPYTHON_CLI:BOOL=ON ^
-        -DPython_REQUIRED_VERSION:STRING=${{ inputs.python-version }} ^
-        -DPython_ROOT_DIR:PATH=${{ inputs.python-root-dir }} ^
-        -DBUILD_TESTING:BOOL=ON ^
-        -DBUILD_FORTRAN:BOOL=ON ^
-        -DBUILD_PACKAGE:BOOL=OFF ^
-        -DDOCUMENTATION_BUILD:STRING=DoNotBuild ^
-        -DENABLE_OPENMP:BOOL=OFF ^
-        -DUSE_OpenMP:BOOL=OFF ^
-        ../
 
-  - name: Configure CMake on Unix
+      function Begin-Group {
+          param([string]$Title)
+          Write-Output "::group::`e[93m$Title`e[0m"
+      }
+
+      Begin-Group "Entering a VS Dev Shell"
+      Import-Module "$env:MSVC_DIR\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+      Enter-VsDevShell -VsInstallPath "$env:MSVC_DIR" -SkipAutomaticLocation -devCmdArguments -arch=x64
+      Write-Output "::endgroup::"
+
+      Begin-Group "CMake configure"
+      cmake `
+        -G Ninja `
+        -DENABLE_PCH:BOOL=${{ inputs.enable-pch }} `
+        -DCMAKE_BUILD_TYPE:STRING=Release `
+        -DLINK_WITH_PYTHON:BOOL=ON `
+        -DPYTHON_CLI:BOOL=ON `
+        -DPython_REQUIRED_VERSION:STRING=${{ inputs.python-version }} `
+        -DPython_ROOT_DIR:PATH=${{ inputs.python-root-dir }} `
+        -DBUILD_TESTING:BOOL=ON `
+        -DBUILD_FORTRAN:BOOL=ON `
+        -DBUILD_PACKAGE:BOOL=OFF `
+        -DDOCUMENTATION_BUILD:STRING=DoNotBuild `
+        -DENABLE_OPENMP:BOOL=OFF `
+        -DUSE_OpenMP:BOOL=OFF `
+        ../
+      Write-Output "::endgroup::"
+
+      if (${{ inputs.minimal-targets }} -eq "true") {
+          Begin-Group "Building only energyplus and fortran targets"
+
+          $suffix = "_build"
+
+          ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
+          End-Group
+      }
+      else {
+          Begin-Group "Building full energyplus"
+          ninja
+          End-Group
+      }
+
+      Begin-Group "Showing CCache Stats"
+      try { ccache --show-stats -vv } catch { ccache --show-stats }
+      ccache --zero-stats
+      End-Group
+
+
+  - name: Configure CMake And Build on Unix
     if: runner.os != 'Windows'
     working-directory: ${{ inputs.build-directory }}
     shell: bash
     run: |
+      begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+
+      begin_group "CMake configure"
       cmake \
         -G Ninja \
         -DENABLE_PCH:BOOL=${{ inputs.enable-pch }} \
@@ -67,17 +100,8 @@ runs:
         -DUSE_OpenMP:BOOL=OFF \
         ../
 
-  - name: Build
-    working-directory: ${{ inputs.build-directory }}
-    shell: bash
-    run: |
-      begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
-
       if [ "${{ inputs.minimal-targets }}" == "true" ]; then
         begin_group "Builing only energyplus and fortran targets"
-        if [ "$RUNNER_OS" == "Windows" ]; then
-          suffix="_build"
-        fi;
         ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
         echo "::endgroup::"
       else
