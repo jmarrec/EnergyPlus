@@ -33,9 +33,15 @@ runs:
           Write-Output "::group::`e[93m$Title`e[0m"
       }
 
+      switch ($env:PROCESSOR_ARCHITECTURE) {
+        "AMD64" { $target_arch = "x64" }
+        "ARM64" { $target_arch = "arm64" }
+        default { throw "Unknown architecture: $env:PROCESSOR_ARCHITECTURE" }
+      }
+
       Begin-Group "Entering a VS Dev Shell"
       Import-Module "$env:MSVC_DIR\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
-      Enter-VsDevShell -VsInstallPath "$env:MSVC_DIR" -SkipAutomaticLocation -devCmdArguments -arch=x64
+      Enter-VsDevShell -VsInstallPath "$env:MSVC_DIR" -SkipAutomaticLocation -devCmdArguments -arch=$target_arch
       Write-Output "::endgroup::"
 
       Begin-Group "CMake configure"
