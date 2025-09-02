@@ -119,6 +119,7 @@ jobs:
       uses: actions/checkout@v5
       with:
         ref: develop
+        clean: false # Do NOT wipe the build/ and .ccache folder (`git clean -ffdx && git reset --hard HEAD`)
 
     - name: Baseline Configure and Build
       if: matrix.run_regressions && steps.cachebaselineregression.outputs.cache-hit != 'true'
@@ -142,6 +143,8 @@ jobs:
     - name: Checkout Branch again
       if: matrix.run_regressions && steps.cachebaselineregression.outputs.cache-hit != 'true'
       uses: actions/checkout@v5
+      with:
+        clean: false # Do NOT wipe the build/ and .ccache folder (`git clean -ffdx && git reset --hard HEAD`)
 
     - name: Configure and Build
       id: branch_build
