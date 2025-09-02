@@ -110,5 +110,5 @@ runs:
       echo "::endgroup::"
 
       begin_group "Install python dependencies"
-      pip install pytest lxml
+      pip install pytest lxml tzdata
       echo "::endgroup::"
