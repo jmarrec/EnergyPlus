@@ -165,8 +165,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceIntRadExchange_CarrollMRT)
     state->dataHeatBalIntRadExchg->SurfaceTempInKto4th.allocate(SURFACES);
     state->dataHeatBalIntRadExchg->SurfaceTempRad.allocate(SURFACES);
 
-    for (int surfaceNum = 1; surfaceNum <= SURFACES; surfaceNum++)
-    {
+    for (int surfaceNum = 1; surfaceNum <= SURFACES; surfaceNum++) {
         state->dataSurface->Surface(surfaceNum).Construction = surfaceNum;
 
         state->dataViewFactor->EnclRadInfo(ENCLOSURES).Area(surfaceNum) = 10;
