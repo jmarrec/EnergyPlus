@@ -5540,7 +5540,7 @@ void CalcAirFlowSimple(EnergyPlusData &state,
     // This subroutine calculates the air component of the heat balance.
 
     constexpr Real64 StdGravity(9.80665); // The acceleration of gravity at the sea level (m/s2)
-    static constexpr std::string_view RoutineNameVentilation("CalcAirFlowSimple:Ventilation");
+    // static constexpr std::string_view RoutineNameVentilation("CalcAirFlowSimple:Ventilation");
     static constexpr std::string_view RoutineNameMixing("CalcAirFlowSimple:Mixing");
     static constexpr std::string_view RoutineNameCrossMixing("CalcAirFlowSimple:CrossMixing");
     static constexpr std::string_view RoutineNameRefrigerationDoorMixing("CalcAirFlowSimple:RefrigerationDoorMixing");

@@ -1366,14 +1366,13 @@ void GLHEVert::combineShortAndLongTimestepGFunctions()
     Real64 const t_s = pow_2(this->bhLength) / (9.0 * this->soil.diffusivity);
 
     // Nothing to do. Just put the short time step g-functions on the combined vector
-    int num_shortTimestepGFunctions = GFNC_shortTimestep.size();
-    for (int index_shortTS = 0; index_shortTS < num_shortTimestepGFunctions; ++index_shortTS) {
+    for (size_t index_shortTS = 0; index_shortTS < GFNC_shortTimestep.size(); ++index_shortTS) {
         GFNC_combined.push_back(GFNC_shortTimestep[index_shortTS]);
         LNTTS_combined.push_back(LNTTS_shortTimestep[index_shortTS]);
     }
 
     // Add the rest of the long time-step g-functions to the combined curve
-    for (int index_longTS = 0; index_longTS < this->myRespFactors->GFNC.size(); ++index_longTS) {
+    for (size_t index_longTS = 0; index_longTS < this->myRespFactors->GFNC.size(); ++index_longTS) {
         GFNC_combined.push_back(this->myRespFactors->GFNC[index_longTS]);
         LNTTS_combined.push_back(this->myRespFactors->LNTTS[index_longTS]);
     }
@@ -1887,7 +1886,7 @@ Real64 GLHESlinky::doubleIntegral(int const m, int const n, int const m1, int co
         g.push_back(integral(m, n, m1, n1, t, eta, J0));
     }
 
-    for (int i = 1; i < g.size() - 1; ++i) {
+    for (int i = 1; i < static_cast<int>(g.size() - 1); ++i) {
         if (!isEven(i)) {
             g[i] = 4 * g[i];
         } else {

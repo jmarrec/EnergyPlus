@@ -251,7 +251,7 @@ namespace Sched {
         sched->tsVals.assign(Constant::iHoursInDay * max(1, s_glob->TimeStepsInHour), value);
 
         s_sched->schedules.push_back(sched);
-        s_sched->scheduleMap.insert_or_assign(std::move(Util::makeUPPER(sched->Name)), sched->Num);
+        s_sched->scheduleMap.insert_or_assign(Util::makeUPPER(sched->Name), sched->Num);
 
         return sched;
     } // AddScheduleConstant()
@@ -265,7 +265,7 @@ namespace Sched {
 
         sched->Num = (int)s_sched->schedules.size();
         s_sched->schedules.push_back(sched);
-        s_sched->scheduleMap.insert_or_assign(std::move(Util::makeUPPER(sched->Name)), sched->Num);
+        s_sched->scheduleMap.insert_or_assign(Util::makeUPPER(sched->Name), sched->Num);
 
         sched->type = SchedType::Year;
         return sched;
@@ -281,7 +281,7 @@ namespace Sched {
 
         daySched->Num = (int)s_sched->daySchedules.size();
         s_sched->daySchedules.push_back(daySched);
-        s_sched->dayScheduleMap.insert_or_assign(std::move(Util::makeUPPER(daySched->Name)), daySched->Num);
+        s_sched->dayScheduleMap.insert_or_assign(Util::makeUPPER(daySched->Name), daySched->Num);
 
         daySched->tsVals.resize(Constant::iHoursInDay * s_glob->TimeStepsInHour);
 
@@ -297,7 +297,7 @@ namespace Sched {
 
         weekSched->Num = (int)s_sched->weekSchedules.size();
         s_sched->weekSchedules.push_back(weekSched);
-        s_sched->weekScheduleMap.insert_or_assign(std::move(Util::makeUPPER(weekSched->Name)), weekSched->Num);
+        s_sched->weekScheduleMap.insert_or_assign(Util::makeUPPER(weekSched->Name), weekSched->Num);
 
         return weekSched;
     } // AddWeekSchedule()
@@ -394,7 +394,6 @@ namespace Sched {
         std::string subString;
         int MaxNums1;
         char ColumnSep;
-        bool FileIntervalInterpolated;
         int rowLimitCount;
         int skiprowCount;
         int curcolCount;
@@ -2199,7 +2198,7 @@ namespace Sched {
             }
             times.emplace_back(fmt::format("{}:00", HrField[hr + 1]));
         }
-        assert(times.size() == NumTimesInDay);
+        assert(static_cast<int>(times.size()) == NumTimesInDay);
 
         std::string_view const &reportLevelName = reportLevelNames[(int)LevelOfDetail];
         std::string const dayScheduleTableName = format("DaySchedule - {}", reportLevelName);
@@ -2529,7 +2528,8 @@ namespace Sched {
         isMinMaxSet = true;
     }
 
-    std::vector<Real64> const &ScheduleConstant::getDayVals(EnergyPlusData &state, [[maybe_unused]] int jDay, [[maybe_unused]] int dayofWeek)
+    std::vector<Real64> const &
+    ScheduleConstant::getDayVals([[maybe_unused]] EnergyPlusData &state, [[maybe_unused]] int jDay, [[maybe_unused]] int dayofWeek)
     {
         assert((int)tsVals.size() == Constant::iHoursInDay * state.dataGlobal->TimeStepsInHour);
         return this->tsVals;
@@ -2827,7 +2827,6 @@ namespace Sched {
         // representation.
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        Real64 rRetHH; // real Returned "hour"
         std::string hHour;
         std::string mMinute;
 

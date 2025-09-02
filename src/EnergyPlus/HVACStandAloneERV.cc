@@ -1026,7 +1026,7 @@ void GetStandAloneERV(EnergyPlusData &state)
         SetupOutputVariable(state,
                             "Zone Ventilator Supply Fan Availability Status",
                             Constant::Units::None,
-                            (int &)standAloneERV.availStatus,
+                            standAloneERV.availStatus,
                             OutputProcessor::TimeStepType::System,
                             OutputProcessor::StoreType::Average,
                             standAloneERV.Name);

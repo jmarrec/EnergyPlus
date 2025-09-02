@@ -14719,7 +14719,6 @@ void ComputeLoadComponentDecayCurve(EnergyPlusData &state)
         if (!state.dataZoneEquip->ZoneEquipConfig(zoneNum).IsControlled) {
             continue;
         }
-        int const spaceNum = state.dataSurface->Surface(surfNum).spaceNum;
         int coolDesSelected = state.dataSize->CalcFinalZoneSizing(zoneNum).CoolDDNum;
         // loop over timesteps after pulse occurred
         if (coolDesSelected != 0) {
@@ -15836,7 +15835,7 @@ void GetDelaySequences(EnergyPlusData &state,
 
                     for (int mStepBack = 1; mStepBack <= kTimeStep; ++mStepBack) {
                         int sourceStep = kTimeStep - mStepBack + 1;
-                        auto &compLoadTS = szCLDay.ts[sourceStep - 1].spacezone[szNumMinus1];
+                        // auto &compLoadTS = szCLDay.ts[sourceStep - 1].spacezone[szNumMinus1];
                         auto const &surfCLDayTS = surfCLDay.ts[sourceStep - 1].surf[jSurf - 1];
                         auto const &enclCLDayTS = enclCLDay.ts[sourceStep - 1].encl[radEnclosureNum - 1];
                         Real64 thisQRadThermInAbsMult =
@@ -16422,6 +16421,7 @@ void addSurfaceArea(DataSurfaces::SurfaceData const &surf, Array1D<ZompComponent
     bool isTouchingGround = surf.ExtBoundCond == DataSurfaces::Ground || surf.ExtBoundCond == DataSurfaces::GroundFCfactorMethod ||
                             surf.ExtBoundCond == DataSurfaces::KivaFoundation;
     int curIndex = (isZone) ? surf.Zone : surf.spaceNum;
+
     switch (surf.Class) {
     case DataSurfaces::SurfaceClass::Wall: {
         if (isExterior) {
@@ -16456,6 +16456,8 @@ void addSurfaceArea(DataSurfaces::SurfaceData const &surf, Array1D<ZompComponent
     case DataSurfaces::SurfaceClass::GlassDoor: {
         areas(curIndex).door += surf.GrossArea;
     } break;
+    default:
+        break;
     }
 }
 
