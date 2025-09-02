@@ -312,16 +312,16 @@ namespace HeatBalanceIntRadExchange {
                     SurfaceTempRad[ZoneSurfNum] = SurfaceTemp(SurfNum);
                     SurfaceEmiss[ZoneSurfNum] = construct.InsideAbsorpThermal;
                 }
+                SurfaceTempInKto4th[ZoneSurfNum] = pow_4(SurfaceTempRad[ZoneSurfNum] + Constant::Kelvin);
                 if (state.dataHeatBalIntRadExchg->CarrollMethod) {
-                    CarrollMRTNumerator += SurfaceTempRad[ZoneSurfNum] * zone_info.Fp[ZoneSurfNum] * zone_info.Area[ZoneSurfNum];
+                    CarrollMRTNumerator += SurfaceTempInKto4th[ZoneSurfNum] * zone_info.Fp[ZoneSurfNum] * zone_info.Area[ZoneSurfNum];
                     CarrollMRTDenominator += zone_info.Fp[ZoneSurfNum] * zone_info.Area[ZoneSurfNum];
                 }
-                SurfaceTempInKto4th[ZoneSurfNum] = pow_4(SurfaceTempRad[ZoneSurfNum] + Constant::Kelvin);
             }
 
             if (state.dataHeatBalIntRadExchg->CarrollMethod) {
                 if (CarrollMRTDenominator > 0.0) {
-                    CarrollMRTInKTo4th = pow_4(CarrollMRTNumerator / CarrollMRTDenominator + Constant::Kelvin);
+                    CarrollMRTInKTo4th = CarrollMRTNumerator / CarrollMRTDenominator;
                 } else {
                     // Likely only one surface in this enclosure
                     CarrollMRTInKTo4th = 293.15; // arbitrary value, IR will be zero
@@ -339,13 +339,13 @@ namespace HeatBalanceIntRadExchange {
                         Real64 CarrollMRTDenominatorWin(0.0);
                         for (size_type SendZoneSurfNum = 0; SendZoneSurfNum < s_zone_Surfaces; ++SendZoneSurfNum) {
                             if (SendZoneSurfNum != RecZoneSurfNum) {
-                                CarrollMRTNumeratorWin +=
-                                    SurfaceTempRad[SendZoneSurfNum] * zone_info.Fp[SendZoneSurfNum] * zone_info.Area[SendZoneSurfNum];
+                                CarrollMRTNumeratorWin += pow_4(SurfaceTempRad[SendZoneSurfNum] + Constant::Kelvin) * zone_info.Fp[SendZoneSurfNum] *
+                                                          zone_info.Area[SendZoneSurfNum];
                                 CarrollMRTDenominatorWin += zone_info.Fp[SendZoneSurfNum] * zone_info.Area[SendZoneSurfNum];
                             }
                         }
                         if (CarrollMRTDenominatorWin > 0.0) {
-                            CarrollMRTInKTo4thWin = pow_4(CarrollMRTNumeratorWin / CarrollMRTDenominatorWin + Constant::Kelvin);
+                            CarrollMRTInKTo4thWin = CarrollMRTNumeratorWin / CarrollMRTDenominatorWin;
                         }
                         state.dataSurface->SurfWinIRfromParentZone(RecSurfNum) +=
                             (zone_info.Fp[RecZoneSurfNum] * CarrollMRTInKTo4thWin) / SurfaceEmiss[RecZoneSurfNum];
