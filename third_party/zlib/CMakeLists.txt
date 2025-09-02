@@ -4,6 +4,8 @@
 project(miniziplib C)
 
 include(../../cmake/TargetArch.cmake)
+target_architecture(TARGET_ARCH)
+
 include(CheckTypeSize)
 include(CheckFunctionExists)
 include(CheckIncludeFile)
