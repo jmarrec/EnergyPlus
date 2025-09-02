@@ -27,6 +27,8 @@ runs:
     working-directory: ${{ inputs.build-directory }}
     shell: pwsh
     run: |
+      $ErrorActionPreference = 'stop'
+      $PSNativeCommandUseErrorActionPreference = $true
 
       function Begin-Group {
           param([string]$Title)
