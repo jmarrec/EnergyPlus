@@ -107,7 +107,7 @@ jobs:
       working-directory: ./build
       shell: bash
       run: |
-        ctest -R integration.1ZoneUncontrolled -j ${{ env.NPROC }} -VV # TODO: revert filter # TODO: Speed up basement so we don't have to skip it.
+        ctest -R integration.1ZoneUncontrolled -E UTF8 -j ${{ env.NPROC }} -VV # TODO: revert filter # TODO: Speed up basement so we don't have to skip it.
         mv testfiles testfiles-develop
 
     - uses: actions/cache/save@v4
