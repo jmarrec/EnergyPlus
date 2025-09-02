@@ -81,6 +81,7 @@ runs:
       Begin-Group "Showing CCache Stats"
       try { ccache --show-stats -vv } catch { ccache --show-stats }
       ccache --zero-stats
+      ccache -p
       Write-Output "::endgroup::"
 
   - name: Configure CMake And Build on Unix
@@ -120,4 +121,5 @@ runs:
       begin_group "Showing CCache Stats"
       ccache --show-stats -vv || ccache --show-stats || true
       ccache --zero-stats
+      ccache -p
       echo "::endgroup::"
