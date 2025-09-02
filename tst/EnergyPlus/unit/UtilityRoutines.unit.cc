@@ -324,3 +324,21 @@ TEST_F(EnergyPlusFixture, UtilityRoutines_setDesignObjectNameAndPointerTest)
     EXPECT_TRUE(compare_err_stream(error_stringTest3, true));
     EXPECT_TRUE(gotErrors);
 }
+
+TEST_F(EnergyPlusFixture, UtilityRoutines_ShowDetailedSevereItemNotFound)
+{
+    // New error message
+    std::string detailed_error_message = "TestRoutine: MissingField = CanNotBeFound, item not found.";
+
+    // Original error message
+    std::string error_message = "TestRoutine:  =";
+
+    ErrorObjectHeader eoh{"TestRoutine", "", ""};
+    // This should output the item that's missing
+    ShowDetailedSevereItemNotFound(*state, eoh, "MissingField", "CanNotBeFound");
+    EXPECT_TRUE(state->dataErrTracking->LastSevereError.find(detailed_error_message) != std::string::npos);
+
+    // This is the previous handler and it should not display the item information
+    ShowSevereItemNotFound(*state, eoh, "MissingField", "CanNotBeFound");
+    EXPECT_TRUE(state->dataErrTracking->LastSevereError.find(error_message) != std::string::npos);
+}

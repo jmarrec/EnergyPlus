@@ -618,7 +618,7 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
         // period schedule
         if (len(s_ipsc->cAlphaArgs(4)) > 0) {
             if ((tariff.periodSched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(4))) == nullptr) {
-                ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4));
+                ShowDetailedSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4));
                 ErrorsFound = true;
             }
         }
@@ -626,7 +626,7 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
         // season schedule
         if (len(s_ipsc->cAlphaArgs(5)) > 0) {
             if ((tariff.seasonSched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(5))) == nullptr) {
-                ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(5), s_ipsc->cAlphaArgs(5));
+                ShowDetailedSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(5), s_ipsc->cAlphaArgs(5));
                 ErrorsFound = true;
             }
         }
@@ -634,7 +634,7 @@ void GetInputEconomicsTariff(EnergyPlusData &state, bool &ErrorsFound) // true i
         // month schedule
         if (len(s_ipsc->cAlphaArgs(6)) > 0) {
             if ((tariff.monthSched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(6))) == nullptr) {
-                ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(6), s_ipsc->cAlphaArgs(6));
+                ShowDetailedSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(6), s_ipsc->cAlphaArgs(6));
                 ErrorsFound = true;
             }
         }
