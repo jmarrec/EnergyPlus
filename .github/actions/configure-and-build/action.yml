@@ -64,7 +64,7 @@ runs:
         ../
       Write-Output "::endgroup::"
 
-      if (${{ inputs.minimal-targets }} -eq "true") {
+      if ("${{ inputs.minimal-targets }}" -eq "true") {
           Begin-Group "Building only energyplus and fortran targets"
 
           $suffix = "_build"
