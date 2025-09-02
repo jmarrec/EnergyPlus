@@ -314,6 +314,9 @@ namespace HeatBalanceIntRadExchange {
                 }
                 SurfaceTempInKto4th[ZoneSurfNum] = pow_4(SurfaceTempRad[ZoneSurfNum] + Constant::Kelvin);
                 if (state.dataHeatBalIntRadExchg->CarrollMethod) {
+                    // The original approach from Carroll's paper didn't balance because the mean radiant temperature was essentially the mean
+                    // of SurfaceTempRad. This has been updated to use SurfaceTempInKto4th so that the sum of the net long-wave radiation for each
+                    // surface equals 0.
                     CarrollMRTNumerator += SurfaceTempInKto4th[ZoneSurfNum] * zone_info.Fp[ZoneSurfNum] * zone_info.Area[ZoneSurfNum];
                     CarrollMRTDenominator += zone_info.Fp[ZoneSurfNum] * zone_info.Area[ZoneSurfNum];
                 }
@@ -321,6 +324,7 @@ namespace HeatBalanceIntRadExchange {
 
             if (state.dataHeatBalIntRadExchg->CarrollMethod) {
                 if (CarrollMRTDenominator > 0.0) {
+                    // pow_4 and root_4 cancel out, so we can avoid calling root_4 here
                     CarrollMRTInKTo4th = CarrollMRTNumerator / CarrollMRTDenominator;
                 } else {
                     // Likely only one surface in this enclosure
