@@ -69,7 +69,7 @@ runs:
 
           $suffix = "_build"
 
-          ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
+          ninja energyplus ExpandObjects${suffix} ReadVars{suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
           Write-Output "::endgroup::"
       }
       else {
