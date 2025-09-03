@@ -8333,10 +8333,10 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
     state->dataSurface->Surface(4).RadEnclIndex = radEnclosureNum;
 
     auto &znCL = state->dataOutRptTab->znCompLoads;
-    auto &znCLDay = znCL[coolDesSelected - 1];
+    // auto &znCLDay = znCL[coolDesSelected - 1];
     for (int jSurf = 1; jSurf <= 4; ++jSurf) {
         for (int step = 1; step <= 10; ++step) {
-            auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
+            // auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
             auto &surfCLDayTS = state->dataOutRptTab->surfCompLoads[coolDesSelected - 1].ts[step - 1].surf[jSurf - 1];
             surfCLDayTS.TMULTseq = 0.1 * step;
             surfCLDayTS.ITABSFseq = 0.2 * step * surfBaseValue[jSurf - 1];
@@ -8395,7 +8395,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
 
     for (int jSurf = 1; jSurf <= 4; ++jSurf) {
         for (int step = 1; step <= 10; ++step) {
-            auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
+            // auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
             auto &surfCLDayTS = state->dataOutRptTab->surfCompLoads[coolDesSelected - 1].ts[step - 1].surf[jSurf - 1];
             surfCLDayTS.TMULTseq = 0.1 * step;
             surfCLDayTS.ITABSFseq = 0.2 * step * surfBaseValue[jSurf - 1];

@@ -2212,12 +2212,10 @@ void ReportInfiltrations(EnergyPlusData &state)
     static constexpr std::string_view RoutineName = "ReportInfiltrations";
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    Real64 AirDensity;          // Density of air (kg/m^3)
     Real64 CpAir;               // Heat capacity of air (J/kg-C)
     Real64 TotalLoad;           // Total loss or gain
     Real64 H2OHtOfVap;          // Heat of vaporization of air
     Real64 ADSCorrectionFactor; // Correction factor of air flow model values when ADS is simulated
-    Real64 TimeStepSys = state.dataHVACGlobal->TimeStepSys;
     Real64 TimeStepSysSec = state.dataHVACGlobal->TimeStepSysSec;
 
     for (auto &thisInfiltration : state.dataHeatBal->Infiltration) {
@@ -2319,8 +2317,6 @@ void ReportAirHeatBalance(EnergyPlusData &state)
     // PURPOSE OF THIS SUBROUTINE:
     // This subroutine updates the report variables for the AirHeatBalance.
 
-    static constexpr std::string_view RoutineName3("ReportAirHeatBalance:3");
-
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
     state.dataHeatBal->ZoneTotalExfiltrationHeatLoss = 0.0;
@@ -2332,7 +2328,6 @@ void ReportAirHeatBalance(EnergyPlusData &state)
 
     // Reports zone exhaust loss by exhaust fans
     for (int zoneNum = 1; zoneNum <= state.dataGlobal->NumOfZones; ++zoneNum) { // Start of zone loads report variable update loop ...
-        auto &zone = state.dataHeatBal->Zone(zoneNum);
         auto &znAirRpt = state.dataHeatBal->ZnAirRpt(zoneNum);
         auto &znEquipConfig = state.dataZoneEquip->ZoneEquipConfig(zoneNum);
         reportAirHeatBal1(state, znAirRpt, znEquipConfig, zoneNum);
@@ -2375,11 +2370,10 @@ void reportAirHeatBal1(EnergyPlusData &state,
                        DataHeatBalance::AirReportVars &szAirRpt,
                        DataZoneEquipment::EquipConfiguration const &szEquipConfig,
                        int const zoneNum,
-                       int const spaceNum)
+                       [[maybe_unused]] int const spaceNum)
 {
     Real64 CpAir = Psychrometrics::PsyCpAirFnW(state.dataEnvrn->OutHumRat); // Heat capacity of air (J/kg-C)
     Real64 outDB = state.dataHeatBal->Zone(zoneNum).OutDryBulbTemp;
-    Real64 H2OHtOfVap = Psychrometrics::PsyHgAirFnWTdb(state.dataEnvrn->OutHumRat, outDB); // Heat of vaporization of air
     Real64 ADSCorrectionFactor = 1.0;
     if (state.afn->simulation_control.type == AirflowNetwork::ControlType::MultizoneWithDistributionOnlyDuringFanOperation) {
         if ((state.dataZoneEquip->ZoneEquipAvail(zoneNum) == Avail::Status::CycleOn ||
@@ -2616,7 +2610,7 @@ void reportAirHeatBal2(EnergyPlusData &state,
     for (int MixNum = 1; MixNum <= state.dataHeatBal->TotCrossMixing; ++MixNum) {
         auto &crossMixing = state.dataHeatBal->CrossMixing(MixNum);
         if (crossMixing.ReportFlag &&
-            ((((spaceNum == 0) && (crossMixing.ZonePtr == zoneNum)) || (spaceNum > 0) && (spaceNum == crossMixing.spaceIndex)))) {
+            (((spaceNum == 0) && (crossMixing.ZonePtr == zoneNum)) || ((spaceNum > 0) && (spaceNum == crossMixing.spaceIndex)))) {
             Real64 const fromMAT = (crossMixing.fromSpaceIndex == 0)
                                        ? state.dataZoneTempPredictorCorrector->zoneHeatBalance(crossMixing.FromZone).MAT
                                        : state.dataZoneTempPredictorCorrector->spaceHeatBalance(crossMixing.fromSpaceIndex).MAT;

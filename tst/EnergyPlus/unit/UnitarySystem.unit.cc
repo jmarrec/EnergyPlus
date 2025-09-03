@@ -7898,7 +7898,7 @@ Curve:Biquadratic,
     // blow thru fan resets OnOffFanPartLoadFraction = 1 so other equipment not using PLF are not affected. OnOffFanPartLoadFraction = 1 here.
     // Unitary System also sets OnOffFanPartLoadFraction = 1 (see end of ReportUnitarySystem) so this variable will = 1
     EXPECT_EQ(1.0, state->dataHVACGlobal->OnOffFanPartLoadFraction);
-    auto *fan2 = dynamic_cast<Fans::FanComponent *>(state->dataFans->fans(1));
+    [[maybe_unused]] auto *fan2 = dynamic_cast<Fans::FanComponent *>(state->dataFans->fans(1));
     assert(fan2 != nullptr);
     EXPECT_GT(fan1->runtimeFrac, FanPLR);
 }

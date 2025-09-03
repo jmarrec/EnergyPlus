@@ -580,7 +580,7 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedDefrostCOP)
 
     Coil.MSEIRFFlow(1) = pCurve->Num;
 
-    int constexpr nPLFfPLR1 = 5;
+    [[maybe_unused]] int constexpr nPLFfPLR1 = 5;
     pCurve = AddCurve(*state, "HP_Heat-PLF-fPLR1");
     pCurve->curveType = CurveType::Quadratic;
     pCurve->coeff[0] = 1;
@@ -593,7 +593,7 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedDefrostCOP)
 
     Coil.MSPLFFPLR(1) = pCurve->Num;
 
-    int constexpr nConstantBiquadratic = 6;
+    [[maybe_unused]] int constexpr nConstantBiquadratic = 6;
     pCurve = AddCurve(*state, "ConstantBiquadratic");
     pCurve->curveType = CurveType::BiQuadratic;
     pCurve->coeff[0] = 1;
@@ -668,7 +668,7 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedDefrostCOP)
 
     Coil.MSEIRFFlow(2) = pCurve->Num;
 
-    int constexpr nPLFfPLR2 = 11;
+    [[maybe_unused]] int constexpr nPLFfPLR2 = 11;
     pCurve = AddCurve(*state, "HP_Heat-PLF-fPLR2");
     pCurve->curveType = CurveType::Quadratic;
     pCurve->coeff[0] = 1;
@@ -1027,7 +1027,7 @@ TEST_F(EnergyPlusFixture, TestSingleSpeedDefrostCOP)
 
     Coil.EIRFFlow(1) = pCurve->Num;
 
-    int constexpr nPLFfPLR2 = 5;
+    [[maybe_unused]] int constexpr nPLFfPLR2 = 5;
     pCurve = AddCurve(*state, "HP_Heat-PLF-fPLR2");
     pCurve->curveType = CurveType::Quadratic;
     pCurve->numDims = 1;
@@ -2174,7 +2174,7 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
     int SingleMode = 0;
 
     int VarSpeedCoilNum = 1;
-    int CyclingScheme = 1;
+    [[maybe_unused]] int CyclingScheme = 1;
     Real64 SensLoad = 100.0;
     Real64 LatentLoad = 100.0;
     Real64 OnOffAirFlowRatio = 0.5;

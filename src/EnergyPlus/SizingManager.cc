@@ -3311,8 +3311,12 @@ void ReportTemperatureInputError(
     }
 }
 
-void GetZoneAndZoneListNames(
-    EnergyPlusData &state, bool &ErrorsFound, int &NumZones, Array1D_string &ZoneNames, int &NumZoneLists, Array1D<ZoneListData> &ZoneListNames)
+void GetZoneAndZoneListNames(EnergyPlusData &state,
+                             [[maybe_unused]] bool &ErrorsFound,
+                             int &NumZones,
+                             Array1D_string &ZoneNames,
+                             int &NumZoneLists,
+                             Array1D<ZoneListData> &ZoneListNames)
 {
 
     // SUBROUTINE INFORMATION:

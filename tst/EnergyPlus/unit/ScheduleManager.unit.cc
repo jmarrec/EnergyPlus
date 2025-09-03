@@ -96,7 +96,6 @@ TEST_F(EnergyPlusFixture, ScheduleManager_isMinuteMultipleOfTimestep)
 TEST_F(EnergyPlusFixture, ScheduleManager_UpdateScheduleVals)
 {
     auto &s_glob = state->dataGlobal;
-    auto &s_sched = state->dataSched;
     state->dataEnvrn->DSTIndicator = 0;
 
     auto *sched1 = Sched::AddScheduleDetailed(*state, "Detailed-1");
@@ -966,7 +965,6 @@ TEST_F(EnergyPlusFixture, Schedule_GetCurrentScheduleValue_DST_SouthernHemispher
 
 TEST_F(EnergyPlusFixture, Schedule_GetCurrentScheduleValue_DST_RampUp_Leap)
 {
-    auto &s_sched = state->dataSched;
     auto &s_glob = state->dataGlobal;
     // So here we'll mimic using a Schedule:Compact that ramps up constantly
 
@@ -998,7 +996,7 @@ TEST_F(EnergyPlusFixture, Schedule_GetCurrentScheduleValue_DST_RampUp_Leap)
     state->dataWeather->WFAllowsLeapYears = true;
     state->dataWeather->LeapYearAdd = 1;
 
-    int nDays = 366;
+    // int nDays = 366;
     s_glob->TimeStepsInHour = 4;
 
     auto *sched1 = Sched::AddScheduleDetailed(*state, "SCHED-1");
@@ -1172,7 +1170,7 @@ TEST_F(EnergyPlusFixture, Schedule_GetCurrentScheduleValue_DST_RampUp_NoLeap)
     state->dataWeather->LeapYearAdd = 0;
 
     // ScheduleManager always assume LeapYear really.
-    int nDays = 365;
+    // int nDays = 365;
     s_glob->TimeStepsInHour = 4;
 
     auto *sched1 = Sched::AddScheduleDetailed(*state, "SCHED-1");

@@ -407,7 +407,7 @@ sys.argv.append("energyplus")
     {
     }
 
-    void PythonEngine::exec(std::string_view sv)
+    void PythonEngine::exec(std::string_view)
     {
     }
 

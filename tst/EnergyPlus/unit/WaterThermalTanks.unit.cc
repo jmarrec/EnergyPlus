@@ -2029,7 +2029,6 @@ TEST_F(EnergyPlusFixture, StratifiedTankCalc)
         EXPECT_GE(NodeTemps[i], NodeTemps[i + 1]);
     }
 
-    int DummyIndex = 1;
     Real64 TankNodeEnergy = 0;
     for (int i = 0; i < Tank.Nodes; ++i) {
         auto &node = Tank.Node[i];
@@ -2174,7 +2173,6 @@ TEST_F(EnergyPlusFixture, StratifiedTankSourceFlowRateCalc)
     Tank.SourceInletTemp = 70.0;
     Tank.SourceMassFlowRate = 6.30901964e-5 * 997; // 1 gal/min
 
-    int DummyIndex = 1;
     Real64 Cp = Fluid::GetWater(*state)->getSpecificHeat(*state, 60.0, "StratifiedTankCalcNoDraw");
 
     Tank.CalcWaterThermalTankStratified(*state);
@@ -3478,8 +3476,8 @@ TEST_F(EnergyPlusFixture, Desuperheater_WAHP_VSEQ_Coil_Test)
     // Source name and type successfully passed to DataHeatBalance::HeatReclaimVS_Coil data struct
 
     DataHeatBalance::HeatReclaimDataBase &HeatReclaim = state->dataHeatBal->HeatReclaimVS_Coil(DXNum);
-    EXPECT_EQ(state->dataHeatBal->HeatReclaimVS_Coil(DXNum).Name, "VARSPEED_WAHP_COIL");
-    EXPECT_EQ(state->dataHeatBal->HeatReclaimVS_Coil(DXNum).SourceType, "Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit");
+    EXPECT_EQ(HeatReclaim.Name, "VARSPEED_WAHP_COIL");
+    EXPECT_EQ(HeatReclaim.SourceType, "Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit");
 
     // Initiate conditions for multispeed coil calculation
     state->dataEnvrn->OutDryBulbTemp = 32.0;
@@ -3667,7 +3665,6 @@ TEST_F(EnergyPlusFixture, MixedTankAlternateSchedule)
 
     int TankNum(1);
     Real64 rho;
-    int WaterIndex(1);
     bool NeedsHeatOrCool;
     WaterThermalTanks::WaterThermalTankData &Tank = state->dataWaterThermalTanks->WaterThermalTank(TankNum);
 

@@ -53,35 +53,43 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-
-import os
-from subprocess import STDOUT, CalledProcessError, check_call
-
-from ep_testing.tests.base import BaseTest
+from enum import IntEnum, StrEnum
 
 
-class HVACDiagram(BaseTest):
+class OS(StrEnum):
+    """Operating Systems."""
 
-    def name(self):
-        return "Test running 5ZoneAirCooled.idf, then HVACDiagram and make sure the SVG is created"
+    Windows = "Windows"
+    Linux = "Linux"
+    Mac = "Mac"
 
-    def run(self, install_root: str, verbose: bool, kwargs: dict):
-        idf_path = os.path.join(install_root, "ExampleFiles", "5ZoneAirCooled.idf")
-        print('* Running test class "%s" on file "%s"... ' % (self.__class__.__name__, "5ZoneAirCooled.idf"), end="")
-        eplus_binary = os.path.join(install_root, "energyplus")
-        dev_null = open(os.devnull, "w")
-        try:
-            check_call([eplus_binary, "-D", idf_path], stdout=dev_null, stderr=STDOUT)
-            print(" [E+ FINISHED] ", end="")
-        except CalledProcessError:
-            raise Exception("EnergyPlus failed!") from None
-        hvac_diagram_binary = os.path.join(install_root, "PostProcess", "HVAC-Diagram")
-        try:
-            check_call([hvac_diagram_binary], stdout=dev_null, stderr=STDOUT)
-            print(" [HVAC DIAGRAM FINISHED] ", end="")
-        except CalledProcessError:
-            raise Exception("Transition failed!") from None
-        if os.path.exists("eplusout.svg"):
-            print(" [SVG FILE EXISTS] [DONE]!")
-        else:
-            raise Exception("SVG Did not exist!")
+
+class MSVC(IntEnum):
+    """Microsoft Visual Studio versions."""
+
+    V16 = 16
+    V17 = 17
+    # V18 = 18  # Future version placeholder
+
+    def generator_name(self) -> str:
+        """Get the CMake generator name for the MSVC version."""
+        return MSVC_GENERATOR_MAPPING[self]
+
+
+# Alias mapping for common version names to MSVC enum, for argparse
+MSVC_ALIAS_MAPPING = {
+    "2017": MSVC.V16,
+    "2022": MSVC.V17,
+}
+
+# Mapping from MSVC enum to CMake generator names
+MSVC_GENERATOR_MAPPING = {
+    MSVC.V16: "Visual Studio 16 2019",
+    MSVC.V17: "Visual Studio 17 2022",
+}
+
+
+class Bitness(StrEnum):
+    X86 = "x86"
+    X64 = "x64"
+    ARM64 = "arm64"

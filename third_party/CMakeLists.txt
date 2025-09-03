@@ -143,7 +143,7 @@ set_target_properties(epexpat PROPERTIES FOLDER ThirdParty/Expat)
 
 add_subdirectory(FMI)
 set_target_properties(epfmiimport PROPERTIES FOLDER ThirdParty/FMI)
-target_link_libraries(epfmiimport turn_off_warnings)
+target_link_libraries(epfmiimport PRIVATE turn_off_warnings)
 
 add_subdirectory(zlib)
 set_target_properties(miniziplib PROPERTIES FOLDER ThirdParty/zlib)

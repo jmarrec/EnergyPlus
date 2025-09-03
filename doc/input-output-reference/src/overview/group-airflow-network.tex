@@ -443,9 +443,9 @@ Let T\(_{out}\) equal the outdoor air temperature, T\(_{zone}\) equal the previo
 
 \textbf{Constant}: Whenever this object's Venting Availability Schedule allows venting, all of the zone's openable windows and doors are open, independent of indoor or outdoor conditions. Note that ``Constant'' here means that the size of each opening is fixed while venting; the air flow through each opening can, of course, vary from timestep to timestep.
 
-\textbf{ASHRAE55Adaptive}: All of the zone's operable windows and doors are opened if the operative temperature is greater than the comfort temperature (central line) calculated from the ASHRAE Standard 55-2010 adaptive comfort model and Venting Availability Schedule allows venting.
+\textbf{ASHRAE55Adaptive}: All of the zone's operable windows and doors are opened if the operative temperature is greater than the comfort temperature (central line) calculated from the ASHRAE Standard 55-2010 adaptive comfort model and Venting Availability Schedule allows venting. Note that in addition to these conditions, the zone must also be occupied for venting to take place when using this control.
 
-\textbf{CEN15251Adaptive:} All of the zone's operable windows and doors are opened if the operative temperature is greater than the comfort temperature (central line) calculated from the CEN15251 adaptive comfort model and Venting Availability Schedule allows venting.
+\textbf{CEN15251Adaptive:} All of the zone's operable windows and doors are opened if the operative temperature is greater than the comfort temperature (central line) calculated from the CEN15251 adaptive comfort model and Venting Availability Schedule allows venting. As with the ASHRAE55Adaptive venting control, the zone must also be occupied for venting to take place when using this control.
 
 \subsubsection{Field: Ventilation Control Zone Temperature Setpoint Schedule Name}\label{field-ventilation-control-zone-temperature-setpoint-schedule-name}
 

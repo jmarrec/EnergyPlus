@@ -79,7 +79,7 @@ jobs:
 
     - name: Baseline Checkout
       if: matrix.run_regressions
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         ref: develop
         path: baseline
@@ -123,12 +123,12 @@ jobs:
     - name: Baseline Test
       if: matrix.run_regressions
       working-directory: ./baseline/build
-      run: ctest -C Release -R integration -j 3  # TODO: Speed up basement so we don't have to skip it.
+      run: ctest -C Release -R integration -j ${{ matrix.nproc }}  # TODO: Speed up basement so we don't have to skip it.
 
     # BUILD AND TEST EVERYTHING ON THE CURRENT BRANCH
 
     - name: Branch Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         path: branch
 
@@ -164,7 +164,7 @@ jobs:
 
     - name: Branch Test
       working-directory: ./branch/build
-      run: ctest -C Release -j 3
+      run: ctest -C Release -j ${{ matrix.nproc }}
 
     - name: Install Regression Tool
       if: always() && matrix.run_regressions && steps.branch_build.outcome != 'failure'  # always run this step as long as we actually built

@@ -285,7 +285,7 @@ void EIRPlantLoopHeatPump::setOperatingFlowRatesWSHP(EnergyPlusData &state, bool
     }
 }
 
-void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool FirstHVACIteration, Real64 const currentLoad)
+void EIRPlantLoopHeatPump::setOperatingFlowRatesASHP(EnergyPlusData &state, bool FirstHVACIteration, [[maybe_unused]] Real64 const currentLoad)
 {
     if (!this->running) {
         this->loadSideMassFlowRate = 0.0;
@@ -672,7 +672,8 @@ void EIRPlantLoopHeatPump::calcSourceSideHeatTransferWSHP(EnergyPlusData &state)
     Real64 const sourceMCp = this->sourceSideMassFlowRate * CpSrc;
     this->sourceSideOutletTemp = this->calcSourceOutletTemp(this->sourceSideInletTemp, this->sourceSideHeatTransfer / sourceMCp);
 
-    if (this->waterSource && abs(this->sourceSideOutletTemp - this->sourceSideInletTemp) > 100.0) { // whoaa out of range happenings on water loop
+    if (this->waterSource &&
+        std::abs(this->sourceSideOutletTemp - this->sourceSideInletTemp) > 100.0) { // whoaa out of range happenings on water loop
         //
         // TODO setup recurring error warning?
         // lets do something different than fatal the simulation
@@ -2553,8 +2554,6 @@ static constexpr std::array<std::string_view, static_cast<int>(EIRFuelFiredHeatP
 
 void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
 {
-    Real64 const reportingInterval = state.dataHVACGlobal->TimeStepSysSec;
-
     // ideally the plant is going to ensure that we don't have a runflag=true when the load is invalid, but
     // I'm not sure we can count on that so we will do one check here to make sure we don't calculate things badly
     if ((this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpFuelFiredCooling && currentLoad >= 0.0) ||
@@ -2571,7 +2570,7 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
     // if the component control is SERIESACTIVE we set the component flow to inlet flow so that flow resolver
     // will not shut down the branch
     auto &thisInletNode = state.dataLoopNodes->Node(this->loadSideNodes.inlet);
-    auto &thisOutletNode = state.dataLoopNodes->Node(this->loadSideNodes.outlet);
+    // auto &thisOutletNode = state.dataLoopNodes->Node(this->loadSideNodes.outlet);
     auto &thisSourceSideInletNode = state.dataLoopNodes->Node(this->sourceSideNodes.inlet); // OA Intake node
     auto &sim_component = DataPlant::CompData::getPlantComponent(state, this->loadSidePlantLoc);
     if ((this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpFuelFiredHeating && currentLoad <= 0.0)) {
