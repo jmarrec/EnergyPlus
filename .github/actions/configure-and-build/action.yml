@@ -66,10 +66,7 @@ runs:
 
       if ("${{ inputs.minimal-targets }}" -eq "true") {
           Begin-Group "Building only energyplus and fortran targets"
-
-          $suffix = "_build"
-
-          ninja energyplus ExpandObjects${suffix} ReadVars{suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
+          ninja energyplus ExpandObjects_build ReadVars_build Slab_build Basement_build AppGPostProcess_build ParametricPreprocessor_build
           Write-Output "::endgroup::"
       }
       else {
@@ -110,7 +107,7 @@ runs:
 
       if [ "${{ inputs.minimal-targets }}" == "true" ]; then
         begin_group "Builing only energyplus and fortran targets"
-        ninja energyplus ExpandObjects${suffix} ReadVarsESO${suffix} Slab${suffix} Basement${suffix} AppGPostProcess${suffix} ParametricPreprocessor${suffix}
+        ninja energyplus ExpandObjects ReadVarsESO Slab Basement AppGPostProcess ParametricPreprocessor
         echo "::endgroup::"
       else
         begin_group "Builing full energyplus"
