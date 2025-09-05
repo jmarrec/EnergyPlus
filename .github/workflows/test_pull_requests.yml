@@ -99,15 +99,21 @@ jobs:
       shell: bash
       run: |
         begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+        Color_Off='\033[0m'       # Text Reset
+
+        # Regular Colors
+        Red='\033[0;31m'
+        Green='\033[0;32m'
+        BrightYellow='\033[93m'
 
         if [ "${{ steps.cacheccache-restore.outputs.cache-hit }}" == "true" ]; then
-          echo "✅ CCache primary key was hit"
+          echo -e "✅ ${Green}CCache primary key was hit${Color_Off}"
         else
           FILES_IN_CACHE=$(ccache --print-stats | grep "^files_in_cache" | awk '{print $2}')
           if [ "$FILES_IN_CACHE" -gt 0 ]; then
-            echo "⚠️ Secondary cache hit "
+            echo -e "⚠️  ${BrightYellow}Secondary cache hit${Color_Off}"
           else
-            echo "❌ No cache hit"
+            echo "❌ ${Red}No cache hit${Color_Off}"
           fi;
         fi;
 
