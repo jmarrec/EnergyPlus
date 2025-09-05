@@ -161,9 +161,6 @@ target_compile_definitions(fmt PRIVATE FMT_USE_FULL_CACHE_DRAGONBOX=1)
 set_target_properties(fmt PROPERTIES FOLDER ThirdParty/fmt)
 mark_as_advanced(FORCE FMT_SYSTEM_HEADERS)
 
-add_subdirectory(cpgfunctionEP)
-set_target_properties(cpgfunctionEP PROPERTIES FOLDER ThirdParty/cpgfunctionEP)
-
 # Kiva
 option(BUILD_GROUND_PLOT "Build ground plotting library (for Kiva debugging only)" OFF)
 mark_as_advanced(FORCE BUILD_GROUND_PLOT)

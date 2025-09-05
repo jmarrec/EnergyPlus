@@ -165,7 +165,8 @@ void emitWarningMessages(EnergyPlusData &state,
                          std::initializer_list<std::string> const &msgs,
                          bool countAsError = false);
 
-void ShowFatalError(EnergyPlusData &state, std::string const &ErrorMessage, OptionalOutputFileRef OutUnit1 = {}, OptionalOutputFileRef OutUnit2 = {});
+[[noreturn]] void
+ShowFatalError(EnergyPlusData &state, std::string const &ErrorMessage, OptionalOutputFileRef OutUnit1 = {}, OptionalOutputFileRef OutUnit2 = {});
 
 void ShowSevereError(EnergyPlusData &state,
                      std::string const &ErrorMessage,

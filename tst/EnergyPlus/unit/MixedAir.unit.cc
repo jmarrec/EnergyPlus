@@ -6619,7 +6619,7 @@ TEST_F(EnergyPlusFixture, CO2ControlDesignOARateTest)
         "   **   ~~~   ** This may be overriding desired ventilation controls. Check inputs for Minimum Outdoor Air Flow Rate, Minimum Outdoor Air "
         "Schedule Name and Controller:MechanicalVentilation",
         "   **   ~~~   ** Minimum OA fraction = 2.9412E-003, Mech Vent OA fraction = 1.5603E-003",
-        "   **   ~~~   **  Environment=, at Simulation time= 00:00 - 00:00",
+        "   **   ~~~   **  Environment=, at Simulation time= 00:00 - 00:15",
     });
 
     EXPECT_TRUE(compare_err_stream_substring(error_string, true));

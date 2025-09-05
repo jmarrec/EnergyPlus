@@ -80,7 +80,8 @@
 #include <EnergyPlus/FluidCoolers.hh>
 #include <EnergyPlus/FluidProperties.hh>
 #include <EnergyPlus/FuelCellElectricGenerator.hh>
-#include <EnergyPlus/GroundHeatExchangers.hh>
+#include <EnergyPlus/GroundHeatExchangers/Slinky.hh>
+#include <EnergyPlus/GroundHeatExchangers/Vertical.hh>
 #include <EnergyPlus/HVACInterfaceManager.hh>
 #include <EnergyPlus/HVACVariableRefrigerantFlow.hh>
 #include <EnergyPlus/HeatPumpWaterToWaterCOOLING.hh>

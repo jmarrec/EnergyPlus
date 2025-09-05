@@ -6250,8 +6250,8 @@ TEST_F(EnergyPlusFixture, CLIPLINE_Full)
         Line line_new{}; // Only defined if visible
     };
 
-    // No need to capture the constexpr variables
-    auto testclipline = [](const TestCase &t) {
+    // No need to capture the constexpr variables (but MSVC will complain)
+    auto testclipline = [&](const TestCase &t) {
         Real64 x0 = t.line_ori.p0.x;
         Real64 y0 = t.line_ori.p0.y;
 

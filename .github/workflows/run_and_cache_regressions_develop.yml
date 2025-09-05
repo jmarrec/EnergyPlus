@@ -1,0 +1,130 @@
+name: Build, Run and Cache Develop Regressions
+
+on:
+  push:
+    branches: [ develop ]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  FC: gfortran-13
+
+jobs:
+  build_and_test:
+    name: Testing on ${{ matrix.pretty }}
+    runs-on: ${{ matrix.os }}
+    permissions:
+      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - os: macos-14
+          macos_dev_target: 13.0
+          arch: arm64
+          python-arch: arm64
+          pretty: "Mac arm64"
+          python-version: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
+        - os: ubuntu-24.04
+          arch: x86_64
+          python-arch: x64
+          pretty: "Ubuntu 24.04"
+          python-version: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
+        - os: windows-2022
+          arch: x86_64
+          python-arch: x64
+          pretty: "Windows x64"
+          python-version: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
+        - os: ubuntu-24.04-arm
+          arch: arm64
+          python-arch: arm64
+          pretty: "Ubuntu 24.04 arm64"
+          python-version: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
+        - os: windows-11-arm
+          arch: arm64
+          python-arch: arm64
+          pretty: "Windows arm64"
+          python-version: 3.12.10
+
+    steps:
+
+    - uses: actions/checkout@v5
+
+    - name: Setup System
+      id: setup-runner
+      uses: ./.github/actions/setup-runner
+      with:
+        python-version: ${{ matrix.python-version }}
+        python-arch: ${{ matrix.python-arch }}
+
+    - name: Get Current SHA
+      shell: bash
+      run: |
+        echo "Figuring out the develop GIT SHA"
+        CURRENT_SHA=$(git rev-parse --short=10 HEAD)
+        echo "Develop GIT SHA is '${CURRENT_SHA}'"
+        echo "CURRENT_SHA=$CURRENT_SHA" >> $GITHUB_ENV
+
+    - name: Cache CCACHE
+      uses: actions/cache@v4
+      id: cacheccache
+      with:
+        path: |
+          ${{ steps.setup-runner.outputs.ccache-dir }}
+        key: ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ env.CURRENT_SHA }}
+        restore-keys: |
+          ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
+          ccache-${{ matrix.os }}-
+
+    - name: Did restoring the CCache-cache work? Yes
+      # If the SDK wasn't found in the cache
+      if: steps.cacheccache.outputs.cache-hit == 'true'
+      shell: bash
+      run: |
+        ccache --show-stats -vv || ccache --show-stats
+        ccache --zero-stats
+        ccache -p
+
+    - name: Create Build Directory
+      shell: bash
+      run: |
+        cmake -E make_directory ./build/
+        if [ "$RUNNER_OS" == "macOS" ]; then
+          # The MACOSX_DEPLOYMENT_TARGET environment variable sets the default value for the CMAKE_OSX_DEPLOYMENT_TARGET variable.
+          echo MACOSX_DEPLOYMENT_TARGET=${{ matrix.macos_dev_target }} >> $GITHUB_ENV
+        fi;
+
+    - name: Install problem matcher
+      shell: bash
+      run: echo "::add-matcher::./.github/workflows/cpp-problem-matcher.json"
+
+    - name: Configure and Build
+      uses: ./.github/actions/configure-and-build
+      with:
+        enable-pch: OFF
+        minimal-targets: false
+        build-directory: ./build
+        nproc: ${{ steps.setup-runner.outputs.nproc }}
+        python-version: ${{ matrix.python-version }}
+        python-root-dir: ${{ steps.setup-runner.outputs.python-root-dir }}
+
+    - name: Remove problem matcher
+      shell: bash
+      run: echo "::remove-matcher owner=gcc-problem-matcher::"
+
+    - name: Run Tests
+      working-directory: ./build
+      shell: bash
+      run: |
+        if ctest -j ${{ env.NPROC }}; then
+          echo "All tests passed"
+        else
+          echo "Re-running failed tests..."
+          ctest --rerun-failed --output-on-failure
+        fi;
+        mv testfiles testfiles-develop
+
+    - uses: actions/cache/save@v4
+      with:
+        path: |
+          ./build/testfiles-develop
+        key: baselineregression-${{ matrix.os }}-${{ env.CURRENT_SHA }}
