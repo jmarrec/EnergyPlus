@@ -82,9 +82,9 @@ jobs:
         # We turn off the PCH in that case, since that's how develop builds it
         echo "ENABLE_PCH=OFF" >> $GITHUB_ENV
 
-    - name: Cache CCACHE
-      uses: actions/cache@v4
-      id: cacheccache
+    - name: Restore Cache CCACHE
+      uses: actions/cache/restore@v4
+      id: cacheccache-restore
       with:
         path: |
           ${{ steps.setup-runner.outputs.ccache-dir }}
@@ -95,14 +95,30 @@ jobs:
           ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
           ccache-${{ matrix.os }}-
 
-    - name: Did restoring the CCache-cache work? Yes
-      # If the SDK wasn't found in the cache
-      if: steps.cacheccache.outputs.cache-hit == 'true'
+    - name: Did restoring the CCache-cache work?
       shell: bash
       run: |
+        begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+
+        if [ "${{ steps.cacheccache-restore.outputs.cache-hit }}" == "true" ]; then
+          echo "✅ CCache primary key was hit"
+        else
+          FILES_IN_CACHE=$(ccache --print-stats | grep "^files_in_cache" | awk '{print $2}')
+          if [ "$FILES_IN_CACHE" -gt 0 ]; then
+            echo "⚠️ Secondary cache hit "
+          else
+            echo "❌ No cache hit"
+          fi;
+        fi;
+
+        begin_group "Showing existing ccache stats"
         ccache --show-stats -vv || ccache --show-stats
+        echo "::endgroup::"
+
         ccache --zero-stats
+        begin_group "Showing CCache config"
         ccache -p
+        echo "::endgroup::"
 
     - name: Create Build Directory
       shell: bash
@@ -163,6 +179,14 @@ jobs:
     - name: Remove problem matcher
       shell: bash
       run: echo "::remove-matcher owner=gcc-problem-matcher::"
+
+    - name: Save CCache cache
+      if: always() && steps.cacheccache-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          ${{ steps.setup-runner.outputs.ccache-dir }}
+        key: ${{ steps.cacheccache-restore.outputs.cache-primary-key }}
 
     - name: Run Tests
       working-directory: ./build
