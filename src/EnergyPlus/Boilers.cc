@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <algorithm>
 #include <cmath>
 
 // ObjexxFCL Headers
@@ -98,7 +99,7 @@ BoilerSpecs *BoilerSpecs::factory(EnergyPlusData &state, std::string const &obje
         state.dataBoilers->getBoilerInputFlag = false;
     }
     // Now look for this particular boiler in the list
-    auto myBoiler = std::find_if(state.dataBoilers->Boiler.begin(), state.dataBoilers->Boiler.end(), [&objectName](const BoilerSpecs &boiler) {
+    auto *myBoiler = std::find_if(state.dataBoilers->Boiler.begin(), state.dataBoilers->Boiler.end(), [&objectName](const BoilerSpecs &boiler) {
         return boiler.Name == objectName;
     });
     if (myBoiler != state.dataBoilers->Boiler.end()) {
@@ -186,9 +187,9 @@ void GetBoilerInput(EnergyPlusData &state)
     // LOAD ARRAYS WITH CURVE FIT Boiler DATA
 
     for (int BoilerNum = 1; BoilerNum <= numBoilers; ++BoilerNum) {
-        int NumAlphas; // Number of elements in the alpha array
-        int NumNums;   // Number of elements in the numeric array
-        int IOStat;    // IO Status when calling get input subroutine
+        int NumAlphas = 0; // Number of elements in the alpha array
+        int NumNums = 0;   // Number of elements in the numeric array
+        int IOStat = 0;    // IO Status when calling get input subroutine
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                  s_ipsc->cCurrentModuleObject,
                                                                  BoilerNum,
@@ -823,7 +824,7 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
     this->BoilerLoad = MyLoad;
 
     // Initialize the delta temperature to zero
-    Real64 BoilerDeltaTemp; // C - boiler inlet to outlet temperature difference, set in all necessary code paths so no initialization required
+    Real64 BoilerDeltaTemp = 0.0; // C - boiler inlet to outlet temperature difference, set in all necessary code paths so no initialization required
 
     if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).FlowLock == DataPlant::FlowLock::Unlocked) {
         // Either set the flow to the Constant value or calculate the flow for the variable volume
@@ -866,13 +867,7 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
         this->BoilerMassFlowRate = state.dataLoopNodes->Node(BoilerInletNode).MassFlowRate;
 
         if ((MyLoad > 0.0) && (this->BoilerMassFlowRate > 0.0)) { // this boiler has a heat load
-            this->BoilerLoad = MyLoad;
-            if (this->BoilerLoad > BoilerNomCap * BoilerMaxPLR) {
-                this->BoilerLoad = BoilerNomCap * BoilerMaxPLR;
-            }
-            if (this->BoilerLoad < BoilerNomCap * BoilerMinPLR) {
-                this->BoilerLoad = BoilerNomCap * BoilerMinPLR;
-            }
+            this->BoilerLoad = std::clamp(MyLoad, BoilerNomCap * BoilerMinPLR, BoilerNomCap * BoilerMaxPLR);
             this->BoilerOutletTemp = state.dataLoopNodes->Node(BoilerInletNode).Temp + this->BoilerLoad / (this->BoilerMassFlowRate * Cp);
         } else {
             this->BoilerLoad = 0.0;
@@ -885,9 +880,8 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
         this->BoilerLoad = 0.0;
         this->BoilerOutletTemp = state.dataLoopNodes->Node(BoilerInletNode).Temp;
     }
-    this->BoilerPLR = this->BoilerLoad / BoilerNomCap; // operating part load ratio
-    this->BoilerPLR = std::min(this->BoilerPLR, BoilerMaxPLR);
-    this->BoilerPLR = std::max(this->BoilerPLR, BoilerMinPLR);
+    // operating part load ratio
+    this->BoilerPLR = std::clamp(this->BoilerLoad / BoilerNomCap, BoilerMinPLR, BoilerMaxPLR);
 
     // calculate theoretical fuel use based on nominal thermal efficiency
     Real64 const TheorFuelUse = this->BoilerLoad / BoilerNomEff; // Theoretical (stoichiometric) fuel use
