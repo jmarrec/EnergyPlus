@@ -74,6 +74,8 @@ def install_packages(python_lib_dir: Path):
         print("PYTHON: All CLI packages found and up to date, no pip install needed")
         return
 
+    to_install = [f"{n}=={v}" for n, v in pkgs_to_install.items()]
+    
     is_windows = platform.system() == "Windows"
     is_arm = platform.machine().lower() in ("arm64", "aarch64")
     if "ghedesigner" in pkgs_to_install and is_windows and is_arm:
@@ -87,9 +89,8 @@ def install_packages(python_lib_dir: Path):
             f"PYTHON: Installing scipy from {scipy_wheel_url} since this is Windows ARM64 "
             "and no official wheel exists as of 1.16.1"
         )
-        run([executable, "-m", "pip", "install", f"--target={python_lib_dir}", scipy_wheel_url], check=True)
+        to_install.append(scipy_wheel_url)
 
-    to_install = [f"{n}=={v}" for n, v in pkgs_to_install.items()]
     print(f"PYTHON: CLI packages not found or out of date, pip installing these now: {to_install}")
     run([executable, "-m", "pip", "install", f"--target={python_lib_dir}", "--upgrade", *to_install], check=True)
 
