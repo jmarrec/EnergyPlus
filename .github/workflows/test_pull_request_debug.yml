@@ -29,6 +29,10 @@ jobs:
         python-version: ${{ env.Python_REQUIRED_VERSION }}
         python-arch: ${{ env.python-arch }}
 
+    - name: Install coverage tools
+      shell: bash
+      run: sudo apt-get update && sudo apt-get install lcov gcovr
+
     - name: Create Build Directory
       shell: bash
       run: cmake -E make_directory ./build/
@@ -42,7 +46,7 @@ jobs:
       uses: ./.github/actions/configure-and-build
       with:
         enable-pch: ${{ env.ENABLE_PCH }}
-        minimal-targets: true
+        minimal-targets: false
         build-directory: ./build
         nproc: ${{ steps.setup-runner.outputs.nproc }}
         python-version: ${{ env.Python_REQUIRED_VERSION }}
@@ -78,6 +82,22 @@ jobs:
           ctest --rerun-failed -VV
           echo "::endgroup::"
         fi;
+
+    - name: Prepare Coverage Results
+      shell: bash
+      working-directory: ./build
+      run: lcov --capture --directory ../src/EnergyPlus/CMakeFiles/energypluslib.dir/ --output-file coverage.info
+
+    - name: Generate HTML Coverage Package
+      shell: bash
+      working-directory: ./build
+      run: genhtml coverage.info --output-directory out
+
+    - name: Upload folder as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-results
+        path: ./build/out
 
     - name: Setup upterm session
       uses: owenthereal/action-upterm@v1
