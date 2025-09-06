@@ -17,6 +17,9 @@ inputs:
   enable-pch:
     description: "Turn on ENABLE_PCH to have pre-compiled headers. Pass ON or OFF"
     default: "OFF"
+  build-type:
+    description: "The CMake build type to use, which will default to release"
+    default: "Release"
 
 runs:
   using: "composite"
@@ -50,7 +53,7 @@ runs:
       cmake `
         -G Ninja `
         -DENABLE_PCH:BOOL=${{ inputs.enable-pch }} `
-        -DCMAKE_BUILD_TYPE:STRING=Release `
+        -DCMAKE_BUILD_TYPE:STRING=${{ inputs.build-type }} `
         -DLINK_WITH_PYTHON:BOOL=ON `
         -DPYTHON_CLI:BOOL=ON `
         -DPython_REQUIRED_VERSION:STRING=${{ inputs.python-version }} `
@@ -91,7 +94,7 @@ runs:
       cmake \
         -G Ninja \
         -DENABLE_PCH:BOOL=${{ inputs.enable-pch }} \
-        -DCMAKE_BUILD_TYPE:STRING=Release \
+        -DCMAKE_BUILD_TYPE:STRING=${{ inputs.build-type }} \
         -DLINK_WITH_PYTHON:BOOL=ON \
         -DPYTHON_CLI:BOOL=ON \
         -DPython_REQUIRED_VERSION:STRING=${{ inputs.python-version }} \

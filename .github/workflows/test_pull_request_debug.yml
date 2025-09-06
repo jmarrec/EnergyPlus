@@ -1,0 +1,78 @@
+name: Debug Build and Test
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  FC: gfortran-13
+  Python_REQUIRED_VERSION: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
+  python-arch: x64
+  os: ubuntu-24.04
+
+jobs:
+  build_and_test:
+    name: Debug Testing
+    runs-on: ${{ env.os }}
+    permissions:
+      pull-requests: write
+
+    steps:
+
+    - uses: actions/checkout@v5
+
+    - name: Setup System
+      id: setup-runner
+      uses: ./.github/actions/setup-runner
+      with:
+        python-version: ${{ env.Python_REQUIRED_VERSION }}
+        python-arch: ${{ env.python-arch }}
+
+    - name: Create Build Directory
+      shell: bash
+      run: cmake -E make_directory ./build/
+
+    - name: Install problem matcher
+      shell: bash
+      run: echo "::add-matcher::./.github/workflows/cpp-problem-matcher.json"
+
+    - name: Configure and Build
+      id: branch_build
+      uses: ./.github/actions/configure-and-build
+      with:
+        enable-pch: ${{ env.ENABLE_PCH }}
+        minimal-targets: true
+        build-directory: ./build
+        nproc: ${{ steps.setup-runner.outputs.nproc }}
+        python-version: ${{ env.Python_REQUIRED_VERSION }}
+        python-root-dir: ${{ steps.setup-runner.outputs.python-root-dir }}
+        build-type: RelWithDebInfo
+
+    - name: Remove problem matcher
+      shell: bash
+      run: echo "::remove-matcher owner=gcc-problem-matcher::"
+
+    - name: Run Tests
+      working-directory: ./build
+      shell: bash
+      run: |
+        begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+
+        Color_Off='\033[0m'       # Text Reset
+
+        # Regular Colors
+        Red='\033[0;31m'
+        Green='\033[0;32m'
+
+        begin_group "Running CTests"
+        if ctest -j ${{ env.NPROC }}; then
+          echo "::endgroup::"
+          echo -e "✅ ${Green}All tests passed${Color_Off}"
+        else
+          echo "::endgroup::"
+          echo -e "❌ ${Red}Some Tests Failed${Color_Off}"
+          begin_group "Re-running failed tests verbosely..."
+          ctest --rerun-failed -VV
+          echo "::endgroup::"
+        fi;
