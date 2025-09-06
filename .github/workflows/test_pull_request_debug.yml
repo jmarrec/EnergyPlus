@@ -83,10 +83,13 @@ jobs:
           echo "::endgroup::"
         fi;
 
+    - name: Setup upterm session
+      uses: owenthereal/action-upterm@v1
+
     - name: Prepare Coverage Results
       shell: bash
       working-directory: ./build
-      run: lcov --capture --directory ../src/EnergyPlus/CMakeFiles/energypluslib.dir/ --output-file coverage.info
+      run: lcov --capture --directory ./src/EnergyPlus/CMakeFiles/energypluslib.dir/ --output-file coverage.info
 
     - name: Generate HTML Coverage Package
       shell: bash
@@ -98,6 +101,3 @@ jobs:
       with:
         name: coverage-results
         path: ./build/out
-
-    - name: Setup upterm session
-      uses: owenthereal/action-upterm@v1
