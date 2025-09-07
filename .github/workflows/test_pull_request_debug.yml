@@ -89,12 +89,12 @@ jobs:
     - name: Prepare Initial Coverage Results
       shell: bash
       working-directory: ./build
-      run: lcov -c -d . -o ./lcov.output --no-external --base-directory ../src/EnergyPlus -–ignore-errors source
+      run: lcov -c -d . -o ./lcov.output --no-external --base-directory ../src/EnergyPlus --ignore-errors source
 
     - name: Clean up Coverage Results
       shell: bash
       working-directory: ./build
-      run: lcov -r ./lcov.output `pwd`/\* -o ./lcov.output.filtered -–ignore-errors source
+      run: lcov -r ./lcov.output `pwd`/\* -o ./lcov.output.filtered --ignore-errors source
 
     - name: Generate HTML Coverage Package
       shell: bash
