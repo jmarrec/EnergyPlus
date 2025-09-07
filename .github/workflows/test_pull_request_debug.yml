@@ -83,21 +83,26 @@ jobs:
           echo "::endgroup::"
         fi;
 
-    - name: Setup upterm session
-      uses: owenthereal/action-upterm@v1
+#    - name: Setup upterm session
+#      uses: owenthereal/action-upterm@v1
 
-    - name: Prepare Coverage Results
+    - name: Prepare Initial Coverage Results
       shell: bash
       working-directory: ./build
-      run: lcov --capture --directory ./src/EnergyPlus/CMakeFiles/energypluslib.dir/ --output-file coverage.info
+      run: lcov -c -d . -o ./lcov.output --no-external --base-directory ../src/EnergyPlus
+
+    - name: Clean up Coverage Results
+      shell: bash
+      working-directory: ./build
+      run: lcov -r ./lcov.output `pwd`/\* -o ./lcov.output.filtered
 
     - name: Generate HTML Coverage Package
       shell: bash
       working-directory: ./build
-      run: genhtml coverage.info --output-directory out
+      run: genhtml ./lcov.output.filtered -o lcov-html --demangle-cpp --function-coverage
 
     - name: Upload folder as artifact
       uses: actions/upload-artifact@v4
       with:
         name: coverage-results
-        path: ./build/out
+        path: ./build/lcov-html
