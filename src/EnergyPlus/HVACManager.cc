@@ -646,7 +646,7 @@ void ManageHVAC(EnergyPlusData &state)
             }
             if (size(state.dataLoopNodes->Node) > 0) {
                 print(state.files.debug,
-                      "{:12},{:12}, {:22.15N},",
+                      "{:12},{:12}, {:22.15G},",
                       state.dataGlobal->DayOfSim,
                       state.dataGlobal->HourOfDay,
                       state.dataGlobal->TimeStep * state.dataGlobal->TimeStepZone);

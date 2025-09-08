@@ -57,6 +57,7 @@
 #include "Fixtures/EnergyPlusFixture.hh"
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataBranchNodeConnections.hh>
+#include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataSizing.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/OutAirNodeManager.hh>
@@ -221,6 +222,53 @@ namespace PlantManager {
         EXPECT_EQ((int)state->dataSetPointManager->spms(2)->ctrlVar, (int)HVAC::CtrlVarType::Temp);
         EXPECT_EQ(state->dataLoopNodes->NodeID(state->dataSetPointManager->spms(2)->ctrlNodeNums[0]), "CHILLED WATER LOOP SUPPLY INLET");
     }
+
+    TEST_F(EnergyPlusFixture, PlantManager_SizePlantLoop_CorrectTempReportTest)
+    {
+        int loopNum = 1;
+        bool okToFinish = false;
+
+        state->dataPlnt->PlantLoop.allocate(1);
+        state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
+        state->dataPlantMgr->GetCompSizFac = false;
+        state->dataSize->PlantSizData.allocate(1);
+        state->dataPlnt->PlantLoop(1).LoopSide(LoopSideLocation::Demand).TotalBranches = 0;
+        state->dataPlnt->PlantLoop(1).MaxVolFlowRate = 0.0;
+        state->dataPlnt->PlantLoop(1).MaxVolFlowRateWasAutoSized = false;
+        state->dataPlnt->PlantLoop(1).VolumeWasAutoSized = true;
+        state->dataPlnt->PlantLoop(1).CirculationTime = 1.0;
+        state->dataPlnt->PlantFinalSizesOkayToReport = true;
+        state->dataPlnt->PlantLoop(1).MinVolFlowRate = 0.0;
+        state->dataPlnt->PlantLoop(1).FluidType = DataLoopNode::NodeFluidType::Steam;
+        state->dataSize->PlantSizData(1).DesVolFlowRate = 1.0;
+        state->dataSize->PlantSizData(1).DeltaT = 5.0;
+        state->dataSize->PlantSizData(1).ExitTemp = 25.0;
+        state->dataPlnt->PlantLoop(1).Name = "A LONG TIME AGO";
+
+        // Test 1: Plant/Heating
+        state->dataPlnt->PlantLoop(1).TypeOfLoop = LoopType::Plant;
+        state->dataSize->PlantSizData(1).LoopType = DataSizing::TypeOfPlantLoop::Heating;
+        state->dataPlnt->PlantLoop(1).Name = "HOTH";
+        SizePlantLoop(*state, loopNum, okToFinish);
+        const std::string heating_eio_output = "PlantLoop, HOTH, Design Return Temperature [C], 20.0";
+        compare_eio_stream_substring(heating_eio_output, true);
+
+        // Test 2: Plant/Cooling
+        state->dataPlnt->PlantLoop(1).TypeOfLoop = LoopType::Plant;
+        state->dataSize->PlantSizData(1).LoopType = DataSizing::TypeOfPlantLoop::Cooling;
+        state->dataPlnt->PlantLoop(1).Name = "MUSTAFAR";
+        SizePlantLoop(*state, loopNum, okToFinish);
+        const std::string cooling_eio_output = "PlantLoop, MUSTAFAR, Design Return Temperature [C], 30.0";
+        compare_eio_stream_substring(cooling_eio_output, true);
+
+        // Test 2: Condenser
+        state->dataPlnt->PlantLoop(1).TypeOfLoop = LoopType::Condenser;
+        state->dataPlnt->PlantLoop(1).Name = "KAMINO";
+        SizePlantLoop(*state, loopNum, okToFinish);
+        const std::string condenser_eio_output = "CondenserLoop, KAMINO, Design Return Temperature [C], 30.0";
+        compare_eio_stream_substring(condenser_eio_output, true);
+    }
+
 } // namespace PlantManager
 
 namespace UserDefinedComponents {

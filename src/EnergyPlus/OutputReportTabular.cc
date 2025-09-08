@@ -16671,7 +16671,7 @@ void LoadSummaryUnitConversion(EnergyPlusData &state, CompLoadTablesType &compLo
 
     compLoadTotal.airflowPerFlrArea *= airFlowPerAreaConversion;
     if (powerConversion != 0.) {
-        compLoadTotal.airflowPerTotCap = compLoadTotal.airflowPerTotCap * airFlowPerAreaConversion / powerConversion;
+        compLoadTotal.airflowPerTotCap = compLoadTotal.airflowPerTotCap * airFlowConversion / powerConversion;
         compLoadTotal.areaPerTotCap = compLoadTotal.areaPerTotCap * areaConversion / powerConversion;
     }
     if (areaConversion != 0.) {
@@ -16728,7 +16728,7 @@ void LoadSummaryUnitConversion(EnergyPlusData &state, CompLoadTablesType &compLo
 
         compLoadTotal.airflowPerFlrArea *= airFlowPerAreaConversion;
         if (powerConversion != 0.) {
-            compLoadTotal.airflowPerTotCap = compLoadTotal.airflowPerTotCap * airFlowPerAreaConversion / powerConversion;
+            compLoadTotal.airflowPerTotCap = compLoadTotal.airflowPerTotCap * airFlowConversion / powerConversion;
             compLoadTotal.areaPerTotCap = compLoadTotal.areaPerTotCap * areaConversion / powerConversion;
         }
         if (areaConversion != 0.) {
@@ -18396,7 +18396,7 @@ std::string RealToStr(Real64 const RealIn, int const numDigits)
     }
 
     if (std::abs(RealIn) > maxvalDigitsA.at(nDigits)) {
-        return format("{:12.6Z}", RealIn);
+        return format("{:12.6E}", RealIn);
     } else {
         return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
     }

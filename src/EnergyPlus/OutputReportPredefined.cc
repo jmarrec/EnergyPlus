@@ -1646,7 +1646,7 @@ namespace OutputReportPredefined {
                 sigDigitCount = 2;
             }
             state.dataOutRptPredefined->tableEntry(state.dataOutRptPredefined->numTableEntry).charEntry =
-                format("{:12.{}Z}", tableEntryReal, sigDigitCount);
+                format("{:12.{}E}", tableEntryReal, sigDigitCount);
         }
 
         if (state.dataOutRptPredefined->tableEntry(state.dataOutRptPredefined->numTableEntry).charEntry.size() > 12) {

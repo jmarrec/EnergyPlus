@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <limits>
 #include <map>
 
 // ObjexxFCL Headers
@@ -283,7 +284,8 @@ namespace Sched {
         s_sched->daySchedules.push_back(daySched);
         s_sched->dayScheduleMap.insert_or_assign(Util::makeUPPER(daySched->Name), daySched->Num);
 
-        daySched->tsVals.resize(Constant::iHoursInDay * s_glob->TimeStepsInHour);
+        // When InitConstantScheduleData is called, TimeStepsInHour is 0, so we ensure 24
+        daySched->tsVals.assign(Constant::iHoursInDay * max(1, s_glob->TimeStepsInHour), 0.0);
 
         return daySched;
     } // AddDaySchedule()
@@ -294,6 +296,11 @@ namespace Sched {
 
         auto *weekSched = new WeekSchedule;
         weekSched->Name = name;
+
+        // Fill the dayScheds with the Missing Day Schedule (Always Off)
+        for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
+            weekSched->dayScheds[iDayType] = s_sched->daySchedules[SchedNum_AlwaysOff];
+        }
 
         weekSched->Num = (int)s_sched->weekSchedules.size();
         s_sched->weekSchedules.push_back(weekSched);
@@ -313,6 +320,10 @@ namespace Sched {
         auto *schedOn = AddScheduleConstant(state, "Constant-1.0", 1.0);
         assert(schedOn->Num == SchedNum_AlwaysOn);
         schedOn->isUsed = true; // Suppress unused warnings
+
+        auto *missingDaySchedule = AddDaySchedule(state, "MissingDaySchedule-0.0");
+        assert(missingDaySchedule->Num == SchedNum_AlwaysOff);
+        missingDaySchedule->isUsed = true;
     }
 
     void ProcessScheduleInput(EnergyPlusData &state)
@@ -1208,6 +1219,9 @@ namespace Sched {
         //  A3 , \field Complex Field #1
         //  A4 , \field Complex Field #2
         //  A5 , \field Complex Field #3
+
+        // When InitConstantScheduleData is called, TimeStepsInHour is 0, so we delay it here
+        static_cast<DaySchedule *>(s_sched->daySchedules[SchedNum_AlwaysOff])->tsVals.assign(Constant::iHoursInDay * s_glob->TimeStepsInHour, 0.0);
 
         SchNum = NumRegSchedules;
         CurrentModuleObject = "Schedule:Compact";
@@ -2378,10 +2392,6 @@ namespace Sched {
 
         auto const *weekSched = this->weekScheds[thisDayOfYear];
         auto const *daySched = (thisHolidayNum > 0) ? weekSched->dayScheds[thisHolidayNum] : weekSched->dayScheds[thisDayOfWeek];
-        if (daySched == nullptr) {
-            // We already warned in ProcessScheduleInput that there were missing days: Missing day types will have 0.0 as Schedule Values
-            return 0.0;
-        }
 
         // If Unspecified or equal to zero, use NumOfTimeStepInHour, otherwise use supplied
         if (ts <= 0) {
@@ -2476,9 +2486,6 @@ namespace Sched {
             weekSched->isUsed = true;
             for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
                 auto *daySched = weekSched->dayScheds[iDayType];
-                if (daySched == nullptr) {
-                    continue;
-                }
                 daySched->isUsed = true;
             }
         }

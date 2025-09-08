@@ -5843,6 +5843,26 @@ void GetDXCoils(EnergyPlusData &state)
                                     thisDXCoil.Name);
             }
 
+            if (thisDXCoil.CondensateCollectMode == CondensateCollectAction::ToTank) {
+                SetupOutputVariable(state,
+                                    "Cooling Coil Condensate Volume Flow Rate",
+                                    Constant::Units::m3_s,
+                                    thisDXCoil.CondensateVdot,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Average,
+                                    thisDXCoil.Name);
+                SetupOutputVariable(state,
+                                    "Cooling Coil Condensate Volume",
+                                    Constant::Units::m3,
+                                    thisDXCoil.CondensateVol,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Sum,
+                                    thisDXCoil.Name,
+                                    Constant::eResource::OnSiteWater,
+                                    OutputProcessor::Group::HVAC,
+                                    OutputProcessor::EndUseCat::Condensate);
+            }
+
             if (thisDXCoil.ReportEvapCondVars) {
                 SetupOutputVariable(state,
                                     "Cooling Coil Condenser Inlet Temperature",
