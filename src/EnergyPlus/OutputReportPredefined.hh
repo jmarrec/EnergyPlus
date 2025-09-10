@@ -139,14 +139,10 @@ namespace OutputReportPredefined {
         std::string typeField;
         std::string nameField;
         std::string description;
-        Real64 valField;
-        bool active;
-        bool written;
-
-        // Default Constructor
-        CompSizeTableEntryType() : valField(0.0), active(false), written(false)
-        {
-        }
+        Real64 valField = 0.0;
+        std::string strField;
+        bool active = false;
+        bool written = false;
     };
 
     struct ShadowRelateType
@@ -183,6 +179,12 @@ namespace OutputReportPredefined {
 
     void AddCompSizeTableEntry(
         EnergyPlusData &state, std::string_view FieldType, std::string_view FieldName, std::string_view FieldDescription, Real64 const FieldValue);
+
+    void AddCompSizeTableStrEntry(EnergyPlusData &state,
+                                  std::string_view FieldType,
+                                  std::string_view FieldName,
+                                  std::string_view FieldDescription,
+                                  std::string_view FieldValue);
 
     void AddShadowRelateTableEntry(EnergyPlusData &state, int const castingField, int const receivingField, int const receivingKind);
 
@@ -248,7 +250,23 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchFanMotorEff = 0;
     int pdchFanMotorHeatToZoneFrac = 0; // Motor Heat to Zone Fraction
     int pdchFanMotorHeatZone = 0;       // Motor Loss Zone Name
+    int pdchFanSpeedCtrlMethod = 0;
+    int pdchFanNumSpeeds = 0;
     int pdchFanAirLoopName = 0;
+
+    int pdstFanPower = 0;
+    int pdchFanPowerType = 0;
+    int pdchFanPower00 = 0;
+    int pdchFanPower01 = 0;
+    int pdchFanPower02 = 0;
+    int pdchFanPower03 = 0;
+    int pdchFanPower04 = 0;
+    int pdchFanPower05 = 0;
+    int pdchFanPower06 = 0;
+    int pdchFanPower07 = 0;
+    int pdchFanPower08 = 0;
+    int pdchFanPower09 = 0;
+    int pdchFanPower10 = 0;
 
     // Pump subtable
     int pdstPump = 0;
@@ -443,38 +461,47 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchPLCLProvCool = 0;        // provides cooling
     int pdchPLCLMaxLoopFlowRate = 0; // Maximum Loop Flow Rate
     int pdchPLCLMinLoopFlowRate = 0; // Minimum Loop Flow Rate
+    int pdchPLCLSupTemp = 0;         // "Design Supply Temperature [C]");
+    int pdchPLCLRetTemp = 0;         // "Design Return Temperature [C]");
+    int pdchPLCLDesCap = 0;          // "Design Capacity [W]");
 
     // Std 229 Air Terminal Table in Equipment Summary
     int pdstAirTerm = 0;
-    int pdchAirTermZoneName = 0;       // Zone Name
-    int pdchAirTermMinFlow = 0;        // Minimum Flow
-    int pdchAirTermMinOutdoorFlow = 0; // Minimum Outdoor Flow
-    int pdchAirTermSupCoolingSP = 0;   // Supply cooling setpoint
-    int pdchAirTermSupHeatingSP = 0;   // Supply heating setpoint
-    int pdchAirTermHeatingCap = 0;     // Heating capacity
-    int pdchAirTermCoolingCap = 0;     // Cooling capacity
-    int pdchAirTermTypeInp = 0;        // Type of Input Object
-    int pdchAirTermHeatCoilType = 0;   // Heat/Reheat Coil Object Type
-    int pdchAirTermCoolCoilType = 0;   // Chilled Water Coil Object Type
-    int pdchAirTermFanType = 0;        // Fan Object Type
-    int pdchAirTermFanName = 0;        // Fan Name
-    int pdchAirTermPrimFlow = 0;       // Primary Air Flow Rate
-    int pdchAirTermSecdFlow = 0;       // Secondary Air Flow Rate
-    int pdchAirTermMinFlowSch = 0;     // Minimum Flow Schedule Name
-    int pdchAirTermMaxFlowReh = 0;     // Maximum Flow During Reheat
-    int pdchAirTermMinOAflowSch = 0;   // Minimum Outdoor Flow Schedule Name
-    int pdchAirTermTempCntl = 0;       // Temperature Control
+    int pdchAirTermZoneName = 0;        // Zone Name
+    int pdchAirTermMinFlow = 0;         // Minimum Flow
+    int pdchAirTermMinOutdoorFlow = 0;  // Minimum Outdoor Flow
+    int pdchAirTermSupCoolingSP = 0;    // Supply cooling setpoint
+    int pdchAirTermSupHeatingSP = 0;    // Supply heating setpoint
+    int pdchAirTermHeatingCap = 0;      // Heating capacity
+    int pdchAirTermCoolingCap = 0;      // Cooling capacity
+    int pdchAirTermTypeInp = 0;         // Type of Input Object
+    int pdchAirTermHeatCoilType = 0;    // Heat/Reheat Coil Object Type
+    int pdchAirTermCoolCoilType = 0;    // Chilled Water Coil Object Type
+    int pdchAirTermFanType = 0;         // Fan Object Type
+    int pdchAirTermFanName = 0;         // Fan Name
+    int pdchAirTermFanCtrlType = 0;     // Fan Control Type
+    int pdchAirTermPrimFlow = 0;        // Primary Air Flow Rate
+    int pdchAirTermSecdFlow = 0;        // Secondary Air Flow Rate
+    int pdchAirTermMinFlowSch = 0;      // Minimum Flow Schedule Name
+    int pdchAirTermMaxFlowReh = 0;      // Maximum Flow During Reheat
+    int pdchAirTermMinOAflowSch = 0;    // Minimum Outdoor Flow Schedule Name
+    int pdchAirTermPIUHeatCtrlType = 0; // PIU Heating Control Type
 
     // Std 229 Air Heat Recovery
     int pdstAirHR = 0;
     int pdchAirHRInputObjType = 0;              // input object type
     int pdchAirHRPlateOrRotary = 0;             // plate/rotary
+    int pdchAirHROperation = 0;                 // operation control
     int pdchAirHRSenEffAt100PerHeatAirFlow = 0; // Sensible Effectiveness at 100% Heating Air Flow
     int pdchAirHRSenEffAt100PerCoolAirFlow = 0; // Sensible Effectiveness at 100% Cooling Air Flow
     int pdchAirHRLatEffAt100PerHeatAirFlow = 0; // Latent Effectiveness at 100% Heating Air Flow
     int pdchAirHRLatEffAt100PerCoolAirFlow = 0; // Latent Effectiveness at 100% Cooling Air Flow
     int pdchAirHRExhaustAirflow = 0;            // Exhaust (Secondary) airflow
     int pdchAirHRSupplyAirflow = 0;             // Supply (Outdoor) airflow
+    int pdchAirHRZoneHVACName = 0;              // Zone ERV name
+    int pdchAirHRAirloopName = 0;               // Airloop name
+    int pdchAirHROASysName = 0;                 // OA system name
+    int pdchAirHROAControllerName = 0;          // OA controller name
 
     // Envelope Report
     int pdrEnvelope = 0;
@@ -903,6 +930,16 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchStatSchdTypeName1 = 0;
     int pdchStatSchdHeatName = 0;
     int pdchStatSchdCoolName = 0;
+
+    int pdstFanOper = 0.0;
+    int pdchFanOpOccHrs = 0.0;
+    int pdchFanOpOccCont = 0.0;
+    int pdchFanOpOccCyc = 0.0;
+    int pdchFanOpOccOff = 0.0;
+    int pdchFanOpUnoccHrs = 0.0;
+    int pdchFanOpUnoccCont = 0.0;
+    int pdchFanOpUnoccCyc = 0.0;
+    int pdchFanOpUnoccOff = 0.0;
 
     // HVAC Topology
     int pdrTopology = 0;
