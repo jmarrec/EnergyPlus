@@ -6992,7 +6992,7 @@ void CalcHeatBalanceOutsideSurf(EnergyPlusData &state,
                 Real64 HSky = 0.0;      // "Convection" coefficient from sky to surface
                 Real64 HGround = 0.0;   // "Convection" coefficient from ground to surface
                 Real64 HAir = 0.0;      // "Convection" coefficient from air to surface (radiation)
-                Real64 HSurrr = 0.0;    // "Linearized radiation" coefficient from surrounding surfaces to surface
+                // Real64 HSurrr = 0.0;    // "Linearized radiation" coefficient from surrounding surfaces to surface
                 state.dataHeatBalSurf->SurfHConvExt(SurfNum) = 0.0;
                 state.dataHeatBalSurf->SurfHAirExt(SurfNum) = 0.0;
                 state.dataHeatBalSurf->SurfHSkyExt(SurfNum) = 0.0;

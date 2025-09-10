@@ -183,7 +183,7 @@ namespace InternalHeatGains {
         DataHeatBalance::IntGainType::ElectricLoadCenterStorageSimple,
         DataHeatBalance::IntGainType::ElectricLoadCenterConverter};
     // Explicitly list internal gains not gathered here
-    static constexpr std::array<DataHeatBalance::IntGainType, 3> ExcludedIntGainTypes = {
+    [[maybe_unused]] static constexpr std::array<DataHeatBalance::IntGainType, 3> ExcludedIntGainTypes = {
         DataHeatBalance::IntGainType::ZoneContaminantSourceAndSinkCarbonDioxide,
         DataHeatBalance::IntGainType::DaylightingDeviceTubular,
         DataHeatBalance::IntGainType::ZoneContaminantSourceAndSinkGenericContam};
@@ -266,14 +266,6 @@ namespace InternalHeatGains {
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         int IOStat;
-
-        //   Variables for reporting nominal internal gains
-        Real64 LightTot; // Total Lights for calculating lights per square meter
-        Real64 ElecTot;  // Total Electric Load for calculating electric per square meter
-        Real64 GasTot;   // Total Gas load for calculating gas per square meter
-        Real64 OthTot;   // Total Other load for calculating other load per square meter
-        Real64 HWETot;   // Total Hot Water Equipment for calculating HWE per square meter
-        Real64 StmTot;   // Total Steam for calculating Steam per square meter
 
         // Formats
         static constexpr std::string_view Format_720(" Zone Internal Gains Nominal, {},{:.2R},{:.1R},");

@@ -5619,7 +5619,7 @@ void GetDXCoils(EnergyPlusData &state)
                 SetupOutputVariable(state,
                                     "Cooling Coil Dehumidification Mode",
                                     Constant::Units::None,
-                                    (int &)thisDXCoil.DehumidificationMode,
+                                    thisDXCoil.DehumidificationMode,
                                     OutputProcessor::TimeStepType::System,
                                     OutputProcessor::StoreType::Average,
                                     thisDXCoil.Name);
@@ -5841,6 +5841,26 @@ void GetDXCoils(EnergyPlusData &state)
                                     OutputProcessor::TimeStepType::System,
                                     OutputProcessor::StoreType::Average,
                                     thisDXCoil.Name);
+            }
+
+            if (thisDXCoil.CondensateCollectMode == CondensateCollectAction::ToTank) {
+                SetupOutputVariable(state,
+                                    "Cooling Coil Condensate Volume Flow Rate",
+                                    Constant::Units::m3_s,
+                                    thisDXCoil.CondensateVdot,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Average,
+                                    thisDXCoil.Name);
+                SetupOutputVariable(state,
+                                    "Cooling Coil Condensate Volume",
+                                    Constant::Units::m3,
+                                    thisDXCoil.CondensateVol,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Sum,
+                                    thisDXCoil.Name,
+                                    Constant::eResource::OnSiteWater,
+                                    OutputProcessor::Group::HVAC,
+                                    OutputProcessor::EndUseCat::Condensate);
             }
 
             if (thisDXCoil.ReportEvapCondVars) {

@@ -377,7 +377,6 @@ protected:
         state->dataHVACVarRefFlow->MaxHeatingCapacity(1) = 1.0E20;
 
         int Sch1 = 1;
-        int Sch2 = 2;
 
         int numTU = 1; // total number of TUs
         state->dataHVACVarRefFlow->VRFTUNumericFields.allocate(numTU);
@@ -2384,7 +2383,6 @@ TEST_F(EnergyPlusFixture, VRF_FluidTCtrl_VRFOU_Compressor)
         Real64 Enthalpy = 432842;     // actual enthalpy given as input [kJ/kg]
         Real64 TempLow = 40;          // lower bound of temperature in the iteration [C]
         Real64 TempUp = 60;           // upper bound of temperature in the iteration [C]
-        int RefrigIndex = 2;          // Index to Refrigerant Properties
         Real64 Temperature = 44;      // temperature to be returned [C]
         std::string CalledFrom = "EnergyPlusFixture:VRF_FluidTCtrl_VRFOU_Compressor";
 
@@ -2597,7 +2595,6 @@ TEST_F(EnergyPlusFixture, VRF_FluidTCtrl_VRFOU_Compressor)
         Pipe_Q = 162.67;             // Piping Loss Algorithm Parameter: Heat loss [W]
         OUEvapHeatExtract = 5110.40; // Evaporator heat extract [W]
         Ncomp = 1058;                // Compressor power [W]
-        CompSpdActual;               // Actual compressor running speed [rps]
         CyclingRatio = 1.0;
 
         // Run

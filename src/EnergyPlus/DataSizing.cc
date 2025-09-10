@@ -686,12 +686,12 @@ Real64 OARequirementsData::desFlowPerZoneArea(EnergyPlusData &state, int const z
                 thisDSOA.OAFlowMethod != OAFlowCalcMethod::ACH) {
                 if ((spaceNum == 0) || (spaceNum == dsoaSpaceNum)) {
                     Real64 spaceArea = state.dataHeatBal->space(this->dsoaSpaceIndexes(dsoaCount)).FloorArea;
-                    sumArea + -spaceArea;
+                    sumArea += spaceArea;
                     sumAreaOA += thisDSOA.OAFlowPerArea * spaceArea;
                 }
             }
         }
-        if ((spaceNum == 0) && (state.dataHeatBal->Zone(zoneNum).FloorArea)) {
+        if ((spaceNum == 0) && (state.dataHeatBal->Zone(zoneNum).FloorArea > 0.0)) {
             desFlowPA = sumAreaOA / state.dataHeatBal->Zone(zoneNum).FloorArea;
         } else if (sumArea > 0.0) {
             desFlowPA = sumAreaOA / sumArea;

@@ -129,18 +129,18 @@ constexpr std::array<std::string_view, (int)LimitType::Num> limitTypeNames = {
 constexpr std::array<std::string_view, (int)LimitType::Num> limitTypeNamesUC = {
     "NOLIMIT", "LIMITFLOWRATE", "LIMITCAPACITY", "LIMITFLOWRATEANDCAPACITY"};
 
-constexpr std::array<std::string_view, (int)HumControl::Num> humControlNames = {
+[[maybe_unused]] constexpr std::array<std::string_view, (int)HumControl::Num> humControlNames = {
     "None", "ConstantSensibleHeatRatio", "Humidistat", "ConstantSupplyHumidityRatio"};
 constexpr std::array<std::string_view, (int)HumControl::Num> humControlNamesUC = {
     "NONE", "CONSTANTSENSIBLEHEATRATIO", "HUMIDISTAT", "CONSTANTSUPPLYHUMIDITYRATIO"};
 
-constexpr std::array<std::string_view, (int)DCV::Num> dcvNames = {"None", "OccupancySchedule", "CO2SetPoint"};
+[[maybe_unused]] constexpr std::array<std::string_view, (int)DCV::Num> dcvNames = {"None", "OccupancySchedule", "CO2SetPoint"};
 constexpr std::array<std::string_view, (int)DCV::Num> dcvNamesUC = {"NONE", "OCCUPANCYSCHEDULE", "CO2SETPOINT"};
 
-constexpr std::array<std::string_view, (int)Econ::Num> econNames = {"NoEconomizer", "DifferentialDryBulb", "DifferentialEnthalpy"};
+[[maybe_unused]] constexpr std::array<std::string_view, (int)Econ::Num> econNames = {"NoEconomizer", "DifferentialDryBulb", "DifferentialEnthalpy"};
 constexpr std::array<std::string_view, (int)Econ::Num> econNamesUC = {"NOECONOMIZER", "DIFFERENTIALDRYBULB", "DIFFERENTIALENTHALPY"};
 
-constexpr std::array<std::string_view, (int)HeatRecovery::Num> heatRecoveryNames = {"None", "Sensible", "Enthalpy"};
+[[maybe_unused]] constexpr std::array<std::string_view, (int)HeatRecovery::Num> heatRecoveryNames = {"None", "Sensible", "Enthalpy"};
 constexpr std::array<std::string_view, (int)HeatRecovery::Num> heatRecoveryNamesUC = {"NONE", "SENSIBLE", "ENTHALPY"};
 
 void SimPurchasedAir(EnergyPlusData &state,
@@ -1005,7 +1005,7 @@ void GetPurchasedAir(EnergyPlusData &state)
         SetupOutputVariable(state,
                             "Zone Ideal Loads Hybrid Ventilation Available Status",
                             Constant::Units::None,
-                            (int &)PurchAir(PurchAirNum).availStatus,
+                            PurchAir(PurchAirNum).availStatus,
                             OutputProcessor::TimeStepType::System,
                             OutputProcessor::StoreType::Average,
                             PurchAir(PurchAirNum).Name);

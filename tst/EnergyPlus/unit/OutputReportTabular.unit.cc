@@ -152,7 +152,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_RealToStr)
     EXPECT_EQ("  123456.789", RealToStr(123456.789, 3));
     EXPECT_EQ(" 123456.7890", RealToStr(123456.789, 4));
 
-    EXPECT_EQ("0.123457E+06", RealToStr(123456.789, 5));
+    EXPECT_EQ("1.234568E+05", RealToStr(123456.789, 5));
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_isNumber)
@@ -6801,10 +6801,10 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_LoadSummaryUnitConversion_test
     compLoad.totCapPerArea = 0.15;
 
     state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPound;
+    SetupUnitConversions(*state);
     Real64 powerConversion = getSpecificUnitMultiplier(*state, "W", "Btu/h");
     Real64 areaConversion = getSpecificUnitMultiplier(*state, "m2", "ft2");
     Real64 airFlowConversion = getSpecificUnitMultiplier(*state, "m3/s", "ft3/min");
-    Real64 airFlowPerAreaConversion = getSpecificUnitMultiplier(*state, "m3/s-m2", "ft3/min-ft2");
     int tempConvIndx = getSpecificUnitIndex(*state, "C", "F");
 
     LoadSummaryUnitConversion(*state, compLoad);
@@ -6816,7 +6816,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_LoadSummaryUnitConversion_test
 
     EXPECT_EQ(ConvertIP(*state, tempConvIndx, 20.), compLoad.outsideDryBulb);
     EXPECT_EQ(0.7 * airFlowConversion, compLoad.mainFanAirFlow);
-    EXPECT_EQ(0.2 * airFlowPerAreaConversion / powerConversion, compLoad.airflowPerTotCap);
+    EXPECT_EQ(0.2 * airFlowConversion / powerConversion, compLoad.airflowPerTotCap);
     EXPECT_EQ(0.15 * powerConversion / areaConversion, compLoad.totCapPerArea);
 }
 
@@ -8333,10 +8333,10 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
     state->dataSurface->Surface(4).RadEnclIndex = radEnclosureNum;
 
     auto &znCL = state->dataOutRptTab->znCompLoads;
-    auto &znCLDay = znCL[coolDesSelected - 1];
+    // auto &znCLDay = znCL[coolDesSelected - 1];
     for (int jSurf = 1; jSurf <= 4; ++jSurf) {
         for (int step = 1; step <= 10; ++step) {
-            auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
+            // auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
             auto &surfCLDayTS = state->dataOutRptTab->surfCompLoads[coolDesSelected - 1].ts[step - 1].surf[jSurf - 1];
             surfCLDayTS.TMULTseq = 0.1 * step;
             surfCLDayTS.ITABSFseq = 0.2 * step * surfBaseValue[jSurf - 1];
@@ -8395,7 +8395,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
 
     for (int jSurf = 1; jSurf <= 4; ++jSurf) {
         for (int step = 1; step <= 10; ++step) {
-            auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
+            // auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
             auto &surfCLDayTS = state->dataOutRptTab->surfCompLoads[coolDesSelected - 1].ts[step - 1].surf[jSurf - 1];
             surfCLDayTS.TMULTseq = 0.1 * step;
             surfCLDayTS.ITABSFseq = 0.2 * step * surfBaseValue[jSurf - 1];
@@ -9055,10 +9055,10 @@ TEST_F(EnergyPlusFixture, ORT_LoadSummaryUnitConversion_OverLoad_DualUnits)
     compLoad.totCapPerArea = 0.15;
 
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    SetupUnitConversions(*state);
     Real64 powerConversion = getSpecificUnitMultiplier(*state, "W", "Btu/h");
     Real64 areaConversion = getSpecificUnitMultiplier(*state, "m2", "ft2");
     Real64 airFlowConversion = getSpecificUnitMultiplier(*state, "m3/s", "ft3/min");
-    Real64 airFlowPerAreaConversion = getSpecificUnitMultiplier(*state, "m3/s-m2", "ft3/min-ft2");
     int tempConvIndx = getSpecificUnitIndex(*state, "C", "F");
 
     // LoadSummaryUnitConversion(*state, compLoad);
@@ -9071,7 +9071,7 @@ TEST_F(EnergyPlusFixture, ORT_LoadSummaryUnitConversion_OverLoad_DualUnits)
 
     EXPECT_EQ(ConvertIP(*state, tempConvIndx, 20.), compLoad.outsideDryBulb);
     EXPECT_EQ(0.7 * airFlowConversion, compLoad.mainFanAirFlow);
-    EXPECT_EQ(0.2 * airFlowPerAreaConversion / powerConversion, compLoad.airflowPerTotCap);
+    EXPECT_EQ(0.2 * airFlowConversion / powerConversion, compLoad.airflowPerTotCap);
     EXPECT_EQ(0.15 * powerConversion / areaConversion, compLoad.totCapPerArea);
 }
 
@@ -9889,18 +9889,18 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_PredefinedTable_SigDigits_Forc
     value = 123456789.1;
 
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizDesDay, "MyPlant Sizing Pass 1", value, 3);
-    EXPECT_EQ("0.123E+09", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizDesDay, "MyPlant Sizing Pass 1"));
+    EXPECT_EQ("1.235E+08", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizDesDay, "MyPlant Sizing Pass 1"));
 
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizPrevVdot, "MyPlant Sizing Pass 1", value, 2);
-    EXPECT_EQ("0.12E+09", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizPrevVdot, "MyPlant Sizing Pass 1"));
+    EXPECT_EQ("1.23E+08", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizPrevVdot, "MyPlant Sizing Pass 1"));
 
     // Force reset to numSigDigits = 2 since we switch to scientific notation
 
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizMeasVdot, "MyPlant Sizing Pass 1", value, 1);
-    EXPECT_EQ("0.12E+09", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizMeasVdot, "MyPlant Sizing Pass 1"));
+    EXPECT_EQ("1.23E+08", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizMeasVdot, "MyPlant Sizing Pass 1"));
 
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizCalcVdot, "MyPlant Sizing Pass 1", value, 0);
-    EXPECT_EQ("0.12E+09", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizCalcVdot, "MyPlant Sizing Pass 1"));
+    EXPECT_EQ("1.23E+08", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizCalcVdot, "MyPlant Sizing Pass 1"));
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_PredefinedTable_Standard62_1_NoSizing)

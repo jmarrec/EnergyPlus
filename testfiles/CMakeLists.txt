@@ -333,7 +333,11 @@ add_simulation_test(IDF_FILE FurnaceWithDXSystem_CoolingHXAssisted.idf EPW_FILE 
 add_simulation_test(IDF_FILE FurnaceWithDXSystem_CoolingHXAssisted_NewDXCoil.idf EPW_FILE USA_FL_Miami.Intl.AP.722020_TMY3.epw)
 add_simulation_test(IDF_FILE GSHP-GLHE.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE GSHP-GLHE-CalcGFunctions.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
-add_simulation_test(IDF_FILE GSHP-GLHE-CalcGFunctions-cpg.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
+if (PYTHON_CLI)
+    add_simulation_test(IDF_FILE GSHP-GLHE-CalcGFunctions-cpg.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
+else()
+    add_simulation_test(IDF_FILE GSHP-GLHE-CalcGFunctions-cpg.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw EXPECT_FATAL)
+endif()
 add_simulation_test(IDF_FILE GSHPSimple-GLHE.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE GSHP-Slinky.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE GasTurbChiller.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
@@ -799,7 +803,10 @@ add_simulation_test(IDF_FILE AbsorptionChiller_Macro.imf EPW_FILE USA_IL_Chicago
 add_api_simulation_test(PYTHON_FILE user_defined_equipment.py)
 
 # External interface files -- note they don't work on Mac, and they only exchange data for runperiods
-if (NOT APPLE)
+# And we don't have arm64 binaries
+include(../cmake/TargetArch.cmake)
+target_architecture(TARGET_ARCH)
+if (NOT (APPLE OR (TARGET_ARCH MATCHES "arm64")))
     add_simulation_test(IDF_FILE _ExternalInterface-functionalmockupunit-to-actuator.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw ANNUAL_SIMULATION)
     add_simulation_test(IDF_FILE _ExternalInterface-functionalmockupunit-to-schedule.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw ANNUAL_SIMULATION)
     add_simulation_test(IDF_FILE _ExternalInterface-functionalmockupunit-to-variable.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw ANNUAL_SIMULATION)

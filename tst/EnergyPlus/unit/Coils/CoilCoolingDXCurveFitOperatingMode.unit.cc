@@ -274,7 +274,6 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXCurveFitCrankcaseHeaterCurve)
     EXPECT_EQ("COIL COOLING DX CURVE FIT PERFORMANCE 1", thisCoil.performance->name);
 
     HVAC::CoilMode coilMode = HVAC::CoilMode::Normal;
-    Real64 PLR = 1.0;
     int speedNum = 1;
     Real64 speedRatio = 1.0;
     HVAC::FanOp fanOp = HVAC::FanOp::Cycling;

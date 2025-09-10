@@ -1180,31 +1180,73 @@ void AllocateModuleArrays(EnergyPlusData &state)
         if (state.dataGlobal->DisplayAdvancedReportVariables) {
             // CurrentModuleObject='Zone(Advanced)'
             SetupOutputVariable(state,
-                                "Zone Opaque Surface Inside Faces Total Conduction Heat Gain Rate",
+                                "Zone Opaque Surface Inside Faces Conduction Rate",
+                                Constant::Units::W,
+                                state.dataHeatBal->ZoneOpaqSurfInsFaceCond(ZoneLoop),
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Zone(ZoneLoop).Name);
+            SetupOutputVariable(state,
+                                "Zone Opaque Surface Inside Faces Conduction Heat Gain Rate",
                                 Constant::Units::W,
                                 state.dataHeatBal->ZoneOpaqSurfInsFaceCondGainRep(ZoneLoop),
                                 OutputProcessor::TimeStepType::Zone,
                                 OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Zone(ZoneLoop).Name);
             SetupOutputVariable(state,
-                                "Zone Opaque Surface Inside Faces Total Conduction Heat Loss Rate",
+                                "Zone Opaque Surface Inside Faces Conduction Heat Loss Rate",
                                 Constant::Units::W,
                                 state.dataHeatBal->ZoneOpaqSurfInsFaceCondLossRep(ZoneLoop),
                                 OutputProcessor::TimeStepType::Zone,
                                 OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Zone(ZoneLoop).Name);
+            SetupOutputVariable(state,
+                                "Zone Opaque Surface Outside Faces Conduction Rate",
+                                Constant::Units::W,
+                                state.dataHeatBal->ZoneOpaqSurfExtFaceCond(ZoneLoop),
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Zone(ZoneLoop).Name);
+            SetupOutputVariable(state,
+                                "Zone Opaque Surface Outside Faces Conduction Heat Gain Rate",
+                                Constant::Units::W,
+                                state.dataHeatBal->ZoneOpaqSurfExtFaceCondGainRep(ZoneLoop),
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Zone(ZoneLoop).Name);
+            SetupOutputVariable(state,
+                                "Zone Opaque Surface Outside Faces Conduction Heat Loss Rate",
+                                Constant::Units::W,
+                                state.dataHeatBal->ZoneOpaqSurfExtFaceCondLossRep(ZoneLoop),
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Zone(ZoneLoop).Name);
             // Energy variables
             SetupOutputVariable(state,
-                                "Zone Opaque Surface Inside Faces Total Conduction Heat Gain Energy",
+                                "Zone Opaque Surface Inside Faces Conduction Heat Gain Energy",
                                 Constant::Units::J,
                                 state.dataHeatBal->ZnOpqSurfInsFaceCondGnRepEnrg(ZoneLoop),
                                 OutputProcessor::TimeStepType::Zone,
                                 OutputProcessor::StoreType::Sum,
                                 state.dataHeatBal->Zone(ZoneLoop).Name);
             SetupOutputVariable(state,
-                                "Zone Opaque Surface Inside Faces Total Conduction Heat Loss Energy",
+                                "Zone Opaque Surface Inside Faces Conduction Heat Loss Energy",
                                 Constant::Units::J,
                                 state.dataHeatBal->ZnOpqSurfInsFaceCondLsRepEnrg(ZoneLoop),
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Sum,
+                                state.dataHeatBal->Zone(ZoneLoop).Name);
+            SetupOutputVariable(state,
+                                "Zone Opaque Surface Outside Faces Conduction Heat Gain Energy",
+                                Constant::Units::J,
+                                state.dataHeatBal->ZnOpqSurfExtFaceCondGnRepEnrg(ZoneLoop),
+                                OutputProcessor::TimeStepType::Zone,
+                                OutputProcessor::StoreType::Sum,
+                                state.dataHeatBal->Zone(ZoneLoop).Name);
+            SetupOutputVariable(state,
+                                "Zone Opaque Surface Outside Faces Conduction Heat Loss Energy",
+                                Constant::Units::J,
+                                state.dataHeatBal->ZnOpqSurfExtFaceCondLsRepEnrg(ZoneLoop),
                                 OutputProcessor::TimeStepType::Zone,
                                 OutputProcessor::StoreType::Sum,
                                 state.dataHeatBal->Zone(ZoneLoop).Name);
@@ -1223,6 +1265,7 @@ void AllocateModuleArrays(EnergyPlusData &state)
                             OutputProcessor::StoreType::Average,
                             surf.Name);
         if (surf.ExtSolar) {
+
             SetupOutputVariable(state,
                                 "Surface Outside Face Sunlit Area",
                                 Constant::Units::m2,
@@ -6641,7 +6684,7 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
 
             if (s_surf->SurfWinWindowModelType(SurfNum) != WindowModel::EQL && ANY_BLIND(ShadeFlag)) {
                 auto const &surfShade = s_surf->surfShades(SurfNum);
-                auto const *matBlind = dynamic_cast<Material::MaterialBlind const *>(s_mat->materials(surfShade.blind.matNum));
+                [[maybe_unused]] auto const *matBlind = dynamic_cast<Material::MaterialBlind const *>(s_mat->materials(surfShade.blind.matNum));
                 assert(matBlind != nullptr);
 
                 int profIdxLo = surfShade.blind.profAngIdxLo;

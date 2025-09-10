@@ -362,7 +362,6 @@ TEST_F(EnergyPlusFixture, Test_CentralHeatPumpSystem_adjustChillerHeaterCondFlow
     state->dataPlantCentralGSHP->Wrapper(1).WrapperComp.allocate(1);
     state->dataPlantCentralGSHP->Wrapper(1).ChillerHeater.allocate(1);
     auto &thisWrap = state->dataPlantCentralGSHP->Wrapper(1);
-    auto &thisCH = thisWrap.ChillerHeater(1);
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
@@ -447,7 +446,6 @@ TEST_F(EnergyPlusFixture, Test_CentralHeatPumpSystem_adjustChillerHeaterEvapFlow
     state->dataPlantCentralGSHP->Wrapper(1).WrapperComp.allocate(1);
     state->dataPlantCentralGSHP->Wrapper(1).ChillerHeater.allocate(1);
     auto &thisWrap = state->dataPlantCentralGSHP->Wrapper(1);
-    auto &thisCH = thisWrap.ChillerHeater(1);
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
@@ -650,7 +648,6 @@ TEST_F(EnergyPlusFixture, Test_CentralHeatPumpSystem_calcPLRAndCyclingRatio)
     state->dataPlantCentralGSHP->Wrapper(1).WrapperComp.allocate(1);
     state->dataPlantCentralGSHP->Wrapper(1).ChillerHeater.allocate(1);
     auto &thisWrap = state->dataPlantCentralGSHP->Wrapper(1);
-    auto &thisCH = thisWrap.ChillerHeater(1);
 
     Real64 availChillerCap;
     Real64 actualPartLoadRatio;
