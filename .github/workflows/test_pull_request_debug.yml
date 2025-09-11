@@ -1,4 +1,4 @@
-name: Debug Build and Test
+name: RelWithDebInfo Build and Test
 
 on:
   pull_request:
@@ -31,7 +31,8 @@ jobs:
 
     - name: Install coverage tools
       shell: bash
-      run: sudo apt-get update && sudo apt-get install lcov gcovr
+      run: |
+        pip install git+https://github.com/jmarrec/gcovr.git@1142_coverage
 
     - name: Create Build Directory
       shell: bash
@@ -89,20 +90,59 @@ jobs:
     - name: Prepare Initial Coverage Results
       shell: bash
       working-directory: ./build
-      run: lcov -c -d . -o ./lcov.output --no-external --base-directory ../src/EnergyPlus --ignore-errors source
+      run: |
+        gcovr --config ../gcovr.cfg --gcov-object-directory=.  --json coverage.json
 
-    - name: Clean up Coverage Results
+    - name: Prepare HTML report
       shell: bash
       working-directory: ./build
-      run: lcov -r ./lcov.output `pwd`/\* -o ./lcov.output.filtered --ignore-errors source
+      run: |
+        mkdir html
+        gcovr \
+          --config ../gcovr.cfg --gcov-object-directory=. \
+          --add-tracefile coverage.json \
+          --html html/index.html --html-details \
+          --html-theme=green \
+          --sort=uncovered-percent
 
-    - name: Generate HTML Coverage Package
+    - name: Prepare Markdown report
       shell: bash
       working-directory: ./build
-      run: genhtml ./lcov.output.filtered -o lcov-html --demangle-cpp --function-coverage --synthesize-missing
+      run: |
+        # Coverage thresholds. Default for all is medium: >= 75.0, high: >= 90.0
+        # Lines (current: 74.9%)
+        # medium-threshold-line = 74.8
+        # high-threshold-line = 74.9
+
+        # Functions (current: 89.2%)
+        # medium-threshold = 89.0
+        # high-threshold = 89.2
+
+        # Branches (current: 64.7%)
+        # medium-threshold-branch = 64.6
+        # high-threshold-branch = 64.7
+        gcovr \
+          --config ../gcovr.cfg --gcov-object-directory=. \
+          --add-tracefile coverage.json \
+          --medium-threshold-line=74.8 --high-threshold-line=74.9 \
+          --medium-threshold=89.0 --high-threshold=89.2 \
+          --medium-threshold-branch=64.6 --high-threshold-branch=64.7 \
+          --markdown-summary=summary.md \
+          --markdown=markdown.md \
+          --sort=uncovered-percent
+
+          cat summary.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '<details><summary>Full Coverage Report</summary>' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cat markdown.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
 
     - name: Upload folder as artifact
       uses: actions/upload-artifact@v4
       with:
         name: coverage-results
-        path: ./build/lcov-html
+        path: ./build/html
