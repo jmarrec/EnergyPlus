@@ -227,12 +227,10 @@ void CsvParser::parse_line(std::string_view csv, size_t &index, json &columns)
                 }
 
                 // Determine if we're at the end of the file
+                // if the token isn't end of file, check for  an additional 
+                // 1 character for \n and 2 characters for \r\n
                 bool last_line = false;
-                if (token == Token::FILE_END) {
-                    last_line = true;
-                }
-                // 1 character for \n 2 characters for \r\n
-                else if ((found_index + 1 == csv_size) || (found_index + 2 == csv_size)) {
+                if (token == Token::FILE_END || (found_index + 1 == csv_size) || (found_index + 2 == csv_size)) {
                     last_line = true;
                 }
 
