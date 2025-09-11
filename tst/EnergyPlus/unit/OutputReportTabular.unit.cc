@@ -12895,7 +12895,6 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_DontWarnMonthlyIfOnlyNamedR
 
 TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_ElectricityEndUseColumns)
 {
-    // Test for #11205 - Check for missing columns in monthly electricity end use reports
     std::string const idf_objects = delimited_string({
         "Output:Table:SummaryReports,",
         "  AllMonthly;  !- Report 1 Name",
