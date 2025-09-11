@@ -10,6 +10,7 @@ env:
   Python_REQUIRED_VERSION: 3.12.3  # 3.12.2 not available on Ubuntu 24 GHA
   python-arch: x64
   os: ubuntu-24.04
+  ENABLE_PCH: OFF
 
 jobs:
   build_and_test:
@@ -42,6 +43,48 @@ jobs:
       shell: bash
       run: echo "::add-matcher::./.github/workflows/cpp-problem-matcher.json"
 
+    - name: Restore Cache CCACHE
+      uses: actions/cache/restore@v4
+      id: cacheccache-restore
+      with:
+        path: |
+          ${{ steps.setup-runner.outputs.ccache-dir }}
+        key: ccache-RelWithDebInfo-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ github.head_ref }}-pch=${{ env.ENABLE_PCH }}
+        restore-keys: |
+          ccache-RelWithDebInfo-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-${{ github.head_ref }}
+          ccache-RelWithDebInfo-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
+
+    - name: Did restoring the CCache-cache work?
+      shell: bash
+      run: |
+        begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+        Color_Off='\033[0m'       # Text Reset
+
+        # Regular Colors
+        Red='\033[0;31m'
+        Green='\033[0;32m'
+        BrightYellow='\033[93m'
+
+        if [ "${{ steps.cacheccache-restore.outputs.cache-hit }}" == "true" ]; then
+          echo -e "✅ ${Green}CCache primary key was hit${Color_Off}"
+        else
+          FILES_IN_CACHE=$(ccache --print-stats | grep "^files_in_cache" | awk '{print $2}')
+          if [ "$FILES_IN_CACHE" -gt 0 ]; then
+            echo -e "⚠️  ${BrightYellow}Secondary cache hit${Color_Off}"
+          else
+            echo -e "❌ ${Red}No cache hit${Color_Off}"
+          fi;
+        fi;
+
+        begin_group "Showing existing ccache stats"
+        ccache --show-stats -vv || ccache --show-stats
+        echo "::endgroup::"
+
+        ccache --zero-stats
+        begin_group "Showing CCache config"
+        ccache -p
+        echo "::endgroup::"
+
     - name: Configure and Build
       id: branch_build
       uses: ./.github/actions/configure-and-build
@@ -59,6 +102,18 @@ jobs:
     - name: Remove problem matcher
       shell: bash
       run: echo "::remove-matcher owner=gcc-problem-matcher::"
+
+
+    - name: Save CCache cache
+      if: always() && steps.cacheccache-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          ${{ steps.setup-runner.outputs.ccache-dir }}
+        key: ${{ steps.cacheccache-restore.outputs.cache-primary-key }}
+
+    - name: Setup upterm session
+      uses: owenthereal/action-upterm@v1
 
     - name: Run Tests
       working-directory: ./build
@@ -83,9 +138,6 @@ jobs:
           ctest --rerun-failed -VV
           echo "::endgroup::"
         fi;
-
-#    - name: Setup upterm session
-#      uses: owenthereal/action-upterm@v1
 
     - name: Prepare Initial Coverage Results
       shell: bash
