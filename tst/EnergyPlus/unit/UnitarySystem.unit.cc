@@ -5953,18 +5953,18 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
 
         "Sizing:System,",
         "Heat Pump Sys 1,         !- AirLoop Name",
-        "sensible,                !- Type of Load to Size On",
+        "VentilationRequirement,                !- Type of Load to Size On",
         "autosize,                !- Design Outdoor Air Flow Rate {m3/s}",
-        "0.0,                     !- Central Heating Maximum System Air Flow Ratio",
-        "7.0,                     !- Preheat Design Temperature {C}",
+        "1.0,                     !- Central Heating Maximum System Air Flow Ratio",
+        "27.0,                     !- Preheat Design Temperature {C}",
         "0.008,                   !- Preheat Design Humidity Ratio {kgWater/kgDryAir}",
-        "25.0,                    !- Precool Design Temperature {C}",
+        "32.222,                    !- Precool Design Temperature {C}",
         "0.008,                   !- Precool Design Humidity Ratio {kgWater/kgDryAir}",
-        "25.,                     !- Central Cooling Design Supply Air Temperature {C}",
-        "50.,                     !- Central Heating Design Supply Air Temperature {C}",
+        "32.222,                     !- Central Cooling Design Supply Air Temperature {C}",
+        "12.777,                     !- Central Heating Design Supply Air Temperature {C}",
         "noncoincident,           !- Type of Zone Sum to Use",
-        "no,                      !- 100% Outdoor Air in Cooling",
-        "no,                      !- 100% Outdoor Air in Heating",
+        "yes,                      !- 100% Outdoor Air in Cooling",
+        "yes,                      !- 100% Outdoor Air in Heating",
         "0.008,                   !- Central Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}",
         "0.008,                   !- Central Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}",
         "DesignDay,               !- Cooling Supply Air Flow Rate Method",
@@ -5978,17 +5978,17 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
         ",                        !- Heating Fraction of Autosized Heating Supply Air Flow Rate",
         ",                        !- Heating Fraction of Autosized Cooling Supply Air Flow Rate",
         ",                        !- Heating Supply Air Flow Rate Per Unit Heating Capacity {m3/s-W}",
-        ",                        !- System Outdoor Air Method",
-        "1.0,                     !- Zone Maximum Outdoor Air Fraction {dimensionless}",
-        "CoolingDesignCapacity,   !- Cooling Design Capacity Method",
-        "autosize,                !- Cooling Design Capacity {W}",
+        "ZoneSum,                 !- System Outdoor Air Method",
+        ",                        !- Zone Maximum Outdoor Air Fraction {dimensionless}",
+        ",                        !- Cooling Design Capacity Method",
+        ",                        !- Cooling Design Capacity {W}",
         ",                        !- Cooling Design Capacity Per Floor Area {W/m2}",
         ",                        !- Fraction of Autosized Cooling Design Capacity",
-        "HeatingDesignCapacity,   !- Heating Design Capacity Method",
-        "autosize,                !- Heating Design Capacity {W}",
+        ",                        !- Heating Design Capacity Method",
+        ",                        !- Heating Design Capacity {W}",
         ",                        !- Heating Design Capacity Per Floor Area {W/m2}",
         ",                        !- Fraction of Autosized Heating Design Capacity",
-        "VAV;                     !- Central Cooling Capacity Control Method",
+        ";                        !- Central Cooling Capacity Control Method",
 
         "Curve:Cubic,",
         "HPACHeatCapFT,           !- Name",
@@ -6767,7 +6767,7 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
     Real64 constexpr SpeedRatio{0.0};
     int constexpr SpeedCal{1};
     VariableSpeedCoils::InitVarSpeedCoil(*state, DXCoilNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
-    EXPECT_TRUE(compare_err_stream_substring("entering air temperature is less than design outlet air temperature", true));
+    EXPECT_TRUE(compare_err_stream_substring("This will yield negative coil capacity sizing", true));
 }
 
 TEST_F(EnergyPlusFixture, UnitarySystemModel_SetOnOffMassFlowRateTest)

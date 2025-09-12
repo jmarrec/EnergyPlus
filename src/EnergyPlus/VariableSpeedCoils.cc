@@ -4749,17 +4749,17 @@ namespace VariableSpeedCoils {
                         TotCapTempModFac =
                             Curve::CurveValue(state, varSpeedCoil.MSCCapFTemp(varSpeedCoil.NormSpedLevel), MixWetBulb, RatedSourceTempCool);
 
-                        if (MixTemp < SupTemp) {
-                            ShowSevereError(
-                                state,
-                                "On design day, cooling coil entering air temperature is less than design outlet air temperature. This will "
-                                "yield negative coil capacity sizing.");
-                            ShowContinueError(state, "Cooling capacity is set to zero during sizing; simulation continues.");
-                        }
                         if (MixEnth > SupEnth) {
                             CoolCapAtPeak = (rhoair * VolFlowRate * (MixEnth - SupEnth)) + FanCoolLoad;
                         } else {
                             CoolCapAtPeak = (rhoair * VolFlowRate * (48000.0 - SupEnth)) + FanCoolLoad;
+                        }
+                        if ((CoolCapAtPeak < 0) && (MixTemp < SupTemp)) {
+                            ShowWarningError(
+                                state,
+                                format("On design day, cooling coil entering air temperature {:.2R} is less than design supply air temperature {:.2R}. This will "
+                                "yield negative coil capacity sizing for {}.", MixTemp, SupTemp, varSpeedCoil.Name));
+                            ShowContinueError(state, "Cooling capacity is set to zero during sizing; simulation continues.");
                         }
                         CoolCapAtPeak = max(0.0, CoolCapAtPeak);
                         if (TotCapTempModFac > 0.0) {
