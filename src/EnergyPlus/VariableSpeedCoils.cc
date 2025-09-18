@@ -4757,8 +4757,8 @@ namespace VariableSpeedCoils {
                         if ((CoolCapAtPeak < 0) && (MixTemp < SupTemp)) {
                             ShowWarningError(
                                 state,
-                                format("On design day, cooling coil entering air temperature {:.2R} is less than design supply air temperature {:.2R}. This will "
-                                "yield negative coil capacity sizing for {}.", MixTemp, SupTemp, varSpeedCoil.Name));
+                                format("On design day {}, cooling coil entering air temperature {:.2R} is less than design supply air temperature {:.2R}. This will "
+                                "yield negative coil capacity sizing for {}.", state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).CoolDesDay, MixTemp, SupTemp, varSpeedCoil.Name));
                             ShowContinueError(state, "Cooling capacity is set to zero during sizing; simulation continues.");
                         }
                         CoolCapAtPeak = max(0.0, CoolCapAtPeak);
