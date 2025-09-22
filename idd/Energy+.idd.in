@@ -63225,7 +63225,7 @@ HeatExchanger:Desiccant:BalancedFlow,
       \type choice
       \key Yes
       \key No
-      \default No
+      \default Yes
       \note Yes means that the heat exchanger will be locked out (off)
       \note when the economizer is operating or high humidity control is active
 

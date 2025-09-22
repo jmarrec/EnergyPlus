@@ -117,10 +117,6 @@ namespace DataSizing {
         Num
     };
 
-    // parameters for sizing (keep this for now to avoid plant sizing output changes)
-    constexpr int NonCoincident(1);
-    constexpr int Coincident(2);
-
     // parameters for zone and system sizing concurrence method
     enum class SizingConcurrence
     {
@@ -131,6 +127,7 @@ namespace DataSizing {
     };
 
     constexpr std::array<std::string_view, static_cast<int>(SizingConcurrence::Num)> SizingConcurrenceNamesUC{"NONCOINCIDENT", "COINCIDENT"};
+    constexpr std::array<std::string_view, static_cast<int>(SizingConcurrence::Num)> SizingConcurrenceNames{"NonCoincident", "Coincident"};
 
     // parameters for coil sizing concurrence method
     enum class CoilSizingConcurrence
@@ -1038,9 +1035,10 @@ namespace DataSizing {
         TypeOfPlantLoop LoopType = TypeOfPlantLoop::Invalid; // type of loop: 1=heating, 2=cooling, 3=condenser
         Real64 ExitTemp = 0.0;                               // loop design exit (supply) temperature [C]
         Real64 DeltaT = 0.0;                                 // loop design temperature drop (or rise) [DelK]
-        int ConcurrenceOption = 0;                           // sizing option for coincident or noncoincident
-        int NumTimeStepsInAvg = 0;                           // number of zone timesteps in the averaging window for coincident plant flow
-        int SizingFactorOption = 0;                          // option for what sizing factor to apply
+        DataSizing::SizingConcurrence ConcurrenceOption =
+            DataSizing::SizingConcurrence::NonCoincident; // sizing option for coincident or noncoincident (default)
+        int NumTimeStepsInAvg = 1;                        // number of zone timesteps in the averaging window for coincident plant flow
+        int SizingFactorOption = 0;                       // option for what sizing factor to apply
         // Calculated
         Real64 DesVolFlowRate = 0.0; // loop design flow rate in m3/s
         bool VolFlowSizingDone = 0;  // flag to indicate when this loop has finished sizing flow rate

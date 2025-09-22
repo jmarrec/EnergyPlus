@@ -101,6 +101,7 @@
 #include <EnergyPlus/ElectricPowerServiceManager.hh>
 #include <EnergyPlus/EvaporativeCoolers.hh>
 #include <EnergyPlus/EvaporativeFluidCoolers.hh>
+#include <EnergyPlus/Fans.hh>
 #include <EnergyPlus/FileSystem.hh>
 #include <EnergyPlus/FluidCoolers.hh>
 #include <EnergyPlus/General.hh>
@@ -6608,6 +6609,16 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
             PreDefTableEntry(
                 state, state.dataOutRptPredefined->pdchOaAvFctEMS, thisPrimaryAirSys.Name, avgFlowRate(iSys, MixedAir::OALimitFactor::EMS), 4);
         }
+
+        // System Summary Fan Operation
+        PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanOpOccHrs, thisPrimaryAirSys.Name, thisSysPreDefRep.TimeOccupiedTotal);
+        PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanOpOccCont, thisPrimaryAirSys.Name, thisSysPreDefRep.TimeFanContTotalOcc);
+        PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanOpOccCyc, thisPrimaryAirSys.Name, thisSysPreDefRep.TimeFanCycTotalOcc);
+        PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanOpOccOff, thisPrimaryAirSys.Name, thisSysPreDefRep.TimeFanOffTotalOcc);
+        PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanOpUnoccHrs, thisPrimaryAirSys.Name, thisSysPreDefRep.TimeUnoccupiedTotal);
+        PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanOpUnoccCont, thisPrimaryAirSys.Name, thisSysPreDefRep.TimeFanContTotalUnocc);
+        PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanOpUnoccCyc, thisPrimaryAirSys.Name, thisSysPreDefRep.TimeFanCycTotalUnocc);
+        PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanOpUnoccOff, thisPrimaryAirSys.Name, thisSysPreDefRep.TimeFanOffTotalUnocc);
     }
     // add total rows for outdoor air details
     OutputReportPredefined::PreDefTableEntry(
@@ -6930,6 +6941,47 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
     // fill the LEED setpoint table
     ZoneTempPredictorCorrector::FillPredefinedTableOnThermostatSetpoints(state);
     ZoneTempPredictorCorrector::FillPredefinedTableOnThermostatSchedules(state);
+
+    // Fan Operating Points
+    constexpr std::array<Real64, 10> flowFrac = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9};
+    bool const saveNightVentOn = state.dataHVACGlobal->NightVentOn;
+    bool const saveTurnFansOn = state.dataHVACGlobal->TurnFansOn;
+    state.dataHVACGlobal->NightVentOn = false;
+    state.dataHVACGlobal->TurnFansOn = true;
+
+    for (auto *fan : state.dataFans->fans) {
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanPowerType, fan->Name, HVAC::fanTypeNames[(int)fan->type]);
+        // Save node data to restore later
+        auto &outletNode = state.dataLoopNodes->Node(fan->outletNodeNum);
+        auto &inletNode = state.dataLoopNodes->Node(fan->inletNodeNum);
+        auto const saveOutletNode = outletNode;
+        auto const saveInletNode = inletNode;
+        // Set some node values so the fan init function works as expected
+        outletNode.MassFlowRateMax = inletNode.MassFlowRateMaxAvail = fan->maxAirMassFlowRate;
+        outletNode.MassFlowRateMin = inletNode.MassFlowRateMinAvail = 0.0;
+        inletNode.MassFlowRate = fan->maxAirMassFlowRate;
+        fan->simulate(state, false);
+        Real64 const fullLoadPower = fan->totalPower;
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanPower10, fan->Name, 1.0);
+
+        int columnIndex = state.dataOutRptPredefined->pdchFanPower00;
+        for (Real64 frac : flowFrac) {
+            Real64 fanPowerFrac = 0.0;
+            if (fullLoadPower > 0.0) {
+                inletNode.MassFlowRate = frac * fan->maxAirMassFlowRate;
+                fan->simulate(state, false);
+                fanPowerFrac = fan->totalPower / fullLoadPower;
+            }
+            PreDefTableEntry(state, columnIndex, fan->Name, fanPowerFrac);
+            ++columnIndex;
+        }
+        // Restore Nodes
+        outletNode = saveOutletNode;
+        inletNode = saveInletNode;
+    }
+    // Restore flags
+    state.dataHVACGlobal->NightVentOn = saveNightVentOn;
+    state.dataHVACGlobal->TurnFansOn = saveTurnFansOn;
 }
 
 void WriteMonthlyTables(EnergyPlusData &state)
@@ -13961,7 +14013,6 @@ void WriteComponentSizing(EnergyPlusData &state)
     //       DATE WRITTEN   July 2007
     //       MODIFIED       January 2010, Kyle Benne
     //                      Added SQLite output
-    //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
     //   Write out tables based on component sizing data originally
@@ -14144,26 +14195,30 @@ void WriteComponentSizing(EnergyPlusData &state)
                         }
                     }
                     if ((foundDesc >= 1) && (foundObj >= 1)) {
-                        state.dataOutRptTab->curValueSIWCS = state.dataOutRptPredefined->CompSizeTableEntry(iTableEntry).valField;
-                        if (unitsStyle_cur == UnitsStyle::InchPound) {
-                            if (colUnitConv(foundDesc) != 0) {
-                                state.dataOutRptTab->curValueWCS = ConvertIP(state, colUnitConv(foundDesc), state.dataOutRptTab->curValueSIWCS);
+                        if (!state.dataOutRptPredefined->CompSizeTableEntry(iTableEntry).strField.empty()) {
+                            tableBody(foundDesc, foundObj) = state.dataOutRptPredefined->CompSizeTableEntry(iTableEntry).strField;
+                        } else {
+                            state.dataOutRptTab->curValueSIWCS = state.dataOutRptPredefined->CompSizeTableEntry(iTableEntry).valField;
+                            if (unitsStyle_cur == UnitsStyle::InchPound) {
+                                if (colUnitConv(foundDesc) != 0) {
+                                    state.dataOutRptTab->curValueWCS = ConvertIP(state, colUnitConv(foundDesc), state.dataOutRptTab->curValueSIWCS);
+                                } else {
+                                    state.dataOutRptTab->curValueWCS = state.dataOutRptTab->curValueSIWCS;
+                                }
+                            } else if (unitsStyle_cur == UnitsStyle::InchPoundExceptElectricity) {
+                                if (colUnitConv(foundDesc) != 0) {
+                                    state.dataOutRptTab->curValueWCS = ConvertIP(state, colUnitConv(foundDesc), state.dataOutRptTab->curValueSIWCS);
+                                } else {
+                                    state.dataOutRptTab->curValueWCS = state.dataOutRptTab->curValueSIWCS;
+                                }
                             } else {
                                 state.dataOutRptTab->curValueWCS = state.dataOutRptTab->curValueSIWCS;
                             }
-                        } else if (unitsStyle_cur == UnitsStyle::InchPoundExceptElectricity) {
-                            if (colUnitConv(foundDesc) != 0) {
-                                state.dataOutRptTab->curValueWCS = ConvertIP(state, colUnitConv(foundDesc), state.dataOutRptTab->curValueSIWCS);
+                            if (std::abs(state.dataOutRptTab->curValueWCS) >= 1.0) {
+                                tableBody(foundDesc, foundObj) = RealToStr(state.dataOutRptTab->curValueWCS, 2);
                             } else {
-                                state.dataOutRptTab->curValueWCS = state.dataOutRptTab->curValueSIWCS;
+                                tableBody(foundDesc, foundObj) = RealToStr(state.dataOutRptTab->curValueWCS, 6);
                             }
-                        } else {
-                            state.dataOutRptTab->curValueWCS = state.dataOutRptTab->curValueSIWCS;
-                        }
-                        if (std::abs(state.dataOutRptTab->curValueWCS) >= 1.0) {
-                            tableBody(foundDesc, foundObj) = RealToStr(state.dataOutRptTab->curValueWCS, 2);
-                        } else {
-                            tableBody(foundDesc, foundObj) = RealToStr(state.dataOutRptTab->curValueWCS, 6);
                         }
                         state.dataOutRptPredefined->CompSizeTableEntry(iTableEntry).written = true;
                     }

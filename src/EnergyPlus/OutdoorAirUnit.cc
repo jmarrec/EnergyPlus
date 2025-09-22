@@ -78,6 +78,7 @@
 #include <EnergyPlus/OutAirNodeManager.hh>
 #include <EnergyPlus/OutdoorAirUnit.hh>
 #include <EnergyPlus/OutputProcessor.hh>
+#include <EnergyPlus/OutputReportPredefined.hh>
 #include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/ScheduleManager.hh>
@@ -799,6 +800,11 @@ namespace OutdoorAirUnit {
                             //          thisOutAirUnit%OAEquip(CompNum)%Type= CompType::HeatXchngr
 
                             // Desiccant Dehumidifier
+                            OutputReportPredefined::PreDefTableEntry(state,
+                                                                     state.dataOutRptPredefined->pdchAirHRZoneHVACName,
+                                                                     thisOutAirUnit.OAEquip(CompNum).ComponentName,
+                                                                     thisOutAirUnit.Name);
+
                             break;
                         }
                         case CompType::Desiccant: {

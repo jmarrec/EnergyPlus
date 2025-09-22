@@ -3509,22 +3509,8 @@ void GetSystemSizingInput(EnergyPlusData &state)
         SysSizInput(SysSizIndex).CoolCapControl = static_cast<CapacityControl>(
             getEnumValue(CapacityControlNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(iCoolCapControlAlphaNum))));
 
-        {
-            std::string const &sizingOption = state.dataIPShortCut->cAlphaArgs(iSizingOptionAlphaNum);
-            if (sizingOption == "COINCIDENT") {
-                SysSizInput(SysSizIndex).SizingOption = DataSizing::SizingConcurrence::Coincident;
-            } else if (sizingOption == "NONCOINCIDENT") {
-                SysSizInput(SysSizIndex).SizingOption = DataSizing::SizingConcurrence::NonCoincident;
-            } else {
-                ShowSevereError(state, format("{}=\"{}\", invalid data.", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(iNameAlphaNum)));
-                ShowContinueError(state,
-                                  format("... incorrect {}=\"{}\".",
-                                         state.dataIPShortCut->cAlphaFieldNames(iSizingOptionAlphaNum),
-                                         state.dataIPShortCut->cAlphaArgs(iSizingOptionAlphaNum)));
-                ShowContinueError(state, "... valid values are Coincident or NonCoincident.");
-                ErrorsFound = true;
-            }
-        }
+        SysSizInput(SysSizIndex).SizingOption = static_cast<SizingConcurrence>(
+            getEnumValue(SizingConcurrenceNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(iSizingOptionAlphaNum))));
 
         BooleanSwitch is100PctOACooling = getYesNoValue(state.dataIPShortCut->cAlphaArgs(i100PercentOACoolingAlphaNum));
         SysSizInput(SysSizIndex).CoolOAOption = (is100PctOACooling == BooleanSwitch::Yes) ? OAControl::AllOA : OAControl::MinOA;
@@ -4014,10 +4000,6 @@ void GetPlantSizingInput(EnergyPlusData &state)
             e.LoopType = DataSizing::TypeOfPlantLoop::Invalid;
             e.DesVolFlowRate = 0.0;
         }
-        for (int i = 1; i <= state.dataSize->NumPltSizInput; ++i) {
-            state.dataSize->PlantSizData(i).ConcurrenceOption = NonCoincident;
-            state.dataSize->PlantSizData(i).NumTimeStepsInAvg = 1;
-        }
     }
 
     for (PltSizIndex = 1; PltSizIndex <= state.dataSize->NumPltSizInput; ++PltSizIndex) {
@@ -4051,20 +4033,8 @@ void GetPlantSizingInput(EnergyPlusData &state)
         assert(state.dataSize->PlantSizData(PltSizIndex).LoopType != TypeOfPlantLoop::Invalid);
 
         if (NumAlphas > 2) {
-            {
-                std::string const &concurrenceOption = state.dataIPShortCut->cAlphaArgs(3);
-                if (concurrenceOption == "NONCOINCIDENT") {
-                    state.dataSize->PlantSizData(PltSizIndex).ConcurrenceOption = NonCoincident;
-                } else if (concurrenceOption == "COINCIDENT") {
-                    state.dataSize->PlantSizData(PltSizIndex).ConcurrenceOption = Coincident;
-                } else {
-                    ShowSevereError(state, format("{}=\"{}\", invalid data.", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                    ShowContinueError(
-                        state, format("...incorrect {}=\"{}\".", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
-                    ShowContinueError(state, R"(...Valid values are "NonCoincident" or "Coincident".)");
-                    ErrorsFound = true;
-                }
-            }
+            state.dataSize->PlantSizData(PltSizIndex).ConcurrenceOption =
+                static_cast<SizingConcurrence>(getEnumValue(SizingConcurrenceNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(3))));
         }
         if (NumAlphas > 3) {
             {
