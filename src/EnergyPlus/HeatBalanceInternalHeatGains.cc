@@ -76,6 +76,12 @@ void SetupZoneInternalGain(EnergyPlusData &state,
         if (state.dataHeatBal->Zone(ZoneNum).numSpaces > 1) {
             gainFrac = state.dataHeatBal->space(spaceNum).FloorArea / state.dataHeatBal->Zone(ZoneNum).FloorArea;
         }
+        if (std::find(AdjustTankLossMultipliers.begin(), AdjustTankLossMultipliers.end(), IntGainCompType) != AdjustTankLossMultipliers.end()) {
+            int multiplier = state.dataHeatBal->Zone(ZoneNum).Multiplier * state.dataHeatBal->Zone(ZoneNum).ListMultiplier;
+            if (multiplier > 1) {
+                gainFrac /= multiplier;
+            }
+        }
         SetupSpaceInternalGain(state,
                                spaceNum,
                                gainFrac,

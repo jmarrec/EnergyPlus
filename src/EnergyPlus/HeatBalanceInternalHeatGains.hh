@@ -83,6 +83,12 @@ void SetupSpaceInternalGain(EnergyPlusData &state,
                             int RetNodeNum = 0 // for return air heat gains
 );
 
+static constexpr std::array<DataHeatBalance::IntGainType, 4> AdjustTankLossMultipliers = {
+    DataHeatBalance::IntGainType::WaterHeaterMixed,
+    DataHeatBalance::IntGainType::WaterHeaterStratified,
+    DataHeatBalance::IntGainType::ThermalStorageChilledWaterMixed,
+    DataHeatBalance::IntGainType::ThermalStorageChilledWaterStratified};
+
 struct HeatBalInternalHeatGainsData : BaseGlobalStruct
 {
 
