@@ -6273,10 +6273,10 @@ TEST_F(EnergyPlusFixture, MixedTank_PVT_Per_VolumeSizing_PerSolarCollectorArea)
 
 TEST_F(EnergyPlusFixture, WaterThermalTankData_AdjustTankLossMultipliers)
 {
-    int ZONES = 1;
-    int SPACES = 5;
-    int FLOOR_AREA = 1000;
-    int MULTIPLIER = 10;
+    constexpr int ZONES = 1;
+    constexpr int SPACES = 5;
+    constexpr int FLOOR_AREA = 1000;
+    constexpr int MULTIPLIER = 10;
 
     state->dataHeatBal->Zone.allocate(ZONES);
     state->dataHeatBal->Zone(ZONES).numSpaces = SPACES;
