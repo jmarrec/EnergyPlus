@@ -578,14 +578,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                 Constant::Units::m3_s,
                                 state.dataHeatBal->ZnAirRpt(thisZoneAirBalance.ZonePtr).OABalanceVdotCurDensity,
                                 OutputProcessor::TimeStepType::System,
-                                OutputProcessor::StoreType::Sum,
+                                OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Zone(thisZoneAirBalance.ZonePtr).Name);
             SetupOutputVariable(state,
                                 "Zone Combined Outdoor Air Standard Density Volume Flow Rate",
                                 Constant::Units::m3_s,
                                 state.dataHeatBal->ZnAirRpt(thisZoneAirBalance.ZonePtr).OABalanceVdotStdDensity,
                                 OutputProcessor::TimeStepType::System,
-                                OutputProcessor::StoreType::Sum,
+                                OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Zone(thisZoneAirBalance.ZonePtr).Name);
             SetupOutputVariable(state,
                                 "Zone Combined Outdoor Air Current Density Volume",

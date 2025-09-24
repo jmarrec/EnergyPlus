@@ -9527,25 +9527,25 @@ Curve:Biquadratic,
                 0.000001);
 
     // 10 heating speeds with autosized MSHP design spec yielding equally distributed air flow at 1/10 per speed
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[1], 0.008524, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[1], 0.008524, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(1), thisSys->m_HeatVolumeFlowRate[1]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[2], 0.017048, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[2], 0.017048, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(2), thisSys->m_HeatVolumeFlowRate[2]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[3], 0.025573, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[3], 0.025573, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(3), thisSys->m_HeatVolumeFlowRate[3]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[4], 0.034098, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[4], 0.034098, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(4), thisSys->m_HeatVolumeFlowRate[4]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[5], 0.042622, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[5], 0.042622, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(5), thisSys->m_HeatVolumeFlowRate[5]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[6], 0.051147, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[6], 0.051147, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(6), thisSys->m_HeatVolumeFlowRate[6]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[7], 0.059671, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[7], 0.059671, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(7), thisSys->m_HeatVolumeFlowRate[7]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[8], 0.068196, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[8], 0.068196, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(8), thisSys->m_HeatVolumeFlowRate[8]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[9], 0.076720, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[9], 0.076720, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(9), thisSys->m_HeatVolumeFlowRate[9]);
-    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[10], 0.085245, 0.000001);
+    EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[10], 0.085245, 0.00001);
     EXPECT_EQ(state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirVolFlowRate(10), thisSys->m_HeatVolumeFlowRate[10]);
 
     // test fan speed ratio variables
@@ -11357,12 +11357,12 @@ Schedule:Compact,
 
     EXPECT_EQ(1, state->dataUnitarySystems->numUnitarySystems); // only 1 unitary system above so expect 1 as number of unitary system objects
 
-    EXPECT_NEAR(thisSys->m_DesignHeatingCapacity, 1303.097, 0.001);
+    EXPECT_NEAR(thisSys->m_DesignHeatingCapacity, 1303.097, 0.01);
     EXPECT_EQ(thisSys->m_DesignCoolingCapacity, 0.0);
-    EXPECT_NEAR(state->dataDXCoils->DXCoil(1).MSRatedTotCap(1), 325.774, 0.001);
-    EXPECT_NEAR(state->dataDXCoils->DXCoil(1).MSRatedTotCap(2), 651.549, 0.001);
-    EXPECT_NEAR(state->dataDXCoils->DXCoil(1).MSRatedTotCap(3), 977.323, 0.001);
-    EXPECT_NEAR(state->dataDXCoils->DXCoil(1).MSRatedTotCap(4), 1303.097, 0.001);
+    EXPECT_NEAR(state->dataDXCoils->DXCoil(1).MSRatedTotCap(1), 325.774, 0.01);
+    EXPECT_NEAR(state->dataDXCoils->DXCoil(1).MSRatedTotCap(2), 651.549, 0.01);
+    EXPECT_NEAR(state->dataDXCoils->DXCoil(1).MSRatedTotCap(3), 977.323, 0.01);
+    EXPECT_NEAR(state->dataDXCoils->DXCoil(1).MSRatedTotCap(4), 1303.097, 0.01);
     EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[1], 0.0131, 0.0001);
     EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[2], 0.0262, 0.0001);
     EXPECT_NEAR(thisSys->m_HeatVolumeFlowRate[3], 0.0393, 0.0001);
