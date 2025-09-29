@@ -224,7 +224,7 @@ namespace SimulationManager {
         // read object information early in simulation
         isInputObjectUsed(state);
 
-        BranchInputManager::ManageBranchInput(state); // just gets input and returns.
+        BranchInputManager::ManageBranchInput(state);    // just gets input and returns.
         BranchInputManager::ManageConnectorInput(state); // just gets input and returns.
 
         // Create a new plugin manager which starts up the Python interpreter
