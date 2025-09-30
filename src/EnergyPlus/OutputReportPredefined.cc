@@ -394,6 +394,20 @@ namespace OutputReportPredefined {
         s->pdchDXCoolCoilNetCapSID = newPreDefColumn(state, s->pdstDXCoolCoil2, "Rated Net Cooling Capacity Test D [W]");
         s->pdchDXCoolCoilElecPowerD = newPreDefColumn(state, s->pdstDXCoolCoil2, "Rated Electric Power Test D [W]");
 
+        // ACCA Manual S report
+        s->pdstACCAMS = newPreDefSubTable(state, s->pdrEquip, "Heat Pump ACCA Manual S Report");
+        s->pdchMSHPName = newPreDefColumn(state, s->pdstACCAMS, "Heat Pump Name");
+        s->pdchMSHPType = newPreDefColumn(state, s->pdstACCAMS, "Heat Pump Type");
+        s->pdchMSCoilType = newPreDefColumn(state, s->pdstACCAMS, "Heat Pump Coil Type");
+        s->pdchMSSizMethod = newPreDefColumn(state, s->pdstACCAMS, "Sizing Method");
+        s->pdchMSTotLoad = newPreDefColumn(state, s->pdstACCAMS, "Total Load");
+        s->pdchMSSensLoad = newPreDefColumn(state, s->pdstACCAMS, "Sensible Load");
+        s->pdchMSTotCapacity = newPreDefColumn(state, s->pdstACCAMS, "Total Capacity");
+        s->pdchMSSensCapacity = newPreDefColumn(state, s->pdstACCAMS, "Sensible Capacity");
+        s->pdchMSTotRatio = newPreDefColumn(state, s->pdstACCAMS, "Total Capacity Sizing Factor");
+        s->pdchMSSensRatio = newPreDefColumn(state, s->pdstACCAMS, "Sensible Capacity Sizing Factor");
+        s->pdchMSLatRatio = newPreDefColumn(state, s->pdstACCAMS, "Latent Capacity Sizing Factor");
+
         // Water-to-Air HP report
         s->pdstWAHP = newPreDefSubTable(state, s->pdrEquip, "Water-to-Air Heat Pumps at Rated Temperatures Report");
         s->pdchWAHPType = newPreDefColumn(state, s->pdstWAHP, "Coil Type");
@@ -408,6 +422,7 @@ namespace OutputReportPredefined {
 
         s->pdstDXHeatCoil = newPreDefSubTable(state, s->pdrEquip, "DX Heating Coils");
         s->pdchDXHeatCoilType = newPreDefColumn(state, s->pdstDXHeatCoil, "DX Heating Coil Type");
+        s->pdchDXHeatCoilSizingRatio = newPreDefColumn(state, s->pdstDXHeatCoil, "Heating to Cooling Capacity Sizing Ratio");
         s->pdchDXHeatCoilHighCap = newPreDefColumn(state, s->pdstDXHeatCoil, "High Temperature Heating (net) Rating Capacity [W]");
         s->pdchDXHeatCoilLowCap = newPreDefColumn(state, s->pdstDXHeatCoil, "Low Temperature Heating (net) Rating Capacity [W]");
         s->pdchDXHeatCoilHSPFIP = newPreDefColumn(state, s->pdstDXHeatCoil, "HSPF [Btu/W-h]");
@@ -503,6 +518,51 @@ namespace OutputReportPredefined {
         s->pdchSWHThEff = newPreDefColumn(state, s->pdstSWH, "Thermal Efficiency [W/W]");
         s->pdchSWHRecEff = newPreDefColumn(state, s->pdstSWH, "Recovery Efficiency [W/W]");
         s->pdchSWHEnFac = newPreDefColumn(state, s->pdstSWH, "Energy Factor");
+
+        s->pdchSWHFuelType = newPreDefColumn(state, s->pdstSWH, "Fuel Type");
+        s->pdchSWHSchHt1StptName = newPreDefColumn(state, s->pdstSWH, "Set Point Schedule Name for Heater 1");
+        s->pdchSWHSchHt1Stpt11amWedVal = newPreDefColumn(state, s->pdstSWH, "Set Point at 11am First Wednesday for Heater 1 [C]");
+        s->pdchSWHSchHt1Stpt11amWedCnt = newPreDefColumn(state, s->pdstSWH, "Days with Same 11am Value for Heater 1");
+        s->pdchSWHSchHt1StptMonthUsed = newPreDefColumn(state, s->pdstSWH, "Month Assumed for Heater 1");
+        s->pdchSWHSchHt2StptName = newPreDefColumn(state, s->pdstSWH, "Set Point Schedule Name for Heater 2");
+        s->pdchSWHSchHt2Stpt11amWedVal = newPreDefColumn(state, s->pdstSWH, "Set Point at 11am First Wednesday for Heater 2 [C]");
+        s->pdchSWHSchHt2Stpt11amWedCnt = newPreDefColumn(state, s->pdstSWH, "Days with Same 11am Value for Heater 2");
+        s->pdchSWHSchHt2StptMonthUsed = newPreDefColumn(state, s->pdstSWH, "Month Assumed for Heater 2");
+        s->pdchSWHPkUseFlwRt = newPreDefColumn(state, s->pdstSWH, "Peak Use Water Flow Rate [m3/s]");
+        s->pdchSWHUseSch = newPreDefColumn(state, s->pdstSWH, "Use Flow Rate Fraction Schedule Name");
+        s->pdchSWHAmbZoneNm = newPreDefColumn(state, s->pdstSWH, "Ambient Temperature Zone Name");
+
+        s->pdstWtEq = newPreDefSubTable(state, s->pdrEquip, "Water Use");
+        s->pdchWtEqZone = newPreDefColumn(state, s->pdstWtEq, "Zone");
+        s->pdchWtEqEndUse = newPreDefColumn(state, s->pdstWtEq, "End-Use Subcategory");
+        s->pdchWtEqConnNm = newPreDefColumn(state, s->pdstWtEq, "WaterUse Connection Name");
+        s->pdchWtEqPkFlw = newPreDefColumn(state, s->pdstWtEq, "Peak Water Flow Rate [m3/s]");
+        s->pdchWtEqFlwFractSch = newPreDefColumn(state, s->pdstWtEq, "Peak Flow Multipler Schedule");
+        s->pdchWtEqFlwFractMax = newPreDefColumn(state, s->pdstWtEq, "Peak Flow Multipler Schedule Maximum");
+        s->pdchWtEqTargTempSch = newPreDefColumn(state, s->pdstWtEq, "Target Temperature Schedule");
+        s->pdchWtEqTargTempMax = newPreDefColumn(state, s->pdstWtEq, "Target Temperature  Schedule Maximum [C]");
+        s->pdchWtEqHotTempSch = newPreDefColumn(state, s->pdstWtEq, "Hot Supply Temperature Schedule");
+        s->pdchWtEqHotTempMax = newPreDefColumn(state, s->pdstWtEq, "Hot Supply Temperature  Schedule Maximum [C]");
+        s->pdchWtEqColdTempSch = newPreDefColumn(state, s->pdstWtEq, "Cold Supply Temperature Schedule");
+        s->pdchWtEqColdTempMin = newPreDefColumn(state, s->pdstWtEq, "Cold Supply Temperature  Schedule Minimum [C]");
+        s->pdchWtEqSensFracSch = newPreDefColumn(state, s->pdstWtEq, "Sensible Fraction Schedule");
+        s->pdchWtEqsensFracMax = newPreDefColumn(state, s->pdstWtEq, "Sensible Fraction  Schedule Maximum");
+        s->pdchWtEqLatFracSch = newPreDefColumn(state, s->pdstWtEq, "Latent Fraction Schedule");
+        s->pdchWtEqLatFracMax = newPreDefColumn(state, s->pdstWtEq, "Latent Fraction  Schedule Maximum");
+
+        s->pdstWtCn = newPreDefSubTable(state, s->pdrEquip, "WaterUse Connections");
+        s->pdchWtCnDrnHxType = newPreDefColumn(state, s->pdstWtCn, "Drain Water Heat Exchanger Type");
+        s->pdchWtCnDrnHxDest = newPreDefColumn(state, s->pdstWtCn, "Drain Water Heat Exchanger Destination");
+        s->pdchWtCnDrnHxUA = newPreDefColumn(state, s->pdstWtCn, "Drain Water Heat Exchanger U-Factor Times Area");
+        s->pdchWtCnDrnHxEff = newPreDefColumn(state, s->pdstWtCn, "Average Heat Recovery Effectiveness");
+        s->pdchWtCnHotTempSch = newPreDefColumn(state, s->pdstWtCn, "Hot Water Supply Temperature Schedule ");
+        s->pdchWtCnHotTempMax = newPreDefColumn(state, s->pdstWtCn, "Hot Water Supply Temperature Schedule Maximum [C]");
+        s->pdchWtCnColdTempSch = newPreDefColumn(state, s->pdstWtCn, "Cold Water Supply Temperature Schedule");
+        s->pdchWtCnColdTempMin = newPreDefColumn(state, s->pdstWtCn, "Cold Water Supply Temperature Schedule Minimum [C]");
+        s->pdchWtCnPltLpNm = newPreDefColumn(state, s->pdstWtCn, "PlantLoop Name");
+        s->pdchWtCnBrchNm = newPreDefColumn(state, s->pdstWtCn, "Branch Name");
+        s->pdchWtCnSupTnk = newPreDefColumn(state, s->pdstWtCn, "Supply Water Storage Tank Name");
+        s->pdchWtCnRecTnk = newPreDefColumn(state, s->pdstWtCn, "Reclamation Water Storage Tank Name");
 
         // Std 229 Chillers in Equipment Summary
         s->pdstChiller = newPreDefSubTable(state, s->pdrEquip, "Chillers");
@@ -610,6 +670,53 @@ namespace OutputReportPredefined {
         s->pdchAirHRAirloopName = newPreDefColumn(state, s->pdstAirHR, "Airloop Name");
         s->pdchAirHROASysName = newPreDefColumn(state, s->pdstAirHR, "OA System Name");
         s->pdchAirHROAControllerName = newPreDefColumn(state, s->pdstAirHR, "OA Controller Name");
+
+        // Controls Summary
+
+        s->pdrCtrl = newPreDefReport(state, "ControlSummary", "Ctrl", "Control Summary");
+
+        s->pdstStPtOAR = newPreDefSubTable(state, s->pdrCtrl, "SetpointManager:OutdoorAirReset");
+
+        s->pdchSPMOArStPtNd = newPreDefColumn(state, s->pdstStPtOAR, "Setpoint Nodes");
+        s->pdchSPMOArStPtLp = newPreDefColumn(state, s->pdstStPtOAR, "Setpoint Node PlantLoop Name");
+        s->pdchSPMOArType = newPreDefColumn(state, s->pdstStPtOAR, "Control Type");
+        s->pdchSPMOArStLo1 = newPreDefColumn(state, s->pdstStPtOAR, "Setpoint at Outdoor Low Temperature [C]");
+        s->pdchSPMOArStHi1 = newPreDefColumn(state, s->pdstStPtOAR, "Setpoint at Outdoor High Temperature [C]");
+        s->pdchSPMOArOutLo1 = newPreDefColumn(state, s->pdstStPtOAR, "Outdoor Low Temperature [C]");
+        s->pdchSPMOArOutHi1 = newPreDefColumn(state, s->pdstStPtOAR, "Outdoor High Temperature [C]");
+        s->pdchSPMOArSchNm = newPreDefColumn(state, s->pdstStPtOAR, "Schedule Name");
+        s->pdchSPMOArStLo2 = newPreDefColumn(state, s->pdstStPtOAR, "Setpoint at Outdoor Low Temperature 2 [C]");
+        s->pdchSPMOArStHi2 = newPreDefColumn(state, s->pdstStPtOAR, "Setpoint at Outdoor High Temperature 2 [C]");
+        s->pdchSPMOArOutLo2 = newPreDefColumn(state, s->pdstStPtOAR, "Outdoor Low Temperature 2 [C]");
+        s->pdchSPMOArOutHi2 = newPreDefColumn(state, s->pdstStPtOAR, "Outdoor High Temperature 2 [C]");
+
+        s->pdstStPtRetT = newPreDefSubTable(state, s->pdrCtrl, "SetpointManager:ReturnTemperature");
+        s->pdchSPMRetType = newPreDefColumn(state, s->pdstStPtRetT, "Type"); // chilled or hot water
+        s->pdchSPMRetOutNd = newPreDefColumn(state, s->pdstStPtRetT, "Plant Loop Supply Outlet Node");
+        s->pdchSPMRetInNd = newPreDefColumn(state, s->pdstStPtRetT, "Plant Loop Supply Inlet Node");
+        s->pdchSPMRetPltLp = newPreDefColumn(state, s->pdstStPtRetT, "PlantLoop Name");
+        s->pdchSPMRetMinT = newPreDefColumn(state, s->pdstStPtRetT, "Minimum Supply Temperature Setpoint [C]");
+        s->pdchSPMRetMaxT = newPreDefColumn(state, s->pdstStPtRetT, "Maximum Supply Temperature Setpoint [C]");
+        s->pdchSPMRetRetType =
+            newPreDefColumn(state, s->pdstStPtRetT, "Return Temperature Setpoint Input Type"); // Constant, Scheduled or ReturnTemperatureSetpoint
+        s->pdchSPMRetRetT = newPreDefColumn(state, s->pdstStPtRetT, "Return Temperature Setpoint [C]");
+        s->pdchSPMRetRetSch = newPreDefColumn(state, s->pdstStPtRetT, "Return Temperature Setpoint Schedule Name");
+
+        s->pdstAvlMgrSch = newPreDefSubTable(state, s->pdrCtrl, "AvailabilityManager:Scheduled");
+        s->pdchAvlMgrSchAvailNm = newPreDefColumn(state, s->pdstAvlMgrSch, "AvailabilityManager Name");
+        s->pdchAvlMgrSchType = newPreDefColumn(state, s->pdstAvlMgrSch, "Type");
+        s->pdchAvlMgrSchSchNm = newPreDefColumn(state, s->pdstAvlMgrSch, "Schedule Name");
+
+        s->pdstPLtEqOpLb = newPreDefSubTable(state, s->pdrCtrl, "PlantEquipmentOperation Load Based");
+        s->pdchPLtEqOpLbPltLpNm = newPreDefColumn(state, s->pdstPLtEqOpLb, "Plant Loop Name");
+        s->pdchPLtEqOpLbNm = newPreDefColumn(state, s->pdstPLtEqOpLb, "Name");
+        s->pdchPLtEqOpLbType = newPreDefColumn(state, s->pdstPLtEqOpLb, "Type");
+        s->pdchPLtEqOpLbSchNm = newPreDefColumn(state, s->pdstPLtEqOpLb, "Schedule Name");
+        s->pdchPLtEqOpLbIndex = newPreDefColumn(state, s->pdstPLtEqOpLb, "Index");
+        s->pdchPLtEqOpLbLow = newPreDefColumn(state, s->pdstPLtEqOpLb, "Lower Limit [W]");
+        s->pdchPLtEqOpLbUp = newPreDefColumn(state, s->pdstPLtEqOpLb, "Upper Limit [W]");
+        s->pdchPLtEqOpLbEqLstNm = newPreDefColumn(state, s->pdstPLtEqOpLb, "Equipment List Name");
+        s->pdchPLtEqOpLbEquip = newPreDefColumn(state, s->pdstPLtEqOpLb, "Equipment");
 
         // Sizing Report
 
@@ -938,6 +1045,7 @@ namespace OutputReportPredefined {
         s->pdchEcoRetEnth = newPreDefColumn(state, s->pdstEconomizer, "Return Air Enthalpy Limit");
         s->pdchEcoOATempLim = newPreDefColumn(state, s->pdstEconomizer, "Outdoor Air Temperature Limit [C]");
         s->pdchEcoOAEnthLim = newPreDefColumn(state, s->pdstEconomizer, "Outdoor Air Enthalpy Limit [C]");
+        s->pdchEcoOAsysNm = newPreDefColumn(state, s->pdstEconomizer, "AirLoopHVAC:OutdoorAirSystem Name");
 
         s->pdstDemCntlVent = newPreDefSubTable(state, s->pdrSystem, "Demand Controlled Ventilation using Controller:MechanicalVentilation");
         s->pdchDCVventMechName = newPreDefColumn(state, s->pdstDemCntlVent, "Controller:MechanicalVentilation Name");
@@ -2147,7 +2255,6 @@ namespace OutputReportPredefined {
         newPreDefColumn = state.dataOutRptPredefined->numColumnTag;
         return newPreDefColumn;
     }
-
 } // namespace OutputReportPredefined
 
 } // namespace EnergyPlus

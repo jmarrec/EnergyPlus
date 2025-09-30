@@ -244,6 +244,8 @@ set(SRC
     DisplayRoutines.hh
     DualDuct.cc
     DualDuct.hh
+    DuctLoss.cc
+    DuctLoss.hh
     EMSManager.cc
     EMSManager.hh
     EPVector.hh

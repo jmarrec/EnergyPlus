@@ -1327,7 +1327,7 @@ namespace DataHeatBalance {
         Real64 CarbonDioxideGainRate = 0.0;           // current timestep value of carbon dioxide gain rate for device
         Real64 *PtrGenericContamGainRate = nullptr;   // POINTER to value of generic contaminant gain rate for device
         Real64 GenericContamGainRate = 0.0;           // current timestep value of generic contaminant gain rate for device
-        int ReturnAirNodeNum = 0;                     // return air node number for retrun air convection heat gain
+        int ReturnAirNodeNum = 0;                     // return air node number for return air convection heat gain
     };
 
     struct SpaceZoneSimData // Calculated data by Space or Zone during each time step/hour

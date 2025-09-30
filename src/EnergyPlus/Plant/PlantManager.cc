@@ -95,6 +95,7 @@
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
 #include <EnergyPlus/OutputReportPredefined.hh>
+#include <EnergyPlus/OutputReportTabular.hh>
 #include <EnergyPlus/OutsideEnergySources.hh>
 #include <EnergyPlus/PhotovoltaicThermalCollectors.hh>
 #include <EnergyPlus/PipeHeatTransfer.hh>
@@ -2237,6 +2238,53 @@ void fillPlantToplogyComponentRow2(EnergyPlusData &state,
     OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantCompType2, format("{}", rowCounter), compType);
     OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantCompName2, format("{}", rowCounter), compName);
     ++rowCounter;
+}
+
+void FillPlantEquipmentOperationLoad(EnergyPlusData &state)
+{
+    // J. Glazer - August 2025
+
+    // s->pdstPLtEqOpLb = newPreDefSubTable(state, s->pdrCtrl, "PlantEquipmentOperation Load Based");
+    // s->pdchPLtEqOpLbPltLpNm = newPreDefColumn(state, s->pdstPLtEqOpLb, "Plant Loop Name");
+    // s->pdchPLtEqOpLbNm = newPreDefColumn(state, s->pdstPLtEqOpLb, "Name");
+    // s->pdchPLtEqOpLbType = newPreDefColumn(state, s->pdstPLtEqOpLb, "Type");
+    // s->pdchPLtEqOpLbIndex = newPreDefColumn(state, s->pdstPLtEqOpLb, "Index");
+    // s->pdchPLtEqOpLbLow = newPreDefColumn(state, s->pdstPLtEqOpLb, "Lower Limit [W]");
+    // s->pdchPLtEqOpLbUp = newPreDefColumn(state, s->pdstPLtEqOpLb, "Upper Limit [W]");
+    // s->pdchPLtEqOpLbEqLstNm = newPreDefColumn(state, s->pdstPLtEqOpLb, "Equipment List Name");
+    // s->pdchPLtEqOpLbEquip = newPreDefColumn(state, s->pdstPLtEqOpLb, "Equipment");
+
+    auto &orp = state.dataOutRptPredefined;
+    int row = 0;
+    for (int iLoop = 1; iLoop <= state.dataPlnt->TotNumLoops; ++iLoop) {
+        DataPlant::PlantLoopData &thisLoop = state.dataPlnt->PlantLoop(iLoop);
+        for (int jScheme = 1; jScheme <= thisLoop.NumOpSchemes; ++jScheme) {
+            for (int kList = 1; kList <= thisLoop.OpScheme(jScheme).NumEquipLists; ++kList) {
+                ++row;
+                std::string rowS = format("{}", row);
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbPltLpNm, rowS, thisLoop.Name);
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbNm, rowS, thisLoop.OpScheme(jScheme).Name);
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbType, rowS, thisLoop.OpScheme(jScheme).TypeOf);
+                if (thisLoop.OpScheme(jScheme).sched != nullptr) {
+                    OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbSchNm, rowS, thisLoop.OpScheme(jScheme).sched->Name);
+                } else {
+                    OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbSchNm, rowS, "n/a");
+                }
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbIndex, rowS, format("{}", kList));
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbEqLstNm, rowS, thisLoop.OpScheme(jScheme).EquipList(kList).Name);
+                OutputReportPredefined::PreDefTableEntry(
+                    state, orp->pdchPLtEqOpLbLow, rowS, thisLoop.OpScheme(jScheme).EquipList(kList).RangeLowerLimit);
+                OutputReportPredefined::PreDefTableEntry(
+                    state, orp->pdchPLtEqOpLbUp, rowS, thisLoop.OpScheme(jScheme).EquipList(kList).RangeUpperLimit);
+                std::vector<std::string> componentNames;
+                for (int lComp = 1; lComp <= thisLoop.OpScheme(jScheme).EquipList(kList).NumComps; ++lComp) {
+                    componentNames.push_back(thisLoop.OpScheme(jScheme).EquipList(kList).Comp(lComp).Name);
+                }
+                OutputReportPredefined::PreDefTableEntry(
+                    state, orp->pdchPLtEqOpLbEquip, rowS, OutputReportTabular::stringJoinDelimiter(componentNames, "; "));
+            }
+        }
+    }
 }
 
 void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // true if first iteration of the simulation

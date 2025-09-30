@@ -328,6 +328,20 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchDXCoolCoilNetCapSID = 0;  // Standard Rated (Net) Cooling Capacity [W], Test D
     int pdchDXCoolCoilElecPowerD = 0; // Standard Rated Electric Power [W], Test D
 
+    // ACCA Manual S report
+    int pdstACCAMS = 0;
+    int pdchMSHPName = 0;
+    int pdchMSHPType = 0;
+    int pdchMSCoilType = 0;
+    int pdchMSSizMethod = 0;
+    int pdchMSTotLoad = 0;
+    int pdchMSSensLoad = 0;
+    int pdchMSTotCapacity = 0;
+    int pdchMSSensCapacity = 0;
+    int pdchMSTotRatio = 0;
+    int pdchMSSensRatio = 0;
+    int pdchMSLatRatio = 0;
+
     // Water-to-Air HP report
     int pdstWAHP = 0;
     int pdchWAHPType = 0;
@@ -362,6 +376,7 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     // DX Heating Coil subtable
     int pdstDXHeatCoil = 0;
     int pdchDXHeatCoilType = 0; // DX Heating coil type
+    int pdchDXHeatCoilSizingRatio = 0;
     int pdchDXHeatCoilHighCap = 0;
     int pdchDXHeatCoilLowCap = 0;
     int pdchDXHeatCoilHSPFSI = 0;    // HSPF value in SI unit at AHRI std. 340/360 conditions [W/W]
@@ -402,6 +417,52 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchSWHThEff = 0;
     int pdchSWHRecEff = 0;
     int pdchSWHEnFac = 0;
+    int pdchSWHFuelType = 0;
+    int pdchSWHSchHt1StptName = 0;
+    int pdchSWHSchHt1Stpt11amWedVal = 0;
+    int pdchSWHSchHt1Stpt11amWedCnt = 0;
+    int pdchSWHSchHt1StptMonthUsed = 0;
+    int pdchSWHSchHt2StptName = 0;
+    int pdchSWHSchHt2Stpt11amWedVal = 0;
+    int pdchSWHSchHt2Stpt11amWedCnt = 0;
+    int pdchSWHSchHt2StptMonthUsed = 0;
+    int pdchSWHPkUseFlwRt = 0;
+    int pdchSWHUseSch = 0;
+    int pdchSWHAmbZoneNm = 0;
+
+    // wateruse:equipment table
+    int pdstWtEq = 0;
+    int pdchWtEqZone = 0;
+    int pdchWtEqEndUse = 0;
+    int pdchWtEqPkFlw = 0;
+    int pdchWtEqFlwFractSch = 0;
+    int pdchWtEqFlwFractMax = 0;
+    int pdchWtEqTargTempSch = 0;
+    int pdchWtEqTargTempMax = 0;
+    int pdchWtEqConnNm = 0;
+    int pdchWtEqHotTempSch = 0;
+    int pdchWtEqHotTempMax = 0;
+    int pdchWtEqColdTempSch = 0;
+    int pdchWtEqColdTempMin = 0;
+    int pdchWtEqSensFracSch = 0;
+    int pdchWtEqsensFracMax = 0;
+    int pdchWtEqLatFracSch = 0;
+    int pdchWtEqLatFracMax = 0;
+
+    // WaterUse:Connections table
+    int pdstWtCn = 0;
+    int pdchWtCnDrnHxType = 0;
+    int pdchWtCnDrnHxDest = 0;
+    int pdchWtCnDrnHxUA = 0;
+    int pdchWtCnDrnHxEff = 0;
+    int pdchWtCnHotTempSch = 0;
+    int pdchWtCnHotTempMax = 0;
+    int pdchWtCnColdTempSch = 0;
+    int pdchWtCnColdTempMin = 0;
+    int pdchWtCnPltLpNm = 0;
+    int pdchWtCnBrchNm = 0;
+    int pdchWtCnSupTnk = 0;
+    int pdchWtCnRecTnk = 0;
 
     // Std 229 Chiller Table in Equipment Summary
     int pdstChiller = 0;
@@ -898,6 +959,7 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchEcoRetEnth = 0;
     int pdchEcoOATempLim = 0;
     int pdchEcoOAEnthLim = 0;
+    int pdchEcoOAsysNm = 0;
     int pdstDemCntlVent = 0;
     int pdchDCVventMechName = 0;
     int pdchDCVperPerson = 0;
@@ -940,6 +1002,51 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchFanOpUnoccCont = 0.0;
     int pdchFanOpUnoccCyc = 0.0;
     int pdchFanOpUnoccOff = 0.0;
+
+    // Controls Summary
+
+    int pdrCtrl = 0;
+
+    int pdstStPtOAR = 0;
+    int pdchSPMOArStPtNd = 0;
+    int pdchSPMOArStPtLp = 0;
+    int pdchSPMOArType = 0;
+    int pdchSPMOArStLo1 = 0;
+    int pdchSPMOArStHi1 = 0;
+    int pdchSPMOArOutLo1 = 0;
+    int pdchSPMOArOutHi1 = 0;
+    int pdchSPMOArSchNm = 0;
+    int pdchSPMOArStLo2 = 0;
+    int pdchSPMOArStHi2 = 0;
+    int pdchSPMOArOutLo2 = 0;
+    int pdchSPMOArOutHi2 = 0;
+
+    int pdstStPtRetT = 0;
+    int pdchSPMRetType = 0;
+    int pdchSPMRetOutNd = 0;
+    int pdchSPMRetInNd = 0;
+    int pdchSPMRetPltLp = 0;
+    int pdchSPMRetMinT = 0;
+    int pdchSPMRetMaxT = 0;
+    int pdchSPMRetRetType = 0;
+    int pdchSPMRetRetT = 0;
+    int pdchSPMRetRetSch = 0;
+
+    int pdstAvlMgrSch = 0;
+    int pdchAvlMgrSchAvailNm = 0;
+    int pdchAvlMgrSchType = 0;
+    int pdchAvlMgrSchSchNm = 0;
+
+    int pdstPLtEqOpLb = 0;
+    int pdchPLtEqOpLbPltLpNm = 0;
+    int pdchPLtEqOpLbNm = 0;
+    int pdchPLtEqOpLbType = 0;
+    int pdchPLtEqOpLbSchNm = 0;
+    int pdchPLtEqOpLbIndex = 0;
+    int pdchPLtEqOpLbLow = 0;
+    int pdchPLtEqOpLbUp = 0;
+    int pdchPLtEqOpLbEqLstNm = 0;
+    int pdchPLtEqOpLbEquip = 0;
 
     // HVAC Topology
     int pdrTopology = 0;

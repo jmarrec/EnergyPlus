@@ -134,6 +134,7 @@
 #include <EnergyPlus/DesiccantDehumidifiers.hh>
 #include <EnergyPlus/DisplacementVentMgr.hh>
 #include <EnergyPlus/DualDuct.hh>
+#include <EnergyPlus/DuctLoss.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/EarthTube.hh>
 #include <EnergyPlus/EcoRoofManager.hh>

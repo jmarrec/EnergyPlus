@@ -26551,6 +26551,7 @@ AirflowNetwork:Distribution:Node,
       \key OAMixerOutdoorAirStreamNode
       \key OutdoorAir:NodeList
       \key OutdoorAir:Node
+      \key Zone
       \key Other
       \default Other
       \note Designates Node type for the Node or Component Name defined in the field above.
@@ -26564,6 +26565,7 @@ AirflowNetwork:Distribution:Node,
       \note the OutdoorAir:Mixer
       \note Other -- none of the above, the Node name already defined in the previous field is part
       \note of an air loop.
+      \note Zone -- Enter a zone name for duct simple model to calculate duct loss without using AFN model.
  N1 ; \field Node Height
       \type real
       \units m
@@ -27285,6 +27287,56 @@ AirflowNetwork:IntraZone:Linkage,
       \object-list SurfAndSubSurfNames
       \note Only used when one of two nodes defined above are not located in the same zone, and
       \note the input of the Component Name field in this object is ignored
+
+Duct:Loss:Conduction,
+ A1 , \field Name
+      \required-field
+ A2 , \field AirLoopHVAC Name
+      \required-field
+      \type object-list
+      \object-list AirPrimaryLoops
+ A3 , \field AirflowNetwork:Distribution:Linkage Name
+      \required-field
+      \type object-list
+      \object-list AirflowNetworkDistributionLinkageNames
+ A4 , \field Environment Type
+      \type choice
+      \key Zone
+      \key Schedule
+      \default Zone
+ A5 , \field Ambient Zone Name
+      \type object-list
+      \object-list ZoneNames
+ A6 , \field Ambient Temperature Schedule Name
+      \type object-list
+      \object-list ScheduleNames
+ A7 ; \field Ambient Humidity Ratio Schedule Name
+      \type object-list
+      \object-list ScheduleNames
+
+Duct:Loss:Leakage,
+ A1 , \field Name
+      \required-field
+ A2 , \field AirLoopHVAC Name
+      \required-field
+      \type object-list
+      \object-list AirPrimaryLoops
+ A3 ; \field AirflowNetwork:Distribution:Linkage Name
+      \required-field
+      \type object-list
+      \object-list AirflowNetworkDistributionLinkageNames
+
+Duct:Loss:MakeupAir,
+ A1 , \field Name
+      \required-field
+ A2 , \field AirLoopHVAC Name
+      \required-field
+      \type object-list
+      \object-list AirPrimaryLoops
+ A3 ; \field AirflowNetwork:Distribution:Linkage Name
+      \required-field
+      \type object-list
+      \object-list AirflowNetworkDistributionLinkageNames
 
 \group Exterior Equipment
        ! This equipment is used merely for reporting.
@@ -34585,12 +34637,24 @@ Sizing:Zone,
       \note no humidistat is associated with this zone.
       \type alpha
       \units percent
-  A15;\field Type of Space Sum to Use
+  A15,\field Type of Space Sum to Use
       \note NonCoincident is available only if Do Space Heat Balance for Sizing=Yes in ZoneAirHeatBalanceAlgorithm.
       \type choice
       \key Coincident
       \key NonCoincident
       \default Coincident
+  A16,\field Heating Coil Sizing Method
+      \type choice
+      \key None
+      \key CoolingCapacity
+      \key HeatingCapacity
+      \key GreaterOfHeatingOrCooling
+      \default None
+  N23;\field Maximum Heating Capacity To Cooling Load Sizing Ratio
+      \type real
+      \units W/W
+      \minimum 1.0
+      \default 1.0
 
 DesignSpecification:ZoneHVAC:Sizing,
   \min-fields 1
@@ -35097,7 +35161,7 @@ Sizing:System,
       \key VT
       \key OnOff
       \default OnOff
-  N27; \field Occupant Diversity
+ N27, \field Occupant Diversity
       \type real
       \maximum 1.0
       \minimum 0.0
@@ -35106,6 +35170,20 @@ Sizing:System,
       \note The Occupant Diversity is used to determine a multi-zone system's outdoor air intake when the System Outdoor Air Method is
       \note Standard62.1VentilationRateProcedure or the Standard62.1SimplifiedProcedure. If set to be autosized, it will be calculated
       \note using the information in the People objects assigned to each zone attached to this system/airloop.
+ A12, \field Heating Coil Sizing Method
+      \note Size a heat pump heating coil using the Cooling, Heating or GreaterOfHeatingOrCooling capacities
+      \type choice
+      \key None
+      \key CoolingCapacity
+      \key HeatingCapacity
+      \key GreaterOfHeatingOrCooling
+      \default None
+ N28; \field Maximum Heating Capacity To Cooling Capacity Sizing Ratio
+      \note The limit of heating coil capacity to cooling coil capacity
+      \type real
+      \units W/W
+      \minimum 1.0
+      \default 1.0
 
 Sizing:Plant,
       \memo Specifies the input needed to autosize plant loop flow rates and equipment capacities.
@@ -35906,10 +35984,58 @@ ZoneHVAC:IdealLoadsAirSystem,
        \minimum 0.0
        \maximum 1.0
        \default 0.65
-  A17; \field Design Specification ZoneHVAC Sizing Object Name
+  A17, \field Design Specification ZoneHVAC Sizing Object Name
        \note Enter the name of a DesignSpecificationZoneHVACSizing object.
        \type object-list
        \object-list DesignSpecificationZoneHVACSizingName
+  A18, \field Heating Fuel Efficiency Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note Reference heating fuel efficiency value for converting heating
+       \note ideal loads into fuel energy consumption.
+       \note The minimum schedule value must be greater than 0.0. The maximum value
+       \note depends on the technology, and can exceed 1.0.
+       \note If blank, heating fuel efficiency value is always 1.0.
+  A19, \field Heating Fuel Type
+       \type choice
+       \key Electricity
+       \key NaturalGas
+       \key Propane
+       \key FuelOilNo1
+       \key FuelOilNo2
+       \key Coal
+       \key Diesel
+       \key Gasoline
+       \key OtherFuel1
+       \key OtherFuel2
+       \key DistrictCooling
+       \key DistrictHeatingWater
+       \key DistrictHeatingSteam
+       \Default DistrictHeatingWater
+  A20, \field Cooling Fuel Efficiency Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+       \note Reference cooling fuel efficiency value for converting cooling
+       \note ideal loads into fuel energy consumption.
+       \note The minimum schedule value must be greater than 0.0. The maximum value
+       \note depends on the technology, and can exceed 1.0.
+       \note If blank, cooling fuel efficiency value is always 1.0.
+  A21; \field Cooling Fuel Type
+       \type choice
+       \key Electricity
+       \key NaturalGas
+       \key Propane
+       \key FuelOilNo1
+       \key FuelOilNo2
+       \key Coal
+       \key Diesel
+       \key Gasoline
+       \key OtherFuel1
+       \key OtherFuel2
+       \key DistrictCooling
+       \key DistrictHeatingWater
+       \key DistrictHeatingSteam
+       \Default DistrictCooling
 
 ZoneHVAC:FourPipeFanCoil,
         \memo Four pipe fan coil system. Forced-convection hydronic heating-cooling unit with
@@ -36566,13 +36692,19 @@ ZoneHVAC:PackagedTerminalHeatPump,
         \minimum 0.0
         \autosizable
         \default autosize
-   N12; \field Maximum Supply Air Temperature in Heating Mode
+   N12, \field Maximum Supply Air Temperature in Heating Mode
         \note For Capacity Control Method = SingleZoneVAV, enter the maximum air temperature limit for reduced fan speed.
         \type real
         \units C
         \minimum 0.0
         \autosizable
         \default autosize
+   N13; \field DX Heating Coil Sizing Ratio
+        \type real
+        \default 1.0
+        \minimum> 0
+        \note Used to adjust heat pump heating capacity with respect to DX cooling capacity
+        \note used only for heat pump configurations (i.e., a DX cooling and DX heating coil is used).
 
 ZoneHVAC:WaterToAirHeatPump,
         \memo Water-to-air heat pump. Forced-convection heating-cooling unit with supply fan,
@@ -36680,7 +36812,7 @@ ZoneHVAC:WaterToAirHeatPump,
         \object-list FansOnOff
         \object-list FansSystemModel
         \note Needs to match Fan:SystemModel or Fan:OnOff object
-   A10,  \field Heating Coil Object Type
+   A10, \field Heating Coil Object Type
         \required-field
         \type choice
         \key Coil:Heating:WaterToAirHeatPump:EquationFit
@@ -36763,10 +36895,16 @@ ZoneHVAC:WaterToAirHeatPump,
         \type choice
         \key UnitarySystemPerformance:Multispeed
         \note Enter the type of performance specification object used to describe the multispeed coil or fan.
-   A23; \field Design Specification Multispeed Object Name
+   A23, \field Design Specification Multispeed Object Name
         \type object-list
         \object-list UnitarySystemPerformanceNames
         \note The name of the performance specification object used to describe the multispeed coil or fan.
+   N9;  \field DX Heating Coil Sizing Ratio
+        \type real
+        \default 1.0
+        \minimum> 0
+        \note Used to adjust heat pump heating capacity with respect to DX cooling capacity
+        \note used only for heat pump configurations (i.e., a DX cooling and DX heating coil is used).
 
 ZoneHVAC:Dehumidifier:DX,
         \memo This object calculates the performance of zone (room) air dehumidifiers.
@@ -64691,7 +64829,7 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir,
         \note continuously regardless of cooling or heating coil operation).
         \note Leaving this schedule name blank will default to cycling fan mode for the
         \note entire simulation period.
-   A16; \field Dehumidification Control Type
+   A16, \field Dehumidification Control Type
         \type choice
         \key None
         \key Multimode
@@ -64709,6 +64847,12 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir,
         \note cooling coil types. When a heat exchanger assisted Cooling
         \note coil is used, the heat exchanger is locked on at all times.
         \note A ZoneControl:Humidistat object is also required.
+   N6;  \field DX Heating Coil Sizing Ratio
+        \type real
+        \default 1.0
+        \minimum> 0
+        \note Used to adjust heat pump heating capacity with respect to DX cooling capacity
+        \note used only for heat pump configurations (i.e., a DX cooling and DX heating coil is used).
 
 AirLoopHVAC:UnitaryHeatPump:WaterToAir,
         \memo Unitary heat pump system, heating and cooling, single-speed with constant volume
@@ -64832,7 +64976,7 @@ AirLoopHVAC:UnitaryHeatPump:WaterToAir,
         \note as required to meet the humidity setpoint. Valid only with
         \note Coil:Cooling:WaterToAirHeatPump:EquationFit or
         \note Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit
-   A18; \field Heat Pump Coil Water Flow Mode
+   A18, \field Heat Pump Coil Water Flow Mode
         \type choice
         \key Constant
         \key Cycling
@@ -64842,6 +64986,12 @@ AirLoopHVAC:UnitaryHeatPump:WaterToAir,
         \note Constant results in 100% water flow regardless of compressor PLR
         \note Cycling results in water flow that matches compressor PLR
         \note ConstantOnDemand results in 100% water flow whenever the coil is on, but is 0% whenever the coil has no load
+   N6;  \field DX Heating Coil Sizing Ratio
+        \type real
+        \default 1.0
+        \minimum> 0
+        \note Used to adjust heat pump heating capacity with respect to DX cooling capacity
+        \note used only for heat pump configurations (i.e., a DX cooling and DX heating coil is used).
 
 AirLoopHVAC:UnitaryHeatCool:VAVChangeoverBypass,
         \memo Unitary system, heating and cooling with constant volume supply fan (continuous or
@@ -65144,12 +65294,12 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed,
         \object-list HeatingCoilsDXMultiSpeed
         \object-list HeatingCoilsElectricMultiStage
         \object-list HeatingCoilsGasMultiStage
-   N1 , \field Minimum Outdoor Dry-Bulb Temperature for Compressor Operation
+   N1 , \field DX Heating Coil Sizing Ratio
         \type real
-        \default -8.0
-        \units C
-        \note Needs to match the corresponding minimum outdoor temperature defined
-        \note in the DX heating coil object.
+        \default 1.0
+        \minimum> 0
+        \note Used to adjust heat pump heating capacity with respect to DX cooling capacity
+        \note used only for heat pump configurations (i.e., a DX cooling and DX heating coil is used).
    A12, \field Cooling Coil Object Type
         \required-field
         \type choice
@@ -65217,7 +65367,7 @@ AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed,
         \note is used when no heating or cooling is required and the coils are off.
         \note If this field is left blank or zero, the supply air flow rate from the
         \note previous on cycle (either cooling or heating) is used.
-   N9, \field Number of Speeds for Heating
+   N9,  \field Number of Speeds for Heating
         \required-field
         \type integer
         \minimum 1
@@ -69354,7 +69504,7 @@ AirLoopHVAC:DedicatedOutdoorAirSystem,
   N5 , \field Number of AirLoopHVAC
        \required-field
        \type integer
-       \note Enter the number of the AirLoopHAVC served by AirLoopHVAC:DedicatedOutdoorAirSystem
+       \note Enter the number of the AirLoopHVAC served by AirLoopHVAC:DedicatedOutdoorAirSystem
   A6 , \field AirLoopHVAC 1 Name
        \note The rest of fields are extensible. It requires AirLoopHVAC names served by
        \note an AirLoopHVAC:DedicatedOutdoorAirSystem.
@@ -78584,6 +78734,8 @@ EvaporativeFluidCooler:SingleSpeed,
        \type real
        \units C
        \minimum> 0.0
+       \default autosize
+       \autosizable
        \ip-units F
        \note Only used for Performance Input Method = UserSpecifiedDesignCapacity;
        \note for other Performance Input Methods, this field is ignored.
@@ -78591,6 +78743,7 @@ EvaporativeFluidCooler:SingleSpeed,
   N10, \field Design Entering Air Temperature
        \type real
        \units C
+       \default 35.0
        \minimum> 0.0
        \ip-units F
        \note Only used for Performance Input Method = UserSpecifiedDesignCapacity;
@@ -78600,6 +78753,7 @@ EvaporativeFluidCooler:SingleSpeed,
   N11, \field Design Entering Air Wet-bulb Temperature
        \type real
        \units C
+       \default 25.6
        \minimum> 0.0
        \ip-units F
        \note Only used for Performance Input Method = UserSpecifiedDesignCapacity;
@@ -78831,6 +78985,8 @@ EvaporativeFluidCooler:TwoSpeed,
        \type real
        \units C
        \minimum> 0.0
+       \default autosize
+       \autosizable
        \ip-units F
        \note Only used for Performance Input Method = UserSpecifiedDesignCapacity;
        \note for other Performance Input Methods, this field is ignored.
@@ -78838,6 +78994,7 @@ EvaporativeFluidCooler:TwoSpeed,
   N20, \field Design Entering Air Temperature
        \type real
        \units C
+       \default 35.0
        \minimum> 0.0
        \ip-units F
        \note Only used for Performance Input Method = UserSpecifiedDesignCapacity;
@@ -78847,6 +79004,7 @@ EvaporativeFluidCooler:TwoSpeed,
   N21, \field Design Entering Air Wet-bulb Temperature
        \type real
        \units C
+       \default 25.6
        \minimum> 0.0
        \ip-units F
        \note Only used for Performance Input Method = UserSpecifiedDesignCapacity;
