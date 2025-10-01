@@ -151,7 +151,8 @@ void EIRPlantLoopHeatPump::simulate(
                     state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
             }
 
-            Real64 leavingSetpoint = state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint;
+            // Call the helper so we handle SingleSetpoint versus DualSetpointDeadband instead of just grabbing TempSetPoint;
+            Real64 leavingSetpoint = this->getLoadSideOutletSetPointTemp(state);
             Real64 CurSpecHeat = this->loadSidePlantLoc.loop->glycol->getSpecificHeat(state, loadSideInletTemp, "EIRPlantLoopHeatPump::simulate");
             Real64 controlLoad = this->loadSideMassFlowRate * CurSpecHeat * (leavingSetpoint - loadSideInletTemp);
 
