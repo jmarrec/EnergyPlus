@@ -6291,6 +6291,7 @@ TEST_F(EnergyPlusFixture, WaterThermalTankData_AdjustTankLossMultipliers)
     for (int spaceNum = 1; spaceNum <= SPACES; spaceNum++) {
         state->dataHeatBal->Zone(ZONES).spaceIndexes(spaceNum) = spaceNum;
         state->dataHeatBal->space(spaceNum).FloorArea = static_cast<Real64>(FLOOR_AREA) / SPACES;
+        state->dataHeatBal->space(spaceNum).zoneNum = ZONES;
     }
 
     WaterThermalTanks::WaterThermalTankData tank;

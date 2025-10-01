@@ -83,7 +83,7 @@ void SetupSpaceInternalGain(EnergyPlusData &state,
                             int RetNodeNum = 0 // for return air heat gains
 );
 
-// Multipliers are double counted for tank losses - these are the internal gains that need adjust for this
+// Tank losses should be distributed across multiplied zones/spaces - these are the internal gains that need adjust for this
 static constexpr std::array<DataHeatBalance::IntGainType, 4> AdjustTankLossMultipliers = {
     DataHeatBalance::IntGainType::WaterHeaterMixed,
     DataHeatBalance::IntGainType::WaterHeaterStratified,

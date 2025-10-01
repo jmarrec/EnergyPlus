@@ -76,12 +76,6 @@ void SetupZoneInternalGain(EnergyPlusData &state,
         if (state.dataHeatBal->Zone(ZoneNum).numSpaces > 1) {
             gainFrac = state.dataHeatBal->space(spaceNum).FloorArea / state.dataHeatBal->Zone(ZoneNum).FloorArea;
         }
-        if (std::find(AdjustTankLossMultipliers.begin(), AdjustTankLossMultipliers.end(), IntGainCompType) != AdjustTankLossMultipliers.end()) {
-            int multiplier = state.dataHeatBal->Zone(ZoneNum).Multiplier * state.dataHeatBal->Zone(ZoneNum).ListMultiplier;
-            if (multiplier > 1) {
-                gainFrac /= multiplier;
-            }
-        }
         SetupSpaceInternalGain(state,
                                spaceNum,
                                gainFrac,
@@ -160,6 +154,15 @@ void SetupSpaceInternalGain(EnergyPlusData &state,
 
     thisIntGain.device(thisIntGain.numberOfDevices).CompObjectName = UpperCaseObjectName;
     thisIntGain.device(thisIntGain.numberOfDevices).CompType = IntGainCompType;
+
+    // Tank losses should be distributed across multiplied zones/spaces - adjust the space gain fraction to account for this
+    if (std::find(AdjustTankLossMultipliers.begin(), AdjustTankLossMultipliers.end(), IntGainCompType) != AdjustTankLossMultipliers.end()) {
+        const int zoneNum = state.dataHeatBal->space(spaceNum).zoneNum;
+        const int multiplier = state.dataHeatBal->Zone(zoneNum).Multiplier * state.dataHeatBal->Zone(zoneNum).ListMultiplier;
+        if (multiplier > 1) {
+            spaceGainFraction /= multiplier;
+        }
+    }
     thisIntGain.device(thisIntGain.numberOfDevices).spaceGainFrac = spaceGainFraction;
 
     // note pointer assignments in code below!
