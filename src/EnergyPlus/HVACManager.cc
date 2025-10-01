@@ -71,6 +71,7 @@
 #include <EnergyPlus/DataZoneEnergyDemands.hh>
 #include <EnergyPlus/DemandManager.hh>
 #include <EnergyPlus/DisplayRoutines.hh>
+#include <EnergyPlus/DuctLoss.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/ElectricPowerServiceManager.hh>
 #include <EnergyPlus/Fans.hh>
@@ -646,7 +647,7 @@ void ManageHVAC(EnergyPlusData &state)
             }
             if (size(state.dataLoopNodes->Node) > 0) {
                 print(state.files.debug,
-                      "{:12},{:12}, {:22.15N},",
+                      "{:12},{:12}, {:22.15G},",
                       state.dataGlobal->DayOfSim,
                       state.dataGlobal->HourOfDay,
                       state.dataGlobal->TimeStep * state.dataGlobal->TimeStepZone);
@@ -1873,6 +1874,10 @@ void SimSelectedEquipment(EnergyPlusData &state,
                     SimAirLoops = true;  // at min three times using ONOFF fan with the AirflowNetwork model
                     SimZoneEquipment = true;
                 }
+            }
+            if (state.dataDuctLoss->DuctLossSimu && IterAir < 4) {
+                SimAirLoops = true;
+                SimZoneEquipment = true;
             }
         }
 

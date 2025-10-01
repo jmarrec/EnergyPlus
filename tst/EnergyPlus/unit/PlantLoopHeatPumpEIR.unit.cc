@@ -2398,7 +2398,12 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource)
                                                       "  ,",
                                                       "  dummyCurve,",
                                                       "  dummyCurve,",
-                                                      "  dummyCurve;",
+                                                      "  dummyCurve,",
+                                                      "  1.0,",
+                                                      "  HeatingCapacity,",
+                                                      "  Load,",
+                                                      "  ConstantFlow,",
+                                                      "  0.5;",
                                                       "Curve:Linear,",
                                                       "  dummyCurve,",
                                                       "  0.95,",
@@ -2514,6 +2519,23 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource)
         // expect it to miss setpoint and be at max capacity
         EXPECT_NEAR(45.0, thisHeatingPLHP->loadSideOutletTemp, 0.001);
         EXPECT_NEAR(30.0, thisHeatingPLHP->sourceSideOutletTemp, 0.001);
+    }
+
+    // now we can call it again from the load side, but this time there is a very low load (still firsthvac)
+    {
+        bool firstHVAC = true;
+        Real64 curLoad = 100.0;
+        bool runFlag = true;
+        Real64 constexpr expectedLoadMassFlowRate = 0.09999;
+        Real64 constexpr expectedCp = 4180;
+        Real64 constexpr specifiedLoadSetpoint = 45;
+        Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
+        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
+        state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
+        thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
+        // expect it to miss setpoint and be at max capacity
+        EXPECT_NEAR((curLoad / thisHeatingPLHP->referenceCOP) * 0.95 * 0.95, thisHeatingPLHP->powerUsage, 0.001);
     }
 }
 

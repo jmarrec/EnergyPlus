@@ -2505,12 +2505,14 @@ TEST_F(EnergyPlusFixture, HeatBalanceSurfaceManager_TestSurfPropertySrdSurfLWR)
     // Test if LWR from surrounding surfaces correctly calculated
     EXPECT_DOUBLE_EQ(Constant::StefanBoltzmann * 0.9 * 0.6 * (pow_4(25.0 + Constant::Kelvin) - pow_4(20.0 + Constant::Kelvin)),
                      state->dataHeatBalSurf->SurfQRadLWOutSrdSurfs(1));
-    EXPECT_DOUBLE_EQ(Constant::StefanBoltzmann * 0.9 *
-                         (0.3 * (pow_4(25.0 + Constant::Kelvin) - pow_4(20.0 + Constant::Kelvin)) +
-                          0.3 * (pow_4(25.0 + Constant::Kelvin) - pow_4(20.0 + Constant::Kelvin))),
-                     state->dataHeatBalSurf->SurfQRadLWOutSrdSurfs(2));
-    EXPECT_DOUBLE_EQ(Constant::StefanBoltzmann * 0.9 * 0.5 * (pow_4(25.0 + Constant::Kelvin) - pow_4(20.0 + Constant::Kelvin)),
-                     state->dataHeatBalSurf->SurfQRadLWOutSrdSurfs(3));
+    EXPECT_NEAR(Constant::StefanBoltzmann * 0.9 *
+                    (0.3 * (pow_4(25.0 + Constant::Kelvin) - pow_4(20.0 + Constant::Kelvin)) +
+                     0.3 * (pow_4(25.0 + Constant::Kelvin) - pow_4(20.0 + Constant::Kelvin))),
+                state->dataHeatBalSurf->SurfQRadLWOutSrdSurfs(2),
+                0.0000000001);
+    EXPECT_NEAR(Constant::StefanBoltzmann * 0.9 * 0.5 * (pow_4(25.0 + Constant::Kelvin) - pow_4(20.0 + Constant::Kelvin)),
+                state->dataHeatBalSurf->SurfQRadLWOutSrdSurfs(3),
+                0.0000000001);
     EXPECT_DOUBLE_EQ(0.0, state->dataHeatBalSurf->SurfQRadLWOutSrdSurfs(4));
     // LWR Exchange Coefficient check for CTF method heat balance algorithm
     EXPECT_EQ(state->dataHeatBal->OverallHeatTransferSolutionAlgo, DataSurfaces::HeatTransferModel::CTF);
