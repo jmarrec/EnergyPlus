@@ -73397,7 +73397,7 @@ Boiler:HotWater,
        \type real
        \units W
        \autosizable
-       \minimum 0.0
+       \minimum> 0.0
   N2 , \field Nominal Thermal Efficiency
        \required-field
        \type real
@@ -76723,22 +76723,22 @@ CentralHeatPumpSystem,
        \key SmartMixing
        \default SmartMixing
   A3,  \field Cooling Loop Inlet Node Name
-       \type alpha
+       \type node
        \required-field
   A4,  \field Cooling Loop Outlet Node Name
-       \type alpha
+       \type node
        \required-field
   A5,  \field Source Loop Inlet Node Name
-       \type alpha
+       \type node
        \required-field
   A6,  \field Source Loop Outlet Node Name
-       \type alpha
+       \type node
        \required-field
   A7,  \field Heating Loop Inlet Node Name
-       \type alpha
+       \type node
        \required-field
   A8,  \field Heating Loop Outlet Node Name
-       \type alpha
+       \type node
        \required-field
   N1,  \field Ancillary Power
        \type real
