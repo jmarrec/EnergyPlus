@@ -139,6 +139,18 @@ void EIRPlantLoopHeatPump::simulate(
 
     if (this->running) {
         if (this->sysControlType == ControlType::Setpoint) {
+            if (this->SetpointSetToLoop) {
+                // Copy the overall loop setpoints to the Heat Pump outlet node
+                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint =
+                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
+                // Hi is used when (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
+                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointHi =
+                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
+                // Lo when HeatPumpEIRHeating
+                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointLo =
+                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
+            }
+
             Real64 leavingSetpoint = state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint;
             Real64 CurSpecHeat = this->loadSidePlantLoc.loop->glycol->getSpecificHeat(state, loadSideInletTemp, "EIRPlantLoopHeatPump::simulate");
             Real64 controlLoad = this->loadSideMassFlowRate * CurSpecHeat * (leavingSetpoint - loadSideInletTemp);
@@ -2647,6 +2659,52 @@ void EIRPlantLoopHeatPump::oneTimeInit(EnergyPlusData &state)
 
                     PlantUtilities::InterConnectTwoPlantLoopSides(state, this->loadSidePlantLoc, this->heatRecoveryPlantLoc, this->EIRHPType, true);
                 }
+            }
+        }
+
+        if (this->sysControlType == ControlType::Setpoint) {
+
+            // check if setpoint on outlet node
+            if ((state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint == DataLoopNode::SensedNodeFlagValue) &&
+                (state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointHi == DataLoopNode::SensedNodeFlagValue)) {
+                if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
+                    if (!this->SetpointSetToLoopErrDone) {
+                        ShowWarningError(state,
+                                         format("{}: Missing temperature setpoint for Setpoint Controlled {} name = \"{}\"",
+                                                routineName,
+                                                DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
+                                                this->name));
+                        ShowContinueError(state, "  A temperature setpoint is needed at the load side outlet node, use a SetpointManager");
+                        ShowContinueError(state, "  The overall loop setpoint will be assumed for the Heat Pump. The simulation continues ... ");
+                        this->SetpointSetToLoopErrDone = true;
+                    }
+                } else {
+                    // need call to EMS to check node
+                    bool fatalError = false; // but not really fatal yet, but should be.
+                    EMSManager::CheckIfNodeSetPointManagedByEMS(state, this->loadSideNodes.outlet, HVAC::CtrlVarType::Temp, fatalError);
+                    state.dataLoopNodes->NodeSetpointCheck(this->loadSideNodes.outlet).needsSetpointChecking = false;
+                    if (fatalError) {
+                        if (!this->SetpointSetToLoopErrDone) {
+                            ShowWarningError(state,
+                                             format("{}: Missing temperature setpoint for Setpoint Controlled {} name = \"{}\"",
+                                                    routineName,
+                                                    DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
+                                                    this->name));
+                            ShowContinueError(state, "  A temperature setpoint is needed at the load side outlet node when ControlType = Setpoint");
+                            ShowContinueError(state, "  use a Setpoint Manager to establish a setpoint at the outlet node ");
+                            ShowContinueError(state, "  or use an EMS actuator to establish a setpoint at the outlet node ");
+                            ShowContinueError(state, "  The overall loop setpoint will be assumed for the Heat Pump. The simulation continues ... ");
+                            this->SetpointSetToLoopErrDone = true;
+                        }
+                    }
+                }
+                this->SetpointSetToLoop = true;
+                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint =
+                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
+                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointLo =
+                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
+                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointHi =
+                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
             }
         }
 
