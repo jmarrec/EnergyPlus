@@ -2003,6 +2003,14 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
     state->dataGlobal->BeginEnvrnFlag = false;
     thisHeatingPLHP->onInitLoopEquip(*state, myLocation);
 
+    compare_err_stream(delimited_string({
+        "   ** Warning ** EIRPlantLoopHeatPump : oneTimeInit: Missing temperature setpoint for Setpoint Controlled HeatPump:PlantLoop:EIR:Heating "
+        "name = \"HEATING COIL\"",
+        "   **   ~~~   **   A temperature setpoint is needed at the load side outlet node, use a SetpointManager",
+        "   **   ~~~   **   The overall loop setpoint will be assumed for the Heat Pump. The simulation continues ... ",
+    }));
+    EXPECT_TRUE(thisHeatingPLHP->SetpointSetToLoop);
+
     EXPECT_NEAR(30.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
     EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint, 0.001);
     EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi, 0.001);
@@ -2019,7 +2027,17 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
 
     // reset the flag to force re-running oneTimeInit
     thisHeatingPLHP->oneTimeInitFlag = true;
+    thisHeatingPLHP->SetpointSetToLoop = false;
+    thisHeatingPLHP->SetpointSetToLoopErrDone = false;
     thisHeatingPLHP->onInitLoopEquip(*state, myLocation);
+
+    compare_err_stream(delimited_string({
+        "   ** Warning ** EIRPlantLoopHeatPump : oneTimeInit: Missing temperature setpoint for Setpoint Controlled HeatPump:PlantLoop:EIR:Heating "
+        "name = \"HEATING COIL\"",
+        "   **   ~~~   **   A temperature setpoint is needed at the load side outlet node, use a SetpointManager",
+        "   **   ~~~   **   The overall loop setpoint will be assumed for the Heat Pump. The simulation continues ... ",
+    }));
+    EXPECT_TRUE(thisHeatingPLHP->SetpointSetToLoop);
 
     EXPECT_NEAR(10.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
     EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint, 0.001);
