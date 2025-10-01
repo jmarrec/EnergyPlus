@@ -208,6 +208,9 @@ enum class PlantEquipmentType
     HeatPumpEIRHeating,
     HeatPumpFuelFiredCooling,
     HeatPumpFuelFiredHeating,
+    HeatPumpAirToWaterCooling,
+    HeatPumpAirToWaterHeating,
+    HeatPumpAirToWater,
     PurchSteam,
     Num
 };

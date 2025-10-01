@@ -1214,7 +1214,6 @@ TEST_F(EnergyPlusFixture, temperatureAndCountInSch_test)
     Real64 valueAtTime;
     int numDays;
     std::string monthAssumed;
-    constexpr int wednesday = 4;
 
     state->dataEnvrn->Latitude = 30.; // northern hemisphere
     auto *sched1 = Sched::GetSchedule(*state, "SCHED1");
