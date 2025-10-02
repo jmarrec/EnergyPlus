@@ -1723,6 +1723,44 @@ TEST_F(EnergyPlusFixture, ScheduleFile_RequestNonExistingColumn)
     compare_err_stream(expected_error);
 }
 
+TEST_F(EnergyPlusFixture, ShadowCalculation_CSV_broken)
+{
+    // This file has one more header than data columns
+    // Surface Name,EAST SIDE TREE,WEST SIDE TREE
+    //  01/01 00:15,0,
+    //  01/01 00:30,0,
+
+    // a CSV exported with the extra '()' at the end (22.2.0 and below) should still be importable in E+ without crashing
+    const fs::path scheduleFile = configured_source_directory() / "tst/EnergyPlus/unit/Resources/shading_data_2220_broken.csv";
+
+    std::string const idf_objects = delimited_string({
+        "Schedule:File:Shading,",
+        "  " + scheduleFile.string() + ";              !- Name of File",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    auto &s_glob = state->dataGlobal;
+
+    s_glob->TimeStepsInHour = 4;    // must initialize this to get schedules initialized
+    s_glob->MinutesInTimeStep = 15; // must initialize this to get schedules initialized
+    s_glob->TimeStepZone = 0.25;
+    s_glob->TimeStepZoneSec = s_glob->TimeStepZone * Constant::rSecsInHour;
+    state->dataEnvrn->CurrentYearIsLeapYear = false;
+
+    EXPECT_THROW(state->init_state(*state), EnergyPlus::FatalError); // read schedules
+
+    const std::string expected_error = delimited_string({
+        "   ** Severe  ** ProcessScheduleInput: Schedule:File:Shading = shading_data_2220_broken.csv",
+        "   **   ~~~   ** For header 'WEST SIDE TREE', Requested column number 3, but found only 2 columns.",
+        "   **   ~~~   ** Error Occurred in " + scheduleFile.string(),
+        "   **  Fatal  ** Program terminates due to previous condition.",
+        "   ...Summary of Errors that led to program termination:",
+        "   ..... Reference severe error count=1",
+        "   ..... Last severe error=ProcessScheduleInput: Schedule:File:Shading = shading_data_2220_broken.csv",
+    });
+    compare_err_stream(expected_error);
+}
+
 TEST_F(EnergyPlusFixture, ShadowCalculation_CSV_extra_parenthesis)
 {
     // 9753 - Test backward compat:
