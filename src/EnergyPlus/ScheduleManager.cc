@@ -615,6 +615,13 @@ namespace Sched {
                         ShowContinueError(state, fmt::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
                         ShowFatalError(state, "Program terminates due to previous condition.");
                     }
+                    for (const auto &[warning, isContinued] : csvParser.warnings()) {
+                        if (isContinued) {
+                            ShowContinueError(state, warning);
+                        } else {
+                            ShowWarningError(state, warning);
+                        }
+                    }
                     schedule_file_shading_result = it.first;
                 } else if (FileSystem::is_all_json_type(ext)) {
                     auto schedule_data = FileSystem::readJSON(state.files.TempFullFilePath.filePath);
@@ -1643,11 +1650,18 @@ namespace Sched {
                                 if (isContinued) {
                                     ShowContinueError(state, error);
                                 } else {
-                                    ShowSevereError(state, error);
+                                    ShowSevereCustom(state, eoh, error);
                                 }
                             }
                             ShowContinueError(state, fmt::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
                             ShowFatalError(state, "Program terminates due to previous condition.");
+                        }
+                        for (const auto &[warning, isContinued] : csvParser.warnings()) {
+                            if (isContinued) {
+                                ShowContinueError(state, warning);
+                            } else {
+                                ShowWarningCustom(state, eoh, warning);
+                            }
                         }
                         result = it.first;
                     } else if (FileSystem::is_all_json_type(ext)) {
