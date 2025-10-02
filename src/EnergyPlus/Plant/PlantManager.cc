@@ -308,7 +308,7 @@ void GetPlantLoopData(EnergyPlusData &state)
     int IOStat;    // IO Status when calling get input subroutine
     int PlantLoopNum;
     int CondLoopNum;
-    Array1D_string Alpha(18); // dimension to num of alpha fields in input
+    Array1D_string Alpha(19); // dimension to num of alpha fields in input
     Array1D<Real64> Num(30);  // dimension to num of numeric data fields in input
     bool ErrorsFound(false);
     std::string CurrentModuleObject; // for ease in renaming.
@@ -614,6 +614,7 @@ void GetPlantLoopData(EnergyPlusData &state)
         } else {
             PressSimAlphaIndex = 15;
         }
+        this_loop.TypeOfWaterLoop = static_cast<DataPlant::WaterLoopType>(getEnumValue(DataPlant::waterLoopTypeNamesUC, Util::makeUPPER(Alpha(19))));
 
         if (NumAlphas >= PressSimAlphaIndex) {
             MatchedPressureString = false;
@@ -1200,6 +1201,33 @@ void GetPlantInput(EnergyPlusData &state)
                     case PlantEquipmentType::HeatPumpFuelFiredCooling: {
                         this_comp.compPtr = EIRPlantLoopHeatPumps::EIRFuelFiredHeatPump::factory(
                             state, PlantEquipmentType::HeatPumpFuelFiredCooling, CompNames(CompNum));
+                        this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        break;
+                    }
+                    case PlantEquipmentType::HeatPumpAirToWater: {
+                        if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::HotWater) {
+                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                                state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
+                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterHeating;
+                            this_comp.TypeOf = "HeatPumpAirToWaterHeating";
+                        } else if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::ChilledWater) {
+                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                                state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
+                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterCooling;
+                            this_comp.TypeOf = "HeatPumpAirToWaterCooling";
+                        }
+                        this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        break;
+                    }
+                    case PlantEquipmentType::HeatPumpAirToWaterHeating: {
+                        this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                            state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
+                        this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        break;
+                    }
+                    case PlantEquipmentType::HeatPumpAirToWaterCooling: {
+                        this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                            state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
                         this_comp.CurOpSchemeType = OpScheme::Invalid;
                         break;
                     }
@@ -4394,6 +4422,8 @@ void SetupBranchControlTypes(EnergyPlusData &state)
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
+                    case DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling:
+                    case DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating:
                     case DataPlant::PlantEquipmentType::HeatPumpEIRCooling:
                     case PlantEquipmentType::HeatPumpEIRHeating: { // 95, 96
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;

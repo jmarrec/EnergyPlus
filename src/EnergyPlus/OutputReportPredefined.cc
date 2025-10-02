@@ -605,6 +605,23 @@ namespace OutputReportPredefined {
         s->pdchBoilerPlantloopName = newPreDefColumn(state, s->pdstBoiler, "Plantloop Name");
         s->pdchBoilerPlantloopBranchName = newPreDefColumn(state, s->pdstBoiler, "Plantloop Branch Name");
 
+        // Heat Pumps in Equipment Summary
+        s->pdstAWHP = newPreDefSubTable(state, s->pdrEquip, "AWHPs");
+
+        s->pdchAWHPType = newPreDefColumn(state, s->pdstAWHP, "Type");
+        s->pdchAWHPRefCap = newPreDefColumn(state, s->pdstAWHP, "Reference Capacity[W]");
+        s->pdchAWHPRefCOP = newPreDefColumn(state, s->pdstAWHP, "Reference COP");
+        // s->pdchAWHPSEER = newPreDefColumn(state, s->pdstAWHP, "SEER");
+        // s->pdchAWHPHSPF = newPreDefColumn(state, s->pdstAWHP, "HSPF");
+        s->pdchAWHPMinPLR = newPreDefColumn(state, s->pdstAWHP, "Minimum Part Load Ratio");
+        s->pdchAWHPDesSizeRefAirTemp = newPreDefColumn(state, s->pdstAWHP, "Design Size Reference Air Temperature [C]");
+        s->pdchAWHPDesEnterWaterTemp = newPreDefColumn(state, s->pdstAWHP, "Entering Water Temperature [C]");
+        s->pdchAWHPDesLeaveWaterTemp = newPreDefColumn(state, s->pdstAWHP, "Leaving Water Temperature [C]");
+        s->pdchAWHPDesSizeRefAirFlowRate = newPreDefColumn(state, s->pdstAWHP, "Design Size Reference Air Flow Rate [kg/s]");
+        s->pdchAWHPDesSizeRefWaterFlowRate = newPreDefColumn(state, s->pdstAWHP, "Design Size Reference Water Flow Rate [kg/s]");
+        s->pdchAWHPPlantloopName = newPreDefColumn(state, s->pdstAWHP, "Plantloop Name");
+        s->pdchAWHPPlantloopBranchName = newPreDefColumn(state, s->pdstAWHP, "Plantloop Branch Name");
+
         // Std 229 cooling towers and fluid coolers Table in Equipment Summary
         s->pdstCTFC = newPreDefSubTable(state, s->pdrEquip, "Cooling Towers and Fluid Coolers");
 

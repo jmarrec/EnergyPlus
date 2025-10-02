@@ -9912,19 +9912,41 @@ namespace UnitarySystems {
                                     ZoneLoad);
                             }
                         } else if (SolFlag == -2) {
-                            if (this->RegulaFalsiFailedIndex == 0) {
-                                ShowWarningMessage(state, format("Coil control failed for {}:{}", this->UnitType, this->Name));
-                                ShowContinueError(state, "  sensible part-load ratio determined to be outside the range of 0-1.");
-                                ShowContinueErrorTimeStamp(
-                                    state, format("Sensible load to be met = {:.2T} (watts), and the simulation continues.", ZoneLoad));
+                            if (this->m_MultiOrVarSpeedCoolCoil) {
+                                // check if this speed output at PLR = 0 is different from lower speed output at PLR = 1
+                                // when this happens and the off capacity now exceeds the load then SolFlag = -2 will happen
+                                PartLoadRatio = 0.0;
+                                this->calcUnitarySystemToLoad(state,
+                                                              AirLoopNum,
+                                                              FirstHVACIteration,
+                                                              PartLoadRatio, // compressor is off so both PLRs will be 0
+                                                              PartLoadRatio,
+                                                              OnOffAirFlowRatio,
+                                                              SensOutputOff,
+                                                              LatOutputOff,
+                                                              HXUnitOn,
+                                                              HeatCoilLoad,
+                                                              SupHeaterLoad,
+                                                              CompressorONFlag);
                             }
-                            ShowRecurringWarningErrorAtEnd(
-                                state,
-                                this->UnitType + " \"" + this->Name +
-                                    "\" - sensible part-load ratio out of range error continues. Sensible load statistics:",
-                                this->RegulaFalsiFailedIndex,
-                                ZoneLoad,
-                                ZoneLoad);
+                            // same bounds check used for this large code block
+                            if ((state.dataUnitarySystems->HeatingLoad && ZoneLoad > SensOutputOff) ||
+                                (state.dataUnitarySystems->CoolingLoad && ZoneLoad < SensOutputOff)) {
+                                // if this is still true then print valid warnings
+                                if (this->RegulaFalsiFailedIndex == 0) {
+                                    ShowWarningMessage(state, format("Coil control failed for {}:{}", this->UnitType, this->Name));
+                                    ShowContinueError(state, "  sensible part-load ratio determined to be outside the range of 0-1.");
+                                    ShowContinueErrorTimeStamp(
+                                        state, format("Sensible load to be met = {:.2T} (watts), and the simulation continues.", ZoneLoad));
+                                }
+                                ShowRecurringWarningErrorAtEnd(
+                                    state,
+                                    this->UnitType + " \"" + this->Name +
+                                        "\" - sensible part-load ratio out of range error continues. Sensible load statistics:",
+                                    this->RegulaFalsiFailedIndex,
+                                    ZoneLoad,
+                                    ZoneLoad);
+                            }
                         } // IF (SolFlag == -1) THEN
                     }
                 } else { // load is not bounded by capacity. Leave PLR=1 or turn off unit?
