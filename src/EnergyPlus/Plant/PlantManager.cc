@@ -3304,18 +3304,23 @@ void SizePlantLoop(EnergyPlusData &state,
                                              state.dataPlnt->PlantLoop(LoopNum).PlantSizNum > 0
                                                  ? state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).ExitTemp
                                                  : -999.0);
+                Real64 flipSign = 1.0;
+                if (state.dataPlnt->PlantLoop(LoopNum).PlantSizNum > 0 &&
+                    state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).LoopType == DataSizing::TypeOfPlantLoop::Cooling) {
+                    flipSign = -1.0;
+                }
                 BaseSizer::reportSizerOutput(state,
                                              "PlantLoop",
                                              state.dataPlnt->PlantLoop(LoopNum).Name,
                                              "Design Return Temperature [C]",
                                              state.dataPlnt->PlantLoop(LoopNum).PlantSizNum > 0
                                                  ? state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).ExitTemp -
-                                                       state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).DeltaT
+                                                       flipSign * state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).DeltaT
                                                  : -999.0);
                 BaseSizer::reportSizerOutput(state,
                                              "PlantLoop",
                                              state.dataPlnt->PlantLoop(LoopNum).Name,
-                                             "Sizing option (Coincident/NonCoincident)",
+                                             "Sizing option (NonCoincident=1/Coincident=2/Combination=3)",
                                              state.dataPlnt->PlantLoop(LoopNum).PlantSizNum > 0
                                                  ? state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).ConcurrenceOption
                                                  : -1);
@@ -3339,13 +3344,13 @@ void SizePlantLoop(EnergyPlusData &state,
                                              state.dataPlnt->PlantLoop(LoopNum).Name,
                                              "Design Return Temperature [C]",
                                              state.dataPlnt->PlantLoop(LoopNum).PlantSizNum > 0
-                                                 ? state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).ExitTemp -
+                                                 ? state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).ExitTemp +
                                                        state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).DeltaT
                                                  : -999.0);
                 BaseSizer::reportSizerOutput(state,
                                              "CondenserLoop",
                                              state.dataPlnt->PlantLoop(LoopNum).Name,
-                                             "Sizing option (Coincident/NonCoincident)",
+                                             "Sizing option (NonCoincident=1/Coincident=2/Combination=3)",
                                              state.dataPlnt->PlantLoop(LoopNum).PlantSizNum
                                                  ? state.dataSize->PlantSizData(state.dataPlnt->PlantLoop(LoopNum).PlantSizNum).ConcurrenceOption
                                                  : -1);

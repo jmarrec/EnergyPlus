@@ -1842,7 +1842,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_ScheduleMismatch)
     // "Electricity Season Schedule Mismatch" and referenced as "Electricity Season Schedule"
     GetInputEconomicsTariff(*state, ErrorsFound);
 
-    // The old code did not display the item in the severe error, check for it here.
+    // Check to make sure that the missing item is displayed in the error message.
     std::string detailed_error_message = "** Severe  ** GetInputEconomicsTariff: Season Schedule Name = ELECTRICITY SEASON SCHEDULE, item not found.";
     compare_err_stream_substring(detailed_error_message);
 }

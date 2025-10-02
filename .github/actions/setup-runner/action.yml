@@ -54,7 +54,7 @@ runs:
       echo "DIR_SEP=$DIR_SEP" >> $GITHUB_ENV
 
       begin_group "Install system dependencies such as ninja and ccache"
-      CCACHE_DIR="${{ github.workspace }}${DIR_SEP}.ccache"
+      export CCACHE_DIR="${{ github.workspace }}${DIR_SEP}.ccache"
       echo "CCACHE_DIR=$CCACHE_DIR"
       echo "CCACHE_DIR=$CCACHE_DIR" >> $GITHUB_ENV
       echo "ccache-dir=$CCACHE_DIR" >> $GITHUB_OUTPUT
@@ -90,17 +90,22 @@ runs:
         # clang-19
         COMPILER="clang-$(clang -dumpversion | cut -d'.' -f 1)"
       fi;
+      echo "::endgroup::"
 
+      begin_group "compiler ID"
+      echo "compiler-id=$COMPILER"
       echo "COMPILER=$COMPILER" >> $GITHUB_ENV
       echo "compiler-id=$COMPILER" >> $GITHUB_OUTPUT
+      echo "::endgroup::"
 
       # Setup ccache, common
+      begin_group "Configure CCache"
       ccache --set-config=cache_dir=$CCACHE_DIR
       ccache --set-config=max_size=500M
       ccache --set-config=compression=true
       ccache --set-config=sloppiness=pch_defines,time_macros
       ccache --set-config=base_dir="${{ github.workspace }}"
-
+      ccache -p
       echo "::endgroup::"
 
       begin_group "App Python_ROOT_DIR env variable"

@@ -82,9 +82,9 @@ jobs:
         # We turn off the PCH in that case, since that's how develop builds it
         echo "ENABLE_PCH=OFF" >> $GITHUB_ENV
 
-    - name: Cache CCACHE
-      uses: actions/cache@v4
-      id: cacheccache
+    - name: Restore Cache CCACHE
+      uses: actions/cache/restore@v4
+      id: cacheccache-restore
       with:
         path: |
           ${{ steps.setup-runner.outputs.ccache-dir }}
@@ -95,14 +95,36 @@ jobs:
           ccache-${{ matrix.os }}-${{ steps.setup-runner.outputs.compiler-id }}-
           ccache-${{ matrix.os }}-
 
-    - name: Did restoring the CCache-cache work? Yes
-      # If the SDK wasn't found in the cache
-      if: steps.cacheccache.outputs.cache-hit == 'true'
+    - name: Did restoring the CCache-cache work?
       shell: bash
       run: |
+        begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+        Color_Off='\033[0m'       # Text Reset
+
+        # Regular Colors
+        Red='\033[0;31m'
+        Green='\033[0;32m'
+        BrightYellow='\033[93m'
+
+        if [ "${{ steps.cacheccache-restore.outputs.cache-hit }}" == "true" ]; then
+          echo -e "✅ ${Green}CCache primary key was hit${Color_Off}"
+        else
+          FILES_IN_CACHE=$(ccache --print-stats | grep "^files_in_cache" | awk '{print $2}')
+          if [ "$FILES_IN_CACHE" -gt 0 ]; then
+            echo -e "⚠️  ${BrightYellow}Secondary cache hit${Color_Off}"
+          else
+            echo -e "❌ ${Red}No cache hit${Color_Off}"
+          fi;
+        fi;
+
+        begin_group "Showing existing ccache stats"
         ccache --show-stats -vv || ccache --show-stats
+        echo "::endgroup::"
+
         ccache --zero-stats
+        begin_group "Showing CCache config"
         ccache -p
+        echo "::endgroup::"
 
     - name: Create Build Directory
       shell: bash
@@ -137,7 +159,7 @@ jobs:
       working-directory: ./build
       shell: bash
       run: |
-        ctest -R integration -j ${{ env.NPROC }} --ouput-on-failure
+        ctest -R integration -j ${{ env.NPROC }} --output-on-failure
 
     - name: Checkout Branch again
       if: matrix.run_regressions && steps.cachebaselineregression.outputs.cache-hit != 'true'
@@ -164,15 +186,36 @@ jobs:
       shell: bash
       run: echo "::remove-matcher owner=gcc-problem-matcher::"
 
+    - name: Save CCache cache
+      if: always() && steps.cacheccache-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: |
+          ${{ steps.setup-runner.outputs.ccache-dir }}
+        key: ${{ steps.cacheccache-restore.outputs.cache-primary-key }}
+
     - name: Run Tests
       working-directory: ./build
       shell: bash
       run: |
+        begin_group() { echo -e "::group::\033[93m$1\033[0m"; }
+
+        Color_Off='\033[0m'       # Text Reset
+
+        # Regular Colors
+        Red='\033[0;31m'
+        Green='\033[0;32m'
+
+        begin_group "Running CTests"
         if ctest -j ${{ env.NPROC }}; then
-          echo "All tests passed"
+          echo "::endgroup::"
+          echo -e "✅ ${Green}All tests passed${Color_Off}"
         else
-          echo "Re-running failed tests..."
-          ctest --rerun-failed --output-on-failure
+          echo "::endgroup::"
+          echo -e "❌ ${Red}Some Tests Failed${Color_Off}"
+          begin_group "Re-running failed tests verbosely..."
+          ctest --rerun-failed -VV
+          echo "::endgroup::"
         fi;
 
     - name: Install Regression Tool

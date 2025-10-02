@@ -338,7 +338,7 @@ TEST_F(EnergyPlusFixture, UtilityRoutines_ShowDetailedSevereItemNotFound)
     ShowDetailedSevereItemNotFound(*state, eoh, "MissingField", "CanNotBeFound");
     EXPECT_TRUE(state->dataErrTracking->LastSevereError.find(detailed_error_message) != std::string::npos);
 
-    // This is the previous handler and it should not display the item information
+    // This  should not display the item information
     ShowSevereItemNotFound(*state, eoh, "MissingField", "CanNotBeFound");
     EXPECT_TRUE(state->dataErrTracking->LastSevereError.find(error_message) != std::string::npos);
 }
