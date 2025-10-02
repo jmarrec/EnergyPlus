@@ -1677,9 +1677,25 @@ namespace Sched {
                     }
                 }
 
+                // curcolCount is 1-indexed here
+                if (static_cast<size_t>(curcolCount) > result->second["values"].size()) {
+                    ShowSevereCustom(
+                        state, eoh, format("Requested column number {}, but found only {} columns.", curcolCount, result->second["values"].size()));
+                    ShowContinueError(state, fmt::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
+                    ShowFatalError(state, "Program terminates due to previous condition.");
+                }
                 auto const &column_json = result->second["values"][curcolCount - 1];
                 rowCnt = column_json.size();
-                auto const column_values = column_json.get<std::vector<Real64>>(); // (AUTO_OK_OBJ)
+
+                std::vector<Real64> column_values;
+                try {
+                    column_values = column_json.get<std::vector<Real64>>();
+                } catch (nlohmann::json::type_error &e) {
+                    ShowSevereCustom(state, eoh, format("Column number {} has non-numeric data.", curcolCount));
+                    ShowContinueError(state, e.what());
+                    ShowContinueError(state, fmt::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
+                    ShowFatalError(state, "Program terminates due to previous condition.");
+                }
 
                 // schedule values have been filled into the hourlyFileValues array.
 
@@ -1775,6 +1791,9 @@ namespace Sched {
             auto const headers = schedule_file_shading_result->second["header"].get<std::vector<std::string>>();  // (AUTO_OK_OBJ)
             auto const headers_set = schedule_file_shading_result->second["header"].get<std::set<std::string>>(); // (AUTO_OK_OBJ)
 
+            std::string const shadingFileName = schedule_file_shading_result->first.filename().string();
+            ErrorObjectHeader eoh{routineName, "Schedule:File:Shading", shadingFileName};
+
             for (auto const &header : headers_set) {
                 size_t column = 0;
                 auto column_it = std::find(headers.begin(), headers.end(), header);
@@ -1784,7 +1803,26 @@ namespace Sched {
                 if (column == 0) {
                     continue; // Skip timestamp column and any duplicate column, which will be 0 as well since it won't be found.
                 }
-                auto const column_values = values_json.at(column).get<std::vector<Real64>>(); // (AUTO_OK_OBJ)
+
+                if (column >= values_json.size()) {
+                    ShowSevereCustom(
+                        state,
+                        eoh,
+                        fmt::format(
+                            "For header '{}', Requested column number {}, but found only {} columns.", header, column + 1, values_json.size()));
+                    ShowContinueError(state, fmt::format("Error Occurred in {}", schedule_file_shading_result->first));
+                    ShowFatalError(state, "Program terminates due to previous condition.");
+                }
+
+                std::vector<Real64> column_values;
+                try {
+                    column_values = values_json.at(column).get<std::vector<Real64>>();
+                } catch (nlohmann::json::type_error &e) {
+                    ShowSevereCustom(state, eoh, fmt::format("Column number {} has non-numeric data.", column + 1));
+                    ShowContinueError(state, e.what());
+                    ShowContinueError(state, fmt::format("Error Occurred in {}", schedule_file_shading_result->first));
+                    ShowFatalError(state, "Program terminates due to previous condition.");
+                }
 
                 std::string curName = format("{}_shading", header);
                 std::string curNameUC = Util::makeUPPER(curName);
