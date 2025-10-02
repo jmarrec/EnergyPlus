@@ -6768,6 +6768,8 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
     int constexpr SpeedCal{1};
     VariableSpeedCoils::InitVarSpeedCoil(*state, DXCoilNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
     EXPECT_TRUE(compare_err_stream_substring("This will yield negative coil capacity sizing", true));
+    // Cooling design day name should be populated, but is not. This appears to be a separate issue that should be addressed at a later time.
+    // EXPECT_TRUE(compare_err_stream_substring("Annual Cooling 1 %", true));
 }
 
 TEST_F(EnergyPlusFixture, UnitarySystemModel_SetOnOffMassFlowRateTest)
