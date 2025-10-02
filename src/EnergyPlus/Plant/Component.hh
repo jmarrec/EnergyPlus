@@ -194,6 +194,7 @@ namespace DataPlant {
         DataPlant::CtrlType::HeatingOp, //	"DistrictHeating:Water" (steam is at the end)
         DataPlant::CtrlType::CoolingOp, //	"ThermalStorage:Ice:Detailed"
         DataPlant::CtrlType::CoolingOp, //	"ThermalStorage:Ice:Simple"
+        DataPlant::CtrlType::HeatingOp, //  "ThermalStorage:PCM"
         DataPlant::CtrlType::Invalid,   //	"TemperingValve"
         DataPlant::CtrlType::HeatingOp, //	"WaterHeater:Mixed"
         DataPlant::CtrlType::HeatingOp, //	"WaterHeater:Stratified"

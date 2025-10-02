@@ -90,6 +90,10 @@ namespace PCMStorage {
 
     void SimulatePCMStorage(EnergyPlusData &state, PlantLocation const &plantLoc, bool FirstHVACIteration, Real64 &CurLoad, bool RunFlag)
     {
+        // Silence only the truly unused parameters
+        (void)FirstHVACIteration;
+        (void)CurLoad;
+        (void)RunFlag;
         auto &PCM = PCMStorageData::instance();
 
         if (!PCM.Initialized) {
@@ -227,12 +231,14 @@ namespace PCMStorage {
 
     void PCMStorageData::Calculate(EnergyPlusData &state, PlantLocation const &plantLoc)
     {
+        // plantLoc is passed in but not referenced in the body → silence here
+        (void)plantLoc;
         auto &useInlet = state.dataLoopNodes->Node(UseSideInletNode);
         auto &useOutlet = state.dataLoopNodes->Node(UseSideOutletNode);
         auto &plantInlet = state.dataLoopNodes->Node(PlantSideInletNode);
         auto &plantOutlet = state.dataLoopNodes->Node(PlantSideOutletNode);
 
-        Real64 avail = this->AvailabilitySchedule->getCurrentVal();
+        [[maybe_unused]] Real64 avail = this->AvailabilitySchedule->getCurrentVal();
         Real64 dt_seconds = state.dataHVACGlobal->TimeStepSys * 3600.0;
 
         Real64 CpWater = 4180.0; // J/kg-C
@@ -255,8 +261,8 @@ namespace PCMStorage {
             return;
         }
 
-        Real64 useheatTransfer = massFlowUse * CpWater * deltaTUse;       // Heat to Water Heater
-        Real64 plantheatTransfer = massFlowPlant * CpWater * deltaTPlant; // Heat to PCM Tank
+        // Real64 useheatTransfer = massFlowUse * CpWater * deltaTUse;       // Heat to Water Heater
+        // Real64 plantheatTransfer = massFlowPlant * CpWater * deltaTPlant; // Heat to PCM Tank
         HeatLossRate_W = HeatLossRate;
 
         // Calculate tank temperature from stored energy
@@ -320,6 +326,13 @@ namespace PCMStorage {
         PlantUtilities::SetComponentFlowRate(state, mUseReq, this->UseSideInletNode, this->UseSideOutletNode, this->usePlantLoc);
         PlantUtilities::SetComponentFlowRate(state, mPlantReq, this->PlantSideInletNode, this->PlantSideOutletNode, this->sourcePlantLoc);
 
+        // Update node temps for the side that actually flowed
+        if (mUseReq > 0.0) {
+            useOutlet.Temp = useOutletTemp;
+        } else if (mPlantReq > 0.0) {
+            plantOutlet.Temp = std::min(plantOutletTemp, state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp);
+        }
+
         // Recompute heat-transfer rates using the requested flows (W)
         // (deltaTUse/deltaTPlant were computed above; keep your existing outlet temp calcs)
         Real64 useheatTransfer_req = mUseReq * CpWater * (useInlet.Temp - useOutletTemp);
@@ -330,13 +343,6 @@ namespace PCMStorage {
 
         // Update stored energy (J)
         EnergyStored += netPowerW * dt_seconds;
-
-        // Update node temps for the side that actually flowed
-        if (mUseReq > 0.0) {
-            useOutlet.Temp = useOutletTemp;
-        } else if (mPlantReq > 0.0) {
-            plantOutlet.Temp = std::min(plantOutletTemp, state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp);
-        }
 
         // Persist rates for reporting
         this->useheatTransfer = useheatTransfer_req;
