@@ -84,20 +84,8 @@ TEST_F(InputProcessorFixture, CsvParser_ProperlyFormed)
     EXPECT_FALSE(csvParser.hasErrors()) << format_errors_or_warnings(csvParser.errors());
     EXPECT_TRUE(csvParser.errors().empty());
 
-#if 0
-    EXPECT_FALSE(csvParser.hasWarnings())<< format_errors_or_warnings(csvParser.errors());
-    EXPECT_TRUE(csvParser.awrnings().empty());
-    {
-        auto const &[warning, isContinued] = csvParser.warnings().front();
-        EXPECT_EQ("CsvParser - Line 3 Column 2 - Blank value found, setting to null. Error in following line.", warning);
-        EXPECT_FALSE(isContinued);
-    }
-    {
-        auto const &[warning, isContinued] = csvParser.warnings().back();
-        EXPECT_EQ("1,,0.02", warning);
-        EXPECT_TRUE(isContinued);
-    }
-#endif
+    EXPECT_FALSE(csvParser.hasWarnings()) << format_errors_or_warnings(csvParser.warnings(), false);
+    EXPECT_TRUE(csvParser.warnings().empty());
 
     auto const &header = result["header"];
     EXPECT_EQ("Hour", header[0]);
@@ -180,7 +168,6 @@ TEST_F(InputProcessorFixture, CsvParser_NullValue)
     EXPECT_FALSE(csvParser.hasErrors()) << format_errors_or_warnings(csvParser.errors());
     EXPECT_TRUE(csvParser.errors().empty());
 
-#if 0
     EXPECT_TRUE(csvParser.hasWarnings());
     EXPECT_EQ(2, csvParser.warnings().size());
     {
@@ -193,7 +180,6 @@ TEST_F(InputProcessorFixture, CsvParser_NullValue)
         EXPECT_EQ("1,,0.02", warning);
         EXPECT_TRUE(isContinued);
     }
-#endif
 
     auto const &header = result["header"];
     EXPECT_EQ("Hour", header[0]);
@@ -242,7 +228,6 @@ TEST_F(InputProcessorFixture, CsvParser_ExtraColumns)
     EXPECT_FALSE(csvParser.hasErrors()) << format_errors_or_warnings(csvParser.errors());
     EXPECT_TRUE(csvParser.errors().empty());
 
-#if 0
     EXPECT_TRUE(csvParser.hasWarnings());
     EXPECT_EQ(2, csvParser.warnings().size());
     {
@@ -255,7 +240,6 @@ TEST_F(InputProcessorFixture, CsvParser_ExtraColumns)
         EXPECT_EQ("1,0.2,0.02,0.33", warning);
         EXPECT_TRUE(isContinued);
     }
-#endif
 
     auto const &header = result["header"];
     EXPECT_EQ("Hour", header[0]);
