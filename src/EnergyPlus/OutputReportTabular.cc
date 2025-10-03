@@ -5330,12 +5330,14 @@ void setTabularReportStyles(EnergyPlusData &state)
         currentStyle.produceJSON = true;
         currentStyle.produceSQLite = false;
         // Check if SQLite output enabled and style matches JSON
-        if (state.dataSQLiteProcedures->sqlite) {
-            if ((ort->formatReals_SQLite == ort->formatReals_JSON) && (ort->unitsStyle_SQLite == ort->unitsStyle_JSON)) {
-                currentStyle.produceSQLite = true;
-                needMoreForSQLite = false;
-            } else {
-                needMoreForSQLite = true;
+        if (needMoreForSQLite) {
+            if (state.dataSQLiteProcedures->sqlite) {
+                if ((ort->formatReals_SQLite == ort->formatReals_JSON) && (ort->unitsStyle_SQLite == ort->unitsStyle_JSON)) {
+                    currentStyle.produceSQLite = true;
+                    needMoreForSQLite = false;
+                } else {
+                    needMoreForSQLite = true;
+                }
             }
         }
         ort->tabularReportPasses.emplace_back(currentStyle);
