@@ -512,6 +512,9 @@ void ManageHVAC(EnergyPlusData &state)
                 }
                 state.dataHVACMgr->PrintedWarmup = true;
             }
+            if (!state.dataGlobal->DoingSizing) {
+                NodeInputManager::CalcMoreNodeInfo(state);
+            }
             UpdateDataandReport(state, OutputProcessor::TimeStepType::System);
             if (state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeDesignDay ||
                 state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeRunPeriodDesign) {
