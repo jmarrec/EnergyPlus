@@ -4090,9 +4090,6 @@ void WriteTabularTariffReports(EnergyPlusData &state)
 
         if (state.dataOutRptTab->displayEconomicResultSummary) {
             DisplayString(state, "Writing Tariff Reports");
-            for (auto &e : econVar) {
-                e.isReported = false;
-            }
             showWarningsBasedOnTotal(state);
             //---------------------------------
             // Economics Results Summary Report
@@ -4257,6 +4254,11 @@ void WriteTabularTariffReports(EnergyPlusData &state)
             //---------------------------------
             if (state.dataOutRptTab->displayTariffReport) {
                 for (auto &currentStyle : state.dataOutRptTab->tabularReportPasses) {
+                    // Clear this for each style pass
+                    for (auto &e : econVar) {
+                        e.isReported = false;
+                    }
+
                     for (int iTariff = 1; iTariff <= s_econ->numTariff; ++iTariff) {
                         auto const &tariff = s_econ->tariff(iTariff);
                         auto const &computation = s_econ->computation(iTariff);
