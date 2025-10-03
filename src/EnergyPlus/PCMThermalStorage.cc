@@ -220,13 +220,13 @@ namespace PCMStorage {
             this->MyEnvrnFlag = true;
         }
 
-        Real64 avail = this->AvailabilitySchedule->getCurrentVal();
-        // Establish component flow requests on each side of the storage tank.  Use the
-        // design mass flow rates computed above and apply availability scheduling.  Note
-        // that SetComponentFlowRate expects a mass flow (kg/s), not a volumetric flow.  The
-        // previous implementation passed the design volumetric flow rate directly which
-        // resulted in very small mass flows and in some cases zero flow on the use side.  Here
-        // we convert to mass flow and schedule it off when the availability schedule is zero.
+        // Real64 avail = this->AvailabilitySchedule->getCurrentVal();
+        //  Establish component flow requests on each side of the storage tank.  Use the
+        //  design mass flow rates computed above and apply availability scheduling.  Note
+        //  that SetComponentFlowRate expects a mass flow (kg/s), not a volumetric flow.  The
+        //  previous implementation passed the design volumetric flow rate directly which
+        //  resulted in very small mass flows and in some cases zero flow on the use side.  Here
+        //  we convert to mass flow and schedule it off when the availability schedule is zero.
     }
 
     void PCMStorageData::Calculate(EnergyPlusData &state, PlantLocation const &plantLoc)
