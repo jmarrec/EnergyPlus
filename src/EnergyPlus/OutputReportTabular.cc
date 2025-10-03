@@ -14223,6 +14223,10 @@ void WriteComponentSizing(EnergyPlusData &state)
     WriteReportHeaders(state, "Component Sizing Summary", "Entire Facility", OutputProcessor::StoreType::Average);
 
     for (auto &currentStyle : ort->tabularReportPasses) {
+        // clear written flags
+        for (auto &e : state.dataOutRptPredefined->CompSizeTableEntry) {
+            e.written = false;
+        }
 
         // The arrays that look for unique headers are dimensioned in the
         // running program since the size of the number of entries is
