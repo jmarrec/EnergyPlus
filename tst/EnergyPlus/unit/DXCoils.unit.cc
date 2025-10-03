@@ -2548,6 +2548,45 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedWasteHeat)
     EXPECT_NEAR(1302.748, state->dataHVACGlobal->MSHPWasteHeat, 0.001);
 }
 
+TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunctionAlone)
+{
+    state->init_state(*state);
+    // Define coil parameters
+    Real64 constexpr RatedInletAirTemp(26.666699999999999);
+    Real64 constexpr RatedInletAirHumRat(0.011184700000000001);
+    state->dataDXCoils->DXCoil.allocate(1);
+    state->dataDXCoils->DXCoil(1).DXCoilType = "Coil:Cooling:DX:SingleSpeed";
+    state->dataDXCoils->DXCoil(1).Name = "Test Coil";
+    state->dataDXCoils->DXCoil(1).RatedTotCap(1) = 4480.6580719394560;
+    state->dataDXCoils->DXCoil(1).RatedAirVolFlowRate(1) = 0.23519298920287324;
+    state->dataDXCoils->DXCoil(1).RatedSHR(1) = 0.75045855035287490;
+    std::string const CallingRoutine("DXCoil_ValidateADPFunctionAlone");
+
+    // Calculate new SHR
+    Real64 newSHR = ValidateADP(*state,
+                                state->dataDXCoils->DXCoil(1).DXCoilType,
+                                state->dataDXCoils->DXCoil(1).Name,
+                                RatedInletAirTemp,
+                                RatedInletAirHumRat,
+                                state->dataDXCoils->DXCoil(1).RatedTotCap(1),
+                                state->dataDXCoils->DXCoil(1).RatedAirVolFlowRate(1),
+                                state->dataDXCoils->DXCoil(1).RatedSHR(1),
+                                CallingRoutine);
+
+    // Make sure that the outlet conditions are below the saturation
+    Real64 airMassFlowRate =
+        state->dataDXCoils->DXCoil(1).RatedAirVolFlowRate(1) *
+        Psychrometrics::PsyRhoAirFnPbTdbW(*state, DataEnvironment::StdPressureSeaLevel, RatedInletAirTemp, RatedInletAirHumRat, CallingRoutine);
+    Real64 deltaH = state->dataDXCoils->DXCoil(1).RatedTotCap(1) / airMassFlowRate;
+    Real64 inletAirEnthalpy = Psychrometrics::PsyHFnTdbW(RatedInletAirTemp, RatedInletAirHumRat);
+    Real64 hTinHumRatOut = inletAirEnthalpy - (1.0 - newSHR) * deltaH;
+    Real64 outletAirHumRat = Psychrometrics::PsyWFnTdbH(*state, RatedInletAirTemp, hTinHumRatOut); // 0.0098703703931385892
+    Real64 outletAirEnthalpy = inletAirEnthalpy - deltaH;                                          // 38853.039955973931
+    Real64 outletAirTemp = Psychrometrics::PsyTdbFnHW(outletAirEnthalpy, outletAirHumRat);         // 13.846750113203081
+    Real64 dewPointTempOutHumRat = Psychrometrics::PsyTdpFnWPb(*state, outletAirHumRat, DataEnvironment::StdPressureSeaLevel);
+    ASSERT_TRUE(dewPointTempOutHumRat < outletAirTemp);
+}
+
 TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
 {
 
@@ -2688,7 +2727,7 @@ TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
                                     state->dataDXCoils->DXCoil(1).RatedSHR(1),
                                     true);
 
-    EXPECT_NEAR(0.792472, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
+    EXPECT_NEAR(0.79201121, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
     EXPECT_NEAR(0.00213735, CBF_calculated, 0.0000001);
 
     state->dataDXCoils->DXCoil(1).RatedTotCap(1) = 35000.0; // simulate outlet condition right at the saturation curve
@@ -2705,7 +2744,7 @@ TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
                              state->dataDXCoils->DXCoil(1).RatedSHR(1),
                              true);
 
-    EXPECT_NEAR(0.67908322, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
+    EXPECT_NEAR(0.67892329, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
     EXPECT_NEAR(0.00298921, CBF_calculated, 0.0000001);
 
     state->dataDXCoils->DXCoil(1).RatedTotCap(1) = 40000.0; // reverse perturb SHR (i.e., decrease SHR), CalcCBF would have failed with RH >= 1.0
@@ -2722,7 +2761,7 @@ TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
                              state->dataDXCoils->DXCoil(1).RatedSHR(1),
                              true);
 
-    EXPECT_NEAR(0.64708322, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
+    EXPECT_NEAR(0.64719495, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
     EXPECT_NEAR(0.00252307, CBF_calculated, 0.0000001);
 }
 
@@ -4983,8 +5022,8 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoilsAutoSizingOutput)
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.87500
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Gross Rated Total Cooling Capacity [W], 32731.91226
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Gross Rated Total Cooling Capacity [W], 16365.95613
- Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Rated Sensible Heat Ratio, 0.80039
- Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Sensible Heat Ratio, 0.80039
+ Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Rated Sensible Heat Ratio, 0.80369
+ Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Sensible Heat Ratio, 0.80369
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Evaporative Condenser Air Flow Rate [m3/s], 1.86572
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Evaporative Condenser Air Flow Rate [m3/s], 3.73144
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Evaporative Condenser Pump Power Consumption [W], 69.81717
@@ -5267,8 +5306,8 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoolingCoilPartialAutoSizeOutput)
     EXPECT_NEAR(32731.91, state->dataDXCoils->DXCoil(1).MSRatedTotCap(2), 0.01);
     EXPECT_NEAR(16365.95, state->dataDXCoils->DXCoil(1).MSRatedTotCap(1), 0.01);
     // Design SHR at speed 2 and speed 1
-    EXPECT_NEAR(0.80038, state->dataDXCoils->DXCoil(1).MSRatedSHR(2), 0.00001);
-    EXPECT_NEAR(0.80038, state->dataDXCoils->DXCoil(1).MSRatedSHR(1), 0.00001);
+    EXPECT_NEAR(0.80369, state->dataDXCoils->DXCoil(1).MSRatedSHR(2), 0.00001);
+    EXPECT_NEAR(0.80369, state->dataDXCoils->DXCoil(1).MSRatedSHR(1), 0.00001);
 
     // test SHR design size when partial autosizing (capacity is hardsized)
     state->dataDXCoils->DXCoil(1).MSRatedTotCap(1) = 17500.0; // DataSizing::AutoSize;
@@ -5276,8 +5315,8 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoolingCoilPartialAutoSizeOutput)
 
     SizeDXCoil(*state, 1);
     // Design size SHR at speed 2 and speed 1
-    EXPECT_NEAR(0.80038, state->dataDXCoils->DXCoil(1).MSRatedSHR(2), 0.00001);
-    EXPECT_NEAR(0.80038, state->dataDXCoils->DXCoil(1).MSRatedSHR(1), 0.00001);
+    EXPECT_NEAR(0.80369, state->dataDXCoils->DXCoil(1).MSRatedSHR(2), 0.00001);
+    EXPECT_NEAR(0.80369, state->dataDXCoils->DXCoil(1).MSRatedSHR(1), 0.00001);
     // Design Capacity at speed 2 and speed 1
     EXPECT_NEAR(32731.91, state->dataDXCoils->DXCoil(1).MSRatedTotCapDes(2), 0.01);
     EXPECT_EQ(35000.0, state->dataDXCoils->DXCoil(1).MSRatedTotCap(2));

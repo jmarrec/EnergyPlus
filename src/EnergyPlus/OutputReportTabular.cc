@@ -117,6 +117,7 @@
 #include <EnergyPlus/OutputReportTabular.hh>
 #include <EnergyPlus/OutputReportTabularAnnual.hh>
 #include <EnergyPlus/PackagedThermalStorageCoil.hh>
+#include <EnergyPlus/Plant/PlantManager.hh>
 #include <EnergyPlus/PlantChillers.hh>
 #include <EnergyPlus/PollutionModule.hh>
 #include <EnergyPlus/Psychrometrics.hh>
@@ -125,11 +126,13 @@
 #include <EnergyPlus/ResultsFramework.hh>
 #include <EnergyPlus/SQLiteProcedures.hh>
 #include <EnergyPlus/ScheduleManager.hh>
+#include <EnergyPlus/SetPointManager.hh>
 #include <EnergyPlus/ThermalComfort.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 #include <EnergyPlus/VentilatedSlab.hh>
 #include <EnergyPlus/WaterManager.hh>
 #include <EnergyPlus/WaterThermalTanks.hh>
+#include <EnergyPlus/WaterUse.hh>
 #include <EnergyPlus/WeatherManager.hh>
 #include <EnergyPlus/ZonePlenum.hh>
 #include <EnergyPlus/ZoneTempPredictorCorrector.hh>
@@ -6982,6 +6985,19 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
     // Restore flags
     state.dataHVACGlobal->NightVentOn = saveNightVentOn;
     state.dataHVACGlobal->TurnFansOn = saveTurnFansOn;
+
+    // fill water use equipment table
+    for (auto &we : state.dataWaterUse->WaterEquipment) {
+        we.FillPredefinedTable(state);
+    }
+    // fill the setpoint manager tables
+    SetPointManager::FillPredefinedTablesForSetPointManagers(state);
+
+    // fill the available manager tables
+    Avail::FillPredefinedTablesForAvailManager(state);
+
+    // fill the plant equipment operation load based
+    PlantManager::FillPlantEquipmentOperationLoad(state);
 }
 
 void WriteMonthlyTables(EnergyPlusData &state)
@@ -18554,6 +18570,18 @@ int digitsAferDecimal(std::string const &s)
         }
     }
     return int(numDigits);
+}
+
+std::string stringJoinDelimiter(const std::vector<std::string> &in_strings, const std::string &delimiter)
+{
+    if (in_strings.empty()) {
+        return "";
+    }
+    std::string result = in_strings[0];
+    for (size_t i = 1; i < in_strings.size(); ++i) {
+        result += delimiter + in_strings[i];
+    }
+    return result;
 }
 
 void AddTOCEntry(EnergyPlusData &state, std::string const &nameSection, std::string const &nameReport)
