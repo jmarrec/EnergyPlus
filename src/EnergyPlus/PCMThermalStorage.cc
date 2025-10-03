@@ -238,22 +238,22 @@ namespace PCMStorage {
         auto &plantInlet = state.dataLoopNodes->Node(PlantSideInletNode);
         auto &plantOutlet = state.dataLoopNodes->Node(PlantSideOutletNode);
 
-        [[maybe_unused]] Real64 avail = this->AvailabilitySchedule->getCurrentVal();
+        // Real64 avail = this->AvailabilitySchedule->getCurrentVal();
         Real64 dt_seconds = state.dataHVACGlobal->TimeStepSys * 3600.0;
 
         Real64 CpWater = 4180.0; // J/kg-C
-        Real64 massFlowUse = useInlet.MassFlowRate;
-        Real64 massFlowPlant = plantInlet.MassFlowRate;
+        // Real64 massFlowUse = useInlet.MassFlowRate;
+        // Real64 massFlowPlant = plantInlet.MassFlowRate;
 
         Real64 plantOutletTemp = plantInlet.Temp - (Effectiveness * (plantInlet.Temp - FreezingTemp)); // Calculate Plant Outlet Temperature
         Real64 useOutletTemp = useInlet.Temp + (Effectiveness * (MeltingTemp - useInlet.Temp));        // Calculate Use Outlet Temperature
 
-        Real64 deltaTUse = useInlet.Temp - useOutletTemp;       // Heat to Water Heater
-        Real64 deltaTPlant = plantInlet.Temp - plantOutletTemp; // Heat to PCM Tank
+        // Real64 deltaTUse = useInlet.Temp - useOutletTemp;       // Heat to Water Heater
+        // Real64 deltaTPlant = plantInlet.Temp - plantOutletTemp; // Heat to PCM Tank
         PlantUtilities::SafeCopyPlantNode(state, this->UseSideInletNode, this->UseSideOutletNode);
         PlantUtilities::SafeCopyPlantNode(state, this->PlantSideInletNode, this->PlantSideOutletNode);
 
-        if (avail <= 0.0) {
+        if (this->AvailabilitySchedule->getCurrentVal() <= 0.0) {
             useInlet.MassFlowRate = 0.0;
             useOutlet.MassFlowRate = 0.0;
             plantInlet.MassFlowRate = 0.0;
