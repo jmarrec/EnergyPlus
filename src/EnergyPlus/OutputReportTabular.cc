@@ -233,7 +233,7 @@ void UpdateTabularReports(EnergyPlusData &state, OutputProcessor::TimeStepType t
         OutputReportTabularAnnual::GetInputTabularAnnual(state);
         OutputReportTabularAnnual::checkAggregationOrderForAnnual(state);
         GetInputTabularTimeBins(state);
-        OutputReportTabular::GetInputTabularStyle(state); // need to get this early before sizing writes to table outputs
+        GetInputTabularStyle(state);
         GetInputOutputTableSummaryReports(state);
         if (state.dataOutRptTab->displayThermalResilienceSummary) {
             // check whether multiple people have different threshold for a zone
@@ -1245,10 +1245,6 @@ void GetInputTabularStyle(EnergyPlusData &state)
     // PURPOSE OF THIS SUBROUTINE:
     //   This routine set a flag for the output format for
     //   all tabular reports. This is a "unique" object.
-
-    // using DataStringGlobals::CharComma;
-    // using DataStringGlobals::CharSpace;
-    // using DataStringGlobals::CharTab;
 
     static std::string const CurrentModuleObject("OutputControl:Table:Style");
 
@@ -5203,9 +5199,7 @@ void WriteTabularReports(EnergyPlusData &state)
     WaterManager::ReportRainfall(state);
     auto &ort = state.dataOutRptTab;
 
-    // Here to it is ready to assign ort->unitStyle_SQLite (not in SQLiteProcedures.cc)
-    // and ort->unitsStyle_JSON (not in ResultsFramework)
-    // when ort->unitsStyle inputs should have been concretely processed and assigned.
+    // All output style inputs have been processed by now, so check if either JSON or SQLite units are unassigned
     if (ort->unitsStyle_SQLite == UnitsStyle::NotFound) {
         ort->unitsStyle_SQLite = ort->unitsStyle_Tabular; // This is the default UseOutputControlTableStyles
     }
