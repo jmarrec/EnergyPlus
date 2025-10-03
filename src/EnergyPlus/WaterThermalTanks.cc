@@ -3738,6 +3738,12 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
         if (objectType == "ThermalStorage:ChilledWater:Stratified") {
             Tank.WaterThermalTankType = DataPlant::PlantEquipmentType::ChilledWaterTankStratified;
             TankTempLimit = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "minimum_temperature_limit");
+            if (TankTempLimit > 0.0) {
+                Tank.TankTempLimit = TankTempLimit;
+            } else {
+                // default to just above freezing
+                Tank.TankTempLimit = 1.0;
+            }
             auto const &setpointTempScheduleName = fields.find("setpoint_temperature_schedule_name");
             if (setpointTempScheduleName == fields.end() || setpointTempScheduleName->empty()) {
                 ShowSevereEmptyField(state, eoh, "setpoint_temperature_schedule_name");
@@ -3753,6 +3759,12 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
         } else { // "ThermalStorage:HotWater:Stratified"
             Tank.WaterThermalTankType = DataPlant::PlantEquipmentType::HotWaterTankStratified;
             TankTempLimit = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "maximum_temperature_limit");
+            if (TankTempLimit <= 100.0) {
+                Tank.TankTempLimit = TankTempLimit;
+            } else {
+                // Default to very large number, boiling point of water
+                Tank.TankTempLimit = 100.0;
+            }
             auto const &topTempScheduleFieldName = "top_setpoint_temperature_schedule_name";
             auto const &topSetpointTempScheduleName = fields.find(topTempScheduleFieldName);
             if (topSetpointTempScheduleName == fields.end() || topSetpointTempScheduleName->empty()) {
