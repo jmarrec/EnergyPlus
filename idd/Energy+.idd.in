@@ -26915,6 +26915,7 @@ AirflowNetwork:Distribution:Linkage,
       \min-fields 4
       \memo This object defines the connection between two nodes and a component.
  A1 , \field Name
+      \reference AirflowNetworkDistributionLinkageNames
       \required-field
       \type alpha
       \note Enter a unique name for this object.
