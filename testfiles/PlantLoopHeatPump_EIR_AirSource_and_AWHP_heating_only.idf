@@ -1,12 +1,13 @@
-! PlantLoopHeatPump_EIR_AirSource.idf
+! PlantLoopHeatPump_EIR_AirSource_and_AWHP_heating_only.idf
 !
 ! Basic file description:
-! The EIR formulated air-to-water heat pump is demonstrated using a simple collection of plant loops.  Building loads
-! are represented using Plant Load Profile objects
+! The air-to-water heat pump HeatPump:AirToWater for a heating-only applications
+! is demonstrated using a simple chilled water loop. Building loads are
+! represented using Plant Load Profile objects.
 ! Run:      1 design day.
 ! Building: None.
 ! System:   None.
-! Plant:    PLANT LOAD PROFILE with District Heating and Cooling as necessary.
+! Plant:    The heating loop is served by air-to-water heat pump.
 
   Version,25.2;
 
@@ -468,7 +469,30 @@
 
   Output:VariableDictionary,IDF;
 
-  Output:Variable,*,Heat Pump Operating Mode is Heating,detailed;  !- HVAC Average []
+  Output:Variable,*,Heat Pump Load Side Heat Transfer Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Heat Transfer Energy in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Heat Transfer Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Heat Transfer Energy in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Inlet Temperature in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Outlet Temperature in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Inlet Temperature in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Outlet Temperature in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Electricity Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Electricity Energy in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Load Side Mass Flow Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Source Side Mass Flow Rate in Heating Mode,detailed;
+  Output:Variable,*,Heat Pump Number Of Heating Unit On,detailed;  !- HVAC Average []
+  Output:Variable,*,Heat Pump Crankcase Heater Electricity Rate,detailed;  !- HVAC Average [W]
+  Output:Variable,*,Heat Pump Crankcase Heater Electricity Energy,detailed;  !- HVAC Sum [W]
+  Output:Variable,*,Heat Pump Heating COP,detailed;  !- HVAC Average []
+  Output:Variable,*,Heat Pump Total Heating Rate,detailed;  !- HVAC Average []
+  Output:Variable,*,Site Outdoor Air Drybulb Temperature,detailed;  !- Zone Average [C]
+  Output:Variable,*,Heat Pump Defrost Electricity Rate,detailed;  !- HVAC Average [W]
+  Output:Variable,*,Heat Pump Defrost Electricity Energy,detailed;  !- HVAC Sum [J]
+  Output:Variable,Heating Coil Load Loop,Plant Supply Side Heating Demand Rate,detailed;  !- HVAC Average [W]
+  Output:Variable,*,Plant Load Profile Heat Transfer Rate,detailed;  !- HVAC Average [W]
+  Output:Variable,*,Heat Pump Speed Level in Heating Mode,detailed;  !- HVAC Average []
+  Output:Variable,*,Heat Pump Speed Ratio in Heating Mode,detailed;  !- HVAC Average []
   Output:Variable,*,Operating Model Output Heating,detailed;
   Output:Variable,*,EMS Defrost Flag,detailed;
   Output:Variable,*,Heat Pump Load Due To Defrost,detailed;  !- HVAC Average [W]

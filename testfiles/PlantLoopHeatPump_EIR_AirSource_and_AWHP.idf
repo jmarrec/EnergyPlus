@@ -1,4 +1,4 @@
-! PlantLoopHeatPump_EIR_AirSource_and_AWHP_realistic_curve.idf
+! PlantLoopHeatPump_EIR_AirSource_and_AWHP.idf
 !
 ! Basic file description:
 ! The air-to-water heat pump HeatPump:AirToWater is demonstrated using a simple collection of plant loops.  Building loads
