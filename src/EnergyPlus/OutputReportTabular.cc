@@ -2247,6 +2247,7 @@ void CreatePredefinedMonthlyReports(EnergyPlusData &state)
         AddMonthlyFieldSetInput(state, curReport, "Humidifier:Electricity", "", AggType::SumOrAvg);
         AddMonthlyFieldSetInput(state, curReport, "HeatRecovery:Electricity", "", AggType::SumOrAvg);
         AddMonthlyFieldSetInput(state, curReport, "WaterSystems:Electricity", "", AggType::SumOrAvg);
+        AddMonthlyFieldSetInput(state, curReport, "Refrigeration:Electricity", "", AggType::SumOrAvg);
         AddMonthlyFieldSetInput(state, curReport, "Cogeneration:Electricity", "", AggType::SumOrAvg);
     }
     if (ort->namedMonthly(14).show) {
@@ -2333,6 +2334,7 @@ void CreatePredefinedMonthlyReports(EnergyPlusData &state)
         AddMonthlyFieldSetInput(state, curReport, "Humidifier:Electricity", "", AggType::Maximum);
         AddMonthlyFieldSetInput(state, curReport, "HeatRecovery:Electricity", "", AggType::Maximum);
         AddMonthlyFieldSetInput(state, curReport, "WaterSystems:Electricity", "", AggType::Maximum);
+        AddMonthlyFieldSetInput(state, curReport, "Refrigeration:Electricity", "", AggType::Maximum);
         AddMonthlyFieldSetInput(state, curReport, "Cogeneration:Electricity", "", AggType::Maximum);
     }
     if (ort->namedMonthly(23).show) {
@@ -2347,6 +2349,11 @@ void CreatePredefinedMonthlyReports(EnergyPlusData &state)
         AddMonthlyFieldSetInput(state, curReport, "Heating:Electricity", "", AggType::ValueWhenMaxMin);
         AddMonthlyFieldSetInput(state, curReport, "Cooling:Electricity", "", AggType::ValueWhenMaxMin);
         AddMonthlyFieldSetInput(state, curReport, "HeatRejection:Electricity", "", AggType::ValueWhenMaxMin);
+        AddMonthlyFieldSetInput(state, curReport, "Humidifier:Electricity", "", AggType::ValueWhenMaxMin);
+        AddMonthlyFieldSetInput(state, curReport, "HeatRecovery:Electricity", "", AggType::ValueWhenMaxMin);
+        AddMonthlyFieldSetInput(state, curReport, "WaterSystems:Electricity", "", AggType::ValueWhenMaxMin);
+        AddMonthlyFieldSetInput(state, curReport, "Refrigeration:Electricity", "", AggType::ValueWhenMaxMin);
+        AddMonthlyFieldSetInput(state, curReport, "Cogeneration:Electricity", "", AggType::ValueWhenMaxMin);
     }
     if (ort->namedMonthly(24).show) {
         curReport = AddMonthlyReport(state, "PeakEnergyEndUseNaturalGasMonthly", 2, true);
