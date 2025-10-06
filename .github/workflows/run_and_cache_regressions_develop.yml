@@ -2,7 +2,7 @@ name: Build, Run and Cache Develop Regressions
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, FixDevelopArmBuilds ]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
