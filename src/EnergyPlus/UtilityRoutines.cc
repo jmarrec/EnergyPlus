@@ -1682,7 +1682,7 @@ void ShowSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh,
     ShowContinueError(state, format("{} = {}, item not found.", fieldName, fieldVal));
 }
 
-void ShowDetailedSevereItemNotFound(EnergyPlusData& state, ErrorObjectHeader const& eoh, std::string_view fieldName, std::string_view fieldVal)
+void ShowDetailedSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldVal)
 {
     ShowSevereError(state, format("{}: {} = {}, item not found.", eoh.routineName, fieldName, fieldVal));
     ShowContinueError(state, format("{} = {}, item not found.", fieldName, fieldVal));
