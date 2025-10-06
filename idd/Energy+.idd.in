@@ -76334,16 +76334,16 @@ HeatPump:AirToWater,
         \note HeatingPriority: similar to the previous cooling priority one,
         \note but will prioritize to meet the heating demand first
         \note Balanced: balance the percent satisfied heating or cooling load
-   N1,  \field Minimum Part Load Ratio
-        \note Below this operating limit compressor cycling will occur
-        \type real
-        \minimum 0.0
-        \default 0.0
    A6 , \field Operating Mode Control Schedule Name
         \note This field is used if the control method is set to ScheduledModes
         \note Schedule values control operating mode: 0=off, 1=cooling, 2=heating
         \type object-list
         \object-list ScheduleNames
+   N1,  \field Minimum Part Load Ratio
+        \note Below this operating limit compressor cycling will occur
+        \type real
+        \minimum 0.0
+        \default 0.0
    N2 , \field Rated Inlet Air Temperature in Heating Mode
         \type real
         \units C

@@ -283,6 +283,7 @@
     Load ,                   !- Operating Mode Control Method
     SingleMode,              !- Operating Mode Control Option for Multiple Unit
     ,                        !- Operating Mode Control Schedule Name
+    ,                        !- Minimum Part Load Ratio
     20 ,                     !- Rated Inlet Air Temperature in Heating Mode
     autosize,                !- Rated Air Flow Rate in Heating Mode
     50 ,                     !- Rated Leaving Water Temperature in Heating Mode
@@ -291,7 +292,6 @@
     25,                      !- Maximum Outdoor Air Temperature in Heating Mode
     MinHeatingSWTvsOAT,      !- Minimum Leaving Water Temperature Curve Name in Heating Mode
     MaxHeatingSWTvsOAT,      !- Maximum Leaving Water Temperature Curve Name in Heating Mode
-    ,                        !- Minimum Part Load Ratio
     1.0,                     !- Sizing Factor for Heating
     25,                      !- Rated Inlet Air Temperature in Cooling Mode
     20 ,                     !- Rated Air Flow Rate in Cooling Mode
