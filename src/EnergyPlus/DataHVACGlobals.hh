@@ -99,14 +99,14 @@ namespace HVAC {
     int constexpr NumOfSizingTypes(35); // request sizing for cooling air flow rate
 
     // Sizing types
-    int constexpr CoolingAirflowSizing(1);                // request sizing for cooling air flow rate
-    int constexpr CoolingWaterDesWaterInletTempSizing(6); // request sizing for cooling water coil inlet water temp
-    int constexpr HeatingAirflowSizing(14);               // request sizing for heating air flow rate
-    int constexpr SystemAirflowSizing(16);                // request sizing for system air flow rate
-    int constexpr CoolingCapacitySizing(17);              // request sizing for cooling capacity
-    int constexpr HeatingCapacitySizing(18);              // request sizing for heating capacity
-    int constexpr SystemCapacitySizing(21);               // request sizing for system capacity
-    int constexpr AutoCalculateSizing(25);                // identifies an autocalulate input
+    int constexpr CoolingAirflowSizing(1);                  // request sizing for cooling air flow rate
+    int constexpr CoolingWaterDesWaterInletTempSizing(6);   // request sizing for cooling water coil inlet water temp
+    int constexpr HeatingAirflowSizing(14);                 // request sizing for heating air flow rate
+    int constexpr SystemAirflowSizing(16);                  // request sizing for system air flow rate
+    int constexpr CoolingCapacitySizing(17);                // request sizing for cooling capacity
+    int constexpr HeatingCapacitySizing(18);                // request sizing for heating capacity
+    int constexpr SystemCapacitySizing(21);                 // request sizing for system capacity
+    [[maybe_unused]] int constexpr AutoCalculateSizing(25); // identifies an autocalulate input
 
     // The following parameters describe the setpoint types in TempControlType(ActualZoneNum)
     enum class SetptType
@@ -120,7 +120,7 @@ namespace HVAC {
         Num
     };
 
-    static constexpr std::array<SetptType, (int)SetptType::Num> setptTypes = {
+    static constexpr std::array<SetptType, 4> controlledSetptTypes = {
         SetptType::SingleHeat, SetptType::SingleCool, SetptType::SingleHeatCool, SetptType::DualHeatCool};
 
     static constexpr std::array<std::string_view, (int)SetptType::Num> setptTypeNames = {
@@ -396,7 +396,7 @@ namespace HVAC {
     {
         Invalid = -1,
         AirToAir_FlatPlate,
-        AirToAir_Generic,
+        AirToAir_SensAndLatent,
         Desiccant_Balanced,
         Num
     };

@@ -127,7 +127,7 @@
 ! Utility Tariffs:                None
 !
 
-  Version,25.1;
+  Version,25.2;
 
   Building,
     NONE,                    !- Name

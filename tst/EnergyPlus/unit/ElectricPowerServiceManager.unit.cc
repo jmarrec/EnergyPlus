@@ -1142,7 +1142,7 @@ TEST_F(EnergyPlusFixture, Battery_checkUserEfficiencyInputTest)
     userInputEfficiencyCharge = 0.0;
     expectedResult = 0.001;
     errorsFound = false;
-    functionResult = checkUserEfficiencyInput(*state, userInputEfficiencyCharge, "CHARGING", "Tatooine", errorsFound);
+    functionResult = checkUserEfficiencyInput(*state, userInputEfficiencyCharge, true, "Tatooine", errorsFound);
     EXPECT_NEAR(functionResult, expectedResult, 0.00001);
     std::string const error_string1 = delimited_string(
         {format("   ** Warning ** Version: missing in IDF, processing for EnergyPlus version=\"{}\"", DataStringGlobals::MatchVersion),
@@ -1155,7 +1155,7 @@ TEST_F(EnergyPlusFixture, Battery_checkUserEfficiencyInputTest)
     userInputEfficiencyCharge = 0.7;
     expectedResult = 0.7;
     errorsFound = false;
-    functionResult = checkUserEfficiencyInput(*state, userInputEfficiencyCharge, "CHARGING", "Tatooine", errorsFound);
+    functionResult = checkUserEfficiencyInput(*state, userInputEfficiencyCharge, true, "Tatooine", errorsFound);
     EXPECT_NEAR(functionResult, expectedResult, 0.00001);
     EXPECT_FALSE(errorsFound);
 
@@ -1163,7 +1163,7 @@ TEST_F(EnergyPlusFixture, Battery_checkUserEfficiencyInputTest)
     userInputEfficiencyDischarge = -1.0;
     expectedResult = 0.001;
     errorsFound = false;
-    functionResult = checkUserEfficiencyInput(*state, userInputEfficiencyDischarge, "DISCHARGING", "Tatooine", errorsFound);
+    functionResult = checkUserEfficiencyInput(*state, userInputEfficiencyDischarge, false, "Tatooine", errorsFound);
     EXPECT_NEAR(functionResult, expectedResult, 0.00001);
     std::string const error_string2 = delimited_string(
         {"   ** Severe  ** ElectricStorage discharge efficiency was too low.  This occurred for electric storage unit named Tatooine",
@@ -1175,7 +1175,7 @@ TEST_F(EnergyPlusFixture, Battery_checkUserEfficiencyInputTest)
     userInputEfficiencyDischarge = 0.9;
     expectedResult = 0.9;
     errorsFound = false;
-    functionResult = checkUserEfficiencyInput(*state, userInputEfficiencyDischarge, "DISCHARGING", "Tatooine", errorsFound);
+    functionResult = checkUserEfficiencyInput(*state, userInputEfficiencyDischarge, false, "Tatooine", errorsFound);
     EXPECT_NEAR(functionResult, expectedResult, 0.00001);
     EXPECT_FALSE(errorsFound);
 }

@@ -127,6 +127,7 @@ namespace Furnaces {
         int ReheatingCoilIndex;                                    // Index to reheat coil
         std::string HeatingCoilName;                               // name of heating coil
         std::string HeatingCoilType;                               // type of heating coil
+        Real64 HeatingSizingRatio = 1.0;                           // Ratio of heat pump heating to cooling capacity
         int CoilControlNode;                                       // control node for hot water and steam heating coils
         int HWCoilAirInletNode;                                    // air inlet node number of HW coil for PTAC, PTHP, HeatCool, HeatOnly
         int HWCoilAirOutletNode;                                   // air outlet node number of HW coil for PTAC, PTHP, HeatCool, HeatOnly
@@ -275,13 +276,12 @@ namespace Furnaces {
               SensibleRegulaFalsiFailedIndex(0), WSHPHeatMaxIterIndex(0), WSHPHeatRegulaFalsiFailedIndex(0), DXHeatingMaxIterIndex(0),
               DXHeatingRegulaFalsiFailedIndex(0), HeatingMaxIterIndex(0), HeatingMaxIterIndex2(0), HeatingRegulaFalsiFailedIndex(0),
               ActualFanVolFlowRate(0.0), HeatingSpeedRatio(1.0), CoolingSpeedRatio(1.0), NoHeatCoolSpeedRatio(1.0), ZoneInletNode(0),
-              SenLoadLoss(0.0), LatLoadLoss(0.0), SensibleLoadMet(0.0), LatentLoadMet(0.0), DehumidInducedHeatingDemandRate(0.0),
-              CoilOutletNode(0), plantLoc{}, SuppPlantLoc{}, HotWaterCoilMaxIterIndex(0), HotWaterCoilMaxIterIndex2(0),
-              EMSOverrideSensZoneLoadRequest(false), EMSSensibleZoneLoadValue(0.0), EMSOverrideMoistZoneLoadRequest(false),
-              EMSMoistureZoneLoadValue(0.0), HeatCoolMode(Furnaces::ModeOfOperation::Invalid), NumOfSpeedCooling(0), NumOfSpeedHeating(0),
-              IdleSpeedRatio(0.0), IdleVolumeAirRate(0.0), IdleMassFlowRate(0.0), FanVolFlow(0.0), CheckFanFlow(true),
-              HeatVolumeFlowRate(HVAC::MaxSpeedLevels, 0.0), HeatMassFlowRate(HVAC::MaxSpeedLevels, 0.0),
-              CoolVolumeFlowRate(HVAC::MaxSpeedLevels, 0.0), CoolMassFlowRate(HVAC::MaxSpeedLevels, 0.0),
+              SenLoadLoss(0.0), LatLoadLoss(0.0), SensibleLoadMet(0.0), LatentLoadMet(0.0), DehumidInducedHeatingDemandRate(0.0), CoilOutletNode(0),
+              plantLoc{}, SuppPlantLoc{}, HotWaterCoilMaxIterIndex(0), HotWaterCoilMaxIterIndex2(0), EMSOverrideSensZoneLoadRequest(false),
+              EMSSensibleZoneLoadValue(0.0), EMSOverrideMoistZoneLoadRequest(false), EMSMoistureZoneLoadValue(0.0),
+              HeatCoolMode(Furnaces::ModeOfOperation::Invalid), NumOfSpeedCooling(0), NumOfSpeedHeating(0), IdleSpeedRatio(0.0),
+              IdleVolumeAirRate(0.0), IdleMassFlowRate(0.0), FanVolFlow(0.0), CheckFanFlow(true), HeatVolumeFlowRate(HVAC::MaxSpeedLevels, 0.0),
+              HeatMassFlowRate(HVAC::MaxSpeedLevels, 0.0), CoolVolumeFlowRate(HVAC::MaxSpeedLevels, 0.0), CoolMassFlowRate(HVAC::MaxSpeedLevels, 0.0),
               MSHeatingSpeedRatio(HVAC::MaxSpeedLevels, 0.0), MSCoolingSpeedRatio(HVAC::MaxSpeedLevels, 0.0), bIsIHP(false), CompSpeedNum(0),
               CompSpeedRatio(0.0), ErrIndexCyc(0), ErrIndexVar(0), iterationCounter(0), iterationMode(0), FirstPass(true)
         {

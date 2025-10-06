@@ -273,6 +273,28 @@ main_gui(True)
             engine.exec(cmd);
             exit(0);
         });
+
+        auto *gheDesignerSubCommand = auxiliaryToolsSubcommand->add_subcommand("ghedesigner", "GHEDesigner Operation");
+        gheDesignerSubCommand->add_option("args", python_fwd_args, "Extra Arguments forwarded to GHEDesigner")->option_text("ARG ...");
+        gheDesignerSubCommand->positionals_at_end(true);
+        gheDesignerSubCommand->footer(
+            "You can pass extra arguments after the ghedesigner keyword, they should be the input file and output directory.");
+
+        gheDesignerSubCommand->callback([&state, &python_fwd_args] {
+            EnergyPlus::Python::PythonEngine engine(state);
+            // There's probably better to be done, like instantiating the pythonEngine with the argc/argv then calling PyRun_SimpleFile but whatever
+            std::string cmd = Python::PythonEngine::getTclPreppedPreamble(python_fwd_args);
+            cmd += R"python(
+from ghedesigner.main import run_manager_from_cli
+run_manager_from_cli()
+)python";
+            try {
+                engine.exec(cmd);
+                exit(0);
+            } catch (std::runtime_error &) {
+                exit(1);
+            }
+        });
 #    endif
 #endif
 
@@ -779,13 +801,19 @@ state.dataStrGlobals->inputFilePath='{:g}',
             ConvertCaseToLower(readResult.data, LINEOut); // Turn line into lower case
             //        LINE=LINEOut
 
-            if (!has(LINEOut, Heading)) continue;
+            if (!has(LINEOut, Heading)) {
+                continue;
+            }
 
             //                                  See if [ and ] are on line
             ILB = index(LINEOut, '[');
             IRB = index(LINEOut, ']');
-            if (ILB == std::string::npos && IRB == std::string::npos) continue;
-            if (!has(LINEOut, '[' + Heading + ']')) continue; // Must be really correct heading line
+            if (ILB == std::string::npos && IRB == std::string::npos) {
+                continue;
+            }
+            if (!has(LINEOut, '[' + Heading + ']')) {
+                continue; // Must be really correct heading line
+            }
 
             //                                  Heading line found, now looking for Kind
             while (inputFile.good() && !NewHeading) {
@@ -797,7 +825,9 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 std::string line = innerReadResult.data;
                 strip(line);
 
-                if (line.empty()) continue; // Ignore Blank Lines
+                if (line.empty()) {
+                    continue; // Ignore Blank Lines
+                }
 
                 ConvertCaseToLower(line, LINEOut); // Turn line into lower case
                 //         LINE=LINEOut
@@ -810,13 +840,23 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 //                                  KindofParameter = string
                 IEQ = index(LINEOut, '=');
                 IPAR = index(LINEOut, Param);
-                if (IEQ == std::string::npos) continue;
-                if (IPAR == std::string::npos) continue;
-                if (IPAR != 0) continue;
-                if (!has(LINEOut, Param + '=')) continue; // needs to be param=
+                if (IEQ == std::string::npos) {
+                    continue;
+                }
+                if (IPAR == std::string::npos) {
+                    continue;
+                }
+                if (IPAR != 0) {
+                    continue;
+                }
+                if (!has(LINEOut, Param + '=')) {
+                    continue; // needs to be param=
+                }
 
                 //                                  = found and parameter found.
-                if (IPAR > IEQ) continue;
+                if (IPAR > IEQ) {
+                    continue;
+                }
 
                 //                                  parameter = found
                 //                                  Set output string to start with non-blank character

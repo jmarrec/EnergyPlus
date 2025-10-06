@@ -241,7 +241,6 @@ void GetPumpInput(EnergyPlusData &state)
     int NumPumpBankSimpleConst = 0;
     Real64 SteamDensity;
     Real64 TempWaterDensity;
-    int DummyWaterIndex(1);
     Real64 constexpr minToMaxRatioMax = 0.99;
 
     ErrorsFound = false;
@@ -1519,7 +1518,9 @@ void InitializePumps(EnergyPlusData &state, int const PumpNum)
     }
 
     // Reset the local environment flag for the next environment
-    if (!state.dataGlobal->BeginEnvrnFlag) thisPump.PumpInitFlag = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        thisPump.PumpInitFlag = true;
+    }
 
     // zero out module level working variables
     auto const &daPumps = state.dataPumps;
@@ -2001,7 +2002,6 @@ void SizePump(EnergyPlusData &state, int const PumpNum)
     Real64 PumpSizFac;       // pump sizing factor
     Real64 SteamDensity;
     Real64 TempWaterDensity;
-    int DummyWaterIndex(1);
     Real64 DesVolFlowRatePerBranch; // local temporary for split of branch pumps
 
     auto &thisPump = state.dataPumps->PumpEquip(PumpNum);

@@ -550,6 +550,7 @@ namespace WaterThermalTanks {
         SourceSideControl SourceSideControlMode;               // flag for how source side flow is controlled
         Sched::Schedule *sourceSideAltSetpointSched = nullptr; // schedule of alternate temperature setpoint values
         Real64 SizingRecoveryTime;                             // sizing parameter for autosizing indirect water heaters (hr)
+        Real64 VolFlowRateMax;                                 // Used only in reporting {m3/s)
         Real64 MassFlowRateMax;                                // Maximum flow rate for scheduled DHW (kg/s)
         Real64 VolFlowRateMin;                                 // Minimum flow rate for heater ignition (kg/s)
         Real64 MassFlowRateMin;                                // Minimum mass flow rate for heater ignition (kg/s)
@@ -692,8 +693,8 @@ namespace WaterThermalTanks {
               UseSideLoadRequested(0.0), UseSidePlantLoc{}, SourceInletNode(0), SourceInletTemp(0.0), SourceOutletNode(0), SourceOutletTemp(0.0),
               SourceMassFlowRate(0.0), SourceEffectiveness(0.0), PlantSourceMassFlowRateMax(0.0), SavedSourceOutletTemp(0.0),
               SourceDesignVolFlowRate(0.0), SourceDesignVolFlowRateWasAutoSized(false),
-              SourceBranchControlType(DataBranchAirLoopPlant::ControlType::Passive), SourceSidePlantSizNum(0),
-              SourceSideSeries(true), SrcSidePlantLoc{}, SourceSideControlMode(SourceSideControl::IndirectHeatAltSetpoint), SizingRecoveryTime(0.0),
+              SourceBranchControlType(DataBranchAirLoopPlant::ControlType::Passive), SourceSidePlantSizNum(0), SourceSideSeries(true),
+              SrcSidePlantLoc{}, SourceSideControlMode(SourceSideControl::IndirectHeatAltSetpoint), SizingRecoveryTime(0.0), VolFlowRateMax(0.0),
               MassFlowRateMax(0.0), VolFlowRateMin(0.0), MassFlowRateMin(0.0), TankTemp(0.0), SavedTankTemp(0.0), TankTempAvg(0.0), Height(0.0),
               HeightWasAutoSized(false), Perimeter(0.0), Shape(TankShape::VertCylinder), HeaterHeight1(0.0), HeaterNode1(0), HeaterOn1(false),
               SavedHeaterOn1(false), HeaterHeight2(0.0), HeaterNode2(0), HeaterOn2(false), SavedHeaterOn2(false), AdditionalCond(0.0),
@@ -982,7 +983,7 @@ namespace WaterThermalTanks {
 
     bool getWaterTankStratifiedInput(EnergyPlusData &state);
 
-    bool GetWaterThermalTankInput(EnergyPlusData &state);
+    void GetWaterThermalTankInput(EnergyPlusData &state);
 
     void CalcWaterThermalTankZoneGains(EnergyPlusData &state);
 

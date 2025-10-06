@@ -97,7 +97,7 @@
 ! Environmental Emissions:        None
 ! Utility Tariffs:                None
 
-  Version,25.1;
+  Version,25.2;
 
   Timestep,6;
 
@@ -2231,6 +2231,8 @@
   Output:Variable,*,District Heating Water Rate,timestep;
 
   Output:Variable,*,Zone Thermal Comfort Fanger Model PMV,timestep;
+
+  Output:Variable,*,Zone Thermal Comfort Clothing Value,timestep,On;
 
   Output:Variable,*,Zone Radiant HVAC Heating Energy,timestep;
 

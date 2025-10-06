@@ -568,6 +568,26 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimple_TestAirFlow)
                 (PsyHFnTdbW(15.0, 0.004) + (19636.8798 / 1.0)) * 0.5 + 0.5 * PsyHFnTdbW(15.0, 0.004),
                 0.1);
     EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).OutletAirDBTemp, 24.69937, 0.0001);
+
+    // test CheckSimpleWAHPRatedCurvesOutputs with null pointers
+    HPNum = 1;
+    // ensure RatedEntAirDry/WetbulbTemp is not autosize so code will test valid versus null curve pointer
+    EXPECT_NE(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).RatedEntAirDrybulbTemp, DataSizing::AutoSize);
+    EXPECT_NE(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).RatedEntAirWetbulbTemp, DataSizing::AutoSize);
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).SensCoolCapCurve = nullptr;
+    WaterToAirHeatPumpSimple::CheckSimpleWAHPRatedCurvesOutputs(*state, state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).Name);
+
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).TotalCoolCapCurve = nullptr;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).CoolPowCurve = nullptr;
+    WaterToAirHeatPumpSimple::CheckSimpleWAHPRatedCurvesOutputs(*state, state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).Name);
+
+    HPNum = 2;
+    // ensure RatedEntAirDry/WetbulbTemp is not autosize so code will test valid versus null curve pointer
+    EXPECT_NE(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).RatedEntAirDrybulbTemp, DataSizing::AutoSize);
+    EXPECT_NE(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).RatedEntAirWetbulbTemp, DataSizing::AutoSize);
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).HeatCapCurve = nullptr;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).HeatPowCurve = nullptr;
+    WaterToAirHeatPumpSimple::CheckSimpleWAHPRatedCurvesOutputs(*state, state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum).Name);
 }
 
 TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimple_TestWaterFlowControl)
@@ -1081,7 +1101,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedAirVolFlowRate = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedCapCoolTotal = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedCapCoolSens = AutoSize;
-    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedWaterVolFlowRate = 0.0;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedWaterVolFlowRate = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).WaterInletNodeNum = 1;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).WaterOutletNodeNum = 2;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedEntWaterTemp = 30.0;
@@ -1093,7 +1113,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WAHPType = WatertoAirHP::Heating;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedAirVolFlowRate = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedCapHeat = AutoSize;
-    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedWaterVolFlowRate = 0.0;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedWaterVolFlowRate = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WaterInletNodeNum = 3;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WaterOutletNodeNum = 4;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedEntWaterTemp = 20.0;
@@ -1252,6 +1272,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataSize->PlantSizData.allocate(1);
     state->dataSize->PlantSizData(1).PlantLoopName = "Condenser Water Loop";
     state->dataSize->PlantSizData(1).ExitTemp = 29.4;
+    state->dataSize->PlantSizData(1).DeltaT = 5.56;
 
     WaterToAirHeatPumpSimple::SizeHVACWaterToAir(*state, 1);
     WaterToAirHeatPumpSimple::SizeHVACWaterToAir(*state, 2);
@@ -1280,6 +1301,17 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
                     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedCapCoolAtRatedCdts,
                 1.23,
                 0.00001);
+    EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedWaterVolFlowRate -
+                    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedWaterVolFlowRate,
+                0.0,
+                0.00001);
+    EXPECT_TRUE(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedWaterVolFlowRate > 0.0);
+    Real64 waterVolFlowRate = max(((1 - 1 / state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedCOPHeatAtRatedCdts) *
+                                   state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedCapHeat),
+                                  ((1 + 1 / state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedCOPCoolAtRatedCdts) *
+                                   state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedCapCoolTotal)) /
+                              (state->dataSize->PlantSizData(1).DeltaT * 4179.88 * 995.768);
+    EXPECT_NEAR(waterVolFlowRate - state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedWaterVolFlowRate, 0.0, 0.00001);
 }
 
 TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedConditionsNoDesHtgAirFlow)
@@ -1305,7 +1337,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedAirVolFlowRate = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedCapCoolTotal = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedCapCoolSens = AutoSize;
-    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedWaterVolFlowRate = 0.0;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedWaterVolFlowRate = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).WaterInletNodeNum = 1;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).WaterOutletNodeNum = 2;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedEntWaterTemp = 30.0;
@@ -1317,7 +1349,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WAHPType = WatertoAirHP::Heating;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedAirVolFlowRate = AutoSize;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedCapHeat = AutoSize;
-    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedWaterVolFlowRate = 0.0;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedWaterVolFlowRate = 0.000185;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WaterInletNodeNum = 3;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WaterOutletNodeNum = 4;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedEntWaterTemp = 20.0;
@@ -1476,6 +1508,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataSize->PlantSizData.allocate(1);
     state->dataSize->PlantSizData(1).PlantLoopName = "Condenser Water Loop";
     state->dataSize->PlantSizData(1).ExitTemp = 29.4;
+    state->dataSize->PlantSizData(1).DeltaT = 5.56;
 
     WaterToAirHeatPumpSimple::SizeHVACWaterToAir(*state, 1);
     WaterToAirHeatPumpSimple::SizeHVACWaterToAir(*state, 2);
@@ -1484,6 +1517,11 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
                     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedCapCoolAtRatedCdts,
                 1.23,
                 0.00001);
+    EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedWaterVolFlowRate - 0.000185, 0.0, 0.000001);
+    EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).RatedWaterVolFlowRate -
+                    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).RatedWaterVolFlowRate,
+                0.0,
+                0.000001);
 }
 
 TEST_F(EnergyPlusFixture, EquationFit_Initialization)
