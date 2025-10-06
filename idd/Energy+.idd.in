@@ -76292,7 +76292,7 @@ HeatPump:AirToWater:FuelFired:Cooling,
 
 HeatPump:AirToWater,
         \memo air-to-water heat pump system which provides either chilled or hot water with single- or variable speed compressors.
-        \min-fields 56
+        \min-fields 77
    A1 , \field Name
         \required-field
         \type alpha
