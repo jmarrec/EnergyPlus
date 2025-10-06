@@ -76318,6 +76318,7 @@ HeatPump:AirToWater,
    A5,  \field Operating Mode Control Option for Multiple Unit
         \note this determines how the operation mode is assigned when the load
         \note is too large to be met by multiple heat pump units
+        \type choice
         \key SingleMode
         \key CoolingPriority
         \key HeatingPriority
