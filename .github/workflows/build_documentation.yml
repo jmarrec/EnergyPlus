@@ -2,7 +2,7 @@ name: Documentation
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, 11256_Mac_packaging ]
   pull_request:
     branches: [ develop ]
 
@@ -17,12 +17,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-24.04
+          # - os: ubuntu-24.04
+          #   generator: "Unix Makefiles"
+          #   pretty: 'Ubuntu 24.04'
+          # - os: windows-2022
+          #   generator: "Visual Studio 17 2022"
+          #   pretty: "Windows"
+          - os: macos-15-intel
             generator: "Unix Makefiles"
-            pretty: 'Ubuntu 24.04'
-          - os: windows-2022
-            generator: "Visual Studio 17 2022"
-            pretty: "Windows"
+            pretty: 'Mac x64'
 
     runs-on: ${{ matrix.os }}
 
@@ -38,6 +41,13 @@ jobs:
     - name: Set up LaTeX on Linux
       if: runner.os == 'Linux'
       run: sudo apt update && sudo apt install -y texlive texlive-xetex texlive-science poppler-utils
+
+    - name: Setup up LaTeX on Mac
+      if: runner.os == 'macOS'
+      run: |
+        echo "Using brew to install mactex and adding it to PATH"
+        brew install --cask basictex
+        echo "/Library/TeX/texbin" >> $GITHUB_PATH
 
     - name: Set up LaTeX on Windows
       if: runner.os == 'Windows'
