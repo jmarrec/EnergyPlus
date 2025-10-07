@@ -244,6 +244,8 @@ set(SRC
     DisplayRoutines.hh
     DualDuct.cc
     DualDuct.hh
+    DuctLoss.cc
+    DuctLoss.hh
     EMSManager.cc
     EMSManager.hh
     EPVector.hh
@@ -301,8 +303,21 @@ set(SRC
     GeneratorFuelSupply.hh
     GlobalNames.cc
     GlobalNames.hh
-    GroundHeatExchangers.cc
-    GroundHeatExchangers.hh
+    GroundHeatExchangers/Base.cc
+    GroundHeatExchangers/Base.hh
+    GroundHeatExchangers/BoreholeArray.cc
+    GroundHeatExchangers/BoreholeArray.hh
+    GroundHeatExchangers/BoreholeSingle.cc
+    GroundHeatExchangers/BoreholeSingle.hh
+    GroundHeatExchangers/Properties.cc
+    GroundHeatExchangers/Properties.hh
+    GroundHeatExchangers/ResponseFactors.cc
+    GroundHeatExchangers/ResponseFactors.hh
+    GroundHeatExchangers/Slinky.cc
+    GroundHeatExchangers/Slinky.hh
+    GroundHeatExchangers/State.hh
+    GroundHeatExchangers/Vertical.cc
+    GroundHeatExchangers/Vertical.hh
     GroundTemperatureModeling/BaseGroundTemperatureModel.hh
     GroundTemperatureModeling/FiniteDifferenceGroundTemperatureModel.cc
     GroundTemperatureModeling/FiniteDifferenceGroundTemperatureModel.hh
@@ -779,7 +794,6 @@ target_link_libraries(
          Windows-CalcEngine
          airflownetworklib
          ssc
-         cpgfunctionEP
          libtk205)
 
 target_link_libraries(energypluslib PRIVATE project_options project_fp_options project_warnings cpp_pch_files)
