@@ -2792,7 +2792,8 @@ void HeatPumpAirToWater::oneTimeInit(EnergyPlusData &state)
     this->oneTimeInitFlagAWHP = false;
 }
 
-void HeatPumpAirToWater::sizeLoadSide(EnergyPlusData &state) {
+void HeatPumpAirToWater::sizeLoadSide(EnergyPlusData &state)
+{
     EIRPlantLoopHeatPump::sizeLoadSide(state);
     this->referenceCapacityOneUnit = this->referenceCapacity / this->heatPumpMultiplier;
 }
@@ -4269,7 +4270,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     }
                 }
 
-                if (thisAWHP.ratedCapacity[thisAWHP.numSpeeds] == DataSizing::AutoSize) {
+                if (thisAWHP.ratedCapacity[thisAWHP.numSpeeds - 1] == DataSizing::AutoSize) {
                     thisAWHP.referenceCapacityWasAutoSized = true;
                 }
                 thisAWHP.referenceCapacityOneUnit = thisAWHP.ratedCapacity[thisAWHP.numSpeeds - 1];
@@ -4294,13 +4295,8 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
     if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
         // defrost related actuators
         mode_keyword = "Heating";
-        SetupEMSActuator(state,
-                         "HeatPump:AirToWater",
-                         this->name,
-                         "Defrost Flag",
-                         "[]",
-                         this->DefrosstFlagEMSOverrideOn,
-                         this->DefrosstFlagEMSOverrideValue);
+        SetupEMSActuator(
+            state, "HeatPump:AirToWater", this->name, "Defrost Flag", "[]", this->DefrosstFlagEMSOverrideOn, this->DefrosstFlagEMSOverrideValue);
         SetupEMSActuator(state,
                          "HeatPump:AirToWater",
                          this->name,
@@ -4318,13 +4314,8 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
     } else {
         mode_keyword = "Cooling";
     }
-    SetupEMSActuator(state,
-                     "HeatPump:AirToWater",
-                     this->name,
-                     "Operating Mode",
-                     "[ ]",
-                     this->OperationModeEMSOverrideOn,
-                     this->OperationModeEMSOverrideValue);
+    SetupEMSActuator(
+        state, "HeatPump:AirToWater", this->name, "Operating Mode", "[ ]", this->OperationModeEMSOverrideOn, this->OperationModeEMSOverrideValue);
 }
 
 void EIRFuelFiredHeatPump::oneTimeInit(EnergyPlusData &state)

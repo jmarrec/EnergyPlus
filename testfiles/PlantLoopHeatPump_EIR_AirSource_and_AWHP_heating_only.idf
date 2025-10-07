@@ -289,7 +289,7 @@
     CapCurveFuncTempHT,      !- Normalized Heating Capacity Function of Temperature Curve Name at Speed 1
     EIRCurveFuncTempHT,      !- Heating Energy Input Ratio Function of Temperature Curve Name at Speed 1
     EIRCurveFuncPLR,         !- Heating Energy Input Ratio Function of PLR Curve Name at Speed 1
-    40000,                   !- Rated Heating Capacity at Speed 2
+    autosize,                !- Rated Heating Capacity at Speed 2
     3.51,                    !- Rated COP for Heating at Speed 2
     CapCurveFuncTempHT2,     !- Normalized Heating Capacity Function of Temperature Curve Name at Speed 2
     EIRCurveFuncTempHT2,     !- Heating Energy Input Ratio Function of Temperature Curve Name at Speed 2
