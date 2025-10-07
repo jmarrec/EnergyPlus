@@ -76300,7 +76300,7 @@ HeatPump:AirToWater,
    A2 , \field Availability Schedule Name Heating
         \type object-list
         \object-list ScheduleNames
-        \note Enter the name of a schedule that defines the availability of the unit in cooling mode
+        \note Enter the name of a schedule that defines the availability of the unit in heating mode
         \note Schedule values of 0 denote the unit is off. All other values denote the unit is available
         \note If this field is left blank, the unit is available the entire simulation
    A3 , \field Availability Schedule Name Cooling
