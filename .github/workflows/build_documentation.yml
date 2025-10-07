@@ -111,7 +111,7 @@ jobs:
         fi;
         echo "TOC is available for pass NO.2"
 
-    - name: Preinstall Packages on macOSs
+    - name: Preinstall Packages on macOS
       if: runner.os == 'macOS'
       working-directory: ./doc/test
       run: |
@@ -123,7 +123,7 @@ jobs:
 
     - name: Upload lst files
       uses: actions/upload-artifact@v4
-      if: matrix.os == 'macOS'
+      if: runner.os == 'macOS'
       with:
         name: macos-lst-files
         path: ${{ github.workspace }}/doc/test/*.lst
