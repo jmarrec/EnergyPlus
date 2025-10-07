@@ -32,7 +32,7 @@ jobs:
         macos_dev_target: [12.1, 13.0]
         include:
         - macos_dev_target: 12.1
-          os: macos-13
+          os: macos-15-intel
           allow_failure: false
           arch: x86_64
           python-arch: x64
@@ -282,7 +282,7 @@ jobs:
         macos_dev_target: [12.1, 13.0]
         include:
           - macos_dev_target: 12.1
-            os: macos-13
+            os: macos-15-intel
             arch: x86_64
             python-arch: x64
             test_key: mac12
