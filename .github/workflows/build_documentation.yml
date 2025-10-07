@@ -17,12 +17,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # - os: ubuntu-24.04
-          #   generator: "Unix Makefiles"
-          #   pretty: 'Ubuntu 24.04'
-          # - os: windows-2022
-          #   generator: "Visual Studio 17 2022"
-          #   pretty: "Windows"
+          - os: ubuntu-24.04
+            generator: "Unix Makefiles"
+            pretty: 'Ubuntu 24.04'
+          - os: windows-2022
+            generator: "Visual Studio 17 2022"
+            pretty: "Windows"
           - os: macos-15-intel
             generator: "Unix Makefiles"
             pretty: 'Mac x64'
