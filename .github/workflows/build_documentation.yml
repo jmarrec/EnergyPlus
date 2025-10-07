@@ -111,6 +111,23 @@ jobs:
         fi;
         echo "TOC is available for pass NO.2"
 
+    - name: Preinstall Packages on macOSs
+      if: runner.os == 'macOS'
+      working-directory: ./doc/test
+      run: |
+        sudo tlmgr update --self
+        sudo tlmgr list --only-installed --data name > ori_installed.lst
+        sudo tlmgr install texliveonfly
+        sudo texliveonfly --compiler=xelatex dependencies.tex
+        sudo tlmgr list --only-installed --data name > new_installed.lst
+
+    - name: Upload lst files
+      uses: actions/upload-artifact@v4
+      if: matrix.os == 'macOS'
+      with:
+        name: macos-lst-files
+        path: ${{ github.workspace }}/doc/test/*.lst
+
     - name: Create Build Environment
       run: cmake -E make_directory ./doc/build
 
