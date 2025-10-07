@@ -82,7 +82,7 @@ jobs:
         aria2c https://www.apple.com/certificateauthority/AppleWWDRCAG2.cer
         aria2c https://www.apple.com/certificateauthority/DeveloperIDG2CA.cer
         security import AppleWWDRCAG2.cer -k $KEYCHAIN_PATH
-        security import DeveloperIDG2CA.cer -k $KEYCHAIN_PATH
+        security import DeveloperIDG2CA.cer -k $KEYCHAIN_PATH || true  # macos-15-intel seems to already have it
         security find-identity -vvvv $KEYCHAIN_PATH
         security find-identity -v -p codesigning
 
