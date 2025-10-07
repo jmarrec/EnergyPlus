@@ -116,17 +116,13 @@ jobs:
       working-directory: ./doc/test
       run: |
         sudo tlmgr update --self
-        sudo tlmgr list --only-installed --data name > ori_installed.lst
-        sudo tlmgr install texliveonfly
-        sudo texliveonfly --compiler=xelatex dependencies.tex
-        sudo tlmgr list --only-installed --data name > new_installed.lst
-
-    - name: Upload lst files
-      uses: actions/upload-artifact@v4
-      if: runner.os == 'macOS'
-      with:
-        name: macos-lst-files
-        path: ${{ github.workspace }}/doc/test/*.lst
+        # Just install these, since I now know what we need
+        sudo tlmgr install enumitem framed multirow siunitx
+        # sudo tlmgr list --only-installed --data name > ori_installed.lst
+        # sudo tlmgr install texliveonfly
+        # sudo texliveonfly --compiler=xelatex dependencies.tex
+        # sudo tlmgr list --only-installed --data name > new_installed.lst
+        # python -c "from pathlib import Path; ori_lines = set(Path('./ori_installed.lst').read_text().splitlines()); new_lines = set(Path('./new_installed.lst').read_text().splitlines()); new_pkgs = new_lines - ori_lines; print([x for x in new_pkgs if not x.startswith('texliveonfly')])"
 
     - name: Create Build Environment
       run: cmake -E make_directory ./doc/build
@@ -141,15 +137,6 @@ jobs:
     - name: Build Docs
       working-directory: ./doc/build
       run: cmake --build . -j 4
-
-    - name: Debug
-      if: ${{ failure() }}
-      run: |
-        cat doc/input-output-reference/input-output-reference.log
-
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      if: ${{ failure() }}
 
     - name: Upload EngineeringReference
       uses: actions/upload-artifact@v4
