@@ -266,7 +266,7 @@
     ,                        !- Maximum Outdoor Air Temperature in Cooling Mode
     ,                        !- Minimum Leaving Water Temperature Curve Name in Cooling Mode
     ,                        !- Maximum Leaving Water Temperature Curve Name in Cooling Mode
-    .9,                      !- Sizing Factor for Cooling
+    ,                        !- Sizing Factor for Cooling
     Outdoor Air Inlet Node ,  !- Air Inlet Node Name
     Outdoor Air Outlet Node,  !- Air Outlet Node Name
     Heating Coil Load Loop Intermediate Node,  !- Hot Water Inlet Node Name
@@ -499,7 +499,6 @@
   Output:Variable,*,Heat Pump Fractional Defrost Time,detailed;  !- HVAC Average [W]
   Output:Variable,*,Heat Pump Defrost Electricity Rate,detailed;  !- HVAC Average [W]
   Output:Variable,*,Outdoor Temp,detailed;
-  Output:Variable,*,DefrostOnInternal,detailed;
   Output:Variable,*,DefrostTimerInternal,detailed;
 
   OutputControl:Table:Style,
@@ -512,49 +511,6 @@
     Verbose,                 !- Actuator Availability Dictionary Reporting
     Verbose,                 !- Internal Variable Availability Dictionary Reporting
     Verbose;                 !- EMS Runtime Language Debug Output Level
-
-  EnergyManagementSystem:Actuator,
-    opModeAct_heating,       !- Name
-    test_AWHP,               !- Actuated Component Unique Name
-    HeatPump:AirToWater:Heating,  !- Actuated Component Type
-    Operating Mode;          !- Actuated Component Control Type
-
-  EnergyManagementSystem:OutputVariable,
-    Operating Model Output Heating,  !- Name
-    opModeAct_heating,       !- EMS Variable Name
-    Averaged,                !- Type of Data in Variable
-    SystemTimeStep,          !- Update Frequency
-    ,                        !- EMS Program or Subroutine Name
-    ;                        !- Units
-
-  EnergyManagementSystem:OutputVariable,
-    DefrostOnInternal,       !- Name
-    DefrostOn,               !- EMS Variable Name
-    Averaged,                !- Type of Data in Variable
-    SystemTimeStep,          !- Update Frequency
-    ,                        !- EMS Program or Subroutine Name
-    ;                        !- Units
-
-  EnergyManagementSystem:OutputVariable,
-    DefrostTimerInternal,    !- Name
-    DefrostTimer,            !- EMS Variable Name
-    Averaged,                !- Type of Data in Variable
-    SystemTimeStep,          !- Update Frequency
-    ,                        !- EMS Program or Subroutine Name
-    ;                        !- Units
-
-  EnergyManagementSystem:ProgramCallingManager,
-    Change_OpMode_EMS_Program_Manager,  !- Name
-    InsideHVACSystemIterationLoop,  !- EnergyPlus Model Calling Point
-    Change_OpMode_EMS_Program;  !- Program Name 1
-
-  EnergyManagementSystem:Program,
-    Change_OpMode_EMS_Program,  !- Name
-    IF (Hour <= 12),         !- Program Line 2
-    SET opModeAct_heating = 1,  !- <none>
-    ELSE,                    !- <none>
-    SET opModeAct_heating = 0,  !- <none>
-    ENDIF;                   !- <none>
 
 !- custom defrost code
 
