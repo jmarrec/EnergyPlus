@@ -757,7 +757,8 @@ namespace OutputReportPredefined {
         s->pdchSpClPkDOASHeatGain = newPreDefColumn(state, s->pdstSpaceClSize, "Heat Gain Rate from DOAS [W]");
         addFootNoteSubTable(state,
                             s->pdstSpaceClSize,
-                            "The Design Load is the space sensible load only. It does not include any system effects or ventilation loads.");
+                            "The Design Load is the space sensible load only. It does not include any system effects or ventilation loads. Values "
+                            "shown include multipliers.");
 
         s->pdstZoneClSize = newPreDefSubTable(state, s->pdrSizing, "Zone Sensible Cooling");
 
@@ -775,8 +776,10 @@ namespace OutputReportPredefined {
         s->pdchZnClPkOAHum = newPreDefColumn(state, s->pdstZoneClSize, "Outdoor Humidity Ratio at Peak Load [kgWater/kgDryAir]");
         s->pdchZnClPkOAMinFlow = newPreDefColumn(state, s->pdstZoneClSize, "Minimum Outdoor Air Flow Rate [m3/s]");
         s->pdchZnClPkDOASHeatGain = newPreDefColumn(state, s->pdstZoneClSize, "Heat Gain Rate from DOAS [W]");
-        addFootNoteSubTable(
-            state, s->pdstZoneClSize, "The Design Load is the zone sensible load only. It does not include any system effects or ventilation loads.");
+        addFootNoteSubTable(state,
+                            s->pdstZoneClSize,
+                            "The Design Load is the zone sensible load only. It does not include any system effects or ventilation loads. Values "
+                            "shown include multipliers.");
 
         s->pdstSpaceHtSize = newPreDefSubTable(state, s->pdrSizing, "Space Sensible Heating");
 
@@ -796,7 +799,8 @@ namespace OutputReportPredefined {
         s->pdchSpHtPkDOASHeatGain = newPreDefColumn(state, s->pdstSpaceHtSize, "Heat Gain Rate from DOAS [W]");
         addFootNoteSubTable(state,
                             s->pdstSpaceHtSize,
-                            "The Design Load is the space sensible load only. It does not include any system effects or ventilation loads.");
+                            "The Design Load is the space sensible load only. It does not include any system effects or ventilation loads. Values "
+                            "shown include multipliers.");
 
         s->pdstZoneHtSize = newPreDefSubTable(state, s->pdrSizing, "Zone Sensible Heating");
 
@@ -814,8 +818,10 @@ namespace OutputReportPredefined {
         s->pdchZnHtPkOAHum = newPreDefColumn(state, s->pdstZoneHtSize, "Outdoor Humidity Ratio at Peak Load [kgWater/kgDryAir]");
         s->pdchZnHtPkOAMinFlow = newPreDefColumn(state, s->pdstZoneHtSize, "Minimum Outdoor Air Flow Rate [m3/s]");
         s->pdchZnHtPkDOASHeatGain = newPreDefColumn(state, s->pdstZoneHtSize, "Heat Gain Rate from DOAS [W]");
-        addFootNoteSubTable(
-            state, s->pdstZoneHtSize, "The Design Load is the zone sensible load only. It does not include any system effects or ventilation loads.");
+        addFootNoteSubTable(state,
+                            s->pdstZoneHtSize,
+                            "The Design Load is the zone sensible load only. It does not include any system effects or ventilation loads. Values "
+                            "shown include multipliers.");
 
         s->pdstSystemSize = newPreDefSubTable(state, s->pdrSizing, "System Design Air Flow Rates");
 
