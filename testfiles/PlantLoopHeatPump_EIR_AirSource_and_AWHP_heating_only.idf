@@ -220,7 +220,7 @@
     Heating Coil Load Loop Pump,  !- Component 1 Name
     Heating Coil Load Loop Supply Inlet Node,  !- Component 1 Inlet Node Name
     Heating Coil Load Loop Intermediate Node,  !- Component 1 Outlet Node Name
-    HeatPump:AirToWater:Heating,  !- Component 2 Object Type
+    HeatPump:AirToWater,  !- Component 2 Object Type
     test_AWHP,               !- Component 2 Name
     Heating Coil Load Loop Intermediate Node,  !- Component 2 Inlet Node Name
     Heating Coil Load Loop Supply Outlet Node;  !- Component 2 Outlet Node Name
@@ -517,7 +517,7 @@
   EnergyManagementSystem:Actuator,
     defrost_on,              !- Name
     test_AWHP,               !- Actuated Component Unique Name
-    HeatPump:AirToWater:Heating,  !- Actuated Component Type
+    HeatPump:AirToWater,     !- Actuated Component Type
     Defrost Flag;            !- Actuated Component Control Type
 
   EnergyManagementSystem:OutputVariable,

@@ -4137,7 +4137,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     errorsFound = true;
                 }
                 BranchNodeConnections::TestCompSet(state,
-                                                   Util::makeUPPER(format("{}:{}", cCurrentModuleObject, modeKeyWord)),
+                                                   Util::makeUPPER(cCurrentModuleObject),
                                                    thisAWHP.name,
                                                    loadSideInletNodeName,
                                                    loadSideOutletNodeName,
@@ -4295,21 +4295,21 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
         // defrost related actuators
         mode_keyword = "Heating";
         SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
+                         "HeatPump:AirToWater",
                          this->name,
                          "Defrost Flag",
                          "[]",
                          this->DefrosstFlagEMSOverrideOn,
                          this->DefrosstFlagEMSOverrideValue);
         SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
+                         "HeatPump:AirToWater",
                          this->name,
                          "Entering Water Temperature",
                          "[C]",
                          this->EnteringTempEMSOverrideOn,
                          this->EnteringTempEMSOverrideValue);
         SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
+                         "HeatPump:AirToWater",
                          this->name,
                          "Leaving Water Temperature",
                          "[C]",
@@ -4319,7 +4319,7 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
         mode_keyword = "Cooling";
     }
     SetupEMSActuator(state,
-                     format("HeatPump:AirToWater:{}", mode_keyword),
+                     "HeatPump:AirToWater",
                      this->name,
                      "Operating Mode",
                      "[ ]",
