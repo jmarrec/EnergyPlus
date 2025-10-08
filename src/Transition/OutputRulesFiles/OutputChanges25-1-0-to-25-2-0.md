@@ -290,3 +290,22 @@ This is entirely new table
 - Upper Limit [W]
 - Equipment List Name
 - Equipment
+
+#### Predefined Monthly Summary Reports - Additional Columns
+
+A new column was added to the EndUseEnergyConsumptionElectricityMonthly report:
+
+- Refrigeration:Electricity
+
+A new column was added to the PeakEnergyEndUseElectricityPart2Monthly report:
+
+- Refrigeration:Electricity {Maximum}
+- Refrigeration:Electricity {Timestamp}
+
+Several new columns were added to the ElectricComponentsOfPeakDemandMonthly report:
+
+- Humidifier:Electricity {At Max/Min}
+- HeatRecovery:Electricity {At Max/Min}
+- WaterSystems:Electricity {At Max/Min}
+- Refrigeration:Electricity {At Max/Min}
+- Cogeneration:Electricity {At Max/Min}

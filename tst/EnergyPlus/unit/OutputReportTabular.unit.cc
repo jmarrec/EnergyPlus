@@ -13390,6 +13390,121 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_DontWarnMonthlyIfOnlyNamedR
     compare_err_stream("");
 }
 
+TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_ElectricityEndUseColumns)
+{
+    std::string const idf_objects = delimited_string({
+        "Output:Table:SummaryReports,",
+        "  AllMonthly;  !- Report 1 Name",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    Real64 extLitUse;
+    Real64 refrigerationUse;
+
+    SetupOutputVariable(*state,
+                        "Exterior Lights Electricity Energy",
+                        Constant::Units::J,
+                        extLitUse,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Lite1",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
+                        "General");
+
+    SetupOutputVariable(*state,
+                        "Refrigeration Electricity Energy",
+                        Constant::Units::J,
+                        refrigerationUse,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Refrigeration1",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::Refrigeration,
+                        "General");
+
+    state->dataGlobal->DoWeathSim = true;
+
+    GetInputTabularMonthly(*state);
+    EXPECT_EQ(state->dataOutRptTab->MonthlyInputCount, 0);
+    GetInputOutputTableSummaryReports(*state);
+    EXPECT_EQ(state->dataOutRptTab->MonthlyInputCount, numNamedMonthly);
+
+    InitializeTabularMonthly(*state);
+
+    std::map<std::string, std::vector<std::string>> const reportColumnsMap{{"EndUseEnergyConsumptionElectricityMonthly",
+                                                                            {"INTERIORLIGHTS:ELECTRICITY",
+                                                                             "EXTERIORLIGHTS:ELECTRICITY",
+                                                                             "INTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "EXTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "FANS:ELECTRICITY",
+                                                                             "PUMPS:ELECTRICITY",
+                                                                             "HEATING:ELECTRICITY",
+                                                                             "COOLING:ELECTRICITY",
+                                                                             "HEATREJECTION:ELECTRICITY",
+                                                                             "HUMIDIFIER:ELECTRICITY",
+                                                                             "HEATRECOVERY:ELECTRICITY",
+                                                                             "WATERSYSTEMS:ELECTRICITY",
+                                                                             "REFRIGERATION:ELECTRICITY",
+                                                                             "COGENERATION:ELECTRICITY"}},
+
+                                                                           {"PeakEnergyEndUseElectricityPart1Monthly",
+                                                                            {"INTERIORLIGHTS:ELECTRICITY",
+                                                                             "EXTERIORLIGHTS:ELECTRICITY",
+                                                                             "INTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "EXTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "FANS:ELECTRICITY",
+                                                                             "PUMPS:ELECTRICITY",
+                                                                             "HEATING:ELECTRICITY"}},
+
+                                                                           {"PeakEnergyEndUseElectricityPart2Monthly",
+                                                                            {"COOLING:ELECTRICITY",
+                                                                             "HEATREJECTION:ELECTRICITY",
+                                                                             "HUMIDIFIER:ELECTRICITY",
+                                                                             "HEATRECOVERY:ELECTRICITY",
+                                                                             "WATERSYSTEMS:ELECTRICITY",
+                                                                             "REFRIGERATION:ELECTRICITY",
+                                                                             "COGENERATION:ELECTRICITY"}},
+
+                                                                           {"ElectricComponentsOfPeakDemandMonthly",
+                                                                            {"ELECTRICITY:FACILITY",
+                                                                             "INTERIORLIGHTS:ELECTRICITY",
+                                                                             "INTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "EXTERIORLIGHTS:ELECTRICITY",
+                                                                             "EXTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "FANS:ELECTRICITY",
+                                                                             "PUMPS:ELECTRICITY",
+                                                                             "HEATING:ELECTRICITY",
+                                                                             "COOLING:ELECTRICITY",
+                                                                             "HEATREJECTION:ELECTRICITY",
+                                                                             "HUMIDIFIER:ELECTRICITY",
+                                                                             "HEATRECOVERY:ELECTRICITY",
+                                                                             "WATERSYSTEMS:ELECTRICITY",
+                                                                             "REFRIGERATION:ELECTRICITY",
+                                                                             "COGENERATION:ELECTRICITY"}}};
+
+    for (int i = 1; i <= state->dataOutRptTab->MonthlyInputCount; i++) {
+        std::string reportName = state->dataOutRptTab->MonthlyInput(i).name;
+        if (reportColumnsMap.find(reportName) != reportColumnsMap.end()) {
+            EXPECT_EQ(state->dataOutRptTab->MonthlyInput(i).numTables, 1);
+
+            int tableIndex = state->dataOutRptTab->MonthlyInput(i).firstTable;
+            int firstColumnIndex = state->dataOutRptTab->MonthlyTables(tableIndex).firstColumn;
+            int numberOfColumns = state->dataOutRptTab->MonthlyTables(tableIndex).numColumns;
+
+            std::vector<std::string> columnNames;
+            for (int j = firstColumnIndex; j < firstColumnIndex + numberOfColumns; j++) {
+                columnNames.push_back(state->dataOutRptTab->MonthlyColumns(j).varName);
+            }
+            EXPECT_EQ(columnNames, reportColumnsMap.at(reportName));
+        }
+    }
+
+    compare_err_stream("");
+}
+
 TEST_F(SQLiteFixture, OutputReportTabular_DistrictHeating)
 {
     // Test for #10190 - District Heating Steam is empty
