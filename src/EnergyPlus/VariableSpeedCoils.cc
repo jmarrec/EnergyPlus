@@ -102,13 +102,6 @@ namespace VariableSpeedCoils {
     int constexpr WaterSupplyFromMains = 101;
     int constexpr WaterSupplyFromTank = 102;
 
-    // Defrost strategy (heat pump only)
-    int constexpr ReverseCycle = 1; // uses reverse cycle defrost strategy
-    int constexpr Resistive = 2;    // uses electric resistance heater for defrost
-                                    // Defrost control  (heat pump only)
-    int constexpr Timed = 1;        // defrost cycle is timed
-    int constexpr OnDemand = 2;     // defrost cycle occurs only when required
-
     void SimVariableSpeedCoils(EnergyPlusData &state,
                                std::string_view CompName,             // Coil Name
                                int &CompIndex,                        // Index for Component name

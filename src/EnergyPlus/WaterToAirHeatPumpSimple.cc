@@ -218,7 +218,6 @@ namespace WaterToAirHeatPumpSimple {
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetSimpleWatertoAirHPInput: "); // include trailing blank space
-        static constexpr std::string_view routineName = "GetSimpleWatertoAirHPInput";
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         bool ErrorsFound(false);         // If errors detected in input
