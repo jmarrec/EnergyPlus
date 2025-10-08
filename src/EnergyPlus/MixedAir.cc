@@ -2677,6 +2677,13 @@ void InitOAController(EnergyPlusData &state, int const OAControllerNum, bool con
             } else {
                 OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchEcoRetTemp, equipName, "-");
             }
+            for (auto curOaSys : state.dataAirLoop->OutsideAirSys) {
+                for (auto curCtrlName : curOaSys.ControllerName) {
+                    if (curCtrlName == thisOAController.Name) {
+                        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchEcoOAsysNm, equipName, curOaSys.Name);
+                    }
+                }
+            }
         }
     }
 

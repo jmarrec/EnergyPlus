@@ -404,6 +404,7 @@ void CoilCoolingDXCurveFitPerformance::size(EnergyPlus::EnergyPlusData &state)
         this->mySizeFlag = false;
     }
     this->oneTimeAvailSchedSetup();
+    this->oneTimeMinOATSetup();
 }
 
 void CoilCoolingDXCurveFitPerformance::calculate(EnergyPlus::EnergyPlusData &state,
@@ -677,6 +678,7 @@ void CoilCoolingDXCurveFitPerformance::setOperMode(EnergyPlus::EnergyPlusData &s
                               this->object_name));
     }
 }
+
 void CoilCoolingDXCurveFitPerformance::oneTimeAvailSchedSetup()
 {
     if (this->myOneTimeAvailSchedInitFlag) {
@@ -685,5 +687,16 @@ void CoilCoolingDXCurveFitPerformance::oneTimeAvailSchedSetup()
         this->alternateMode.coilCoolingDXAvailSched = this->normalMode.coilCoolingDXAvailSched;
         this->alternateMode2.coilCoolingDXAvailSched = this->normalMode.coilCoolingDXAvailSched;
         this->myOneTimeAvailSchedInitFlag = false;
+    }
+}
+
+void CoilCoolingDXCurveFitPerformance::oneTimeMinOATSetup()
+{
+    if (this->myOneTimeMinOATFlag) {
+        // set the minimum OA temperature for compressor operation for each mode
+        this->normalMode.minOutdoorDrybulb = static_cast<EnergyPlus::CoilCoolingDXPerformanceBase *>(this)->minOutdoorDrybulb;
+        this->alternateMode.minOutdoorDrybulb = this->normalMode.minOutdoorDrybulb;
+        this->alternateMode2.minOutdoorDrybulb = this->normalMode.minOutdoorDrybulb;
+        this->myOneTimeMinOATFlag = false;
     }
 }

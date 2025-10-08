@@ -545,11 +545,30 @@ The sizing is done in subroutine \emph{SizeHVACWaterToAir}.
 
 \subsubsection{Rated Air Flow Rate}\label{rated-air-flow-rate}
 
-The calculation is identical to that done for \emph{Coil:Cooling:Water}.
+The rated air flow rate is determined by taking the maximum of either the design heating or cooling air flow rates. For zonal systems, the heating and cooling design air flow rates are calculated using inputs from the corresponding \emph{Sizing:Zone} objects and for air loop based systems the design air flow rates are calculates using inputs from the corresponding \emph{Sizing:System} objects.
 
 \subsubsection{Rated Water Flow Rate}\label{rated-water-flow-rate}
 
-The calculation is identical to that done for \emph{Coil:Cooling:Water}, which is the coil design load divided by the \emph{Loop Design Temperature Difference} user input from \emph{Sizing:Plant.} If there is a companion heating coil, the heating coil design load is used so that both modes will have the same rated water flow rate. For sizing the plant loop serving this coil, only one half of this flow rate is used since both the cooling and heating coil will save a flow rate but only one of these coils will operate at a time.
+The water flow rate is determined as follows:
+
+\begin{equation}
+  \dot m_{water} = \frac{(1 + \frac{1}{COP{rated}}) \times Q{cooling}}{\Delta T{plant} \times C_p \times \rho}
+\end{equation}
+
+Where:
+
+\begin{itemize}
+  \item
+    ${COP{rated}}$ is the gross rated cooling coil coefficient of performance
+  \item
+    $Q{cooling}$ is the gross rated total cooling coil capacity
+  \item
+    $\Delta T{plant}$ is the plant design fluid temperature difference associated with the coil
+  \item
+    $(1 + \frac{1}{COP{rated}}) \times Q{cooling}$ is the cooling coil condenser capacity
+\end{itemize}
+
+If this coil is modeled along with a \emph{Coil:Heating:WaterToAirHeatPump:EquationFit}, the water flow rate is chosen as the maximum of both coils.
 
 \subsubsection{Rated Total Cooling Capacity}\label{rated-total-cooling-capacity}
 
@@ -739,11 +758,31 @@ The sizing is done in subroutine \emph{SizeHVACWaterToAir.}
 
 \subsubsection{Rated Air Flow Rate}\label{rated-air-flow-rate-2}
 
-The calculation is identical to that done for \emph{Coil:Cooling:Water}.
+The rated air flow rate is determined by taking the maximum of either the design heating or cooling air flow rates. For zonal systems, the heating and cooling design air flow rates are calculated using inputs from the corresponding \emph{Sizing:Zone} objects and for air loop based systems the design air flow rates are calculates using inputs from the corresponding \emph{Sizing:System} objects.
 
 \subsubsection{Rated Water Flow Rate}\label{rated-water-flow-rate-2}
 
-The calculation is identical to that done for \emph{Coil:Cooling:Water} , which is the coil design load divided by the \emph{Loop Design Temperature Difference} user input from \emph{Sizing:Plant.} For sizing the plant loop serving this coil, only one half of this flow rate is used since both the cooling and heating coil will save a flow rate but only one of these coils will operate at a time.
+The water flow rate is determined as follows:
+
+\begin{equation}
+  \dot m_{water} = \frac{(1 - \frac{1}{COP{rated}}) \times Q{heating}}{\Delta T{plant} \times C_p \times \rho}
+\end{equation}
+
+Where:
+
+\begin{itemize}
+  \item
+    ${COP{rated}}$ is the gross rated heating coil coefficient of performance
+  \item
+    $Q{heating}$ is the gross rated heating coil capacity
+  \item
+    $\Delta T{plant}$ is the plant design fluid temperature difference associated with the coil
+  \item
+    $(1 - \frac{1}{COP{rated}}) \times Q{heating}$ is the heating coil evaporator capacity
+\end{itemize}
+
+
+If this coil is modeled along with a \emph{Coil:Cooling:WaterToAirHeatPump:EquationFit}, the water flow rate is chosen as the maximum of both coils.
 
 \subsubsection{Rated Total Heating Capacity}\label{rated-total-heating-capacity}
 
