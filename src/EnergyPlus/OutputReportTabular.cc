@@ -1377,13 +1377,8 @@ void GetInputTabularStyle(EnergyPlusData &state)
     }
 
     if (ort->WriteTabularFiles) {
-        print(state.files.eio, "! <Tabular Report>,Style,Unit Conversion\n");
-        if (AlphArray(1) != "HTML") {
-            ConvertCaseToLower(AlphArray(1), AlphArray(2));
-            AlphArray(1).erase(1);
-            AlphArray(1) += AlphArray(2).substr(1);
-        }
-        print(state.files.eio, "Tabular Report,{},{}\n", AlphArray(1), AlphArray(2));
+        print(state.files.eio, "! <Tabular Report>,Style,Unit Conversion, Format Reals\n");
+        print(state.files.eio, "Tabular Report,{},{},{}\n", AlphArray(1), AlphArray(2), ort->formatReals_Tabular ? "Yes" : "No");
     }
 }
 
