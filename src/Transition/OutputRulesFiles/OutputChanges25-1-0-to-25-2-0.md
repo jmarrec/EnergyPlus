@@ -321,4 +321,4 @@ See pull request [#10209](https://github.com/NREL/EnergyPlus/pull/10209)
 
 * HVAC Sizing Summary table output values for "User Design Load per Area" have been corrected to properly account for zone multipliers.
 
-See pull request [#11259](https://github.com/NREL/EnergyPlus/pull/10259)
+See pull request [#11259](https://github.com/NREL/EnergyPlus/pull/11259)
