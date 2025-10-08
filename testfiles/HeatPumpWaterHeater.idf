@@ -4614,8 +4614,6 @@
     Hot Water Demand Schedule,  !- Flow Rate Fraction Schedule Name
     ;                        !- Target Temperature Schedule Name
 
-  Schedule:Constant,SSBWaterTempSchedule,TEMPERATURE,43.333333333333336;
-
   WaterUse:Connections,
     Domestic Hot Water,      !- Name
     Water Demand Inlet Node, !- Inlet Node Name
