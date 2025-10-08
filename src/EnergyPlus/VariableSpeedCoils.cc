@@ -667,7 +667,6 @@ namespace VariableSpeedCoils {
         if (instances_ccVS != s_ip->epJSON.end()) {
             std::string cFieldName;
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
-            auto const instances_hcVSEqFit = s_ip->epJSON.find(CurrentModuleObject);
             auto &instancesValue = instances_ccVS.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
