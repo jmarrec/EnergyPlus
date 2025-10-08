@@ -1376,10 +1376,8 @@ void GetInputTabularStyle(EnergyPlusData &state)
         ort->formatReals_Tabular = getYesNoValue(AlphArray(3)) == BooleanSwitch::Yes;
     }
 
-    if (ort->WriteTabularFiles) {
-        print(state.files.eio, "! <Tabular Report>,Style,Unit Conversion, Format Reals\n");
-        print(state.files.eio, "Tabular Report,{},{},{}\n", AlphArray(1), AlphArray(2), ort->formatReals_Tabular ? "Yes" : "No");
-    }
+    print(state.files.eio, "! <Tabular Report>,Style,Unit Conversion, Format Reals\n");
+    print(state.files.eio, "Tabular Report,{},{},{}\n", AlphArray(1), AlphArray(2), ort->formatReals_Tabular ? "Yes" : "No");
 }
 
 UnitsStyle SetUnitsStyleFromString(std::string const &unitStringIn)
