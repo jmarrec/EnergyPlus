@@ -776,7 +776,7 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
         int arrayIndex = -1;
         // check if component has been added to array
         if (plntComps.size() > 0) {
-            for (int i = 0; i < plntComps.size(); ++i) {
+            for (size_t i = 0; i < plntComps.size(); ++i) {
                 if (plntComps[i] == compName &&
                     cmpType[i] == static_cast<DataPlant::PlantEquipmentType>(getEnumValue(DataPlant::PlantEquipTypeNames, compType))) {
                     arrayIndex = i;
@@ -838,7 +838,7 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
             if (peakAirFlow == 0.0) {
                 peakAirFlow = 1.0; // protect divide by 0, data will still show 0
             }
-            for (size_t ts = 0; ts < timeStepInDay; ++ts) {
+            for (size_t ts = 0; ts < finalSysSizing(state.dataHVACGlobal->NumPrimaryAirSys).HeatFlowSeq.size(); ++ts) {
                 // water flow rate will be proportional to autosized water flow rate * (design air flow rate / peak air flow rate)
                 if (heatingLoop) {
                     tmpFlowData[ts] = peakWaterFlow * (finalSysSizing(state.dataHVACGlobal->NumPrimaryAirSys).HeatFlowSeq(ts + 1) /

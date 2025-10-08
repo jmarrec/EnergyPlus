@@ -1986,7 +1986,7 @@
     Chilled Water Loop,      !- Plant or Condenser Loop Name
     cooling,                 !- Loop Type
     7.22,                    !- Design Loop Exit Temperature {C}
-    6.67,                    !- Loop Design Temperature Difference {deltaC}
+    6.0,                     !- Loop Design Temperature Difference {deltaC}
     Coincident,              !- Sizing Option
     1,                       !- Zone Timesteps in Averaging Window
     None;                    !- Coincident Sizing Factor Mode
@@ -2038,7 +2038,7 @@
     Until: 24:00,40.0,       !- Field 6
     For: WeekDays,           !- Field 8
     Until: 7:00,40.0,        !- Field 9
-    Until: 18:00,23.9,       !- Field 11
+    Until: 22:00,23.9,       !- Field 11
     Until: 24:00,40.0,       !- Field 13
     For: WeekEnds Holiday,   !- Field 15
     Until: 7:00,40.0,        !- Field 16
@@ -2073,10 +2073,10 @@
     Through: 12/31,          !- Field 1
     For: Weekdays,           !- Field 2
     Until: 6:00,0.02,        !- Field 3
-    Until: 18:00,1.0,        !- Field 5
+    Until: 22:00,1.0,        !- Field 5
     Until: 24:00,0.02,       !- Field 7
     For: AllOtherDays,       !- Field 9
-    Until: 24:00,0.02;       !- Field 10
+    Until: 24:00,0.5;        !- Field 10
 
   Schedule:Compact,
     FanAvailSched,           !- Name
@@ -2087,7 +2087,7 @@
     Through: 9/30,           !- Field 5
     For: WeekDays,           !- Field 6
     Until: 7:00,0.0,         !- Field 7
-    Until: 17:00,1.0,        !- Field 9
+    Until: 22:00,1.0,        !- Field 9
     Until: 24:00,0.0,        !- Field 11
     For: SummerDesignDay WinterDesignDay, !- Field 13
     Until: 24:00,1.0,        !- Field 14
@@ -2106,7 +2106,7 @@
     Through: 9/30,           !- Field 5
     For: WeekDays,           !- Field 6
     Until: 7:00,0.0,         !- Field 7
-    Until: 17:00,1.0,        !- Field 9
+    Until: 22:00,1.0,        !- Field 9
     Until: 24:00,0.0,        !- Field 11
     For: SummerDesignDay WinterDesignDay, !- Field 13
     Until: 24:00,1.0,        !- Field 14
@@ -2138,7 +2138,7 @@
     Through: 9/30,           !- Field 5
     For: WeekDays,           !- Field 6
     Until: 7:00,0.0,         !- Field 7
-    Until: 17:00,1.0,        !- Field 9
+    Until: 22:00,1.0,        !- Field 9
     Until: 24:00,0.0,        !- Field 11
     For: SummerDesignDay WinterDesignDay, !- Field 13
     Until: 24:00,1.0,        !- Field 14
@@ -3270,7 +3270,10 @@
     CW Loop Operation,       !- Name
     PlantEquipmentOperation:ComponentSetpoint,  !- Control Scheme 1 Object Type
     Chiller and Partial Ice Storage,  !- Control Scheme 1 Name
-    PlantOnSched;            !- Control Scheme 1 Schedule Name
+    ChillerAndTESSch,        !- Control Scheme 1 Schedule Name
+    PlantEquipmentOperation:ComponentSetpoint,  !- Control Scheme 1 Object Type
+    Ice Storage Only,        !- Control Scheme 1 Name
+    TESOnlySch;              !- Control Scheme 1 Schedule Name
 
   PlantEquipmentOperation:ComponentSetpoint,
     Chiller and Partial Ice Storage,  !- Name
@@ -3285,7 +3288,34 @@
     Ice Tank Inlet Node,     !- Demand Calculation 2 Node Name
     Ice Tank Outlet Node,    !- Setpoint 2 Node Name
     0.13506E-02,             !- Component 2 Flow Rate {m3/s}
-    DUAL;                    !- Operation 2 Type
+    Cooling;                 !- Operation 2 Type
+
+  PlantEquipmentOperation:ComponentSetpoint,
+    Ice Storage Only,  !- Name
+    ThermalStorage:Ice:Simple,  !- Equipment 1 Object Type
+    Ice Tank,                !- Equipment 1 Name
+    Ice Tank Inlet Node,     !- Demand Calculation 1 Node Name
+    Ice Tank Outlet Node,    !- Setpoint 1 Node Name
+    0.13506E-02,             !- Component 1 Flow Rate {m3/s}
+    Cooling;                 !- Operation 1 Type
+
+  Schedule:Compact,
+    TESOnlySch,              !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 9:00,0.0,         !- Field 3
+    Until: 22:00,1.0,        !- Field 4
+    Until: 24:00,0.0;        !- Field 5
+
+  Schedule:Compact,
+    ChillerAndTESSch,        !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 9:00,1.0,         !- Field 3
+    Until: 22:00,0.0,        !- Field 4
+    Until: 24:00,1.0;        !- Field 5
 
   SetpointManager:Scheduled,
     Ice Tank Setpoint Manager,  !- Name
@@ -3344,7 +3374,7 @@
   Chiller:Electric,
     Central Chiller,         !- Name
     WaterCooled,             !- Condenser Type
-    15000,                   !- Nominal Capacity {W}
+    autosize,                !- Nominal Capacity {W}
     3.2,                     !- Nominal COP {W/W}
     Central Chiller Inlet Node,  !- Chilled Water Inlet Node Name
     Central Chiller Outlet Node,  !- Chilled Water Outlet Node Name
@@ -3358,9 +3388,9 @@
     6.667,                   !- Design Chilled Water Outlet Temperature {C}
     autosize,                !- Design Chilled Water Flow Rate {m3/s}
     autosize,                !- Design Condenser Fluid Flow Rate {m3/s}
-    0.94483600,              !- Coefficient 1 of Capacity Ratio Curve
-    -.05700880,              !- Coefficient 2 of Capacity Ratio Curve
-    -.00185486,              !- Coefficient 3 of Capacity Ratio Curve
+    0.99483600,              !- Coefficient 1 of Capacity Ratio Curve
+    -.0075700880,            !- Coefficient 2 of Capacity Ratio Curve
+    -.0000185486,            !- Coefficient 3 of Capacity Ratio Curve
     1.907846,                !- Coefficient 1 of Power Ratio Curve
     -1.20498700,             !- Coefficient 2 of Power Ratio Curve
     0.26346230,              !- Coefficient 3 of Power Ratio Curve
@@ -3382,7 +3412,7 @@
     TESSizing,               !- Name
     9.0,                     !- On Peak Period Start Time
     22.0,                    !- On Peak Period End Time
-    0.36;                    !- Sizing Factor
+    1.0;                     !- Sizing Factor
 
   Pump:ConstantSpeed,
     CW Circ Pump,            !- Name
@@ -3714,7 +3744,15 @@
 
   Output:Variable,Ice Tank Outlet Node,System Node Setpoint Temperature,hourly;
 
+  Output:Variable,CW Supply Outlet Node,System Node Temperature,hourly;
+
   Output:Variable,CW Supply Outlet Node,System Node Setpoint Temperature,hourly;
+
+  Output:Variable,CW Supply Outlet Node,System Node Mass Flow Rate,hourly;
+
+  Output:Variable,Main Cooling Coil 1 Water Inlet Node,System Node Mass Flow Rate,hourly;
+
+  Output:Variable,Main Cooling Coil 1 Water Inlet Node,System Node Standard Density Volume Flow Rate,hourly;
 
   Output:VariableDictionary,Regular;
 
