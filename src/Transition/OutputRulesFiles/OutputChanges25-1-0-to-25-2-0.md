@@ -312,3 +312,13 @@ Several new columns were added to the ElectricComponentsOfPeakDemandMonthly repo
 - Cogeneration:Electricity {At Max/Min}
 
 See pull request [#10209](https://github.com/NREL/EnergyPlus/pull/10209)
+
+### Table and eio Output Changes Related to Zone Multipliers
+
+* eio "Zone Sizing Information" - The values for "Floor Area {m2}" and "# Occupants" are now reported with multipliers applied to be consistent with the other values reported for zone sizing.
+
+* Outdoor Air Details table output has a new column for "Zone Multiplier".
+
+* HVAC Sizing Summary table output values for "User Design Load per Area" have been corrected to properly account for zone multipliers.
+
+See pull request [#11259](https://github.com/NREL/EnergyPlus/pull/10259)
