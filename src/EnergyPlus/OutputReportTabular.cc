@@ -6373,11 +6373,11 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
 
                 // occupants
                 if ((thisZone.isNominalOccupied) && (thisZonePreDefRep.NumOccAccumTime > 0)) {
-                        Real64 const avgOcc = thisZonePreDefRep.NumOccAccum / thisZonePreDefRep.NumOccAccumTime;
-                        PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc1, thisZone.Name, avgOcc);
-                        PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc2, thisZone.Name, avgOcc);
-                        PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvAvgNumOcc, thisZone.Name, avgOcc);
-                        totalAverageOccupants += avgOcc * zoneMult;
+                    Real64 const avgOcc = thisZonePreDefRep.NumOccAccum / thisZonePreDefRep.NumOccAccumTime;
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc1, thisZone.Name, avgOcc);
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc2, thisZone.Name, avgOcc);
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvAvgNumOcc, thisZone.Name, avgOcc);
+                    totalAverageOccupants += avgOcc * zoneMult;
                 } else {
                     PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc1, thisZone.Name, 0.0);
                     PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc2, thisZone.Name, 0.0);
