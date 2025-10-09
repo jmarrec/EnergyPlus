@@ -1183,9 +1183,9 @@ OARequirementsData::calcOAFlowRate(EnergyPlusData &state,
     case DataSizing::OAFlowCalcMethod::PCDesOcc: {
         ZoneOAPeople = 0.0;
         if (this->OAFlowMethod != DataSizing::OAFlowCalcMethod::PCDesOcc) {
-            ZoneOAPeople = curNumOccupants * thisZone.Multiplier * thisZone.ListMultiplier * this->OAFlowPerPerson;
+            ZoneOAPeople = curNumOccupants * this->OAFlowPerPerson;
         } else {
-            ZoneOAPeople = nomTotOccupants * thisZone.Multiplier * thisZone.ListMultiplier * this->OAFlowPerPerson;
+            ZoneOAPeople = nomTotOccupants * this->OAFlowPerPerson;
             CO2PeopleGeneration = 0.0;
             if (this->OAFlowMethod == DataSizing::OAFlowCalcMethod::PCDesOcc) {
                 // Accumulate CO2 generation from people at design occupancy and current activity level
@@ -1204,7 +1204,7 @@ OARequirementsData::calcOAFlowRate(EnergyPlusData &state,
                 }
             }
         }
-        ZoneOAArea = floorArea * thisZone.Multiplier * thisZone.ListMultiplier * this->OAFlowPerArea;
+        ZoneOAArea = floorArea * this->OAFlowPerArea;
         ZoneOAMin = ZoneOAArea;
         ZoneOAMax = (ZoneOAArea + ZoneOAPeople);
         if (thisZone.zoneContamControllerSched != nullptr) {
@@ -1223,13 +1223,10 @@ OARequirementsData::calcOAFlowRate(EnergyPlusData &state,
 
                         // Calculate zone maximum target CO2 concentration in PPM
                         if (this->OAFlowMethod == DataSizing::OAFlowCalcMethod::PCDesOcc) {
-                            ZoneMaxCO2 = state.dataContaminantBalance->OutdoorCO2 +
-                                         (CO2PeopleGeneration * thisZone.Multiplier * thisZone.ListMultiplier * 1.0e6) / ZoneOAMax;
+                            ZoneMaxCO2 = state.dataContaminantBalance->OutdoorCO2 + (CO2PeopleGeneration * 1.0e6) / ZoneOAMax;
                         } else {
-                            ZoneMaxCO2 =
-                                state.dataContaminantBalance->OutdoorCO2 + (state.dataContaminantBalance->ZoneCO2GainFromPeople(ActualZoneNum) *
-                                                                            thisZone.Multiplier * thisZone.ListMultiplier * 1.0e6) /
-                                                                               ZoneOAMax;
+                            ZoneMaxCO2 = state.dataContaminantBalance->OutdoorCO2 +
+                                         (state.dataContaminantBalance->ZoneCO2GainFromPeople(ActualZoneNum) * 1.0e6) / ZoneOAMax;
                         }
 
                         if (ZoneMaxCO2 <= ZoneMinCO2) {
@@ -1370,7 +1367,6 @@ OARequirementsData::calcOAFlowRate(EnergyPlusData &state,
     }
 
     // Apply zone multipliers and zone list multipliers
-    // TODO MJW: this looks like it's double-counting the multipliers - it *is* double counting for methods PCOccSch and PCDesOcc
     OAVolumeFlowRate *= thisZone.Multiplier * thisZone.ListMultiplier;
 
     // Apply schedule as needed. Sizing does not use schedule.
