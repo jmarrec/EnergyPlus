@@ -967,22 +967,22 @@ SizingPeriod:WeatherFileDays,
     Vertical GHE 1x4 Std,    !- Name
     GLHE Inlet,              !- Inlet Node Name
     GLHE Outlet,             !- Outlet Node Name
-    0.00100944,              !- Design Flow Rate {m3/s}
+    0.001,                   !- Design Flow Rate {m3/s}
     Site:GroundTemperature:Undisturbed:KusudaAchenbach,  !- Undisturbed Ground Temperature Model Type
     KATemps,                 !- Undisturbed Ground Temperature Model Name
     2.5,                     !- Ground Thermal Conductivity {W/m-K}
     2.5E+06,                 !- Ground Thermal Heat Capacity {J/m3-K}
     ,                        !- GHE:Vertical:ResponseFactors Object Name
     FullDesign,              !- g-Function Calculation Method
-    GHE-1-Sizing,            !- GHE:Vertical:Sizing Object Name
-    ,                        !- GHE:Vertical:Array Object Name
-    GHE-1;                   !- GHE:Vertical:Single Object Name 1
+    GroundHeatExchanger:Vertical:Sizing:Rectangle,  !- GHE:Vertical:Sizing Object Type
+    GHE-1-Sizing;            !- GHE:Vertical:Sizing Object Name
 
-!-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:SIZING ===========
+!-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:SIZING:RECTANGLE ===========
 
-  GroundHeatExchanger:Vertical:Sizing,
+  GroundHeatExchanger:Vertical:Sizing:Rectangle,
     GHE-1-Sizing,            !- Name
-    Rectangle,               !- Borehole Field Geometry Type
+    Full Year Weather File Sizing Period,  !- SizingPeriod:WeatherFileDays Name
+    0.0005,                  !- Design Flow Rate Per Borehole {m3/s}
     100.0,                   !- Available Borehole Field Length
     100.0,                   !- Available Borehole Field Width
     200.0,                   !- Maximum Number of Boreholes
@@ -1007,14 +1007,6 @@ SizingPeriod:WeatherFileDays,
     0.03341,                 !- Pipe Outer Diameter {m}
     0.002984,                !- Pipe Thickness {m}
     0.04913;                 !- U-Tube Distance {m}
-
-!-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:ARRAY ===========
-
-  GroundHeatExchanger:Vertical:Single,
-    GHE-1,                   !- Name
-    GHE-1 Props,             !- GHE:Vertical:Properties Object Name
-    0,                       !- X Position
-    0;                       !- Y Position
 
 !-   ===========  ALL OBJECTS IN CLASS: PLANTLOOP ===========
 
