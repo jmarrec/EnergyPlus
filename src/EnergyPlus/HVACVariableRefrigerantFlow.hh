@@ -95,7 +95,11 @@ namespace HVACVariableRefrigerantFlow {
     };
 
     static constexpr std::array<std::string_view, static_cast<int>(ThermostatCtrlType::Num)> ThermostatCtrlTypeUC = {
-        "LOADPRIORITY", "ZONEPRIORITY", "THERMOSTATOFFSETPRIORITY", "SCHEDULEDPRIORITY", "MASTERTHERMOSTATPRIORITY",
+        "LOADPRIORITY",
+        "ZONEPRIORITY",
+        "THERMOSTATOFFSETPRIORITY",
+        "SCHEDULEDPRIORITY",
+        "MASTERTHERMOSTATPRIORITY",
         // "FIRSTONPRIORITY",
     };
 
