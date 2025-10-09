@@ -3023,6 +3023,7 @@ void GetDXCoils(EnergyPlusData &state)
                 thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
             } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                 ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                ErrorsFound = true;
             }
 
             // ErrorsFound will be set to True if problem was found, left untouched otherwise
@@ -3548,6 +3549,7 @@ void GetDXCoils(EnergyPlusData &state)
                 thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
             } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                 ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                ErrorsFound = true;
             }
             // ErrorsFound will be set to True if problem was found, left untouched otherwise
             VerifyUniqueCoilName(state, CurrentModuleObject, thisDXCoil.Name, ErrorsFound, CurrentModuleObject + " Name");

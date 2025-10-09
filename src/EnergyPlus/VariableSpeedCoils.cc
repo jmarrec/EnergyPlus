@@ -274,6 +274,7 @@ namespace VariableSpeedCoils {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
                 } else if ((varSpeedCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                     ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                    ErrorsFound = true;
                 }
                 varSpeedCoil.NumOfSpeeds = s_ip->getIntFieldValue(fields, schemaProps, "number_of_speeds");
                 varSpeedCoil.NormSpedLevel = s_ip->getIntFieldValue(fields, schemaProps, "nominal_speed_level");
@@ -688,6 +689,7 @@ namespace VariableSpeedCoils {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
                 } else if ((varSpeedCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                     ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                    ErrorsFound = true;
                 }
                 varSpeedCoil.NumOfSpeeds = s_ip->getIntFieldValue(fields, schemaProps, "number_of_speeds");
                 varSpeedCoil.NormSpedLevel = s_ip->getIntFieldValue(fields, schemaProps, "nominal_speed_level");
@@ -1152,6 +1154,7 @@ namespace VariableSpeedCoils {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
                 } else if ((varSpeedCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                     ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                    ErrorsFound = true;
                 }
                 varSpeedCoil.NumOfSpeeds = s_ip->getIntFieldValue(fields, schemaProps, "number_of_speeds");
                 varSpeedCoil.NormSpedLevel = s_ip->getIntFieldValue(fields, schemaProps, "nominal_speed_level");
@@ -1549,6 +1552,7 @@ namespace VariableSpeedCoils {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
                 } else if ((varSpeedCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                     ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                    ErrorsFound = true;
                 }
                 varSpeedCoil.NumOfSpeeds = s_ip->getIntFieldValue(fields, schemaProps, "number_of_speeds");
                 varSpeedCoil.NormSpedLevel = s_ip->getIntFieldValue(fields, schemaProps, "nominal_speed_level");
@@ -1956,6 +1960,7 @@ namespace VariableSpeedCoils {
                     varSpeedCoil.availSched = Sched::GetScheduleAlwaysOn(state);
                 } else if ((varSpeedCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                     ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                    ErrorsFound = true;
                 }
                 varSpeedCoil.NumOfSpeeds = s_ip->getIntFieldValue(fields, schemaProps, "number_of_speeds");
                 varSpeedCoil.NormSpedLevel = s_ip->getIntFieldValue(fields, schemaProps, "nominal_speed_level");

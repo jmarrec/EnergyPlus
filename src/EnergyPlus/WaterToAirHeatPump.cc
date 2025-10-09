@@ -245,6 +245,7 @@ namespace WaterToAirHeatPump {
                     heatPump.availSched = Sched::GetScheduleAlwaysOn(state);
                 } else if ((heatPump.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                     ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                    ErrorsFound = true;
                 }
                 cFieldName = "Refrigerant Type";
                 heatPump.Refrigerant = s_ip->getAlphaFieldValue(fields, schemaProps, "refrigerant_type"); // AlphArray(3);
@@ -484,6 +485,7 @@ namespace WaterToAirHeatPump {
                     heatPump.availSched = Sched::GetScheduleAlwaysOn(state);
                 } else if ((heatPump.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
                     ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                    ErrorsFound = true;
                 }
                 cFieldName = "Refrigerant Type";
                 heatPump.Refrigerant = s_ip->getAlphaFieldValue(fields, schemaProps, "refrigerant_type"); // AlphArray(3);
