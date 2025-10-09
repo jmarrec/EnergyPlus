@@ -135,8 +135,8 @@ jobs:
         fi
 
         if [[ "$BUILD_DOCS" != "false" ]]; then
-          echo "Using brew to install mactex and adding it to PATH"
-          brew install --cask mactex-no-gui
+          echo "Using brew to install basictex and adding it to PATH"
+          brew install --cask basictex
           echo "/Library/TeX/texbin" >> $GITHUB_PATH
           echo "DOCUMENTATION_BUILD=BuildWithAll" >> $GITHUB_ENV
         else
@@ -149,6 +149,14 @@ jobs:
         brew list gcc@13 || brew install gcc@13
         which gfortran-13 || echo "FC=$(brew --prefix gcc@13)/bin/gfortran-13" >> $GITHUB_ENV
         brew install ninja tcl-tk
+
+    - name: Install required LaTeX packages by building the Test document
+      shell: bash
+      working-directory: ./doc/test
+      run: |
+        sudo tlmgr update --self
+        sudo tlmgr install enumitem framed multirow siunitx
+        xelatex dependencies.tex
 
     - name: Create Build Directory
       run: cmake -E make_directory ./build/

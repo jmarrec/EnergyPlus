@@ -23,9 +23,9 @@ jobs:
           - os: windows-2022
             generator: "Visual Studio 17 2022"
             pretty: "Windows"
-          - os: macos-15
-            generator: "Unix Makefiles"
-            pretty: 'Mac arm64'
+#         - os: macos-15
+#           generator: "Unix Makefiles"
+#           pretty: 'Mac arm64'
 
     runs-on: ${{ matrix.os }}
 
