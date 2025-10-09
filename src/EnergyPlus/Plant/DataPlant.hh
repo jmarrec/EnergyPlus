@@ -113,6 +113,7 @@ namespace DataPlant {
         "DistrictHeating:Water",
         "ThermalStorage:Ice:Detailed",
         "ThermalStorage:Ice:Simple",
+        "ThermalStorage:PCM",
         "TemperingValve",
         "WaterHeater:Mixed",
         "WaterHeater:Stratified",
@@ -142,6 +143,7 @@ namespace DataPlant {
         "EvaporativeFluidCooler:TwoSpeed",
         "ThermalStorage:ChilledWater:Mixed",
         "ThermalStorage:ChilledWater:Stratified",
+        "ThermalStorage:HotWater:Stratified",
         "SolarCollector:FlatPlate:PhotovoltaicThermal",
         "ZoneHVAC:Baseboard:Convective:Water",
         "ZoneHVAC:Baseboard:RadiantConvective:Steam",
@@ -218,6 +220,7 @@ namespace DataPlant {
         "DISTRICTHEATING:WATER",
         "THERMALSTORAGE:ICE:DETAILED",
         "THERMALSTORAGE:ICE:SIMPLE",
+        "THERMALSTORAGE:PCM",
         "TEMPERINGVALVE",
         "WATERHEATER:MIXED",
         "WATERHEATER:STRATIFIED",
@@ -247,6 +250,7 @@ namespace DataPlant {
         "EVAPORATIVEFLUIDCOOLER:TWOSPEED",
         "THERMALSTORAGE:CHILLEDWATER:MIXED",
         "THERMALSTORAGE:CHILLEDWATER:STRATIFIED",
+        "THERMALSTORAGE:HOTWATER:STRATIFIED",
         "SOLARCOLLECTOR:FLATPLATE:PHOTOVOLTAICTHERMAL",
         "ZONEHVAC:BASEBOARD:CONVECTIVE:WATER",
         "ZONEHVAC:BASEBOARD:RADIANTCONVECTIVE:STEAM",
@@ -323,6 +327,7 @@ namespace DataPlant {
         LoopType::Both,  //	"DistrictHeating:Water"
         LoopType::Plant, //	"ThermalStorage:Ice:Detailed"
         LoopType::Plant, //	"ThermalStorage:Ice:Simple"
+        LoopType::Plant, // "ThermalStorage:PCM"
         LoopType::Both,  //	"TemperingValve"
         LoopType::Both,  //	"WaterHeater:Mixed"
         LoopType::Both,  //	"WaterHeater:Stratified"
@@ -352,6 +357,7 @@ namespace DataPlant {
         LoopType::Both,  //	"EvaporativeFluidCooler:TwoSpeed"
         LoopType::Both,  //	"ThermalStorage:ChilledWater:Mixed"
         LoopType::Both,  //	"ThermalStorage:ChilledWater:Stratified"
+        LoopType::Both,  //	"ThermalStorage:HotWater:Stratified"
         LoopType::Both,  //	"SolarCollector:FlatPlate:PhotovoltaicThermal"
         LoopType::Plant, //	"ZoneHVAC:Baseboard:Convective:Water"
         LoopType::Plant, //	"ZoneHVAC:Baseboard:RadiantConvective:Steam"

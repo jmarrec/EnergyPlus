@@ -47181,7 +47181,7 @@ ZoneHVAC:HighTemperatureRadiant,
         \default 2.0
    A7 , \field Heating Setpoint Temperature Schedule Name
         \required-field
-        \note This setpoint is a "mean air temperature", a "mean radiant temperature" or an 
+        \note This setpoint is a "mean air temperature", a "mean radiant temperature" or an
         \note "operative temperature" setpoint depending on the control type
         \type object-list
         \object-list ScheduleNames
@@ -76567,7 +76567,7 @@ HeatPump:AirToWater,
    N19, \field Heat Pump Multiplier
         \type integer
         \default 1
-        \note intend to model modular heat pumps 
+        \note intend to model modular heat pumps
    A19, \field Control Type
         \type choice
         \key FixedSpeed
@@ -76580,7 +76580,7 @@ HeatPump:AirToWater,
         \units W
         \note The compressor crankcase heater only operates when the dry-bulb temperature of air
         \note surrounding the compressor is below the Maximum Ambient Temperature for Crankcase
-        \note Heater Operation and the heat pump is off. The ambient temperature uses the outdoor air temperature. 
+        \note Heater Operation and the heat pump is off. The ambient temperature uses the outdoor air temperature.
    A20, \field Crankcase Heater Capacity Function of Temperature Curve Name
         \note A Curve:* or Table:Lookup object encoding the relationship between
         \note the crankcase heater capacity and the outdoor air temperature. When this field is
@@ -82746,8 +82746,8 @@ ThermalStorage:ChilledWater:Stratified,
   N4 , \field Deadband Temperature Difference
        \type real
        \units deltaC
-       \minimum 0.0
-       \default 0.0
+       \minimum 0.0001
+       \default 0.0001
   N5,  \field Temperature Sensor Height
        \units m
        \minimum 0.0
@@ -82757,6 +82757,8 @@ ThermalStorage:ChilledWater:Stratified,
   N7 , \field Nominal Cooling Capacity
        \type real
        \units W
+       \autosizable
+       \default autosize
   A4 , \field Ambient Temperature Indicator
        \required-field
        \type choice
@@ -82916,6 +82918,291 @@ ThermalStorage:ChilledWater:Stratified,
        \type real
        \units W/K
        \default 0.0
+
+ThermalStorage:HotWater:Stratified,
+  A1 , \field Name
+       \required-field
+       \type alpha
+       \reference-class-name validPlantEquipmentTypes
+       \reference validPlantEquipmentNames
+       \reference-class-name validCondenserEquipmentTypes
+       \reference validCondenserEquipmentNames
+       \reference-class-name validBranchEquipmentTypes
+       \reference validBranchEquipmentNames
+  N1 , \field Tank Volume
+       \required-field
+       \type real
+       \units m3
+       \minimum> 0.0
+       \ip-units gal
+  N2 , \field Tank Height
+       \required-field
+       \type real
+       \units m
+       \minimum> 0.0
+       \note Height is measured in the axial direction for horizontal cylinders
+  A2 , \field Tank Shape
+       \type choice
+       \key VerticalCylinder
+       \key HorizontalCylinder
+       \key Other
+       \default VerticalCylinder
+  N3 , \field Tank Perimeter
+       \type real
+       \units m
+       \minimum 0.0
+       \note Only used if Tank Shape is Other
+  A3 , \field Top Setpoint Temperature Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+  A4 , \field Bottom Setpoint Temperature Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+  N4 , \field Deadband Temperature Difference
+       \type real
+       \units deltaC
+       \minimum 0.0001
+       \default 0.0001
+  N5,  \field Top Temperature Sensor Height
+       \units m
+       \minimum 0.0
+  N6,  \field Bottom Temperature Sensor Height
+       \units m
+       \minimum 0.0
+  N7 , \field Maximum Temperature Limit
+       \type real
+       \units C
+  N8 , \field Nominal Heating Capacity
+       \type real
+       \units W
+       \autosizable
+       \default autosize
+  A5 , \field Ambient Temperature Indicator
+       \required-field
+       \type choice
+       \key Schedule
+       \key Zone
+       \key Outdoors
+  A6 , \field Ambient Temperature Schedule Name
+       \type object-list
+       \object-list ScheduleNames
+  A7 , \field Ambient Temperature Zone Name
+       \type object-list
+       \object-list ZoneNames
+  A8,  \field Ambient Temperature Outdoor Air Node Name
+       \type node
+       \note required for Ambient Temperature Indicator=Outdoors
+  N9 , \field Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature
+       \type real
+       \units W/m2-K
+       \minimum 0.0
+  A9,  \field Use Side Inlet Node Name
+       \type node
+  A10, \field Use Side Outlet Node Name
+       \type node
+  A11, \field Use Side Flow Direction Schedule
+       \note allowed value is -1 and 1. When the value is 1, water flows in from
+       \note the inlet and flows out from the outlet node. When the value is -1, water
+       \note flows in from the outlet node and flows out from the inlet node (i.e. the
+       \note flow direction is reversed)
+  N10, \field Use Side Heat Transfer Effectiveness
+       \type real
+       \minimum 0.0
+       \maximum 1.0
+       \default 1.0
+       \note The use side effectiveness in the stratified tank model is a simplified analogy of
+       \note a heat exchanger's effectiveness. This effectiveness is equal to the fraction of
+       \note use mass flow rate that directly mixes with the tank fluid. And one minus the
+       \note effectiveness is the fraction that bypasses the tank. The use side mass flow rate
+       \note that bypasses the tank is mixed with the fluid or water leaving the stratified tank.
+  A12, \field Use Side Availability Schedule Name
+       \note Availability schedule name for use side. Schedule value > 0 means the system is available.
+       \note If this field is blank, the system is always available.
+       \type object-list
+       \object-list ScheduleNames
+  N11 , \field Use Side Inlet Height
+       \type real
+       \units m
+       \minimum 0.0
+       \autocalculatable
+       \default autocalculate
+       \note Defaults to top of tank
+  N12, \field Use Side Outlet Height
+       \type real
+       \units m
+       \minimum 0.0
+       \default 0.0
+       \note Defaults to bottom of tank
+  N13, \field Use Side Design Flow Rate
+       \type real
+       \autosizable
+       \default autosize
+       \units m3/s
+       \ip-units gal/min
+       \minimum 0.0
+  A13, \field Source Side Inlet Node Name
+       \type node
+  A14, \field Source Side Outlet Node Name
+       \type node
+  A15, \field Source Side Flow Direction Schedule
+       \type alpha
+       \note allowed value is -1 and 1. When the value is 1, water flows in from
+       \note the inlet and flows out from the outlet node. When the value is -1, water
+       \note flows in from the outlet node and flows out from the inlet node (i.e. the
+       \note flow direction is reversed)
+  N14, \field Source Side Heat Transfer Effectiveness
+       \type real
+       \minimum> 0.0
+       \maximum 1.0
+       \default 1.0
+       \note The source side effectiveness in the stratified tank model is a simplified analogy of
+       \note a heat exchanger's effectiveness. This effectiveness is equal to the fraction of
+       \note source mass flow rate that directly mixes with the tank fluid. And one minus the
+       \note effectiveness is the fraction that bypasses the tank. The source side mass flow rate
+       \note that bypasses the tank is mixed with the fluid or water leaving the stratified tank.
+  A16, \field Source Side Availability Schedule Name
+       \note Availability schedule name for use side. Schedule value > 0 means the system is available.
+       \note If this field is blank, the system is always available.
+       \type object-list
+       \object-list ScheduleNames
+  N15, \field Source Side Inlet Height
+       \type real
+       \units m
+       \minimum 0.0
+       \default 0.0
+       \note Defaults to bottom of tank
+  N16, \field Source Side Outlet Height
+       \type real
+       \units m
+       \minimum 0.0
+       \autocalculatable
+       \default autocalculate
+       \note Defaults to top of tank
+  N17, \field Source Side Design Flow Rate
+       \type real
+       \autosizable
+       \default autosize
+       \units m3/s
+       \ip-units gal/min
+       \minimum 0.0
+  N18, \field Tank Recovery Time
+       \type real
+       \default 4.0
+       \note Parameter for autosizing design flow rates for indirectly cooled water tanks
+       \note time required to lower temperature of entire tank from 14.4C to 9.0C
+       \units hr
+       \minimum> 0.0
+  A17, \field Inlet Mode
+       \type choice
+       \key Fixed
+       \key Seeking
+       \default Fixed
+  N19, \field Number of Nodes
+       \type integer
+       \minimum 1
+       \maximum 10
+       \default 1
+  N20, \field Additional Destratification Conductivity
+       \type real
+       \units W/m-K
+       \minimum 0.0
+       \default 0.0
+  N21, \field Node 1 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N22, \field Node 2 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N23, \field Node 3 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N24, \field Node 4 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N25, \field Node 5 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N26, \field Node 6 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N27, \field Node 7 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N28, \field Node 8 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N29, \field Node 9 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+  N30; \field Node 10 Additional Loss Coefficient
+       \type real
+       \units W/K
+       \default 0.0
+ThermalStorage:PCM,
+      \min-fields 11
+      \memo This thermal storage model is PCM-based
+      \memo It requires PCM material property connection
+      \memo In addition to the object linking, this object needs PCM Latent heat storage capacity and Heat Loss Rate
+      \memo This model needs 4 nodes: 2 plant side nodes and 2 use side nodes.
+  A1, \field Name
+      \type alpha
+      \required-field
+      \reference-class-name validPlantEquipmentTypes
+      \reference validPlantEquipmentNames
+      \reference-class-name validBranchEquipmentTypes
+      \reference validBranchEquipmentNames
+  A2 , \field Availability Schedule Name
+       \required-field
+       \type object-list
+       \object-list ScheduleNames
+  A3 , \field Plant Side Inlet Node Name
+       \type node
+       \required-field
+  A4 , \field Plant Side Outlet Node Name
+       \type node
+       \required-field
+  A5 , \field Use Side Inlet Node Name
+       \type node
+       \required-field
+  A6 , \field Use Side Outlet Node Name
+       \type node
+       \required-field
+  A7 , \field PCM Material Name
+       \type alpha
+       \object-list MaterialName
+       \required-field
+  N1 , \field Tank Capacity
+       \type real
+       \units kg
+       \minimum > 0
+       \autosizable
+       \required-field
+  N2 , \field Heat Loss Rate
+       \type real
+       \units W
+       \default 0.0
+  N3 , \field Use Side Design Flow Rate
+       \type real
+       \units m3/s
+       \minimum > 0
+       \autosizable
+       \required-field
+  N4 ; \field Plant Side Design Flow Rate
+       \type real
+       \units m3/s
+       \minimum > 0
+       \autosizable
+       \required-field
+
 
 \group Plant-Condenser Loops
 !*****************PLANT AND CONDENSER LOOP SPECIFICATION*********************
@@ -107876,7 +108163,7 @@ OutputControl:Table:Style,
        \key Yes
        \key No
        \default Yes
-       
+
 
 OutputControl:ReportingTolerances,
        \memo Calculations of the time that setpoints are not met use a tolerance of 0.2C.

@@ -1376,15 +1376,8 @@ void GetInputTabularStyle(EnergyPlusData &state)
         ort->formatReals_Tabular = getYesNoValue(AlphArray(3)) == BooleanSwitch::Yes;
     }
 
-    if (ort->WriteTabularFiles) {
-        print(state.files.eio, "! <Tabular Report>,Style,Unit Conversion\n");
-        if (AlphArray(1) != "HTML") {
-            ConvertCaseToLower(AlphArray(1), AlphArray(2));
-            AlphArray(1).erase(1);
-            AlphArray(1) += AlphArray(2).substr(1);
-        }
-        print(state.files.eio, "Tabular Report,{},{}\n", AlphArray(1), AlphArray(2));
-    }
+    print(state.files.eio, "! <Tabular Report>,Style,Unit Conversion, Format Reals\n");
+    print(state.files.eio, "Tabular Report,{},{},{}\n", AlphArray(1), AlphArray(2), ort->formatReals_Tabular ? "Yes" : "No");
 }
 
 UnitsStyle SetUnitsStyleFromString(std::string const &unitStringIn)
@@ -6372,14 +6365,16 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvAirLpNm, thisZone.Name, airLoopName);
 
                 // occupants
-                if (thisZone.isNominalOccupied) {
-                    if (thisZonePreDefRep.NumOccAccumTime > 0) {
-                        Real64 const avgOcc = thisZonePreDefRep.NumOccAccum / thisZonePreDefRep.NumOccAccumTime;
-                        PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc1, thisZone.Name, avgOcc);
-                        PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc2, thisZone.Name, avgOcc);
-                        PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvAvgNumOcc, thisZone.Name, avgOcc);
-                        totalAverageOccupants += avgOcc * zoneMult;
-                    }
+                if ((thisZone.isNominalOccupied) && (thisZonePreDefRep.NumOccAccumTime > 0)) {
+                    Real64 const avgOcc = thisZonePreDefRep.NumOccAccum / thisZonePreDefRep.NumOccAccumTime;
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc1, thisZone.Name, avgOcc);
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc2, thisZone.Name, avgOcc);
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvAvgNumOcc, thisZone.Name, avgOcc);
+                    totalAverageOccupants += avgOcc * zoneMult;
+                } else {
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc1, thisZone.Name, 0.0);
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaoAvgNumOcc2, thisZone.Name, 0.0);
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvAvgNumOcc, thisZone.Name, 0.0);
                 }
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvNomNumOcc, thisZone.Name, thisZone.TotOccupants);
                 totalOccupants += thisZone.TotOccupants * zoneMult;
@@ -6395,6 +6390,7 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
 
                 // minimum dynamic target ventilation Voz-dyn-min
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvMinDynTrgVent, thisZone.Name, thisZonePreDefRep.VozMin / zoneMult, 3);
+                PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaMvZoneMult, thisZone.Name, zoneMult);
                 totalVozMin += thisZonePreDefRep.VozMin;
 
                 // Mechanical ventilation
@@ -6486,6 +6482,7 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaTaBzTmAt, thisZone.Name, thisZonePreDefRep.VozTargetTimeAt);
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaTaBzTmAbove, thisZone.Name, thisZonePreDefRep.VozTargetTimeAbove);
                 PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaTaBzTmAboveUnocc, thisZone.Name, thisZonePreDefRep.TotVentTimeNonZeroUnocc);
+                PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaTaBzZoneMult, thisZone.Name, zoneMult);
 
                 if (thisZone.isNominalOccupied && (thisZonePreDefRep.TotTimeOcc > 0.0)) {
                     Real64 totTimeOccSec = thisZonePreDefRep.TotTimeOcc * Constant::rSecsInHour;
@@ -6518,6 +6515,7 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
                     PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaOccBzTmBelow, thisZone.Name, thisZonePreDefRep.VozTargetTimeBelowOcc);
                     PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaOccBzTmAt, thisZone.Name, thisZonePreDefRep.VozTargetTimeAtOcc);
                     PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaOccBzTmAbove, thisZone.Name, thisZonePreDefRep.VozTargetTimeAboveOcc);
+                    PreDefTableEntry(state, state.dataOutRptPredefined->pdchOaOccBzZoneMult, thisZone.Name, zoneMult);
                 }
             }
         }
