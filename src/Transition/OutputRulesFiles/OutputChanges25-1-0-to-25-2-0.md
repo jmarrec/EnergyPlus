@@ -311,6 +311,23 @@ Several new columns were added to the ElectricComponentsOfPeakDemandMonthly repo
 - Refrigeration:Electricity {At Max/Min}
 - Cogeneration:Electricity {At Max/Min}
 
+### Tabular Report output to eio
+- Add a new field for "Format Reals" to the eio output for "Tabular Report".
+- Fix unit conversion value when format is not HTML.
+- Always report this to eio, even if table reports are not active.
+
+Example before:
+```
+! <Tabular Report>,Style,Unit Conversion
+Tabular Report,HTML,NONE
+```
+
+New:
+```
+! <Tabular Report>,Style,Unit Conversion, Format Reals
+Tabular Report,HTML,NONE,Yes
+```
+See Pull Request [#11260](https://github.com/NREL/EnergyPlus/pull/11260).
 See pull request [#10209](https://github.com/NREL/EnergyPlus/pull/10209)
 
 ### Table and eio Output Changes Related to Zone Multipliers
