@@ -977,6 +977,15 @@ void GetPlantInput(EnergyPlusData &state)
                         this_comp.compPtr = WaterThermalTanks::WaterThermalTankData::factory(state, CompNames(CompNum));
                         break;
                     }
+                    case PlantEquipmentType::HotWaterTankStratified: {
+                        if (LoopSideNum == LoopSideLocation::Demand) {
+                            this_comp.CurOpSchemeType = OpScheme::Demand;
+                        } else if (LoopSideNum == LoopSideLocation::Supply) {
+                            this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        }
+                        this_comp.compPtr = WaterThermalTanks::WaterThermalTankData::factory(state, CompNames(CompNum));
+                        break;
+                    }
                     case PlantEquipmentType::WaterUseConnection: {
                         this_comp.CurOpSchemeType = OpScheme::Demand;
                         this_comp.compPtr = WaterUse::WaterConnectionsType::factory(state, CompNames(CompNum));
