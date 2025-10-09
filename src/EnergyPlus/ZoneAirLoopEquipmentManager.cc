@@ -51,6 +51,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/AirTerminalUnit.hh>
 #include <EnergyPlus/BranchNodeConnections.hh>
+#include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataAirLoop.hh>
 #include <EnergyPlus/DataDefineEquip.hh>
@@ -518,6 +519,7 @@ namespace ZoneAirLoopEquipmentManager {
         // every time step
         airDistUnit.MassFlowRateDnStrLk = 0.0;
         airDistUnit.MassFlowRateUpStrLk = 0.0;
+        airDistUnit.parallelPIUTerminalLeakFrac = 0.0;
         airDistUnit.massFlowRateParallelPIULk = 0.0;
         airDistUnit.MassFlowRateTU = 0.0;
         airDistUnit.MassFlowRateZSup = 0.0;
@@ -576,8 +578,9 @@ namespace ZoneAirLoopEquipmentManager {
             MassFlowRateMaxAvail = 0.0;
             MassFlowRateMinAvail = 0.0;
             // check for no plenum
-            // set the max and min avail flow rates taking into acount the upstream leak
-            if (airDistUnit.UpStreamLeak) {
+            // set the max and min avail flow rates taking into account the upstream leak
+            if (airDistUnit.UpStreamLeak || airDistUnit.DownStreamLeak ||
+                airDistUnit.EquipTypeEnum(AirDistCompNum) == DataDefineEquip::ZnAirLoopEquipType::SingleDuct_ParallelPIU_Reheat) {
                 if (InNodeNum > 0) {
                     MassFlowRateMaxAvail = state.dataLoopNodes->Node(InNodeNum).MassFlowRateMaxAvail;
                     MassFlowRateMinAvail = state.dataLoopNodes->Node(InNodeNum).MassFlowRateMinAvail;
@@ -686,7 +689,7 @@ namespace ZoneAirLoopEquipmentManager {
                        airDistUnit.EquipIndex(AirDistCompNum));
             } break;
             case DataDefineEquip::ZnAirLoopEquipType::SingleDuct_ParallelPIU_Reheat: {
-                airDistUnit.piuTerminalLeakMassFlowRate = 0.0;
+                airDistUnit.parallelPIUTerminalLeakFrac = 0.0;
                 SimPIU(state,
                        airDistUnit.EquipName(AirDistCompNum),
                        FirstHVACIteration,
@@ -695,7 +698,13 @@ namespace ZoneAirLoopEquipmentManager {
                        airDistUnit.EquipIndex(AirDistCompNum));
                 int PIUNum = Util::FindItemInList(airDistUnit.EquipName(AirDistCompNum), state.dataPowerInductionUnits->PIU);
                 if (PIUNum > 0) {
-                    airDistUnit.piuTerminalLeakMassFlowRate = state.dataPowerInductionUnits->PIU(PIUNum).leakMassFlowRate;
+                    if (auto &thisPIU = state.dataPowerInductionUnits->PIU(PIUNum); thisPIU.leakFracCurve > 0 && thisPIU.MaxPriAirMassFlow > 0 &&
+                                                                                    state.dataPowerInductionUnits->PIU(PIUNum).SecMassFlowRate == 0) {
+                        const Real64 airflowFrac = thisPIU.PriAirMassFlow / thisPIU.MaxPriAirMassFlow;
+                        thisPIU.leakFrac = min(1.0, Curve::CurveValue(state, thisPIU.leakFracCurve, airflowFrac));
+                        thisPIU.leakMassFlowRate = thisPIU.leakFrac * state.dataLoopNodes->Node(InNodeNum).MassFlowRate;
+                        airDistUnit.parallelPIUTerminalLeakFrac = thisPIU.leakFrac;
+                    }
                 }
             } break;
             case DataDefineEquip::ZnAirLoopEquipType::SingleDuct_ConstVol_4PipeInduc: {
@@ -752,13 +761,13 @@ namespace ZoneAirLoopEquipmentManager {
                     state.dataLoopNodes->Node(InNodeNum).MassFlowRateMaxAvail = MassFlowRateMaxAvail;
                     state.dataLoopNodes->Node(InNodeNum).MassFlowRateMinAvail = MassFlowRateMinAvail;
                 }
-                if ((airDistUnit.UpStreamLeak || airDistUnit.DownStreamLeak || airDistUnit.piuTerminalLeakMassFlowRate) &&
+                if ((airDistUnit.UpStreamLeak || airDistUnit.DownStreamLeak || airDistUnit.parallelPIUTerminalLeakFrac > 0.0) &&
                     MassFlowRateMaxAvail > 0.0) {
                     airDistUnit.MassFlowRateTU = state.dataLoopNodes->Node(InNodeNum).MassFlowRate;
                     airDistUnit.MassFlowRateZSup =
-                        max(airDistUnit.MassFlowRateTU * (1.0 - airDistUnit.DownStreamLeakFrac) - airDistUnit.piuTerminalLeakMassFlowRate, 0.0);
+                        max(airDistUnit.MassFlowRateTU * (1.0 - airDistUnit.DownStreamLeakFrac - airDistUnit.parallelPIUTerminalLeakFrac), 0.0);
                     airDistUnit.MassFlowRateDnStrLk = airDistUnit.MassFlowRateTU * airDistUnit.DownStreamLeakFrac;
-                    airDistUnit.massFlowRateParallelPIULk = airDistUnit.piuTerminalLeakMassFlowRate;
+                    airDistUnit.massFlowRateParallelPIULk = airDistUnit.MassFlowRateTU * airDistUnit.parallelPIUTerminalLeakFrac;
                     airDistUnit.MassFlowRateSup = airDistUnit.MassFlowRateTU + airDistUnit.MassFlowRateUpStrLk;
                     state.dataLoopNodes->Node(InNodeNum).MassFlowRate = airDistUnit.MassFlowRateSup;
                     state.dataLoopNodes->Node(OutNodeNum).MassFlowRate = airDistUnit.MassFlowRateZSup;

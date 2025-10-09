@@ -106,12 +106,12 @@ namespace DataDefineEquip {
         int TermUnitSizingNum = 0;                // index to TermUnitSizing and TermUnitFinalZoneSizing for this air distribution unit
         Real64 UpStreamLeakFrac = 0.0;            // upstream nominal leakage fraction
         Real64 DownStreamLeakFrac = 0.0;          // downstream constant leakage fraction
-        Real64 piuTerminalLeakMassFlowRate = 0.0; // PIU terminal leakage mass flow rate [kg/s]
+        Real64 parallelPIUTerminalLeakFrac = 0.0; // PIU terminal leakage mass flow rate [kg/s]
         Real64 MassFlowRateUpStrLk = 0.0;         // current air mass flow rate of the upstream leak [kg/s]
         Real64 MassFlowRateDnStrLk = 0.0;         // current air mass flow rate of the downstream leak [kg/s]
         Real64 MassFlowRateTU = 0.0;              // current air mass flow rate through the terminal unit [kg/s]
         Real64 MassFlowRateZSup = 0.0;            // current air mass flow rate of zone supply air [kg/s]
-        Real64 massFlowRateParallelPIULk;         // current air mass flow rate of parallel piu leak [kg/s]
+        Real64 massFlowRateParallelPIULk = 0.0;   // current air mass flow rate of parallel piu leak [kg/s]
         Real64 MassFlowRateSup = 0.0;             // current air mass flow rate of supply air upstream of upstream leak [kg/s]
         Real64 MassFlowRatePlenInd = 0.0;         // current air mass flow rate of induced air from plenum [kg/s]
         Real64 MaxAvailDelta = 0.0;               // change in max avail mass low rate due to leaks [kg/s]

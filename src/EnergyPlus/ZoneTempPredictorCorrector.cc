@@ -5242,8 +5242,9 @@ void ZoneSpaceHeatBalanceData::calcZoneOrSpaceSums(EnergyPlusData &state,
                     state, state.dataZoneEquip->ZoneEquipConfig(zoneNum).ExhaustNode(iExhNode));
                 if (piuNum > 0) {
                     auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum);
-                    this->SumSysMCp += thisPIU.leakMassFlowRate;
-                    this->SumSysMCpT += thisPIU.leakMassFlowRate * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
+                    Real64 CpAir = Psychrometrics::PsyCpAirFnW(this->airHumRat);
+                    this->SumSysMCp += thisPIU.leakMassFlowRate * CpAir;
+                    this->SumSysMCpT += thisPIU.leakMassFlowRate * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
                 }
             }
         }

@@ -990,11 +990,14 @@ void CalcAirZoneReturnPlenum(EnergyPlusData &state, int const ZonePlenumNum)
     // add in the leak flow rate, if any. Don't alter the pressure calc (it is not used anyway)
     for (ADUListIndex = 1; ADUListIndex <= state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum).NumADUs; ++ADUListIndex) {
         int ADUNum = state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum).ADUIndex(ADUListIndex);
-        if (state.dataDefineEquipment->AirDistUnit(ADUNum).UpStreamLeak || state.dataDefineEquipment->AirDistUnit(ADUNum).DownStreamLeak) {
+        if (state.dataDefineEquipment->AirDistUnit(ADUNum).UpStreamLeak || state.dataDefineEquipment->AirDistUnit(ADUNum).DownStreamLeak ||
+            state.dataDefineEquipment->AirDistUnit(ADUNum).massFlowRateParallelPIULk > 0) {
             state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum).OutletMassFlowRate +=
                 state.dataDefineEquipment->AirDistUnit(ADUNum).MassFlowRateUpStrLk +
                 state.dataDefineEquipment->AirDistUnit(ADUNum).MassFlowRateDnStrLk +
-                state.dataDefineEquipment->AirDistUnit(ADUNum).massFlowRateParallelPIULk;
+                state.dataDefineEquipment->AirDistUnit(ADUNum)
+                    .massFlowRateParallelPIULk; // Even though the PIU leakage flow rate doesn't necessarily go through the plenum, the same amount
+                                                // ends-up being returned
             state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum).OutletMassFlowRateMaxAvail +=
                 state.dataDefineEquipment->AirDistUnit(ADUNum).MaxAvailDelta;
             state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum).OutletMassFlowRateMinAvail +=
