@@ -25,7 +25,7 @@ See Pull Request [#11051](https://github.com/NREL/EnergyPlus/pull/11051).
     "Exhaust Airflow [kg/s]" --> "Exhaust Air Flow Rate [m3/s]
 
     "Outdoor Airflow [kg/s]" --> "Supply Air Flow Rate [m3/s]"
-    
+
 * Add more new columns:
 
   - Heat Recovery Active ("WhenFansOn", "Scheduled", "WhenOutsideEconomizerLimits", "WhenMinimumOutdoorAir")
@@ -77,19 +77,13 @@ See Pull Request [#10998](https://github.com/NREL/EnergyPlus/pull/10998).
 * Always report sizing values whether autosized or hard-sized.
 
 * Add columns for "Design Supply Temperature", "Design ReturnTemperature", and "Design Capacity".
-  
+
 See Pull Request [#10998](https://github.com/NREL/EnergyPlus/pull/10998).
 
 ### Table Output, Equipment Summary Report, Fan Power Fractions subtable
 New table output showing fraction of full load fan power vs flow fraction.
 
 See Pull Request [#11153](https://github.com/NREL/EnergyPlus/pull/11153).
-
-### EIO and HTML Table Output: Initialization Summary
-
-A number of changes related to finding duplicated HTML tables (based on FullName) have been made.
-
-See Pull Request [#11106](https://github.com/NREL/EnergyPlus/pull/11106).
 
 ### Table Output, DX Heating Coils
 * Add column Heating to Cooling Capacity Sizing Ratio
@@ -101,6 +95,12 @@ See Pull Request [#11130](https://github.com/NREL/EnergyPlus/pull/11130).
 * Columns: Heat Pump Name, Heat Pump Type, Heat Pump Coil Type, Sizing Method, Total Load, Sensible Load, Total Capacity, Sensible Capacity, Total Capacity Sizing Factor, Sensible Capacity Sizing Factor, Latent Capacity Sizing Factor
 
 See Pull Request [#11130](https://github.com/NREL/EnergyPlus/pull/11130).
+
+### EIO and HTML Table Output: Initialization Summary
+
+A number of changes related to finding duplicated HTML tables (based on FullName) have been made.
+
+See Pull Request [#11106](https://github.com/NREL/EnergyPlus/pull/11106).
 
 #### Schedules
 
@@ -202,16 +202,16 @@ after change:
 - Chilled/Hot Water Thermal Storage Tank Source Side Heat Transfer Energy
 - Chilled/Hot Water Thermal Storage Tank Temperature Node
 - Chilled/Hot Water Thermal Storage Tank Final Temperature Node
- 
+
 See Pull Request [#11033](https://github.com/NREL/EnergyPlus/pull/11033).
-#
+
 ### ZoneHVAC:IdealLoadsAirSystem
- 
+
 * Added eight new report variables for ZoneHVAC:IdealLoadsAirSystem object:
 
 ```
    (1) * Zone Ideal Loads Zone Heating Fuel Energy Rate [W] *
-   (2) * Zone Ideal Loads Zone Cooling Fuel Energy Rate [W]            
+   (2) * Zone Ideal Loads Zone Cooling Fuel Energy Rate [W]
    (3) * Zone Ideal Loads Zone Heating Fuel Energy [J]
    (4) * Zone Ideal Loads Zone Cooling Fuel Energy [J]
    (5) * Zone Ideal Loads Supply Air Total Heating Fuel Energy Rate [W] *
@@ -220,12 +220,11 @@ See Pull Request [#11033](https://github.com/NREL/EnergyPlus/pull/11033).
    (8) * Zone Ideal Loads Supply Air Total Cooling Fuel Energy [J] *
 ```
 
-See pull request [#10971] https://github.com/NREL/EnergyPlus/pull/10971
+See pull request [#10971](https://github.com/NREL/EnergyPlus/pull/109710)
 
+### EIO and HTML Table Output Changes and New Tables
 
-
-
-### EIO and HTML Table Output - Schedule-Hourly/Schedule-Timestep
+#### EIO and HTML Table Output - Schedule-Hourly/Schedule-Timestep
 
 Change header to the EIO table to make more compatible with the parsing that the Initialization Summary so that columns for more
 that the first Until Date/WeekSchedule are shown. Made explicit for the first 9 pairs of Until's. The use of 9 pairs of columns is preferred to a report that has a flexible number of columns.
@@ -233,7 +232,7 @@ that the first Until Date/WeekSchedule are shown. Made explicit for the first 9 
 Previous
 ```
 ! <Schedule - Hourly>,Name,ScheduleType,{Until Date,WeekSchedule}** Repeated until Dec 31
-``` 
+```
 
 Changed
 ```
@@ -327,3 +326,54 @@ This is entirely new table
 - Upper Limit [W]
 - Equipment List Name
 - Equipment
+
+See pull request [#10949](https://github.com/NREL/EnergyPlus/pull/10949)
+
+
+### Predefined Monthly Summary Reports - Additional Columns
+
+A new column was added to the EndUseEnergyConsumptionElectricityMonthly report:
+
+- Refrigeration:Electricity
+
+A new column was added to the PeakEnergyEndUseElectricityPart2Monthly report:
+
+- Refrigeration:Electricity {Maximum}
+- Refrigeration:Electricity {Timestamp}
+
+Several new columns were added to the ElectricComponentsOfPeakDemandMonthly report:
+
+- Humidifier:Electricity {At Max/Min}
+- HeatRecovery:Electricity {At Max/Min}
+- WaterSystems:Electricity {At Max/Min}
+- Refrigeration:Electricity {At Max/Min}
+- Cogeneration:Electricity {At Max/Min}
+
+### Tabular Report output to eio
+- Add a new field for "Format Reals" to the eio output for "Tabular Report".
+- Fix unit conversion value when format is not HTML.
+- Always report this to eio, even if table reports are not active.
+
+Example before:
+```
+! <Tabular Report>,Style,Unit Conversion
+Tabular Report,HTML,NONE
+```
+
+New:
+```
+! <Tabular Report>,Style,Unit Conversion, Format Reals
+Tabular Report,HTML,NONE,Yes
+```
+See Pull Request [#11260](https://github.com/NREL/EnergyPlus/pull/11260).
+See pull request [#10209](https://github.com/NREL/EnergyPlus/pull/10209)
+
+### Table and eio Output Changes Related to Zone Multipliers
+
+* eio "Zone Sizing Information" - The values for "Floor Area {m2}" and "# Occupants" are now reported with multipliers applied to be consistent with the other values reported for zone sizing.
+
+* Outdoor Air Details table output has a new column for "Zone Multiplier".
+
+* HVAC Sizing Summary table output values for "User Design Load per Area" have been corrected to properly account for zone multipliers.
+
+See pull request [#11259](https://github.com/NREL/EnergyPlus/pull/11259)

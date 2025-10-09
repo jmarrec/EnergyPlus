@@ -56,6 +56,7 @@
 #include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataOutputs.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
+#include <EnergyPlus/InputProcessing/CsvParser.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 
 #include <map>
@@ -2093,11 +2094,12 @@ TEST_F(InputProcessorFixture, getObjectItem_json1)
                                                               cAlphaFields,
                                                               cNumericFields);
 
-    EXPECT_TRUE(compare_containers(std::vector<std::string>({"SIMPLEANDTABULAR", "USEOUTPUTCONTROLTABLESTYLE"}), Alphas));
-    EXPECT_TRUE(compare_containers(std::vector<std::string>({"Option Type", "Unit Conversion for Tabular Data"}), cAlphaFields));
+    EXPECT_TRUE(compare_containers(std::vector<std::string>({"SIMPLEANDTABULAR", "USEOUTPUTCONTROLTABLESTYLE", "YES"}), Alphas));
+    EXPECT_TRUE(compare_containers(
+        std::vector<std::string>({"Option Type", "Unit Conversion for Tabular Data", "Format Numeric Values for Tabular Data"}), cAlphaFields));
     EXPECT_TRUE(compare_containers(std::vector<std::string>({}), cNumericFields));
     EXPECT_TRUE(compare_containers(std::vector<bool>({}), lNumericBlanks));
-    EXPECT_TRUE(compare_containers(std::vector<bool>({false, true}), lAlphaBlanks));
+    EXPECT_TRUE(compare_containers(std::vector<bool>({false, true, true}), lAlphaBlanks));
     EXPECT_TRUE(compare_containers(std::vector<Real64>({}), Numbers));
     EXPECT_EQ(1, NumAlphas);
     EXPECT_EQ(0, NumNumbers);
@@ -4845,5 +4847,45 @@ TEST_F(InputProcessorFixture, epJSONgetFieldValue_extensiblesFromIDF)
 //          EXPECT_TRUE( compare_containers( std::vector< bool >( {} ), IDFRecords( index ).NumBlank ) );
 //
 //   }
+TEST_F(InputProcessorFixture, csv_import_ending_blank_line)
+{
+    std::string csv_no_empty_line_n = "\"H1\",\"H2\",\"H3\"\n"
+                                      "1,2,3\n"
+                                      "4,5,6\n"
+                                      "7,8,9\n";
+    std::string csv_with_empty_line_n = csv_no_empty_line_n + "\\n";
+    // EXPECT_TRUE(false);
+
+    std::string csv_no_empty_line_rn = "\"H1\",\"H2\",\"H3\"\r\n"
+                                       "1,2,3\r\n"
+                                       "4,5,6\r\n"
+                                       "7,8,9\r\n";
+
+    std::string csv_with_empty_line_rn = csv_no_empty_line_rn + "\r\n";
+
+    CsvParser csvParser;
+
+    // None of the following should throw errors
+
+    // No extra lines
+    std::string_view csv = csv_no_empty_line_n;
+    size_t index = 0;
+    csvParser.decode(csv, ',', 0);
+    EXPECT_TRUE(csvParser.errors().empty()) << "\\n with no ending blank line parse test failed";
+    csv = csv_no_empty_line_rn;
+    index = 0;
+    csvParser.decode(csv, ',', 0);
+    EXPECT_TRUE(csvParser.errors().empty()) << "\\r\\n with no ending blank line parse test failed";
+
+    // testing extra blank lines at the end
+    csv = csv_with_empty_line_n;
+    index = 0;
+    csvParser.decode(csv, ',', 0);
+    EXPECT_TRUE(csvParser.errors().empty()) << "\\n with with an ending blank line parse test failed";
+    csv = csv_with_empty_line_rn;
+    index = 0;
+    csvParser.decode(csv, ',', 0);
+    EXPECT_TRUE(csvParser.errors().empty()) << "\\r\\n with an ending blank line parse test failed";
+}
 
 } // namespace EnergyPlus

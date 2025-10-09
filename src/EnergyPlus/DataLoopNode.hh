@@ -393,6 +393,7 @@ namespace DataLoopNode {
         ThermalStorageHotWaterStratified,
         ThermalStorageIceDetailed,
         ThermalStorageIceSimple,
+        ThermalStoragePCM,
         WaterHeaterHeatPump,
         WaterHeaterHeatPumpPumpedCondenser,
         WaterHeaterHeatPumpWrappedCondenser,
