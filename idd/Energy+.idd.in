@@ -76497,10 +76497,8 @@ HeatPump:AirToWater,
         \type real
         \minimum 0.0
         \default 0.0
-        \autosizable
         \units W
         \note only applicable if resistive defrost strategy is specified
-        \ip-units W
    A18, \field Defrost Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
