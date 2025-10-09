@@ -73920,7 +73920,7 @@ Chiller:Electric:EIR,
        \default 0.2
   A20, \field Thermosiphon Capacity Fraction Curve Name
        \type object-list
-       \object-list UniVariateFunctions
+       \object-list UnivariateFunctions
        \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
        \note Tevap, out = evaporator outlet temperature
        \note Tcond, in = condenser inlet temperature
@@ -74172,7 +74172,7 @@ Chiller:Electric:ReformulatedEIR,
        \default 0.2
   A19, \field Thermosiphon Capacity Fraction Curve Name
        \type object-list
-       \object-list UniVariateFunctions
+       \object-list UnivariateFunctions
        \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
        \note Tevap, out = evaporator outlet temperature
        \note Tcond, in = condenser inlet temperature
@@ -74333,7 +74333,7 @@ Chiller:Electric,
        \default General
   A14, \field Thermosiphon Capacity Fraction Curve Name
        \type object-list
-       \object-list UniVariateFunctions
+       \object-list UnivariateFunctions
        \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
        \note Tevap, out = evaporator outlet temperature
        \note Tcond, in = condenser inlet temperature
@@ -74723,7 +74723,7 @@ Chiller:ConstantCOP,
        \note throughout the entire simulation.
   A9 , \field Thermosiphon Capacity Fraction Curve Name
        \type object-list
-       \object-list UniVariateFunctions
+       \object-list UnivariateFunctions
        \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
        \note Tevap, out = evaporator outlet temperature
        \note Tcond, in = condenser inlet temperature
@@ -75617,7 +75617,7 @@ HeatPump:PlantLoop:EIR:Cooling,
         \note EIR = 1/COP
         \required-field
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*PLR + c*PLR**2 is typical, other univariate curves may be used
         \note PLR = part load ratio (cooling load/steady state capacity)
    A13, \field Control Type
@@ -75656,12 +75656,12 @@ HeatPump:PlantLoop:EIR:Cooling,
         \note The unit is disabled above this temperature.
    A15, \field Minimum Supply Water Temperature Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A16, \field Maximum Supply Water Temperature Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    N10, \field Maximum Heat Recovery Outlet Temperature
@@ -75690,7 +75690,7 @@ HeatPump:PlantLoop:EIR:Cooling,
         \note If this field is blank, the AWHP curve without heat recovery will be used
    A19, \field Thermosiphon Capacity Fraction Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
         \note Tevap, out = evaporator outlet temperature
         \note Tcond, in = condenser inlet temperature
@@ -75797,7 +75797,7 @@ HeatPump:PlantLoop:EIR:Heating,
         \note EIR = 1/COP
         \required-field
         \type object-list
-        \object-list BiVariateFunctions
+        \object-list BivariateFunctions
         \note curve = a + b*CWS + c*CWS**2 + d*ECT + e*ECT**2 + f*CWS*ECT
         \note CWS = supply (leaving) hot water temperature(C)
         \note ECT = entering condenser fluid temperature(C)
@@ -75857,17 +75857,17 @@ HeatPump:PlantLoop:EIR:Heating,
         \note The unit is disabled above this temperature.
    A16, \field Minimum Supply Water Temperature Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A17, \field Maximum Supply Water Temperature Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A18, \field Dry Outdoor Correction Factor Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
    N11, \field Maximum Outdoor Dry Bulb Temperature For Defrost Operation
         \type real
         \default 10.0
@@ -75895,14 +75895,14 @@ HeatPump:PlantLoop:EIR:Heating,
         \note only required if Timed or OnDemand defrost strategy is specified
    A21, \field Timed Empirical Defrost Frequency Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note univariate curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = outdoor air dry-bulb temperature (C)
         \note Timed Empirical Defrost Frequency fraction in hours = curve output
         \note only applicable if TimedEmpirical defrost control is specified
    A22, \field Timed Empirical Defrost Heat Load Penalty Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \object-list BivariateFunctions
         \note univariate curve = a + b*OAT is typical, other univariate curves may be used
         \note bivariate curve = a + b*WB + c*WB**2 + d*OAT + e*OAT**2 + f*WB*OAT
@@ -75912,7 +75912,7 @@ HeatPump:PlantLoop:EIR:Heating,
         \note only applicable if TimedEmpirical defrost control is specified
    A23, \field Timed Empirical Defrost Heat Input Energy Fraction Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \object-list BivariateFunctions
         \note univariate curve = a + b*OAT is typical, other univariate curves may be used
         \note bivariate curve = a + b*WB + c*WB**2 + d*OAT + e*OAT**2 + f*WB*OAT
@@ -75938,7 +75938,7 @@ HeatPump:PlantLoop:EIR:Heating,
         \note Electric Input Ratio (EIR) modifier as a function of temperature
         \note EIR = 1/COP
         \type object-list
-        \object-list BiVariateFunctions
+        \object-list BivariateFunctions
         \note curve = a + b*HWS + c*HWS**2 + d*ECT + e*ECT**2 + f*HWS*ECT
         \note HWS = supply (leaving) hot water temperature(C)
         \note ECT = entering condenser fluid temperature(C)
@@ -76387,12 +76387,12 @@ HeatPump:AirToWater,
         \note Heating is disabled above this temperature
    A7,  \field Minimum Leaving Water Temperature Curve Name in Heating Mode
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A8,  \field Maximum Leaving Water Temperature Curve Name in Heating Mode
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    N8, \field Sizing Factor for Heating
@@ -76443,12 +76443,12 @@ HeatPump:AirToWater,
         \note Cooling is disabled above this temperature
    A9,  \field Minimum Leaving Water Temperature Curve Name in Cooling Mode
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A10, \field Maximum Leaving Water Temperature Curve Name in Cooling Mode
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    N15, \field Sizing Factor for Cooling
