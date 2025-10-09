@@ -113,6 +113,7 @@ namespace DataPlant {
         "DistrictHeating:Water",
         "ThermalStorage:Ice:Detailed",
         "ThermalStorage:Ice:Simple",
+        "ThermalStorage:PCM",
         "TemperingValve",
         "WaterHeater:Mixed",
         "WaterHeater:Stratified",
@@ -218,6 +219,7 @@ namespace DataPlant {
         "DISTRICTHEATING:WATER",
         "THERMALSTORAGE:ICE:DETAILED",
         "THERMALSTORAGE:ICE:SIMPLE",
+        "THERMALSTORAGE:PCM",
         "TEMPERINGVALVE",
         "WATERHEATER:MIXED",
         "WATERHEATER:STRATIFIED",
@@ -323,6 +325,7 @@ namespace DataPlant {
         LoopType::Both,  //	"DistrictHeating:Water"
         LoopType::Plant, //	"ThermalStorage:Ice:Detailed"
         LoopType::Plant, //	"ThermalStorage:Ice:Simple"
+        LoopType::Plant, // "ThermalStorage:PCM"
         LoopType::Both,  //	"TemperingValve"
         LoopType::Both,  //	"WaterHeater:Mixed"
         LoopType::Both,  //	"WaterHeater:Stratified"

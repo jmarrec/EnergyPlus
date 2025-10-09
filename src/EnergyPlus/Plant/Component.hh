@@ -92,6 +92,7 @@ namespace DataPlant {
         false, //	"DistrictHeating:Water" (steam is at the end)
         false, //	"ThermalStorage:Ice:Detailed"
         false, //	"ThermalStorage:Ice:Simple"
+        false, //   "ThermalStorage:PCM"
         false, //	"TemperingValve"
         false, //	"WaterHeater:Mixed"
         false, //	"WaterHeater:Stratified"
@@ -193,6 +194,7 @@ namespace DataPlant {
         DataPlant::CtrlType::HeatingOp, //	"DistrictHeating:Water" (steam is at the end)
         DataPlant::CtrlType::CoolingOp, //	"ThermalStorage:Ice:Detailed"
         DataPlant::CtrlType::CoolingOp, //	"ThermalStorage:Ice:Simple"
+        DataPlant::CtrlType::HeatingOp, //  "ThermalStorage:PCM"
         DataPlant::CtrlType::Invalid,   //	"TemperingValve"
         DataPlant::CtrlType::HeatingOp, //	"WaterHeater:Mixed"
         DataPlant::CtrlType::HeatingOp, //	"WaterHeater:Stratified"
