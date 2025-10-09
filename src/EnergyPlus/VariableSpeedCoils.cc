@@ -8364,15 +8364,14 @@ namespace VariableSpeedCoils {
             Toffa = Toff;
         }
 
-        //  Use sucessive substitution to solve for To
+        //  Use successive substitution to solve for To
         aa = (Gamma * Toffa) - (0.25 / Twet) * pow_2(Gamma) * pow_2(Toffa);
-
         To1 = aa + LatentCapacityTimeConstant;
         Error = 1.0;
         while (Error > 0.001) {
             //  Floating overflow errors occur when -To1/LatentCapacityTimeConstant is a large positive number.
             //  Cap upper limit at 700 to avoid the overflow errors.
-            To2 = aa - LatentCapacityTimeConstant * (std::exp(min(700.0, -To1 / LatentCapacityTimeConstant)) - 1.0);
+            To2 = aa - LatentCapacityTimeConstant * std::expm1(min(700.0, -To1 / LatentCapacityTimeConstant));
             Error = std::abs((To2 - To1) / To1);
             To1 = To2;
         }
