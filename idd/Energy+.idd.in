@@ -82862,6 +82862,63 @@ ThermalStorage:ChilledWater:Stratified,
        \units W/K
        \default 0.0
 
+ThermalStorage:PCM,
+      \min-fields 11
+      \memo This thermal storage model is PCM-based
+      \memo It requires PCM material property connection
+      \memo In addition to the object linking, this object needs PCM Latent heat storage capacity and Heat Loss Rate
+      \memo This model needs 4 nodes: 2 plant side nodes and 2 use side nodes.
+  A1, \field Name
+      \type alpha
+      \required-field
+      \reference-class-name validPlantEquipmentTypes
+      \reference validPlantEquipmentNames
+      \reference-class-name validBranchEquipmentTypes
+      \reference validBranchEquipmentNames
+  A2 , \field Availability Schedule Name
+       \required-field
+       \type object-list
+       \object-list ScheduleNames
+  A3 , \field Plant Side Inlet Node Name
+       \type node
+       \required-field
+  A4 , \field Plant Side Outlet Node Name
+       \type node
+       \required-field
+  A5 , \field Use Side Inlet Node Name
+       \type node
+       \required-field
+  A6 , \field Use Side Outlet Node Name
+       \type node
+       \required-field
+  A7 , \field PCM Material Name
+       \type alpha
+       \object-list MaterialName
+       \required-field
+  N1 , \field Tank Capacity
+       \type real
+       \units kg
+       \minimum > 0
+       \autosizable
+       \required-field
+  N2 , \field Heat Loss Rate
+       \type real
+       \units W
+       \default 0.0
+  N3 , \field Use Side Design Flow Rate
+       \type real
+       \units m3/s
+       \minimum > 0
+       \autosizable
+       \required-field
+  N4 ; \field Plant Side Design Flow Rate
+       \type real
+       \units m3/s
+       \minimum > 0
+       \autosizable
+       \required-field
+  
+
 \group Plant-Condenser Loops
 !*****************PLANT AND CONDENSER LOOP SPECIFICATION*********************
 !Plant and condenser loops are specified as follows:
