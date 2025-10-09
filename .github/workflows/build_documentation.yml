@@ -2,7 +2,7 @@ name: Documentation
 
 on:
   push:
-    branches: [ develop, 11256_Mac_packaging ]
+    branches: [ develop ]
   pull_request:
     branches: [ develop ]
 
