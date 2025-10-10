@@ -6540,7 +6540,6 @@
     ,                        !- Rated Liquid Temperature {C}
     5.6;                     !- Rated Subcooling {deltaC}
 
-
 ! Capacity Curve for Carlyle_R-507_Low_06TRF065,   !nominal MBtu/h = 150455.3
 ! Results in Watts, Inputs:  Sat Suction Temp (C), Sat Discharge Temp (C)
 
@@ -6724,7 +6723,6 @@
     -17.8,                   !- Maximum Value of x
     10.0,                    !- Minimum Value of y
     48.9;                    !- Maximum Value of y
-
 
 ! Capacity Curve for Carlyle_R-507_Low_06TRE048,   !nominal MBtu/h = 105682.3
 ! Results in Watts, Inputs:  Sat Suction Temp (C), Sat Discharge Temp (C)
