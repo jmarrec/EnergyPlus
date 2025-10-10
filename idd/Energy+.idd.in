@@ -76296,7 +76296,11 @@ HeatPump:AirToWater,
    A1 , \field Name
         \required-field
         \type alpha
-        \note Enter a unique name for this air-to-water heat pump
+        \required-field
+        \reference-class-name validPlantEquipmentTypes
+        \reference validPlantEquipmentNames
+        \reference-class-name validBranchEquipmentTypes
+        \reference validBranchEquipmentNames
    A2 , \field Availability Schedule Name Heating
         \type object-list
         \object-list ScheduleNames
