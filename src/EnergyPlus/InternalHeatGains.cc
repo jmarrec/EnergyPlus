@@ -150,10 +150,11 @@ namespace InternalHeatGains {
     static constexpr std::array<DataHeatBalance::IntGainType, 3> IntGainTypesWaterUse = {DataHeatBalance::IntGainType::WaterUseEquipment,
                                                                                          DataHeatBalance::IntGainType::WaterHeaterMixed,
                                                                                          DataHeatBalance::IntGainType::WaterHeaterStratified};
-    static constexpr std::array<DataHeatBalance::IntGainType, 20> IntGainTypesHvacLoss = {
+    static constexpr std::array<DataHeatBalance::IntGainType, 21> IntGainTypesHvacLoss = {
         DataHeatBalance::IntGainType::ZoneBaseboardOutdoorTemperatureControlled,
         DataHeatBalance::IntGainType::ThermalStorageChilledWaterMixed,
         DataHeatBalance::IntGainType::ThermalStorageChilledWaterStratified,
+        DataHeatBalance::IntGainType::ThermalStorageHotWaterStratified,
         DataHeatBalance::IntGainType::PipeIndoor,
         DataHeatBalance::IntGainType::Pump_VarSpeed,
         DataHeatBalance::IntGainType::Pump_ConSpeed,

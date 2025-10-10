@@ -123,8 +123,8 @@ struct CoilCoolingDXCurveFitPerformance : public CoilCoolingDXPerformanceBase
 
     void setOperMode(EnergyPlusData &state, CoilCoolingDXCurveFitOperatingMode &currentMode, int const mode);
 
+    void oneTimeAvailSchedSetup();
     void oneTimeMinOATSetup();
-
     Real64 ratedCBF(EnergyPlusData &) override
     {
         return normalMode.speeds[normalMode.nominalSpeedIndex].RatedCBF;
@@ -257,6 +257,7 @@ struct CoilCoolingDXCurveFitPerformance : public CoilCoolingDXPerformanceBase
     CoilCoolingDXCurveFitOperatingMode normalMode;
     CoilCoolingDXCurveFitOperatingMode alternateMode;  // enhanced dehumidifcation or Subcool mode
     CoilCoolingDXCurveFitOperatingMode alternateMode2; // Reheat mode
+    bool myOneTimeAvailSchedInitFlag = true;
     bool myOneTimeMinOATFlag = true;
 };
 
