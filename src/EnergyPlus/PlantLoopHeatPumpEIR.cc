@@ -2066,17 +2066,8 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                     if (timePeriod != fields.end()) {
                         thisPLHP.defrostTime = timePeriod.value().get<Real64>();
                     } else {
-                        Real64 defaultVal = 0.0;
-                        if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                                state, cCurrentModuleObject, "heat_pump_defrost_time_period_fraction", defaultVal)) {
-                            // excluding from coverage
-                            ShowSevereError(state, // LCOV_EXCL_LINE
-                                            format("EIR PLHP \"{}\": Heat Pump Defrost Time Period Fraction not entered and default value not found.",
-                                                   thisPLHP.name)); // LCOV_EXCL_LINE
-                            errorsFound = true;                     // LCOV_EXCL_LINE
-                        } else {
-                            thisPLHP.defrostTime = defaultVal;
-                        }
+                        state.dataInputProcessing->inputProcessor->getDefaultValue(
+                            state, cCurrentModuleObject, "heat_pump_defrost_time_period_fraction", thisPLHP.defrostTime);
                     }
                 }
 
