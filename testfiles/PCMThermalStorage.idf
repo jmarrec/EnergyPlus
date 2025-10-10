@@ -1,12 +1,14 @@
 !-Generator IDFEditor 1.54
 !-Option OriginalOrderTop UseSpecialFormat
-
 !-NOTE: All comments with '!-' are ignored by the IDFEditor and are generated automatically.
 !-      Use '!' comments if they need to be retained when using the IDFEditor.
 
-Output:Variable,*,Thermal Energy Storage Latent Heat Capacity,Timestep;
-Output:Variable,*,Thermal Energy Storage Percent Capacity,Timestep;
-Output:Variable,*,Thermal Energy Storage Tank Temperature,Timestep;
+  Output:Variable,*,Thermal Energy Storage Latent Heat Capacity,Timestep;
+
+  Output:Variable,*,Thermal Energy Storage Percent Capacity,Timestep;
+
+  Output:Variable,*,Thermal Energy Storage Tank Temperature,Timestep;
+
 ! MicroCogeneration.idf
 ! Basic file description:  1 story building divided into four exterior and one interior conditioned zones.
 !
