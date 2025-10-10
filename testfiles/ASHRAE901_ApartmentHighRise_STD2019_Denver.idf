@@ -40370,7 +40370,7 @@
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
   Table:IndependentVariable,
-    airFlowRatio,  !- Name
+    airFlowRatio,            !- Name
     Linear,                  !- Interpolation Method
     Linear,                  !- Extrapolation Method
     0.0,                     !- Minimum Value
@@ -40385,7 +40385,7 @@
 
   Table:IndependentVariableList,
     effectiveness_IndependentVariableList,  !- Name
-    airFlowRatio;     !- Independent Variable 1 Name
+    airFlowRatio;            !- Independent Variable 1 Name
 
   Table:Lookup,
     SenEffectHeatingTable,   !- Name
@@ -40590,7 +40590,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F2 NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -40615,7 +40614,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F2 SE Apartment OA Heat Exchanger,  !- Name
@@ -40792,7 +40790,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F3 NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -40817,7 +40814,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F3 SE Apartment OA Heat Exchanger,  !- Name
@@ -40994,7 +40990,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F4 NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41019,7 +41014,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F4 SE Apartment OA Heat Exchanger,  !- Name
@@ -41196,7 +41190,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     M NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41221,7 +41214,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     M SE Apartment OA Heat Exchanger,  !- Name
@@ -41398,7 +41390,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F6 NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41423,7 +41414,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F6 SE Apartment OA Heat Exchanger,  !- Name
@@ -41600,7 +41590,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F7 NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41751,7 +41740,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F7 S2 Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41776,7 +41764,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F8 SW Apartment OA Heat Exchanger,  !- Name
@@ -41803,7 +41790,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F8 NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41828,7 +41814,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F8 SE Apartment OA Heat Exchanger,  !- Name
@@ -41855,7 +41840,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F8 NE Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41880,7 +41864,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F8 N1 Apartment OA Heat Exchanger,  !- Name
@@ -41907,7 +41890,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F8 N2 Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41932,7 +41914,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F8 S1 Apartment OA Heat Exchanger,  !- Name
@@ -41959,7 +41940,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F8 S2 Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -41984,7 +41964,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F9 SW Apartment OA Heat Exchanger,  !- Name
@@ -42011,7 +41990,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F9 NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -42036,7 +42014,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F9 SE Apartment OA Heat Exchanger,  !- Name
@@ -42063,7 +42040,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F9 NE Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -42088,7 +42064,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F9 N1 Apartment OA Heat Exchanger,  !- Name
@@ -42115,7 +42090,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F9 N2 Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -42140,7 +42114,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     F9 S1 Apartment OA Heat Exchanger,  !- Name
@@ -42167,7 +42140,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     F9 S2 Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -42192,7 +42164,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     T SW Apartment OA Heat Exchanger,  !- Name
@@ -42219,7 +42190,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     T NW Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -42244,7 +42214,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     T SE Apartment OA Heat Exchanger,  !- Name
@@ -42271,7 +42240,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     T NE Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -42296,7 +42264,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     T N1 Apartment OA Heat Exchanger,  !- Name
@@ -42323,7 +42290,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     T N2 Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -42349,7 +42315,6 @@
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
 
-
   HeatExchanger:AirToAir:SensibleAndLatent,
     T S1 Apartment OA Heat Exchanger,  !- Name
     AllOn_Except_DD,         !- Availability Schedule Name
@@ -42374,7 +42339,6 @@
     ,                        !- Latent Effectiveness of Heating Air Flow Curve Name
     SenEffectCoolingTable,   !- Sensible Effectiveness of Cooling Air Flow Curve Name
     ;                        !- Latent Effectiveness of Cooling Air Flow Curve Name
-
 
   HeatExchanger:AirToAir:SensibleAndLatent,
     T S2 Apartment OA Heat Exchanger,  !- Name

@@ -2733,8 +2733,8 @@
 
   UnitarySystemPerformance:Multispeed,
     Sys 2 WaterToAirHP System MultiSpeed Performance,  !- Name
-    10,                       !- Number of Speeds for Heating
-    10,                       !- Number of Speeds for Cooling
+    10,                      !- Number of Speeds for Heating
+    10,                      !- Number of Speeds for Cooling
     No,                      !- Single Mode Operation
     ,                        !- No Load Supply Air Flow Rate Ratio
     autosize,                !- Heating Speed 1 Supply Air Flow Ratio
@@ -3093,8 +3093,8 @@
   Fan:SystemModel,
     SPACE3-1 Supply Fan,     !- Name
     FanAvailSched,           !- Availability Schedule Name
-    SPACE3-1 Heat Pump Inlet, !- Air Inlet Node Name
-    SPACE3-1 Zone Unit Fan Outlet, !- Air Outlet Node Name
+    SPACE3-1 Heat Pump Inlet,!- Air Inlet Node Name
+    SPACE3-1 Zone Unit Fan Outlet,  !- Air Outlet Node Name
     autosize,                !- Design Maximum Air Flow Rate {m3/s}
     Discrete,                !- Speed Control Method
     0.2,                     !- Electric Power Minimum Flow Rate Fraction
@@ -3504,7 +3504,7 @@
     LatEffectivenessTable;   !- Latent Effectiveness of Cooling Air Flow Curve Name
 
   Table:IndependentVariable,
-    airFlowRatio,  !- Name
+    airFlowRatio,            !- Name
     Linear,                  !- Interpolation Method
     Linear,                  !- Extrapolation Method
     0.0,                     !- Minimum Value
@@ -3519,7 +3519,7 @@
 
   Table:IndependentVariableList,
     effectiveness_IndependentVariableList,  !- Name
-    airFlowRatio;     !- Independent Variable 1 Name
+    airFlowRatio;            !- Independent Variable 1 Name
 
   Table:Lookup,
     SenEffectivenessTable,   !- Name
@@ -4231,7 +4231,6 @@
 
   Output:Variable,SPACE1-1 HP Supp Coil,Heating Coil Heating Rate,Timestep;
 
-
   Output:Variable,SPACE2-1 Supply Inlet,System Node Mass Flow Rate,Timestep;
 
   Output:Variable,SPACE2-1 Supply Inlet,System Node Temperature,Timestep;
@@ -4291,7 +4290,6 @@
   Output:Variable,SPACE2-1 Heat Pump,Zone Water to Air Heat Pump Sensible Cooling Rate,Timestep;
 
   Output:Variable,SPACE2-1 HP Supp Coil,Heating Coil Heating Rate,Timestep;
-
 
   Output:Variable,SPACE3-1 Supply Inlet,System Node Mass Flow Rate,Timestep;
 
@@ -4382,19 +4380,29 @@
   Output:Variable,DOAS Relief Air Outlet,System Node Temperature,Timestep;
 
   Output:Variable,*,Unitary System Water Coil Multispeed Fan Cycling Ratio,Timestep;
+
   Output:Variable,*,Unitary System Water Coil Multispeed Fan Speed Ratio,Timestep;
+
   Output:Variable,*,Unitary System Water Coil Multispeed Fan Speed Level,Timestep;
 
   Output:Variable,*,Cooling Coil Upper Speed Level,Timestep;
+
   Output:Variable,*,Cooling Coil Neighboring Speed Levels Ratio,Timestep;
+
   Output:Variable,*,Heating Coil Upper Speed Level,Timestep;
+
   Output:Variable,*,Heating Coil Neighboring Speed Levels Ratio,Timestep;
 
   Output:Variable,SPACE1-1 Heat Pump Inlet,System Node Mass Flow Rate,Timestep;
+
   Output:Variable,SPACE2-1 Heat Pump Inlet,System Node Mass Flow Rate,Timestep;
+
   Output:Variable,SPACE3-1 Heat Pump Inlet,System Node Mass Flow Rate,Timestep;
+
   Output:Variable,SPACE1-1 Supply Inlet,System Node Temperature,Timestep;
+
   Output:Variable,SPACE2-1 Supply Inlet,System Node Temperature,Timestep;
+
   Output:Variable,SPACE3-1 Supply Inlet,System Node Temperature,Timestep;
 
 !-   ===========  ALL OBJECTS IN CLASS: OUTPUT:DIAGNOSTICS ===========

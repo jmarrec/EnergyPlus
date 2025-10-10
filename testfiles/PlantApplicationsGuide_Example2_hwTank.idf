@@ -174,7 +174,7 @@
     CoolSysPrimary Chiller Inlet Node,  !- Component 1 Inlet Node Name
     CoolSysPrimary TES Use Inlet Node,  !- Component 1 Outlet Node Name
     ThermalStorage:HotWater:Stratified,  !- Component 2 Object Type
-    Hot Water Storage Tank 1,  !- Component 2 Name
+    Hot Water Storage Tank 1,!- Component 2 Name
     CoolSysPrimary TES Use Inlet Node,  !- Component 2 Inlet Node Name
     CoolSysPrimary TES Use Outlet Node;  !- Component 2 Outlet Node Name
 
@@ -485,7 +485,7 @@
   PlantEquipmentList,
     CoolSysSecondary TES supply,  !- Name
     ThermalStorage:HotWater:Stratified,  !- Equipment 1 Object Type
-    Hot Water Storage Tank 1;  !- Equipment 1 Name
+    Hot Water Storage Tank 1;!- Equipment 1 Name
 
 !--------------------------------------------------------------------------------------------
 !------------------------------------SPECIFIC SCHEDULES--------------------------------------
@@ -513,14 +513,14 @@
     Until: 24:00,7.5;        !- Field 3
 
   Schedule:Compact,
-    CW Tank Temp Top Schedule,   !- Name
+    CW Tank Temp Top Schedule,  !- Name
     Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
     Until: 24:00,7.5;        !- Field 3
 
   Schedule:Compact,
-    CW Tank Temp Bottom Schedule,   !- Name
+    CW Tank Temp Bottom Schedule,  !- Name
     Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: AllDays,            !- Field 2
@@ -1452,7 +1452,7 @@
     Yes,                     !- Do System Sizing Calculation
     Yes,                     !- Do Plant Sizing Calculation
     Yes,                     !- Run Simulation for Sizing Periods
-    Yes,                      !- Run Simulation for Weather File Run Periods
+    Yes,                     !- Run Simulation for Weather File Run Periods
     No,                      !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
@@ -5536,20 +5536,33 @@
 !-
 !-   Output:Variable,*,Zone Heating Setpoint Not Met While Occupied Time,hourly;
 
-Output:Variable,*,Hot Water Thermal Storage Tank Temperature,hourly; !- HVAC Average [C]
-Output:Variable,*,Hot Water Thermal Storage Tank Final Tank Temperature,hourly; !- HVAC Average [C]
-Output:Variable,*,Hot Water Thermal Storage Tank Heat Gain Rate,hourly; !- HVAC Average [W]
-Output:Variable,*,Hot Water Thermal Storage Tank Heat Gain Energy,hourly; !- HVAC Sum [J]
-Output:Variable,*,Hot Water Thermal Storage Tank Use Side Mass Flow Rate,hourly; !- HVAC Average [kg/s]
-Output:Variable,*,Hot Water Thermal Storage Tank Use Side Inlet Temperature,hourly; !- HVAC Average [C]
-Output:Variable,*,Hot Water Thermal Storage Tank Use Side Outlet Temperature,hourly; !- HVAC Average [C]
-Output:Variable,*,Hot Water Thermal Storage Tank Use Side Heat Transfer Rate,hourly; !- HVAC Average [W]
-Output:Variable,*,Hot Water Thermal Storage Tank Use Side Heat Transfer Energy,hourly; !- HVAC Sum [J]
-Output:Variable,*,Hot Water Thermal Storage Tank Source Side Mass Flow Rate,hourly; !- HVAC Average [kg/s]
-Output:Variable,*,Hot Water Thermal Storage Tank Source Side Inlet Temperature,hourly; !- HVAC Average [C]
-Output:Variable,*,Hot Water Thermal Storage Tank Source Side Outlet Temperature,hourly; !- HVAC Average [C]
-Output:Variable,*,Hot Water Thermal Storage Tank Source Side Heat Transfer Rate,hourly; !- HVAC Average [W]
-Output:Variable,*,Hot Water Thermal Storage Tank Source Side Heat Transfer Energy,hourly; !- HVAC Sum [J]
+  Output:Variable,*,Hot Water Thermal Storage Tank Temperature,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Final Tank Temperature,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Heat Gain Rate,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Heat Gain Energy,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Use Side Mass Flow Rate,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Use Side Inlet Temperature,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Use Side Outlet Temperature,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Use Side Heat Transfer Rate,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Use Side Heat Transfer Energy,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Source Side Mass Flow Rate,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Source Side Inlet Temperature,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Source Side Outlet Temperature,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Source Side Heat Transfer Rate,hourly;
+
+  Output:Variable,*,Hot Water Thermal Storage Tank Source Side Heat Transfer Energy,hourly;
 
   Output:Diagnostics,
     DisplayUnusedObjects;    !- Key 1

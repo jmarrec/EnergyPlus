@@ -55,8 +55,8 @@
 !-   ===========  ALL OBJECTS IN CLASS: CONVERGENCELIMITS ===========
 
   ConvergenceLimits,
-    15,                       !- Minimum System Timestep {minutes}
-    5;                        !- Maximum HVAC Iterations
+    15,                      !- Minimum System Timestep {minutes}
+    5;                       !- Maximum HVAC Iterations
 
 !-   ===========  ALL OBJECTS IN CLASS: SITE:LOCATION ===========
 
@@ -131,7 +131,7 @@
     1,                       !- Begin Month
     1,                       !- Begin Day of Month
     ,                        !- Begin Year
-    1,                      !- End Month
+    1,                       !- End Month
     31,                      !- End Day of Month
     ,                        !- End Year
     Sunday,                  !- Day of Week for Start Day
@@ -142,34 +142,34 @@
     Yes;                     !- Use Weather File Snow Indicators
 
   RunPeriod,
-    RUNPERIOD 2,              !- Name
-    4,                        !- Begin Month
-    1,                        !- Begin Day of Month
-    ,                         !- Begin Year
-    4,                        !- End Month
-    30,                       !- End Day of Month
-    ,                         !- End Year
-    Sunday,                   !- Day of Week for Start Day
-    No,                       !- Use Weather File Holidays and Special Days
-    No,                       !- Use Weather File Daylight Saving Period
-    No,                       !- Apply Weekend Holiday Rule
-    Yes,                      !- Use Weather File Rain Indicators
-    Yes;                      !- Use Weather File Snow Indicators
+    RUNPERIOD 2,             !- Name
+    4,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    ,                        !- Begin Year
+    4,                       !- End Month
+    30,                      !- End Day of Month
+    ,                        !- End Year
+    Sunday,                  !- Day of Week for Start Day
+    No,                      !- Use Weather File Holidays and Special Days
+    No,                      !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
 
   RunPeriod,
-    RUNPERIOD 3,              !- Name
-    7,                        !- Begin Month
-    1,                        !- Begin Day of Month
-    ,                         !- Begin Year
-    7,                        !- End Month
-    31,                       !- End Day of Month
-    ,                         !- End Year
-    Sunday,                   !- Day of Week for Start Day
-    No,                       !- Use Weather File Holidays and Special Days
-    No,                       !- Use Weather File Daylight Saving Period
-    No,                       !- Apply Weekend Holiday Rule
-    Yes,                      !- Use Weather File Rain Indicators
-    Yes;                      !- Use Weather File Snow Indicators
+    RUNPERIOD 3,             !- Name
+    7,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    ,                        !- Begin Year
+    7,                       !- End Month
+    31,                      !- End Day of Month
+    ,                        !- End Year
+    Sunday,                  !- Day of Week for Start Day
+    No,                      !- Use Weather File Holidays and Special Days
+    No,                      !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
 
 !-   ===========  ALL OBJECTS IN CLASS: RUNPERIODCONTROL:SPECIALDAYS ===========
 
@@ -11713,7 +11713,7 @@
     VAV_top WITH REHEAT_DCV, !- Name
     MinOA_MotorizedDamper_Sched,  !- Availability Schedule Name
     Yes,                     !- Demand Controlled Ventilation
-    Standard62.1VentilationRateProcedureWithLimit,!- System Outdoor Air Method
+    Standard62.1VentilationRateProcedureWithLimit,  !- System Outdoor Air Method
     ,                        !- Zone Maximum Outdoor Air Fraction {dimensionless}
     Core_top,                !- Zone or ZoneList 1 Name
     CM DSOA Core_top,        !- Design Specification Outdoor Air Object Name 1
@@ -11735,7 +11735,7 @@
     VAV_bot WITH REHEAT_DCV, !- Name
     MinOA_MotorizedDamper_Sched,  !- Availability Schedule Name
     Yes,                     !- Demand Controlled Ventilation
-    Standard62.1VentilationRateProcedureWithLimit,!- System Outdoor Air Method
+    Standard62.1VentilationRateProcedureWithLimit,  !- System Outdoor Air Method
     ,                        !- Zone Maximum Outdoor Air Fraction {dimensionless}
     Core_bottom,             !- Zone or ZoneList 1 Name
     CM DSOA Core_bottom,     !- Design Specification Outdoor Air Object Name 1
@@ -11757,7 +11757,7 @@
     VAV_mid WITH REHEAT_DCV, !- Name
     MinOA_MotorizedDamper_Sched,  !- Availability Schedule Name
     Yes,                     !- Demand Controlled Ventilation
-    Standard62.1VentilationRateProcedureWithLimit,!- System Outdoor Air Method
+    Standard62.1VentilationRateProcedureWithLimit,  !- System Outdoor Air Method
     ,                        !- Zone Maximum Outdoor Air Fraction {dimensionless}
     Core_mid,                !- Zone or ZoneList 1 Name
     CM DSOA Core_mid,        !- Design Specification Outdoor Air Object Name 1
@@ -12723,7 +12723,7 @@
     CoolSys1 Chiller1 Pump,  !- Component 1 Name
     CoolSys1 Chiller1 Pump Inlet Node,  !- Component 1 Inlet Node Name
     CoolSys1 Pump-CoolSys1 Chiller1Node,  !- Component 1 Outlet Node Name
-    Chiller:Electric:EIR,  !- Component 2 Object Type
+    Chiller:Electric:EIR,    !- Component 2 Object Type
     CoolSys1 Chiller1,       !- Component 2 Name
     CoolSys1 Pump-CoolSys1 Chiller1Node,  !- Component 2 Inlet Node Name
     CoolSys1 Supply Equipment Outlet Node 1;  !- Component 2 Outlet Node Name
@@ -12735,7 +12735,7 @@
     CoolSys1 Chiller2 Pump,  !- Component 1 Name
     CoolSys1 Chiller2 Pump Inlet Node,  !- Component 1 Inlet Node Name
     CoolSys1 Pump-CoolSys1 Chiller2Node,  !- Component 1 Outlet Node Name
-    Chiller:Electric:EIR,  !- Component 2 Object Type
+    Chiller:Electric:EIR,    !- Component 2 Object Type
     CoolSys1 Chiller2,       !- Component 2 Name
     CoolSys1 Pump-CoolSys1 Chiller2Node,  !- Component 2 Inlet Node Name
     CoolSys1 Supply Equipment Outlet Node 2;  !- Component 2 Outlet Node Name
@@ -12855,7 +12855,7 @@
   Branch,
     TowerWaterSys Demand Load Branch 1,  !- Name
     ,                        !- Pressure Drop Curve Name
-    Chiller:Electric:EIR,  !- Component 1 Object Type
+    Chiller:Electric:EIR,    !- Component 1 Object Type
     CoolSys1 Chiller1,       !- Component 1 Name
     CoolSys1 Chiller1 Water Inlet Node,  !- Component 1 Inlet Node Name
     CoolSys1 Chiller1 Water Outlet Node;  !- Component 1 Outlet Node Name
@@ -12863,7 +12863,7 @@
   Branch,
     TowerWaterSys Demand Load Branch 2,  !- Name
     ,                        !- Pressure Drop Curve Name
-    Chiller:Electric:EIR,  !- Component 1 Object Type
+    Chiller:Electric:EIR,    !- Component 1 Object Type
     CoolSys1 Chiller2,       !- Component 1 Name
     CoolSys1 Chiller2 Water Inlet Node,  !- Component 1 Inlet Node Name
     CoolSys1 Chiller2 Water Outlet Node;  !- Component 1 Outlet Node Name
@@ -14396,14 +14396,14 @@
 
   PlantEquipmentList,
     CoolSys1 Equipment List 1,  !- Name
-    Chiller:Electric:EIR,  !- Equipment 1 Object Type
+    Chiller:Electric:EIR,    !- Equipment 1 Object Type
     CoolSys1 Chiller1;       !- Equipment 1 Name
 
   PlantEquipmentList,
     CoolSys1 Equipment List 2,  !- Name
-    Chiller:Electric:EIR,  !- Equipment 1 Object Type
+    Chiller:Electric:EIR,    !- Equipment 1 Object Type
     CoolSys1 Chiller1,       !- Equipment 1 Name
-    Chiller:Electric:EIR,  !- Equipment 2 Object Type
+    Chiller:Electric:EIR,    !- Equipment 2 Object Type
     CoolSys1 Chiller2;       !- Equipment 2 Name
 
   PlantEquipmentList,
@@ -17322,3 +17322,4 @@
   Output:Variable,*,Chiller Condenser Mass Flow Rate,Detailed;
 
   Output:Variable,*,Chiller Condenser Outlet Temperature,Detailed;
+

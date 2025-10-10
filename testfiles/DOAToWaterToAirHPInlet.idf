@@ -3030,7 +3030,7 @@
     LatEffectivenessTable;   !- Latent Effectiveness of Cooling Air Flow Curve Name
 
   Table:IndependentVariable,
-    airFlowRatio,  !- Name
+    airFlowRatio,            !- Name
     Linear,                  !- Interpolation Method
     Linear,                  !- Extrapolation Method
     0.0,                     !- Minimum Value
@@ -3045,7 +3045,7 @@
 
   Table:IndependentVariableList,
     effectiveness_IndependentVariableList,  !- Name
-    airFlowRatio;     !- Independent Variable 1 Name
+    airFlowRatio;            !- Independent Variable 1 Name
 
   Table:Lookup,
     SenEffectivenessTable,   !- Name
