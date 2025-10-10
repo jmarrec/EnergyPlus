@@ -259,9 +259,6 @@
 !  Vintage:2001
 !  Material:mc-Si
 
-!  Version,
-!    9.0;                    !- Version Identifier
-
   PhotovoltaicPerformance:Sandia,
     12-PW100095W-Array,      !- Name
     10.78,                   !- Active Area {m2}

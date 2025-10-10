@@ -15,9 +15,6 @@
 !   Ave Mon Precip Location: 500280 ANC ANCHORAGE INTL AP AK
 !   Ave Mon Precipitation: 0.0127, 0.01575, 0.01219, 0.009906, 0.01422, 0.02286, 0.03734, 0.0635, 0.06731, 0.04826, 0.02108, 0.02235
 ! The objects and syntax in this dataset comply with EnergyPlus, Version 8.4.0 and above, unless otherwise noted.
-!  Version,
-!    9.0;                    !- Version Identifier
-
   SCHEDULE:COMPACT,
     PrecipitationSchd1,      !- Name
     AnyNumber,               !- Schedule Type Limits Name
