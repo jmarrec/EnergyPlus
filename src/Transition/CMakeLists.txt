@@ -89,6 +89,15 @@ add_executable(${FORMATTER_ONLY_EXECUTABLE} Transition.f90 "${CMAKE_CURRENT_BINA
 target_include_directories(${FORMATTER_ONLY_EXECUTABLE} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 set_target_properties(${FORMATTER_ONLY_EXECUTABLE} PROPERTIES FOLDER Auxiliary)
 target_link_libraries(${FORMATTER_ONLY_EXECUTABLE} TransitionLib)
+install(TARGETS "${FORMATTER_ONLY_EXECUTABLE}" DESTINATION PreProcess/IDFVersionUpdater)
+if(NOT ${FORTRAN_STATIC_EXE})
+  install_target_prereqs("${FORMATTER_ONLY_EXECUTABLE}" PreProcess/IDFVersionUpdater)
+endif()
+
+if(APPLE AND CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION)
+  include("${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/CodeSigning.cmake")
+  register_install_codesign_target("${FORMATTER_ONLY_EXECUTABLE}" PreProcess/IDFVersionUpdater Unspecified)
+endif()
 
 #######################################################################
 #             I N S T A L L    S U P P O R T    F I L E S             #
