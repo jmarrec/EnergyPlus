@@ -223,6 +223,35 @@ Wray, C.P. and N.E. Matson. 2003. ``Duct Leakage Impacts on VAV System Performan
 
 Wray, C.P., R.C. Diamond, and M.H. Sherman. 2005. ``Rationale for Measuring Duct Leakage Flows in Large Commercial Buildings''. Proceedings -- 26th AIVC Conference, Brussels, Belgium, September. LBNL-58252.
 
+\subsection{Air Leakage in Parallel Fan-Powered Terminal Units}\label{parallel_piu_leakage}
+
+As described in O'Neal et al. (2016) and Sardoueinasab et al. (2018), backdraft damper leakage in parallel fan-powered terminal units can be characterized using a leakage fraction at a constant static pressure setpoint:
+
+\begin{equation}
+    f_{\text{leakage}} = \frac{\dot{m}_{\text{leakage}}}{\dot{m}_{\text{primary}}}
+\end{equation}
+
+Leakage is only simulated when the terminal fan is off. The impact of the simulated leakage is twofold:
+\begin{enumerate}
+    \item To make up for the leaked air, the primary air flow rate should be increased to meet the zone load.
+    \item The air escaping from the terminal affects the plenum or the secondary thermal zone heat balance associated with the terminal.
+\end{enumerate}
+
+The new primary flow rate is adjusted as follows:
+\begin{equation}
+    \dot{m}_{\text{primary, adj}} = \dot{m}_{\text{primary}} \times \frac{1}{1 - f_{\text{leakage}}}
+\end{equation}
+
+The new primary flow rate will not exceed the maximum primary flow rate of the terminal.
+
+Since leakage only occurs during dead-band and cooling operation (i.e., not during heating operation), the new primary air flow rate does not affect the terminal mixer and heater. Leaks are accounted for after the terminal simulation, and outlet nodes are updated at that point. The final step is to account for the thermal impact of the leakage on the plenum or the secondary thermal zone. This is handled in a similar fashion to leakage simulation using the Simplified Duct Leakage Model (see Section~\ref{implementation-000}).
+
+\subsubsection{References}\label{references_parallel_piu_leakage}
+D.L. O'Neal, J.L. Edmondson, "Characterizing air leakage in parallel fan-powered terminal units," ASHRAE Transactions, vol. 122, no. 1, 2016, pp. 343-353.
+
+Zahra Sardoueinasab, Peng Yin, Dennis O'Neal, "Energy modeling and analysis of inherent air leakage from parallel fan-powered terminal units using EMS in EnergyPlus," Energy and Buildings, vol. 174, 2018, pp. 413-426. https://doi.org/10.1016/j.enbuild.2018.07.019
+
+
 \subsection{Fan Coil Unit}\label{fan-coil-unit}
 
 \subsubsection{Overview}\label{overview-4-003}
