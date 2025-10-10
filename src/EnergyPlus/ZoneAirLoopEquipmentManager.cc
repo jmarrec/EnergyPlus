@@ -577,6 +577,7 @@ namespace ZoneAirLoopEquipmentManager {
             int OutNodeNum = airDistUnit.OutletNodeNum;
             MassFlowRateMaxAvail = 0.0;
             MassFlowRateMinAvail = 0.0;
+            airDistUnit.parallelPIUTerminalLeakFrac = 0.0;
             // check for no plenum
             // set the max and min avail flow rates taking into account the upstream leak
             if (airDistUnit.UpStreamLeak || airDistUnit.DownStreamLeak ||
@@ -689,22 +690,15 @@ namespace ZoneAirLoopEquipmentManager {
                        airDistUnit.EquipIndex(AirDistCompNum));
             } break;
             case DataDefineEquip::ZnAirLoopEquipType::SingleDuct_ParallelPIU_Reheat: {
-                airDistUnit.parallelPIUTerminalLeakFrac = 0.0;
                 SimPIU(state,
                        airDistUnit.EquipName(AirDistCompNum),
                        FirstHVACIteration,
                        ControlledZoneNum,
                        controlledZoneAirNode,
                        airDistUnit.EquipIndex(AirDistCompNum));
-                int PIUNum = Util::FindItemInList(airDistUnit.EquipName(AirDistCompNum), state.dataPowerInductionUnits->PIU);
-                if (PIUNum > 0) {
-                    if (auto &thisPIU = state.dataPowerInductionUnits->PIU(PIUNum); thisPIU.leakFracCurve > 0 && thisPIU.MaxPriAirMassFlow > 0 &&
-                                                                                    state.dataPowerInductionUnits->PIU(PIUNum).SecMassFlowRate == 0) {
-                        const Real64 airflowFrac = thisPIU.PriAirMassFlow / thisPIU.MaxPriAirMassFlow;
-                        thisPIU.leakFrac = min(1.0, Curve::CurveValue(state, thisPIU.leakFracCurve, airflowFrac));
-                        thisPIU.leakMassFlowRate = thisPIU.leakFrac * state.dataLoopNodes->Node(InNodeNum).MassFlowRate;
-                        airDistUnit.parallelPIUTerminalLeakFrac = thisPIU.leakFrac;
-                    }
+                // Retrieve previously calculated PIU terminal leakage through backdraft damper
+                if (const int PIUNum = Util::FindItemInList(airDistUnit.EquipName(AirDistCompNum), state.dataPowerInductionUnits->PIU); PIUNum > 0) {
+                    airDistUnit.parallelPIUTerminalLeakFrac = state.dataPowerInductionUnits->PIU(PIUNum).leakFrac;
                 }
             } break;
             case DataDefineEquip::ZnAirLoopEquipType::SingleDuct_ConstVol_4PipeInduc: {

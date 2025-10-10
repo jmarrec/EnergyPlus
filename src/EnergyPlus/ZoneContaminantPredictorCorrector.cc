@@ -2327,12 +2327,12 @@ void CorrectZoneContaminants(EnergyPlusData &state,
                 if (piuNum > 0) {
                     auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum);
                     if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
-                        CO2MassFlowRate += (thisPIU.leakMassFlowRate * state.dataLoopNodes->Node(thisPIU.PriAirInNode).CO2) / ZoneMult;
+                        CO2MassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).CO2) / ZoneMult;
                     }
                     if (state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
-                        GCMassFlowRate += (thisPIU.leakMassFlowRate * state.dataLoopNodes->Node(thisPIU.PriAirInNode).GenContam) / ZoneMult;
+                        GCMassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).GenContam) / ZoneMult;
                     }
-                    ZoneMassFlowRate += thisPIU.leakMassFlowRate / ZoneMult;
+                    ZoneMassFlowRate += thisPIU.leakFlow / ZoneMult;
                 }
             }
         }

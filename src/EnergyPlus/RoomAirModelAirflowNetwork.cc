@@ -805,8 +805,8 @@ namespace RoomAir {
                     state, state.dataZoneEquip->ZoneEquipConfig(zoneNum).ExhaustNode(iExhNode));
                 if (piuNum > 0) {
                     auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum);
-                    SumSysMCp += thisPIU.leakMassFlowRate * CpAir;
-                    SumSysMCpT += thisPIU.leakMassFlowRate * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
+                    SumSysMCp += thisPIU.leakFlow * CpAir;
+                    SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
                 }
             }
         }

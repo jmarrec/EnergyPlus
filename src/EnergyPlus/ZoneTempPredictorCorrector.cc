@@ -4490,8 +4490,8 @@ void ZoneSpaceHeatBalanceData::correctHumRat(EnergyPlusData &state, int const zo
                 PoweredInductionUnits::getParallelPIUNumFromSecNodeNum(state, state.dataZoneEquip->ZoneEquipConfig(zoneNum).ExhaustNode(iExhNode));
             if (piuNum > 0) {
                 auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum);
-                MoistureMassFlowRate += (thisPIU.leakMassFlowRate * state.dataLoopNodes->Node(thisPIU.PriAirInNode).HumRat) / ZoneMult;
-                ZoneMassFlowRate += thisPIU.leakMassFlowRate / ZoneMult;
+                MoistureMassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).HumRat) / ZoneMult;
+                ZoneMassFlowRate += thisPIU.leakFlow / ZoneMult;
             }
         }
     }
@@ -5243,8 +5243,8 @@ void ZoneSpaceHeatBalanceData::calcZoneOrSpaceSums(EnergyPlusData &state,
                 if (piuNum > 0) {
                     auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum);
                     Real64 CpAir = Psychrometrics::PsyCpAirFnW(this->airHumRat);
-                    this->SumSysMCp += thisPIU.leakMassFlowRate * CpAir;
-                    this->SumSysMCpT += thisPIU.leakMassFlowRate * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
+                    this->SumSysMCp += thisPIU.leakFlow * CpAir;
+                    this->SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
                 }
             }
         }
@@ -5535,8 +5535,8 @@ void CalcZoneComponentLoadSums(EnergyPlusData &state,
                 PoweredInductionUnits::getParallelPIUNumFromSecNodeNum(state, state.dataZoneEquip->ZoneEquipConfig(ZoneNum).ExhaustNode(iExhNode));
             if (piuNum > 0) {
                 auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum);
-                QSensRate = calcZoneSensibleOutput(
-                    thisPIU.leakMassFlowRate, state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp, thisHB->MAT, thisHB->airHumRat);
+                QSensRate =
+                    calcZoneSensibleOutput(thisPIU.leakFlow, state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp, thisHB->MAT, thisHB->airHumRat);
                 thisAirRpt.SumMCpDTsystem += QSensRate;
             }
         }
