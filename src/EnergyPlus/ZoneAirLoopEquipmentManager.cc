@@ -579,8 +579,8 @@ namespace ZoneAirLoopEquipmentManager {
             MassFlowRateMinAvail = 0.0;
             airDistUnit.parallelPIUTerminalLeakFrac = 0.0;
             // check for no plenum
-            // set the max and min avail flow rates taking into account the upstream leak
-            if (airDistUnit.UpStreamLeak || airDistUnit.DownStreamLeak ||
+            // set the max and min avail flow rates taking into acount the upstream leak
+            if (airDistUnit.UpStreamLeak ||
                 airDistUnit.EquipTypeEnum(AirDistCompNum) == DataDefineEquip::ZnAirLoopEquipType::SingleDuct_ParallelPIU_Reheat) {
                 if (InNodeNum > 0) {
                     MassFlowRateMaxAvail = state.dataLoopNodes->Node(InNodeNum).MassFlowRateMaxAvail;
