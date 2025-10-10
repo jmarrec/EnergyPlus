@@ -82521,12 +82521,17 @@ ThermalStorage:Ice:Simple,
       \type real
       \units GJ
       \ip-units ton-hrs
+      \autosizable
   A3, \field Inlet Node Name
       \type node
       \required-field
-  A4; \field Outlet Node Name
+  A4, \field Outlet Node Name
       \type node
       \required-field
+  A5; \field Thermal Storage Sizing Object Name
+      \type object-list
+      \object-list ThermalStorageSizing
+      \note used only when tank capacity is autosized
 
 ThermalStorage:Ice:Detailed,
     \min-fields 14
@@ -82549,6 +82554,7 @@ ThermalStorage:Ice:Detailed,
   N1 , \field Capacity
        \note This includes only the latent storage capacity
        \units GJ
+       \autosizable
        \required-field
   A3 , \field Inlet Node Name
        \required-field
@@ -82594,13 +82600,17 @@ ThermalStorage:Ice:Detailed,
        \note parameters input above is inappropriate and not advised.
        \units C
        \default 0.0
-  A9 ; \field Thaw Process Indicator
+  A9 , \field Thaw Process Indicator
        \note This field determines whether the system uses internal or external melt
        \note during discharging. This will then have an impact on charging performance.
        \type choice
        \key InsideMelt
        \key OutsideMelt
        \default OutsideMelt
+  A10; \field Thermal Storage Sizing Object Name
+       \type object-list
+       \object-list ThermalStorageSizing
+       \note used only when tank capacity is autosized
 
 ThermalStorage:ChilledWater:Mixed,
        \memo Chilled water storage with a well-mixed, single-node tank. The chilled water is
@@ -83147,6 +83157,7 @@ ThermalStorage:HotWater:Stratified,
        \type real
        \units W/K
        \default 0.0
+
 ThermalStorage:PCM,
       \min-fields 11
       \memo This thermal storage model is PCM-based
@@ -83203,6 +83214,26 @@ ThermalStorage:PCM,
        \autosizable
        \required-field
 
+ThermalStorage:Sizing,
+       \memo Sizing information for thermal energy stoarge capacity.
+  A1,  \field Name
+       \required-field
+       \type alpha
+       \reference ThermalStorageSizing
+  N1,  \field On Peak Period Start Time
+       \required-field
+       \type real
+       \units hr
+       \note Start time of on peak period in hours
+  N2,  \field On Peak Period End Time
+       \note End time of on peak period in hours
+       \required-field
+       \type real
+       \units hr
+  N3;  \field Sizing Factor
+       \type real
+       \minimum> 0.0
+       \default 1.0
 
 \group Plant-Condenser Loops
 !*****************PLANT AND CONDENSER LOOP SPECIFICATION*********************

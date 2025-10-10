@@ -1938,7 +1938,7 @@ The input fields for the object are described in detail below:
 
 \paragraph{Field: Name}\label{field-name-20-001}
 
-This alpha field contains the identifying name for the ice storage tank.
+This required alpha field contains the identifying name for the ice storage tank.
 
 \paragraph{Field: Ice Storage Type}\label{field-ice-storage-type}
 
@@ -1946,15 +1946,19 @@ This alpha field specifies the type of ice storage tank to be modeled. There are
 
 \paragraph{Field: Capacity}\label{field-capacity-000}
 
-This numeric field contains the nominal capacity of the ice storage in GJ (Giga is 10\(^{9}\)).
+This required numeric field contains the nominal capacity of the ice storage in GJ (Giga is 10\(^{9}\)). This field is autosizable when Coil:Cooling:Water, Coil:Cooling:Water:DetailedGeometry, AirTerminal:SingleDuct:ConstantVolume:CooledBeam, AirTerminal:SingleDuct:ConstantVolume:FourPipeBeam, ZoneHVAC:CoolingPanel:RadiantConvective:Water or LoadProfile:Plant objects are used within the plant. Autosizing requires the use of the \hyperref[thermalstoragesizing]{ThermalStorage:Sizing} object. Other plant equipment have not yet been added to the autosizing capability. If other plant equipment types are connected to the thermal energy storage plant loops and the TES capacity is insufficent to meet the load the work around for capacity sizing is to adjust the Sizing Factor in the \hyperref[thermalstoragesizing]{ThermalStorage:Sizing} object, adjust the Sizing:Plant object inputs or enter a value here instead of using autosize.
 
 \paragraph{Field: Inlet Node Name}\label{field-inlet-node-name-004}
 
-This alpha field specifies the name of the chilled water inlet node.
+This required alpha field specifies the name of the chilled water inlet node.
 
 \paragraph{Field: Outlet Node Name}\label{field-outlet-node-name-005}
 
-This alpha field specifies the name of the chilled water outlet node.
+This required alpha field specifies the name of the chilled water outlet node.
+
+\paragraph{Field: Thermal Storage Sizing Object Name}\label{field-thermal-storage-sizing-object-name-001}
+
+This alpha field specifies the name of the ThermalStorage:Sizing object name. If the capacity field is autosized this object is required.
 
 Following is an example input for the THERMAL STORAGE:ICE:SIMPLE object.
 
@@ -2045,7 +2049,7 @@ This field is the name of the schedule (ref: Schedule) that determines whether o
 
 \paragraph{Field: Capacity}\label{field-capacity-1-000}
 
-This number is the maximum amount of latent thermal storage available in the ice storage system. This model does not allow the removal or addition of sensible energy from the tank. Thus, it is always assumed to be at the freezing temperature of the storage material. The capacity is expressed in units of GJ.
+This number is the maximum amount of latent thermal storage available in the ice storage system. This model does not allow the removal or addition of sensible energy from the tank. Thus, it is always assumed to be at the freezing temperature of the storage material. The capacity is expressed in units of GJ. This field is autosizable when Coil:Cooling:Water, Coil:Cooling:Water:DetailedGeometry, AirTerminal:SingleDuct:ConstantVolume:CooledBeam, AirTerminal:SingleDuct:ConstantVolume:FourPipeBeam, ZoneHVAC:CoolingPanel:RadiantConvective:Water or LoadProfile:Plant objects are used within the plant. Autosizing requires the use of the \hyperref[thermalstoragesizing]{ThermalStorage:Sizing} object. Other plant equipment have not yet been added to the autosizing capability. If other plant equipment types are connected to the thermal energy storage plant loops and the TES capacity is insufficent to meet the load the work around for capacity sizing is to adjust the Sizing Factor in the \hyperref[thermalstoragesizing]{ThermalStorage:Sizing} object, adjust the Sizing:Plant object inputs or enter a value here instead of using autosize.
 
 \paragraph{Field: Inlet Node Name}\label{field-inlet-node-name-1-001}
 
@@ -2121,6 +2125,10 @@ This parameter defines the freezing/melting temperature of the ice storage mediu
 \paragraph{Field: Thaw Process Indicator}\label{field-thaw-process-indicator}
 
 This input field assists in more accurate modeling of the charging process by defining how the thawing of ice takes place. There are two options for this input: \textbf{InsideMelt} and \textbf{OutsideMelt}. Some ice storage systems, by their nature, start the charging process with a bare coil or no ice left on the charging surface even though there is still ice stored in the tank.~ An example of such a system is sometimes referred to as an ice-on-coil inside melt system, and these systems would define this parameter using the ``InsideMelt'' option for this field.~ Other systems melt the ice from the outside, leaving ice still on the charging surface when charging begins. These systems are modeled using the ``OutsideMelt'' option.~ For systems that have a charging process that does not vary significantly with fraction charged can ignore this input by accepting the default value.~ The default value for this field is ``OutsideMelt''.
+
+\paragraph{Field: Thermal Storage Sizing Object Name}\label{field-thermal-storage-sizing-object-name-002}
+
+This alpha field specifies the name of the ThermalStorage:Sizing object name. If the capacity field is autosized this object is required.
 
 An IDF example:
 
@@ -2958,7 +2966,7 @@ tank and returns colder water.
 \paragraph{Field: Source Side Heat Transfer
 Effectiveness}\label{field-source-side-heat-transfer-effectiveness-thermalstoragehotwaterstratified}
 
-This field specifies the heat transfer effectiveness between the source side
+This field specifies the heat transfer effectiveness between the source side 
 water and the tank water. If the effectiveness is set to 1 then complete heat
 transfer occurs, simulating perfect mixing of the source side water and the tank
 water. If the effectiveness is less than 1.0, then the source side outlet water
@@ -3234,6 +3242,7 @@ the flow is from the source side outlet to the source side inlet.
 The flow direction of the use side water. This is a numeric value that is 1 if
 the flow is from the use side inlet to the use side outlet, and -1 if the flow
 is from the use side outlet to the use side inlet.
+
 \subsection{ThermalStorage:PCM}\label{thermalstoragepcm}
 
 The \textbf{ThermalStorage:PCM} object models a phase‐change material (PCM) thermal‐storage tank.  Unlike a simple chilled‐water tank, this device stores and releases energy primarily through the PCM’s latent heat.  It connects to two plant loops: a \emph{plant side} for charging the PCM (melting it) and a \emph{use side} for discharging the PCM (freezing it).  Energy transfer is assumed to occur through an internal heat exchanger with a user‑specified effectiveness.  Charging occurs whenever heat is removed from the plant side stream (i.e., the stream is cooled); discharging occurs whenever heat is added to the use side stream (i.e., the stream is heated).  Availability of the unit is controlled by an optional schedule.
@@ -3302,6 +3311,42 @@ ThermalStorage:PCM,
   25,                   !- Heat Loss Rate {W}
   autosize,             !- Use Side Design Flow Rate {m3/s}
   autosize;             !- Plant Side Design Flow Rate {m3/s}
+\end{lstlisting}
+
+\subsection{ThermalStorage:Sizing}\label{thermalstoragesizing}
+
+This thermal storage model is able to autosize the required storage capacity in cetain instances.~
+The ThermalStorage:Sizing object defines the time period on the peak day that thermal storage is active. A start and end time is used to integrate the plant load over this time period to calculate the on peak energy during that time period. This calculation uses the Sizing:Plant exit water temperature to calculate the specific heat and density of water, and the plant delta T as the temperature difference across the storage tank. The sum of the plant water flow rate over the on peak time period is multiplied by the density and specific heat of water and the plant sizing delta T, along with a conversion for seconds in hour of 3600. The end result is joules of energy required by the storage tank. These calculations therefore require the following inputs:
+
+The input fields for the object are described in detail below:
+
+\subsubsection{Inputs}\label{inputs-20-103}
+
+\paragraph{Field: Name}\label{field-name-20-104}
+
+This alpha field contains the identifying name for the ice storage tank. This name will be entered in the corresponding ThermalStorage:Ice:Simple or ThermalStorage:Ice:Detailed objects in the field named Thermal Storage Sizing Object Name.
+
+\paragraph{Field: On Peak Period Start Time}\label{field-on-peak-period-start-time}
+
+This numeric field specifies the time of day the utility's on peak period begins. The value represents hours as a decimal time (e.g., 12.5 represents 12:30 PM).
+
+\paragraph{Field: On Peak Period End Time}\label{field-on-peak-period-end-time}
+
+This numeric field specifies the time of day the utility's on peak period ends. The value represents hours as a decimal time (e.g., 21.0 represents 9:00 PM).
+
+\paragraph{Field: Sizing Factor}\label{field-sizing-factor-20-105}
+
+This numeric field specifies the fraction of the on peak energy to be met by the thermal storage tank. If the storage tank is upstream of a chiller and the chiller operates at the same time as the tank then then tank could be downsized according to this fraction. The fraction may also be greater than 1.0 to fine tune the storage capacity size. The default value is 1.0 if this field is not entered or is blank.
+
+And example IDF object:
+
+\begin{lstlisting}
+
+ThermalStorage:Sizing,
+      ThermalStorageSizing,      !- Name
+      12.0,         !- On Peak Period Start Time {hr}
+      21.0,         !- On Peak Period End Time {hr}
+      0.5;          !- Sizing Factor
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-pcmstorage}
