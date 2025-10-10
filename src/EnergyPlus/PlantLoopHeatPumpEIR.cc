@@ -3534,7 +3534,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                 }
             }
 
-            // N12 defrost_operation_time_fraction
+            // N9 defrost_operation_time_fraction
             if (thisPLHP.EIRHPType == DataPlant::PlantEquipmentType::HeatPumpFuelFiredCooling) {
                 thisPLHP.defrostOpTimeFrac = 0.0;
             } else {
