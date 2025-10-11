@@ -6535,6 +6535,10 @@ namespace VariableSpeedCoils {
             state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).CondensateVol =
                 state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).CondensateVdot * TimeStepSysSec;
         }
+        if (state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).AirLoopNum > 0) {
+            state.dataAirLoop->AirLoopAFNInfo(state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).AirLoopNum).AFNLoopDXCoilRTF =
+                state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).RunFrac;
+        }
     }
 
     void CalcVarSpeedHPWH(EnergyPlusData &state,
@@ -7678,6 +7682,11 @@ namespace VariableSpeedCoils {
         }
 
         state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).QWasteHeat = QWasteHeat;
+
+        if (state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).AirLoopNum > 0) {
+            state.dataAirLoop->AirLoopAFNInfo(state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).AirLoopNum).AFNLoopDXCoilRTF =
+                state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).RunFrac;
+        }
     }
 
     Real64 GetCoilCapacityVariableSpeed(EnergyPlusData &state,
