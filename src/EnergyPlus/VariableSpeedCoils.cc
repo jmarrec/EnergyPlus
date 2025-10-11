@@ -51,6 +51,8 @@
 #include <ObjexxFCL/Array.functions.hh>
 
 // EnergyPlus Headers
+#include "AirflowNetwork/Solver.hpp"
+
 #include <EnergyPlus/Autosizing/Base.hh>
 #include <EnergyPlus/BranchNodeConnections.hh>
 #include <EnergyPlus/CurveManager.hh>
@@ -195,7 +197,7 @@ namespace VariableSpeedCoils {
         varSpeedCoil.SpeedNumReport = SpeedCal;
         varSpeedCoil.SpeedRatioReport = SpeedRatio;
 
-        if (varSpeedCoil.AirLoopNum > 0) {
+        if (varSpeedCoil.AirLoopNum > 0 && state.afn->distribution_simulated) {
             state.dataAirLoop->AirLoopAFNInfo(varSpeedCoil.AirLoopNum).AFNLoopDXCoilRTF = max(varSpeedCoil.RunFracCool, varSpeedCoil.RunFracHeat);
         }
     }
