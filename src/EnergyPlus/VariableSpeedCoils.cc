@@ -174,12 +174,14 @@ namespace VariableSpeedCoils {
             CalcVarSpeedCoilCooling(
                 state, DXCoilNum, fanOp, SensLoad, LatentLoad, compressorOp, PartLoadFrac, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
             UpdateVarSpeedCoil(state, DXCoilNum);
+            varSpeedCoil.RunFracCool = varSpeedCoil.RunFrac;
         } else if ((varSpeedCoil.VSCoilType == HVAC::Coil_HeatingWaterToAirHPVSEquationFit) ||
                    (varSpeedCoil.VSCoilType == HVAC::Coil_HeatingAirToAirVariableSpeed)) {
             // Heating mode
             InitVarSpeedCoil(state, DXCoilNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
             CalcVarSpeedCoilHeating(state, DXCoilNum, fanOp, SensLoad, compressorOp, PartLoadFrac, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
             UpdateVarSpeedCoil(state, DXCoilNum);
+            varSpeedCoil.RunFracHeat = varSpeedCoil.RunFrac;
         } else if (varSpeedCoil.VSCoilType == HVAC::CoilDX_HeatPumpWaterHeaterVariableSpeed) {
             // Heating mode
             InitVarSpeedCoil(state, DXCoilNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
@@ -192,6 +194,10 @@ namespace VariableSpeedCoils {
         // two additional output variables
         varSpeedCoil.SpeedNumReport = SpeedCal;
         varSpeedCoil.SpeedRatioReport = SpeedRatio;
+
+        if (varSpeedCoil.AirLoopNum > 0) {
+            state.dataAirLoop->AirLoopAFNInfo(varSpeedCoil.AirLoopNum).AFNLoopDXCoilRTF = max(varSpeedCoil.RunFracCool, varSpeedCoil.RunFracHeat);
+        }
     }
 
     void GetVarSpeedCoilInput(EnergyPlusData &state)

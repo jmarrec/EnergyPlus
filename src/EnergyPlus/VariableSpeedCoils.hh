@@ -125,16 +125,18 @@ namespace VariableSpeedCoils {
         Real64 EnergySource;               // Source Side Heat Transferred [J]
         Real64 COP;                        // Heat Pump Coefficient of Performance [-]
         Real64 RunFrac;                    // Duty Factor
-        Real64 PartLoadRatio;              // Part Load Ratio
-        Real64 RatedPowerHeat;             // Rated/Ref Heating Power Consumption[W]
-        Real64 RatedCOPHeat;               // Rated/Ref Heating COP [W/W]
-        Real64 RatedCapCoolSens;           // Rated/Ref Sensible Cooling Capacity [W]
-        Real64 RatedPowerCool;             // Rated/Ref Cooling Power Consumption[W]
-        Real64 RatedCOPCool;               // Rated/Ref Cooling COP [W/W]
-        int AirInletNodeNum;               // Node Number of the Air Inlet
-        int AirOutletNodeNum;              // Node Number of the Air Outlet
-        int WaterInletNodeNum;             // Node Number of the Water Onlet
-        int WaterOutletNodeNum;            // Node Number of the Water Outlet
+        Real64 RunFracHeat;
+        Real64 RunFracCool;
+        Real64 PartLoadRatio;    // Part Load Ratio
+        Real64 RatedPowerHeat;   // Rated/Ref Heating Power Consumption[W]
+        Real64 RatedCOPHeat;     // Rated/Ref Heating COP [W/W]
+        Real64 RatedCapCoolSens; // Rated/Ref Sensible Cooling Capacity [W]
+        Real64 RatedPowerCool;   // Rated/Ref Cooling Power Consumption[W]
+        Real64 RatedCOPCool;     // Rated/Ref Cooling COP [W/W]
+        int AirInletNodeNum;     // Node Number of the Air Inlet
+        int AirOutletNodeNum;    // Node Number of the Air Outlet
+        int WaterInletNodeNum;   // Node Number of the Water Onlet
+        int WaterOutletNodeNum;  // Node Number of the Water Outlet
         PlantLocation plantLoc;
         bool FrostHeatingCapacityMultiplierEMSOverrideOn; // if true, then EMS is calling to override multiplier for heating capacity when system is
                                                           // in defrost
@@ -296,12 +298,12 @@ namespace VariableSpeedCoils {
               InletAirDBTemp(0.0), InletAirHumRat(0.0), InletAirEnthalpy(0.0), OutletAirDBTemp(0.0), OutletAirHumRat(0.0), OutletAirEnthalpy(0.0),
               WaterVolFlowRate(0.0), WaterMassFlowRate(0.0), InletWaterTemp(0.0), InletWaterEnthalpy(0.0), OutletWaterTemp(0.0),
               OutletWaterEnthalpy(0.0), Power(0.0), QLoadTotal(0.0), QSensible(0.0), QLatent(0.0), QSource(0.0), QWasteHeat(0.0), Energy(0.0),
-              EnergyLoadTotal(0.0), EnergySensible(0.0), EnergyLatent(0.0), EnergySource(0.0), COP(0.0), RunFrac(0.0), PartLoadRatio(0.0),
-              RatedPowerHeat(0.0), RatedCOPHeat(0.0), RatedCapCoolSens(0.0), RatedPowerCool(0.0), RatedCOPCool(0.0), AirInletNodeNum(0),
-              AirOutletNodeNum(0), WaterInletNodeNum(0), WaterOutletNodeNum(0), plantLoc{}, FrostHeatingCapacityMultiplierEMSOverrideOn(false),
-              FrostHeatingCapacityMultiplierEMSOverrideValue(0.0), FrostHeatingInputPowerMultiplierEMSOverrideOn(false),
-              FrostHeatingInputPowerMultiplierEMSOverrideValue(0.0), FindCompanionUpStreamCoil(true), IsDXCoilInZone(false),
-              CompanionCoolingCoilNum(0), CompanionHeatingCoilNum(0), FanDelayTime(0.0),
+              EnergyLoadTotal(0.0), EnergySensible(0.0), EnergyLatent(0.0), EnergySource(0.0), COP(0.0), RunFrac(0.0), RunFracHeat(0.0),
+              RunFracCool(0.0), PartLoadRatio(0.0), RatedPowerHeat(0.0), RatedCOPHeat(0.0), RatedCapCoolSens(0.0), RatedPowerCool(0.0),
+              RatedCOPCool(0.0), AirInletNodeNum(0), AirOutletNodeNum(0), WaterInletNodeNum(0), WaterOutletNodeNum(0), plantLoc{},
+              FrostHeatingCapacityMultiplierEMSOverrideOn(false), FrostHeatingCapacityMultiplierEMSOverrideValue(0.0),
+              FrostHeatingInputPowerMultiplierEMSOverrideOn(false), FrostHeatingInputPowerMultiplierEMSOverrideValue(0.0),
+              FindCompanionUpStreamCoil(true), IsDXCoilInZone(false), CompanionCoolingCoilNum(0), CompanionHeatingCoilNum(0), FanDelayTime(0.0),
               // This one calls into a std::vector, so it's 0-indexed, so we initialize it to -1
               MSHPDesignSpecIndex(-1), MSErrIndex(HVAC::MaxSpeedLevels, 0), MSRatedPercentTotCap(HVAC::MaxSpeedLevels, 0.0),
               MSRatedTotCap(HVAC::MaxSpeedLevels, 0.0), MSRatedSHR(HVAC::MaxSpeedLevels, 0.0), MSRatedCOP(HVAC::MaxSpeedLevels, 0.0),
