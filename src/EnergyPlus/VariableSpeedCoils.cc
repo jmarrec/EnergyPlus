@@ -5773,10 +5773,6 @@ namespace VariableSpeedCoils {
             varSpeedCoil.CondensateVdot = max(0.0, (state.dataVariableSpeedCoils->LoadSideMassFlowRate * (SpecHumIn - SpecHumOut) / RhoWater));
             varSpeedCoil.CondensateVol = varSpeedCoil.CondensateVdot * TimeStepSysSec;
         }
-        if (state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).AirLoopNum > 0) {
-            state.dataAirLoop->AirLoopAFNInfo(state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).AirLoopNum).AFNLoopDXCoilRTF =
-                state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).RunFrac;
-        }
     }
 
     void CalcVarSpeedHPWH(EnergyPlusData &state,
@@ -6807,11 +6803,6 @@ namespace VariableSpeedCoils {
         }
 
         varSpeedCoil.QWasteHeat = QWasteHeat;
-
-        if (state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).AirLoopNum > 0) {
-            state.dataAirLoop->AirLoopAFNInfo(state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).AirLoopNum).AFNLoopDXCoilRTF =
-                state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).RunFrac;
-        }
     }
 
     Real64 GetCoilCapacityVariableSpeed(EnergyPlusData &state,
