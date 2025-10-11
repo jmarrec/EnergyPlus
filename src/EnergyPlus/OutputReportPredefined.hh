@@ -502,6 +502,25 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchBoilerFuelType = 0;            // Fuel type
     int pdchBoilerParaElecLoad = 0;        // Parasitic electric load
 
+    // AWHP Table in Equipment Summary
+    int pdstAWHP = 0;
+    int pdchAWHPType = 0;                    // Type
+    int pdchAWHPRefCap = 0;                  // Reference Capacity[W]
+    int pdchAWHPRefCOP = 0;                  // Reference COP
+    int pdchAWHPRefEff = 0;                  // Reference Efficiency [W/W]
+    int pdchAWHPRatedCap = 0;                // Rated Capacity [W]
+    int pdchAWHPRatedEff = 0;                // Rated Efficiency [W/W]
+    int pdchAWHPSEER = 0;                    // SEER
+    int pdchAWHPHSPF = 0;                    // HSPF
+    int pdchAWHPMinPLR = 0;                  // Minimum part load ratio
+    int pdchAWHPDesSizeRefAirTemp;           // Design Size Reference Air Temperature [C]"
+    int pdchAWHPDesEnterWaterTemp;           // Entering Water Temperature [C]"
+    int pdchAWHPDesLeaveWaterTemp;           // Leaving Water Temperature [C]"
+    int pdchAWHPDesSizeRefWaterFlowRate = 0; // "Design Size Reference Water Flow Rate [kg/s]");
+    int pdchAWHPDesSizeRefAirFlowRate = 0;   // "Design Size Reference Air Flow Rate [kg/s]");
+    int pdchAWHPPlantloopName = 0;           // Plantloop name
+    int pdchAWHPPlantloopBranchName = 0;     // Plantloop branch name
+
     // Std 229 cooling towers and fluid coolers Table in Equipment Summary
     int pdstCTFC = 0;
     int pdchCTFCType = 0;               // Type
@@ -1128,6 +1147,7 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchOaMvZoneArea = 0;
     int pdchOaMvDesZnOa = 0;
     int pdchOaMvMinDynTrgVent = 0;
+    int pdchOaMvZoneMult = 0;
 
     int pdstOAtotAirByZone = 0;
     int pdchOaTaBzMechVent = 0;
@@ -1140,6 +1160,7 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchOaTaBzTmAt = 0;
     int pdchOaTaBzTmAbove = 0;
     int pdchOaTaBzTmAboveUnocc = 0;
+    int pdchOaTaBzZoneMult = 0;
 
     int pdstOAavgOccByZone = 0;
     int pdchOaOccBzMechVent = 0;
@@ -1151,6 +1172,7 @@ struct OutputReportPredefinedData : BaseGlobalStruct
     int pdchOaOccBzTmBelow = 0;
     int pdchOaOccBzTmAt = 0;
     int pdchOaOccBzTmAbove = 0;
+    int pdchOaOccBzZoneMult = 0;
 
     int pdstOAtotAirByLoop = 0;
     int pdchOaTaAlMechVent = 0;

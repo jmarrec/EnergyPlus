@@ -92,6 +92,7 @@ namespace DataPlant {
         false, //	"DistrictHeating:Water" (steam is at the end)
         false, //	"ThermalStorage:Ice:Detailed"
         false, //	"ThermalStorage:Ice:Simple"
+        false, //   "ThermalStorage:PCM"
         false, //	"TemperingValve"
         false, //	"WaterHeater:Mixed"
         false, //	"WaterHeater:Stratified"
@@ -121,6 +122,7 @@ namespace DataPlant {
         false, //	"EvaporativeFluidCooler:TwoSpeed"
         false, //	"ThermalStorage:ChilledWater:Mixed"
         false, //	"ThermalStorage:ChilledWater:Stratified"
+        false, //	"ThermalStorage:HotWater:Stratified"
         false, //	"SolarCollector:FlatPlate:PhotovoltaicThermal"
         false, //	"ZoneHVAC:Baseboard:Convective:Water"
         false, //	"ZoneHVAC:Baseboard:RadiantConvective:Steam"
@@ -193,6 +195,7 @@ namespace DataPlant {
         DataPlant::CtrlType::HeatingOp, //	"DistrictHeating:Water" (steam is at the end)
         DataPlant::CtrlType::CoolingOp, //	"ThermalStorage:Ice:Detailed"
         DataPlant::CtrlType::CoolingOp, //	"ThermalStorage:Ice:Simple"
+        DataPlant::CtrlType::HeatingOp, //  "ThermalStorage:PCM"
         DataPlant::CtrlType::Invalid,   //	"TemperingValve"
         DataPlant::CtrlType::HeatingOp, //	"WaterHeater:Mixed"
         DataPlant::CtrlType::HeatingOp, //	"WaterHeater:Stratified"
@@ -222,6 +225,7 @@ namespace DataPlant {
         DataPlant::CtrlType::CoolingOp, //	"EvaporativeFluidCooler:TwoSpeed"
         DataPlant::CtrlType::CoolingOp, //	"ThermalStorage:ChilledWater:Mixed"
         DataPlant::CtrlType::CoolingOp, //	"ThermalStorage:ChilledWater:Stratified"
+        DataPlant::CtrlType::HeatingOp, //	"ThermalStorage:HotWater:Stratified"
         DataPlant::CtrlType::HeatingOp, //	"SolarCollector:FlatPlate:PhotovoltaicThermal"
         DataPlant::CtrlType::Invalid,   //	"ZoneHVAC:Baseboard:Convective:Water"
         DataPlant::CtrlType::Invalid,   //	"ZoneHVAC:Baseboard:RadiantConvective:Steam"

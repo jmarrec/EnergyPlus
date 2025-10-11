@@ -6095,6 +6095,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistWAHPCoils)
     std::string const idf_objects = delimited_string({
         "Coil:Cooling:WaterToAirHeatPump:EquationFit,",
         "Super Coil,   !- Name",
+        ",             !- Availability Schedule Name",
         "GSHP Clg Inlet,          !- Water Inlet Node Name",
         "GSHP Clg Outlet,         !- Water Outlet Node Name",
         "Cooling Coil Air Inlet Node_unit1,  !- Air Inlet Node Name",
@@ -6118,6 +6119,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistWAHPCoils)
         "60;                      !- Fan Delay Time {s}",
         "Coil:Heating:WaterToAirHeatPump:EquationFit,",
         "Super Heating Coil,  !- Name",
+        ",                    !- Availability Schedule Name",
         "GSHP Htg Inlet,          !- Water Inlet Node Name",
         "GSHP Htg Outlet,         !- Water Outlet Node Name",
         "Heating Coil Air Inlet Node_unit1,  !- Air Inlet Node Name",
@@ -6161,6 +6163,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistWAHPVSCoils)
     std::string const idf_objects = delimited_string({
         "  Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,",
         "    Super Coil,  !- Name",
+        "    ,            !- Availability Schedule Name",
         "    Lobby_ZN_1_FLR_2 WSHP Cooling Source Side Inlet Node,  !- Water-to-Refrigerant HX Water Inlet Node Name",
         "    Lobby_ZN_1_FLR_2 WSHP Cooling Source Side Outlet Node,  !- Water-to-Refrigerant HX Water Outlet Node Name",
         "    Lobby_ZN_1_FLR_2 WSHP Cooling Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
@@ -6296,6 +6299,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistWAHPVSCoils)
         "    wasteHeat VS Temp1 Test;                        !- Speed 9 Waste Heat Function of Temperature Curve Name",
         "  Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,",
         "    Super Heating Coil,  !- Name",
+        "    ,                    !- Availability Schedule Name",
         "    Lobby_ZN_1_FLR_2 WSHP Heating Source Side Inlet Node,  !- Water-to-Refrigerant HX Water Inlet Node Name",
         "    Lobby_ZN_1_FLR_2 WSHP Heating Source Side Outlet Node,  !- Water-to-Refrigerant HX Water Outlet Node Name",
         "    Lobby_ZN_1_FLR_2 WSHP Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
@@ -6444,6 +6448,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistCoils)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    Super Coil,              !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Node_1,                  !- Indoor Air Inlet Node Name",
         "    Node_2,                  !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
@@ -6483,6 +6488,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistCoils)
         "",
         "  Coil:Heating:DX:VariableSpeed,",
         "    Super Heating Coil,      !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Node_1,                  !- Indoor Air Inlet Node Name",
         "    Node_2,                  !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
