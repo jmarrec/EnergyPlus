@@ -1946,7 +1946,7 @@ void CalcParallelPIU(EnergyPlusData &state,
                 // Determine leakage rate that won't make it to the zone served by the terminal
                 thisPIU.leakFlow = thisPIU.leakFrac * thisPIU.PriAirMassFlow;
                 // Increase the primary flow rate to meet the cooling load with leakage
-                thisPIU.PriAirMassFlow *= 1 / (1 - thisPIU.leakFrac); //(1 + thisPIU.leakFrac);
+                thisPIU.PriAirMassFlow *= 1 / (1 - thisPIU.leakFrac);
             }
             // Make sure that the primary airflow doesn't exceed the maximum when leakage is modeled
             // When the primary airflow is limited to the maximum, the load won't likely be met
