@@ -426,6 +426,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
         std::string zszSuffix;
         std::string spszSuffix;
         std::string sszSuffix;
+        std::string pszSuffix;
         std::string meterSuffix;
         std::string sqliteSuffix;
         std::string adsSuffix;
@@ -444,6 +445,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 zszSuffix = "zsz";
                 spszSuffix = "spsz";
                 sszSuffix = "ssz";
+                pszSuffix = "psz";
                 meterSuffix = "mtr";
                 sqliteSuffix = "sqlite";
                 adsSuffix = "ADS";
@@ -458,6 +460,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 zszSuffix = "-zsz";
                 spszSuffix = "-spsz";
                 sszSuffix = "-ssz";
+                pszSuffix = "-psz";
                 meterSuffix = "-meter";
                 sqliteSuffix = "-sqlite";
                 adsSuffix = "-ads";
@@ -472,6 +475,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 zszSuffix = "Zsz";
                 spszSuffix = "Spsz";
                 sszSuffix = "Ssz";
+                pszSuffix = "Psz";
                 meterSuffix = "Meter";
                 sqliteSuffix = "Sqlite";
                 adsSuffix = "Ads";
@@ -555,6 +559,9 @@ state.dataStrGlobals->inputFilePath='{:g}',
         state.files.outputSszCsvFilePath = composePath(sszSuffix + ".csv");
         state.files.outputSszTabFilePath = composePath(sszSuffix + ".tab");
         state.files.outputSszTxtFilePath = composePath(sszSuffix + ".txt");
+        state.files.outputPszCsvFilePath = composePath(pszSuffix + ".csv");
+        state.files.outputPszTabFilePath = composePath(pszSuffix + ".tab");
+        state.files.outputPszTxtFilePath = composePath(pszSuffix + ".txt");
         state.dataStrGlobals->outputAdsFilePath = composePath(adsSuffix + ".out");
         state.files.shade.filePath = composePath(shdSuffix + ".csv");
         if (suffixType == "L") {

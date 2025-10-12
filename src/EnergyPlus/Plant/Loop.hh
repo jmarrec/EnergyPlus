@@ -100,6 +100,10 @@ namespace DataPlant {
     constexpr std::array<DataPlant::LoopSideLocation, static_cast<int>(DataPlant::LoopSideLocation::Num)> LoopSideKeys = {
         DataPlant::LoopSideLocation::Demand, DataPlant::LoopSideLocation::Supply};
 
+    struct PlantCoilData
+    {
+        std::vector<Real64> tsDesWaterFlowRate;
+    };
     struct PlantLoopData
     {
         // Members
@@ -168,6 +172,10 @@ namespace DataPlant {
         Real64 OutletNodeFlowrate;
         Real64 OutletNodeTemperature;
         int LastLoopSideSimulated;
+        std::vector<Real64> plantDesWaterFlowRate;
+        std::vector<std::string> plantCoilObjectNames;
+        std::vector<PlantCoilData> compDesWaterFlowRate;
+        std::vector<PlantEquipmentType> plantCoilObjectTypes;
 
         // Default Constructor
         PlantLoopData()

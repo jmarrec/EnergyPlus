@@ -193,6 +193,7 @@ set(test_src
     OutsideEnergySources.unit.cc
     PVWatts.unit.cc
     PackagedTerminalHeatPump.unit.cc
+    PCMThermalTank.unit.cc
     Photovoltaics.unit.cc
     PhotovoltaicThermalCollectors.unit.cc
     PierceSurface.unit.cc

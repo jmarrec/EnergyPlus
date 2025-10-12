@@ -4923,10 +4923,8 @@ namespace HeatBalanceManager {
                     if (auto found = fields.find("simple_mixing_air_changes_per_hour"); found != fields.end()) {
                         thisConstruct.AirBoundaryACH = found.value().get<Real64>();
                     } else {
-                        if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                                state, cCurrentModuleObject, "simple_mixing_air_changes_per_hour", thisConstruct.AirBoundaryACH)) {
-                            errorsFound = true;
-                        }
+                        state.dataInputProcessing->inputProcessor->getDefaultValue(
+                            state, cCurrentModuleObject, "simple_mixing_air_changes_per_hour", thisConstruct.AirBoundaryACH);
                     }
 
                     if (auto found = fields.find("simple_mixing_schedule_name"); found != fields.end()) {
