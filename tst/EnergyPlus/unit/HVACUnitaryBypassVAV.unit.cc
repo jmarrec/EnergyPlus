@@ -1475,6 +1475,7 @@ TEST_F(EnergyPlusFixture, UnitaryBypassVAV_ParentElectricityRateTest)
 
         "  Coil:Heating:DX:VariableSpeed,",
         "    Main DX Heating Coil 1,  !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
         "    Heating Coil Air Outlet Node,  !- Indoor Air Outlet Node Name",
         "    5.0,                     !-Number of Speeds{dimensionless}",
@@ -1541,6 +1542,7 @@ TEST_F(EnergyPlusFixture, UnitaryBypassVAV_ParentElectricityRateTest)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    Main Cooling Coil 1,     !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    DX Cooling Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
         "    Heating Coil Air Inlet Node,  !- Indoor Air Outlet Node Name",
         "    4.0,                     !- Number of Speeds {dimensionless}",
