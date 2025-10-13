@@ -80226,6 +80226,7 @@ GroundHeatExchanger:Vertical:Sizing:Rectangle,
   N1,   \field Design Flow Rate Per Borehole
         \type real
         \minimum> 0.0
+        \default 0.0005
         \units m3/s
         \required-field
         \note Design flow rate per borehole used to size borehole field
@@ -80249,13 +80250,13 @@ GroundHeatExchanger:Vertical:Sizing:Rectangle,
   N5,   \field Minimum Borehole Spacing
         \type real
         \minimum> 0.0
-        \default 1.0
+        \default 4.0
         \units m
         \note Minimum borehole-to-borehole spacing
   N6,   \field Maximum Borehole Spacing
         \type real
         \minimum> 0.0
-        \default 10.0
+        \default 6.0
         \units m
         \note Maximum borehole-to-borehole spacing
   N7,   \field Minimum Borehole Vertical Length

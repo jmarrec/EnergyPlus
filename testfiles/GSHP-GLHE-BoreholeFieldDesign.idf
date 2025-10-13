@@ -975,7 +975,9 @@ SizingPeriod:WeatherFileDays,
     ,                        !- GHE:Vertical:ResponseFactors Object Name
     FullDesign,              !- g-Function Calculation Method
     GroundHeatExchanger:Vertical:Sizing:Rectangle,  !- GHE:Vertical:Sizing Object Type
-    GHE-1-Sizing;            !- GHE:Vertical:Sizing Object Name
+    GHE-1-Sizing,            !- GHE:Vertical:Sizing Object Name
+    ,                        !- GHE:Vertical:Array Object Name
+    GHE-1;                   !- GHE:Vertical:Single Object Name 1
 
 !-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:SIZING:RECTANGLE ===========
 
@@ -983,15 +985,15 @@ SizingPeriod:WeatherFileDays,
     GHE-1-Sizing,            !- Name
     Full Year Weather File Sizing Period,  !- SizingPeriod:WeatherFileDays Name
     0.0005,                  !- Design Flow Rate Per Borehole {m3/s}
-    100.0,                   !- Available Borehole Field Length
-    100.0,                   !- Available Borehole Field Width
-    200.0,                   !- Maximum Number of Boreholes
-    3.0,                     !- Minimum Borehole Spacing
-    10.0,                    !- Maximum Borehole Spacing
-    60.0,                    !- Minimum Borehole Vertical Length
-    135.0,                   !- Maximum Borehole Vertical Length
-    5.0,                     !- Minimum Exiting Fluid Temperature for Sizing
-    35.0;                    !- Maximum Exiting Fluid Temperature for Sizing
+    100.0,                   !- Available Borehole Field Length {m}
+    100.0,                   !- Available Borehole Field Width {m}
+    200.0,                   !- Maximum Number of Boreholes {-}
+    3.0,                     !- Minimum Borehole Spacing {m}
+    10.0,                    !- Maximum Borehole Spacing {m}
+    60.0,                    !- Minimum Borehole Vertical Length {m}
+    135.0,                   !- Maximum Borehole Vertical Length {m}
+    5.0,                     !- Minimum Exiting Fluid Temperature for Sizing {C}
+    35.0;                    !- Maximum Exiting Fluid Temperature for Sizing {C}
 
 !-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:PROPERTIES ===========
 
@@ -1007,6 +1009,14 @@ SizingPeriod:WeatherFileDays,
     0.03341,                 !- Pipe Outer Diameter {m}
     0.002984,                !- Pipe Thickness {m}
     0.04913;                 !- U-Tube Distance {m}
+
+!-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:SINGLE ===========
+
+  GroundHeatExchanger:Vertical:Single,
+    GHE-1,                   !- Name
+    GHE-1 Props,             !- GHE:Vertical:Properties Object Name
+    0,                       !- X Position
+    0;                       !- Y Position
 
 !-   ===========  ALL OBJECTS IN CLASS: PLANTLOOP ===========
 

@@ -58,7 +58,9 @@ namespace GroundHeatExchangers {
     struct BorefieldSizingData
     {
         std::string name;
-        constexpr static std::string_view geometryType = "RECTANGLE"; // only RECTANGLE for now, so constexpr
+        std::string type;
+        std::string sizingPeriodName;
+        Real64 designFlowRatePerBorehole;
         Real64 length = 0.0;
         Real64 width = 0.0;
         Real64 minSpacing = 0.0;

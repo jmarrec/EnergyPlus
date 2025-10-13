@@ -68,7 +68,8 @@ namespace GroundHeatExchangers {
         FullDesign,
         Num
     };
-    static constexpr std::array<std::string_view, static_cast<int>(GFuncCalcMethod::Num)> GFuncCalcMethodsStrs = {"UHFCALC", "UBHWTCALC", "DESIGN"};
+    static constexpr std::array<std::string_view, static_cast<int>(GFuncCalcMethod::Num)> GFuncCalcMethodsStrs = {
+        "UHFCALC", "UBHWTCALC", "FULLDESIGN"};
 
     struct ThermophysicalProps // LCOV_EXCL_LINE
     {
