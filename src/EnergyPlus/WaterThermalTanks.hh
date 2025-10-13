@@ -302,6 +302,7 @@ namespace WaterThermalTanks {
         bool StandAlone;                                            // Flag for operation with no plant connections (no use nodes)
         Sched::Schedule *availSched = nullptr;                      // Availability Schedule
         Sched::Schedule *setptTempSched = nullptr;                  // Setpoint Temperature Schedule
+        Sched::Schedule *dxCoilAvailSched = nullptr;                // DX WaterHeating Coil Availability Schedule
         Real64 DeadBandTempDiff;                                    // Dead band temperature difference (cut-in temperature)
         Real64 Capacity;                                            // Heat Pump rated capacity (W)
         Real64 BackupElementCapacity;                               // Tank backup element capacity (W)

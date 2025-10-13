@@ -53851,17 +53851,22 @@ Coil:Cooling:DX:VariableSpeed,
         \memo wet coil when compressor cycles off with continuous fan operation. Requires two to
         \memo ten sets of performance data and will interpolate between speeds. Modeled as a
         \memo single coil with variable-speed compressor.
-        \min-fields 35
+        \min-fields 36
    A1,  \field Name
         \required-field
         \type alpha
         \reference CoolingCoilsDXVariableSpeed
         \reference DesuperHeatingCoilSources
         \reference AFNCoilNames
-   A2,  \field Indoor Air Inlet Node Name
+   A2 , \field Availability Schedule Name
+        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+        \note If this field is blank, the system is always available.
+        \type object-list
+        \object-list ScheduleNames
+   A3,  \field Indoor Air Inlet Node Name
         \required-field
         \type node
-   A3,  \field Indoor Air Outlet Node Name
+   A4,  \field Indoor Air Outlet Node Name
         \required-field
         \type node
    N1,  \field Number of Speeds
@@ -53918,18 +53923,18 @@ Coil:Cooling:DX:VariableSpeed,
         \default 60
         \note Programmed time delay for fan to shut off after compressor cycle off.
         \note Enter 0 when fan operating mode is continuous
-   A4,  \field Energy Part Load Fraction Curve Name
+   A5,  \field Energy Part Load Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*PLR + c*PLR**2
         \note cubic curve = a + b*PLR + c*PLR**2 + d*PLR**3
         \note PLR = part load ratio (cooling load/steady state capacity)
-   A5,  \field Condenser Air Inlet Node Name
+   A6,  \field Condenser Air Inlet Node Name
         \type node
         \note Enter the name of an outdoor air node. This node name is also specified in
         \note an OutdoorAir:Node or OutdoorAir:NodeList object.
-   A6,  \field Condenser Type
+   A7,  \field Condenser Type
         \type choice
         \key AirCooled
         \key EvaporativelyCooled
@@ -53947,7 +53952,7 @@ Coil:Cooling:DX:VariableSpeed,
         \default 0.0
         \units W
         \ip-units W
-   A7,  \field Crankcase Heater Capacity Function of Temperature Curve Name
+   A8,  \field Crankcase Heater Capacity Function of Temperature Curve Name
         \note A Curve:* or Table:Lookup object encoding the relationship between
         \note the crankcase heater capacity and the outdoor air temperature. When this field is
         \note missing or empty, constant crankcase heater capacity will be assumed.
@@ -53962,10 +53967,10 @@ Coil:Cooling:DX:VariableSpeed,
         \type real
         \default -25.0
         \units C
-   A8,  \field Supply Water Storage Tank Name
+   A9,  \field Supply Water Storage Tank Name
         \type object-list
         \object-list WaterStorageTankNames
-   A9,  \field Condensate Collection Water Storage Tank Name
+   A10, \field Condensate Collection Water Storage Tank Name
         \type object-list
         \object-list WaterStorageTankNames
    N14, \field Basin Heater Capacity
@@ -53985,7 +53990,7 @@ Coil:Cooling:DX:VariableSpeed,
         \default 2.0
         \note This field is only used for Condenser Type = EvaporativelyCooled.
         \note Enter the outdoor dry-bulb temperature when the basin heater turns on.
-   A10, \field Basin Heater Operating Schedule Name
+   A11, \field Basin Heater Operating Schedule Name
         \type object-list
         \object-list ScheduleNames
         \note This field is only used for Condenser Type = EvaporativelyCooled.
@@ -54050,28 +54055,28 @@ Coil:Cooling:DX:VariableSpeed,
         \minimum 0
         \maximum 1.0
         \note This field is only used for Condenser Type = EvaporativelyCooled
-   A11, \field Speed 1 Total Cooling Capacity Function of Temperature Curve Name
+   A12, \field Speed 1 Total Cooling Capacity Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A12, \field Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A13, \field Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A13, \field Speed 1 Energy Input Ratio Function of Temperature Curve Name
+   A14, \field Speed 1 Energy Input Ratio Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A14, \field Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A15, \field Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
@@ -54129,25 +54134,25 @@ Coil:Cooling:DX:VariableSpeed,
         \type real
         \minimum 0
         \maximum 1.0
-   A15, \field Speed 2 Total Cooling Capacity Function of Temperature Curve Name
+   A16, \field Speed 2 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A16, \field Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A17, \field Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A17, \field Speed 2 Energy Input Ratio Function of Temperature Curve Name
+   A18, \field Speed 2 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A18, \field Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A19, \field Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -54204,25 +54209,25 @@ Coil:Cooling:DX:VariableSpeed,
         \type real
         \minimum 0
         \maximum 1.0
-   A19, \field Speed 3 Total Cooling Capacity Function of Temperature Curve Name
+   A20, \field Speed 3 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A20, \field Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A21, \field Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A21, \field Speed 3 Energy Input Ratio Function of Temperature Curve Name
+   A22, \field Speed 3 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A22, \field Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A23, \field Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -54279,25 +54284,25 @@ Coil:Cooling:DX:VariableSpeed,
         \type real
         \minimum 0
         \maximum 1.0
-   A23, \field Speed 4 Total Cooling Capacity Function of Temperature Curve Name
+   A24, \field Speed 4 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A24, \field Speed 4 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A25, \field Speed 4 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A25, \field Speed 4 Energy Input Ratio Function of Temperature Curve Name
+   A26, \field Speed 4 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A26, \field Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A27, \field Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -54354,25 +54359,25 @@ Coil:Cooling:DX:VariableSpeed,
         \type real
         \minimum 0
         \maximum 1.0
-   A27, \field Speed 5 Total Cooling Capacity Function of Temperature Curve Name
+   A28, \field Speed 5 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A28, \field Speed 5 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A29, \field Speed 5 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A29, \field Speed 5 Energy Input Ratio Function of Temperature Curve Name
+   A30, \field Speed 5 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A30, \field Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A31, \field Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -54429,25 +54434,25 @@ Coil:Cooling:DX:VariableSpeed,
         \type real
         \minimum 0
         \maximum 1.0
-   A31, \field Speed 6 Total Cooling Capacity Function of Temperature Curve Name
+   A32, \field Speed 6 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A32, \field Speed 6 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A33, \field Speed 6 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A33, \field Speed 6 Energy Input Ratio Function of Temperature Curve Name
+   A34, \field Speed 6 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A34, \field Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A35, \field Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -54504,25 +54509,25 @@ Coil:Cooling:DX:VariableSpeed,
         \type real
         \minimum 0
         \maximum 1.0
-   A35, \field Speed 7 Total Cooling Capacity Function of Temperature Curve Name
+   A36, \field Speed 7 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A36, \field Speed 7 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A37, \field Speed 7 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A37, \field Speed 7 Energy Input Ratio Function of Temperature Curve Name
+   A38, \field Speed 7 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A38, \field Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A39, \field Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -54579,25 +54584,25 @@ Coil:Cooling:DX:VariableSpeed,
         \type real
         \minimum 0
         \maximum 1.0
-   A39, \field Speed 8 Total Cooling Capacity Function of Temperature Curve Name
+   A40, \field Speed 8 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A40, \field Speed 8 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A41, \field Speed 8 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A41, \field Speed 8 Energy Input Ratio Function of Temperature Curve Name
+   A42, \field Speed 8 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A42, \field Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A43, \field Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -54656,25 +54661,25 @@ Coil:Cooling:DX:VariableSpeed,
         \minimum 0
         \maximum 1.0
         \note optional
-   A43, \field Speed 9 Total Cooling Capacity Function of Temperature Curve Name
+   A44, \field Speed 9 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A44, \field Speed 9 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A45, \field Speed 9 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A45, \field Speed 9 Energy Input Ratio Function of Temperature Curve Name
+   A46, \field Speed 9 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A46, \field Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A47, \field Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -54733,26 +54738,26 @@ Coil:Cooling:DX:VariableSpeed,
         \minimum 0
         \maximum 1.0
         \note optional
-   A47, \field Speed 10 Total Cooling Capacity Function of Temperature Curve Name
+   A48, \field Speed 10 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A48, \field Speed 10 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A49, \field Speed 10 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A49, \field Speed 10 Energy Input Ratio Function of Temperature Curve Name
+   A50, \field Speed 10 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*odb + e*odb**2 + f*wb*odb
         \note wb = entering wet-bulb temperature (C)
         \note odb = air entering temperature seen by the condenser (C)
-   A50; \field Speed 10 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A51; \field Speed 10 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -56717,16 +56722,21 @@ Coil:Heating:DX:VariableSpeed,
         \memo (includes electric compressor and outdoor fan), variable-speed, with defrost
         \memo controls. Requires two to ten sets of performance data and will interpolate between
         \memo speeds.
-        \min-fields 26
+        \min-fields 27
    A1,  \field Name
         \required-field
         \type alpha
         \reference HeatingCoilsDXVariableSpeed
         \reference AFNCoilNames
-   A2,  \field Indoor Air Inlet Node Name
+   A2 , \field Availability Schedule Name
+        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+        \note If this field is blank, the system is always available.
+        \type object-list
+        \object-list ScheduleNames
+   A3,  \field Indoor Air Inlet Node Name
         \required-field
         \type node
-   A3,  \field Indoor Air Outlet Node Name
+   A4,  \field Indoor Air Outlet Node Name
         \required-field
         \type node
    N1,  \field Number of Speeds
@@ -56750,14 +56760,14 @@ Coil:Heating:DX:VariableSpeed,
         \type real
         \autosizable
         \default autosize
-   A4,  \field Energy Part Load Fraction Curve Name
+   A5,  \field Energy Part Load Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*PLR + c*PLR**2
         \note cubic curve = a + b*PLR + c*PLR**2 + d*PLR**3
         \note PLR = part load ratio (heating load/steady state capacity)
-   A5,  \field Defrost Energy Input Ratio Function of Temperature Curve Name
+   A6,  \field Defrost Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note biquadratic curve = a + b*wb + c*wb**2 + d*oat + e*oat**2 + f*wb*oat
@@ -56790,7 +56800,7 @@ Coil:Heating:DX:VariableSpeed,
         \default 0.0
         \units W
         \ip-units W
-   A6,  \field Crankcase Heater Capacity Function of Temperature Curve Name
+   A7,  \field Crankcase Heater Capacity Function of Temperature Curve Name
         \note A Curve:* or Table:Lookup object encoding the relationship between
         \note the crankcase heater capacity and the outdoor air temperature. When this field is
         \note missing or empty, constant crankcase heater capacity will be assumed.
@@ -56801,12 +56811,12 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \default 10.0
         \units C
-   A7,  \field Defrost Strategy
+   A8,  \field Defrost Strategy
         \type choice
         \key ReverseCycle
         \key Resistive
         \default ReverseCycle
-   A8,  \field Defrost Control
+   A9,  \field Defrost Control
         \type choice
         \key Timed
         \key OnDemand
@@ -56863,28 +56873,28 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A9,  \field Speed 1 Heating Capacity Function of Temperature Curve Name
+   A10, \field Speed 1 Heating Capacity Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A10, \field Speed 1 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A11, \field Speed 1 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A11, \field Speed 1 Energy Input Ratio Function of Temperature Curve Name
+   A12, \field Speed 1 Energy Input Ratio Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A12, \field Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A13, \field Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
@@ -56926,25 +56936,25 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A13, \field Speed 2 Heating Capacity Function of Temperature Curve Name
+   A14, \field Speed 2 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A14, \field Speed 2 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A15, \field Speed 2 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A15, \field Speed 2 Energy Input Ratio Function of Temperature Curve Name
+   A16, \field Speed 2 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A16, \field Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A17, \field Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -56985,26 +56995,26 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A17, \field Speed 3 Heating Capacity Function of Temperature Curve Name
+   A18, \field Speed 3 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A18, \field Speed 3 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A19, \field Speed 3 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A19, \field Speed 3 Energy Input Ratio Function of Temperature Curve Name
+   A20, \field Speed 3 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A20, \field Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A21, \field Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -57045,25 +57055,25 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A21, \field Speed 4 Heating Capacity Function of Temperature Curve Name
+   A22, \field Speed 4 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A22, \field Speed 4 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A23, \field Speed 4 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A23, \field Speed 4 Energy Input Ratio Function of Temperature Curve Name
+   A24, \field Speed 4 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A24, \field Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A25, \field Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -57104,25 +57114,25 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A25, \field Speed 5 Heating Capacity Function of Temperature Curve Name
+   A26, \field Speed 5 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A26, \field Speed 5 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A27, \field Speed 5 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A27, \field Speed 5 Energy Input Ratio Function of Temperature Curve Name
+   A28, \field Speed 5 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A28, \field Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A29, \field Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -57163,25 +57173,25 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A29, \field Speed 6 Heating Capacity Function of Temperature Curve Name
+   A30, \field Speed 6 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A30, \field Speed 6 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A31, \field Speed 6 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A31, \field Speed 6 Energy Input Ratio Function of Temperature Curve Name
+   A32, \field Speed 6 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A32, \field Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A33, \field Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -57222,25 +57232,25 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A33, \field Speed 7 Heating Capacity Function of Temperature Curve Name
+   A34, \field Speed 7 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A34, \field Speed 7 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A35, \field Speed 7 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A35, \field Speed 7 Energy Input Ratio Function of Temperature Curve Name
+   A36, \field Speed 7 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A36, \field Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A37, \field Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -57281,25 +57291,25 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A37, \field Speed 8 Heating Capacity Function of Temperature Curve Name
+   A38, \field Speed 8 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A38, \field Speed 8 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A39, \field Speed 8 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A39, \field Speed 8 Energy Input Ratio Function of Temperature Curve Name
+   A40, \field Speed 8 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A40, \field Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A41, \field Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -57340,25 +57350,25 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A41, \field Speed 9 Heating Capacity Function of Temperature Curve Name
+   A42, \field Speed 9 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A42, \field Speed 9 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A43, \field Speed 9 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A43, \field Speed 9 Energy Input Ratio Function of Temperature Curve Name
+   A44, \field Speed 9 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A44, \field Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A45, \field Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -57399,25 +57409,25 @@ Coil:Heating:DX:VariableSpeed,
         \minimum 0.0
         \maximum 1505.0
         \default 934.4
-   A45, \field Speed 10 Heating Capacity Function of Temperature Curve Name
+   A46, \field Speed 10 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A46, \field Speed 10 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A47, \field Speed 10 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A47, \field Speed 10 Energy Input Ratio Function of Temperature Curve Name
+   A48, \field Speed 10 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*oat + e*oat**2 + f*db*oat
         \note db = entering air dry-bulb temperature (C)
         \note oat = air entering temperature seen by the evaporator (C)
-   A48; \field Speed 10 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A49; \field Speed 10 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
@@ -57431,14 +57441,19 @@ Coil:Cooling:WaterToAirHeatPump:ParameterEstimation,
         \memo evaporation from wet coil when compressor cycles off with continuous fan operation.
         \memo Parameter estimation model is a deterministic model that requires a consistent set of
         \memo parameters to describe the operating conditions of the heat pump components.
-        \min-fields 31
+        \min-fields 32
    A1 , \field Name
         \required-field
         \type alpha
         \reference CoolingCoilsWaterToAirHP
         \reference-class-name validBranchEquipmentTypes
         \reference validBranchEquipmentNames
-   A2 , \field Compressor Type
+   A2 , \field Availability Schedule Name
+        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+        \note If this field is blank, the system is always available.
+        \type object-list
+        \object-list ScheduleNames
+   A3 , \field Compressor Type
         \required-field
         \type choice
         \key Reciprocating
@@ -57447,7 +57462,7 @@ Coil:Cooling:WaterToAirHeatPump:ParameterEstimation,
         \note Parameters 1-5 are as named below.
         \note Parameters 6-10 depend on the type of compressor and fluid.
         \note Refer to the InputOutputReference on the parameters required
-   A3,  \field Refrigerant Type
+   A4,  \field Refrigerant Type
         \type object-list
         \object-list FluidNames
         \default R22
@@ -57492,16 +57507,16 @@ Coil:Cooling:WaterToAirHeatPump:ParameterEstimation,
         \type real
         \minimum 0.0
         \units Pa
-   A4,  \field Water Inlet Node Name
+   A5,  \field Water Inlet Node Name
         \required-field
         \type node
-   A5,  \field Water Outlet Node Name
+   A6,  \field Water Outlet Node Name
         \required-field
         \type node
-   A6,  \field Air Inlet Node Name
+   A7,  \field Air Inlet Node Name
         \required-field
         \type node
-   A7,  \field Air Outlet Node Name
+   A8,  \field Air Outlet Node Name
         \required-field
         \type node
    N7,  \field Load Side Total Heat Transfer Coefficient
@@ -57596,7 +57611,7 @@ Coil:Cooling:WaterToAirHeatPump:ParameterEstimation,
         \units W/K
         \minimum 0.0
         \type real
-   A8,  \field Part Load Fraction Correlation Curve Name
+   A9,  \field Part Load Fraction Correlation Curve Name
         \note quadratic curve = a + b*PLR + c*PLR**2
         \note cubic curve = a + b*PLR + c*PLR**2 + d*PLR**3
         \note PLR = part load ratio (cooling load/steady state capacity)
@@ -57632,14 +57647,19 @@ Coil:Heating:WaterToAirHeatPump:ParameterEstimation,
         \memo compressor), single-speed, parameter estimation model. Parameter estimation model is
         \memo a deterministic model that requires a consistent set of parameters to describe
         \memo the operating conditions of the heat pump components.
-        \min-fields 25
+        \min-fields 26
    A1 , \field Name
         \required-field
         \type alpha
         \reference HeatingCoilsWaterToAirHP
         \reference-class-name validBranchEquipmentTypes
         \reference validBranchEquipmentNames
-   A2 , \field Compressor Type
+   A2 , \field Availability Schedule Name
+        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+        \note If this field is blank, the system is always available.
+        \type object-list
+        \object-list ScheduleNames      
+   A3 , \field Compressor Type
         \required-field
         \type choice
         \key Reciprocating
@@ -57648,7 +57668,7 @@ Coil:Heating:WaterToAirHeatPump:ParameterEstimation,
         \note Parameters 1-4 are as named below.
         \note Parameters 5-9 depend on the type of compressor.
         \note Refer to the InputOutputReference on the parameters required
-   A3,  \field Refrigerant Type
+   A4,  \field Refrigerant Type
         \type object-list
         \object-list FluidNames
         \default R22
@@ -57674,16 +57694,16 @@ Coil:Heating:WaterToAirHeatPump:ParameterEstimation,
         \type real
         \minimum 0.0
         \units Pa
-   A4,  \field Water Inlet Node Name
+   A5,  \field Water Inlet Node Name
         \required-field
         \type node
-   A5,  \field Water Outlet Node Name
+   A6,  \field Water Outlet Node Name
         \required-field
         \type node
-   A6,  \field Air Inlet Node Name
+   A7,  \field Air Inlet Node Name
         \required-field
         \type node
-   A7,  \field Air Outlet Node Name
+   A8,  \field Air Outlet Node Name
         \required-field
         \type node
    N5,  \field Load Side Total Heat Transfer Coefficient
@@ -57773,7 +57793,7 @@ Coil:Heating:WaterToAirHeatPump:ParameterEstimation,
         \units W/K
         \minimum 0.0
         \type real
-   A8;  \field Part Load Fraction Correlation Curve Name
+   A9;  \field Part Load Fraction Correlation Curve Name
         \note quadratic curve = a + b*PLR + c*PLR**2
         \note cubic curve = a + b*PLR + c*PLR**2 + d*PLR**3
         \note PLR = part load ratio (heating load/steady state capacity)
@@ -57786,7 +57806,7 @@ Coil:Cooling:WaterToAirHeatPump:EquationFit,
         \memo compressor), single-speed, equation-fit model. Optional inputs for moisture
         \memo evaporation from wet coil when compressor cycles off with continuous fan operation.
         \memo Equation-fit model uses normalized curves to describe the heat pump performance.
-        \min-fields 22
+        \min-fields 23
    A1,  \field Name
         \required-field
         \type alpha
@@ -57795,16 +57815,21 @@ Coil:Cooling:WaterToAirHeatPump:EquationFit,
         \reference validBranchEquipmentNames
         \reference DesuperHeatingWaterOnlySources
         \reference AFNCoilNames
-   A2,  \field Water Inlet Node Name
+   A2 , \field Availability Schedule Name
+        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+        \note If this field is blank, the system is always available.
+        \type object-list
+        \object-list ScheduleNames
+   A3,  \field Water Inlet Node Name
         \required-field
         \type node
-   A3,  \field Water Outlet Node Name
+   A4,  \field Water Outlet Node Name
         \required-field
         \type node
-   A4,  \field Air Inlet Node Name
+   A5,  \field Air Inlet Node Name
         \required-field
         \type node
-   A5,  \field Air Outlet Node Name
+   A6,  \field Air Outlet Node Name
         \required-field
         \type node
    N1,  \field Rated Air Flow Rate
@@ -57863,19 +57888,19 @@ Coil:Cooling:WaterToAirHeatPump:EquationFit,
         \type real
         \default 19.0
         \minimum> 0
-   A6,  \field Total Cooling Capacity Curve Name
+   A7,  \field Total Cooling Capacity Curve Name
         \required-field
         \type object-list
         \object-list QuadvariateFunctions
-   A7,  \field Sensible Cooling Capacity Curve Name
+   A8,  \field Sensible Cooling Capacity Curve Name
         \required-field
         \type object-list
         \object-list QuintvariateFunctions
-   A8,  \field Cooling Power Consumption Curve Name
+   A9,  \field Cooling Power Consumption Curve Name
         \required-field
         \type object-list
         \object-list QuadvariateFunctions
-   A9,  \field Part Load Fraction Correlation Curve Name
+   A10, \field Part Load Fraction Correlation Curve Name
         \note quadratic curve = a + b*PLR + c*PLR**2
         \note cubic curve = a + b*PLR + c*PLR**2 + d*PLR**3
         \note PLR = part load ratio (cooling load/steady state capacity)
@@ -57934,7 +57959,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \memo Equation-fit model uses normalized curves to describe the heat pump performance.
         \memo Requires two to ten sets of performance data and will interpolate between speeds.
         \memo Modeled as a single coil with variable-speed compressor.
-        \min-fields 30
+        \min-fields 31
    A1,  \field Name
         \required-field
         \type alpha
@@ -57943,16 +57968,21 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \reference validBranchEquipmentNames
         \reference DesuperHeatingWaterOnlySources
         \reference AFNCoilNames
-   A2,  \field Water-to-Refrigerant HX Water Inlet Node Name
+   A2 , \field Availability Schedule Name
+        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+        \note If this field is blank, the system is always available.
+        \type object-list
+        \object-list ScheduleNames
+   A3,  \field Water-to-Refrigerant HX Water Inlet Node Name
         \required-field
         \type node
-   A3,  \field Water-to-Refrigerant HX Water Outlet Node Name
+   A4,  \field Water-to-Refrigerant HX Water Outlet Node Name
         \required-field
         \type node
-   A4,  \field Indoor Air Inlet Node Name
+   A5,  \field Indoor Air Inlet Node Name
         \required-field
         \type node
-   A5,  \field Indoor Air Outlet Node Name
+   A6,  \field Indoor Air Outlet Node Name
         \required-field
         \type node
    N1,  \field Number of Speeds
@@ -58021,7 +58051,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \type real
         \minimum 0
         \default 0
-   A6,  \field Energy Part Load Fraction Curve Name
+   A7,  \field Energy Part Load Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
@@ -58056,42 +58086,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \type real
         \minimum 0
         \required-field
-   A7,  \field Speed 1 Total Cooling Capacity Function of Temperature Curve Name
+   A8,  \field Speed 1 Total Cooling Capacity Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A8,  \field Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A9,  \field Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A9,  \field Speed 1 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A10, \field Speed 1 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A10, \field Speed 1 Energy Input Ratio Function of Temperature Curve Name
+   A11, \field Speed 1 Energy Input Ratio Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A11, \field Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A12, \field Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A12, \field Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A13, \field Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
@@ -58103,7 +58133,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \type real
         \minimum 0
         \required-field
-   A13, \field Speed 1 Waste Heat Function of Temperature Curve Name
+   A14, \field Speed 1 Waste Heat Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
@@ -58133,37 +58163,37 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A14, \field Speed 2 Total Cooling Capacity Function of Temperature Curve Name
+   A15, \field Speed 2 Total Cooling Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A15, \field Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A16, \field Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A16, \field Speed 2 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A17, \field Speed 2 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A17, \field Speed 2 Energy Input Ratio Function of Temperature Curve Name
+   A18, \field Speed 2 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A18, \field Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A19, \field Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A19, \field Speed 2 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A20, \field Speed 2 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
@@ -58173,7 +58203,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A20, \field Speed 2 Waste Heat Function of Temperature Curve Name
+   A21, \field Speed 2 Waste Heat Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
@@ -58202,42 +58232,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A21, \field Speed 3 Total Cooling Capacity Function of Temperature Curve Name
+   A22, \field Speed 3 Total Cooling Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A22, \field Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A23, \field Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A23, \field Speed 3 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A24, \field Speed 3 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A24, \field Speed 3 Energy Input Ratio Function of Temperature Curve Name
+   A25, \field Speed 3 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A25, \field Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A26, \field Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A26, \field Speed 3 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A27, \field Speed 3 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -58248,7 +58278,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A27, \field Speed 3 Waste Heat Function of Temperature Curve Name
+   A28, \field Speed 3 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -58278,42 +58308,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A28, \field Speed 4 Total Cooling Capacity Function of Temperature Curve Name
+   A29, \field Speed 4 Total Cooling Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A29, \field Speed 4 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A30, \field Speed 4 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A30, \field Speed 4 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A31, \field Speed 4 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A31, \field Speed 4 Energy Input Ratio Function of Temperature Curve Name
+   A32, \field Speed 4 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A32, \field Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A33, \field Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A33, \field Speed 4 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A34, \field Speed 4 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -58324,7 +58354,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A34, \field Speed 4 Waste Heat Function of Temperature Curve Name
+   A35, \field Speed 4 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -58354,42 +58384,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A35, \field Speed 5 Total Cooling Capacity Function of Temperature Curve Name
+   A36, \field Speed 5 Total Cooling Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A36, \field Speed 5 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A37, \field Speed 5 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A37, \field Speed 5 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A38, \field Speed 5 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A38, \field Speed 5 Energy Input Ratio Function of Temperature Curve Name
+   A39, \field Speed 5 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A39, \field Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A40, \field Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A40, \field Speed 5 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A41, \field Speed 5 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -58400,7 +58430,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A41, \field Speed 5 Waste Heat Function of Temperature Curve Name
+   A42, \field Speed 5 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -58430,42 +58460,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A42, \field Speed 6 Total Cooling Capacity Function of Temperature Curve Name
+   A43, \field Speed 6 Total Cooling Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A43, \field Speed 6 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A44, \field Speed 6 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A44, \field Speed 6 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A45, \field Speed 6 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A45, \field Speed 6 Energy Input Ratio Function of Temperature Curve Name
+   A46, \field Speed 6 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A46, \field Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A47, \field Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A47, \field Speed 6 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A48, \field Speed 6 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -58476,7 +58506,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A48, \field Speed 6 Waste Heat Function of Temperature Curve Name
+   A49, \field Speed 6 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -58506,42 +58536,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A49, \field Speed 7 Total Cooling Capacity Function of Temperature Curve Name
+   A50, \field Speed 7 Total Cooling Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A50, \field Speed 7 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A51, \field Speed 7 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A51, \field Speed 7 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A52, \field Speed 7 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A52, \field Speed 7 Energy Input Ratio Function of Temperature Curve Name
+   A53, \field Speed 7 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A53, \field Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A54, \field Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A54, \field Speed 7 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A55, \field Speed 7 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -58552,7 +58582,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A55, \field Speed 7 Waste Heat Function of Temperature Curve Name
+   A56, \field Speed 7 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -58582,42 +58612,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A56, \field Speed 8 Total Cooling Capacity Function of Temperature Curve Name
+   A57, \field Speed 8 Total Cooling Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A57, \field Speed 8 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A58, \field Speed 8 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A58, \field Speed 8 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A59, \field Speed 8 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A59, \field Speed 8 Energy Input Ratio Function of Temperature Curve Name
+   A60, \field Speed 8 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A60, \field Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A61, \field Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A61, \field Speed 8 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A62, \field Speed 8 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -58628,7 +58658,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A62, \field Speed 8 Waste Heat Function of Temperature Curve Name
+   A63, \field Speed 8 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -58658,42 +58688,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A63, \field Speed 9 Total Cooling Capacity Function of Temperature Curve Name
+   A64, \field Speed 9 Total Cooling Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A64, \field Speed 9 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A65, \field Speed 9 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A65, \field Speed 9 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A66, \field Speed 9 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A66, \field Speed 9 Energy Input Ratio Function of Temperature Curve Name
+   A67, \field Speed 9 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A67, \field Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A68, \field Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A68, \field Speed 9 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A69, \field Speed 9 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -58704,7 +58734,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A69, \field Speed 9 Waste Heat Function of Temperature Curve Name
+   A70, \field Speed 9 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -58734,42 +58764,42 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A70, \field Speed 10 Total Cooling Capacity Function of Temperature Curve Name
+   A71, \field Speed 10 Total Cooling Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A71, \field Speed 10 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+   A72, \field Speed 10 Total Cooling Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A72, \field Speed 10 Total Cooling Capacity Function of Water Flow Fraction Curve Name
+   A73, \field Speed 10 Total Cooling Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A73, \field Speed 10 Energy Input Ratio Function of Temperature Curve Name
+   A74, \field Speed 10 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
         \note wb = entering wet-bulb temperature (C)
         \note ewt = water entering temperature seen by the condenser (C)
-   A74, \field Speed 10 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A75, \field Speed 10 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A75, \field Speed 10 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A76, \field Speed 10 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -58780,7 +58810,7 @@ Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A76; \field Speed 10 Waste Heat Function of Temperature Curve Name
+   A77; \field Speed 10 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -58792,7 +58822,7 @@ Coil:Heating:WaterToAirHeatPump:EquationFit,
         \memo Direct expansion (DX) heating coil for water-to-air heat pump (includes electric
         \memo compressor), single-speed, equation-fit model. Equation-fit model uses normalized
         \memo curves to describe the heat pump performance.
-        \min-fields 15
+        \min-fields 16
    A1,  \field Name
         \required-field
         \type alpha
@@ -58800,16 +58830,21 @@ Coil:Heating:WaterToAirHeatPump:EquationFit,
         \reference-class-name validBranchEquipmentTypes
         \reference validBranchEquipmentNames
         \reference AFNCoilNames
-   A2,  \field Water Inlet Node Name
+   A2 , \field Availability Schedule Name
+        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+        \note If this field is blank, the system is always available.
+        \type object-list
+        \object-list ScheduleNames
+   A3,  \field Water Inlet Node Name
         \required-field
         \type node
-   A3,  \field Water Outlet Node Name
+   A4,  \field Water Outlet Node Name
         \required-field
         \type node
-   A4,  \field Air Inlet Node Name
+   A5,  \field Air Inlet Node Name
         \required-field
         \type node
-   A5,  \field Air Outlet Node Name
+   A6,  \field Air Outlet Node Name
         \required-field
         \type node
    N1,  \field Rated Air Flow Rate
@@ -58863,15 +58898,15 @@ Coil:Heating:WaterToAirHeatPump:EquationFit,
         \type real
         \minimum> 0
         \default 1.0
-   A6,  \field Heating Capacity Curve Name
+   A7,  \field Heating Capacity Curve Name
         \required-field
         \type object-list
         \object-list QuadvariateFunctions
-   A7,  \field Heating Power Consumption Curve Name
+   A8,  \field Heating Power Consumption Curve Name
         \required-field
         \type object-list
         \object-list QuadvariateFunctions
-   A8;  \field Part Load Fraction Correlation Curve Name
+   A9;  \field Part Load Fraction Correlation Curve Name
         \note quadratic curve = a + b*PLR + c*PLR**2
         \note cubic curve = a + b*PLR + c*PLR**2 + d*PLR**3
         \note PLR = part load ratio (heat load/steady state capacity)
@@ -58884,7 +58919,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \memo compressor), variable-speed, equation-fit model. Equation-fit model uses normalized
         \memo curves to describe the heat pump performance. Requires two to ten sets of performance
         \memo data and will interpolate between speeds.
-        \min-fields 23
+        \min-fields 24
    A1,  \field Name
         \required-field
         \type alpha
@@ -58892,16 +58927,21 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \reference-class-name validBranchEquipmentTypes
         \reference validBranchEquipmentNames
         \reference AFNCoilNames
-   A2,  \field Water-to-Refrigerant HX Water Inlet Node Name
+   A2 , \field Availability Schedule Name
+        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+        \note If this field is blank, the system is always available.
+        \type object-list
+        \object-list ScheduleNames
+   A3,  \field Water-to-Refrigerant HX Water Inlet Node Name
         \required-field
         \type node
-   A3,  \field Water-to-Refrigerant HX Water Outlet Node Name
+   A4,  \field Water-to-Refrigerant HX Water Outlet Node Name
         \required-field
         \type node
-   A4,  \field Indoor Air Inlet Node Name
+   A5,  \field Indoor Air Inlet Node Name
         \required-field
         \type node
-   A5,  \field Indoor Air Outlet Node Name
+   A6,  \field Indoor Air Outlet Node Name
         \required-field
         \type node
    N1,  \field Number of Speeds
@@ -58931,7 +58971,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \type real
         \autosizable
         \default autosize
-   A6,  \field Energy Part Load Fraction Curve Name
+   A7,  \field Energy Part Load Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
@@ -58960,42 +59000,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \type real
         \minimum 0
         \required-field
-   A7,  \field Speed 1 Heating Capacity Function of Temperature Curve Name
+   A8,  \field Speed 1 Heating Capacity Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A8,  \field Speed 1 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A9,  \field Speed 1 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A9,  \field Speed 1 Heating Capacity Function of Water Flow Fraction Curve Name
+   A10, \field Speed 1 Heating Capacity Function of Water Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A10, \field Speed 1 Energy Input Ratio Function of Temperature Curve Name
+   A11, \field Speed 1 Energy Input Ratio Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A11, \field Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A12, \field Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A12, \field Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A13, \field Speed 1 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \required-field
         \type object-list
         \object-list UnivariateFunctions
@@ -59007,7 +59047,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \type real
         \minimum 0
         \required-field
-   A13, \field Speed 1 Waste Heat Function of Temperature Curve Name
+   A14, \field Speed 1 Waste Heat Function of Temperature Curve Name
         \required-field
         \type object-list
         \object-list BivariateFunctions
@@ -59032,37 +59072,37 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A14, \field Speed 2 Heating Capacity Function of Temperature Curve Name
+   A15, \field Speed 2 Heating Capacity Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A15, \field Speed 2 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A16, \field Speed 2 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A16, \field Speed 2 Heating Capacity Function of Water Flow Fraction Curve Name
+   A17, \field Speed 2 Heating Capacity Function of Water Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A17, \field Speed 2 Energy Input Ratio Function of Temperature Curve Name
+   A18, \field Speed 2 Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A18, \field Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A19, \field Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A19, \field Speed 2 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A20, \field Speed 2 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59073,7 +59113,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A20, \field Speed 2 Waste Heat Function of Temperature Curve Name
+   A21, \field Speed 2 Waste Heat Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
@@ -59097,42 +59137,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A21, \field Speed 3 Heating Capacity Function of Temperature Curve Name
+   A22, \field Speed 3 Heating Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A22, \field Speed 3 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A23, \field Speed 3 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A23, \field Speed 3 Heating Capacity Function of Water Flow Fraction Curve Name
+   A24, \field Speed 3 Heating Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A24, \field Speed 3 Energy Input Ratio Function of Temperature Curve Name
+   A25, \field Speed 3 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A25, \field Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A26, \field Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A26, \field Speed 3 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A27, \field Speed 3 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59143,7 +59183,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A27, \field Speed 3 Waste Heat Function of Temperature Curve Name
+   A28, \field Speed 3 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -59168,42 +59208,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A28, \field Speed 4 Heating Capacity Function of Temperature Curve Name
+   A29, \field Speed 4 Heating Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A29, \field Speed 4 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A30, \field Speed 4 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A30, \field Speed 4 Heating Capacity Function of Water Flow Fraction Curve Name
+   A31, \field Speed 4 Heating Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A31, \field Speed 4 Energy Input Ratio Function of Temperature Curve Name
+   A32, \field Speed 4 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A32, \field Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A33, \field Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A33, \field Speed 4 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A34, \field Speed 4 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59214,7 +59254,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A34, \field Speed 4 Waste Heat Function of Temperature Curve Name
+   A35, \field Speed 4 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -59239,42 +59279,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A35, \field Speed 5 Heating Capacity Function of Temperature Curve Name
+   A36, \field Speed 5 Heating Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A36, \field Speed 5 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A37, \field Speed 5 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A37, \field Speed 5 Heating Capacity Function of Water Flow Fraction Curve Name
+   A38, \field Speed 5 Heating Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A38, \field Speed 5 Energy Input Ratio Function of Temperature Curve Name
+   A39, \field Speed 5 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A39, \field Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A40, \field Speed 5 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A40, \field Speed 5 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A41, \field Speed 5 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59285,7 +59325,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A41, \field Speed 5 Waste Heat Function of Temperature Curve Name
+   A42, \field Speed 5 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -59310,42 +59350,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A42, \field Speed 6 Heating Capacity Function of Temperature Curve Name
+   A43, \field Speed 6 Heating Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A43, \field Speed 6 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A44, \field Speed 6 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A44, \field Speed 6 Heating Capacity Function of Water Flow Fraction Curve Name
+   A45, \field Speed 6 Heating Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A45, \field Speed 6 Energy Input Ratio Function of Temperature Curve Name
+   A46, \field Speed 6 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A46, \field Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A47, \field Speed 6 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A47, \field Speed 6 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A48, \field Speed 6 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59356,7 +59396,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A48, \field Speed 6 Waste Heat Function of Temperature Curve Name
+   A49, \field Speed 6 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -59381,42 +59421,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A49, \field Speed 7 Heating Capacity Function of Temperature Curve Name
+   A50, \field Speed 7 Heating Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A50, \field Speed 7 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A51, \field Speed 7 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A51, \field Speed 7 Heating Capacity Function of Water Flow Fraction Curve Name
+   A52, \field Speed 7 Heating Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A52, \field Speed 7 Energy Input Ratio Function of Temperature Curve Name
+   A53, \field Speed 7 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A53, \field Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A54, \field Speed 7 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A54, \field Speed 7 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A55, \field Speed 7 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59427,7 +59467,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A55, \field Speed 7 Waste Heat Function of Temperature Curve Name
+   A56, \field Speed 7 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -59452,42 +59492,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A56, \field Speed 8 Heating Capacity Function of Temperature Curve Name
+   A57, \field Speed 8 Heating Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A57, \field Speed 8 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A58, \field Speed 8 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A58, \field Speed 8 Heating Capacity Function of Water Flow Fraction Curve Name
+   A59, \field Speed 8 Heating Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A59, \field Speed 8 Energy Input Ratio Function of Temperature Curve Name
+   A60, \field Speed 8 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A60, \field Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A61, \field Speed 8 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A61, \field Speed 8 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A62, \field Speed 8 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59498,7 +59538,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A62, \field Speed 8 Waste Heat Function of Temperature Curve Name
+   A63, \field Speed 8 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -59523,42 +59563,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A63, \field Speed 9 Heating Capacity Function of Temperature Curve Name
+   A64, \field Speed 9 Heating Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A64, \field Speed 9 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A65, \field Speed 9 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A65, \field Speed 9 Heating Capacity Function of Water Flow Fraction Curve Name
+   A66, \field Speed 9 Heating Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A66, \field Speed 9 Energy Input Ratio Function of Temperature Curve Name
+   A67, \field Speed 9 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A67, \field Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A68, \field Speed 9 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A68, \field Speed 9 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A69, \field Speed 9 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59569,7 +59609,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A69, \field Speed 9 Waste Heat Function of Temperature Curve Name
+   A70, \field Speed 9 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -59594,42 +59634,42 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \ip-units gal/min
         \type real
         \minimum 0
-   A70, \field Speed 10 Heating Capacity Function of Temperature Curve Name
+   A71, \field Speed 10 Heating Capacity Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A71, \field Speed 10 Total Heating Capacity Function of Air Flow Fraction Curve Name
+   A72, \field Speed 10 Total Heating Capacity Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A72, \field Speed 10 Heating Capacity Function of Water Flow Fraction Curve Name
+   A73, \field Speed 10 Heating Capacity Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffw + c*ffw**2
         \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
         \note ffw = Fraction of the full load Water Flow
-   A73, \field Speed 10 Energy Input Ratio Function of Temperature Curve Name
+   A74, \field Speed 10 Energy Input Ratio Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
         \note curve = a + b*db + c*db**2 + d*ewt + e*ewt**2 + f*db*ewt
         \note db = entering air dry-bulb temperature (C)
         \note ewt = water entering temperature seen by the evaporator (C)
-   A74, \field Speed 10 Energy Input Ratio Function of Air Flow Fraction Curve Name
+   A75, \field Speed 10 Energy Input Ratio Function of Air Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
         \note quadratic curve = a + b*ffa + c*ffa**2
         \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
         \note ffa = Fraction of the full load Air Flow
-   A75, \field Speed 10 Energy Input Ratio Function of Water Flow Fraction Curve Name
+   A76, \field Speed 10 Energy Input Ratio Function of Water Flow Fraction Curve Name
         \note optional
         \type object-list
         \object-list UnivariateFunctions
@@ -59640,7 +59680,7 @@ Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,
         \units dimensionless
         \type real
         \minimum 0
-   A76; \field Speed 10 Waste Heat Function of Temperature Curve Name
+   A77; \field Speed 10 Waste Heat Function of Temperature Curve Name
         \note optional
         \type object-list
         \object-list BivariateFunctions
@@ -59652,12 +59692,17 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \memo Heat pump water heater (HPWH) heating coil, air-to-water direct-expansion (DX)
        \memo system which includes a water heating coil, evaporator air coil, evaporator
        \memo fan, electric compressor, and water pump. Part of a WaterHeater:HeatPump:PumpedCondenser system.
-       \min-fields 22
+       \min-fields 23
   A1 , \field Name
        \required-field
        \type alpha
        \reference HeatPumpWaterHeaterDXCoilsPumped
        \note Unique name for this instance of a heat pump water heater DX coil.
+  A2 , \field Availability Schedule Name
+       \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+       \note If this field is blank, the system is always available.
+       \type object-list
+       \object-list ScheduleNames
   N1 , \field Rated Heating Capacity
        \required-field
        \type real
@@ -59725,21 +59770,21 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note A warning message will be issued if the ratio of Rated Condenser Water Flow Rate
        \note to Heating Capacity is less than 1.79405E-8 m3/s/W (0.083 gpm/MBH)
        \note or greater than 8.97024E-8 m3/s/W (0.417 gpm/MBH), but the simulation will continue.
-  A2 , \field Evaporator Fan Power Included in Rated COP
+  A3 , \field Evaporator Fan Power Included in Rated COP
        \type choice
        \key Yes
        \key No
        \default Yes
        \note Select Yes if the evaporator fan power is included in the rated COP. This choice field
        \note impacts the calculation of compressor electric power.
-  A3 , \field Condenser Pump Power Included in Rated COP
+  A4 , \field Condenser Pump Power Included in Rated COP
        \type choice
        \key Yes
        \key No
        \default No
        \note Select Yes if the condenser pump power is included in the rated COP. This choice field
        \note impacts the calculation of compressor electric power.
-  A4 , \field Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
+  A5 , \field Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
        \type choice
        \key Yes
        \key No
@@ -59760,21 +59805,21 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \default 0.2
        \note Fraction of pump heat transferred to the condenser water. The pump is assumed
        \note to be located downstream of the condenser.
-  A5 , \field Evaporator Air Inlet Node Name
+  A6 , \field Evaporator Air Inlet Node Name
        \required-field
        \type node
        \note The node from which the DX coil draws its inlet air.
-  A6 , \field Evaporator Air Outlet Node Name
+  A7 , \field Evaporator Air Outlet Node Name
        \required-field
        \type node
        \note The node to which the DX coil sends its outlet air.
-  A7 , \field Condenser Water Inlet Node Name
+  A8 , \field Condenser Water Inlet Node Name
        \required-field
        \type node
        \note The node from which the DX coil condenser draws its inlet water.
        \note This name should match the source side outlet node name in the associated
        \note water heater tank object.
-  A8 , \field Condenser Water Outlet Node Name
+  A9 , \field Condenser Water Outlet Node Name
        \required-field
        \type node
        \note The node to which the DX coil condenser sends its outlet water.
@@ -59789,7 +59834,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note surrounding the compressor is below the Maximum Ambient Temperature for Crankcase
        \note Heater Operation and the DX coil is off. The ambient temperature surrounding the
        \note compressor is set by the WaterHeater:HeatPump:PumpedCondenser parent object (field Compressor Location).
-  A9 , \field Crankcase Heater Capacity Function of Temperature Curve Name
+  A10, \field Crankcase Heater Capacity Function of Temperature Curve Name
        \note A Curve:* or Table:Lookup object encoding the relationship between
        \note the crankcase heater capacity and the outdoor air temperature. When this field is
        \note missing or empty, constant crankcase heater capacity will be assumed.
@@ -59804,7 +59849,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note surrounding the compressor is below the Maximum Outdoor Temperature for Crankcase
        \note Heater Operation and the unit is off. The ambient temperature surrounding the
        \note compressor is set by the WaterHeater:HeatPump:PumpedCondenser parent object (field Compressor Location).
-  A10, \field Evaporator Air Temperature Type for Curve Objects
+  A11, \field Evaporator Air Temperature Type for Curve Objects
        \type choice
        \key DryBulbTemperature
        \key WetBulbTemperature
@@ -59812,7 +59857,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note Determines temperature type for heating capacity curves and
        \note heating COP curves. This input determines whether
        \note the inlet air dry-bulb or wet-bulb temperature is used to evaluate these curves.
-  A11, \field Heating Capacity Function of Temperature Curve Name
+  A12, \field Heating Capacity Function of Temperature Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \object-list BivariateFunctions
@@ -59823,7 +59868,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note tw = condenser inlet water temperature (C).
        \note The field Evaporator Air Temperature Type for Curve Objects determines if dry-bulb or wet-bulb
        \note is used as the evaporator inlet air temperature (ta).
-  A12, \field Heating Capacity Function of Air Flow Fraction Curve Name
+  A13, \field Heating Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Heating capacity modifier curve (function of air flow fraction) should be quadratic or cubic.
@@ -59832,7 +59877,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note ff = fraction of the rated evaporator air flow rate.
        \note Use curve coefficients of 1,0,0 or leave this field blank when neglecting performance impacts
        \note due to variations in air flow rate fraction.
-  A13, \field Heating Capacity Function of Water Flow Fraction Curve Name
+  A14, \field Heating Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Heating capacity modifier curve (function of water flow fraction) should be quadratic or cubic.
@@ -59841,7 +59886,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note ff = fraction of the rated condenser water flow rate.
        \note Use curve coefficients of 1,0,0 or leave this field blank when neglecting performance impacts
        \note due to variations in water flow rate fraction.
-  A14, \field Heating COP Function of Temperature Curve Name
+  A15, \field Heating COP Function of Temperature Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \object-list BivariateFunctions
@@ -59852,7 +59897,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note tw = condenser inlet water temperature (C).
        \note The field Evaporator Air Temperature Type for Curve Objects determines if dry-bulb or wet-bulb
        \note is used as the evaporator inlet air temperature (ta).
-  A15, \field Heating COP Function of Air Flow Fraction Curve Name
+  A16, \field Heating COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Heating COP modifier curve (function of air flow fraction) should be quadratic or cubic.
@@ -59861,7 +59906,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note ff = fraction of the rated evaporator air flow rate.
        \note Use curve coefficients of 1,0,0 or leave this field blank when neglecting performance impacts
        \note due to variations in air flow rate fraction.
-  A16, \field Heating COP Function of Water Flow Fraction Curve Name
+  A17, \field Heating COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Heating COP modifier curve (function of water flow fraction) should be quadratic or cubic.
@@ -59870,7 +59915,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
        \note ff = fraction of the rated condenser water flow rate.
        \note Use curve coefficients of 1,0,0 or leave this field blank when neglecting performance impacts
        \note due to variations in water flow rate fraction.
-  A17; \field Part Load Fraction Correlation Curve Name
+  A18; \field Part Load Fraction Correlation Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Part Load Fraction Correlation (function of part load ratio) should be quadratic or cubic.
@@ -59884,12 +59929,17 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \memo Heat pump water heater (HPWH) heating coil, air-to-water direct-expansion (DX)
        \memo system which includes a water heating coil, evaporator air coil, evaporator
        \memo fan, electric compressor, and water pump. Part of a WaterHeater:HeatPump:WrappedCondenser system.
-       \min-fields 15
+       \min-fields 16
   A1 , \field Name
        \required-field
        \type alpha
        \reference HeatPumpWaterHeaterDXCoilsWrapped
        \note Unique name for this instance of a heat pump water heater DX coil.
+  A2 , \field Availability Schedule Name
+       \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+       \note If this field is blank, the system is always available.
+       \type object-list
+       \object-list ScheduleNames
   N1 , \field Rated Heating Capacity
        \required-field
        \type real
@@ -59945,18 +59995,18 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \note Evaporator air flow rate corresponding to rated coil performance
        \note (heating capacity, COP and SHR).
        \note Default is 5.035E-5 m3/s/W (31.25 cfm/MBH) of rated heating capacity when autocalculated.
-  A2 , \field Evaporator Fan Power Included in Rated COP
+  A3 , \field Evaporator Fan Power Included in Rated COP
        \type choice
        \key Yes
        \key No
        \default Yes
        \note Select Yes if the evaporator fan power is included in the rated COP. This choice field
        \note impacts the calculation of compressor electric power.
-  A3,  \field Evaporator Air Inlet Node Name
+  A4,  \field Evaporator Air Inlet Node Name
        \required-field
        \type node
        \note The node from which the DX coil draws its inlet air.
-  A4,  \field Evaporator Air Outlet Node Name
+  A5,  \field Evaporator Air Outlet Node Name
        \required-field
        \type node
        \note The node to which the DX coil sends its outlet air.
@@ -59969,7 +60019,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \note surrounding the compressor is below the Maximum Ambient Temperature for Crankcase
        \note Heater Operation and the DX coil is off. The ambient temperature surrounding the
        \note compressor is set by the WaterHeater:HeatPump:WrappedCondenser parent object (field Compressor Location).
-  A5,  \field Crankcase Heater Capacity Function of Temperature Curve Name
+  A6,  \field Crankcase Heater Capacity Function of Temperature Curve Name
        \note A Curve:* or Table:Lookup object encoding the relationship between
        \note the crankcase heater capacity and the outdoor air temperature. When this field is
        \note missing or empty, constant crankcase heater capacity will be assumed.
@@ -59984,7 +60034,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \note surrounding the compressor is below the Maximum Outdoor Temperature for Crankcase
        \note Heater Operation and the unit is off. The ambient temperature surrounding the
        \note compressor is set by the WaterHeater:HeatPump:WrappedCondenser parent object (field Compressor Location).
-  A6,  \field Evaporator Air Temperature Type for Curve Objects
+  A7,  \field Evaporator Air Temperature Type for Curve Objects
        \type choice
        \key DryBulbTemperature
        \key WetBulbTemperature
@@ -59992,7 +60042,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \note Determines temperature type for heating capacity curves and
        \note heating COP curves. This input determines whether
        \note the inlet air dry-bulb or wet-bulb temperature is used to evaluate these curves.
-  A7,  \field Heating Capacity Function of Temperature Curve Name
+  A8,  \field Heating Capacity Function of Temperature Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \object-list BivariateFunctions
@@ -60003,7 +60053,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \note tw = condenser inlet water temperature (C).
        \note The field Evaporator Air Temperature Type for Curve Objects determines if dry-bulb or wet-bulb
        \note is used as the evaporator inlet air temperature (ta).
-  A8,  \field Heating Capacity Function of Air Flow Fraction Curve Name
+  A9,  \field Heating Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Heating capacity modifier curve (function of air flow fraction) should be quadratic or cubic.
@@ -60012,7 +60062,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \note ff = fraction of the rated evaporator air flow rate.
        \note Use curve coefficients of 1,0,0 or leave this field blank when neglecting performance impacts
        \note due to variations in air flow rate fraction.
-  A9,  \field Heating COP Function of Temperature Curve Name
+  A10, \field Heating COP Function of Temperature Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \object-list BivariateFunctions
@@ -60023,7 +60073,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \note tw = condenser inlet water temperature (C).
        \note The field Evaporator Air Temperature Type for Curve Objects determines if dry-bulb or wet-bulb
        \note is used as the evaporator inlet air temperature (ta).
-  A10, \field Heating COP Function of Air Flow Fraction Curve Name
+  A11, \field Heating COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Heating COP modifier curve (function of air flow fraction) should be quadratic or cubic.
@@ -60032,7 +60082,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
        \note ff = fraction of the rated evaporator air flow rate.
        \note Use curve coefficients of 1,0,0 or leave this field blank when neglecting performance impacts
        \note due to variations in air flow rate fraction.
-  A11; \field Part Load Fraction Correlation Curve Name
+  A12; \field Part Load Fraction Correlation Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Part Load Fraction Correlation (function of part load ratio) should be quadratic or cubic.
@@ -60046,12 +60096,17 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \memo variable-speed Heat pump water heater (VSHPWH) heating coil, air-to-water direct-expansion (DX)
        \memo system which includes a variable-speed water heating coil, evaporator air coil, evaporator
        \memo fan, electric compressor, and water pump. Part of a WaterHeater:HeatPump system.
-       \min-fields 34
+       \min-fields 35
   A1 , \field Name
        \required-field
        \type alpha
        \reference HeatPumpWaterHeaterDXCoilsVariableSpeed
        \note Unique name for this instance of a variable-speed heat pump water heater DX coil.
+  A2 , \field Availability Schedule Name
+       \note Availability schedule name for this system. Schedule value > 0 means the system is available.
+       \note If this field is blank, the system is always available.
+       \type object-list
+       \object-list ScheduleNames 
   N1,  \field Number of Speeds
        \units dimensionless
        \type integer
@@ -60112,21 +60167,21 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note A warning message will be issued if the ratio of Rated Condenser Water Flow Rate
        \note to Heating Capacity is less than 1.79405E-8 m3/s/W (0.083 gpm/MBH)
        \note or greater than 8.97024E-8 m3/s/W (0.417 gpm/MBH), but the simulation will continue.
-  A2 , \field Evaporator Fan Power Included in Rated COP
+  A3 , \field Evaporator Fan Power Included in Rated COP
        \type choice
        \key Yes
        \key No
        \default Yes
        \note Select Yes if the evaporator fan power is included in the rated COP. This choice field
        \note impacts the calculation of compressor electric power.
-  A3 , \field Condenser Pump Power Included in Rated COP
+  A4 , \field Condenser Pump Power Included in Rated COP
        \type choice
        \key Yes
        \key No
        \default No
        \note Select Yes if the condenser pump power is included in the rated COP. This choice field
        \note impacts the calculation of compressor electric power.
-  A4 , \field Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
+  A5 , \field Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
        \type choice
        \key Yes
        \key No
@@ -60140,21 +60195,21 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \default 0.2
        \note Fraction of pump heat transferred to the condenser water. The pump is assumed
        \note to be located downstream of the condenser.
-  A5 , \field Evaporator Air Inlet Node Name
+  A6 , \field Evaporator Air Inlet Node Name
        \required-field
        \type node
        \note The node from which the DX coil draws its inlet air.
-  A6 , \field Evaporator Air Outlet Node Name
+  A7 , \field Evaporator Air Outlet Node Name
        \required-field
        \type node
        \note The node to which the DX coil sends its outlet air.
-  A7 , \field Condenser Water Inlet Node Name
+  A8 , \field Condenser Water Inlet Node Name
        \required-field
        \type node
        \note The node from which the DX coil condenser draws its inlet water.
        \note This name should match the source side outlet node name in the associated
        \note water heater tank object.
-  A8 , \field Condenser Water Outlet Node Name
+  A9 , \field Condenser Water Outlet Node Name
        \required-field
        \type node
        \note The node to which the DX coil condenser sends its outlet water.
@@ -60169,7 +60224,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note surrounding the compressor is below the Maximum Ambient Temperature for Crankcase
        \note Heater Operation and the DX coil is off. The ambient temperature surrounding the
        \note compressor is set by the WaterHeater:HeatPump parent object (field Compressor Location).
-  A9 , \field Crankcase Heater Capacity Function of Temperature Curve Name
+  A10, \field Crankcase Heater Capacity Function of Temperature Curve Name
        \note A Curve:* or Table:Lookup object encoding the relationship between
        \note the crankcase heater capacity and the outdoor air temperature. When this field is
        \note missing or empty, constant crankcase heater capacity will be assumed.
@@ -60184,7 +60239,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note surrounding the compressor is below the Maximum Outdoor Temperature for Crankcase
        \note Heater Operation and the unit is off. The ambient temperature surrounding the
        \note compressor is set by the WaterHeater:HeatPump parent object (field Compressor Location).
-  A10, \field Evaporator Air Temperature Type for Curve Objects
+  A11, \field Evaporator Air Temperature Type for Curve Objects
        \type choice
        \key DryBulbTemperature
        \key WetBulbTemperature
@@ -60192,7 +60247,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Determines temperature type for heating capacity curves and
        \note heating COP curves. This input determines whether
        \note the inlet air dry-bulb or wet-bulb temperature is used to evaluate these curves.
-  A11, \field Part Load Fraction Correlation Curve Name
+  A12, \field Part Load Fraction Correlation Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
@@ -60244,7 +60299,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \type real
        \minimum 0
        \required-field
-  A12, \field Speed 1 Total WH Capacity Function of Temperature Curve Name
+  A13, \field Speed 1 Total WH Capacity Function of Temperature Curve Name
        \required-field
        \type object-list
        \object-list BivariateFunctions
@@ -60252,7 +60307,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A13, \field Speed 1 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A14, \field Speed 1 Total WH Capacity Function of Air Flow Fraction Curve Name
        \required-field
        \type object-list
        \object-list UnivariateFunctions
@@ -60260,7 +60315,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A14, \field Speed 1 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A15, \field Speed 1 Total WH Capacity Function of Water Flow Fraction Curve Name
        \required-field
        \type object-list
        \object-list UnivariateFunctions
@@ -60268,7 +60323,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A15, \field Speed 1 COP Function of Temperature Curve Name
+  A16, \field Speed 1 COP Function of Temperature Curve Name
        \required-field
        \type object-list
        \object-list BivariateFunctions
@@ -60276,7 +60331,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A16, \field Speed 1 COP Function of Air Flow Fraction Curve Name
+  A17, \field Speed 1 COP Function of Air Flow Fraction Curve Name
        \required-field
        \type object-list
        \object-list UnivariateFunctions
@@ -60284,7 +60339,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A17, \field Speed 1 COP Function of Water Flow Fraction Curve Name
+  A18, \field Speed 1 COP Function of Water Flow Fraction Curve Name
        \required-field
        \type object-list
        \object-list UnivariateFunctions
@@ -60292,14 +60347,14 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N18, \field Rated Water Heating Capacity at Speed 2
+  N18, \field Speed 2 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N19, \field Rated Water Heating COP at Speed 2
+  N19, \field Speed 2 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60307,7 +60362,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N20, \field Rated Sensible Heat Ratio at Speed 2
+  N20, \field Speed 2 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60330,56 +60385,56 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A18, \field Speed 2 Total WH Capacity Function of Temperature Curve Name
+  A19, \field Speed 2 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A19, \field Speed 2 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A20, \field Speed 2 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A20, \field Speed 2 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A21, \field Speed 2 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A21, \field Speed 2 COP Function of Temperature Curve Name
+  A22, \field Speed 2 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A22, \field Speed 2 COP Function of Air Flow Fraction Curve Name
+  A23, \field Speed 2 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A23, \field Speed 2 COP Function of Water Flow Fraction Curve Name
+  A24, \field Speed 2 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N24, \field Rated Water Heating Capacity at speed 3
+  N24, \field Speed 3 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N25, \field Rated Water Heating COP at Speed 3
+  N25, \field Speed 3 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60387,7 +60442,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N26, \field Rated Sensible Heat Ratio at Speed 3
+  N26, \field Speed 3 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60410,56 +60465,56 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A24, \field Speed 3 Total WH Capacity Function of Temperature Curve Name
+  A25, \field Speed 3 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A25, \field Speed 3 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A26, \field Speed 3 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A26, \field Speed 3 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A27, \field Speed 3 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A27, \field Speed 3 COP Function of Temperature Curve Name
+  A28, \field Speed 3 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A28, \field Speed 3 COP Function of Air Flow Fraction Curve Name
+  A29, \field Speed 3 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A29, \field Speed 3 COP Function of Water Flow Fraction Curve Name
+  A30, \field Speed 3 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N30, \field Rated Water Heating Capacity at Speed 4
+  N30, \field Speed 4 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N31, \field Rated Water Heating COP at Speed 4
+  N31, \field Speed 4 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60467,7 +60522,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N32, \field Rated Sensible Heat Ratio at Speed 4
+  N32, \field Speed 4 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60490,56 +60545,56 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A30, \field Speed 4 Total WH Capacity Function of Temperature Curve Name
+  A31, \field Speed 4 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A31, \field Speed 4 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A32, \field Speed 4 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A32, \field Speed 4 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A33, \field Speed 4 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A33, \field Speed 4 COP Function of Temperature Curve Name
+  A34, \field Speed 4 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A34, \field Speed 4 COP Function of Air Flow Fraction Curve Name
+  A35, \field Speed 4 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A35, \field Speed 4 COP Function of Water Flow Fraction Curve Name
+  A36, \field Speed 4 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N36, \field Rated Water Heating Capacity at Speed 5
+  N36, \field Speed 5 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N37, \field Rated Water Heating COP at Speed 5
+  N37, \field Speed 5 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60547,7 +60602,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N38, \field Rated Sensible Heat Ratio at Speed 5
+  N38, \field Speed 5 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60570,56 +60625,56 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A36, \field Speed 5 Total WH Capacity Function of Temperature Curve Name
+  A37, \field Speed 5 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A37, \field Speed 5 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A38, \field Speed 5 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A38, \field Speed 5 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A39, \field Speed 5 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A39, \field Speed 5 COP Function of Temperature Curve Name
+  A40, \field Speed 5 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A40, \field Speed 5 COP Function of Air Flow Fraction Curve Name
+  A41, \field Speed 5 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A41, \field Speed 5 COP Function of Water Flow Fraction Curve Name
+  A42, \field Speed 5 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N42, \field Rated Water Heating Capacity at Speed 6
+  N42, \field Speed 6 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N43, \field Rated Water Heating COP at Speed 6
+  N43, \field Speed 6 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60627,7 +60682,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N44, \field Rated Sensible Heat Ratio at Speed 6
+  N44, \field Speed 6 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60650,56 +60705,56 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A42, \field Speed 6 Total WH Capacity Function of Temperature Curve Name
+  A43, \field Speed 6 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A43, \field Speed 6 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A44, \field Speed 6 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A44, \field Speed 6 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A45, \field Speed 6 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A45, \field Speed 6 COP Function of Temperature Curve Name
+  A46, \field Speed 6 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A46, \field Speed 6 COP Function of Air Flow Fraction Curve Name
+  A47, \field Speed 6 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A47, \field Speed 6 COP Function of Water Flow Fraction Curve Name
+  A48, \field Speed 6 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N48, \field Rated Water Heating Capacity at Speed 7
+  N48, \field Speed 7 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N49, \field Rated Water Heating COP at Speed 7
+  N49, \field Speed 7 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60707,7 +60762,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N50, \field Rated Sensible Heat Ratio at Speed 7
+  N50, \field Speed 7 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60730,56 +60785,56 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A48, \field Speed 7 Total WH Capacity Function of Temperature Curve Name
+  A49, \field Speed 7 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A49, \field Speed 7 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A50, \field Speed 7 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A50, \field Speed 7 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A51, \field Speed 7 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A51, \field Speed 7 COP Function of Temperature Curve Name
+  A52, \field Speed 7 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A52, \field Speed 7 COP Function of Air Flow Fraction Curve Name
+  A53, \field Speed 7 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A53, \field Speed 7 COP Function of Water Flow Fraction Curve Name
+  A54, \field Speed 7 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N54, \field Rated Water Heating Capacity at Speed 8
+  N54, \field Speed 8 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N55, \field Rated Water Heating COP at Speed 8
+  N55, \field Speed 8 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60787,7 +60842,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N56, \field Rated Sensible Heat Ratio at Speed 8
+  N56, \field Speed 8 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60810,56 +60865,56 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A54, \field Speed 8 Total WH Capacity Function of Temperature Curve Name
+  A55, \field Speed 8 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A55, \field Speed 8 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A56, \field Speed 8 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A56, \field Speed 8 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A57, \field Speed 8 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A57, \field Speed 8 COP Function of Temperature Curve Name
+  A58, \field Speed 8 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A58, \field Speed 8 COP Function of Air Flow Fraction Curve Name
+  A59, \field Speed 8 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A59, \field Speed 8 COP Function of Water Flow Fraction Curve Name
+  A60, \field Speed 8 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N60, \field Rated Water Heating Capacity at Speed 9
+  N60, \field Speed 9 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N61, \field Rated Water Heating COP at Speed 9
+  N61, \field Speed 9 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60867,7 +60922,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N62, \field Rated Sensible Heat Ratio at Speed 9
+  N62, \field Speed 9 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60890,56 +60945,56 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A60, \field Speed 9 Total WH Capacity Function of Temperature Curve Name
+  A61, \field Speed 9 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A61, \field Speed 9 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A62, \field Speed 9 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A62, \field Speed 9 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A63, \field Speed 9 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A63, \field Speed 9 COP Function of Temperature Curve Name
+  A64, \field Speed 9 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A64, \field Speed 9 COP Function of Air Flow Fraction Curve Name
+  A65, \field Speed 9 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A65, \field Speed 9 COP Function of Water Flow Fraction Curve Name
+  A66, \field Speed 9 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  N66, \field Rated Water Heating Capacity at Speed 10
+  N66, \field Speed 10 Rated Water Heating Capacity
        \type real
        \units W
        \minimum> 0
        \note Heating capacity at the rated inlet air temperatures, rated condenser inlet
        \note water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump heat.
-  N67, \field Rated Water Heating COP at Speed 10
+  N67, \field Speed 10 Rated Water Heating COP
        \type real
        \units W/W
        \minimum> 0
@@ -60947,7 +61002,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Heating coefficient of performance at the rated inlet air and water temperatures,
        \note rated condenser inlet water temperature, rated air flow rate, and rated water flow rate.
        \note Can optionally include condenser pump power and evaporator fan power (see fields below).
-  N68, \field Rated Sensible Heat Ratio at Speed 10
+  N68, \field Speed 10 Rated Sensible Heat Ratio
        \type real
        \minimum 0.5
        \maximum 1
@@ -60970,42 +61025,42 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \units dimensionless
        \type real
        \minimum 0
-  A66, \field Speed 10 Total WH Capacity Function of Temperature Curve Name
+  A67, \field Speed 10 Total WH Capacity Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A67, \field Speed 10 Total WH Capacity Function of Air Flow Fraction Curve Name
+  A68, \field Speed 10 Total WH Capacity Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A68, \field Speed 10 Total WH Capacity Function of Water Flow Fraction Curve Name
+  A69, \field Speed 10 Total WH Capacity Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffw + c*ffw**2
        \note cubic curve = a + b*ffw + c*ffw**2 + d*ffw**3
        \note ffw = Fraction of the full load Water Flow
-  A69, \field Speed 10 COP Function of Temperature Curve Name
+  A70, \field Speed 10 COP Function of Temperature Curve Name
        \type object-list
        \object-list BivariateFunctions
        \note Table:Lookup object can also be used
        \note curve = a + b*wb + c*wb**2 + d*ewt + e*ewt**2 + f*wb*ewt
        \note wb = entering wet-bulb temperature or dry bulb temperature upon selection (C)
        \note ewt = water entering temperature seen by the condenser (C)
-  A70, \field Speed 10 COP Function of Air Flow Fraction Curve Name
+  A71, \field Speed 10 COP Function of Air Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
        \note quadratic curve = a + b*ffa + c*ffa**2
        \note cubic curve = a + b*ffa + c*ffa**2 + d*ffa**3
        \note ffa = Fraction of the full load Air Flow
-  A71; \field Speed 10 COP Function of Water Flow Fraction Curve Name
+  A72; \field Speed 10 COP Function of Water Flow Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Table:Lookup object can also be used
@@ -82550,12 +82605,17 @@ ThermalStorage:Ice:Simple,
       \type real
       \units GJ
       \ip-units ton-hrs
+      \autosizable
   A3, \field Inlet Node Name
       \type node
       \required-field
-  A4; \field Outlet Node Name
+  A4, \field Outlet Node Name
       \type node
       \required-field
+  A5; \field Thermal Storage Sizing Object Name
+      \type object-list
+      \object-list ThermalStorageSizing
+      \note used only when tank capacity is autosized
 
 ThermalStorage:Ice:Detailed,
     \min-fields 14
@@ -82578,6 +82638,7 @@ ThermalStorage:Ice:Detailed,
   N1 , \field Capacity
        \note This includes only the latent storage capacity
        \units GJ
+       \autosizable
        \required-field
   A3 , \field Inlet Node Name
        \required-field
@@ -82623,13 +82684,17 @@ ThermalStorage:Ice:Detailed,
        \note parameters input above is inappropriate and not advised.
        \units C
        \default 0.0
-  A9 ; \field Thaw Process Indicator
+  A9 , \field Thaw Process Indicator
        \note This field determines whether the system uses internal or external melt
        \note during discharging. This will then have an impact on charging performance.
        \type choice
        \key InsideMelt
        \key OutsideMelt
        \default OutsideMelt
+  A10; \field Thermal Storage Sizing Object Name
+       \type object-list
+       \object-list ThermalStorageSizing
+       \note used only when tank capacity is autosized
 
 ThermalStorage:ChilledWater:Mixed,
        \memo Chilled water storage with a well-mixed, single-node tank. The chilled water is
@@ -83176,6 +83241,7 @@ ThermalStorage:HotWater:Stratified,
        \type real
        \units W/K
        \default 0.0
+
 ThermalStorage:PCM,
       \min-fields 11
       \memo This thermal storage model is PCM-based
@@ -83232,6 +83298,26 @@ ThermalStorage:PCM,
        \autosizable
        \required-field
 
+ThermalStorage:Sizing,
+       \memo Sizing information for thermal energy stoarge capacity.
+  A1,  \field Name
+       \required-field
+       \type alpha
+       \reference ThermalStorageSizing
+  N1,  \field On Peak Period Start Time
+       \required-field
+       \type real
+       \units hr
+       \note Start time of on peak period in hours
+  N2,  \field On Peak Period End Time
+       \note End time of on peak period in hours
+       \required-field
+       \type real
+       \units hr
+  N3;  \field Sizing Factor
+       \type real
+       \minimum> 0.0
+       \default 1.0
 
 \group Plant-Condenser Loops
 !*****************PLANT AND CONDENSER LOOP SPECIFICATION*********************

@@ -1,52 +1,53 @@
-! HeatPumpWaterHeater.idf
+!-Generator IDFEditor 1.34
+!-Option OriginalOrderTop UseSpecialFormat
+!-NOTE: All comments with '!-' are ignored by the IDFEditor and are generated automatically.
+!-      Use '!' comments if they need to be retained when using the IDFEditor.
+! 5ZoneIceStorage_autosized.idf
 ! Basic file description:  1 story building divided into 4 exterior and one interior conditioned zones and return plenum.
+!                          (based on 5ZoneWarmest)
+! Highlights:              illustrates the use of ice thermal storage
 !
-! Highlights:              Examples of 5 heat pump water heaters using stratified tanks.
-!                          1 HPWH in Zone 5 using both zone air and outdoor air,
-!                          1 HPWH in Zone 4 using only zone air, 1 outdoors, 1 located outdoors and connected to a hot
-!                          water plant loop, and 1 HPWH is scheduled with no connection to a zone or plant.
-!                          1 Water Heater:Stratified example is included for comparison (this water heater is scheduled)
+! Simulation Location/Run: CHICAGO_IL_USA TMY2-94846, 2 design days, 2 run periods,
+!                          Run Control executes the run periods using the weather file
 !
-! Simulation Location/Run: Miami Intl Ap FL USA WMO=722020, 2 design days, 2 run periods.
-!                          Run Control executes the design days
+! Location:                Chicago, IL
 !
-! Location:                Miami, FL
+! Design Days:             CHICAGO_IL_USA Annual Heating 99% Design Conditions DB, MaxDB= -17.3°C
+!                          CHICAGO_IL_USA Annual Cooling 1% Design Conditions, MaxDB=  31.5°C MCWB=  23.0°C
 !
-! Design Days:             Miami Intl Ap FL USA Annual Heating 99.6%, MaxDB=8.7°C
-!                          Miami Intl Ap FL USA Annual Cooling (DB=>MWB) .4%, MaxDB=33.2°C MWB=25.3°C
+! Run Period (Weather File): Winter 1/1 to 1/14, Summer 7/1 to 7/14, CHICAGO_IL_USA TMY2-94846
 !
-! Run Period (Weather File): Winter 1/14, Summer 7/7.
-!
-! Run Control:             Zone and System sizing with weather file run control (no design days ran)
+! Run Control:             Zone and System sizing with weather file run control (no design days run)
 !
 ! Building: Single floor rectangular building 100 ft x 50 ft. 5 zones - 4 exterior, 1 interior, zone height 8 feet.
 !           Exterior zone depth is 12 feet. There is a 2 foot high return plenum: the overall building height is
 !           10 feet. There are windows on all 4 facades; the south and north facades have glass doors.
 !           The south facing glass is shaded by overhangs. The walls are woodshingle over plywood, R11 insulation,
 !           and gypboard. The roof is a gravel built up roof with R-3 mineral board insulation and plywood sheathing.
-!           The windows are double pane 6mm clear with 6mm air gap.  The window to wall ratio is approximately 0.29.
+!           The windows are of various single and double pane construction with 3mm and 6mm glass and either 6mm or
+!           13mm argon or air gap.  The window to wall ratio is approximately 0.29.
 !           The south wall and door have overhangs.
 !
 !           The building is oriented 30 degrees east of north.
 !
-! Floor Area:       463.6 m2 (5000 ft2)
-! Number of Floors: 1
+! Floor Area:        463.6 m2 (5000 ft2)
+! Number of Stories: 1
 !
 ! Zone Description Details:
 !
 !      (0,15.2,0)                      (30.5,15.2,0)
 !           _____   ________                ____
 !         |\     ***        ****************   /|
-!         | \             Zone 3              / |
+!         | \                                 / |
 !         |  \                 (26.8,11.6,0) /  |
 !         *   \_____________________________/   *
-!         * Z  |(3.7,11.6,0)               |  Z *
-!         * o  |                           |  o *
-!         * n  |          Zone 5           |  n *
-!         * e  |               (26.8,3.7,0)|  e *
+!         *    |(3.7,11.6,0)               |    *
+!         *    |                           |    *
+!         *    |                           |    *
+!         *    |               (26.8,3.7,0)|    *
 !         *    |___________________________|    *
-!         * 4 / (3.7,3.7,0)                 \ 2 *
-!         |  /            Zone 1             \  |
+!         *   / (3.7,3.7,0)                 \   *
+!         |  /                               \  |
 !         | /                                 \ |
 !         |/___******************___***________\|
 !          |       Overhang        |   |
@@ -56,7 +57,7 @@
 !      (0,0,0)                            (30.5,0,0)
 !
 ! Internal gains description:     lighting is 1.5 watts/ft2, office equip is 1.0 watts/ft2. There is 1 occupant
-!                                 per 100 ft2 of floor area. The infiltration is constant in winter months.
+!                                 per 100 ft2 of floor area. The infiltration is 0.25 air changes per hour.
 !
 ! Interzone Surfaces:             6 interzone surfaces (see diagram)
 ! Internal Mass:                  None
@@ -74,40 +75,22 @@
 ! Natural Ventilation:            None
 ! Compact Schedules:              Yes
 !
-! HVAC:                           Standard VAV system with outside air economizer, hot water reheat
-!                                 coils, central chilled water cooling coil. Central Plant is single
-!                                 heat pump hot water heater, electric compression chiller with water cooled
-!                                 condenser, and cooling tower. All equipment is autosized.
-!                                 ZoneControl:Humidistat and Set Point Manager:Single Zone Max Hum
-!                                 are used in SPACE2-1 to control relative humidity to 50%
-!                                 via Controller:Simple with the control variable set to TEMPandHUMRAT.
-!                                 Three heat pump water heaters are located indoors, outdoors, and scheduled to
-!                                 illustrate stand alone HP water heaters. One HPWH is connected to a hot water plant loop.
+! HVAC:                           Standard VAV system with outside air economizer, hot water reheat coils,
+!                                 central chilled water cooling coil. Central Plant is single hot water
+!                                 boiler, electric compression chiller with water cooled condenser,
+!                                 ice thermal storage, and a cooling tower. All equipment is autosized,
+!                                 except the chiller and ice storage.  The chiller is sized at 50% of peak
+!                                 load, and the ice storage is sized for 8 hours of 50% of peak load.
+!                                 Note differences from 5ZoneWarmest to accomodate ice storage, including:
+!                                 Constant volume continuous chilled water pump, optimal chilled water loop
+!                                 load distribution scheme, ice storage in chilled water supply
+!                                 outlet branch, component setpoint based operation scheme, constant flow
+!                                 chiller
 !
-! Heat Pump:Water Heater:         5 ea.
-!                                 Zone 5    - HPWH using mixer/splitter nodes to blend outdoor air with zone air
-!                                 Zone 4    - HPWH without mixer/splitter nodes using only zone air
-!                                 Zone 4B   - HPWH identical to Zone 4 (and also in Zone 4) but connected to a plant
-!                                             loop for the draws (also identical to Zone 4).
-!                                 Outdoors  - HPWH located outdoors and not connected to a plant loop
-!                                 Scheduled - HPWH using scheduled ambient conditions
-!                                 Plant     - HPWH located outdoors and connected to a plant loop which serves zone 1-5
-!                                             reheat coils and the main heating coil in the air loop.
-!
-!                                 The HPWH in Zone 4 and 5 show the configuration of a HPWH with and without
-!                                 mixer/splitter nodes and the associated node connnections. Each of these systems
-!                                 are listed in a Zone Equipment List with the required highest priority. Each of
-!                                 these HPWHs impact the zone air heat balance.
-!
-!                                 The HPWHs located outdoors and in the plant only require the use of outdoor air
-!                                 nodes as the inlet air to the unit. The plant HPWH has connections to the hot
-!                                 water plant loop through the water heater tank's USE inlet/outlet nodes.
-!
-!                                 The scheduled HPWH is an example of a self-standing water heater with all
-!                                 performance aspects simulated through scheduling.
-!
-! Water Heater:Stratified:        1 ea.
-!                                 Scheduled - example of a water heater using an electric element to heat the water
+!                                 The supply air temperature setpoint is established by a setpoint
+!                                 manager using the "warmest" strategy: the supply air temperature
+!                                 is set to the highest temperature that will meet the cooling load
+!                                 of the warmest zone at full cfm.
 !
 ! Zonal Equipment:                AirTerminal:SingleDuct:VAV:Reheat
 ! Central Air Handling Equipment: Yes
@@ -116,15 +99,16 @@
 ! Purchased Heating:              None
 ! Coils:                          Coil:Cooling:Water, Coil:Heating:Water
 ! Pumps:                          Pump:VariableSpeed
-! Boilers:                        None
+! Boilers:                        Boiler:HotWater
 ! Chillers:                       Chiller:Electric
 ! Towers:                         CoolingTower:SingleSpeed
+! Thermal Storage:                ThermalStorage:Ice:Simple
 !
 ! Results:
 ! Standard Reports:               None
-! Timestep or Hourly Variables:   Hourly
-! Time bins Report:               None
-! HTML Report:                    None
+! Timestep or Hourly Variables:   Hourly, Monthly, and RunPeriod
+! Time bins Report:               Yes
+! HTML Report:                    Time bins
 ! Environmental Emissions:        None
 ! Utility Tariffs:                None
 
@@ -150,8 +134,8 @@
 
   ConvergenceLimits,
     1,                       !- Minimum System Timestep {minutes}
-    20,                      !- Maximum HVAC Iterations
-    4,                       !- Minimum Plant Iterations
+    30,                      !- Maximum HVAC Iterations
+    5,                       !- Minimum Plant Iterations
     10;                      !- Maximum Plant Iterations
 
   GlobalGeometryRules,
@@ -196,7 +180,7 @@
   RunPeriod,
     Run Period 1,            !- Name
     1,                       !- Begin Month
-    14,                      !- Begin Day of Month
+    1,                       !- Begin Day of Month
     ,                        !- Begin Year
     1,                       !- End Month
     14,                      !- End Day of Month
@@ -211,10 +195,10 @@
   RunPeriod,
     Run Period 2,            !- Name
     7,                       !- Begin Month
-    7,                       !- Begin Day of Month
+    1,                       !- Begin Day of Month
     ,                        !- Begin Year
     7,                       !- End Month
-    7,                       !- End Day of Month
+    14,                      !- End Day of Month
     ,                        !- End Year
     Tuesday,                 !- Day of Week for Start Day
     Yes,                     !- Use Weather File Holidays and Special Days
@@ -223,46 +207,42 @@
     Yes,                     !- Use Weather File Rain Indicators
     Yes;                     !- Use Weather File Snow Indicators
 
+  Site:Location,
+    CHICAGO_IL_USA TMY2-94846,  !- Name
+    41.78,                   !- Latitude {deg}
+    -87.75,                  !- Longitude {deg}
+    -6.00,                   !- Time Zone {hr}
+    190.00;                  !- Elevation {m}
+
   SimulationControl,
     Yes,                     !- Do Zone Sizing Calculation
     Yes,                     !- Do System Sizing Calculation
     No,                      !- Do Plant Sizing Calculation
-    Yes,                     !- Run Simulation for Sizing Periods
+    No,                      !- Run Simulation for Sizing Periods
     Yes,                     !- Run Simulation for Weather File Run Periods
-    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+    YES,                     !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
- !  Data Source=ASHRAE 2009 Annual Design Conditions
-
-  Site:Location,
-    Miami Intl Ap FL USA WMO=722020,  !- Name
-    25.82,                   !- Latitude {deg}
-    -80.30,                  !- Longitude {deg}
-    -5.00,                   !- Time Zone {hr}
-    11.00;                   !- Elevation {m}
-
- ! Miami Intl Ap FL USA Annual Heating Design Conditions Wind Speed=3.8m/s Wind Dir=340
- ! Coldest Month=January
- ! Miami Intl Ap FL USA Annual Heating 99.6%, MaxDB=8.7°C
+! CHICAGO_IL_USA Annual Heating 99% Design Conditions DB, MaxDB= -17.3°C
 
   SizingPeriod:DesignDay,
-    Miami Intl Ap Ann Htg 99.6% Condns DB,  !- Name
+    CHICAGO_IL_USA Annual Heating 99% Design Conditions DB,  !- Name
     1,                       !- Month
     21,                      !- Day of Month
     WinterDesignDay,         !- Day Type
-    8.7,                     !- Maximum Dry-Bulb Temperature {C}
+    -17.3,                   !- Maximum Dry-Bulb Temperature {C}
     0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
     Wetbulb,                 !- Humidity Condition Type
-    8.7,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    -17.3,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    101217.,                 !- Barometric Pressure {Pa}
-    3.8,                     !- Wind Speed {m/s}
-    340,                     !- Wind Direction {deg}
+    99063.,                  !- Barometric Pressure {Pa}
+    4.9,                     !- Wind Speed {m/s}
+    270,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -271,30 +251,28 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
+    0.0;                     !- Sky Clearness
 
- ! Miami Intl Ap Annual Cooling Design Conditions Wind Speed=4.5m/s Wind Dir=140
- ! Hottest Month=July
- ! Miami Intl Ap FL USA Annual Cooling (DB=>MWB) .4%, MaxDB=33.2°C MWB=25.3°C
+! CHICAGO_IL_USA Annual Cooling 1% Design Conditions, MaxDB=  31.5°C MCWB=  23.0°C
 
   SizingPeriod:DesignDay,
-    Miami Intl Ap Ann Clg .4% Condns DB=>MWB,  !- Name
+    CHICAGO_IL_USA Annual Cooling 1% Design Conditions DB/MCWB,  !- Name
     7,                       !- Month
     21,                      !- Day of Month
     SummerDesignDay,         !- Day Type
-    33.2,                    !- Maximum Dry-Bulb Temperature {C}
-    6.7,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+    31.5,                    !- Maximum Dry-Bulb Temperature {C}
+    10.7,                    !- Daily Dry-Bulb Temperature Range {deltaC}
     ,                        !- Dry-Bulb Temperature Range Modifier Type
     ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
     Wetbulb,                 !- Humidity Condition Type
-    25.3,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    23.0,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
     ,                        !- Humidity Condition Day Schedule Name
     ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
     ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
     ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    101217.,                 !- Barometric Pressure {Pa}
-    4.5,                     !- Wind Speed {m/s}
-    140,                     !- Wind Direction {deg}
+    99063.,                  !- Barometric Pressure {Pa}
+    5.3,                     !- Wind Speed {m/s}
+    230,                     !- Wind Direction {deg}
     No,                      !- Rain Indicator
     No,                      !- Snow Indicator
     No,                      !- Daylight Saving Time Indicator
@@ -303,7 +281,7 @@
     ,                        !- Diffuse Solar Day Schedule Name
     ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
     ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+    1.0;                     !- Sky Clearness
 
   Site:GroundTemperature:BuildingSurface,20.03,20.03,20.13,20.30,20.43,20.52,20.62,20.77,20.78,20.55,20.44,20.20;
 
@@ -488,81 +466,81 @@
   WindowMaterial:Gas,
     AIR 6MM,                 !- Name
     Air,                     !- Gas Type
-    .0063;                   !- Thickness {m}
+    0.0063;                  !- Thickness {m}
 
   WindowMaterial:Gas,
     AIR 13MM,                !- Name
     Air,                     !- Gas Type
-    .0127;                   !- Thickness {m}
+    0.0127;                  !- Thickness {m}
 
   WindowMaterial:Gas,
     ARGON 13MM,              !- Name
     Argon,                   !- Gas Type
-    .0127;                   !- Thickness {m}
+    0.0127;                  !- Thickness {m}
 
   WindowMaterial:Glazing,
     CLEAR 3MM,               !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    .003,                    !- Thickness {m}
-    .837,                    !- Solar Transmittance at Normal Incidence
-    .075,                    !- Front Side Solar Reflectance at Normal Incidence
-    .075,                    !- Back Side Solar Reflectance at Normal Incidence
-    .898,                    !- Visible Transmittance at Normal Incidence
-    .081,                    !- Front Side Visible Reflectance at Normal Incidence
-    .081,                    !- Back Side Visible Reflectance at Normal Incidence
-    .0,                      !- Infrared Transmittance at Normal Incidence
-    .84,                     !- Front Side Infrared Hemispherical Emissivity
-    .84,                     !- Back Side Infrared Hemispherical Emissivity
-    .9;                      !- Conductivity {W/m-K}
+    0.003,                   !- Thickness {m}
+    0.837,                   !- Solar Transmittance at Normal Incidence
+    0.075,                   !- Front Side Solar Reflectance at Normal Incidence
+    0.075,                   !- Back Side Solar Reflectance at Normal Incidence
+    0.898,                   !- Visible Transmittance at Normal Incidence
+    0.081,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.081,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   WindowMaterial:Glazing,
     GREY 3MM,                !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    .003,                    !- Thickness {m}
-    .626,                    !- Solar Transmittance at Normal Incidence
-    .061,                    !- Front Side Solar Reflectance at Normal Incidence
-    .061,                    !- Back Side Solar Reflectance at Normal Incidence
-    .611,                    !- Visible Transmittance at Normal Incidence
-    .061,                    !- Front Side Visible Reflectance at Normal Incidence
-    .061,                    !- Back Side Visible Reflectance at Normal Incidence
-    .0,                      !- Infrared Transmittance at Normal Incidence
-    .84,                     !- Front Side Infrared Hemispherical Emissivity
-    .84,                     !- Back Side Infrared Hemispherical Emissivity
-    .9;                      !- Conductivity {W/m-K}
+    0.003,                   !- Thickness {m}
+    0.626,                   !- Solar Transmittance at Normal Incidence
+    0.061,                   !- Front Side Solar Reflectance at Normal Incidence
+    0.061,                   !- Back Side Solar Reflectance at Normal Incidence
+    0.611,                   !- Visible Transmittance at Normal Incidence
+    0.061,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.061,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   WindowMaterial:Glazing,
     CLEAR 6MM,               !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    .006,                    !- Thickness {m}
-    .775,                    !- Solar Transmittance at Normal Incidence
-    .071,                    !- Front Side Solar Reflectance at Normal Incidence
-    .071,                    !- Back Side Solar Reflectance at Normal Incidence
-    .881,                    !- Visible Transmittance at Normal Incidence
-    .080,                    !- Front Side Visible Reflectance at Normal Incidence
-    .080,                    !- Back Side Visible Reflectance at Normal Incidence
-    .0,                      !- Infrared Transmittance at Normal Incidence
-    .84,                     !- Front Side Infrared Hemispherical Emissivity
-    .84,                     !- Back Side Infrared Hemispherical Emissivity
-    .9;                      !- Conductivity {W/m-K}
+    0.006,                   !- Thickness {m}
+    0.775,                   !- Solar Transmittance at Normal Incidence
+    0.071,                   !- Front Side Solar Reflectance at Normal Incidence
+    0.071,                   !- Back Side Solar Reflectance at Normal Incidence
+    0.881,                   !- Visible Transmittance at Normal Incidence
+    0.080,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.080,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.84,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   WindowMaterial:Glazing,
     LoE CLEAR 6MM,           !- Name
     SpectralAverage,         !- Optical Data Type
     ,                        !- Window Glass Spectral Data Set Name
-    .006,                    !- Thickness {m}
-    .600,                    !- Solar Transmittance at Normal Incidence
-    .170,                    !- Front Side Solar Reflectance at Normal Incidence
-    .220,                    !- Back Side Solar Reflectance at Normal Incidence
-    .840,                    !- Visible Transmittance at Normal Incidence
-    .055,                    !- Front Side Visible Reflectance at Normal Incidence
-    .078,                    !- Back Side Visible Reflectance at Normal Incidence
-    .0,                      !- Infrared Transmittance at Normal Incidence
-    .84,                     !- Front Side Infrared Hemispherical Emissivity
-    .10,                     !- Back Side Infrared Hemispherical Emissivity
-    .9;                      !- Conductivity {W/m-K}
+    0.006,                   !- Thickness {m}
+    0.600,                   !- Solar Transmittance at Normal Incidence
+    0.170,                   !- Front Side Solar Reflectance at Normal Incidence
+    0.220,                   !- Back Side Solar Reflectance at Normal Incidence
+    0.840,                   !- Visible Transmittance at Normal Incidence
+    0.055,                   !- Front Side Visible Reflectance at Normal Incidence
+    0.078,                   !- Back Side Visible Reflectance at Normal Incidence
+    0.0,                     !- Infrared Transmittance at Normal Incidence
+    0.84,                    !- Front Side Infrared Hemispherical Emissivity
+    0.10,                    !- Back Side Infrared Hemispherical Emissivity
+    0.9;                     !- Conductivity {W/m-K}
 
   Construction,
     Dbl Clr 3mm/13mm Air,    !- Name
@@ -578,80 +556,81 @@
     OCCUPY-1,                !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay WinterDesignDay, !- Field 2
-    Until: 9:00,0.0,         !- Field 3
-    Until: 12:00,1.0,        !- Field 5
-    Until: 13:00,0.8,        !- Field 7
-    Until: 14:00,0.4,        !- Field 9
-    Until: 15:00,0.8,        !- Field 11
-    Until: 17:00,1.0,        !- Field 13
-    Until: 24:00,0.0,        !- Field 15
-    For: AllOtherDays,       !- Field 17
-    Until: 24:00,0.0;        !- Field 18
+    For: WeekDays SummerDesignDay CustomDay1 CustomDay2, !- Field 2
+    Until: 8:00,0.0,         !- Field 3
+    Until: 11:00,1.00,       !- Field 5
+    Until: 12:00,0.80,       !- Field 7
+    Until: 13:00,0.40,       !- Field 9
+    Until: 14:00,0.80,       !- Field 11
+    Until: 18:00,1.00,       !- Field 13
+    Until: 19:00,0.50,       !- Field 15
+    Until: 21:00,0.10,       !- Field 17
+    Until: 24:00,0.0,        !- Field 19
+    For: Weekends WinterDesignDay Holiday, !- Field 21
+    Until: 24:00,0.0;        !- Field 22
 
   Schedule:Compact,
     LIGHTS-1,                !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay WinterDesignDay, !- Field 2
-    Until: 9:00,0.05,        !- Field 3
-    Until: 10:00,0.9,        !- Field 5
-    Until: 11:00,0.95,       !- Field 7
-    Until: 12:00,1.0,        !- Field 9
-    Until: 13:00,0.95,       !- Field 11
-    Until: 14:00,0.8,        !- Field 13
-    Until: 15:00,0.9,        !- Field 15
-    Until: 17:00,1.0,        !- Field 17
-    Until: 24:00,0.05,       !- Field 19
-    For: AllOtherDays,       !- Field 21
-    Until: 24:00,0.05;       !- Field 22
+    For: WeekDays SummerDesignDay CustomDay1 CustomDay2, !- Field 2
+    Until: 8:00,0.05,        !- Field 3
+    Until: 9:00,0.9,         !- Field 5
+    Until: 10:00,0.95,       !- Field 7
+    Until: 11:00,1.00,       !- Field 9
+    Until: 12:00,0.95,       !- Field 11
+    Until: 13:00,0.8,        !- Field 13
+    Until: 14:00,0.9,        !- Field 15
+    Until: 18:00,1.00,       !- Field 17
+    Until: 19:00,0.60,       !- Field 19
+    Until: 21:00,0.20,       !- Field 21
+    Until: 24:00,0.05,       !- Field 23
+    For: Weekends WinterDesignDay Holiday, !- Field 25
+    Until: 24:00,0.05;       !- Field 26
 
   Schedule:Compact,
     EQUIP-1,                 !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay WinterDesignDay, !- Field 2
-    Until: 9:00,0.02,        !- Field 3
-    Until: 10:00,0.4,        !- Field 5
-    Until: 15:00,0.9,        !- Field 7
-    Until: 16:00,0.8,        !- Field 9
-    Until: 17:00,0.7,        !- Field 11
-    Until: 24:00,0.02,       !- Field 13
-    For: CustomDay1 CustomDay2, !- Field 15
-    Until: 9:00,0.02,        !- Field 16
-    Until: 10:00,0.4,        !- Field 18
-    Until: 15:00,0.9,        !- Field 20
-    Until: 16:00,0.8,        !- Field 22
-    Until: 17:00,0.7,        !- Field 24
-    Until: 24:00,0.02,       !- Field 26
-    For: AllOtherDays,       !- Field 28
-    Until: 24:00,0.2;        !- Field 29
+    For: WeekDays SummerDesignDay CustomDay1 CustomDay2, !- Field 2
+    Until: 8:00,0.02,        !- Field 3
+    Until: 9:00,0.4,         !- Field 5
+    Until: 14:00,0.9,        !- Field 7
+    Until: 15:00,0.8,        !- Field 9
+    Until: 16:00,0.7,        !- Field 11
+    Until: 18:00,0.5,        !- Field 13
+    Until: 20:00,0.3,        !- Field 15
+    Until: 24:00,0.02,       !- Field 17
+    For: Weekends WinterDesignDay Holiday, !- Field 19
+    Until: 24:00,0.2;        !- Field 20
 
   Schedule:Compact,
     INFIL-SCH,               !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 3/31,           !- Field 1
-    For: Alldays,            !- Field 2
+    For: AllDays,            !- Field 2
     Until: 24:00,1.0,        !- Field 3
     Through: 10/31,          !- Field 5
-    For: Alldays,            !- Field 6
+    For: AllDays,            !- Field 6
     Until: 24:00,0.0,        !- Field 7
     Through: 12/31,          !- Field 9
-    For: Alldays,            !- Field 10
+    For: AllDays,            !- Field 10
     Until: 24:00,1.0;        !- Field 11
 
   Schedule:Compact,
     ActSchd,                 !- Name
     Any Number,              !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Alldays,            !- Field 2
+    For: AllDays,            !- Field 2
     Until: 24:00,117.239997864; !- Field 3
+
+                             !- Field 4
 
   Schedule:Compact,
     ShadeTransSch,           !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Alldays,            !- Field 2
+    For: AllDays,            !- Field 2
     Until: 24:00,0.0;        !- Field 3
 
   Zone,
@@ -847,7 +826,7 @@
     239.247360229;           !- Volume {m3}
 
   ZoneInfiltration:DesignFlowRate,
-    SPACE1-1 Infiltration,   !- Name
+    SPACE1-1 Infil 1,        !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
     flow/zone,               !- Design Flow Rate Calculation Method
@@ -861,7 +840,7 @@
     0;                       !- Velocity Squared Term Coefficient
 
   People,
-    SPACE1-1 People,         !- Name
+    SPACE1-1 People 1,       !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
     people,                  !- Number of People Calculation Method
@@ -873,7 +852,7 @@
     ActSchd;                 !- Activity Level Schedule Name
 
   Lights,
-    SPACE1-1 Lights,         !- Name
+    SPACE1-1 Lights 1,       !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
@@ -887,7 +866,7 @@
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE1-1 Elec Equipment, !- Name
+    SPACE1-1 ElecEq 1,       !- Name
     SPACE1-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
@@ -1062,11 +1041,11 @@
     103.311355591;           !- Volume {m3}
 
   ZoneInfiltration:DesignFlowRate,
-    SPACE2-1 Infiltration,   !- Name
+    SPACE2-1 Infil 1,        !- Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
     flow/zone,               !- Design Flow Rate Calculation Method
-    .00717,                  !- Design Flow Rate {m3/s}
+    0.00717,                 !- Design Flow Rate {m3/s}
     ,                        !- Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Flow per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
@@ -1076,7 +1055,7 @@
     0;                       !- Velocity Squared Term Coefficient
 
   People,
-    SPACE2-1 People,         !- Name
+    SPACE2-1 People 1,       !- Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
     people,                  !- Number of People Calculation Method
@@ -1088,7 +1067,7 @@
     ActSchd;                 !- Activity Level Schedule Name
 
   Lights,
-    SPACE2-1 Lights,         !- Name
+    SPACE2-1 Lights 1,       !- Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
@@ -1102,7 +1081,7 @@
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE2-1 Elec Equipment, !- Name
+    SPACE2-1 ElecEq 1,       !- Name
     SPACE2-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
@@ -1242,7 +1221,7 @@
     239.247360229;           !- Volume {m3}
 
   ZoneInfiltration:DesignFlowRate,
-    SPACE3-1 Infiltration,   !- Name
+    SPACE3-1 Infil 1,        !- Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
     flow/zone,               !- Design Flow Rate Calculation Method
@@ -1256,7 +1235,7 @@
     0;                       !- Velocity Squared Term Coefficient
 
   People,
-    SPACE3-1 People,         !- Name
+    SPACE3-1 People 1,       !- Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
     people,                  !- Number of People Calculation Method
@@ -1268,7 +1247,7 @@
     ActSchd;                 !- Activity Level Schedule Name
 
   Lights,
-    SPACE3-1 Lights,         !- Name
+    SPACE3-1 Lights 1,       !- Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
@@ -1282,7 +1261,7 @@
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE3-1 Elec Equipment, !- Name
+    SPACE3-1 ElecEq 1,       !- Name
     SPACE3-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
@@ -1437,11 +1416,11 @@
     103.311355591;           !- Volume {m3}
 
   ZoneInfiltration:DesignFlowRate,
-    SPACE4-1 Infiltration,   !- Name
+    SPACE4-1 Infil 1,        !- Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
     flow/zone,               !- Design Flow Rate Calculation Method
-    .00717,                  !- Design Flow Rate {m3/s}
+    0.00717,                 !- Design Flow Rate {m3/s}
     ,                        !- Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Flow per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
@@ -1451,7 +1430,7 @@
     0;                       !- Velocity Squared Term Coefficient
 
   People,
-    SPACE4-1 People,         !- Name
+    SPACE4-1 People 1,       !- Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
     people,                  !- Number of People Calculation Method
@@ -1463,7 +1442,7 @@
     ActSchd;                 !- Activity Level Schedule Name
 
   Lights,
-    SPACE4-1 Lights,         !- Name
+    SPACE4-1 Lights 1,       !- Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
@@ -1477,7 +1456,7 @@
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE4-1 Elec Equipment, !- Name
+    SPACE4-1 ElecEq 1,       !- Name
     SPACE4-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
@@ -1617,11 +1596,11 @@
     447.682556152;           !- Volume {m3}
 
   ZoneInfiltration:DesignFlowRate,
-    SPACE5-1 Infiltration,   !- Name
+    SPACE5-1 Infil 1,        !- Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     INFIL-SCH,               !- Schedule Name
     flow/zone,               !- Design Flow Rate Calculation Method
-    .031089,                 !- Design Flow Rate {m3/s}
+    0.031089,                !- Design Flow Rate {m3/s}
     ,                        !- Flow per Zone Floor Area {m3/s-m2}
     ,                        !- Flow per Exterior Surface Area {m3/s-m2}
     ,                        !- Air Changes per Hour {1/hr}
@@ -1631,7 +1610,7 @@
     0;                       !- Velocity Squared Term Coefficient
 
   People,
-    SPACE5-1 People,         !- Name
+    SPACE5-1 People 1,       !- Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     OCCUPY-1,                !- Number of People Schedule Name
     people,                  !- Number of People Calculation Method
@@ -1643,7 +1622,7 @@
     ActSchd;                 !- Activity Level Schedule Name
 
   Lights,
-    SPACE5-1 Lights,         !- Name
+    SPACE5-1 Lights 1,       !- Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
@@ -1657,7 +1636,7 @@
     GeneralLights;           !- End-Use Subcategory
 
   ElectricEquipment,
-    SPACE5-1 Elec Equipment, !- Name
+    SPACE5-1 ElecEq 1,       !- Name
     SPACE5-1,                !- Zone or ZoneList or Space or SpaceList Name
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
@@ -1961,9 +1940,9 @@
     autosize,                !- Design Outdoor Air Flow Rate {m3/s}
     0.3,                     !- Central Heating Maximum System Air Flow Ratio
     7.0,                     !- Preheat Design Temperature {C}
-    .008,                    !- Preheat Design Humidity Ratio {kgWater/kgDryAir}
+    0.008,                   !- Preheat Design Humidity Ratio {kgWater/kgDryAir}
     11.0,                    !- Precool Design Temperature {C}
-    .008,                    !- Precool Design Humidity Ratio {kgWater/kgDryAir}
+    0.008,                   !- Precool Design Humidity Ratio {kgWater/kgDryAir}
     12.8,                    !- Central Cooling Design Supply Air Temperature {C}
     16.7,                    !- Central Heating Design Supply Air Temperature {C}
     noncoincident,           !- Type of Zone Sum to Use
@@ -1983,51 +1962,64 @@
     ,                        !- Heating Fraction of Autosized Cooling Supply Air Flow Rate
     ,                        !- Heating Supply Air Flow Rate Per Unit Heating Capacity {m3/s-W}
     ,                        !- System Outdoor Air Method
-    ,                        !- Zone Maximum Outdoor Air Fraction {dimensionless}
-    ,                        !- Cooling Design Capacity Method
-    ,                        !- Cooling Design Capacity {W}
+    1.0,                     !- Zone Maximum Outdoor Air Fraction {dimensionless}
+    CoolingDesignCapacity,   !- Cooling Design Capacity Method
+    autosize,                !- Cooling Design Capacity {W}
     ,                        !- Cooling Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Cooling Design Capacity
-    ,                        !- Heating Design Capacity Method
-    ,                        !- Heating Design Capacity {W}
+    HeatingDesignCapacity,   !- Heating Design Capacity Method
+    autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Heating Design Capacity
-    ;                        !- Central Cooling Capacity Control Method
+    VAV;                     !- Central Cooling Capacity Control Method
 
   Sizing:Plant,
     Hot Water Loop,          !- Plant or Condenser Loop Name
     heating,                 !- Loop Type
-    62.,                     !- Design Loop Exit Temperature {C}
-    11;                      !- Loop Design Temperature Difference {deltaC}
+    82.,                     !- Design Loop Exit Temperature {C}
+    11,                      !- Loop Design Temperature Difference {deltaC}
+    Coincident,              !- Sizing Option
+    1,                       !- Zone Timesteps in Averaging Window
+    None;                    !- Coincident Sizing Factor Mode
 
   Sizing:Plant,
     Chilled Water Loop,      !- Plant or Condenser Loop Name
     cooling,                 !- Loop Type
     7.22,                    !- Design Loop Exit Temperature {C}
-    6.67;                    !- Loop Design Temperature Difference {deltaC}
+    6.0,                     !- Loop Design Temperature Difference {deltaC}
+    Coincident,              !- Sizing Option
+    1,                       !- Zone Timesteps in Averaging Window
+    None;                    !- Coincident Sizing Factor Mode
 
   Sizing:Plant,
     Condenser Water Loop,    !- Plant or Condenser Loop Name
     condenser,               !- Loop Type
     29.4,                    !- Design Loop Exit Temperature {C}
-    5.6;                     !- Loop Design Temperature Difference {deltaC}
+    5.6,                     !- Loop Design Temperature Difference {deltaC}
+    Coincident,              !- Sizing Option
+    1,                       !- Zone Timesteps in Averaging Window
+    None;                    !- Coincident Sizing Factor Mode
 
   Schedule:Compact,
     Htg-SetP-Sch,            !- Name
     Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekends HoliDay,   !- Field 2
-    Until: 7:00,12.8,        !- Field 3
-    Until: 14:00,21.1,       !- Field 5
-    Until: 24:00,12.8,       !- Field 7
-    For: SummerDesignDay,    !- Field 9
-    Until: 24:00,12.8,       !- Field 10
-    For: WinterDesignDay,    !- Field 12
-    Until: 24:00,21.1,       !- Field 13
-    For: AllOtherDays,       !- Field 15
+    For: SummerDesignDay,    !- Field 2
+    Until: 24:00,12.8,       !- Field 3
+    For: WinterDesignDay,    !- Field 5
+    Until: 24:00,21.1,       !- Field 6
+    For: WeekDays,           !- Field 8
+    Until: 7:00,12.8,        !- Field 9
+    Until: 18:00,21.1,       !- Field 11
+    Until: 24:00,12.8,       !- Field 13
+    For: WeekEnds Holiday,   !- Field 15
     Until: 7:00,12.8,        !- Field 16
-    Until: 19:00,21.1,       !- Field 18
-    Until: 24:00,12.8;       !- Field 20
+    Until: 13:00,21.1,       !- Field 18
+    Until: 24:00,12.8,       !- Field 20
+    For: AllOtherDays,       !- Field 22
+    Until: 7:00,12.8,        !- Field 23
+    Until: 18:00,21.1,       !- Field 25
+    Until: 24:00,12.8;       !- Field 27
 
   Schedule:Compact,
     PlenumHtg-SetP-Sch,      !- Name
@@ -2040,109 +2032,128 @@
     Clg-SetP-Sch,            !- Name
     Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekends HoliDay,   !- Field 2
-    Until: 7:00,40.0,        !- Field 3
-    Until: 14:00,23.9,       !- Field 5
-    Until: 24:00,32.2,       !- Field 7
-    For: SummerDesignDay,    !- Field 9
-    Until: 24:00,23.9,       !- Field 10
-    For: WinterDesignDay,    !- Field 12
+    For: SummerDesignDay,    !- Field 2
+    Until: 24:00,23.9,       !- Field 3
+    For: WinterDesignDay,    !- Field 5
+    Until: 24:00,40.0,       !- Field 6
+    For: WeekDays,           !- Field 8
+    Until: 7:00,40.0,        !- Field 9
+    Until: 22:00,23.9,       !- Field 11
     Until: 24:00,40.0,       !- Field 13
-    For: AllOtherDays,       !- Field 15
+    For: WeekEnds Holiday,   !- Field 15
     Until: 7:00,40.0,        !- Field 16
-    Until: 19:00,23.9,       !- Field 18
-    Until: 24:00,40.0;       !- Field 20
+    Until: 13:00,23.9,       !- Field 18
+    Until: 24:00,32.2,       !- Field 20
+    For: AllOtherDays,       !- Field 22
+    Until: 7:00,40.0,        !- Field 23
+    Until: 18:00,23.9,       !- Field 25
+    Until: 24:00,40.0;       !- Field 27
 
   Schedule:Compact,
     PlenumClg-SetP-Sch,      !- Name
     Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Alldays,            !- Field 2
+    For: AllDays,            !- Field 2
     Until: 24:00,40.0;       !- Field 3
 
   Schedule:Compact,
     Zone Control Type Sched, !- Name
     Control Type,            !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,4;          !- Field 3
+    For: SummerDesignDay,    !- Field 2
+    Until: 24:00,2,          !- Field 3
+    For: WinterDesignDay,    !- Field 5
+    Until: 24:00,1,          !- Field 6
+    For: AllOtherDays,       !- Field 8
+    Until: 24:00,4;          !- Field 9
 
   Schedule:Compact,
     Min OA Sched,            !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
-    For: Weekdays SummerDesignDay WinterDesignDay, !- Field 2
-    Until: 7:00,0.02,        !- Field 3
-    Until: 19:00,1.0,        !- Field 5
+    For: Weekdays,           !- Field 2
+    Until: 6:00,0.02,        !- Field 3
+    Until: 22:00,1.0,        !- Field 5
     Until: 24:00,0.02,       !- Field 7
     For: AllOtherDays,       !- Field 9
-    Until: 24:00,0.02;       !- Field 10
+    Until: 24:00,0.5;        !- Field 10
 
   Schedule:Compact,
     FanAvailSched,           !- Name
     Fraction,                !- Schedule Type Limits Name
     Through: 3/31,           !- Field 1
-    For: Alldays,            !- Field 2
+    For: AllDays,            !- Field 2
     Until: 24:00,1.0,        !- Field 3
     Through: 9/30,           !- Field 5
-    For: Weekdays,           !- Field 6
+    For: WeekDays,           !- Field 6
     Until: 7:00,0.0,         !- Field 7
-    Until: 18:00,1.0,        !- Field 9
+    Until: 22:00,1.0,        !- Field 9
     Until: 24:00,0.0,        !- Field 11
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 13
-    Until: 24:00,0.0,        !- Field 14
+    For: SummerDesignDay WinterDesignDay, !- Field 13
+    Until: 24:00,1.0,        !- Field 14
     For: AllOtherDays,       !- Field 16
-    Until: 24:00,1.0,        !- Field 17
+    Until: 24:00,0.0,        !- Field 17
     Through: 12/31,          !- Field 19
-    For: Alldays,            !- Field 20
-    Until: 24:00,1.0;        !- Field 21
-
-  Schedule:Compact,
-    ReheatCoilAvailSched,    !- Name
-    Fraction,                !- Schedule Type Limits Name
-    Through: 3/31,           !- Field 1
-    For: Alldays,            !- Field 2
-    Until: 24:00,1.0,        !- Field 3
-    Through: 9/30,           !- Field 5
-    For: Weekdays,           !- Field 6
-    Until: 7:00,0.0,         !- Field 7
-    Until: 18:00,1.0,        !- Field 9
-    Until: 24:00,0.0,        !- Field 11
-    For: Weekends Holidays CustomDay1 CustomDay2, !- Field 13
-    Until: 24:00,0.0,        !- Field 14
-    For: AllOtherDays,       !- Field 16
-    Until: 24:00,1.0,        !- Field 17
-    Through: 12/31,          !- Field 19
-    For: Alldays,            !- Field 20
+    For: AllDays,            !- Field 20
     Until: 24:00,1.0;        !- Field 21
 
   Schedule:Compact,
     CoolingCoilAvailSched,   !- Name
     Fraction,                !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: Alldays,            !- Field 2
-    Until: 24:00,1.0;        !- Field 3
+    Through: 3/31,           !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00,0.0,        !- Field 3
+    Through: 9/30,           !- Field 5
+    For: WeekDays,           !- Field 6
+    Until: 7:00,0.0,         !- Field 7
+    Until: 22:00,1.0,        !- Field 9
+    Until: 24:00,0.0,        !- Field 11
+    For: SummerDesignDay WinterDesignDay, !- Field 13
+    Until: 24:00,1.0,        !- Field 14
+    For: AllOtherDays,       !- Field 16
+    Until: 24:00,0.0,        !- Field 17
+    Through: 12/31,          !- Field 19
+    For: AllDays,            !- Field 20
+    Until: 24:00,0.0;        !- Field 21
 
   Schedule:Compact,
     CoolingPumpAvailSched,   !- Name
     Fraction,                !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: Alldays,            !- Field 2
-    Until: 24:00,1.0;        !- Field 3
+    Through: 3/31,           !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00,0.0,        !- Field 3
+    Through: 9/30,           !- Field 5
+    For: AllDays,            !- Field 6
+    Until: 24:00,1.0,        !- Field 7
+    Through: 12/31,          !- Field 9
+    For: AllDays,            !- Field 10
+    Until: 24:00,0.0;        !- Field 11
 
   Schedule:Compact,
-    CW Loop Temp Schedule,   !- Name
-    Temperature,             !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: Alldays,            !- Field 2
-    Until: 24:00,7.22;       !- Field 3
+    ReheatCoilAvailSched,    !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 3/31,           !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 24:00,1.0,        !- Field 3
+    Through: 9/30,           !- Field 5
+    For: WeekDays,           !- Field 6
+    Until: 7:00,0.0,         !- Field 7
+    Until: 22:00,1.0,        !- Field 9
+    Until: 24:00,0.0,        !- Field 11
+    For: SummerDesignDay WinterDesignDay, !- Field 13
+    Until: 24:00,1.0,        !- Field 14
+    For: AllOtherDays,       !- Field 16
+    Until: 24:00,0.0,        !- Field 17
+    Through: 12/31,          !- Field 19
+    For: AllDays,            !- Field 20
+    Until: 24:00,1.0;        !- Field 21
 
   Schedule:Compact,
     HW Loop Temp Schedule,   !- Name
     Temperature,             !- Schedule Type Limits Name
     Through: 12/31,          !- Field 1
     For: Alldays,            !- Field 2
-    Until: 24:00,60.0;       !- Field 3
+    Until: 24:00,82.0;       !- Field 3
 
   Schedule:Compact,
     PlantOnSched,            !- Name
@@ -2151,929 +2162,12 @@
     For: Alldays,            !- Field 2
     Until: 24:00,1.0;        !- Field 3
 
-  Schedule:Compact,
-    Seasonal Reset Supply Air Temp Sch,  !- Name
-    Temperature,             !- Schedule Type Limits Name
-    Through: 3/31,           !- Field 1
-    For: Alldays,            !- Field 2
-    Until: 24:00,16.0,       !- Field 3
-    Through: 9/30,           !- Field 5
-    For: Alldays,            !- Field 6
-    Until: 24:00,17.5,       !- Field 7
-    Through: 12/31,          !- Field 9
-    For: Alldays,            !- Field 10
-    Until: 24:00,16.0;       !- Field 11
-
-  Schedule:Compact,
-    Seasonal Relative Humidity Sch,  !- Name
-    Humidity,                !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: Alldays,            !- Field 2
-    Until: 24:00,50.0;       !- Field 3
-
-  ScheduleTypeLimits,
-    Humidity,                !- Name
-    0,                       !- Lower Limit Value
-    100,                     !- Upper Limit Value
-    CONTINUOUS;              !- Numeric Type
-
-!********** Indoor Heat Pump Water Heater Inputs (uses zone and outdoor air) in Zone 5 ****************
-
-  WaterHeater:HeatPump:PumpedCondenser,
-    Zone5HeatPumpWaterHeater,!- Name
-    HeatPumpWaterHeaterSch,  !- Availability Schedule Name
-    HPWHTempSch,             !- Compressor Setpoint Temperature Schedule Name
-    2.0,                     !- Dead Band Temperature Difference {deltaC}
-    HPWHWaterInletNode,      !- Condenser Water Inlet Node Name
-    HPWHWaterOutletNode,     !- Condenser Water Outlet Node Name
-    autocalculate,           !- Condenser Water Flow Rate {m3/s}
-    autocalculate,           !- Evaporator Air Flow Rate {m3/s}
-    ZoneAndOutdoorAir,       !- Inlet Air Configuration
-    HPWHAirOutletNode,       !- Air Inlet Node Name
-    HPWHAirInletNode,        !- Air Outlet Node Name
-    HPWHOutdoorAirInletNode, !- Outdoor Air Node Name
-    HPWHExhaustAirOutletNode,!- Exhaust Air Node Name
-    ,                        !- Inlet Air Temperature Schedule Name
-    ,                        !- Inlet Air Humidity Schedule Name
-    SPACE5-1,                !- Inlet Air Zone Name
-    WaterHeater:Stratified,  !- Tank Object Type
-    HPWHTank,                !- Tank Name
-    ,                        !- Tank Use Side Inlet Node Name
-    ,                        !- Tank Use Side Outlet Node Name
-    Coil:WaterHeating:AirToWaterHeatPump:Pumped,  !- DX Coil Object Type
-    HPWHDXCoil,              !- DX Coil Name
-    5.0,                     !- Minimum Inlet Air Temperature for Compressor Operation {C}
-    ,                        !- Maximum Inlet Air Temperature for Compressor Operation {C}
-    Zone,                    !- Compressor Location
-    ,                        !- Compressor Ambient Temperature Schedule Name
-    Fan:OnOff,               !- Fan Object Type
-    HPWHFan,                 !- Fan Name
-    DrawThrough,             !- Fan Placement
-    15.0,                    !- On Cycle Parasitic Electric Load {W}
-    5.0,                     !- Off Cycle Parasitic Electric Load {W}
-    Zone,                    !- Parasitic Heat Rejection Location
-    HPWHInletAirMixerNode,   !- Inlet Air Mixer Node Name
-    HPWHOutletAirSplitterNode,  !- Outlet Air Splitter Node Name
-    HPWHMixerInletAirSch,    !- Inlet Air Mixer Schedule Name
-    ,                        !- Tank Element Control Logic
-    0.154465;                !- Control Sensor 1 Height In Stratified Tank {m}
-
-  WaterHeater:Stratified,
-    HPWHTank,                !- Name
-    ,                        !- End-Use Subcategory
-    0.3785,                  !- Tank Volume {m3}
-    0.514882,                !- Tank Height {m}
-    VerticalCylinder,        !- Tank Shape
-    ,                        !- Tank Perimeter {m}
-    82.2222,                 !- Maximum Temperature Limit {C}
-    MasterSlave,             !- Heater Priority Control
-    Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
-    0.360417,                !- Heater 1 Height {m}
-    Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
-    0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- On Cycle Parasitic Height {m}
-    ZONE,                    !- Ambient Temperature Indicator
-    ,                        !- Ambient Temperature Schedule Name
-    SPACE5-1,                !- Ambient Temperature Zone Name
-    ,                        !- Ambient Temperature Outdoor Air Node Name
-    0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
-    ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
-    ,                        !- Off Cycle Flue Loss Fraction to Zone
-    0.00379,                 !- Peak Use Flow Rate {m3/s}
-    Hot Water Demand Schedule,  !- Use Flow Rate Fraction Schedule Name
-    ,                        !- Cold Water Supply Temperature Schedule Name
-    ,                        !- Use Side Inlet Node Name
-    ,                        !- Use Side Outlet Node Name
-    ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
-    HPWHWaterOutletNode,     !- Source Side Inlet Node Name
-    HPWHWaterInletNode,      !- Source Side Outlet Node Name
-    0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
-    0.257441,                !- Source Side Outlet Height {m}
-    Fixed,                   !- Inlet Mode
-    ,                        !- Use Side Design Flow Rate {m3/s}
-    ,                        !- Source Side Design Flow Rate {m3/s}
-    ,                        !- Indirect Water Heating Recovery Time {hr}
-    10;                      !- Number of Nodes
-
-  Coil:WaterHeating:AirToWaterHeatPump:Pumped,
-    HPWHDXCoil,              !- Name
-    ,                        !- Availability Schedule Name
-    4000.0,                  !- Rated Heating Capacity {W}
-    3.2,                     !- Rated COP {W/W}
-    0.6956,                  !- Rated Sensible Heat Ratio
-    29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
-    22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
-    55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
-    autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
-    No,                      !- Evaporator Fan Power Included in Rated COP
-    No,                      !- Condenser Pump Power Included in Rated COP
-    No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
-    150.0,                   !- Condenser Water Pump Power {W}
-    0.1,                     !- Fraction of Condenser Pump Heat to Water
-    HPWHInletAirMixerNode,   !- Evaporator Air Inlet Node Name
-    HPWHDXCoilAirOutletNode, !- Evaporator Air Outlet Node Name
-    HPWHWaterInletNode,      !- Condenser Water Inlet Node Name
-    HPWHWaterOutletNode,     !- Condenser Water Outlet Node Name
-    100.0,                   !- Crankcase Heater Capacity {W}
-    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-    5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
-    WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
-    HPWHHeatingCapFTemp,     !- Heating Capacity Function of Temperature Curve Name
-    ,                        !- Heating Capacity Function of Air Flow Fraction Curve Name
-    ,                        !- Heating Capacity Function of Water Flow Fraction Curve Name
-    HPWHHeatingCOPFTemp,     !- Heating COP Function of Temperature Curve Name
-    ,                        !- Heating COP Function of Air Flow Fraction Curve Name
-    ,                        !- Heating COP Function of Water Flow Fraction Curve Name
-    HPWHPLFFPLR;             !- Part Load Fraction Correlation Curve Name
-
-  Fan:OnOff,
-    HPWHFan,                 !- Name
-    HeatPumpWaterHeaterSch,  !- Availability Schedule Name
-    0.7,                     !- Fan Total Efficiency
-    100.0,                   !- Pressure Rise {Pa}
-    0.2685,                  !- Maximum Flow Rate {m3/s}
-    0.9,                     !- Motor Efficiency
-    1.0,                     !- Motor In Airstream Fraction
-    HPWHDXCoilAirOutletNode, !- Air Inlet Node Name
-    HPWHOutletAirSplitterNode;  !- Air Outlet Node Name
-
-!  Heating Capacity as a Function of Temperature Curve (Air Wet-bulb T, Condenser Water Inlet T)
-!  Colmac HPA 2000 Air Source Heat Pump Water Heater
-!  Rating point: 29.4 C (85 F) Entering Air Dry-bulb Temperature
-!                22.2 C (72 F) Entering Air Wet-bulb Temperature
-!                56.7 C (132.2 F) Entering Condenser Water Temperature
-!  Capacity = 17028.6 W (58117 BTUH) water heating capacity
-!  COP      = 3.37 W/W (12.21 BTUH/W) water heating efficiency
-!
-
-  Curve:Biquadratic,
-    HPWHHeatingCapFTemp,     !- Name
-    0.369827,                !- Coefficient1 Constant
-    0.043341,                !- Coefficient2 x
-    -0.00023,                !- Coefficient3 x**2
-    0.000466,                !- Coefficient4 y
-    0.000026,                !- Coefficient5 y**2
-    -0.00027,                !- Coefficient6 x*y
-    0.0,                     !- Minimum Value of x
-    40.0,                    !- Maximum Value of x
-    20.0,                    !- Minimum Value of y
-    90.0,                    !- Maximum Value of y
-    ,                        !- Minimum Curve Output
-    ,                        !- Maximum Curve Output
-    Temperature,             !- Input Unit Type for X
-    Temperature,             !- Input Unit Type for Y
-    Dimensionless;           !- Output Unit Type
-
-  Curve:Biquadratic,
-    HPWHHeatingCOPFTemp,     !- Name
-    1.19713,                 !- Coefficient1 Constant
-    0.077849,                !- Coefficient2 x
-    -0.0000016,              !- Coefficient3 x**2
-    -0.02675,                !- Coefficient4 y
-    0.000296,                !- Coefficient5 y**2
-    -0.00112,                !- Coefficient6 x*y
-    0.0,                     !- Minimum Value of x
-    40.0,                    !- Maximum Value of x
-    20.0,                    !- Minimum Value of y
-    90.0,                    !- Maximum Value of y
-    ,                        !- Minimum Curve Output
-    ,                        !- Maximum Curve Output
-    Temperature,             !- Input Unit Type for X
-    Temperature,             !- Input Unit Type for Y
-    Dimensionless;           !- Output Unit Type
-
-  Curve:Quadratic,
-    HPWHPLFFPLR,             !- Name
-    0.75,                    !- Coefficient1 Constant
-    0.25,                    !- Coefficient2 x
-    0.0,                     !- Coefficient3 x**2
-    0.0,                     !- Minimum Value of x
-    1.0;                     !- Maximum Value of x
-
-  Schedule:Compact,
-    HeatPumpWaterHeaterSch,  !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,1.0;        !- Field 3
-
-  Schedule:Compact,
-    HPWHTempSch,             !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,60.0;       !- Field 3
-
-  Schedule:Compact,
-    Hot Water Setpoint Temp Schedule,  !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,50.0;       !- Field 3
-
-  Schedule:Compact,
-    HPWHMixerInletAirSch,    !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 3/31,           !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,0.2,        !- Field 3
-    Through: 9/30,           !- Field 5
-    For: AllDays,            !- Field 6
-    Until: 24:00,0.0,        !- Field 7
-    Through: 12/31,          !- Field 9
-    For: AllDays,            !- Field 10
-    Until: 24:00,0.2;        !- Field 11
-
-  Schedule:Compact,
-    Hot Water Demand Schedule,  !- Name
-    Fraction,                !- Schedule Type Limits Name
-    THROUGH: 12/31,          !- Field 1
-    FOR: AllDays,            !- Field 2
-    UNTIL: 5:00,0,           !- Field 3
-    UNTIL: 7:00,0.003,       !- Field 5
-    UNTIL: 18:00,0,          !- Field 7
-    UNTIL: 18:30,0.003,      !- Field 9
-    UNTIL: 24:00,0;          !- Field 11
-
-!*********** End of Indoor Heat Pump Water Heater Inputs (uses zone and outdoor air) in Zone 5 ********
-!*********** Indoor Heat Pump Water Heater Inputs (uses no outdoor air) in Zone 4 ******
-
-  WaterHeater:HeatPump:PumpedCondenser,
-    Zone4HeatPumpWaterHeater,!- Name
-    HeatPumpWaterHeaterSch,  !- Availability Schedule Name
-    HPWHTempSch,             !- Compressor Setpoint Temperature Schedule Name
-    2.0,                     !- Dead Band Temperature Difference {deltaC}
-    Zone4WaterInletNode,     !- Condenser Water Inlet Node Name
-    Zone4WaterOutletNode,    !- Condenser Water Outlet Node Name
-    autocalculate,           !- Condenser Water Flow Rate {m3/s}
-    autocalculate,           !- Evaporator Air Flow Rate {m3/s}
-    ZoneAirOnly,             !- Inlet Air Configuration
-    Zone4AirOutletNode,      !- Air Inlet Node Name
-    Zone4AirInletNode,       !- Air Outlet Node Name
-    ,                        !- Outdoor Air Node Name
-    ,                        !- Exhaust Air Node Name
-    ,                        !- Inlet Air Temperature Schedule Name
-    ,                        !- Inlet Air Humidity Schedule Name
-    SPACE4-1,                !- Inlet Air Zone Name
-    WaterHeater:Stratified,  !- Tank Object Type
-    Zone4HPWHTank,           !- Tank Name
-    ,                        !- Tank Use Side Inlet Node Name
-    ,                        !- Tank Use Side Outlet Node Name
-    Coil:WaterHeating:AirToWaterHeatPump:Pumped,  !- DX Coil Object Type
-    Zone4HPWHDXCoil,         !- DX Coil Name
-    5.0,                     !- Minimum Inlet Air Temperature for Compressor Operation {C}
-    ,                        !- Maximum Inlet Air Temperature for Compressor Operation {C}
-    Zone,                    !- Compressor Location
-    ,                        !- Compressor Ambient Temperature Schedule Name
-    Fan:OnOff,               !- Fan Object Type
-    Zone4HPWHFan,            !- Fan Name
-    DrawThrough,             !- Fan Placement
-    15.0,                    !- On Cycle Parasitic Electric Load {W}
-    5.0,                     !- Off Cycle Parasitic Electric Load {W}
-    Zone,                    !- Parasitic Heat Rejection Location
-    ,                        !- Inlet Air Mixer Node Name
-    ,                        !- Outlet Air Splitter Node Name
-    ,                        !- Inlet Air Mixer Schedule Name
-    ,                        !- Tank Element Control Logic
-    0.154465;                !- Control Sensor 1 Height In Stratified Tank {m}
-
-  WaterHeater:Stratified,
-    Zone4HPWHTank,           !- Name
-    ,                        !- End-Use Subcategory
-    0.3785,                  !- Tank Volume {m3}
-    0.514882,                !- Tank Height {m}
-    VerticalCylinder,        !- Tank Shape
-    ,                        !- Tank Perimeter {m}
-    82.2222,                 !- Maximum Temperature Limit {C}
-    MasterSlave,             !- Heater Priority Control
-    Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
-    0.360417,                !- Heater 1 Height {m}
-    Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
-    0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- On Cycle Parasitic Height {m}
-    ZONE,                    !- Ambient Temperature Indicator
-    ,                        !- Ambient Temperature Schedule Name
-    SPACE4-1,                !- Ambient Temperature Zone Name
-    ,                        !- Ambient Temperature Outdoor Air Node Name
-    0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
-    ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
-    ,                        !- Off Cycle Flue Loss Fraction to Zone
-    0.00379,                 !- Peak Use Flow Rate {m3/s}
-    Hot Water Demand Schedule,  !- Use Flow Rate Fraction Schedule Name
-    ,                        !- Cold Water Supply Temperature Schedule Name
-    ,                        !- Use Side Inlet Node Name
-    ,                        !- Use Side Outlet Node Name
-    ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
-    Zone4WaterOutletNode,    !- Source Side Inlet Node Name
-    Zone4WaterInletNode,     !- Source Side Outlet Node Name
-    0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
-    0.257441,                !- Source Side Outlet Height {m}
-    Fixed,                   !- Inlet Mode
-    ,                        !- Use Side Design Flow Rate {m3/s}
-    ,                        !- Source Side Design Flow Rate {m3/s}
-    ,                        !- Indirect Water Heating Recovery Time {hr}
-    10;                      !- Number of Nodes
-
-  Coil:WaterHeating:AirToWaterHeatPump:Pumped,
-    Zone4HPWHDXCoil,         !- Name
-    ,                        !- Availability Schedule Name
-    4000.0,                  !- Rated Heating Capacity {W}
-    3.2,                     !- Rated COP {W/W}
-    0.6956,                  !- Rated Sensible Heat Ratio
-    29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
-    22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
-    55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
-    autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
-    No,                      !- Evaporator Fan Power Included in Rated COP
-    No,                      !- Condenser Pump Power Included in Rated COP
-    No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
-    150.0,                   !- Condenser Water Pump Power {W}
-    0.1,                     !- Fraction of Condenser Pump Heat to Water
-    Zone4AirOutletNode,      !- Evaporator Air Inlet Node Name
-    Zone4DXCoilAirOutletNode,!- Evaporator Air Outlet Node Name
-    Zone4WaterInletNode,     !- Condenser Water Inlet Node Name
-    Zone4WaterOutletNode,    !- Condenser Water Outlet Node Name
-    100.0,                   !- Crankcase Heater Capacity {W}
-    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-    5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
-    WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
-    HPWHHeatingCapFTemp,     !- Heating Capacity Function of Temperature Curve Name
-    ,                        !- Heating Capacity Function of Air Flow Fraction Curve Name
-    ,                        !- Heating Capacity Function of Water Flow Fraction Curve Name
-    HPWHHeatingCOPFTemp,     !- Heating COP Function of Temperature Curve Name
-    ,                        !- Heating COP Function of Air Flow Fraction Curve Name
-    ,                        !- Heating COP Function of Water Flow Fraction Curve Name
-    HPWHPLFFPLR;             !- Part Load Fraction Correlation Curve Name
-
-  Fan:OnOff,
-    Zone4HPWHFan,            !- Name
-    HeatPumpWaterHeaterSch,  !- Availability Schedule Name
-    0.7,                     !- Fan Total Efficiency
-    100.0,                   !- Pressure Rise {Pa}
-    0.2685,                  !- Maximum Flow Rate {m3/s}
-    0.9,                     !- Motor Efficiency
-    1.0,                     !- Motor In Airstream Fraction
-    Zone4DXCoilAirOutletNode,!- Air Inlet Node Name
-    Zone4AirInletNode;       !- Air Outlet Node Name
-
-!*********** End of Indoor Heat Pump Water Heater Inputs (uses no outdoor air) in Zone 4 ******
-!*********** Indoor Heat Pump Water Heater Inputs (uses no outdoor air) in Zone 4 ******
-
-  WaterHeater:HeatPump:PumpedCondenser,
-    Zone4bHeatPumpWaterHeater,  !- Name
-    HeatPumpWaterHeaterSch,  !- Availability Schedule Name
-    HPWHTempSch,             !- Compressor Setpoint Temperature Schedule Name
-    2.0,                     !- Dead Band Temperature Difference {deltaC}
-    Zone4bWaterInletNode,    !- Condenser Water Inlet Node Name
-    Zone4bWaterOutletNode,   !- Condenser Water Outlet Node Name
-    autocalculate,           !- Condenser Water Flow Rate {m3/s}
-    autocalculate,           !- Evaporator Air Flow Rate {m3/s}
-    ZoneAirOnly,             !- Inlet Air Configuration
-    Zone4bAirOutletNode,     !- Air Inlet Node Name
-    Zone4bAirInletNode,      !- Air Outlet Node Name
-    ,                        !- Outdoor Air Node Name
-    ,                        !- Exhaust Air Node Name
-    ,                        !- Inlet Air Temperature Schedule Name
-    ,                        !- Inlet Air Humidity Schedule Name
-    SPACE4-1,                !- Inlet Air Zone Name
-    WaterHeater:Stratified,  !- Tank Object Type
-    Zone4bHPWHTank,          !- Tank Name
-    Water Heater Use Inlet Node,  !- Tank Use Side Inlet Node Name
-    Water Heater Use Outlet Node,  !- Tank Use Side Outlet Node Name
-    Coil:WaterHeating:AirToWaterHeatPump:Pumped,  !- DX Coil Object Type
-    Zone4bHPWHDXCoil,        !- DX Coil Name
-    5.0,                     !- Minimum Inlet Air Temperature for Compressor Operation {C}
-    ,                        !- Maximum Inlet Air Temperature for Compressor Operation {C}
-    Zone,                    !- Compressor Location
-    ,                        !- Compressor Ambient Temperature Schedule Name
-    Fan:OnOff,               !- Fan Object Type
-    Zone4bHPWHFan,           !- Fan Name
-    DrawThrough,             !- Fan Placement
-    15.0,                    !- On Cycle Parasitic Electric Load {W}
-    5.0,                     !- Off Cycle Parasitic Electric Load {W}
-    Zone,                    !- Parasitic Heat Rejection Location
-    ,                        !- Inlet Air Mixer Node Name
-    ,                        !- Outlet Air Splitter Node Name
-    ,                        !- Inlet Air Mixer Schedule Name
-    ,                        !- Tank Element Control Logic
-    0.154465;                !- Control Sensor 1 Height In Stratified Tank {m}
-
-  WaterHeater:Stratified,
-    Zone4bHPWHTank,          !- Name
-    ,                        !- End-Use Subcategory
-    0.3785,                  !- Tank Volume {m3}
-    0.514882,                !- Tank Height {m}
-    VerticalCylinder,        !- Tank Shape
-    ,                        !- Tank Perimeter {m}
-    82.2222,                 !- Maximum Temperature Limit {C}
-    MasterSlave,             !- Heater Priority Control
-    Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    4000,                    !- Heater 1 Capacity {W}
-    0.360417,                !- Heater 1 Height {m}
-    Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
-    0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- On Cycle Parasitic Height {m}
-    ZONE,                    !- Ambient Temperature Indicator
-    ,                        !- Ambient Temperature Schedule Name
-    SPACE4-1,                !- Ambient Temperature Zone Name
-    ,                        !- Ambient Temperature Outdoor Air Node Name
-    0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
-    ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
-    ,                        !- Off Cycle Flue Loss Fraction to Zone
-    ,                        !- Peak Use Flow Rate {m3/s}
-    ,                        !- Use Flow Rate Fraction Schedule Name
-    ,                        !- Cold Water Supply Temperature Schedule Name
-    Water Heater Use Inlet Node,  !- Use Side Inlet Node Name
-    Water Heater Use Outlet Node,  !- Use Side Outlet Node Name
-    1,                       !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
-    Zone4bWaterOutletNode,   !- Source Side Inlet Node Name
-    Zone4bWaterInletNode,    !- Source Side Outlet Node Name
-    1.0,                     !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
-    0.257441,                !- Source Side Outlet Height {m}
-    Fixed,                   !- Inlet Mode
-    autosize,                !- Use Side Design Flow Rate {m3/s}
-    ,                        !- Source Side Design Flow Rate {m3/s}
-    ,                        !- Indirect Water Heating Recovery Time {hr}
-    10;                      !- Number of Nodes
-
-  Coil:WaterHeating:AirToWaterHeatPump:Pumped,
-    Zone4bHPWHDXCoil,        !- Name
-    ,                        !- Availability Schedule Name
-    4000,                    !- Rated Heating Capacity {W}
-    3.2,                     !- Rated COP {W/W}
-    0.6956,                  !- Rated Sensible Heat Ratio
-    29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
-    22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
-    55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    autocalculate,           !- Rated Evaporator Air Flow Rate {m3/s}
-    autocalculate,           !- Rated Condenser Water Flow Rate {m3/s}
-    No,                      !- Evaporator Fan Power Included in Rated COP
-    No,                      !- Condenser Pump Power Included in Rated COP
-    No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
-    150.0,                   !- Condenser Water Pump Power {W}
-    0.1,                     !- Fraction of Condenser Pump Heat to Water
-    Zone4bAirOutletNode,     !- Evaporator Air Inlet Node Name
-    Zone4bDXCoilAirOutletNode,  !- Evaporator Air Outlet Node Name
-    Zone4bWaterInletNode,    !- Condenser Water Inlet Node Name
-    Zone4bWaterOutletNode,   !- Condenser Water Outlet Node Name
-    100.0,                   !- Crankcase Heater Capacity {W}
-    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-    5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
-    WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
-    HPWHHeatingCapFTemp,     !- Heating Capacity Function of Temperature Curve Name
-    ,                        !- Heating Capacity Function of Air Flow Fraction Curve Name
-    ,                        !- Heating Capacity Function of Water Flow Fraction Curve Name
-    HPWHHeatingCOPFTemp,     !- Heating COP Function of Temperature Curve Name
-    ,                        !- Heating COP Function of Air Flow Fraction Curve Name
-    ,                        !- Heating COP Function of Water Flow Fraction Curve Name
-    HPWHPLFFPLR;             !- Part Load Fraction Correlation Curve Name
-
-  Fan:OnOff,
-    Zone4bHPWHFan,           !- Name
-    HeatPumpWaterHeaterSch,  !- Availability Schedule Name
-    0.7,                     !- Fan Total Efficiency
-    100.0,                   !- Pressure Rise {Pa}
-    0.2685,                  !- Maximum Flow Rate {m3/s}
-    0.9,                     !- Motor Efficiency
-    1.0,                     !- Motor In Airstream Fraction
-    Zone4bDXCoilAirOutletNode,  !- Air Inlet Node Name
-    Zone4bAirInletNode;      !- Air Outlet Node Name
-
-!*********** End of Indoor Heat Pump Water Heater Inputs (uses no outdoor air) in Zone 4 ******
-!*********** Outdoor Heat Pump Water Heater Inputs ***********************
-
-  WaterHeater:HeatPump:PumpedCondenser,
-    OutdoorHeatPumpWaterHeater,  !- Name
-    PlantHPWHSch,            !- Availability Schedule Name
-    HPWHTempSch,             !- Compressor Setpoint Temperature Schedule Name
-    2.0,                     !- Dead Band Temperature Difference {deltaC}
-    HPOutdoorWaterInletNode, !- Condenser Water Inlet Node Name
-    HPOutdoorWaterOutletNode,!- Condenser Water Outlet Node Name
-    0.00016,                 !- Condenser Water Flow Rate {m3/s}
-    0.2685,                  !- Evaporator Air Flow Rate {m3/s}
-    OutdoorAirOnly,          !- Inlet Air Configuration
-    ,                        !- Air Inlet Node Name
-    ,                        !- Air Outlet Node Name
-    HPOutdoorAirInletNode,   !- Outdoor Air Node Name
-    HPOutdoorAirOutletNode,  !- Exhaust Air Node Name
-    ,                        !- Inlet Air Temperature Schedule Name
-    ,                        !- Inlet Air Humidity Schedule Name
-    ,                        !- Inlet Air Zone Name
-    WaterHeater:Stratified,  !- Tank Object Type
-    HPWHOutdoorTank,         !- Tank Name
-    ,                        !- Tank Use Side Inlet Node Name
-    ,                        !- Tank Use Side Outlet Node Name
-    Coil:WaterHeating:AirToWaterHeatPump:Pumped,  !- DX Coil Object Type
-    HPWHOutdoorDXCoil,       !- DX Coil Name
-    11.0,                    !- Minimum Inlet Air Temperature for Compressor Operation {C}
-    ,                        !- Maximum Inlet Air Temperature for Compressor Operation {C}
-    Outdoors,                !- Compressor Location
-    ,                        !- Compressor Ambient Temperature Schedule Name
-    Fan:OnOff,               !- Fan Object Type
-    HPWHOutdoorFan,          !- Fan Name
-    BlowThrough,             !- Fan Placement
-    ,                        !- On Cycle Parasitic Electric Load {W}
-    ,                        !- Off Cycle Parasitic Electric Load {W}
-    ,                        !- Parasitic Heat Rejection Location
-    ,                        !- Inlet Air Mixer Node Name
-    ,                        !- Outlet Air Splitter Node Name
-    ,                        !- Inlet Air Mixer Schedule Name
-    ,                        !- Tank Element Control Logic
-    0.154465;                !- Control Sensor 1 Height In Stratified Tank {m}
-
-  WaterHeater:Stratified,
-    HPWHOutdoorTank,         !- Name
-    ,                        !- End-Use Subcategory
-    0.3785,                  !- Tank Volume {m3}
-    0.514882,                !- Tank Height {m}
-    VerticalCylinder,        !- Tank Shape
-    ,                        !- Tank Perimeter {m}
-    82.2222,                 !- Maximum Temperature Limit {C}
-    MasterSlave,             !- Heater Priority Control
-    Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
-    0.360417,                !- Heater 1 Height {m}
-    Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
-    0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- On Cycle Parasitic Height {m}
-    Outdoors,                !- Ambient Temperature Indicator
-    ,                        !- Ambient Temperature Schedule Name
-    ,                        !- Ambient Temperature Zone Name
-    HPWHOutdoorTank OA Node, !- Ambient Temperature Outdoor Air Node Name
-    0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
-    ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
-    ,                        !- Off Cycle Flue Loss Fraction to Zone
-    0.000379,                !- Peak Use Flow Rate {m3/s}
-    Hot Water Demand Schedule,  !- Use Flow Rate Fraction Schedule Name
-    ,                        !- Cold Water Supply Temperature Schedule Name
-    ,                        !- Use Side Inlet Node Name
-    ,                        !- Use Side Outlet Node Name
-    ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
-    HPOutdoorWaterOutletNode,!- Source Side Inlet Node Name
-    HPOutdoorWaterInletNode, !- Source Side Outlet Node Name
-    0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
-    0.257441,                !- Source Side Outlet Height {m}
-    Fixed,                   !- Inlet Mode
-    ,                        !- Use Side Design Flow Rate {m3/s}
-    ,                        !- Source Side Design Flow Rate {m3/s}
-    ,                        !- Indirect Water Heating Recovery Time {hr}
-    10;                      !- Number of Nodes
-
-  OutdoorAir:Node,
-    HPWHOutdoorTank OA Node; !- Name
-
-  Coil:WaterHeating:AirToWaterHeatPump:Pumped,
-    HPWHOutdoorDXCoil,       !- Name
-    ,                        !- Availability Schedule Name
-    4000.0,                  !- Rated Heating Capacity {W}
-    3.2,                     !- Rated COP {W/W}
-    0.736,                   !- Rated Sensible Heat Ratio
-    29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
-    22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
-    55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    0.2685,                  !- Rated Evaporator Air Flow Rate {m3/s}
-    0.00016,                 !- Rated Condenser Water Flow Rate {m3/s}
-    No,                      !- Evaporator Fan Power Included in Rated COP
-    No,                      !- Condenser Pump Power Included in Rated COP
-    No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
-    150.0,                   !- Condenser Water Pump Power {W}
-    0.1,                     !- Fraction of Condenser Pump Heat to Water
-    HPOutdoorFanAirOutletNode,  !- Evaporator Air Inlet Node Name
-    HPOutdoorAirOutletNode,  !- Evaporator Air Outlet Node Name
-    HPOutdoorWaterInletNode, !- Condenser Water Inlet Node Name
-    HPOutdoorWaterOutletNode,!- Condenser Water Outlet Node Name
-    100.0,                   !- Crankcase Heater Capacity {W}
-    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-    5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
-    WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
-    HPWHHeatingCapFTemp,     !- Heating Capacity Function of Temperature Curve Name
-    ,                        !- Heating Capacity Function of Air Flow Fraction Curve Name
-    ,                        !- Heating Capacity Function of Water Flow Fraction Curve Name
-    HPWHHeatingCOPFTemp,     !- Heating COP Function of Temperature Curve Name
-    ,                        !- Heating COP Function of Air Flow Fraction Curve Name
-    ,                        !- Heating COP Function of Water Flow Fraction Curve Name
-    HPWHPLFFPLR;             !- Part Load Fraction Correlation Curve Name
-
-  Fan:OnOff,
-    HPWHOutdoorFan,          !- Name
-    PlantHPWHSch,            !- Availability Schedule Name
-    0.7,                     !- Fan Total Efficiency
-    100.0,                   !- Pressure Rise {Pa}
-    0.2685,                  !- Maximum Flow Rate {m3/s}
-    0.9,                     !- Motor Efficiency
-    1.0,                     !- Motor In Airstream Fraction
-    HPOutdoorAirInletNode,   !- Air Inlet Node Name
-    HPOutdoorFanAirOutletNode;  !- Air Outlet Node Name
-
-!*************** End of Outdoor Heat Pump Water Heater Inputs *****************
-!************** Scheduled Heat Pump Water Heater Inputs ***********************
-
-  Schedule:Compact,
-    ScheduledHPWHSch,        !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,1.0;        !- Field 3
-
-  Schedule:Compact,
-    ScheduledAmbientTemp,    !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,19.72222;   !- Field 3
-
-  Schedule:Compact,
-    ScheduledAmbientRH,      !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,0.5;        !- Field 3
-
-  Schedule:Compact,
-    ScheduledCompressorTemp, !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,21.0;       !- Field 3
-
-  WaterHeater:HeatPump:PumpedCondenser,
-    ScheduledHeatPumpWaterHeater,  !- Name
-    ScheduledHPWHSch,        !- Availability Schedule Name
-    HPWHTempSch,             !- Compressor Setpoint Temperature Schedule Name
-    2.0,                     !- Dead Band Temperature Difference {deltaC}
-    HPScheduledWaterInletNode,  !- Condenser Water Inlet Node Name
-    HPScheduledWaterOutletNode,  !- Condenser Water Outlet Node Name
-    0.00016,                 !- Condenser Water Flow Rate {m3/s}
-    0.2685,                  !- Evaporator Air Flow Rate {m3/s}
-    Schedule,                !- Inlet Air Configuration
-    HPScheduledAirInletNode, !- Air Inlet Node Name
-    HPScheduledAirOutletNode,!- Air Outlet Node Name
-    ,                        !- Outdoor Air Node Name
-    ,                        !- Exhaust Air Node Name
-    ScheduledAmbientTemp,    !- Inlet Air Temperature Schedule Name
-    ScheduledAmbientRH,      !- Inlet Air Humidity Schedule Name
-    ,                        !- Inlet Air Zone Name
-    WaterHeater:Stratified,  !- Tank Object Type
-    HPWHScheduledTank,       !- Tank Name
-    ,                        !- Tank Use Side Inlet Node Name
-    ,                        !- Tank Use Side Outlet Node Name
-    Coil:WaterHeating:AirToWaterHeatPump:Pumped,  !- DX Coil Object Type
-    HPWHScheduledDXCoil,     !- DX Coil Name
-    11.0,                    !- Minimum Inlet Air Temperature for Compressor Operation {C}
-    ,                        !- Maximum Inlet Air Temperature for Compressor Operation {C}
-    Schedule,                !- Compressor Location
-    ScheduledCompressorTemp, !- Compressor Ambient Temperature Schedule Name
-    Fan:OnOff,               !- Fan Object Type
-    HPWHScheduledFan,        !- Fan Name
-    BlowThrough,             !- Fan Placement
-    ,                        !- On Cycle Parasitic Electric Load {W}
-    ,                        !- Off Cycle Parasitic Electric Load {W}
-    ,                        !- Parasitic Heat Rejection Location
-    ,                        !- Inlet Air Mixer Node Name
-    ,                        !- Outlet Air Splitter Node Name
-    ,                        !- Inlet Air Mixer Schedule Name
-    ,                        !- Tank Element Control Logic
-    0.154465;                !- Control Sensor 1 Height In Stratified Tank {m}
-
-  WaterHeater:Stratified,
-    HPWHScheduledTank,       !- Name
-    ,                        !- End-Use Subcategory
-    0.3785,                  !- Tank Volume {m3}
-    0.514882,                !- Tank Height {m}
-    VerticalCylinder,        !- Tank Shape
-    ,                        !- Tank Perimeter {m}
-    82.2222,                 !- Maximum Temperature Limit {C}
-    MasterSlave,             !- Heater Priority Control
-    Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
-    0.360417,                !- Heater 1 Height {m}
-    Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
-    0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- On Cycle Parasitic Height {m}
-    SCHEDULE,                !- Ambient Temperature Indicator
-    ScheduledAmbientTemp,    !- Ambient Temperature Schedule Name
-    ,                        !- Ambient Temperature Zone Name
-    ,                        !- Ambient Temperature Outdoor Air Node Name
-    0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
-    ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
-    ,                        !- Off Cycle Flue Loss Fraction to Zone
-    0.000379,                !- Peak Use Flow Rate {m3/s}
-    Hot Water Demand Schedule,  !- Use Flow Rate Fraction Schedule Name
-    ,                        !- Cold Water Supply Temperature Schedule Name
-    ,                        !- Use Side Inlet Node Name
-    ,                        !- Use Side Outlet Node Name
-    ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
-    HPScheduledWaterOutletNode,  !- Source Side Inlet Node Name
-    HPScheduledWaterInletNode,  !- Source Side Outlet Node Name
-    0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
-    0.257441,                !- Source Side Outlet Height {m}
-    Fixed,                   !- Inlet Mode
-    ,                        !- Use Side Design Flow Rate {m3/s}
-    ,                        !- Source Side Design Flow Rate {m3/s}
-    ,                        !- Indirect Water Heating Recovery Time {hr}
-    10;                      !- Number of Nodes
-
-  Coil:WaterHeating:AirToWaterHeatPump:Pumped,
-    HPWHScheduledDXCoil,     !- Name
-    ,                        !- Availability Schedule Name
-    4000.0,                  !- Rated Heating Capacity {W}
-    3.2,                     !- Rated COP {W/W}
-    0.736,                   !- Rated Sensible Heat Ratio
-    29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
-    22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
-    55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    0.2685,                  !- Rated Evaporator Air Flow Rate {m3/s}
-    0.00016,                 !- Rated Condenser Water Flow Rate {m3/s}
-    Yes,                     !- Evaporator Fan Power Included in Rated COP
-    No,                      !- Condenser Pump Power Included in Rated COP
-    No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
-    125.0,                   !- Condenser Water Pump Power {W}
-    0.1,                     !- Fraction of Condenser Pump Heat to Water
-    HPScheduledFanAirOutletNode,  !- Evaporator Air Inlet Node Name
-    HPScheduledAirOutletNode,!- Evaporator Air Outlet Node Name
-    HPScheduledWaterInletNode,  !- Condenser Water Inlet Node Name
-    HPScheduledWaterOutletNode,  !- Condenser Water Outlet Node Name
-    120.0,                   !- Crankcase Heater Capacity {W}
-    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-    5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
-    WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
-    HPWHHeatingCapFTemp,     !- Heating Capacity Function of Temperature Curve Name
-    ,                        !- Heating Capacity Function of Air Flow Fraction Curve Name
-    ,                        !- Heating Capacity Function of Water Flow Fraction Curve Name
-    HPWHHeatingCOPFTemp,     !- Heating COP Function of Temperature Curve Name
-    ,                        !- Heating COP Function of Air Flow Fraction Curve Name
-    ,                        !- Heating COP Function of Water Flow Fraction Curve Name
-    HPWHPLFFPLR;             !- Part Load Fraction Correlation Curve Name
-
-  Fan:OnOff,
-    HPWHScheduledFan,        !- Name
-    ScheduledHPWHSch,        !- Availability Schedule Name
-    0.7,                     !- Fan Total Efficiency
-    100.0,                   !- Pressure Rise {Pa}
-    0.2685,                  !- Maximum Flow Rate {m3/s}
-    0.9,                     !- Motor Efficiency
-    1.0,                     !- Motor In Airstream Fraction
-    HPScheduledAirInletNode, !- Air Inlet Node Name
-    HPScheduledFanAirOutletNode;  !- Air Outlet Node Name
-
-!*************** End of Scheduled Heat Pump Water Heater Inputs *****************
-!*************** Scheduled non-HP Water Heater (uses electric element for water heating) *********
-
-  WaterHeater:Stratified,
-    ScheduledElectricTank,   !- Name
-    ,                        !- End-Use Subcategory
-    0.3785,                  !- Tank Volume {m3}
-    0.514882,                !- Tank Height {m}
-    VerticalCylinder,        !- Tank Shape
-    ,                        !- Tank Perimeter {m}
-    82.2222,                 !- Maximum Temperature Limit {C}
-    MasterSlave,             !- Heater Priority Control
-    Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    5000,                    !- Heater 1 Capacity {W}
-    0.360417,                !- Heater 1 Height {m}
-    Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
-    0.154465,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.95,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
-    0.308929,                !- On Cycle Parasitic Height {m}
-    SCHEDULE,                !- Ambient Temperature Indicator
-    ScheduledAmbientTemp,    !- Ambient Temperature Schedule Name
-    ,                        !- Ambient Temperature Zone Name
-    ,                        !- Ambient Temperature Outdoor Air Node Name
-    0.658944,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    1.000000,                !- Skin Loss Fraction to Zone
-    ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
-    ,                        !- Off Cycle Flue Loss Fraction to Zone
-    0.000379,                !- Peak Use Flow Rate {m3/s}
-    Hot Water Demand Schedule,  !- Use Flow Rate Fraction Schedule Name
-    ,                        !- Cold Water Supply Temperature Schedule Name
-    ,                        !- Use Side Inlet Node Name
-    ,                        !- Use Side Outlet Node Name
-    ,                        !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
-    ,                        !- Source Side Inlet Node Name
-    ,                        !- Source Side Outlet Node Name
-    0.95,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
-    0.257441,                !- Source Side Outlet Height {m}
-    Fixed,                   !- Inlet Mode
-    ,                        !- Use Side Design Flow Rate {m3/s}
-    ,                        !- Source Side Design Flow Rate {m3/s}
-    ,                        !- Indirect Water Heating Recovery Time {hr}
-    10;                      !- Number of Nodes
-
-  Site:WaterMainsTemperature,
-    CORRELATION,             !- Calculation Method
-    ,                        !- Temperature Schedule Name
-    9.69,                    !- Annual Average Outdoor Air Temperature {C}
-    28.1;                    !- Maximum Difference In Monthly Average Outdoor Air Temperatures {deltaC}
-
-!*************** Scheduled Water Heater (uses electric element for water heating) *********
-
   OutdoorAir:NodeList,
     OutsideAirInletNodes;    !- Node or NodeList Name 1
 
   NodeList,
     OutsideAirInletNodes,    !- Name
-    Outside Air Inlet Node 1,!- Node 1 Name
-    HPOutdoorAirInletNode,   !- Node 2 Name
-    HPPlantAirInletNode,     !- Node 3 Name
-    HPWHOutdoorAirInletNode; !- Node 4 Name
+    Outside Air Inlet Node 1;!- Node 1 Name
 
   NodeList,
     SPACE1-1 In Nodes,       !- Name
@@ -3089,23 +2183,11 @@
 
   NodeList,
     SPACE4-1 In Nodes,       !- Name
-    SPACE4-1 In Node,        !- Node 1 Name
-    Zone4AirInletNode,       !- Node 2 Name
-    Zone4bAirInletNode;      !- Node 3 Name
-
-  NodeList,
-    SPACE4-1 Out Nodes,      !- Name
-    Zone4AirOutletNode,      !- Node 1 Name
-    Zone4bAirOutletNode;     !- Node 2 Name
+    SPACE4-1 In Node;        !- Node 1 Name
 
   NodeList,
     SPACE5-1 In Nodes,       !- Name
-    SPACE5-1 In Node,        !- Node 1 Name
-    HPWHAirInletNode;        !- Node 2 Name
-
-  NodeList,
-    SPACE5-1 Out Nodes,      !- Name
-    HPWHAirOutletNode;       !- Node 1 Name
+    SPACE5-1 In Node;        !- Node 1 Name
 
   ZoneHVAC:EquipmentConnections,
     SPACE1-1,                !- Zone Name
@@ -3135,7 +2217,7 @@
     SPACE4-1,                !- Zone Name
     SPACE4-1 Eq,             !- Zone Conditioning Equipment List Name
     SPACE4-1 In Nodes,       !- Zone Air Inlet Node or NodeList Name
-    SPACE4-1 Out Nodes,      !- Zone Air Exhaust Node or NodeList Name
+    ,                        !- Zone Air Exhaust Node or NodeList Name
     SPACE4-1 Node,           !- Zone Air Node Name
     SPACE4-1 Out Node;       !- Zone Return Air Node or NodeList Name
 
@@ -3143,7 +2225,7 @@
     SPACE5-1,                !- Zone Name
     SPACE5-1 Eq,             !- Zone Conditioning Equipment List Name
     SPACE5-1 In Nodes,       !- Zone Air Inlet Node or NodeList Name
-    SPACE5-1 Out Nodes,      !- Zone Air Exhaust Node or NodeList Name
+    ,                        !- Zone Air Exhaust Node or NodeList Name
     SPACE5-1 Node,           !- Zone Air Node Name
     SPACE5-1 Out Node;       !- Zone Return Air Node or NodeList Name
 
@@ -3151,41 +2233,56 @@
     SPACE1-1 Control,        !- Name
     SPACE1-1,                !- Zone or ZoneList Name
     Zone Control Type Sched, !- Control Type Schedule Name
-    ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    DualSetPoint;            !- Control 1 Name
+    ThermostatSetpoint:SingleCooling,  !- Control 1 Object Type
+    CoolingSetPoint,         !- Control 1 Name
+    ThermostatSetpoint:SingleHeating,  !- Control 2 Object Type
+    HeatingSetpoint,         !- Control 2 Name
+    ThermostatSetpoint:DualSetpoint,  !- Control 3 Object Type
+    DualSetPoint;            !- Control 3 Name
 
   ZoneControl:Thermostat,
     SPACE2-1 Control,        !- Name
     SPACE2-1,                !- Zone or ZoneList Name
     Zone Control Type Sched, !- Control Type Schedule Name
-    ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    DualSetPoint;            !- Control 1 Name
-
-  ZoneControl:Humidistat,
-    Space2-1 Humidistat,     !- Name
-    SPACE2-1,                !- Zone Name
-    Seasonal Relative Humidity Sch;  !- Humidifying Relative Humidity Setpoint Schedule Name
+    ThermostatSetpoint:SingleCooling,  !- Control 1 Object Type
+    CoolingSetPoint,         !- Control 1 Name
+    ThermostatSetpoint:SingleHeating,  !- Control 2 Object Type
+    HeatingSetpoint,         !- Control 2 Name
+    ThermostatSetpoint:DualSetpoint,  !- Control 3 Object Type
+    DualSetPoint;            !- Control 3 Name
 
   ZoneControl:Thermostat,
     SPACE3-1 Control,        !- Name
     SPACE3-1,                !- Zone or ZoneList Name
     Zone Control Type Sched, !- Control Type Schedule Name
-    ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    DualSetPoint;            !- Control 1 Name
+    ThermostatSetpoint:SingleCooling,  !- Control 1 Object Type
+    CoolingSetPoint,         !- Control 1 Name
+    ThermostatSetpoint:SingleHeating,  !- Control 2 Object Type
+    HeatingSetpoint,         !- Control 2 Name
+    ThermostatSetpoint:DualSetpoint,  !- Control 3 Object Type
+    DualSetPoint;            !- Control 3 Name
 
   ZoneControl:Thermostat,
     SPACE4-1 Control,        !- Name
     SPACE4-1,                !- Zone or ZoneList Name
     Zone Control Type Sched, !- Control Type Schedule Name
-    ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    DualSetPoint;            !- Control 1 Name
+    ThermostatSetpoint:SingleCooling,  !- Control 1 Object Type
+    CoolingSetPoint,         !- Control 1 Name
+    ThermostatSetpoint:SingleHeating,  !- Control 2 Object Type
+    HeatingSetpoint,         !- Control 2 Name
+    ThermostatSetpoint:DualSetpoint,  !- Control 3 Object Type
+    DualSetPoint;            !- Control 3 Name
 
   ZoneControl:Thermostat,
     SPACE5-1 Control,        !- Name
     SPACE5-1,                !- Zone or ZoneList Name
     Zone Control Type Sched, !- Control Type Schedule Name
-    ThermostatSetpoint:DualSetpoint,  !- Control 1 Object Type
-    DualSetPoint;            !- Control 1 Name
+    ThermostatSetpoint:SingleCooling,  !- Control 1 Object Type
+    CoolingSetPoint,         !- Control 1 Name
+    ThermostatSetpoint:SingleHeating,  !- Control 2 Object Type
+    HeatingSetpoint,         !- Control 2 Name
+    ThermostatSetpoint:DualSetpoint,  !- Control 3 Object Type
+    DualSetPoint;            !- Control 3 Name
 
   ThermostatSetpoint:SingleHeating,
     HeatingSetpoint,         !- Name
@@ -3243,38 +2340,20 @@
     SequentialLoad,          !- Load Distribution Scheme
     ZoneHVAC:AirDistributionUnit,  !- Zone Equipment 1 Object Type
     SPACE4-1 ATU,            !- Zone Equipment 1 Name
-    3,                       !- Zone Equipment 1 Cooling Sequence
-    3,                       !- Zone Equipment 1 Heating or No-Load Sequence
+    1,                       !- Zone Equipment 1 Cooling Sequence
+    1,                       !- Zone Equipment 1 Heating or No-Load Sequence
     ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
-    ,                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
-    WaterHeater:HeatPump:PumpedCondenser,  !- Zone Equipment 2 Object Type
-    Zone4HeatPumpWaterHeater,!- Zone Equipment 2 Name
-    1,                       !- Zone Equipment 2 Cooling Sequence
-    1,                       !- Zone Equipment 2 Heating or No-Load Sequence
-    ,                        !- Zone Equipment 2 Sequential Cooling Fraction Schedule Name
-    ,                        !- Zone Equipment 2 Sequential Heating Fraction Schedule Name
-    WaterHeater:HeatPump:PumpedCondenser,  !- Zone Equipment 3 Object Type
-    Zone4bHeatPumpWaterHeater,  !- Zone Equipment 3 Name
-    2,                       !- Zone Equipment 3 Cooling Sequence
-    2,                       !- Zone Equipment 3 Heating or No-Load Sequence
-    ,                        !- Zone Equipment 3 Sequential Cooling Fraction Schedule Name
-    ;                        !- Zone Equipment 3 Sequential Heating Fraction Schedule Name
+    ;                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
 
   ZoneHVAC:EquipmentList,
     SPACE5-1 Eq,             !- Name
     SequentialLoad,          !- Load Distribution Scheme
-    WaterHeater:HeatPump:PumpedCondenser,  !- Zone Equipment 1 Object Type
-    Zone5HeatPumpWaterHeater,!- Zone Equipment 1 Name
+    ZoneHVAC:AirDistributionUnit,  !- Zone Equipment 1 Object Type
+    SPACE5-1 ATU,            !- Zone Equipment 1 Name
     1,                       !- Zone Equipment 1 Cooling Sequence
     1,                       !- Zone Equipment 1 Heating or No-Load Sequence
     ,                        !- Zone Equipment 1 Sequential Cooling Fraction Schedule Name
-    ,                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
-    ZoneHVAC:AirDistributionUnit,  !- Zone Equipment 2 Object Type
-    SPACE5-1 ATU,            !- Zone Equipment 2 Name
-    2,                       !- Zone Equipment 2 Cooling Sequence
-    2,                       !- Zone Equipment 2 Heating or No-Load Sequence
-    ,                        !- Zone Equipment 2 Sequential Cooling Fraction Schedule Name
-    ;                        !- Zone Equipment 2 Sequential Heating Fraction Schedule Name
+    ;                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
 
   ZoneHVAC:AirDistributionUnit,
     SPACE1-1 ATU,            !- Name
@@ -3651,22 +2730,9 @@
     Main Heating Coil 1 Outlet Node,  !- Air Inlet Node Name
     VAV Sys 1 Outlet Node;   !- Air Outlet Node Name
 
-  SetpointManager:MixedAir,
-    Mixed Air Temp Manager 2,!- Name
-    Temperature,             !- Control Variable
-    VAV Sys 1 Outlet Node,   !- Reference Setpoint Node Name
-    Main Heating Coil 1 Outlet Node,  !- Fan Inlet Node Name
-    VAV Sys 1 Outlet Node,   !- Fan Outlet Node Name
-    Main Branch SetPoint Node List;  !- Setpoint Node or NodeList Name
-
-  NodeList,
-    Main Branch SetPoint Node List,  !- Name
-    Main Cooling Coil 1 Outlet Node,  !- Node 1 Name
-    Main Heating Coil 1 Outlet Node;  !- Node 2 Name
-
   Controller:WaterCoil,
     Central Cooling Coil Contoller 1,  !- Name
-    TemperatureAndHumidityRatio,  !- Control Variable
+    Temperature,             !- Control Variable
     Reverse,                 !- Action
     FLOW,                    !- Actuator Variable
     Main Cooling Coil 1 Outlet Node,  !- Sensor Node Name
@@ -3675,21 +2741,14 @@
     autosize,                !- Maximum Actuated Flow {m3/s}
     0.0;                     !- Minimum Actuated Flow {m3/s}
 
-    ! This object uses results from ZoneControl:Humidistat and needs to reference the same zone
-
-  SetpointManager:SingleZone:Humidity:Maximum,
-    Space2-1 Humidistat Manager,  !- Name
-    Main Cooling Coil 1 Outlet Node,  !- Setpoint Node or NodeList Name
-    SPACE2-1 Node;           !- Control Zone Air Node Name
-
   Controller:OutdoorAir,
     OA Controller 1,         !- Name
     Relief Air Outlet Node 1,!- Relief Air Outlet Node Name
     VAV Sys 1 Inlet Node,    !- Return Air Node Name
     Mixed Air Node 1,        !- Mixed Air Node Name
     Outside Air Inlet Node 1,!- Actuator Node Name
-    0.25,                    !- Minimum Outdoor Air Flow Rate {m3/s}
-    0.25,                    !- Maximum Outdoor Air Flow Rate {m3/s}
+    autosize,                !- Minimum Outdoor Air Flow Rate {m3/s}
+    autosize,                !- Maximum Outdoor Air Flow Rate {m3/s}
     FixedDryBulb,            !- Economizer Control Type
     ModulateFlow,            !- Economizer Control Action Type
     19.,                     !- Economizer Maximum Limit Dry-Bulb Temperature {C}
@@ -3712,10 +2771,13 @@
     autosize,                !- Maximum Actuated Flow {m3/s}
     0.0;                     !- Minimum Actuated Flow {m3/s}
 
-  SetpointManager:Scheduled,
-    Supply Air Temp Manager 1,  !- Name
+  SetpointManager:Warmest,
+    Supply Air Temperature Manager 1,  !- Name
     Temperature,             !- Control Variable
-    Seasonal Reset Supply Air Temp Sch,  !- Schedule Name
+    VAV Sys 1,               !- HVAC Air Loop Name
+    11.2,                    !- Minimum Setpoint Temperature {C}
+    16.,                     !- Maximum Setpoint Temperature {C}
+    MaximumTemperature,      !- Strategy
     Supply Air Temp Nodes 1; !- Setpoint Node or NodeList Name
 
   SetpointManager:MixedAir,
@@ -3724,7 +2786,13 @@
     VAV Sys 1 Outlet Node,   !- Reference Setpoint Node Name
     Main Heating Coil 1 Outlet Node,  !- Fan Inlet Node Name
     VAV Sys 1 Outlet Node,   !- Fan Outlet Node Name
-    Mixed Air Node 1;        !- Setpoint Node or NodeList Name
+    Main Branch SetPoint Node List;  !- Setpoint Node or NodeList Name
+
+  NodeList,
+    Main Branch SetPoint Node List,  !- Name
+    Mixed Air Node 1,        !- Node 1 Name
+    Main Cooling Coil 1 Outlet Node,  !- Node 2 Name
+    Main Heating Coil 1 Outlet Node;  !- Node 3 Name
 
   NodeList,
     Supply Air Temp Nodes 1, !- Name
@@ -3764,7 +2832,7 @@
   BranchList,
     Heating Supply Side Branches,  !- Name
     Heating Supply Inlet Branch,  !- Branch 1 Name
-    Central HPWH Branch,     !- Branch 2 Name
+    Central Boiler Branch,   !- Branch 2 Name
     Heating Supply Bypass Branch,  !- Branch 3 Name
     Heating Supply Outlet Branch;  !- Branch 4 Name
 
@@ -3784,12 +2852,12 @@
     HW Pump Outlet Node;     !- Component 1 Outlet Node Name
 
   Branch,
-    Central HPWH Branch,     !- Name
+    Central Boiler Branch,   !- Name
     ,                        !- Pressure Drop Curve Name
-    WaterHeater:HeatPump:PumpedCondenser,  !- Component 1 Object Type
-    PlantHeatPumpWaterHeater,!- Component 1 Name
-    HPWH Use Inlet Node,     !- Component 1 Inlet Node Name
-    HPWH Use Outlet Node;    !- Component 1 Outlet Node Name
+    Boiler:HotWater,         !- Component 1 Object Type
+    Central Boiler,          !- Component 1 Name
+    Central Boiler Inlet Node,  !- Component 1 Inlet Node Name
+    Central Boiler Outlet Node;  !- Component 1 Outlet Node Name
 
   Branch,
     Heating Supply Bypass Branch,  !- Name
@@ -3948,198 +3016,61 @@
   Connector:Splitter,
     Heating Supply Splitter, !- Name
     Heating Supply Inlet Branch,  !- Inlet Branch Name
-    Central HPWH Branch,     !- Outlet Branch 1 Name
+    Central Boiler Branch,   !- Outlet Branch 1 Name
     Heating Supply Bypass Branch;  !- Outlet Branch 2 Name
 
   Connector:Mixer,
     Heating Supply Mixer,    !- Name
     Heating Supply Outlet Branch,  !- Outlet Branch Name
-    Central HPWH Branch,     !- Inlet Branch 1 Name
+    Central Boiler Branch,   !- Inlet Branch 1 Name
     Heating Supply Bypass Branch;  !- Inlet Branch 2 Name
 
   PlantEquipmentOperationSchemes,
     Hot Loop Operation,      !- Name
     PlantEquipmentOperation:HeatingLoad,  !- Control Scheme 1 Object Type
-    Central HPWH Only,       !- Control Scheme 1 Name
+    Central Boiler Only,     !- Control Scheme 1 Name
     PlantOnSched;            !- Control Scheme 1 Schedule Name
 
   PlantEquipmentOperation:HeatingLoad,
-    Central HPWH Only,       !- Name
+    Central Boiler Only,     !- Name
     0,                       !- Load Range 1 Lower Limit {W}
     1000000,                 !- Load Range 1 Upper Limit {W}
     heating plant;           !- Range 1 Equipment List Name
 
-!    WATER HEATER:MIXED,         !- KEY--Plant Equip 1
-!    HPWHPlantTank;              !- Equip Name 1
-
   PlantEquipmentList,
     heating plant,           !- Name
-    WaterHeater:HeatPump:PumpedCondenser,  !- Equipment 1 Object Type
-    PlantHeatPumpWaterHeater;!- Equipment 1 Name
+    Boiler:HotWater,         !- Equipment 1 Object Type
+    Central Boiler;          !- Equipment 1 Name
 
-!************** Plant Heat Pump Water Heater Inputs ***********************
+  Boiler:HotWater,
+    Central Boiler,          !- Name
+    NaturalGas,              !- Fuel Type
+    autosize,                !- Nominal Capacity {W}
+    0.8,                     !- Nominal Thermal Efficiency
+    LeavingBoiler,           !- Efficiency Curve Temperature Evaluation Variable
+    BoilerEfficiency,        !- Normalized Boiler Efficiency Curve Name
+    autosize,                !- Design Water Flow Rate {m3/s}
+    0.0,                     !- Minimum Part Load Ratio
+    1.2,                     !- Maximum Part Load Ratio
+    1.0,                     !- Optimum Part Load Ratio
+    Central Boiler Inlet Node,  !- Boiler Water Inlet Node Name
+    Central Boiler Outlet Node,  !- Boiler Water Outlet Node Name
+    100.,                    !- Water Outlet Upper Temperature Limit {C}
+    LeavingSetpointModulated;!- Boiler Flow Mode
 
-  WaterHeater:HeatPump:PumpedCondenser,
-    PlantHeatPumpWaterHeater,!- Name
-    PlantHPWHSch,            !- Availability Schedule Name
-    PlantHPWHTempSch,        !- Compressor Setpoint Temperature Schedule Name
-    2.0,                     !- Dead Band Temperature Difference {deltaC}
-    HPPlantWaterInletNode,   !- Condenser Water Inlet Node Name
-    HPPlantWaterOutletNode,  !- Condenser Water Outlet Node Name
-    0.00115525,              !- Condenser Water Flow Rate {m3/s}
-    1.00695,                 !- Evaporator Air Flow Rate {m3/s}
-    OutdoorAirOnly,          !- Inlet Air Configuration
-    ,                        !- Air Inlet Node Name
-    ,                        !- Air Outlet Node Name
-    HPPlantAirInletNode,     !- Outdoor Air Node Name
-    HPPlantAirOutletNode,    !- Exhaust Air Node Name
-    ,                        !- Inlet Air Temperature Schedule Name
-    ,                        !- Inlet Air Humidity Schedule Name
-    ,                        !- Inlet Air Zone Name
-    WaterHeater:Stratified,  !- Tank Object Type
-    HPWHPlantTank,           !- Tank Name
-    HPWH Use Inlet Node,     !- Tank Use Side Inlet Node Name
-    HPWH Use Outlet Node,    !- Tank Use Side Outlet Node Name
-    Coil:WaterHeating:AirToWaterHeatPump:Pumped,  !- DX Coil Object Type
-    HPWHPlantDXCoil,         !- DX Coil Name
-    11.0,                    !- Minimum Inlet Air Temperature for Compressor Operation {C}
-    ,                        !- Maximum Inlet Air Temperature for Compressor Operation {C}
-    Outdoors,                !- Compressor Location
-    ,                        !- Compressor Ambient Temperature Schedule Name
-    Fan:OnOff,               !- Fan Object Type
-    HPWHPlantFan,            !- Fan Name
-    BlowThrough,             !- Fan Placement
-    ,                        !- On Cycle Parasitic Electric Load {W}
-    ,                        !- Off Cycle Parasitic Electric Load {W}
-    ,                        !- Parasitic Heat Rejection Location
-    ,                        !- Inlet Air Mixer Node Name
-    ,                        !- Outlet Air Splitter Node Name
-    ,                        !- Inlet Air Mixer Schedule Name
-    ,                        !- Tank Element Control Logic
-    0.194613;                !- Control Sensor 1 Height In Stratified Tank {m}
+  SetpointManager:Scheduled,
+    Central Boiler Setpoint Manager,  !- Name
+    Temperature,             !- Control Variable
+    HW Loop Temp Schedule,   !- Schedule Name
+    Central Boiler Outlet Node;  !- Setpoint Node or NodeList Name
 
-  WaterHeater:Stratified,
-    HPWHPlantTank,           !- Name
-    ,                        !- End-Use Subcategory
-    0.757,                   !- Tank Volume {m3}
-    0.648710,                !- Tank Height {m}
-    VerticalCylinder,        !- Tank Shape
-    ,                        !- Tank Perimeter {m}
-    82.2222,                 !- Maximum Temperature Limit {C}
-    MasterSlave,             !- Heater Priority Control
-    Plant Hot Water Setpoint Temp Schedule,  !- Heater 1 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 1 Deadband Temperature Difference {deltaC}
-    25000,                   !- Heater 1 Capacity {W}
-    0.454097,                !- Heater 1 Height {m}
-    Plant Hot Water Setpoint Temp Schedule,  !- Heater 2 Setpoint Temperature Schedule Name
-    2.0,                     !- Heater 2 Deadband Temperature Difference {deltaC}
-    0,                       !- Heater 2 Capacity {W}
-    0.194613,                !- Heater 2 Height {m}
-    ELECTRICITY,             !- Heater Fuel Type
-    0.98,                    !- Heater Thermal Efficiency
-    10,                      !- Off Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- Off Cycle Parasitic Fuel Type
-    0,                       !- Off Cycle Parasitic Heat Fraction to Tank
-    0.389226,                !- Off Cycle Parasitic Height {m}
-    30,                      !- On Cycle Parasitic Fuel Consumption Rate {W}
-    ELECTRICITY,             !- On Cycle Parasitic Fuel Type
-    0,                       !- On Cycle Parasitic Heat Fraction to Tank
-    0.389226,                !- On Cycle Parasitic Height {m}
-    Outdoors,                !- Ambient Temperature Indicator
-    ,                        !- Ambient Temperature Schedule Name
-    ,                        !- Ambient Temperature Zone Name
-    HPWHPlantTank OA Node,   !- Ambient Temperature Outdoor Air Node Name
-    0.000000,                !- Uniform Skin Loss Coefficient per Unit Area to Ambient Temperature {W/m2-K}
-    0.000000,                !- Skin Loss Fraction to Zone
-    ,                        !- Off Cycle Flue Loss Coefficient to Ambient Temperature {W/K}
-    ,                        !- Off Cycle Flue Loss Fraction to Zone
-    ,                        !- Peak Use Flow Rate {m3/s}
-    ,                        !- Use Flow Rate Fraction Schedule Name
-    ,                        !- Cold Water Supply Temperature Schedule Name
-    HPWH Use Inlet Node,     !- Use Side Inlet Node Name
-    HPWH Use Outlet Node,    !- Use Side Outlet Node Name
-    0.98,                    !- Use Side Effectiveness
-    0,                       !- Use Side Inlet Height {m}
-    autocalculate,           !- Use Side Outlet Height {m}
-    HPPlantWaterOutletNode,  !- Source Side Inlet Node Name
-    HPPlantWaterInletNode,   !- Source Side Outlet Node Name
-    0.98,                    !- Source Side Effectiveness
-    0,                       !- Source Side Inlet Height {m}
-    0.324355,                !- Source Side Outlet Height {m}
-    Fixed,                   !- Inlet Mode
-    autosize,                !- Use Side Design Flow Rate {m3/s}
-    ,                        !- Source Side Design Flow Rate {m3/s}
-    ,                        !- Indirect Water Heating Recovery Time {hr}
-    10;                      !- Number of Nodes
-
-  OutdoorAir:Node,
-    HPWHPlantTank OA Node;   !- Name
-
-  Coil:WaterHeating:AirToWaterHeatPump:Pumped,
-    HPWHPlantDXCoil,         !- Name
-    ,                        !- Availability Schedule Name
-    25000.0,                 !- Rated Heating Capacity {W}
-    3.2,                     !- Rated COP {W/W}
-    0.736,                   !- Rated Sensible Heat Ratio
-    29.44,                   !- Rated Evaporator Inlet Air Dry-Bulb Temperature {C}
-    22.22,                   !- Rated Evaporator Inlet Air Wet-Bulb Temperature {C}
-    55.72,                   !- Rated Condenser Inlet Water Temperature {C}
-    1.00695,                 !- Rated Evaporator Air Flow Rate {m3/s}
-    0.00115525,              !- Rated Condenser Water Flow Rate {m3/s}
-    No,                      !- Evaporator Fan Power Included in Rated COP
-    No,                      !- Condenser Pump Power Included in Rated COP
-    No,                      !- Condenser Pump Heat Included in Rated Heating Capacity and Rated COP
-    150.0,                   !- Condenser Water Pump Power {W}
-    0.1,                     !- Fraction of Condenser Pump Heat to Water
-    HPPlantFanAirOutletNode, !- Evaporator Air Inlet Node Name
-    HPPlantAirOutletNode,    !- Evaporator Air Outlet Node Name
-    HPPlantWaterInletNode,   !- Condenser Water Inlet Node Name
-    HPPlantWaterOutletNode,  !- Condenser Water Outlet Node Name
-    100.0,                   !- Crankcase Heater Capacity {W}
-    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-    5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
-    WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
-    HPWHHeatingCapFTemp,     !- Heating Capacity Function of Temperature Curve Name
-    ,                        !- Heating Capacity Function of Air Flow Fraction Curve Name
-    ,                        !- Heating Capacity Function of Water Flow Fraction Curve Name
-    HPWHHeatingCOPFTemp,     !- Heating COP Function of Temperature Curve Name
-    ,                        !- Heating COP Function of Air Flow Fraction Curve Name
-    ,                        !- Heating COP Function of Water Flow Fraction Curve Name
-    HPWHPLFFPLR;             !- Part Load Fraction Correlation Curve Name
-
-  Fan:OnOff,
-    HPWHPlantFan,            !- Name
-    PlantHPWHSch,            !- Availability Schedule Name
-    0.7,                     !- Fan Total Efficiency
-    100.0,                   !- Pressure Rise {Pa}
-    2.6852,                  !- Maximum Flow Rate {m3/s}
-    0.9,                     !- Motor Efficiency
-    1.0,                     !- Motor In Airstream Fraction
-    HPPlantAirInletNode,     !- Air Inlet Node Name
-    HPPlantFanAirOutletNode; !- Air Outlet Node Name
-
-  Schedule:Compact,
-    PlantHPWHSch,            !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,1.0;        !- Field 3
-
-  Schedule:Compact,
-    PlantHPWHTempSch,        !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,80.0;       !- Field 3
-
-  Schedule:Compact,
-    Plant Hot Water Setpoint Temp Schedule,  !- Name
-    Any Number,              !- Schedule Type Limits Name
-    Through: 12/31,          !- Field 1
-    For: AllDays,            !- Field 2
-    Until: 24:00,70.0;       !- Field 3
-
-!*************** End of Plant Heat Pump Water Heater Inputs *****************
+  Curve:Quadratic,
+    BoilerEfficiency,        !- Name
+    1.0,                     !- Coefficient1 Constant
+    0.0,                     !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0,                       !- Minimum Value of x
+    1;                       !- Maximum Value of x
 
   Pump:VariableSpeed,
     HW Circ Pump,            !- Name
@@ -4159,12 +3090,12 @@
 
   PlantLoop,
     Chilled Water Loop,      !- Name
-    Water,                   !- Fluid Type
-    ,                        !- User Defined Fluid Type
+    UserDefinedFluidType,    !- Fluid Type
+    EthyleneGlycol40Percent, !- User Defined Fluid Type
     CW Loop Operation,       !- Plant Equipment Operation Scheme Name
     CW Supply Outlet Node,   !- Loop Temperature Setpoint Node Name
     98,                      !- Maximum Loop Temperature {C}
-    1,                       !- Minimum Loop Temperature {C}
+    -5,                      !- Minimum Loop Temperature {C}
     autosize,                !- Maximum Loop Flow Rate {m3/s}
     0.0,                     !- Minimum Loop Flow Rate {m3/s}
     autocalculate,           !- Plant Loop Volume {m3}
@@ -4176,17 +3107,19 @@
     CW Demand Outlet Node,   !- Demand Side Outlet Node Name
     Cooling Demand Side Branches,  !- Demand Side Branch List Name
     Cooling Demand Side Connectors,  !- Demand Side Connector List Name
-    SequentialLoad;          !- Load Distribution Scheme
+    Optimal;                 !- Load Distribution Scheme
+
+  FluidProperties:GlycolConcentration,
+    EthyleneGlycol40Percent, !- Name
+    EthyleneGlycol,          !- Glycol Type
+    ,                        !- User Defined Glycol Name
+    0.4;                     !- Glycol Concentration
 
   SetpointManager:Scheduled,
     Chilled Water Loop Setpoint Manager,  !- Name
     Temperature,             !- Control Variable
     CW Loop Temp Schedule,   !- Schedule Name
-    Chilled Water Loop Setpoint Node List;  !- Setpoint Node or NodeList Name
-
-  NodeList,
-    Chilled Water Loop Setpoint Node List,  !- Name
-    CW Supply Outlet Node;   !- Node 1 Name
+    CW Supply Outlet Node;   !- Setpoint Node or NodeList Name
 
   BranchList,
     Cooling Supply Side Branches,  !- Name
@@ -4266,20 +3199,24 @@
   Branch,
     Cooling Supply Outlet,   !- Name
     ,                        !- Pressure Drop Curve Name
-    Pipe:Adiabatic,          !- Component 1 Object Type
-    Supply Side Outlet Pipe, !- Component 1 Name
-    Supply Side Exit Pipe Inlet Node,  !- Component 1 Inlet Node Name
-    CW Supply Outlet Node;   !- Component 1 Outlet Node Name
+    ThermalStorage:Ice:Simple,  !- Component 1 Object Type
+    Ice Tank,                !- Component 1 Name
+    Ice Tank Inlet Node,     !- Component 1 Inlet Node Name
+    Ice Tank Outlet Node,    !- Component 1 Outlet Node Name
+    Pipe:Adiabatic,          !- Component 2 Object Type
+    Supply Side Outlet Pipe, !- Component 2 Name
+    Ice Tank Outlet Node,    !- Component 2 Inlet Node Name
+    CW Supply Outlet Node;   !- Component 2 Outlet Node Name
 
   Pipe:Adiabatic,
     Supply Side Outlet Pipe, !- Name
-    Supply Side Exit Pipe Inlet Node,  !- Inlet Node Name
+    Ice Tank Outlet Node,    !- Inlet Node Name
     CW Supply Outlet Node;   !- Outlet Node Name
 
   Branch,
     CW Pump Branch,          !- Name
     ,                        !- Pressure Drop Curve Name
-    Pump:VariableSpeed,      !- Component 1 Object Type
+    Pump:ConstantSpeed,      !- Component 1 Object Type
     CW Circ Pump,            !- Component 1 Name
     CW Supply Inlet Node,    !- Component 1 Inlet Node Name
     CW Pump Outlet Node;     !- Component 1 Outlet Node Name
@@ -4331,20 +3268,108 @@
 
   PlantEquipmentOperationSchemes,
     CW Loop Operation,       !- Name
-    PlantEquipmentOperation:CoolingLoad,  !- Control Scheme 1 Object Type
-    Central Chiller Only,    !- Control Scheme 1 Name
-    PlantOnSched;            !- Control Scheme 1 Schedule Name
+    PlantEquipmentOperation:ComponentSetpoint,  !- Control Scheme 1 Object Type
+    Chiller and Partial Ice Storage,  !- Control Scheme 1 Name
+    ChillerAndTESSch,        !- Control Scheme 1 Schedule Name
+    PlantEquipmentOperation:ComponentSetpoint,  !- Control Scheme 1 Object Type
+    Ice Storage Only,        !- Control Scheme 1 Name
+    TESOnlySch;              !- Control Scheme 1 Schedule Name
 
-  PlantEquipmentOperation:CoolingLoad,
-    Central Chiller Only,    !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    900000,                  !- Load Range 1 Upper Limit {W}
-    Cooling Plant;           !- Range 1 Equipment List Name
-
-  PlantEquipmentList,
-    Cooling Plant,           !- Name
+  PlantEquipmentOperation:ComponentSetpoint,
+    Chiller and Partial Ice Storage,  !- Name
     Chiller:Electric,        !- Equipment 1 Object Type
-    Central Chiller;         !- Equipment 1 Name
+    Central Chiller,         !- Equipment 1 Name
+    Central Chiller Inlet Node,  !- Demand Calculation 1 Node Name
+    Central Chiller Outlet Node,  !- Setpoint 1 Node Name
+    autosize,                !- Component 1 Flow Rate {m3/s}
+    COOLING,                 !- Operation 1 Type
+    ThermalStorage:Ice:Simple,  !- Equipment 2 Object Type
+    Ice Tank,                !- Equipment 2 Name
+    Ice Tank Inlet Node,     !- Demand Calculation 2 Node Name
+    Ice Tank Outlet Node,    !- Setpoint 2 Node Name
+    0.13506E-02,             !- Component 2 Flow Rate {m3/s}
+    Cooling;                 !- Operation 2 Type
+
+  PlantEquipmentOperation:ComponentSetpoint,
+    Ice Storage Only,  !- Name
+    ThermalStorage:Ice:Simple,  !- Equipment 1 Object Type
+    Ice Tank,                !- Equipment 1 Name
+    Ice Tank Inlet Node,     !- Demand Calculation 1 Node Name
+    Ice Tank Outlet Node,    !- Setpoint 1 Node Name
+    0.13506E-02,             !- Component 1 Flow Rate {m3/s}
+    Cooling;                 !- Operation 1 Type
+
+  Schedule:Compact,
+    TESOnlySch,              !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 9:00,0.0,         !- Field 3
+    Until: 22:00,1.0,        !- Field 4
+    Until: 24:00,0.0;        !- Field 5
+
+  Schedule:Compact,
+    ChillerAndTESSch,        !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: AllDays,            !- Field 2
+    Until: 9:00,1.0,         !- Field 3
+    Until: 22:00,0.0,        !- Field 4
+    Until: 24:00,1.0;        !- Field 5
+
+  SetpointManager:Scheduled,
+    Ice Tank Setpoint Manager,  !- Name
+    Temperature,             !- Control Variable
+    Ice Tank Setpoint Temp Schedule,  !- Schedule Name
+    Ice Tank Outlet Node;    !- Setpoint Node or NodeList Name
+
+  SetpointManager:Scheduled,
+    Central Chiller Setpoint Manager,  !- Name
+    Temperature,             !- Control Variable
+    Central Chiller Setpoint Temp Schedule,  !- Schedule Name
+    Central Chiller Outlet Node;  !- Setpoint Node or NodeList Name
+
+! Chiller setpoint schedule, charge ice tank during offpeak hours on weekdays
+! On Peak Energy Period, 9 a.m. to 10 p.m., Weekdays (Chicago ComEd, Rate 6 TOU)
+
+  Schedule:Compact,
+    Central Chiller Setpoint Temp Schedule,  !- Name
+    Temperature,             !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays SummerDesignDay, !- Field 2
+    Until: 09:00,-5.0,       !- Field 3
+    Until: 22:00,7.22,       !- Field 5
+    Until: 24:00,-5.0,       !- Field 7
+    For: AllOtherDays,       !- Field 9
+    Until: 24:00,7.22;       !- Field 10
+
+! Ice thermal storage setpoint schedule, in this case same as
+! chilled water supply outlet setpoint schedule
+
+  Schedule:Compact,
+    Ice Tank Setpoint Temp Schedule,  !- Name
+    Temperature,             !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays SummerDesignDay, !- Field 2
+    Until: 09:00,7.22,       !- Field 3
+    Until: 22:00,7.22,       !- Field 5
+    Until: 24:00,7.22,       !- Field 7
+    For: AllOtherDays,       !- Field 9
+    Until: 24:00,7.22;       !- Field 10
+
+! Chilled water supply outlet setpoint schedule, must be set low to creat "load"
+! during ice storage charging
+
+  Schedule:Compact,
+    CW Loop Temp Schedule,   !- Name
+    Temperature,             !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays SummerDesignDay, !- Field 2
+    Until: 09:00,-5.0,       !- Field 3
+    Until: 22:00,7.22,       !- Field 5
+    Until: 24:00,-5.0,       !- Field 7
+    For: AllOtherDays,       !- Field 9
+    Until: 24:00,7.22;       !- Field 10
 
   Chiller:Electric,
     Central Chiller,         !- Name
@@ -4357,46 +3382,74 @@
     Central Chiller Condenser Outlet Node,  !- Condenser Outlet Node Name
     0.0,                     !- Minimum Part Load Ratio
     1.0,                     !- Maximum Part Load Ratio
-    .65,                     !- Optimum Part Load Ratio
+    0.65,                    !- Optimum Part Load Ratio
     29.44,                   !- Design Condenser Inlet Temperature {C}
     2.682759,                !- Temperature Rise Coefficient
     6.667,                   !- Design Chilled Water Outlet Temperature {C}
     autosize,                !- Design Chilled Water Flow Rate {m3/s}
     autosize,                !- Design Condenser Fluid Flow Rate {m3/s}
-    0.94483600,              !- Coefficient 1 of Capacity Ratio Curve
-    -.05700880,              !- Coefficient 2 of Capacity Ratio Curve
-    -.00185486,              !- Coefficient 3 of Capacity Ratio Curve
+    0.99483600,              !- Coefficient 1 of Capacity Ratio Curve
+    -.0075700880,            !- Coefficient 2 of Capacity Ratio Curve
+    -.0000185486,            !- Coefficient 3 of Capacity Ratio Curve
     1.907846,                !- Coefficient 1 of Power Ratio Curve
     -1.20498700,             !- Coefficient 2 of Power Ratio Curve
     0.26346230,              !- Coefficient 3 of Power Ratio Curve
     0.03303,                 !- Coefficient 1 of Full Load Ratio Curve
     0.6852,                  !- Coefficient 2 of Full Load Ratio Curve
     0.2818,                  !- Coefficient 3 of Full Load Ratio Curve
-    5,                       !- Chilled Water Outlet Temperature Lower Limit {C}
-    LeavingSetpointModulated;!- Chiller Flow Mode
+    -5,                      !- Chilled Water Outlet Temperature Lower Limit {C}
+    ConstantFlow;            !- Chiller Flow Mode
 
-  SetpointManager:Scheduled,
-    Central Chiller Setpoint Manager,  !- Name
-    Temperature,             !- Control Variable
-    CW Loop Temp Schedule,   !- Schedule Name
-    Central Chiller Outlet Node;  !- Setpoint Node or NodeList Name
+  ThermalStorage:Ice:Simple,
+    Ice Tank,                !- Name
+    IceOnCoilInternal,       !- Ice Storage Type
+    autosize,                !- Capacity {GJ}
+    Ice Tank Inlet Node,     !- Inlet Node Name
+    Ice Tank Outlet Node,    !- Outlet Node Name
+    TESSizing;               !- Thermal Storage Sizing Object Name
 
-  Pump:VariableSpeed,
+  ThermalStorage:Sizing,
+    TESSizing,               !- Name
+    9.0,                     !- On Peak Period Start Time
+    22.0,                    !- On Peak Period End Time
+    1.0;                     !- Sizing Factor
+
+  Pump:ConstantSpeed,
     CW Circ Pump,            !- Name
     CW Supply Inlet Node,    !- Inlet Node Name
     CW Pump Outlet Node,     !- Outlet Node Name
-    autosize,                !- Design Maximum Flow Rate {m3/s}
+    autosize,                !- Design Flow Rate {m3/s}
     179352,                  !- Design Pump Head {Pa}
     autosize,                !- Design Power Consumption {W}
     0.9,                     !- Motor Efficiency
     0.0,                     !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    INTERMITTENT,            !- Pump Control Type
-    CoolingPumpAvailSched;   !- Pump Flow Rate Schedule Name
+    CONTINUOUS;              !- Pump Control Type
+
+! On Peak Energy Period, 9 a.m. to 10 p.m., Weekdays (Chicago ComEd, Rate 6 TOU)
+
+  Schedule:Compact,
+    OnPeakEnergy,            !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays SummerDesignDay, !- Field 2
+    Until: 09:00,0.0,        !- Field 3
+    Until: 22:00,1.0,        !- Field 5
+    Until: 24:00,0.0,        !- Field 7
+    For: AllOtherDays,       !- Field 9
+    Until: 24:00,0.0;        !- Field 10
+
+! Off Peak Energy Period, all hours except 9 a.m. to 10 p.m., Weekdays (Chicago ComEd, Rate 6 TOU)
+
+  Schedule:Compact,
+    OffPeakEnergy,           !- Name
+    Fraction,                !- Schedule Type Limits Name
+    Through: 12/31,          !- Field 1
+    For: Weekdays SummerDesignDay, !- Field 2
+    Until: 09:00,1.0,        !- Field 3
+    Until: 22:00,0.0,        !- Field 5
+    Until: 24:00,1.0,        !- Field 7
+    For: AllOtherDays,       !- Field 9
+    Until: 24:00,1.0;        !- Field 10
 
   CondenserLoop,
     Condenser Water Loop,    !- Name
@@ -4641,47 +3694,73 @@
 
   Output:Variable,*,Cooling Coil Total Cooling Rate,hourly;
 
-  Output:Variable,*,Water Heater Runtime Fraction,hourly;
+  Output:Variable,*,Plant Supply Side Outlet Temperature,hourly;
 
-  Output:Variable,*,Water Heater Part Load Ratio,hourly;
+  Output:Variable,Mixed Air Node 1,System Node Temperature,hourly;
 
-  Output:Variable,*,Water Heater Electricity Rate,hourly;
+  Output:Variable,Main Cooling Coil 1 Outlet Node,System Node Temperature,hourly;
 
-  Output:Variable,*,Water Heater Source Side Inlet Temperature,hourly;
+  Output:Variable,Main Heating Coil 1 Outlet Node,System Node Temperature,hourly;
 
-  Output:Variable,*,Water Heater Source Side Outlet Temperature,hourly;
+  Output:Variable,VAV Sys 1 Outlet Node,System Node Temperature,hourly;
 
-  Output:Variable,*,Water Heater Source Side Mass Flow Rate,hourly;
+  Output:Variable,VAV Sys 1 Outlet Node,System Node Setpoint Temperature,hourly;
 
-  Output:Variable,*,Water Heater Source Side Heat Transfer Rate,hourly;
+  Output:Variable,*,Chiller Electricity Rate,hourly;
 
-  Output:Variable,*,Water Heater Use Side Inlet Temperature,hourly;
+  Output:Variable,*,Chiller Electricity Energy,hourly,OnPeakEnergy;
 
-  Output:Variable,*,Water Heater Use Side Outlet Temperature,hourly;
+  Output:Variable,*,Chiller Electricity Energy,hourly,OffPeakEnergy;
 
-  Output:Variable,*,Water Heater Use Side Mass Flow Rate,hourly;
+  Output:Variable,*,Chiller Evaporator Cooling Rate,hourly;
 
-  Output:Variable,*,Water Heater Use Side Heat Transfer Rate,hourly;
+  Output:Variable,*,Chiller Evaporator Inlet Temperature,hourly;
 
-  Output:Variable,*,Cooling Coil Total Water Heating Rate,hourly;
+  Output:Variable,*,Chiller Evaporator Outlet Temperature,hourly;
 
-  Output:Variable,*,Cooling Coil Water Heating Electricity Rate,hourly;
+  Output:Variable,*,Chiller COP,hourly;
 
-  Output:Variable,*,Water Heater Tank Temperature,hourly;
+  Output:Variable,*,Chiller Evaporator Mass Flow Rate,hourly;
 
-  Output:Variable,*,Water Heater Compressor Part Load Ratio,hourly;
+  Output:Variable,*,Ice Thermal Storage Requested Load,hourly;
 
-  Output:Variable,*,Fan Electricity Rate,hourly;
+  Output:Variable,*,Ice Thermal Storage End Fraction,hourly;
 
-  Output:Variable,*,Cooling Coil Crankcase Heater Electricity Rate,hourly;
+  Output:Variable,*,Ice Thermal Storage Mass Flow Rate,hourly;
 
-  Output:Variable,*,Water Heater On Cycle Ancillary Electricity Rate,hourly;
+  Output:Variable,*,Ice Thermal Storage Inlet Temperature,hourly;
 
-  Output:Variable,*,Water Heater Off Cycle Ancillary Electricity Rate,hourly;
+  Output:Variable,*,Ice Thermal Storage Outlet Temperature,hourly;
+
+  Output:Variable,*,Ice Thermal Storage Cooling Discharge Rate,hourly;
+
+  Output:Variable,*,Ice Thermal Storage Cooling Discharge Energy,hourly;
+
+  Output:Variable,*,Ice Thermal Storage Cooling Charge Rate,hourly;
+
+  Output:Variable,*,Ice Thermal Storage Cooling Charge Energy,hourly;
+
+  Output:Variable,Central Chiller Outlet Node,System Node Setpoint Temperature,hourly;
+
+  Output:Variable,Ice Tank Outlet Node,System Node Setpoint Temperature,hourly;
+
+  Output:Variable,CW Supply Outlet Node,System Node Temperature,hourly;
+
+  Output:Variable,CW Supply Outlet Node,System Node Setpoint Temperature,hourly;
+
+  Output:Variable,CW Supply Outlet Node,System Node Mass Flow Rate,hourly;
+
+  Output:Variable,Main Cooling Coil 1 Water Inlet Node,System Node Mass Flow Rate,hourly;
+
+  Output:Variable,Main Cooling Coil 1 Water Inlet Node,System Node Standard Density Volume Flow Rate,hourly;
 
   Output:VariableDictionary,Regular;
 
   Output:Surfaces:Drawing,dxf;
+
+  Output:Meter,Electricity:Facility,hourly;
+
+  Output:Meter,Electricity:Plant,hourly;
 
   Output:Meter:MeterFileOnly,Electricity:Facility,monthly;
 
@@ -4693,6 +3772,10 @@
 
   Output:Meter:MeterFileOnly,Electricity:Plant,monthly;
 
+  Output:Meter:MeterFileOnly,NaturalGas:Facility,monthly;
+
+  Output:Meter:MeterFileOnly,NaturalGas:Plant,monthly;
+
   Output:Meter:MeterFileOnly,Electricity:Facility,runperiod;
 
   Output:Meter:MeterFileOnly,Electricity:Building,runperiod;
@@ -4703,210 +3786,61 @@
 
   Output:Meter:MeterFileOnly,Electricity:Plant,runperiod;
 
+  Output:Meter:MeterFileOnly,NaturalGas:Facility,runperiod;
+
+  Output:Meter:MeterFileOnly,NaturalGas:Plant,runperiod;
+
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
 
-  WaterUse:Equipment,
-    Showers,                 !- Name
-    Domestic Hot Water,      !- End-Use Subcategory
-    0.00379,                 !- Peak Flow Rate {m3/s}
-    Hot Water Demand Schedule,  !- Flow Rate Fraction Schedule Name
-    ;                        !- Target Temperature Schedule Name
+  Output:Table:TimeBins,
+    *,                       !- Key Value
+    Electricity:Facility,    !- Variable Name
+    0,                       !- Interval Start
+    2000,                    !- Interval Size
+    10,                      !- Interval Count
+    OnPeakEnergy;            !- Schedule Name
 
-  Schedule:Constant,SSBWaterTempSchedule,TEMPERATURE,43.333333333333336;
+  Output:Table:TimeBins,
+    *,                       !- Key Value
+    Electricity:Facility,    !- Variable Name
+    0,                       !- Interval Start
+    2000,                    !- Interval Size
+    10,                      !- Interval Count
+    OffPeakEnergy;           !- Schedule Name
 
-  WaterUse:Connections,
-    Domestic Hot Water,      !- Name
-    Water Demand Inlet Node, !- Inlet Node Name
-    Water Demand Outlet Node,!- Outlet Node Name
-    ,                        !- Supply Water Storage Tank Name
-    ,                        !- Reclamation Water Storage Tank Name
-    ,                        !- Hot Water Supply Temperature Schedule Name
-    ,                        !- Cold Water Supply Temperature Schedule Name
-    None,                    !- Drain Water Heat Exchanger Type
-    ,                        !- Drain Water Heat Exchanger Destination
-    ,                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
-    Showers;                 !- Water Use Equipment 1 Name
+  Output:Table:TimeBins,
+    *,                       !- Key Value
+    Electricity:Plant,       !- Variable Name
+    0,                       !- Interval Start
+    1000,                    !- Interval Size
+    10,                      !- Interval Count
+    OnPeakEnergy;            !- Schedule Name
 
-  Branch,
-    Water Demand Branch,     !- Name
-    ,                        !- Pressure Drop Curve Name
-    WaterUse:Connections,    !- Component 1 Object Type
-    Domestic Hot Water,      !- Component 1 Name
-    Water Demand Inlet Node, !- Component 1 Inlet Node Name
-    Water Demand Outlet Node;!- Component 1 Outlet Node Name
+  Output:Table:TimeBins,
+    *,                       !- Key Value
+    Electricity:Plant,       !- Variable Name
+    0,                       !- Interval Start
+    1000,                    !- Interval Size
+    10,                      !- Interval Count
+    OffPeakEnergy;           !- Schedule Name
 
-  Connector:Mixer,
-    DHW Demand Mixer,        !- Name
-    Mains Makeup Branch,     !- Outlet Branch Name
-    Water Demand Branch;     !- Inlet Branch 1 Name
+  Output:Table:TimeBins,
+    *,                       !- Key Value
+    Chiller Electricity Rate,!- Variable Name
+    0,                       !- Interval Start
+    1000,                    !- Interval Size
+    10,                      !- Interval Count
+    OnPeakEnergy;            !- Schedule Name
 
-  Connector:Splitter,
-    DHW Demand Splitter,     !- Name
-    DHW Demand Inlet Branch, !- Inlet Branch Name
-    Water Demand Branch;     !- Outlet Branch 1 Name
-
-  Connector:Mixer,
-    DHW Supply Mixer,        !- Name
-    DHW Supply Outlet Branch,!- Outlet Branch Name
-    Water Heater Branch;     !- Inlet Branch 1 Name
-
-  Connector:Splitter,
-    DHW Supply Splitter,     !- Name
-    Mains Inlet Branch,      !- Inlet Branch Name
-    Water Heater Branch;     !- Outlet Branch 1 Name
-
-  ConnectorList,
-    DHW Supply Connectors,   !- Name
-    Connector:Splitter,      !- Connector 1 Object Type
-    DHW Supply Splitter,     !- Connector 1 Name
-    Connector:Mixer,         !- Connector 2 Object Type
-    DHW Supply Mixer;        !- Connector 2 Name
-
-  Branch,
-    DHW Supply Outlet Branch,!- Name
-    ,                        !- Pressure Drop Curve Name
-    Pipe:Adiabatic,          !- Component 1 Object Type
-    DHW Supply Outlet Pipe,  !- Component 1 Name
-    DHW Supply Outlet Pipe Inlet Node,  !- Component 1 Inlet Node Name
-    DHW Supply Outlet Node;  !- Component 1 Outlet Node Name
-
-  Pipe:Adiabatic,
-    DHW Supply Outlet Pipe,  !- Name
-    DHW Supply Outlet Pipe Inlet Node,  !- Inlet Node Name
-    DHW Supply Outlet Node;  !- Outlet Node Name
-
-  BranchList,
-    DHW Demand Branches,     !- Name
-    DHW Demand Inlet Branch, !- Branch 1 Name
-    Water Demand Branch,     !- Branch 2 Name
-    Mains Makeup Branch;     !- Branch 3 Name
-
-  BranchList,
-    DHW Supply Branches,     !- Name
-    Mains Inlet Branch,      !- Branch 1 Name
-    Water Heater Branch,     !- Branch 2 Name
-    DHW Supply Outlet Branch;!- Branch 3 Name
-
-  Branch,
-    DHW Demand Inlet Branch, !- Name
-    ,                        !- Pressure Drop Curve Name
-    Pipe:Adiabatic,          !- Component 1 Object Type
-    DHW Demand Inlet Pipe,   !- Component 1 Name
-    DHW Demand Inlet Node,   !- Component 1 Inlet Node Name
-    DHW Demand Inlet Pipe Outlet Node;  !- Component 1 Outlet Node Name
-
-  Pipe:Adiabatic,
-    DHW Demand Inlet Pipe,   !- Name
-    DHW Demand Inlet Node,   !- Inlet Node Name
-    DHW Demand Inlet Pipe Outlet Node;  !- Outlet Node Name
-
-  Branch,
-    Mains Makeup Branch,     !- Name
-    ,                        !- Pressure Drop Curve Name
-    Pipe:Adiabatic,          !- Component 1 Object Type
-    Mains Makeup Pipe,       !- Component 1 Name
-    Mains Makeup Pipe Inlet Node,  !- Component 1 Inlet Node Name
-    Mains Makeup Node;       !- Component 1 Outlet Node Name
-
-  Pipe:Adiabatic,
-    Mains Makeup Pipe,       !- Name
-    Mains Makeup Pipe Inlet Node,  !- Inlet Node Name
-    Mains Makeup Node;       !- Outlet Node Name
-
-  ConnectorList,
-    DHW Demand Connectors,   !- Name
-    Connector:Splitter,      !- Connector 1 Object Type
-    DHW Demand Splitter,     !- Connector 1 Name
-    Connector:Mixer,         !- Connector 2 Object Type
-    DHW Demand Mixer;        !- Connector 2 Name
-
-  PlantLoop,
-    DHW Loop,                !- Name
-    Water,                   !- Fluid Type
-    ,                        !- User Defined Fluid Type
-    DHW Loop Operation,      !- Plant Equipment Operation Scheme Name
-    DHW Supply Outlet Node,  !- Loop Temperature Setpoint Node Name
-    100,                     !- Maximum Loop Temperature {C}
-    0,                       !- Minimum Loop Temperature {C}
-    0.01,                    !- Maximum Loop Flow Rate {m3/s}
-    0,                       !- Minimum Loop Flow Rate {m3/s}
-    0.003,                   !- Plant Loop Volume {m3}
-    Mains Inlet Node,        !- Plant Side Inlet Node Name
-    DHW Supply Outlet Node,  !- Plant Side Outlet Node Name
-    DHW Supply Branches,     !- Plant Side Branch List Name
-    DHW Supply Connectors,   !- Plant Side Connector List Name
-    DHW Demand Inlet Node,   !- Demand Side Inlet Node Name
-    Mains Makeup Node,       !- Demand Side Outlet Node Name
-    DHW Demand Branches,     !- Demand Side Branch List Name
-    DHW Demand Connectors,   !- Demand Side Connector List Name
-    Optimal;                 !- Load Distribution Scheme
-
-  Sizing:Plant,
-    DHW Loop,                !- Plant or Condenser Loop Name
-    Heating,                 !- Loop Type
-    51.666666666666664,      !- Design Loop Exit Temperature {C}
-    5.555555555555555;       !- Loop Design Temperature Difference {deltaC}
-
-  PlantEquipmentOperationSchemes,
-    DHW Loop Operation,      !- Name
-    PlantEquipmentOperation:HeatingLoad,  !- Control Scheme 1 Object Type
-    DHW Control Scheme,      !- Control Scheme 1 Name
-    AlwaysOn;                !- Control Scheme 1 Schedule Name
-
-  Schedule:Constant,AlwaysOn,FRACTION,1;
-
-  PlantEquipmentOperation:HeatingLoad,
-    DHW Control Scheme,      !- Name
-    0,                       !- Load Range 1 Lower Limit {W}
-    1000000000000000,        !- Load Range 1 Upper Limit {W}
-    DHW Plant Equipment;     !- Range 1 Equipment List Name
-
-  SetpointManager:Scheduled,
-    DHW Loop Setpoint Manager,  !- Name
-    Temperature,             !- Control Variable
-    DHWSupplySetpoint,       !- Schedule Name
-    DHW Supply Outlet Node;  !- Setpoint Node or NodeList Name
-
-  Schedule:Constant,DHWSupplySetpoint,TEMPERATURE,51.666666666666664;
-
-  Branch,
-    Mains Inlet Branch,      !- Name
-    ,                        !- Pressure Drop Curve Name
-    Pump:VariableSpeed,      !- Component 1 Object Type
-    Mains Pressure,          !- Component 1 Name
-    Mains Inlet Node,        !- Component 1 Inlet Node Name
-    Mains Pressure Outlet Node;  !- Component 1 Outlet Node Name
-
-  Pump:VariableSpeed,
-    Mains Pressure,          !- Name
-    Mains Inlet Node,        !- Inlet Node Name
-    Mains Pressure Outlet Node,  !- Outlet Node Name
-    0.01,                    !- Design Maximum Flow Rate {m3/s}
-    1,                       !- Design Pump Head {Pa}
-    0,                       !- Design Power Consumption {W}
-    1,                       !- Motor Efficiency
-    0,                       !- Fraction of Motor Inefficiencies to Fluid Stream
-    0,                       !- Coefficient 1 of the Part Load Performance Curve
-    1,                       !- Coefficient 2 of the Part Load Performance Curve
-    0,                       !- Coefficient 3 of the Part Load Performance Curve
-    0,                       !- Coefficient 4 of the Part Load Performance Curve
-    0,                       !- Design Minimum Flow Rate {m3/s}
-    Intermittent;            !- Pump Control Type
-
-  PlantEquipmentList,
-    DHW Plant Equipment,     !- Name
-    WaterHeater:HeatPump:PumpedCondenser,  !- Equipment 1 Object Type
-    Zone4bHeatPumpWaterHeater;  !- Equipment 1 Name
-
-  Branch,
-    Water Heater Branch,     !- Name
-    ,                        !- Pressure Drop Curve Name
-    WaterHeater:HeatPump:PumpedCondenser,  !- Component 1 Object Type
-    Zone4bHeatPumpWaterHeater,  !- Component 1 Name
-    Water Heater Use Inlet Node,  !- Component 1 Inlet Node Name
-    Water Heater Use Outlet Node;  !- Component 1 Outlet Node Name
+  Output:Table:TimeBins,
+    *,                       !- Key Value
+    Chiller Electricity Rate,!- Variable Name
+    0,                       !- Interval Start
+    1000,                    !- Interval Size
+    10,                      !- Interval Count
+    OffPeakEnergy;           !- Schedule Name
 
