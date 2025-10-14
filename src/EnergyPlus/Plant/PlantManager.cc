@@ -2467,6 +2467,9 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
             state.dataPlantMgr->GetCompSizFac = false;
         } // iterative passes thru sizing related routines.  end while?
 
+        if (state.dataGlobal->ReportPlantCompWaterFlowDataFlag) {
+            ReportPlantCompWaterFlowData(state, state.dataPlnt->PlantFinalSizesOkayToReport);
+        }
         // Step 5 now one more time for the final
         for (int HalfLoopNum = 1; HalfLoopNum <= state.dataPlnt->TotNumHalfLoops; ++HalfLoopNum) {
             if (state.dataGlobal->DoHVACSizingSimulation) {
@@ -2508,6 +2511,9 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
     //*****************************************************************
     // END First Pass SIZING INIT
     //*****************************************************************
+    if (state.dataGlobal->ReportPlantCompWaterFlowDataFlag) {
+        ReportPlantCompWaterFlowData(state, state.dataPlnt->PlantFinalSizesOkayToReport);
+    }
     //*****************************************************************
     // BEGIN Resizing Pass for HVAC Sizing Simulation Adjustments
     //*****************************************************************
@@ -2559,6 +2565,9 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
             state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).SimulateAllLoopSidePumps(state);
         }
 
+        if (state.dataGlobal->ReportPlantCompWaterFlowDataFlag) {
+            ReportPlantCompWaterFlowData(state, state.dataPlnt->PlantFinalSizesOkayToReport);
+        }
         state.dataPlnt->PlantReSizingCompleted = true;
         state.dataPlnt->PlantFinalSizesOkayToReport = false;
     }
@@ -4626,6 +4635,81 @@ void CheckOngoingPlantWarnings(EnergyPlusData &state)
                               format("Excess Storage Time={:.2R}[hr], Total Loop Active Time={:.2R}[hr]",
                                      state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Supply).LoopSideInlet_CapExcessStorageTime,
                                      state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Demand).LoopSideInlet_TotalTime));
+        }
+    }
+}
+
+void ReportPlantCompWaterFlowData(EnergyPlusData &state, bool const reportFlag)
+{
+    // Reporting will be 24 hrs of data by plant loop for each component connected to that loop. Then the next loop's component will be reported.
+    // Could be changed to report all loop's and components at the same time (i.e., as single group from 00:15 to 24:00 instead of multiple groups)
+    // sum equipment water flow rate time series
+    for (int LoopNum = 1; LoopNum <= state.dataHVACGlobal->NumPlantLoops; ++LoopNum) {
+        if (state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate.size() == 0) {
+            continue;
+        }
+        state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate.resize(size_t(24 * state.dataGlobal->TimeStepsInHour));
+        for (size_t ts = 0; ts < state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate.size(); ++ts) {
+            state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate[ts] = 0.0;
+            for (auto &thisCoil : state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate) {
+                state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate[ts] += thisCoil.tsDesWaterFlowRate[ts];
+            }
+        }
+    }
+    if (reportFlag) {
+        state.dataGlobal->ReportPlantCompWaterFlowDataFlag = false;
+    } else {
+        return;
+    }
+    for (int LoopNum = 1; LoopNum <= state.dataHVACGlobal->NumPlantLoops; ++LoopNum) {
+        if (state.dataPlnt->PlantFinalSizesOkayToReport) {
+            if (state.dataSize->SizingFileColSep == DataStringGlobals::CharComma) {
+                state.files.psz.filePath = state.files.outputPszCsvFilePath;
+            } else if (state.dataSize->SizingFileColSep == DataStringGlobals::CharTab) {
+                state.files.psz.filePath = state.files.outputPszTabFilePath;
+            } else {
+                state.files.psz.filePath = state.files.outputPszTxtFilePath;
+            }
+            state.files.psz.ensure_open(state, "SizePlantLoop", state.files.outputControl.psz);
+            // write out the sys design calc results
+
+            print(state.files.psz, "Time");
+            for (size_t J = 0; J < state.dataPlnt->PlantLoop(LoopNum).plantCoilObjectNames.size(); ++J) {
+                constexpr const char *PSizeFmt12("{}{}{}{}{}");
+                print(state.files.psz,
+                      PSizeFmt12,
+                      state.dataSize->SizingFileColSep,
+                      state.dataPlnt->PlantLoop(LoopNum).Name,
+                      ":",
+                      state.dataPlnt->PlantLoop(LoopNum).plantCoilObjectNames[J],
+                      ":Design Water Volume Flow Rate [m3/s]");
+            }
+            print(state.files.psz, "\n");
+            int HourPrint;
+            int Minutes = 0;
+            size_t TimeStepIndex = 0;
+            for (int HourCounter = 1; HourCounter <= 24; ++HourCounter) {
+                for (int TimeStepCounter = 1; TimeStepCounter <= state.dataGlobal->TimeStepsInHour; ++TimeStepCounter) {
+                    ++TimeStepIndex;
+                    Minutes += state.dataGlobal->MinutesInTimeStep;
+                    if (Minutes == 60) {
+                        Minutes = 0;
+                        HourPrint = HourCounter;
+                    } else {
+                        HourPrint = HourCounter - 1;
+                    }
+                    constexpr const char *PSizeFmt20("{:02}:{:02}:00");
+                    print(state.files.psz, PSizeFmt20, HourPrint, Minutes);
+                    constexpr const char *PSizeFmt22("{}{:12.6E}");
+
+                    for (size_t J = 0; J < state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate.size(); ++J) {
+                        Real64 const tsData = state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate[J].tsDesWaterFlowRate[TimeStepIndex - 1];
+                        print(state.files.psz, PSizeFmt22, state.dataSize->SizingFileColSep, tsData);
+                    }
+                    print(state.files.psz, "\n");
+                }
+            }
+            print(state.files.psz, "\n");
         }
     }
 }

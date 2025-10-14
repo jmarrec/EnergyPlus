@@ -100,6 +100,7 @@ add_simulation_test(IDF_FILE 5ZoneFanCoilDOAS_HumidifierOnOASystem.idf EPW_FILE 
 add_simulation_test(IDF_FILE 5ZoneFPIU.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneGeometryTransform.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneIceStorage.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
+add_simulation_test(IDF_FILE 5ZoneIceStorage_autosized.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneNightVent1.idf EPW_FILE USA_CA_Fresno.Air.Terminal.723890_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneNightVent2.idf EPW_FILE USA_CA_Fresno.Air.Terminal.723890_TMY3.epw)
 add_simulation_test(IDF_FILE 5ZoneNightVent3.idf EPW_FILE USA_CA_Fresno.Air.Terminal.723890_TMY3.epw)
@@ -776,6 +777,7 @@ add_simulation_test(IDF_FILE WCE_Interior_VB_-45_deg.idf EPW_FILE USA_IL_Chicago
 add_simulation_test(IDF_FILE _5ZoneAirCooled_annual.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw ANNUAL_SIMULATION)
 add_simulation_test(IDF_FILE _5ZoneAirCooled_LeapYear_annual.idf EPW_FILE MadeUpLeapYear.epw ANNUAL_SIMULATION)
 add_simulation_test(IDF_FILE UnitarySystem_MultiSpeedDX_EconoStaging.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw ANNUAL_SIMULATION)
+add_simulation_test(IDF_FILE UnitarySystem_VariableSpeedDX_SZVAV.idf EPW_FILE USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw ANNUAL_SIMULATION)
 add_simulation_test(IDF_FILE _ResidentialBase.idf EPW_FILE USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw ANNUAL_SIMULATION)
 add_simulation_test(IDF_FILE _ResidentialBaseboardHardSize.idf EPW_FILE USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3.epw)
 
