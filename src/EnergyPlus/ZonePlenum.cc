@@ -995,9 +995,7 @@ void CalcAirZoneReturnPlenum(EnergyPlusData &state, int const ZonePlenumNum)
             state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum).OutletMassFlowRate +=
                 state.dataDefineEquipment->AirDistUnit(ADUNum).MassFlowRateUpStrLk +
                 state.dataDefineEquipment->AirDistUnit(ADUNum).MassFlowRateDnStrLk +
-                state.dataDefineEquipment->AirDistUnit(ADUNum)
-                    .massFlowRateParallelPIULk; // Even though the PIU leakage flow rate doesn't necessarily go through the plenum, the same amount
-                                                // ends-up being returned
+                state.dataDefineEquipment->AirDistUnit(ADUNum).massFlowRateParallelPIULk;
             state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum).OutletMassFlowRateMaxAvail +=
                 state.dataDefineEquipment->AirDistUnit(ADUNum).MaxAvailDelta;
             state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum).OutletMassFlowRateMinAvail +=

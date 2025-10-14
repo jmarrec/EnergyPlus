@@ -1043,7 +1043,7 @@ TEST_F(EnergyPlusFixture, ZoneTempPredictorCorrector_calcZoneOrSpaceSums_SurfCon
     EXPECT_EQ(0.0, thisZoneHB.SumSysMCpT);
 
     // Check that parallel PIU leakage is accounted for
-    state->dataHeatBal->Zone(1).isSourceForParallelPIU = true;
+    state->dataHeatBal->Zone(1).leakageParallelPIUNum = 1;
     state->dataPowerInductionUnits->GetPIUInputFlag = false;
     state->dataPowerInductionUnits->NumPIUs = 1;
     state->dataPowerInductionUnits->PIU.allocate(1);

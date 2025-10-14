@@ -51,8 +51,10 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataContaminantBalance.hh>
+#include <EnergyPlus/DataDefineEquip.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataLoopNode.hh>
+#include <EnergyPlus/DataZoneEquipment.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/MixerComponent.hh>
 #include <EnergyPlus/NodeInputManager.hh>
@@ -432,8 +434,52 @@ void CalcAirMixer(EnergyPlusData &state, int &MixerNum)
     state.dataMixerComponent->MixerCond(MixerNum).OutletHumRat = 0.0;
     state.dataMixerComponent->MixerCond(MixerNum).OutletPressure = 0.0;
     state.dataMixerComponent->MixerCond(MixerNum).OutletEnthalpy = 0.0;
-
+    Real64 massFlowRateParallelPIULk = 0.0;
+    Real64 massFlowRateHumRatParallelPIULk = 0.0;
+    Real64 massFlowRateTempParallelPIULk = 0.0;
+    Real64 massFlowRatePressureParallelPIULk = 0.0;
+    Real64 massFlowRateEnthalpyParallelPIULk = 0.0;
     for (InletNodeNum = 1; InletNodeNum <= state.dataMixerComponent->MixerCond(MixerNum).NumInletNodes; ++InletNodeNum) {
+
+        // Get PIU leakage flow rate only first mixer in return path
+        // First: check if this mixer is in a return path
+        for (int returnAirPathNum = 1; returnAirPathNum <= static_cast<int>(state.dataZoneEquip->ReturnAirPath.size()); ++returnAirPathNum) {
+            const int returnAirPathCompNumOfComponents = state.dataZoneEquip->ReturnAirPath(returnAirPathNum).NumOfComponents;
+            for (int returnPathCompNum = 1; returnPathCompNum <= returnAirPathCompNumOfComponents; ++returnPathCompNum) {
+                if (state.dataZoneEquip->ReturnAirPath(returnAirPathNum).ComponentName(returnPathCompNum) ==
+                        state.dataMixerComponent->MixerCond(MixerNum).MixerName &&
+                    state.dataZoneEquip->ReturnAirPath(returnAirPathNum).ComponentTypeEnum(returnAirPathNum) ==
+                        DataZoneEquipment::AirLoopHVACZone::Mixer) {
+                    // Second: check if inlet nodes in the mixer are return nodes of zones served by a ADU that includes a parallel PIU
+                    if (!state.dataDefineEquipment->AirDistUnit.empty()) {
+                        for (int airDistUnitNum = 1; airDistUnitNum <= static_cast<int>(state.dataDefineEquipment->AirDistUnit.size());
+                             ++airDistUnitNum) {
+                            const auto &airDistUnit = state.dataDefineEquipment->AirDistUnit(airDistUnitNum);
+                            if (const int airDistUnitZoneNum = airDistUnit.ZoneNum; airDistUnitZoneNum > 0) {
+                                const int numRetNodes = state.dataZoneEquip->ZoneEquipConfig(airDistUnitZoneNum).NumReturnNodes;
+                                for (int retZoneAirNodeNum = 1; retZoneAirNodeNum <= numRetNodes; ++retZoneAirNodeNum) {
+                                    if (const int retZoneAirNode =
+                                            state.dataZoneEquip->ZoneEquipConfig(airDistUnitZoneNum).ReturnNodeAirLoopNum(retZoneAirNodeNum);
+                                        retZoneAirNode == InletNodeNum) {
+                                        // Third: increment to get the mixer leakage
+                                        massFlowRateParallelPIULk += airDistUnit.massFlowRateParallelPIULk;
+                                        massFlowRateTempParallelPIULk +=
+                                            airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).Temp;
+                                        massFlowRateHumRatParallelPIULk +=
+                                            airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).HumRat;
+                                        massFlowRatePressureParallelPIULk +=
+                                            airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).Press;
+                                        massFlowRateEnthalpyParallelPIULk +=
+                                            airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).Enthalpy;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         state.dataMixerComponent->MixerCond(MixerNum).OutletMassFlowRate +=
             state.dataMixerComponent->MixerCond(MixerNum).InletMassFlowRate(InletNodeNum);
         state.dataMixerComponent->MixerCond(MixerNum).OutletMassFlowRateMaxAvail +=
@@ -471,8 +517,30 @@ void CalcAirMixer(EnergyPlusData &state, int &MixerNum)
                 state.dataMixerComponent->MixerCond(MixerNum).OutletMassFlowRate;
         }
 
-        // Use Enthalpy and humidity ratio to get outlet temperature from psych chart
+        // Balance the leaks
+        if (massFlowRateParallelPIULk > 0) {
+            const Real64 noLeakMassFlowRate = state.dataMixerComponent->MixerCond(MixerNum).OutletMassFlowRate;
+            const Real64 totMassFlowRate = noLeakMassFlowRate + massFlowRateParallelPIULk;
 
+            // Humidity ratio
+            state.dataMixerComponent->MixerCond(MixerNum).OutletHumRat =
+                (noLeakMassFlowRate * state.dataMixerComponent->MixerCond(MixerNum).OutletHumRat + massFlowRateHumRatParallelPIULk) / totMassFlowRate;
+
+            // Pressure
+            state.dataMixerComponent->MixerCond(MixerNum).OutletPressure =
+                (noLeakMassFlowRate * state.dataMixerComponent->MixerCond(MixerNum).OutletPressure + massFlowRatePressureParallelPIULk) /
+                totMassFlowRate;
+
+            // Enthalpy
+            state.dataMixerComponent->MixerCond(MixerNum).OutletEnthalpy =
+                (noLeakMassFlowRate * state.dataMixerComponent->MixerCond(MixerNum).OutletEnthalpy + massFlowRateEnthalpyParallelPIULk) /
+                totMassFlowRate;
+
+            // Flow rate
+            state.dataMixerComponent->MixerCond(MixerNum).OutletMassFlowRate = totMassFlowRate;
+        }
+
+        // Use Enthalpy and humidity ratio to get outlet temperature from psych chart
         state.dataMixerComponent->MixerCond(MixerNum).OutletTemp =
             PsyTdbFnHW(state.dataMixerComponent->MixerCond(MixerNum).OutletEnthalpy, state.dataMixerComponent->MixerCond(MixerNum).OutletHumRat);
 

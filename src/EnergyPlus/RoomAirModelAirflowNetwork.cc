@@ -798,17 +798,11 @@ namespace RoomAir {
             SumSysMCpT += inletNode.MassFlowRate * CpAir * inletNode.Temp;
         }
 
-        if (zone.isSourceForParallelPIU) {
+        if (zone.leakageParallelPIUNum > 0) {
             Real64 CpAir = PsyCpAirFnW(zoneHB.airHumRat);
-            for (int iExhNode = 1; iExhNode <= state.dataZoneEquip->ZoneEquipConfig(zoneNum).NumExhaustNodes; ++iExhNode) {
-                int piuNum = PoweredInductionUnits::getParallelPIUNumFromSecNodeNum(
-                    state, state.dataZoneEquip->ZoneEquipConfig(zoneNum).ExhaustNode(iExhNode));
-                if (piuNum > 0) {
-                    auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum);
-                    SumSysMCp += thisPIU.leakFlow * CpAir;
-                    SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
-                }
-            }
+            const auto &thisPIU = state.dataPowerInductionUnits->PIU(state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum);
+            SumSysMCp += thisPIU.leakFlow * CpAir;
+            SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
         }
 
         int ZoneMult = zone.Multiplier * zone.ListMultiplier;

@@ -610,7 +610,7 @@ namespace DataHeatBalance {
         Real64 ExtGrossGroundWallArea_Multiplied = 0.0;            // Ground contact Wall Area for Zone (Gross) with multipliers
         bool IsSupplyPlenum = false;                               // True when this zone is a supply plenum
         bool IsReturnPlenum = false;                               // True when this zone is a return plenum
-        bool isSourceForParallelPIU = false;                       // True when a parallel PIU draws air from this zone
+        int leakageParallelPIUNum = 0;                             // parallel PIU index for backdraft damper leakage
         int PlenumCondNum = 0;                                     // Supply or return plenum conditions number, 0 if this is not a plenum zone
         int TempControlledZoneIndex = 0;                           // this is the index number for TempControlledZone structure for lookup
         int humidityControlZoneIndex = 0;                          // this is the index number for HumidityControlZone structure for lookup

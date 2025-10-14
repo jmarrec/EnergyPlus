@@ -2206,7 +2206,7 @@
     SPACE1-1,                !- Zone Name
     SPACE1-1 Eq,             !- Zone Conditioning Equipment List Name
     SPACE1-1 In Nodes,       !- Zone Air Inlet Node or NodeList Name
-    ,                        !- Zone Air Exhaust Node or NodeList Name
+    PIU Inlet,               !- Zone Air Exhaust Node or NodeList Name
     SPACE1-1 Node,           !- Zone Air Node Name
     SPACE1-1 Out Node;       !- Zone Return Air Node or NodeList Name
 
@@ -2238,7 +2238,7 @@
     SPACE5-1,                !- Zone Name
     SPACE5-1 Eq,             !- Zone Conditioning Equipment List Name
     SPACE5-1 In Nodes,       !- Zone Air Inlet Node or NodeList Name
-    PIU Inlet,                        !- Zone Air Exhaust Node or NodeList Name
+    ,                        !- Zone Air Exhaust Node or NodeList Name
     SPACE5-1 Node,           !- Zone Air Node Name
     SPACE5-1 Out Node;       !- Zone Return Air Node or NodeList Name
 
@@ -2404,13 +2404,13 @@
     SPACE1-1 VAV Reheat,                       !- Name
     ReheatCoilAvailSched,                      !- Availability Schedule Name
     autosize,                                  !- Maximum Primary Air Flow Rate {m3/s}
-    0.20913,                                  !- Maximum Secondary Air Flow Rate {m3/s}
-    0.26186,                                       !- Minimum Primary Air Flow Fraction
+    0.20913,                                   !- Maximum Secondary Air Flow Rate {m3/s}
+    0.26186,                                   !- Minimum Primary Air Flow Fraction
     0,                                         !- Fan On Flow Fraction
     SPACE1-1 ATU In Node,                      !- Supply Air Inlet Node Name
     PIU Inlet,                                 !- Secondary Air Inlet Node Name
     SPACE1-1 In Node,                          !- Air Outlet Node Name
-    SPACE1-1 PIU MIXER OUTLET,                   !- Reheat Coil Air Inlet Node Name
+    SPACE1-1 PIU MIXER OUTLET,                 !- Reheat Coil Air Inlet Node Name
     SPACE1-1 PIU MIXER,                        !- Zone Mixer Name
     SPACE1-1 PIU FAN,                          !- Fan Name
     Coil:Heating:Water,                        !- Reheat Coil Object Type
@@ -2423,7 +2423,8 @@
     ,                        !- Heating Control Type
     ,                        !- Design Heating Discharge Air Temperature {C}
     ,                        !- High Limit Heating Discharge Air Temperature {C}
-    high_0p25_in_wc;         !- Backdraft Damper Leakage Fraction Curve Name
+    high_0p25_in_wc,         !- Backdraft Damper Leakage Fraction Curve Name
+    SPACE5-1;                !- Backdraft Damper Leakage Zone Name
 
   AirLoopHVAC:ZoneMixer,
     SPACE1-1 PIU MIXER,  !- Name

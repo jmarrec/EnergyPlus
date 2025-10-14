@@ -559,23 +559,23 @@ void GetPIUs(EnergyPlusData &state)
                                                cCurrentModuleObject,
                                                thisPIU.Name));
                     } else if (thisPIU.leakFracCurve > 0) {
-                        // Find the secondary zone or plenum index
-                        // The secondary air inlet node should either be a zone exhaust air node...
-                        for (int zoneNum = 1; zoneNum <= state.dataGlobal->NumOfZones; ++zoneNum) {
-                            for (int exhaustNum = 1; exhaustNum <= state.dataZoneEquip->ZoneEquipConfig(zoneNum).NumExhaustNodes; ++exhaustNum) {
-                                if (thisPIU.SecAirInNode == state.dataZoneEquip->ZoneEquipConfig(zoneNum).ExhaustNode(exhaustNum)) {
-                                    state.dataHeatBal->Zone(zoneNum).isSourceForParallelPIU = true;
-                                    break;
-                                }
-                            }
-                        }
-                        // ...  or an induced air node of a return plenum
-                        for (int zoneNum = 1; zoneNum <= state.dataZonePlenum->NumZoneSupplyPlenums; ++zoneNum) {
-                            for (int nodeNum = 1; nodeNum <= state.dataZonePlenum->ZoneRetPlenCond(zoneNum).NumInducedNodes; ++nodeNum) {
-                                if (thisPIU.SecAirInNode == state.dataZonePlenum->ZoneRetPlenCond(zoneNum).InducedNode(nodeNum)) {
-                                    state.dataHeatBal->Zone(zoneNum).isSourceForParallelPIU = true;
-                                    break;
-                                }
+                        std::string damperLeakageZoneName = ip->getAlphaFieldValue(fields, objectSchemaProps, "backdraft_damper_leakage_zone_name");
+                        if (damperLeakageFractionCurveName.empty()) {
+                            thisPIU.leakFracCurve = 0;
+                            ShowSevereError(state,
+                                            format("The air leakage zone name for the {} {} is missing. No air leakage will be modeled.",
+                                                   cCurrentModuleObject,
+                                                   thisPIU.Name));
+                        } else {
+                            if (int zoneNum = Util::FindItemInList(damperLeakageZoneName, state.dataHeatBal->Zone); zoneNum == thisPIU.CtrlZoneNum) {
+                                thisPIU.leakFracCurve = 0;
+                                ShowSevereError(state,
+                                                format("Air leakage for the {} {} won't be simulated as both the control zone and leakage "
+                                                       "zones are the same.",
+                                                       cCurrentModuleObject,
+                                                       thisPIU.Name));
+                            } else {
+                                state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum = PIUNum;
                             }
                         }
                     }
@@ -735,7 +735,7 @@ void InitPIU(EnergyPlusData &state,
 
     if (!state.dataPowerInductionUnits->ZoneEquipmentListChecked && state.dataZoneEquip->ZoneEquipInputsFilled) {
         state.dataPowerInductionUnits->ZoneEquipmentListChecked = true;
-        // Check to see if there is a Air Distribution Unit on the Zone Equipment List
+        // Check to see if there is an Air Distribution Unit on the Zone Equipment List
         for (int Loop = 1; Loop <= state.dataPowerInductionUnits->NumPIUs; ++Loop) {
             if (state.dataPowerInductionUnits->PIU(Loop).ADUNum == 0) {
                 continue;
