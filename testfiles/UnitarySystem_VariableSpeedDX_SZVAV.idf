@@ -2860,6 +2860,7 @@
 
   Coil:Heating:DX:VariableSpeed,
     Sys 2 Furnace DX Cool Heating Coil,              !- Name
+    ,                                                !- Availability Schedule Name
     Sys 2 Furnace DX Cool Cooling Coil Outlet,       !- Indoor Air Inlet Node Name
     Sys 2 Furnace DX Cool Heating Coil Outlet,       !- Indoor Air Outlet Node Name
     3,                                               !- Number of Speeds {dimensionless}
@@ -2962,6 +2963,7 @@
 
   Coil:Cooling:DX:VariableSpeed,
     Sys 2 Furnace DX Cool Cooling Coil,                       !- Name
+    ,                                                         !- Availability Schedule Name
     Sys 2 Furnace DX Cool Mixed Air Outlet,                   !- Indoor Air Inlet Node Name
     Sys 2 Furnace DX Cool Cooling Coil Outlet,                !- Indoor Air Outlet Node Name
     3,                                               !- Number of Speeds {dimensionless}
@@ -4878,6 +4880,7 @@
 
   Coil:Cooling:DX:VariableSpeed,
     Sys 4 Heat Pump Air Source Cooling Coil,  !- Name
+    ,                        !- Availability Schedule Name
     Sys 4 Heat Pump Air Source Supply Fan Outlet,  !- Indoor Air Inlet Node Name
     Sys 4 Heat Pump Air Source Cooling Coil Outlet,  !- Indoor Air Outlet Node Name
     4,                       !- Number of Speeds {dimensionless}
