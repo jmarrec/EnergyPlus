@@ -843,6 +843,7 @@ TEST_F(EnergyPlusFixture, SZVAV_UnitarySys_VarSpeed_Testing)
 
         "  Coil:Heating:DX:VariableSpeed,",
         "    Sys 2 Furnace DX Cool Heating Coil,              !- Name",
+        "    ,                                                !- Availability Schedule Name",
         "    Sys 2 Furnace DX Cool Cooling Coil Outlet,       !- Indoor Air Inlet Node Name",
         "    Sys 2 Furnace DX Cool Heating Coil Outlet,       !- Indoor Air Outlet Node Name",
         "    3,                                               !- Number of Speeds {dimensionless}",
@@ -970,6 +971,7 @@ TEST_F(EnergyPlusFixture, SZVAV_UnitarySys_VarSpeed_Testing)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    Sys 2 Furnace DX Cool Cooling Coil,                       !- Name",
+        "    ,                                                         !- Availability Schedule Name",
         "    Sys 2 Furnace DX Cool Mixed Air Outlet,                   !- Indoor Air Inlet Node Name",
         "    Sys 2 Furnace DX Cool Cooling Coil Outlet,                !- Indoor Air Outlet Node Name",
         "    3,                                                        !- Number of Speeds {dimensionless}",
