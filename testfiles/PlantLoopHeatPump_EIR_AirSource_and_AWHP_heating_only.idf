@@ -245,13 +245,13 @@
     test_AWHP,               !- Name
     ,                        !- Availability Schedule Name Heating
     ,                        !- Availability Schedule Name Cooling
-    Load ,                   !- Operating Mode Control Method
+    Load,                    !- Operating Mode Control Method
     SingleMode,              !- Operating Mode Control Option for Multiple Unit
     ,                        !- Operating Mode Control Schedule Name
     ,                        !- Minimum Part Load Ratio
-    20 ,                     !- Rated Inlet Air Temperature in Heating Mode
+    20,                      !- Rated Inlet Air Temperature in Heating Mode
     autosize,                !- Rated Air Flow Rate in Heating Mode
-    50 ,                     !- Rated Leaving Water Temperature in Heating Mode
+    50,                      !- Rated Leaving Water Temperature in Heating Mode
     autosize,                !- Rated Water Flow Rate in Heating Mode
     -20,                     !- Minimum Outdoor Air Temperature in Heating Mode
     25,                      !- Maximum Outdoor Air Temperature in Heating Mode
@@ -267,7 +267,7 @@
     ,                        !- Minimum Leaving Water Temperature Curve Name in Cooling Mode
     ,                        !- Maximum Leaving Water Temperature Curve Name in Cooling Mode
     ,                        !- Sizing Factor for Cooling
-    Outdoor Air Inlet Node ,  !- Air Inlet Node Name
+    Outdoor Air Inlet Node,   !- Air Inlet Node Name
     Outdoor Air Outlet Node,  !- Air Outlet Node Name
     Heating Coil Load Loop Intermediate Node,  !- Hot Water Inlet Node Name
     Heating Coil Load Loop Supply Outlet Node,  !- Hot Water Outlet Node Name
@@ -278,12 +278,12 @@
     0.2,                     !- Heat Pump Defrost Time Period Fraction
     150,                     !- Resistive Defrost Heater Capacity
     ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
-    2 ,                      !- Heat Pump Multiplier
-    FixedSpeed ,             !- Control Type
-    100 ,                    !- Crankcase Heater Capacity
+    2,                       !- Heat Pump Multiplier
+    FixedSpeed,              !- Control Type
+    100,                     !- Crankcase Heater Capacity
     CrankCaseHeaterPowerCurve,  !- Crankcase Heater Capacity Function of Temperature Curve Name
-    5 ,                      !- Maximum Ambient Temperature for Crankcase Heater Operation
-    2 ,                      !- Number of Speeds for Heating
+    5,                       !- Maximum Ambient Temperature for Crankcase Heater Operation
+    2,                       !- Number of Speeds for Heating
     20000,                   !- Rated Heating Capacity at Speed 1
     3.49,                    !- Rated COP for Heating at Speed 1
     CapCurveFuncTempHT,      !- Normalized Heating Capacity Function of Temperature Curve Name at Speed 1

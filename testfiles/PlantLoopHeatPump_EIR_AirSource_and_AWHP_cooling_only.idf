@@ -149,7 +149,7 @@
     test_AWHP,               !- Name
     ,                        !- Availability Schedule Name Heating
     ,                        !- Availability Schedule Name Cooling
-    Load ,                   !- Operating Mode Control Method
+    Load,                    !- Operating Mode Control Method
     SingleMode,              !- Operating Mode Control Option for Multiple Unit
     ,                        !- Operating Mode Control Schedule Name
     ,                        !- Minimum Part Load Ratio
@@ -163,27 +163,27 @@
     ,                        !- Maximum Leaving Water Temperature Curve Name in Heating Mode
     ,                        !- Sizing Factor for Heating
     25,                      !- Rated Inlet Air Temperature in Cooling Mode
-    20 ,                     !- Rated Air Flow Rate in Cooling Mode
-    22 ,                     !- Rated Leaving Water Temperature in Cooling Mode
-    autosize ,               !- Rated Water Flow Rate in Cooling Mode
-    18 ,                     !- Minimum Outdoor Air Temperature in Cooling Mode
+    20,                      !- Rated Air Flow Rate in Cooling Mode
+    22,                      !- Rated Leaving Water Temperature in Cooling Mode
+    autosize,                !- Rated Water Flow Rate in Cooling Mode
+    18,                      !- Minimum Outdoor Air Temperature in Cooling Mode
     40,                      !- Maximum Outdoor Air Temperature in Cooling Mode
     ,                        !- Minimum Leaving Water Temperature Curve Name in Cooling Mode
     ,                        !- Maximum Leaving Water Temperature Curve Name in Cooling Mode
     0.9,                     !- Sizing Factor for Cooling
-    Outdoor Air Inlet Node ,  !- Air Inlet Node Name
+    Outdoor Air Inlet Node,   !- Air Inlet Node Name
     Outdoor Air Outlet Node,  !- Air Outlet Node Name
     ,                        !- Hot Water Inlet Node Name
     ,                        !- Hot Water Outlet Node Name
-    Cooling Coil Load Loop Intermediate Node ,  !- Chilled Water Inlet Node Name
-    Cooling Coil Load Loop Supply Outlet Node ,  !- Chilled Water Outlet Node Name
+    Cooling Coil Load Loop Intermediate Node,   !- Chilled Water Inlet Node Name
+    Cooling Coil Load Loop Supply Outlet Node,   !- Chilled Water Outlet Node Name
     ,                        !- Maximum Outdoor Dry Bulb Temperature For Defrost Operation
     ,                        !- Heat Pump Defrost Control
     ,                        !- Heat Pump Defrost Time Period Fraction
     ,                        !- Resistive Defrost Heater Capacity
     ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
-    2 ,                      !- Heat Pump Multiplier
-    FixedSpeed ,             !- Control Type
+    2,                       !- Heat Pump Multiplier
+    FixedSpeed,              !- Control Type
     ,                        !- Crankcase Heater Capacity
     ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
     ,                        !- Maximum Ambient Temperature for Crankcase Heater Operation
