@@ -436,7 +436,6 @@ void CalcAirMixer(EnergyPlusData &state, int &MixerNum)
     state.dataMixerComponent->MixerCond(MixerNum).OutletEnthalpy = 0.0;
     Real64 massFlowRateParallelPIULk = 0.0;
     Real64 massFlowRateHumRatParallelPIULk = 0.0;
-    Real64 massFlowRateTempParallelPIULk = 0.0;
     Real64 massFlowRatePressureParallelPIULk = 0.0;
     Real64 massFlowRateEnthalpyParallelPIULk = 0.0;
     for (InletNodeNum = 1; InletNodeNum <= state.dataMixerComponent->MixerCond(MixerNum).NumInletNodes; ++InletNodeNum) {
@@ -463,8 +462,6 @@ void CalcAirMixer(EnergyPlusData &state, int &MixerNum)
                                         retZoneAirNode == InletNodeNum) {
                                         // Third: increment to get the mixer leakage
                                         massFlowRateParallelPIULk += airDistUnit.massFlowRateParallelPIULk;
-                                        massFlowRateTempParallelPIULk +=
-                                            airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).Temp;
                                         massFlowRateHumRatParallelPIULk +=
                                             airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).HumRat;
                                         massFlowRatePressureParallelPIULk +=
