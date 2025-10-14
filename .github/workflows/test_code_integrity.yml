@@ -2,7 +2,7 @@ name: Code Integrity
 
 on:
   push:
-    branches: [ develop, 11252_precommit ]
+    branches: [ develop ]
   pull_request:
     branches: [ develop ]
   workflow_dispatch:
@@ -21,6 +21,20 @@ jobs:
         run: |
           pip install pre-commit tabulate
 
+      - name: Run pre-commit
+        id: pre_commit
+        if: always()
+        run: |
+          # Skip clang-format since we run it separately. The only reason is that I'm not yet willing to remove the step summary table
+          export SKIP='clang-format'
+          # check_for_enum_scope_usage.py is slow so it's added as a "manual" hook stage, so it doesn't run on each pre-commit
+          # Here we pass --hook-stage manual so it's run also
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
+            pre-commit run --verbose --hook-stage manual --from-ref HEAD^ --to-ref HEAD
+          else
+            pre-commit run --verbose --hook-stage manual --all-files
+          fi
+
       # This can take up to 2min30 (between 14 and 30s usually)
       - name: Install clang-format-19
         shell: bash
@@ -33,14 +47,6 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -q clang-format-19
           clang-format-19 --version
-
-      - name: Get files touched by the PR
-        if: ${{ github.event_name == 'pull_request' }}
-        id: pr_changed_files
-        shell: bash
-        run: |
-          readarray -t all_files < <(git diff --name-only --diff-filter=AM HEAD^ HEAD)
-          echo "all_files='${all_files[*]}'" >> $GITHUB_OUTPUT
 
       - name: Run clang-format against C++ files touched by the PR
         if: ${{ github.event_name == 'pull_request' }}
@@ -150,20 +156,6 @@ jobs:
         with:
             name: EnergyPlus-${{ github.sha }}-clang_format.patch
             path: clang_format.patch
-
-      - name: Run pre-commit
-        id: pre_commit
-        if: always()
-        run: |
-          # Skip clang-format since we run it separately. The only reason is that I'm not yet willing to remove the step summary table
-          export SKIP='clang-format'
-          # check_for_enum_scope_usage.py is slow so it's added as a "manual" hook stage, so it doesn't run on each pre-commit
-          # Here we pass --hook-stage manual so it's run also
-          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ]; then
-            pre-commit run --verbose --hook-stage manual --files ${{ steps.pr_changed_files.output.all_files }}
-          else
-            pre-commit run --verbose --hook-stage manual --all-files
-          fi
 
       - name: Commit Auto-corrections
         shell: bash
