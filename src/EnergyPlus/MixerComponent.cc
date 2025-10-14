@@ -58,6 +58,7 @@
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/MixerComponent.hh>
 #include <EnergyPlus/NodeInputManager.hh>
+#include <EnergyPlus/PoweredInductionUnits.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
@@ -442,32 +443,35 @@ void CalcAirMixer(EnergyPlusData &state, int &MixerNum)
 
         // Get PIU leakage flow rate only first mixer in return path
         // First: check if this mixer is in a return path
-        for (int returnAirPathNum = 1; returnAirPathNum <= static_cast<int>(state.dataZoneEquip->ReturnAirPath.size()); ++returnAirPathNum) {
-            const int returnAirPathCompNumOfComponents = state.dataZoneEquip->ReturnAirPath(returnAirPathNum).NumOfComponents;
-            for (int returnPathCompNum = 1; returnPathCompNum <= returnAirPathCompNumOfComponents; ++returnPathCompNum) {
-                if (state.dataZoneEquip->ReturnAirPath(returnAirPathNum).ComponentName(returnPathCompNum) ==
-                        state.dataMixerComponent->MixerCond(MixerNum).MixerName &&
-                    state.dataZoneEquip->ReturnAirPath(returnAirPathNum).ComponentTypeEnum(returnAirPathNum) ==
-                        DataZoneEquipment::AirLoopHVACZone::Mixer) {
-                    // Second: check if inlet nodes in the mixer are return nodes of zones served by a ADU that includes a parallel PIU
-                    if (!state.dataDefineEquipment->AirDistUnit.empty()) {
-                        for (int airDistUnitNum = 1; airDistUnitNum <= static_cast<int>(state.dataDefineEquipment->AirDistUnit.size());
-                             ++airDistUnitNum) {
-                            const auto &airDistUnit = state.dataDefineEquipment->AirDistUnit(airDistUnitNum);
-                            if (const int airDistUnitZoneNum = airDistUnit.ZoneNum; airDistUnitZoneNum > 0) {
-                                const int numRetNodes = state.dataZoneEquip->ZoneEquipConfig(airDistUnitZoneNum).NumReturnNodes;
-                                for (int retZoneAirNodeNum = 1; retZoneAirNodeNum <= numRetNodes; ++retZoneAirNodeNum) {
-                                    if (const int retZoneAirNode =
-                                            state.dataZoneEquip->ZoneEquipConfig(airDistUnitZoneNum).ReturnNodeAirLoopNum(retZoneAirNodeNum);
-                                        retZoneAirNode == InletNodeNum) {
-                                        // Third: increment to get the mixer leakage
-                                        massFlowRateParallelPIULk += airDistUnit.massFlowRateParallelPIULk;
-                                        massFlowRateHumRatParallelPIULk +=
-                                            airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).HumRat;
-                                        massFlowRatePressureParallelPIULk +=
-                                            airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).Press;
-                                        massFlowRateEnthalpyParallelPIULk +=
-                                            airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.InletNodeNum).Enthalpy;
+        if (state.dataPowerInductionUnits->NumParallelPIUs > 0) {
+            for (int returnAirPathNum = 1; returnAirPathNum <= static_cast<int>(state.dataZoneEquip->ReturnAirPath.size()); ++returnAirPathNum) {
+                const int returnAirPathCompNumOfComponents = state.dataZoneEquip->ReturnAirPath(returnAirPathNum).NumOfComponents;
+                for (int returnPathCompNum = 1; returnPathCompNum <= returnAirPathCompNumOfComponents; ++returnPathCompNum) {
+                    if (state.dataZoneEquip->ReturnAirPath(returnAirPathNum).ComponentName(returnPathCompNum) ==
+                            state.dataMixerComponent->MixerCond(MixerNum).MixerName &&
+                        state.dataZoneEquip->ReturnAirPath(returnAirPathNum).ComponentTypeEnum(returnPathCompNum) ==
+                            DataZoneEquipment::AirLoopHVACZone::Mixer) {
+                        // Second: check if inlet nodes in the mixer are return nodes of zones served by a ADU that includes a parallel PIU
+                        if (!state.dataDefineEquipment->AirDistUnit.empty()) {
+                            for (int airDistUnitNum = 1; airDistUnitNum <= static_cast<int>(state.dataDefineEquipment->AirDistUnit.size());
+                                 ++airDistUnitNum) {
+                                if (const auto &airDistUnit = state.dataDefineEquipment->AirDistUnit(airDistUnitNum); airDistUnit.piuLkZoneNum > 0) {
+                                    if (const int airDistUnitZoneNum = airDistUnit.ZoneNum; airDistUnitZoneNum > 0) {
+                                        const int numRetNodes = state.dataZoneEquip->ZoneEquipConfig(airDistUnitZoneNum).NumReturnNodes;
+                                        for (int retZoneAirNodeNum = 1; retZoneAirNodeNum <= numRetNodes; ++retZoneAirNodeNum) {
+                                            if (const int retZoneAirNode =
+                                                    state.dataZoneEquip->ZoneEquipConfig(airDistUnitZoneNum).ReturnNodeAirLoopNum(retZoneAirNodeNum);
+                                                retZoneAirNode == InletNodeNum) {
+                                                // Third: increment to get the mixer leakage
+                                                massFlowRateParallelPIULk += airDistUnit.massFlowRateParallelPIULk;
+                                                massFlowRateHumRatParallelPIULk += airDistUnit.massFlowRateParallelPIULk *
+                                                                                   state.dataLoopNodes->Node(airDistUnit.piuLkZoneNum).HumRat;
+                                                massFlowRatePressureParallelPIULk +=
+                                                    airDistUnit.massFlowRateParallelPIULk * state.dataLoopNodes->Node(airDistUnit.piuLkZoneNum).Press;
+                                                massFlowRateEnthalpyParallelPIULk += airDistUnit.massFlowRateParallelPIULk *
+                                                                                     state.dataLoopNodes->Node(airDistUnit.piuLkZoneNum).Enthalpy;
+                                            }
+                                        }
                                     }
                                 }
                             }

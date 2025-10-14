@@ -699,6 +699,9 @@ namespace ZoneAirLoopEquipmentManager {
                 // Retrieve previously calculated PIU terminal leakage through backdraft damper
                 if (const int PIUNum = Util::FindItemInList(airDistUnit.EquipName(AirDistCompNum), state.dataPowerInductionUnits->PIU); PIUNum > 0) {
                     airDistUnit.parallelPIUTerminalLeakFrac = state.dataPowerInductionUnits->PIU(PIUNum).leakFrac;
+                    if (state.dataPowerInductionUnits->PIU(PIUNum).damperLeakageZoneNum > 0 && airDistUnit.piuLkZoneNum <= 0) { // one-time assignment
+                        airDistUnit.piuLkZoneNum = state.dataPowerInductionUnits->PIU(PIUNum).damperLeakageZoneNum;
+                    }
                 }
             } break;
             case DataDefineEquip::ZnAirLoopEquipType::SingleDuct_ConstVol_4PipeInduc: {

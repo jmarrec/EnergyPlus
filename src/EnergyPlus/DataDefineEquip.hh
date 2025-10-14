@@ -132,6 +132,7 @@ namespace DataDefineEquip {
         Real64 CoolGain = 0.0;                    // [J]
         bool EachOnceFlag = true;
         bool IsConstLeakageRate = false; // if true, constant leakage rate, if false proportional leakage rate will be calculated
+        int piuLkZoneNum = 0;            // zone index designated as the destination for the PIU backdraft damper leaks
 
         // Default Constructor
         ZoneAirEquip()

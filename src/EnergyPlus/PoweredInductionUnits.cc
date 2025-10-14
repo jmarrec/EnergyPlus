@@ -576,6 +576,7 @@ void GetPIUs(EnergyPlusData &state)
                                                        thisPIU.Name));
                             } else {
                                 state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum = PIUNum;
+                                thisPIU.damperLeakageZoneNum = zoneNum;
                             }
                         }
                     }
