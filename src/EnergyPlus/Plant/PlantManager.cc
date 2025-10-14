@@ -97,6 +97,7 @@
 #include <EnergyPlus/OutputReportPredefined.hh>
 #include <EnergyPlus/OutputReportTabular.hh>
 #include <EnergyPlus/OutsideEnergySources.hh>
+#include <EnergyPlus/PCMThermalStorage.hh>
 #include <EnergyPlus/PhotovoltaicThermalCollectors.hh>
 #include <EnergyPlus/PipeHeatTransfer.hh>
 #include <EnergyPlus/Pipes.hh>
@@ -308,7 +309,7 @@ void GetPlantLoopData(EnergyPlusData &state)
     int IOStat;    // IO Status when calling get input subroutine
     int PlantLoopNum;
     int CondLoopNum;
-    Array1D_string Alpha(18); // dimension to num of alpha fields in input
+    Array1D_string Alpha(19); // dimension to num of alpha fields in input
     Array1D<Real64> Num(30);  // dimension to num of numeric data fields in input
     bool ErrorsFound(false);
     std::string CurrentModuleObject; // for ease in renaming.
@@ -614,6 +615,7 @@ void GetPlantLoopData(EnergyPlusData &state)
         } else {
             PressSimAlphaIndex = 15;
         }
+        this_loop.TypeOfWaterLoop = static_cast<DataPlant::WaterLoopType>(getEnumValue(DataPlant::waterLoopTypeNamesUC, Util::makeUPPER(Alpha(19))));
 
         if (NumAlphas >= PressSimAlphaIndex) {
             MatchedPressureString = false;
@@ -975,6 +977,15 @@ void GetPlantInput(EnergyPlusData &state)
                         this_comp.compPtr = WaterThermalTanks::WaterThermalTankData::factory(state, CompNames(CompNum));
                         break;
                     }
+                    case PlantEquipmentType::HotWaterTankStratified: {
+                        if (LoopSideNum == LoopSideLocation::Demand) {
+                            this_comp.CurOpSchemeType = OpScheme::Demand;
+                        } else if (LoopSideNum == LoopSideLocation::Supply) {
+                            this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        }
+                        this_comp.compPtr = WaterThermalTanks::WaterThermalTankData::factory(state, CompNames(CompNum));
+                        break;
+                    }
                     case PlantEquipmentType::WaterUseConnection: {
                         this_comp.CurOpSchemeType = OpScheme::Demand;
                         this_comp.compPtr = WaterUse::WaterConnectionsType::factory(state, CompNames(CompNum));
@@ -1203,6 +1214,33 @@ void GetPlantInput(EnergyPlusData &state)
                         this_comp.CurOpSchemeType = OpScheme::Invalid;
                         break;
                     }
+                    case PlantEquipmentType::HeatPumpAirToWater: {
+                        if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::HotWater) {
+                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                                state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
+                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterHeating;
+                            this_comp.TypeOf = "HeatPumpAirToWaterHeating";
+                        } else if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::ChilledWater) {
+                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                                state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
+                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterCooling;
+                            this_comp.TypeOf = "HeatPumpAirToWaterCooling";
+                        }
+                        this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        break;
+                    }
+                    case PlantEquipmentType::HeatPumpAirToWaterHeating: {
+                        this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                            state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
+                        this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        break;
+                    }
+                    case PlantEquipmentType::HeatPumpAirToWaterCooling: {
+                        this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                            state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
+                        this_comp.CurOpSchemeType = OpScheme::Invalid;
+                        break;
+                    }
                     case PlantEquipmentType::HeatPumpVRF: {
                         if (LoopSideNum == LoopSideLocation::Demand) {
                             this_comp.CurOpSchemeType = OpScheme::Demand;
@@ -1229,6 +1267,10 @@ void GetPlantInput(EnergyPlusData &state)
                     }
                     case PlantEquipmentType::TS_IceSimple: {
                         this_comp.compPtr = IceThermalStorage::SimpleIceStorageData::factory(state, CompNames(CompNum));
+                        break;
+                    }
+                    case PlantEquipmentType::TS_PCM: {
+                        this_comp.compPtr = PCMStorage::PCMStorageData::factory(state, CompNames(CompNum));
                         break;
                     }
                     case PlantEquipmentType::TS_IceDetailed: {
@@ -2425,6 +2467,9 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
             state.dataPlantMgr->GetCompSizFac = false;
         } // iterative passes thru sizing related routines.  end while?
 
+        if (state.dataGlobal->ReportPlantCompWaterFlowDataFlag) {
+            ReportPlantCompWaterFlowData(state, state.dataPlnt->PlantFinalSizesOkayToReport);
+        }
         // Step 5 now one more time for the final
         for (int HalfLoopNum = 1; HalfLoopNum <= state.dataPlnt->TotNumHalfLoops; ++HalfLoopNum) {
             if (state.dataGlobal->DoHVACSizingSimulation) {
@@ -2466,6 +2511,9 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
     //*****************************************************************
     // END First Pass SIZING INIT
     //*****************************************************************
+    if (state.dataGlobal->ReportPlantCompWaterFlowDataFlag) {
+        ReportPlantCompWaterFlowData(state, state.dataPlnt->PlantFinalSizesOkayToReport);
+    }
     //*****************************************************************
     // BEGIN Resizing Pass for HVAC Sizing Simulation Adjustments
     //*****************************************************************
@@ -2517,6 +2565,9 @@ void InitializeLoops(EnergyPlusData &state, bool const FirstHVACIteration) // tr
             state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).SimulateAllLoopSidePumps(state);
         }
 
+        if (state.dataGlobal->ReportPlantCompWaterFlowDataFlag) {
+            ReportPlantCompWaterFlowData(state, state.dataPlnt->PlantFinalSizesOkayToReport);
+        }
         state.dataPlnt->PlantReSizingCompleted = true;
         state.dataPlnt->PlantFinalSizesOkayToReport = false;
     }
@@ -4043,12 +4094,17 @@ void SetupBranchControlTypes(EnergyPlusData &state)
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::ValveTempering: { //                  = 30
+                    case DataPlant::PlantEquipmentType::TS_PCM: { //                    = 30
+                        this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
+                        this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
+                        this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
+                    } break;
+                    case DataPlant::PlantEquipmentType::ValveTempering: { //                  = 31
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::WtrHeaterMixed: { //                   = 31
+                    case DataPlant::PlantEquipmentType::WtrHeaterMixed: { //                   = 32
                         if (LoopSideCtr == LoopSideLocation::Demand) {
                             this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                             this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
@@ -4059,7 +4115,7 @@ void SetupBranchControlTypes(EnergyPlusData &state)
                             this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                         }
                     } break;
-                    case DataPlant::PlantEquipmentType::WtrHeaterStratified: { //              = 32
+                    case DataPlant::PlantEquipmentType::WtrHeaterStratified: { //              = 33
                         if (LoopSideCtr == LoopSideLocation::Demand) {
                             this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                             this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
@@ -4070,127 +4126,127 @@ void SetupBranchControlTypes(EnergyPlusData &state)
                             this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                         }
                     } break;
-                    case DataPlant::PlantEquipmentType::PumpVariableSpeed: { //                 = 33
+                    case DataPlant::PlantEquipmentType::PumpVariableSpeed: { //                 = 34
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::PumpConstantSpeed: { //                 = 34
+                    case DataPlant::PlantEquipmentType::PumpConstantSpeed: { //                 = 35
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::PumpCondensate: { //                    = 35
+                    case DataPlant::PlantEquipmentType::PumpCondensate: { //                    = 36
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::PumpBankVariableSpeed: { //             = 36
+                    case DataPlant::PlantEquipmentType::PumpBankVariableSpeed: { //             = 37
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::PumpBankConstantSpeed: { //             = 37
+                    case DataPlant::PlantEquipmentType::PumpBankConstantSpeed: { //             = 38
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::WaterUseConnection: { //              = 38
+                    case DataPlant::PlantEquipmentType::WaterUseConnection: { //              = 39
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::CoilWaterCooling: { //               = 39  ! demand side component
+                    case DataPlant::PlantEquipmentType::CoilWaterCooling: { //               = 40  ! demand side component
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling: { //      = 40  ! demand side component
+                    case DataPlant::PlantEquipmentType::CoilWaterDetailedFlatCooling: { //      = 41  ! demand side component
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::CoilWaterSimpleHeating: { //           = 41  ! demand side component
+                    case DataPlant::PlantEquipmentType::CoilWaterSimpleHeating: { //           = 42  ! demand side component
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::CoilSteamAirHeating: { //         = 42  ! demand side component
+                    case DataPlant::PlantEquipmentType::CoilSteamAirHeating: { //         = 43  ! demand side component
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::SolarCollectorFlatPlate: { //         = 43  ! demand side component
+                    case DataPlant::PlantEquipmentType::SolarCollectorFlatPlate: { //         = 44  ! demand side component
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::PlantLoadProfile: { //            = 44  ! demand side component
+                    case DataPlant::PlantEquipmentType::PlantLoadProfile: { //            = 45  ! demand side component
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::GrndHtExchgSystem: { //            = 45
+                    case DataPlant::PlantEquipmentType::GrndHtExchgSystem: { //            = 46
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::GrndHtExchgSurface: { //            = 46
+                    case DataPlant::PlantEquipmentType::GrndHtExchgSurface: { //            = 47
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::GrndHtExchgPond: { //            = 47
+                    case DataPlant::PlantEquipmentType::GrndHtExchgPond: { //            = 48
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::Generator_MicroTurbine: { //          = 48  !newer FSEC turbine
+                    case DataPlant::PlantEquipmentType::Generator_MicroTurbine: { //          = 49  !newer FSEC turbine
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::ByNominalCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::Generator_ICEngine: { //             = 49
+                    case DataPlant::PlantEquipmentType::Generator_ICEngine: { //             = 50
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::ByNominalCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::Generator_CTurbine: { //             = 50  !older BLAST turbine
+                    case DataPlant::PlantEquipmentType::Generator_CTurbine: { //             = 51  !older BLAST turbine
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::ByNominalCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::Generator_MicroCHP: { //              = 51
+                    case DataPlant::PlantEquipmentType::Generator_MicroCHP: { //              = 52
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::ByNominalCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::Generator_FCStackCooler: { //         = 52
+                    case DataPlant::PlantEquipmentType::Generator_FCStackCooler: { //         = 53
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::ByNominalCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::FluidCooler_SingleSpd: { //           = 53
+                    case DataPlant::PlantEquipmentType::FluidCooler_SingleSpd: { //           = 54
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::FluidCooler_TwoSpd: { //            = 54
+                    case DataPlant::PlantEquipmentType::FluidCooler_TwoSpd: { //            = 55
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::EvapFluidCooler_SingleSpd: { //       = 55
+                    case DataPlant::PlantEquipmentType::EvapFluidCooler_SingleSpd: { //       = 56
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::EvapFluidCooler_TwoSpd: { //         = 56
+                    case DataPlant::PlantEquipmentType::EvapFluidCooler_TwoSpd: { //         = 57
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
-                    case DataPlant::PlantEquipmentType::ChilledWaterTankMixed: { //         = 57
+                    case DataPlant::PlantEquipmentType::ChilledWaterTankMixed: { //         = 58
                         if (LoopSideCtr == LoopSideLocation::Demand) {
                             this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                             this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
@@ -4201,7 +4257,7 @@ void SetupBranchControlTypes(EnergyPlusData &state)
                             this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                         }
                     } break;
-                    case DataPlant::PlantEquipmentType::ChilledWaterTankStratified: { //      = 58
+                    case DataPlant::PlantEquipmentType::ChilledWaterTankStratified: { //      = 59
                         if (LoopSideCtr == LoopSideLocation::Demand) {
                             this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                             this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
@@ -4212,23 +4268,23 @@ void SetupBranchControlTypes(EnergyPlusData &state)
                             this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                         }
                     } break;
-                    case DataPlant::PlantEquipmentType::PVTSolarCollectorFlatPlate: { //      = 59
+                    case DataPlant::PlantEquipmentType::PVTSolarCollectorFlatPlate: { //      = 60
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                         // next batch for ZoneHVAC
                     } break;
-                    case DataPlant::PlantEquipmentType::Baseboard_Conv_Water: { //        = 60
+                    case DataPlant::PlantEquipmentType::Baseboard_Conv_Water: { //        = 61
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::Baseboard_Rad_Conv_Steam: { //      = 61
+                    case DataPlant::PlantEquipmentType::Baseboard_Rad_Conv_Steam: { //      = 62
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
                     } break;
-                    case DataPlant::PlantEquipmentType::Baseboard_Rad_Conv_Water: { //      = 62
+                    case DataPlant::PlantEquipmentType::Baseboard_Rad_Conv_Water: { //      = 63
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
                         this_component.HowLoadServed = DataPlant::HowMet::NoneDemand;
@@ -4394,6 +4450,8 @@ void SetupBranchControlTypes(EnergyPlusData &state)
                         this_component.FlowPriority = DataPlant::LoopFlowStatus::TakesWhatGets;
                         this_component.HowLoadServed = DataPlant::HowMet::PassiveCap;
                     } break;
+                    case DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling:
+                    case DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating:
                     case DataPlant::PlantEquipmentType::HeatPumpEIRCooling:
                     case PlantEquipmentType::HeatPumpEIRHeating: { // 95, 96
                         this_component.FlowCtrl = DataBranchAirLoopPlant::ControlType::Active;
@@ -4577,6 +4635,81 @@ void CheckOngoingPlantWarnings(EnergyPlusData &state)
                               format("Excess Storage Time={:.2R}[hr], Total Loop Active Time={:.2R}[hr]",
                                      state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Supply).LoopSideInlet_CapExcessStorageTime,
                                      state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Demand).LoopSideInlet_TotalTime));
+        }
+    }
+}
+
+void ReportPlantCompWaterFlowData(EnergyPlusData &state, bool const reportFlag)
+{
+    // Reporting will be 24 hrs of data by plant loop for each component connected to that loop. Then the next loop's component will be reported.
+    // Could be changed to report all loop's and components at the same time (i.e., as single group from 00:15 to 24:00 instead of multiple groups)
+    // sum equipment water flow rate time series
+    for (int LoopNum = 1; LoopNum <= state.dataHVACGlobal->NumPlantLoops; ++LoopNum) {
+        if (state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate.size() == 0) {
+            continue;
+        }
+        state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate.resize(size_t(24 * state.dataGlobal->TimeStepsInHour));
+        for (size_t ts = 0; ts < state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate.size(); ++ts) {
+            state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate[ts] = 0.0;
+            for (auto &thisCoil : state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate) {
+                state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate[ts] += thisCoil.tsDesWaterFlowRate[ts];
+            }
+        }
+    }
+    if (reportFlag) {
+        state.dataGlobal->ReportPlantCompWaterFlowDataFlag = false;
+    } else {
+        return;
+    }
+    for (int LoopNum = 1; LoopNum <= state.dataHVACGlobal->NumPlantLoops; ++LoopNum) {
+        if (state.dataPlnt->PlantFinalSizesOkayToReport) {
+            if (state.dataSize->SizingFileColSep == DataStringGlobals::CharComma) {
+                state.files.psz.filePath = state.files.outputPszCsvFilePath;
+            } else if (state.dataSize->SizingFileColSep == DataStringGlobals::CharTab) {
+                state.files.psz.filePath = state.files.outputPszTabFilePath;
+            } else {
+                state.files.psz.filePath = state.files.outputPszTxtFilePath;
+            }
+            state.files.psz.ensure_open(state, "SizePlantLoop", state.files.outputControl.psz);
+            // write out the sys design calc results
+
+            print(state.files.psz, "Time");
+            for (size_t J = 0; J < state.dataPlnt->PlantLoop(LoopNum).plantCoilObjectNames.size(); ++J) {
+                constexpr const char *PSizeFmt12("{}{}{}{}{}");
+                print(state.files.psz,
+                      PSizeFmt12,
+                      state.dataSize->SizingFileColSep,
+                      state.dataPlnt->PlantLoop(LoopNum).Name,
+                      ":",
+                      state.dataPlnt->PlantLoop(LoopNum).plantCoilObjectNames[J],
+                      ":Design Water Volume Flow Rate [m3/s]");
+            }
+            print(state.files.psz, "\n");
+            int HourPrint;
+            int Minutes = 0;
+            size_t TimeStepIndex = 0;
+            for (int HourCounter = 1; HourCounter <= 24; ++HourCounter) {
+                for (int TimeStepCounter = 1; TimeStepCounter <= state.dataGlobal->TimeStepsInHour; ++TimeStepCounter) {
+                    ++TimeStepIndex;
+                    Minutes += state.dataGlobal->MinutesInTimeStep;
+                    if (Minutes == 60) {
+                        Minutes = 0;
+                        HourPrint = HourCounter;
+                    } else {
+                        HourPrint = HourCounter - 1;
+                    }
+                    constexpr const char *PSizeFmt20("{:02}:{:02}:00");
+                    print(state.files.psz, PSizeFmt20, HourPrint, Minutes);
+                    constexpr const char *PSizeFmt22("{}{:12.6E}");
+
+                    for (size_t J = 0; J < state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate.size(); ++J) {
+                        Real64 const tsData = state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate[J].tsDesWaterFlowRate[TimeStepIndex - 1];
+                        print(state.files.psz, PSizeFmt22, state.dataSize->SizingFileColSep, tsData);
+                    }
+                    print(state.files.psz, "\n");
+                }
+            }
+            print(state.files.psz, "\n");
         }
     }
 }

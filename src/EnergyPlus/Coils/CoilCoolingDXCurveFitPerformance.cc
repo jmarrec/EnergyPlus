@@ -403,6 +403,7 @@ void CoilCoolingDXCurveFitPerformance::size(EnergyPlus::EnergyPlusData &state)
         }
         this->mySizeFlag = false;
     }
+    this->oneTimeAvailSchedSetup();
     this->oneTimeMinOATSetup();
 }
 
@@ -677,6 +678,18 @@ void CoilCoolingDXCurveFitPerformance::setOperMode(EnergyPlus::EnergyPlusData &s
                               this->object_name));
     }
 }
+
+void CoilCoolingDXCurveFitPerformance::oneTimeAvailSchedSetup()
+{
+    if (this->myOneTimeAvailSchedInitFlag) {
+        // set avail schedule for each mode
+        this->normalMode.coilCoolingDXAvailSched = static_cast<EnergyPlus::CoilCoolingDXPerformanceBase *>(this)->coilCoolingDXAvailSched;
+        this->alternateMode.coilCoolingDXAvailSched = this->normalMode.coilCoolingDXAvailSched;
+        this->alternateMode2.coilCoolingDXAvailSched = this->normalMode.coilCoolingDXAvailSched;
+        this->myOneTimeAvailSchedInitFlag = false;
+    }
+}
+
 void CoilCoolingDXCurveFitPerformance::oneTimeMinOATSetup()
 {
     if (this->myOneTimeMinOATFlag) {
