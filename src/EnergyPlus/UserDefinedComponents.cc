@@ -479,7 +479,7 @@ namespace UserDefinedComponents {
         int CompNum;
 
         if (state.dataUserDefinedComponents->GetAirTerminalInput) {
-            GetUserDefinedAirTerminal(state);
+            GetUserDefinedAirComponent(state);
             state.dataUserDefinedComponents->GetAirTerminalInput = false;
         }
 
@@ -1919,7 +1919,7 @@ namespace UserDefinedComponents {
         }
     }
 
-    void GetUserDefinedAirTerminal(EnergyPlusData &state)
+    void GetUserDefinedAirComponent(EnergyPlusData &state)
     {
 
         bool ErrorsFound(false);
@@ -2110,8 +2110,7 @@ namespace UserDefinedComponents {
                 BranchNodeConnections::TestCompSet(state, cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(4), cAlphaArgs(5), "Air Nodes");
 
                 if (state.dataUserDefinedComponents->NumUserAirTerminals > 0) { // Skip this code if the only User Defined type is ZoneHVAC
-                    int ADUNum = 0;
-                    for (ADUNum = 1; ADUNum <= (int)state.dataDefineEquipment->AirDistUnit.size(); ++ADUNum) {
+                    for (int ADUNum = 1; ADUNum <= (int)state.dataDefineEquipment->AirDistUnit.size(); ++ADUNum) {
                         if (state.dataUserDefinedComponents->UserAirTerminal(CompLoop).AirConnection.OutletNodeNum ==
                             state.dataDefineEquipment->AirDistUnit(ADUNum).OutletNodeNum) {
                             //        AirDistUnit(ADUNum)%InletNodeNum = IndUnitIUNum)%InletNodeNum

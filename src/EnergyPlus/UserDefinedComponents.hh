@@ -319,7 +319,7 @@ namespace UserDefinedComponents {
 
     void GetUserDefinedComponents(EnergyPlusData &state);
 
-    void GetUserDefinedAirTerminal(EnergyPlusData &state);
+    void GetUserDefinedAirComponent(EnergyPlusData &state);
 
     void GetUserDefinedCoilIndex(
         EnergyPlusData &state, std::string const &CoilName, int &CoilIndex, bool &ErrorsFound, std::string const &CurrentModuleObject);
