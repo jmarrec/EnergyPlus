@@ -292,9 +292,9 @@ namespace PlantManager {
         ctrlType = DataPlant::PlantEquipmentCtrlType[static_cast<int>(DataPlant::PlantEquipmentType::PurchSteam)];
         EXPECT_EQ(ctrlType, DataPlant::CtrlType::HeatingOp);
         // Check that last slot is initialized
-        ctrlType = DataPlant::PlantEquipmentCtrlType[static_cast<int>(DataPlant::PlantEquipmentType::Num)-1];
+        ctrlType = DataPlant::PlantEquipmentCtrlType[static_cast<int>(DataPlant::PlantEquipmentType::Num) - 1];
         EXPECT_EQ(ctrlType, DataPlant::CtrlType::HeatingOp);
-        
+
         // Check random other types
         ctrlType = DataPlant::PlantEquipmentCtrlType[static_cast<int>(DataPlant::PlantEquipmentType::FluidCooler_SingleSpd)];
         EXPECT_EQ(ctrlType, DataPlant::CtrlType::CoolingOp);
