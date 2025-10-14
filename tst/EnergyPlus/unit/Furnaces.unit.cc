@@ -283,9 +283,11 @@ TEST_F(EnergyPlusFixture, SetVSHPAirFlowTest_VSFurnaceFlowTest)
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).Name = "WATERCOOLINGCOIL";
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).WAHPPlantType = DataPlant::PlantEquipmentType::CoilWAHPCoolingEquationFit;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).WAHPType = WaterToAirHeatPumpSimple::WatertoAirHP::Cooling;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).availSched = Sched::GetScheduleAlwaysOn(*state);
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).Name = "WATERHEATINGCOIL";
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WAHPPlantType = DataPlant::PlantEquipmentType::CoilWAHPHeatingEquationFit;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WAHPType = WaterToAirHeatPumpSimple::WatertoAirHP::Heating;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).availSched = Sched::GetScheduleAlwaysOn(*state);
     state->dataWaterToAirHeatPumpSimple->SimpleHPTimeStepFlag.allocate(2);
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).AirInletNodeNum = 1;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).AirOutletNodeNum = 3;
