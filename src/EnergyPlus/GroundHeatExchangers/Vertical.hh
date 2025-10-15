@@ -60,7 +60,7 @@ namespace GroundHeatExchangers {
         std::string name;
         std::string type;
         std::string sizingPeriodName;
-        Real64 designFlowRatePerBorehole;
+        Real64 designFlowRatePerBorehole = 0.0;
         Real64 length = 0.0;
         Real64 width = 0.0;
         Real64 minSpacing = 0.0;

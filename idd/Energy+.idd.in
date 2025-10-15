@@ -80275,7 +80275,8 @@ GroundHeatExchanger:Vertical:Sizing:Rectangle,
         \type alpha
         \reference GroundHeatExchangerVerticalSizingNames
   A2,   \field SizingPeriod:WeatherFileDays Name
-        \type alpha
+        \required-field
+        \type object-list
         \object-list SizingPeriodWeatherFileDays
         \note Specifies the SizingPeriod:WeatherFileDays required to perform GHE sizing
   N1,   \field Design Flow Rate Per Borehole
