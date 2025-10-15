@@ -170,7 +170,7 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
             auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find("GroundHeatExchanger:Vertical:Sizing:Rectangle");
             if (instances == state.dataInputProcessing->inputProcessor->epJSON.end()) {
                 ShowSevereError(state,
-                               format("Expected to find GroundHeatExchanger:Vertical:Sizing named {}, but it was missing", this->sizingData.name));
+                                format("Expected to find GroundHeatExchanger:Vertical:Sizing named {}, but it was missing", this->sizingData.name));
                 errorsFound = true;
             }
 
@@ -192,7 +192,7 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
                     }
 
                     bool spIsAnnual = false;
-                    for (auto & designPeriod : state.dataWeather->RunPeriodDesignInput) {
+                    for (auto &designPeriod : state.dataWeather->RunPeriodDesignInput) {
                         if (Util::makeUPPER(designPeriod.title) == Util::makeUPPER((this->sizingData.sizingPeriodName)) &&
                             (designPeriod.totalDays == 365)) {
                             spIsAnnual = true;
@@ -202,8 +202,8 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
 
                     if (!spIsAnnual) {
                         ShowSevereError(state,
-                                       format("SizingPeriod:WeatherFileDays named {}, must be an annual design period of 365 days",
-                                              this->sizingData.sizingPeriodName));
+                                        format("SizingPeriod:WeatherFileDays named {}, must be an annual design period of 365 days",
+                                               this->sizingData.sizingPeriodName));
                         errorsFound = true;
                     }
 
