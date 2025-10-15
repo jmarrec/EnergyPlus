@@ -3,7 +3,7 @@
 !-NOTE: All comments with '!-' are ignored by the IDFEditor and are generated automatically.
 !-      Use '!' comments if they need to be retained when using the IDFEditor.
 !-   ===========  ALL OBJECTS IN CLASS: VERSION ===========
-! GSHP-GLHE-CalcGFunctions.idf
+! GSHP-GLHE-CalcGFunctions-cpg.idf
 ! Basic File Description:
 ! This input file exemplifies the use of the Water to water ground source heat pump model.
 ! Highlights: Simulate a heat transfer interaction with the slab
@@ -52,7 +52,7 @@
     Yes,                     !- Do Plant Sizing Calculation
     Yes,                     !- Run Simulation for Sizing Periods
     Yes,                     !- Run Simulation for Weather File Run Periods
-    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+    Yes,                     !- Do HVAC Sizing Simulation for Sizing Periods
     1;                       !- Maximum Number of HVAC Sizing Simulation Passes
 
 !-   ===========  ALL OBJECTS IN CLASS: BUILDING ===========
@@ -82,61 +82,15 @@
 
 !-   ===========  ALL OBJECTS IN CLASS: SIZINGPERIOD:DESIGNDAY ===========
 
-  SizingPeriod:DesignDay,
-    Chicago Ohare Intl Ap Ann Htg 99% Condns DB,  !- Name
-    1,                       !- Month
-    21,                      !- Day of Month
-    WinterDesignDay,         !- Day Type
-    -16.6,                   !- Maximum Dry-Bulb Temperature {C}
-    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    -16.6,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98886.,                  !- Barometric Pressure {Pa}
-    4.9,                     !- Wind Speed {m/s}
-    270,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    0.00;                    !- Sky Clearness
-
-  SizingPeriod:DesignDay,
-    Chicago Ohare Intl Ap Ann Clg 1% Condns DB=>MWB,  !- Name
-    7,                       !- Month
-    21,                      !- Day of Month
-    SummerDesignDay,         !- Day Type
-    31.6,                    !- Maximum Dry-Bulb Temperature {C}
-    10.5,                    !- Daily Dry-Bulb Temperature Range {deltaC}
-    ,                        !- Dry-Bulb Temperature Range Modifier Type
-    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
-    Wetbulb,                 !- Humidity Condition Type
-    23,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
-    ,                        !- Humidity Condition Day Schedule Name
-    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
-    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
-    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
-    98886.,                  !- Barometric Pressure {Pa}
-    5.2,                     !- Wind Speed {m/s}
-    230,                     !- Wind Direction {deg}
-    No,                      !- Rain Indicator
-    No,                      !- Snow Indicator
-    No,                      !- Daylight Saving Time Indicator
-    ASHRAEClearSky,          !- Solar Model Indicator
-    ,                        !- Beam Solar Day Schedule Name
-    ,                        !- Diffuse Solar Day Schedule Name
-    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
-    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
-    1.00;                    !- Sky Clearness
+SizingPeriod:WeatherFileDays,
+    Full Year Weather File Sizing Period,  !- Name
+    1,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    12,                      !- End Month
+    31,                      !- End Day of Month
+    Sunday,                  !- Day of Week for Start Day
+    No,                      !- Use Weather File Daylight Saving Period
+    No;                      !- Use Weather File Rain and Snow Indicators
 
 !-   ===========  ALL OBJECTS IN CLASS: RUNPERIOD ===========
 
@@ -145,7 +99,7 @@
     1,                       !- Begin Month
     1,                       !- Begin Day of Month
     ,                        !- Begin Year
-    1,                       !- End Month
+    12,                      !- End Month
     31,                      !- End Day of Month
     ,                        !- End Year
     Tuesday,                 !- Day of Week for Start Day
@@ -682,23 +636,6 @@
     2.5,                     !- Maximum Cycling Rate {cycles/hr}
     60,                      !- Latent Capacity Time Constant {s}
     60;                      !- Fan Delay Time {s}
-
-  Curve:Quadratic,
-    HPACCOOLPLFFPLR,         !- Name
-    0.75,                    !- Coefficient1 Constant
-    0.25,                    !- Coefficient2 x
-    0.0,                     !- Coefficient3 x**2
-    0.0,                     !- Minimum Value of x
-    1.0;                     !- Maximum Value of x
-
-  Curve:Quadratic,
-    HPACHEATPLFFPLR,         !- Name
-    0.75,                    !- Coefficient1 Constant
-    0.25,                    !- Coefficient2 x
-    0.0,                     !- Coefficient3 x**2
-    0.0,                     !- Minimum Value of x
-    1.0;                     !- Maximum Value of x
-
 !-   ===========  ALL OBJECTS IN CLASS: COIL:HEATING:WATERTOAIRHEATPUMP:EQUATIONFIT ===========
 ! Performance coefficients assume rated Capacity and COP are at:
 ! 20.0C (68F) entering air dry-bulb temperature and 0.0C (32F) entering water temperature
@@ -720,6 +657,22 @@
     HeatCapCurve,            !- Heating Capacity Curve Name
     HeatPowCurve,            !- Heating Power Consumption Curve Name
     HPACHEATPLFFPLR;         !- Part Load Fraction Correlation Curve Name
+
+  Curve:Quadratic,
+    HPACCOOLPLFFPLR,         !- Name
+    0.75,                    !- Coefficient1 Constant
+    0.25,                    !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Minimum Value of x
+    1.0;                     !- Maximum Value of x
+
+  Curve:Quadratic,
+    HPACHEATPLFFPLR,         !- Name
+    0.75,                    !- Coefficient1 Constant
+    0.25,                    !- Coefficient2 x
+    0.0,                     !- Coefficient3 x**2
+    0.0,                     !- Minimum Value of x
+    1.0;                     !- Maximum Value of x
 
 !-   ===========  ALL OBJECTS IN CLASS: CURVE:QUADLINEAR ===========
 
@@ -1016,16 +969,33 @@
     Vertical GHE 1x4 Std,    !- Name
     GLHE Inlet,              !- Inlet Node Name
     GLHE Outlet,             !- Outlet Node Name
-    0.00100944,              !- Design Flow Rate {m3/s}
+    0.001,                   !- Design Flow Rate {m3/s}
     Site:GroundTemperature:Undisturbed:KusudaAchenbach,  !- Undisturbed Ground Temperature Model Type
     KATemps,                 !- Undisturbed Ground Temperature Model Name
     2.5,                     !- Ground Thermal Conductivity {W/m-K}
     2.5E+06,                 !- Ground Thermal Heat Capacity {J/m3-K}
     ,                        !- GHE:Vertical:ResponseFactors Object Name
-    UHFcalc,                 !- g-Function Calculation Method
-    ,                        !- GHE:Vertical:Sizing Object Type
-    ,                        !- GHE:Vertical:Sizing Object Name
-    GHE-Array;               !- GHE:Vertical:Array Object Name
+    FullDesign,              !- g-Function Calculation Method
+    GroundHeatExchanger:Vertical:Sizing:Rectangle,  !- GHE:Vertical:Sizing Object Type
+    GHE-1-Sizing,            !- GHE:Vertical:Sizing Object Name
+    ,                        !- GHE:Vertical:Array Object Name
+    GHE-1;                   !- GHE:Vertical:Single Object Name 1
+
+!-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:SIZING:RECTANGLE ===========
+
+  GroundHeatExchanger:Vertical:Sizing:Rectangle,
+    GHE-1-Sizing,            !- Name
+    Full Year Weather File Sizing Period,  !- SizingPeriod:WeatherFileDays Name
+    0.0005,                  !- Design Flow Rate Per Borehole {m3/s}
+    100.0,                   !- Available Borehole Field Length {m}
+    100.0,                   !- Available Borehole Field Width {m}
+    200.0,                   !- Maximum Number of Boreholes {-}
+    3.0,                     !- Minimum Borehole Spacing {m}
+    10.0,                    !- Maximum Borehole Spacing {m}
+    60.0,                    !- Minimum Borehole Vertical Length {m}
+    135.0,                   !- Maximum Borehole Vertical Length {m}
+    5.0,                     !- Minimum Exiting Fluid Temperature for Sizing {C}
+    35.0;                    !- Maximum Exiting Fluid Temperature for Sizing {C}
 
 !-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:PROPERTIES ===========
 
@@ -1042,14 +1012,13 @@
     0.002984,                !- Pipe Thickness {m}
     0.04913;                 !- U-Tube Distance {m}
 
-!-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:ARRAY ===========
+!-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:SINGLE ===========
 
-  GroundHeatExchanger:Vertical:Array,
-    GHE-Array,               !- Name
+  GroundHeatExchanger:Vertical:Single,
+    GHE-1,                   !- Name
     GHE-1 Props,             !- GHE:Vertical:Properties Object Name
-    2,                       !- Number of Boreholes in X-Direction
-    2,                       !- Number of Boreholes in Y-Direction
-    5;                       !- Borehole Spacing {m}
+    0,                       !- X Position
+    0;                       !- Y Position
 
 !-   ===========  ALL OBJECTS IN CLASS: PLANTLOOP ===========
 
