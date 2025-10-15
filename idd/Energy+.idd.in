@@ -73976,7 +73976,7 @@ Chiller:Electric:EIR,
        \default 0.2
   A20, \field Thermosiphon Capacity Fraction Curve Name
        \type object-list
-       \object-list UniVariateFunctions
+       \object-list UnivariateFunctions
        \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
        \note Tevap, out = evaporator outlet temperature
        \note Tcond, in = condenser inlet temperature
@@ -74228,7 +74228,7 @@ Chiller:Electric:ReformulatedEIR,
        \default 0.2
   A19, \field Thermosiphon Capacity Fraction Curve Name
        \type object-list
-       \object-list UniVariateFunctions
+       \object-list UnivariateFunctions
        \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
        \note Tevap, out = evaporator outlet temperature
        \note Tcond, in = condenser inlet temperature
@@ -74389,7 +74389,7 @@ Chiller:Electric,
        \default General
   A14, \field Thermosiphon Capacity Fraction Curve Name
        \type object-list
-       \object-list UniVariateFunctions
+       \object-list UnivariateFunctions
        \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
        \note Tevap, out = evaporator outlet temperature
        \note Tcond, in = condenser inlet temperature
@@ -74779,7 +74779,7 @@ Chiller:ConstantCOP,
        \note throughout the entire simulation.
   A9 , \field Thermosiphon Capacity Fraction Curve Name
        \type object-list
-       \object-list UniVariateFunctions
+       \object-list UnivariateFunctions
        \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
        \note Tevap, out = evaporator outlet temperature
        \note Tcond, in = condenser inlet temperature
@@ -75673,7 +75673,7 @@ HeatPump:PlantLoop:EIR:Cooling,
         \note EIR = 1/COP
         \required-field
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*PLR + c*PLR**2 is typical, other univariate curves may be used
         \note PLR = part load ratio (cooling load/steady state capacity)
    A13, \field Control Type
@@ -75712,12 +75712,12 @@ HeatPump:PlantLoop:EIR:Cooling,
         \note The unit is disabled above this temperature.
    A15, \field Minimum Supply Water Temperature Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A16, \field Maximum Supply Water Temperature Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    N10, \field Maximum Heat Recovery Outlet Temperature
@@ -75746,7 +75746,7 @@ HeatPump:PlantLoop:EIR:Cooling,
         \note If this field is blank, the AWHP curve without heat recovery will be used
    A19, \field Thermosiphon Capacity Fraction Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b * (Tevap, out - Tcond, in) is typical, other univariate curves may be used
         \note Tevap, out = evaporator outlet temperature
         \note Tcond, in = condenser inlet temperature
@@ -75853,7 +75853,7 @@ HeatPump:PlantLoop:EIR:Heating,
         \note EIR = 1/COP
         \required-field
         \type object-list
-        \object-list BiVariateFunctions
+        \object-list BivariateFunctions
         \note curve = a + b*CWS + c*CWS**2 + d*ECT + e*ECT**2 + f*CWS*ECT
         \note CWS = supply (leaving) hot water temperature(C)
         \note ECT = entering condenser fluid temperature(C)
@@ -75913,17 +75913,17 @@ HeatPump:PlantLoop:EIR:Heating,
         \note The unit is disabled above this temperature.
    A16, \field Minimum Supply Water Temperature Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A17, \field Maximum Supply Water Temperature Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A18, \field Dry Outdoor Correction Factor Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
    N11, \field Maximum Outdoor Dry Bulb Temperature For Defrost Operation
         \type real
         \default 10.0
@@ -75951,14 +75951,14 @@ HeatPump:PlantLoop:EIR:Heating,
         \note only required if Timed or OnDemand defrost strategy is specified
    A21, \field Timed Empirical Defrost Frequency Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note univariate curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = outdoor air dry-bulb temperature (C)
         \note Timed Empirical Defrost Frequency fraction in hours = curve output
         \note only applicable if TimedEmpirical defrost control is specified
    A22, \field Timed Empirical Defrost Heat Load Penalty Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \object-list BivariateFunctions
         \note univariate curve = a + b*OAT is typical, other univariate curves may be used
         \note bivariate curve = a + b*WB + c*WB**2 + d*OAT + e*OAT**2 + f*WB*OAT
@@ -75968,7 +75968,7 @@ HeatPump:PlantLoop:EIR:Heating,
         \note only applicable if TimedEmpirical defrost control is specified
    A23, \field Timed Empirical Defrost Heat Input Energy Fraction Curve Name
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \object-list BivariateFunctions
         \note univariate curve = a + b*OAT is typical, other univariate curves may be used
         \note bivariate curve = a + b*WB + c*WB**2 + d*OAT + e*OAT**2 + f*WB*OAT
@@ -75994,7 +75994,7 @@ HeatPump:PlantLoop:EIR:Heating,
         \note Electric Input Ratio (EIR) modifier as a function of temperature
         \note EIR = 1/COP
         \type object-list
-        \object-list BiVariateFunctions
+        \object-list BivariateFunctions
         \note curve = a + b*HWS + c*HWS**2 + d*ECT + e*ECT**2 + f*HWS*ECT
         \note HWS = supply (leaving) hot water temperature(C)
         \note ECT = entering condenser fluid temperature(C)
@@ -76348,15 +76348,19 @@ HeatPump:AirToWater:FuelFired:Cooling,
 
 HeatPump:AirToWater,
         \memo air-to-water heat pump system which provides either chilled or hot water with single- or variable speed compressors.
-        \min-fields 56
+        \min-fields 77
    A1 , \field Name
         \required-field
         \type alpha
-        \note Enter a unique name for this air-to-water heat pump
+        \required-field
+        \reference-class-name validPlantEquipmentTypes
+        \reference validPlantEquipmentNames
+        \reference-class-name validBranchEquipmentTypes
+        \reference validBranchEquipmentNames
    A2 , \field Availability Schedule Name Heating
         \type object-list
         \object-list ScheduleNames
-        \note Enter the name of a schedule that defines the availability of the unit in cooling mode
+        \note Enter the name of a schedule that defines the availability of the unit in heating mode
         \note Schedule values of 0 denote the unit is off. All other values denote the unit is available
         \note If this field is left blank, the unit is available the entire simulation
    A3 , \field Availability Schedule Name Cooling
@@ -76374,6 +76378,7 @@ HeatPump:AirToWater,
    A5,  \field Operating Mode Control Option for Multiple Unit
         \note this determines how the operation mode is assigned when the load
         \note is too large to be met by multiple heat pump units
+        \type choice
         \key SingleMode
         \key CoolingPriority
         \key HeatingPriority
@@ -76394,13 +76399,18 @@ HeatPump:AirToWater,
         \note Schedule values control operating mode: 0=off, 1=cooling, 2=heating
         \type object-list
         \object-list ScheduleNames
-   N1 , \field Rated Inlet Air Temperature in Heating Mode
+   N1,  \field Minimum Part Load Ratio
+        \note Below this operating limit compressor cycling will occur
+        \type real
+        \minimum 0.0
+        \default 0.0
+   N2 , \field Rated Inlet Air Temperature in Heating Mode
         \type real
         \units C
         \default 8
         \note inlet air dry-bulb temperature corresponding to rated heat pump performance
         \note (capacity, COP).
-   N2 , \field Rated Air Flow Rate in Heating Mode
+   N3 , \field Rated Air Flow Rate in Heating Mode
         \type real
         \units m3/s
         \minimum> 0.0
@@ -76408,13 +76418,13 @@ HeatPump:AirToWater,
         \default autosize
         \note air flow rate corresponding to rated heat pump performance
         \note (capacity, COP).
-   N3 , \field Rated Leaving Water Temperature in Heating Mode
+   N4 , \field Rated Leaving Water Temperature in Heating Mode
         \type real
         \units C
         \default 40
         \note outlet water temperature corresponding to rated heat pump performance
         \note (heating capacity, COP).
-   N4 , \field Rated Water Flow Rate in Heating Mode
+   N5 , \field Rated Water Flow Rate in Heating Mode
         \type real
         \units m3/s
         \ip-units gal/min
@@ -76423,13 +76433,13 @@ HeatPump:AirToWater,
         \default autosize
         \note Condenser water flow rate corresponding to rated heat pump performance
         \note (capacity, COP).
-   N5,  \field Minimum Outdoor Air Temperature in Heating Mode
+   N6,  \field Minimum Outdoor Air Temperature in Heating Mode
         \type real
         \units C
         \default -30.0
         \note Enter the minimum outdoor temperature allowed for heating operation
         \note Heating is disabled below this temperature
-   N6,  \field Maximum Outdoor Air Temperature in Heating Mode
+   N7,  \field Maximum Outdoor Air Temperature in Heating Mode
         \type real
         \units C
         \default 100
@@ -76437,19 +76447,14 @@ HeatPump:AirToWater,
         \note Heating is disabled above this temperature
    A7,  \field Minimum Leaving Water Temperature Curve Name in Heating Mode
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A8,  \field Maximum Leaving Water Temperature Curve Name in Heating Mode
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
-   N7,  \field Minimum Part Load Ratio
-        \note Below this operating limit compressor cycling will occur
-        \type real
-        \minimum 0.0
-        \default 0.0
    N8, \field Sizing Factor for Heating
         \note Multiplies the autosized capacity and flow rates
         \type real
@@ -76498,12 +76503,12 @@ HeatPump:AirToWater,
         \note Cooling is disabled above this temperature
    A9,  \field Minimum Leaving Water Temperature Curve Name in Cooling Mode
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    A10, \field Maximum Leaving Water Temperature Curve Name in Cooling Mode
         \type object-list
-        \object-list UniVariateFunctions
+        \object-list UnivariateFunctions
         \note quadratic curve = a + b*OAT is typical, other univariate curves may be used
         \note OAT = Outdoor Dry-Bulb Temperature
    N15, \field Sizing Factor for Cooling
@@ -76541,7 +76546,7 @@ HeatPump:AirToWater,
         \key Timed
         \key OnDemand
         \key TimedEmpirical
-        \note A blank field is the same as None.
+        \default None
    N17, \field Heat Pump Defrost Time Period Fraction
         \type real
         \minimum 0.0
@@ -76552,10 +76557,8 @@ HeatPump:AirToWater,
         \type real
         \minimum 0.0
         \default 0.0
-        \autosizable
         \units W
         \note only applicable if resistive defrost strategy is specified
-        \ip-units W
    A18, \field Defrost Energy Input Ratio Function of Temperature Curve Name
         \type object-list
         \object-list BivariateFunctions
@@ -76598,6 +76601,7 @@ HeatPump:AirToWater,
    N24, \field Number of Speeds for Heating
         \type integer
         \note the number of speed levels in heating mode
+        \minimum 0
         \maximum 5
         \default 1
         \note if there's only cooling component, set this field to 0
@@ -76631,6 +76635,8 @@ HeatPump:AirToWater,
         \type real
         \units W
         \minimum> 0.0
+        \autosizable
+        \default autosize
    N28, \field Rated COP for Heating at Speed 2
         \type real
         \minimum> 0.0
@@ -76654,6 +76660,8 @@ HeatPump:AirToWater,
         \type real
         \units W
         \minimum> 0.0
+        \autosizable
+        \default autosize
    N30, \field Rated COP for Heating at Speed 3
         \type real
         \minimum> 0.0
@@ -76677,6 +76685,8 @@ HeatPump:AirToWater,
         \type real
         \units W
         \minimum> 0.0
+        \autosizable
+        \default autosize
    N32,\field Rated COP for Heating at Speed 4
         \type real
         \minimum> 0.0
@@ -76700,6 +76710,8 @@ HeatPump:AirToWater,
         \type real
         \units W
         \minimum> 0.0
+        \autosizable
+        \default autosize
    N34, \field Rated COP for Heating at Speed 5
         \type real
         \minimum> 0.0
@@ -76750,6 +76762,7 @@ HeatPump:AirToWater,
         \note which is a cubic curve or a lookup table.
    N37, \field Number of Speeds for Cooling
         \type integer
+        \minimum 0
         \maximum 5
         \default 1
         \note the number of speed levels in cooling mode
@@ -76784,6 +76797,8 @@ HeatPump:AirToWater,
         \type real
         \units W
         \minimum> 0.0
+        \autosizable
+        \default autosize
    N41, \field Rated COP for Cooling at Speed 2
         \type real
         \minimum> 0.0
@@ -76807,6 +76822,8 @@ HeatPump:AirToWater,
         \type real
         \units W
         \minimum> 0.0
+        \autosizable
+        \default autosize
    N43, \field Rated COP for Cooling at Speed 3
         \type real
         \minimum> 0.0
@@ -76830,6 +76847,8 @@ HeatPump:AirToWater,
         \type real
         \units W
         \minimum> 0.0
+        \autosizable
+        \default autosize
    N45, \field Rated COP for Cooling at Speed 4
         \type real
         \minimum> 0.0
@@ -76853,6 +76872,8 @@ HeatPump:AirToWater,
         \type real
         \units W
         \minimum> 0.0
+        \autosizable
+        \default autosize
    N47, \field Rated COP for Cooling at Speed 5
         \type real
         \minimum> 0.0
