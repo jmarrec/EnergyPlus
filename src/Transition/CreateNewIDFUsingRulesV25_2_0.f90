@@ -493,8 +493,11 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                    OutArgs(1:10)=InArgs(1:10)
                    OutArgs(11) = ''
                    OutArgs(12) = ''
-                   OutArgs(13:CurArgs+1)=InArgs(11:CurArgs)
-                   CurArgs = CurArgs + 1
+                   OutArgs(13:CurArgs+2)=InArgs(11:CurArgs)
+                   CurArgs = CurArgs + 2
+                 ELSE
+                   nodiff=.true.
+                   OutArgs(1:CurArgs)=InArgs(1:CurArgs)
                  END IF
 
               ! If your original object starts with H, insert the rules here
