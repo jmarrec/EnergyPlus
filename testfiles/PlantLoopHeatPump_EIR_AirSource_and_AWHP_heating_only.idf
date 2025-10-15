@@ -493,13 +493,11 @@
   Output:Variable,*,Plant Load Profile Heat Transfer Rate,detailed;  !- HVAC Average [W]
   Output:Variable,*,Heat Pump Speed Level in Heating Mode,detailed;  !- HVAC Average []
   Output:Variable,*,Heat Pump Speed Ratio in Heating Mode,detailed;  !- HVAC Average []
-  Output:Variable,*,Operating Model Output Heating,detailed;
   Output:Variable,*,EMS Defrost Flag,detailed;
   Output:Variable,*,Heat Pump Load Due To Defrost,detailed;  !- HVAC Average [W]
   Output:Variable,*,Heat Pump Fractional Defrost Time,detailed;  !- HVAC Average [W]
   Output:Variable,*,Heat Pump Defrost Electricity Rate,detailed;  !- HVAC Average [W]
   Output:Variable,*,Outdoor Temp,detailed;
-  Output:Variable,*,DefrostTimerInternal,detailed;
 
   OutputControl:Table:Style,
     HTML;                    !- Column Separator
