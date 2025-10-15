@@ -2783,6 +2783,12 @@ void HeatPumpAirToWater::oneTimeInit(EnergyPlusData &state)
     this->oneTimeInitFlagAWHP = false;
 }
 
+void HeatPumpAirToWater::sizeLoadSide(EnergyPlusData &state)
+{
+    EIRPlantLoopHeatPump::sizeLoadSide(state);
+    this->referenceCapacityOneUnit = this->referenceCapacity / this->heatPumpMultiplier;
+}
+
 bool EIRPlantLoopHeatPump::thermosiphonDisabled(EnergyPlusData &state)
 {
     if (this->thermosiphonTempCurveIndex > 0) {
@@ -4052,7 +4058,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     errorsFound = true;
                 }
                 BranchNodeConnections::TestCompSet(state,
-                                                   Util::makeUPPER(format("{}:{}", cCurrentModuleObject, modeKeyWord)),
+                                                   Util::makeUPPER(cCurrentModuleObject),
                                                    thisAWHP.name,
                                                    loadSideInletNodeName,
                                                    loadSideOutletNodeName,
@@ -4066,8 +4072,6 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                 thisAWHP.numSpeeds =
                     state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, format("number_of_speeds_for_{}", modeKeyWord));
 
-                // start from the second speed level as the first speed level might be autosized
-
                 for (int i = 0; i < thisAWHP.numSpeeds; i++) {
                     auto capFtFieldName = format("normalized_{}_capacity_function_of_temperature_curve_name_at_speed_{}", modeKeyWord, i + 1);
                     if (fields.find(capFtFieldName) == fields.end()) {
@@ -4079,15 +4083,14 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                         errorsFound = true;
                     }
                     std::string const capFtName = Util::makeUPPER(fields.at(capFtFieldName).get<std::string>());
-                    if (i == 0) {
-                        thisAWHP.referenceCapacity = thisAWHP.ratedCapacity[0] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
-                            fields, schemaProps, format("rated_{}_capacity_at_speed_1", modeKeyWord));
-                        if (thisAWHP.ratedCapacity[0] == DataSizing::AutoSize) {
-                            thisAWHP.referenceCapacityWasAutoSized = true;
-                        }
-                    } else {
-                        thisAWHP.ratedCapacity[i] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
-                            fields, schemaProps, format("rated_{}_capacity_at_speed_{}", modeKeyWord, i + 1));
+                    thisAWHP.ratedCapacity[i] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
+                        fields, schemaProps, format("rated_{}_capacity_at_speed_{}", modeKeyWord, i + 1));
+                    if (i != thisAWHP.numSpeeds - 1 && thisAWHP.ratedCapacity[i] == DataSizing::AutoSize) {
+                        ShowSevereError(state,
+                                        format("cannot autosize capacity below maximum speed (name={}, field={})",
+                                               thisAWHP.name,
+                                               format("rated_{}_capacity_at_speed_{}", modeKeyWord, i + 1)));
+                        errorsFound = true;
                     }
                     thisAWHP.ratedCOP[i] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
                         fields, schemaProps, format("rated_cop_for_{}_at_speed_{}", modeKeyWord, i + 1));
@@ -4187,6 +4190,9 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     }
                 }
 
+                if (thisAWHP.ratedCapacity[thisAWHP.numSpeeds - 1] == DataSizing::AutoSize) {
+                    thisAWHP.referenceCapacityWasAutoSized = true;
+                }
                 thisAWHP.referenceCapacityOneUnit = thisAWHP.ratedCapacity[thisAWHP.numSpeeds - 1];
                 thisAWHP.referenceCapacity = thisAWHP.referenceCapacityOneUnit * thisAWHP.heatPumpMultiplier;
                 thisAWHP.referenceCOP = thisAWHP.ratedCOP[thisAWHP.numSpeeds - 1];
@@ -4209,22 +4215,17 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
     if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
         // defrost related actuators
         mode_keyword = "Heating";
+        SetupEMSActuator(
+            state, "HeatPump:AirToWater", this->name, "Defrost Flag", "[]", this->DefrosstFlagEMSOverrideOn, this->DefrosstFlagEMSOverrideValue);
         SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
-                         this->name,
-                         "Defrost Flag",
-                         "[]",
-                         this->DefrosstFlagEMSOverrideOn,
-                         this->DefrosstFlagEMSOverrideValue);
-        SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
+                         "HeatPump:AirToWater",
                          this->name,
                          "Entering Water Temperature",
                          "[C]",
                          this->EnteringTempEMSOverrideOn,
                          this->EnteringTempEMSOverrideValue);
         SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
+                         "HeatPump:AirToWater",
                          this->name,
                          "Leaving Water Temperature",
                          "[C]",
@@ -4233,13 +4234,8 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
     } else {
         mode_keyword = "Cooling";
     }
-    SetupEMSActuator(state,
-                     format("HeatPump:AirToWater:{}", mode_keyword),
-                     this->name,
-                     "Operating Mode",
-                     "[ ]",
-                     this->OperationModeEMSOverrideOn,
-                     this->OperationModeEMSOverrideValue);
+    SetupEMSActuator(
+        state, "HeatPump:AirToWater", this->name, "Operating Mode", "[ ]", this->OperationModeEMSOverrideOn, this->OperationModeEMSOverrideValue);
 }
 
 void EIRFuelFiredHeatPump::oneTimeInit(EnergyPlusData &state)
