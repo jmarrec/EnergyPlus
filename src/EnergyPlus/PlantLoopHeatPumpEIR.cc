@@ -1420,32 +1420,24 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
                     BaseSizer::reportSizerOutput(state, typeName, this->name, designFlowKW, tmpLoadVolFlow);
                 }
                 if (state.dataPlnt->PlantFirstSizesOkayToReport) {
-                    BaseSizer::reportSizerOutput(
-                        state, typeName, this->name, fmt::format("Initial {}", designFlowKW), tmpLoadVolFlow);
+                    BaseSizer::reportSizerOutput(state, typeName, this->name, fmt::format("Initial {}", designFlowKW), tmpLoadVolFlow);
                 }
             } else {
                 if (this->loadSideDesignVolFlowRate > 0.0 && tmpLoadVolFlow > 0.0) {
                     Real64 hardSizedLoadSideFlow = this->loadSideDesignVolFlowRate;
                     if (state.dataPlnt->PlantFinalSizesOkayToReport) {
                         if (state.dataGlobal->DoPlantSizing) {
-                            BaseSizer::reportSizerOutput(state,
-                                                         typeName,
-                                                         this->name,
-                                                         designFlowKW,
-                                                         tmpLoadVolFlow,
-                                                         userFlowKW,
-                                                         hardSizedLoadSideFlow);
-                        } else {
                             BaseSizer::reportSizerOutput(
-                                state, typeName, this->name, userFlowKW, hardSizedLoadSideFlow);
+                                state, typeName, this->name, designFlowKW, tmpLoadVolFlow, userFlowKW, hardSizedLoadSideFlow);
+                        } else {
+                            BaseSizer::reportSizerOutput(state, typeName, this->name, userFlowKW, hardSizedLoadSideFlow);
                         }
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpLoadVolFlow - hardSizedLoadSideFlow) / hardSizedLoadSideFlow) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state, format("EIRPlantLoopHeatPump::size(): Potential issue with equipment sizing for {}", this->name));
                                 ShowContinueError(state, format("User-Specified {} of {:.2R} [m3/s]", flowRateKW, hardSizedLoadSideFlow));
-                                ShowContinueError(state,
-                                                  format("differs from Design Size {} of {:.2R} [m3/s]", flowRateKW, tmpLoadVolFlow));
+                                ShowContinueError(state, format("differs from Design Size {} of {:.2R} [m3/s]", flowRateKW, tmpLoadVolFlow));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1466,8 +1458,7 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
                         BaseSizer::reportSizerOutput(state, typeName, this->name, designFlowKW, tmpLoadVolFlow);
                     }
                     if (state.dataPlnt->PlantFirstSizesOkayToReport) {
-                        BaseSizer::reportSizerOutput(
-                            state, typeName, this->name, fmt::format("Initial {}", designFlowKW), tmpLoadVolFlow);
+                        BaseSizer::reportSizerOutput(state, typeName, this->name, fmt::format("Initial {}", designFlowKW), tmpLoadVolFlow);
                     }
                 }
             }
@@ -1690,7 +1681,7 @@ void EIRPlantLoopHeatPump::sizeSrcSideASHP(EnergyPlusData &state)
 
     std::string_view typeName = DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)];
     std::string flowRateKW = "Source Side Volume Flow Rate";
-    if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling)  {
+    if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
         flowRateKW = "Rated Air Volume Flow Rate in Cooling Mode";
         typeName = "HeatPump:AirToWater";
     } else if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
@@ -1712,16 +1703,10 @@ void EIRPlantLoopHeatPump::sizeSrcSideASHP(EnergyPlusData &state)
         if (this->sourceSideDesignVolFlowRate > 0.0) {
             if (state.dataPlnt->PlantFinalSizesOkayToReport) {
                 if (state.dataGlobal->DoPlantSizing) {
-                    BaseSizer::reportSizerOutput(state,
-                                                 typeName,
-                                                 this->name,
-                                                 designFlowKW,
-                                                 tmpSourceVolFlow,
-                                                 userFlowKW,
-                                                 this->sourceSideDesignVolFlowRate);
-                } else {
                     BaseSizer::reportSizerOutput(
-                        state, typeName, this->name, userFlowKW, this->sourceSideDesignVolFlowRate);
+                        state, typeName, this->name, designFlowKW, tmpSourceVolFlow, userFlowKW, this->sourceSideDesignVolFlowRate);
+                } else {
+                    BaseSizer::reportSizerOutput(state, typeName, this->name, userFlowKW, this->sourceSideDesignVolFlowRate);
                 }
             }
         }
