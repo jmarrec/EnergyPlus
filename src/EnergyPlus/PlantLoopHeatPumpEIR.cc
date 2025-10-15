@@ -1167,15 +1167,12 @@ void HeatPumpAirToWater::reportEquipmentSummary(EnergyPlusData &state)
             } else if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
                 modeKeyWord = "Cooling";
             }
-            objectName = format("{}:{}", this->name, modeKeyWord);
+            objectName = format("{}\n{} Component", this->name, modeKeyWord);
             constexpr std::array<std::string_view, static_cast<int>(ControlType::Num)> AWHPCompressorControlTypeUC = {"FIXEDSPEED", "VARIABLESPEED"};
             auto typeNameCompressor = AWHPCompressorControlTypeUC[static_cast<int>(this->controlType)];
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAWHPType, objectName, typeNameCompressor);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAWHPRefCap, objectName, this->referenceCapacity);
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAWHPRefCOP, objectName, this->referenceCOP);
-            // implement later
-            // OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAWHPSEER, objectName, "fixme");
-            // OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAWHPHSPF, objectName, "fixme");
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAWHPMinPLR, objectName, this->minimumPLR);
             OutputReportPredefined::PreDefTableEntry(
                 state, state.dataOutRptPredefined->pdchAWHPDesSizeRefAirTemp, objectName, this->sourceSideDesignInletTemp);
