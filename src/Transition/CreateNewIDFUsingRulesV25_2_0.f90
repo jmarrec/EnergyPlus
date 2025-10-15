@@ -486,7 +486,8 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                    nodiff=.false.
                    OutArgs(1:10)=InArgs(1:10)
                    OutArgs(11) = ''
-                   OutArgs(12:CurArgs+1)=InArgs(11:CurArgs)
+                   OutArgs(12) = ''
+                   OutArgs(13:CurArgs+1)=InArgs(11:CurArgs)
                    CurArgs = CurArgs + 1
                  END IF
 
