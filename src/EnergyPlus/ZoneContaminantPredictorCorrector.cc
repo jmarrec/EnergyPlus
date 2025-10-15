@@ -2320,15 +2320,18 @@ void CorrectZoneContaminants(EnergyPlusData &state,
             ZoneMassFlowRate += node.MassFlowRate / ZoneMult;
         }
 
-        if (state.dataHeatBal->Zone(ZoneNum).leakageParallelPIUNum > 0) {
-            const auto &thisPIU = state.dataPowerInductionUnits->PIU(state.dataHeatBal->Zone(ZoneNum).leakageParallelPIUNum);
-            if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
-                CO2MassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).CO2) / ZoneMult;
+        if (!state.dataHeatBal->Zone(ZoneNum).leakageParallelPIUNums.empty()) {
+            for (int piuNum = 1; piuNum <= static_cast<int>(state.dataHeatBal->Zone(ZoneNum).leakageParallelPIUNums.size()); ++piuNum) {
+                if (const auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum); thisPIU.leakFlow > 0) {
+                    if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
+                        CO2MassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).CO2) / ZoneMult;
+                    }
+                    if (state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
+                        GCMassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).GenContam) / ZoneMult;
+                    }
+                    ZoneMassFlowRate += thisPIU.leakFlow / ZoneMult;
+                }
             }
-            if (state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
-                GCMassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).GenContam) / ZoneMult;
-            }
-            ZoneMassFlowRate += thisPIU.leakFlow / ZoneMult;
         }
 
         Real64 timeStepSysSec = state.dataHVACGlobal->TimeStepSysSec;

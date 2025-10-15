@@ -4484,10 +4484,13 @@ void ZoneSpaceHeatBalanceData::correctHumRat(EnergyPlusData &state, int const zo
         ZoneMassFlowRate += inletNode.MassFlowRate / ZoneMult;
     }
 
-    if (state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum > 0) {
-        const auto &thisPIU = state.dataPowerInductionUnits->PIU(state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum);
-        MoistureMassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).HumRat) / ZoneMult;
-        ZoneMassFlowRate += thisPIU.leakFlow / ZoneMult;
+    if (!state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNums.empty()) {
+        for (int piuNum = 1; piuNum <= static_cast<int>(state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNums.size()); ++piuNum) {
+            if (const auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum); thisPIU.leakFlow > 0) {
+                MoistureMassFlowRate += (thisPIU.leakFlow * state.dataLoopNodes->Node(thisPIU.PriAirInNode).HumRat) / ZoneMult;
+                ZoneMassFlowRate += thisPIU.leakFlow / ZoneMult;
+            }
+        }
     }
 
     // Calculate hourly humidity ratio from infiltration + humidity added from latent load + system added moisture
@@ -5230,14 +5233,22 @@ void ZoneSpaceHeatBalanceData::calcZoneOrSpaceSums(EnergyPlusData &state,
                 MassFlowRate * CpAir * state.dataLoopNodes->Node(state.dataZonePlenum->ZoneSupPlenCond(thisZone.PlenumCondNum).InletNode).Temp;
         }
 
-        if (state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum > 0) {
-            const auto &thisPIU = state.dataPowerInductionUnits->PIU(state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum);
-            const Real64 CpAir = Psychrometrics::PsyCpAirFnW(this->airHumRat);
-            this->SumSysMCp += thisPIU.leakFlow * CpAir;
-            this->SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
-        }
-
         int ZoneMult = thisZone.Multiplier * thisZone.ListMultiplier;
+
+        if (!state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNums.empty()) {
+            const Real64 CpAir = Psychrometrics::PsyCpAirFnW(this->airHumRat);
+            for (int piuNum = 1; piuNum <= static_cast<int>(state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNums.size()); ++piuNum) {
+                if (const auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum); thisPIU.leakFlow > 0) {
+                    if (state.dataHeatBal->Zone(zoneNum).SystemZoneNodeNumber > 0) {
+                        this->SumSysMCp += thisPIU.leakFlow * CpAir;
+                        this->SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
+                    } else {
+                        this->SumMCp += thisPIU.leakFlow * CpAir / ZoneMult;
+                        this->SumMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp / ZoneMult;
+                    }
+                }
+            }
+        }
 
         this->SumSysMCp /= ZoneMult;
         this->SumSysMCpT /= ZoneMult;
@@ -5517,10 +5528,18 @@ void CalcZoneComponentLoadSums(EnergyPlusData &state,
         thisAirRpt.SumMCpDTsystem += QSensRate;
     }
 
-    if (state.dataHeatBal->Zone(ZoneNum).leakageParallelPIUNum > 0) {
-        const auto &thisPIU = state.dataPowerInductionUnits->PIU(state.dataHeatBal->Zone(ZoneNum).leakageParallelPIUNum);
-        QSensRate = calcZoneSensibleOutput(thisPIU.leakFlow, state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp, thisHB->MAT, thisHB->airHumRat);
-        thisAirRpt.SumMCpDTsystem += QSensRate;
+    if (!state.dataHeatBal->Zone(ZoneNum).leakageParallelPIUNums.empty()) {
+        for (int piuNum = 1; piuNum <= static_cast<int>(state.dataHeatBal->Zone(ZoneNum).leakageParallelPIUNums.size()); ++piuNum) {
+            if (const auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum); thisPIU.leakFlow > 0) {
+                QSensRate =
+                    calcZoneSensibleOutput(thisPIU.leakFlow, state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp, thisHB->MAT, thisHB->airHumRat);
+                if (state.dataHeatBal->Zone(ZoneNum).SystemZoneNodeNumber > 0) {
+                    thisAirRpt.SumMCpDTsystem += QSensRate;
+                } else {
+                    thisAirRpt.SumMCpDTzones += QSensRate;
+                }
+            }
+        }
     }
 
     // non air system response.

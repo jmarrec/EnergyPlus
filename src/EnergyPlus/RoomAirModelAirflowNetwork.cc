@@ -751,7 +751,7 @@ namespace RoomAir {
             auto &zoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(zoneNum);
             for (int iNode = 1; iNode <= zoneEquipConfig.NumInletNodes; ++iNode) {
                 // Get node conditions
-                // this next block is of interest to irratic system loads... maybe nodes are not accurate at time of call ?
+                // this next block is of interest to erratic system loads... maybe nodes are not accurate at time of call ?
                 // how can we tell ? predict step must be lagged ? correct step, systems have run.
                 auto const &inletNode = state.dataLoopNodes->Node(zoneEquipConfig.InletNode(iNode));
                 for (auto const &afnHVAC : afnNode.HVAC) {
@@ -798,11 +798,15 @@ namespace RoomAir {
             SumSysMCpT += inletNode.MassFlowRate * CpAir * inletNode.Temp;
         }
 
-        if (zone.leakageParallelPIUNum > 0) {
+        if (!zone.leakageParallelPIUNums.empty()) {
             Real64 CpAir = PsyCpAirFnW(zoneHB.airHumRat);
-            const auto &thisPIU = state.dataPowerInductionUnits->PIU(state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum);
-            SumSysMCp += thisPIU.leakFlow * CpAir;
-            SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
+            for (int piuNum = 1; piuNum <= static_cast<int>(state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNums.size()); ++piuNum) {
+                const auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum + 1);
+                if (thisPIU.leakFlow > 0) {
+                    SumSysMCp += thisPIU.leakFlow * CpAir;
+                    SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
+                }
+            }
         }
 
         int ZoneMult = zone.Multiplier * zone.ListMultiplier;

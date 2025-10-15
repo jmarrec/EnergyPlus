@@ -575,7 +575,32 @@ void GetPIUs(EnergyPlusData &state)
                                                        cCurrentModuleObject,
                                                        thisPIU.Name));
                             } else {
-                                state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNum = PIUNum;
+                                int leakToPlenumZoneNum = 0;
+                                ZonePlenum::GetZonePlenumInput(state);
+                                for (int zonePlenumLoop = 1; zonePlenumLoop <= state.dataZonePlenum->NumZoneReturnPlenums; ++zonePlenumLoop) {
+                                    if (state.dataZonePlenum->ZoneRetPlenCond(zonePlenumLoop).NumInletNodes > 0) {
+                                        for (int plenumInletNodeNum = 1;
+                                             plenumInletNodeNum <= state.dataZonePlenum->ZoneRetPlenCond(zonePlenumLoop).NumInletNodes;
+                                             ++plenumInletNodeNum) {
+                                            for (int retNodeNum = 1; retNodeNum <= state.dataZoneEquip->ZoneEquipConfig(zoneNum).NumReturnNodes;
+                                                 ++retNodeNum) {
+                                                if (plenumInletNodeNum == retNodeNum) {
+                                                    leakToPlenumZoneNum = state.dataZonePlenum->ZoneRetPlenCond(zonePlenumLoop).ZoneNodeNum;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                if (leakToPlenumZoneNum > 0 && leakToPlenumZoneNum != zoneNum) {
+                                    ShowSevereError(state,
+                                                    format("The {} {} is serving a zone connected to a AirLoopHVAC:ReturnPlenum object, leakage "
+                                                           "should be assigned to {}.",
+                                                           cCurrentModuleObject,
+                                                           thisPIU.Name,
+                                                           state.dataHeatBal->Zone(leakToPlenumZoneNum).Name));
+                                    ErrorsFound = true;
+                                }
+                                state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNums.push_back(PIUNum);
                                 thisPIU.damperLeakageZoneNum = zoneNum;
                             }
                         }
