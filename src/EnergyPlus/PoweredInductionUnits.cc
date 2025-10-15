@@ -585,20 +585,20 @@ void GetPIUs(EnergyPlusData &state)
                                             for (int retNodeNum = 1; retNodeNum <= state.dataZoneEquip->ZoneEquipConfig(zoneNum).NumReturnNodes;
                                                  ++retNodeNum) {
                                                 if (plenumInletNodeNum == retNodeNum) {
-                                                    leakToPlenumZoneNum = state.dataZonePlenum->ZoneRetPlenCond(zonePlenumLoop).ZoneNodeNum;
+                                                    leakToPlenumZoneNum = state.dataZonePlenum->ZoneRetPlenCond(zonePlenumLoop).ActualZoneNum;
                                                 }
                                             }
                                         }
                                     }
                                 }
                                 if (leakToPlenumZoneNum > 0 && leakToPlenumZoneNum != zoneNum) {
-                                    ShowSevereError(state,
-                                                    format("The {} {} is serving a zone connected to a AirLoopHVAC:ReturnPlenum object, leakage "
-                                                           "should be assigned to {}.",
-                                                           cCurrentModuleObject,
-                                                           thisPIU.Name,
-                                                           state.dataHeatBal->Zone(leakToPlenumZoneNum).Name));
-                                    ErrorsFound = true;
+                                    ShowWarningMessage(state,
+                                                       format("Check backdraft damper leakage zone name assignment for the {}:{}. It is serving a "
+                                                              "zone connected to a AirLoopHVAC:ReturnPlenum object, leakage "
+                                                              "should probably be assigned to {}.",
+                                                              cCurrentModuleObject,
+                                                              thisPIU.Name,
+                                                              state.dataHeatBal->Zone(leakToPlenumZoneNum).Name));
                                 }
                                 state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNums.push_back(PIUNum);
                                 thisPIU.damperLeakageZoneNum = zoneNum;
