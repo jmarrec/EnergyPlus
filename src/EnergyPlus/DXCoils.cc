@@ -12349,8 +12349,8 @@ Real64 ValidateADP(EnergyPlusData &state,
         ShowContinueError(state, format("...Coil Inlet Enthalpy                     = {:.6R} J/kg", InletAirEnthalpy));
         ShowContinueError(state, format("...Coil Apparatus Dew Point Temperature     = {:.2R} C", tempADPMax));
         ShowContinueError(state, format("...Coil Apparatus Dew Point Humidity Ratio  = {:.6R} kgWater/kgDryAir", humRatADP));
-        ShowContinueError(state,
-                          format("...Coil Enthalpy at Inlet Temperature and Apparatus Dew Point Humidity Ratio  = {:.2R} C", enthalpyTempinHumRatADP));
+        ShowContinueError(
+            state, format("...Coil Enthalpy at Inlet Temperature and Apparatus Dew Point Humidity Ratio  = {:.2R} C", enthalpyTempinHumRatADP));
         ShowContinueError(state, "The maximum design SHR is assumed to be 1.0.");
     }
     shrADPMax = min(1.0, shrADPMax);

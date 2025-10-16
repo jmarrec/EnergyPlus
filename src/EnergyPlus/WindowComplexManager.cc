@@ -1081,7 +1081,8 @@ namespace WindowComplexManager {
                         Lamda = Constant::Pi * pow_2(std::sin(UpperTheta));
                         SolAng = 2.0 * Constant::Pi * (1.0 - std::cos(UpperTheta));
                     } else {
-                        Lamda = 0.5 * DPhi * (pow_2(std::sin(UpperTheta)) - pow_2(std::sin(LowerTheta))); // For W6 basis, lambda is funct of Theta and
+                        Lamda =
+                            0.5 * DPhi * (pow_2(std::sin(UpperTheta)) - pow_2(std::sin(LowerTheta))); // For W6 basis, lambda is funct of Theta and
                         // NPhis, not individual Phi
                         SolAng = DPhi * (std::cos(LowerTheta) - std::cos(UpperTheta));
                     }
@@ -1153,7 +1154,8 @@ namespace WindowComplexManager {
                         Lamda = Constant::Pi * pow_2(std::sin(UpperTheta));
                         SolAng = 2.0 * Constant::Pi * (1.0 - std::cos(UpperTheta));
                     } else {
-                        Lamda = 0.5 * DPhi * (pow_2(std::sin(UpperTheta)) - pow_2(std::sin(LowerTheta))); // For W6 basis, lambda is funct of Theta and
+                        Lamda =
+                            0.5 * DPhi * (pow_2(std::sin(UpperTheta)) - pow_2(std::sin(LowerTheta))); // For W6 basis, lambda is funct of Theta and
                         // NPhis, not individual Phi
                         SolAng = DPhi * (std::cos(LowerTheta) - std::cos(UpperTheta));
                     }

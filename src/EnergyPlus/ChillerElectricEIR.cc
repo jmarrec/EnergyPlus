@@ -1575,8 +1575,11 @@ void ElectricEIRChillerSpecs::size(EnergyPlusData &state)
                         state, "Chiller:Electric:EIR", this->Name, "Design Size Heat Recovery Water Flow Rate [m3/s]", tempHeatRecVolFlowRate);
                 }
                 if (state.dataPlnt->PlantFirstSizesOkayToReport) {
-                    BaseSizer::reportSizerOutput(
-                        state, "Chiller:Electric:EIR", this->Name, "Initial Design Size Heat Recovery Water Flow Rate [m3/s]", tempHeatRecVolFlowRate);
+                    BaseSizer::reportSizerOutput(state,
+                                                 "Chiller:Electric:EIR",
+                                                 this->Name,
+                                                 "Initial Design Size Heat Recovery Water Flow Rate [m3/s]",
+                                                 tempHeatRecVolFlowRate);
                 }
             }
         } else {
