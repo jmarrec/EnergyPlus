@@ -47,17 +47,19 @@
 
 // PCM Thermal Storage Module - PCMThermalStorage.cc
 
-#include "PCMThermalStorage.hh"
 #include <EnergyPlus/BranchNodeConnections.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
+#include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
+#include <EnergyPlus/FluidProperties.hh>
 #include <EnergyPlus/HeatBalFiniteDiffManager.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
+#include <EnergyPlus/PCMThermalStorage.hh>
 #include <EnergyPlus/PhaseChangeModeling/HysteresisModel.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
@@ -67,7 +69,6 @@
 #include <EnergyPlus/UtilityRoutines.hh>
 
 #include <algorithm> // for std::max used in autosizing
-
 namespace EnergyPlus {
 namespace PCMStorage {
 
@@ -133,7 +134,14 @@ namespace PCMStorage {
             EnergyPlus::PCMStorage::RegisterPCMStorageOutputVariables(state);
             this->MyPlantScanFlag = false;
         }
-        Real64 rho = 998.2;
+        Real64 temp = state.dataLoopNodes->Node(this->UseSideInletNode).Temp;
+
+        // get the water fluid property object
+        EnergyPlus::Fluid::GlycolProps *waterProps = EnergyPlus::Fluid::GetWater(state);
+
+        // retrieve density [kg/m3]
+        double rho = waterProps->getDensity(state, temp, "PCMStorageData::Calculate");
+
         // At the beginning of each new environment (e.g. design day) perform one-time initializations.
         if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
             // Determine design flow rates when the user has requested autosizing (indicated by a value <= 0).
@@ -241,7 +249,11 @@ namespace PCMStorage {
         // Real64 avail = this->AvailabilitySchedule->getCurrentVal();
         Real64 dt_seconds = state.dataHVACGlobal->TimeStepSys * 3600.0;
 
-        Real64 CpWater = 4180.0; // J/kg-C
+        Real64 temp = state.dataLoopNodes->Node(this->UseSideInletNode).Temp;
+
+        EnergyPlus::Fluid::GlycolProps *waterProps = EnergyPlus::Fluid::GetWater(state);
+
+        Real64 CpWater = waterProps->getSpecificHeat(state, temp, "PCMStorageData::Calculate"); // J/kg-C
         // Real64 massFlowUse = useInlet.MassFlowRate;
         // Real64 massFlowPlant = plantInlet.MassFlowRate;
 
@@ -263,8 +275,7 @@ namespace PCMStorage {
 
         // Real64 useheatTransfer = massFlowUse * CpWater * deltaTUse;       // Heat to Water Heater
         // Real64 plantheatTransfer = massFlowPlant * CpWater * deltaTPlant; // Heat to PCM Tank
-        HeatLossRate_W = HeatLossRate;
-
+       
         // Calculate tank temperature from stored energy
         if (this->PCMmat) {
             Real64 targetEnthalpy = EnergyStored / TankCapacity;
@@ -339,7 +350,7 @@ namespace PCMStorage {
         Real64 plantheatTransfer_req = mPlantReq * CpWater * (plantInlet.Temp - plantOutletTemp);
 
         // Only one side should contribute per timestep by construction; but compute net formally:
-        Real64 netPowerW = plantheatTransfer_req + useheatTransfer_req - HeatLossRate_W;
+        Real64 netPowerW = plantheatTransfer_req + useheatTransfer_req - HeatLossRate;
 
         // Update stored energy (J)
         EnergyStored += netPowerW * dt_seconds;
@@ -368,7 +379,7 @@ namespace PCMStorage {
         SetupOutputVariable(state,
                             "Thermal Energy Storage Heat Loss Rate",
                             Constant::Units::W,
-                            PCM.HeatLossRate_W,
+                            PCM.HeatLossRate,
                             EnergyPlus::OutputProcessor::TimeStepType::System,
                             EnergyPlus::OutputProcessor::StoreType::Average,
                             PCM.Name);
