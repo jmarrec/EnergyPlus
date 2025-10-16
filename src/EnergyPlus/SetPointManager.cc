@@ -326,7 +326,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
     //                          SET POINT MANAGER:OUTSIDE AIR PRETREAT
     //                        Work supported by ASHRAE research project 1254-RP
     //                      Haves October 2004
-    //                      Witte (GARD), Sep 2006
+    //                      Witte (GUARD), Sep 2006
     //                      July 2010 B.A. Nigusse, FSEC/UCF
     //                        Added new setpoint managers:
     //                          SetpointManager:MultiZone:Heating:Average
@@ -3038,7 +3038,7 @@ void SPMOutsideAirPretreat::calculate(EnergyPlusData &state)
     //       AUTHOR         M. J. Witte based on CalcMixedAirSetPoint by Fred Buhl,
     //                        Work supported by ASHRAE research project 1254-RP
     //       DATE WRITTEN   January 2005
-    //       MODIFIED       Witte (GARD), Sep 2006
+    //       MODIFIED       Witte (GUARD), Sep 2006
     //                      Griffith( NREL), May 2009, added EMS setpoint checks
 
     // PURPOSE OF THIS SUBROUTINE:

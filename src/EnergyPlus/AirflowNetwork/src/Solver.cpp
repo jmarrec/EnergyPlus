@@ -2264,7 +2264,7 @@ namespace AirflowNetwork {
             ShowWarningError(m_state, format(RoutineName) + CurrentModuleObject + " object, ");
             ShowContinueError(
                 m_state,
-                format("The number of AirflowNetwork:Distribution:DuctSizing is not avalable. The current requirement for Duct Sizing requires a "
+                format("The number of AirflowNetwork:Distribution:DuctSizing is not available. The current requirement for Duct Sizing requires a "
                        "single object."));
             ShowContinueError(m_state, format("..Duct sizing is not performed"));
             simulation_control.autosize_ducts = false;
@@ -3244,7 +3244,7 @@ namespace AirflowNetwork {
                     ShowSevereItemNotFound(m_state, eoh, "Venting Schedule", MultizoneSurfaceData(i).VentAvailSchName);
                     ErrorsFound = true;
                 } else if (m_state.dataSurface->Surface(MultizoneSurfaceData(i).SurfNum).IsAirBoundarySurf) {
-                    ShowWarningNonEmptyField(m_state, eoh, "Venting Availbility Schedule");
+                    ShowWarningNonEmptyField(m_state, eoh, "Venting Availability Schedule");
                     ShowContinueError(m_state, "Venting is always available for air-boundary surfaces.");
                     MultizoneSurfaceData(i).ventAvailSched = Sched::GetScheduleAlwaysOn(m_state);
                     MultizoneSurfaceData(i).VentAvailSchName = "";
@@ -3902,7 +3902,7 @@ namespace AirflowNetwork {
                         if (m_state.dataGlobal->DisplayExtraWarnings) {
                             ShowWarningError(m_state,
                                              format(RoutineName) + CurrentModuleObject + "='" + IntraZoneLinkageData(link).Name +
-                                                 " is reomoved from the list due to the surface conncetion from Intrazone to Interzone.");
+                                                 " is reomoved from the list due to the surface connection from Intrazone to Interzone.");
                         }
                         for (int j = link; j <= IntraZoneNumOfLinks - 1; ++j) {
                             IntraZoneLinkageData(j) = IntraZoneLinkageData(j + 1);
@@ -7114,7 +7114,7 @@ namespace AirflowNetwork {
         } else { //-calculate the advanced single sided wind pressure coefficients
 
             // Calculate the wind pressure coefficients vs. wind direction for each external node
-            // The wind pressure coeffients are stored temporarily in the "valsByFacade" vector and then
+            // The wind pressure coefficients are stored temporarily in the "valsByFacade" vector and then
             // converted into a table near the end of this else. There will be at least seven profiles
             // (four sides plus one roof plus two for each pair of windows). The name is thus a little
             // misleading, as it isn't really the values by facade once you get beyond the first five.
@@ -13407,7 +13407,7 @@ namespace AirflowNetwork {
         for (i = 1; i <= NetworkNumOfLinks; ++i) {
             PW(i) = 0.0;
         }
-        // Write an ouput file used for AIRNET input
+        // Write an output file used for AIRNET input
         /*
         if (LIST >= 5) {
             Unit11 = GetNewUnitNumber();
@@ -13790,7 +13790,7 @@ namespace AirflowNetwork {
 
         // Locals
         // SUBROUTINE ARGUMENT DEFINITIONS:
-        // noel GNU says AU is being indexed beyound bounds
+        // noel GNU says AU is being indexed beyond bounds
         // REAL(r64), INTENT(INOUT) :: AU(IK(NetworkNumOfNodes+1)-1) ! the upper triangle of [A] before and after factoring
 
         // SUBROUTINE PARAMETER DEFINITIONS:

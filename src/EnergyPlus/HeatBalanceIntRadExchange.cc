@@ -1522,7 +1522,7 @@ namespace HeatBalanceIntRadExchange {
         // A(i)*F(i,j)=A(j)*F(j,i); F(i,i)=0.; SUM(F(i,j)=1.0, j=1,N)
         // Subroutine takes approximate view factors and enforces reciprocity by
         // averaging AiFij and AjFji.  Then it determines a set of row coefficients
-        // which can be multipled by each AF product to force the sum of AiFij for
+        // which can be multiplied by each AF product to force the sum of AiFij for
         // each row to equal Ai, and applies them. Completeness is checked, and if
         // not satisfied, the AF averaging and row modifications are repeated until
         // completeness is within a preselected small deviation from 1.0
@@ -1842,7 +1842,7 @@ namespace HeatBalanceIntRadExchange {
         CalcMatrixInverse(Cmatrix, Cinverse); // SOLVE THE LINEAR SYSTEM
         Cmatrix.clear();                      // Release memory ASAP
 
-        // Scale Cinverse colums by excitation to get partial radiosity matrix
+        // Scale Cinverse columns by excitation to get partial radiosity matrix
         l = 0u;
         for (int j = 1; j <= N; ++j) {
             Real64 const e_j(Excite(j));

@@ -474,9 +474,9 @@ private: // data
     enum class TransformerUse
     {
         Invalid = -1,
-        PowerInFromGrid,               // condition power from grid going into building buss
-        PowerOutFromBldgToGrid,        // condition power from building buss going out to grid
-        PowerBetweenLoadCenterAndBldg, // condition power from a load center going into building buss, or from building buss into load center for
+        PowerInFromGrid,               // condition power from grid going into building bus
+        PowerOutFromBldgToGrid,        // condition power from building bus going out to grid
+        PowerBetweenLoadCenterAndBldg, // condition power from a load center going into building bus, or from building bus into load center for
                                        // draws
         Num
     };
@@ -521,7 +521,7 @@ private: // data
     std::vector<int> wiredMeterPtrs_;                  // array of "pointers" to meters wired to transformer
     std::vector<bool> specialMeter_;                   // indicates whether a meter needs special consideration
     // Electricity:Facility and Electricity:HVAC are two special
-    // meters because tranformer loss is part of them
+    // meters because transformer loss is part of them
     // calculated and from elsewhere vars
     Real64 ratedNL_;         // rated no load losses, user input or calculated [W]
     Real64 ratedLL_;         // rated load losses, user input or calculated [W]

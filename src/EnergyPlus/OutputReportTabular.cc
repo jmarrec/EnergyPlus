@@ -7755,7 +7755,7 @@ void WriteBEPSTable(EnergyPlusData &state)
     //       AUTHOR         Jason Glazer
     //       DATE WRITTEN   November 2003
     //       MODIFIED       January 2010, Kyle Benne; Added SQLite output
-    //                      March 2020, Dareum Nam; Disaggregated "Additional Fuel"
+    //                      March 2020, Dareum Name; Disaggregated "Additional Fuel"
 
     // PURPOSE OF THIS SUBROUTINE:
     //   Take the gathered total and enduse meter data and structure
@@ -9910,7 +9910,7 @@ void WriteSourceEnergyEndUseSummary(EnergyPlusData &state)
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Mangesh Basarkar
     //       DATE WRITTEN   September 2011
-    //       MODIFIED       March 2020, Dareum Nam; Disaggregated "Additional Fuel"
+    //       MODIFIED       March 2020, Dareum Name; Disaggregated "Additional Fuel"
     //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
@@ -10308,7 +10308,7 @@ void WriteDemandEndUseSummary(EnergyPlusData &state)
     //       AUTHOR         Jason Glazer
     //       DATE WRITTEN   January 2009
     //       MODIFIED       January 2010, Kyle Benne; Added SQLite output
-    //                      March 2020, Dareum Nam; Disaggregated "Additional Fuel"
+    //                      March 2020, Dareum Name; Disaggregated "Additional Fuel"
     //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
@@ -12124,7 +12124,7 @@ void writeVeriSumSpaceTables(EnergyPlusData &state, const tabularReportStyle &st
         spaceTypeTotPlugProcess(state.dataHeatBal->space(spaceNum).spaceTypeNum) += itEquip;
     }
 
-    // re-use existing zone total variables
+    // reuse existing zone total variables
     for (int iTotal = 1; iTotal <= 4; ++iTotal) {
         state.dataOutRptTab->zstArea(iTotal) = 0.0;
         state.dataOutRptTab->zstLight(iTotal) = 0.0;

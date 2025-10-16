@@ -106,7 +106,7 @@ void FanBase::simulate(EnergyPlusData &state,
                        ObjexxFCL::Optional<Real64 const> _massFlowRate1,    // Mass flow rate in operating mode 1 [kg/s]
                        ObjexxFCL::Optional<Real64 const> _runTimeFraction1, // Run time fraction in operating mode 1
                        ObjexxFCL::Optional<Real64 const> _massFlowRate2,    // Mass flow rate in operating mode 2 [kg/s]
-                       ObjexxFCL::Optional<Real64 const> _runTimeFraction2, // Run time fraction in opearating mode 2
+                       ObjexxFCL::Optional<Real64 const> _runTimeFraction2, // Run time fraction in operating mode 2
                        ObjexxFCL::Optional<Real64 const> _pressureRise2     // Pressure difference for operating mode 2
 )
 {
@@ -2493,7 +2493,7 @@ Real64 FanComponent::getDesignHeatGain(EnergyPlusData &state,
 
     // METHODOLOGY EMPLOYED:
     // Simple fan:  Qdot,tot = (Vdot*deltaP)/Eff,tot
-    //              Qdot,air = Eff,mot*Qdot,tot + (Qdot,tot - Eff,mot*Qdot,tot)*Frac,mot-in-airstream
+    //              Qdot,air = Eff,not*Qdot,tot + (Qdot,tot - Eff,not*Qdot,tot)*Frac,not-in-airstream
 
     if (type != HVAC::FanType::ComponentModel) {
         Real64 _deltaP = deltaPress; // fan design pressure rise [N/m2]

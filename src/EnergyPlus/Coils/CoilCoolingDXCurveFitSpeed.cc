@@ -835,7 +835,7 @@ Real64 CoilCoolingDXCurveFitSpeed::calcEffectiveSHR(const DataLoopNode::NodeData
     //  and real world applications would use a single heating coil for both purposes, the actual
     //  fan operation is based on HeatingPLR + ReheatPLR. For cycling fan RH control, latent
     //  degradation only occurs when a heating load exists, in this case the reheat load is
-    //  equal to and oposite in magnitude to the cooling coil sensible output but the reheat
+    //  equal to and opposite in magnitude to the cooling coil sensible output but the reheat
     //  coil is not always active. This additional fan run time has not been accounted for at this time.
     //  Recalculate Toff for cycling fan systems when heating is active
     if (HeatingRTF > 0.0) {
@@ -848,7 +848,7 @@ Real64 CoilCoolingDXCurveFitSpeed::calcEffectiveSHR(const DataLoopNode::NodeData
         }
     }
 
-    //  Use sucessive substitution to solve for To
+    //  Use successive substitution to solve for To
     aa = (Gamma * Toffa) - (0.25 / Twet) * pow_2(Gamma) * pow_2(Toffa);
     To1 = aa + Tcl;
     Error = 1.0;

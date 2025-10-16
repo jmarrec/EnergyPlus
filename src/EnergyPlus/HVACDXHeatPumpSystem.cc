@@ -208,7 +208,7 @@ namespace HVACDXHeatPumpSystem {
         }
         // set econo lockout flag
         // set econo lockout flag
-        if (AirLoopNum != -1) { // IF the sysem is not an equipment of outdoor air unit
+        if (AirLoopNum != -1) { // IF the system is not an equipment of outdoor air unit
 
             if ((DXHeatPumpSystem(DXSystemNum).PartLoadFrac > 0.0) &&
                 state.dataAirLoop->AirLoopControlInfo(AirLoopNum).CanLockoutEconoWithCompressor) {
@@ -527,7 +527,7 @@ namespace HVACDXHeatPumpSystem {
         //       AUTHOR         Brent Griffith (derived from ControlDXSystem by Richard Liesen)
         //       DATE WRITTEN   Jan 2012
         //       MODIFIED       Nov. 2003, R. Raustad, FSEC
-        //                      Feb. 2005, M. J. Witte, GARD. Add dehumidification controls and support for multimode DX coil
+        //                      Feb. 2005, M. J. Witte, GUARD. Add dehumidification controls and support for multimode DX coil
         //                      Jan. 2008, R. Raustad, FSEC. Added coolreheat to all coil types
         //                      Feb. 2013, B. Shen, ORNL. Add Coil:Heating:DX:VariableSpeed
         //                      Nov. 2016, R. Zhang, LBNL. Applied the coil supply air temperature sensor offset fault model

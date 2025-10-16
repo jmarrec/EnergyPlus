@@ -175,7 +175,7 @@ namespace EvaporativeFluidCoolers {
         Sched::Schedule *blowdownSched = nullptr;          // schedule of blowdown in [m3/s]
         int WaterTankID = 0;                               // index "pointer" to WaterStorage structure
         int WaterTankDemandARRID = 0;                      // index "pointer" to demand array inside WaterStorage structure
-        Real64 UserEvapLossFactor = 0.0;                   // simple model [%/Delt C]
+        Real64 UserEvapLossFactor = 0.0;                   // simple model [%/Dealt C]
         Real64 DriftLossFraction = 0.0;
         Real64 ConcentrationRatio = 0.0; // ratio of solids in blowdown vs make up water
         bool SuppliedByWaterSystem = false;

@@ -602,7 +602,7 @@ namespace HeatBalFiniteDiffManager {
 
         // Setup Output Variables
 
-        //  set a Delt that fits the zone time step and keeps it below 200s.
+        //  set a Dealt that fits the zone time step and keeps it below 200s.
 
         s_hbfd->fracTimeStepZone_Hour = 1.0 / double(state.dataGlobal->TimeStepsInHour);
 
@@ -1384,7 +1384,7 @@ namespace HeatBalFiniteDiffManager {
             print(state.files.eio, "{}\n", "! <Construction CondFD>,Construction Name,Index,#Layers,#Nodes,Time Step {hours}");
             print(state.files.eio,
                   "{}\n",
-                  "! <Material CondFD Summary>,Material Name,Thickness {m},#Layer Elements,Layer Delta X,Layer Alpha*Delt/Delx**2,Layer Moisture "
+                  "! <Material CondFD Summary>,Material Name,Thickness {m},#Layer Elements,Layer Delta X,Layer Alpha*Dealt/Delx**2,Layer Moisture "
                   "Stability");
 
             // HT Algo issue
@@ -1634,7 +1634,7 @@ namespace HeatBalFiniteDiffManager {
 
             } else {
 
-                // potential-lkl-from old      CALL InteriorBCEqns(Delt,nodeIn,LayIn,Surf,SurfaceFD(Surface(Surf)%ExtBoundCond)%T, &
+                // potential-lkl-from old      CALL InteriorBCEqns(Dealt,nodeIn,LayIn,Surf,SurfaceFD(Surface(Surf)%ExtBoundCond)%T, &
                 auto &surfaceFDEBC = s_hbfd->SurfaceFD(surface_ExtBoundCond);
                 InteriorBCEqns(state,
                                Delt,

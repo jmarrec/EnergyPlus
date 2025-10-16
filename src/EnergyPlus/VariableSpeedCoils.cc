@@ -3460,7 +3460,7 @@ namespace VariableSpeedCoils {
                     // Check for valid range of (Rated Air Volume Flow Rate / Rated Total Capacity)
                     RatedVolFlowPerRatedTotCap = varSpeedCoil.MSRatedAirVolFlowRate(Mode) / varSpeedCoil.MSRatedTotCap(Mode);
                 }
-                // call coil model with everthing set at rating point
+                // call coil model with everything set at rating point
                 varSpeedCoil.InletAirDBTemp = RatedInletAirTempHeat;
                 varSpeedCoil.InletAirHumRat =
                     Psychrometrics::PsyWFnTdbTwbPb(state, RatedInletAirTempHeat, RatedInletWetBulbTemp, DataEnvironment::StdPressureSeaLevel);
@@ -3807,7 +3807,7 @@ namespace VariableSpeedCoils {
         Real64 WaterMassFlowRatio;    // water mass flow rate
         Real64 RatedSourceTempCool;   // rated source temperature, space cooling mode
         std::string CurrentObjSubfix; // Object subfix type for printing
-        bool HardSizeNoDesRun;        // Indicator to hardsize withouth sizing runs
+        bool HardSizeNoDesRun;        // Indicator to hardsize without sizing runs
         bool SizingDesRunThisAirSys;  // true if a particular air system had a Sizing:System object and system sizing done
         bool SizingDesRunThisZone;    // true if a particular zone had a Sizing:Zone object and zone sizing was done
         Real64 HPInletAirHumRat;      // Rated inlet air humidity ratio for heat pump water heater [kgWater/kgDryAir]
@@ -4016,7 +4016,7 @@ namespace VariableSpeedCoils {
 
                         // design fan heat will be added to coil load
                         Real64 FanCoolLoad = DataAirSystems::calcFanDesignHeatGain(state, state.dataSize->DataFanIndex, VolFlowRate);
-                        // inlet/outlet temp is adjusted after enthalpy is calculcated so fan heat is not double counted
+                        // inlet/outlet temp is adjusted after enthalpy is calculated so fan heat is not double counted
                         Real64 CpAir = Psychrometrics::PsyCpAirFnW(MixHumRat);
                         if (state.dataAirSystemsData->PrimaryAirSystems(state.dataSize->CurSysNum).supFanPlace == HVAC::FanPlace::BlowThru) {
                             MixTemp += FanCoolLoad / (CpAir * rhoair * VolFlowRate);
@@ -4096,7 +4096,7 @@ namespace VariableSpeedCoils {
 
                     // design fan heat will be added to coil load
                     Real64 FanCoolLoad = DataAirSystems::calcFanDesignHeatGain(state, state.dataSize->DataFanIndex, VolFlowRate);
-                    // inlet/outlet temp is adjusted after enthalpy is calculcated so fan heat is not double counted
+                    // inlet/outlet temp is adjusted after enthalpy is calculated so fan heat is not double counted
                     Real64 CpAir = Psychrometrics::PsyCpAirFnW(MixHumRat);
 
                     if (state.dataSize->DataFanPlacement == HVAC::FanPlace::BlowThru) {
@@ -4599,7 +4599,7 @@ namespace VariableSpeedCoils {
                                          "Design Size Rated Water Flow Rate [m3/s]",
                                          RatedWaterVolFlowRateDes);
             // Ensure water flow rate at lower speed must be lower or
-            // equal to the flow rate at higher speed. Otherwise, a severe error is isssued.
+            // equal to the flow rate at higher speed. Otherwise, a severe error is issued.
             for (Mode = 1; Mode <= varSpeedCoil.NumOfSpeeds - 1; ++Mode) {
                 if (varSpeedCoil.MSRatedWaterVolFlowRate(Mode) > varSpeedCoil.MSRatedWaterVolFlowRate(Mode + 1) * 1.05) {
                     ShowWarningError(
@@ -6261,7 +6261,7 @@ namespace VariableSpeedCoils {
         varSpeedCoil.CrankcaseHeaterConsumption = varSpeedCoil.CrankcaseHeaterPower * TimeStepSysSec;
         varSpeedCoil.EvapWaterConsump = 0.0;
         varSpeedCoil.BasinHeaterConsumption = 0.0;
-        // re-use EvapCondPumpElecConsumption to store WH pump energy consumption
+        // reuse EvapCondPumpElecConsumption to store WH pump energy consumption
         varSpeedCoil.EvapCondPumpElecConsumption = varSpeedCoil.HPWHCondPumpElecNomPower * TimeStepSysSec;
         if (varSpeedCoil.RunFrac == 0.0) {
             varSpeedCoil.COP = 0.0;
@@ -7484,7 +7484,7 @@ namespace VariableSpeedCoils {
             Toffa = Toff;
         }
 
-        //  Use sucessive substitution to solve for To
+        //  Use successive substitution to solve for To
         aa = (Gamma * Toffa) - (0.25 / Twet) * pow_2(Gamma) * pow_2(Toffa);
 
         To1 = aa + LatentCapacityTimeConstant;
