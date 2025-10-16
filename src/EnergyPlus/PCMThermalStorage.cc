@@ -47,6 +47,10 @@
 
 // PCM Thermal Storage Module - PCMThermalStorage.cc
 
+// C++ Headers
+#include <algorithm>
+
+// EnergyPlus Headers
 #include <EnergyPlus/BranchNodeConnections.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
@@ -68,7 +72,6 @@
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
-#include <algorithm> // for std::max used in autosizing
 namespace EnergyPlus {
 namespace PCMStorage {
 
@@ -275,7 +278,7 @@ namespace PCMStorage {
 
         // Real64 useheatTransfer = massFlowUse * CpWater * deltaTUse;       // Heat to Water Heater
         // Real64 plantheatTransfer = massFlowPlant * CpWater * deltaTPlant; // Heat to PCM Tank
-       
+
         // Calculate tank temperature from stored energy
         if (this->PCMmat) {
             Real64 targetEnthalpy = EnergyStored / TankCapacity;
