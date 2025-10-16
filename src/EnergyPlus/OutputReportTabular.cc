@@ -14807,7 +14807,7 @@ void AddTOCLoadComponentTableSummaries(EnergyPlusData &state)
     if (state.dataGlobal->CompLoadReportIsReq) {
         if (ort->displayZoneComponentLoadSummary) {
             if (state.dataHeatBal->doSpaceHeatBalanceSizing) {
-                for (int iSpace = 1; iSpace <= state.dataGlobal->NumOfZones; ++iSpace) {
+                for (int iSpace = 1; iSpace <= state.dataGlobal->numSpaces; ++iSpace) {
                     if (!state.dataZoneEquip->ZoneEquipConfig(state.dataHeatBal->space(iSpace).zoneNum).IsControlled) {
                         continue;
                     }
@@ -15100,7 +15100,7 @@ void GatherComponentLoadsSurface(EnergyPlusData &state)
         }
         if (state.dataHeatBal->doSpaceHeatBalanceSizing) {
             auto &spCLDayTS = ort->spCompLoads[state.dataSize->CurOverallSimDay - 1].ts[timeStepInDayGCLS - 1];
-            for (int ispace = 1; ispace <= state.dataGlobal->NumOfZones; ++ispace) {
+            for (int ispace = 1; ispace <= state.dataGlobal->numSpaces; ++ispace) {
                 Real64 tubularGain = 0.0;
                 int zone = state.dataHeatBal->space(ispace).zoneNum;
                 tubularGain = InternalHeatGains::SumInternalConvectionGainsByTypes(state, zone, OutputReportTabular::IntGainTypesTubularGCLS, ispace);
