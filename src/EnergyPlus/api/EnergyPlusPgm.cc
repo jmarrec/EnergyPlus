@@ -66,7 +66,7 @@
 
 // Portions of the EnergyPlus utility software (EP-Launch, IDFEditor, DOE2Translator, HVAC-Diagram,
 // ExpandObjects, CSVProc, System Templates, and convertESOMTR) were developed by GARD Analytics, Inc.
-// 1028 Busse Highway, Park Ridge, Illinois 60068-1802, USA (847) 698-5690, www.guard.com.  GARD Analytics
+// 1028 Busse Highway, Park Ridge, Illinois 60068-1802, USA (847) 698-5690, www.gard.com.  GARD Analytics
 // performed independent verification and validation testing of the software after developing the testing
 // strategy and plan.  GARD Analytics was also responsible for gas absorption chiller, desiccant
 // dehumidifier, ice storage (simple), table reports and economics.
@@ -136,7 +136,7 @@
 // American Society of Heating Refrigerating and Air-Conditioning Engineers, Inc,,
 // 1791 Tullie Circle, N.E., Atlanta, GA 30329. www.ashrae.org
 // Work performed by GARD Analytics, Inc., 1028 Busse Highway, Park Ridge, Illinois 60068-1802, USA.
-// www.guard.com, November 2004.
+// www.gard.com, November 2004.
 
 // EnergyPlus v1.2.2 and later versions (wintel platform) contains links to SPARK, a simulation engine for
 // detailed system modeling developed at Ernest Orlando Lawrence Berkeley National Laboratory in

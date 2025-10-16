@@ -2762,7 +2762,7 @@ void CalcPurchAirMinOAMassFlow(EnergyPlusData &state,
 {
 
     // SUBROUTINE INFORMATION:
-    //       AUTHOR         M. Witte (GUARD)
+    //       AUTHOR         M. Witte (GARD)
     //       DATE WRITTEN   Jun 2011 (taken from HVACSingleDuctSystem.cc and adapted for Ideal Loads System)
 
     // PURPOSE OF THIS SUBROUTINE:
@@ -2816,7 +2816,7 @@ void CalcPurchAirMixedAir(EnergyPlusData &state,
 {
 
     // SUBROUTINE INFORMATION:
-    //       AUTHOR         M. Witte (GUARD)
+    //       AUTHOR         M. Witte (GARD)
     //       DATE WRITTEN   Sep 2011
     //       MODIFIED       na
     //       RE-ENGINEERED  na
