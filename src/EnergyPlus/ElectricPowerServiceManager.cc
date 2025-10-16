@@ -4809,7 +4809,7 @@ void ElectricTransformer::manageTransformers(EnergyPlusData &state, Real64 const
         break;
     }
     case TransformerUse::PowerBetweenLoadCenterAndBldg: {
-        // TODO, new configuration for transformer, really part of the specific load center and connects it to the main building bus
+        // TODO, new configuration for transformer, really part of the specific load center and connects it to the main building buss
         powerIn_ = surplusPowerOutFromLoadCenters;
         elecLoad = surplusPowerOutFromLoadCenters;
         break;

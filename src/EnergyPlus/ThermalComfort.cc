@@ -1235,10 +1235,10 @@ namespace ThermalComfort {
             // Thermal sensation TSENS as function of mean body temp.-
             // AvgBodyTempLow is AvgBodyTemp when DISC is 0. (lower limit of zone of evap. regul.)
             Real64 AvgBodyTempLow = (0.185 / ActLevelConv) * (state.dataThermalComforts->ActLevel - state.dataThermalComforts->WorkEff) + 36.313;
-            // AvgBodyTempHigh is AvgBodyTemp when HIS=100 (upper limit of zone of evap. regul.)
+            // AvgBodyTempHigh is AvgBodyTemp when HSI=100 (upper limit of zone of evap. regul.)
             Real64 AvgBodyTempHigh = (0.359 / ActLevelConv) * (state.dataThermalComforts->ActLevel - state.dataThermalComforts->WorkEff) + 36.664;
 
-            // TSENS=DISC=4.7 when HIS =1 00 (HIS is Belding's classic heat stress index)
+            // TSENS=DISC=4.7 when HSI =1 00 (HSI is Belding's classic heat stress index)
             // In cold, DISC &TSENS are the same and neg. fct of AvgBodyTemp
             if (state.dataThermalComforts->AvgBodyTemp > AvgBodyTempLow) {
                 comfort.PierceTSENS = 4.7 * (state.dataThermalComforts->AvgBodyTemp - AvgBodyTempLow) / (AvgBodyTempHigh - AvgBodyTempLow);

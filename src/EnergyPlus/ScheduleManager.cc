@@ -3391,7 +3391,7 @@ namespace Sched {
         // J. Glazer - March 2024
         // finds the minimum and maximum for a specific set of day types for a given schedule
         constexpr std::array<std::array<bool, (int)DayType::Num>, (int)DayTypeGroup::Num> dayTypeFilters = {{
-            //  Unused    Sun    Mon    Tues   Wed    Their   Fri    Sat    Hol    Summer Winter Cust1  Cust2
+            //  Unused    Sun    Mon    Tues   Wed    Thur   Fri    Sat    Hol    Summer Winter Cust1  Cust2
             {false, false, true, true, true, true, true, false, false, false, false, false, false},     // Weekday
             {false, true, false, false, false, false, false, true, true, false, false, false, false},   // WeekendHoliday
             {false, false, false, false, false, false, false, false, false, true, false, false, false}, // SummerDesign
