@@ -1243,6 +1243,7 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
 
     std::string capacityKW = "Nominal Capacity";
     std::string flowRateKW = "Load Side Volume Flow Rate";
+    std::string flowRateKW_no_v = "Load Side Flow Rate";
     if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
         capacityKW = "Rated Cooling Capacity";
         flowRateKW = "Rated Water Volume Flow Rate in Cooling Mode";
@@ -1458,7 +1459,7 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
                         BaseSizer::reportSizerOutput(state, typeName, this->name, designFlowKW, tmpLoadVolFlow);
                     }
                     if (state.dataPlnt->PlantFirstSizesOkayToReport) {
-                        BaseSizer::reportSizerOutput(state, typeName, this->name, fmt::format("Initial {}", designFlowKW), tmpLoadVolFlow);
+                        BaseSizer::reportSizerOutput(state, typeName, this->name, fmt::format("Initial {} [m3/s]", designFlowKW), tmpLoadVolFlow);
                     }
                 }
             }
@@ -1484,7 +1485,7 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
             }
         }
         if (!this->loadSideDesignVolFlowRateWasAutoSized && state.dataPlnt->PlantFinalSizesOkayToReport) {
-            BaseSizer::reportSizerOutput(state, typeName, this->name, userFlowKW, this->loadSideDesignVolFlowRate);
+            BaseSizer::reportSizerOutput(state, typeName, this->name, fmt::format("User-Specified {} [m3/s]", flowRateKW_no_v), this->loadSideDesignVolFlowRate);
         }
         if (!this->referenceCapacityWasAutoSized && state.dataPlnt->PlantFinalSizesOkayToReport) {
             BaseSizer::reportSizerOutput(state, typeName, this->name, userCapacityKW, this->referenceCapacity);
@@ -1693,7 +1694,7 @@ void EIRPlantLoopHeatPump::sizeSrcSideASHP(EnergyPlusData &state)
     if (this->sourceSideDesignVolFlowRateWasAutoSized) {
         this->sourceSideDesignVolFlowRate = tmpSourceVolFlow;
         if (state.dataPlnt->PlantFinalSizesOkayToReport) {
-            BaseSizer::reportSizerOutput(state, typeName, this->name, userFlowKW, tmpSourceVolFlow);
+            BaseSizer::reportSizerOutput(state, typeName, this->name, designFlowKW, tmpSourceVolFlow);
         }
         if (state.dataPlnt->PlantFirstSizesOkayToReport) {
             BaseSizer::reportSizerOutput(state, typeName, this->name, fmt::format("Initial {}", designFlowKW), tmpSourceVolFlow);
