@@ -2066,17 +2066,8 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                     if (timePeriod != fields.end()) {
                         thisPLHP.defrostTime = timePeriod.value().get<Real64>();
                     } else {
-                        Real64 defaultVal = 0.0;
-                        if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                                state, cCurrentModuleObject, "heat_pump_defrost_time_period_fraction", defaultVal)) {
-                            // excluding from coverage
-                            ShowSevereError(state, // LCOV_EXCL_LINE
-                                            format("EIR PLHP \"{}\": Heat Pump Defrost Time Period Fraction not entered and default value not found.",
-                                                   thisPLHP.name)); // LCOV_EXCL_LINE
-                            errorsFound = true;                     // LCOV_EXCL_LINE
-                        } else {
-                            thisPLHP.defrostTime = defaultVal;
-                        }
+                        state.dataInputProcessing->inputProcessor->getDefaultValue(
+                            state, cCurrentModuleObject, "heat_pump_defrost_time_period_fraction", thisPLHP.defrostTime);
                     }
                 }
 
@@ -2792,6 +2783,12 @@ void HeatPumpAirToWater::oneTimeInit(EnergyPlusData &state)
     this->oneTimeInitFlagAWHP = false;
 }
 
+void HeatPumpAirToWater::sizeLoadSide(EnergyPlusData &state)
+{
+    EIRPlantLoopHeatPump::sizeLoadSide(state);
+    this->referenceCapacityOneUnit = this->referenceCapacity / this->heatPumpMultiplier;
+}
+
 bool EIRPlantLoopHeatPump::thermosiphonDisabled(EnergyPlusData &state)
 {
     if (this->thermosiphonTempCurveIndex > 0) {
@@ -3454,14 +3451,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
             if (sizeFactorFound != fields.end()) {
                 thisPLHP.sizingFactor = sizeFactorFound.value().get<Real64>();
             } else {
-                Real64 defaultVal_sizeFactor = 1.0;
-                if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                        state, cCurrentModuleObject, "sizing_factor", defaultVal_sizeFactor)) {
-                    ShowSevereError(state, "EIR FFHP: Sizing factor not entered and could not get default value");
-                    errorsFound = true;
-                } else {
-                    thisPLHP.sizingFactor = defaultVal_sizeFactor;
-                }
+                state.dataInputProcessing->inputProcessor->getDefaultValue(state, cCurrentModuleObject, "sizing_factor", thisPLHP.sizingFactor);
             }
 
             // A8 flow mode
@@ -3506,13 +3496,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
             if (minPLRFound != fields.end()) {
                 thisPLHP.minPLR = minPLRFound.value().get<Real64>();
             } else {
-                Real64 defaultVal = 0.1;
-                if (!state.dataInputProcessing->inputProcessor->getDefaultValue(state, cCurrentModuleObject, "minimum_part_load_ratio", defaultVal)) {
-                    ShowSevereError(state, "EIR PLFFHP: minimum PLR not entered and could not get default value.");
-                    errorsFound = true;
-                } else {
-                    thisPLHP.minPLR = defaultVal;
-                }
+                state.dataInputProcessing->inputProcessor->getDefaultValue(state, cCurrentModuleObject, "minimum_part_load_ratio", thisPLHP.minPLR);
             }
 
             // N8 max PLR
@@ -3520,13 +3504,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
             if (maxPLRFound != fields.end()) {
                 thisPLHP.maxPLR = maxPLRFound.value().get<Real64>();
             } else {
-                Real64 defaultVal = 1.0;
-                if (!state.dataInputProcessing->inputProcessor->getDefaultValue(state, cCurrentModuleObject, "maximum_part_load_ratio", defaultVal)) {
-                    ShowSevereError(state, "EIR PLFFHP: maximum PLR not entered and could not get default value.");
-                    errorsFound = true;
-                } else {
-                    thisPLHP.maxPLR = defaultVal;
-                }
+                state.dataInputProcessing->inputProcessor->getDefaultValue(state, cCurrentModuleObject, "maximum_part_load_ratio", thisPLHP.maxPLR);
             }
 
             // A14 fuel_energy_input_ratio_defrost_adjustment_curve_name
@@ -3570,14 +3548,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                 if (defrostOpTimeFracFound != fields.end()) {
                     thisPLHP.defrostOpTimeFrac = defrostOpTimeFracFound.value().get<Real64>();
                 } else {
-                    Real64 defaultVal = 0.0;
-                    if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                            state, cCurrentModuleObject, "defrost_operation_time_fraction", defaultVal)) {
-                        ShowSevereError(state, "EIR PLFFHP: defrost time fraction not entered and could not get default value.");
-                        errorsFound = true;
-                    } else {
-                        thisPLHP.defrostOpTimeFrac = defaultVal;
-                    }
+                    state.dataInputProcessing->inputProcessor->getDefaultValue(
+                        state, cCurrentModuleObject, "defrost_operation_time_fraction", thisPLHP.defrostOpTimeFrac);
                 }
             }
 
@@ -3589,14 +3561,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                 if (resDefrostHeaterCapFound != fields.end()) {
                     thisPLHP.defrostResistiveHeaterCap = resDefrostHeaterCapFound.value().get<Real64>();
                 } else {
-                    Real64 defaultVal = 0.0;
-                    if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                            state, cCurrentModuleObject, "resistive_defrost_heater_capacity", defaultVal)) {
-                        ShowSevereError(state, "EIR PLFFHP: Resistive Defrost Heater Capacity not entered and could not get default value.");
-                        errorsFound = true;
-                    } else {
-                        thisPLHP.defrostResistiveHeaterCap = defaultVal;
-                    }
+                    state.dataInputProcessing->inputProcessor->getDefaultValue(
+                        state, cCurrentModuleObject, "resistive_defrost_heater_capacity", thisPLHP.defrostResistiveHeaterCap);
                 }
             }
 
@@ -3608,14 +3574,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                 if (maxOADBTFound != fields.end()) {
                     thisPLHP.defrostMaxOADBT = maxOADBTFound.value().get<Real64>();
                 } else {
-                    Real64 defaultVal = 5.0;
-                    if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                            state, cCurrentModuleObject, "maximum_outdoor_dry_bulb_temperature_for_defrost_operation", defaultVal)) {
-                        ShowSevereError(state, "EIR PLFFHP: max defrost operation OA temperature not entered and could not get default value.");
-                        errorsFound = true;
-                    } else {
-                        thisPLHP.defrostMaxOADBT = defaultVal;
-                    }
+                    state.dataInputProcessing->inputProcessor->getDefaultValue(
+                        state, cCurrentModuleObject, "maximum_outdoor_dry_bulb_temperature_for_defrost_operation", thisPLHP.defrostMaxOADBT);
                 }
             }
 
@@ -3638,14 +3598,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
             if (nomAuxElecPowerFound != fields.end()) {
                 thisPLHP.nominalAuxElecPower = nomAuxElecPowerFound.value().get<Real64>();
             } else {
-                Real64 defaultVal = 0.0;
-                if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                        state, cCurrentModuleObject, "nominal_auxiliary_electric_power", defaultVal)) {
-                    ShowSevereError(state, "EIR PLFFHP: nominal auxiliary electric power not entered and could not get default value.");
-                    errorsFound = true;
-                } else {
-                    thisPLHP.nominalAuxElecPower = defaultVal;
-                }
+                thisPLHP.nominalAuxElecPower = 0.0; // no default in IDD. This would be 0 anyway.
             }
 
             // A17 auxiliary_electric_energy_input_ratio_function_of_temperature_curve_name
@@ -3679,13 +3632,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
             if (stdElecPwrFound != fields.end()) {
                 thisPLHP.standbyElecPower = stdElecPwrFound.value().get<Real64>();
             } else {
-                Real64 defaultVal = 0.0;
-                if (!state.dataInputProcessing->inputProcessor->getDefaultValue(state, cCurrentModuleObject, "standby_electric_power", defaultVal)) {
-                    ShowSevereError(state, "EIR FFHP: standby electric power not entered and could not get default value.");
-                    errorsFound = true;
-                } else {
-                    thisPLHP.standbyElecPower = defaultVal;
-                }
+                state.dataInputProcessing->inputProcessor->getDefaultValue(
+                    state, cCurrentModuleObject, "standby_electric_power", thisPLHP.standbyElecPower);
             }
 
             // N14 minimum unloading ratio
@@ -3693,13 +3641,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
             if (minimumUnloadingRatio != fields.end()) {
                 thisPLHP.minimumUnloadingRatio = minimumUnloadingRatio.value().get<Real64>();
             } else {
-                Real64 defaultVal = 0.25;
-                if (!state.dataInputProcessing->inputProcessor->getDefaultValue(state, cCurrentModuleObject, "minimum_unloading_ratio", defaultVal)) {
-                    ShowSevereError(state, "EIR FFHP: minimum unload ratio not entered and could not get default value.");
-                    errorsFound = true;
-                } else {
-                    thisPLHP.minimumUnloadingRatio = defaultVal;
-                }
+                state.dataInputProcessing->inputProcessor->getDefaultValue(
+                    state, cCurrentModuleObject, "minimum_unloading_ratio", thisPLHP.minimumUnloadingRatio);
             }
             if (thisPLHP.minimumUnloadingRatio < thisPLHP.minPLR) {
                 ShowSevereError(state, "EIR FFHP: the minimum unloading ratio cannot be lower than the minimum part load ratio.");
@@ -4013,18 +3956,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     if (timePeriod != fields.end()) {
                         thisAWHP.defrostTime = timePeriod.value().get<Real64>();
                     } else {
-                        Real64 defaultVal = 0.0;
-                        if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                                state, cCurrentModuleObject, "heat_pump_defrost_time_period_fraction", defaultVal)) {
-                            // excluding from coverage
-                            ShowSevereError(
-                                state, // LCOV_EXCL_LINE
-                                format("HeatPump:AirToWater \"{}\": Heat Pump Defrost Time Period Fraction not entered and default value not found.",
-                                       thisAWHP.name)); // LCOV_EXCL_LINE
-                            errorsFound = true;         // LCOV_EXCL_LINE
-                        } else {
-                            thisAWHP.defrostTime = defaultVal;
-                        }
+                        state.dataInputProcessing->inputProcessor->getDefaultValue(
+                            state, cCurrentModuleObject, "heat_pump_defrost_time_period_fraction", thisAWHP.defrostTime);
                     }
                 }
 
@@ -4035,15 +3968,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     if (resDefrostHeaterCapFound != fields.end()) {
                         thisAWHP.defrostResistiveHeaterCap = resDefrostHeaterCapFound.value().get<Real64>();
                     } else {
-                        Real64 defaultVal = 0.0;
-                        if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                                state, cCurrentModuleObject, "resistive_defrost_heater_capacity", defaultVal)) {
-                            ShowSevereError(state,
-                                            "HeatPump:AirToWater: Resistive Defrost Heater Capacity not entered and could not get default value.");
-                            errorsFound = true;
-                        } else {
-                            thisAWHP.defrostResistiveHeaterCap = defaultVal;
-                        }
+                        state.dataInputProcessing->inputProcessor->getDefaultValue(
+                            state, cCurrentModuleObject, "resistive_defrost_heater_capacity", thisAWHP.defrostResistiveHeaterCap);
                     }
                 }
                 if (thisAWHP.EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating &&
@@ -4132,7 +4058,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     errorsFound = true;
                 }
                 BranchNodeConnections::TestCompSet(state,
-                                                   Util::makeUPPER(format("{}:{}", cCurrentModuleObject, modeKeyWord)),
+                                                   Util::makeUPPER(cCurrentModuleObject),
                                                    thisAWHP.name,
                                                    loadSideInletNodeName,
                                                    loadSideOutletNodeName,
@@ -4146,8 +4072,6 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                 thisAWHP.numSpeeds =
                     state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, format("number_of_speeds_for_{}", modeKeyWord));
 
-                // start from the second speed level as the first speed level might be autosized
-
                 for (int i = 0; i < thisAWHP.numSpeeds; i++) {
                     auto capFtFieldName = format("normalized_{}_capacity_function_of_temperature_curve_name_at_speed_{}", modeKeyWord, i + 1);
                     if (fields.find(capFtFieldName) == fields.end()) {
@@ -4159,15 +4083,14 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                         errorsFound = true;
                     }
                     std::string const capFtName = Util::makeUPPER(fields.at(capFtFieldName).get<std::string>());
-                    if (i == 0) {
-                        thisAWHP.referenceCapacity = thisAWHP.ratedCapacity[0] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
-                            fields, schemaProps, format("rated_{}_capacity_at_speed_1", modeKeyWord));
-                        if (thisAWHP.ratedCapacity[0] == DataSizing::AutoSize) {
-                            thisAWHP.referenceCapacityWasAutoSized = true;
-                        }
-                    } else {
-                        thisAWHP.ratedCapacity[i] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
-                            fields, schemaProps, format("rated_{}_capacity_at_speed_{}", modeKeyWord, i + 1));
+                    thisAWHP.ratedCapacity[i] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
+                        fields, schemaProps, format("rated_{}_capacity_at_speed_{}", modeKeyWord, i + 1));
+                    if (i != thisAWHP.numSpeeds - 1 && thisAWHP.ratedCapacity[i] == DataSizing::AutoSize) {
+                        ShowSevereError(state,
+                                        format("cannot autosize capacity below maximum speed (name={}, field={})",
+                                               thisAWHP.name,
+                                               format("rated_{}_capacity_at_speed_{}", modeKeyWord, i + 1)));
+                        errorsFound = true;
                     }
                     thisAWHP.ratedCOP[i] = state.dataInputProcessing->inputProcessor->getRealFieldValue(
                         fields, schemaProps, format("rated_cop_for_{}_at_speed_{}", modeKeyWord, i + 1));
@@ -4267,6 +4190,9 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     }
                 }
 
+                if (thisAWHP.ratedCapacity[thisAWHP.numSpeeds - 1] == DataSizing::AutoSize) {
+                    thisAWHP.referenceCapacityWasAutoSized = true;
+                }
                 thisAWHP.referenceCapacityOneUnit = thisAWHP.ratedCapacity[thisAWHP.numSpeeds - 1];
                 thisAWHP.referenceCapacity = thisAWHP.referenceCapacityOneUnit * thisAWHP.heatPumpMultiplier;
                 thisAWHP.referenceCOP = thisAWHP.ratedCOP[thisAWHP.numSpeeds - 1];
@@ -4289,22 +4215,17 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
     if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
         // defrost related actuators
         mode_keyword = "Heating";
+        SetupEMSActuator(
+            state, "HeatPump:AirToWater", this->name, "Defrost Flag", "[]", this->DefrosstFlagEMSOverrideOn, this->DefrosstFlagEMSOverrideValue);
         SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
-                         this->name,
-                         "Defrost Flag",
-                         "[]",
-                         this->DefrosstFlagEMSOverrideOn,
-                         this->DefrosstFlagEMSOverrideValue);
-        SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
+                         "HeatPump:AirToWater",
                          this->name,
                          "Entering Water Temperature",
                          "[C]",
                          this->EnteringTempEMSOverrideOn,
                          this->EnteringTempEMSOverrideValue);
         SetupEMSActuator(state,
-                         format("HeatPump:AirToWater:{}", mode_keyword),
+                         "HeatPump:AirToWater",
                          this->name,
                          "Leaving Water Temperature",
                          "[C]",
@@ -4313,13 +4234,8 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
     } else {
         mode_keyword = "Cooling";
     }
-    SetupEMSActuator(state,
-                     format("HeatPump:AirToWater:{}", mode_keyword),
-                     this->name,
-                     "Operating Mode",
-                     "[ ]",
-                     this->OperationModeEMSOverrideOn,
-                     this->OperationModeEMSOverrideValue);
+    SetupEMSActuator(
+        state, "HeatPump:AirToWater", this->name, "Operating Mode", "[ ]", this->OperationModeEMSOverrideOn, this->OperationModeEMSOverrideValue);
 }
 
 void EIRFuelFiredHeatPump::oneTimeInit(EnergyPlusData &state)

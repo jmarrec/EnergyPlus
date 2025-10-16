@@ -382,14 +382,95 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
 !                 CurArgs = CurArgs + 1
 
               ! If your original object starts with A, insert the rules here
-              CASE('AIRLOOPHVAC:UNITARYHEATPUMP:AIRTOAIR:MULTISPEED')
-                 CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
-                 nodiff=.false.
-                 OutArgs(1:11)=InArgs(1:11)
-                 OutArgs(12) = ''
-                 OutArgs(13:CurArgs)=InArgs(13:CurArgs)
 
               ! If your original object starts with C, insert the rules here
+              CASE('COIL:COOLING:WATERTOAIRHEATPUMP:VARIABLESPEEDEQUATIONFIT')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+
+              CASE('COIL:HEATING:WATERTOAIRHEATPUMP:VARIABLESPEEDEQUATIONFIT')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+
+              CASE('COIL:COOLING:DX:VARIABLESPEED')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+
+              CASE('COIL:HEATING:DX:VARIABLESPEED')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+
+              CASE('COIL:WATERHEATING:AIRTOWATERHEATPUMP:VARIABLESPEED')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+                
+              CASE('COIL:COOLING:WATERTOAIRHEATPUMP:EQUATIONFIT')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+                
+              CASE('COIL:HEATING:WATERTOAIRHEATPUMP:EQUATIONFIT')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+                
+              CASE('COIL:COOLING:WATERTOAIRHEATPUMP:PARAMETERESTIMATION')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+                
+              CASE('COIL:HEATING:WATERTOAIRHEATPUMP:PARAMETERESTIMATION')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+
+              CASE('COIL:WATERHEATING:AIRTOWATERHEATPUMP:PUMPED')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
+                
+              CASE('COIL:WATERHEATING:AIRTOWATERHEATPUMP:WRAPPED')
+                CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                nodiff=.false.
+                OutArgs(1:1)=InArgs(1:1)
+                OutArgs(2) = ''  ! new Availability Schedule Name field
+                OutArgs(3:CurArgs+1)=InArgs(2:CurArgs)
+                CurArgs = CurArgs + 1
 
               ! If your original object starts with D, insert the rules here
 
@@ -398,6 +479,17 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
               ! If your original object starts with F, insert the rules here
 
               ! If your original object starts with G, insert the rules here
+
+             CASE('GROUNDHEATEXCHANGER:SYSTEM')
+                 CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                 IF (CurArgs > 10) THEN
+                   nodiff=.false.
+                   OutArgs(1:10)=InArgs(1:10)
+                   OutArgs(11) = ''
+                   OutArgs(12) = ''
+                   OutArgs(13:CurArgs+1)=InArgs(11:CurArgs)
+                   CurArgs = CurArgs + 1
+                 END IF
 
               ! If your original object starts with H, insert the rules here
 
