@@ -138,7 +138,7 @@ void GetOutsideEnergySourcesInput(EnergyPlusData &state)
     //       AUTHOR         Dan Fisher
     //       DATE WRITTEN   April 1998
     //       MODIFIED       May 2010; Edwin Lee; Linda Lawrie (consolidation)
-    //                      June 2022, Dareum Name, Add DistrictHeatingSteam
+    //                      June 2022, Dareum Nam, Add DistrictHeatingSteam
     //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
@@ -350,7 +350,7 @@ void OutsideEnergySourceSpecs::size(EnergyPlusData &state)
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Daeho Kang
     //       DATE WRITTEN   April 2014
-    //       MODIFIED       June 2021, Dareum Name, Add DistrictHeatingSteam
+    //       MODIFIED       June 2021, Dareum Nam, Add DistrictHeatingSteam
     //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
@@ -433,7 +433,7 @@ void OutsideEnergySourceSpecs::calculate(EnergyPlusData &state, bool runFlag, Re
     //       AUTHOR         Dan Fisher
     //       DATE WRITTEN   July 1998
     //       MODIFIED       May 2010; Edwin Lee; Linda Lawrie (consolidation)
-    //                      June 2021, Dareum Name, Add DistrictHeatingSteam
+    //                      June 2021, Dareum Nam, Add DistrictHeatingSteam
     //       RE-ENGINEERED  Sept 2010, Brent Griffith, plant rewrite
 
     // SUBROUTINE PARAMETER DEFINITIONS:

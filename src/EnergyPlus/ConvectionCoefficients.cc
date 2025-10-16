@@ -6464,7 +6464,7 @@ void CalcASTMC1340ConvCoeff(EnergyPlusData &state,
 Real64 CalcASTMC1340ConvCoeff(EnergyPlusData &state, int const SurfNum, Real64 const Tsurf, Real64 const Tair, Real64 const Vair, Real64 const Tilt)
 {
     // FUNCTION INFORMATION:
-    //       AUTHOR         Dareum Name
+    //       AUTHOR         Dareum Nam
     //       DATE WRITTEN   Feb 2021
 
     // PURPOSE OF THIS FUNCTION:
