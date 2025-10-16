@@ -480,6 +480,17 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
 
               ! If your original object starts with G, insert the rules here
 
+             CASE('GROUNDHEATEXCHANGER:SYSTEM')
+                 CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                 IF (CurArgs > 10) THEN
+                   nodiff=.false.
+                   OutArgs(1:10)=InArgs(1:10)
+                   OutArgs(11) = ''
+                   OutArgs(12) = ''
+                   OutArgs(13:CurArgs+1)=InArgs(11:CurArgs)
+                   CurArgs = CurArgs + 1
+                 END IF
+
               ! If your original object starts with H, insert the rules here
 
               ! If your original object starts with I, insert the rules here
