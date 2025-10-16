@@ -21650,6 +21650,7 @@ ComfortViewFactorAngles,
   A2 , \field Surface 1 Name
        \type object-list
        \object-list AllHeatTranSurfNames
+       \begin-extensible
   N1 , \field Angle Factor 1
        \type real
        \minimum 0.0
@@ -34627,8 +34628,8 @@ Sizing:Zone,
       \note Only No Latent Load or a zone humidistat is present.
       \note A default of 50.0 will be used if no schedule is provided and
       \note no humidistat is associated with this zone.
-      \type alpha
-      \units percent
+      \type object-list
+      \object-list ScheduleNames
   A14,\field Zone Humidistat Humidification Set Point Schedule Name
       \note Enter the zone relative humidity schedule used for zone latent
       \note heating calculations.
@@ -34637,8 +34638,8 @@ Sizing:Zone,
       \note Only No Latent Load or a zone humidistat is present.
       \note A default of 50.0 will be used if no schedule is provided and
       \note no humidistat is associated with this zone.
-      \type alpha
-      \units percent
+      \type object-list
+      \object-list ScheduleNames
   A15,\field Type of Space Sum to Use
       \note NonCoincident is available only if Do Space Heat Balance for Sizing=Yes in ZoneAirHeatBalanceAlgorithm.
       \type choice
@@ -36013,7 +36014,7 @@ ZoneHVAC:IdealLoadsAirSystem,
        \key DistrictCooling
        \key DistrictHeatingWater
        \key DistrictHeatingSteam
-       \Default DistrictHeatingWater
+       \default DistrictHeatingWater
   A20, \field Cooling Fuel Efficiency Schedule Name
        \type object-list
        \object-list ScheduleNames
@@ -36037,7 +36038,7 @@ ZoneHVAC:IdealLoadsAirSystem,
        \key DistrictCooling
        \key DistrictHeatingWater
        \key DistrictHeatingSteam
-       \Default DistrictCooling
+       \default DistrictCooling
 
 ZoneHVAC:FourPipeFanCoil,
         \memo Four pipe fan coil system. Forced-convection hydronic heating-cooling unit with
@@ -85980,7 +85981,7 @@ EnergyManagementSystem:Actuator,
        \required-field
        \type alpha
        \note This name becomes a variable for use in Erl programs
-       \note no spaces or other special characters (-,+,/,\) allowed in name
+       \note no spaces or other special characters (minus, plus, slashes, etc) allowed in name
   A2 , \field Actuated Component Unique Name
        \required-field
        \type alpha
@@ -94561,13 +94562,13 @@ ElectricLoadCenter:Storage:LiIonNMCBattery,
         \minimum 1
         \required-field
         \note Battery voltage is calculated by multiplying this field
-        \note by the nominal cell voltage (N13, default 3.342V)
+        \note by the nominal cell voltage (Numeric Field 13, default 3.342V)
    N3,  \field Number of Strings in Parallel
         \type integer
         \minimum 1
         \required-field
         \note Capacity (Ah) is determined by multiplying this field
-        \note by the cell capacity (N14, default 3.2 Ah)
+        \note by the cell capacity (Numeric Field 14, default 3.2 Ah)
    N4,  \field Initial Fractional State of Charge
         \type real
         \minimum 0
@@ -98579,6 +98580,7 @@ Table:IndependentVariable,
   N7,  \field Value 2
        \type real
   N8,N9,N10,N11,N12,N13,N14,N15,N16,N17,N18,N19,N20;
+
 Table:IndependentVariableList,
        \memo A sorted list of independent variables used by one or more Table:Lookup
        \memo objects.
