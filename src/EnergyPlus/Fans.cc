@@ -2493,7 +2493,7 @@ Real64 FanComponent::getDesignHeatGain(EnergyPlusData &state,
 
     // METHODOLOGY EMPLOYED:
     // Simple fan:  Qdot,tot = (Vdot*deltaP)/Eff,tot
-    //              Qdot,air = Eff,not*Qdot,tot + (Qdot,tot - Eff,not*Qdot,tot)*Frac,not-in-airstream
+    //              Qdot,air = Eff,mot*Qdot,tot + (Qdot,tot - Eff,mot*Qdot,tot)*Frac,mot-in-airstream
 
     if (type != HVAC::FanType::ComponentModel) {
         Real64 _deltaP = deltaPress; // fan design pressure rise [N/m2]

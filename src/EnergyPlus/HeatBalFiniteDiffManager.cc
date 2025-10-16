@@ -1384,7 +1384,7 @@ namespace HeatBalFiniteDiffManager {
             print(state.files.eio, "{}\n", "! <Construction CondFD>,Construction Name,Index,#Layers,#Nodes,Time Step {hours}");
             print(state.files.eio,
                   "{}\n",
-                  "! <Material CondFD Summary>,Material Name,Thickness {m},#Layer Elements,Layer Delta X,Layer Alpha*delt/Delx**2,Layer Moisture "
+                  "! <Material CondFD Summary>,Material Name,Thickness {m},#Layer Elements,Layer Delta X,Layer Alpha*Delt/Delx**2,Layer Moisture "
                   "Stability");
 
             // HT Algo issue
