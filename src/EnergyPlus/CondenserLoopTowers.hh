@@ -224,7 +224,7 @@ namespace CondenserLoopTowers {
         Real64 MaxFracFlowRate = 0.0; // Maximal ratio of design flow/cell allowable
         // begin water system interactions
         EvapLoss EvapLossMode = EvapLoss::MoistTheory;   // sets how tower water evaporation is modeled
-        Real64 UserEvapLossFactor = 0.0;                 // simple model [%/Dealt C]
+        Real64 UserEvapLossFactor = 0.0;                 // simple model [%/Delt C]
         Real64 DriftLossFraction = 0.008;                // default value is 0.008%
         Blowdown BlowdownMode = Blowdown::Concentration; // sets how tower water blowdown is modeled
         Real64 ConcentrationRatio = 3.0;                 // ratio of solids in blowdown vs make up water

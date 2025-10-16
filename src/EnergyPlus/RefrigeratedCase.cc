@@ -233,8 +233,8 @@ constexpr std::array<std::string_view, (int)CompressorSuctionPressureCtrl::Num> 
 // constexpr std::array<std::string_view, (int)SubcoolerType::Num> subcoolerTypeNames = {"LiquidSuction", "Mechanical"};
 constexpr std::array<std::string_view, (int)SubcoolerType::Num> subcoolerTypeNamesUC = {"LIQUIDSUCTION", "MECHANICAL"};
 
-// constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNames = {"time schedule", "TemperatureTermination"};
-constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNamesUC = {"TIME SCHEDULE", "TEMPERATURETERMINATION"};
+// constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNames = {"TimeSchedule", "TemperatureTermination"};
+constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNamesUC = {"TIMESCHEDULE", "TEMPERATURETERMINATION"};
 
 // constexpr std::array<std::string_view, (int)SecFluidType::Num> secFluidTypeNames = {"FluidAlwaysLiquid", "FluidPhaseChange"};
 constexpr std::array<std::string_view, (int)SecFluidType::Num> secFluidTypeNamesUC = {"FLUIDALWAYSLIQUID", "FLUIDPHASECHANGE"};
@@ -13179,7 +13179,7 @@ void RefrigSystemData::CalculateCompressors(EnergyPlusData &state)
     // SUBROUTINE PARAMETER DEFINITIONS:
     // Following constants approp for R22, R134a, R404a, R507, R410a, R407c, future allow input?
     //   May want to allow input to reflect larger pipes selected to reduce delta P and increase compressor efficiency.
-    // NOTE, these dealt...Pipes reflect the decrease in Pressure in the pipes, NOT thermal transfer through the pipe walls.
+    // NOTE, these DelT...Pipes reflect the decrease in Pressure in the pipes, NOT thermal transfer through the pipe walls.
     Real64 constexpr DelTSuctPipes(1.0);  // Tsat drop corresponding to P drop in suction pipes, ASHRAE 2006 p 2.4 (C)
     Real64 constexpr DelTDischPipes(0.5); // Tsat drop corresponding to P drop in discharge pipes, ASHRAE 2006 p 2.5 (C)
 
@@ -13257,8 +13257,8 @@ void RefrigSystemData::CalculateCompressors(EnergyPlusData &state)
         if (StageIndex == 1) {                                    // Do single-stage or low-stage calculations
             if (this->NumStages == 1) {                           // Single-stage system
                 NeededCapacity = NeededCapacity_base;             // because compressor capacity rated from txv to comp inlet
-                TsatforPdisch = this->TCondense + DelTDischPipes; // need (Psat of (Tcond + dealt corresponding to delP disch Pipes))
-                TsatforPsuct = this->TEvapNeeded - DelTSuctPipes; // need (Psat of (Tevap - dealt corresponding to del P suct Pipes))
+                TsatforPdisch = this->TCondense + DelTDischPipes; // need (Psat of (Tcond + delT corresponding to delP disch Pipes))
+                TsatforPsuct = this->TEvapNeeded - DelTSuctPipes; // need (Psat of (Tevap - delT corresponding to del P suct Pipes))
                 HsatVaporforTevapneeded = this->refrig->getSatEnthalpy(state, this->TEvapNeeded, 1.0, RoutineName);
                 this->HSatLiqCond = this->refrig->getSatEnthalpy(state, this->TCondense, 0.0, RoutineName);
                 this->CpSatLiqCond = this->refrig->getSatSpecificHeat(state, this->TCondense, 0.0, RoutineName);
@@ -13283,8 +13283,8 @@ void RefrigSystemData::CalculateCompressors(EnergyPlusData &state)
                 this->PIntercooler = std::sqrt(PCond * PEvap);
                 this->TIntercooler = this->refrig->getSatTemperature(state, this->PIntercooler, RoutineName);
                 NeededCapacity = NeededCapacity_base;                // because compressor capacity rated from txv to comp inlet
-                TsatforPdisch = this->TIntercooler + DelTDischPipes; // need (Psat of (Tinter + dealt corresponding to delP disch Pipes))
-                TsatforPsuct = this->TEvapNeeded - DelTSuctPipes;    // need (Psat of (Tevap - dealt corresponding to del P suct Pipes))
+                TsatforPdisch = this->TIntercooler + DelTDischPipes; // need (Psat of (Tinter + delT corresponding to delP disch Pipes))
+                TsatforPsuct = this->TEvapNeeded - DelTSuctPipes;    // need (Psat of (Tevap - delT corresponding to del P suct Pipes))
                 HsatVaporforTevapneeded = this->refrig->getSatEnthalpy(state, this->TEvapNeeded, 1.0, RoutineName);
                 this->HSatLiqCond = this->refrig->getSatEnthalpy(state, this->TCondense, 0.0, RoutineName);
                 this->CpSatLiqCond = this->refrig->getSatSpecificHeat(state, this->TCondense, 0.0, RoutineName);
@@ -13528,7 +13528,7 @@ void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
     // Following constants approp for R22, R134a, R404a, R507, R410a, R407c.
     // For the same pressure drop, CO2 has a corresponding temperature penalty 5 to 10 times smaller than
     // ammonia and R-134a (ASHRAE Handbook of Refrigeration, 2010, p. 3.7).  Ignore pressure drop for CO2 calculations.
-    // NOTE, these dealt...Pipes reflect the decrease in Pressure in the pipes, NOT thermal transfer through the pipe walls.
+    // NOTE, these DelT...Pipes reflect the decrease in Pressure in the pipes, NOT thermal transfer through the pipe walls.
 
     Real64 constexpr ErrorTol(0.001); // Iterative solution tolerance
 
@@ -13975,7 +13975,7 @@ void RefrigSystemData::CalculateSubcoolers(EnergyPlusData &state)
         } // NumStages and IntercoolerType
 
         switch (cooler.subcoolerType) {
-            // Mechanical subcoolers required to come first in order to take advantage of dealt
+            // Mechanical subcoolers required to come first in order to take advantage of delT
             //  from lshx. taken care of because subcooler ID assigned in that order in input.
         case SubcoolerType::Mechanical: {
             Real64 mechSCLoad = this->RefMassFlowtoLoads * CpLiquid * (TLiqInActualLocal - ControlTLiqOut);

@@ -2657,7 +2657,7 @@ void filmg(EnergyPlusData &state,
     //   cp    specific heat @ mean temperature [J/g*K]
     //   pr    gap gas Prandtl number
     //   tmean     average film temperature
-    //   dealt  temperature difference
+    //   delt  temperature difference
 
     // Using
     // Argument array dimensioning

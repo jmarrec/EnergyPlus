@@ -1106,7 +1106,7 @@ void ConstructionProps::calculateExponentialMatrix()
     //       RE-ENGINEERED  June 1996, RKS; Nov 1999, LKL;
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine computes the exponential matrix exp(AMat*dealt) for
+    // This subroutine computes the exponential matrix exp(AMat*delt) for
     // use in the state space method for the calculation of CTFs.
 
     // METHODOLOGY EMPLOYED:
@@ -1151,11 +1151,11 @@ void ConstructionProps::calculateExponentialMatrix()
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     Real64 AMatRowNorm;    // Row norm for AMat
     Real64 AMatRowNormMax; // Largest row norm for AMat
-    Array2D<Real64> AMat1; // AMat factored by (dealt/2^k)
+    Array2D<Real64> AMat1; // AMat factored by (delt/2^k)
     Array2D<Real64> AMato; // AMat raised to the previous power (power of AMat1-1)
     Array2D<Real64> AMatN; // Current value of AMat raised to power n (n = 1,2...)
     Real64 CheckVal;       // Used to avoid possible overflow from Double->REAL(r64)->Integer
-    Real64 fact;           // Intermediate calculation variable (dealt/2^k)
+    Real64 fact;           // Intermediate calculation variable (delt/2^k)
     int i;                 // Loop counter
     int ic;                // Loop counter
     int ict;               // Loop counter
@@ -1210,7 +1210,7 @@ void ConstructionProps::calculateExponentialMatrix()
 
     k = int(std::log(AMatRowNormMax) / std::log(2.0)) + 1; // Autodesk:Num Handle AMatRowNormMax=0
 
-    // Step 3, page 128:  Divide (AMat*dealt) by 2^k.  This section of code
+    // Step 3, page 128:  Divide (AMat*delt) by 2^k.  This section of code
     // takes advantage of the fact that AMat is tridiagonal.  Thus, it
     // only factors the elements of the AMat that are known to be non-zero.
 
@@ -1544,7 +1544,7 @@ void ConstructionProps::calculateGammas()
 
     ATemp.deallocate();
     // Compute Gamma2 from equation (2.1.13) in Seem's dissertation which
-    // states that:  Gamma2  =  [AInv] * ([Gamma1]/dealt - [BMat])
+    // states that:  Gamma2  =  [AInv] * ([Gamma1]/delt - [BMat])
     // again noting that BMat contains only the non-zero values of B.
     Gamma2 = 0.0;
 
