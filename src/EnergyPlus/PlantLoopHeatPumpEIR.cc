@@ -2580,6 +2580,20 @@ void EIRPlantLoopHeatPump::oneTimeInit(EnergyPlusData &state)
             errFlag = true;
         }
 
+        if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating ||
+            this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
+            if (state.dataPlnt->PlantLoop(this->loadSidePlantLoc.loopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::None) {
+                ShowSevereError(state,
+                                format("{}: Missing value for input field \"Water Loop Type\" in Plant Loop = {}. It's required for {} name = \"{}\"",
+                                       routineName,
+                                       state.dataPlnt->PlantLoop(this->loadSidePlantLoc.loopNum).Name,
+                                       "HeatPump:AirToWater",
+                                       this->name));
+                ShowContinueError(state, "The load and source sides need to be on different loops.");
+                errFlag = true;
+            }
+        }
+
         thisErrFlag = false;
         if (this->waterSource) {
             PlantUtilities::ScanPlantLoopsForObject(
