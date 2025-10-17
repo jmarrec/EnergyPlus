@@ -11166,7 +11166,7 @@
 
   Coil:Cooling:WaterToAirHeatPump:EquationFit,
     Heat Pump Cooling Mode AirLoop DataCenter Basement,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     AirLoop DataCenter Basement Water to Air Heat Pump Source Side1 Inlet Node,  !- Water Inlet Node Name
     AirLoop DataCenter Basement Water to Air Heat Pump Source Side1 Outlet Node,  !- Water Outlet Node Name
     AirLoop DataCenter Basement Supply Fan Outlet,  !- Air Inlet Node Name
@@ -11176,9 +11176,9 @@
     autosize,                !- Gross Rated Total Cooling Capacity {W}
     autosize,                !- Gross Rated Sensible Cooling Capacity {W}
     3.878739046,             !- Gross Rated Cooling COP {W/W}
-    30.0,                   !- Rated Entering Water Temperature {C}
-    27.0,                   !- Rated Entering Air Dry-Bulb Temperature {C}
-    19.0,                   !- Rated Entering Air Wet-Bulb Temperature {C}
+    30.0,                    !- Rated Entering Water Temperature {C}
+    27.0,                    !- Rated Entering Air Dry-Bulb Temperature {C}
+    19.0,                    !- Rated Entering Air Wet-Bulb Temperature {C}
     WAHPCoolCapCurveTot 1,   !- Total Cooling Capacity Curve Name
     WAHPCoolCapCurveSens 1,  !- Sensible Cooling Capacity Curve Name
     WAHPCoolPowCurve 1,      !- Cooling Power Consumption Curve Name
@@ -11191,7 +11191,7 @@
 
   Coil:Cooling:WaterToAirHeatPump:EquationFit,
     Heat Pump Cooling Mode AirLoop DataCenter bot,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     AirLoop DataCenter bot Water to Air Heat Pump Source Side1 Inlet Node,  !- Water Inlet Node Name
     AirLoop DataCenter bot Water to Air Heat Pump Source Side1 Outlet Node,  !- Water Outlet Node Name
     AirLoop DataCenter bot Supply Fan Outlet,  !- Air Inlet Node Name
@@ -11201,9 +11201,9 @@
     autosize,                !- Gross Rated Total Cooling Capacity {W}
     autosize,                !- Gross Rated Sensible Cooling Capacity {W}
     4.005260634,             !- Gross Rated Cooling COP {W/W}
-    30.0,                   !- Rated Entering Water Temperature {C}
-    27.0,                   !- Rated Entering Air Dry-Bulb Temperature {C}
-    19.0,                   !- Rated Entering Air Wet-Bulb Temperature {C}
+    30.0,                    !- Rated Entering Water Temperature {C}
+    27.0,                    !- Rated Entering Air Dry-Bulb Temperature {C}
+    19.0,                    !- Rated Entering Air Wet-Bulb Temperature {C}
     WAHPCoolCapCurveTot 2,   !- Total Cooling Capacity Curve Name
     WAHPCoolCapCurveSens 2,  !- Sensible Cooling Capacity Curve Name
     WAHPCoolPowCurve 2,      !- Cooling Power Consumption Curve Name
@@ -11216,7 +11216,7 @@
 
   Coil:Cooling:WaterToAirHeatPump:EquationFit,
     Heat Pump Cooling Mode AirLoop DataCenter mid,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     AirLoop DataCenter mid Water to Air Heat Pump Source Side1 Inlet Node,  !- Water Inlet Node Name
     AirLoop DataCenter mid Water to Air Heat Pump Source Side1 Outlet Node,  !- Water Outlet Node Name
     AirLoop DataCenter mid Supply Fan Outlet,  !- Air Inlet Node Name
@@ -11226,9 +11226,9 @@
     autosize,                !- Gross Rated Total Cooling Capacity {W}
     autosize,                !- Gross Rated Sensible Cooling Capacity {W}
     4.005260634,             !- Gross Rated Cooling COP {W/W}
-    30.0,                   !- Rated Entering Water Temperature {C}
-    27.0,                   !- Rated Entering Air Dry-Bulb Temperature {C}
-    19.0,                   !- Rated Entering Air Wet-Bulb Temperature {C}
+    30.0,                    !- Rated Entering Water Temperature {C}
+    27.0,                    !- Rated Entering Air Dry-Bulb Temperature {C}
+    19.0,                    !- Rated Entering Air Wet-Bulb Temperature {C}
     WAHPCoolCapCurveTot 3,   !- Total Cooling Capacity Curve Name
     WAHPCoolCapCurveSens 3,  !- Sensible Cooling Capacity Curve Name
     WAHPCoolPowCurve 3,      !- Cooling Power Consumption Curve Name
@@ -11241,7 +11241,7 @@
 
   Coil:Cooling:WaterToAirHeatPump:EquationFit,
     Heat Pump Cooling Mode AirLoop DataCenter top,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     AirLoop DataCenter top Water to Air Heat Pump Source Side1 Inlet Node,  !- Water Inlet Node Name
     AirLoop DataCenter top Water to Air Heat Pump Source Side1 Outlet Node,  !- Water Outlet Node Name
     AirLoop DataCenter top Supply Fan Outlet,  !- Air Inlet Node Name
@@ -11251,9 +11251,9 @@
     autosize,                !- Gross Rated Total Cooling Capacity {W}
     autosize,                !- Gross Rated Sensible Cooling Capacity {W}
     4.005260634,             !- Gross Rated Cooling COP {W/W}
-    30.0,                   !- Rated Entering Water Temperature {C}
-    27.0,                   !- Rated Entering Air Dry-Bulb Temperature {C}
-    19.0,                   !- Rated Entering Air Wet-Bulb Temperature {C}
+    30.0,                    !- Rated Entering Water Temperature {C}
+    27.0,                    !- Rated Entering Air Dry-Bulb Temperature {C}
+    19.0,                    !- Rated Entering Air Wet-Bulb Temperature {C}
     WAHPCoolCapCurveTot 4,   !- Total Cooling Capacity Curve Name
     WAHPCoolCapCurveSens 4,  !- Sensible Cooling Capacity Curve Name
     WAHPCoolPowCurve 4,      !- Cooling Power Consumption Curve Name
@@ -11263,11 +11263,12 @@
     2.5,                     !- Maximum Cycling Rate {cycles/hr}
     60,                      !- Latent Capacity Time Constant {s}
     60;                      !- Fan Delay Time {s}
+
 !-   ===========  ALL OBJECTS IN CLASS: COIL:HEATING:WATERTOAIRHEATPUMP:EQUATIONFIT ===========
 
   Coil:Heating:WaterToAirHeatPump:EquationFit,
     Heat Pump HEATING Mode AirLoop DataCenter Basement,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     AirLoop DataCenter Basement Water to Air Heat Pump Source Side2 Inlet Node,  !- Water Inlet Node Name
     AirLoop DataCenter Basement Water to Air Heat Pump Source Side2 Outlet Node,  !- Water Outlet Node Name
     Cooling Coil Air Outlet Node AirLoop DataCenter Basement,  !- Air Inlet Node Name
@@ -11280,12 +11281,12 @@
     20.0,                    !- Rated Entering Air Dry-Bulb Temperature {C}
     1.0,                     !- Ratio of Rated Heating Capacity to Rated Cooling Capacity
     WAHPHeatCapCurve 1,      !- Heating Capacity Curve Name
-    WAHPHeatPowCurve 1,            !- Heating Power Consumption Curve Name
+    WAHPHeatPowCurve 1,      !- Heating Power Consumption Curve Name
     HPACHEATPLFFPLR;         !- Part Load Fraction Correlation Curve Name
 
   Coil:Heating:WaterToAirHeatPump:EquationFit,
     Heat Pump HEATING Mode AirLoop DataCenter bot,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     AirLoop DataCenter bot Water to Air Heat Pump Source Side2 Inlet Node,  !- Water Inlet Node Name
     AirLoop DataCenter bot Water to Air Heat Pump Source Side2 Outlet Node,  !- Water Outlet Node Name
     Cooling Coil Air Outlet Node AirLoop DataCenter bot,  !- Air Inlet Node Name
@@ -11298,12 +11299,12 @@
     20.0,                    !- Rated Entering Air Dry-Bulb Temperature {C}
     1.0,                     !- Ratio of Rated Heating Capacity to Rated Cooling Capacity
     WAHPHeatCapCurve 2,      !- Heating Capacity Curve Name
-    WAHPHeatPowCurve 2,            !- Heating Power Consumption Curve Name
+    WAHPHeatPowCurve 2,      !- Heating Power Consumption Curve Name
     HPACHEATPLFFPLR;         !- Part Load Fraction Correlation Curve Name
 
   Coil:Heating:WaterToAirHeatPump:EquationFit,
     Heat Pump HEATING Mode AirLoop DataCenter mid,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     AirLoop DataCenter mid Water to Air Heat Pump Source Side2 Inlet Node,  !- Water Inlet Node Name
     AirLoop DataCenter mid Water to Air Heat Pump Source Side2 Outlet Node,  !- Water Outlet Node Name
     Cooling Coil Air Outlet Node AirLoop DataCenter mid,  !- Air Inlet Node Name
@@ -11316,12 +11317,12 @@
     20.0,                    !- Rated Entering Air Dry-Bulb Temperature {C}
     1.0,                     !- Ratio of Rated Heating Capacity to Rated Cooling Capacity
     WAHPHeatCapCurve 3,      !- Heating Capacity Curve Name
-    WAHPHeatPowCurve 3,            !- Heating Power Consumption Curve Name
+    WAHPHeatPowCurve 3,      !- Heating Power Consumption Curve Name
     HPACHEATPLFFPLR;         !- Part Load Fraction Correlation Curve Name
 
   Coil:Heating:WaterToAirHeatPump:EquationFit,
     Heat Pump HEATING Mode AirLoop DataCenter top,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     AirLoop DataCenter top Water to Air Heat Pump Source Side2 Inlet Node,  !- Water Inlet Node Name
     AirLoop DataCenter top Water to Air Heat Pump Source Side2 Outlet Node,  !- Water Outlet Node Name
     Cooling Coil Air Outlet Node AirLoop DataCenter top,  !- Air Inlet Node Name
@@ -11334,7 +11335,7 @@
     20.0,                    !- Rated Entering Air Dry-Bulb Temperature {C}
     1.0,                     !- Ratio of Rated Heating Capacity to Rated Cooling Capacity
     WAHPHeatCapCurve 4,      !- Heating Capacity Curve Name
-    WAHPHeatPowCurve 4,            !- Heating Power Consumption Curve Name
+    WAHPHeatPowCurve 4,      !- Heating Power Consumption Curve Name
     HPACHEATPLFFPLR;         !- Part Load Fraction Correlation Curve Name
 
 !-   ===========  ALL OBJECTS IN CLASS: HUMIDIFIER:STEAM:ELECTRIC ===========

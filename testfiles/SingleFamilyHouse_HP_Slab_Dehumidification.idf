@@ -3764,7 +3764,14 @@
     ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
     10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
     ReverseCycle,            !- Defrost Strategy
-    OnDemand;                !- Defrost Control
+    OnDemand,                !- Defrost Control
+    ,                        !- Defrost Time Period Fraction
+    ,                        !- Resistive Defrost Heater Capacity {W}
+    ,                        !- Region number for calculating HSPF
+    ,                        !- Evaporator Air Inlet Node Name
+    ,                        !- Zone Name for Evaporator Placement
+    ,                        !- Secondary Coil Air Flow Rate {m3/s}
+    ;                        !- Secondary Coil Fan Flow Scaling Factor {m3/s}
 
 !-   ===========  ALL OBJECTS IN CLASS: COIL:WATERHEATING:AIRTOWATERHEATPUMP:WRAPPED ===========
 

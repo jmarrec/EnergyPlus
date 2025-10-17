@@ -195,17 +195,17 @@
     CoolSysPrimary Supply Outlet Node;  !- Component 1 Outlet Node Name
 
   ThermalStorage:HotWater:Stratified,
-    Hot Water Storage Tank 1,  !- Name
+    Hot Water Storage Tank 1,!- Name
     50.0,                    !- Tank Volume {m3}
     8.0,                     !- Tank Height {m}
     VerticalCylinder,        !- Tank Shape
     ,                        !- Tank Perimeter {m}
-    CW Tank Temp Top Schedule,   !- Top Setpoint Temperature Schedule Name
-    CW Tank Temp Bottom Schedule,   !- Bottom Setpoint Temperature Schedule Name
+    CW Tank Temp Top Schedule,  !- Top Setpoint Temperature Schedule Name
+    CW Tank Temp Bottom Schedule,  !- Bottom Setpoint Temperature Schedule Name
     2.5,                     !- Deadband Temperature Difference {deltaC}
     8.0,                     !- Top Temperature Sensor Height {m}
     1.0,                     !- Bottom Temperature Sensor Height {m}
-    82.0,                     !- Maximum Temperature Limit {C}
+    82.0,                    !- Maximum Temperature Limit {C}
     50000,                   !- Nominal Heating Capacity {W}
     Zone,                    !- Ambient Temperature Indicator
     ,                        !- Ambient Temperature Schedule Name
@@ -222,7 +222,7 @@
     autosize,                !- Use Side Design Flow Rate {m3/s}
     ,                        !- Source Side Inlet Node Name
     ,                        !- Source Side Outlet Node Name
-    ,                        !- Use Side Flow Direction Schedule
+    ,                        !- Source Side Flow Direction Schedule
     0.9,                     !- Source Side Heat Transfer Effectiveness
     TES Charge Schedule,     !- Source Side Availability Schedule Name
     0.15,                    !- Source Side Inlet Height {m}
@@ -5597,3 +5597,4 @@
     ClimaticDataSummary,     !- Report 4 Name
     EquipmentSummary,        !- Report 5 Name
     EnvelopeSummary;         !- Report 6 Name
+

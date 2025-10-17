@@ -5319,7 +5319,7 @@
     Loop,                    !- Component Override Cooling Control Temperature Mode
     1;                       !- Sizing Factor
 
-ThermalStorage:PCM,
+  ThermalStorage:PCM,
     PCM Tank,                !- Name
     ALWAYS_ON,               !- Availability Schedule Name
     MICROCHP SENERTECH Water Inlet Node,  !- Plant Side Inlet Node Name

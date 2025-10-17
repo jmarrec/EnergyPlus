@@ -408,12 +408,12 @@
     8.0,                     !- Tank Height {m}
     VerticalCylinder,        !- Tank Shape
     ,                        !- Tank Perimeter {m}
-    CW Tank Temp Top Schedule,   !- Top Setpoint Temperature Schedule Name
-    CW Tank Temp Bottom Schedule,   !- Bottom Setpoint Temperature Schedule Name
+    CW Tank Temp Top Schedule,  !- Top Setpoint Temperature Schedule Name
+    CW Tank Temp Bottom Schedule,  !- Bottom Setpoint Temperature Schedule Name
     2.5,                     !- Deadband Temperature Difference {deltaC}
     8.0,                     !- Top Temperature Sensor Height {m}
     1.0,                     !- Bottom Temperature Sensor Height {m}
-    82.0,                     !- Maximum Temperature Limit {C}
+    82.0,                    !- Maximum Temperature Limit {C}
     0.0,                     !- Nominal Heating Capacity {W}
     Outdoors,                !- Ambient Temperature Indicator
     ,                        !- Ambient Temperature Schedule Name
@@ -430,7 +430,7 @@
     autosize,                !- Use Side Design Flow Rate {m3/s}
     Tank Source Inlet Node,  !- Source Side Inlet Node Name
     Tank Source Outlet Node, !- Source Side Outlet Node Name
-    ,                        !- Use Side Flow Direction Schedule
+    ,                        !- Source Side Flow Direction Schedule
     0.9,                     !- Source Side Heat Transfer Effectiveness
     TES Charge Schedule,     !- Source Side Availability Schedule Name
     7.85,                    !- Source Side Inlet Height {m}

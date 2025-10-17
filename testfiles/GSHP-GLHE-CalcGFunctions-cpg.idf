@@ -667,7 +667,7 @@
 
   Coil:Cooling:WaterToAirHeatPump:EquationFit,
     Main Floor WAHP Cooling Coil,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     Main Floor WAHP Cooling Water Inlet Node,  !- Water Inlet Node Name
     Main Floor WAHP Cooling Water Outlet Node,  !- Water Outlet Node Name
     Main Floor WAHP Mixed Air Outlet,  !- Air Inlet Node Name
@@ -689,13 +689,14 @@
     2.5,                     !- Maximum Cycling Rate {cycles/hr}
     60,                      !- Latent Capacity Time Constant {s}
     60;                      !- Fan Delay Time {s}
+
 !-   ===========  ALL OBJECTS IN CLASS: COIL:HEATING:WATERTOAIRHEATPUMP:EQUATIONFIT ===========
 ! Performance coefficients assume rated Capacity and COP are at:
 ! 20.0C (68F) entering air dry-bulb temperature and 0.0C (32F) entering water temperature
 
   Coil:Heating:WaterToAirHeatPump:EquationFit,
     Main Floor WAHP Heating Coil,  !- Name
-    ,                              !- Availability Schedule Name
+    ,                        !- Availability Schedule Name
     Main Floor WAHP Heating Water Inlet Node,  !- Water Inlet Node Name
     Main Floor WAHP Heating Water Outlet Node,  !- Water Outlet Node Name
     Main Floor WAHP Cooling Coil Outlet,  !- Air Inlet Node Name

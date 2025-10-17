@@ -4852,79 +4852,79 @@
 
   Coil:Cooling:DX:VariableSpeed,
     Sys 4 Heat Pump Air Source Cooling Coil,  !- Name
-    ,                        !- Indoor Air Inlet Node Name
-    Sys 4 Heat Pump Air Source Supply Fan Outlet,  !- Indoor Air Outlet Node Name
-    Sys 4 Heat Pump Air Source Cooling Coil Outlet,  !- Number of Speeds {dimensionless}
+    ,                        !- Availability Schedule Name
+    Sys 4 Heat Pump Air Source Supply Fan Outlet,  !- Indoor Air Inlet Node Name
+    Sys 4 Heat Pump Air Source Cooling Coil Outlet,  !- Indoor Air Outlet Node Name
+    4,                       !- Number of Speeds {dimensionless}
     4,                       !- Nominal Speed Level {dimensionless}
-    4,                       !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {W}
+    ,                        !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {W}
     ,                        !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}
     ,                        !- Nominal Time for Condensate to Begin Leaving the Coil {s}
     ,                        !- Initial Moisture Evaporation Rate Divided by Steady-State AC Latent Capacity {dimensionless}
     ,                        !- Maximum Cycling Rate {cycles/hr}
     ,                        !- Latent Capacity Time Constant {s}
     ,                        !- Fan Delay Time {s}
-    ,                        !- Energy Part Load Fraction Curve Name
-    Sys 4 Heat Pump Air Source Heat Coil PLF,  !- Condenser Air Inlet Node Name
-    ,                        !- Condenser Type
-    AirCooled,               !- Evaporative Condenser Pump Rated Power Consumption {W}
+    Sys 4 Heat Pump Air Source Heat Coil PLF,  !- Energy Part Load Fraction Curve Name
+    ,                        !- Condenser Air Inlet Node Name
+    AirCooled,               !- Condenser Type
+    ,                        !- Evaporative Condenser Pump Rated Power Consumption {W}
     ,                        !- Crankcase Heater Capacity {W}
     ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-    ,                        !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
-    10,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
-    -25,                     !- Supply Water Storage Tank Name
+    10,                      !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
+    -25,                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
+    ,                        !- Supply Water Storage Tank Name
     ,                        !- Condensate Collection Water Storage Tank Name
     ,                        !- Basin Heater Capacity {W/K}
-    ,                        !- Basin Heater Setpoint Temperature {C}
-    2,                       !- Basin Heater Operating Schedule Name
-    ,                        !- Speed 1 Reference Unit Gross Rated Total Cooling Capacity {W}
-    1302.02679,              !- Speed 1 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
-    0.70108,                 !- Speed 1 Reference Unit Gross Rated Cooling COP {W/W}
-    3,                       !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
-    0.0524326,               !- 2017 Speed 1 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    2,                       !- Basin Heater Setpoint Temperature {C}
+    ,                        !- Basin Heater Operating Schedule Name
+    1302.02679,              !- Speed 1 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.70108,                 !- Speed 1 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    3,                       !- Speed 1 Reference Unit Gross Rated Cooling COP {W/W}
+    0.0524326,               !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
+    ,                        !- 2017 Speed 1 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- 2023 Speed 1 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- Speed 1 Reference Unit Rated Condenser Air Flow Rate {m3/s}
     ,                        !- Speed 1 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
-    ,                        !- Speed 1 Total Cooling Capacity Function of Temperature Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil Cap-FT,  !- Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil Cap-FF,  !- Speed 1 Energy Input Ratio Function of Temperature Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil EIR-FT,  !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil EIR-FF,  !- Speed 2 Reference Unit Gross Rated Total Cooling Capacity {W}
-    2604.05358,              !- Speed 2 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
-    0.70108,                 !- Speed 2 Reference Unit Gross Rated Cooling COP {W/W}
-    3,                       !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
-    0.10487,                 !- 2017 Speed 2 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    Sys 4 Heat Pump Air Source Cool Coil Cap-FT,  !- Speed 1 Total Cooling Capacity Function of Temperature Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil Cap-FF,  !- Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil EIR-FT,  !- Speed 1 Energy Input Ratio Function of Temperature Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil EIR-FF,  !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
+    2604.05358,              !- Speed 2 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.70108,                 !- Speed 2 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    3,                       !- Speed 2 Reference Unit Gross Rated Cooling COP {W/W}
+    0.10487,                 !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
+    ,                        !- 2017 Speed 2 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- 2023 Speed 2 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- Speed 2 Reference Unit Rated Condenser Air Flow Rate {m3/s}
     ,                        !- Speed 2 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
-    ,                        !- Speed 2 Total Cooling Capacity Function of Temperature Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil Cap-FT,  !- Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil Cap-FF,  !- Speed 2 Energy Input Ratio Function of Temperature Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil EIR-FT,  !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil EIR-FF,  !- Speed 3 Reference Unit Gross Rated Total Cooling Capacity {W}
-    3906.08036,              !- Speed 3 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
-    0.70108,                 !- Speed 3 Reference Unit Gross Rated Cooling COP {W/W}
-    3,                       !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}
-    0.1573,                  !- 2017 Speed 3 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    Sys 4 Heat Pump Air Source Cool Coil Cap-FT,  !- Speed 2 Total Cooling Capacity Function of Temperature Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil Cap-FF,  !- Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil EIR-FT,  !- Speed 2 Energy Input Ratio Function of Temperature Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil EIR-FF,  !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
+    3906.08036,              !- Speed 3 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.70108,                 !- Speed 3 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    3,                       !- Speed 3 Reference Unit Gross Rated Cooling COP {W/W}
+    0.1573,                  !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}
+    ,                        !- 2017 Speed 3 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- 2023 Speed 3 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- Speed 3 Reference Unit Rated Condenser Air Flow Rate {m3/s}
     ,                        !- Speed 3 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
-    ,                        !- Speed 3 Total Cooling Capacity Function of Temperature Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil Cap-FT,  !- Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil Cap-FF,  !- Speed 3 Energy Input Ratio Function of Temperature Curve Name
-    Sys 3 Heat Pump Air Source Cool Coil EIR-FT,  !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil EIR-FF,  !- Speed 4 Reference Unit Gross Rated Total Cooling Capacity {W}
-    5208.10715,              !- Speed 4 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
-    0.70108,                 !- Speed 4 Reference Unit Gross Rated Cooling COP {W/W}
-    3,                       !- Speed 4 Reference Unit Rated Air Flow Rate {m3/s}
-    0.20973,                 !- 2017 Speed 4 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    Sys 4 Heat Pump Air Source Cool Coil Cap-FT,  !- Speed 3 Total Cooling Capacity Function of Temperature Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil Cap-FF,  !- Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Sys 3 Heat Pump Air Source Cool Coil EIR-FT,  !- Speed 3 Energy Input Ratio Function of Temperature Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil EIR-FF,  !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
+    5208.10715,              !- Speed 4 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.70108,                 !- Speed 4 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    3,                       !- Speed 4 Reference Unit Gross Rated Cooling COP {W/W}
+    0.20973,                 !- Speed 4 Reference Unit Rated Air Flow Rate {m3/s}
+    ,                        !- 2017 Speed 4 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- 2023 Speed 4 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- Speed 4 Reference Unit Rated Condenser Air Flow Rate {m3/s}
     ,                        !- Speed 4 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
-    ,                        !- Speed 4 Total Cooling Capacity Function of Temperature Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil Cap-FT,  !- Speed 4 Total Cooling Capacity Function of Air Flow Fraction Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil Cap-FF,  !- Speed 4 Energy Input Ratio Function of Temperature Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil EIR-FT,  !- Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
-    Sys 4 Heat Pump Air Source Cool Coil EIR-FF;  !- Speed 5 Reference Unit Gross Rated Total Cooling Capacity {W}
+    Sys 4 Heat Pump Air Source Cool Coil Cap-FT,  !- Speed 4 Total Cooling Capacity Function of Temperature Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil Cap-FF,  !- Speed 4 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil EIR-FT,  !- Speed 4 Energy Input Ratio Function of Temperature Curve Name
+    Sys 4 Heat Pump Air Source Cool Coil EIR-FF;  !- Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
 
   Output:Variable,Sys 1 Furnace DX Cool Unitary System,Unitary System DX Coil Speed Level,timestep;
 

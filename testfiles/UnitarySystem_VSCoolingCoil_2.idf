@@ -1785,55 +1785,55 @@
 
   Coil:Cooling:DX:VariableSpeed,
     Heat Pump ACDXCoil 1 Cooling Coil,  !- Name
-    ,                        !- Indoor Air Inlet Node Name
-    DX COOLING COIL AIR INLET NODE,  !- Indoor Air Outlet Node Name
-    Heating Coil Air Inlet Node,  !- Number of Speeds {dimensionless}
+    ,                        !- Availability Schedule Name
+    DX COOLING COIL AIR INLET NODE,  !- Indoor Air Inlet Node Name
+    Heating Coil Air Inlet Node,  !- Indoor Air Outlet Node Name
+    2,                       !- Number of Speeds {dimensionless}
     2,                       !- Nominal Speed Level {dimensionless}
-    2,                       !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {W}
-    27219.40,                !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}
-    1.45,                    !- Nominal Time for Condensate to Begin Leaving the Coil {s}
+    27219.40,                !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {W}
+    1.45,                    !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}
+    ,                        !- Nominal Time for Condensate to Begin Leaving the Coil {s}
     ,                        !- Initial Moisture Evaporation Rate Divided by Steady-State AC Latent Capacity {dimensionless}
     ,                        !- Maximum Cycling Rate {cycles/hr}
     ,                        !- Latent Capacity Time Constant {s}
     ,                        !- Fan Delay Time {s}
-    ,                        !- Energy Part Load Fraction Curve Name
-    Heat Pump ACDXCoil 1 Cooling fPLR,  !- Condenser Air Inlet Node Name
+    Heat Pump ACDXCoil 1 Cooling fPLR,  !- Energy Part Load Fraction Curve Name
+    ,                        !- Condenser Air Inlet Node Name
     ,                        !- Condenser Type
     ,                        !- Evaporative Condenser Pump Rated Power Consumption {W}
-    ,                        !- Crankcase Heater Capacity {W}
-    75.00,                   !- Crankcase Heater Capacity Function of Temperature Curve Name
-    ,                        !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
-    10.00,                   !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
+    75.00,                   !- Crankcase Heater Capacity {W}
+    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
+    10.00,                   !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
+    ,                        !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
     ,                        !- Supply Water Storage Tank Name
     ,                        !- Condensate Collection Water Storage Tank Name
     ,                        !- Basin Heater Capacity {W/K}
     ,                        !- Basin Heater Setpoint Temperature {C}
     ,                        !- Basin Heater Operating Schedule Name
-    ,                        !- Speed 1 Reference Unit Gross Rated Total Cooling Capacity {W}
-    19554.1,                 !- Speed 1 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
-    0.730,                   !- Speed 1 Reference Unit Gross Rated Cooling COP {W/W}
-    3.899,                   !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
-    1.0572,                  !- 2017 Speed 1 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    19554.1,                 !- Speed 1 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.730,                   !- Speed 1 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    3.899,                   !- Speed 1 Reference Unit Gross Rated Cooling COP {W/W}
+    1.0572,                  !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
+    ,                        !- 2017 Speed 1 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- 2023 Speed 1 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- Speed 1 Reference Unit Rated Condenser Air Flow Rate {m3/s}
     ,                        !- Speed 1 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
-    ,                        !- Speed 1 Total Cooling Capacity Function of Temperature Curve Name
-    Heat Pump ACDXCoil 1 Cooling CapfT 1,  !- Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
-    Heat Pump ACDXCoil 1 Cooling CapfFF 1,  !- Speed 1 Energy Input Ratio Function of Temperature Curve Name
-    Heat Pump ACDXCoil 1 Cooling EIRfT 1,  !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
-    Heat Pump ACDXCoil 1 Cooling EIRfFF 1,  !- Speed 2 Reference Unit Gross Rated Total Cooling Capacity {W}
-    27219.4,                 !- Speed 2 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
-    0.730,                   !- Speed 2 Reference Unit Gross Rated Cooling COP {W/W}
-    4.105,                   !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
-    1.4523,                  !- 2017 Speed 2 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    Heat Pump ACDXCoil 1 Cooling CapfT 1,  !- Speed 1 Total Cooling Capacity Function of Temperature Curve Name
+    Heat Pump ACDXCoil 1 Cooling CapfFF 1,  !- Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Heat Pump ACDXCoil 1 Cooling EIRfT 1,  !- Speed 1 Energy Input Ratio Function of Temperature Curve Name
+    Heat Pump ACDXCoil 1 Cooling EIRfFF 1,  !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
+    27219.4,                 !- Speed 2 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.730,                   !- Speed 2 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    4.105,                   !- Speed 2 Reference Unit Gross Rated Cooling COP {W/W}
+    1.4523,                  !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
+    ,                        !- 2017 Speed 2 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- 2023 Speed 2 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
     ,                        !- Speed 2 Reference Unit Rated Condenser Air Flow Rate {m3/s}
     ,                        !- Speed 2 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
-    ,                        !- Speed 2 Total Cooling Capacity Function of Temperature Curve Name
-    Heat Pump ACDXCoil 1 Cooling CapfT 2,  !- Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
-    Heat Pump ACDXCoil 1 Cooling CapfFF 2,  !- Speed 2 Energy Input Ratio Function of Temperature Curve Name
-    Heat Pump ACDXCoil 1 Cooling EIRfT 2,  !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
-    Heat Pump ACDXCoil 1 Cooling EIRfFF 2;  !- Speed 3 Reference Unit Gross Rated Total Cooling Capacity {W}
+    Heat Pump ACDXCoil 1 Cooling CapfT 2,  !- Speed 2 Total Cooling Capacity Function of Temperature Curve Name
+    Heat Pump ACDXCoil 1 Cooling CapfFF 2,  !- Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Heat Pump ACDXCoil 1 Cooling EIRfT 2,  !- Speed 2 Energy Input Ratio Function of Temperature Curve Name
+    Heat Pump ACDXCoil 1 Cooling EIRfFF 2;  !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
 
   Curve:Linear,
     Heat Pump ACDXCoil 1 Cooling fPLR,  !- Name
