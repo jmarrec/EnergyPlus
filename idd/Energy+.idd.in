@@ -108219,11 +108219,12 @@ Output:Table:ReportPeriod,
        \memo This object allows the user to generate the resilience tabular reports over a subset of a run period.
        \memo When it is defined, a series of reporting-period-specific resilience summary tables will be generated
        \memo at the end of all tabular reports. Multiple reporting periods may be input.
-   A1, \field Name,
+   A1, \field Name
        \required-field
        \note descriptive name
        \note cannot be blank and must be unique
-   A2, \field Report Name,
+   A2, \field Report Name
+       \type choice
        \key ThermalResilienceSummary
        \key CO2ResilienceSummary
        \key VisualResilienceSummary
