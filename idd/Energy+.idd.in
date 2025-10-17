@@ -27130,7 +27130,7 @@ AirflowNetwork:Distribution:DuctSizing,
  N2 , \field Maximum Airflow Velocity
       \type real
       \units m/s
-      \minimum >0.0
+      \minimum> 0.0
       \maximum 25.0
       \default 5.0
       \note Used only if Duct Sizing Type = MaximumVelocity or PressureLossWithMaximumVelocity.
@@ -27143,7 +27143,7 @@ AirflowNetwork:Distribution:DuctSizing,
  N3 , \field Total Pressure Loss Across Supply Trunk
       \type real
       \units Pa
-      \minimum >0.0
+      \minimum> 0.0
       \note Used only if Duct Sizing Type = PressureLoss or PressureLossWithMaximumVelocity.
       \note When PressureLoss is entered, duct diameter is calculated using Colebrook's equation
       \note When PressureLossWithMaximumVelocity is entered, duct diameter is calculated based on
@@ -27153,19 +27153,19 @@ AirflowNetwork:Distribution:DuctSizing,
  N4 , \field Total Pressure Loss Across Supply Branch
       \type real
       \units Pa
-      \minimum >0.0
+      \minimum> 0.0
       \note Duct diameter is calculated using Colebrook's equation. When there is no solution,
       \note velocity = 5 m/s is used to calculate duct diameter.
  N5 , \field Total Pressure Loss Across Return Trunk
       \type real
       \units Pa
-      \minimum >0.0
+      \minimum> 0.0
       \note Duct diameter is calculated using Colebrook's equation. When there is no solution,
       \note velocity = 5 m/s is used to calculate duct diameter.
  N6 ; \field Total Pressure Loss Across Return Branch
       \type real
       \units Pa
-      \minimum >0.0
+      \minimum> 0.0
       \note Duct diameter is calculated using Colebrook's equation. When there is no solution,
       \note velocity = 5 m/s is used to calculate duct diameter.
 
@@ -83301,7 +83301,7 @@ ThermalStorage:PCM,
   N1 , \field Tank Capacity
        \type real
        \units kg
-       \minimum > 0
+       \minimum> 0
        \autosizable
        \required-field
   N2 , \field Heat Loss Rate
@@ -83311,13 +83311,13 @@ ThermalStorage:PCM,
   N3 , \field Use Side Design Flow Rate
        \type real
        \units m3/s
-       \minimum > 0
+       \minimum> 0
        \autosizable
        \required-field
   N4 ; \field Plant Side Design Flow Rate
        \type real
        \units m3/s
-       \minimum > 0
+       \minimum> 0
        \autosizable
        \required-field
 
