@@ -76105,7 +76105,7 @@ HeatPump:AirToWater:FuelFired:Heating,
        \required-field
        \type object-list
        \object-list BivariateFunctions
-       \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+       \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
        \note which is a biquadratic curve or a lookup table.
   A12, \field Fuel Energy Input Ratio Function of Temperature Curve Name
        \required-field
@@ -76292,7 +76292,7 @@ HeatPump:AirToWater:FuelFired:Cooling,
        \required-field
        \type object-list
        \object-list BivariateFunctions
-       \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+       \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
        \note which is a biquadratic curve or a lookup table.
   A12, \field Fuel Energy Input Ratio Function of Temperature Curve Name
        \required-field
@@ -76621,7 +76621,7 @@ HeatPump:AirToWater,
    A22, \field Normalized Heating Capacity Function of Temperature Curve Name at Speed 1
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A23, \field Heating Energy Input Ratio Function of Temperature Curve Name at Speed 1
         \type object-list
@@ -76646,7 +76646,7 @@ HeatPump:AirToWater,
    A25, \field Normalized Heating Capacity Function of Temperature Curve Name at Speed 2
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A26, \field Heating Energy Input Ratio Function of Temperature Curve Name at Speed 2
         \type object-list
@@ -76671,7 +76671,7 @@ HeatPump:AirToWater,
    A28, \field Normalized Heating Capacity Function of Temperature Curve Name at Speed 3
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A29, \field Heating Energy Input Ratio Function of Temperature Curve Name at Speed 3
         \type object-list
@@ -76696,7 +76696,7 @@ HeatPump:AirToWater,
    A31, \field Normalized Heating Capacity Function of Temperature Curve Name at Speed 4
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A32, \field Heating Energy Input Ratio Function of Temperature Curve Name at Speed 4
         \type object-list
@@ -76721,7 +76721,7 @@ HeatPump:AirToWater,
    A34, \field Normalized Heating Capacity Function of Temperature Curve Name at Speed 5
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A35, \field Heating Energy Input Ratio Function of Temperature Curve Name at Speed 5
         \type object-list
@@ -76750,7 +76750,7 @@ HeatPump:AirToWater,
    A38, \field Normalized Heating Capacity Function of Temperature Curve Name in Booster Mode
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A39, \field Heating Energy Input Ratio Function of Temperature Curve Name in Booster Mode
         \type object-list
@@ -76783,7 +76783,7 @@ HeatPump:AirToWater,
    A41, \field Normalized Cooling Capacity Function of Temperature Curve Name at Speed 1
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A42, \field Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 1
         \type object-list
@@ -76808,7 +76808,7 @@ HeatPump:AirToWater,
    A44, \field Normalized Cooling Capacity Function of Temperature Curve Name at Speed 2
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A45, \field Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 2
         \type object-list
@@ -76833,7 +76833,7 @@ HeatPump:AirToWater,
    A47, \field Normalized Cooling Capacity Function of Temperature Curve Name at Speed 3
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A48, \field Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 3
         \type object-list
@@ -76858,7 +76858,7 @@ HeatPump:AirToWater,
    A50, \field Normalized Cooling Capacity Function of Temperature Curve Name at Speed 4
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A51, \field Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 4
         \type object-list
@@ -76883,7 +76883,7 @@ HeatPump:AirToWater,
    A53, \field Normalized Cooling Capacity Function of Temperature Curve Name at Speed 5
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A54, \field Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 5
         \type object-list
@@ -76912,7 +76912,7 @@ HeatPump:AirToWater,
    A57, \field Normalized Cooling Capacity Function of Temperature Curve Name in Booster Mode
         \type object-list
         \object-list BivariateFunctions
-        \note: CAPFT - Normalized Capacity Function of Temperature Curve Name,
+        \note CAPFT - Normalized Capacity Function of Temperature Curve Name,
         \note which is a biquadratic curve or a lookup table of air and water temperature.
    A58, \field Cooling Energy Input Ratio Function of Temperature Curve Name in Booster Mode
         \type object-list
@@ -108297,8 +108297,8 @@ OutputControl:Table:Style,
        \key InchPoundExceptElectricity
        \default None
    A3; \field Format Numeric Values
-       \memo If No, all digits are shown after the decimal point without any rounding (23.238769213).
-       \memo If Yes, values are rounded for readability (23.24).
+       \note If No, all digits are shown after the decimal point without any rounding (23.238769213).
+       \note If Yes, values are rounded for readability (23.24).
        \type choice
        \key Yes
        \key No
@@ -108903,8 +108903,8 @@ Output:JSON,
        \key InchPoundExceptElectricity
        \default UseOutputControlTableStyle
   A6 ; \field Format Numeric Values for Tabular Data
-       \memo If No, all digits are shown after the decimal point without any rounding (23.238769213).
-       \memo If Yes, values are rounded for readability (23.24).
+       \note If No, all digits are shown after the decimal point without any rounding (23.238769213).
+       \note If Yes, values are rounded for readability (23.24).
        \type choice
        \key Yes
        \key No
@@ -108930,8 +108930,8 @@ Output:SQLite,
        \key InchPoundExceptElectricity
        \default UseOutputControlTableStyle
    A3; \field Format Numeric Values for Tabular Data
-       \memo If No, all digits are shown after the decimal point without any rounding (23.238769213).
-       \memo If Yes, values are rounded for readability (23.24).
+       \note If No, all digits are shown after the decimal point without any rounding (23.238769213).
+       \note If Yes, values are rounded for readability (23.24).
        \type choice
        \key Yes
        \key No
