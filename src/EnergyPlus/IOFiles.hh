@@ -575,6 +575,7 @@ public:
         bool spsz = true;
         bool zsz = true;
         bool ssz = true;
+        bool psz = true;
         bool dxf = true;
         bool bnd = true;
         bool rdd = true;
@@ -620,6 +621,11 @@ public:
     fs::path outputSszCsvFilePath{"eplusssz.csv"};
     fs::path outputSszTabFilePath{"eplusssz.tab"};
     fs::path outputSszTxtFilePath{"eplusssz.txt"};
+
+    InputOutputFile psz{""};
+    fs::path outputPszCsvFilePath{"epluspsz.csv"};
+    fs::path outputPszTabFilePath{"epluspsz.tab"};
+    fs::path outputPszTxtFilePath{"epluspsz.txt"};
 
     InputOutputFile map{""};
     fs::path outputMapCsvFilePath{"eplusmap.csv"};

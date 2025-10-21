@@ -244,6 +244,8 @@ set(SRC
     DisplayRoutines.hh
     DualDuct.cc
     DualDuct.hh
+    DuctLoss.cc
+    DuctLoss.hh
     EMSManager.cc
     EMSManager.hh
     EPVector.hh
@@ -465,6 +467,8 @@ set(SRC
     PVWatts.hh
     PackagedThermalStorageCoil.cc
     PackagedThermalStorageCoil.hh
+	PCMThermalStorage.cc
+	PCMThermalStorage.hh
     PhaseChangeModeling/HysteresisModel.cc
     PhaseChangeModeling/HysteresisModel.hh
     PhotovoltaicThermalCollectors.cc
