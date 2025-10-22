@@ -405,6 +405,74 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_SingleSpeed_DesignEnteringWaterIsAutos
 
     EXPECT_NO_THROW(EvapFluidCoolerSpecs::factory(*state, DataPlant::PlantEquipmentType::EvapFluidCooler_SingleSpd, "BIG EVAPORATIVEFLUIDCOOLER"));
     compare_err_stream("");
+
+    EvapFluidCoolerSpecs *ptr =
+        EvapFluidCoolerSpecs::factory(*state, DataPlant::PlantEquipmentType::EvapFluidCooler_SingleSpd, "BIG EVAPORATIVEFLUIDCOOLER");
+
+    EXPECT_EQ(DataSizing::AutoSize, ptr->DesignEnteringWaterTemp);
+    EXPECT_TRUE(ptr->DesignEnteringWaterTempWasAutoSized);
+
+    state->dataPlnt->PlantLoop.allocate(1);
+    auto &plantLoop = state->dataPlnt->PlantLoop(1);
+    plantLoop.PlantSizNum = 0;
+    plantLoop.LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    plantLoop.LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    plantLoop.FluidName = "WATER";
+    plantLoop.glycol = Fluid::GetWater(*state);
+
+    ptr->plantLoc.loopNum = 1;
+    ptr->plantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
+    ptr->plantLoc.branchNum = 1;
+    ptr->plantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, ptr->plantLoc);
+
+    // Necessary to trigger the crash about the Missing Sizing:Plant
+    state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
+    state->dataPlnt->PlantFinalSizesOkayToReport = true;
+
+    EXPECT_THROW(ptr->SizeEvapFluidCooler(*state), EnergyPlus::FatalError);
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** Autosizing error for evaporative fluid cooler object = BIG EVAPORATIVEFLUIDCOOLER",
+        "   **  Fatal  ** Autosizing of evaporative fluid cooler Design Entering Water Temperature requires a loop Sizing:Plant object.",
+    })));
+
+    EXPECT_FALSE(ptr->DesignWaterFlowRateWasAutoSized);
+    EXPECT_FALSE(ptr->HighSpeedAirFlowRateWasAutoSized);
+    EXPECT_FALSE(ptr->HighSpeedFanPowerWasAutoSized);
+    EXPECT_FALSE(ptr->HighSpeedEvapFluidCoolerUAWasAutoSized);
+    EXPECT_TRUE(ptr->DesignEnteringWaterTempWasAutoSized);
+
+    state->dataSize->PlantSizData.allocate(1);
+    auto &sizingPlant = state->dataSize->PlantSizData(1);
+    plantLoop.PlantSizNum = 1;
+    sizingPlant.ExitTemp = 10.0;
+    sizingPlant.DeltaT = 10.0;
+    // 20.0C, which is below the Entering Air Wet-bulb Temp of 25.6C, so it should throw
+    Real64 expected_ewt = sizingPlant.ExitTemp + sizingPlant.DeltaT;
+    EXPECT_EQ(20.0, expected_ewt);
+
+    EXPECT_THROW(ptr->SizeEvapFluidCooler(*state), EnergyPlus::FatalError);
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** Error when autosizing the Design Entering Water Temperature for Evaporative Fluid Cooler = BIG EVAPORATIVEFLUIDCOOLER.",
+        "   **   ~~~   ** Design Entering Water Temperature (20.00 C) must be greater than design entering air wet-bulb temperature (25.60 C).",
+        "   **   ~~~   ** Check the Sizing:Plant object and the Design Entering Air Wet-bulb Temp input field for the Evaporative Fluid Cooler.",
+        "   **  Fatal  ** Review and revise design input values as appropriate.",
+    })));
+    EXPECT_NE(DataSizing::AutoSize, ptr->DesignEnteringWaterTemp);
+    EXPECT_EQ(expected_ewt, ptr->DesignEnteringWaterTemp);
+
+    compare_eio_stream("");
+
+    sizingPlant.ExitTemp = 30.0;
+    expected_ewt = sizingPlant.ExitTemp + sizingPlant.DeltaT;
+    EXPECT_EQ(40.0, expected_ewt);
+
+    EXPECT_NO_THROW(ptr->SizeEvapFluidCooler(*state));
+    compare_err_stream("");
+    EXPECT_EQ(expected_ewt, ptr->DesignEnteringWaterTemp);
+
+    EXPECT_TRUE(compare_eio_stream_substring("Component Sizing Information, EvaporativeFluidCooler:SingleSpeed, BIG EVAPORATIVEFLUIDCOOLER, "
+                                             "Design Entering Water Temperature [C], 40.00000"));
 }
 
 TEST_F(EnergyPlusFixture, EvapFluidCooler_TwoSpeed_DesignEnteringWaterIsAutosized)
@@ -452,6 +520,77 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_TwoSpeed_DesignEnteringWaterIsAutosize
 
     EXPECT_NO_THROW(EvapFluidCoolerSpecs::factory(*state, DataPlant::PlantEquipmentType::EvapFluidCooler_TwoSpd, "BIG EVAPORATIVEFLUIDCOOLER"));
     compare_err_stream("");
+
+    EvapFluidCoolerSpecs *ptr =
+        EvapFluidCoolerSpecs::factory(*state, DataPlant::PlantEquipmentType::EvapFluidCooler_TwoSpd, "BIG EVAPORATIVEFLUIDCOOLER");
+
+    EXPECT_EQ(DataSizing::AutoSize, ptr->DesignEnteringWaterTemp);
+    EXPECT_TRUE(ptr->DesignEnteringWaterTempWasAutoSized);
+
+    EXPECT_EQ(DataSizing::AutoSize, ptr->DesignEnteringWaterTemp);
+    EXPECT_TRUE(ptr->DesignEnteringWaterTempWasAutoSized);
+
+    state->dataPlnt->PlantLoop.allocate(1);
+    auto &plantLoop = state->dataPlnt->PlantLoop(1);
+    plantLoop.PlantSizNum = 0;
+    plantLoop.LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    plantLoop.LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    plantLoop.FluidName = "WATER";
+    plantLoop.glycol = Fluid::GetWater(*state);
+
+    ptr->plantLoc.loopNum = 1;
+    ptr->plantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
+    ptr->plantLoc.branchNum = 1;
+    ptr->plantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, ptr->plantLoc);
+
+    // Necessary to trigger the crash about the Missing Sizing:Plant
+    state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
+    state->dataPlnt->PlantFinalSizesOkayToReport = true;
+
+    EXPECT_THROW(ptr->SizeEvapFluidCooler(*state), EnergyPlus::FatalError);
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** Autosizing error for evaporative fluid cooler object = BIG EVAPORATIVEFLUIDCOOLER",
+        "   **  Fatal  ** Autosizing of evaporative fluid cooler Design Entering Water Temperature requires a loop Sizing:Plant object.",
+    })));
+
+    EXPECT_FALSE(ptr->DesignWaterFlowRateWasAutoSized);
+    EXPECT_FALSE(ptr->HighSpeedAirFlowRateWasAutoSized);
+    EXPECT_FALSE(ptr->HighSpeedFanPowerWasAutoSized);
+    EXPECT_FALSE(ptr->HighSpeedEvapFluidCoolerUAWasAutoSized);
+    EXPECT_TRUE(ptr->DesignEnteringWaterTempWasAutoSized);
+
+    state->dataSize->PlantSizData.allocate(1);
+    auto &sizingPlant = state->dataSize->PlantSizData(1);
+    plantLoop.PlantSizNum = 1;
+    sizingPlant.ExitTemp = 10.0;
+    sizingPlant.DeltaT = 10.0;
+    // 20.0C, which is below the Entering Air Wet-bulb Temp of 25.6C, so it should throw
+    Real64 expected_ewt = sizingPlant.ExitTemp + sizingPlant.DeltaT;
+    EXPECT_EQ(20.0, expected_ewt);
+
+    EXPECT_THROW(ptr->SizeEvapFluidCooler(*state), EnergyPlus::FatalError);
+    EXPECT_TRUE(compare_err_stream_substring(delimited_string({
+        "   ** Severe  ** Error when autosizing the Design Entering Water Temperature for Evaporative Fluid Cooler = BIG EVAPORATIVEFLUIDCOOLER.",
+        "   **   ~~~   ** Design Entering Water Temperature (20.00 C) must be greater than design entering air wet-bulb temperature (25.60 C).",
+        "   **   ~~~   ** Check the Sizing:Plant object and the Design Entering Air Wet-bulb Temp input field for the Evaporative Fluid Cooler.",
+        "   **  Fatal  ** Review and revise design input values as appropriate.",
+    })));
+    EXPECT_NE(DataSizing::AutoSize, ptr->DesignEnteringWaterTemp);
+    EXPECT_EQ(expected_ewt, ptr->DesignEnteringWaterTemp);
+
+    compare_eio_stream("");
+
+    sizingPlant.ExitTemp = 30.0;
+    expected_ewt = sizingPlant.ExitTemp + sizingPlant.DeltaT;
+    EXPECT_EQ(40.0, expected_ewt);
+
+    EXPECT_NO_THROW(ptr->SizeEvapFluidCooler(*state));
+    compare_err_stream("");
+    EXPECT_EQ(expected_ewt, ptr->DesignEnteringWaterTemp);
+
+    EXPECT_TRUE(compare_eio_stream_substring("Component Sizing Information, EvaporativeFluidCooler:TwoSpeed, BIG EVAPORATIVEFLUIDCOOLER, "
+                                             "Design Entering Water Temperature [C], 40.00000"));
 }
 
 TEST_F(EnergyPlusFixture, EvapFluidCooler_TwoSpeed_UserSpecifiedDesignCapacity_LowSpeed_CanAutocalculate)
@@ -499,5 +638,11 @@ TEST_F(EnergyPlusFixture, EvapFluidCooler_TwoSpeed_UserSpecifiedDesignCapacity_L
 
     EXPECT_NO_THROW(EvapFluidCoolerSpecs::factory(*state, DataPlant::PlantEquipmentType::EvapFluidCooler_TwoSpd, "BIG EVAPORATIVEFLUIDCOOLER"));
     compare_err_stream("");
+
+    EvapFluidCoolerSpecs *ptr =
+        EvapFluidCoolerSpecs::factory(*state, DataPlant::PlantEquipmentType::EvapFluidCooler_TwoSpd, "BIG EVAPORATIVEFLUIDCOOLER");
+
+    EXPECT_EQ(87921.0, ptr->HighSpeedUserSpecifiedDesignCapacity);
+    EXPECT_EQ(87921.0 * 0.25, ptr->LowSpeedUserSpecifiedDesignCapacity);
 }
 } // namespace EnergyPlus
