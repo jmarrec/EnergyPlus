@@ -477,18 +477,6 @@ namespace EvaporativeFluidCoolers {
                 }
 
                 if (thisEFC.DesignEnteringWaterTemp != DataSizing::AutoSize) {
-                    // TODO: this is pointless, IDD should enforce \minimum > 0 here
-                    if (thisEFC.DesignEnteringWaterTemp <= 0.0) {
-                        ShowSevereError(state,
-                                        format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be >0 for {} = \"{}\".",
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               AlphArray(1),
-                                               state.dataIPShortCut->cNumericFieldNames(9),
-                                               state.dataIPShortCut->cAlphaFieldNames(4),
-                                               AlphArray(4)));
-                        ErrorsFound = true;
-                    }
-
                     if (thisEFC.DesignEnteringWaterTemp <= thisEFC.DesignEnteringAirWetBulbTemp) {
                         ShowSevereError(state,
                                         format("{} = \"{}\", {} must be greater than {}.",
@@ -963,18 +951,6 @@ namespace EvaporativeFluidCoolers {
                 }
 
                 if (thisEFC.DesignEnteringWaterTemp != DataSizing::AutoSize) {
-                    // TODO: this is pointless, IDD should enforce \minimum > 0 here
-                    if (thisEFC.DesignEnteringWaterTemp <= 0.0) {
-                        ShowSevereError(state,
-                                        format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be >0 for {} = \"{}\".",
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               AlphArray(1),
-                                               state.dataIPShortCut->cNumericFieldNames(19),
-                                               state.dataIPShortCut->cAlphaFieldNames(4),
-                                               AlphArray(4)));
-                        ErrorsFound = true;
-                    }
-
                     if (thisEFC.DesignEnteringWaterTemp <= thisEFC.DesignEnteringAirWetBulbTemp) {
                         ShowSevereError(state,
                                         format("{} = \"{}\", {} must be greater than {}.",
