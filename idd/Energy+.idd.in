@@ -76354,7 +76354,6 @@ HeatPump:AirToWater,
    A1 , \field Name
         \required-field
         \type alpha
-        \required-field
         \reference-class-name validPlantEquipmentTypes
         \reference validPlantEquipmentNames
         \reference-class-name validBranchEquipmentTypes
