@@ -3816,6 +3816,7 @@ Fan:OnOff,
 
 Coil:Cooling:DX:VariableSpeed,
   DX Cooling Coil,                !- Name
+  ,                               !- Availability Schedule Name
   Cooling Coil Air Inlet Node,    !- Air Inlet Node Name
   Heating Coil Air Inlet Node,    !- Air Outlet Node Name
   10,                             !- Number of Speeds{ dimensionless }
@@ -3969,6 +3970,7 @@ Coil:Cooling:DX:VariableSpeed,
                                              R"IDF(
 Coil:Heating:DX:VariableSpeed,
   DX Heating Coil,                !- Name
+  ,                               !- Availability Schedule Name
   Heating Coil Air Inlet Node,    !- Indoor Air Inlet Node Name
   Zone 2 Inlet Node,              !- Indoor Air Outlet Node Name
   10,                             !- Number of Speeds {dimensionless}
@@ -6996,6 +6998,7 @@ Coil:Cooling:DX:SingleSpeed,
   45;                      !- Latent Capacity Time Constant {s}
 Coil:Heating:DX:VariableSpeed,
   Furnace Heating Coil 1, !- Name
+  ,                       !- Availability Schedule Name
   Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name
   Reheat Coil Air Inlet Node,  !- Indoor Air Outlet Node Name
   10,                      !- Number of Speeds {dimensionless}
@@ -7375,6 +7378,7 @@ Fan:OnOff,
 
 Coil:Cooling:DX:VariableSpeed,
   Furnace ACDXCoil 1, !- Name
+  ,                   !- Availability Schedule Name
   DX Cooling Coil Air Inlet Node, !- Air Inlet Node Name
   Heating Coil Air Inlet Node, !- Air Outlet Node Name
   10, !- Number of Speeds{ dimensionless }
@@ -7873,6 +7877,7 @@ Fan:OnOff,
 
 Coil:Cooling:DX:VariableSpeed,
   Furnace ACDXCoil 1, !- Name
+  ,                   !- Availability Schedule Name
   DX Cooling Coil Air Inlet Node, !- Air Inlet Node Name
   Heating Coil Air Inlet Node, !- Air Outlet Node Name
   10, !- Number of Speeds{ dimensionless }
@@ -9384,6 +9389,7 @@ Coil:Cooling:DX:MultiSpeed,
                                              R"IDF(
 Coil:Heating:DX:VariableSpeed,
   VS Heating Coil 1,       !- Name
+  ,                        !- Availability Schedule Name
   Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name
   Reheat Coil Air Inlet Node,  !- Indoor Air Outlet Node Name
   10,                      !- Number of Speeds {dimensionless}
@@ -10092,6 +10098,7 @@ Fan:OnOff,
 
    Coil:Cooling:WaterToAirHeatPump:EquationFit,
   Sys 1 Heat Pump Cooling Mode,  !- Name
+  ,                              !- Availability Schedule Name
   Sys 1 Water to Air Heat Pump Source Side1 Inlet Node,  !- Water Inlet Node Name
   Sys 1 Water to Air Heat Pump Source Side1 Outlet Node,  !- Water Outlet Node Name
   DX Cooling Coil Air Inlet Node,  !- Air Inlet Node Name
@@ -10113,6 +10120,7 @@ Fan:OnOff,
 
 Coil:Heating:WaterToAirHeatPump:EquationFit,
   Sys 1 Heat Pump Heating Mode,  !- Name
+  ,                              !- Availability Schedule Name
   Sys 1 Water to Air Heat Pump Source Side2 Inlet Node,  !- Water Inlet Node Name
   Sys 1 Water to Air Heat Pump Source Side2 Outlet Node,  !- Water Outlet Node Name
   Heating Coil Air Inlet Node,  !- Air Inlet Node Name
@@ -17452,6 +17460,7 @@ Fan:OnOff,
 
 Coil:Cooling:DX:VariableSpeed,
   DX Cooling Coil,                !- Name
+  ,                               !- Availability Schedule Name
   Cooling Coil Air Inlet Node,    !- Air Inlet Node Name
   Heating Coil Air Inlet Node,    !- Air Outlet Node Name
   5,                              !- Number of Speeds{ dimensionless }
@@ -17539,6 +17548,7 @@ Coil:Cooling:DX:VariableSpeed,
 
 Coil:Heating:DX:VariableSpeed,
   DX Heating Coil,                !- Name
+  ,                               !- Availability Schedule Name
   Heating Coil Air Inlet Node,    !- Indoor Air Inlet Node Name
   East Zone Inlet Node,           !- Indoor Air Outlet Node Name
   5,                              !- Number of Speeds {dimensionless}
@@ -20839,6 +20849,7 @@ TEST_F(AirloopUnitarySysTest, WSHPVariableSpeedCoilSizing)
     state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).AirOutletNodeNum = 2;
     state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).WaterInletNodeNum = 3;
     state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).WaterOutletNodeNum = 4;
+    state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).availSched = Sched::GetScheduleAlwaysOn(*state);
 
     for (int spdNum = 1; spdNum <= 10; ++spdNum) {
         // all speeds have same flow per capacity ratio
@@ -23052,6 +23063,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
 
         "  Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,",
         "    SPACE2-1 HP Heating Mode,  !- Name",
+        "    ,                          !- Availability Schedule Name",
         "    SPACE2-1 HP Heating Water Inlet,  !- Water-to-Refrigerant HX Water Inlet Node Name",
         "    SPACE2-1 HP Heating Water Outlet,  !- Water-to-Refrigerant HX Water Outlet Node Name",
         "    SPACE2-1 Cooling Coil Outlet,  !- Indoor Air Inlet Node Name",
@@ -23185,6 +23197,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
 
         "  Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,",
         "    SPACE2-1 HP Cooling Mode,  !- Name",
+        "    ,                          !- Availability Schedule Name",
         "    SPACE2-1 HP Cooling Water Inlet,  !- Water-to-Refrigerant HX Water Inlet Node Name",
         "    SPACE2-1 HP Cooling Water Outlet,  !- Water-to-Refrigerant HX Water Outlet Node Name",
         "    SPACE2-1 Zone Unit Fan Outlet,  !- Indoor Air Inlet Node Name",
@@ -23648,6 +23661,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
 
         "  Coil:Cooling:WaterToAirHeatPump:EquationFit,",
         "    SPACE1-1 HP Cooling Mode,!- Name",
+        "    ,                        !- Availability Schedule Name",
         "    SPACE1-1 HP Cooling Water Inlet,  !- Water Inlet Node Name",
         "    SPACE1-1 HP Cooling Water Outlet,  !- Water Outlet Node Name",
         "    SPACE1-1 Zone Unit Fan Outlet,  !- Air Inlet Node Name",
@@ -23672,6 +23686,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
 
         "  Coil:Heating:WaterToAirHeatPump:EquationFit,",
         "    SPACE1-1 HP Heating Mode,!- Name",
+        "    ,                        !- Availability Schedule Name",
         "    SPACE1-1 HP Heating Water Inlet,  !- Water Inlet Node Name",
         "    SPACE1-1 HP Heating Water Outlet,  !- Water Outlet Node Name",
         "    SPACE1-1 Cooling Coil Outlet,  !- Air Inlet Node Name",
@@ -25132,6 +25147,7 @@ TEST_F(EnergyPlusFixture, CoilSystemCoolingDX_RunOnLatentLoad)
 
   Coil:Cooling:DX:VariableSpeed,
     DOAS Cooling Coil,       !- Name
+    ,                        !- Availability Schedule Name
     Node 7,                  !- Indoor Air Inlet Node Name
     Node 8,                  !- Indoor Air Outlet Node Name
     8,                       !- Number of Speeds {dimensionless}

@@ -25,7 +25,7 @@ See Pull Request [#11051](https://github.com/NREL/EnergyPlus/pull/11051).
     "Exhaust Airflow [kg/s]" --> "Exhaust Air Flow Rate [m3/s]
 
     "Outdoor Airflow [kg/s]" --> "Supply Air Flow Rate [m3/s]"
-    
+
 * Add more new columns:
 
   - Heat Recovery Active ("WhenFansOn", "Scheduled", "WhenOutsideEconomizerLimits", "WhenMinimumOutdoorAir")
@@ -77,7 +77,7 @@ See Pull Request [#10998](https://github.com/NREL/EnergyPlus/pull/10998).
 * Always report sizing values whether autosized or hard-sized.
 
 * Add columns for "Design Supply Temperature", "Design ReturnTemperature", and "Design Capacity".
-  
+
 See Pull Request [#10998](https://github.com/NREL/EnergyPlus/pull/10998).
 
 ### Table Output, Equipment Summary Report, Fan Power Fractions subtable
@@ -167,13 +167,51 @@ The `Output:Constructions` has two possible keys: `Materials` and `Constructions
 
 When using `Generator:FuelSupply`, the header was written twice in the EIO Initialization Summary as `! <Fuel Supply>,...` leading to two identical tables in the HTML report.
 
+### ThermalStorage:*:Stratified, ThermalStorage:ChilledWater:Mixed output variable name change
+
+Change the follwing variable from "... Thermal Storage ..." to "... Thermal Storage Tank ..."
+
+before change:
+- Chilled/Hot Water Thermal Storage Temperature
+- Chilled/Hot Water Thermal Storage Final Tank Temperature
+- Chilled/Hot Water Thermal Storage Use Side Mass Flow Rate
+- Chilled/Hot Water Thermal Storage Use Side Inlet Temperature
+- Chilled/Hot Water Thermal Storage Use Side Outlet Temperature
+- Chilled/Hot Water Thermal Storage Use Side Heat Transfer Rate
+- Chilled/Hot Water Thermal Storage Use Side Heat Transfer Energy
+- Chilled/Hot Water Thermal Storage Source Side Mass Flow Rate
+- Chilled/Hot Water Thermal Storage Source Side Inlet Temperature
+- Chilled/Hot Water Thermal Storage Source Side Outlet Temperature
+- Chilled/Hot Water Thermal Storage Source Side Heat Transfer Rate
+- Chilled/Hot Water Thermal Storage Source Side Heat Transfer Energy
+- Chilled/Hot Water Thermal Storage Temperature Node
+- Chilled/Hot Water Thermal Storage Final Temperature Node
+
+after change:
+- Chilled/Hot Water Thermal Storage Tank Temperature
+- Chilled/Hot Water Thermal Storage Tank Final Tank Temperature
+- Chilled/Hot Water Thermal Storage Tank Use Side Mass Flow Rate
+- Chilled/Hot Water Thermal Storage Tank Use Side Inlet Temperature
+- Chilled/Hot Water Thermal Storage Tank Use Side Outlet Temperature
+- Chilled/Hot Water Thermal Storage Tank Use Side Heat Transfer Rate
+- Chilled/Hot Water Thermal Storage Tank Use Side Heat Transfer Energy
+- Chilled/Hot Water Thermal Storage Tank Source Side Mass Flow Rate
+- Chilled/Hot Water Thermal Storage Tank Source Side Inlet Temperature
+- Chilled/Hot Water Thermal Storage Tank Source Side Outlet Temperature
+- Chilled/Hot Water Thermal Storage Tank Source Side Heat Transfer Rate
+- Chilled/Hot Water Thermal Storage Tank Source Side Heat Transfer Energy
+- Chilled/Hot Water Thermal Storage Tank Temperature Node
+- Chilled/Hot Water Thermal Storage Tank Final Temperature Node
+
+See Pull Request [#11033](https://github.com/NREL/EnergyPlus/pull/11033).
+
 ### ZoneHVAC:IdealLoadsAirSystem
- 
+
 * Added eight new report variables for ZoneHVAC:IdealLoadsAirSystem object:
 
 ```
    (1) * Zone Ideal Loads Zone Heating Fuel Energy Rate [W] *
-   (2) * Zone Ideal Loads Zone Cooling Fuel Energy Rate [W]            
+   (2) * Zone Ideal Loads Zone Cooling Fuel Energy Rate [W]
    (3) * Zone Ideal Loads Zone Heating Fuel Energy [J]
    (4) * Zone Ideal Loads Zone Cooling Fuel Energy [J]
    (5) * Zone Ideal Loads Supply Air Total Heating Fuel Energy Rate [W] *
@@ -194,7 +232,7 @@ that the first Until Date/WeekSchedule are shown. Made explicit for the first 9 
 Previous
 ```
 ! <Schedule - Hourly>,Name,ScheduleType,{Until Date,WeekSchedule}** Repeated until Dec 31
-``` 
+```
 
 Changed
 ```

@@ -81,6 +81,7 @@ struct CoilCoolingDXCurveFitOperatingMode
 {
     std::string object_name = "Coil:Cooling:DX:CurveFit:OperatingMode";
     std::string parentName;
+    Sched::Schedule *coilCoolingDXAvailSched = nullptr;
 
     void instantiateFromInputSpec(EnergyPlusData &state, CoilCoolingDXCurveFitOperatingModeInputSpecification input_data);
     void size(EnergyPlusData &state);
