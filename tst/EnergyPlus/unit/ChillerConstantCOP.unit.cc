@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -52,6 +52,7 @@
 
 // EnergyPlus Headers
 #include "Fixtures/EnergyPlusFixture.hh"
+#include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataSizing.hh>
@@ -71,9 +72,9 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_WaterCooled_Autosize)
     state->dataPlnt->TotNumLoops = 4;
     state->dataEnvrn->OutBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.20;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         "  Chiller:ConstantCOP,",
@@ -90,10 +91,16 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_WaterCooled_Autosize)
         "    ConstantFlow,            !- Chiller Flow Mode",
         "    1,                       !- Sizing Factor",
         "    ,                        !- Basin Heater Capacity {W/K}",
-        "    2;                       !- Basin Heater Setpoint Temperature {C}",
+        "    2,                       !- Basin Heater Setpoint Temperature {C}",
+        "    ,                        !- temperature difference described above",
+        "    ThermoCapFracCurve;      !- Thermosiphon Capacity Fraction Curve Name",
+
+        "Curve:Linear, ThermoCapFracCurve, 0.0, 0.06, 0.0, 10.0, 0.0, 1.0, Dimensionless, Dimensionless;",
     });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
+
+    state->init_state(*state);
 
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
@@ -111,10 +118,9 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_WaterCooled_Autosize)
     auto &thisChiller = state->dataPlantChillers->ConstCOPChiller(1);
 
     state->dataPlnt->PlantLoop(1).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = thisChiller.Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::Chiller_ConstCOP;
@@ -122,10 +128,10 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_WaterCooled_Autosize)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut = thisChiller.EvapOutletNodeNum;
 
     state->dataPlnt->PlantLoop(2).Name = "CondenserWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "CondenserWater";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).PlantSizNum = 2;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
+
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = thisChiller.Name;
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::Chiller_ConstCOP;
@@ -146,7 +152,6 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_WaterCooled_Autosize)
     bool RunFlag(true);
     Real64 MyLoad(-20000.0);
 
-    Psychrometrics::InitializePsychRoutines(*state);
     thisChiller.initialize(*state, RunFlag, MyLoad);
     thisChiller.size(*state);
 
@@ -162,6 +167,37 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_WaterCooled_Autosize)
     // check autocalculate chiller side cond water flow rate
     EXPECT_NEAR(thisChiller.CondVolFlowRate, 0.0012606164769923673, 0.0000001);
     EXPECT_NEAR(thisChiller.CondMassFlowRateMax, 1.2604878941117141, 0.0000001);
+
+    // test thermosiphon model
+    DataBranchAirLoopPlant::ControlType const EquipFlowCtrl = DataBranchAirLoopPlant::ControlType::SeriesActive;
+    state->dataLoopNodes->Node(thisChiller.EvapInletNodeNum).Temp = 10.0;
+    state->dataLoopNodes->Node(thisChiller.EvapOutletNodeNum).Temp = 6.0;
+    state->dataLoopNodes->Node(thisChiller.EvapOutletNodeNum).TempSetPoint = 6.0;
+    state->dataLoopNodes->Node(thisChiller.CondInletNodeNum).Temp = 12.0; // condenser inlet temp > evap outlet temp
+
+    thisChiller.initialize(*state, RunFlag, MyLoad);
+    thisChiller.calculate(*state, MyLoad, RunFlag, EquipFlowCtrl);
+    EXPECT_GT(thisChiller.partLoadRatio, 0.95);   // load is large
+    EXPECT_EQ(thisChiller.thermosiphonStatus, 0); // thermosiphon is off
+    EXPECT_GT(thisChiller.Power, 4000.0);         // power is non-zero
+
+    state->dataLoopNodes->Node(thisChiller.CondInletNodeNum).Temp = 5.0; // condenser inlet temp < evap outlet temp
+
+    thisChiller.initialize(*state, RunFlag, MyLoad);
+    thisChiller.calculate(*state, MyLoad, RunFlag, EquipFlowCtrl);
+    EXPECT_GT(thisChiller.partLoadRatio, 0.95);   // load is large
+    EXPECT_EQ(thisChiller.thermosiphonStatus, 0); // thermosiphon is off
+    EXPECT_GT(thisChiller.Power, 4000.0);         // power is non-zero
+
+    MyLoad /= 15.0; // reduce load such that thermosiphon can meet load
+    thisChiller.initialize(*state, RunFlag, MyLoad);
+    thisChiller.calculate(*state, MyLoad, RunFlag, EquipFlowCtrl);
+    Real64 dT = thisChiller.EvapOutletTemp - thisChiller.CondInletTemp;
+    Real64 thermosiphonCapFrac = Curve::CurveValue(*state, thisChiller.thermosiphonTempCurveIndex, dT);
+    EXPECT_LT(thisChiller.partLoadRatio, 0.065);               // load is small
+    EXPECT_GT(thermosiphonCapFrac, thisChiller.partLoadRatio); // thermosiphon capacity can meet load
+    EXPECT_EQ(thisChiller.thermosiphonStatus, 1);              // thermosiphon is on
+    EXPECT_EQ(thisChiller.Power, 0.0);                         // power is zero
 }
 
 TEST_F(EnergyPlusFixture, ChillerConstantCOP_Default_Des_Cond_Evap_Temps)
@@ -170,9 +206,9 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_Default_Des_Cond_Evap_Temps)
     state->dataPlnt->TotNumLoops = 12;
     state->dataEnvrn->OutBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.20;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         "  Chiller:ConstantCOP,",
@@ -225,6 +261,8 @@ TEST_F(EnergyPlusFixture, ChillerConstantCOP_Default_Des_Cond_Evap_Temps)
     });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
+
+    state->init_state(*state);
 
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
 

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -67,8 +67,6 @@ namespace MatrixDataManager {
     // MODULE INFORMATION:
     //       AUTHOR         B. Griffith
     //       DATE WRITTEN   June 2010
-    //       MODIFIED       na
-    //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS MODULE:
     // Process user input for Matrix: input data objects
@@ -126,9 +124,6 @@ namespace MatrixDataManager {
         int NumNumbers;          // Number of Numbers for each GetObjectItem call
         int IOStatus;            // Used in GetObjectItem
         bool ErrorsFound(false); // Set to true if errors in input, fatal at end of routine
-        int NumRows;
-        int NumCols;
-        int NumElements;
         auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
 
         cCurrentModuleObject = "Matrix:TwoDimension";
@@ -156,9 +151,9 @@ namespace MatrixDataManager {
             Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
             state.dataMatrixDataManager->MatData(MatNum).Name = state.dataIPShortCut->cAlphaArgs(1);
-            NumRows = std::floor(state.dataIPShortCut->rNumericArgs(1));
-            NumCols = std::floor(state.dataIPShortCut->rNumericArgs(2));
-            NumElements = NumRows * NumCols;
+            int NumRows = std::floor(state.dataIPShortCut->rNumericArgs(1));
+            int NumCols = std::floor(state.dataIPShortCut->rNumericArgs(2));
+            int NumElements = NumRows * NumCols;
 
             // test
             if (NumElements < 1) {

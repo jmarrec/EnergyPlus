@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -104,8 +104,6 @@ void PlantLoopData::CalcUnmetPlantDemand(EnergyPlusData &state)
 
     // Using/Aliasing
     using DataPlant::LoopDemandTol;
-    using FluidProperties::GetSatEnthalpyRefrig;
-    using FluidProperties::GetSpecificHeatGlycol;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
     static constexpr std::string_view RoutineName("PlantLoopSolver::EvaluateLoopSetPointLoad");
@@ -135,7 +133,7 @@ void PlantLoopData::CalcUnmetPlantDemand(EnergyPlusData &state)
 
     if (this->FluidType == DataLoopNode::NodeFluidType::Water) {
 
-        Cp = GetSpecificHeatGlycol(state, this->FluidName, TargetTemp, this->FluidIndex, RoutineName);
+        Cp = this->glycol->getSpecificHeat(state, TargetTemp, RoutineName);
 
         switch (this->LoopDemandCalcScheme) {
         case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
@@ -179,7 +177,7 @@ void PlantLoopData::CalcUnmetPlantDemand(EnergyPlusData &state)
 
     } else if (this->FluidType == DataLoopNode::NodeFluidType::Steam) {
 
-        Cp = GetSpecificHeatGlycol(state, this->FluidName, TargetTemp, this->FluidIndex, RoutineName);
+        Cp = this->glycol->getSpecificHeat(state, TargetTemp, RoutineName);
 
         switch (this->LoopDemandCalcScheme) {
         case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
@@ -190,8 +188,8 @@ void PlantLoopData::CalcUnmetPlantDemand(EnergyPlusData &state)
             // Calculate the delta temperature
             DeltaTemp = LoopSetPointTemperature - TargetTemp;
 
-            EnthalpySteamSatVapor = GetSatEnthalpyRefrig(state, this->FluidName, LoopSetPointTemperature, 1.0, this->FluidIndex, RoutineNameAlt);
-            EnthalpySteamSatLiquid = GetSatEnthalpyRefrig(state, this->FluidName, LoopSetPointTemperature, 0.0, this->FluidIndex, RoutineNameAlt);
+            EnthalpySteamSatVapor = this->steam->getSatEnthalpy(state, LoopSetPointTemperature, 1.0, RoutineNameAlt);
+            EnthalpySteamSatLiquid = this->steam->getSatEnthalpy(state, LoopSetPointTemperature, 0.0, RoutineNameAlt);
 
             LatentHeatSteam = EnthalpySteamSatVapor - EnthalpySteamSatLiquid;
 
@@ -206,7 +204,9 @@ void PlantLoopData::CalcUnmetPlantDemand(EnergyPlusData &state)
     }
 
     // Trim the demand to zero if it is very small
-    if (std::abs(LoadToLoopSetPoint) < LoopDemandTol) LoadToLoopSetPoint = 0.0;
+    if (std::abs(LoadToLoopSetPoint) < LoopDemandTol) {
+        LoadToLoopSetPoint = 0.0;
+    }
 
     this->UnmetDemand = LoadToLoopSetPoint;
 }

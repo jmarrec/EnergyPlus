@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -169,6 +169,8 @@ namespace PlantUtilities {
 
     void LogPlantConvergencePoints(EnergyPlusData &state, bool FirstHVACIteration);
 
+    void SetPlantLocationLinks(EnergyPlusData &state, PlantLocation &plantLoc);
+
     void ScanPlantLoopsForObject(EnergyPlusData &state,
                                  std::string_view CompName,
                                  DataPlant::PlantEquipmentType CompType,
@@ -185,7 +187,15 @@ namespace PlantUtilities {
                                   std::string_view const CallerName, // really used for error messages
                                   int NodeNum,                       // index in Node structure of node to be scanned
                                   PlantLocation &pLantLoc,           // return value for location
-                                  ObjexxFCL::Optional_int CompNum = _);
+                                  int &CompNum,                      // return value for component number
+                                  bool reportError = true);          // optional parameter for reporting
+
+    // overloaded without CompNum
+    void ScanPlantLoopsForNodeNum(EnergyPlusData &state,
+                                  std::string_view const CallerName, // really used for error messages
+                                  int NodeNum,                       // index in Node structure of node to be scanned
+                                  PlantLocation &pLantLoc,           // return value for location
+                                  bool reportError = true);          // optional parameter for reporting
 
     bool AnyPlantLoopSidesNeedSim(EnergyPlusData &state);
 
@@ -210,18 +220,9 @@ namespace PlantUtilities {
     struct CriteriaData
     {
         // Members
-        int CallingCompLoopNum;                             // for debug error handling
-        DataPlant::LoopSideLocation CallingCompLoopSideNum; // for debug error handling
-        int CallingCompBranchNum;                           // for debug error handling
-        int CallingCompCompNum;                             // for debug error handling
-        Real64 ThisCriteriaCheckValue;                      // the previous value, to check the current against
-
-        // Default Constructor
-        CriteriaData()
-            : CallingCompLoopNum(0), CallingCompLoopSideNum(DataPlant::LoopSideLocation::Invalid), CallingCompBranchNum(0), CallingCompCompNum(0),
-              ThisCriteriaCheckValue(0.0)
-        {
-        }
+        int CallingCompLoopNum = 0;                                                                // for debug error handling
+        DataPlant::LoopSideLocation CallingCompLoopSideNum = DataPlant::LoopSideLocation::Invalid; // for debug error handling
+        Real64 ThisCriteriaCheckValue = 0.0;                                                       // the previous value, to check the current against
     };
 
 } // namespace PlantUtilities
@@ -230,6 +231,14 @@ struct PlantUtilitiesData : BaseGlobalStruct
 {
 
     Array1D<PlantUtilities::CriteriaData> CriteriaChecks; // stores criteria information
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

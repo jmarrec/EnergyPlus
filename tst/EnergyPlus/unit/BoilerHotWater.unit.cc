@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -71,6 +71,8 @@ using namespace EnergyPlus::Psychrometrics;
 
 TEST_F(EnergyPlusFixture, Boiler_HotWaterSizingTest)
 {
+    state->dataFluid->init_state(*state); // Still necessary?
+
     // unit test for autosizing boiler nominal capacity in Boiler:HotWater
     state->dataBoilers->Boiler.allocate(1);
     // Hardsized Hot Water Boiler
@@ -85,8 +87,9 @@ TEST_F(EnergyPlusFixture, Boiler_HotWaterSizingTest)
     state->dataSize->PlantSizData.allocate(1);
     // Hot Water Loop
     state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+
     state->dataSize->PlantSizData(1).DesVolFlowRate = 1.0;
     state->dataSize->PlantSizData(1).DeltaT = 10.0;
     state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
@@ -115,6 +118,7 @@ TEST_F(EnergyPlusFixture, Boiler_HotWaterSizingTest)
 }
 TEST_F(EnergyPlusFixture, Boiler_HotWaterAutoSizeTempTest)
 {
+    state->dataFluid->init_state(*state); // Still necessary?
     // unit test for checking hot water temperature for autosizing
     // boiler nominal capacity in Boiler:HotWater
     state->dataBoilers->Boiler.allocate(1);
@@ -130,23 +134,17 @@ TEST_F(EnergyPlusFixture, Boiler_HotWaterAutoSizeTempTest)
     state->dataSize->PlantSizData.allocate(1);
     // Hot Water Loop
     state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataSize->PlantSizData(1).DesVolFlowRate = 1.0;
     state->dataSize->PlantSizData(1).DeltaT = 10.0;
     state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
 
     // calculate nominal capacity at 60.0 C hot water temperature
-    Real64 rho = FluidProperties::GetDensityGlycol(*state,
-                                                   state->dataPlnt->PlantLoop(state->dataBoilers->Boiler(1).plantLoc.loopNum).FluidName,
-                                                   60.0,
-                                                   state->dataPlnt->PlantLoop(state->dataBoilers->Boiler(1).plantLoc.loopNum).FluidIndex,
-                                                   "Boiler_HotWaterAutoSizeTempTest");
-    Real64 Cp = FluidProperties::GetSpecificHeatGlycol(*state,
-                                                       state->dataPlnt->PlantLoop(state->dataBoilers->Boiler(1).plantLoc.loopNum).FluidName,
-                                                       60.0,
-                                                       state->dataPlnt->PlantLoop(state->dataBoilers->Boiler(1).plantLoc.loopNum).FluidIndex,
-                                                       "Boiler_HotWaterAutoSizeTempTest");
+    Real64 rho = state->dataPlnt->PlantLoop(state->dataBoilers->Boiler(1).plantLoc.loopNum)
+                     .glycol->getDensity(*state, 60.0, "Boiler_HotWaterAutoSizeTempTest");
+    Real64 Cp = state->dataPlnt->PlantLoop(state->dataBoilers->Boiler(1).plantLoc.loopNum)
+                    .glycol->getSpecificHeat(*state, 60.0, "Boiler_HotWaterAutoSizeTempTest");
 
     Real64 NomCapBoilerExpected =
         rho * state->dataSize->PlantSizData(1).DesVolFlowRate * Cp * state->dataSize->PlantSizData(1).DeltaT * state->dataBoilers->Boiler(1).SizFac;
@@ -184,6 +182,7 @@ TEST_F(EnergyPlusFixture, Boiler_HotWater_BlankDesignWaterFlowRate)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+
     GetBoilerInput(*state);
 
     EXPECT_EQ(1, (int)state->dataBoilers->Boiler.size());
@@ -191,6 +190,46 @@ TEST_F(EnergyPlusFixture, Boiler_HotWater_BlankDesignWaterFlowRate)
 
     // Additional tests for fuel type input
     EXPECT_ENUM_EQ(state->dataBoilers->Boiler(1).FuelType, Constant::eFuel::NaturalGas);
+}
+
+TEST_F(EnergyPlusFixture, Boiler_HotWater_ZeroNominalCapacity)
+{
+    std::string const idf_objects = delimited_string({
+        "Boiler:HotWater,",
+        "  Central Boiler,          !- Name",
+        "  NaturalGas,              !- Fuel Type",
+        "  0.0,                     !- Nominal Capacity {W}",
+        "  0.8,                     !- Nominal Thermal Efficiency",
+        "  LeavingBoiler,           !- Efficiency Curve Temperature Evaluation Variable",
+        "  BoilerEfficiency,        !- Normalized Boiler Efficiency Curve Name",
+        "  Autosize,                !- Design Water Flow Rate {m3/s}",
+        "  0.0,                     !- Minimum Part Load Ratio",
+        "  1.2,                     !- Maximum Part Load Ratio",
+        "  1.0,                     !- Optimum Part Load Ratio",
+        "  Boiler Inlet 1,          !- Boiler Water Inlet Node Name",
+        "  Boiler Inlet 2;          !- Boiler Water Outlet Node Name",
+
+        "Curve:Quadratic,",
+        "  BoilerEfficiency,        !- Name",
+        "  1.0,                     !- Coefficient1 Constant",
+        "  0.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0,                       !- Minimum Value of x",
+        "  1;                       !- Maximum Value of x",
+    });
+
+    EXPECT_FALSE(process_idf(idf_objects, false));
+
+    std::string const expected_error = delimited_string(
+        {"   ** Severe  ** <root>[Boiler:HotWater][Central Boiler][nominal_capacity] - \"0.000000\" - Expected number greater than 0.000000",
+         "   ** Severe  ** <root>[Boiler:HotWater][Central Boiler][nominal_capacity] - Failed to validate against child schema #0.",
+         "   ** Severe  ** <root>[Boiler:HotWater][Central Boiler][nominal_capacity] - Value type \"number\" for input \"0.000000\" not permitted by "
+         "'type' constraint.",
+         "   ** Severe  ** <root>[Boiler:HotWater][Central Boiler][nominal_capacity] - \"0.000000\" - Failed to match against any enum values.",
+         "   ** Severe  ** <root>[Boiler:HotWater][Central Boiler][nominal_capacity] - Failed to validate against child schema #1.",
+         "   ** Severe  ** <root>[Boiler:HotWater][Central Boiler][nominal_capacity] - Failed to validate against any schemas allowed by anyOf "
+         "constraint."});
+    compare_err_stream(expected_error, true);
 }
 
 TEST_F(EnergyPlusFixture, Boiler_HotWater_BoilerEfficiency)
@@ -202,11 +241,9 @@ TEST_F(EnergyPlusFixture, Boiler_HotWater_BoilerEfficiency)
     state->dataPlnt->TotNumLoops = 2;
     state->dataEnvrn->OutBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.20;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-
-    Psychrometrics::InitializePsychRoutines(*state);
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         "Boiler:HotWater,",
@@ -237,6 +274,7 @@ TEST_F(EnergyPlusFixture, Boiler_HotWater_BoilerEfficiency)
     });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
+    state->init_state(*state);
 
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
     for (int l = 1; l <= state->dataPlnt->TotNumLoops; ++l) {
@@ -252,10 +290,9 @@ TEST_F(EnergyPlusFixture, Boiler_HotWater_BoilerEfficiency)
     auto &thisBoiler = state->dataBoilers->Boiler(1);
 
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "HotWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = thisBoiler.Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type = DataPlant::PlantEquipmentType::Boiler_Simple;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = thisBoiler.BoilerInletNodeNum;

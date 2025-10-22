@@ -295,6 +295,10 @@ In addition to the canned Surface reports (view the Reports section later in thi
   Zone,Sum,Zone Total Internal Total Heating Energy {[}J{]}
 \item
   Zone,Average,Zone Total Internal Total Heating Rate {[}W{]}
+ \item
+  Zone Phase Change Material Melting Enthalpy{[{J/kg}]}
+ \item
+  Zone Phase Change Material Freezing Enthalpy{[{J/kg}]}
 \item
   HVAC,Average,Zone Exfiltration Heat Transfer Rate {[}W{]}
 \item
@@ -659,6 +663,14 @@ These output variables represent the sum of latent gains from specific internal 
 \paragraph{Space or Zone Total Internal Total Heating Energy {[}J{]}}\label{zone-total-internal-total-heating-energy-j}
 
 These output variables represent the sum of all heat gains throughout the space or zone in Watts (for rate) or joules. This includes all heat gains from Energyplus objects that are listed in Table \ref{table:space-or-zone-total-internal-heat-gain-constituents}.
+
+\paragraph{Zone Phase Change Material Melting Enthalpy {[}J/kg{]}}\label{zone-phase-change-material-melting-enthalpy-jkg}
+
+This output variable tracks the summation of all energy within a zone that is associated with phase change materials melting during the current time period in J/kg.  This report is only produced when the user enters phase change materials (see \hyperref[materialpropertyphasechange]{MaterialProperty:PhaseChange}), opts to use the Conduction Finite Difference (aka CondFD) solution algorithm (see \hyperref[heatbalancealgorithm]{HeatBalanceAlgorithm}), and requests DisplayAdvancedReportVariables (see \hyperref[outputdiagnostics]{Output:Diagnostics}).
+
+\paragraph{Zone Phase Change Material Freezing Enthalpy {[}J/kg{]}}\label{zone-phase-change-material-freezing-enthalpy-jkg}
+
+This output variable tracks the summation of all energy within a zone that is associated with phase change materials freezing during the current time period in J/kg.  This report is only produced when the user enters phase change materials (\hyperref[materialpropertyphasechange]{MaterialProperty:PhaseChange}), opts to use the Conduction Finite Difference (aka CondFD) solution algorithm (see \hyperref[heatbalancealgorithm]{HeatBalanceAlgorithm}), and requests DisplayAdvancedReportVariables (see \hyperref[outputdiagnostics]{Output:Diagnostics}).
 
 \paragraph{Zone Exfiltration Heat Transfer Rate {[}W{]}}\label{zone-exfiltration-heat-transfer-rate-w}
 
@@ -1983,7 +1995,7 @@ Each of the following surfaces:
 use the same vertex input. The numeric parameters indicated below are taken from the \hyperref[buildingsurfacedetailed]{BuildingSurface:Detailed} definition; the others may not be exactly the same but are identical in configuration. They are also ``extensible'' -- so, to define more vertices for these surfaces, simply add the required number of vertices (X, Y, and Z coordinates for each vertex) to the input file. Note that \hyperref[fenestrationsurfacedetailed]{FenestrationSurface:Detailed} is not extensible and is limited to 4 (max) vertices. If the Number of Surface Vertex groups is left blank or entered as \textbf{autocalculate}, EnergyPlus looks at the number of groups entered and figures out how many coordinate groups are entered.
 
 \begin{callout}
-\warning{Note that the resolution on the surface vertex input is 1 millimeter (.001 meter). Therefore, using vertices that are very close together (\textless{} 1 mm) may result in invalid dot product and fatal errors during shading calculations.}
+\warning{Note that the resolution for surface vertex input is 1 centimeter (0.01 meter). Vertices that are \textless{} 1 cm apart will be combined.}
 \end{callout}
 
 \begin{figure}[hbtp] % fig 29
@@ -2045,6 +2057,8 @@ This value can be one of several things depending on the actual kind of surface.
   \item
     \textbf{Zone} -- this is similar to Surface but EnergyPlus will automatically create the required surface in the adjacent zone when this is entered for the surface. If there are windows or doors on the surface, EnergyPlus automatically creates appropriate sub-surfaces as well.
   \item
+    \textbf{Space} -- this is similar to Surface but EnergyPlus will automatically create the required surface in the adjacent space when this is entered for the surface. If there are windows or doors on the surface, EnergyPlus automatically creates appropriate sub-surfaces as well.
+  \item
     \textbf{Outdoors} -- if this surface is exposed to outside temperature conditions, then this is the choice. See Sun Exposure and Wind Exposure below for further specifications on this kind of surface.
   \item
     \textbf{Foundation} - uses an alternative model (currently only the Kiva\textsuperscript{TM} model) to account for the multi-dimensional heat transfer of foundation surfaces. The Outside Boundary Condition Object will refer to the name of a \hyperref[foundationkiva]{Foundation:Kiva} object (or be left blank to use the default foundation without extra insulation).
@@ -2074,11 +2088,11 @@ This value can be one of several things depending on the actual kind of surface.
 
 \paragraph{Field: Outside Boundary Condition Object}\label{field-outside-boundary-condition-object-6}
 
-If neither Surface, Zone, Foundation, OtherSideCoefficients, or OtherSideConditionsModel are specified for the Outside Boundary Condition (previous field), then this field should be left blank.
+If neither Surface, Zone, Space, Foundation, OtherSideCoefficients, or OtherSideConditionsModel are specified for the Outside Boundary Condition (previous field), then this field should be left blank.
 
 As stated above, if the Outside Boundary Condition is ``Surface'', then this field's value must be the surface name whose inside face temperature will be forced on the outside face of the base surface. This permits heat exchange between adjacent zones (interzone heat transfer) when multiple zones are simulated, but can also be used to simulate middle zone behavior without modeling the adjacent zones. This is done by specifying a surface within the zone. For example, a middle floor zone can be modeled by making the floor the Outside Boundary Condition Object for the ceiling, and the ceiling the Outside Boundary Condition Object for the floor.
 
-If the Outside Boundary Condition is Zone, then this field should contain the zone name of the adjacent zone for the surface.
+If the Outside Boundary Condition is Zone or Space, then this field should contain the zone or space name for the adjacent surface.
 
 \begin{callout}
 Note: Zones with interzone heat transfer are not adiabatic and the internal surfaces contribute to gains or losses. Adiabatic surfaces are modeled by specifying the base surface itself in this field. Also, for interzone heat transfer, both surfaces must be represented -- for example, if you want interzone heat transfer to an attic space, the ceiling in the lower zone must have a surface object with the outside face environment as the floor in the attic and, likewise, there must be a floor surface object in the attic that references the ceiling surface name in the lower zone.
@@ -2162,6 +2176,8 @@ This value can be one of several things depending on the actual kind of surface.
   \item
     \textbf{Zone} -- this is similar to Surface but EnergyPlus will automatically create the required surface in the adjacent zone when this is entered for the surface. If there are windows or doors on the surface, EnergyPlus automatically creates appropriate sub-surfaces as well.
   \item
+    \textbf{Space} -- this is similar to Surface but EnergyPlus will automatically create the required surface in the adjacent space when this is entered for the surface. If there are windows or doors on the surface, EnergyPlus automatically creates appropriate sub-surfaces as well.
+  \item
     \textbf{Outdoors} -- if this surface is exposed to outside temperature conditions, then this is the choice. See Sun Exposure and Wind Exposure below for further specifications on this kind of surface.
   \item
     \textbf{Ground} -- The temperature on the outside of this surface will be the Ground Temperature.
@@ -2187,11 +2203,11 @@ This value can be one of several things depending on the actual kind of surface.
 
 \paragraph{Field: Outside Boundary Condition Object}\label{field-outside-boundary-condition-object-7}
 
-If neither Surface, Zone, Foundation, OtherSideCoefficients, or OtherSideConditionsModel are specified for the Outside Boundary Condition (previous field), then this field should be left blank.
+If neither Surface, Zone, Space, Foundation, OtherSideCoefficients, or OtherSideConditionsModel are specified for the Outside Boundary Condition (previous field), then this field should be left blank.
 
 As stated above, if the Outside Boundary Condition is ``Surface'', then this field's value must be the surface name whose inside face temperature will be forced on the outside face of the base surface. This permits heat exchange between adjacent zones (interzone heat transfer) when multiple zones are simulated, but can also be used to simulate middle zone behavior without modeling the adjacent zones. This is done by specifying a surface within the zone. For example, a middle floor zone can be modeled by making the floor the Outside Boundary Condition Object for the ceiling, and the ceiling the Outside Boundary Condition Object for the floor.
 
-If the Outside Boundary Condition is Zone, then this field should contain the zone name of the adjacent zone for the surface.
+If the Outside Boundary Condition is Zone or Space, then this field should contain the zone or space name for the adjacent surface.
 
 \begin{callout}
 Note: Zones with interzone heat transfer are not adiabatic and the internal surfaces contribute to gains or losses. Adiabatic surfaces are modeled by specifying the base surface itself in this field. Also, for interzone heat transfer, both surfaces must be represented -- for example, if you want interzone heat transfer to an attic space, the ceiling in the lower zone must have a surface object with the outside face environment as the floor in the attic and, likewise, there must be a floor surface object in the attic that references the ceiling surface name in the lower zone.
@@ -2275,6 +2291,8 @@ This value can be one of several things depending on the actual kind of surface.
   \item
     \textbf{Zone} -- this is similar to Surface but EnergyPlus will automatically create the required surface in the adjacent zone when this is entered for the surface. If there are windows or doors on the surface, EnergyPlus automatically creates appropriate sub-surfaces as well.
   \item
+    \textbf{Space} -- this is similar to Surface but EnergyPlus will automatically create the required surface in the adjacent space when this is entered for the surface. If there are windows or doors on the surface, EnergyPlus automatically creates appropriate sub-surfaces as well.
+  \item
     \textbf{Outdoors} -- if this surface is exposed to outside temperature conditions, then this is the choice. See Sun Exposure and Wind Exposure below for further specifications on this kind of surface.
   \item
     \textbf{Foundation} - uses an alternative model (currently only the Kiva\textsuperscript{TM} model) to account for the multi-dimensional heat transfer of foundation surfaces. The Outside Boundary Condition Object will refer to the name of a \hyperref[foundationkiva]{Foundation:Kiva} object (or be left blank to use the default foundation without extra insulation).
@@ -2304,11 +2322,11 @@ This value can be one of several things depending on the actual kind of surface.
 
 \paragraph{Field: Outside Boundary Condition Object}\label{field-outside-boundary-condition-object-8}
 
-If neither Surface, Zone, Foundation, OtherSideCoefficients, or OtherSideConditionsModel are specified for the Outside Boundary Condition (previous field), then this field should be left blank.
+If neither Surface, Zone, Space, Foundation, OtherSideCoefficients, or OtherSideConditionsModel are specified for the Outside Boundary Condition (previous field), then this field should be left blank.
 
 As stated above, if the Outside Boundary Condition is ``Surface'', then this field's value must be the surface name whose inside face temperature will be forced on the outside face of the base surface. This permits heat exchange between adjacent zones (interzone heat transfer) when multiple zones are simulated, but can also be used to simulate middle zone behavior without modeling the adjacent zones. This is done by specifying a surface within the zone. For example, a middle floor zone can be modeled by making the floor the Outside Boundary Condition Object for the ceiling, and the ceiling the Outside Boundary Condition Object for the floor.
 
-If the Outside Boundary Condition is Zone, then this field should contain the zone name of the adjacent zone for the surface.
+If the Outside Boundary Condition is Zone or Space, then this field should contain the zone or space name for the adjacent surface.
 
 \begin{callout}
 Note: Zones with interzone heat transfer are not adiabatic and the internal surfaces contribute to gains or losses. Adiabatic surfaces are modeled by specifying the base surface itself in this field. Also, for interzone heat transfer, both surfaces must be represented -- for example, if you want interzone heat transfer to an attic space, the ceiling in the lower zone must have a surface object with the outside face environment as the floor in the attic and, likewise, there must be a floor surface object in the attic that references the ceiling surface name in the lower zone.
@@ -2448,6 +2466,8 @@ This value can be one of several things depending on the actual kind of surface.
   \item
     \textbf{Zone} -- this is similar to Surface but EnergyPlus will automatically create the required surface in the adjacent zone when this is entered for the surface. If there are windows or doors on the surface, EnergyPlus automatically creates appropriate sub-surfaces as well.
   \item
+    \textbf{Space} -- this is similar to Surface but EnergyPlus will automatically create the required surface in the adjacent space when this is entered for the surface. If there are windows or doors on the surface, EnergyPlus automatically creates appropriate sub-surfaces as well.
+  \item
     \textbf{Outdoors} -- if this surface is exposed to outside temperature conditions, then this is the choice. See Sun Exposure and Wind Exposure below for further specifications on this kind of surface.
   \item
     \textbf{Foundation} - uses an alternative model (currently only the Kiva\textsuperscript{TM} model) to account for the multi-dimensional heat transfer of foundation surfaces. The Outside Boundary Condition Object will refer to the name of a \hyperref[foundationkiva]{Foundation:Kiva} object (or be left blank to use the default foundation without extra insulation).
@@ -2477,11 +2497,11 @@ This value can be one of several things depending on the actual kind of surface.
 
 \paragraph{Field: Outside Boundary Condition Object}\label{field-outside-boundary-condition-object-9}
 
-If neither Surface, Zone, Foundation, OtherSideCoefficients, or OtherSideConditionsModel are specified for the Outside Boundary Condition (previous field), then this field should be left blank.
+If neither Surface, Zone, Space, Foundation, OtherSideCoefficients, or OtherSideConditionsModel are specified for the Outside Boundary Condition (previous field), then this field should be left blank.
 
 As stated above, if the Outside Boundary Condition is ``Surface'', then this field's value must be the surface name whose inside face temperature will be forced on the outside face of the base surface. This permits heat exchange between adjacent zones (interzone heat transfer) when multiple zones are simulated, but can also be used to simulate middle zone behavior without modeling the adjacent zones. This is done by specifying a surface within the zone. For example, a middle floor zone can be modeled by making the floor the Outside Boundary Condition Object for the ceiling, and the ceiling the Outside Boundary Condition Object for the floor.
 
-If the Outside Boundary Condition is Zone, then this field should contain the zone name of the adjacent zone for the surface.
+If the Outside Boundary Condition is Zone or Space, then this field should contain the zone or space name for the adjacent surface.
 
 \begin{callout}
 Note: Zones with interzone heat transfer are not adiabatic and the internal surfaces contribute to gains or losses. Adiabatic surfaces are modeled by specifying the base surface itself in this field. Also, for interzone heat transfer, both surfaces must be represented -- for example, if you want interzone heat transfer to an attic space, the ceiling in the lower zone must have a surface object with the outside face environment as the floor in the attic and, likewise, there must be a floor surface object in the attic that references the ceiling surface name in the lower zone.
@@ -2607,7 +2627,7 @@ This is the name of a surface that contains this subsurface. Certain kinds of su
 
 If the base surface has Outside Boundary Condition = Surface or OtherSideCoefficients, then this field must also be specified for the subsurface. Otherwise, it can be left blank.
 
-If the base surface has Outside Boundary Condition = Zone, then this surface retains that characteristic and uses the same zone of the base surface. It can be entered here for clarity or it can be left blank.
+If the base surface has Outside Boundary Condition = Zone or Space, then this surface retains that characteristic and uses the same zone or space of the base surface. It can be entered here for clarity or it can be left blank.
 
 If Outside Boundary Condition for the base surface is Surface, this field should specify the subsurface in the opposing zone that is the counterpart to this subsurface. The constructions of the subsurface and opposing subsurface must match, except that, for multi-layer constructions, the layer order of the opposing subsurface's construction must be the reverse of that of the subsurface.
 
@@ -2760,11 +2780,11 @@ This is the name of the construction (ref: Construction object) used in the surf
 
 \paragraph{Field: Zone or ZoneList Name}\label{field-zone-or-zonelist-name-14}
 
-This field is the name of the \hyperref[zone]{Zone} or \hyperref[zonelist]{ZoneList} in which the internal mass will be added. When the ZoneList option is used then this internal mass object is applied to each of zone in the list. The name of the actual internal mass object in each zone becomes <Zone Name> <InternalMass Object Name> and should be less than the standard length (100 characters) for a name field. If it is greater than this standard length, it may be difficult to specify in output reporting as it will be truncated. A warning will be shown if the generated name is greater than 100 characters. If it duplicates another such concatenated name, there will be a severe error and terminate the run.
+This field is the name of the \hyperref[zone]{Zone} or \hyperref[zonelist]{ZoneList} in which the internal mass will be added. When the ZoneList option is used then this internal mass object is applied to each zone in the list. The name of the actual internal mass object in each zone becomes <Zone Name> <InternalMass Object Name> and should be less than the standard length (100 characters) for a name field. If it is greater than this standard length, it may be difficult to specify in output reporting as it will be truncated. A warning will be shown if the generated name is greater than 100 characters. If it duplicates another such concatenated name, there will be a severe error and terminate the run. This field is ignored when a Space or SpaceList Name is specified.
 
 \paragraph{Field: Space or SpaceList Name}\label{field-space-or-spacelist-name-14}
 
-This field is the name of the \hyperref[space]{Space} or \hyperref[spacelist]{SpaceList} in which the internal mass will be added. When the SpaceList option is used then this internal mass object is applied to each space in the list. The name of the actual internal mass object in each space becomes <Space Name> <InternalMass Object Name> and should be less than the standard length (100 characters) for a name field. If it is greater than this standard length, it may be difficult to specify in output reporting as it will be truncated. A warning will be shown if the generated name is greater than 100 characters. If it duplicates another such concatenated name, there will be a severe error and terminate the run. This field is ignored when a ZoneList Name is specified for Zone or ZoneList Name. If a Space Name is used, then the Space must be part of Zone Name. If a SpaceList Name is used, then the Zone Name is ignored (even though it is a required field), and the surface is assigned to the corresponding Zone(s) for each Space in the SpaceList.
+This field is the name of the \hyperref[space]{Space} or \hyperref[spacelist]{SpaceList} in which the internal mass will be added. If this field is blank (or a ZoneList Name is specified), the internal mass will be added to the last space attached to the zone. When the SpaceList option is used then this internal mass object is applied to each space in the list. The name of the actual internal mass object in each space becomes <Space Name> <InternalMass Object Name> and should be less than the standard length (100 characters) for a name field. If it is greater than this standard length, it may be difficult to specify in output reporting as it will be truncated. A warning will be shown if the generated name is greater than 100 characters. If it duplicates another such concatenated name, there will be a severe error and terminate the run. This field is ignored when a ZoneList Name is specified for Zone or ZoneList Name. If this field is entered, then the Zone or ZoneList Name is ignored, and the surface is assigned to the corresponding Zone(s) for the Space(s).
 
 \paragraph{Field: Surface Area}\label{field-surface-area}
 
@@ -2777,13 +2797,15 @@ InternalMass,
   Zn002:IntM001,                !- Surface Name
   INTERIOR,                     !- Construction Name
   DORM ROOMS AND COMMON AREAS,  !- Zone or ZoneList Name
-  408.7734;                     !- Total area exposed to Zone {m2}
+  ,                             !- Space or SpaceList Name
+  408.7734;                     !- Surface Area {m2}
 
 InternalMass,
   Zn002:IntM002,                !- Surface Name
   PARTITION02,                  !- Construction Name
   DORM ROOMS AND COMMON AREAS,  !- Zone or ZoneList Name
-  371.6122;                     !- Total area exposed to Zone {m2}
+  ,                             !- Space or SpaceList Name
+  371.6122;                     !- Surface Area {m2}
 \end{lstlisting}
 
 \subsection{Surface Output Variables/Reports}\label{surface-output-variablesreports}
@@ -2910,14 +2932,16 @@ Zone,Average,Surface Heat Storage Gain Rate [W]
 Zone,Average,Surface Heat Storage Loss Rate [W]
 Zone,Average,Surface Heat Storage Rate per Area [W/m2]
 Zone,Sum,Surface Heat Storage Energy [J]
-Zone,Average,Zone Opaque Surface Inside Face Conduction [W]
-Zone,Average,Zone Opaque Surface Inside Faces Total Conduction Heat Gain Rate [W]
-Zone,Average,Zone Opaque Surface Inside Faces Total Conduction Heat Loss Rate [W]
-Zone,Sum,Zone Opaque Surface Inside Faces Total Conduction Heat Gain Energy [J]
-Zone,Sum,Zone Opaque Surface Inside Faces Total Conduction Heat Loss Energy [J]
-Zone,Average,Zone Opaque Surface Outside Face Conduction [W]
-Zone,Average,Zone Opaque Surface Outside Face Conduction Gain[W]
-Zone,Average,Zone Opaque Surface Outside Face Conduction Loss[W]
+Zone,Average,Zone Opaque Surface Inside Faces Conduction Rate [W]
+Zone,Average,Zone Opaque Surface Inside Faces Conduction Heat Gain Rate [W]
+Zone,Average,Zone Opaque Surface Inside Faces Conduction Heat Loss Rate [W]
+Zone,Sum,Zone Opaque Surface Inside Faces Conduction Heat Gain Energy [J]
+Zone,Sum,Zone Opaque Surface Inside Faces Conduction Heat Loss Energy [J]
+Zone,Average,Zone Opaque Surface Outside Faces Conduction Rate [W]
+Zone,Average,Zone Opaque Surface Outside Faces Conduction Heat Gain Rate [W]
+Zone,Average,Zone Opaque Surface Outside Faces Conduction Heat Loss Rate [W]
+Zone,Sum,Zone Opaque Surface Outside Faces Conduction Heat Gain Energy [J]
+Zone,Sum,Zone Opaque Surface Outside Faces Conduction Heat Loss Energy [J]
 Zone,Average, Surface Inside Face Beam Solar Radiation Heat Gain Rate [W]
 \end{lstlisting}
 
@@ -2926,19 +2950,21 @@ Zone,Average, Surface Inside Face Beam Solar Radiation Heat Gain Rate [W]
 Output variables applicable to exterior windows and glass doors:
 
 \begin{lstlisting}
-Zone,Average,Zone Windows Total Transmitted Solar Radiation Rate [W]
+Zone,Average,Enclosure Windows Total Transmitted Solar Radiation Rate [W]
+Zone,Sum,Enclosure Windows Total Transmitted Solar Radiation Energy [J]
 Zone,Sum,Zone Transmitted Solar Energy [J]
 Zone,Average,Zone Windows Total Heat Gain Rate [W]
 Zone,Sum,Zone Windows Total Heat Gain Energy [J]
 Zone,Average,Zone Windows Total Heat Loss Rate [W]
 Zone,Sum,Zone Windows Total Heat Loss Energy [J]
-Zone,Average,Zone Exterior Windows Total Transmitted Beam Solar Radiation Rate [W]
-Zone,Sum,Zone Exterior Windows Total Transmitted Beam Solar Radiation Energy [J]
-Zone,Average,Zone Interior Windows Total Transmitted Beam Solar Radiation Rate [W]
-Zone,Sum,Zone Interior Windows Total Transmitted Beam Solar Radiation Energy [J]
-Zone,Average,Zone Exterior Windows Total Transmitted Diffuse Solar Radiation Rate [W]
-Zone,Sum,Zone Exterior Windows Total Transmitted Diffuse Solar Radiation Energy [J]
-Zone,Average,Zone Interior Windows Total Transmitted Diffuse Solar Radiation Rate [W]
+Zone,Average,Enclosure Exterior Windows Total Transmitted Beam Solar Radiation Rate [W]
+Zone,Sum,Enclosure Exterior Windows Total Transmitted Beam Solar Radiation Energy [J]
+Zone,Average,Enclosure Interior Windows Total Transmitted Beam Solar Radiation Rate [W]
+Zone,Sum,Enclosure Interior Windows Total Transmitted Beam Solar Radiation Energy [J]
+Zone,Average,Enclosure Exterior Windows Total Transmitted Diffuse Solar Radiation Rate [W]
+Zone,Sum,Enclosure Exterior Windows Total Transmitted Diffuse Solar Radiation Energy [J]
+Zone,Average,Enclosure Interior Windows Total Transmitted Diffuse Solar Radiation Rate [W]
+Zone,Sum,Enclosure Interior Windows Total Transmitted Diffuse Solar Radiation Energy [J]
 Zone,Average,Surface Window Total Glazing Layers Absorbed Solar Radiation Rate [W]
 Zone,Average,Surface Window Total Glazing Layers Absorbed Shortwave Radiation Rate [W]
 Zone,Sum,Surface Window Total Glazing Layers Absorbed Solar Radiation Energy [J]
@@ -3406,37 +3432,37 @@ These ``heat storage'' output variables combine the inside face conduction and o
 
 Different versions of the reports are available. The basic heat storage rate (W) and a per unit area flux (W/m\(^{2}\)) can have positive or negative values with the sign convention that positive indicates heat being added to the surface's mass. There are also directed ``gain'' and ``loss'' versions that have only positive values or zero when the heat storage direction opposes (W). Finally there is a version for total energy stored (J).
 
-\subsubsection{Zone Opaque Surface Inside Face Conduction {[}W{]}}\label{zone-opaque-surface-inside-face-conduction-w}
+\subsubsection{Zone Opaque Surface Inside Faces Conduction Rate {[}W{]}}\label{zone-opaque-surface-inside-face-conduction-w}
 
-The sum of the Opaque Surface Inside Face Conduction values for all opaque surfaces in a zone for both positive and negative sums. For example, assume a zone has six opaque surfaces with Opaque Surface Inside Face Conduction values of 100, -200, 400, 50, 150 and --300 W. Then Zone Opaque Surface Inside Face Conduction = 700 - 500 = 200 W. Or if a zone has six opaque surfaces with Opaque Surface Inside Face Conduction values of -100, -200, 400, -50, 150 and --300W. Then Zone Opaque Surface Inside Face Conduction = 550 -- 650 = -100 W.
+The sum of the Opaque Surface Inside Face Conduction values for all opaque surfaces in a zone for both positive and negative sums. For example, assume a zone has six opaque surfaces with Opaque Surface Inside Face Conduction values of 100, -200, 400, 50, 150 and --300 W. Then Zone Opaque Surface Inside Faces Conduction = 700 - 500 = 200 W. Or if a zone has six opaque surfaces with Opaque Surface Inside Face Conduction values of -100, -200, 400, -50, 150 and --300W. Then Zone Opaque Surface Inside Faces Conduction = 550 -- 650 = -100 W.
 
-\subsubsection{Zone Opaque Surface Inside Faces Total Conduction Heat Gain Rate {[}W{]}}\label{zone-opaque-surface-inside-faces-total-conduction-heat-gain-rate-w}
+\subsubsection{Zone Opaque Surface Inside Faces Conduction Heat Gain Rate {[}W{]}}\label{zone-opaque-surface-inside-faces-conduction-heat-gain-rate-w}
 
-\subsubsection{Zone Opaque Surface Inside Faces Total Conduction Heat Gain Energy {[}J{]}}\label{zone-opaque-surface-inside-faces-total-conduction-heat-gain-energy-j}
+\subsubsection{Zone Opaque Surface Inside Faces Conduction Heat Gain Energy {[}J{]}}\label{zone-opaque-surface-inside-faces-conduction-heat-gain-energy-j}
 
 These are the power and energy sums for the Opaque Surface Inside Face Conduction values for all opaque surfaces in a zone when that sum is positive. For example, assume a zone has six opaque surfaces with Opaque Surface Inside Face Conduction values of 100, -200, 400, 50, 150 and --300 W. Then Zone Opaque Surface Inside Faces Total Conduction Heat Gain Rate = 700 - 500 = 200 W.
 
-\subsubsection{Zone Opaque Surface Inside Faces Total Conduction Heat Loss Rate {[}W{]}}\label{zone-opaque-surface-inside-faces-total-conduction-heat-loss-rate-w}
+\subsubsection{Zone Opaque Surface Inside Faces Conduction Heat Loss Rate {[}W{]}}\label{zone-opaque-surface-inside-faces-conduction-heat-loss-rate-w}
 
-\subsubsection{Zone Opaque Surface Inside Faces Total Conduction Heat Loss Energy {[}J{]}}\label{zone-opaque-surface-inside-faces-total-conduction-heat-loss-energy-j}
+\subsubsection{Zone Opaque Surface Inside Faces Conduction Heat Loss Energy {[}J{]}}\label{zone-opaque-surface-inside-faces-conduction-heat-loss-energy-j}
 
 These are the power and energy absolute value for the sums of the Opaque Surface Inside Face Conduction values for all opaque surfaces in a zone when that sum is negative. For example, assume a zone has six opaque surfaces with Opaque Surface Inside Face Conduction values of -100, -200, 400, -50, 150 and --300W. Then Zone Opaque Surface Inside Faces Total Conduction Heat Loss Rate = \textbar{}550 -- 650\textbar{} = \textbar{}-100\textbar{} = 100 W.
 
-\subsubsection{Zone Opaque Surface Outside Face Conduction {[}W{]}}\label{zone-opaque-surface-outside-face-conduction-w}
+\subsubsection{Zone Opaque Surface Outside Faces Conduction Rate {[}W{]}}\label{zone-opaque-surface-outside-face-conduction-w}
 
-The sum of the Opaque Surface Outside Face Conduction values for all opaque surfaces in a zone for both positive and negative sums. For example, assume a zone has six opaque surfaces with Opaque Surface Outside Face Conduction values of 100, -200, 400, 50, 150 and --300 W. Then Zone Opaque Surface Outside Face Conduction = 700 - 500 = 200 W. Or if a zone has six opaque surfaces with Opaque Surface Outside Face Conduction values of -100, -200, 400, -50, 150 and --300W. Then Zone Opaque Surface Outside Face Conduction = 550 -- 650 = -100 W.
+The sum of the Opaque Surface Outside Face Conduction values for all opaque surfaces in a zone for both positive and negative sums. For example, assume a zone has six opaque surfaces with Opaque Surface Outside Face Conduction values of 100, -200, 400, 50, 150 and --300 W. Then Zone Opaque Surface Outside Faces Conduction = 700 - 500 = 200 W. Or if a zone has six opaque surfaces with Opaque Surface Outside Face Conduction values of -100, -200, 400, -50, 150 and --300W. Then Zone Opaque Surface Outside Faces Conduction = 550 -- 650 = -100 W.
 
-\subsubsection{Zone Opaque Surface Outside Face Conduction Gain {[}W{]}}\label{zone-opaque-surface-outside-face-conduction-gain-w}
+\subsubsection{Zone Opaque Surface Outside Faces Conduction Heat Gain Rate {[}W{]}}\label{zone-opaque-surface-outside-face-conduction-gain-w}
 
-\subsubsection{Zone Opaque Surface Outside Face Conduction Gain Energy {[}J{]}}\label{zone-opaque-surface-outside-face-conduction-gain-energy-j}
+\subsubsection{Zone Opaque Surface Outside Faces Conduction Heat Gain Energy {[}J{]}}\label{zone-opaque-surface-outside-face-conduction-gain-energy-j}
 
-These are the power and energy sums for the Opaque Surface Outside Face Conduction values for all opaque surfaces in a zone when that sum is positive. For example, assume a zone has six opaque surfaces with Opaque Surface Outside Face Conduction values of 100, -200, 400, 50, 150 and --300 W. Then Zone Opaque Surface Outside Face Conduction Gain = 700 - 500 = 200 W.
+These are the power and energy sums for the Opaque Surface Outside Face Conduction values for all opaque surfaces in a zone when that sum is positive. For example, assume a zone has six opaque surfaces with Opaque Surface Outside Face Conduction values of 100, -200, 400, 50, 150 and --300 W. Then Zone Opaque Surface Outside Faces Conduction Gain = 700 - 500 = 200 W.
 
-\subsubsection{Zone Opaque Surface Outside Face Conduction Loss {[}W{]}}\label{zone-opaque-surface-outside-face-conduction-loss-w}
+\subsubsection{Zone Opaque Surface Outside Faces Conduction Heat Loss Rate {[}W{]}}\label{zone-opaque-surface-outside-face-conduction-loss-w}
 
-\subsubsection{Zone Opaque Surface Outside Face Conduction Loss Energy {[}J{]}}\label{zone-opaque-surface-outside-face-conduction-loss-energy-j}
+\subsubsection{Zone Opaque Surface Outside Faces Conduction Heat Loss Energy {[}J{]}}\label{zone-opaque-surface-outside-face-conduction-loss-energy-j}
 
-These are the power and energy absolute value for the sums of the Opaque Surface Outside Face Conduction values for all opaque surfaces in a zone when that sum is negative. For example, assume a zone has six opaque surfaces with Opaque Surface Outside Face Conduction values of -100, -200, 400, -50, 150 and -300W. Then Zone Opaque Surface Outside Face Conduction Loss = \textbar{}550 -- 650\textbar{} = \textbar{}-100\textbar{} = 100 W.
+These are the power and energy absolute value for the sums of the Opaque Surface Outside Face Conduction values for all opaque surfaces in a zone when that sum is negative. For example, assume a zone has six opaque surfaces with Opaque Surface Outside Face Conduction values of -100, -200, 400, -50, 150 and -300W. Then Zone Opaque Surface Outside Faces Conduction Loss = \textbar{}550 -- 650\textbar{} = \textbar{}-100\textbar{} = 100 W.
 
 \subsubsection{Surface Inside Face Beam Solar Radiation Heat Gain Rate {[}W{]}}\label{surface-inside-face-beam-solar-radiation-heat-gain-rate-w}
 
@@ -3446,11 +3472,11 @@ Beam solar radiation from exterior windows absorbed on the inside face of an opa
 
 The following output variables apply to subsurfaces that are windows or glass doors. These two subsurface types are called ``window'' here. ``Exterior window'' means that the base surface of the window is an exterior wall, floor, roof or ceiling (i.e., the base surface is a \hyperref[buildingsurfacedetailed]{BuildingSurface:Detailed} with OutsideFaceEnvironment = ExteriorEnvironment). ``Interior window'' means that the base surface of the window is an inter-zone wall, floor or ceiling. ``Glass'' means a transparent solid layer, usually glass, but possibly plastic or other transparent material. ``Shading device'' means an interior, exterior or between-glass shade or blind, or an exterior screen (only exterior windows can have a shading device).
 
-\subsubsection{Zone Windows Total Transmitted Solar Radiation Rate {[}W{]}}\label{zone-windows-total-transmitted-solar-radiation-rate-w}
+\subsubsection{Enclosure Windows Total Transmitted Solar Radiation Rate {[}W{]}}\label{zone-windows-total-transmitted-solar-radiation-rate-w}
 
-\subsubsection{Zone Windows Total Transmitted Solar Radiation Energy {[}J{]}}\label{zone-windows-total-transmitted-solar-radiation-energy-j}
+\subsubsection{Enclosure Windows Total Transmitted Solar Radiation Energy {[}J{]}}\label{zone-windows-total-transmitted-solar-radiation-energy-j}
 
-The total Surface Window Transmitted Solar Radiation Rate of all the exterior windows in a zone.
+The total Surface Window Transmitted Solar Radiation Rate of all the exterior windows in an enclosure. If the user wishes to report these variables only for a specific enclosure and is uncertain as to what the name of the enclosure is, the enclosure name can be obtained from the the "Input Verification and Results Summary" output report in the "Space Summary" subtable.
 
 \subsubsection{Zone Windows Total Heat Gain Rate {[}W{]}}\label{zone-windows-total-heat-gain-rate-w}
 
@@ -3508,17 +3534,17 @@ For a window with a blind, this transmitted radiation consists of beam radiation
 
 For a window with a blind, this transmitted radiation consists of diffuse radiation reflected from beam by the slats. For a window with a screen, this value consists of diffuse radiation reflected by the screen material.
 
-\subsubsection{Zone Exterior Windows Total Transmitted Beam Solar Radiation Rate {[}W{]}}\label{zone-exterior-windows-total-transmitted-beam-solar-radiation-rate-w}
+\subsubsection{Enclosure Exterior Windows Total Transmitted Beam Solar Radiation Rate {[}W{]}}\label{zone-exterior-windows-total-transmitted-beam-solar-radiation-rate-w}
 
-\subsubsection{Zone Exterior Windows Total Transmitted Beam Solar Radiation Energy {[}J{]}}\label{zone-exterior-windows-total-transmitted-beam-solar-radiation-energy-j}
+\subsubsection{Enclosure Exterior Windows Total Transmitted Beam Solar Radiation Energy {[}J{]}}\label{zone-exterior-windows-total-transmitted-beam-solar-radiation-energy-j}
 
-The sum of the Surface Window Transmitted Beam Solar Radiation Rate (see definition above) from all exterior windows in a zone.
+The sum of the Surface Window Transmitted Beam Solar Radiation Rate (see definition above) from all exterior windows in an enclosure. If the user wishes to report these variables only for a specific enclosure and is uncertain as to what the name of the enclosure is, the enclosure name can be obtained from the the "Input Verification and Results Summary" output report in the "Space Summary" subtable.
 
-\subsubsection{Zone Interior Windows Total Transmitted Beam Solar Radiation Rate {[}W{]}}\label{zone-interior-windows-total-transmitted-beam-solar-radiation-rate-w}
+\subsubsection{Enclosure Interior Windows Total Transmitted Beam Solar Radiation Rate {[}W{]}}\label{zone-interior-windows-total-transmitted-beam-solar-radiation-rate-w}
 
-\subsubsection{Zone Interior Windows Total Transmitted Beam Solar Radiation Energy {[}J{]}}\label{zone-interior-windows-total-transmitted-beam-solar-radiation-energy-j}
+\subsubsection{Enclosure Interior Windows Total Transmitted Beam Solar Radiation Energy {[}J{]}}\label{zone-interior-windows-total-transmitted-beam-solar-radiation-energy-j}
 
-The sum of the Surface Window Transmitted Beam Solar Radiation Rate (see definition above) from all interior windows in a zone.
+The sum of the Surface Window Transmitted Beam Solar Radiation Rate (see definition above) from all interior windows in an enclosure. If the user wishes to report these variables only for a specific enclosure and is uncertain as to what the name of the enclosure is, the enclosure name can be obtained from the the "Input Verification and Results Summary" output report in the "Space Summary" subtable.
 
 \subsubsection{Surface Window Transmitted Diffuse Solar Radiation Rate {[}W{]}}\label{surface-window-transmitted-diffuse-solar-radiation-rate-w}
 
@@ -3526,17 +3552,17 @@ The sum of the Surface Window Transmitted Beam Solar Radiation Rate (see definit
 
 The solar radiation transmitted by an exterior window whose source is diffuse solar incident on the outside of the window. For a bare window, this transmitted radiation consists of diffuse radiation passing through the glass. For a window with a shade, this transmitted radiation is totally diffuse (shades are assumed to be perfect diffusers). For a window with a blind, this transmitted radiation consists of diffuse radiation that passes between the slats and diffuse radiation from diffuse-to-diffuse reflection from the slats. For a window with a screen, this value consists of diffuse radiation transmitted through the screen (gaps between the screen material) and diffuse radiation from diffuse-to-diffuse reflection from the screen material.
 
-\subsubsection{Zone Exterior Windows Total Transmitted Diffuse Solar Radiation Rate {[}W{]}}\label{zone-exterior-windows-total-transmitted-diffuse-solar-radiation-rate-w}
+\subsubsection{Enclosure Exterior Windows Total Transmitted Diffuse Solar Radiation Rate {[}W{]}}\label{zone-exterior-windows-total-transmitted-diffuse-solar-radiation-rate-w}
 
-\subsubsection{Zone Exterior Windows Total Transmitted Diffuse Solar Radiation Energy {[}J{]}}\label{zone-exterior-windows-total-transmitted-diffuse-solar-radiation-energy-j}
+\subsubsection{Enclosure Exterior Windows Total Transmitted Diffuse Solar Radiation Energy {[}J{]}}\label{zone-exterior-windows-total-transmitted-diffuse-solar-radiation-energy-j}
 
-The combined beam and diffuse solar that first entered adjacent zones through exterior windows in the adjacent zones, was subsequently reflected from interior surfaces in those zones (becoming diffuse through that reflection), and was then transmitted through interior windows into the current zone.
+The combined beam and diffuse solar that first entered adjacent zones through exterior windows in the adjacent zones, was subsequently reflected from interior surfaces in those zones (becoming diffuse through that reflection), and was then transmitted through interior windows into the current enclosure. If the user wishes to report these variables only for a specific enclosure and is uncertain as to what the name of the enclosure is, the enclosure name can be obtained from the the "Input Verification and Results Summary" output report in the "Space Summary" subtable.
 
-\subsubsection{Zone Interior Windows Total Transmitted Diffuse Solar Radiation Rate {[}W{]}}\label{zone-interior-windows-total-transmitted-diffuse-solar-radiation-rate-w}
+\subsubsection{Enclosure Interior Windows Total Transmitted Diffuse Solar Radiation Rate {[}W{]}}\label{zone-interior-windows-total-transmitted-diffuse-solar-radiation-rate-w}
 
-\subsubsection{Zone Interior Windows Total Transmitted Diffuse Solar Radiation Energy {[}J{]}}\label{zone-interior-windows-total-transmitted-diffuse-solar-radiation-energy-j}
+\subsubsection{Enclosure Interior Windows Total Transmitted Diffuse Solar Radiation Energy {[}J{]}}\label{zone-interior-windows-total-transmitted-diffuse-solar-radiation-energy-j}
 
-The sum of the Surface Window Transmitted Diffuse Solar Radiation Rate (see definition above) from all interior windows in a zone.
+The sum of the Surface Window Transmitted Diffuse Solar Radiation Rate (see definition above) from all interior windows in an enclosure. If the user wishes to report these variables only for a specific enclosure and is uncertain as to what the name of the enclosure is, the enclosure name can be obtained from the the "Input Verification and Results Summary" output report in the "Space Summary" subtable.
 
 \subsubsection{Surface Window System Solar Transmittance {[]}}\label{surface-window-system-solar-transmittance}
 

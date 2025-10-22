@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -90,6 +90,7 @@ void EnergyPlusFixture::openOutputFiles(EnergyPlusData &state)
     state.files.mtd.open_as_stringstream();
     state.files.edd.open_as_stringstream();
     state.files.zsz.open_as_stringstream();
+    state.files.spsz.open_as_stringstream();
     state.files.ssz.open_as_stringstream();
 }
 
@@ -117,9 +118,9 @@ void EnergyPlusFixture::SetUp()
 
     state->dataUtilityRoutines->outputErrorHeader = false;
 
-    Psychrometrics::InitializePsychRoutines(*state);
-    FluidProperties::InitializeGlycRoutines();
-    createCoilSelectionReportObj(*state);
+    state->init_constant_state(*state);
+    createCoilSelectionReportObj(*state); // So random
+    state->dataEnvrn->StdRhoAir = 1.2;
 }
 
 void EnergyPlusFixture::TearDown()
@@ -130,11 +131,13 @@ void EnergyPlusFixture::TearDown()
     state->files.eio.del();
     state->files.debug.del();
     state->files.zsz.del();
+    state->files.spsz.del();
     state->files.ssz.del();
     state->files.mtr.del();
     state->files.bnd.del();
     state->files.shade.del();
-    //    state->clear_state();
+
+    state->clear_state();
     delete this->state;
 }
 
@@ -171,7 +174,9 @@ bool EnergyPlusFixture::compare_eso_stream(std::string const &expected_string, b
     auto const stream_str = state->files.eso.get_output();
     EXPECT_EQ(expected_string, stream_str);
     bool are_equal = (expected_string == stream_str);
-    if (reset_stream) state->files.eso.open_as_stringstream();
+    if (reset_stream) {
+        state->files.eso.open_as_stringstream();
+    }
     return are_equal;
 }
 
@@ -180,8 +185,21 @@ bool EnergyPlusFixture::compare_eio_stream(std::string const &expected_string, b
     auto const stream_str = state->files.eio.get_output();
     EXPECT_EQ(expected_string, stream_str);
     bool are_equal = (expected_string == stream_str);
-    if (reset_stream) state->files.eio.open_as_stringstream();
+    if (reset_stream) {
+        state->files.eio.open_as_stringstream();
+    }
     return are_equal;
+}
+
+bool EnergyPlusFixture::compare_eio_stream_substring(std::string const &search_string, bool reset_stream)
+{
+    auto const stream_str = state->files.eio.get_output();
+    bool const found = stream_str.find(search_string) != std::string::npos;
+    EXPECT_TRUE(found);
+    if (reset_stream) {
+        state->files.eio.open_as_stringstream();
+    }
+    return found;
 }
 
 bool EnergyPlusFixture::compare_mtr_stream(std::string const &expected_string, bool reset_stream)
@@ -189,7 +207,9 @@ bool EnergyPlusFixture::compare_mtr_stream(std::string const &expected_string, b
     auto const stream_str = state->files.mtr.get_output();
     EXPECT_EQ(expected_string, stream_str);
     bool are_equal = (expected_string == stream_str);
-    if (reset_stream) state->files.mtr.open_as_stringstream();
+    if (reset_stream) {
+        state->files.mtr.open_as_stringstream();
+    }
     return are_equal;
 }
 
@@ -198,7 +218,9 @@ bool EnergyPlusFixture::compare_err_stream(std::string const &expected_string, b
     auto const stream_str = this->err_stream->str();
     EXPECT_EQ(expected_string, stream_str);
     bool are_equal = (expected_string == stream_str);
-    if (reset_stream) this->err_stream->str(std::string());
+    if (reset_stream) {
+        this->err_stream->str(std::string());
+    }
     return are_equal;
 }
 
@@ -206,8 +228,10 @@ bool EnergyPlusFixture::compare_err_stream_substring(std::string const &search_s
 {
     auto const stream_str = this->err_stream->str();
     bool const found = stream_str.find(search_string) != std::string::npos;
-    EXPECT_TRUE(found);
-    if (reset_stream) this->err_stream->str(std::string());
+    EXPECT_TRUE(found) << "Not found in:" << "\n" << stream_str;
+    if (reset_stream) {
+        this->err_stream->str(std::string());
+    }
     return found;
 }
 
@@ -216,7 +240,9 @@ bool EnergyPlusFixture::compare_cout_stream(std::string const &expected_string, 
     auto const stream_str = this->m_cout_buffer->str();
     EXPECT_EQ(expected_string, stream_str);
     bool are_equal = (expected_string == stream_str);
-    if (reset_stream) this->m_cout_buffer->str(std::string());
+    if (reset_stream) {
+        this->m_cout_buffer->str(std::string());
+    }
     return are_equal;
 }
 
@@ -225,7 +251,9 @@ bool EnergyPlusFixture::compare_cerr_stream(std::string const &expected_string, 
     auto const stream_str = this->m_cerr_buffer->str();
     EXPECT_EQ(expected_string, stream_str);
     bool are_equal = (expected_string == stream_str);
-    if (reset_stream) this->m_cerr_buffer->str(std::string());
+    if (reset_stream) {
+        this->m_cerr_buffer->str(std::string());
+    }
     return are_equal;
 }
 
@@ -234,56 +262,72 @@ bool EnergyPlusFixture::compare_dfs_stream(std::string const &expected_string, b
     auto const stream_str = state->files.dfs.get_output();
     EXPECT_EQ(expected_string, stream_str);
     bool are_equal = (expected_string == stream_str);
-    if (reset_stream) state->files.dfs.open_as_stringstream();
+    if (reset_stream) {
+        state->files.dfs.open_as_stringstream();
+    }
     return are_equal;
 }
 
 bool EnergyPlusFixture::has_eso_output(bool reset_stream)
 {
     bool const has_output = !state->files.eso.get_output().empty();
-    if (reset_stream) state->files.eso.open_as_stringstream();
+    if (reset_stream) {
+        state->files.eso.open_as_stringstream();
+    }
     return has_output;
 }
 
 bool EnergyPlusFixture::has_eio_output(bool reset_stream)
 {
     bool const has_output = !state->files.eio.get_output().empty();
-    if (reset_stream) state->files.eio.open_as_stringstream();
+    if (reset_stream) {
+        state->files.eio.open_as_stringstream();
+    }
     return has_output;
 }
 
 bool EnergyPlusFixture::has_mtr_output(bool reset_stream)
 {
     bool const has_output = !state->files.mtr.get_output().empty();
-    if (reset_stream) state->files.mtr.open_as_stringstream();
+    if (reset_stream) {
+        state->files.mtr.open_as_stringstream();
+    }
     return has_output;
 }
 
 bool EnergyPlusFixture::has_err_output(bool reset_stream)
 {
     bool const has_output = this->err_stream->str().size() > 0;
-    if (reset_stream) this->err_stream->str(std::string());
+    if (reset_stream) {
+        this->err_stream->str(std::string());
+    }
     return has_output;
 }
 
 bool EnergyPlusFixture::has_cout_output(bool reset_stream)
 {
     bool const has_output = this->m_cout_buffer->str().size() > 0;
-    if (reset_stream) this->m_cout_buffer->str(std::string());
+    if (reset_stream) {
+        this->m_cout_buffer->str(std::string());
+    }
     return has_output;
 }
 
 bool EnergyPlusFixture::has_cerr_output(bool reset_stream)
 {
     bool const has_output = this->m_cerr_buffer->str().size() > 0;
-    if (reset_stream) this->m_cerr_buffer->str(std::string());
+    if (reset_stream) {
+        this->m_cerr_buffer->str(std::string());
+    }
     return has_output;
 }
 
 bool EnergyPlusFixture::has_dfs_output(bool reset_stream)
 {
     bool const has_output = !state->files.dfs.get_output().empty();
-    if (reset_stream) state->files.dfs.open_as_stringstream();
+    if (reset_stream) {
+        state->files.dfs.open_as_stringstream();
+    }
     return has_output;
 }
 
@@ -296,7 +340,9 @@ bool EnergyPlusFixture::match_err_stream(std::string const &expected_match, bool
     } else {
         match_found = stream_str.find(expected_match) != std::string::npos;
     }
-    if (reset_stream) this->err_stream->str(std::string());
+    if (reset_stream) {
+        this->err_stream->str(std::string());
+    }
     return match_found;
 }
 
@@ -307,6 +353,9 @@ bool EnergyPlusFixture::process_idf(std::string_view const idf_snippet, bool use
     inputProcessor->epJSON = inputProcessor->idf_parser->decode(idf_snippet, inputProcessor->schema(), success);
 
     // Add common objects that will trigger a warning if not present
+    if (inputProcessor->epJSON.find("Timestep") == inputProcessor->epJSON.end()) {
+        inputProcessor->epJSON["Timestep"] = {{"", {{"idf_order", 0}, {"number_of_timesteps_per_hour", 4}}}};
+    }
     if (inputProcessor->epJSON.find("Version") == inputProcessor->epJSON.end()) {
         inputProcessor->epJSON["Version"] = {{"", {{"idf_order", 0}, {"version_identifier", DataStringGlobals::MatchVersion}}}};
     }
@@ -349,8 +398,11 @@ bool EnergyPlusFixture::process_idf(std::string_view const idf_snippet, bool use
     inputProcessor->initializeMaps();
     SimulationManager::PostIPProcessing(*state);
 
-    FluidProperties::GetFluidPropertiesData(*state);
-    state->dataFluidProps->GetInput = false;
+    // Can't do this here because many tests set TimeStepsInHour and
+    // other global settings manually, and init_state() has to be
+    // called after those.
+
+    // state->init_state(*state);
 
     if (state->dataSQLiteProcedures->sqlite) {
         bool writeOutputToSQLite = false;

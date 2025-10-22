@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -97,12 +97,11 @@ struct SystemVarsData : BaseGlobalStruct
 
     DataSystemVariables::ShadingMethod shadingMethod = DataSystemVariables::ShadingMethod::PolygonClipping; // defines the shading method used
 
-    bool DDOnly = false;             // TRUE if design days (sizingperiod:*) only are to be run.
-    bool ReverseDD = false;          // TRUE if reverse design days (reordering sizingperiod:*) are to be run.
-    bool DisableGLHECaching = false; // TRUE if caching is to be disabled, for example, during unit tests.
-    bool FullAnnualRun = false;      // TRUE if full annual simulation is to be run.
-    bool DeveloperFlag = false;      // TRUE if developer flag is turned on. (turns on more displays to console)
-    bool TimingFlag = false;         // TRUE if timing flag is turned on. (turns on more timing displays to console)
+    bool DDOnly = false;        // TRUE if design days (sizingperiod:*) only are to be run.
+    bool ReverseDD = false;     // TRUE if reverse design days (reordering sizingperiod:*) are to be run.
+    bool FullAnnualRun = false; // TRUE if full annual simulation is to be run.
+    bool DeveloperFlag = false; // TRUE if developer flag is turned on. (turns on more displays to console)
+    bool TimingFlag = false;    // TRUE if timing flag is turned on. (turns on more timing displays to console)
 
     bool SutherlandHodgman = true;                 // TRUE if SutherlandHodgman algorithm for polygon clipping is to be used.
     bool SlaterBarsky = false;                     // TRUE if SlaterBarsky algorithm for polygon clipping is to be used for vertical polygons.
@@ -112,6 +111,11 @@ struct SystemVarsData : BaseGlobalStruct
     bool ReportExtShadingSunlitFrac = false; // when true, the sunlit fraction for all surfaces are exported as a csv format output
     bool DisableGroupSelfShading = false;    // when true, defined shadowing surfaces group is ignored when calculating sunlit fraction
     bool DisableAllSelfShading = false;      // when true, all external shadowing surfaces is ignored when calculating sunlit fraction
+    bool DisableSelfShadingWithinGroup = false;
+    bool DisableSelfShadingBetweenGroup = false;
+
+    int shadingGroupsNum = 0;                 // number of shading groups
+    Array1D_string shadingGroupZoneListNames; // array of zone names in user input
 
     bool TrackAirLoopEnvFlag = false; // If TRUE generates a file with runtime statistics for each HVAC
     //  controller on each air loop
@@ -145,13 +149,21 @@ struct SystemVarsData : BaseGlobalStruct
     int NumberIntRadThreads = 1;
     int iNominalTotSurfaces = 0;
     bool Threading = false;
+    bool ciForceTimeStep = false;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {
         shadingMethod = DataSystemVariables::ShadingMethod::PolygonClipping;
         DDOnly = false;
         ReverseDD = false;
-        DisableGLHECaching = false;
         FullAnnualRun = false;
         DeveloperFlag = false;
         TimingFlag = false;

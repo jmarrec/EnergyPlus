@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -73,7 +73,9 @@ TEST_F(EnergyPlusFixture, DataPlant_verifyTwoNodeNumsOnSamePlantLoop)
 {
 
     // not using the DataPlantTest base class because of how specific this one is and that one is very general
-    if (state->dataPlnt->PlantLoop.allocated()) state->dataPlnt->PlantLoop.deallocate();
+    if (state->dataPlnt->PlantLoop.allocated()) {
+        state->dataPlnt->PlantLoop.deallocate();
+    }
     state->dataPlnt->TotNumLoops = 2;
     state->dataPlnt->PlantLoop.allocate(2);
 

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -89,6 +89,9 @@ struct APIDataEntry
     /// \details This is only used for actuators, and represents the control actuation.
     ///          For a node setpoint actuation, this could be either temperature or humidity, for example.
     char *type; // only used for actuators
+    /// \brief This represents the unit of measurement for this exchange point.
+    /// \details This is only used for non-plugin variables.
+    char *unit; // NOT used for plugin variables
 };
 
 /// \brief Gets available API data for the current simulation
@@ -106,6 +109,9 @@ ENERGYPLUSLIB_API char *listAllAPIDataCSV(EnergyPlusState state);
 ///          Do not call for variable, meter, actuator, or any other internal exchange data prior to this returning true.
 /// \param[in] state An active EnergyPlusState instance created with `stateNew`.
 /// \return Returns 1 (true) once the data is ready, otherwise returns 0 (false).
+/// \remark  Note that in the case of Surface actuators for "Construction State" and for a call to \link getConstructionHandle \endlink,
+///          this is not required to be true, as construction data is generally available earlier in the simulation process.
+///          Bypassing this check will allow affecting the Sizing calculations.
 ENERGYPLUSLIB_API int apiDataFullyReady(EnergyPlusState state);
 /// \brief Provides a user-facing check on the API error flag
 /// \details Some API functions return a value of 0, which could potentially indicate an error, or an actual 0 value.
@@ -118,6 +124,18 @@ ENERGYPLUSLIB_API int apiErrorFlag(EnergyPlusState state);
 ///          a calculation to continue, this function can reset the flag.
 /// \param[in] state An active EnergyPlusState instance created with `stateNew`.
 ENERGYPLUSLIB_API void resetErrorFlag(EnergyPlusState state);
+/// \brief Provides the input file path back to the user
+/// \details In most circumstances the client will know the path to the input file, but there are some cases where code
+///          is generalized in unexpected workflows.  Users have requested a way to get the input file path back from the running instance.
+/// \param[in] state An active EnergyPlusState instance created with `stateNew`.
+/// \return A char * of the input file path.  This allocates a new char *, and calling clients must free this when done with it!
+ENERGYPLUSLIB_API char *inputFilePath(EnergyPlusState state);
+/// \brief Provides the weather file path back to the user
+/// \details In most circumstances the client will know the path to the weather file, but there are some cases where code
+///          is generalized in unexpected workflows.  Users have requested a way to get the weather file path back from the running instance.
+/// \param[in] state An active EnergyPlusState instance created with `stateNew`.
+/// \return A char * of the weather file path.  This allocates a new char *, and calling clients must free this when done with it!
+ENERGYPLUSLIB_API char *epwFilePath(EnergyPlusState state);
 
 // ----- DATA TRANSFER HELPER FUNCTIONS
 
@@ -132,7 +150,7 @@ ENERGYPLUSLIB_API struct APIDataEntry *getAPIData(EnergyPlusState state, unsigne
 /// \param[in] data An array (pointer) of API data exchange that points as returned from the getAPIData function
 /// \param[in] arraySize The size of the API data exchange array, which is known after the call to getAPIData.
 /// \return Nothing, this simply frees the memory
-ENERGYPLUSLIB_API void freeAPIData(struct APIDataEntry *data, unsigned int arraySize);
+ENERGYPLUSLIB_API void freeAPIData(const struct APIDataEntry *data, unsigned int arraySize);
 /// \brief Gets the names of the object instances in the current input file
 /// \details Although many workflows should be aware of the input file already, there are certain cases where asking EnergyPlus
 ///          to report back the current input file objects has value.  The primary application is when a user is still utilizing an IDF based
@@ -146,7 +164,7 @@ ENERGYPLUSLIB_API void freeAPIData(struct APIDataEntry *data, unsigned int array
 ENERGYPLUSLIB_API char **getObjectNames(EnergyPlusState state, const char *objectType, unsigned int *resultingSize);
 /// \brief Clears an object names array allocation
 /// \details This function frees an instance of the object names array, which is returned from getObjectNames
-/// \param[in] data An array (pointer) of const char * as returned from the getObjectNames function
+/// \param[in] objectNames An array (pointer) of char * as returned from the getObjectNames function
 /// \param[in] arraySize The size of the object name array, which is known after the call to getObjectNames.
 /// \return Nothing, this simply frees the memory
 ENERGYPLUSLIB_API void freeObjectNames(char **objectNames, unsigned int arraySize);
@@ -293,6 +311,40 @@ ENERGYPLUSLIB_API int getInternalVariableHandle(EnergyPlusState state, const cha
 ///         is returned, use the `apiErrorFlag` function to disambiguate the return value.
 /// \see getInternalVariableHandle
 ENERGYPLUSLIB_API Real64 getInternalVariableValue(EnergyPlusState state, int handle);
+
+// ----- FUNCTIONS RELATED TO EMS GLOBAL VARIABLES (FOR CORNER CASES WHERE PLUGIN/API BLENDS WITH EMS PROGRAMS)
+/// \brief Gets a handle to an EMS "Global" variable
+/// \details When using EMS, it is sometimes necessary to share data between programs.
+///          EMS global variables are declared in the input file and used in EMS programs.
+///          EMS global variables are identified by name only.  This function returns -1 if a match is not found.
+/// \param[in] state An active EnergyPlusState instance created with `stateNew`.
+/// \param[in] name The name of the EMS global variable, which is declared in the EnergyPlus input file
+/// \return The integer handle to an EMS global variable, or -1 if a match is not found.
+/// \remark The behavior of this function is not well-defined until the `apiDataFullyReady` function returns true.
+/// \see apiDataFullyReady
+ENERGYPLUSLIB_API int getEMSGlobalVariableHandle(EnergyPlusState state, const char *name);
+/// \brief Gets the current value of an EMS "Global" variable
+/// \details When using EMS, the value of the shared "global" variables can change at any time.
+///          This function returns the current value of the variable.
+/// \param[in] state An active EnergyPlusState instance created with `stateNew`.
+/// \param[in] handle The handle id to an EMS "Global" variable, which can be retrieved using the `getEMSGlobalVariableHandle` function.
+/// \remark The behavior of this function is not well-defined until the `apiDataFullyReady` function returns true.
+/// \return The current value of the variable, in floating point form, or zero if a handle problem is encountered.  If a zero
+///         is returned, use the `apiErrorFlag` function to disambiguate the return value.
+/// \see apiDataFullyReady
+/// \see getEMSGlobalVariableHandle
+ENERGYPLUSLIB_API Real64 getEMSGlobalVariableValue(EnergyPlusState state, int handle);
+/// \brief Sets the value of an EMS "Global" variable
+/// \details When using EMS, the value of the shared "global" variables can change at any time.
+///          This function sets the variable to a new value.
+/// \param[in] state An active EnergyPlusState instance created with `stateNew`.
+/// \param[in] handle The handle id to an EMS "Global" variable, which can be retrieved using the `getEMSGlobalVariableHandle` function.
+/// \param[in] value The floating point value to be assigned to the global variable
+/// \remark The behavior of this function is not well-defined until the `apiDataFullyReady` function returns true.
+/// \remark A handle index or other problem will return 0 and set a flag to cause EnergyPlus to terminate once Python completes.
+/// \see apiDataFullyReady
+/// \see getEMSGlobalVariableHandle
+ENERGYPLUSLIB_API void setEMSGlobalVariableValue(EnergyPlusState state, int handle, Real64 value);
 
 // ----- FUNCTIONS RELATED TO PYTHON PLUGIN GLOBAL VARIABLES (ONLY USED FOR PYTHON PLUGIN SYSTEM)
 

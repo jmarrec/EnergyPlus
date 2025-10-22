@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -97,6 +97,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_DOASDXCoilTest)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    VS DX Cooling Coil,              !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    DX Cooling Coil Air Inlet Node,  !- Air Inlet Node Name",
         "    Heating Coil Air Inlet Node,     !- Air Outlet Node Name",
         "    5,                       !- Number of Speeds {dimensionless}",
@@ -422,10 +423,11 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_DOASDXCoilTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
-    ScheduleManager::ProcessScheduleInput(*state);
 
     std::string compName = "DX COOLING COIL SYSTEM";
     bool zoneEquipment = false;
@@ -460,6 +462,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    VS DX Cooling Coil,              !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    DX Cooling Coil Air Inlet Node,  !- Air Inlet Node Name",
         "    Heating Coil Air Inlet Node,     !- Air Outlet Node Name",
         "    5,                       !- Number of Speeds {dimensionless}",
@@ -556,10 +559,11 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     std::string compName = "DX COOLING COIL SYSTEM";
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
     state->dataGlobal->NumOfZones = 1;
     state->dataZoneEquip->ZoneEquipConfig.allocate(1);
@@ -577,8 +581,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).Name = compName;
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).CompType_Num = SimAirServingZones::CompType::DXSystem;
     OutputReportPredefined::SetPredefinedTables(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
-    state->dataScheduleMgr->Schedule(1).CurrentValue = 1.0; // Enable schedule without calling schedule manager
+    Sched::GetSchedule(*state, "AVAILSCHED")->currentVal = 1.0; // Enable schedule without calling schedule manager
 
     bool FirstHVACIteration = true;
     bool HXUnitOn = false;
@@ -659,6 +662,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_LatentDegradation_Test)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    VS DX Cooling Coil,              !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    DX Cooling Coil Air Inlet Node,  !- Air Inlet Node Name",
         "    Heating Coil Air Inlet Node,     !- Air Outlet Node Name",
         "    5,                       !- Number of Speeds {dimensionless}",
@@ -755,10 +759,11 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_LatentDegradation_Test)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     std::string compName = "DX COOLING COIL SYSTEM";
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
     state->dataGlobal->NumOfZones = 1;
     state->dataZoneEquip->ZoneEquipConfig.allocate(1);
@@ -776,8 +781,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_LatentDegradation_Test)
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).Name = compName;
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).CompType_Num = SimAirServingZones::CompType::DXSystem;
     OutputReportPredefined::SetPredefinedTables(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
-    state->dataScheduleMgr->Schedule(1).CurrentValue = 1.0; // Enable schedule without calling schedule manager
+    Sched::GetSchedule(*state, "AVAILSCHED")->currentVal = 1.0; // Enable schedule without calling schedule manager
 
     bool FirstHVACIteration = true;
     bool HXUnitOn = false;
@@ -1029,10 +1033,11 @@ TEST_F(EnergyPlusFixture, NewDXCoilModel_RHControl)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     std::string compName = "DX COOLING COIL SYSTEM";
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
     state->dataGlobal->NumOfZones = 1;
     state->dataZoneEquip->ZoneEquipConfig.allocate(1);
@@ -1051,8 +1056,7 @@ TEST_F(EnergyPlusFixture, NewDXCoilModel_RHControl)
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).Name = compName;
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).CompType_Num = SimAirServingZones::CompType::DXSystem;
     OutputReportPredefined::SetPredefinedTables(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
-    state->dataScheduleMgr->Schedule(1).CurrentValue = 1.0; // Enable schedule without calling schedule manager
+    Sched::GetSchedule(*state, "AVAILSCHED")->currentVal = 1.0; // Enable schedule without calling schedule manager
 
     bool FirstHVACIteration = true;
     bool HXUnitOn = false;

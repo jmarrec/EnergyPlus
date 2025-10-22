@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University
+# EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
@@ -94,7 +94,7 @@ for root, dirs, files in os.walk(test_files_dir):
 # there are a few files we purposely skip
 files_to_skip = {"_1a-Long0.0.idf", "_ExternalInterface-actuator.idf", "_ExternalInterface-schedule.idf",
                  "_ExternalInterface-variable.idf", "HVAC3Zone-IntGains-Def.imf", "HVAC3ZoneChillerSpec.imf",
-                 "HVAC3ZoneGeometry.imf", "HVAC3ZoneMat-Const.imf"}
+                 "HVAC3ZoneGeometry.imf", "HVAC3ZoneMat-Const.imf", "_1ZoneUncontrolled_ForAPITesting.idf"}
 found_idf_files_trimmed = found_idf_files - files_to_skip
 
 # the CMakeLists file will always have "forward" slashes

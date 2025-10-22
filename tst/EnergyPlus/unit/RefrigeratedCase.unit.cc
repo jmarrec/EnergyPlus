@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -54,6 +54,7 @@
 
 // I should not have to import these, but I do, the headers don't declare them
 #include <EnergyPlus/Data/EnergyPlusData.hh>
+#include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/HeatBalanceInternalHeatGains.hh>
 #include <EnergyPlus/HeatBalanceManager.hh>
@@ -383,13 +384,15 @@ Schedule:Compact,
 )IDF";
 
     ASSERT_TRUE(process_idf(fmt::format("{}\n{}", oneZoneBuildingWithIdealLoads, idf_objects))); // read idf objects
+    state->init_state(*state);
 
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
+    state->dataEnvrn->OutBaroPress = 101325.0;
     bool ErrorsFound = false;
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
     DataZoneEquipment::GetZoneEquipmentData(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
+
     // ZoneAirLoopEquipmentManager::GetZoneAirLoopEquipment(*state);
     InternalHeatGains::ManageInternalHeatGains(*state, true);
     RefrigeratedCase::ManageRefrigeratedCaseRacks(*state);
@@ -477,13 +480,14 @@ Refrigeration:WalkIn,
 )IDF";
 
     ASSERT_TRUE(process_idf(fmt::format("{}\n{}", oneZoneBuildingWithIdealLoads, idf_objects))); // read idf objects
+    state->init_state(*state);
 
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
+    state->dataEnvrn->OutBaroPress = 101325.0;
     bool ErrorsFound = false;
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
     DataZoneEquipment::GetZoneEquipmentData(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
     // ZoneAirLoopEquipmentManager::GetZoneAirLoopEquipment(*state);
     InternalHeatGains::ManageInternalHeatGains(*state, true);
     RefrigeratedCase::ManageRefrigeratedCaseRacks(*state);
@@ -574,13 +578,14 @@ Refrigeration:WalkIn,
 )IDF";
 
     ASSERT_TRUE(process_idf(fmt::format("{}\n{}", oneZoneBuildingWithIdealLoads, idf_objects))); // read idf objects
+    state->init_state(*state);
 
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
+    state->dataEnvrn->OutBaroPress = 101325.0;
     bool ErrorsFound = false;
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
     DataZoneEquipment::GetZoneEquipmentData(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
     // ZoneAirLoopEquipmentManager::GetZoneAirLoopEquipment(*state);
     InternalHeatGains::ManageInternalHeatGains(*state, true);
     RefrigeratedCase::ManageRefrigeratedCaseRacks(*state);
@@ -731,13 +736,14 @@ Schedule:Compact,
 )IDF";
 
     ASSERT_TRUE(process_idf(fmt::format("{}\n{}", oneZoneBuildingWithIdealLoads, idf_objects))); // read idf objects
+    state->init_state(*state);
 
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
+    state->dataEnvrn->OutBaroPress = 101325.0;
     bool ErrorsFound = false;
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
     DataZoneEquipment::GetZoneEquipmentData(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
     // ZoneAirLoopEquipmentManager::GetZoneAirLoopEquipment(*state);
     InternalHeatGains::ManageInternalHeatGains(*state, true);
     RefrigeratedCase::ManageRefrigeratedCaseRacks(*state);

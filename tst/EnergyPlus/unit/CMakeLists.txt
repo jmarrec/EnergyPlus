@@ -6,6 +6,10 @@ if(USE_PSYCH_ERRORS)
   add_compile_definitions(EP_psych_errors)
 endif()
 
+if(PYTHON_CLI)
+  add_compile_definitions(EP_PYTHON_CLI)
+endif()
+
 set(test_src
     TestHelpers/IdfParser.cc
     TestHelpers/IdfParser.hh
@@ -62,6 +66,7 @@ set(test_src
     ChillerConstantCOP.unit.cc
     ChillerElectric.unit.cc
     ChillerElectricEIR.unit.cc
+    ChillerReformulatedEIR.unit.cc
     ChillerExhaustAbsorption.unit.cc
     ChillerGasAbsorption.unit.cc
     ChillerIndirectAbsorption.unit.cc
@@ -71,6 +76,7 @@ set(test_src
     Coils/CoilCoolingDXCurveFitSpeed.unit.cc
     Coils/CoilCoolingDXFixture.hh
     CondenserLoopTowers.unit.cc
+    Construction.unit.cc
     ConstructionInternalSource.unit.cc
     ConvectionCoefficients.unit.cc
     CoolTower.unit.cc
@@ -96,6 +102,7 @@ set(test_src
     DesiccantDehumidifiers.unit.cc
     DisplacementVentMgr.unit.cc
     DualDuct.unit.cc
+    DuctLoss.unit.cc
     EPVector.unit.cc
     EMSManager.unit.cc
     EarthTube.unit.cc
@@ -108,6 +115,7 @@ set(test_src
     EvaporativeCoolers.unit.cc
     EvaporativeFluidCoolers.unit.cc
     ExhaustSystem.unit.cc
+    ExtendedHI.unit.cc
     ExteriorEnergyUse.unit.cc
     FanCoilUnits.unit.cc
     Fans.unit.cc
@@ -120,8 +128,15 @@ set(test_src
     Furnaces.unit.cc
     General.unit.cc
     GeneralRoutines.unit.cc
-    GroundHeatExchangers.unit.cc
+    GroundHeatExchangers/Base.unit.cc
+    GroundHeatExchangers/BoreholeArray.unit.cc
+    GroundHeatExchangers/BoreholeSingle.unit.cc
+    GroundHeatExchangers/Properties.unit.cc
+    GroundHeatExchangers/ResponseFactors.unit.cc
+    GroundHeatExchangers/Slinky.unit.cc
+    GroundHeatExchangers/Vertical.unit.cc
     HVACControllers.unit.cc
+    HVACCooledBeam.unit.cc
     HVACDXSystem.unit.cc
     HVACDXHeatPumpSystem.unit.cc
     HVACFan.unit.cc
@@ -178,6 +193,7 @@ set(test_src
     OutsideEnergySources.unit.cc
     PVWatts.unit.cc
     PackagedTerminalHeatPump.unit.cc
+    PCMThermalTank.unit.cc
     Photovoltaics.unit.cc
     PhotovoltaicThermalCollectors.unit.cc
     PierceSurface.unit.cc
@@ -269,9 +285,10 @@ set(test_src
     ZoneHVACEvaporativeCooler.unit.cc
     ZonePlenum.unit.cc
     ZoneTempPredictorCorrector.unit.cc
+    CommandLineInterface.unit.cc
     main.cc)
 
-set(test_dependencies energypluslib)
+set(test_dependencies energypluslib energyplusapi)
 
 if(LINK_WITH_PYTHON)
   add_compile_definitions(LINK_WITH_PYTHON)
@@ -292,14 +309,6 @@ endif()
 # Execute energyplus_tests with no arguments to run all tests
 create_test_targets(energyplus "${test_src}" "${test_dependencies}" True)
 
-
-set(test_src
-    Fixtures/EnergyPlusFixture.cc
-    Fixtures/EnergyPlusFixture.hh
-    CommandLineInterface.unit.cc
-    main.cc
-)
 # For CommandLineInterface.unit.cc, make an in.idf / in.epw in the test directory so we can test the legacy CLI (applies to CTest which sets the current directory to this one)
 configure_file("${PROJECT_SOURCE_DIR}/weather/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw" "${CMAKE_CURRENT_BINARY_DIR}/in.epw" COPYONLY)
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Resources/UnitaryHybridUnitTest_DOSA.idf" "${CMAKE_CURRENT_BINARY_DIR}/in.idf" COPYONLY)
-create_test_targets(energyplusapi "${test_src}" "${test_dependencies}" True)

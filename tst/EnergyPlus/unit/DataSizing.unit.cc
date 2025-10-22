@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -63,9 +63,10 @@
 #include <EnergyPlus/ZoneEquipmentManager.hh>
 
 #include "Fixtures/EnergyPlusFixture.hh"
-#include <nlohmann/json_literals.hpp>
+#include <nlohmann/json.hpp>
 
 using namespace EnergyPlus;
+using namespace nlohmann::literals;
 
 TEST_F(EnergyPlusFixture, DataSizingTest_resetHVACSizingGlobals)
 {
@@ -288,7 +289,8 @@ TEST_F(EnergyPlusFixture, OARequirements_calcDesignSpecificationOutdoorAir)
             },
             "Space 1d" : {
                  "zone_name": "Zone 1",
-                 "floor_area": 100.0
+                 "floor_area": 100.0,
+                 "volume": 300.0
             }
         },
         "DesignSpecification:OutdoorAir": {
@@ -344,9 +346,16 @@ TEST_F(EnergyPlusFixture, OARequirements_calcDesignSpecificationOutdoorAir)
     state->dataGlobal->isEpJSON = true;
     state->dataInputProcessing->inputProcessor->initializeMaps();
 
+    state->init_state(*state);
+
     bool ErrorsFound = false;
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
-    compare_err_stream("");
+
+    std::string const error_string = delimited_string(
+        {format("   ** Warning ** Version: missing in IDF, processing for EnergyPlus version=\"{}\"", DataStringGlobals::MatchVersion),
+         "   ** Warning ** No Timestep object found.  Number of TimeSteps in Hour defaulted to 4."});
+
+    EXPECT_TRUE(compare_err_stream(error_string, true));
     EXPECT_FALSE(ErrorsFound);
 
     int zoneNum = 1;
@@ -392,6 +401,7 @@ TEST_F(EnergyPlusFixture, OARequirements_calcDesignSpecificationOutdoorAir)
     thisSpaceName = "SPACE 1D";
     spaceNum = Util::FindItemInList(thisSpaceName, state->dataHeatBal->space);
     state->dataHeatBal->space(spaceNum).FloorArea = 100.0;
+    state->dataHeatBal->space(spaceNum).Volume = 300.0;
 
     std::string thisZoneName = "ZONE 2";
     zoneNum = Util::FindItemInList(thisZoneName, state->dataHeatBal->Zone);
@@ -424,6 +434,7 @@ TEST_F(EnergyPlusFixture, OARequirements_calcDesignSpecificationOutdoorAir)
 
 TEST_F(EnergyPlusFixture, GetCoilDesFlowT_Test)
 {
+    state->init_state(*state);
     state->dataEnvrn->StdRhoAir = 1.1;
     state->dataSize->SysSizInput.allocate(1);
     state->dataSize->FinalSysSizing.allocate(1);

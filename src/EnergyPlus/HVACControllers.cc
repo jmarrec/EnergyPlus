@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -263,7 +263,9 @@ void ManageControllers(EnergyPlusData &state,
     if (controllerProps.BypassControllerCalc && BypassOAController) {
         IsUpToDateFlag = true;
         IsConvergedFlag = true;
-        if (present(AllowWarmRestartFlag)) AllowWarmRestartFlag = true;
+        if (present(AllowWarmRestartFlag)) {
+            AllowWarmRestartFlag = true;
+        }
         return;
     }
 
@@ -442,7 +444,9 @@ void GetControllerInput(EnergyPlusData &state)
         }
     }
 
-    if (state.dataHVACControllers->NumControllers == 0) return;
+    if (state.dataHVACControllers->NumControllers == 0) {
+        return;
+    }
     // Condition of no controllers will be taken care of elsewhere, if necessary
 
     state.dataHVACControllers->ControllerProps.allocate(state.dataHVACControllers->NumControllers);
@@ -481,17 +485,18 @@ void GetControllerInput(EnergyPlusData &state)
             controllerProps.ControlVar = static_cast<EnergyPlus::HVACControllers::CtrlVarType>(getEnumValue(ctrlVarNamesUC, AlphArray(2)));
             if (controllerProps.ControlVar == HVACControllers::CtrlVarType::Invalid) {
                 ShowSevereError(state, format("{}{}=\"{}\".", RoutineName, CurrentModuleObject, AlphArray(1)));
-                ShowSevereError(state,
-                                format("...Invalid {}=\"{}\", must be Temperature, HumidityRatio, or TemperatureAndHumidityRatio.",
-                                       cAlphaFields(2),
-                                       AlphArray(2)));
+                ShowContinueError(state,
+                                  format("...Invalid {}=\"{}\", must be Temperature, HumidityRatio, or TemperatureAndHumidityRatio.",
+                                         cAlphaFields(2),
+                                         AlphArray(2)));
                 ErrorsFound = true;
             }
 
             controllerProps.Action = static_cast<ControllerAction>(getEnumValue(actionNamesUC, AlphArray(3)));
             if (controllerProps.Action == ControllerAction::Invalid) {
                 ShowSevereError(state, format("{}{}=\"{}\".", RoutineName, CurrentModuleObject, AlphArray(1)));
-                ShowSevereError(state, format("...Invalid {}=\"{}{}", cAlphaFields(3), AlphArray(3), R"(", must be "Normal", "Reverse" or blank.)"));
+                ShowContinueError(state,
+                                  format("...Invalid {}=\"{}{}", cAlphaFields(3), AlphArray(3), R"(", must be "Normal", "Reverse" or blank.)"));
                 ErrorsFound = true;
             }
 
@@ -1021,11 +1026,8 @@ void InitController(EnergyPlusData &state, int const ControlNum, bool &IsConverg
     // Do the Begin Environment initializations
     if (state.dataGlobal->BeginEnvrnFlag && MyEnvrnFlag(ControlNum)) {
 
-        Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                       state.dataPlnt->PlantLoop(thisController.ActuatedNodePlantLoc.loopNum).FluidName,
-                                                       Constant::CWInitConvTemp,
-                                                       state.dataPlnt->PlantLoop(thisController.ActuatedNodePlantLoc.loopNum).FluidIndex,
-                                                       RoutineName);
+        Real64 rho =
+            state.dataPlnt->PlantLoop(thisController.ActuatedNodePlantLoc.loopNum).glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
 
         thisController.MinActuated = rho * thisController.MinVolFlowActuated;
         thisController.MaxActuated = rho * thisController.MaxVolFlowActuated;
@@ -1897,9 +1899,13 @@ void TrackAirLoopControllers(EnergyPlusData &state,
     auto &airLoopStats = state.dataHVACControllers->AirLoopStats(AirLoopNum);
 
     // If no controllers on this air loop then we have nothing to do
-    if (state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).NumControllers == 0) return;
+    if (state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).NumControllers == 0) {
+        return;
+    }
     // To avoid tracking statistics in case of no air loop or no HVAC controllers are defined
-    if (state.dataHVACControllers->NumAirLoopStats == 0) return;
+    if (state.dataHVACControllers->NumAirLoopStats == 0) {
+        return;
+    }
 
     // Update performance statistics for air loop
     ++airLoopStats.NumCalls;
@@ -2184,9 +2190,13 @@ void TraceAirLoopControllers(EnergyPlusData &state,
     auto &airLoopStats = state.dataHVACControllers->AirLoopStats(AirLoopNum);
 
     // IF no controllers on this air loop then we have nothing to do
-    if (state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).NumControllers == 0) return;
+    if (state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).NumControllers == 0) {
+        return;
+    }
     // To avoid tracking statistics in case of no air loop or no HVAC controllers are defined
-    if (state.dataHVACControllers->NumAirLoopStats == 0) return;
+    if (state.dataHVACControllers->NumAirLoopStats == 0) {
+        return;
+    }
 
     // Setup trace file on first call only
     if (airLoopStats.FirstTraceFlag) {
@@ -2197,7 +2207,9 @@ void TraceAirLoopControllers(EnergyPlusData &state,
 
     auto &TraceFile = *airLoopStats.TraceFile;
 
-    if (!TraceFile.good()) return;
+    if (!TraceFile.good()) {
+        return;
+    }
 
     // Write iteration stamp first
     TraceIterationStamp(state, TraceFile, FirstHVACIteration, AirLoopPass, AirLoopConverged, AirLoopNumCalls);
@@ -2341,7 +2353,9 @@ void TraceIndividualController(EnergyPlusData &state,
     auto &TraceFile = *ControllerProps.TraceFile;
 
     // Nothing to do if trace file not registered
-    if (!TraceFile.good()) return;
+    if (!TraceFile.good()) {
+        return;
+    }
 
     // Skip a line before each new HVAC step
     if (SkipLineFlag) {
@@ -2472,7 +2486,7 @@ Real64 GetCurrentHVACTime(const EnergyPlusData &state)
     // as real.
     Real64 const CurrentHVACTime =
         (state.dataGlobal->CurrentTime - state.dataGlobal->TimeStepZone) + state.dataHVACGlobal->SysTimeElapsed + state.dataHVACGlobal->TimeStepSys;
-    return CurrentHVACTime * Constant::SecInHour;
+    return CurrentHVACTime * Constant::rSecsInHour;
 }
 
 Real64 GetPreviousHVACTime(const EnergyPlusData &state)
@@ -2487,7 +2501,7 @@ Real64 GetPreviousHVACTime(const EnergyPlusData &state)
     // This is the correct formula that does not use MinutesPerSystemTimeStep, which would
     // erronously truncate all sub-minute system time steps down to the closest full minute.
     Real64 const PreviousHVACTime = (state.dataGlobal->CurrentTime - state.dataGlobal->TimeStepZone) + state.dataHVACGlobal->SysTimeElapsed;
-    return PreviousHVACTime * Constant::SecInHour;
+    return PreviousHVACTime * Constant::rSecsInHour;
 }
 
 std::string CreateHVACTimeString(const EnergyPlusData &state)
@@ -2599,7 +2613,9 @@ void CheckControllerListOrder(EnergyPlusData &state)
             // check if flow order doesn't agree with controller order
             if (allocated(ContrlSensedNodeNums)) {
                 for (int SensedNodeIndex = 1; SensedNodeIndex <= WaterCoilContrlCount; ++SensedNodeIndex) {
-                    if (SensedNodeIndex == 1) continue;
+                    if (SensedNodeIndex == 1) {
+                        continue;
+                    }
                     if (ContrlSensedNodeNums(2, SensedNodeIndex) < ContrlSensedNodeNums(2, SensedNodeIndex - 1)) {
                         // now see if on the same branch
                         if (ContrlSensedNodeNums(3, SensedNodeIndex) == ContrlSensedNodeNums(3, SensedNodeIndex - 1)) {
@@ -2620,7 +2636,9 @@ void CheckControllerListOrder(EnergyPlusData &state)
                 }
             }
 
-            if (allocated(ContrlSensedNodeNums)) ContrlSensedNodeNums.deallocate();
+            if (allocated(ContrlSensedNodeNums)) {
+                ContrlSensedNodeNums.deallocate();
+            }
 
         } // controllers > 1
     }

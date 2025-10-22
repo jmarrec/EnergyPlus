@@ -20,7 +20,7 @@ The name of the Daylighting:Controls object.
 
 The name of the \hyperref[zone]{Zone} or \hyperref[space]{Space} to which the following daylighting-related input applies. If a zone name is specified, the zone must lie completely within a single solar enclosure.
 
-\paragraph{Field: Daylighting Method}\label{field-Daylighting Method}
+\paragraph{Field: Daylighting Method}\label{field-daylighting-method}
 
 The Daylighting Method field can be set to either of the following: SplitFlux or DElight. Different Zones can have different settings in the same file but in a single zone only one method should be used at a time. Guidelines for using the SplitFlux method and additional details on the DElight method are shown in following sections.
 
@@ -89,7 +89,7 @@ The number of steps, excluding off, in a stepped lighting control system (see fi
 
 May be specified if a stepped lighting control system (Lighting Control Type set to Stepped) is manually operated, such as in a simple, one-step (on-off) system. Gives the probability the occupants of a daylit zone will set the electric lights to the correct level to obtain the required illuminance. The rest of the time the lights are assumed to be set one step too high. For example, consider an on-off lighting system (Number of Steps = 1) with a set point of 600 lux and 0.7 reset probability. Then, when daylighting exceeds 600 lux, the electric lights will be off 70\% of the time and on 30\% of the time.
 
-\paragraph{Field: Glare Calculation Daylighting Reference Point Name}\label{field-glare calculation-daylighting-reference-point-name}
+\paragraph{Field: Glare Calculation Daylighting Reference Point Name}\label{field-glare-calculation-daylighting-reference-point-name}
 
 The \hyperref[daylightingreferencepoint-000]{Daylighting:ReferencePoint} name should be specified that is used for determining the glare. Only one reference point is used to calculate the glare. This input is only used in when the Daylighting Method is set to SplitFlux. This input is ignored when Daylighting Method is set to DElight.
 
@@ -157,6 +157,8 @@ The desired lighting level (in lux) at the named \hyperref[daylightingreferencep
 This object is referenced by \hyperref[daylightingcontrols-000]{Daylighting:Controls} to identify the reference point coordinates for each sensor. The reference points in the zone are where horizontal daylighting illuminance will be calculated. It is assumed that the photocells that control the overhead electric lighting respond to the light levels at the specified coordinates. Reference points are given in coordinates specified in the \hyperref[globalgeometryrules]{GlobalGeometryRules} object Daylighting Reference Point CoordinateSystem field.
 
 When the DElight Daylighting Method is used, there may be up to a maximum of 100 reference points for each zone. Each Reference Point that is input does NOT need to be included in the control of the electric lighting system within the zone. This is determined by the fraction of the zone controlled by each Reference Point, which can be input as 0. Note when the DElight Daylighting Method is used, that the sum of all Reference Point control fractions must equal 1 to obtain correct overall results.
+
+It should also be noted that daylighting factors cannot be accurately calculated for reference points that are very close to a wall or window (less than 0.15 m or 6 inches). While an error is reported for a reference point that is too close to a window, no error message is generated when the user defines a point that is too close to a wall.
 
 \subsubsection{Inputs}\label{inputs-010}
 
@@ -505,7 +507,14 @@ The amount by which the overhead electric lighting power in a space or zone is m
 
 \subsection{Output:IlluminanceMap}\label{outputilluminancemap}
 
-The Output:IlluminanceMap object expands on the reporting capabilities of the daylighting simulation. For any zone simulated with \hyperref[daylightingcontrols-000]{Daylighting:Controls}, the illuminance map can generate up to 2,500 points of additional daylighting illuminance values. The resulting map is output as a comma delimited text file that can be imported into a spreadsheet program for rapid visualization of the daylighting illuminance patterns in a zone. The values are produced on an hourly basis. The Z height of the map is constant (parallel to a flat floor). More than one illuminance map can be created for a zone. IlluminanceMap output is available only when SplitFlux daylighting method is selected in \hyperref[daylightingcontrols-000]{Daylighting:Controls} object.
+The Output:IlluminanceMap object expands on the reporting capabilities of the daylighting simulation. For any space or zone simulated with \hyperref[daylightingcontrols-000]{Daylighting:Controls}, the illuminance map can generate up to 2,500 points of additional daylighting illuminance values. The resulting map is output as a comma delimited text file that can be imported into a spreadsheet program for rapid visualization of the daylighting illuminance patterns in a space or zone. The values are produced on an hourly basis. The Z height of the map is constant (parallel to a flat floor). More than one illuminance map can be created for a space or zone. IlluminanceMap output is available only when SplitFlux daylighting method is selected in \hyperref[daylightingcontrols-000]{Daylighting:Controls} object.
+
+When using the Output:IlluminanceMap object, the user should note the following:
+
+\begin{itemize}
+\item Daylighting factors cannot be accurately calculated for reference points that are very close to a wall or window (less than 0.15 m or 6 inches). An error is reported for a reference point that is too close to a window, but no error is reported for a point that is too close to a wall.
+\item Since not all zones are rectangular, it is possible to have map points that are outside the zone. Any illuminance registered at these points is inaccurate and, additionally, a ``*'' marks these values for easy observance.
+\end{itemize}
 
 \subsubsection{Inputs}\label{inputs-4-006}
 
@@ -513,13 +522,13 @@ The Output:IlluminanceMap object expands on the reporting capabilities of the da
 
 The name of the map object.
 
-\paragraph{Field: Zone Name}\label{field-zone-name-2-000}
+\paragraph{Field: Zone or Space Name}\label{field-zone-name-2-000}
 
-Reference to a zone with \hyperref[daylightingcontrols-000]{Daylighting:Controls}. The zone must lie completely within a single solar enclosure.
+Reference to a zone or space with \hyperref[daylightingcontrols-000]{Daylighting:Controls}. If a zone name is specified, all spaces in the zone must be within the same solar enclosure.
 
 \paragraph{Field: Z Height}\label{field-z-height}
 
-The height or elevation of the grid of daylighting points.
+The height or elevation of the grid of daylighting points.  Coordinates may be world or relative as specified in the \hyperref[globalgeometryrules]{GlobalGeometryRules} object Daylighting Reference Point CoordinateSystem field. If a space name is specifice for this map, relative coodinates are relative to the origin of the zone that contains the space  (spaces do not have a separate origin).
 
 \paragraph{Field: X Minimum Coordinate}\label{field-x-minimum-coordinate}
 
@@ -545,13 +554,11 @@ The maximum Y coordinate boundary for the map.
 
 The number of daylighting reference points in the Y direction from the minimum to the maximum boundaries. The maximum number of points that can be generated is 2500 (Number of X Grid Points X Number of Y Grid Points).
 
-Note:~ Daylighting factors cannot be accurately calculated for reference points that are very close to a wall or window (less than 0.15 m or 6 inches). An error is reported for a reference point that is too close to a window, but no error is reported for a point that is too close to a wall.
-
 \begin{lstlisting}
 
 Output:IlluminanceMap,
     Daylit Map,      ! Map Name
-    Daylit Zone,     ! Zone Name
+    Daylit Zone,     ! Zone or Space Name
     0,               ! Z Height [m]
     0.1,             ! X Minimum Coordinate [m]
     4.9,             ! X Maximum Coordinate [m]
@@ -560,8 +567,6 @@ Output:IlluminanceMap,
     9.9,             ! Y Maximum Coordinate [m]
     10;              ! Number of Y grid Points
 \end{lstlisting}
-
-Since not all zones are rectangular, it is possible to have map points that are outside the zone. Any illuminance registered at these points is inaccurate and, additionally, a ``*'' marks these values for easy observance.
 
 \subsection{OutputControl:IlluminanceMap:Style}\label{outputcontrolilluminancemapstyle}
 

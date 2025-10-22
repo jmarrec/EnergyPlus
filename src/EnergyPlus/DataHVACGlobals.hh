@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -99,26 +99,32 @@ namespace HVAC {
     int constexpr NumOfSizingTypes(35); // request sizing for cooling air flow rate
 
     // Sizing types
-    int constexpr CoolingAirflowSizing(1);                // request sizing for cooling air flow rate
-    int constexpr CoolingWaterDesWaterInletTempSizing(6); // request sizing for cooling water coil inlet water temp
-    int constexpr HeatingAirflowSizing(14);               // request sizing for heating air flow rate
-    int constexpr SystemAirflowSizing(16);                // request sizing for system air flow rate
-    int constexpr CoolingCapacitySizing(17);              // request sizing for cooling capacity
-    int constexpr HeatingCapacitySizing(18);              // request sizing for heating capacity
-    int constexpr SystemCapacitySizing(21);               // request sizing for system capacity
-    int constexpr AutoCalculateSizing(25);                // identifies an autocalulate input
+    int constexpr CoolingAirflowSizing(1);                  // request sizing for cooling air flow rate
+    int constexpr CoolingWaterDesWaterInletTempSizing(6);   // request sizing for cooling water coil inlet water temp
+    int constexpr HeatingAirflowSizing(14);                 // request sizing for heating air flow rate
+    int constexpr SystemAirflowSizing(16);                  // request sizing for system air flow rate
+    int constexpr CoolingCapacitySizing(17);                // request sizing for cooling capacity
+    int constexpr HeatingCapacitySizing(18);                // request sizing for heating capacity
+    int constexpr SystemCapacitySizing(21);                 // request sizing for system capacity
+    [[maybe_unused]] int constexpr AutoCalculateSizing(25); // identifies an autocalulate input
 
     // The following parameters describe the setpoint types in TempControlType(ActualZoneNum)
-    enum class ThermostatType
+    enum class SetptType
     {
         Invalid = -1,
         Uncontrolled,
-        SingleHeating,
-        SingleCooling,
+        SingleHeat,
+        SingleCool,
         SingleHeatCool,
-        DualSetPointWithDeadBand,
+        DualHeatCool,
         Num
     };
+
+    static constexpr std::array<SetptType, 4> controlledSetptTypes = {
+        SetptType::SingleHeat, SetptType::SingleCool, SetptType::SingleHeatCool, SetptType::DualHeatCool};
+
+    static constexpr std::array<std::string_view, (int)SetptType::Num> setptTypeNames = {
+        "Uncontrolled", "SingleHeating", "SingleCooling", "SingleHeatCool", "DualSetPointWithDeadBand"};
 
     enum class AirDuctType
     // parameters describing air duct type
@@ -131,6 +137,9 @@ namespace HVAC {
         RAB,
         Num
     };
+
+    static constexpr std::array<std::string_view, static_cast<int>(AirDuctType::Num)> airDuctTypeNames = {
+        "Main", "Cooling", "Heating", "Other", "Return Air Bypass"};
 
     int constexpr Cooling(2);
     int constexpr Heating(3);
@@ -387,7 +396,7 @@ namespace HVAC {
     {
         Invalid = -1,
         AirToAir_FlatPlate,
-        AirToAir_Generic,
+        AirToAir_SensAndLatent,
         Desiccant_Balanced,
         Num
     };
@@ -426,7 +435,6 @@ namespace HVAC {
 
     int constexpr MaxSpeedLevels = 10;
 
-    // extern Array1D_string const cFanTypes;
     extern Array1D_string const cAllCoilTypes;
     extern Array1D_string const cCoolingCoilTypes;
     extern Array1D_string const cHeatingCoilTypes;
@@ -525,7 +533,17 @@ struct HVACGlobalsData : BaseGlobalStruct
     bool StandardRatingsMyOneTimeFlag = true;
     bool StandardRatingsMyCoolOneTimeFlag = true;
     bool StandardRatingsMyCoolOneTimeFlag2 = true;
+    bool StandardRatingsMyCoolOneTimeFlag3 = true;
     bool StandardRatingsMyHeatOneTimeFlag = true;
+    bool StandardRatingsMyHeatOneTimeFlag2 = true;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -57,7 +57,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataAirLoop.hh>
-#include <EnergyPlus/DataGlobals.hh>
+// #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataSizing.hh>
 #include <EnergyPlus/EPVector.hh>
@@ -169,14 +169,13 @@ namespace MixedAir {
         EconoOp Econo = EconoOp::NoEconomizer; // 0 = NoEconomizer, 1 = FixedDryBulb, 2 = FixedEnthalpy, 3=DifferentialDryBulb,
         // 4=DifferentialEnthalpy, 5=FixedDewPointAndDryBulb, 6 = ElectronicEnthalpy,
         // 7 =DifferentialDryBulbAndEnthalpy
-        bool EconBypass = false; // ModulateFlow =FALSE , MinimumFlowWithBypass =TRUE
-        int MixNode = 0;         // Controlled node (mixed air node)
-        int OANode = 0;          // Actuated node (outside air node)
-        int InletNode = 0;       // Inlet Air Node for into Mixer  (BTG Nov 2004)
-        int RelNode = 0;         // Relief Air Node Number
-        int RetNode = 0;         // Return Air Node Number
-        std::string MinOASch;    // Name of the minimum outside air schedule
-        int MinOASchPtr = 0;     // Index to the minimum outside air schedule
+        bool EconBypass = false;               // ModulateFlow =FALSE , MinimumFlowWithBypass =TRUE
+        int MixNode = 0;                       // Controlled node (mixed air node)
+        int OANode = 0;                        // Actuated node (outside air node)
+        int InletNode = 0;                     // Inlet Air Node for into Mixer  (BTG Nov 2004)
+        int RelNode = 0;                       // Relief Air Node Number
+        int RetNode = 0;                       // Return Air Node Number
+        Sched::Schedule *minOASched = nullptr; // minimum outside air schedule
         Real64 RelMassFlow = 0.0;
         Real64 OAMassFlow = 0.0;
         Real64 ExhMassFlow = 0.0;
@@ -208,11 +207,9 @@ namespace MixedAir {
         Real64 HighRHOAFlowRatio = 1.0;          // Modify ratio with respect to maximum outdoor air flow rate (high RH)
         bool ModifyDuringHighOAMoisture = false; // flag to Modify outdoor air flow, TRUE when modify any time, FALSE when modify only when indoor air
                                                  // humrat is less than outdoor HR
-        int EconomizerOASchedPtr = 0;            // schedule to modify outdoor air flow
-        std::string MinOAflowSch;                // Name of the Minimum fraction of Design/Mixed Mass of air
-        std::string MaxOAflowSch;                // Name of the Maximum fraction of Design/Mixed Mass of air
-        int MinOAflowSchPtr = 0;                 // Index to the Minimum Fraction of Outdoor Air Schedule
-        int MaxOAflowSchPtr = 0;                 // Index to the Maximum Fraction of Outdoor Air Schedule
+        Sched::Schedule *economizerOASched = nullptr; // schedule to modify outdoor air flow
+        Sched::Schedule *minOAflowSched = nullptr;    // Index to the Minimum Fraction of Outdoor Air Schedule
+        Sched::Schedule *maxOAflowSched = nullptr;    // Index to the Maximum Fraction of Outdoor Air Schedule
         //   Economizer Status, which is currently following the EconomizerOperationFlag, might be something like "Economizer status
         //   indicates when the conditions are favorable for the economizer to operate (i.e., none of the control limits have been exceeded).
         //   While this status signal indicates favorable conditions for economizer operation, it does not guarantee that the air-side
@@ -246,21 +243,17 @@ namespace MixedAir {
         OALimitFactor OALimitingFactor = OALimitFactor::Invalid; // OA controller limiting factor
         int OALimitingFactorReport = 0;                          // OA controller limiting factor - integer for reporting
 
-        void CalcOAController(EnergyPlusData &state, int const AirLoopNum, bool const FirstHVACIteration);
+        void CalcOAController(EnergyPlusData &state, int AirLoopNum, bool FirstHVACIteration);
 
-        void CalcOAEconomizer(EnergyPlusData &state,
-                              int const AirLoopNum,
-                              Real64 const OutAirMinFrac,
-                              Real64 &OASignal,
-                              bool &HighHumidityOperationFlag,
-                              bool const FirstHVACIteration);
+        void CalcOAEconomizer(
+            EnergyPlusData &state, int AirLoopNum, Real64 OutAirMinFrac, Real64 &OASignal, bool &HighHumidityOperationFlag, bool FirstHVACIteration);
 
         void SizeOAController(EnergyPlusData &state);
 
         void UpdateOAController(EnergyPlusData &state);
 
         void Checksetpoints(EnergyPlusData &state,
-                            Real64 const OutAirMinFrac,   // Local variable used to calculate min OA fraction
+                            Real64 OutAirMinFrac,         // Local variable used to calculate min OA fraction
                             Real64 &OutAirSignal,         // Used to set OA mass flow rate
                             bool &EconomizerOperationFlag // logical used to show economizer status
         );
@@ -268,38 +261,27 @@ namespace MixedAir {
 
     struct VentilationMechanicalZoneProps
     {
-        std::string name;                        // name of mech vent zone
-        int zoneNum = 0;                         // Actual zones number
-        Real64 ZoneOAAreaRate = 0.0;             // Mechanical ventilation rate (m3/s/m2) for each zone
-        Real64 ZoneOAPeopleRate = 0.0;           // Mechanical ventilation rate (m3/s/person) for each zone
-        Real64 ZoneOAFlowRate = 0.0;             // OA Flow Rate (m3/s/zone) for each zone
-        Real64 ZoneOAACHRate = 0.0;              // OA ACH (m3/s/volume) for each zone
-        int ZoneDesignSpecOAObjIndex = 0;        // index of the design specification outdoor air object for each zone
-        std::string ZoneDesignSpecOAObjName;     // name of the design specification outdoor air object for each zone
-        Real64 ZoneADEffCooling = 1.0;           // Zone air distribution effectiveness in cooling mode for each zone
-        Real64 ZoneADEffHeating = 1.0;           // Zone air distribution effectiveness in heating mode for each zone
-        int ZoneADEffSchPtr = 0;                 // Pointer to the zone air distribution effectiveness schedule for each zone
-        int ZoneDesignSpecADObjIndex = 0;        // index of the design specification zone air distribution object for each zone
-        std::string ZoneDesignSpecADObjName;     // name of the design specification zone air distribution object for each zone
-        Real64 ZoneSecondaryRecirculation = 0.0; // zone air secondary recirculation ratio for each zone
-        DataSizing::OAFlowCalcMethod ZoneOAFlowMethod = DataSizing::OAFlowCalcMethod::PerPerson; // OA flow method for each zone
-        int ZoneOASchPtr = 0;              // Index to the outdoor air schedule for each zone (from DesignSpecification:OutdoorAir or default)
-        Real64 OAPropCtlMinRateSchPtr = 0; // Outdoor design OA flow rate schedule from DesignSpecification:OutdoorAir
+        std::string name;                                   // name of mech vent zone
+        int zoneNum = 0;                                    // Actual zones number
+        int ZoneDesignSpecOAObjIndex = 0;                   // index of the design specification outdoor air object for each zone
+        Real64 ZoneADEffCooling = 1.0;                      // Zone air distribution effectiveness in cooling mode for each zone
+        Real64 ZoneADEffHeating = 1.0;                      // Zone air distribution effectiveness in heating mode for each zone
+        Sched::Schedule *zoneADEffSched = nullptr;          // air distribution effectiveness schedule for each zone
+        int ZoneDesignSpecADObjIndex = 0;                   // index of the design specification zone air distribution object for each zone
+        Real64 ZoneSecondaryRecirculation = 0.0;            // zone air secondary recirculation ratio for each zone
+        Sched::Schedule *zoneOASched = nullptr;             // Outdoor air schedule for each zone (from DesignSpecification:OutdoorAir or default)
+        Sched::Schedule *zonePropCtlMinRateSched = nullptr; // Outdoor design OA flow rate schedule from DesignSpecification:OutdoorAir
+        Real64 zoneOABZ = 0.0;                              // Zone breathing-zone OA flow rate [m3/s]
         EPVector<int> peopleIndexes; // List of People objects in this zone (for SystemOAMethod == DataSizing::SysOAMethod::ProportionalControlDesOcc)
     };
 
     struct VentilationMechanicalProps // Derived type for Ventilation:Mechanical data
     {
         // Members
-        std::string Name;             // Name of Ventilation:Mechanical object
-        std::string SchName;          // Name of the mechanical ventilation schedule
-        int SchPtr = 0;               // Index to the mechanical ventilation schedule
-        bool DCVFlag = false;         // if true, implement OA based on demand controlled ventilation
-        int NumofVentMechZones = 0;   // Number of zones with mechanical ventilation
-        Real64 TotAreaOAFlow = 0.0;   // Total outdoor air flow rate for all zones per area (m3/s/m2)
-        Real64 TotPeopleOAFlow = 0.0; // Total outdoor air flow rate for all PEOPLE objects in zones (m3/s)
-        Real64 TotZoneOAFlow = 0.0;   // Total outdoor air flow rate for all zones (m3/s)
-        Real64 TotZoneOAACH = 0.0;    // Total outdoor air flow rate for all zones Air Changes per hour (m3/s/m3)
+        std::string Name;                                                          // Name of Ventilation:Mechanical object
+        Sched::Schedule *availSched = nullptr;                                     // Mechanical ventilation schedule
+        bool DCVFlag = false;                                                      // if true, implement OA based on demand controlled ventilation
+        int NumofVentMechZones = 0;                                                // Number of zones with mechanical ventilation
         DataSizing::SysOAMethod SystemOAMethod = DataSizing::SysOAMethod::Invalid; // System Outdoor Air Method - SOAM_ZoneSum, SOAM_VRP, SOAM_VRPL
         Real64 ZoneMaxOAFraction = 1.0;                                            // Zone maximum outdoor air fraction
         int CO2MaxMinLimitErrorCount = 0; // Counter when max CO2 concentration < min CO2 concentration for SOAM_ProportionalControlSchOcc
@@ -353,6 +335,12 @@ namespace MixedAir {
         Real64 RetEnthalpy = 0.0;
         Real64 RetPressure = 0.0;
         Real64 RetMassFlowRate = 0.0;
+
+        void InitOAMixer(EnergyPlusData &state);
+
+        void CalcOAMixer(EnergyPlusData &state);
+
+        void UpdateOAMixer(EnergyPlusData &state) const;
     };
 
     // Functions
@@ -367,32 +355,28 @@ namespace MixedAir {
 
     int GetOAController(EnergyPlusData &state, std::string const &OAName);
 
-    void
-    ManageOutsideAirSystem(EnergyPlusData &state, std::string const &OASysName, bool const FirstHVACIteration, int const AirLoopNum, int &OASysNum);
+    void ManageOutsideAirSystem(EnergyPlusData &state, std::string const &OASysName, bool FirstHVACIteration, int AirLoopNum, int &OASysNum);
 
-    void SimOutsideAirSys(EnergyPlusData &state, int const OASysNum, bool const FirstHVACIteration, int const AirLoopNum);
+    void SimOutsideAirSys(EnergyPlusData &state, int OASysNum, bool FirstHVACIteration, int AirLoopNum);
 
-    void SimOASysComponents(EnergyPlusData &state, int const OASysNum, bool const FirstHVACIteration, int const AirLoopNum);
+    void SimOASysComponents(EnergyPlusData &state, int OASysNum, bool FirstHVACIteration, int AirLoopNum);
 
     void SimOAComponent(EnergyPlusData &state,
-                        std::string const &CompType,                    // the component type
-                        std::string const &CompName,                    // the component Name
-                        SimAirServingZones::CompType const CompTypeNum, // Component Type -- Integerized for this module
-                        bool const FirstHVACIteration,
+                        std::string const &CompType,              // the component type
+                        std::string const &CompName,              // the component Name
+                        SimAirServingZones::CompType CompTypeNum, // Component Type -- Integerized for this module
+                        bool FirstHVACIteration,
                         int &CompIndex,
-                        int const AirLoopNum, // air loop index for economizer lockout coordination
-                        bool const Sim,       // if TRUE, simulate component; if FALSE, just set the coil exisitence flags
-                        int const OASysNum,   // index to outside air system
-                        bool &OAHeatingCoil,  // TRUE indicates a heating coil has been found
-                        bool &OACoolingCoil,  // TRUE indicates a cooling coil has been found
-                        bool &OAHX);          // TRUE indicates a heat exchanger has been found
+                        int AirLoopNum,      // air loop index for economizer lockout coordination
+                        bool Sim,            // if TRUE, simulate component; if FALSE, just set the coil exisitence flags
+                        int OASysNum,        // index to outside air system
+                        bool &OAHeatingCoil, // TRUE indicates a heating coil has been found
+                        bool &OACoolingCoil, // TRUE indicates a cooling coil has been found
+                        bool &OAHX);         // TRUE indicates a heat exchanger has been found
 
     void SimOAMixer(EnergyPlusData &state, std::string const &CompName, int &CompIndex);
 
-    void SimOAController(EnergyPlusData &state, std::string const &CtrlName, int &CtrlIndex, bool const FirstHVACIteration, int const AirLoopNum);
-
-    // Get Input Section of the Module
-    //******************************************************************************
+    void SimOAController(EnergyPlusData &state, std::string const &CtrlName, int &CtrlIndex, bool FirstHVACIteration, int AirLoopNum);
 
     void GetOutsideAirSysInputs(EnergyPlusData &state);
 
@@ -403,12 +387,12 @@ namespace MixedAir {
     void GetOAMixerInputs(EnergyPlusData &state);
 
     void ProcessOAControllerInputs(EnergyPlusData &state,
-                                   std::string_view const CurrentModuleObject,
-                                   int const OutAirNum,
+                                   std::string_view CurrentModuleObject,
+                                   int OutAirNum,
                                    Array1D_string const &AlphArray,
-                                   int &NumAlphas,
+                                   int const NumAlphas,
                                    Array1D<Real64> const &NumArray,
-                                   int &NumNums,
+                                   int const NumNums,
                                    Array1D_bool const &lNumericBlanks, // Unused
                                    Array1D_bool const &lAlphaBlanks,
                                    Array1D_string const &cAlphaFields,
@@ -416,45 +400,9 @@ namespace MixedAir {
                                    bool &ErrorsFound                     // If errors found in input
     );
 
-    // End of Get Input subroutines for the Module
-    //******************************************************************************
+    void InitOutsideAirSys(EnergyPlusData &state, int OASysNum, int AirLoopNum);
 
-    // Beginning Initialization Section of the Module
-    //******************************************************************************
-
-    void InitOutsideAirSys(EnergyPlusData &state, int const OASysNum, int const AirLoopNum);
-
-    void InitOAController(EnergyPlusData &state, int const OAControllerNum, bool const FirstHVACIteration, int const AirLoopNum);
-
-    void InitOAMixer(EnergyPlusData &state, int const OAMixerNum);
-
-    // End of Initialization Section of the Module
-    //******************************************************************************
-
-    // Beginning Calculation Section of the Module
-    //******************************************************************************
-
-    void CalcOAMixer(EnergyPlusData &state, int const OAMixerNum);
-
-    // End of Calculation/Simulation Section of the Module
-    //******************************************************************************
-
-    // Beginning Sizing Section of the Module
-    //******************************************************************************
-
-    // End of Sizing Section of the Module
-    //******************************************************************************
-
-    // Beginning Update/Reporting Section of the Module
-    //******************************************************************************
-
-    void UpdateOAMixer(EnergyPlusData &state, int const OAMixerNum);
-
-    // End of Sizing Section of the Module
-    //******************************************************************************
-
-    // Beginning Utility Section of the Module
-    //******************************************************************************
+    void InitOAController(EnergyPlusData &state, int OAControllerNum, bool FirstHVACIteration, int AirLoopNum);
 
     Array1D_int GetOAMixerNodeNumbers(EnergyPlusData &state,
                                       std::string const &OAMixerName, // must match OA mixer names for the OA mixer type
@@ -465,29 +413,29 @@ namespace MixedAir {
 
     int GetNumOAControllers(EnergyPlusData &state);
 
-    int GetOAMixerReliefNodeNumber(EnergyPlusData &state, int const OAMixerNum); // Which Mixer
+    int GetOAMixerReliefNodeNumber(EnergyPlusData &state, int OAMixerNum); // Which Mixer
 
-    int GetOASysControllerListIndex(EnergyPlusData &state, int const OASysNumber); // OA Sys Number
+    int GetOASysControllerListIndex(EnergyPlusData &state, int OASysNumber); // OA Sys Number
 
-    int GetOASysNumSimpControllers(EnergyPlusData &state, int const OASysNumber); // OA Sys Number
+    int GetOASysNumSimpControllers(EnergyPlusData &state, int OASysNumber); // OA Sys Number
 
-    int GetOASysNumHeatingCoils(EnergyPlusData &state, int const OASysNumber); // OA Sys Number
+    int GetOASysNumHeatingCoils(EnergyPlusData &state, int OASysNumber); // OA Sys Number
 
-    int GetOASysNumHXs(EnergyPlusData &state, int const OASysNumber); // OA Sys Number
+    int GetOASysNumHXs(EnergyPlusData &state, int OASysNumber); // OA Sys Number
 
-    int GetOASysNumCoolingCoils(EnergyPlusData &state, int const OASysNumber); // OA Sys Number
+    int GetOASysNumCoolingCoils(EnergyPlusData &state, int OASysNumber); // OA Sys Number
 
     int GetOASystemNumber(EnergyPlusData &state, std::string const &OASysName); // OA Sys Name
 
-    int FindOAMixerMatchForOASystem(EnergyPlusData &state, int const OASysNumber); // Which OA System
+    int FindOAMixerMatchForOASystem(EnergyPlusData &state, int OASysNumber); // Which OA System
 
     int GetOAMixerIndex(EnergyPlusData &state, std::string const &OAMixerName); // Which Mixer
 
-    int GetOAMixerInletNodeNumber(EnergyPlusData &state, int const OAMixerNumber); // Which Mixer
+    int GetOAMixerInletNodeNumber(EnergyPlusData &state, int OAMixerNumber); // Which Mixer
 
-    int GetOAMixerReturnNodeNumber(EnergyPlusData &state, int const OAMixerNumber); // Which Mixer
+    int GetOAMixerReturnNodeNumber(EnergyPlusData &state, int OAMixerNumber); // Which Mixer
 
-    int GetOAMixerMixedNodeNumber(EnergyPlusData &state, int const OAMixerNumber); // Which Mixer
+    int GetOAMixerMixedNodeNumber(EnergyPlusData &state, int OAMixerNumber); // Which Mixer
 
     bool CheckForControllerWaterCoil(EnergyPlusData &state,
                                      DataAirLoop::ControllerKind ControllerType, // should be passed in as UPPERCASE
@@ -501,27 +449,24 @@ namespace MixedAir {
 
     int GetNumOASystems(EnergyPlusData &state);
 
-    int GetOACompListNumber(EnergyPlusData &state, int const OASysNum); // OA Sys Number
+    int GetOACompListNumber(EnergyPlusData &state, int OASysNum); // OA Sys Number
 
     std::string GetOACompName(EnergyPlusData &state,
-                              int const OASysNum, // OA Sys Number
-                              int const InListNum // In-list Number
+                              int OASysNum, // OA Sys Number
+                              int InListNum // In-list Number
     );
 
     std::string GetOACompType(EnergyPlusData &state,
-                              int const OASysNum, // OA Sys Number
-                              int const InListNum // In-list Number
+                              int OASysNum, // OA Sys Number
+                              int InListNum // In-list Number
     );
 
     SimAirServingZones::CompType GetOACompTypeNum(EnergyPlusData &state,
-                                                  int const OASysNum, // OA Sys Number
-                                                  int const InListNum // In-list Number
+                                                  int OASysNum, // OA Sys Number
+                                                  int InListNum // In-list Number
     );
 
     int GetOAMixerNumber(EnergyPlusData &state, std::string const &OAMixerName); // must match OA mixer names for the OA mixer type
-
-    // End of Utility Section of the Module
-    //******************************************************************************
 
 } // namespace MixedAir
 
@@ -543,11 +488,6 @@ struct MixedAirData : BaseGlobalStruct
     Array1D_bool InitOAControllerSetPointCheckFlag;
     bool InitOAControllerSetUpAirLoopHVACVariables = true;
     bool AllocateOAControllersFlag = true;
-    Array1D_string DesignSpecOAObjName;     // name of the design specification outdoor air object
-    Array1D_int DesignSpecOAObjIndex;       // index of the design specification outdoor air object
-    Array1D_string VentMechZoneOrListName;  // Zone or Zone List to apply mechanical ventilation rate
-    Array1D_string DesignSpecZoneADObjName; // name of the design specification zone air distribution object
-    Array1D_int DesignSpecZoneADObjIndex;   // index of the design specification zone air distribution object
     EPVector<MixedAir::ControllerListProps> ControllerLists;
     EPVector<MixedAir::OAControllerProps> OAController;
     EPVector<MixedAir::OAMixerProps> OAMixer;
@@ -561,6 +501,14 @@ struct MixedAirData : BaseGlobalStruct
     Array1D_bool OAControllerMyEnvrnFlag;
     Array1D_bool OAControllerMySizeFlag;
     Array1D_bool MechVentCheckFlag;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {
@@ -579,11 +527,6 @@ struct MixedAirData : BaseGlobalStruct
         this->InitOAControllerSetPointCheckFlag.deallocate();
         this->InitOAControllerSetUpAirLoopHVACVariables = true;
         this->AllocateOAControllersFlag = true;
-        this->DesignSpecOAObjName.deallocate();
-        this->DesignSpecOAObjIndex.deallocate();
-        this->VentMechZoneOrListName.deallocate();
-        this->DesignSpecZoneADObjName.deallocate();
-        this->DesignSpecZoneADObjIndex.deallocate();
         this->ControllerLists.deallocate();
         this->OAController.deallocate();
         this->OAMixer.deallocate();

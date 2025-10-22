@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -104,32 +104,22 @@ namespace EnergyPlus::HeatBalanceAirManager {
 enum class AirflowSpec
 {
     Invalid = -1,
-    Flow,
-    FlowPerZone,
-    FlowPerArea,
-    FlowPerPerson,
-    AirChanges,
-    Num
-};
-constexpr std::array<std::string_view, static_cast<int>(AirflowSpec::Num)> airflowNamesUC = {
-    "FLOW", "FLOW/ZONE", "FLOW/AREA", "FLOW/PERSON", "AIRCHANGES/HOUR"};
-
-enum class AirflowSpecAlt
-{
-    Invalid = -1,
-    Flow,
     FlowPerZone,
     FlowPerArea,
     FlowPerExteriorArea,
     FlowPerExteriorWallArea,
+    FlowPerPerson,
     AirChanges,
     Num
 };
-constexpr std::array<std::string_view, static_cast<int>(AirflowSpecAlt::Num)> airflowAltNamesUC = {
-    "FLOW", "FLOW/ZONE", "FLOW/AREA", "FLOW/EXTERIORAREA", "FLOW/EXTERIORWALLAREA", "AIRCHANGES/HOUR"};
+constexpr std::array<std::string_view, static_cast<int>(AirflowSpec::Num)> airflowSpecNamesUC = {
+    "FLOW/ZONE", "FLOW/AREA", "FLOW/EXTERIORAREA", "FLOW/EXTERIORWALLAREA", "FLOW/PERSON", "AIRCHANGES/HOUR"};
 
 constexpr std::array<std::string_view, static_cast<int>(DataHeatBalance::VentilationType::Num)> ventilationTypeNamesUC = {
     "NATURAL", "INTAKE", "EXHAUST", "BALANCED"};
+
+constexpr std::array<std::string_view, static_cast<int>(DataHeatBalance::InfVentDensityBasis::Num)> infVentDensityBasisNamesUC = {
+    "OUTDOOR", "STANDARD", "INDOOR"};
 
 constexpr std::array<std::string_view, static_cast<int>(RoomAir::RoomAirModel::Num)> roomAirModelNamesUC = {"USERDEFINED",
                                                                                                             "MIXING",
@@ -261,6 +251,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
     Real64 constexpr MixingTempLimit = 100.0;                                   // degrees Celsius
     Real64 constexpr VentilWSLimit = 40.0;                                      // m/s
     static constexpr std::string_view RoutineName("GetSimpleAirModelInputs: "); // include trailing blank space
+    static constexpr std::string_view routineName = "GetSimpleAirModelInputs";
     // Refrigeration Door Mixing Protection types, factors used to moderate mixing flow.
     Real64 constexpr RefDoorNone = 0.0;
     Real64 constexpr RefDoorAirCurtain = 0.5;
@@ -290,16 +281,16 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
     int ZoneNumB;
 
     // Formats
-    static constexpr std::string_view Format_720(" {} Airflow Stats Nominal, {},{},{},{:.2R},{:.1R},");
+    static constexpr std::string_view Format_720(" {} Airflow Stats Nominal, {},{},{},{},{:.2R},{:.1R},");
     static constexpr std::string_view Format_721(
-        "! <{} Airflow Stats Nominal>,Name,Schedule Name,Zone Name, Zone Floor Area {{m2}}, # Zone Occupants,{}\n");
+        "! <{} Airflow Stats Nominal>,Name,Input Object, Schedule Name,Zone Name, Zone Floor Area {{m2}}, # Zone Occupants,{}\n");
     static constexpr std::string_view Format_722(" {}, {}\n");
 
     RepVarSet.dimension(state.dataGlobal->NumOfZones, true);
 
     // Following used for reporting
     state.dataHeatBal->ZnAirRpt.allocate(state.dataGlobal->NumOfZones);
-    if (state.dataHeatBal->doSpaceHeatBalanceSimulation) {
+    if (state.dataHeatBal->doSpaceHeatBalanceSizing || state.dataHeatBal->doSpaceHeatBalanceSimulation) {
         state.dataHeatBal->spaceAirRpt.allocate(state.dataGlobal->numSpaces);
     }
 
@@ -453,6 +444,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                  lAlphaFieldBlanks,
                                                                  cAlphaFieldNames,
                                                                  cNumericFieldNames);
+
+        ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
         bool IsNotOK = false;
         auto &thisZoneAirBalance = state.dataHeatBal->ZoneAirBalance(Loop);
         thisZoneAirBalance.Name = cAlphaArgs(1);
@@ -512,31 +505,17 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             ErrorsFound = true;
         }
 
-        thisZoneAirBalance.InducedAirSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(4));
-        if (thisZoneAirBalance.InducedAirSchedPtr == 0) {
-            if (lAlphaFieldBlanks(4)) {
-                ShowSevereError(
-                    state,
-                    format("{}{}=\"{}\",{} is required but field is blank.", RoutineName, cCurrentModuleObject, cAlphaArgs(1), cAlphaFieldNames(4)));
-            } else {
-                ShowSevereError(state,
-                                format(R"({}{}="{}", invalid (not found) {}="{}".)",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaFieldNames(4),
-                                       cAlphaArgs(4)));
-            }
+        if (lAlphaFieldBlanks(4)) {
+            ShowSevereEmptyField(state, eoh, cAlphaFieldNames(4));
+        } else if ((thisZoneAirBalance.inducedAirSched = Sched::GetSchedule(state, cAlphaArgs(4))) == nullptr) {
+            ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(4), cAlphaArgs(4));
             ErrorsFound = true;
-        }
-        if (!ScheduleManager::CheckScheduleValueMinMax(state, thisZoneAirBalance.InducedAirSchedPtr, ">=", 0.0, "<=", 1.0)) {
-            ShowSevereError(
-                state, format("{} = {}:  Error found in {} = {}", cCurrentModuleObject, thisZoneAirBalance.Name, cAlphaFieldNames(4), cAlphaArgs(4)));
-            ShowContinueError(state, "Schedule values must be (>=0., <=1.)");
+        } else if (!thisZoneAirBalance.inducedAirSched->checkMinMaxVals(state, Clusive::In, 0.0, Clusive::In, 1.0)) {
+            Sched::ShowSevereBadMinMax(state, eoh, cAlphaFieldNames(4), cAlphaArgs(4), Clusive::In, 0.0, Clusive::In, 1.0);
             ErrorsFound = true;
         }
 
-        // Check whether this zone is also controleld by hybrid ventilation object with ventilation control option or not
+        // Check whether this zone is also controlled by hybrid ventilation object with ventilation control option or not
         bool ControlFlag = Avail::GetHybridVentilationControlStatus(state, thisZoneAirBalance.ZonePtr);
         if (ControlFlag && thisZoneAirBalance.BalanceMethod == DataHeatBalance::AirBalance::Quadrature) {
             thisZoneAirBalance.BalanceMethod = DataHeatBalance::AirBalance::None;
@@ -599,14 +578,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                 Constant::Units::m3_s,
                                 state.dataHeatBal->ZnAirRpt(thisZoneAirBalance.ZonePtr).OABalanceVdotCurDensity,
                                 OutputProcessor::TimeStepType::System,
-                                OutputProcessor::StoreType::Sum,
+                                OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Zone(thisZoneAirBalance.ZonePtr).Name);
             SetupOutputVariable(state,
                                 "Zone Combined Outdoor Air Standard Density Volume Flow Rate",
                                 Constant::Units::m3_s,
                                 state.dataHeatBal->ZnAirRpt(thisZoneAirBalance.ZonePtr).OABalanceVdotStdDensity,
                                 OutputProcessor::TimeStepType::System,
-                                OutputProcessor::StoreType::Sum,
+                                OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Zone(thisZoneAirBalance.ZonePtr).Name);
             SetupOutputVariable(state,
                                 "Zone Combined Outdoor Air Current Density Volume",
@@ -714,6 +693,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
 
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
             // Create one Infiltration instance for every space associated with this input object
             auto &thisInfiltrationInput = infiltrationDesignFlowRateObjects(infilInputNum);
             for (int Item1 = 1; Item1 <= thisInfiltrationInput.numOfSpaces; ++Item1) {
@@ -726,30 +706,22 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 auto &thisZone = state.dataHeatBal->Zone(thisSpace.zoneNum);
 
                 thisInfiltration.ModelType = DataHeatBalance::InfiltrationModelType::DesignFlowRate;
+
                 if (lAlphaFieldBlanks(3)) {
-                    thisInfiltration.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisInfiltration.SchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(3));
-                    if (thisInfiltration.SchedPtr == 0) {
-                        if (Item1 == 1) { // avoid repeated error messages from the same input object
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\", invalid (not found) {}=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(3),
-                                                   cAlphaArgs(3)));
-                            ErrorsFound = true;
-                        }
+                    thisInfiltration.sched =
+                        Sched::GetScheduleAlwaysOn(state); // This is not an availability schedule per se, but does default to Constant-1.0
+                } else if ((thisInfiltration.sched = Sched::GetSchedule(state, cAlphaArgs(3))) == nullptr) {
+                    if (Item1 == 1) { // avoid repeated error messages from the same input object
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(3), cAlphaArgs(3));
+                        ErrorsFound = true;
                     }
                 }
 
                 // Set space flow fractions
                 // Infiltration equipment design level calculation method.
-                AirflowSpecAlt flow = static_cast<AirflowSpecAlt>(getEnumValue(airflowAltNamesUC, cAlphaArgs(4))); // NOLINT(modernize-use-auto)
+                AirflowSpec flow = static_cast<AirflowSpec>(getEnumValue(airflowSpecNamesUC, cAlphaArgs(4))); // NOLINT(modernize-use-auto)
                 switch (flow) {
-                case AirflowSpecAlt::Flow:
-                case AirflowSpecAlt::FlowPerZone:
+                case AirflowSpec::FlowPerZone:
                     if (lNumericFieldBlanks(1)) {
                         ShowWarningError(state,
                                          format("{}{}=\"{}\", {} specifies {}, but that field is blank.  0 Infiltration will result.",
@@ -777,7 +749,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     break;
 
-                case AirflowSpecAlt::FlowPerArea:
+                case AirflowSpec::FlowPerArea:
                     if (thisInfiltration.ZonePtr != 0) {
                         if (rNumericArgs(2) >= 0.0) {
                             thisInfiltration.DesignLevel = rNumericArgs(2) * thisSpace.FloorArea;
@@ -813,7 +785,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     break;
 
-                case AirflowSpecAlt::FlowPerExteriorArea:
+                case AirflowSpec::FlowPerExteriorArea:
                     if (thisInfiltration.ZonePtr != 0) {
                         if (rNumericArgs(3) >= 0.0) {
                             thisInfiltration.DesignLevel = rNumericArgs(3) * thisSpace.ExteriorTotalSurfArea;
@@ -847,7 +819,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     break;
 
-                case AirflowSpecAlt::FlowPerExteriorWallArea:
+                case AirflowSpec::FlowPerExteriorWallArea:
                     if (thisInfiltration.ZonePtr != 0) {
                         if (rNumericArgs(3) >= 0.0) {
                             thisInfiltration.DesignLevel = rNumericArgs(3) * thisSpace.ExtGrossWallArea;
@@ -881,10 +853,10 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                     break;
 
-                case AirflowSpecAlt::AirChanges:
+                case AirflowSpec::AirChanges:
                     if (thisInfiltration.spaceIndex != 0) {
                         if (rNumericArgs(4) >= 0.0) {
-                            thisInfiltration.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::SecInHour;
+                            thisInfiltration.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::rSecsInHour;
                             if (thisSpace.Volume <= 0.0) {
                                 ShowWarningError(state,
                                                  format("{}{}=\"{}\", {} specifies {}, but Space Volume = 0.  0 Infiltration will result.",
@@ -939,6 +911,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                         ShowContinueError(state, "Infiltration Coefficients are all zero.  No Infiltration will be reported.");
                     }
                 }
+                thisInfiltration.densityBasis = static_cast<DataHeatBalance::InfVentDensityBasis>(
+                    getEnumValue(infVentDensityBasisNamesUC, cAlphaArgs(5))); // NOLINT(modernize-use-auto)
             }
         }
     }
@@ -958,6 +932,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                      lAlphaFieldBlanks,
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
+
             // Create one Infiltration instance for every space associated with this input object
             auto &thisInfiltrationInput = infiltrationLeakageAreaObjects(infilInputNum);
             for (int Item1 = 1; Item1 <= thisInfiltrationInput.numOfSpaces; ++Item1) {
@@ -972,19 +949,10 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 thisInfiltration.ModelType = DataHeatBalance::InfiltrationModelType::ShermanGrimsrud;
 
                 if (lAlphaFieldBlanks(3)) {
-                    thisInfiltration.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisInfiltration.SchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(3));
-                    if (thisInfiltration.SchedPtr == 0) {
-                        ShowSevereError(state,
-                                        format(R"({}{}="{}", invalid (not found) {}="{}".)",
-                                               RoutineName,
-                                               cCurrentModuleObject,
-                                               cAlphaArgs(1),
-                                               cAlphaFieldNames(3),
-                                               cAlphaArgs(3)));
-                        ErrorsFound = true;
-                    }
+                    thisInfiltration.sched = Sched::GetScheduleAlwaysOn(state); // Not an availability schedule but defaults to constant 1.0
+                } else if ((thisInfiltration.sched = Sched::GetSchedule(state, cAlphaArgs(3))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(3), cAlphaArgs(3));
+                    ErrorsFound = true;
                 }
                 thisInfiltration.BasicStackCoefficient = rNumericArgs(2);
                 thisInfiltration.BasicWindCoefficient = rNumericArgs(3);
@@ -1045,6 +1013,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                      lAlphaFieldBlanks,
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
+
             // Create one Infiltration instance for every space associated with this input object
             auto &thisInfiltrationInput = infiltrationFlowCoefficientObjects(infilInputNum);
             for (int Item1 = 1; Item1 <= thisInfiltrationInput.numOfSpaces; ++Item1) {
@@ -1059,19 +1030,10 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 thisInfiltration.ModelType = DataHeatBalance::InfiltrationModelType::AIM2;
 
                 if (lAlphaFieldBlanks(3)) {
-                    thisInfiltration.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisInfiltration.SchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(3));
-                    if (thisInfiltration.SchedPtr == 0) {
-                        ShowSevereError(state,
-                                        format("{}{}=\"{}\", invalid (not found) {}=\"{}\".",
-                                               RoutineName,
-                                               cCurrentModuleObject,
-                                               cAlphaArgs(1),
-                                               cAlphaFieldNames(3),
-                                               cAlphaArgs(3)));
-                        ErrorsFound = true;
-                    }
+                    thisInfiltration.sched = Sched::GetScheduleAlwaysOn(state); // Not an availability schedule, but defaults to constant-1.0
+                } else if ((thisInfiltration.sched = Sched::GetSchedule(state, cAlphaArgs(3))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(3), cAlphaArgs(3));
+                    ErrorsFound = true;
                 }
                 thisInfiltration.AIM2StackCoefficient = rNumericArgs(2);
                 thisInfiltration.PressureExponent = rNumericArgs(3);
@@ -1182,6 +1144,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                 OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Infiltration(Loop).Name);
             SetupOutputVariable(state,
+                                "Infiltration Outdoor Density Volume Flow Rate",
+                                Constant::Units::m3_s,
+                                state.dataHeatBal->Infiltration(Loop).InfilVdotOutDensity,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Infiltration(Loop).Name);
+            SetupOutputVariable(state,
                                 "Infiltration Current Density Volume",
                                 Constant::Units::m3,
                                 state.dataHeatBal->Infiltration(Loop).InfilVolumeCurDensity,
@@ -1210,9 +1179,23 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                 OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Infiltration(Loop).Name);
             SetupOutputVariable(state,
-                                "Infiltration Air Change Rate",
+                                "Infiltration Current Density Air Change Rate",
                                 Constant::Units::ach,
-                                state.dataHeatBal->Infiltration(Loop).InfilAirChangeRate,
+                                state.dataHeatBal->Infiltration(Loop).InfilAirChangeRateCurDensity,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Infiltration(Loop).Name);
+            SetupOutputVariable(state,
+                                "Infiltration Standard Density Air Change Rate",
+                                Constant::Units::ach,
+                                state.dataHeatBal->Infiltration(Loop).InfilAirChangeRateStdDensity,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Infiltration(Loop).Name);
+            SetupOutputVariable(state,
+                                "Infiltration Outdoor Density Air Change Rate",
+                                Constant::Units::ach,
+                                state.dataHeatBal->Infiltration(Loop).InfilAirChangeRateOutDensity,
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Infiltration(Loop).Name);
@@ -1276,6 +1259,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                     OutputProcessor::StoreType::Average,
                                     state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
                 SetupOutputVariable(state,
+                                    "Zone Infiltration Outdoor Density Volume Flow Rate",
+                                    Constant::Units::m3_s,
+                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilVdotOutDensity,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Average,
+                                    state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
+                SetupOutputVariable(state,
                                     "Zone Infiltration Current Density Volume",
                                     Constant::Units::m3,
                                     state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilVolumeCurDensity,
@@ -1304,9 +1294,23 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                     OutputProcessor::StoreType::Average,
                                     state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
                 SetupOutputVariable(state,
-                                    "Zone Infiltration Air Change Rate",
+                                    "Zone Infiltration Current Density Air Change Rate",
                                     Constant::Units::ach,
-                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilAirChangeRate,
+                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilAirChangeRateCurDensity,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Average,
+                                    state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
+                SetupOutputVariable(state,
+                                    "Zone Infiltration Standard Density Air Change Rate",
+                                    Constant::Units::ach,
+                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilAirChangeRateStdDensity,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Average,
+                                    state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
+                SetupOutputVariable(state,
+                                    "Zone Infiltration Outdoor Density Air Change Rate",
+                                    Constant::Units::ach,
+                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilAirChangeRateOutDensity,
                                     OutputProcessor::TimeStepType::System,
                                     OutputProcessor::StoreType::Average,
                                     state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
@@ -1368,6 +1372,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
 
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
             auto &thisVentilationInput = ventilationDesignFlowRateObjects(ventInputNum);
             for (int Item1 = 1; Item1 <= thisVentilationInput.numOfSpaces; ++Item1) {
                 ++ventilationNum;
@@ -1380,27 +1385,17 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
                 thisVentilation.ModelType = DataHeatBalance::VentilationModelType::DesignFlowRate;
                 if (lAlphaFieldBlanks(3)) {
-                    thisVentilation.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisVentilation.SchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(3));
-                    if (thisVentilation.SchedPtr == 0) {
-                        if (Item1 == 1) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\", invalid (not found) {}=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(3),
-                                                   cAlphaArgs(3)));
-                        }
+                    thisVentilation.availSched = Sched::GetScheduleAlwaysOn(state); // Defaults to constant-1.0
+                } else if ((thisVentilation.availSched = Sched::GetSchedule(state, cAlphaArgs(3))) == nullptr) {
+                    if (Item1 == 1) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(3), cAlphaArgs(3));
                         ErrorsFound = true;
                     }
                 }
 
                 // Ventilation equipment design level calculation method
-                AirflowSpec flow = static_cast<AirflowSpec>(getEnumValue(airflowNamesUC, cAlphaArgs(4))); // NOLINT(modernize-use-auto)
+                AirflowSpec flow = static_cast<AirflowSpec>(getEnumValue(airflowSpecNamesUC, cAlphaArgs(4))); // NOLINT(modernize-use-auto)
                 switch (flow) {
-                case AirflowSpec::Flow:
                 case AirflowSpec::FlowPerZone:
                     thisVentilation.DesignLevel = rNumericArgs(1);
                     if (lNumericFieldBlanks(1)) {
@@ -1485,7 +1480,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 case AirflowSpec::AirChanges:
                     if (thisVentilation.spaceIndex != 0) {
                         if (rNumericArgs(4) >= 0.0) {
-                            thisVentilation.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::SecInHour;
+                            thisVentilation.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::rSecsInHour;
                             if (thisSpace.Volume <= 0.0) {
                                 ShowWarningError(state,
                                                  format("{}{}=\"{}\", {} specifies {}, but Space Volume = 0.  0 Ventilation will result.",
@@ -1591,6 +1586,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 } else {
                     thisVentilation.MinIndoorTemperature = -VentilTempLimit;
                 }
+
                 //    Ventilation(Loop)%MinIndoorTemperature = rNumericArgs(11)
                 if ((thisVentilation.MinIndoorTemperature < -VentilTempLimit) || (thisVentilation.MinIndoorTemperature > VentilTempLimit)) {
                     if (Item1 == 1) {
@@ -1605,54 +1601,32 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                 }
 
-                thisVentilation.MinIndoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(6));
-                if (thisVentilation.MinIndoorTempSchedPtr > 0) {
-                    if (Item1 == 1) {
-                        if (!lNumericFieldBlanks(11))
-                            ShowWarningError(state,
-                                             format("{}The Minimum Indoor Temperature value and schedule are provided. The scheduled temperature "
-                                                    "will be used in the {} object = {}",
-                                                    RoutineName,
-                                                    cCurrentModuleObject,
-                                                    cAlphaArgs(1)));
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisVentilation.MinIndoorTempSchedPtr, ">=", -VentilTempLimit, "<=", VentilTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format(
-                                    "{}{} statement = {} must have a minimum indoor temperature between -100C and 100C defined in the schedule = {}",
-                                    RoutineName,
-                                    cCurrentModuleObject,
-                                    cAlphaArgs(1),
-                                    cAlphaArgs(6)));
-                            ErrorsFound = true;
+                if (!lAlphaFieldBlanks(6)) {
+                    thisVentilation.minIndoorTempSched = Sched::GetSchedule(state, cAlphaArgs(6));
+                }
+
+                if (Item1 == 1) { // Item check prevents this error from printing multiple times
+                    if (lAlphaFieldBlanks(6)) {
+                        if (lNumericFieldBlanks(11)) {
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(11), format("The default value will be used ({:.1R})",
+                            // -VentilTempLimit));
                         }
-                    }
-                }
-                if (thisVentilation.MinIndoorTempSchedPtr == 0 && lNumericFieldBlanks(11) && (!lAlphaFieldBlanks(6))) {
-                    if (Item1 == 1) {
-                        ShowWarningError(
-                            state,
-                            format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                   RoutineName,
-                                   cNumericFieldNames(11),
-                                   -VentilTempLimit));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                    }
-                }
-                // Check Minimum indoor temperature value and schedule fields
-                if (!lNumericFieldBlanks(11) && (!cAlphaArgs(6).empty() && thisVentilation.MinIndoorTempSchedPtr == 0)) {
-                    if (Item1 == 1) {
-                        ShowWarningError(state,
-                                         format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                                RoutineName,
+                    } else if (thisVentilation.minIndoorTempSched == nullptr) {
+                        ShowWarningItemNotFound(state,
+                                                eoh,
                                                 cAlphaFieldNames(6),
                                                 cAlphaArgs(6),
-                                                rNumericArgs(11)));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                                                format("The default value will be used ({:.1R})", thisVentilation.MinIndoorTemperature));
+                    } else if (!thisVentilation.minIndoorTempSched->checkMinMaxVals(
+                                   state, Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(6), cAlphaArgs(6), Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit);
+                        ErrorsFound = true;
+                    } else if (!lNumericFieldBlanks(11)) {
+                        ShowWarningCustom(
+                            state,
+                            eoh,
+                            format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(6), cAlphaFieldNames(11), cAlphaFieldNames(6)));
                     }
                 }
 
@@ -1668,104 +1642,62 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                 }
 
-                thisVentilation.MaxIndoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(7));
-                if (thisVentilation.MaxIndoorTempSchedPtr > 0) {
-                    if (Item1 == 1) {
-                        if (!lNumericFieldBlanks(12))
-                            ShowWarningError(state,
-                                             format("{}The Maximum Indoor Temperature value and schedule are provided. The scheduled temperature "
-                                                    "will be used in the {} object = {}",
-                                                    RoutineName,
-                                                    cCurrentModuleObject,
-                                                    cAlphaArgs(1)));
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisVentilation.MaxIndoorTempSchedPtr, ">=", -VentilTempLimit, "<=", VentilTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{} = {} must have a maximum indoor temperature between -100C and 100C defined in the schedule = {}",
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(7)));
-                            ErrorsFound = true;
+                if (!lAlphaFieldBlanks(7)) {
+                    thisVentilation.maxIndoorTempSched = Sched::GetSchedule(state, cAlphaArgs(7));
+                }
+
+                if (Item1 == 1) { // Item check prevents this error from printing multiple times
+                    if (lAlphaFieldBlanks(7)) {
+                        if (lNumericFieldBlanks(12)) {
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(12), format("The default value will be used ({:.1R})",
+                            // VentilTempLimit));
                         }
-                    }
-                }
-                if (thisVentilation.MaxIndoorTempSchedPtr == 0 && lNumericFieldBlanks(12) && (!lAlphaFieldBlanks(7))) {
-                    if (Item1 == 1) {
-                        ShowWarningError(
-                            state,
-                            format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                   RoutineName,
-                                   cNumericFieldNames(12),
-                                   VentilTempLimit));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                    }
-                }
-                // Check Maximum indoor temperature value and schedule fields
-                if (!lNumericFieldBlanks(12) && ((!lAlphaFieldBlanks(7)) && thisVentilation.MaxIndoorTempSchedPtr == 0)) {
-                    if (Item1 == 1) {
-                        ShowWarningError(state,
-                                         format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                                RoutineName,
+                    } else if (thisVentilation.maxIndoorTempSched == nullptr) {
+                        ShowWarningItemNotFound(state,
+                                                eoh,
                                                 cAlphaFieldNames(7),
                                                 cAlphaArgs(7),
-                                                rNumericArgs(12)));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                                                format("The default value will be used ({:.1R})", thisVentilation.MaxIndoorTemperature));
+                    } else if (!thisVentilation.maxIndoorTempSched->checkMinMaxVals(
+                                   state, Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(7), cAlphaArgs(7), Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit);
+                        ErrorsFound = true;
+                    } else if (!lNumericFieldBlanks(12)) {
+                        ShowWarningCustom(
+                            state,
+                            eoh,
+                            format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(7), cAlphaFieldNames(12), cAlphaFieldNames(7)));
                     }
                 }
 
                 thisVentilation.DelTemperature = !lNumericFieldBlanks(13) ? rNumericArgs(13) : -VentilTempLimit;
                 //    Ventilation(Loop)%DelTemperature = rNumericArgs(13)  !  3/12/03  Negative del temp now allowed COP
 
-                thisVentilation.DeltaTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(8));
-                if (thisVentilation.DeltaTempSchedPtr > 0) {
-                    if (Item1 == 1) {
-                        if (!lNumericFieldBlanks(13))
-                            ShowWarningError(state,
-                                             format("{}The Delta Temperature value and schedule are provided. The scheduled temperature will be used "
-                                                    "in the {} object = {}",
-                                                    RoutineName,
-                                                    cCurrentModuleObject,
-                                                    cAlphaArgs(1)));
-                        // Check min value in the schedule to ensure both values are within the range
-                        if (ScheduleManager::GetScheduleMinValue(state, thisVentilation.DeltaTempSchedPtr) < -VentilTempLimit) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} statement = {} must have a delta temperature equal to or above -100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(8)));
-                            ErrorsFound = true;
-                        }
-                    }
-                }
-                if (thisVentilation.DeltaTempSchedPtr == 0 && lNumericFieldBlanks(13) && (!lAlphaFieldBlanks(8))) {
-                    if (Item1 == 1) {
-                        ShowWarningError(
-                            state,
-                            format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                   RoutineName,
-                                   cNumericFieldNames(13),
-                                   VentilTempLimit));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                    }
+                if (!lAlphaFieldBlanks(8)) {
+                    thisVentilation.deltaTempSched = Sched::GetSchedule(state, cAlphaArgs(8));
                 }
 
-                if (!lNumericFieldBlanks(13) && ((!lAlphaFieldBlanks(8)) && thisVentilation.DeltaTempSchedPtr == 0)) {
-                    if (Item1 == 1) {
-                        ShowWarningError(state,
-                                         format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                                RoutineName,
+                if (Item1 == 1) { // Item check prevents this error from printing multiple times
+                    if (lAlphaFieldBlanks(8)) {
+                        if (lNumericFieldBlanks(13)) {
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(13), format("The default value will be used ({:.1R})",
+                            // VentilTempLimit));
+                        }
+                    } else if (thisVentilation.deltaTempSched == nullptr) {
+                        ShowWarningItemNotFound(state,
+                                                eoh,
                                                 cAlphaFieldNames(8),
                                                 cAlphaArgs(8),
-                                                rNumericArgs(13)));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                                                format("The default value will be used ({:.1R})", thisVentilation.DelTemperature));
+                    } else if (!thisVentilation.deltaTempSched->checkMinVal(state, Clusive::In, -VentilTempLimit)) {
+                        Sched::ShowSevereBadMin(state, eoh, cAlphaFieldNames(8), cAlphaArgs(8), Clusive::In, -100);
+                        ErrorsFound = true;
+                    } else if (!lNumericFieldBlanks(13)) {
+                        ShowWarningCustom(
+                            state,
+                            eoh,
+                            format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(8), cAlphaFieldNames(13), cAlphaFieldNames(8)));
                     }
                 }
 
@@ -1782,49 +1714,32 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                 }
 
-                thisVentilation.MinOutdoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(9));
-                if (Item1 == 1) {
-                    if (thisVentilation.MinOutdoorTempSchedPtr > 0) {
-                        if (!lNumericFieldBlanks(14))
-                            ShowWarningError(state,
-                                             format("{}The Minimum Outdoor Temperature value and schedule are provided. The scheduled temperature "
-                                                    "will be used in the {} object = {}",
-                                                    RoutineName,
-                                                    cCurrentModuleObject,
-                                                    cAlphaArgs(1)));
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisVentilation.MinOutdoorTempSchedPtr, ">=", -VentilTempLimit, "<=", VentilTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format(
-                                    "{}{} statement = {} must have a minimum outdoor temperature between -100C and 100C defined in the schedule = {}",
-                                    RoutineName,
-                                    cCurrentModuleObject,
-                                    cAlphaArgs(1),
-                                    cAlphaArgs(9)));
-                            ErrorsFound = true;
+                if (!lAlphaFieldBlanks(9)) {
+                    thisVentilation.minOutdoorTempSched = Sched::GetSchedule(state, cAlphaArgs(9));
+                }
+
+                if (Item1 == 1) { // Item check prevents this error from printing multiple times
+                    if (lAlphaFieldBlanks(9)) {
+                        if (lNumericFieldBlanks(14)) {
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(14), format("The default value will be used ({:.1R})",
+                            // VentilTempLimit));
                         }
-                    }
-                    if (thisVentilation.MinOutdoorTempSchedPtr == 0 && lNumericFieldBlanks(14) && (!lAlphaFieldBlanks(9))) {
-                        ShowWarningError(state,
-                                         format("{}Minimum Outdoor Temperature: the value field is blank and schedule field is invalid. The "
-                                                "default value will be used ({:.1R}) ",
-                                                RoutineName,
-                                                -VentilTempLimit));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                    }
-                    // Check Minimum outdoor temperature value and schedule fields
-                    if (!lNumericFieldBlanks(14) && ((!lAlphaFieldBlanks(9)) && thisVentilation.MinOutdoorTempSchedPtr == 0)) {
-                        ShowWarningError(state,
-                                         format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                                RoutineName,
+                    } else if (thisVentilation.minOutdoorTempSched == nullptr) {
+                        ShowWarningItemNotFound(state,
+                                                eoh,
                                                 cAlphaFieldNames(9),
                                                 cAlphaArgs(9),
-                                                rNumericArgs(14)));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                                                format("The default value will be used ({:.1R})", thisVentilation.MinOutdoorTemperature));
+                    } else if (!thisVentilation.minOutdoorTempSched->checkMinMaxVals(
+                                   state, Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(9), cAlphaArgs(9), Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit);
+                        ErrorsFound = true;
+                    } else if (!lNumericFieldBlanks(14)) {
+                        ShowWarningCustom(
+                            state,
+                            eoh,
+                            format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(9), cNumericFieldNames(14), cAlphaFieldNames(9)));
                     }
                 }
 
@@ -1841,49 +1756,32 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                 }
 
-                thisVentilation.MaxOutdoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(10));
-                if (Item1 == 1) {
-                    if (thisVentilation.MaxOutdoorTempSchedPtr > 0) {
-                        if (!lNumericFieldBlanks(15))
-                            ShowWarningError(state,
-                                             format("{}The Maximum Outdoor Temperature value and schedule are provided. The scheduled temperature "
-                                                    "will be used in the {} object = {}",
-                                                    RoutineName,
-                                                    cCurrentModuleObject,
-                                                    cAlphaArgs(1)));
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisVentilation.MaxOutdoorTempSchedPtr, ">=", -VentilTempLimit, "<=", VentilTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format(
-                                    "{}{} statement = {} must have a maximum outdoor temperature between -100C and 100C defined in the schedule = {}",
-                                    RoutineName,
-                                    cCurrentModuleObject,
-                                    cAlphaArgs(1),
-                                    cAlphaArgs(10)));
-                            ErrorsFound = true;
+                if (!lAlphaFieldBlanks(10)) {
+                    thisVentilation.maxOutdoorTempSched = Sched::GetSchedule(state, cAlphaArgs(10));
+                }
+
+                if (Item1 == 1) { // Item check prevents this error from printing multiple times
+                    if (lAlphaFieldBlanks(10)) {
+                        if (lNumericFieldBlanks(15)) {
+                            // ShowWarningEmptyField(state, eoh, cNumericFieldNames(15), format("The default value will be used ({:.1R})",
+                            // VentilTempLimit));
                         }
-                    }
-                    if (thisVentilation.MaxOutdoorTempSchedPtr == 0 && lNumericFieldBlanks(15) && (!lAlphaFieldBlanks(10))) {
-                        ShowWarningError(
-                            state,
-                            format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                   RoutineName,
-                                   cNumericFieldNames(15),
-                                   VentilTempLimit));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                    }
-                    // Check Maximum outdoor temperature value and schedule fields
-                    if (!lNumericFieldBlanks(15) && ((!lAlphaFieldBlanks(10)) && thisVentilation.MaxOutdoorTempSchedPtr == 0)) {
-                        ShowWarningError(state,
-                                         format("{}{} = {}is invalid. The constant value will be used at {:.1R} degrees C ",
-                                                RoutineName,
+                    } else if (thisVentilation.maxOutdoorTempSched == nullptr) {
+                        ShowWarningItemNotFound(state,
+                                                eoh,
                                                 cAlphaFieldNames(10),
                                                 cAlphaArgs(10),
-                                                rNumericArgs(15)));
-                        ShowContinueError(state,
-                                          format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                                                format("The default value will be used ({:.1R})", thisVentilation.MaxOutdoorTemperature));
+                    } else if (!thisVentilation.maxOutdoorTempSched->checkMinMaxVals(
+                                   state, Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(10), cAlphaArgs(10), Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit);
+                        ErrorsFound = true;
+                    } else if (!lNumericFieldBlanks(15)) {
+                        ShowWarningCustom(
+                            state,
+                            eoh,
+                            format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(10), cNumericFieldNames(15), cAlphaFieldNames(10)));
                     }
                 }
 
@@ -1898,6 +1796,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                         ErrorsFound = true;
                     }
                 }
+
+                thisVentilation.densityBasis = static_cast<DataHeatBalance::InfVentDensityBasis>(
+                    getEnumValue(infVentDensityBasisNamesUC, cAlphaArgs(11))); // NOLINT(modernize-use-auto)
 
                 // Report variables should be added for individual VENTILATION objects, in addition to zone totals below
 
@@ -1961,6 +1862,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
                         SetupOutputVariable(state,
+                                            "Zone Ventilation Outdoor Density Volume Flow Rate",
+                                            Constant::Units::m3_s,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilVdotOutDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
                                             "Zone Ventilation Current Density Volume",
                                             Constant::Units::m3,
                                             state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilVolumeCurDensity,
@@ -1989,9 +1897,23 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
                         SetupOutputVariable(state,
-                                            "Zone Ventilation Air Change Rate",
+                                            "Zone Ventilation Current Density Air Change Rate",
                                             Constant::Units::ach,
-                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRate,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateCurDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
+                                            "Zone Ventilation Standard Density Air Change Rate",
+                                            Constant::Units::ach,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateStdDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
+                                            "Zone Ventilation Outdoor Density Air Change Rate",
+                                            Constant::Units::ach,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateOutDensity,
                                             OutputProcessor::TimeStepType::System,
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
@@ -2047,6 +1969,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
 
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
+
             auto &thisVentilationInput = ventilationWindStackObjects(ventInputNum);
             for (int Item1 = 1; Item1 <= thisVentilationInput.numOfSpaces; ++Item1) {
                 ++ventilationNum;
@@ -2059,6 +1983,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
                 thisVentilation.ModelType = DataHeatBalance::VentilationModelType::WindAndStack;
 
+                thisVentilation.availSched = Sched::GetScheduleAlwaysOn(state); // not an availability schedule, but defaults to constant-1.0
+
                 thisVentilation.OpenArea = rNumericArgs(1);
                 if (thisVentilation.OpenArea < 0.0) {
                     ShowSevereError(
@@ -2067,19 +1993,11 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 }
 
                 if (lAlphaFieldBlanks(3)) {
-                    thisVentilation.OpenAreaSchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisVentilation.OpenAreaSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(3));
-                    if (thisVentilation.OpenAreaSchedPtr == 0) {
-                        ShowSevereError(state,
-                                        format("{}{}=\"{}\", invalid (not found) {}=\"{}\".",
-                                               RoutineName,
-                                               cCurrentModuleObject,
-                                               cAlphaArgs(1),
-                                               cAlphaFieldNames(3),
-                                               cAlphaArgs(3)));
-                        ErrorsFound = true;
-                    }
+                    thisVentilation.openAreaFracSched =
+                        Sched::GetScheduleAlwaysOn(state); // not an availability schedule, but defaults to constant-1.0
+                } else if ((thisVentilation.openAreaFracSched = Sched::GetSchedule(state, cAlphaArgs(3))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(3), cAlphaArgs(3));
+                    ErrorsFound = true;
                 }
 
                 thisVentilation.OpenEff = rNumericArgs(2);
@@ -2129,98 +2047,67 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     ErrorsFound = true;
                 }
 
-                thisVentilation.MinIndoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(4));
-                if (thisVentilation.MinIndoorTempSchedPtr > 0) {
-                    if (!lNumericFieldBlanks(6))
-                        ShowWarningError(state,
-                                         format("{}The Minimum Indoor Temperature value and schedule are provided. The scheduled temperature will be "
-                                                "used in the {} object = {}",
-                                                RoutineName,
-                                                cCurrentModuleObject,
-                                                cAlphaArgs(1)));
-                    // Check min and max values in the schedule to ensure both values are within the range
-                    if (!ScheduleManager::CheckScheduleValueMinMax(
-                            state, thisVentilation.MinIndoorTempSchedPtr, ">=", -VentilTempLimit, "<=", VentilTempLimit)) {
-                        ShowSevereError(
-                            state,
-                            format("{}{} statement = {} must have a minimum indoor temperature between -100C and 100C defined in the schedule = {}",
-                                   RoutineName,
-                                   cCurrentModuleObject,
-                                   cAlphaArgs(1),
-                                   cAlphaArgs(4)));
-                        ErrorsFound = true;
-                    }
-                }
-                if (thisVentilation.MinIndoorTempSchedPtr == 0 && lNumericFieldBlanks(6) && (!lAlphaFieldBlanks(4))) {
-                    ShowWarningError(state,
-                                     format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                            RoutineName,
-                                            cNumericFieldNames(6),
-                                            -VentilTempLimit));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
-                // Check Minimum indoor temperature value and schedule fields
-                if (!lNumericFieldBlanks(6) && (!cAlphaArgs(4).empty() && thisVentilation.MinIndoorTempSchedPtr == 0)) {
-                    ShowWarningError(state,
-                                     format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                            RoutineName,
-                                            cAlphaFieldNames(4),
-                                            cAlphaArgs(4),
-                                            rNumericArgs(11)));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                if (!lAlphaFieldBlanks(4)) {
+                    thisVentilation.minIndoorTempSched = Sched::GetSchedule(state, cAlphaArgs(4));
                 }
 
+                if (lAlphaFieldBlanks(4)) {
+                    if (lNumericFieldBlanks(6)) {
+                        // ShowWarningEmptyField(state, eoh, cAlphaFieldNames(12), format("The default value will be used ({:.1R})",
+                        // VentilTempLimit));
+                    }
+                } else if (thisVentilation.minIndoorTempSched == nullptr) {
+                    ShowWarningItemNotFound(state,
+                                            eoh,
+                                            cAlphaFieldNames(4),
+                                            cAlphaArgs(4),
+                                            format("The default value will be used ({:.1R})", thisVentilation.MinIndoorTemperature));
+                } else if (!thisVentilation.minIndoorTempSched->checkMinMaxVals(state, Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit)) {
+                    Sched::ShowSevereBadMinMax(
+                        state, eoh, cAlphaFieldNames(4), cAlphaArgs(4), Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit);
+                    ErrorsFound = true;
+                } else if (!lNumericFieldBlanks(6)) {
+                    ShowWarningCustom(
+                        state,
+                        eoh,
+                        format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(4), cNumericFieldNames(6), cAlphaFieldNames(4)));
+                }
+
+                // Max indoor temperature
                 if (!lNumericFieldBlanks(7)) {
                     thisVentilation.MaxIndoorTemperature = rNumericArgs(7);
                 } else {
                     thisVentilation.MaxIndoorTemperature = VentilTempLimit;
                 }
                 if ((thisVentilation.MaxIndoorTemperature < -VentilTempLimit) || (thisVentilation.MaxIndoorTemperature > VentilTempLimit)) {
-                    ShowSevereError(state,
-                                    format("{}{}=\"{}\" must have a maximum indoor temperature between -100C and 100C",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           cAlphaArgs(1)));
+                    ShowSevereCustom(state, eoh, format("{} must be between {}C and {}C", cNumericFieldNames(7), -VentilTempLimit, VentilTempLimit));
                     ErrorsFound = true;
                 }
 
-                thisVentilation.MaxIndoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(5));
-                if (thisVentilation.MaxIndoorTempSchedPtr > 0) {
-                    if (!lNumericFieldBlanks(7))
-                        ShowWarningError(state,
-                                         format("{}The Maximum Indoor Temperature value and schedule are provided. The scheduled temperature will be "
-                                                "used in the {} object = {}",
-                                                RoutineName,
-                                                cCurrentModuleObject,
-                                                cAlphaArgs(1)));
-                    // Check min and max values in the schedule to ensure both values are within the range
-                    if (!ScheduleManager::CheckScheduleValueMinMax(
-                            state, thisVentilation.MaxIndoorTempSchedPtr, ">=", -VentilTempLimit, "<=", VentilTempLimit)) {
-                        ShowSevereError(state,
-                                        format("{} = {} must have a maximum indoor temperature between -100C and 100C defined in the schedule = {}",
-                                               cCurrentModuleObject,
-                                               cAlphaArgs(1),
-                                               cAlphaArgs(5)));
-                        ErrorsFound = true;
+                if (!lAlphaFieldBlanks(5)) {
+                    thisVentilation.maxIndoorTempSched = Sched::GetSchedule(state, cAlphaArgs(5));
+                }
+
+                if (lAlphaFieldBlanks(5)) {
+                    if (lNumericFieldBlanks(7)) {
+                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(7), format("The default value will be used ({:.1R})",
+                        // VentilTempLimit));
                     }
-                }
-                if (thisVentilation.MaxIndoorTempSchedPtr == 0 && lNumericFieldBlanks(7) && (!lAlphaFieldBlanks(5))) {
-                    ShowWarningError(state,
-                                     format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                            RoutineName,
-                                            cNumericFieldNames(7),
-                                            VentilTempLimit));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
-                // Check Maximum indoor temperature value and schedule fields
-                if (!lNumericFieldBlanks(7) && ((!lAlphaFieldBlanks(5)) && thisVentilation.MaxIndoorTempSchedPtr == 0)) {
-                    ShowWarningError(state,
-                                     format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                            RoutineName,
-                                            cAlphaFieldNames(7),
+                } else if (thisVentilation.maxIndoorTempSched == nullptr) {
+                    ShowWarningItemNotFound(state,
+                                            eoh,
+                                            cAlphaFieldNames(5),
                                             cAlphaArgs(5),
-                                            rNumericArgs(7)));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                                            format("The default value will be used ({:.1R})", thisVentilation.MaxIndoorTemperature));
+                } else if (!thisVentilation.maxIndoorTempSched->checkMinMaxVals(state, Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit)) {
+                    Sched::ShowSevereBadMinMax(
+                        state, eoh, cAlphaFieldNames(5), cAlphaArgs(5), Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit);
+                    ErrorsFound = true;
+                } else if (!lNumericFieldBlanks(7)) {
+                    ShowWarningCustom(
+                        state,
+                        eoh,
+                        format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(5), cNumericFieldNames(7), cAlphaFieldNames(5)));
                 }
 
                 if (!lNumericFieldBlanks(8)) {
@@ -2229,45 +2116,32 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     thisVentilation.DelTemperature = -VentilTempLimit;
                 }
 
-                thisVentilation.DeltaTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(6));
-                if (thisVentilation.DeltaTempSchedPtr > 0) {
-                    if (!lNumericFieldBlanks(8))
-                        ShowWarningError(state,
-                                         format("{}The Delta Temperature value and schedule are provided. The scheduled temperature will be used in "
-                                                "the {} object = {}",
-                                                RoutineName,
-                                                cCurrentModuleObject,
-                                                cAlphaArgs(1)));
-                    // Check min value in the schedule to ensure both values are within the range
-                    if (ScheduleManager::GetScheduleMinValue(state, thisVentilation.DeltaTempSchedPtr) < -VentilTempLimit) {
-                        ShowSevereError(
-                            state,
-                            format("{}{} statement = {} must have a delta temperature equal to or above -100C defined in the schedule = {}",
-                                   RoutineName,
-                                   cCurrentModuleObject,
-                                   cAlphaArgs(1),
-                                   cAlphaArgs(8)));
-                        ErrorsFound = true;
-                    }
-                }
-                if (thisVentilation.DeltaTempSchedPtr == 0 && lNumericFieldBlanks(8) && (!lAlphaFieldBlanks(6))) {
-                    ShowWarningError(state,
-                                     format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                            RoutineName,
-                                            cNumericFieldNames(8),
-                                            VentilTempLimit));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
-                if (!lNumericFieldBlanks(8) && ((!lAlphaFieldBlanks(6)) && thisVentilation.DeltaTempSchedPtr == 0)) {
-                    ShowWarningError(state,
-                                     format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                            RoutineName,
-                                            cAlphaFieldNames(6),
-                                            cAlphaArgs(6),
-                                            rNumericArgs(8)));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                if (!lAlphaFieldBlanks(6)) {
+                    thisVentilation.deltaTempSched = Sched::GetSchedule(state, cAlphaArgs(6));
                 }
 
+                if (lAlphaFieldBlanks(6)) {
+                    if (lNumericFieldBlanks(8)) {
+                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(8), format("The default value will be used ({:.1R})",
+                        // VentilTempLimit));
+                    }
+                } else if (thisVentilation.deltaTempSched == nullptr) {
+                    ShowWarningItemNotFound(state,
+                                            eoh,
+                                            cAlphaFieldNames(6),
+                                            cAlphaArgs(6),
+                                            format("The default value will be used ({:.1R})", thisVentilation.DelTemperature));
+                } else if (!thisVentilation.deltaTempSched->checkMinVal(state, Clusive::In, -VentilTempLimit)) {
+                    Sched::ShowSevereBadMin(state, eoh, cAlphaFieldNames(6), cAlphaArgs(6), Clusive::In, -VentilTempLimit);
+                    ErrorsFound = true;
+                } else if (!lNumericFieldBlanks(8)) {
+                    ShowWarningCustom(
+                        state,
+                        eoh,
+                        format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(6), cNumericFieldNames(8), cAlphaFieldNames(6)));
+                }
+
+                // Min outdoor temp
                 thisVentilation.MinOutdoorTemperature = !lNumericFieldBlanks(9) ? rNumericArgs(9) : -VentilTempLimit;
                 if ((thisVentilation.MinOutdoorTemperature < -VentilTempLimit) || (thisVentilation.MinOutdoorTemperature > VentilTempLimit)) {
                     ShowSevereError(state,
@@ -2279,48 +2153,34 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     ErrorsFound = true;
                 }
 
-                thisVentilation.MinOutdoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(7));
-                if (thisVentilation.MinOutdoorTempSchedPtr > 0) {
-                    if (!lNumericFieldBlanks(9))
-                        ShowWarningError(state,
-                                         format("{}The Minimum Outdoor Temperature value and schedule are provided. The scheduled temperature will "
-                                                "be used in the {} object = {}",
-                                                RoutineName,
-                                                cCurrentModuleObject,
-                                                cAlphaArgs(1)));
-                    // Check min and max values in the schedule to ensure both values are within the range
-                    if (!ScheduleManager::CheckScheduleValueMinMax(
-                            state, thisVentilation.MinOutdoorTempSchedPtr, ">=", -VentilTempLimit, "<=", VentilTempLimit)) {
-                        ShowSevereError(
-                            state,
-                            format("{}{} statement = {} must have a minimum outdoor temperature between -100C and 100C defined in the schedule = {}",
-                                   RoutineName,
-                                   cCurrentModuleObject,
-                                   cAlphaArgs(1),
-                                   cAlphaArgs(7)));
-                        ErrorsFound = true;
-                    }
-                }
-                if (thisVentilation.MinOutdoorTempSchedPtr == 0 && lNumericFieldBlanks(9) && (!lAlphaFieldBlanks(7))) {
-                    ShowWarningError(
-                        state,
-                        format("{}Minimum Outdoor Temperature: the value field is blank and schedule field is invalid. The default value "
-                               "will be used ({:.1R}) ",
-                               RoutineName,
-                               -VentilTempLimit));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
-                // Check Minimum outdoor temperature value and schedule fields
-                if (!lNumericFieldBlanks(9) && ((!lAlphaFieldBlanks(7)) && thisVentilation.MinOutdoorTempSchedPtr == 0)) {
-                    ShowWarningError(state,
-                                     format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                            RoutineName,
-                                            cAlphaFieldNames(7),
-                                            cAlphaArgs(7),
-                                            rNumericArgs(14)));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                if (!lAlphaFieldBlanks(7)) {
+                    thisVentilation.minOutdoorTempSched = Sched::GetSchedule(state, cAlphaArgs(7));
                 }
 
+                if (lAlphaFieldBlanks(7)) {
+                    if (lNumericFieldBlanks(9)) {
+                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(9), format("The default value will be used ({:.1R})",
+                        // VentilTempLimit));
+                    }
+                } else if (thisVentilation.minOutdoorTempSched == nullptr) {
+                    ShowWarningItemNotFound(state,
+                                            eoh,
+                                            cAlphaFieldNames(7),
+                                            cAlphaArgs(7),
+                                            format("The default value will be used ({:.1R})", thisVentilation.MinOutdoorTemperature));
+                } else if (!thisVentilation.minOutdoorTempSched->checkMinMaxVals(
+                               state, Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit)) {
+                    Sched::ShowSevereBadMinMax(
+                        state, eoh, cAlphaFieldNames(7), cAlphaArgs(7), Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit);
+                    ErrorsFound = true;
+                } else if (!lNumericFieldBlanks(9)) {
+                    ShowWarningCustom(
+                        state,
+                        eoh,
+                        format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(7), cNumericFieldNames(9), cAlphaFieldNames(7)));
+                }
+
+                // Max outdoor temp
                 thisVentilation.MaxOutdoorTemperature = !lNumericFieldBlanks(10) ? rNumericArgs(10) : VentilTempLimit;
                 if ((thisVentilation.MaxOutdoorTemperature < -VentilTempLimit) || (thisVentilation.MaxOutdoorTemperature > VentilTempLimit)) {
                     ShowSevereError(state,
@@ -2332,46 +2192,34 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     ErrorsFound = true;
                 }
 
-                thisVentilation.MaxOutdoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(8));
-                if (thisVentilation.MaxOutdoorTempSchedPtr > 0) {
-                    if (!lNumericFieldBlanks(10))
-                        ShowWarningError(state,
-                                         format("{}The Maximum Outdoor Temperature value and schedule are provided. The scheduled temperature will "
-                                                "be used in the {} object = {}",
-                                                RoutineName,
-                                                cCurrentModuleObject,
-                                                cAlphaArgs(1)));
-                    if (!ScheduleManager::CheckScheduleValueMinMax(
-                            state, thisVentilation.MaxOutdoorTempSchedPtr, ">=", -VentilTempLimit, "<=", VentilTempLimit)) {
-                        ShowSevereError(
-                            state,
-                            format("{}{} statement = {} must have a maximum outdoor temperature between -100C and 100C defined in the schedule = {}",
-                                   RoutineName,
-                                   cCurrentModuleObject,
-                                   cAlphaArgs(1),
-                                   cAlphaArgs(8)));
-                        ErrorsFound = true;
-                    }
-                }
-                if (thisVentilation.MaxOutdoorTempSchedPtr == 0 && lNumericFieldBlanks(10) && (!lAlphaFieldBlanks(8))) {
-                    ShowWarningError(state,
-                                     format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                            RoutineName,
-                                            cNumericFieldNames(10),
-                                            VentilTempLimit));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
-                // Check Maximum outdoor temperature value and schedule fields
-                if (!lNumericFieldBlanks(10) && ((!lAlphaFieldBlanks(8)) && thisVentilation.MaxOutdoorTempSchedPtr == 0)) {
-                    ShowWarningError(state,
-                                     format("{}{} = {}is invalid. The constant value will be used at {:.1R} degrees C ",
-                                            RoutineName,
-                                            cAlphaFieldNames(8),
-                                            cAlphaArgs(8),
-                                            rNumericArgs(10)));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
+                if (!lAlphaFieldBlanks(8)) {
+                    thisVentilation.maxOutdoorTempSched = Sched::GetSchedule(state, cAlphaArgs(8));
                 }
 
+                if (lAlphaFieldBlanks(8)) {
+                    if (lNumericFieldBlanks(10)) {
+                        // ShowWarningEmptyField(state, eoh, cNumericFieldNames(10), format("The default value will be used ({:.1R})",
+                        // VentilTempLimit));
+                    }
+                } else if (thisVentilation.maxOutdoorTempSched == nullptr) {
+                    ShowWarningItemNotFound(state,
+                                            eoh,
+                                            cAlphaFieldNames(8),
+                                            cAlphaArgs(8),
+                                            format("The default value will be used ({:.1R})", thisVentilation.MaxOutdoorTemperature));
+                } else if (!thisVentilation.maxOutdoorTempSched->checkMinMaxVals(
+                               state, Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit)) {
+                    Sched::ShowSevereBadMinMax(
+                        state, eoh, cAlphaFieldNames(8), cAlphaArgs(8), Clusive::In, -VentilTempLimit, Clusive::In, VentilTempLimit);
+                    ErrorsFound = true;
+                } else if (!lNumericFieldBlanks(10)) {
+                    ShowWarningCustom(
+                        state,
+                        eoh,
+                        format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(8), cNumericFieldNames(10), cAlphaFieldNames(8)));
+                }
+
+                // Max wind speed
                 thisVentilation.MaxWindSpeed = !lNumericFieldBlanks(11) ? rNumericArgs(11) : VentilWSLimit;
                 if ((thisVentilation.MaxWindSpeed < -VentilWSLimit) || (thisVentilation.MaxWindSpeed > VentilWSLimit)) {
                     ShowSevereError(state,
@@ -2444,6 +2292,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
                         SetupOutputVariable(state,
+                                            "Zone Ventilation Outdoor Density Volume Flow Rate",
+                                            Constant::Units::m3_s,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilVdotOutDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
                                             "Zone Ventilation Current Density Volume",
                                             Constant::Units::m3,
                                             state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilVolumeCurDensity,
@@ -2472,9 +2327,23 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
                         SetupOutputVariable(state,
-                                            "Zone Ventilation Air Change Rate",
+                                            "Zone Ventilation Current Density Air Change Rate",
                                             Constant::Units::ach,
-                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRate,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateCurDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
+                                            "Zone Ventilation Standard Density Air Change Rate",
+                                            Constant::Units::ach,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateStdDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
+                                            "Zone Ventilation Outdoor Density Air Change Rate",
+                                            Constant::Units::ach,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateOutDensity,
                                             OutputProcessor::TimeStepType::System,
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
@@ -2547,6 +2416,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
 
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
             // Create one Mixing instance for every space associated with this input object
             auto const &thisMixingInput = zoneMixingInputObjects(mixingInputNum);
             for (int Item1 = 1; Item1 <= thisMixingInput.numOfSpaces; ++Item1) {
@@ -2559,25 +2429,15 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 auto &thisZone = state.dataHeatBal->Zone(thisSpace.zoneNum);
 
                 if (lAlphaFieldBlanks(3)) {
-                    thisMixing.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisMixing.SchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(3));
-                    if (thisMixing.SchedPtr == 0) {
-                        ShowWarningError(state,
-                                         format("{}{}=\"{}\", invalid (not found) {}=\"{}\"",
-                                                RoutineName,
-                                                cCurrentModuleObject,
-                                                thisMixingInput.Name,
-                                                cAlphaFieldNames(3),
-                                                cAlphaArgs(3)));
-                        ErrorsFound = true;
-                    }
+                    thisMixing.sched = Sched::GetScheduleAlwaysOn(state); // Not an availability schedule, but defaults to constant-1.0
+                } else if ((thisMixing.sched = Sched::GetSchedule(state, cAlphaArgs(3))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(3), cAlphaArgs(3));
+                    ErrorsFound = true;
                 }
 
                 // Mixing equipment design level calculation method
-                AirflowSpec flow = static_cast<AirflowSpec>(getEnumValue(airflowNamesUC, cAlphaArgs(4))); // NOLINT(modernize-use-auto)
+                AirflowSpec flow = static_cast<AirflowSpec>(getEnumValue(airflowSpecNamesUC, cAlphaArgs(4)));
                 switch (flow) {
-                case AirflowSpec::Flow:
                 case AirflowSpec::FlowPerZone:
                     thisMixing.DesignLevel = rNumericArgs(1);
                     if (lNumericFieldBlanks(1)) {
@@ -2679,7 +2539,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 case AirflowSpec::AirChanges:
                     if (thisMixing.spaceIndex != 0) {
                         if (rNumericArgs(4) >= 0.0) {
-                            thisMixing.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::SecInHour;
+                            thisMixing.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::rSecsInHour;
                             if (thisSpace.Volume <= 0.0) {
                                 ShowWarningError(state,
                                                  format("{}{}=\"{}\", {} specifies {}, but Space Volume = 0.  0 Mixing will result.",
@@ -2723,230 +2583,112 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     thisMixing.FromZone = state.dataHeatBal->space(thisMixing.fromSpaceIndex).zoneNum;
                 }
                 if ((thisMixing.FromZone == 0) && (thisMixing.fromSpaceIndex == 0)) {
-                    ShowSevereError(
-                        state,
-                        format("{}{} not found={} for {}={}", RoutineName, cAlphaFieldNames(5), cAlphaArgs(5), cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(5), cAlphaArgs(5));
                     ErrorsFound = true;
                 }
                 thisMixing.DeltaTemperature = rNumericArgs(5);
 
                 if (NumAlpha > 5) {
-                    thisMixing.DeltaTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(6));
-                    if (thisMixing.DeltaTempSchedPtr > 0) {
-                        if (!lNumericFieldBlanks(5))
-                            ShowWarningError(state,
-                                             format("{}The Delta Temperature value and schedule are provided. The scheduled temperature will be used "
-                                                    "in the {} object = {}",
-                                                    RoutineName,
-                                                    cCurrentModuleObject,
-                                                    cAlphaArgs(1)));
-                        if (ScheduleManager::GetScheduleMinValue(state, thisMixing.DeltaTempSchedPtr) < -MixingTempLimit) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} statement = {} must have a delta temperature equal to or above -100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(6)));
-                            ErrorsFound = true;
+                    if (lAlphaFieldBlanks(6)) {
+                        if (lNumericFieldBlanks(5)) {
+                            ShowWarningCustom(state,
+                                              eoh,
+                                              format("{} and {} are empty, a default temperature of {:.1R}C will be used.",
+                                                     cAlphaFieldNames(6),
+                                                     cNumericFieldNames(5),
+                                                     -MixingTempLimit));
                         }
+                    } else if ((thisMixing.deltaTempSched = Sched::GetSchedule(state, cAlphaArgs(6))) == nullptr) {
+                        ShowWarningItemNotFound(state, eoh, cAlphaFieldNames(6), cAlphaArgs(6), "");
+                        if (lNumericFieldBlanks(5)) {
+                            ShowContinueError(state, format("a default temperature of {:.1R}C will be used.", -MixingTempLimit));
+                        }
+                    } else if (!thisMixing.deltaTempSched->checkMinVal(state, Clusive::In, -MixingTempLimit)) {
+                        Sched::ShowSevereBadMin(state, eoh, cAlphaFieldNames(6), cAlphaArgs(6), Clusive::In, -MixingTempLimit);
+                        ErrorsFound = true;
+                    } else if (!lNumericFieldBlanks(5)) {
+                        ShowWarningCustom(
+                            state,
+                            eoh,
+                            format("{} and {} are provided, {} will be used.", cAlphaFieldNames(6), cNumericFieldNames(5), cAlphaFieldNames(6)));
                     }
                 }
-                if (thisMixing.DeltaTempSchedPtr == 0 && lNumericFieldBlanks(5) && (!lAlphaFieldBlanks(6))) {
-                    ShowWarningError(state,
-                                     format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                            RoutineName,
-                                            cNumericFieldNames(5),
-                                            rNumericArgs(5)));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
-                if (!lNumericFieldBlanks(5) && ((!lAlphaFieldBlanks(6)) && thisMixing.DeltaTempSchedPtr == 0)) {
-                    ShowWarningError(state,
-                                     format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                            RoutineName,
-                                            cAlphaFieldNames(6),
-                                            cAlphaArgs(6),
-                                            rNumericArgs(5)));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
 
+                // Min indoor temp
                 if (NumAlpha > 6) {
-                    thisMixing.MinIndoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(7));
-                    if (thisMixing.MinIndoorTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(7))) {
-                            ShowSevereError(state,
-                                            format("{}{} not found={} for {}={}",
-                                                   RoutineName,
-                                                   cAlphaFieldNames(7),
-                                                   cAlphaArgs(7),
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MinIndoorTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MinIndoorTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} statement = {} must have a minimum zone temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(7)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(7)) {
+                        // Is this an error or is there a default?
+                    } else if ((thisMixing.minIndoorTempSched = Sched::GetSchedule(state, cAlphaArgs(7))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(7), cAlphaArgs(7));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.minIndoorTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(7), cAlphaArgs(7), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
+                // Max indoor temp
                 if (NumAlpha > 7) {
-                    thisMixing.MaxIndoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(8));
-                    if (thisMixing.MaxIndoorTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(8))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\", {} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(8),
-                                                   cAlphaArgs(8)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MaxIndoorTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MaxIndoorTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{}=\"{}\" must have a maximum zone temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(8)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(8)) {
+                    } else if ((thisMixing.maxIndoorTempSched = Sched::GetSchedule(state, cAlphaArgs(8))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(8), cAlphaArgs(8));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.maxIndoorTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(8), cAlphaArgs(8), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
+                // Min source temp
                 if (NumAlpha > 8) {
-                    thisMixing.MinSourceTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(9));
-                    if (thisMixing.MinSourceTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(9))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\", {} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(9),
-                                                   cAlphaArgs(9)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MinSourceTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MinSourceTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{}=\"{}\" must have a minimum source temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(9)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(9)) {
+                    } else if ((thisMixing.minSourceTempSched = Sched::GetSchedule(state, cAlphaArgs(9))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(9), cAlphaArgs(9));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.minSourceTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(9), cAlphaArgs(9), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
+                // Max source temp
                 if (NumAlpha > 9) {
-                    thisMixing.MaxSourceTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(10));
-                    if (thisMixing.MaxSourceTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(10))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\", {} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(10),
-                                                   cAlphaArgs(10)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MaxSourceTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MaxSourceTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(state,
-                                            format("{}{} statement =\"{}\" must have a maximum source temperature between -100C and 100C defined in "
-                                                   "the schedule = {}",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaArgs(10)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(10)) {
+                    } else if ((thisMixing.maxSourceTempSched = Sched::GetSchedule(state, cAlphaArgs(10))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(10), cAlphaArgs(10));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.maxSourceTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(10), cAlphaArgs(10), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
                 if (NumAlpha > 10) {
-                    thisMixing.MinOutdoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(11));
-                    if (thisMixing.MinOutdoorTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(11))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\", {} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(11),
-                                                   cAlphaArgs(11)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MinOutdoorTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MinOutdoorTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} =\"{}\" must have a minimum outdoor temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(11)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(11)) {
+                    } else if ((thisMixing.minOutdoorTempSched = Sched::GetSchedule(state, cAlphaArgs(11))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(11), cAlphaArgs(11));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.minOutdoorTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(11), cAlphaArgs(11), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
+                //
                 if (NumAlpha > 11) {
-                    thisMixing.MaxOutdoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(12));
-                    if (thisMixing.MaxOutdoorTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(12))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\", {} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(12),
-                                                   cAlphaArgs(12)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MaxOutdoorTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MaxOutdoorTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} =\"{}\" must have a maximum outdoor temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(12)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(12)) {
+                    } else if ((thisMixing.maxOutdoorTempSched = Sched::GetSchedule(state, cAlphaArgs(12))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(12), cAlphaArgs(12));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.maxOutdoorTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(12), cAlphaArgs(12), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
@@ -3073,7 +2815,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         // check zones which are used only as a source zones
         for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
             for (int Loop = 1; Loop <= state.dataHeatBal->TotMixing; ++Loop) {
-                if (ZoneNum != state.dataHeatBal->Mixing(Loop).FromZone) continue;
+                if (ZoneNum != state.dataHeatBal->Mixing(Loop).FromZone) {
+                    continue;
+                }
                 state.dataHeatBal->MassConservation(ZoneNum).IsOnlySourceZone = true;
                 for (int Loop1 = 1; Loop1 <= state.dataHeatBal->TotMixing; ++Loop1) {
                     if (ZoneNum == state.dataHeatBal->Mixing(Loop1).ZonePtr) {
@@ -3109,7 +2853,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 state.dataHeatBal->MassConservation(ZoneNum).IsSourceAndReceivingZone = true;
             }
         }
-        if (allocated(ZoneMixingNum)) ZoneMixingNum.deallocate();
+        if (allocated(ZoneMixingNum)) {
+            ZoneMixingNum.deallocate();
+        }
     }
 
     // zone mass conservation calculation order starts with receiving zones
@@ -3167,6 +2913,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                      lAlphaFieldBlanks,
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
+
             // Create one Mixing instance for every space associated with this input object
             auto const &thisMixingInput = zoneCrossMixingInputObjects(mixingInputNum);
             for (int Item1 = 1; Item1 <= thisMixingInput.numOfSpaces; ++Item1) {
@@ -3179,25 +2928,15 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 auto &thisZone = state.dataHeatBal->Zone(thisSpace.zoneNum);
 
                 if (lAlphaFieldBlanks(3)) {
-                    thisMixing.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisMixing.SchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(3));
-                    if (thisMixing.SchedPtr == 0) {
-                        ShowWarningError(state,
-                                         format("{}{}=\"{}\", invalid (not found) {}=\"{}\"",
-                                                RoutineName,
-                                                cCurrentModuleObject,
-                                                thisMixingInput.Name,
-                                                cAlphaFieldNames(3),
-                                                cAlphaArgs(3)));
-                        ErrorsFound = true;
-                    }
+                    thisMixing.sched = Sched::GetScheduleAlwaysOn(state); // not an availability schedule, but defaults to constant-1.0
+                } else if ((thisMixing.sched = Sched::GetSchedule(state, cAlphaArgs(3))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(3), cAlphaArgs(3));
+                    ErrorsFound = true;
                 }
 
                 // Mixing equipment design level calculation method.
-                AirflowSpec flow = static_cast<AirflowSpec>(getEnumValue(airflowNamesUC, cAlphaArgs(4))); // NOLINT(modernize-use-auto)
+                AirflowSpec flow = static_cast<AirflowSpec>(getEnumValue(airflowSpecNamesUC, cAlphaArgs(4))); // NOLINT(modernize-use-auto)
                 switch (flow) {
-                case AirflowSpec::Flow:
                 case AirflowSpec::FlowPerZone:
                     thisMixing.DesignLevel = rNumericArgs(1);
                     if (lNumericFieldBlanks(1)) {
@@ -3299,7 +3038,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 case AirflowSpec::AirChanges:
                     if (thisMixing.spaceIndex != 0) {
                         if (rNumericArgs(4) >= 0.0) {
-                            thisMixing.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::SecInHour;
+                            thisMixing.DesignLevel = rNumericArgs(4) * thisSpace.Volume / Constant::rSecsInHour;
                             if (thisSpace.Volume <= 0.0) {
                                 ShowWarningError(state,
                                                  format("{}{}=\"{}\", {} specifies {}, but Space Volume = 0.  0 Cross Mixing will result.",
@@ -3355,225 +3094,111 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 thisMixing.DeltaTemperature = rNumericArgs(5);
 
                 if (NumAlpha > 5) {
-                    thisMixing.DeltaTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(6));
-                    if (thisMixing.DeltaTempSchedPtr > 0) {
-                        if (!lNumericFieldBlanks(5))
-                            ShowWarningError(state,
-                                             format("{}The Delta Temperature value and schedule are provided. The scheduled temperature will be used "
-                                                    "in the {} object = {}",
-                                                    RoutineName,
-                                                    cCurrentModuleObject,
-                                                    cAlphaArgs(1)));
-                        if (ScheduleManager::GetScheduleMinValue(state, thisMixing.DeltaTempSchedPtr) < 0.0) {
-                            ShowSevereError(state,
-                                            format("{}{} = {} must have a delta temperature equal to or above 0 C defined in the schedule = {}",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaArgs(6)));
-                            ErrorsFound = true;
+                    if (lAlphaFieldBlanks(6)) {
+                        if (lNumericFieldBlanks(5)) {
+                            ShowWarningCustom(state,
+                                              eoh,
+                                              format("{} and {} are empty, a default temperature of {:.1R}C will be used.",
+                                                     cAlphaFieldNames(6),
+                                                     cNumericFieldNames(5),
+                                                     thisMixing.DeltaTemperature));
                         }
+                    } else if ((thisMixing.deltaTempSched = Sched::GetSchedule(state, cAlphaArgs(6))) == nullptr) {
+                        ShowWarningItemNotFound(state,
+                                                eoh,
+                                                cAlphaFieldNames(6),
+                                                cAlphaArgs(6),
+                                                format("Fixed delta temperature {:.1R}C will be used", thisMixing.DeltaTemperature));
+                    } else if (!thisMixing.deltaTempSched->checkMinVal(state, Clusive::In, 0.0)) {
+                        Sched::ShowSevereBadMin(state, eoh, cAlphaFieldNames(6), cAlphaArgs(6), Clusive::In, 0.0);
+                        ErrorsFound = true;
+                    } else if (!lNumericFieldBlanks(5)) {
+                        ShowWarningCustom(
+                            state,
+                            eoh,
+                            format("{} and {} provided. {} will be used.", cAlphaFieldNames(6), cNumericFieldNames(5), cAlphaFieldNames(6)));
                     }
                 }
-                if (thisMixing.DeltaTempSchedPtr == 0 && lNumericFieldBlanks(5) && (!lAlphaFieldBlanks(6))) {
-                    ShowWarningError(state,
-                                     format("{}{}: the value field is blank and schedule field is invalid. The default value will be used ({:.1R}) ",
-                                            RoutineName,
-                                            cNumericFieldNames(5),
-                                            rNumericArgs(5)));
-                    ShowContinueError(state, format("in {} = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
-                if (!lNumericFieldBlanks(5) && ((!lAlphaFieldBlanks(6)) && thisMixing.DeltaTempSchedPtr == 0)) {
-                    ShowWarningError(state,
-                                     format("{}{} = {} is invalid. The constant value will be used at {:.1R} degrees C ",
-                                            RoutineName,
-                                            cAlphaFieldNames(6),
-                                            cAlphaArgs(6),
-                                            rNumericArgs(5)));
-                    ShowContinueError(state, format("in the {} object = {} and the simulation continues...", cCurrentModuleObject, cAlphaArgs(1)));
-                }
 
+                // Min indoor temp
                 if (NumAlpha > 6) {
-                    thisMixing.MinIndoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(7));
-                    if (thisMixing.MinIndoorTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(7))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\",{} not found={}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(7),
-                                                   cAlphaArgs(7)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MinIndoorTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MinIndoorTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} = {} must have a minimum zone temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(7)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(7)) {
+                    } else if ((thisMixing.minIndoorTempSched = Sched::GetSchedule(state, cAlphaArgs(7))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(7), cAlphaArgs(7));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.minIndoorTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(7), cAlphaArgs(7), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
+                // Max indoor temp
                 if (NumAlpha > 7) {
-                    thisMixing.MaxIndoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(8));
-                    if (thisMixing.MaxIndoorTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(8))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\",{} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(8),
-                                                   cAlphaArgs(8)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MaxIndoorTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MaxIndoorTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} = {} must have a maximum zone temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(8)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(8)) {
+                    } else if ((thisMixing.maxIndoorTempSched = Sched::GetSchedule(state, cAlphaArgs(8))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(8), cAlphaArgs(8));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.maxIndoorTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(8), cAlphaArgs(8), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
+                // Min source temp
                 if (NumAlpha > 8) {
-                    thisMixing.MinSourceTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(9));
-                    if (thisMixing.MinSourceTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(9))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\",{} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(9),
-                                                   cAlphaArgs(9)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MinSourceTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MinSourceTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} = {} must have a minimum source temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(9)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(9)) {
+                    } else if ((thisMixing.minSourceTempSched = Sched::GetSchedule(state, cAlphaArgs(9))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(9), cAlphaArgs(9));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.minSourceTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(9), cAlphaArgs(9), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
+                // Max source temp
                 if (NumAlpha > 9) {
-                    thisMixing.MaxSourceTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(10));
-                    if (thisMixing.MaxSourceTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(10))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\",{} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(10),
-                                                   cAlphaArgs(9)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MaxSourceTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MaxSourceTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} = {} must have a maximum source temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(10)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(10)) {
+                    } else if ((thisMixing.maxSourceTempSched = Sched::GetSchedule(state, cAlphaArgs(10))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(10), cAlphaArgs(10));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.maxSourceTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(10), cAlphaArgs(10), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
+                // Min outdoor temp
                 if (NumAlpha > 10) {
-                    thisMixing.MinOutdoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(11));
-                    if (thisMixing.MinOutdoorTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(11))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\",{} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(11),
-                                                   cAlphaArgs(9)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MinOutdoorTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MinOutdoorTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} = {} must have a minimum outdoor temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(11)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(11)) {
+                    } else if ((thisMixing.minOutdoorTempSched = Sched::GetSchedule(state, cAlphaArgs(11))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(11), cAlphaArgs(11));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.minOutdoorTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(11), cAlphaArgs(11), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
 
                 if (NumAlpha > 11) {
-                    thisMixing.MaxOutdoorTempSchedPtr = ScheduleManager::GetScheduleIndex(state, cAlphaArgs(12));
-                    if (thisMixing.MaxOutdoorTempSchedPtr == 0) {
-                        if ((!lAlphaFieldBlanks(12))) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\",{} not found=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   cAlphaArgs(1),
-                                                   cAlphaFieldNames(12),
-                                                   cAlphaArgs(9)));
-                            ErrorsFound = true;
-                        }
-                    }
-                    if (thisMixing.MaxOutdoorTempSchedPtr > 0) {
-                        // Check min and max values in the schedule to ensure both values are within the range
-                        if (!ScheduleManager::CheckScheduleValueMinMax(
-                                state, thisMixing.MaxOutdoorTempSchedPtr, ">=", -MixingTempLimit, "<=", MixingTempLimit)) {
-                            ShowSevereError(
-                                state,
-                                format("{}{} = {} must have a maximum outdoor temperature between -100C and 100C defined in the schedule = {}",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaArgs(12)));
-                            ErrorsFound = true;
-                        }
+                    if (lAlphaFieldBlanks(12)) {
+                    } else if ((thisMixing.maxOutdoorTempSched = Sched::GetSchedule(state, cAlphaArgs(12))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(12), cAlphaArgs(12));
+                        ErrorsFound = true;
+                    } else if (!thisMixing.maxOutdoorTempSched->checkMinMaxVals(state, Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit)) {
+                        Sched::ShowSevereBadMinMax(
+                            state, eoh, cAlphaFieldNames(12), cAlphaArgs(12), Clusive::In, -MixingTempLimit, Clusive::In, MixingTempLimit);
+                        ErrorsFound = true;
                     }
                 }
             }
-        }
+        } // for (mixingInputNum)
+
         // Create CrossMixing objects from air boundary info
         for (auto const &thisAirBoundaryMixing : state.dataHeatBal->airBoundaryMixing) {
             ++mixingNum;
@@ -3586,7 +3211,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             thisCrossMizing.Name = fmt::format("Air Boundary Mixing Zones {} and {}", zone1, zone2);
             thisCrossMizing.spaceIndex = space1;
             thisCrossMizing.ZonePtr = zone1;
-            thisCrossMizing.SchedPtr = thisAirBoundaryMixing.scheduleIndex;
+            thisCrossMizing.sched = thisAirBoundaryMixing.sched;
             thisCrossMizing.DesignLevel = thisAirBoundaryMixing.mixingVolumeFlowRate;
             thisCrossMizing.FromZone = zone2;
             thisCrossMizing.fromSpaceIndex = space2;
@@ -3780,8 +3405,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
     state.dataHeatBal->TotRefDoorMixing = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
     if (state.dataHeatBal->TotRefDoorMixing > 0) {
         state.dataHeatBal->RefDoorMixing.allocate(state.dataGlobal->NumOfZones);
-        for (auto &e : state.dataHeatBal->RefDoorMixing)
+        for (auto &e : state.dataHeatBal->RefDoorMixing) {
             e.NumRefDoorConnections = 0;
+        }
 
         for (int Loop = 1; Loop <= state.dataHeatBal->TotRefDoorMixing; ++Loop) {
 
@@ -3798,11 +3424,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
 
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
             NameThisObject = cAlphaArgs(1);
 
             int AlphaNum = 2;
             int Zone1Num = Util::FindItemInList(cAlphaArgs(AlphaNum), state.dataHeatBal->Zone);
-            if (Zone1Num == 0) {
+            int space1Num = Util::FindItemInList(cAlphaArgs(AlphaNum), state.dataHeatBal->space);
+            if ((Zone1Num == 0) && (space1Num == 0)) {
                 ShowSevereError(state,
                                 format("{}{}=\"{}\", invalid (not found) {}=\"{}\".",
                                        RoutineName,
@@ -3811,11 +3439,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                        cAlphaFieldNames(AlphaNum),
                                        cAlphaArgs(AlphaNum)));
                 ErrorsFound = true;
+            } else if (Zone1Num == 0) {
+                Zone1Num = state.dataHeatBal->space(space1Num).zoneNum;
             }
 
             ++AlphaNum; // 3
             int Zone2Num = Util::FindItemInList(cAlphaArgs(AlphaNum), state.dataHeatBal->Zone);
-            if (Zone2Num == 0) {
+            int space2Num = Util::FindItemInList(cAlphaArgs(AlphaNum), state.dataHeatBal->space);
+            if ((Zone2Num == 0) && (space2Num == 0)) {
                 ShowSevereError(state,
                                 format("{}{}=\"{}\", invalid (not found) {}=\"{}\".",
                                        RoutineName,
@@ -3824,7 +3455,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                        cAlphaFieldNames(AlphaNum),
                                        cAlphaArgs(AlphaNum)));
                 ErrorsFound = true;
+            } else if (Zone2Num == 0) {
+                Zone2Num = state.dataHeatBal->space(space2Num).zoneNum;
             }
+
+            int spaceNumA = 0;
+            int spaceNumB = 0;
             if (Zone1Num == Zone2Num) {
                 ShowSevereError(state,
                                 format("{}{}=\"{}\", The same zone name has been entered for both sides of a refrigerated door {}=\"{}\".",
@@ -3837,75 +3473,81 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             } else if (Zone1Num < Zone2Num) { // zone 1 will come first in soln loop, id zone 2 as mate zone
                 ZoneNumA = Zone1Num;
                 ZoneNumB = Zone2Num;
+                spaceNumA = space1Num;
+                spaceNumB = space2Num;
             } else { // zone 2 will come first in soln loop, id zone 1 as mate zone
                 ZoneNumA = Zone2Num;
                 ZoneNumB = Zone1Num;
+                spaceNumA = space2Num;
+                spaceNumB = space1Num;
             }
 
-            if (!allocated(state.dataHeatBal->RefDoorMixing(ZoneNumA).OpenSchedPtr)) {
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorMixingObjectName.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).OpenSchedPtr.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorHeight.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).Protection.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).MateZonePtr.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorMixingOn.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorFlowRate.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).VolRefDoorFlowRate.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorMixingObjectName = "";
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).OpenSchedPtr = 0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorHeight = 0.0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea = 0.0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).Protection = RefDoorNone;
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).MateZonePtr = 0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorMixingOn = false;
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorFlowRate = 0.0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).VolRefDoorFlowRate = 0.0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName = "";
+            auto &zoneA = state.dataHeatBal->RefDoorMixing(ZoneNumA);
+            auto &zoneB = state.dataHeatBal->RefDoorMixing(ZoneNumB);
+
+            if (!allocated(zoneA.openScheds)) {
+                zoneA.DoorMixingObjectName.allocate(state.dataGlobal->NumOfZones);
+                zoneA.openScheds.allocate(state.dataGlobal->NumOfZones);
+                zoneA.DoorHeight.allocate(state.dataGlobal->NumOfZones);
+                zoneA.DoorArea.allocate(state.dataGlobal->NumOfZones);
+                zoneA.Protection.allocate(state.dataGlobal->NumOfZones);
+                zoneA.MateZonePtr.allocate(state.dataGlobal->NumOfZones);
+                zoneA.EMSRefDoorMixingOn.allocate(state.dataGlobal->NumOfZones);
+                zoneA.EMSRefDoorFlowRate.allocate(state.dataGlobal->NumOfZones);
+                zoneA.VolRefDoorFlowRate.allocate(state.dataGlobal->NumOfZones);
+                zoneA.DoorProtTypeName.allocate(state.dataGlobal->NumOfZones);
+                zoneA.DoorMixingObjectName = "";
+                zoneA.openScheds = nullptr;
+                zoneA.DoorHeight = 0.0;
+                zoneA.DoorArea = 0.0;
+                zoneA.Protection = RefDoorNone;
+                zoneA.MateZonePtr = 0;
+                zoneA.EMSRefDoorMixingOn = false;
+                zoneA.EMSRefDoorFlowRate = 0.0;
+                zoneA.VolRefDoorFlowRate = 0.0;
+                zoneA.DoorProtTypeName = "";
             } // First refrigeration mixing in this zone
 
-            if (!allocated(state.dataHeatBal->RefDoorMixing(ZoneNumB).OpenSchedPtr)) {
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).DoorMixingObjectName.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).OpenSchedPtr.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).DoorHeight.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).DoorArea.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).Protection.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).MateZonePtr.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).EMSRefDoorMixingOn.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).EMSRefDoorFlowRate.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).VolRefDoorFlowRate.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).DoorProtTypeName.allocate(state.dataGlobal->NumOfZones);
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).DoorMixingObjectName = "";
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).OpenSchedPtr = 0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).DoorHeight = 0.0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).DoorArea = 0.0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).Protection = RefDoorNone;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).MateZonePtr = 0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).EMSRefDoorMixingOn = false;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).EMSRefDoorFlowRate = 0.0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).VolRefDoorFlowRate = 0.0;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).DoorProtTypeName = "";
+            if (!allocated(zoneB.openScheds)) {
+                zoneB.DoorMixingObjectName.allocate(state.dataGlobal->NumOfZones);
+                zoneB.openScheds.allocate(state.dataGlobal->NumOfZones);
+                zoneB.DoorHeight.allocate(state.dataGlobal->NumOfZones);
+                zoneB.DoorArea.allocate(state.dataGlobal->NumOfZones);
+                zoneB.Protection.allocate(state.dataGlobal->NumOfZones);
+                zoneB.MateZonePtr.allocate(state.dataGlobal->NumOfZones);
+                zoneB.EMSRefDoorMixingOn.allocate(state.dataGlobal->NumOfZones);
+                zoneB.EMSRefDoorFlowRate.allocate(state.dataGlobal->NumOfZones);
+                zoneB.VolRefDoorFlowRate.allocate(state.dataGlobal->NumOfZones);
+                zoneB.DoorProtTypeName.allocate(state.dataGlobal->NumOfZones);
+                zoneB.DoorMixingObjectName = "";
+                zoneB.openScheds = nullptr;
+                zoneB.DoorHeight = 0.0;
+                zoneB.DoorArea = 0.0;
+                zoneB.Protection = RefDoorNone;
+                zoneB.MateZonePtr = 0;
+                zoneB.EMSRefDoorMixingOn = false;
+                zoneB.EMSRefDoorFlowRate = 0.0;
+                zoneB.VolRefDoorFlowRate = 0.0;
+                zoneB.DoorProtTypeName = "";
             } // First refrigeration mixing in this zone
 
-            ConnectionNumber = state.dataHeatBal->RefDoorMixing(ZoneNumA).NumRefDoorConnections + 1;
-            state.dataHeatBal->RefDoorMixing(ZoneNumA).NumRefDoorConnections = ConnectionNumber;
-            state.dataHeatBal->RefDoorMixing(ZoneNumA).ZonePtr = ZoneNumA;
-            state.dataHeatBal->RefDoorMixing(ZoneNumA).MateZonePtr(ConnectionNumber) = ZoneNumB;
-            state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorMixingObjectName(ConnectionNumber) = NameThisObject;
+            ConnectionNumber = zoneA.NumRefDoorConnections + 1;
+            zoneA.NumRefDoorConnections = ConnectionNumber;
+            zoneA.ZonePtr = ZoneNumA;
+            zoneA.spaceIndex = spaceNumA;
+            zoneA.fromSpaceIndex = spaceNumB;
+            zoneA.MateZonePtr(ConnectionNumber) = ZoneNumB;
+            zoneA.DoorMixingObjectName(ConnectionNumber) = NameThisObject;
             // need to make sure same pair of zones is only entered once.
-            if (state.dataHeatBal->RefDoorMixing(ZoneNumA).RefDoorMixFlag && state.dataHeatBal->RefDoorMixing(ZoneNumB).RefDoorMixFlag) {
-                if (state.dataHeatBal->RefDoorMixing(ZoneNumA).NumRefDoorConnections > 1) {
+            if (zoneA.RefDoorMixFlag && zoneB.RefDoorMixFlag) {
+                if (zoneA.NumRefDoorConnections > 1) {
                     for (int ConnectTest = 1; ConnectTest <= (ConnectionNumber - 1); ++ConnectTest) {
-                        if (state.dataHeatBal->RefDoorMixing(ZoneNumA).MateZonePtr(ConnectTest) !=
-                            state.dataHeatBal->RefDoorMixing(ZoneNumA).MateZonePtr(ConnectionNumber))
+                        if (zoneA.MateZonePtr(ConnectTest) != zoneA.MateZonePtr(ConnectionNumber)) {
                             continue;
-                        ShowSevereError(state,
-                                        format("{}{}=\"{}\", and {}",
-                                               RoutineName,
-                                               cCurrentModuleObject,
-                                               cAlphaArgs(1),
-                                               state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorMixingObjectName(ConnectTest)));
+                        }
+                        ShowSevereError(
+                            state,
+                            format("{}{}=\"{}\", and {}", RoutineName, cCurrentModuleObject, cAlphaArgs(1), zoneA.DoorMixingObjectName(ConnectTest)));
                         ShowContinueError(state,
                                           format(" Share same pair of zones: \"{}\" and \"{}\". Only one RefrigerationDoorMixing object is allowed "
                                                  "for any unique pair of zones.",
@@ -3913,51 +3555,27 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                  state.dataHeatBal->Zone(ZoneNumB).Name));
                         ErrorsFound = true;
                     } // ConnectTest
-                }     // NumRefDoorconnections > 1
-            } else {  // Both zones need to be flagged with ref doors
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).RefDoorMixFlag = true;
-                state.dataHeatBal->RefDoorMixing(ZoneNumB).RefDoorMixFlag = true;
+                } // NumRefDoorconnections > 1
+            } else { // Both zones need to be flagged with ref doors
+                zoneA.RefDoorMixFlag = true;
+                zoneB.RefDoorMixFlag = true;
             } // Both zones already flagged with ref doors
 
             ++AlphaNum; // 4
             if (lAlphaFieldBlanks(AlphaNum)) {
-                ShowSevereError(state,
-                                format("{}{}=\"{}\",{} is required but field is blank.",
-                                       RoutineName,
-                                       cCurrentModuleObject,
-                                       cAlphaArgs(1),
-                                       cAlphaFieldNames(AlphaNum)));
+                ShowSevereEmptyField(state, eoh, cAlphaFieldNames(AlphaNum));
                 ErrorsFound = true;
-            } else { //(lAlphaFieldBlanks(AlphaNum)) THEN
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).OpenSchedPtr(ConnectionNumber) =
-                    ScheduleManager::GetScheduleIndex(state, cAlphaArgs(AlphaNum));
-                if (state.dataHeatBal->RefDoorMixing(ZoneNumA).OpenSchedPtr(ConnectionNumber) == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}=\"{}\", invalid (not found) {}=\"{}\".",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           cAlphaArgs(1),
-                                           cAlphaFieldNames(AlphaNum),
-                                           cAlphaArgs(AlphaNum)));
-                    ErrorsFound = true;
-                } else { // OpenSchedPtr(ConnectionNumber) ne 0)
-                    if (!ScheduleManager::CheckScheduleValueMinMax(
-                            state, state.dataHeatBal->RefDoorMixing(ZoneNumA).OpenSchedPtr(ConnectionNumber), ">=", 0.0, "<=", 1.0)) {
-                        ShowSevereError(state,
-                                        format("{}{}=\"{}\",{}=\"{}\" has schedule values < 0 or > 1.",
-                                               RoutineName,
-                                               cCurrentModuleObject,
-                                               cAlphaArgs(1),
-                                               cAlphaFieldNames(AlphaNum),
-                                               cAlphaArgs(AlphaNum)));
-                        ErrorsFound = true;
-                    } // check door opening schedule values between 0 and 1
-                }     // OpenSchedPtr(ConnectionNumber) == 0)
-            }         //(lAlphaFieldBlanks(AlphaNum)) THEN
+            } else if ((zoneA.openScheds(ConnectionNumber) = Sched::GetSchedule(state, cAlphaArgs(AlphaNum))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(AlphaNum), cAlphaArgs(AlphaNum));
+                ErrorsFound = true;
+            } else if (!zoneA.openScheds(ConnectionNumber)->checkMinMaxVals(state, Clusive::In, 0.0, Clusive::In, 1.0)) {
+                Sched::ShowSevereBadMinMax(state, eoh, cAlphaFieldNames(AlphaNum), cAlphaArgs(AlphaNum), Clusive::In, 0.0, Clusive::In, 1.0);
+                ErrorsFound = true;
+            } //(lAlphaFieldBlanks(AlphaNum)) THEN
 
             int NumbNum = 1;
             if (lAlphaFieldBlanks(NumbNum)) {
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorHeight(ConnectionNumber) = 3.0; // default height of 3 meters
+                zoneA.DoorHeight(ConnectionNumber) = 3.0; // default height of 3 meters
                 ShowWarningError(state,
                                  format("{}{}=\"{}{} is blank and the default value of 3.0 will be used.",
                                         RoutineName,
@@ -3965,9 +3583,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                         cAlphaArgs(1),
                                         cNumericFieldNames(NumbNum)));
             } else {
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorHeight(ConnectionNumber) = rNumericArgs(NumbNum);
-                if ((state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorHeight(ConnectionNumber) < 0) ||
-                    (state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorHeight(ConnectionNumber) > 50.0)) {
+                zoneA.DoorHeight(ConnectionNumber) = rNumericArgs(NumbNum);
+                if ((zoneA.DoorHeight(ConnectionNumber) < 0) || (zoneA.DoorHeight(ConnectionNumber) > 50.0)) {
                     ShowSevereError(
                         state,
                         format("{}{} = {} must have a door height between 0 and 50 meters. ", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
@@ -3977,7 +3594,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
             ++NumbNum; // 2
             if (lAlphaFieldBlanks(NumbNum)) {
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea(ConnectionNumber) = 9.0; // default area of 9 m2
+                zoneA.DoorArea(ConnectionNumber) = 9.0; // default area of 9 m2
                 ShowWarningError(state,
                                  format("{}{}=\"{}{} is blank and the default value of 9 m2 will be used.",
                                         RoutineName,
@@ -3985,9 +3602,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                         cAlphaArgs(1),
                                         cNumericFieldNames(NumbNum)));
             } else {
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea(ConnectionNumber) = rNumericArgs(NumbNum);
-                if ((state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea(ConnectionNumber) < 0) ||
-                    (state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea(ConnectionNumber) > 400.0)) {
+                zoneA.DoorArea(ConnectionNumber) = rNumericArgs(NumbNum);
+                if ((zoneA.DoorArea(ConnectionNumber) < 0) || (zoneA.DoorArea(ConnectionNumber) > 400.0)) {
                     ShowSevereError(
                         state,
                         format(
@@ -3999,8 +3615,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             ++AlphaNum; // 5
             // Door protection type.
             if (lAlphaFieldBlanks(AlphaNum)) {
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).Protection(ConnectionNumber) = RefDoorNone;  // Default
-                state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName(ConnectionNumber) = "None"; // Default
+                zoneA.Protection(ConnectionNumber) = RefDoorNone;  // Default
+                zoneA.DoorProtTypeName(ConnectionNumber) = "None"; // Default
                 ShowWarningError(state,
                                  format("{}{}=\"{}\"  {} is blank. Default of no door protection will be used",
                                         RoutineName,
@@ -4009,14 +3625,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                         cAlphaFieldNames(AlphaNum)));
             } else {
                 if (cAlphaArgs(AlphaNum) == "NONE") {
-                    state.dataHeatBal->RefDoorMixing(ZoneNumA).Protection(ConnectionNumber) = RefDoorNone;
-                    state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName(ConnectionNumber) = "None";
+                    zoneA.Protection(ConnectionNumber) = RefDoorNone;
+                    zoneA.DoorProtTypeName(ConnectionNumber) = "None";
                 } else if (cAlphaArgs(AlphaNum) == "AIRCURTAIN") {
-                    state.dataHeatBal->RefDoorMixing(ZoneNumA).Protection(ConnectionNumber) = RefDoorAirCurtain;
-                    state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName(ConnectionNumber) = "AirCurtain";
+                    zoneA.Protection(ConnectionNumber) = RefDoorAirCurtain;
+                    zoneA.DoorProtTypeName(ConnectionNumber) = "AirCurtain";
                 } else if (cAlphaArgs(AlphaNum) == "STRIPCURTAIN") {
-                    state.dataHeatBal->RefDoorMixing(ZoneNumA).Protection(ConnectionNumber) = RefDoorStripCurtain;
-                    state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName(ConnectionNumber) = "StripCurtain";
+                    zoneA.Protection(ConnectionNumber) = RefDoorStripCurtain;
+                    zoneA.DoorProtTypeName(ConnectionNumber) = "StripCurtain";
                 } else {
                     ShowSevereError(state,
                                     format("{}{}=\"{}\", invalid calculation method={} with alphanum of 5: {}",
@@ -4027,7 +3643,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                            cAlphaArgs(5)));
                     ErrorsFound = true;
                 } // =none, etc.
-            }     // Blank
+            } // Blank
 
             if (ZoneNumA > 0) {
                 if (RepVarSet(ZoneNumA)) {
@@ -4114,11 +3730,11 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 SetupEMSActuator(state,
                                  "ZoneRefDoorMixing",
-                                 state.dataHeatBal->RefDoorMixing(ZoneNumA).Name,
+                                 zoneA.Name,
                                  "Air Exchange Flow Rate",
                                  "[m3/s]",
-                                 state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorMixingOn(ConnectionNumber),
-                                 state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorFlowRate(ConnectionNumber));
+                                 zoneA.EMSRefDoorMixingOn(ConnectionNumber),
+                                 zoneA.EMSRefDoorFlowRate(ConnectionNumber));
             }
 
             if (ZoneNumB > 0) {
@@ -4206,15 +3822,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             if (state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 SetupEMSActuator(state,
                                  "ZoneRefDoorMixing",
-                                 state.dataHeatBal->RefDoorMixing(ZoneNumB).Name,
+                                 zoneB.Name,
                                  "Air Exchange Flow Rate",
                                  "[m3/s]",
-                                 state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorMixingOn(ConnectionNumber),
+                                 zoneA.EMSRefDoorMixingOn(ConnectionNumber),
                                  state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorFlowRate(ConnectionNumber));
             }
-
         } // DO Loop=1,TotRefDoorMixing
-    }     // TotRefDoorMixing > 0)
+    } // TotRefDoorMixing > 0)
 
     RepVarSet.deallocate();
     cAlphaArgs.deallocate();
@@ -4235,13 +3850,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
     };
 
     for (int Loop = 1; Loop <= state.dataHeatBal->TotInfiltration; ++Loop) {
-        if (Loop == 1)
+        if (Loop == 1) {
             print(state.files.eio,
                   Format_721,
                   "ZoneInfiltration",
                   "Design Volume Flow Rate {m3/s},Volume Flow Rate/Floor Area {m3/s-m2},Volume Flow Rate/Exterior Surface Area {m3/s-m2},ACH - "
                   "Air Changes per Hour,Equation A - Constant Term Coefficient {},Equation B - Temperature Term Coefficient {1/C},Equation C - "
                   "Velocity Term Coefficient {s/m}, Equation D - Velocity Squared Term Coefficient {s2/m2}");
+        }
 
         int ZoneNum = state.dataHeatBal->Infiltration(Loop).ZonePtr;
         if (ZoneNum == 0) {
@@ -4249,11 +3865,28 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             continue;
         }
         TotInfilVentFlow(ZoneNum) += state.dataHeatBal->Infiltration(Loop).DesignLevel;
+
+        std::string infilInputObjectType = "";
+        switch (state.dataHeatBal->Infiltration(Loop).ModelType) {
+        case DataHeatBalance::InfiltrationModelType::DesignFlowRate:
+            infilInputObjectType = "ZoneInfiltration:DesignFlowRate";
+            break;
+        case DataHeatBalance::InfiltrationModelType::ShermanGrimsrud:
+            infilInputObjectType = "ZoneInfiltration:EffectiveLeakageArea";
+            break;
+        case DataHeatBalance::InfiltrationModelType::AIM2:
+            infilInputObjectType = "ZoneInfiltration:FlowCoefficient";
+            break;
+        default:
+            infilInputObjectType = "unknown";
+        };
+
         print(state.files.eio,
               Format_720,
               "ZoneInfiltration",
               state.dataHeatBal->Infiltration(Loop).Name,
-              ScheduleManager::GetScheduleName(state, state.dataHeatBal->Infiltration(Loop).SchedPtr),
+              infilInputObjectType,
+              state.dataHeatBal->Infiltration(Loop).sched->Name,
               state.dataHeatBal->Zone(ZoneNum).Name,
               state.dataHeatBal->Zone(ZoneNum).FloorArea,
               state.dataHeatBal->Zone(ZoneNum).TotOccupants);
@@ -4263,7 +3896,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).ExteriorTotalSurfArea,
                                               state.dataHeatBal->Infiltration(Loop).DesignLevel);
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).Volume,
-                                              state.dataHeatBal->Infiltration(Loop).DesignLevel * Constant::SecInHour);
+                                              state.dataHeatBal->Infiltration(Loop).DesignLevel * Constant::rSecsInHour);
 
         print(state.files.eio, "{:.3R},", state.dataHeatBal->Infiltration(Loop).ConstantTermCoef);
         print(state.files.eio, "{:.3R},", state.dataHeatBal->Infiltration(Loop).TemperatureTermCoef);
@@ -4297,11 +3930,25 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             continue;
         }
         TotInfilVentFlow(ZoneNum) += state.dataHeatBal->Ventilation(Loop).DesignLevel;
+
+        std::string ventInputObjectType = "";
+        switch (state.dataHeatBal->Ventilation(Loop).ModelType) {
+        case DataHeatBalance::VentilationModelType::DesignFlowRate:
+            ventInputObjectType = "ZoneVentilation:DesignFlowRate";
+            break;
+        case DataHeatBalance::VentilationModelType::WindAndStack:
+            ventInputObjectType = "ZoneVentilation:WindandStackOpenArea";
+            break;
+        default:
+            ventInputObjectType = "unknown";
+        };
+
         print(state.files.eio,
               Format_720,
               "ZoneVentilation",
               state.dataHeatBal->Ventilation(Loop).Name,
-              ScheduleManager::GetScheduleName(state, state.dataHeatBal->Ventilation(Loop).SchedPtr),
+              ventInputObjectType,
+              state.dataHeatBal->Ventilation(Loop).availSched->Name,
               state.dataHeatBal->Zone(ZoneNum).Name,
               state.dataHeatBal->Zone(ZoneNum).FloorArea,
               state.dataHeatBal->Zone(ZoneNum).TotOccupants);
@@ -4311,7 +3958,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).FloorArea, state.dataHeatBal->Ventilation(Loop).DesignLevel);
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).TotOccupants, state.dataHeatBal->Ventilation(Loop).DesignLevel);
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).Volume,
-                                              state.dataHeatBal->Ventilation(Loop).DesignLevel * Constant::SecInHour);
+                                              state.dataHeatBal->Ventilation(Loop).DesignLevel * Constant::rSecsInHour);
 
         if (state.dataHeatBal->Ventilation(Loop).FanType == DataHeatBalance::VentilationType::Exhaust) {
             print(state.files.eio, "Exhaust,");
@@ -4332,36 +3979,37 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         print(state.files.eio, "{:.3R},", state.dataHeatBal->Ventilation(Loop).VelocitySQTermCoef);
 
         // TODO Should this also be prefixed with "Schedule: " like the following ones are?
-        if (state.dataHeatBal->Ventilation(Loop).MinIndoorTempSchedPtr > 0) {
-            print(state.files.eio, "{},", ScheduleManager::GetScheduleName(state, state.dataHeatBal->Ventilation(Loop).MinIndoorTempSchedPtr));
+        if (state.dataHeatBal->Ventilation(Loop).minIndoorTempSched != nullptr) {
+            print(state.files.eio, "{},", state.dataHeatBal->Ventilation(Loop).minIndoorTempSched->Name);
         } else {
             print(state.files.eio, "{:.2R},", state.dataHeatBal->Ventilation(Loop).MinIndoorTemperature);
         }
 
-        const auto print_temperature = [&](const int ptr, const Real64 value) {
-            if (ptr > 0) {
-                print(state.files.eio, "Schedule: {},", ScheduleManager::GetScheduleName(state, ptr));
+        const auto print_temperature = [&](Sched::Schedule const *ptr, const Real64 value) {
+            if (ptr != nullptr) {
+                print(state.files.eio, "Schedule: {},", ptr->Name);
             } else {
                 print(state.files.eio, "{:.2R},", value);
             }
         };
 
-        print_temperature(state.dataHeatBal->Ventilation(Loop).MaxIndoorTempSchedPtr, state.dataHeatBal->Ventilation(Loop).MaxIndoorTemperature);
-        print_temperature(state.dataHeatBal->Ventilation(Loop).DeltaTempSchedPtr, state.dataHeatBal->Ventilation(Loop).DelTemperature);
-        print_temperature(state.dataHeatBal->Ventilation(Loop).MinOutdoorTempSchedPtr, state.dataHeatBal->Ventilation(Loop).MinOutdoorTemperature);
-        print_temperature(state.dataHeatBal->Ventilation(Loop).MaxOutdoorTempSchedPtr, state.dataHeatBal->Ventilation(Loop).MaxOutdoorTemperature);
+        print_temperature(state.dataHeatBal->Ventilation(Loop).maxIndoorTempSched, state.dataHeatBal->Ventilation(Loop).MaxIndoorTemperature);
+        print_temperature(state.dataHeatBal->Ventilation(Loop).deltaTempSched, state.dataHeatBal->Ventilation(Loop).DelTemperature);
+        print_temperature(state.dataHeatBal->Ventilation(Loop).minOutdoorTempSched, state.dataHeatBal->Ventilation(Loop).MinOutdoorTemperature);
+        print_temperature(state.dataHeatBal->Ventilation(Loop).maxOutdoorTempSched, state.dataHeatBal->Ventilation(Loop).MaxOutdoorTemperature);
 
         print(state.files.eio, "{:.2R}\n", state.dataHeatBal->Ventilation(Loop).MaxWindSpeed);
     }
 
     TotMixingFlow.dimension(state.dataGlobal->NumOfZones, 0.0);
     for (int Loop = 1; Loop <= state.dataHeatBal->TotMixing; ++Loop) {
-        if (Loop == 1)
+        if (Loop == 1) {
             print(state.files.eio,
                   Format_721,
                   "Mixing",
                   "Design Volume Flow Rate {m3/s},Volume Flow Rate/Floor Area {m3/s-m2},Volume Flow Rate/person Area {m3/s-person},ACH - Air "
                   "Changes per Hour,From/Source Zone,Delta Temperature {C}");
+        }
 
         int ZoneNum = state.dataHeatBal->Mixing(Loop).ZonePtr;
         if (ZoneNum == 0) {
@@ -4373,7 +4021,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
               Format_720,
               "Mixing",
               state.dataHeatBal->Mixing(Loop).Name,
-              ScheduleManager::GetScheduleName(state, state.dataHeatBal->Mixing(Loop).SchedPtr),
+              "ZoneMixing",
+              state.dataHeatBal->Mixing(Loop).sched->Name,
               state.dataHeatBal->Zone(ZoneNum).Name,
               state.dataHeatBal->Zone(ZoneNum).FloorArea,
               state.dataHeatBal->Zone(ZoneNum).TotOccupants);
@@ -4381,7 +4030,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).FloorArea, state.dataHeatBal->Mixing(Loop).DesignLevel);
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).TotOccupants, state.dataHeatBal->Mixing(Loop).DesignLevel);
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).Volume,
-                                              state.dataHeatBal->Mixing(Loop).DesignLevel * Constant::SecInHour);
+                                              state.dataHeatBal->Mixing(Loop).DesignLevel * Constant::rSecsInHour);
 
         print(state.files.eio, "{},", state.dataHeatBal->Zone(state.dataHeatBal->Mixing(Loop).FromZone).Name);
         print(state.files.eio, "{:.2R}\n", state.dataHeatBal->Mixing(Loop).DeltaTemperature);
@@ -4406,7 +4055,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
               Format_720,
               "CrossMixing",
               state.dataHeatBal->CrossMixing(Loop).Name,
-              ScheduleManager::GetScheduleName(state, state.dataHeatBal->CrossMixing(Loop).SchedPtr),
+              "ZoneCrossMixing",
+              state.dataHeatBal->CrossMixing(Loop).sched->Name,
               state.dataHeatBal->Zone(ZoneNum).Name,
               state.dataHeatBal->Zone(ZoneNum).FloorArea,
               state.dataHeatBal->Zone(ZoneNum).TotOccupants);
@@ -4416,7 +4066,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).FloorArea, state.dataHeatBal->CrossMixing(Loop).DesignLevel);
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).TotOccupants, state.dataHeatBal->CrossMixing(Loop).DesignLevel);
         divide_and_print_if_greater_than_zero(state.dataHeatBal->Zone(ZoneNum).Volume,
-                                              state.dataHeatBal->CrossMixing(Loop).DesignLevel * Constant::SecInHour);
+                                              state.dataHeatBal->CrossMixing(Loop).DesignLevel * Constant::rSecsInHour);
 
         print(state.files.eio, "{},", state.dataHeatBal->Zone(state.dataHeatBal->CrossMixing(Loop).FromZone).Name);
         print(state.files.eio, "{:.2R}\n", state.dataHeatBal->CrossMixing(Loop).DeltaTemperature);
@@ -4426,10 +4076,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         static constexpr std::string_view Format_724("! <{} Airflow Stats Nominal>, {}\n");
         print(state.files.eio,
               Format_724,
-              "RefrigerationDoorMixing ",
+              "RefrigerationDoorMixing",
               "Name, Zone 1 Name,Zone 2 Name,Door Opening Schedule Name,Door Height {m},Door Area {m2},Door Protection Type");
         for (ZoneNumA = 1; ZoneNumA <= (state.dataGlobal->NumOfZones - 1); ++ZoneNumA) {
-            if (!state.dataHeatBal->RefDoorMixing(ZoneNumA).RefDoorMixFlag) continue;
+            if (!state.dataHeatBal->RefDoorMixing(ZoneNumA).RefDoorMixFlag) {
+                continue;
+            }
             for (ConnectionNumber = 1; ConnectionNumber <= state.dataHeatBal->RefDoorMixing(ZoneNumA).NumRefDoorConnections; ++ConnectionNumber) {
                 ZoneNumB = state.dataHeatBal->RefDoorMixing(ZoneNumA).MateZonePtr(ConnectionNumber);
                 // TotMixingFlow(ZoneNum)=TotMixingFlow(ZoneNum)+RefDoorMixing(Loop)%!DesignLevel
@@ -4440,13 +4092,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                       state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorMixingObjectName(ConnectionNumber),
                       state.dataHeatBal->Zone(ZoneNumA).Name,
                       state.dataHeatBal->Zone(ZoneNumB).Name,
-                      ScheduleManager::GetScheduleName(state, state.dataHeatBal->RefDoorMixing(ZoneNumA).OpenSchedPtr(ConnectionNumber)),
+                      state.dataHeatBal->RefDoorMixing(ZoneNumA).openScheds(ConnectionNumber)->Name,
                       state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorHeight(ConnectionNumber),
                       state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea(ConnectionNumber),
                       state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName(ConnectionNumber));
             } // ConnectionNumber
-        }     // ZoneNumA
-    }         //(TotRefDoorMixing .GT. 0)
+        } // ZoneNumA
+    } //(TotRefDoorMixing .GT. 0)
 
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
         state.dataHeatBal->Zone(ZoneNum).NominalInfilVent = TotInfilVentFlow(ZoneNum);
@@ -4817,8 +4469,10 @@ void InitSimpleMixingConvectiveHeatGains(EnergyPlusData &state)
     if (state.dataHeatBal->AirFlowFlag) { // Simplified airflow calculation
         // Process the scheduled Mixing for air heat balance
         for (auto &thisMixing : state.dataHeatBal->Mixing) {
-            thisMixing.DesiredAirFlowRate = thisMixing.DesignLevel * ScheduleManager::GetCurrentScheduleValue(state, thisMixing.SchedPtr);
-            if (thisMixing.EMSSimpleMixingOn) thisMixing.DesiredAirFlowRate = thisMixing.EMSimpleMixingFlowRate;
+            thisMixing.DesiredAirFlowRate = thisMixing.DesignLevel * thisMixing.sched->getCurrentVal();
+            if (thisMixing.EMSSimpleMixingOn) {
+                thisMixing.DesiredAirFlowRate = thisMixing.EMSimpleMixingFlowRate;
+            }
             thisMixing.DesiredAirFlowRateSaved = thisMixing.DesiredAirFlowRate;
         }
 
@@ -4842,8 +4496,10 @@ void InitSimpleMixingConvectiveHeatGains(EnergyPlusData &state)
 
         // Process the scheduled CrossMixing for air heat balance
         for (auto &thisCrossMix : state.dataHeatBal->CrossMixing) {
-            thisCrossMix.DesiredAirFlowRate = thisCrossMix.DesignLevel * ScheduleManager::GetCurrentScheduleValue(state, thisCrossMix.SchedPtr);
-            if (thisCrossMix.EMSSimpleMixingOn) thisCrossMix.DesiredAirFlowRate = thisCrossMix.EMSimpleMixingFlowRate;
+            thisCrossMix.DesiredAirFlowRate = thisCrossMix.DesignLevel * thisCrossMix.sched->getCurrentVal();
+            if (thisCrossMix.EMSSimpleMixingOn) {
+                thisCrossMix.DesiredAirFlowRate = thisCrossMix.EMSimpleMixingFlowRate;
+            }
         }
 
         // Note - do each Pair a Single time, so must do increment reports for both zones
@@ -4855,11 +4511,15 @@ void InitSimpleMixingConvectiveHeatGains(EnergyPlusData &state)
             for (int NZ = 1; NZ <= (state.dataGlobal->NumOfZones - 1);
                  ++NZ) { // Can't have %ZonePtr==NumOfZones because lesser zone # of pair placed in ZonePtr in input
                 auto &thisRefDoor = state.dataHeatBal->RefDoorMixing(NZ);
-                if (!thisRefDoor.RefDoorMixFlag) continue;
+                if (!thisRefDoor.RefDoorMixFlag) {
+                    continue;
+                }
                 if (thisRefDoor.ZonePtr == NZ) {
                     for (int J = 1; J <= thisRefDoor.NumRefDoorConnections; ++J) {
                         thisRefDoor.VolRefDoorFlowRate(J) = 0.0;
-                        if (thisRefDoor.EMSRefDoorMixingOn(J)) thisRefDoor.VolRefDoorFlowRate(J) = thisRefDoor.EMSRefDoorFlowRate(J);
+                        if (thisRefDoor.EMSRefDoorMixingOn(J)) {
+                            thisRefDoor.VolRefDoorFlowRate(J) = thisRefDoor.EMSRefDoorFlowRate(J);
+                        }
                     }
                 }
             }
@@ -4956,11 +4616,11 @@ void ReportZoneMeanAirTemp(EnergyPlusData &state)
         state.dataHeatBalAirMgr->CalcExtraReportVarMyOneTimeFlag = false;
     }
     for (int ZoneLoop = 1; ZoneLoop <= state.dataGlobal->NumOfZones; ++ZoneLoop) {
-        auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(ZoneLoop);
+        auto const &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(ZoneLoop);
         calcMeanAirTemps(state, thisZoneHB.ZTAV, thisZoneHB.airHumRatAvg, thisZoneHB.MRT, state.dataHeatBal->ZnAirRpt(ZoneLoop), ZoneLoop);
         if (state.dataHeatBal->doSpaceHeatBalanceSimulation) {
             for (int spaceNum : state.dataHeatBal->Zone(ZoneLoop).spaceIndexes) {
-                auto &thisSpaceHB = state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNum);
+                auto const &thisSpaceHB = state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNum);
                 calcMeanAirTemps(
                     state, thisSpaceHB.ZTAV, thisSpaceHB.airHumRatAvg, thisSpaceHB.MRT, state.dataHeatBal->spaceAirRpt(spaceNum), ZoneLoop);
             }
@@ -4989,12 +4649,11 @@ void calcMeanAirTemps(EnergyPlusData &state,
         // find TempControlledZoneID from ZoneLoop index
         int TempControlledZoneID = state.dataHeatBal->Zone(zoneNum).TempControlledZoneIndex;
         if (state.dataHeatBal->Zone(zoneNum).IsControlled) {
-            if ((state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OperativeTempControl)) {
+            if ((state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OpTempCtrl != DataZoneControls::TempCtrl::None)) {
                 Real64 thisMRTFraction; // temp working value for radiative fraction/weight
                 // is operative temp radiative fraction scheduled or fixed?
-                if (state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OpTempCntrlModeScheduled) {
-                    thisMRTFraction = ScheduleManager::GetCurrentScheduleValue(
-                        state, state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OpTempRadiativeFractionSched);
+                if (state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OpTempCtrl == DataZoneControls::TempCtrl::Scheduled) {
+                    thisMRTFraction = state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).opTempRadiativeFractionSched->getCurrentVal();
                 } else {
                     thisMRTFraction = state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).FixedRadiativeFraction;
                 }

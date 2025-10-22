@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -85,6 +85,9 @@ namespace DataAirLoop {
         Array1D_int TermUnitCoolSizingIndex;       // Air terminal sizing numbers for zones cooled by this air loop
         Array1D_int TermUnitHeatSizingIndex;       // Air terminal sizing numbers for zones heated by this air loop
         Array1D<HVAC::AirDuctType> SupplyDuctType; // 1=main, 2=cooling, 3=heating, 4=other
+        EPVector<int> SupplyDuctBranchNum;         // Supply duct branch number (airloop branchnum, not the actual branch index)
+        EPVector<int> SupplyAirPathNum;            // Supply air path indexes
+        EPVector<int> ReturnAirPathNum;            // Return air path indexes
     };
 
     struct AirLoopOutsideAirConnectData
@@ -122,7 +125,7 @@ namespace DataAirLoop {
         int OASysNum = 0;                           // index of OA System
         bool CyclingFan = false;                    // TRUE if currently the air loop supply fan is cycling
         bool AnyContFan = false;                    // TRUE if at any time supply fan is continuous
-        int CycFanSchedPtr = 0;                     // index of schedule indicating whether fan is cycling or continuous in a unitary system
+        Sched::Schedule *cycFanSched = nullptr;     // schedule indicating whether fan is cycling or continuous in a unitary system
         HVAC::FanOp fanOp = HVAC::FanOp::Invalid;   // 1=cycling fan cycling compressor; 2=constant fan cycling comptressor
         bool UnitarySys = false;                    // TRUE if a unitary system
         bool UnitarySysSimulating = true;           // set FALSE for AirloopUnitarySystem after simulating to downstream coils can size independently
@@ -247,9 +250,17 @@ struct DataAirLoopData : BaseGlobalStruct
     EPVector<DataAirLoop::OutsideAirSysProps> OutsideAirSys;
     EPVector<DataAirLoop::AirLoopAFNData> AirLoopAFNInfo;
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void clear_state() override
     {
-        *this = DataAirLoopData();
+        new (this) DataAirLoopData();
     }
 };
 

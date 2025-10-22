@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -132,7 +132,41 @@ bool env_var_on(std::string const &env_var_str);
 
 using OptionalOutputFileRef = std::optional<std::reference_wrapper<EnergyPlus::InputOutputFile>>;
 
-void ShowFatalError(EnergyPlusData &state, std::string const &ErrorMessage, OptionalOutputFileRef OutUnit1 = {}, OptionalOutputFileRef OutUnit2 = {});
+enum class ErrorMessageCategory
+{
+    Invalid = -1,
+    Unclassified,
+    Input_invalid,
+    Input_field_not_found,
+    Input_field_blank,
+    Input_object_not_found,
+    Input_cannot_find_object,
+    Input_topology_problem,
+    Input_unused,
+    Input_fatal,
+    Runtime_general,
+    Runtime_flow_out_of_range,
+    Runtime_temp_out_of_range,
+    Runtime_airflow_network,
+    Fatal_general,
+    Developer_general,
+    Developer_invalid_index,
+    Num
+};
+void emitErrorMessage(EnergyPlusData &state, ErrorMessageCategory category, std::string const &msg, bool shouldFatal);
+void emitErrorMessages(EnergyPlusData &state,
+                       ErrorMessageCategory category,
+                       std::initializer_list<std::string> const &msgs,
+                       bool shouldFatal,
+                       int zeroBasedTimeStampIndex = -1);
+void emitWarningMessage(EnergyPlusData &state, ErrorMessageCategory category, std::string const &msg, bool countAsError = false);
+void emitWarningMessages(EnergyPlusData &state,
+                         ErrorMessageCategory category,
+                         std::initializer_list<std::string> const &msgs,
+                         bool countAsError = false);
+
+[[noreturn]] void
+ShowFatalError(EnergyPlusData &state, std::string const &ErrorMessage, OptionalOutputFileRef OutUnit1 = {}, OptionalOutputFileRef OutUnit2 = {});
 
 void ShowSevereError(EnergyPlusData &state,
                      std::string const &ErrorMessage,
@@ -163,6 +197,12 @@ void ShowWarningMessage(EnergyPlusData &state,
                         OptionalOutputFileRef OutUnit1 = {},
                         OptionalOutputFileRef OutUnit2 = {});
 
+void ShowRecurringSevereErrorAtEnd(EnergyPlusData &state,
+                                   std::string const &Message, // Message automatically written to "error file" at end of simulation
+                                   int &MsgIndex,              // Recurring message index, if zero, next available index is assigned
+                                   Real64 const val,           // Track and report the max of the values passed to this argument
+                                   std::string const &units);
+
 void ShowRecurringSevereErrorAtEnd(
     EnergyPlusData &state,
     std::string const &Message,                        // Message automatically written to "error file" at end of simulation
@@ -173,6 +213,13 @@ void ShowRecurringSevereErrorAtEnd(
     std::string const &ReportMaxUnits = "",            // optional char string (<=15 length) of units for max value
     std::string const &ReportMinUnits = "",            // optional char string (<=15 length) of units for min value
     std::string const &ReportSumUnits = ""             // optional char string (<=15 length) of units for sum value
+);
+
+void ShowRecurringWarningErrorAtEnd(EnergyPlusData &state,
+                                    std::string const &Message, // Message automatically written to "error file" at end of simulation
+                                    int &MsgIndex,              // Recurring message index, if zero, next available index is assigned
+                                    Real64 const val,
+                                    std::string const &units // optional char string (<=15 length) of units for sum value
 );
 
 void ShowRecurringWarningErrorAtEnd(
@@ -220,6 +267,12 @@ void SummarizeErrors(EnergyPlusData &state);
 
 void ShowRecurringErrors(EnergyPlusData &state);
 
+struct ErrorCountIndex
+{
+    int index = 0;
+    int count = 0;
+};
+
 struct ErrorObjectHeader
 {
     std::string_view routineName;
@@ -234,20 +287,78 @@ void ShowSevereEmptyField(EnergyPlusData &state,
                           std::string_view depFieldName = {},
                           std::string_view depFieldValue = {});
 void ShowSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
+/// <summary>
+/// Similar to ShowSevereItemNotFound, except for the severe error added to the list contains the information about
+/// what item is missing.
+/// </summary>
+/// <param name="state">EnergyPus state, used for tracking the severe error</param>
+/// <param name="eoh">Error object header, used to get the routineName</param>
+/// <param name="fieldName">Name of the unmatched field</param>
+/// <param name="fieldValue">Value of the unmatched field</param>
+void ShowDetailedSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
+void ShowSevereItemNotFoundAudit(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
+
+void ShowSevereDuplicateAssignment(
+    EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue, std::string_view prevValue);
+
 void ShowSevereInvalidKey(
     EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue, std::string_view msg = {});
 void ShowSevereInvalidBool(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
 
-void ShowSevereCustomMessage(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view msg);
+void ShowSevereCustom(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view msg);
+void ShowSevereCustomField(
+    EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue, std::string_view msg);
+
+void ShowSevereCustomAudit(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view msg);
+
+enum class Clusive
+{
+    Invalid = -1,
+    In,
+    Ex,
+    Num
+};
+
+void ShowSevereBadMin(EnergyPlusData &state,
+                      ErrorObjectHeader const &eoh,
+                      std::string_view fieldName,
+                      Real64 fieldVal,
+                      Clusive cluMin,
+                      Real64 minVal,
+                      std::string_view msg = {});
+void ShowSevereBadMax(EnergyPlusData &state,
+                      ErrorObjectHeader const &eoh,
+                      std::string_view fieldName,
+                      Real64 fieldVal,
+                      Clusive cluMin,
+                      Real64 maxVal,
+                      std::string_view msg = {});
+void ShowSevereBadMinMax(EnergyPlusData &state,
+                         ErrorObjectHeader const &eoh,
+                         std::string_view fieldName,
+                         Real64 fieldVal,
+                         Clusive cluMin,
+                         Real64 minVal,
+                         Clusive cluMax,
+                         Real64 maxVal,
+                         std::string_view msg = {});
+
 void ShowWarningDuplicateName(EnergyPlusData &state, ErrorObjectHeader const &eoh);
 void ShowWarningEmptyField(EnergyPlusData &state,
                            ErrorObjectHeader const &eoh,
                            std::string_view fieldName,
-                           std::string_view defaultValue,
+                           std::string_view defaultValue = {},
                            std::string_view depFieldName = {},
                            std::string_view depFieldValue = {});
+
+void ShowWarningNonEmptyField(EnergyPlusData &state,
+                              ErrorObjectHeader const &eoh,
+                              std::string_view fieldName,
+                              std::string_view depFieldName = {},
+                              std::string_view depFieldValue = {});
+
 void ShowWarningItemNotFound(
-    EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue, std::string_view defaultValue);
+    EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue, std::string_view defaultValue = {});
 void ShowWarningInvalidKey(EnergyPlusData &state,
                            ErrorObjectHeader const &eoh,
                            std::string_view fieldName,
@@ -256,7 +367,9 @@ void ShowWarningInvalidKey(EnergyPlusData &state,
                            std::string_view msg = {});
 void ShowWarningInvalidBool(
     EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue, std::string_view defaultValue);
-void ShowWarningCustomMessage(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view msg);
+void ShowWarningCustom(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view msg);
+void ShowWarningCustomField(
+    EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue, std::string_view msg);
 
 namespace Util {
 
@@ -282,6 +395,18 @@ namespace Util {
         return Util::FindItemInList(String, ListOfItems, ListOfItems.isize());
     }
 
+    inline int FindIntInList(Array1_int &list, int item)
+    {
+        auto it = std::find(list.begin(), list.end(), item);
+        return (it == list.end()) ? -1 : (it - list.begin());
+    }
+
+    inline int FindIntInList(std::vector<int> &list, int item)
+    {
+        auto it = std::find(list.begin(), list.end(), item);
+        return (it == list.end()) ? -1 : (it - list.begin());
+    }
+
     int FindItemInList(std::string_view const String, Array1S_string const ListOfItems, int NumItems);
 
     template <typename InputIterator> int FindItemInList(std::string_view const str, InputIterator first, InputIterator last)
@@ -302,7 +427,9 @@ namespace Util {
     template <typename A> inline int FindItemInList(std::string_view const String, MArray1<A, std::string> const &ListOfItems, int const NumItems)
     {
         for (int Count = 1; Count <= NumItems; ++Count) {
-            if (String == ListOfItems(Count)) return Count;
+            if (String == ListOfItems(Count)) {
+                return Count;
+            }
         }
         return 0; // Not found
     }
@@ -317,26 +444,11 @@ namespace Util {
     inline int FindItemInList(std::string_view const String, Container const &ListOfItems, int const NumItems)
     {
         for (typename Container::size_type i = 0, e = NumItems; i < e; ++i) {
-            if (String == ListOfItems[i].Name) return int(i + 1); // 1-based return index
+            if (String == ListOfItems[i].Name) {
+                return int(i + 1); // 1-based return index
+            }
         }
         return 0; // Not found
-    }
-
-    template <typename Container, class = typename std::enable_if<!std::is_same<typename Container::value_type, std::string>::value>::type>
-    // Container needs and operator[i] and elements need Name
-    inline int FindItemInPtrList(std::string_view const String, Container const &ListOfItems, int const NumItems)
-    {
-        for (typename Container::size_type i = 0, e = NumItems; i < e; ++i) {
-            if (String == ListOfItems[i]->Name) return int(i + 1); // 1-based return index
-        }
-        return 0; // Not found
-    }
-
-    template <typename Container, class = typename std::enable_if<!std::is_same<typename Container::value_type, std::string>::value>::type>
-    // Container needs and operator[i] and elements need Name
-    inline int FindItemInPtrList(std::string_view const String, Container const &ListOfItems)
-    {
-        return Util::FindItemInPtrList(String, ListOfItems, ListOfItems.isize());
     }
 
     template <typename Container, class = typename std::enable_if<!std::is_same<typename Container::value_type, std::string>::value>::type>
@@ -352,7 +464,9 @@ namespace Util {
     FindItemInList(std::string_view const String, Container const &ListOfItems, std::string Container::value_type::*name_p, int const NumItems)
     {
         for (typename Container::size_type i = 0, e = NumItems; i < e; ++i) {
-            if (String == ListOfItems[i].*name_p) return int(i + 1); // 1-based return index
+            if (String == ListOfItems[i].*name_p) {
+                return int(i + 1); // 1-based return index
+            }
         }
         return 0; // Not found
     }
@@ -380,7 +494,9 @@ namespace Util {
         bool Found(false);
         while ((!Found) || (Probe != 0)) {
             Probe = (UBnd - LBnd) / 2;
-            if (Probe == 0) break;
+            if (Probe == 0) {
+                break;
+            }
             Probe += LBnd;
             if (equali(String, ListOfItems(Probe))) {
                 Found = true;
@@ -406,10 +522,14 @@ namespace Util {
         // );
 
         auto const it = std::find_if(first, last, [&str](const valueType &s) { return s.name == str; });
-        if (it != last) return it - first + 1; // 1-based return index
+        if (it != last) {
+            return it - first + 1; // 1-based return index
+        }
 
         auto const it2 = std::find_if(first, last, [&str](const valueType &s) { return equali(s.name, str); });
-        if (it2 != last) return it2 - first + 1; // 1-based return index
+        if (it2 != last) {
+            return it2 - first + 1; // 1-based return index
+        }
 
         return 0; // Not found
     }
@@ -421,10 +541,14 @@ namespace Util {
         // Named" );
 
         auto const it = std::find_if(first, last, [&str](const valueType &s) { return s->name == str; });
-        if (it != last) return it - first + 1; // 1-based return index
+        if (it != last) {
+            return it - first + 1; // 1-based return index
+        }
 
         auto const it2 = std::find_if(first, last, [&str](const valueType &s) { return equali(s->name, str); });
-        if (it2 != last) return it2 - first + 1; // 1-based return index
+        if (it2 != last) {
+            return it2 - first + 1; // 1-based return index
+        }
 
         return 0; // Not found
     }
@@ -451,9 +575,13 @@ namespace Util {
     template <typename A> inline int FindItem(std::string_view const String, MArray1<A, std::string> const &ListOfItems, int const NumItems)
     {
         int const item_number(Util::FindItemInList(String, ListOfItems, NumItems));
-        if (item_number != 0) return item_number;
+        if (item_number != 0) {
+            return item_number;
+        }
         for (int Count = 1; Count <= NumItems; ++Count) {
-            if (equali(String, ListOfItems(Count))) return Count;
+            if (equali(String, ListOfItems(Count))) {
+                return Count;
+            }
         }
         return 0; // Not found
     }
@@ -468,9 +596,13 @@ namespace Util {
     inline int FindItem(std::string_view const String, Container const &ListOfItems, int const NumItems)
     {
         int const item_number(Util::FindItemInList(String, ListOfItems, NumItems));
-        if (item_number != 0) return item_number;
+        if (item_number != 0) {
+            return item_number;
+        }
         for (typename Container::size_type i = 0, e = NumItems; i < e; ++i) {
-            if (equali(String, ListOfItems[i].Name)) return i + 1; // 1-based return index
+            if (equali(String, ListOfItems[i].Name)) {
+                return i + 1; // 1-based return index
+            }
         }
         return 0; // Not found
     }
@@ -487,9 +619,13 @@ namespace Util {
     inline int FindItem(std::string_view const String, Container const &ListOfItems, std::string Container::value_type::*name_p, int const NumItems)
     {
         int const item_number(Util::FindItemInList(String, ListOfItems, name_p, NumItems));
-        if (item_number != 0) return item_number;
+        if (item_number != 0) {
+            return item_number;
+        }
         for (typename Container::size_type i = 0, e = NumItems; i < e; ++i) {
-            if (equali(String, ListOfItems[i].*name_p)) return i + 1; // 1-based return index
+            if (equali(String, ListOfItems[i].*name_p)) {
+                return i + 1; // 1-based return index
+            }
         }
         return 0; // Not found
     }
@@ -665,6 +801,15 @@ namespace Util {
 
     bool IsNameEmpty(EnergyPlusData &state, std::string &NameToVerify, std::string_view StringToDisplay, bool &ErrorFound);
 
+    void setDesignObjectNameAndPointer(EnergyPlusData &state,
+                                       std::string &nameToBeSet,         // field that is being set once a match is found
+                                       int &ptrToBeSet,                  // pointer that is being set once a match is found
+                                       std::string const userName,       // name to be found searching through the list
+                                       Array1S_string const listOfNames, // list of names in which the userName must be found
+                                       std::string const itemType,       // string containing type of base object
+                                       std::string const itemName,       // string containing name of base object
+                                       bool &errorFound);                // set to true if an error is found
+
     // Two structs for case insensitive containers.
     // Eg: for unordered_map, we need to have a case insenstive hasher and a case insensitive comparator
     // (The default allocator for unordered_map is fine)
@@ -688,11 +833,14 @@ namespace Util {
 constexpr int getEnumValue(const gsl::span<const std::string_view> sList, const std::string_view s)
 {
     for (unsigned int i = 0; i < sList.size(); ++i) {
-        if (sList[i] == s) return i;
+        if (sList[i] == s) {
+            return i;
+        }
     }
     return -1;
 }
 
+constexpr std::array<std::string_view, 2> yesNoNames = {"No", "Yes"};
 constexpr std::array<std::string_view, 2> yesNoNamesUC = {"NO", "YES"};
 
 constexpr BooleanSwitch getYesNoValue(const std::string_view s)
@@ -712,6 +860,14 @@ struct UtilityRoutinesData : BaseGlobalStruct
     std::string appendPerfLog_headerRow;
     std::string appendPerfLog_valuesRow;
     bool GetMatrixInputFlag = true;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

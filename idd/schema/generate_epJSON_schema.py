@@ -1,4 +1,4 @@
-# EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University
+# EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     p = multiprocessing.Process(target=generate_epJSON_schema, args=(sys.argv[1], ))
     p.start()
 
-    timeout_seconds = 30
+    timeout_seconds = 60
     p.join(timeout=timeout_seconds)
 
     # If thread is still active

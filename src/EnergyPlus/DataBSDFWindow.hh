@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -52,6 +52,9 @@
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array2D.hh>
 #include <ObjexxFCL/Array3D.hh>
+#include <ObjexxFCL/Vector3.fwd.hh>
+
+using ObjexxFCL::Vector3;
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
@@ -74,6 +77,8 @@ namespace DataBSDFWindow {
         Num
     };
 
+    static constexpr std::array<std::string_view, (int)Basis::Num> basisNamesUC = {"LBNLWINDOW", "USERDEFINED"};
+
     enum class BasisSymmetry
     {
         Invalid = -1,
@@ -81,6 +86,8 @@ namespace DataBSDFWindow {
         None,
         Num
     };
+
+    static constexpr std::array<std::string_view, (int)BasisSymmetry::Num> basisSymmetryNamesUC = {"AXISSYMMETRIC", "NONE"};
 
     // Thermal calculations for complex fenestration can be used to generate reports for standard cases
     // noCondition is used when performing timestep calculations
@@ -389,9 +396,17 @@ struct BSDFWindowData : BaseGlobalStruct
     Array2D<Real64> BSDFTempMtrx;                                         // Temporary matrix for holding axisymmetric input
     EPVector<DataBSDFWindow::BSDFWindowGeomDescr> ComplexWind;            // Window geometry structure: set in CalcPerSolarBeam/SolarShading
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void clear_state() override
     {
-        *this = BSDFWindowData();
+        new (this) BSDFWindowData();
     }
 };
 

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -58,6 +58,7 @@
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/Material.hh>
+#include <EnergyPlus/PhaseChangeModeling/HysteresisModel.hh>
 
 namespace EnergyPlus {
 
@@ -147,9 +148,12 @@ namespace HeatBalFiniteDiffManager {
         int indexNodeMinTempLimit = 0;   // index for recurring error message if node temperature is below minimum node temperature for this surfac
         Real64 EnthalpyM;                // Melting enthalpy at a particular temperature
         Real64 EnthalpyF;                // Freezing enthalpy at a particular temperature
-        Array1D<int> PhaseChangeState;
-        Array1D<int> PhaseChangeStateOld;
-        Array1D<int> PhaseChangeStateOldOld;
+        Array1D<Material::Phase> PhaseChangeState;
+        Array1D<Material::Phase> PhaseChangeStateOld;
+        Array1D<Material::Phase> PhaseChangeStateOldOld;
+        Array1D<int> PhaseChangeStateRep;
+        Array1D<int> PhaseChangeStateOldRep;
+        Array1D<int> PhaseChangeStateOldOldRep;
         Array1D<Real64> PhaseChangeTemperatureReverse;
         Array1D<MaterialActuatorData> condMaterialActuators;
         Array1D<MaterialActuatorData> specHeatMaterialActuators;
@@ -204,6 +208,8 @@ namespace HeatBalFiniteDiffManager {
     );
 
     void GetCondFDInput(EnergyPlusData &state);
+
+    int setSizeMaxProperties(EnergyPlusData &state);
 
     void InitHeatBalFiniteDiff(EnergyPlusData &state);
 
@@ -308,7 +314,7 @@ namespace HeatBalFiniteDiffManager {
     void adjustPropertiesForPhaseChange(EnergyPlusData &state,
                                         int finiteDifferenceLayerIndex,
                                         int surfaceIndex,
-                                        const Material::MaterialBase *materialDefinition,
+                                        Material::MaterialPhaseChange *mat,
                                         Real64 temperaturePrevious,
                                         Real64 temperatureUpdated,
                                         Real64 &updatedSpecificHeat,
@@ -340,6 +346,14 @@ struct HeatBalFiniteDiffMgr : BaseGlobalStruct
     Array1D<HeatBalFiniteDiffManager::SurfaceDataFD> SurfaceFD;
     Array1D<HeatBalFiniteDiffManager::MaterialDataFD> MaterialFD;
     bool MyEnvrnFlag = true;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

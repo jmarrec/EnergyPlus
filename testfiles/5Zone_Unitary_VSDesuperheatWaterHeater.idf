@@ -97,7 +97,7 @@
 ! Environmental Emissions:        None
 ! Utility Tariffs:                None
 
-  Version,24.2;
+  Version,25.2;
 
   Building,
     Building,                !- Name
@@ -2740,6 +2740,7 @@
 
   Coil:Cooling:DX:VariableSpeed,
     Main Cooling Coil 1,     !- Name
+    ,                        !- Availability Schedule Name
     Main Cooling Coil 1 Inlet Node,  !- Indoor Air Inlet Node Name
     Main Heating Coil 1 Inlet Node,  !- Indoor Air Outlet Node Name
     1.0,                     !- Number of Speeds {dimensionless}

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -99,8 +99,6 @@ namespace HeatBalanceManager {
 
     void GetSiteAtmosphereData(EnergyPlusData &state, bool &ErrorsFound);
 
-    void GetWindowGlassSpectralData(EnergyPlusData &state, bool &ErrorsFound); // set to true if errors found in input
-
     void GetConstructData(EnergyPlusData &state, bool &ErrorsFound); // If errors found in input
 
     void GetBuildingData(EnergyPlusData &state, bool &ErrorsFound); // If errors found in input
@@ -175,12 +173,6 @@ namespace HeatBalanceManager {
 
     void CreateTCConstructions(EnergyPlusData &state, bool &ErrorsFound); // If errors found in input
 
-    void SetupSimpleWindowGlazingSystem(EnergyPlusData &state, int &MaterNum);
-
-    void SetupComplexFenestrationMaterialInput(EnergyPlusData &state,
-                                               int &MaterNum, // num of material items thus far
-                                               bool &ErrorsFound);
-
     void SetupComplexFenestrationStateInput(EnergyPlusData &state,
                                             int &ConstrNum, // num of construction items thus far
                                             bool &ErrorsFound);
@@ -201,7 +193,6 @@ struct HeatBalanceMgrData : BaseGlobalStruct
     bool ReportWarmupConvergenceFirstWarmupWrite = true;
 
     std::string CurrentModuleObject; // to assist in getting input
-    std::unordered_map<std::string, std::string> UniqueMaterialNames;
     std::unordered_map<std::string, std::string> UniqueConstructNames;
 
     // Real Variables for the Heat Balance Simulation
@@ -236,11 +227,18 @@ struct HeatBalanceMgrData : BaseGlobalStruct
     Array1D<HeatBalanceManager::WarmupConvergence> WarmupConvergenceValues;
     SurfaceOctreeCube surfaceOctree;
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void clear_state() override
     {
 
         ManageHeatBalanceGetInputFlag = true;
-        UniqueMaterialNames.clear();
         UniqueConstructNames.clear();
         DoReport = false;
         ChangeSet = true;

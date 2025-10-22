@@ -32,6 +32,7 @@ btwxt/.gitmodules
 btwxt/vendor/fmt
 btwxt/vendor/courierr/vendor/fmt
 btwxt/vendor/courierr/.gitmodules
+btwxt/vendor/courierr/vendor/googletest
 libtk205/.gitmodules
 
 # unused repo directories/files
@@ -55,6 +56,8 @@ penumbra/vendor/glfw/examples
 penumbra/vendor/glfw/tests
 penumbra/vendor/googletest
 libtk205/.github
+libtk205/.gitignore
+libtk205/.gitmodules
 libtk205/examples
 libtk205/test
 libtk205/vendor/btwxt

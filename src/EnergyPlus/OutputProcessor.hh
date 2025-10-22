@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -52,6 +52,7 @@
 #include <array>
 #include <iosfwd>
 #include <map>
+#include <type_traits>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
@@ -63,6 +64,7 @@
 #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/EPVector.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/ScheduleManager.hh>
 
 // Third party Headers
 #include "re2/re2.h"
@@ -444,7 +446,7 @@ namespace OutputProcessor {
         int maxValueDate = 0;               // Date stamp of maximum
         int minValueDate = 0;               // Date stamp of minimum
         int ReportID = 0;                   // Report variable ID number
-        int SchedPtr = 0;                   // If scheduled, this points to the schedule
+        Sched::Schedule *sched = nullptr;   // If scheduled, this is schedule
         int ZoneMult = 1;                   // If metered, Zone Multiplier is applied
         int ZoneListMult = 1;               // If metered, Zone List Multiplier is applied
 
@@ -463,7 +465,7 @@ namespace OutputProcessor {
 
         std::vector<int> meterNums; // Meter Numbers
 
-        virtual ~OutVar(){};
+        virtual ~OutVar() = default;
 
         std::string multiplierString() const;
 
@@ -517,8 +519,7 @@ namespace OutputProcessor {
         std::string key = "";               // Could be blank or "*"
         std::string name = "";              // Name of Variable
         ReportFreq freq = ReportFreq::Hour; // Reporting Frequency
-        int SchedPtr = 0;                   // Index of the Schedule
-        std::string SchedName = "";         // Schedule Name
+        Sched::Schedule *sched = nullptr;   // Schedule
         bool Used = false;                  // True when this combination (key, varname, frequency) has been set
 
         bool is_simple_string = true; // Whether the Key potentially includes a Regular Expression pattern
@@ -622,7 +623,7 @@ namespace OutputProcessor {
         Array1D_string spaceTypeName; // Array of space type names
     };
 
-    int DetermineMinuteForReporting(EnergyPlusData &state);
+    int DetermineMinuteForReporting(EnergyPlusData const &state);
 
     void InitializeOutput(EnergyPlusData &state);
 
@@ -811,6 +812,29 @@ void SetupOutputVariable(EnergyPlusData &state,
                          OutputProcessor::ReportFreq freq = OutputProcessor::ReportFreq::Hour // Internal use -- causes reporting at this freqency
 );
 
+// A helper to be able to cast an enum to an int& for use in the above function
+template <typename EnumType, typename = std::enable_if_t<std::is_enum_v<EnumType>>>
+void SetupOutputVariable(EnergyPlusData &state,
+                         std::string_view const VariableName,                                 // String Name of variable
+                         Constant::Units VariableUnit,                                        // Actual units corresponding to the actual variable
+                         EnumType &ActualVariable,                                            // Actual Variable, used to set up pointer
+                         OutputProcessor::TimeStepType TimeStepType,                          // Zone, HeatBalance=1, HVAC, System, Plant=2
+                         OutputProcessor::StoreType VariableType,                             // State, Average=1, NonState, Sum=2
+                         std::string const &KeyedValue,                                       // Associated Key for this variable
+                         int const indexGroupKey = -999,                                      // Group identifier for SQL output
+                         OutputProcessor::ReportFreq freq = OutputProcessor::ReportFreq::Hour // Internal use -- causes reporting at this freqency
+)
+{
+#if defined(__GNUC__) || defined(__clang__)
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
+    SetupOutputVariable(state, VariableName, VariableUnit, (int &)ActualVariable, TimeStepType, VariableType, KeyedValue, indexGroupKey, freq);
+#if defined(__GNUC__) || defined(__clang__)
+#    pragma GCC diagnostic pop
+#endif
+};
+
 void UpdateDataandReport(EnergyPlusData &state, OutputProcessor::TimeStepType TimeStepTypeKey); // What kind of data to update (Zone, HVAC)
 
 void GenOutputVariablesAuditReport(EnergyPlusData &state);
@@ -824,11 +848,11 @@ void SetInitialMeterReportingAndOutputNames(EnergyPlusData &state,
                                             bool CumulativeIndicator          // true if this is a Cumulative meter reporting
 );
 
-int GetMeterIndex(EnergyPlusData &state, std::string const &MeterName);
+int GetMeterIndex(EnergyPlusData const &state, std::string const &MeterName);
 
-Constant::eResource GetMeterResourceType(EnergyPlusData &state, int MeterNumber); // Which Meter Number (from GetMeterIndex)
+Constant::eResource GetMeterResourceType(EnergyPlusData const &state, int MeterNumber); // Which Meter Number (from GetMeterIndex)
 
-Real64 GetCurrentMeterValue(EnergyPlusData &state, int MeterNumber); // Which Meter Number (from GetMeterIndex)
+Real64 GetCurrentMeterValue(EnergyPlusData const &state, int MeterNumber); // Which Meter Number (from GetMeterIndex)
 
 Real64 GetInstantMeterValue(EnergyPlusData &state,
                             int MeterNumber,                           // Which Meter Number (from GetMeterIndex)
@@ -845,7 +869,7 @@ Real64 GetInternalVariableValueExternalInterface(EnergyPlusData &state,
                                                  int keyVarIndex                        // Array index
 );
 
-int GetNumMeteredVariables(EnergyPlusData &state,
+int GetNumMeteredVariables(EnergyPlusData const &state,
                            std::string const &ComponentType, // Given Component Type
                            std::string const &ComponentName  // Given Component Name (user defined)
 );
@@ -877,7 +901,7 @@ void InitPollutionMeterReporting(EnergyPlusData &state, OutputProcessor::ReportF
 
 void ProduceRDDMDD(EnergyPlusData &state);
 
-int AddDDOutVar(EnergyPlusData &state,
+int AddDDOutVar(EnergyPlusData const &state,
                 std::string_view const nameUC, // Variable Name
                 OutputProcessor::TimeStepType TimeStepType,
                 OutputProcessor::StoreType StateType,
@@ -942,6 +966,14 @@ struct OutputProcessorData : BaseGlobalStruct
     int maxNumEndUseSpaceTypes = 1;
     EPVector<OutputProcessor::EndUseCategoryType> EndUseCategory;
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void clear_state() override
     {
         this->NumVariablesForOutput = 0;
@@ -973,24 +1005,29 @@ struct OutputProcessorData : BaseGlobalStruct
         this->GetMeterIndexFirstCall = true;
         this->InitFlag = true;
 
-        for (int i = 0; i < (int)OutputProcessor::TimeStepType::Num; ++i)
+        for (int i = 0; i < (int)OutputProcessor::TimeStepType::Num; ++i) {
             new (&this->TimeValue[i]) OutputProcessor::TimeSteps();
+        }
 
-        for (int i = 0; i < (int)this->outVars.size(); ++i)
+        for (int i = 0; i < (int)this->outVars.size(); ++i) {
             delete this->outVars[i];
+        }
         this->outVars.clear();
 
-        for (int i = 0; i < (int)this->ddOutVars.size(); ++i)
+        for (int i = 0; i < (int)this->ddOutVars.size(); ++i) {
             delete this->ddOutVars[i];
+        }
         this->ddOutVars.clear();
         this->ddOutVarMap.clear();
 
-        for (int i = 0; i < (int)this->reqVars.size(); ++i)
+        for (int i = 0; i < (int)this->reqVars.size(); ++i) {
             delete this->reqVars[i];
+        }
         this->reqVars.clear();
 
-        for (int i = 0; i < (int)this->meters.size(); ++i)
+        for (int i = 0; i < (int)this->meters.size(); ++i) {
             delete this->meters[i];
+        }
         this->meters.clear();
         this->meterMap.clear();
 

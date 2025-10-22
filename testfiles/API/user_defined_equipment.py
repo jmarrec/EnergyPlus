@@ -1,4 +1,4 @@
-# EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University
+# EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
@@ -462,6 +462,7 @@ class Zone1WinACModel:
             self.get_handles(state)
             if not self.handles_gotten_properly(state):
                 return 1
+            # x = api_.exchange.get_api_data(state)  #  use this to inspect api data
         self.initialize(state)
         self.simulate(state)
         self.report(state)

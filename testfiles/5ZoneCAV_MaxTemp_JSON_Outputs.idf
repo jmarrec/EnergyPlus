@@ -123,7 +123,7 @@
 ! Environmental Emissions:        None
 ! Utility Tariffs:                None
 
-  Version,24.2;
+  Version,25.2;
 
   Building,
     Building,                !- Name
@@ -3631,15 +3631,20 @@
     TimeSeriesAndTabular,    !- Option Type
     Yes,                     !- Output JSON
     No,                      !- Output CBOR
-    No;                      !- Output MessagePack
+    No,                      !- Output MessagePack
+    None,                    !- Unit Conversion for Tabular Data
+    No;                      !- Format Numeric Values for Tabular Data
 
   OutputControl:Table:Style,
     HTML,                    !- Column Separator
-    JtoKWH;                  !- Unit Conversion
+    JtoKWH,                  !- Unit Conversion
+    Yes;                     !- Format Numeric Values
 
   Output:Table:SummaryReports,
     AllSummary;              !- Report 1 Name
 
   Output:SQLite,
-    SimpleAndTabular;        !- Option Type
+    SimpleAndTabular,        !- Option Type
+    UseOutputControlTableStyle,  !- Unit Conversion for Tabular Data
+    Yes;                     !- Format Numeric Values for Tabular Data
 

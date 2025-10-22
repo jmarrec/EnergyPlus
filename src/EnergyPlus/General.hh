@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -81,22 +81,6 @@ namespace General {
                    const std::function<Real64(Real64)> &f,
                    Real64 X_0,  // 1st bound of interval that contains the solution
                    Real64 X_1); // 2nd bound of interval that contains the solution
-
-    constexpr Real64 Interp(Real64 const Lower, Real64 const Upper, Real64 const InterpFac)
-    {
-        return Lower + InterpFac * (Upper - Lower);
-    }
-
-    constexpr Real64 POLYF(Real64 const X,          // Cosine of angle of incidence
-                           Array1D<Real64> const &A // Polynomial coefficients
-    )
-    {
-        if (X < 0.0 || X > 1.0) {
-            return 0.0;
-        } else {
-            return X * (A(1) + X * (A(2) + X * (A(3) + X * (A(4) + X * (A(5) + X * A(6))))));
-        }
-    }
 
     void MovingAvg(Array1D<Real64> &DataIn, int NumItemsInAvg);
 
@@ -237,8 +221,9 @@ namespace General {
     )
     {
         Array1D_string ItemNames(Items.size());
-        for (std::size_t i = 0, e = Items.size(); i < e; ++i)
+        for (std::size_t i = 0, e = Items.size(); i < e; ++i) {
             ItemNames[i] = Items[i].Name;
+        }
         CheckCreatedZoneItemName(state, calledFrom, CurrentObject, ZoneName, MaxZoneNameLength, ItemName, ItemNames, NumItems, ResultName, errFlag);
     }
 
@@ -260,6 +245,68 @@ namespace General {
         }
     }
 } // namespace General
+
+constexpr Real64 Interp(Real64 const Lower, Real64 const Upper, Real64 const InterpFac)
+{
+    return Lower + InterpFac * (Upper - Lower);
+}
+
+struct InterpCoeffs
+{
+    Real64 x1;
+    Real64 x2;
+};
+
+inline void GetInterpCoeffs(Real64 X, Real64 X1, Real64 X2, InterpCoeffs &c)
+{
+    c.x1 = (X - X1) / (X2 - X1);
+    c.x2 = (X2 - X) / (X2 - X1);
+}
+
+inline Real64 Interp2(Real64 Fx1, Real64 Fx2, InterpCoeffs const &c)
+{
+    return c.x1 * Fx1 + c.x2 * Fx2;
+}
+
+// Disaggregated implementation of bilinear interpolation so that coefficients can be used with multiple variables
+struct BilinearInterpCoeffs
+{
+    Real64 denom;
+    Real64 x1y1;
+    Real64 x1y2;
+    Real64 x2y1;
+    Real64 x2y2;
+};
+
+inline void GetBilinearInterpCoeffs(
+    Real64 const X, Real64 const Y, Real64 const X1, Real64 const X2, Real64 const Y1, Real64 const Y2, BilinearInterpCoeffs &coeffs)
+{
+    if (X1 == X2 && Y1 == Y2) {
+        coeffs.denom = coeffs.x1y1 = 1.0;
+        coeffs.x1y2 = coeffs.x2y1 = coeffs.x2y2 = 0.0;
+    } else if (X1 == X2) {
+        coeffs.denom = (Y2 - Y1);
+        coeffs.x1y1 = (Y2 - Y);
+        coeffs.x1y2 = (Y - Y1);
+        coeffs.x2y1 = coeffs.x2y2 = 0.0;
+    } else if (Y1 == Y2) {
+        coeffs.denom = (X2 - X1);
+        coeffs.x1y1 = (X2 - X);
+        coeffs.x2y1 = (X - X1);
+        coeffs.x1y2 = coeffs.x2y2 = 0.0;
+    } else {
+        coeffs.denom = (X2 - X1) * (Y2 - Y1);
+        coeffs.x1y1 = (X2 - X) * (Y2 - Y);
+        coeffs.x2y1 = (X - X1) * (Y2 - Y);
+        coeffs.x1y2 = (X2 - X) * (Y - Y1);
+        coeffs.x2y2 = (X - X1) * (Y - Y1);
+    }
+}
+
+inline Real64 BilinearInterp(Real64 const Fx1y1, Real64 const Fx1y2, Real64 const Fx2y1, Real64 const Fx2y2, BilinearInterpCoeffs const &coeffs)
+{
+    return (coeffs.x1y1 * Fx1y1 + coeffs.x2y1 * Fx2y1 + coeffs.x1y2 * Fx1y2 + coeffs.x2y2 * Fx2y2) / coeffs.denom;
+}
 
 struct GeneralData : BaseGlobalStruct
 {
@@ -288,6 +335,14 @@ struct GeneralData : BaseGlobalStruct
     std::string LineRptOption1;
     std::string VarDictOption1;
     std::string VarDictOption2;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

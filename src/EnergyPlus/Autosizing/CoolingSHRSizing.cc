@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -49,7 +49,6 @@
 #include <EnergyPlus/DXCoils.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
-#include <EnergyPlus/General.hh>
 
 namespace EnergyPlus {
 
@@ -132,7 +131,9 @@ Real64 CoolingSHRSizer::size(EnergyPlusData &state, Real64 _originalValue, bool 
 
 void CoolingSHRSizer::updateSizingString(EnergyPlusData &state)
 {
-    if (!overrideSizeString) return;
+    if (!overrideSizeString) {
+        return;
+    }
     // override sizingString to match existing text
     if (this->coilType_Num == HVAC::CoilDX_CoolingTwoSpeed) {
         if (this->dataDXSpeedNum == 1) { // mode 1 is high speed in DXCoils loop
@@ -167,7 +168,9 @@ void CoolingSHRSizer::updateSizingString(EnergyPlusData &state)
             this->sizingString = "Gross Sensible Heat Ratio";
         }
     } else {
-        if (this->isEpJSON) this->sizingString = "gross_rated_sensible_heat_ratio";
+        if (this->isEpJSON) {
+            this->sizingString = "gross_rated_sensible_heat_ratio";
+        }
     }
 }
 

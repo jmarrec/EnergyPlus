@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -50,7 +50,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/member.functions.hh>
 
 // EnergyPlus Headers
@@ -193,8 +192,10 @@ namespace RoomAir {
         NumShadesDown = 0.0;
         for (int Ctd = state.dataRoomAir->PosZ_Window(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Window(ZoneNum).end; ++Ctd) {
             int SurfNum = state.dataRoomAir->APos_Window(Ctd);
-            if (SurfNum == 0) continue;
-            auto &surf = state.dataSurface->Surface(SurfNum);
+            if (SurfNum == 0) {
+                continue;
+            }
+            auto const &surf = state.dataSurface->Surface(SurfNum);
             if (surf.ExtBoundCond == ExternalEnvironment || surf.ExtBoundCond == OtherSideCoefNoCalcExt ||
                 surf.ExtBoundCond == OtherSideCoefCalcExt || surf.ExtBoundCond == OtherSideCondModeledExt) {
                 if (ANY_INTERIOR_SHADE_BLIND(state.dataSurface->SurfWinShadingFlag(SurfNum))) {
@@ -234,14 +235,18 @@ namespace RoomAir {
 
         Real64 NumberOfOccupants = 0.0;
         for (auto const &people : state.dataHeatBal->People) {
-            if (people.ZonePtr == ZoneNum) NumberOfOccupants += people.NumberOfPeople;
+            if (people.ZonePtr == ZoneNum) {
+                NumberOfOccupants += people.NumberOfPeople;
+            }
         }
 
         if (model == RoomAirModel::UFADExt) {
             // calculate total window width in zone
             for (int Ctd = state.dataRoomAir->PosZ_Window(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Window(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Window(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
                 auto &surf = state.dataSurface->Surface(SurfNum);
                 if (surf.ExtBoundCond == ExternalEnvironment || surf.ExtBoundCond == OtherSideCoefNoCalcExt ||
                     surf.ExtBoundCond == OtherSideCoefCalcExt || surf.ExtBoundCond == OtherSideCondModeledExt) {
@@ -341,7 +346,7 @@ namespace RoomAir {
         }
     }
 
-    Real64 sumUFADConvGainPerPlume(EnergyPlusData &state, int const zoneNum, Real64 const numOccupants)
+    Real64 sumUFADConvGainPerPlume(EnergyPlusData const &state, int const zoneNum, Real64 const numOccupants)
     {
         Real64 zoneElecConv(0.0); // zone elec equip design convective gain [W]
         for (auto const &zoneElectric : state.dataHeatBal->ZoneElectric) {
@@ -401,7 +406,9 @@ namespace RoomAir {
         using namespace DataHeatBalance;
 
         // Is the air flow model for this zone set to UCSDDV Displacement Ventilation?
-        if (!state.dataRoomAir->IsZoneUFAD(ZoneNum)) return;
+        if (!state.dataRoomAir->IsZoneUFAD(ZoneNum)) {
+            return;
+        }
 
         ufadCC.HAT_MX = 0.0;    // HAT_MX Convection Coefficient times Area times Temperature for the upper subzone
         ufadCC.HAT_MXWin = 0.0; // HAT_MX Convection Coefficient times Area times Temperature for the upper subzone (windows only)
@@ -422,7 +429,9 @@ namespace RoomAir {
         // WALL Hc, HA and HAT calculation
         for (int Ctd = state.dataRoomAir->PosZ_Wall(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Wall(ZoneNum).end; ++Ctd) {
             int SurfNum = state.dataRoomAir->APos_Wall(Ctd);
-            if (SurfNum == 0) continue;
+            if (SurfNum == 0) {
+                continue;
+            }
 
             auto &surf = state.dataSurface->Surface(SurfNum);
             state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -481,7 +490,9 @@ namespace RoomAir {
         // WINDOW Hc, HA and HAT CALCULATION
         for (int Ctd = state.dataRoomAir->PosZ_Window(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Window(ZoneNum).end; ++Ctd) {
             int SurfNum = state.dataRoomAir->APos_Window(Ctd);
-            if (SurfNum == 0) continue;
+            if (SurfNum == 0) {
+                continue;
+            }
 
             auto &surf = state.dataSurface->Surface(SurfNum);
             state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -555,7 +566,9 @@ namespace RoomAir {
         // DOOR Hc, HA and HAT CALCULATION
         for (int Ctd = state.dataRoomAir->PosZ_Door(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Door(ZoneNum).end; ++Ctd) { // DOOR
             int SurfNum = state.dataRoomAir->APos_Door(Ctd);
-            if (SurfNum == 0) continue;
+            if (SurfNum == 0) {
+                continue;
+            }
             auto &surf = state.dataSurface->Surface(SurfNum);
             state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
             state.dataSurface->SurfTAirRefRpt(SurfNum) = DataSurfaces::SurfTAirRefReportVals[state.dataSurface->SurfTAirRef(SurfNum)];
@@ -604,9 +617,11 @@ namespace RoomAir {
         state.dataUFADManager->HeightIntMass = min(state.dataUFADManager->HeightIntMassDefault, (zoneCeilingHeight2 - zoneCeilingHeight1));
         for (int Ctd = state.dataRoomAir->PosZ_Internal(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Internal(ZoneNum).end; ++Ctd) {
             int SurfNum = state.dataRoomAir->APos_Internal(Ctd);
-            if (SurfNum == 0) continue;
+            if (SurfNum == 0) {
+                continue;
+            }
 
-            auto &surf = state.dataSurface->Surface(SurfNum);
+            auto const &surf = state.dataSurface->Surface(SurfNum);
             state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
             state.dataSurface->SurfTAirRefRpt(SurfNum) = DataSurfaces::SurfTAirRefReportVals[state.dataSurface->SurfTAirRef(SurfNum)];
             Real64 ZSupSurf = state.dataUFADManager->HeightIntMass;
@@ -643,8 +658,10 @@ namespace RoomAir {
         // CEILING Hc, HA and HAT CALCULATION
         for (int Ctd = state.dataRoomAir->PosZ_Ceiling(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Ceiling(ZoneNum).end; ++Ctd) {
             int SurfNum = state.dataRoomAir->APos_Ceiling(Ctd);
-            if (SurfNum == 0) continue;
-            auto &surf = state.dataSurface->Surface(SurfNum);
+            if (SurfNum == 0) {
+                continue;
+            }
+            auto const &surf = state.dataSurface->Surface(SurfNum);
 
             state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
             state.dataSurface->SurfTAirRefRpt(SurfNum) = DataSurfaces::SurfTAirRefReportVals[state.dataSurface->SurfTAirRef(SurfNum)];
@@ -659,8 +676,10 @@ namespace RoomAir {
         // FLOOR Hc, HA and HAT CALCULATION
         for (int Ctd = state.dataRoomAir->PosZ_Floor(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Floor(ZoneNum).end; ++Ctd) {
             int SurfNum = state.dataRoomAir->APos_Floor(Ctd);
-            if (SurfNum == 0) continue;
-            auto &surf = state.dataSurface->Surface(SurfNum);
+            if (SurfNum == 0) {
+                continue;
+            }
+            auto const &surf = state.dataSurface->Surface(SurfNum);
 
             state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
             state.dataSurface->SurfTAirRefRpt(SurfNum) = DataSurfaces::SurfTAirRefReportVals[state.dataSurface->SurfTAirRef(SurfNum)];
@@ -674,12 +693,13 @@ namespace RoomAir {
         } // END FLOOR
     }
 
-    static constexpr std::array<DataHeatBalance::IntGainType, 51> IntGainTypesOccupied = {
+    static constexpr std::array<DataHeatBalance::IntGainType, 52> IntGainTypesOccupied = {
         DataHeatBalance::IntGainType::People,
         DataHeatBalance::IntGainType::WaterHeaterMixed,
         DataHeatBalance::IntGainType::WaterHeaterStratified,
         DataHeatBalance::IntGainType::ThermalStorageChilledWaterMixed,
         DataHeatBalance::IntGainType::ThermalStorageChilledWaterStratified,
+        DataHeatBalance::IntGainType::ThermalStorageHotWaterStratified,
         DataHeatBalance::IntGainType::ElectricEquipment,
         DataHeatBalance::IntGainType::ElectricEquipmentITEAirCooled,
         DataHeatBalance::IntGainType::GasEquipment,
@@ -732,7 +752,7 @@ namespace RoomAir {
 
     // Explicitly list internal gains not applicable for UFAD
     // Explicitly list internal gains not applicable for Displacement Vent
-    static constexpr std::array<DataHeatBalance::IntGainType, 2> ExcludedIntGainTypes = {
+    [[maybe_unused]] static constexpr std::array<DataHeatBalance::IntGainType, 2> ExcludedIntGainTypes = {
         DataHeatBalance::IntGainType::ZoneContaminantSourceAndSinkCarbonDioxide,
         DataHeatBalance::IntGainType::ZoneContaminantSourceAndSinkGenericContam};
 
@@ -796,12 +816,12 @@ namespace RoomAir {
         Real64 CeilingHeight = state.dataRoomAir->ZoneCeilingHeight2(ZoneNum) - state.dataRoomAir->ZoneCeilingHeight1(ZoneNum);
 
         auto &zoneU = state.dataRoomAir->ZoneUFAD(state.dataRoomAir->ZoneUFADPtr(ZoneNum));
-        Real64 HeightThermostat = zoneU.ThermostatHeight; // height of the thermostat above the floor [m]
-        Real64 HeightComfort = zoneU.ComfortHeight;       // height at which comfort temperature is calculated
-        Real64 TempDiffCritRep = zoneU.TempTrigger;       // Minimum temperature difference between upper and occupied subzones for reporting
-        Real64 DiffArea = zoneU.DiffArea;                 // diffuser effective area [m2]
-        Real64 ThrowAngle = Constant::DegToRadians * zoneU.DiffAngle; // diffuser slot angle relative to vertical [radians]
-        Real64 SourceHeight = 0.0;                                    // height of plume sources above the floor [m]
+        Real64 HeightThermostat = zoneU.ThermostatHeight;         // height of the thermostat above the floor [m]
+        Real64 HeightComfort = zoneU.ComfortHeight;               // height at which comfort temperature is calculated
+        Real64 TempDiffCritRep = zoneU.TempTrigger;               // Minimum temperature difference between upper and occupied subzones for reporting
+        Real64 DiffArea = zoneU.DiffArea;                         // diffuser effective area [m2]
+        Real64 ThrowAngle = Constant::DegToRad * zoneU.DiffAngle; // diffuser slot angle relative to vertical [radians]
+        Real64 SourceHeight = 0.0;                                // height of plume sources above the floor [m]
         Real64 NumDiffusers = zoneU.DiffusersPerZone;
         Real64 PowerPerPlume = zoneU.PowerPerPlume;
         // gains from occupants, task lighting, elec equip, gas equip, other equip, hot water equip, steam equip,
@@ -895,7 +915,9 @@ namespace RoomAir {
                     NumberOfPlumes = 1.0;
                     NumDiffusersPerPlume = 1.0;
                 }
-                if (PowerInPlumes <= 0.0) break;
+                if (PowerInPlumes <= 0.0) {
+                    break;
+                }
                 Gamma = std::pow(TotSysFlow * std::cos(ThrowAngle), 1.5) /
                         (NumberOfPlumes * std::pow(NumDiffusersPerPlume * DiffArea, 1.25) * std::sqrt(0.0281 * 0.001 * PowerInPlumes));
                 if (zoneU.CalcTransHeight) {
@@ -1222,12 +1244,12 @@ namespace RoomAir {
         Real64 CeilingHeight = state.dataRoomAir->ZoneCeilingHeight2(ZoneNum) - state.dataRoomAir->ZoneCeilingHeight1(ZoneNum);
 
         auto &zoneU = state.dataRoomAir->ZoneUFAD(state.dataRoomAir->ZoneUFADPtr(ZoneNum));
-        Real64 HeightThermostat = zoneU.ThermostatHeight; // height of the thermostat above the floor [m]
-        Real64 HeightComfort = zoneU.ComfortHeight;       // height at which comfort temperature is calculated
-        Real64 TempDiffCritRep = zoneU.TempTrigger;       // Minimum temperature difference between upper and occupied subzones for reporting
-        Real64 DiffArea = zoneU.DiffArea;                 // diffuser effective area [m2]
-        Real64 ThrowAngle = Constant::DegToRadians * zoneU.DiffAngle; // diffuser slot angle relative to vertical [radians]
-        Real64 SourceHeight = zoneU.HeatSrcHeight;                    // height of plume sources above the floor [m]
+        Real64 HeightThermostat = zoneU.ThermostatHeight;         // height of the thermostat above the floor [m]
+        Real64 HeightComfort = zoneU.ComfortHeight;               // height at which comfort temperature is calculated
+        Real64 TempDiffCritRep = zoneU.TempTrigger;               // Minimum temperature difference between upper and occupied subzones for reporting
+        Real64 DiffArea = zoneU.DiffArea;                         // diffuser effective area [m2]
+        Real64 ThrowAngle = Constant::DegToRad * zoneU.DiffAngle; // diffuser slot angle relative to vertical [radians]
+        Real64 SourceHeight = zoneU.HeatSrcHeight;                // height of plume sources above the floor [m]
         Real64 NumDiffusers = zoneU.DiffusersPerZone;
         Real64 PowerPerPlume = zoneU.PowerPerPlume;
         // gains from occupants, task lighting, elec equip, gas equip, other equip, hot water equip, steam equip,
@@ -1340,7 +1362,9 @@ namespace RoomAir {
                                 ufadCC.HA_MX * state.dataRoomAir->ZTMX(ZoneNum);
                 // NumberOfPlumes = PowerInPlumes / PowerPerPlume
                 NumberOfPlumes = 1.0;
-                if (PowerInPlumes <= 0.0) break;
+                if (PowerInPlumes <= 0.0) {
+                    break;
+                }
                 if (zoneU.WinWidth > 0.0) { // use exterior zone formula
                     PowerInPlumesPerMeter = PowerInPlumes / zoneU.WinWidth;
                     Gamma =

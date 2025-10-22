@@ -1,4 +1,4 @@
-# EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University
+# EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
@@ -109,14 +109,14 @@ def get_current_wheel_details():
                 "wheel": "win32",
                 "zip_tag": "Windows",
                 "arch": "Win32",
-                "build_tool": "Visual Studio 16 2019",
+                "build_tool": "Visual Studio 17 2022",
                 "extension": "dll",
             },
             "AMD64": {
                 "wheel": "win_amd64",
                 "zip_tag": "Windows",
                 "arch": "x64",
-                "build_tool": "Visual Studio 16 2019",
+                "build_tool": "Visual Studio 17 2022",
                 "extension": "dll",
             },
         },

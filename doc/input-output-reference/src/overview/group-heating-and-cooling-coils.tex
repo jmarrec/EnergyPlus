@@ -2077,19 +2077,19 @@ The air volume flow rate, in \si{\volumeFlowRate}, across the DX cooling coil at
 
 \paragraph{Field: 2017 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2017 version of ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, 15.2 Coils) and also in the predefined tabular output reports (Output:Table:SummaryReports object, Equipment Summary). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER, EER, IEER, and Standard Rating (Net) Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations. These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils)
 Note 1: Standard Ratings using this field will be reported in the "2017 Standard Ratings for DX Coils" table
 Note 2: two values are calculated for SEER: 'SEER User' is calculated using user-input PLF curve and cooling coefficient of degradation; 'SEER Standard' is calculated using AHRI Std 210/240-2017 default PLF curve and cooling coefficient of degradation.
-Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 210-240 (2017).
-Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2013).
+Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2017) -- when the cooling capacity of the coil is less than 65,000 Btu/hr.
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2013) -- when the cooling capacity of the coil is between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: 2023 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2023 version of ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER2), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER2, EER, IEER, and Standard Rating (Net) Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). 
 Note 1: Standard Ratings using this field will be reported in the "2023 Standard Ratings for DX Coils" table
 Note 2: two values are calculated for SEER2. 'SEER2 User' is calculated using user-input PLF curve and cooling coefficient of degradation. 'SEER2 Standard' is calculated using AHRI Std 210/240-2023 default PLF curve and cooling coefficient of degradation.
-Note 3: SEER2 User, SEER2 Standard, EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr - will be calculated according to ANSI/AHRI standard 210-240 (2023).
-Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacities between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2022).
+Note 3: SEER2 User, SEER2 Standard, EER2, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2023) -- when the cooling capacity of the coil is less than 65,000 Btu/hr.
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2022) -- when the cooling capacity of the coill is between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: Air Inlet Node Name}\label{field-air-inlet-node-name-9}
 
@@ -2201,6 +2201,11 @@ The rated power of the evaporative condenser water pump in Watts. This value is 
 
 This numeric field defines the crankcase heater capacity in Watts. When the outdoor air dry-bulb temperature is below the value specified in the input field Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation (described below), the crankcase heater is enabled during the time that the compressor is not running. If this cooling coil is used as part of an air-to-air heat pump (Ref. \hyperref[airloophvacunitaryheatpumpairtoair]{AirLoopHVAC:UnitaryHeatPump:AirToAir} or PackageTerminal: HeatPump:AirToAir), the crankcase heater defined for this DX cooling coil is ignored and the crankcase heater power defined for the DX heating coil (Ref. \hyperref[coilheatingdxsinglespeed]{Coil:Heating:DX:SingleSpeed}) is enabled during the time that the compressor is not running for either heating or cooling. The value for this input field must be greater than or equal to 0, and the default value is 0. To simulate a DX cooling coil without a crankcase heater, enter a value of 0.
 
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
+
 \paragraph{Field: Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation}\label{field-maximum-outdoor-dry-bulb-temperature-for-crankcase-heater-operation}
 
 This numeric field defines the outdoor air dry-bulb temperature above which the compressor's crankcase heater is disabled. The value for this input field must be greater than or equal to 0.0$^\circ$C, and the default value is 10$^\circ$C.
@@ -2237,15 +2242,6 @@ The name of a quadratic or cubic normalized curve (Ref: Performance Curves) that
 
 This input field is name of a conditioned or unconditioned zone where the secondary coil (condenser) of DX system or a heat pump is to be placed. This is an optional input field specified only when user desires to reject the condenser heat into a zone. The heat rejected is modeled as sensible internal gain of a secondary zone.
 
-\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}\label{outdoor-temperature-dependent-crankcase-heater-capacity-curve-name}
-
-The name of a normalized Curve:* or Table:Lookup object encoding the
-relationship between the crankcase heater capacity and the outdoor air
-temperature. This curve can be any uni-variate curve or table. The output of
-this curve is multiplied by the value in the field ``Crankcase Heater Capacity'.
-If this field is missing or empty, constant crankcase heater capacity will be
-assumed.
-
 Following is an example input for a Coil:Cooling:DX:SingleSpeed coil.
 
 \begin{lstlisting}
@@ -2276,6 +2272,7 @@ Coil:Cooling:DX:SingleSpeed,
   ,                         !- Evaporative Condenser Air Volume Flow Rate {m3/s}
   ,                         !- Evaporative Condenser Pump Rated Power Consumption {W}
   30.,                      !- Crankcase Heater Capacity {W}
+  ,                         !- Crankcase Heater Capacity Function of Temperature Curve Name
   10.;                      !- Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation {C}
 \end{lstlisting}
 
@@ -2317,26 +2314,26 @@ The high speed air volume flow rate, in \si{\volumeFlowRate}, across the DX cool
 
 \paragraph{Field: High Speed 2017 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2017 version of the ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, 15.2 Coils) and also in the predefined tabular output reports (Output:Table:SummaryReports object, Equipment Summary). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER, EER, IEER, and Standard Rating (Net) Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils).
 Note 1: Standard Ratings using this field will be reported in the "2017 Standard Ratings for DX Coils" table
 Note 2: two values are calculated for SEER: 'SEER User' is calculated using user-input PLF curve and cooling coefficient of degradation; 'SEER Standard' is calculated using AHRI Std 210/240-2017 default PLF curve and cooling coefficient of degradation.
-Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 210-240 (2017).
-Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2013).
+Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2017) -- with cooling capacity less than 65,000 Btu/hr.
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2013) -- with cooling capacity between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: High Speed 2023 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2023 version of the ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER2), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER2, EER, IEER, and Standard Rating (Net) Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.
+These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). 
 Note 1: Standard Ratings using this field will be reported in the "2023 Standard Ratings for DX Coils" table
 Note 2: two values are calculated for SEER2. 'SEER2 User' is calculated using user-input PLF curve and cooling coefficient of degradation. 'SEER2 Standard' is calculated using AHRI Std 210/240-2023 default PLF curve and cooling coefficient of degradation.
-Note 3: SEER2 User, SEER2 Standard, EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr - will be calculated according to ANSI/AHRI standard 210-240 (2023).
-Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacities between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2022).
+Note 3: SEER2 User, SEER2 Standard, EER2, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2023) -- when the cooling capacity of the coil is less than 65,000 Btu/hr.
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2022) -- when the cooling capacity of the coill is between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: Unit Internal Static Air Pressure}\label{field-unit-internal-static-air-pressure}
 
-This field is to specify the internal static air pressure, in units of Pascals, associated with the unit s supply air flow for rating purposes. This field does not affect the performance during operation. The air pressure drop/rise input here should be internal in the sense that it is for the entire package of unitary equipment as it would be tested in a laboratory (including other non-cooling sections inside the package for filters, dampers, and or heating coils) but none of the external pressure drop for distributing supply air throughout the building. This is different from the input field called Pressure Rise in the fan object which includes both the external static pressure and the internal static pressure.
+This field is to specify the internal static air pressure, in units of Pascals, associated with the units supply air flow for rating purposes. This field does not affect the performance during operation. The air pressure drop/rise input here should be internal in the sense that it is for the entire package of unitary equipment as it would be tested in a laboratory (including other non-cooling sections inside the package for filters, dampers, and or heating coils) but none of the external pressure drop for distributing supply air throughout the building. This is different from the input field called Pressure Rise in the fan object which includes both the external static pressure and the internal static pressure.
 If this coil is used with a \hyperref[fanvariablevolume]{Fan:VariableVolume} to model a packaged variable-air-volume unit, then ratings for  EER, IEER, SEER, and Standard Rating (Net) Cooling Capacity will be calculated as defined ANSI/AHRI Standard 340/360 standard.  See also - the fields "High Speed 2017 Rated Evaporator Fan Power Per Volume Flow Rate" and "Low Speed 2017 Rated Evaporator Fan Power Per Volume Flow Rate", which are also used to calculate the 2017 version of these standard ratings. The 2017 standard ratings are reported to the EIO file and to the predefined output table "2017 Standard Ratings for DX Coils."
-Additionally, a newer definition for calculating EER, IEER, SEER2, and Standard Rating (Net) Cooling Capacity, was published in the 2022 version of AHRI 340-360.  These ratings are calculated using values in the fields "High Speed 2023 Rated Evaporator Fan Power Per Volume Flow Rate" and "Low Speed 2023 Rated Evaporator Fan Power Per Volume Flow Rate"  The 2023 standard ratings are reported to the EIO file and to the predefined output table "2023 Standard Ratings for DX Coils", which are also used to calculate the 2023 version of these standard ratings. The 2023 standard ratings are reported to the EIO file and to the predefined output table "2023 Standard Ratings for DX Coils."
-This field is optional. If a value is provided, then it will be used, together with the associated fan characteristics when calculating the standard ratings described above. If a value is not provided, then the standard ratings are still calculated, using values (user provided or default values) in the 'Rated Evaporator Fan Power Per Volume Flow Rate' fields, as described in those fields.
+Additionally, a newer definition for calculating EER, IEER, SEER2, and Standard Rating (Net) Cooling Capacity, was published in the 2022 version of AHRI 340-360.  These ratings are calculated using values in the fields "High Speed 2023 Rated Evaporator Fan Power Per Volume Flow Rate" and "Low Speed 2023 Rated Evaporator Fan Power Per Volume Flow Rate"  The 2023 standard ratings are reported to the EIO file and to the predefined output table "2023 Standard Ratings for DX Coils." This field is optional. If a value is provided, then it will be used, together with the associated fan characteristics when calculating the standard ratings described above. If a value is not provided, then the standard ratings are still calculated, using values (user provided or default values) in the 'Rated Evaporator Fan Power Per Volume Flow Rate' fields, as described in those fields.
 
 \paragraph{Field: Air Inlet Node}\label{field-air-inlet-node}
 
@@ -2402,19 +2399,19 @@ The low speed volume air flow rate, in \si{\volumeFlowRate}, across the DX cooli
 
 \paragraph{Field: Low Speed 2017 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2017 version of ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Single Speed DX Cooling Coil, Standard Ratings) and also in the predefined tabular output reports (Output:Table:SummaryReports object, Equipment Summary). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER, EER, IEER and Standard Rating Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
-Note 1: two values are calculated for SEER. 'SEER User' is calculated using user-input PLF curve and cooling coefficient of degradation. 'SEER Standard' is calculated using AHRI Std 210/240-2017 default PLF curve and cooling coefficient of degradation.
-Note 2: SEER2 and Standard Rating (Net) Cooling Capacity -- will only be reported for coils with cooling capacity less than 65,000 Btu/hr - according to ANSI/AHRI standard 210-240 (2013).
-Note 3: EER and IEER with cooling capacities less than 65,000 Btu/hr will be calculated according to ANSI/AHRI standard 210-240 (2017).
-Note 4: EER and IEER with cooling capacities between 65,000 and 135,000 Btu/hr will be calculated according to ANSI/AHRI standard 340-360 (2013).
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils).
+Note 1: Standard Ratings using this field will be reported in the "2017 Standard Ratings for DX Coils" table
+Note 2: two values are calculated for SEER: 'SEER User' is calculated using user-input PLF curve and cooling coefficient of degradation; 'SEER Standard' is calculated using AHRI Std 210/240-2017 default PLF curve and cooling coefficient of degradation.
+Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 210-240 (2017).
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2013).
 
 \paragraph{Field: Low Speed 2023 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2023 version of ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER2), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Single Speed DX Cooling Coil, Standard Ratings) and also in the predefined tabular output reports (Output:Table:SummaryReports object, Equipment Summary). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER2, EER, IEER and Standard Rating Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
-Note 1: two values are calculated for SEER. 'SEER User' is calculated using user-input PLF curve and cooling coefficient of degradation. 'SEER Standard' is calculated using AHRI Std 210/240-2023 default PLF curve and cooling coefficient of degradation.
-Note 2: SEER2 and Standard Rating (Net) Cooling Capacity -- will only be reported for coils with cooling capacity less than 65,000 Btu/hr - according to ANSI/AHRI standard 210-240 (2023).
-Note 3: EER and IEER with cooling capacities less than 65,000 Btu/hr will be calculated according to ANSI/AHRI standard 210-240 (2023).
-Note 4: EER and IEER with cooling capacities between 65,000 and 135,000 Btu/hr will be calculated according to ANSI/AHRI standard 340-360 (2022).
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). 
+Note 1: Standard Ratings using this field will be reported in the "2022/2023 Standard Ratings for DX Coils" table
+Note 2: two values are calculated for SEER2. 'SEER2 User' is calculated using user-input PLF curve and cooling coefficient of degradation. 'SEER2 Standard' is calculated using AHRI Std 210/240-2023 default PLF curve and cooling coefficient of degradation.
+Note 3: SEER2 User, SEER2 Standard, EER2, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2023) -- when the cooling capacity of the coil is less than 65,000 Btu/hr.
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2022) -- when the cooling capacity of the coill is between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: Low Speed Total Cooling Capacity Function of Temperature Curve Name}\label{field-low-speed-total-cooling-capacity-function-of-temperature-curve-name}
 
@@ -2658,6 +2655,11 @@ The name of the HVAC system node to which the DX cooling coil sends its outlet a
 
 This numeric field defines the crankcase heater capacity in Watts. When the outdoor air dry-bulb temperature is below the value specified in the input field Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation (described below), the crankcase heater is enabled during the time that the compressor is not running. If this cooling coil is used as part of an air-to-air heat pump (Ref. \hyperref[airloophvacunitarysystem]{AirLoopHVAC:UnitarySystem} and \hyperref[airloophvacunitaryheatcoolvavchangeoverbypass]{AirLoopHVAC:UnitaryHeatCool:VAVChangeoverBypass}), the crankcase heater defined for this DX cooling coil is ignored and the crankcase heater power defined for the DX heating coil (Ref. \hyperref[coilheatingdxsinglespeed]{Coil:Heating:DX:SingleSpeed}) is enabled during the time that the compressor is not running for either heating or cooling. The value for this input field must be greater than or equal to 0, and the default value is 0. To simulate a DX cooling coil without a crankcase heater, enter a value of 0.
 
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
+
 \paragraph{Field: Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation}\label{field-maximum-outdoor-dry-bulb-temperature-for-crankcase-heater-operation-1}
 
 This numeric field defines the outdoor air dry-bulb temperature above which the compressor's crankcase heater is disabled. The value for this input field must be greater than or equal to 0.0$^\circ$C, and the default value is 10$^\circ$C.
@@ -2718,15 +2720,6 @@ This numeric field contains the set point temperature ($^\circ$C) for the basin 
 
 This alpha field contains the name of the basin heater operating schedule. This field only applies for Condenser Type = EvaporativelyCooled. The basin heater operating schedule is assumed to be an on/off schedule and the heater is available to operate any time the schedule value is greater than 0. The basin heater operates when scheduled on and the outdoor air dry-bulb temperature is below the set point temperature described in the previous field. If this field is left blank, the basin heater is available to operate throughout the simulation. Regardless of this schedule, the basin heater may only operate when the DX coil is off.
 
-\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}\label{outdoor-temperature-dependent-crankcase-heater-capacity-curve-name-1}
-
-The name of a normalized Curve:* or Table:Lookup object encoding the
-relationship between the crankcase heater capacity and the outdoor air
-temperature. This curve can be any uni-variate curve or table. The output of
-this curve is multiplied by the value in the field ``Crankcase Heater Capacity'.
-If this field is missing or empty, constant crankcase heater capacity will be
-assumed.
-
 Following is an example IDF use of the object:
 
 \begin{lstlisting}
@@ -2737,6 +2730,7 @@ Coil:Cooling:DX:TwoStageWithHumidityControlMode,
   DOAS Supply Fan Outlet,                     !- Air Inlet Node Name
   DOAS Cooling Coil Outlet,                   !- Air Outlet Node Name
   ,                                           !- Crankcase Heater Capacity
+  ,                                           !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                                           !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater
   2,                                          !- Number of Capacity Stages
   1,                                          !- Number of Enhanced Dehumidification Modes
@@ -2808,6 +2802,11 @@ The latent capacity degradation model only applies when the ContinuousFanWithCyc
 
 This numeric field defines the crankcase heater capacity in Watts. When the outdoor air dry-bulb temperature is below the value specified in the input field Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation (described below), the crankcase heater is enabled during the time that the compressor is not running. The value for this input field must be greater than or equal to 0. If this input field is left blank, the default value is 0. To simulate a unit without a crankcase heater, enter a value of 0.
 
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
+
 \paragraph{Field: Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation}\label{field-maximum-outdoor-dry-bulb-temperature-for-crankcase-heater-operation-2}
 
 This numeric field defines the outdoor air dry-bulb temperature above which the compressor's crankcase heater is disabled. The value for this input field must be greater than or equal to 0.0$^\circ$C. If this input field is left blank, the default value is 10$^\circ$C.
@@ -2858,19 +2857,19 @@ The volumetric air flow rate for Speed \textless{}x\textgreater{}, in \si{\volum
 
 \paragraph{Field: Speed \textless{}X\textgreater{} 2017 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions for Speed <x> in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2017 version of the ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, 15.2 Coils) and also in the predefined tabular output reports (Output:Table:SummaryReports object, Equipment Summary). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER, EER, IEER, and Standard Rating (Net) Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils).
 Note 1: Standard Ratings using this field will be reported in the "2017 Standard Ratings for DX Coils" table
 Note 2: two values are calculated for SEER: 'SEER User' is calculated using user-input PLF curve and cooling coefficient of degradation; 'SEER Standard' is calculated using AHRI Std 210/240-2017 default PLF curve and cooling coefficient of degradation.
-Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 210-240 (2017).
-Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2013).
+Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2017) -- when the cooling capacity of the coil is less than 65,000 Btu/hr -- .
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2013) -- with cooling capacity between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: Speed \textless{}X\textgreater{} 2023 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions for Speed <x> in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2023 version of the ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER2), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER2, EER, IEER, and Standard Rating (Net) Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). 
 Note 1: Standard Ratings using this field will be reported in the "2023 Standard Ratings for DX Coils" table
 Note 2: two values are calculated for SEER2. 'SEER2 User' is calculated using user-input PLF curve and cooling coefficient of degradation. 'SEER2 Standard' is calculated using AHRI Std 210/240-2023 default PLF curve and cooling coefficient of degradation.
-Note 3: SEER2 User, SEER2 Standard, EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr - will be calculated according to ANSI/AHRI standard 210-240 (2023).
-Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacities between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2022).
+Note 3: SEER2 User, SEER2 Standard, EER2, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2023) -- when the cooling capacity of the coil is less than 65,000 Btu/hr.
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2022) -- when the cooling capacity of the coill is between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: Speed \textless{}x\textgreater{} Total Cooling Capacity Function of Temperature Curve Name}\label{field-speed-x-total-cooling-capacity-function-of-temperature-curve-name}
 
@@ -2972,15 +2971,6 @@ The rated power of the evaporative condenser water pump in Watts at Speed \textl
 
 This input field is name of a conditioned or unconditioned zone where the secondary coil (condenser) of DX system or a heat pump is to be placed. This is an optional input field specified only when user desires to reject the condenser heat into a zone. The heat rejected is modeled as sensible internal gain of a secondary zone.
 
-\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}\label{outdoor-temperature-dependent-crankcase-heater-capacity-curve-name-2}
-
-The name of a normalized Curve:* or Table:Lookup object encoding the
-relationship between the crankcase heater capacity and the outdoor air
-temperature. This curve can be any uni-variate curve or table. The output of
-this curve is multiplied by the value in the field ``Crankcase Heater Capacity'.
-If this field is missing or empty, constant crankcase heater capacity will be
-assumed.
-
 Following is an example input for this multispeed DX cooling coil.
 
 \begin{lstlisting}
@@ -2997,6 +2987,7 @@ Coil:Cooling:DX:MultiSpeed,
   No,                              !- Apply Part Load Fraction to Speeds greater than 1
   No,                              !- Apply latent degradation to Speeds greater than 1
   200.0,                           !- Crankcase Heater Capacity {W}
+  ,                                !- Crankcase Heater Capacity Function of Temperature Curve Name
   10.0,                            !- Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation
   ,                                !- Basin Heater Capacity {W/K}
   ,                                !- Basin Heater Setpoint Temperature {C}
@@ -3277,6 +3268,10 @@ The Variable-Speed DX Cooling Coil is a collection of performance curves that re
 
 This alpha field contains the identifying name for the variable-speed cooling coil.
 
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-001}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX cooling coil can run during a given time period. A schedule value of 0 indicates that the DX cooling coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
+
 \paragraph{Field: Air Inlet Node Name}\label{field-air-inlet-node-name-12}
 
 This alpha field contains the cooling coil load side inlet node name.
@@ -3384,6 +3379,11 @@ The rated power of the evaporative condenser water pump in Watts. This value is 
 
 This numeric field defines the crankcase heater capacity in Watts. When the outdoor air drybulb temperature is below the value specified in the input field Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation (described below), the crankcase heater is enabled during the time that the compressor is not running. If this cooling coil is used as part of an air-to-air heat pump, the crankcase heater defined for this DX cooling coil is ignored and the crankcase heater power defined for the DX heating coil (Ref. \hyperref[coilheatingdxsinglespeed]{Coil:Heating:DX:SingleSpeed}) is enabled during the time that the compressor is not running for either heating or cooling. The value for this input field must be greater than or equal to 0, and the default value is 0. To simulate a DX cooling coil without a crankcase heater, enter a value of 0.
 
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
+
 \paragraph{Field: Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation}\label{field-maximum-outdoor-dry-bulb-temperature-for-crankcase-heater-operation-3}
 
 This numeric field defines the outdoor air dry-bulb temperature above which the compressor's crankcase heater is disabled. The value for this input field must be greater than or equal to 0.0$^\circ$C, and the default value is 10$^\circ$C.
@@ -3436,19 +3436,19 @@ This numeric field defines the volumetric air flow rate, in \si{\volumeFlowRate}
 
 \paragraph{Field: Speed \textless{}X\textgreater{} 2017 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions for Speed <x> in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2017 version of the ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, 15.2 Coils) and also in the predefined tabular output reports (Output:Table:SummaryReports object, Equipment Summary). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER, EER, IEER, and Standard Rating (Net) Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
+This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 773.3 W/(m\(^{3}\)/s) (365 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1250 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils).
 Note 1: Standard Ratings using this field will be reported in the "2017 Standard Ratings for DX Coils" table
 Note 2: two values are calculated for SEER: 'SEER User' is calculated using user-input PLF curve and cooling coefficient of degradation; 'SEER Standard' is calculated using AHRI Std 210/240-2017 default PLF curve and cooling coefficient of degradation.
-Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 210-240 (2017).
-Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2013).
+Note 3: SEER User, SEER Standard, EER, and IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2017) -- with cooling capacity less than 65,000 Btu/hr.
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2013) -- with cooling capacity between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: Speed \textless{}X\textgreater{} 2023 Rated Evaporator Fan Power Per Volume Flow Rate}
 
-This field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions for Speed <x> in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the following metrics according to the 2023 version of the ANSI/AHRI 210-240 standard: Seasonal Energy Efficiency Ratio (SEER2), Energy Efficiency Ratio (EER), Integrated Energy Efficiency Ratio (IEER) and the Standard Rating (Net) Cooling Capacity.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). This value is not used for modeling the evaporator (cooling coil) fan during simulations; instead, it is used for calculating SEER2, EER, IEER, and Standard Rating (Net) Cooling Capacity to assist the user in verifying their inputs for modeling this type of equipment.
+his field is the electric power for the evaporator (cooling coil) fan per air volume flow rate through the coil at the rated conditions in W/(m\(^{3}\)/s). The default value is 934.4 W/(m3/s) (441 W/1000 cfm) if this field is left blank. If a value is entered, it must be \textgreater{}= 0.0 and \textless{}= 1505 W/(m\(^{3}\)/s). This value is only used to calculate the ASHRAE/AHRI standard performance metrics to assist the user in verifying their inputs for modeling this type of equipment (see Notes below for which ratings will be reported).  The value is not used for modeling the evaporator (cooling coil) fan during simulations.  These metrics will be outputs in the EnergyPlus eio file (ref. EnergyPlus Engineering Reference, Section 15.2 Coils). 
 Note 1: Standard Ratings using this field will be reported in the "2023 Standard Ratings for DX Coils" table
 Note 2: two values are calculated for SEER2. 'SEER2 User' is calculated using user-input PLF curve and cooling coefficient of degradation. 'SEER2 Standard' is calculated using AHRI Std 210/240-2023 default PLF curve and cooling coefficient of degradation.
-Note 3: SEER2 User, SEER2 Standard, EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacity less than 65,000 Btu/hr - will be calculated according to ANSI/AHRI standard 210-240 (2023).
-Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity -- with cooling capacities between 65,000 and 135,000 Btu/hr -- will be calculated according to ANSI/AHRI standard 340-360 (2022).
+Note 3: SEER2 User, SEER2 Standard, EER2, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 210-240 (2023) -- when the cooling capacity of the coil is less than 65,000 Btu/hr.
+Note 4: EER, IEER, and Standard Rating (Net) Cooling Capacity will be calculated according to ANSI/AHRI standard 340-360 (2022) -- when the cooling capacity of the coill is between 65,000 and 135,000 Btu/hr.
 
 \paragraph{Field: Speed \textless{}x\textgreater{} Reference Unit Rated Condenser Air Flow Rate}\label{field-speed-x-reference-unit-rated-condenser-air-flow-rate}
 
@@ -3954,22 +3954,23 @@ Following is an example input for a \hyperref[coilcoolingdxtwostagewithhumidityc
 \begin{lstlisting}
 
 Coil:Cooling:DX:TwoStageWithHumidityControlMode,
-  DXSystem 1 Cooling Coil, !- Coil Name
-  OfficeHeatCoolAvail,         !- Availability Schedule
-  DXSystem 1 Mixed Air Node,   !- Coil Air Inlet Node
-  DXSystem 1 Fan Air Inlet Node,   !- Coil Air Outlet Node
-  ,                                               !- Crankcase Heater Capacity {W}
-  ,                                               !- Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation {C}
-  2,                                             !- Number of Capacity Stages
-  1,                                             !- Number of Enhanced Dehumidification Modes
-  CoilPerformance:DX:Cooling,   !- Normal Mode Stage 1 Coil Performance Object Type
-  DXSystem 1 DX Coil Standard Mode-Stage 1,   !- Normal Mode Stage 1 Coil Performance Object Name
-  CoilPerformance:DX:Cooling,   !- Normal Mode Stage 1+2 Coil Perf Object Type
-  DXSystem 1 DX Coil Standard Mode-Stage 1&2,   !- Normal Mode Stage 1+2 Coil Perf Object Name
-  CoilPerformance:DX:Cooling,   !- Dehumid Mode 1 Stage 1 Coil Perf Object Type
+  DXSystem 1 Cooling Coil,       !- Coil Name
+  OfficeHeatCoolAvail,           !- Availability Schedule
+  DXSystem 1 Mixed Air Node,     !- Coil Air Inlet Node
+  DXSystem 1 Fan Air Inlet Node, !- Coil Air Outlet Node
+  ,                              !- Crankcase Heater Capacity {W}
+  ,                              !- Crankcase Heater Capacity Function of Temperature Curve Name
+  ,                              !- Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation {C}
+  2,                             !- Number of Capacity Stages
+  1,                             !- Number of Enhanced Dehumidification Modes
+  CoilPerformance:DX:Cooling,    !- Normal Mode Stage 1 Coil Performance Object Type
+  DXSystem 1 DX Coil Standard Mode-Stage 1,        !- Normal Mode Stage 1 Coil Performance Object Name
+  CoilPerformance:DX:Cooling,                      !- Normal Mode Stage 1+2 Coil Perf Object Type
+  DXSystem 1 DX Coil Standard Mode-Stage 1&2,      !- Normal Mode Stage 1+2 Coil Perf Object Name
+  CoilPerformance:DX:Cooling,                      !- Dehumid Mode 1 Stage 1 Coil Perf Object Type
   DXSystem 1 DX Coil SubCoolReheat Mode-Stage 1,   !- Dehumid Mode 1 Stage 1 Coil Perf Object Name
-  CoilPerformance:DX:Cooling,   !- Dehumid Mode 1 Stage 1+2 Coil Perf Object Type
-  DXSystem 1 DX Coil SubCoolReheat Mode-Stage 1&2;   !- Dehumid Mode 1 Stage 1+2 Coil Perf Object Name
+  CoilPerformance:DX:Cooling,                      !- Dehumid Mode 1 Stage 1+2 Coil Perf Object Type
+  DXSystem 1 DX Coil SubCoolReheat Mode-Stage 1&2; !- Dehumid Mode 1 Stage 1+2 Coil Perf Object Name
 
 
   CoilPerformance:DX:Cooling,
@@ -4202,6 +4203,11 @@ This numeric field defines the outdoor air dry-bulb temperature above which outd
 
 This numeric field defines the crankcase heater capacity in Watts. When the outdoor air dry-bulb temperature is below the value specified in the input field Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation (described below), the crankcase heater is enabled during the time that the compressor is not running. If this heating coil is used as part of an air-to-air heat pump (Ref. \hyperref[airloophvacunitaryheatpumpairtoair]{AirLoopHVAC:UnitaryHeatPump:AirToAir} or \hyperref[zonehvacpackagedterminalheatpump]{ZoneHVAC:PackagedTerminalHeatPump}), the crankcase heater defined for this DX heating coil is enabled during the time that the compressor is not running for either heating or cooling (and the crankcase heater power defined in the DX cooling coil object is disregarded in this case). The value for this input field must be greater than or equal to 0. If this input field is left blank, the default value is 0. To simulate a unit without a crankcase heater, enter a value of 0.
 
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
+
 \paragraph{Field: Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation}\label{field-maximum-outdoor-dry-bulb-temperature-for-crankcase-heater-operation-4}
 
 This numeric field defines the outdoor air dry-bulb temperature above which the compressor's crankcase heater is disabled. The value for this input field must be greater than or equal to 0.0$^\circ$C. If this input field is left blank, the default value is 10$^\circ$C.
@@ -4222,7 +4228,7 @@ This numeric field defines the fraction of compressor runtime when the defrost c
 
 This numeric field defines the capacity of the resistive defrost heating element in Watts. This input field is used only when the selected defrost strategy is resistive (see input field Defrost Strategy above). The value for this input field must be greater than or equal to 0. If this input field is left blank, the default value is 0.
 
-\paragraph{Field: Region Number for Calculating HSPF (2017) and HSPF2 (2023)}\label{field-region-number-for-calculating-HSPF-(2017)-and-hspf2-(2023)}
+\paragraph{Field: Region Number for Calculating HSPF (2017) and HSPF2 (2023)}\label{field-region-number-for-calculating-HSPF-2017-and-hspf2-2023}
 
 This optional numeric field defines the region number which is used in calculating the Heating Seasonal Performance Factor (HSPF (2017 ANSI/AHRI standard) and HSPF2 (2023 ANSI/AHRI standard)) of heating coils. The value for this input field must be between 1 and 6. If this input field is left blank, the default value is 4.
 
@@ -4253,15 +4259,6 @@ This input field is name of sensible heat ratio modifier biquadratic curve. The 
 \paragraph{Field: Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name}\label{field-sensible-heat-ratio-modifier-function-of-flow-fraction-curve-name}
 
 This input field is name of sensible heat ratio modifier curve as function of secondary air flow fraction. The value of this curve modifies the nominal sensible heat ratio for current time step depending on the secondary coil air flow fraction. This is an optional input field. If this input field is left blank, then the sensible heat ratio modifier curve value for flow fraction is set to 1.0.
-
-\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}\label{outdoor-temperature-dependent-crankcase-heater-capacity-curve-name-4}
-
-The name of a normalized Curve:* or Table:Lookup object encoding the
-relationship between the crankcase heater capacity and the outdoor air
-temperature. This curve can be any uni-variate curve or table. The output of
-this curve is multiplied by the value in the field ``Crankcase Heater Capacity'.
-If this field is missing or empty, constant crankcase heater capacity will be
-assumed.
 
 Following is an example input for the object.
 
@@ -4413,6 +4410,11 @@ This numeric field defines the minimum outdoor air dry-bulb temperature where th
 
 This numeric field defines the crankcase heater capacity in Watts. When the outdoor air dry-bulb temperature is below the value specified in the input field Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation (described below), the crankcase heater is enabled during the time that the compressor is not running. The value for this input field must be greater than or equal to 0. If this input field is left blank, the default value is 0. To simulate a unit without a crankcase heater, enter a value of 0.
 
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
+
 \paragraph{Field: Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation}\label{field-maximum-outdoor-dry-bulb-temperature-for-crankcase-heater-operation-5}
 
 This numeric field defines the outdoor air dry-bulb temperature above which the compressor's crankcase heater is disabled. The value for this input field must be greater than or equal to 0.0$^\circ$C. If this input field is left blank, the default value is 10$^\circ$C.
@@ -4551,15 +4553,6 @@ This input field is name of sensible heat ratio modifier biquadratic curve. The 
 
 This input field is name of sensible heat ratio modifier curve as function of secondary air flow fraction. The value of this curve modifies the nominal sensible heat ratio for current time step depending on the secondary coil air flow fraction. This is an optional input field. If this input field is left blank, then the sensible heat ratio modifier curve value for flow fraction is set to 1.0.
 
-\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}\label{outdoor-temperature-dependent-crankcase-heater-capacity-curve-name-5}
-
-The name of a normalized Curve:* or Table:Lookup object encoding the
-relationship between the crankcase heater capacity and the outdoor air
-temperature. This curve can be any uni-variate curve or table. The output of
-this curve is multiplied by the value in the field ``Crankcase Heater Capacity'.
-If this field is missing or empty, constant crankcase heater capacity will be
-assumed.
-
 Following is an example input for a multi-speed heating DX coil.
 
 \begin{lstlisting}
@@ -4571,6 +4564,7 @@ COIL:Heating:DX:MultiSpeed,
   SuppHeating Coil Air Inlet Node, !- Coil Air Outlet Node
   -8.0,                            !- Minimum Outdoor Dry-bulb Temperature for Compressor Operation {C}
   200.0,                           !- Crankcase Heater Capacity {W}
+    ,                              !- Crankcase Heater Capacity Function of Temperature Curve Name
   10.0,                            !- Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation {C}
   HPACDefrostCAPFT,                !- Defrost energy input ratio modifier curve (temperature)
   7.22,                            !- Maximum Outdoor Dry-bulb Temperature for Defrost Operation
@@ -4731,6 +4725,10 @@ The Variable-Speed Air-to-Air Heating DX Coil is a collection of performance cur
 
 This alpha field contains the identifying name for the variable speed heating coil.
 
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-002}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX heating coil can run during a given time period. A schedule value of 0 indicates that the DX heating coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
+
 \paragraph{Field: Air Inlet Node Name}\label{field-air-inlet-node-name-15}
 
 This alpha field contains the heating coil load side inlet node name.
@@ -4807,6 +4805,11 @@ This numeric field defines the outdoor air dry-bulb temperature above which outd
 \paragraph{Field: Crankcase Heater Capacity}\label{field-crankcase-heater-capacity-6}
 
 This numeric field defines the crankcase heater capacity in Watts. When the outdoor air drybulb temperature is below the value specified in the input field Maximum Outdoor Dry-bulb Temperature for Crankcase Heater Operation (described below), the crankcase heater is enabled during the time that the compressor is not running. The value for this input field must be greater than or equal to 0. If this input field is left blank, the default value is 0. To simulate a unit without a crankcase heater, enter a value of 0.
+
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
 
 \paragraph{Field: Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation}\label{field-maximum-outdoor-dry-bulb-temperature-for-crankcase-heater-operation-6}
 
@@ -4888,6 +4891,7 @@ Coil:Heating:DX:VariableSpeed,
   ,                                               !- Outdoor Dry-Bulb Temperature to Turn Back On Compressor{C}
   5.0,                                         !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   200.0,                                     !- Crankcase Heater Capacity {W}
+  ,                                          !- Crankcase Heater Capacity Function of Temperature Curve Name
   10.0,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                             !- Defrost Strategy
   TIMED,                                     !- Defrost Control
@@ -5190,6 +5194,8 @@ This alpha (choice) field defines the source of superheated refrigerant gas from
   \hyperref[coilcoolingdxvariablespeed]{Coil:Cooling:DX:VariableSpeed}
 \item
   \hyperref[coilcoolingwatertoairheatpumpequationfit]{Coil:Cooling:WaterToAirHeatPump:EquationFit}
+\item
+  \hyperref[coilcoolingwatertoairheatpumpvariablespeedequationfit]{Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit}
 \item
   \hyperref[refrigerationcompressorrack]{Refrigeration:CompressorRack}
 \item
@@ -5553,6 +5559,7 @@ CoilSystem:Heating:DX,
   -8.0,                                       !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   5.0,                                         !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   200.0,                                     !- Crankcase Heater Capacity {W}
+  ,                                          !- Crankcase Heater Capacity Function of Temperature Curve Name
   10.0,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,                             !- Defrost Strategy
   TIMED,                                     !- Defrost Control
@@ -5950,6 +5957,10 @@ The input fields for this object are described below in detail:
 
 This alpha field defines a unique user-assigned name for an instance of a heat pump water heater DX coil. Any reference to this coil by another object (e.g., \hyperref[waterheaterheatpumppumpedcondenser]{\lstinline!WaterHeater:HeatPump:PumpedCondenser!}) will use this name.
 
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-003}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX Water Heating coil can run during a given time period. A schedule value of 0 indicates that the DX Water Heating coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
+
 \paragraph{Field: Rated Heating Capacity}\label{field-rated-heating-capacity}
 
 This numeric field defines the DX coil heating capacity in Watts at the rated evaporator inlet air temperatures, rated condenser inlet water temperature, rated evaporator air flow rate, and rated condenser water flow rate specified below. Values must be greater than 0. This value represents water heating capacity, and it may or may not include the impact of condenser pump heat (see field Condenser Pump Heat Included in Rated Heating Capacity below).
@@ -6022,6 +6033,11 @@ This alpha field defines the name of the node to which the heat pump condenser s
 
 This numeric field defines the compressor's crankcase heater capacity in Watts. The crankcase heater only operates when the compressor is off and the air surrounding the compressor is below the Maximum Ambient Temperature for Crankcase Heater Operation specified below.
 
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
+
 \paragraph{Field: Maximum Ambient Temperature for Crankcase Heater Operation}\label{field-maximum-ambient-temperature-for-crankcase-heater-operation}
 
 This numeric field defines the maximum ambient temperature for crankcase heater operation in degree Celsius. The crankcase heater only operates when the air surrounding the compressor is below this maximum temperature value and the compressor is off. The ambient temperature surrounding the compressor is set by the Heat Pump:Water Heater parent object (field Compressor Location).
@@ -6076,15 +6092,6 @@ If the user wishes to model no efficiency degradation due to compressor cycling,
        PLF = 1.0 + 0.0(PLR)
 \end{lstlisting}
 
-\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}\label{outdoor-temperature-dependent-crankcase-heater-capacity-curve-name-7}
-
-The name of a normalized Curve:* or Table:Lookup object encoding the
-relationship between the crankcase heater capacity and the outdoor air
-temperature. This curve can be any uni-variate curve or table. The output of
-this curve is multiplied by the value in the field ``Crankcase Heater Capacity'.
-If this field is missing or empty, constant crankcase heater capacity will be
-assumed.
-
 Following is an example input for the \lstinline!Coil:WaterHeating:AirToWaterHeatPump:Pumped! object:
 
 \begin{lstlisting}
@@ -6109,6 +6116,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
   Zone4WaterInletNode,       !- Condenser Water Inlet Node Name
   Zone4WaterOutletNode,      !- Condenser Water Outlet Node Name
   100.0,                     !- Crankcase Heater Capacity {W}
+    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
   5.0,                       !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
   wet-bulb temperature,      !- Evaporator Air Temperature Type for Curve Objects
   HPWHHeatingCapFTemp,       !- Heating Capacity Modifier Curve Name (function of temperature)
@@ -6205,6 +6213,10 @@ The heat pump water heater DX coil model performs the following major functions:
 
 This alpha field defines a unique user-assigned name for an instance of a heat pump water heater DX coil. Any reference to this coil by another object (e.g., \hyperref[waterheaterheatpumpwrappedcondenser]{\lstinline!WaterHeater:HeatPump:WrappedCondenser!}) will use this name.
 
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-004}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX Water Heating coil can run during a given time period. A schedule value of 0 indicates that the DX Water Heating coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
+
 \paragraph{Field: Rated Heating Capacity}\label{field-rated-heating-capacity-1}
 
 This numeric field defines the DX coil heating capacity in Watts at the rated evaporator inlet air temperatures, rated condenser inlet water temperature, rated evaporator air flow rate, and rated condenser water flow rate specified below. Values must be greater than 0. This value represents water heating capacity, and it may or may not include the impact of condenser pump heat (see field Condenser Pump Heat Included in Rated Heating Capacity below).
@@ -6248,6 +6260,11 @@ This alpha field defines the name of the air node to which the evaporator coil s
 \paragraph{Field: Crankcase Heater Capacity}\label{field-crankcase-heater-capacity-8}
 
 This numeric field defines the compressor's crankcase heater capacity in Watts. The crankcase heater only operates when the compressor is off and the air surrounding the compressor is below the Maximum Ambient Temperature for Crankcase Heater Operation specified below.
+
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
 
 \paragraph{Field: Maximum Ambient Temperature for Crankcase Heater Operation}\label{field-maximum-ambient-temperature-for-crankcase-heater-operation-1}
 
@@ -6295,15 +6312,6 @@ If the user wishes to model no efficiency degradation due to compressor cycling,
        PLF = 1.0 + 0.0(PLR)
 \end{lstlisting}
 
-\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}\label{outdoor-temperature-dependent-crankcase-heater-capacity-curve-name-8}
-
-The name of a normalized Curve:* or Table:Lookup object encoding the
-relationship between the crankcase heater capacity and the outdoor air
-temperature. This curve can be any uni-variate curve or table. The output of
-this curve is multiplied by the value in the field ``Crankcase Heater Capacity'.
-If this field is missing or empty, constant crankcase heater capacity will be
-assumed.
-
 Following is an example input for the \lstinline!Coil:WaterHeating:AirToWaterHeatPump:Wrapped! object:
 
 \begin{lstlisting}
@@ -6321,6 +6329,7 @@ Coil:WaterHeating:AirToWaterHeatPump:Wrapped,
   HPWH Air Inlet,          !- Evaporator Air Inlet Node Name
   HPWH Coil Outlet Fan Inlet,  !- Evaporator Air Outlet Node Name
   0,                       !- Crankcase Heater Capacity {W}
+    ,                      !- Crankcase Heater Capacity Function of Temperature Curve Name
   10,                      !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
   WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
   HPWH-Htg-Cap-fT,         !- Heating Capacity Function of Temperature Curve Name
@@ -6424,6 +6433,9 @@ The input fields for this object are described below in detail:
 This alpha field defines a unique user-assigned name for an instance of a heat pump water heater Variable Speed DX coil.
 Any reference to this coil by another object (e.g., \lstinline!WaterHeater:HeatPump:PumpedCondenser! or \lstinline!CoilSystem:IntegratedHeatPump:AirSource!) will use this name.
 
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-005}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX Water Heating coil can run during a given time period. A schedule value of 0 indicates that the DX Water Heating coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
 
 \paragraph{Field: Number of Speeds}\label{vshpwhheating-number-of-speeds}
 
@@ -6556,6 +6568,10 @@ This alpha field defines the name of the node to which the heat pump condenser s
 This numeric field defines the compressor's crankcase heater capacity in Watts.
 The crankcase heater only operates when the compressor is off and the air surrounding the compressor is below the Maximum Ambient Temperature for Crankcase Heater Operation specified below.
 
+\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}
+
+The name of a normalized Curve:* or Table:Lookup object encoding the relationship between the crankcase heater capacity and the outdoor air temperature. This curve can be any uni-variate curve or table. The output of this curve is multiplied by the value in the field ``Crankcase Heater Capacity'. If this field is missing or empty, constant crankcase heater capacity will be
+assumed.
 
 \paragraph{Field: Maximum Ambient Temperature for Crankcase Heater Operation}\label{vshpwhheating-maximum-ambient-temperature-for-crankcase-heater-operation}
 
@@ -6664,15 +6680,6 @@ The output of this curve is multiplied by the rated COP at this specific speed a
 This alpha field specifies the name of a \textbf{quadratic} or \textbf{cubic} performance curve object (ref: Performance Curves) that defines the variation in DX coil heating COP as a function of the ratio of actual water flow rate through the condenser to the rated condenser water flow rate.
 The output of this curve is multiplied by the rated COP at this specific speed and the output from the two other heating COP modifier curves (function of temperature and function of air flow fraction) to give the DX coil heating COP at the specific inlet fluid temperatures and flow rates at which the coil is operating. The curve should be normalized to have the value of 1.0 at the rated condenser water flow rate (water flow fraction of 1.0). If this field is left blank, the heating COP remains constant (curve value assumed to be 1.0 for all water flow rates).
 
-\paragraph{Field: Crankcase Heater Capacity Function of Temperature Curve Name}\label{vshpwhheating-outdoor-temperature-dependent-crankcase-heater-capacity-curve-name}
-
-The name of a normalized Curve:* or Table:Lookup object encoding the
-relationship between the crankcase heater capacity and the outdoor air
-temperature. This curve can be any uni-variate curve or table. The output of
-this curve is multiplied by the value in the field ``Crankcase Heater Capacity'.
-If this field is missing or empty, constant crankcase heater capacity will be
-assumed.
-
 Following is an example input for the \lstinline!Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed! object:
 
 \begin{lstlisting}
@@ -6696,6 +6703,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
   HPPlantWaterInletNode,   !- Condenser Water Inlet Node Name
   HPPlantWaterOutletNode,  !- Condenser Water Outlet Node Name
   100.0,                   !- Crankcase Heater Capacity {W}
+  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
   5.0,                     !- Maximum Ambient Temperature for Crankcase Heater Operation {C}
   WetBulbTemperature,      !- Evaporator Air Temperature Type for Curve Objects
   HPWHPLFFPLR,             !- Part Load Fraction Correlation Curve Name
@@ -6986,6 +6994,10 @@ Tang,C. C. 2005. Modeling Packaged Heat Pumps in Quasi-Steady State Energy Simul
 
 This alpha field contains the identifying name for the coil. Any reference to this coil by another object (e.g., \hyperref[airloophvacunitarysystem]{AirLoopHVAC:UnitarySystem} or \hyperref[airloophvacunitaryheatpumpwatertoair]{AirLoopHVAC:UnitaryHeatPump:WaterToAir}) will use this name.
 
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-006}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX cooling coil can run during a given time period. A schedule value of 0 indicates that the DX cooling coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
+
 \paragraph{Field: Compressor Type}\label{field-compressor-type}
 
 Type of compressor mode used for the heat pump. Choices available are reciprocating, rotary and scroll compressor. Note that the parameters vary for different compressor.
@@ -7175,6 +7187,10 @@ Tang,C. C. 2005. Modeling Packaged Heat Pumps in Quasi-Steady State Energy Simul
 \paragraph{Field: Name}\label{field-name-29}
 
 This alpha field contains the identifying name for the coil. Any reference to this coil by another object (e.g., \hyperref[airloophvacunitarysystem]{AirLoopHVAC:UnitarySystem} or \hyperref[airloophvacunitaryheatpumpwatertoair]{AirLoopHVAC:UnitaryHeatPump:WaterToAir}) will use this name.
+
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-007}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX cooling coil can run during a given time period. A schedule value of 0 indicates that the DX cooling coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
 
 \paragraph{Field: Water Inlet Node Name}\label{field-water-inlet-node-name-6-000}
 
@@ -7496,6 +7512,11 @@ The Variable-Speed Water-to-Air Cooling Equation Fit Coil is a collection of per
 \paragraph{Field: Name}\label{field-name-30}
 
 This alpha field contains the identifying name for the variable speed cooling coil. Any reference to this coil by another object (e.g., \hyperref[airloophvacunitarysystem]{AirLoopHVAC:UnitarySystem} or \hyperref[airloophvacunitaryheatpumpwatertoair]{AirLoopHVAC:UnitaryHeatPump:WaterToAir}) will use this name.
+
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-008}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX cooling coil can run during a given time period. A schedule value of 0 indicates that the DX cooling coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
+
 
 \paragraph{Field: Water Inlet Node Name}\label{field-water-inlet-node-name-7}
 
@@ -8039,6 +8060,10 @@ The Water to Air heat pump heating coil is a deterministic model that requires p
 
 This alpha field contains the identifying name for the coil. Any reference to this coil by another object (e.g., \hyperref[airloophvacunitarysystem]{AirLoopHVAC:UnitarySystem} or \hyperref[airloophvacunitaryheatpumpwatertoair]{AirLoopHVAC:UnitaryHeatPump:WaterToAir}) will use this name.
 
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-009}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX heating coil can run during a given time period. A schedule value of 0 indicates that the DX heating coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
+
 \paragraph{Field: Compressor Type}\label{field-compressor-type-1}
 
 Type of compressor mode used for the heat pump. Choices available are reciprocating, rotary and scroll compressor. Note that the parameters vary for different compressor.
@@ -8186,6 +8211,10 @@ The Water to Air Heating Equation Fit Coil is a simple curve-fit model that requ
 \paragraph{Field: Name}\label{field-name-32}
 
 This alpha field contains the identifying name for the coil. Any reference to this coil by another object (e.g., \hyperref[airloophvacunitarysystem]{AirLoopHVAC:UnitarySystem} or \hyperref[airloophvacunitaryheatpumpwatertoair]{AirLoopHVAC:UnitaryHeatPump:WaterToAir}) will use this name.
+
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-010}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX heating coil can run during a given time period. A schedule value of 0 indicates that the DX heating coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
 
 \paragraph{Field: Water Inlet Node Name}\label{field-water-inlet-node-name-9}
 
@@ -8361,6 +8390,10 @@ The Variable-Speed Water-to-Air Heating Equation Fit Coil is a collection of per
 \paragraph{Field: Name}\label{field-name-33}
 
 This alpha field contains the identifying name for the variable speed heating coil. Any reference to this coil by another object (e.g., \hyperref[airloophvacunitarysystem]{AirLoopHVAC:UnitarySystem} or \hyperref[airloophvacunitaryheatpumpwatertoair]{AirLoopHVAC:UnitaryHeatPump:WaterToAir}) will use this name.
+
+\paragraph{Field: Availability Schedule Name}\label{field-availability-schedule-name-16-012}
+
+This alpha field defines the name of the schedule (ref: Schedule) that denotes whether the DX heating coil can run during a given time period. A schedule value of 0 indicates that the DX heating coil is off for that time period. If the schedule's value is \textgreater{} 0 (usually 1 is used), the coil is On duing that time period. If this field is blank, the schedule has values of 1 for all time periods. Schedule values must be \textgreater{}= 0 and \textless{}= 1.
 
 \paragraph{Field: Water Inlet Node Name}\label{field-water-inlet-node-name-10}
 
@@ -9568,6 +9601,7 @@ Coil:Cooling:DX:SingleSpeed,
   ,                        !- Evaporative Condenser Air Flow Rate {m3/s}
   ,                        !- Evaporative Condenser Pump Rated Power Consumption {W}
   ,                        !- Crankcase Heater Capacity {W}
+  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
   ,                        !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                        !- Supply Water Storage Tank Name
   ,                        !- Condensate Collection Water Storage Tank Name
@@ -9640,6 +9674,7 @@ Coil:Cooling:DX:MultiSpeed,
   No,                      !- Apply Part Load Fraction to Speeds Greater than 1
   No,                      !- Apply Latent Degradation to Speeds Greater than 1
   200.0,                   !- Crankcase Heater Capacity {W}
+  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
   10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   ,                        !- Basin Heater Capacity {W/K}
   ,                        !- Basin Heater Setpoint Temperature {C}
@@ -9779,6 +9814,7 @@ Coil:Heating:DX:SingleSpeed,
   ,                        !- Outdoor Dry-Bulb Temperature to Turn On Compressor {C}
   5.0,                     !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
   200.0,                   !- Crankcase Heater Capacity {W}
+  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
   10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   Resistive,               !- Defrost Strategy
   TIMED,                   !- Defrost Control
@@ -9806,6 +9842,7 @@ Coil:Heating:DX:MultiSpeed,
   -8.0,                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
   -5.0,                    !- Outdoor Dry-Bulb Temperature to Turn On Compressor {C}
   200.0,                   !- Crankcase Heater Capacity {W}
+  ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
   10.0,              !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
   HPACDefrostCAPFT,        !- Defrost Energy Input Ratio Function of Temperature Curve Name
   7.22,                    !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -47,7 +47,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/DataGlobals.hh>
@@ -223,11 +222,12 @@ namespace ThermalEN673Calc {
                 solar_EN673(dir, totsol, rtot, rs, nlayer, asol, sft, standard, nperr, ErrorMessage);
                 if (GoAhead(nperr)) {
                     shgc = sft;
-                    if (files.WriteDebugOutput)
+                    if (files.WriteDebugOutput) {
                         WriteOutputEN673(files.DebugOutputFile, files.DBGD, nlayer, ufactor, hout, hin, Ra, Nu, hg, hr, hs, nperr);
+                    }
                 } // GoAhead after solar
-            }     // GoAhead after EN673ISO10292
-        }         // GopAhead after propcon90
+            } // GoAhead after EN673ISO10292
+        } // GopAhead after propcon90
     }
 
     void EN673ISO10292(EnergyPlusData &state,
@@ -412,7 +412,7 @@ namespace ThermalEN673Calc {
                              standard,
                              nperr,
                              ErrorMessage);
-                    Gr(i) = (Constant::GravityConstant * pow_3(gap(i)) * dT(i) * pow_2(dens)) / (Tm * pow_2(visc));
+                    Gr(i) = (Constant::Gravity * pow_3(gap(i)) * dT(i) * pow_2(dens)) / (Tm * pow_2(visc));
                     Ra(i) = Gr(i) * pr;
                     Nu(i) = A * std::pow(Ra(i), n);
                     if (Nu(i) < 1.0) {
@@ -481,7 +481,7 @@ namespace ThermalEN673Calc {
                                      standard,
                                      nperr,
                                      ErrorMessage);
-                            Gr(i) = (Constant::GravityConstant * pow_3(gap(i)) * dT(i) * pow_2(dens)) / (Tm * pow_2(visc));
+                            Gr(i) = (Constant::Gravity * pow_3(gap(i)) * dT(i) * pow_2(dens)) / (Tm * pow_2(visc));
                             Ra(i) = Gr(i) * pr;
                             Nu(i) = A * std::pow(Ra(i), n);
                             if (Nu(i) < 1.0) {
@@ -513,8 +513,10 @@ namespace ThermalEN673Calc {
                 ++iter; // end of next iteration
                 diff = std::abs(sumRs - sumRsold);
                 // bi: perhaps we should also limit No. of iterations?
-                if (diff < eps) break; // tolerance was met - exit loop
-            }                          // remaining iterations
+                if (diff < eps) {
+                    break; // tolerance was met - exit loop
+                }
+            } // remaining iterations
         }
 
         // dr...END OF ITERATIONS

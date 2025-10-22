@@ -132,22 +132,6 @@ This numeric input field specifies carbon dioxide generation rate per person wit
 
 Number of People * People Schedule * People Activity * Carbon Dioxide Generation Rate. The default value is 3.82E-8 m3/s-W (obtained from ASHRAE Standard 62.1-2007 value at 0.0084 cfm/met/person over the general adult population). The maximum value can be 10 times the default value.
 
-\paragraph{Field: Cold Stress Temperature Threshold}\label{cold-stress-temperature-threshold}
-
-This field is used in the calculation of hours of safety for cold events, which
-is defined as the longest duration (number of hours), starting from the
-beginning time of the risk period (e.g., the start time of a power outage), to
-not below a certain temperature threshold (specified in this field). If not
-specified, 60F (or 15.56C) will be used as the default temperature threshold.
-
-\paragraph{Field: Heat Stress Temperature Threshold}\label{heat-stress-temperature-threshold}
-
-This field is used in the calculation of hours of safety for hot events, which
-is defined as the longest duration (number of hours), starting from the
-beginning time of the risk period (e.g., the start time of a power outage), to
-not above a certain temperature threshold (specified in this field). If not
-specified, 86F (or 30C) will be used as the default temperature threshold.
-
 \paragraph{Field: Enable ASHRAE 55 comfort warnings}\label{field-enable-ashrae-55-comfort-warnings}
 
 This field accepts either ``Yes'' or ``No'' as values. When ``Yes'' is specified, warnings are generated when the space conditions are outside of the ASHRAE 55 comfort range as discussed in the sections that follow titled ``Simplified ASHRAE 55-2004 Graph Related Outputs'' and ``Simplified ASHRAE 55 Warnings.'' The default is not to provide these warnings so if you want to know if your space is outside this comfort range you must set this field to Yes.
@@ -277,10 +261,10 @@ The final one to five fields are optional and are intended to trigger various th
   The KSU Two-Node Model is applied to calculate related thermal comfort metrics. KSU Model Thermal Sensation Vote is calculated and reported as each time step. Note that the KSU model is computationally intensive and may noticeably increase the execution time of the simulation. Apart from existing required fields in People object, extra fields required for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
 
   \item[AdaptiveASH55]
-  Adaptive Comfort Model Based on ASHRAE Standard 55-2010 is applied to calculate related thermal comfort metrics. ASHRAE 55 Adaptive Model 90\% Acceptability Status, 80\% Acceptability Status, Running Average Outdoor Air Temperature, and the Adaptive Model Temperature are calculated and reported as each time step. AdaptiveASH55 is only applicable when the running average outdoor air temperature for the past 7 days is between 10.0 and 33.5C.
+  Adaptive Comfort Model Based on ASHRAE Standard 55-2010 is applied to calculate related thermal comfort metrics. ASHRAE 55 Adaptive Model 90\% Acceptability Status, 80\% Acceptability Status, Running Average Outdoor Air Temperature, and the Adaptive Model Temperature are calculated and reported as each time step. AdaptiveASH55 is only applicable when the running average outdoor air temperature for the past 7 days is between 10.0 and 33.5$^\circ$C.
 
   \item[AdaptiveCEN15251]
-  Adaptive Comfort Model Based on European Standard EN15251-2007 is applied to calculate related thermal comfort metrics. CEN 15251 Adaptive Model Category I/II/II Status, Running Average Outdoor Air Temperature, and the Adaptive Model Temperature are calculated and reported as each time step. AdaptiveCEN15251 is only applicable when the running average outdoor air temperature for the past 30 days is between 10.0 and 30.0C.
+  Adaptive Comfort Model Based on European Standard EN15251-2007 is applied to calculate related thermal comfort metrics. CEN 15251 Adaptive Model Category I/II/II Status, Running Average Outdoor Air Temperature, and the Adaptive Model Temperature are calculated and reported as each time step. AdaptiveCEN15251 is only applicable when the running average outdoor air temperature for the past 30 days is between 10.0 and 30.0$^\circ$C.
 
   \item[CoolingEffectASH55]
   ASHRAE 55-2017 Elevated Air Speed Cooling Effect Model is applied to calculate related thermal comfort metrics. Elevated Air Speed Cooling Effect, Cooling Effect Adjusted PMV, and Cooling Effect Adjusted PPD are calculated and reported as each time step. Apart from existing required fields in People object, extra fields required for this model include Surface Name/Angle Factor List Name, Work Efficiency Schedule Name, Clothing Insulation Schedule Name, and Air Velocity Schedule Name.
@@ -298,6 +282,22 @@ The final one to five fields are optional and are intended to trigger various th
 \paragraph{Field: Ankle Level Air Velocity Schedule Name}\label{field-ankle-level-air-velocity-schedule-name}
 
 This field is the name of the schedule that approximates the amount of air movement at the occupants' ankle level (0.1 m above floor level) as a function of time throughout the simulation period. The user has control over this parameter through the schedule that requires the individual numbers in the schedule to be positive real numbers having units of meters per second. This field is required to run the AnkleDraftASH55 thermal comfort model. If a schedule is listed here but no thermal comfort model is selected, then a warning message will be produced and this schedule will be listed as unused in the error file.
+
+\paragraph{Field: Cold Stress Temperature Threshold}\label{cold-stress-temperature-threshold}
+
+This field is used in the calculation of hours of safety for cold events, which
+is defined as the longest duration (number of hours), starting from the
+beginning time of the risk period (e.g., the start time of a power outage) to
+not below a certain temperature threshold (specified in this field). If not
+specified, 60$^\circ$F (or 15.56$^\circ$C) will be used as the default temperature threshold.
+
+\paragraph{Field: Heat Stress Temperature Threshold}\label{heat-stress-temperature-threshold}
+
+This field is used in the calculation of hours of safety for hot events, which
+is defined as the longest duration (number of hours), starting from the
+beginning time of the risk period (e.g., the start time of a power outage) to
+not above a certain temperature threshold (specified in this field). If not
+specified, 86$^\circ$F (or 30$^\circ$C) will be used as the default temperature threshold.
 
 The following IDF example allows for a maximum of 31 people with scheduled occupancy of ``Office Occupancy'', 60\% radiant using an Activity Schedule of ``Activity Sch''. The example allows for thermal comfort reporting.
 
@@ -473,6 +473,8 @@ People specific outputs include:
   Zone,Average,Zone Thermal Comfort Fanger Model PPD {[}\%{]}
 \item
   Zone,Average,Zone Thermal Comfort Clothing Surface Temperature {[}C{]}
+\item
+  Zone,Average,Zone Thermal Comfort Clothing Value {[}clo{]}
 \item
   Zone,Average,Zone Thermal Comfort Pierce Model Effective Temperature PMV {[]}
 \item
@@ -699,13 +701,13 @@ The following output variables are all based on whether the humidity ratio and t
 \begin{longtable}[c]{@{}ll@{}}
 \caption{Winter Clothes (1.0 Clo) \label{table:winter-clothes-1.0-clo}} \tabularnewline
 \toprule
-Operative Temperature (C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
+Operative Temperature ($^\circ$C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
 \midrule
 \endfirsthead
 
 \caption[]{Winter Clothes (1.0 Clo)} \tabularnewline
 \toprule
-Operative Temperature (C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
+Operative Temperature ($^\circ$C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
 \midrule
 \endhead
 
@@ -726,13 +728,13 @@ Operative Temperature (C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
 \begin{longtable}[c]{@{}ll@{}}
 \caption{Summer Clothes (0.5 Clo) \label{table:summer-clothes-0.5-clo}} \tabularnewline
 \toprule
-Operative Temperature (C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
+Operative Temperature ($^\circ$C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
 \midrule
 \endfirsthead
 
 \caption[]{Summer Clothes (0.5 Clo)} \tabularnewline
 \toprule
-Operative Temperature (C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
+Operative Temperature ($^\circ$C) & Humidity Ratio (kgWater/kgDryAir) \tabularnewline
 \midrule
 \endhead
 
@@ -2431,7 +2433,7 @@ IndoorLivingWall objects have output variables for individual objects. The follo
 \item
   Zone,Average,Indoor Living Wall Evapotranspiration Rate {[}\si{\evapotranspirationRate}{]}
 \item
-  Zone,Average,Indoor Living Wall Energy Required For Evapotranspiration Per Unit Area {[}\si{\watt\per\area}{]}
+  Zone,Average,Indoor Living Wall Energy Rate Required For Evapotranspiration Per Unit Area {[}\si{\watt\per\area}{]}
 \item
   Zone,Average,Indoor Living Wall LED Operational PPFD {[}\si{\umolperAreaperSecond}{]}
 \item
@@ -2446,7 +2448,50 @@ IndoorLivingWall objects have output variables for individual objects. The follo
   Zone,Sum,Indoor Living Wall LED Electricity Energy {[}J{]}
 \end{itemize}
 
+\paragraph{Indoor Living Wall Plant Surface Temperature {[}C{]}}\label{indoor-living-wall-plant-surface-temperature-c}
 
+This output is the plant surface temperature in C. Plant surface temperature is determined using surface heat balance of indoor living walls. 
+
+\paragraph{Indoor Living Wall Sensible Heat Gain Rate {[}W{]}}\label{indoor-living-wall-sensible-heat-gain-rate-w}
+
+This output is the sensible heat gain rate from indoor living walls in W and determined by surface heat balance. Positive sign represents heat gain of spaces; negative sign represents heat loss of spaces. 
+
+\paragraph{Indoor Living Wall Latent Heat Gain Rate {[}W{]}}\label{indoor-living-wall-latent-heat-gain-rate-w}
+
+This output is the latent heat gain rate from indoor living walls in W. Latent heat gain is determined based on the increase of enthalpy due to the increase of absolute humidity (or humidity ratio) from plant evapotranspiration.
+
+\paragraph{Indoor Living Wall Evapotranspiration Rate {[}\si{\evapotranspirationRate}{]}}\label{indoor-living-wall-evapotranspiration-rate}
+
+This output is evapotranspiration (ET) rate of indoor living walls in \si{\evapotranspirationRate}. The ET rate is directly calculated by ET models(Penman-Monteith model, Stanghellini model or ET model from users).
+
+\paragraph{Indoor Living Wall Energy Rate Required For Evapotranspiration Per Unit Area {[}\si{\watt\per\area}{]}}\label{indoor-living-wall-evapotranspiration-per-unit-area}
+
+This output is energy rate per unit area required for plant evapotranspiration (ET) of indoor living walls in \si{\watt\per\area}. The energy rate per unit area for ET is determined by latent heat of vaporization for total ET over time period and surface area.
+
+\paragraph{Indoor Living Wall LED Operational PPFD {[}\si{\umolperAreaperSecond}{]}}\label{indoor-living-wall-led-operational-ppfd}
+
+This output is operational photosynthetic photon flux density (PPFD) of LED light in \si{\umolperAreaperSecond}. The operational PPFD of LED light is determined based on lighting method. If lighting method is Daylight, the operational LED PPFD is zero. If lighting method is LED, the operational LED PPFD is nominal LED PPFD. If lighting method is LED-Daylight, the operational LED PPFD is calculated based on targeted PPFD and daylighting level with the consideration of nominal LED PPFD. 
+
+\paragraph{Indoor Living Wall PPFD {[}\si{\umolperAreaperSecond}{]}}\label{indoor-living-wall-ppfd}
+
+This output is the actual PPFD including LED and/or daylight for indoor living walls in \si{\umolperAreaperSecond}.
+
+\paragraph{Indoor Living Wall Vapor Pressure Deficit {[}Pa{]}}\label{indoor-living-wall-vpd-pa}
+
+This output is the vapor pressure deficit in Pa. The output represents the difference between saturated vapor pressure and vapor pressure of the moist air of current condition.
+
+\paragraph{Indoor Living Wall LED Sensible Heat Gain Rate {[}W{]}}\label{indoor-living-wall-led-sensible-heat-gain-rate-w}
+
+This output is the LED sensible heat gain rate for indoor living walls in W. The output determines convective heat gain from LED lights when LED lights are on. 
+
+\paragraph{Indoor Living Wall LED Operational Power {[}W{]}}\label{indoor-living-wall-led-operational-power-w}
+
+This output is LED operational power for indoor living walls in W. The LED operational power is determined by LED nominal power in proportion to the ratio of LED operational PPFD to LED nominal PPFD. 
+
+\paragraph{Indoor Living Wall LED Electricity Energy {[}J{]}}\label{indoor-living-wall-led-electricity-energy-j}
+
+This output is LED electricity energy for indoor living walls in J. The LED electricity energy is calculated by LED operational power multiplied by time period. 
+  
 \subsection{ElectricEquipment:ITE:AirCooled}\label{electricequipmentiteaircooled}
 
 This object describes air-cooled electric information technology equipment (ITE) which has variable power consumption as a function of loading and temperature.

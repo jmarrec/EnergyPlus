@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -57,6 +57,13 @@
 
     // Public domain polyfill for feenableexcept on OS X
     // http://www-personal.umich.edu/~williams/archive/computation/fe-handling-example.c
+
+    inline int fegetexcept()
+    {
+      static fenv_t fenv;
+
+      return std::fegetenv(&fenv) ? -1 : (fenv.__control & FE_ALL_EXCEPT);
+    }
 
     inline int feenableexcept(unsigned int excepts)
     {
@@ -124,6 +131,17 @@
     // __APPLE__ ARM64 has an extra flag that is raised when a denormal is flushed
     // to zero.
     static constexpr uint32_t EX_FLUSHTOZERO = 0x20;
+
+    inline int fegetexcept()
+    {
+      static fenv_t fenv;
+      if (std::fegetenv(&fenv) != 0) {
+        return -1;
+      }
+      const unsigned long long old_fpcr = fenv.__fpcr;
+      const unsigned int old_excepts = (old_fpcr >> FPCR_EXCEPT_SHIFT) & unsigned(FE_ALL_EXCEPT);
+      return old_excepts;
+    }
 
     inline int feenableexcept(unsigned int excepts)
     {

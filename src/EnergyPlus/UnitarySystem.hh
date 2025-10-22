@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -231,24 +231,25 @@ namespace UnitarySystems {
         int m_UnitarySysNum = -1;
         SysType m_sysType = SysType::Invalid;
         bool m_ThisSysInputShouldBeGotten = true;
-        int m_SysAvailSchedPtr = 0; // Pointer to the availability schedule
+        Sched::Schedule *m_sysAvailSched = nullptr; // availability schedule
         UnitarySysCtrlType m_ControlType = UnitarySysCtrlType::None;
         DehumCtrlType m_DehumidControlType_Num = DehumCtrlType::None;
         bool m_Humidistat = false;
         bool m_ValidASHRAECoolCoil = false;
         bool m_ValidASHRAEHeatCoil = false;
-        bool m_SimASHRAEModel = false; // flag denoting that ASHRAE model (SZVAV) should be used
+        bool m_SimASHRAEModel = false;   // flag denoting that ASHRAE model (SZVAV) should be used
+        bool m_SimASHRAEModelOn = false; // flag denoting that the SZVAV calculation is active
         bool m_setFaultModelInput = true;
         int m_FanIndex = 0;
         HVAC::FanPlace m_FanPlace = HVAC::FanPlace::Invalid;
-        int m_FanOpModeSchedPtr = 0;
+        Sched::Schedule *m_fanOpModeSched = nullptr;
         bool m_FanExists = false;
         HVAC::FanType m_FanType = HVAC::FanType::Invalid;
         bool m_RequestAutoSize = false;
         Real64 m_ActualFanVolFlowRate = 0.0;
         Real64 m_DesignFanVolFlowRate = 0.0;
         Real64 m_DesignMassFlowRate = 0.0;
-        int m_FanAvailSchedPtr = 0;
+        Sched::Schedule *m_fanAvailSched = nullptr;
         HVAC::FanOp m_FanOpMode = HVAC::FanOp::Invalid;
         int m_ATMixerIndex = 0;
         int m_ATMixerPriNode = 0;
@@ -262,7 +263,7 @@ namespace UnitarySystems {
         int m_HeatingCoilType_Num = 0;
         bool m_DXHeatingCoil = false;
         int m_HeatingCoilIndex = 0;
-        int m_HeatingCoilAvailSchPtr = 0;
+        Sched::Schedule *m_heatingCoilAvailSched = nullptr;
         Real64 m_DesignHeatingCapacity = 0.0;
         Real64 m_MaxHeatAirVolFlow = 0.0;
         int m_NumOfSpeedHeating = 0;
@@ -273,7 +274,7 @@ namespace UnitarySystems {
         bool m_CoolCoilExists = false;
         int m_CoolingCoilType_Num = 0;
         int m_NumOfSpeedCooling = 0;
-        int m_CoolingCoilAvailSchPtr = 0;
+        Sched::Schedule *m_coolingCoilAvailSched = nullptr;
         Real64 m_DesignCoolingCapacity = 0.0;
         Real64 m_MaxCoolAirVolFlow = 0.0;
         int m_CondenserNodeNum = 0;
@@ -525,6 +526,7 @@ namespace UnitarySystems {
         HVAC::EconomizerStagingType OAControllerEconomizerStagingType =
             HVAC::EconomizerStagingType::InterlockedWithMechanicalCooling; // economizer staging operation type
         bool OAMixerExists = false;                                        // true if OA mixer is connected to inlet of UnitarySystem
+        bool reportACCAManualS = false;
 
         //    private:
         // private members not initialized in constructor
@@ -947,11 +949,12 @@ namespace UnitarySystems {
         int getEquipIndex() override;
 
         UnitarySys() = default;
-        ~UnitarySys() = default;
+        virtual ~UnitarySys() = default;
     };
 
     int getDesignSpecMSHPIndex(EnergyPlusData &state, std::string_view objectName);
     int getUnitarySystemIndex(EnergyPlusData &state, std::string_view objectName);
+    bool getUnitarySystemNodeNumber(EnergyPlusData &state, int const nodeNumber);
 
     bool searchZoneInletNodes(EnergyPlusData &state, int nodeToFind, int &ZoneEquipConfigIndex, int &InletNodeIndex);
     bool searchZoneInletNodesByEquipmentIndex(EnergyPlusData &state, int nodeToFind, int zoneEquipmentIndex);
@@ -965,6 +968,9 @@ namespace UnitarySystems {
                                int &airLoopIndex);
     void setupAllOutputVars(EnergyPlusData &state, int const numAllSystemTypes);
     void isWaterCoilHeatRecoveryType(EnergyPlusData const &state, int const waterCoilNodeNum, bool &nodeNotFound);
+
+    int
+    getZoneEqIndex(EnergyPlusData &state, std::string const &UnitarySysName, DataZoneEquipment::ZoneEquipType zoneEquipType, int const OAUnitNum = 0);
 
 } // namespace UnitarySystems
 struct UnitarySystemsData : BaseGlobalStruct
@@ -1009,6 +1015,14 @@ struct UnitarySystemsData : BaseGlobalStruct
     bool getInputFlag = true;
     bool setupOutputOnce = true;
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void clear_state() override
     {
         numUnitarySystems = 0;
@@ -1041,7 +1055,9 @@ struct UnitarySystemsData : BaseGlobalStruct
         getInputOnceFlag = true;
         setupOutputOnce = true;
         unitarySys.clear();
-        if (designSpecMSHP.size() > 0) designSpecMSHP.clear();
+        if (designSpecMSHP.size() > 0) {
+            designSpecMSHP.clear();
+        }
         getInputFlag = true;
     }
 

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -74,6 +74,7 @@
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
+#include <EnergyPlus/OutputReportPredefined.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
@@ -200,6 +201,7 @@ namespace DualDuct {
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetDualDuctInput: "); // include trailing bla
+        static constexpr std::string_view routineName = "GetDualDuctInput";
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         int NumAlphas;
@@ -243,6 +245,8 @@ namespace DualDuct {
                                                                          cAlphaFields,
                                                                          cNumericFields);
 
+                ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphArray(1)};
+
                 // Anything below this line in this control block should use DDNum
                 int DDNum = DamperIndex;
                 auto &thisDD = state.dataDualDuct->dd_airterminal(DDNum);
@@ -251,14 +255,10 @@ namespace DualDuct {
                 thisDD.Name = AlphArray(1);
                 thisDD.DamperType = DualDuctDamper::ConstantVolume;
                 if (lAlphaBlanks(2)) {
-                    thisDD.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisDD.SchedPtr = ScheduleManager::GetScheduleIndex(state, AlphArray(2));
-                    if (thisDD.SchedPtr == 0) {
-                        ShowSevereError(state,
-                                        format("{}, \"{}\" {} = {} not found.", CurrentModuleObject, thisDD.Name, cAlphaFields(2), AlphArray(2)));
-                        ErrorsFound = true;
-                    }
+                    thisDD.availSched = Sched::GetScheduleAlwaysOn(state);
+                } else if ((thisDD.availSched = Sched::GetSchedule(state, AlphArray(2))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFields(2), AlphArray(2));
+                    ErrorsFound = true;
                 }
                 thisDD.OutletNodeNum = GetOnlySingleNode(state,
                                                          AlphArray(3),
@@ -318,7 +318,9 @@ namespace DualDuct {
                     // Fill the Zone Equipment data with the inlet node numbers of this unit.
                     for (int CtrlZone = 1; CtrlZone <= state.dataGlobal->NumOfZones; ++CtrlZone) {
                         auto &thisZoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(CtrlZone);
-                        if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZone).IsControlled) continue;
+                        if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZone).IsControlled) {
+                            continue;
+                        }
                         for (SupAirIn = 1; SupAirIn <= thisZoneEquipConfig.NumInletNodes; ++SupAirIn) {
                             if (thisDD.OutletNodeNum == thisZoneEquipConfig.InletNode(SupAirIn)) {
                                 if (state.dataZoneEquip->ZoneEquipConfig(CtrlZone).AirDistUnitCool(SupAirIn).OutNode > 0) {
@@ -382,6 +384,8 @@ namespace DualDuct {
                                                                          cAlphaFields,
                                                                          cNumericFields);
 
+                ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphArray(1)};
+
                 // Anything below this line in this control block should use DDNum
                 int DDNum = DamperIndex + NumDualDuctConstVolDampers;
                 auto &thisDD = state.dataDualDuct->dd_airterminal(DDNum);
@@ -390,14 +394,10 @@ namespace DualDuct {
                 thisDD.Name = AlphArray(1);
                 thisDD.DamperType = DualDuctDamper::VariableVolume;
                 if (lAlphaBlanks(2)) {
-                    thisDD.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisDD.SchedPtr = ScheduleManager::GetScheduleIndex(state, AlphArray(2));
-                    if (thisDD.SchedPtr == 0) {
-                        ShowSevereError(state,
-                                        format("{}, \"{}\" {} = {} not found.", CurrentModuleObject, thisDD.Name, cAlphaFields(2), AlphArray(2)));
-                        ErrorsFound = true;
-                    }
+                    thisDD.availSched = Sched::GetScheduleAlwaysOn(state);
+                } else if ((thisDD.availSched = Sched::GetSchedule(state, AlphArray(2))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFields(2), AlphArray(2));
+                    ErrorsFound = true;
                 }
                 thisDD.OutletNodeNum = GetOnlySingleNode(state,
                                                          AlphArray(3),
@@ -457,7 +457,9 @@ namespace DualDuct {
                     // Fill the Zone Equipment data with the inlet node numbers of this unit.
                     for (int CtrlZone = 1; CtrlZone <= state.dataGlobal->NumOfZones; ++CtrlZone) {
                         auto &thisZoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(CtrlZone);
-                        if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZone).IsControlled) continue;
+                        if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZone).IsControlled) {
+                            continue;
+                        }
                         for (SupAirIn = 1; SupAirIn <= thisZoneEquipConfig.NumInletNodes; ++SupAirIn) {
                             if (thisDD.OutletNodeNum == thisZoneEquipConfig.InletNode(SupAirIn)) {
                                 thisZoneEquipConfig.AirDistUnitCool(SupAirIn).InNode = thisDD.ColdAirInletNodeNum;
@@ -487,15 +489,9 @@ namespace DualDuct {
 
                 if (lAlphaBlanks(7)) {
                     thisDD.ZoneTurndownMinAirFrac = 1.0;
-                    thisDD.ZoneTurndownMinAirFracSchExist = false;
-                } else {
-                    thisDD.ZoneTurndownMinAirFracSchPtr = ScheduleManager::GetScheduleIndex(state, AlphArray(7));
-                    if (thisDD.ZoneTurndownMinAirFracSchPtr == 0) {
-                        ShowSevereError(state, format("{} = {} not found.", cAlphaFields(7), AlphArray(7)));
-                        ShowContinueError(state, format("Occurs in {} = {}", cCMO_DDVariableVolume, thisDD.Name));
-                        ErrorsFound = true;
-                    }
-                    thisDD.ZoneTurndownMinAirFracSchExist = true;
+                } else if ((thisDD.zoneTurndownMinAirFracSched = Sched::GetSchedule(state, AlphArray(7))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFields(7), AlphArray(7));
+                    ErrorsFound = true;
                 }
 
                 // Setup the Average damper Position output variable
@@ -542,6 +538,8 @@ namespace DualDuct {
                                                                          cAlphaFields,
                                                                          cNumericFields);
 
+                ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphArray(1)};
+
                 // Anything below this line in this control block should use DDNum
                 int DDNum = DamperIndex + NumDualDuctConstVolDampers + NumDualDuctVarVolDampers;
                 auto &thisDD = state.dataDualDuct->dd_airterminal(DDNum);
@@ -550,14 +548,10 @@ namespace DualDuct {
                 thisDD.Name = AlphArray(1);
                 thisDD.DamperType = DualDuctDamper::OutdoorAir;
                 if (lAlphaBlanks(2)) {
-                    thisDD.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisDD.SchedPtr = ScheduleManager::GetScheduleIndex(state, AlphArray(2));
-                    if (thisDD.SchedPtr == 0) {
-                        ShowSevereError(state,
-                                        format("{}, \"{}\" {} = {} not found.", CurrentModuleObject, thisDD.Name, cAlphaFields(2), AlphArray(2)));
-                        ErrorsFound = true;
-                    }
+                    thisDD.availSched = Sched::GetScheduleAlwaysOn(state);
+                } else if ((thisDD.availSched = Sched::GetSchedule(state, AlphArray(2))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, cAlphaFields(2), AlphArray(2));
+                    ErrorsFound = true;
                 }
                 thisDD.OutletNodeNum = GetOnlySingleNode(state,
                                                          AlphArray(3),
@@ -632,7 +626,9 @@ namespace DualDuct {
                     // Fill the Zone Equipment data with the inlet node numbers of this unit.
                     for (int CtrlZone = 1; CtrlZone <= state.dataGlobal->NumOfZones; ++CtrlZone) {
                         auto &thisZoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(CtrlZone);
-                        if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZone).IsControlled) continue;
+                        if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZone).IsControlled) {
+                            continue;
+                        }
                         for (SupAirIn = 1; SupAirIn <= thisZoneEquipConfig.NumInletNodes; ++SupAirIn) {
                             if (thisDD.OutletNodeNum == thisZoneEquipConfig.InletNode(SupAirIn)) {
                                 if (thisDD.RecircIsUsed) {
@@ -763,10 +759,13 @@ namespace DualDuct {
             state.dataDualDuct->ZoneEquipmentListChecked = true;
             // Check to see if there is a Air Distribution Unit on the Zone Equipment List
             for (Loop = 1; Loop <= state.dataDualDuct->NumDDAirTerminal; ++Loop) {
-                if (this->ADUNum == 0) continue;
-                if (DataZoneEquipment::CheckZoneEquipmentList(
-                        state, "ZONEHVAC:AIRDISTRIBUTIONUNIT", state.dataDefineEquipment->AirDistUnit(this->ADUNum).Name))
+                if (this->ADUNum == 0) {
                     continue;
+                }
+                if (DataZoneEquipment::CheckZoneEquipmentList(
+                        state, "ZONEHVAC:AIRDISTRIBUTIONUNIT", state.dataDefineEquipment->AirDistUnit(this->ADUNum).Name)) {
+                    continue;
+                }
                 ShowSevereError(state,
                                 format("InitDualDuct: ADU=[Air Distribution Unit,{}] is not on any ZoneHVAC:EquipmentList.",
                                        state.dataDefineEquipment->AirDistUnit(this->ADUNum).Name));
@@ -799,8 +798,8 @@ namespace DualDuct {
                     state.dataLoopNodes->Node(OutNode).MassFlowRateMin = 0.0;
                 } else if (this->DamperType == DualDuctDamper::VariableVolume) {
                     // get dual duct air terminal box minimum flow fraction value
-                    if (this->ZoneTurndownMinAirFracSchExist) {
-                        this->ZoneTurndownMinAirFrac = ScheduleManager::GetScheduleMinValue(state, this->ZoneTurndownMinAirFracSchPtr);
+                    if (this->zoneTurndownMinAirFracSched != nullptr) {
+                        this->ZoneTurndownMinAirFrac = this->zoneTurndownMinAirFracSched->getMinVal(state);
                     } else {
                         this->ZoneTurndownMinAirFrac = 1.0;
                     }
@@ -821,7 +820,9 @@ namespace DualDuct {
                 // Initialize for DualDuct:VAV:OutdoorAir
                 OutNode = this->OutletNodeNum;
                 OAInNode = this->OAInletNodeNum;
-                if (this->RecircIsUsed) RAInNode = this->RecircAirInletNodeNum;
+                if (this->RecircIsUsed) {
+                    RAInNode = this->RecircAirInletNodeNum;
+                }
                 state.dataLoopNodes->Node(OutNode).MassFlowRateMax = this->MaxAirMassFlowRate;
                 state.dataLoopNodes->Node(OutNode).MassFlowRateMin = 0.0;
                 this->dd_airterminalOAInlet.AirMassFlowRateMax = this->DesignOAFlowRate * state.dataEnvrn->StdRhoAir;
@@ -836,7 +837,9 @@ namespace DualDuct {
                 // figure per person by design level for the OA duct.
                 PeopleFlow = 0.0;
                 for (Loop = 1; Loop <= state.dataHeatBal->TotPeople; ++Loop) {
-                    if (state.dataHeatBal->People(Loop).ZonePtr != this->CtrlZoneNum) continue;
+                    if (state.dataHeatBal->People(Loop).ZonePtr != this->CtrlZoneNum) {
+                        continue;
+                    }
                     DataSizing::OAFlowCalcMethod damperOAFlowMethod = state.dataSize->OARequirements(this->OARequirementsPtr).OAFlowMethod;
                     if (damperOAFlowMethod == DataSizing::OAFlowCalcMethod::PerPerson || damperOAFlowMethod == DataSizing::OAFlowCalcMethod::Sum ||
                         damperOAFlowMethod == DataSizing::OAFlowCalcMethod::Max) {
@@ -872,7 +875,9 @@ namespace DualDuct {
             OutNode = this->OutletNodeNum;
         } else if (this->DamperType == DualDuctDamper::OutdoorAir) {
             OAInNode = this->OAInletNodeNum;
-            if (this->RecircIsUsed) RAInNode = this->RecircAirInletNodeNum;
+            if (this->RecircIsUsed) {
+                RAInNode = this->RecircAirInletNodeNum;
+            }
             OutNode = this->OutletNodeNum;
         }
 
@@ -883,7 +888,7 @@ namespace DualDuct {
             if (this->DamperType == DualDuctDamper::ConstantVolume || this->DamperType == DualDuctDamper::VariableVolume) {
                 auto &thisHotInNode = state.dataLoopNodes->Node(HotInNode);
                 auto &thisColdInNode = state.dataLoopNodes->Node(ColdInNode);
-                Real64 schedValue = ScheduleManager::GetCurrentScheduleValue(state, this->SchedPtr);
+                Real64 schedValue = this->availSched->getCurrentVal();
                 if ((thisHotInNode.MassFlowRate > 0.0) && (schedValue > 0.0)) {
                     thisHotInNode.MassFlowRate = this->dd_airterminalHotAirInlet.AirMassFlowRateMax;
                 } else {
@@ -906,8 +911,8 @@ namespace DualDuct {
                     thisColdInNode.MassFlowRateMaxAvail = 0.0;
                 }
                 // get current time step air terminal box turndown minimum flow fraction
-                if (this->ZoneTurndownMinAirFracSchExist) {
-                    this->ZoneTurndownMinAirFrac = ScheduleManager::GetCurrentScheduleValue(state, this->ZoneTurndownMinAirFracSchPtr);
+                if (this->zoneTurndownMinAirFracSched != nullptr) {
+                    this->ZoneTurndownMinAirFrac = this->zoneTurndownMinAirFracSched->getCurrentVal();
                 } else {
                     this->ZoneTurndownMinAirFrac = 1.0;
                 }
@@ -927,7 +932,7 @@ namespace DualDuct {
 
             } else if (this->DamperType == DualDuctDamper::OutdoorAir) {
                 auto &thisOAInNode = state.dataLoopNodes->Node(OAInNode);
-                Real64 schedValue = ScheduleManager::GetCurrentScheduleValue(state, this->SchedPtr);
+                Real64 schedValue = this->availSched->getCurrentVal();
                 // The first time through set the mass flow rate to the Max for VAV:OutdoorAir
                 if ((thisOAInNode.MassFlowRate > 0.0) && (schedValue > 0.0)) {
                     thisOAInNode.MassFlowRate = this->dd_airterminalOAInlet.AirMassFlowRateMax;
@@ -1114,7 +1119,7 @@ namespace DualDuct {
         // Get the calculated load from the Heat Balance from ZoneSysEnergyDemand
         QTotLoad = state.dataZoneEnergyDemand->ZoneSysEnergyDemand(ZoneNum).RemainingOutputRequired;
         // Need the design MassFlowRate for calculations
-        if (ScheduleManager::GetCurrentScheduleValue(state, this->SchedPtr) > 0.0) {
+        if (this->availSched->getCurrentVal() > 0.0) {
             MassFlow = this->dd_airterminalHotAirInlet.AirMassFlowRateMaxAvail / 2.0 + this->dd_airterminalColdAirInlet.AirMassFlowRateMaxAvail / 2.0;
         } else {
             MassFlow = 0.0;
@@ -1242,7 +1247,7 @@ namespace DualDuct {
         // the massflow rate of either heating or cooling is determined to meet the entire load.  Then
         // if the massflow is below the minimum or greater than the Max it is set to either the Min
         // or the Max as specified for the VAV model.
-        if (ScheduleManager::GetCurrentScheduleValue(state, this->SchedPtr) == 0.0) {
+        if (this->availSched->getCurrentVal() == 0.0) {
             // System is Off set massflow to 0.0
             MassFlow = 0.0;
 
@@ -1458,7 +1463,9 @@ namespace DualDuct {
         // Calculate all of the required Cp's
         CpAirZn = Psychrometrics::PsyCpAirFnW(state.dataLoopNodes->Node(ZoneNodeNum).HumRat);
         CpAirSysOA = Psychrometrics::PsyCpAirFnW(state.dataLoopNodes->Node(OAInletNodeNum).HumRat);
-        if (this->RecircIsUsed) CpAirSysRA = Psychrometrics::PsyCpAirFnW(state.dataLoopNodes->Node(RecircInletNodeNum).HumRat);
+        if (this->RecircIsUsed) {
+            CpAirSysRA = Psychrometrics::PsyCpAirFnW(state.dataLoopNodes->Node(RecircInletNodeNum).HumRat);
+        }
 
         // Set the OA Damper to the calculated ventilation flow rate
         this->dd_airterminalOAInlet.AirMassFlowRate = OAMassFlow;
@@ -1475,10 +1482,11 @@ namespace DualDuct {
             QOALoad = this->dd_airterminalOAInlet.AirMassFlowRate *
                       (CpAirSysOA * this->dd_airterminalOAInlet.AirTemp - CpAirZn * state.dataLoopNodes->Node(ZoneNodeNum).Temp);
 
-            QOALoadToHeatSP = this->dd_airterminalOAInlet.AirMassFlowRate * (CpAirSysOA * this->dd_airterminalOAInlet.AirTemp -
-                                                                             CpAirZn * state.dataHeatBalFanSys->ZoneThermostatSetPointLo(ZoneNum));
-            QOALoadToCoolSP = this->dd_airterminalOAInlet.AirMassFlowRate * (CpAirSysOA * this->dd_airterminalOAInlet.AirTemp -
-                                                                             CpAirZn * state.dataHeatBalFanSys->ZoneThermostatSetPointHi(ZoneNum));
+            auto const &zoneTstatSetpt = state.dataHeatBalFanSys->zoneTstatSetpts(ZoneNum);
+            QOALoadToHeatSP =
+                this->dd_airterminalOAInlet.AirMassFlowRate * (CpAirSysOA * this->dd_airterminalOAInlet.AirTemp - CpAirZn * zoneTstatSetpt.setptLo);
+            QOALoadToCoolSP =
+                this->dd_airterminalOAInlet.AirMassFlowRate * (CpAirSysOA * this->dd_airterminalOAInlet.AirTemp - CpAirZn * zoneTstatSetpt.setptHi);
 
         } else {
             QOALoad = 0.0;
@@ -1547,7 +1555,7 @@ namespace DualDuct {
 
         // Find the Max Box Flow Rate.
         MassFlowMax = this->dd_airterminalOAInlet.AirMassFlowRateMaxAvail + this->dd_airterminalRecircAirInlet.AirMassFlowRateMaxAvail;
-        if (ScheduleManager::GetCurrentScheduleValue(state, this->SchedPtr) > 0.0) {
+        if (this->availSched->getCurrentVal() > 0.0) {
             TotMassFlow = this->dd_airterminalOAInlet.AirMassFlowRate + this->dd_airterminalRecircAirInlet.AirMassFlowRate;
         } else {
             TotMassFlow = 0.0;
@@ -1654,7 +1662,9 @@ namespace DualDuct {
         if (AirLoopNum > 0) {
             AirLoopOAFrac = state.dataAirLoop->AirLoopFlow(AirLoopNum).OAFrac;
             // If no additional input from user, RETURN from subroutine
-            if (this->NoOAFlowInputFromUser) return;
+            if (this->NoOAFlowInputFromUser) {
+                return;
+            }
             // Calculate outdoor air flow rate, zone multipliers are applied in GetInput
             if (AirLoopOAFrac > 0.0) {
                 bool constexpr UseMinOASchFlag(true); // Always use min OA schedule in calculations.
@@ -1700,7 +1710,9 @@ namespace DualDuct {
             ShowSevereError(
                 state,
                 format("CalcOAOnlyMassFlow: Problem in AirTerminal:DualDuct:VAV:OutdoorAir = {}, check outdoor air specification", this->Name));
-            if (present(MaxOAVolFlow)) MaxOAVolFlow = 0.0;
+            if (present(MaxOAVolFlow)) {
+                MaxOAVolFlow = 0.0;
+            }
             return;
         }
 
@@ -1857,9 +1869,10 @@ namespace DualDuct {
             "! <Dual Duct Damper>,<Dual Duct Damper Count>,<Dual Duct Damper Name>,<Inlet Node>,<Outlet Node>,<Inlet "
             "Node Type>,<AirLoopHVAC Name>");
 
-        if (!allocated(state.dataDualDuct->dd_airterminal))
+        if (!allocated(state.dataDualDuct->dd_airterminal)) {
             return; // Autodesk Bug: Can arrive here with Damper unallocated (SimulateDualDuct not yet called) with NumDDAirTerminal either set >0 or
-                    // uninitialized
+        }
+        // uninitialized
 
         // Report Dual Duct Dampers to BND File
         print(state.files.bnd, "{}\n", "! ===============================================================");
@@ -1877,20 +1890,28 @@ namespace DualDuct {
                 Found = 0;
                 for (int Count3 = 1; Count3 <= state.dataZoneEquip->SupplyAirPath(Count2).NumOutletNodes; ++Count3) {
                     if (state.dataDualDuct->dd_airterminal(Count1).HotAirInletNodeNum ==
-                        state.dataZoneEquip->SupplyAirPath(Count2).OutletNode(Count3))
+                        state.dataZoneEquip->SupplyAirPath(Count2).OutletNode(Count3)) {
                         Found = Count3;
+                    }
                     if (state.dataDualDuct->dd_airterminal(Count1).ColdAirInletNodeNum ==
-                        state.dataZoneEquip->SupplyAirPath(Count2).OutletNode(Count3))
+                        state.dataZoneEquip->SupplyAirPath(Count2).OutletNode(Count3)) {
                         Found = Count3;
-                    if (state.dataDualDuct->dd_airterminal(Count1).OAInletNodeNum == state.dataZoneEquip->SupplyAirPath(Count2).OutletNode(Count3))
+                    }
+                    if (state.dataDualDuct->dd_airterminal(Count1).OAInletNodeNum == state.dataZoneEquip->SupplyAirPath(Count2).OutletNode(Count3)) {
                         Found = Count3;
+                    }
                     if (state.dataDualDuct->dd_airterminal(Count1).RecircAirInletNodeNum ==
-                        state.dataZoneEquip->SupplyAirPath(Count2).OutletNode(Count3))
+                        state.dataZoneEquip->SupplyAirPath(Count2).OutletNode(Count3)) {
                         Found = Count3;
+                    }
                 }
-                if (Found != 0) break;
+                if (Found != 0) {
+                    break;
+                }
             }
-            if (Found == 0) SupplyAirPathNum = 0;
+            if (Found == 0) {
+                SupplyAirPathNum = 0;
+            }
 
             // Determine which air loop this dual duct damper is connected to
             Found = 0;
@@ -1901,26 +1922,35 @@ namespace DualDuct {
                 for (int Count3 = 1; Count3 <= state.dataAirLoop->AirToZoneNodeInfo(Count2).NumSupplyNodes; ++Count3) {
                     if (SupplyAirPathNum != 0) {
                         if (state.dataZoneEquip->SupplyAirPath(SupplyAirPathNum).InletNodeNum ==
-                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3))
+                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3)) {
                             Found = Count3;
+                        }
                     } else {
                         if (state.dataDualDuct->dd_airterminal(Count1).HotAirInletNodeNum ==
-                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3))
+                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3)) {
                             Found = Count3;
+                        }
                         if (state.dataDualDuct->dd_airterminal(Count1).ColdAirInletNodeNum ==
-                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3))
+                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3)) {
                             Found = Count3;
+                        }
                         if (state.dataDualDuct->dd_airterminal(Count1).OAInletNodeNum ==
-                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3))
+                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3)) {
                             Found = Count3;
+                        }
                         if (state.dataDualDuct->dd_airterminal(Count1).RecircAirInletNodeNum ==
-                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3))
+                            state.dataAirLoop->AirToZoneNodeInfo(Count2).ZoneEquipSupplyNodeNum(Count3)) {
                             Found = Count3;
+                        }
                     }
                 }
-                if (Found != 0) break;
+                if (Found != 0) {
+                    break;
+                }
             }
-            if (Found == 0) ChrName = "**Unknown**";
+            if (Found == 0) {
+                ChrName = "**Unknown**";
+            }
 
             std::string_view damperType = cmoNameArray[static_cast<int>(state.dataDualDuct->dd_airterminal(Count1).DamperType)];
             if ((state.dataDualDuct->dd_airterminal(Count1).DamperType == DualDuctDamper::ConstantVolume) ||
@@ -2032,6 +2062,41 @@ namespace DualDuct {
             this->OutdoorAirFlowRate =
                 (this->dd_airterminalOutlet.AirMassFlowRate / state.dataEnvrn->StdRhoAir) * state.dataAirLoop->AirLoopFlow(this->AirLoopNum).OAFrac;
         }
+    }
+
+    void DualDuctAirTerminal::reportTerminalUnit(EnergyPlusData &state)
+    {
+        // populate the predefined equipment summary report related to air terminals
+        auto &orp = state.dataOutRptPredefined;
+        auto &adu = state.dataDefineEquipment->AirDistUnit(this->ADUNum);
+        if (!state.dataSize->TermUnitFinalZoneSizing.empty()) {
+            auto &sizing = state.dataSize->TermUnitFinalZoneSizing(adu.TermUnitSizingNum);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermMinFlow, adu.Name, sizing.DesCoolVolFlowMin);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermMinOutdoorFlow, adu.Name, sizing.MinOA);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermSupCoolingSP, adu.Name, sizing.CoolDesTemp);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermSupHeatingSP, adu.Name, sizing.HeatDesTemp);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermHeatingCap, adu.Name, sizing.DesHeatLoad);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermCoolingCap, adu.Name, sizing.DesCoolLoad);
+        }
+
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermTypeInp, adu.Name, dualDuctDamperNames[(int)this->DamperType]);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermPrimFlow, adu.Name, this->MaxAirVolFlowRate);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermSecdFlow, adu.Name, "n/a");
+        if (this->zoneTurndownMinAirFracSched != nullptr) {
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermMinFlowSch, adu.Name, this->zoneTurndownMinAirFracSched->Name);
+        } else {
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermMinFlowSch, adu.Name, "n/a");
+        }
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermMaxFlowReh, adu.Name, "n/a");
+        std::string schName = "n/a";
+        if (this->OARequirementsPtr > 0) {
+            schName = state.dataSize->OARequirements(this->OARequirementsPtr).oaFlowFracSched->Name;
+        }
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermMinOAflowSch, adu.Name, schName);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermHeatCoilType, adu.Name, "n/a");
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermCoolCoilType, adu.Name, "n/a");
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermFanType, adu.Name, "n/a");
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchAirTermFanName, adu.Name, "n/a");
     }
 
 } // namespace DualDuct

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -55,6 +55,7 @@
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/FluidProperties.hh>
 #include <EnergyPlus/PlantComponent.hh>
 
 namespace EnergyPlus {
@@ -101,17 +102,6 @@ namespace RefrigeratedCase {
         Num
     };
 
-    // Walk In Cooler Defrost type
-    enum class WalkinClrDefrostType
-    {
-        Invalid = -1,
-        Fluid,
-        Elec,
-        None,
-        OffCycle,
-        Num
-    };
-
     // Secondary loop parameters
     enum class SecFluidType
     {
@@ -153,8 +143,8 @@ namespace RefrigeratedCase {
     enum class CndsrFlowType : int
     {
         Invalid = -1,
-        VariableFlow,
-        ConstantFlow,
+        Variable,
+        Constant,
         Num
     };
 
@@ -280,12 +270,37 @@ namespace RefrigeratedCase {
         Num
     };
 
+    enum class CriticalType
+    {
+        Invalid = -1,
+        Subcritical,
+        Transcritical,
+        Num
+    };
+
+    enum class IntercoolerType
+    {
+        Invalid = -1,
+        None,
+        Flash,
+        ShellAndCoil,
+        Num
+    };
+
+    enum class TransSysType
+    {
+        Invalid = -1,
+        SingleStage,
+        TwoStage,
+        Num
+    };
+
     struct RefrigCaseData
     {
         std::string Name;                                             // Name of refrigerated display case
         std::string ZoneName;                                         // Zone or Location of Display Case
         int NumSysAttach = 0;                                         // Number of systems attached to case, error if /=1
-        int SchedPtr = 0;                                             // Index to the correct availability schedule
+        Sched::Schedule *availSched = nullptr;                        // Availability schedule
         int ZoneNodeNum = 0;                                          // Index to Zone Node
         int ActualZoneNum = 0;                                        // Index to Zone
         int ZoneRANode = 0;                                           // Node number of return node in zone
@@ -305,7 +320,7 @@ namespace RefrigeratedCase {
         Real64 OperatingFanPower = 0.0;                              // Operating power of refrigerated case fan [W/m]
         Real64 RatedLightingPower = 0.0;                             // Rated (consis w RateTotCapPerLength) power of refrigerated case lights [W/m]
         Real64 LightingPower = 0.0;                                  // Installed power of refrigerated case lights [W/m]
-        int LightingSchedPtr = 0;                                    // Index to the correct case lighting schedule
+        Sched::Schedule *lightingSched = nullptr;                    // case lighting schedule
         Real64 AntiSweatPower = 0.0;                                 // Rated power of refrigerated case anti-sweat heaters [W/m]
         Real64 MinimumASPower = 0.0;                                 // Minimum power output of case anti-sweat heaters [W/m]
         ASHtrCtrlType AntiSweatControlType = ASHtrCtrlType::Invalid; // Type of anti-sweat heater control:
@@ -314,30 +329,30 @@ namespace RefrigeratedCase {
         Real64 Height = 0.0;                                          // case height for AS heater with heat balance control
         RefCaseDefrostType defrostType = RefCaseDefrostType::Invalid; // Case defrost control type, Off-cycle,Timed,Hot-gas,Electric
         Real64 DefrostPower = 0.0;                                    // Rated power of refrigerated case defrost [W/m]
-        int DefrostSchedPtr = 0;                                      // Index to the correct defrost schedule
-        int DefrostDripDownSchedPtr = 0;                              // Index to the correct fail-safe schedule
+        Sched::Schedule *defrostSched = nullptr;                      // defrost schedule
+        Sched::Schedule *defrostDripDownSched = nullptr;              // correct fail-safe schedule
         Real64 Length = 0.0;                                          // Length of refrigerated case [m]
         Real64 Temperature = 0.0;                                     // Rated case temperature [C]
         Real64 RAFrac = 0.0;                                          // HVAC under case return air fraction [0-1]
-        int StockingSchedPtr = 0;                                     // Index to the correct product stocking schedule
+        Sched::Schedule *stockingSched = nullptr;                     // product stocking schedule
         Real64 LightingFractionToCase = 0.0;                          // Fraction of lighting energy that directly contributes to the
         // case cooling load. The remainder contributes to the zone load
         // (air heat balance).
         Real64 ASHeaterFractionToCase = 0.0; // Fraction of anti-sweat heater energy that results in a direct
         // heat load to the case. The remainder is a heating load
         // to the zone where the refrigerated case is located.
-        Real64 DesignSensCaseCredit = 0.0;  // Design sensible case credit applied to zone load
-        Real64 EvapTempDesign = 0.0;        // Design evaporator temperature
-        Real64 RefrigInventory = 0.0;       // Design refrigerant inventory [kg/m]
-        Real64 DesignRefrigInventory = 0.0; // Design refrigerant inventory [kg total for the case]
-        Real64 DesignRatedCap = 0.0;        // Design total case capacity=RatedTotCap*Length [W]
-        Real64 DesignLatentCap = 0.0;       // Design latent case capacity=DesignRAtedCap*LatentHeatRatio*RTF [W]
-        Real64 DesignDefrostCap = 0.0;      // Design defrost case capacity=DefrostPower*Length [W]
-        Real64 DesignLighting = 0.0;        // Design case lighting=LightingPower*Length [W]
-        Real64 DesignFanPower = 0.0;        // Design power of case fan=Operatingpower*Length [W]
-        Real64 StoredEnergy = 0.0;          // Cumulative Stored Energy not met by evaporator [J]
-        Real64 StoredEnergySaved = 0.0;     // Cumulative Stored Energy not met by evaporator [J]
-        int CaseCreditFracSchedPtr = 0;     // Index to the case credit reduction schedule
+        Real64 DesignSensCaseCredit = 0.0;              // Design sensible case credit applied to zone load
+        Real64 EvapTempDesign = 0.0;                    // Design evaporator temperature
+        Real64 RefrigInventory = 0.0;                   // Design refrigerant inventory [kg/m]
+        Real64 DesignRefrigInventory = 0.0;             // Design refrigerant inventory [kg total for the case]
+        Real64 DesignRatedCap = 0.0;                    // Design total case capacity=RatedTotCap*Length [W]
+        Real64 DesignLatentCap = 0.0;                   // Design latent case capacity=DesignRAtedCap*LatentHeatRatio*RTF [W]
+        Real64 DesignDefrostCap = 0.0;                  // Design defrost case capacity=DefrostPower*Length [W]
+        Real64 DesignLighting = 0.0;                    // Design case lighting=LightingPower*Length [W]
+        Real64 DesignFanPower = 0.0;                    // Design power of case fan=Operatingpower*Length [W]
+        Real64 StoredEnergy = 0.0;                      // Cumulative Stored Energy not met by evaporator [J]
+        Real64 StoredEnergySaved = 0.0;                 // Cumulative Stored Energy not met by evaporator [J]
+        Sched::Schedule *caseCreditFracSched = nullptr; // case credit reduction schedule
         // Report Variables
         Real64 TotalCoolingLoad = 0.0;         // Refrigerated case total cooling rate (W)
         Real64 TotalCoolingEnergy = 0.0;       // Refrigerated case total cooling energy (J)
@@ -456,7 +471,7 @@ namespace RefrigeratedCase {
         Real64 EvapPumpConsumption = 0.0;                         // Evaporative cooling water pump electric consumption (J)
         Real64 EvapWaterConsumpRate = 0.0;                        // Evaporative condenser water consumption rate (m3/s)
         Real64 EvapWaterConsumption = 0.0;                        // Evaporative condenser water consumption (m3)
-        int EvapSchedPtr = 0;                                     // Index to the correct evap condenser availability schedule
+        Sched::Schedule *evapAvailSched = nullptr;                // evap condenser availability schedule
         Real64 BasinHeaterPowerFTempDiff = 0.0;                   // Basin heater capacity per degree K below setpoint (W/K)
         Real64 BasinHeaterSetPointTemp = 2.0;                     // Setpoint temperature for basin heater operation (C)
         Real64 BasinHeaterPower = 0.0;                            // Power demand from basin heater (W)
@@ -481,35 +496,35 @@ namespace RefrigeratedCase {
         Real64 CondenserFanPower = 0.0;                           // Condenser fan power (W)
         int TotCondFTempPtr = 0;                                  // Index for condenser fan power modifier curve
         // (function of outdoor temperature)
-        Real64 ActualCondenserFanPower = 0.0;                 // Rack condenser fan power (W)
-        Real64 CondenserFanConsumption = 0.0;                 // Rack condenser fan electric consumption (J)
-        Real64 SensZoneCreditHeatRate = 0.0;                  // Rack sensible heating zone credit rate (W)
-        Real64 SensZoneCreditHeat = 0.0;                      // Rack sensible heating zone credit energy (J)
-        Real64 SensHVACCreditHeatRate = 0.0;                  // Rack sensible heating HVAC credit rate (W)
-        Real64 SensHVACCreditHeat = 0.0;                      // Rack sensible heating HVAC credit energy (J)
-        int EvapFreezeWarnIndex = 0;                          // Recurring freeze warning index
-        int NoFlowWarnIndex = 0;                              // No cooling water when needed warning index
-        int HighTempWarnIndex = 0;                            // Water outlet high temp warning index
-        int LowTempWarnIndex = 0;                             // Water outlet low temp warning index
-        int HighFlowWarnIndex = 0;                            // Water outlet high flow warning index
-        int HighInletWarnIndex = 0;                           // Water inlet high temp warning index
-        int InletNode = 0;                                    // Water-cooled condenser inlet node number
-        Real64 InletTemp = 0.0;                               // Water-cooling condenser inlet temperature (C)
-        int OutletNode = 0;                                   // Water-cooled condenser outlet node number
-        int PlantTypeOfNum = 0;                               // Water-cooled condenser plant equipment type
-        PlantLocation plantLoc;                               // Water-cooled condenser plant location
-        Real64 OutletTemp = 0.0;                              // Water-cooling condenser outlet temperature (C)
-        int OutletTempSchedPtr = 0;                           // Schedule pointer for condenser outlet temp setting
-        Real64 VolFlowRate = 0.0;                             // Water-cooled condenser volumetric flow rate (m3/s)
-        Real64 DesVolFlowRate = 0.0;                          // Water-cooled condenser design volumetric flow rate (m3/s)
-        Real64 MassFlowRate = 0.0;                            // Water-cooled condenser mass flow rate (kg/s)
-        Real64 CondLoad = 0.0;                                // Total condenser load (W)
-        Real64 CondEnergy = 0.0;                              // Condenser energy (J)
-        CndsrFlowType FlowType = CndsrFlowType::VariableFlow; // Water-cooled condenser loop flow type
-        Real64 VolFlowRateMax = 0.0;                          // Maximum condenser volumetric flow rate (m3/s)
-        Real64 MassFlowRateMax = 0.0;                         // Maximum condenser mass flow rate (kg/s)
-        Real64 InletTempMin = 10.0;                           // Minimum condenser water inlet temperature (C)
-        Real64 OutletTempMax = 55.0;                          // Maximum condenser water outlet temperature (C)
+        Real64 ActualCondenserFanPower = 0.0;             // Rack condenser fan power (W)
+        Real64 CondenserFanConsumption = 0.0;             // Rack condenser fan electric consumption (J)
+        Real64 SensZoneCreditHeatRate = 0.0;              // Rack sensible heating zone credit rate (W)
+        Real64 SensZoneCreditHeat = 0.0;                  // Rack sensible heating zone credit energy (J)
+        Real64 SensHVACCreditHeatRate = 0.0;              // Rack sensible heating HVAC credit rate (W)
+        Real64 SensHVACCreditHeat = 0.0;                  // Rack sensible heating HVAC credit energy (J)
+        int EvapFreezeWarnIndex = 0;                      // Recurring freeze warning index
+        int NoFlowWarnIndex = 0;                          // No cooling water when needed warning index
+        int HighTempWarnIndex = 0;                        // Water outlet high temp warning index
+        int LowTempWarnIndex = 0;                         // Water outlet low temp warning index
+        int HighFlowWarnIndex = 0;                        // Water outlet high flow warning index
+        int HighInletWarnIndex = 0;                       // Water inlet high temp warning index
+        int InletNode = 0;                                // Water-cooled condenser inlet node number
+        Real64 InletTemp = 0.0;                           // Water-cooling condenser inlet temperature (C)
+        int OutletNode = 0;                               // Water-cooled condenser outlet node number
+        int PlantTypeOfNum = 0;                           // Water-cooled condenser plant equipment type
+        PlantLocation plantLoc;                           // Water-cooled condenser plant location
+        Real64 OutletTemp = 0.0;                          // Water-cooling condenser outlet temperature (C)
+        Sched::Schedule *outletTempSched = nullptr;       // Schedule for condenser outlet temp setting
+        Real64 VolFlowRate = 0.0;                         // Water-cooled condenser volumetric flow rate (m3/s)
+        Real64 DesVolFlowRate = 0.0;                      // Water-cooled condenser design volumetric flow rate (m3/s)
+        Real64 MassFlowRate = 0.0;                        // Water-cooled condenser mass flow rate (kg/s)
+        Real64 CondLoad = 0.0;                            // Total condenser load (W)
+        Real64 CondEnergy = 0.0;                          // Condenser energy (J)
+        CndsrFlowType FlowType = CndsrFlowType::Variable; // Water-cooled condenser loop flow type
+        Real64 VolFlowRateMax = 0.0;                      // Maximum condenser volumetric flow rate (m3/s)
+        Real64 MassFlowRateMax = 0.0;                     // Maximum condenser mass flow rate (kg/s)
+        Real64 InletTempMin = 10.0;                       // Minimum condenser water inlet temperature (C)
+        Real64 OutletTempMax = 55.0;                      // Maximum condenser water outlet temperature (C)
         Real64 TotalCoolingLoad = 0.0;
         bool ShowCOPWarning = true;
 
@@ -554,8 +569,9 @@ namespace RefrigeratedCase {
 
     struct RefrigSystemData
     {
-        std::string Name;                    // Name of refrigeration system
-        std::string RefrigerantName;         // Name of refrigerant, must match name in FluidName
+        std::string Name;            // Name of refrigeration system
+        std::string RefrigerantName; // Name of refrigerant, must match name in FluidName
+        Fluid::RefrigProps *refrig = nullptr;
         std::string EndUseSubcategory;       // Used for reporting purposes
         bool SystemRejectHeatToZone = false; // Flag to show air-cooled condenser located inside zone
         bool CoilFlag = false;               // Flag to show if coil type load on system (even if below in a secondary)
@@ -570,13 +586,13 @@ namespace RefrigeratedCase {
         Array1D_int SubcoolerNum;            // Absolute Index of subcoolers (allocated NumSubcoolers)
         Array1D_int WalkInNum;               // absolute Index of walk ins (allocated NumWalkIns)
         CompressorSuctionPressureCtrl CompSuctControl = CompressorSuctionPressureCtrl::ConstantSuctionTemperature; // Index to suction control
-        int HiStageWarnIndex1 = 0; // Recurring warning index when hi stage compressors unable to meet coil loads
-        int HiStageWarnIndex2 = 0; // Recurring warning index when hi stage compressors unable to meet coil loads
-        int InsuffCapWarn = 0;     // Recurring warning index when refrigeration system unable to meet coil loads
-        int IntercoolerType = 0;   // Intercooler type (0=none, 1=flash intercooler, 2=shell-and-coil intercooler)
-        int NumCases = 0;          // Number of cases on this system
-        int NumCoils = 0;          // Number of cases on this system
-        int NumCompressors = 0;    // Number of compressors on this system for single-stage systems
+        int HiStageWarnIndex1 = 0;                                  // Recurring warning index when hi stage compressors unable to meet coil loads
+        int HiStageWarnIndex2 = 0;                                  // Recurring warning index when hi stage compressors unable to meet coil loads
+        int InsuffCapWarn = 0;                                      // Recurring warning index when refrigeration system unable to meet coil loads
+        IntercoolerType intercoolerType = IntercoolerType::Invalid; // Intercooler type (0=none, 1=flash intercooler, 2=shell-and-coil intercooler)
+        int NumCases = 0;                                           // Number of cases on this system
+        int NumCoils = 0;                                           // Number of cases on this system
+        int NumCompressors = 0;                                     // Number of compressors on this system for single-stage systems
         // or number of low-stage compressors on this system for two-stage systems
         int NumCondensers = 1;         // Number of condensers on this system
         int NumGasCoolers = 0;         // Number of gas coolers on this system
@@ -589,7 +605,6 @@ namespace RefrigeratedCase {
         int NumNonCascadeLoads = 0;    // Sum of NumCases, NumWalk-Ins, NumCoils, and NumSecondarys
         int NumCascadeLoads = 0;       // Number of cascade condensers cooled by this system
         int NumTransferLoads = 0;      // Sum of NumCascadeLoads and NumSecondarys
-        int RefIndex = 0;              // Index number of refrigerant, automatically assigned on first call to fluid property
         //   and used thereafter
         int SuctionPipeActualZoneNum = 0;      // ID number for zone where suction pipes gain heat
         int SuctionPipeZoneNodeNum = 0;        // ID number for zone node where suction pipes gain heat
@@ -699,6 +714,8 @@ namespace RefrigeratedCase {
         std::string Name;            // Name of transcritical CO2 refrigeration system
         std::string RefrigerantName; // Name of refrigerant, must match name in FluidName
         //    (see fluidpropertiesrefdata.idf)
+        Fluid::RefrigProps *refrig = nullptr;
+
         std::string EndUseSubcategory;       // Used for reporting purposes
         bool SystemRejectHeatToZone = false; // Flag to show air-cooled gas cooler located inside zone
         Array1D_int CaseNumMT;               // absolute Index of medium temperature cases (allocated NumCasesMT)
@@ -715,87 +732,86 @@ namespace RefrigeratedCase {
         int NumGasCoolers = 1;               // Number of gas coolers on this system
         int NumWalkInsLT = 0;                // Number of low temperature walk in coolers on this system
         int NumWalkInsMT = 0;                // Number of medium temperature walk in coolers on this system
-        int RefIndex = 0;                    // Index number of refrigerant, automatically assigned on first call to fluid property
         //   and used thereafter
-        int SuctionPipeActualZoneNumMT = 0;     // ID number for zone where medium temperature suction pipes gain heat
-        int SuctionPipeZoneNodeNumMT = 0;       // ID number for zone node where medium temperature suction pipes gain heat
-        int SuctionPipeActualZoneNumLT = 0;     // ID number for zone where medium temperature suction pipes gain heat
-        int SuctionPipeZoneNodeNumLT = 0;       // ID number for zone node where medium temperature suction pipes gain heat
-        int TransSysType = 0;                   // Transcritical refrigeration system type: SingleStage = 1, TwoStage=2
-        Real64 AverageCompressorCOP = 0.0;      // Average COP for compressors on this system (W)
-        Real64 CpSatLiqCond = 0.0;              // Spec Heat of sat liquid at condensing pressure  (J/kg-C)
-        Real64 CpSatVapEvapMT = 0.0;            // Spec Heat of saturated vapor exiting medium temperature evaporator (J/kg-C)
-        Real64 CpSatVapEvapLT = 0.0;            // Spec Heat of saturated vapor exiting low temperature evaporator (J/kg-C)
-        Real64 CpSatLiqReceiver = 0.0;          // Spec Heat of saturated liquid in receiver (J/kg-C)
-        Real64 DelHSubcoolerDis = 0.0;          // Change in enthalpy across subcooler, hot side (J/kg)
-        Real64 DelHSubcoolerSuc = 0.0;          // Change in enthalpy across subcooler, cold side (J/kg)
-        Real64 HCaseInMT = 0.0;                 // Medium temperature case inlet enthalpy (after subcoolers and pipe P drops) (J/kg)
-        Real64 HCaseInLT = 0.0;                 // Low temperature case inlet enthalpy (after pipe P drops) (J/kg)
-        Real64 HCompInHP = 0.0;                 // High pressure compressor inlet enthalpy  (J/kg)
-        Real64 HCompInLP = 0.0;                 // Low pressure compressor inlet enthalpy  (J/kg)
-        Real64 HCompOutHP = 0.0;                // High pressure compressor outlet enthalpy (J/kg)
-        Real64 HCompOutLP = 0.0;                // Low pressure compressor outlet enthalpy (J/kg)
-        Real64 HSatLiqCond = 0.0;               // Enthalpy of sat liquid at condensing pressure  (J/kg)
-        Real64 HSatLiqReceiver = 0.0;           // Enthalpy of sat liquid in receiver (J/kg)
-        Real64 HCaseOutMT = 0.0;                // Enthalpy of refrigerant leaving medium temperature cases, after superheat (J/kg)
-        Real64 HCaseOutLT = 0.0;                // Enthalpy of refrigerant leaving low temperature cases, after superheat (J/kg)
-        Real64 NetHeatRejectLoad = 0.0;         // Portion of TotalCondenser load due to this system (after heat recovery) W
-        Real64 NetHeatRejectEnergy = 0.0;       // Portion of TotalCondenser energy due to this system (after heat recovery) J
-        Real64 PipeHeatLoadMT = 0.0;            // Total medium temperature suction pipe heat gains, optional (W)
-        Real64 PipeHeatLoadLT = 0.0;            // Total low temperature suction pipe heat gains, optional (W)
-        Real64 PipeHeatEnergy = 0.0;            // Total suction pipe heat gains, optional (J)
-        Real64 PipeHeatEnergyMT = 0.0;          // Total medium temperature suction pipe heat gains, optional (J)
-        Real64 PipeHeatEnergyLT = 0.0;          // Total low temperature suction pipe heat gains, optional (J)
-        Real64 RefMassFlowtoMTLoads = 0.0;      // Refrigerant mass flow through medium temperature cases(kg/s)
-        Real64 RefMassFlowtoLTLoads = 0.0;      // Refrigerant mass flow through low temperature cases(kg/s)
-        Real64 RefMassFlowCompsHP = 0.0;        // Total system refrigerant mass flow through high pressue compressors(kg/s)
-        Real64 RefMassFlowCompsLP = 0.0;        // Total system refrigerant mass flow through low pressue compressors(kg/s)
-        Real64 RefMassFlowComps = 0.0;          // Total system refrigerant mass flow through all compressors (kg/s)
-        Real64 RefMassFlowReceiverBypass = 0.0; // Refrigerant mass flow through receiver bypass (kg/s)
-        Real64 RefInventory = 0.0;              // Approximate refrigerant inventory entered by user (kg)
-        Real64 SCEffectiveness = 0.0;           // Heat exchanger effectiveness of the subcooler
-        Real64 SumUASuctionPipingMT = 0.0;      // Sum of U*A for medium temperature suction piping (W/C)
-        Real64 SumUASuctionPipingLT = 0.0;      // Sum of U*A for low temperature suction piping (W/C)
-        Real64 TCaseOutMT = 0.0;                // Medium temperature case out temperature including case superheat (C)
-        Real64 TCaseOutLT = 0.0;                // Low temperature case out temperature including case superheat (C)
-        Real64 TCondense = 0.0;                 // Condensing temperature (Tsat for P discharge) (C)
-        Real64 TReceiver = 0.0;                 // Temperature in receiver (Tsat for P receiver) (C)
-        Real64 PReceiver = 0.0;                 // Pressure in receiver (Psat for T receiver) (C)
-        Real64 TCompInHP = 0.0;                 // High pressure compressor inlet temperature (after case and LSHX superheat and pipe delta P) (C)
-        Real64 TCompInLP = 0.0;                 // Low pressure compressor inlet temperature (after case and pipe delta P) (C)
-        Real64 TCondenseMin = 0.0;              // Minimum allowed condensing temperature (C)
-        Real64 TEvapDesignMT = 0.0;             // Min (on sys) design medium temperature case/walkin/secondary evap temp
-        Real64 TEvapDesignLT = 0.0;             // Min (on sys) design low temperature case/walkin/secondary evap temp
-        Real64 TEvapNeededMT = 0.0;             // Max MT Case evap temperature to maintain lowest case T on system (C)
-        Real64 TEvapNeededLT = 0.0;             // Max LT Case evap temperature to maintain lowest case T on system (C)
-        Real64 TLiqInActual = 0.0;              // Actual liquid temperature entering TXV after subcooling (C)
-        Real64 TotalCondDefrostCredit = 0.0;    // sum of heat reclaimed for hot gas and hot brine defrost for cases/WI served directly [W]
-        Real64 TotalCoolingEnergy = 0.0;        // Total energy of all refrigerated cases and walkins served directly (J)
-        Real64 TotalCoolingEnergyMT = 0.0;      // Total energy of all medium temperature refrigerated cases and walkins served directly (J)
-        Real64 TotalCoolingEnergyLT = 0.0;      // Total energy of all low temperature refrigerated cases and walkins served directly (J)
-        Real64 TotalCoolingLoadMT = 0.0;        // Total medium temperature load of all refrigerated cases and walkins served directly (W)
-        Real64 TotalCoolingLoadLT = 0.0;        // Total low temperature load of all refrigerated cases and walkins served directly (W)
-        Real64 TotalSystemLoad = 0.0;           // Sum of MT and LT loads, W
-        Real64 TotalSystemLoadMT = 0.0;         // Includes medium temperature cases and walk-ins, W
-        Real64 TotalSystemLoadLT = 0.0;         // Includes low temperature cases and walk-ins, W
-        Real64 TotCompPowerHP = 0.0;            // Total power for high pressure compressors on this system (W)
-        Real64 TotCompPowerLP = 0.0;            // Total power for low pressure compressors on this system (W)
-        Real64 TotCompElecConsump = 0.0;        // Total Elec consump for compressors on this system (J)
-        Real64 TotCompElecConsumpHP = 0.0;      // Total Elec consumption for high pressure compressors on this system (J)
-        Real64 TotCompElecConsumpLP = 0.0;      // Total Elec consumption for low pressure compressors on this system (J)
-        Real64 TotCompCapacity = 0.0;           // Sum of HP and LP compressor capacity (W)
-        Real64 TotCompCapacityHP = 0.0;         // Total design capacity for high pressure compressors on this system (W)
-        Real64 TotCompCapacityLP = 0.0;         // Total design capacity for low pressure compressors on this system (W)
-        Real64 TotCompCoolingEnergy = 0.0;      // Total cooling energy from compressors on this system (J)
-        Real64 TotCompCoolingEnergyHP = 0.0;    // Total cooling energy from high pressure compressors on this system (J)
-        Real64 TotCompCoolingEnergyLP = 0.0;    // Total cooling energy from low pressure compressors on this system (J)
-        Real64 TotRejectHeatRecovered = 0.0;    // Total reject heat recovered for hot gas or hot brine defrost (W)
-        Real64 UnmetEnergy = 0.0;               // Accumulative loads unmet by the LP and HP compressors on this system (J)
-        Real64 UnmetEnergyMT = 0.0;             // Accumulative loads unmet by total HP compressors on this system (J)
-        Real64 UnmetEnergyLT = 0.0;             // Accumulative loads unmet by total LP compressors on this system (J)
-        Real64 UnmetEnergySaved = 0.0;          // Accumulative loads unmet by the LP and HP compressors on this system (J)
-        Real64 UnmetEnergySavedMT = 0.0;        // Accumulative loads unmet by total HP compressors on this system (J)
-        Real64 UnmetEnergySavedLT = 0.0;        // Accumulative loads unmet by total LP compressors on this system (J)
+        int SuctionPipeActualZoneNumMT = 0;                // ID number for zone where medium temperature suction pipes gain heat
+        int SuctionPipeZoneNodeNumMT = 0;                  // ID number for zone node where medium temperature suction pipes gain heat
+        int SuctionPipeActualZoneNumLT = 0;                // ID number for zone where medium temperature suction pipes gain heat
+        int SuctionPipeZoneNodeNumLT = 0;                  // ID number for zone node where medium temperature suction pipes gain heat
+        TransSysType transSysType = TransSysType::Invalid; // Transcritical refrigeration system type: SingleStage, TwoStage
+        Real64 AverageCompressorCOP = 0.0;                 // Average COP for compressors on this system (W)
+        Real64 CpSatLiqCond = 0.0;                         // Spec Heat of sat liquid at condensing pressure  (J/kg-C)
+        Real64 CpSatVapEvapMT = 0.0;                       // Spec Heat of saturated vapor exiting medium temperature evaporator (J/kg-C)
+        Real64 CpSatVapEvapLT = 0.0;                       // Spec Heat of saturated vapor exiting low temperature evaporator (J/kg-C)
+        Real64 CpSatLiqReceiver = 0.0;                     // Spec Heat of saturated liquid in receiver (J/kg-C)
+        Real64 DelHSubcoolerDis = 0.0;                     // Change in enthalpy across subcooler, hot side (J/kg)
+        Real64 DelHSubcoolerSuc = 0.0;                     // Change in enthalpy across subcooler, cold side (J/kg)
+        Real64 HCaseInMT = 0.0;                            // Medium temperature case inlet enthalpy (after subcoolers and pipe P drops) (J/kg)
+        Real64 HCaseInLT = 0.0;                            // Low temperature case inlet enthalpy (after pipe P drops) (J/kg)
+        Real64 HCompInHP = 0.0;                            // High pressure compressor inlet enthalpy  (J/kg)
+        Real64 HCompInLP = 0.0;                            // Low pressure compressor inlet enthalpy  (J/kg)
+        Real64 HCompOutHP = 0.0;                           // High pressure compressor outlet enthalpy (J/kg)
+        Real64 HCompOutLP = 0.0;                           // Low pressure compressor outlet enthalpy (J/kg)
+        Real64 HSatLiqCond = 0.0;                          // Enthalpy of sat liquid at condensing pressure  (J/kg)
+        Real64 HSatLiqReceiver = 0.0;                      // Enthalpy of sat liquid in receiver (J/kg)
+        Real64 HCaseOutMT = 0.0;                           // Enthalpy of refrigerant leaving medium temperature cases, after superheat (J/kg)
+        Real64 HCaseOutLT = 0.0;                           // Enthalpy of refrigerant leaving low temperature cases, after superheat (J/kg)
+        Real64 NetHeatRejectLoad = 0.0;                    // Portion of TotalCondenser load due to this system (after heat recovery) W
+        Real64 NetHeatRejectEnergy = 0.0;                  // Portion of TotalCondenser energy due to this system (after heat recovery) J
+        Real64 PipeHeatLoadMT = 0.0;                       // Total medium temperature suction pipe heat gains, optional (W)
+        Real64 PipeHeatLoadLT = 0.0;                       // Total low temperature suction pipe heat gains, optional (W)
+        Real64 PipeHeatEnergy = 0.0;                       // Total suction pipe heat gains, optional (J)
+        Real64 PipeHeatEnergyMT = 0.0;                     // Total medium temperature suction pipe heat gains, optional (J)
+        Real64 PipeHeatEnergyLT = 0.0;                     // Total low temperature suction pipe heat gains, optional (J)
+        Real64 RefMassFlowtoMTLoads = 0.0;                 // Refrigerant mass flow through medium temperature cases(kg/s)
+        Real64 RefMassFlowtoLTLoads = 0.0;                 // Refrigerant mass flow through low temperature cases(kg/s)
+        Real64 RefMassFlowCompsHP = 0.0;                   // Total system refrigerant mass flow through high pressue compressors(kg/s)
+        Real64 RefMassFlowCompsLP = 0.0;                   // Total system refrigerant mass flow through low pressue compressors(kg/s)
+        Real64 RefMassFlowComps = 0.0;                     // Total system refrigerant mass flow through all compressors (kg/s)
+        Real64 RefMassFlowReceiverBypass = 0.0;            // Refrigerant mass flow through receiver bypass (kg/s)
+        Real64 RefInventory = 0.0;                         // Approximate refrigerant inventory entered by user (kg)
+        Real64 SCEffectiveness = 0.0;                      // Heat exchanger effectiveness of the subcooler
+        Real64 SumUASuctionPipingMT = 0.0;                 // Sum of U*A for medium temperature suction piping (W/C)
+        Real64 SumUASuctionPipingLT = 0.0;                 // Sum of U*A for low temperature suction piping (W/C)
+        Real64 TCaseOutMT = 0.0;                           // Medium temperature case out temperature including case superheat (C)
+        Real64 TCaseOutLT = 0.0;                           // Low temperature case out temperature including case superheat (C)
+        Real64 TCondense = 0.0;                            // Condensing temperature (Tsat for P discharge) (C)
+        Real64 TReceiver = 0.0;                            // Temperature in receiver (Tsat for P receiver) (C)
+        Real64 PReceiver = 0.0;                            // Pressure in receiver (Psat for T receiver) (C)
+        Real64 TCompInHP = 0.0;              // High pressure compressor inlet temperature (after case and LSHX superheat and pipe delta P) (C)
+        Real64 TCompInLP = 0.0;              // Low pressure compressor inlet temperature (after case and pipe delta P) (C)
+        Real64 TCondenseMin = 0.0;           // Minimum allowed condensing temperature (C)
+        Real64 TEvapDesignMT = 0.0;          // Min (on sys) design medium temperature case/walkin/secondary evap temp
+        Real64 TEvapDesignLT = 0.0;          // Min (on sys) design low temperature case/walkin/secondary evap temp
+        Real64 TEvapNeededMT = 0.0;          // Max MT Case evap temperature to maintain lowest case T on system (C)
+        Real64 TEvapNeededLT = 0.0;          // Max LT Case evap temperature to maintain lowest case T on system (C)
+        Real64 TLiqInActual = 0.0;           // Actual liquid temperature entering TXV after subcooling (C)
+        Real64 TotalCondDefrostCredit = 0.0; // sum of heat reclaimed for hot gas and hot brine defrost for cases/WI served directly [W]
+        Real64 TotalCoolingEnergy = 0.0;     // Total energy of all refrigerated cases and walkins served directly (J)
+        Real64 TotalCoolingEnergyMT = 0.0;   // Total energy of all medium temperature refrigerated cases and walkins served directly (J)
+        Real64 TotalCoolingEnergyLT = 0.0;   // Total energy of all low temperature refrigerated cases and walkins served directly (J)
+        Real64 TotalCoolingLoadMT = 0.0;     // Total medium temperature load of all refrigerated cases and walkins served directly (W)
+        Real64 TotalCoolingLoadLT = 0.0;     // Total low temperature load of all refrigerated cases and walkins served directly (W)
+        Real64 TotalSystemLoad = 0.0;        // Sum of MT and LT loads, W
+        Real64 TotalSystemLoadMT = 0.0;      // Includes medium temperature cases and walk-ins, W
+        Real64 TotalSystemLoadLT = 0.0;      // Includes low temperature cases and walk-ins, W
+        Real64 TotCompPowerHP = 0.0;         // Total power for high pressure compressors on this system (W)
+        Real64 TotCompPowerLP = 0.0;         // Total power for low pressure compressors on this system (W)
+        Real64 TotCompElecConsump = 0.0;     // Total Elec consump for compressors on this system (J)
+        Real64 TotCompElecConsumpHP = 0.0;   // Total Elec consumption for high pressure compressors on this system (J)
+        Real64 TotCompElecConsumpLP = 0.0;   // Total Elec consumption for low pressure compressors on this system (J)
+        Real64 TotCompCapacity = 0.0;        // Sum of HP and LP compressor capacity (W)
+        Real64 TotCompCapacityHP = 0.0;      // Total design capacity for high pressure compressors on this system (W)
+        Real64 TotCompCapacityLP = 0.0;      // Total design capacity for low pressure compressors on this system (W)
+        Real64 TotCompCoolingEnergy = 0.0;   // Total cooling energy from compressors on this system (J)
+        Real64 TotCompCoolingEnergyHP = 0.0; // Total cooling energy from high pressure compressors on this system (J)
+        Real64 TotCompCoolingEnergyLP = 0.0; // Total cooling energy from low pressure compressors on this system (J)
+        Real64 TotRejectHeatRecovered = 0.0; // Total reject heat recovered for hot gas or hot brine defrost (W)
+        Real64 UnmetEnergy = 0.0;            // Accumulative loads unmet by the LP and HP compressors on this system (J)
+        Real64 UnmetEnergyMT = 0.0;          // Accumulative loads unmet by total HP compressors on this system (J)
+        Real64 UnmetEnergyLT = 0.0;          // Accumulative loads unmet by total LP compressors on this system (J)
+        Real64 UnmetEnergySaved = 0.0;       // Accumulative loads unmet by the LP and HP compressors on this system (J)
+        Real64 UnmetEnergySavedMT = 0.0;     // Accumulative loads unmet by total HP compressors on this system (J)
+        Real64 UnmetEnergySavedLT = 0.0;     // Accumulative loads unmet by total LP compressors on this system (J)
 
         // Reset Initialization Values to Zeros
         void reset_init()
@@ -850,7 +866,7 @@ namespace RefrigeratedCase {
         int NumSysAttach = 0;                      // Number of systems attached to condenser, error if /=1
         DataHeatBalance::RefrigCondenserType CondenserType = DataHeatBalance::RefrigCondenserType::Invalid; // Specifies cooling mode for condenser
         int EvapFreezeWarnIndex = 0;                                                                        // Recurring freeze warning index
-        CndsrFlowType FlowType = CndsrFlowType::VariableFlow;                                               // Water-cooled condenser loop flow type
+        CndsrFlowType FlowType = CndsrFlowType::Variable;                                                   // Water-cooled condenser loop flow type
         int CondCreditWarnIndex1 = 0;                                                                       // Used to count warnings
         int CondCreditWarnIndex2 = 0;                                                                       // Used to count warnings
         int CondCreditWarnIndex3 = 0;                                                                       // Used to count warnings
@@ -864,14 +880,14 @@ namespace RefrigeratedCase {
         int HighFlowWarnIndex = 0;                                        // Water outlet high flow warning index
         int HighInletWarnIndex = 0;                                       // Water inlet high temp warning index
         int InletNode = 0;                                                // Water-cooled condenser inlet node number
-        int EvapSchedPtr = 0;                                             // Index to the correct evap condenser availability schedule
+        Sched::Schedule *evapAvailSched = nullptr;                        // Evap condenser availability schedule
         WaterSupply EvapWaterSupplyMode = WaterSupply::FromMains;         // Source of water for evap condenser cooling
         int EvapWaterSupTankID = 0;                                       // TankID when evap condenser uses water from storage tank
         int EvapWaterTankDemandARRID = 0;                                 // Demand index when evap condenser uses water from storage tank
         int OutletNode = 0;                                               // Water-cooled condenser outlet node number
         int PlantTypeOfNum = 0;                                           // Water-cooled condenser plant equipment type
         PlantLocation plantLoc;                                           // Water-cooled condenser plant location
-        int OutletTempSchedPtr = 0;                                       // Schedule pointer for condenser outlet temp setting
+        Sched::Schedule *outletTempSched = nullptr;                       // Schedule for condenser outlet temp setting
         int InletAirNodeNum = 0;                                          // Inlet air node number, can be outside or in a zone
         int InletAirZoneNum = 0;                                          // Inlet air zone number, if located in a zone
         FanSpeedCtrlType FanSpeedControlType = FanSpeedCtrlType::Invalid; // fixed, two-speed, or variable
@@ -1087,9 +1103,11 @@ namespace RefrigeratedCase {
 
     struct SecondaryLoopData
     {
-        bool CoilFlag = false;                              // Flag to show if coil type load on secondary system
-        std::string Name;                                   // Name of refrigeration system
-        std::string FluidName;                              // Name of circulating fluid
+        bool CoilFlag = false; // Flag to show if coil type load on secondary system
+        std::string Name;      // Name of refrigeration system
+        std::string FluidName; // Name of circulating fluid
+        Fluid::GlycolProps *glycol = nullptr;
+        Fluid::RefrigProps *refrig = nullptr;
         std::string EndUseSubcategory;                      // Used for reporting purposes
         Array1D_int CaseNum;                                // Absolute Index of cases (dimensioned 1 to NumCases)
         Array1D_int CoilNum;                                // Absolute Index of coils (dimensioned 1 to NumCoils)
@@ -1098,7 +1116,6 @@ namespace RefrigeratedCase {
         int DistPipeZoneNodeNum = 0;                        // ID number for zone node where distribution pipe gain heat
         Real64 DistPipeZoneHeatGain = 0.0;                  // ! sensible heat gain rate to zone with pipe
         SecFluidType FluidType = SecFluidType::Invalid;     // Indicates whether fluid always liquid or undergoes phase change
-        int FluidID = 0;                                    // Numerical ID used for calls to properties subroutine
         int NumSysAttach = 0;                               // Used to check for non-unique and unused secondary loops
         int NumPumps = 0;                                   // Number of pumps (or pump stages) serving this system
         int NumCases = 0;                                   // Number of Cases served by this secondary loop
@@ -1183,29 +1200,29 @@ namespace RefrigeratedCase {
         std::string Name; // Name of walk in cooler
         Array1D_string ZoneName;
         // Names of zones exchanging energy with cooler
-        int CircFanSchedPtr = 0;                                          // Index to the correct availability schedule
-        int DefrostDripDownSchedPtr = 0;                                  // Index to the correct fail-safe schedule
-        int DefrostSchedPtr = 0;                                          // Index to the correct defrost schedule
-        DefrostCtrlType DefrostControlType = DefrostCtrlType::Invalid;    // WalkIn defrost control type, Timed,Frost level
-        WalkinClrDefrostType defrostType = WalkinClrDefrostType::Invalid; // WalkIn defrost type, Hot-gas,Electric, Hot-brine
-        int HeaterSchedPtr = 0;                                           // Index to the correct availability schedule
-        int LightingSchedPtr = 0;                                         // Index to the correct WalkIn lighting schedule
-        int NumSysAttach = 0;                                             // Number of systems attached to WalkIn, error if /=1
-        int NumZones = 0;                                                 // Number of zones exchanging energy with WalkIn
-        int SchedPtr = 0;                                                 // Index to the correct availability schedule
-        int StockingSchedPtr = 0;                                         // Index to the correct product stocking schedule
-        Array1D_int GlassDoorOpenSchedPtr;                                // Index to the door opening schedule
-        Array1D_int StockDoorOpenSchedPtr;                                // Index to the door opening schedule
-        Array1D<WIStockDoor> StockDoorProtectType;                        // Index to door protection type
-        Array1D_int ZoneNodeNum;                                          // Index to Zone Node
-        Array1D_int ZoneNum;                                              // Index to Zone
-        Real64 CircFanPower = 0.0;                                        // Operating power of  Walk In fan [W]
-        Real64 CoilFanPower = 0.0;                                        // Operating power of  Walk In evap coil fan [W]
-        Real64 IceTemp = 0.0;                                             // Temperature of Ice Mass [C]
-        Real64 IceTempSaved = 0.0;                                        // Temperature of Ice Mass [C]
-        Real64 DefrostCapacity = 0.0;                                     // Design defrost WalkIn capacity [W]
-        Real64 DeltaFreezeKgFrost = 0.0;                                  // Used to reverse accumulation if the zone/load time step is repeated (kg)
-        Real64 DefEnergyFraction = 0.0;                                   // Portion of defrost energy available to melt ice,
+        Sched::Schedule *circFanAvailSched = nullptr;                  // Index to the correct availability schedule
+        Sched::Schedule *defrostDripDownSched = nullptr;               // fail-safe schedule
+        Sched::Schedule *defrostSched = nullptr;                       // defrost schedule
+        DefrostCtrlType DefrostControlType = DefrostCtrlType::Invalid; // WalkIn defrost control type, Timed,Frost level
+        DefrostType defrostType = DefrostType::Invalid;                // WalkIn defrost type, Hot-gas,Electric, Hot-brine
+        Sched::Schedule *heaterSched = nullptr;                        // heater availability schedule
+        Sched::Schedule *lightingSched = nullptr;                      // walkIn lighting schedule
+        int NumSysAttach = 0;                                          // Number of systems attached to WalkIn, error if /=1
+        int NumZones = 0;                                              // Number of zones exchanging energy with WalkIn
+        Sched::Schedule *availSched = nullptr;                         // availability schedule
+        Sched::Schedule *stockingSched = nullptr;                      // product stocking schedule
+        Array1D<Sched::Schedule *> glassDoorOpenScheds;                // door opening schedule
+        Array1D<Sched::Schedule *> stockDoorOpenScheds;                // door opening schedule
+        Array1D<WIStockDoor> StockDoorProtectType;                     // Index to door protection type
+        Array1D_int ZoneNodeNum;                                       // Index to Zone Node
+        Array1D_int ZoneNum;                                           // Index to Zone
+        Real64 CircFanPower = 0.0;                                     // Operating power of  Walk In fan [W]
+        Real64 CoilFanPower = 0.0;                                     // Operating power of  Walk In evap coil fan [W]
+        Real64 IceTemp = 0.0;                                          // Temperature of Ice Mass [C]
+        Real64 IceTempSaved = 0.0;                                     // Temperature of Ice Mass [C]
+        Real64 DefrostCapacity = 0.0;                                  // Design defrost WalkIn capacity [W]
+        Real64 DeltaFreezeKgFrost = 0.0;                               // Used to reverse accumulation if the zone/load time step is repeated (kg)
+        Real64 DefEnergyFraction = 0.0;                                // Portion of defrost energy available to melt ice,
         //    used with fluid defrost with temp termination (dimensionless)
         Real64 DesignFanPower = 0.0;        // Design power of fans [W]
         Real64 DesignLighting = 0.0;        // Design  lighting (includes task and display lights)[W]
@@ -1313,16 +1330,16 @@ namespace RefrigeratedCase {
         bool SecStatusLast = false;                                    // Flag to show if this is the last coil on a particular secondary
         bool SysStatusFirst = false;                                   // Flag to show if this is the first coil on a particular primary
         bool SysStatusLast = false;                                    // Flag to show if this is the last coil on a particular primary
-        int CoilFanSchedPtr = 0;                                       // Index to the correct availability schedule
-        int DefrostDripDownSchedPtr = 0;                               // Index to the correct fail-safe schedule
-        int DefrostSchedPtr = 0;                                       // Index to the correct defrost schedule
+        Sched::Schedule *coilFanAvaildSched = nullptr;                 // availability schedule
+        Sched::Schedule *defrostDripDownSched = nullptr;               // fail-safe schedule
+        Sched::Schedule *defrostSched = nullptr;                       // defrost schedule
         DefrostCtrlType DefrostControlType = DefrostCtrlType::Invalid; // Coil defrost control type, Timed,Frost level
         DefrostType defrostType = DefrostType::Invalid;                // Coil defrost type, Hot-gas,Electric, Hot-brine
         FanSpeedCtrlType FanType = FanSpeedCtrlType::Invalid;          // Index to coil fan type (fixed, two-speed, etc.)
-        int HeaterSchedPtr = 0;                                        // Index to the correct availability schedule
+        Sched::Schedule *heaterAvailSched = nullptr;                   // availability schedule
         int NumSysAttach = 0;                                          // Number of refrigerating systems cooling this coil (error check purpose)
         RatingType ratingType = RatingType::Invalid;                   // Indicates which type of manufacturer's rating is used
-        int SchedPtr = 0;                                              // Index to the correct availability schedule
+        Sched::Schedule *availSched = nullptr;                         // availability schedule
         int SCIndex = 0;                                               // IDs which of European standard conditions is used for rating
         int SecServeID = 0;                                            // Index to the refrigeration system serving this coil
         SHRCorrectionType SHRCorrType = SHRCorrectionType::Invalid;    // Index to type of correction for sensible heat ratio
@@ -1426,13 +1443,13 @@ namespace RefrigeratedCase {
         Array1D_int CoilNum;  // ID number of Individual Chiller in set
         int ChillerSetID = 0; // ID number for this set of chillers (all serving one zone,
         //                       but can be chilled by multi systems)
-        int SchedPtr = 0;        // Schedule to take whole set off-line if needed
-        int NodeNumInlet = 0;    // Node ID Number of inlet for chiller set as a whole, not identified for specific coils
-        int NodeNumOutlet = 0;   // Node ID Number of outlet for chiller set as a whole, not identified for specific coils
-        int NumCoils = 0;        // Number of individual chillers in set
-        int ZoneNum = 0;         // ID number of zone where chiller set is located
-        int ZoneNodeNum = 0;     // ID number of zone node giving mixed conditions of zone where chiller set is located
-        Real64 QZnReqSens = 0.0; // Sensible heat needed by the zone to reach setpoint [W]
+        Sched::Schedule *availSched = nullptr; // Schedule to take whole set off-line if needed // availability?
+        int NodeNumInlet = 0;                  // Node ID Number of inlet for chiller set as a whole, not identified for specific coils
+        int NodeNumOutlet = 0;                 // Node ID Number of outlet for chiller set as a whole, not identified for specific coils
+        int NumCoils = 0;                      // Number of individual chillers in set
+        int ZoneNum = 0;                       // ID number of zone where chiller set is located
+        int ZoneNodeNum = 0;                   // ID number of zone node giving mixed conditions of zone where chiller set is located
+        Real64 QZnReqSens = 0.0;               // Sensible heat needed by the zone to reach setpoint [W]
 
         void CalculateAirChillerSets(EnergyPlusData &state);
     };
@@ -1625,6 +1642,14 @@ struct RefrigeratedCaseData : BaseGlobalStruct
     Real64 MyCurrentTimeSaved = 0.0;   // Used to determine whether the zone time step is a repetition
     Real64 MyStepStartTimeSaved = 0.0; // Used to determine whether the system time step is a repetition
     Real64 TimeStepFraction = 0.0;     // Used to calculate my current time
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

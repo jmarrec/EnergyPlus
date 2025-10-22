@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -68,7 +68,7 @@ using namespace FenestrationCommon;
 using namespace SpectralAveraging;
 using namespace MultiLayerOptics;
 
-namespace WindowManager {
+namespace Window {
 
     bool isSurfaceHit(EnergyPlusData &state, const int t_SurfNum, const Vector &t_Ray)
     {
@@ -82,8 +82,8 @@ namespace WindowManager {
         Real64 Phi = 0;
 
         // get window tilt and azimuth
-        Real64 Gamma = Constant::DegToRadians * state.dataSurface->Surface(t_SurfNum).Tilt;
-        Real64 Alpha = Constant::DegToRadians * state.dataSurface->Surface(t_SurfNum).Azimuth;
+        Real64 Gamma = Constant::DegToRad * state.dataSurface->Surface(t_SurfNum).Tilt;
+        Real64 Alpha = Constant::DegToRad * state.dataSurface->Surface(t_SurfNum).Azimuth;
 
         RayIdentificationType RadType = RayIdentificationType::Front_Incident;
 
@@ -122,7 +122,7 @@ namespace WindowManager {
         // Handles solar radiation spetrum from defalut location or IDF
         CSeries solarRadiation;
 
-        for (int i = 1; i <= state.dataWindowManager->nume; ++i) {
+        for (int i = 1; i <= nume; ++i) {
             solarRadiation.addProperty(state.dataWindowManager->wle[i - 1], state.dataWindowManager->e[i - 1]);
         }
 
@@ -143,7 +143,7 @@ namespace WindowManager {
         // Handles solar radiation spetrum from defalut location or IDF
         CSeries visibleResponse;
 
-        for (int i = 1; i <= state.dataWindowManager->numt3; ++i) {
+        for (int i = 1; i <= numt3; ++i) {
             visibleResponse.addProperty(state.dataWindowManager->wlt3[i - 1], state.dataWindowManager->y30[i - 1]);
         }
 
@@ -161,9 +161,12 @@ namespace WindowManager {
 
         // PURPOSE OF THIS SUBROUTINE:
         // Reads spectral data value
+
+        auto &s_mat = state.dataMaterial;
+
         assert(t_SampleDataPtr != 0); // It must not be called for zero value
         std::shared_ptr<CSpectralSampleData> aSampleData = std::make_shared<CSpectralSampleData>();
-        auto spectralData = state.dataHeatBal->SpectralData(t_SampleDataPtr); // (AUTO_OK_OBJ)
+        auto spectralData = s_mat->SpectralData(t_SampleDataPtr); // (AUTO_OK_OBJ)
         int numOfWl = spectralData.NumOfWavelengths;
         for (int i = 1; i <= numOfWl; ++i) {
             Real64 wl = spectralData.WaveLength(i);
@@ -177,7 +180,7 @@ namespace WindowManager {
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<CSpectralSampleData> CWCESpecturmProperties::getSpectralSample(Material::MaterialChild const &t_MaterialProperties)
+    std::shared_ptr<CSpectralSampleData> CWCESpecturmProperties::getSpectralSample(Material::MaterialGlass const &t_MaterialProperties)
     {
         Real64 Tsol = t_MaterialProperties.Trans;
         Real64 Rfsol = t_MaterialProperties.ReflectSolBeamFront;
@@ -262,6 +265,6 @@ namespace WindowManager {
         return it->second;
     }
 
-} // namespace WindowManager
+} // namespace Window
 
 } // namespace EnergyPlus

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -78,6 +78,8 @@ enum class TARCOGLayerType : int
     Num
 };
 
+extern const std::array<std::string_view, (int)TARCOGLayerType::Num> layerTypeNamesUC;
+
 //  Thermal models:
 enum class TARCOGThermalModel : int
 {
@@ -89,7 +91,9 @@ enum class TARCOGThermalModel : int
     Num
 };
 
-int constexpr YES_SupportPillar = 1;
+extern const std::array<std::string_view, (int)TARCOGThermalModel::Num> thermalModelNamesUC;
+
+int constexpr YES_SupportPillar = 1; // Exsqueeze me?
 
 // Deflection parameters
 enum class DeflectionCalculation : int
@@ -100,6 +104,8 @@ enum class DeflectionCalculation : int
     GAP_WIDTHS,
     Num
 };
+
+extern const std::array<std::string_view, (int)DeflectionCalculation::Num> deflectionCalculationNamesUC;
 
 // definition of parameters for deflection sum.  These parameters define maximum number of loop to which sum
 // will perform. By equation, these numbers will go to infinite and some test showed that going to NMax and MMax

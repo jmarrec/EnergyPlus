@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -190,7 +190,7 @@ namespace DataAirSystems {
         AirLoopMixerData Mixer;            // Data for mixer (if any)
         Array1D_bool ControlConverged;     // Convergence Parameter for controllers
         int NumOutletBranches = 0;
-        std::array<int, 3> OutletBranchNum = {0}; // branch numbers of system outlets
+        std::array<int, 3> OutletBranchNum = {0}; // airloop branch numbers of system outlets (not the actual branch index)
         int NumInletBranches = 0;
         std::array<int, 3> InletBranchNum = {0}; // branch number of system inlets
         bool CentralHeatCoilExists = true;       // true if there are central heating coils
@@ -332,9 +332,17 @@ struct AirSystemsData : BaseGlobalStruct
     Array1D<DataAirSystems::ConnectAirSysSubComp> AirSysSubCompToPlant;       // Connections between loops
     Array1D<DataAirSystems::ConnectAirSysSubSubComp> AirSysSubSubCompToPlant; // Connections between loops
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void clear_state() override
     {
-        *this = AirSystemsData();
+        new (this) AirSystemsData();
     }
 };
 

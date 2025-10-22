@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -2851,6 +2851,7 @@ TEST_F(EnergyPlusFixture, DesiccantDehum_OnOASystemTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // OutputProcessor::TimeValue.allocate(2);
     state->dataGlobal->DDOnlySimulation = true;
@@ -2898,7 +2899,7 @@ TEST_F(EnergyPlusFixture, DesiccantDehum_OnOASystemTest)
     auto &finalSysSizing = state->dataSize->FinalSysSizing(1);
     auto &sysSizPeakDDNum = state->dataSize->SysSizPeakDDNum(1);
     EXPECT_ENUM_EQ(finalSysSizing.coolingPeakLoad, DataSizing::PeakLoad::SensibleCooling);
-    EXPECT_EQ(finalSysSizing.SizingOption, DataSizing::NonCoincident);
+    EXPECT_ENUM_EQ(finalSysSizing.SizingOption, DataSizing::SizingConcurrence::NonCoincident);
     EXPECT_EQ(sysSizPeakDDNum.SensCoolPeakDD, coolPeakDD);
     int timeStepIndexAtPeakCoolLoad = sysSizPeakDDNum.TimeStepAtSensCoolPk(coolPeakDD);
     EXPECT_EQ(sysSizPeakDDNum.TimeStepAtTotCoolPk(coolPeakDD), timeStepIndexAtPeakCoolLoad);
@@ -4054,6 +4055,7 @@ TEST_F(EnergyPlusFixture, DesiccantDehum_OnPrimaryAirSystemTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // OutputProcessor::TimeValue.allocate(2);
     state->dataGlobal->DDOnlySimulation = true;
@@ -5478,6 +5480,7 @@ TEST_F(EnergyPlusFixture, DesiccantDehum_RegenAirHeaterHWCoilSizingTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // OutputProcessor::TimeValue.allocate(2);
     state->dataGlobal->DDOnlySimulation = true;
@@ -6542,6 +6545,7 @@ TEST_F(EnergyPlusFixture, DesiccantDehum_VSCoolingCoilOnPrimaryAirSystemTest)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    Desiccant DXSystem Cooling Coil,    !- Name",
+        "    ,                        !- Availability Schedule Name",
         "     Desiccant DXSystem Mixed Air Node,  !- Indoor Air Inlet Node Name",
         "    HX Process Inlet Node,   !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
@@ -6732,6 +6736,7 @@ TEST_F(EnergyPlusFixture, DesiccantDehum_VSCoolingCoilOnPrimaryAirSystemTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // OutputProcessor::TimeValue.allocate(2);
     state->dataGlobal->DDOnlySimulation = true;

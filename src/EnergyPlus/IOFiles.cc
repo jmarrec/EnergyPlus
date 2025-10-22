@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -68,7 +68,7 @@ InputFile &InputFile::ensure_open(EnergyPlusData &state, const std::string &call
         open(false, output_to_file);
     }
     if (!good()) {
-        ShowFatalError(state, fmt::format("{}: Could not open file {} for input (read).", caller, filePath.string()));
+        ShowFatalError(state, fmt::format("{}: Could not open file {} for input (read).", caller, filePath));
     }
     return *this;
 }
@@ -200,7 +200,9 @@ void InputFile::backspace() noexcept
         is->seekg(0, std::ios::beg);    // Beginning of file
         std::streampos const g0(is->tellg());
         is->seekg(g1, std::ios::beg); // Restore position
-        if (g1 > g0) --g1;
+        if (g1 > g0) {
+            --g1;
+        }
         while (g1 > g0) {
             is->seekg(--g1, std::ios::beg); // Backup by 1
             if (is->peek() == '\n') {       // Found end of previous record
@@ -217,7 +219,7 @@ InputOutputFile &InputOutputFile::ensure_open(EnergyPlusData &state, const std::
         open(false, output_to_file);
     }
     if (!good()) {
-        ShowFatalError(state, fmt::format("{}: Could not open file {} for output (write).", caller, filePath.string()));
+        ShowFatalError(state, fmt::format("{}: Could not open file {} for output (write).", caller, filePath));
     }
     return *this;
 }
@@ -376,6 +378,9 @@ void IOFiles::OutputControl::getInput(EnergyPlusData &state)
             { // "output_audit"
                 audit = boolean_choice(find_input(fields, "output_audit"));
             }
+            { // "output_space_sizing"
+                spsz = boolean_choice(find_input(fields, "output_space_sizing"));
+            }
             { // "output_zone_sizing"
                 zsz = boolean_choice(find_input(fields, "output_zone_sizing"));
             }
@@ -405,9 +410,6 @@ void IOFiles::OutputControl::getInput(EnergyPlusData &state)
             }
             { // "output_dfs"
                 dfs = boolean_choice(find_input(fields, "output_dfs"));
-            }
-            { // "output_glhe"
-                glhe = boolean_choice(find_input(fields, "output_glhe"));
             }
             { // "output_delightin"
                 delightin = boolean_choice(find_input(fields, "output_delightin"));
@@ -484,6 +486,7 @@ void IOFiles::flushAll()
     eio.flush();
     eso.flush();
     zsz.flush();
+    spsz.flush();
     ssz.flush();
     map.flush();
     mtr.flush();

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -56,6 +56,7 @@
 #include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataOutputs.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
+#include <EnergyPlus/InputProcessing/CsvParser.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 
 #include <map>
@@ -223,6 +224,9 @@ TEST_F(InputProcessorFixture, decode_encode_1)
                                        "  Relative,",
                                        "  Relative;",
                                        "",
+                                       "Timestep,",
+                                       "  4;",
+                                       "",
                                        "Version,",
                                        "  " + DataStringGlobals::MatchVersion + ";",
                                        ""});
@@ -267,6 +271,9 @@ TEST_F(InputProcessorFixture, decode_encode_2)
                                           "  Relative,",
                                           "  Relative,",
                                           "  Relative;",
+                                          "",
+                                          "Timestep,",
+                                          "  4;",
                                           "",
                                           "Version,",
                                           "  " + DataStringGlobals::MatchVersion + ";",
@@ -335,6 +342,9 @@ TEST_F(InputProcessorFixture, decode_encode_3)
                                           "  ,",
                                           "  10;",
                                           "",
+                                          "Timestep,",
+                                          "  4;",
+                                          "",
                                           "Version,",
                                           "  " + DataStringGlobals::MatchVersion + ";",
                                           ""}));
@@ -366,6 +376,9 @@ TEST_F(InputProcessorFixture, byte_order_mark)
                                           "  Relative,",
                                           "  Relative,",
                                           "  Relative;",
+                                          "",
+                                          "Timestep,",
+                                          "  4;",
                                           "",
                                           "Version,",
                                           "  " + DataStringGlobals::MatchVersion + ";",
@@ -548,6 +561,7 @@ TEST_F(InputProcessorFixture, parse_bad_utf_8_json_2)
                                "\"vertex_entry_direction\":\"Counterclockwise\""
                                "}"
                                "},"
+                               "\"Timestep\":{\"\":{\"idf_order\":0,\"number_of_timesteps_per_hour\":4}},"
                                "\"Version\":{"
                                "\"\":{"
                                "\"idf_order\":0,"
@@ -596,6 +610,7 @@ TEST_F(InputProcessorFixture, parse_bad_utf_8_json_3)
                                "\"vertex_entry_direction\":\"Counterclockwise\""
                                "}"
                                "},"
+                               "\"Timestep\":{\"\":{\"idf_order\":0,\"number_of_timesteps_per_hour\":4}},"
                                "\"Version\":{"
                                "\"\":{"
                                "\"idf_order\":0,"
@@ -927,6 +942,9 @@ TEST_F(InputProcessorFixture, parse_idf_extensible_blank_extensibles)
                                               "  Relative,",
                                               "  Relative,",
                                               "  Relative;",
+                                              "",
+                                              "Timestep,",
+                                              "  4;",
                                               "",
                                               "Version,",
                                               "  " + DataStringGlobals::MatchVersion + ";",
@@ -2076,11 +2094,12 @@ TEST_F(InputProcessorFixture, getObjectItem_json1)
                                                               cAlphaFields,
                                                               cNumericFields);
 
-    EXPECT_TRUE(compare_containers(std::vector<std::string>({"SIMPLEANDTABULAR", "USEOUTPUTCONTROLTABLESTYLE"}), Alphas));
-    EXPECT_TRUE(compare_containers(std::vector<std::string>({"Option Type", "Unit Conversion for Tabular Data"}), cAlphaFields));
+    EXPECT_TRUE(compare_containers(std::vector<std::string>({"SIMPLEANDTABULAR", "USEOUTPUTCONTROLTABLESTYLE", "YES"}), Alphas));
+    EXPECT_TRUE(compare_containers(
+        std::vector<std::string>({"Option Type", "Unit Conversion for Tabular Data", "Format Numeric Values for Tabular Data"}), cAlphaFields));
     EXPECT_TRUE(compare_containers(std::vector<std::string>({}), cNumericFields));
     EXPECT_TRUE(compare_containers(std::vector<bool>({}), lNumericBlanks));
-    EXPECT_TRUE(compare_containers(std::vector<bool>({false, true}), lAlphaBlanks));
+    EXPECT_TRUE(compare_containers(std::vector<bool>({false, true, true}), lAlphaBlanks));
     EXPECT_TRUE(compare_containers(std::vector<Real64>({}), Numbers));
     EXPECT_EQ(1, NumAlphas);
     EXPECT_EQ(0, NumNumbers);
@@ -2638,20 +2657,21 @@ TEST_F(InputProcessorFixture, getObjectItem_truncated_sizing_system_min_fields)
                                                              "ZONESUM",
                                                              "COOLINGDESIGNCAPACITY",
                                                              "HEATINGDESIGNCAPACITY",
-                                                             "ONOFF"}),
+                                                             "ONOFF",
+                                                             "NONE"}),
                                    Alphas));
     // The commented out compare containers is what the original input processor said that alpha blanks should be, even though the last 3 alpha fields
     // are filled in with defaults. We think the last three fields really should be considered blank, i.e. true
     //        EXPECT_TRUE( compare_containers( std::vector< bool >( { false, false, false, false, false, false, false, true, false, false, false } ),
     //        lAlphaBlanks ) );
-    EXPECT_TRUE(compare_containers(std::vector<bool>({false, false, false, false, false, false, false, true, true, true, true}), lAlphaBlanks));
+    EXPECT_TRUE(compare_containers(std::vector<bool>({false, false, false, false, false, false, false, true, true, true, true, true}), lAlphaBlanks));
 
     EXPECT_EQ(26, NumNumbers);
-    EXPECT_TRUE(compare_containers(std::vector<Real64>({-99999, 0.4, 7, 0.0085, 11.0, 0.0085, 12.8,   16.7, 0.0085, 0.0085, 0, 0, 0,     0,
-                                                        0,      0,   0, 0,      0,    1,      -99999, 0,    0,      -99999, 0, 0, -99999}),
+    EXPECT_TRUE(compare_containers(std::vector<Real64>({-99999, 0.4, 7, 0.0085, 11.0, 0.0085, 12.8,   16.7, 0.0085, 0.0085, 0, 0, 0,      0,
+                                                        0,      0,   0, 0,      0,    1,      -99999, 0,    0,      -99999, 0, 0, -99999, 1}),
                                    Numbers));
     EXPECT_TRUE(compare_containers(std::vector<bool>({false, false, false, false, false, false, false, false, false, false, true, true, true, true,
-                                                      true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true, true, true}),
+                                                      true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true, true, true, true}),
                                    lNumericBlanks));
     EXPECT_EQ(1, IOStatus);
 }
@@ -3567,6 +3587,7 @@ TEST_F(InputProcessorFixture, getObjectItem_coil_cooling_dx_variable_speed)
     std::string const idf_objects = delimited_string({
         "Coil:Cooling:DX:VariableSpeed,",
         "  Furnace ACDXCoil 1, !- Name",
+        "  ,                   !- Availability Schedule Name",
         "  DX Cooling Coil Air Inlet Node, !- Air Inlet Node Name",
         "  Heating Coil Air Inlet Node, !- Air Outlet Node Name",
         "  10, !- Number of Speeds{ dimensionless }",
@@ -3754,8 +3775,9 @@ TEST_F(InputProcessorFixture, getObjectItem_coil_cooling_dx_variable_speed)
                                                               cAlphaFields,
                                                               cNumericFields);
 
-    EXPECT_EQ(50, NumAlphas);
+    EXPECT_EQ(51, NumAlphas);
     EXPECT_TRUE(compare_containers(std::vector<std::string>({"FURNACE ACDXCOIL 1",
+                                                             "",
                                                              "DX COOLING COIL AIR INLET NODE",
                                                              "HEATING COIL AIR INLET NODE",
                                                              "PLFFPLR",
@@ -3807,9 +3829,9 @@ TEST_F(InputProcessorFixture, getObjectItem_coil_cooling_dx_variable_speed)
                                                              "COOLEIRFFF"}),
                                    Alphas));
     EXPECT_TRUE(compare_containers(
-        std::vector<bool>({false, false, false, false, true,  false, false, true,  true,  true,  false, false, false, false, false, false, false,
+        std::vector<bool>({false, true,  false, false, false, true,  false, false, true,  true,  true,  false, false, false, false, false, false,
                            false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false,
-                           false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}),
+                           false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false}),
         lAlphaBlanks));
 
     EXPECT_EQ(95, NumNumbers);
@@ -4203,6 +4225,11 @@ TEST_F(InputProcessorFixture, reportIDFRecordsStats_basic)
 
         // 1 fields with default, 0 Autosizable, 0 Autocalculatable
         // 0 fields defaulted   , 0 Autosized  , 0 Autocalculated
+        "Timestep,",
+        "  4;", // Has a default
+
+        // 1 fields with default, 0 Autosizable, 0 Autocalculatable
+        // 0 fields defaulted   , 0 Autosized  , 0 Autocalculated
         "Version,",
         "  9.4;", // Has a default
 
@@ -4283,11 +4310,11 @@ TEST_F(InputProcessorFixture, reportIDFRecordsStats_basic)
     state->dataInputProcessing->inputProcessor->reportIDFRecordsStats(*state);
 
     // TOTAL:
-    // 36 fields with defaults, 6 Autosizable, 3 Autocalculatable
+    // 37 fields with defaults, 6 Autosizable, 3 Autocalculatable
     // 11 fields defaulted    , 4 Autosized  , 2 Autocalculated
 
-    EXPECT_EQ(4, state->dataOutput->iNumberOfRecords);             // Number of IDF Records (=Objects)
-    EXPECT_EQ(36, state->dataOutput->iTotalFieldsWithDefaults);    // Total number of fields that could be defaulted
+    EXPECT_EQ(5, state->dataOutput->iNumberOfRecords);             // Number of IDF Records (=Objects)
+    EXPECT_EQ(37, state->dataOutput->iTotalFieldsWithDefaults);    // Total number of fields that could be defaulted
     EXPECT_EQ(6, state->dataOutput->iTotalAutoSizableFields);      // Total number of autosizeable fields
     EXPECT_EQ(3, state->dataOutput->iTotalAutoCalculatableFields); // Total number of autocalculatable fields
     EXPECT_EQ(11, state->dataOutput->iNumberOfDefaultedFields);    // Number of defaulted fields in IDF
@@ -4299,6 +4326,11 @@ TEST_F(InputProcessorFixture, reportIDFRecordsStats_extensible_fields)
 {
 
     std::string const idf_objects = delimited_string({
+
+        // 1 fields with default, 0 Autosizable, 0 Autocalculatable
+        // 0 fields defaulted   , 0 Autosized  , 0 Autocalculated
+        "Timestep,",
+        "  4;", // Has a default
 
         // 1 fields with default, 0 Autosizable, 0 Autocalculatable
         // 0 fields defaulted   , 0 Autosized  , 0 Autocalculated
@@ -4356,11 +4388,11 @@ TEST_F(InputProcessorFixture, reportIDFRecordsStats_extensible_fields)
     state->dataInputProcessing->inputProcessor->reportIDFRecordsStats(*state);
 
     // TOTAL:
-    // 15 fields with defaults, 0 Autosizable, 0 Autocalculatable
+    // 16 fields with defaults, 0 Autosizable, 0 Autocalculatable
     // 2  fields defaulted    , 0 Autosized  , 0 Autocalculated
 
-    EXPECT_EQ(4, state->dataOutput->iNumberOfRecords);             // Number of IDF Records (=Objects)
-    EXPECT_EQ(15, state->dataOutput->iTotalFieldsWithDefaults);    // Total number of fields that could be defaulted
+    EXPECT_EQ(5, state->dataOutput->iNumberOfRecords);             // Number of IDF Records (=Objects)
+    EXPECT_EQ(16, state->dataOutput->iTotalFieldsWithDefaults);    // Total number of fields that could be defaulted
     EXPECT_EQ(0, state->dataOutput->iTotalAutoSizableFields);      // Total number of autosizeable fields
     EXPECT_EQ(0, state->dataOutput->iTotalAutoCalculatableFields); // Total number of autocalculatable fields
     EXPECT_EQ(2, state->dataOutput->iNumberOfDefaultedFields);     // Number of defaulted fields in IDF
@@ -4817,5 +4849,45 @@ TEST_F(InputProcessorFixture, epJSONgetFieldValue_extensiblesFromIDF)
 //          EXPECT_TRUE( compare_containers( std::vector< bool >( {} ), IDFRecords( index ).NumBlank ) );
 //
 //   }
+TEST_F(InputProcessorFixture, csv_import_ending_blank_line)
+{
+    std::string csv_no_empty_line_n = "\"H1\",\"H2\",\"H3\"\n"
+                                      "1,2,3\n"
+                                      "4,5,6\n"
+                                      "7,8,9\n";
+    std::string csv_with_empty_line_n = csv_no_empty_line_n + "\\n";
+    // EXPECT_TRUE(false);
+
+    std::string csv_no_empty_line_rn = "\"H1\",\"H2\",\"H3\"\r\n"
+                                       "1,2,3\r\n"
+                                       "4,5,6\r\n"
+                                       "7,8,9\r\n";
+
+    std::string csv_with_empty_line_rn = csv_no_empty_line_rn + "\r\n";
+
+    CsvParser csvParser;
+
+    // None of the following should throw errors
+
+    // No extra lines
+    std::string_view csv = csv_no_empty_line_n;
+    size_t index = 0;
+    csvParser.decode(csv, ',', 0);
+    EXPECT_TRUE(csvParser.errors().empty()) << "\\n with no ending blank line parse test failed";
+    csv = csv_no_empty_line_rn;
+    index = 0;
+    csvParser.decode(csv, ',', 0);
+    EXPECT_TRUE(csvParser.errors().empty()) << "\\r\\n with no ending blank line parse test failed";
+
+    // testing extra blank lines at the end
+    csv = csv_with_empty_line_n;
+    index = 0;
+    csvParser.decode(csv, ',', 0);
+    EXPECT_TRUE(csvParser.errors().empty()) << "\\n with with an ending blank line parse test failed";
+    csv = csv_with_empty_line_rn;
+    index = 0;
+    csvParser.decode(csv, ',', 0);
+    EXPECT_TRUE(csvParser.errors().empty()) << "\\r\\n with an ending blank line parse test failed";
+}
 
 } // namespace EnergyPlus

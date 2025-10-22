@@ -438,7 +438,7 @@ This field is a regular material name specifying the material with which this ad
 
 \paragraph{Field: Temperature Coefficient for Thermal Conductivity}\label{field-temperature-coefficient-for-thermal-conductivity}
 
-This field is used to enter the temperature dependent coefficient for thermal conductivity of the material.~ Units for this parameter are (W/(m-K\(^{2}\)). This is the thermal conductivity change per unit temperature excursion from 20 C. The conductivity value at 20 C is the one specified with the basic material properties of the regular material specified in the name field. The thermal conductivity is obtained from:
+This field is used to enter the temperature dependent coefficient for thermal conductivity of the material.~ Units for this parameter are (W/(m-K\(^{2}\)). This is the thermal conductivity change per unit temperature excursion from 20$^\circ$C. The conductivity value at 20$^\circ$C is the one specified with the basic material properties of the regular material specified in the name field. The thermal conductivity is obtained from:
 
 \begin{equation}
 k = {k_o} + {k_1}({T_i} - 20)
@@ -452,7 +452,7 @@ k\(_{1}\) is the change in conductivity per degree temperature difference from 2
 
 \paragraph{Field Set: Temperature-Enthalpy}\label{field-set-temperature-enthalpy}
 
-The temperature-enthalpy set of inputs specify a two column tabular temperature-enthalpy function for the basic material. Sixteen pairs can be specified. Specify only the number of pairs necessary. The tabular function must cover the entire temperature range that will be seen by the material in the simulation. It is suggested that the function start at a low temperature, and extend to 100$^\circ$C. Note that the function has no negative slopes and the lowest slope that will occur is the base material specific heat. Temperature values should be strictly increasing. Enthalpy contributions of the phase change are always added to the enthalpy that would result from a constant specific heat base material. An example of a simple Enthalpy Temperature function is shown below.
+The temperature-enthalpy set of inputs specify a two column tabular temperature-enthalpy function for the basic material. The number of temperature-enthalpy pairs that can be specified is extensible. Specify only the number of pairs necessary. The tabular function must cover the entire temperature range that will be seen by the material in the simulation. It is suggested that the function start at a low temperature, and extend to 100$^\circ$C. Note that the function has no negative slopes and the lowest slope that will occur is the base material specific heat. Temperature values should be strictly increasing. Enthalpy contributions of the phase change are always added to the enthalpy that would result from a constant specific heat base material. An example of a simple Enthalpy Temperature function is shown below.
 
 \begin{figure}[htbp]
 \centering
@@ -674,7 +674,7 @@ This field is a regular material name specifying the material with which this ad
 
 \paragraph{Field Set: Temperature-Thermal Conductivity}\label{field-set-temperature-thermal-conductivity}
 
-The temperature -- conductivity set of inputs specify a two column tabular temperature-thermal conductivity function for the basic material. Ten pairs can be specified. Specify only the number of pairs necessary. Temperature values should be strictly increasing.
+The temperature -- conductivity set of inputs specify a two column tabular temperature-thermal conductivity function for the basic material. The number of temperature-thermal conductivity pairs that can be specified is extensible. Specify only the number of pairs necessary. Temperature values should be strictly increasing.
 
 \paragraph{Field: Temperature x}\label{field-temperature-x-1}
 
@@ -2667,27 +2667,27 @@ The fraction of glazing system area that is open on the front of the shading lay
 
 \paragraph{Field: Slat Width}\label{field-slat-width-1}
 
-The width (m) of the venetian slats.~ Used only for ShadingLayerType = Venetian.
+The width (m) of the venetian slats.~ Used only for ShadingLayerType = VenetianHorizontal or VenetianVertical.
 
 \paragraph{Field: Slat Spacing}\label{field-slat-spacing}
 
-The distance (m) between front sides of the venetian slats.~ Used only for ShadingLayerType = Venetian.
+The distance (m) between front sides of the venetian slats.~ Used only for ShadingLayerType = VenetianHorizontal or VenetianVertical.
 
 \paragraph{Field: Slat Thickness}\label{field-slat-thickness-1}
 
-The thickness (m) of the venetian slats.~ Used only for ShadingLayerType = Venetian.
+The thickness (m) of the venetian slats.~ Used only for ShadingLayerType = VenetianHorizontal or VenetianVertical.
 
 \paragraph{Field: Slat Angle}\label{field-slat-angle-1}
 
-The slat tilt angle (degrees) of the venetian slats.~ Used only for ShadingLayerType = Venetian.~ Range of slat angle is from -90 to 90 degrees.
+The slat tilt angle (degrees) of the venetian slats.~ Used only for ShadingLayerType = VenetianHorizontal or VenetianVertical.~ Range of slat angle is from -90 to 90 degrees.
 
 \paragraph{Field: Slat Conductivity}\label{field-slat-conductivity-1}
 
-The conductivity (W/mK) of the venetian slats.~ Used only for ShadingLayerType = Venetian.
+The conductivity (W/mK) of the venetian slats.~ Used only for ShadingLayerType = VenetianHorizontal or VenetianVertical.
 
 \paragraph{Field: Slat Curve}\label{field-slat-curve}
 
-The curvature radius (m) of the venetian slats.~ Setting this value to zero means there is no curvature in the slat (it is flat), while a non-zero value is the radius of the slat curve.~ This value cannot be smaller than Slat Width / 2.~ Used only for ShadingLayerType = Venetian.
+The curvature radius (m) of the venetian slats.~ Setting this value to zero means there is no curvature in the slat (it is flat), while a non-zero value is the radius of the slat curve.~ This value cannot be smaller than Slat Width / 2.~ Used only for ShadingLayerType = VenetianHorizontal or VenetianVertical.
 
 \begin{figure}[hbtp] % fig 18
 \centering
@@ -2695,13 +2695,13 @@ The curvature radius (m) of the venetian slats.~ Setting this value to zero mean
 \caption{Side view of horizontal venetian blind slats or top view of blinds with vertical slats.  Front face of slats is marked with red line. \protect \label{fig:side-view-of-horizontal-venetian-blind-slats}}
 \end{figure}
 
-An IDF example for ShadingLayerType = Venetian
+An IDF example for ShadingLayerType = VenetianHorizontal
 
 \begin{lstlisting}
 
 WindowMaterial:ComplexShade,       !- venetian blind layer
     Shade_30001_Layer,               !- name
-    Venetian,                        !- shading layer type
+    VenetianHorizontal,              !- shading layer type
     0.005,                           !- thickness
     160,                             !- layer conductivity
     0.0,                             !- IR transmittance
@@ -4118,7 +4118,7 @@ EnergyPlus Engineering Reference.
 
 This output is the temperature within the surface at the location of the source/sink.
 
-\paragraph{Surface Internal User Specified Location Temperature {[}C{]}}\label{surface-internal-user—specified-location-temperature-c}
+\paragraph{Surface Internal User Specified Location Temperature {[}C{]}}\label{surface-internal-user-specified-location-temperature-c}
 
 This output is the temperature within the surface at the location requested by the user.
 

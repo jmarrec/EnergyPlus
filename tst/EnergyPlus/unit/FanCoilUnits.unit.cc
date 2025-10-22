@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -73,6 +73,7 @@
 #include <EnergyPlus/MixedAir.hh>
 #include <EnergyPlus/OutputReportPredefined.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/WaterCoils.hh>
@@ -95,7 +96,6 @@ using namespace EnergyPlus::HeatBalanceManager;
 using namespace EnergyPlus::OutputProcessor;
 using namespace EnergyPlus::OutputReportPredefined;
 using namespace EnergyPlus::Psychrometrics;
-using namespace EnergyPlus::ScheduleManager;
 using namespace EnergyPlus::WaterCoils;
 
 namespace EnergyPlus {
@@ -119,11 +119,9 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilHeatingTest)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-
-    InitializePsychRoutines(*state);
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         "	Zone,",
@@ -247,12 +245,13 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilHeatingTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
+
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
 
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanInput(*state);
     EXPECT_EQ((int)HVAC::FanType::OnOff, (int)state->dataFans->fans(1)->type);
 
@@ -351,16 +350,17 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilHeatingTest)
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(2).WaterPlantLoc);
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 2;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(2).Name;
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterCooling;
@@ -368,9 +368,8 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilHeatingTest)
         state->dataWaterCoils->WaterCoil(2).WaterInletNodeNum;
 
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "HotWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -401,7 +400,7 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilHeatingTest)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     CalcMultiStage4PipeFanCoil(*state, FanCoilNum, ZoneNum, FirstHVACIteration, QZnReq, SpeedRatio, PartLoadRatio, QUnitOut);
 
@@ -440,11 +439,9 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilCoolingTest)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-
-    InitializePsychRoutines(*state);
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         "	Zone,",
@@ -570,12 +567,11 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilCoolingTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
 
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanInput(*state);
     EXPECT_EQ((int)HVAC::FanType::OnOff, (int)state->dataFans->fans(1)->type);
 
@@ -674,16 +670,17 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilCoolingTest)
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(2).WaterPlantLoc);
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 2;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(2).Name;
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterCooling;
@@ -691,9 +688,8 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilCoolingTest)
         state->dataWaterCoils->WaterCoil(2).WaterInletNodeNum;
 
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "HotWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -724,7 +720,7 @@ TEST_F(EnergyPlusFixture, MultiStage4PipeFanCoilCoolingTest)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     CalcMultiStage4PipeFanCoil(*state, FanCoilNum, ZoneNum, FirstHVACIteration, QZnReq, SpeedRatio, PartLoadRatio, QUnitOut);
 
@@ -761,11 +757,9 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilHeatingTest)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-
-    InitializePsychRoutines(*state);
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         "	Zone,",
@@ -889,12 +883,12 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilHeatingTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
 
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanInput(*state);
     EXPECT_EQ((int)HVAC::FanType::OnOff, (int)state->dataFans->fans(1)->type);
 
@@ -996,22 +990,22 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilHeatingTest)
     }
 
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
 
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(2).WaterPlantLoc);
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 2;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
-    state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(2).Name;
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterCooling;
@@ -1022,9 +1016,8 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilHeatingTest)
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).FlowLock = DataPlant::FlowLock::Unlocked;
 
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "HotWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -1044,6 +1037,8 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilHeatingTest)
     state->dataFanCoilUnits->FanCoil(1).CoolCoilPlantLoc.compNum = 1;
     state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc.branchNum = 1;
     state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataFanCoilUnits->FanCoil(1).CoolCoilPlantLoc);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc);
 
     state->dataFanCoilUnits->CoolingLoad = false;
     state->dataFanCoilUnits->HeatingLoad = true;
@@ -1069,7 +1064,7 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilHeatingTest)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     // Normal heating simulation for fan coil with constant fan, variable water flow
     Sim4PipeFanCoil(*state, FanCoilNum, ZoneNum, FirstHVACIteration, QUnitOut, LatOutputProvided);
@@ -1169,11 +1164,9 @@ TEST_F(EnergyPlusFixture, ElectricCoilFanCoilHeatingTest)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-
-    InitializePsychRoutines(*state);
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         "	Zone,",
@@ -1288,12 +1281,12 @@ TEST_F(EnergyPlusFixture, ElectricCoilFanCoilHeatingTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
 
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanInput(*state);
     EXPECT_EQ((int)HVAC::FanType::OnOff, (int)state->dataFans->fans(1)->type);
 
@@ -1385,17 +1378,17 @@ TEST_F(EnergyPlusFixture, ElectricCoilFanCoilHeatingTest)
     }
 
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(1).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterCooling;
@@ -1415,6 +1408,8 @@ TEST_F(EnergyPlusFixture, ElectricCoilFanCoilHeatingTest)
     state->dataFanCoilUnits->FanCoil(1).CoolCoilPlantLoc.compNum = 1;
     state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc.branchNum = 0;
     state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc.compNum = 0;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataFanCoilUnits->FanCoil(1).CoolCoilPlantLoc);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc);
 
     state->dataFanCoilUnits->CoolingLoad = false;
     state->dataFanCoilUnits->HeatingLoad = true;
@@ -1440,7 +1435,7 @@ TEST_F(EnergyPlusFixture, ElectricCoilFanCoilHeatingTest)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     // Normal heating simulation for fan coil with constant fan, electric heating
     Sim4PipeFanCoil(*state, FanCoilNum, ZoneNum, FirstHVACIteration, QUnitOut, LatOutputProvided);
@@ -1486,11 +1481,9 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilCoolingTest)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-
-    InitializePsychRoutines(*state);
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         "	Zone,",
@@ -1616,12 +1609,12 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilCoolingTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
 
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanInput(*state);
     EXPECT_EQ((int)HVAC::FanType::OnOff, (int)state->dataFans->fans(1)->type);
 
@@ -1724,22 +1717,23 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilCoolingTest)
     }
 
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
 
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(2).WaterPlantLoc);
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 2;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(2).Name;
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterCooling;
@@ -1750,9 +1744,8 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilCoolingTest)
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).FlowLock = DataPlant::FlowLock::Unlocked;
 
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "HotWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -1772,6 +1765,8 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilCoolingTest)
     state->dataFanCoilUnits->FanCoil(1).CoolCoilPlantLoc.compNum = 1;
     state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc.branchNum = 1;
     state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataFanCoilUnits->FanCoil(1).CoolCoilPlantLoc);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataFanCoilUnits->FanCoil(1).HeatCoilPlantLoc);
 
     state->dataFanCoilUnits->HeatingLoad = false;
     state->dataFanCoilUnits->CoolingLoad = true;
@@ -1797,7 +1792,7 @@ TEST_F(EnergyPlusFixture, ConstantFanVariableFlowFanCoilCoolingTest)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // normal cooling simulation for constant fan variable flow fan coil
     Sim4PipeFanCoil(*state, FanCoilNum, ZoneNum, FirstHVACIteration, QUnitOut, LatOutputProvided);
     EXPECT_NEAR(QZnReq, QUnitOut, 5.0);
@@ -1854,12 +1849,10 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataSize->CurZoneEqNum = 1;
-
-    InitializePsychRoutines(*state);
 
     std::string const idf_objects = delimited_string({
         "	Zone,",
@@ -1988,12 +1981,12 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
 
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanInput(*state);
     EXPECT_EQ((int)HVAC::FanType::OnOff, (int)state->dataFans->fans(1)->type);
 
@@ -2092,16 +2085,17 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(2).WaterPlantLoc);
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 2;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(2).Name;
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterCooling;
@@ -2111,9 +2105,8 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
         state->dataWaterCoils->WaterCoil(2).WaterOutletNodeNum;
 
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "HotWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -2147,7 +2140,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     state->dataSize->ZoneEqSizing.allocate(1);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(HVAC::NumOfSizingTypes);
@@ -2155,7 +2148,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
     state->dataZoneEnergyDemand->CurDeadBandOrSetback.allocate(1);
     state->dataZoneEnergyDemand->CurDeadBandOrSetback(1) = false;
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
     state->dataSize->ZoneSizingRunDone = true;
     state->dataSize->FinalZoneSizing.allocate(1);
     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolVolFlow = 0.5;
@@ -2262,7 +2255,6 @@ TEST_F(EnergyPlusFixture, FanCoil_ASHRAE90VariableFan)
 
 TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
 {
-
     using General::SolveRoot;
 
     int FanCoilNum(1);
@@ -2274,11 +2266,9 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-
-    InitializePsychRoutines(*state);
+    state->dataGlobal->MinutesInTimeStep = 60;
 
     std::string const idf_objects = delimited_string({
         " Zone, EAST ZONE, 0, 0, 0, 0, 1, 1, autocalculate, autocalculate;",
@@ -2325,13 +2315,11 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
+    state->init_state(*state);
     // OutputProcessor::TimeValue.allocate(2);
 
     GetZoneData(*state, ErrorsFound);
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     SetPredefinedTables(*state);
     GetFanInput(*state);
     GetFanCoilUnits(*state);
@@ -2350,16 +2338,17 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(2).WaterPlantLoc);
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 2;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(2).Name;
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterCooling;
@@ -2369,9 +2358,8 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
         state->dataWaterCoils->WaterCoil(2).WaterOutletNodeNum;
 
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "HotWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -2397,8 +2385,7 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
     state->dataEnvrn->DayOfYear_Schedule = 1;
     state->dataEnvrn->DayOfWeek = 2;
     state->dataGlobal->HourOfDay = 1;
-    ProcessScheduleInput(*state);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     // fan coil can hit maximum iterations while trying to find the water mass flow rate to meet the load. In this case RegulaFalsi will return -1.
     // When this happens, this routine will find tighter limits on min/max water flow rate passed to RegulaFalsi
@@ -2547,14 +2534,14 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
         return (QUnitOut - QZnReq2) / QZnReq2;
     };
 
-    state->dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::Bisection;
+    state->dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::Bisection;
     General::SolveRoot(*state, ErrorToler, MaxIte, SolFla, mdot, f, MinWaterFlow, MaxWaterFlow);
     EXPECT_EQ(-1, SolFla);
 
     MaxIte = 20;
     MinWaterFlow = 0.0;
     MaxWaterFlow = 0.09375;
-    state->dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsi;
+    state->dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
     General::SolveRoot(*state, ErrorToler, MaxIte, SolFla, mdot, f, MinWaterFlow, MaxWaterFlow);
     EXPECT_EQ(3, SolFla);
 }
@@ -2578,12 +2565,10 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataSize->CurZoneEqNum = 1;
-
-    InitializePsychRoutines(*state);
 
     std::string const idf_objects = delimited_string({
         "	Zone,",
@@ -2719,12 +2704,12 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
 
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanInput(*state);
     EXPECT_EQ((int)HVAC::FanType::OnOff, (int)state->dataFans->fans(1)->type);
 
@@ -2822,16 +2807,17 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(2).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(2).WaterPlantLoc);
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 2;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(2).Name = "ChilledWaterLoop";
-    state->dataPlnt->PlantLoop(2).FluidName = "ChilledWater";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(2).Name;
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterCooling;
@@ -2841,9 +2827,8 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
         state->dataWaterCoils->WaterCoil(2).WaterOutletNodeNum;
 
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
-    state->dataPlnt->PlantLoop(1).FluidName = "HotWater";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -2878,7 +2863,7 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     state->dataSize->ZoneEqSizing.allocate(1);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(HVAC::NumOfSizingTypes);
@@ -2886,7 +2871,7 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
     state->dataZoneEnergyDemand->CurDeadBandOrSetback.allocate(1);
     state->dataZoneEnergyDemand->CurDeadBandOrSetback(1) = false;
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
     state->dataSize->ZoneSizingRunDone = true;
     state->dataSize->FinalZoneSizing.allocate(1);
     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolVolFlow = 0.5;
@@ -2993,7 +2978,6 @@ TEST_F(EnergyPlusFixture, FanCoil_CyclingFanMode)
 
 TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
 {
-
     int FanCoilNum(1);
     int ZoneNum(1);
     bool FirstHVACIteration(false);
@@ -3010,12 +2994,10 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataSize->CurZoneEqNum = 1;
-
-    InitializePsychRoutines(*state);
 
     std::string const idf_objects = delimited_string({
         "	Zone,",
@@ -3164,13 +3146,12 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
 
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
-
     GetFanCoilUnits(*state);
 
     auto &thisFanCoil(state->dataFanCoilUnits->FanCoil(1));
@@ -3229,10 +3210,6 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
     state->dataLoopNodes->Node(CWCoil.WaterInletNodeNum).Temp = 6.0;
     state->dataLoopNodes->Node(CWCoil.WaterOutletNodeNum).MassFlowRate = ColdWaterMassFlowRate;
     state->dataLoopNodes->Node(CWCoil.WaterOutletNodeNum).MassFlowRateMaxAvail = ColdWaterMassFlowRate;
-    CWCoil.WaterPlantLoc.loopNum = 1;
-    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    CWCoil.WaterPlantLoc.branchNum = 1;
-    CWCoil.WaterPlantLoc.compNum = 1;
 
     // hot water coil
     auto &HWCoil(state->dataWaterCoils->WaterCoil(1));
@@ -3245,10 +3222,6 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
     state->dataLoopNodes->Node(HWCoil.WaterInletNodeNum).MassFlowRateMaxAvail = HotWaterMassFlowRate;
     state->dataLoopNodes->Node(HWCoil.WaterOutletNodeNum).MassFlowRate = HotWaterMassFlowRate;
     state->dataLoopNodes->Node(HWCoil.WaterOutletNodeNum).MassFlowRateMaxAvail = HotWaterMassFlowRate;
-    HWCoil.WaterPlantLoc.loopNum = 2;
-    HWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    HWCoil.WaterPlantLoc.branchNum = 1;
-    HWCoil.WaterPlantLoc.compNum = 1;
 
     for (int l = 1; l <= state->dataPlnt->TotNumLoops; ++l) {
         auto &loopside(state->dataPlnt->PlantLoop(l).LoopSide(DataPlant::LoopSideLocation::Demand));
@@ -3261,9 +3234,8 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
     // chilled water plant loop
     auto &CWLoop(state->dataPlnt->PlantLoop(2));
     CWLoop.Name = "ChilledWaterLoop";
-    CWLoop.FluidName = "ChilledWater";
-    CWLoop.FluidIndex = 1;
     CWLoop.FluidName = "WATER";
+    CWLoop.glycol = Fluid::GetWater(*state);
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = CWCoil.Name;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type = DataPlant::PlantEquipmentType::CoilWaterCooling;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = CWCoil.WaterInletNodeNum;
@@ -3271,13 +3243,25 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
     // hot water plant loop
     auto &HWLoop(state->dataPlnt->PlantLoop(1));
     HWLoop.Name = "HotWaterLoop";
-    HWLoop.FluidName = "HotWater";
-    HWLoop.FluidIndex = 1;
     HWLoop.FluidName = "WATER";
+    HWLoop.glycol = Fluid::GetWater(*state);
     HWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = HWCoil.Name;
     HWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type = DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
     HWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = HWCoil.WaterInletNodeNum;
     HWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut = HWCoil.WaterOutletNodeNum;
+
+    // Set PlantLoc links, now that plant structures are created
+    CWCoil.WaterPlantLoc.loopNum = 1;
+    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
+    CWCoil.WaterPlantLoc.branchNum = 1;
+    CWCoil.WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, CWCoil.WaterPlantLoc);
+
+    HWCoil.WaterPlantLoc.loopNum = 2;
+    HWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
+    HWCoil.WaterPlantLoc.branchNum = 1;
+    HWCoil.WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, HWCoil.WaterPlantLoc);
 
     // heating mode tests
     state->dataFanCoilUnits->CoolingLoad = false;
@@ -3306,7 +3290,7 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     state->dataSize->ZoneEqSizing.allocate(1);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(HVAC::NumOfSizingTypes);
@@ -3314,7 +3298,7 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
     state->dataZoneEnergyDemand->CurDeadBandOrSetback.allocate(1);
     state->dataZoneEnergyDemand->CurDeadBandOrSetback(1) = false;
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
     state->dataSize->ZoneSizingRunDone = true;
     state->dataSize->FinalZoneSizing.allocate(1);
     state->dataSize->FinalZoneSizing(state->dataSize->CurZoneEqNum).DesCoolVolFlow = 0.5;
@@ -3397,7 +3381,6 @@ TEST_F(EnergyPlusFixture, FanCoil_FanSystemModelCyclingFanMode)
 
 TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
 {
-
     int FanCoilNum(1);
     int ZoneNum(1);
     bool FirstHVACIteration(false);
@@ -3413,12 +3396,10 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataSize->CurZoneEqNum = 1;
-
-    InitializePsychRoutines(*state);
 
     std::string const idf_objects = delimited_string({
         " Zone,",
@@ -3566,11 +3547,11 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanCoilUnits(*state);
     auto &thisFanCoil(state->dataFanCoilUnits->FanCoil(1));
     EXPECT_ENUM_EQ(CCM::MultiSpeedFan, thisFanCoil.CapCtrlMeth_Num);
@@ -3621,10 +3602,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
     state->dataLoopNodes->Node(CWCoil.WaterInletNodeNum).Temp = 6.0;
     state->dataLoopNodes->Node(CWCoil.WaterOutletNodeNum).MassFlowRate = ColdWaterMassFlowRate;
     state->dataLoopNodes->Node(CWCoil.WaterOutletNodeNum).MassFlowRateMaxAvail = ColdWaterMassFlowRate;
-    CWCoil.WaterPlantLoc.loopNum = 1;
-    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    CWCoil.WaterPlantLoc.branchNum = 1;
-    CWCoil.WaterPlantLoc.compNum = 1;
+
     // electric heating coil
     auto &eHCoil(state->dataHeatingCoils->HeatingCoil(1));
     state->dataLoopNodes->Node(eHCoil.AirInletNodeNum).MassFlowRate = AirMassFlow;
@@ -3641,13 +3619,19 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
     // chilled water plant loop
     auto &CWLoop(state->dataPlnt->PlantLoop(1));
     CWLoop.Name = "ChilledWaterLoop";
-    CWLoop.FluidName = "ChilledWater";
-    CWLoop.FluidIndex = 1;
     CWLoop.FluidName = "WATER";
+    CWLoop.glycol = Fluid::GetWater(*state);
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = CWCoil.Name;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type = DataPlant::PlantEquipmentType::CoilWaterCooling;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = CWCoil.WaterInletNodeNum;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut = CWCoil.WaterOutletNodeNum;
+
+    // Set plantLocation links now that plant objects have been created
+    CWCoil.WaterPlantLoc.loopNum = 1;
+    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
+    CWCoil.WaterPlantLoc.branchNum = 1;
+    CWCoil.WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, CWCoil.WaterPlantLoc);
 
     state->dataWaterCoils->MyUAAndFlowCalcFlag.allocate(1);
     state->dataWaterCoils->MyUAAndFlowCalcFlag(1) = true;
@@ -3668,14 +3652,14 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     state->dataSize->ZoneEqSizing.allocate(1);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(HVAC::NumOfSizingTypes);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod = 0;
     state->dataZoneEnergyDemand->CurDeadBandOrSetback.allocate(1);
     state->dataZoneEnergyDemand->CurDeadBandOrSetback(1) = false;
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
     state->dataSize->ZoneSizingRunDone = true;
     state->dataSize->FinalZoneSizing.allocate(1);
     auto &fZoneSizing(state->dataSize->FinalZoneSizing(1));
@@ -3763,7 +3747,6 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanCyclingFanMode)
 
 TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
 {
-
     int FanCoilNum(1);
     int ZoneNum(1);
     bool FirstHVACIteration(false);
@@ -3779,12 +3762,10 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataSize->CurZoneEqNum = 1;
-
-    InitializePsychRoutines(*state);
 
     std::string const idf_objects = delimited_string({
         " Zone,",
@@ -3932,11 +3913,11 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanCoilUnits(*state);
     auto &thisFanCoil(state->dataFanCoilUnits->FanCoil(1));
     EXPECT_ENUM_EQ(CCM::MultiSpeedFan, thisFanCoil.CapCtrlMeth_Num);
@@ -3987,10 +3968,7 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
     state->dataLoopNodes->Node(CWCoil.WaterInletNodeNum).Temp = 6.0;
     state->dataLoopNodes->Node(CWCoil.WaterOutletNodeNum).MassFlowRate = ColdWaterMassFlowRate;
     state->dataLoopNodes->Node(CWCoil.WaterOutletNodeNum).MassFlowRateMaxAvail = ColdWaterMassFlowRate;
-    CWCoil.WaterPlantLoc.loopNum = 1;
-    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    CWCoil.WaterPlantLoc.branchNum = 1;
-    CWCoil.WaterPlantLoc.compNum = 1;
+
     // electric heating coil
     auto &eHCoil(state->dataHeatingCoils->HeatingCoil(1));
     state->dataLoopNodes->Node(eHCoil.AirInletNodeNum).MassFlowRate = AirMassFlow;
@@ -4007,13 +3985,18 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
     // chilled water plant loop
     auto &CWLoop(state->dataPlnt->PlantLoop(1));
     CWLoop.Name = "ChilledWaterLoop";
-    CWLoop.FluidName = "ChilledWater";
-    CWLoop.FluidIndex = 1;
     CWLoop.FluidName = "WATER";
+    CWLoop.glycol = Fluid::GetWater(*state);
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = CWCoil.Name;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type = DataPlant::PlantEquipmentType::CoilWaterCooling;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = CWCoil.WaterInletNodeNum;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut = CWCoil.WaterOutletNodeNum;
+
+    CWCoil.WaterPlantLoc.loopNum = 1;
+    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
+    CWCoil.WaterPlantLoc.branchNum = 1;
+    CWCoil.WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, CWCoil.WaterPlantLoc);
 
     state->dataWaterCoils->MyUAAndFlowCalcFlag.allocate(1);
     state->dataWaterCoils->MyUAAndFlowCalcFlag(1) = true;
@@ -4034,14 +4017,14 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     state->dataSize->ZoneEqSizing.allocate(1);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(HVAC::NumOfSizingTypes);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod = 0;
     state->dataZoneEnergyDemand->CurDeadBandOrSetback.allocate(1);
     state->dataZoneEnergyDemand->CurDeadBandOrSetback(1) = false;
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
     state->dataSize->ZoneSizingRunDone = true;
     state->dataSize->FinalZoneSizing.allocate(1);
     auto &fZoneSizing(state->dataSize->FinalZoneSizing(1));
@@ -4129,7 +4112,6 @@ TEST_F(EnergyPlusFixture, FanCoil_ElecHeatCoilMultiSpeedFanContFanMode)
 
 TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
 {
-
     int FanCoilNum(1);
     int ZoneNum(1);
     bool FirstHVACIteration(false);
@@ -4145,12 +4127,10 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     state->dataGlobalNames->NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataSize->CurZoneEqNum = 1;
-
-    InitializePsychRoutines(*state);
 
     std::string const idf_objects = delimited_string({
         " Zone,",
@@ -4298,11 +4278,11 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("EAST ZONE", state->dataHeatBal->Zone(1).Name);
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanCoilUnits(*state);
     auto &thisFanCoil(state->dataFanCoilUnits->FanCoil(1));
     EXPECT_ENUM_EQ(CCM::MultiSpeedFan, thisFanCoil.CapCtrlMeth_Num);
@@ -4353,10 +4333,7 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
     state->dataLoopNodes->Node(CWCoil.WaterInletNodeNum).Temp = 6.0;
     state->dataLoopNodes->Node(CWCoil.WaterOutletNodeNum).MassFlowRate = ColdWaterMassFlowRate;
     state->dataLoopNodes->Node(CWCoil.WaterOutletNodeNum).MassFlowRateMaxAvail = ColdWaterMassFlowRate;
-    CWCoil.WaterPlantLoc.loopNum = 1;
-    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    CWCoil.WaterPlantLoc.branchNum = 1;
-    CWCoil.WaterPlantLoc.compNum = 1;
+
     // electric heating coil
     auto &eHCoil(state->dataHeatingCoils->HeatingCoil(1));
     state->dataLoopNodes->Node(eHCoil.AirInletNodeNum).MassFlowRate = AirMassFlow;
@@ -4373,13 +4350,19 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
     // chilled water plant loop
     auto &CWLoop(state->dataPlnt->PlantLoop(1));
     CWLoop.Name = "ChilledWaterLoop";
-    CWLoop.FluidName = "ChilledWater";
-    CWLoop.FluidIndex = 1;
     CWLoop.FluidName = "WATER";
+    CWLoop.glycol = Fluid::GetWater(*state);
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = CWCoil.Name;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type = DataPlant::PlantEquipmentType::CoilWaterCooling;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = CWCoil.WaterInletNodeNum;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut = CWCoil.WaterOutletNodeNum;
+
+    // Set plant location links now that plant objects are created
+    CWCoil.WaterPlantLoc.loopNum = 1;
+    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
+    CWCoil.WaterPlantLoc.branchNum = 1;
+    CWCoil.WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, CWCoil.WaterPlantLoc);
 
     state->dataWaterCoils->MyUAAndFlowCalcFlag.allocate(1);
     state->dataWaterCoils->MyUAAndFlowCalcFlag(1) = true;
@@ -4400,14 +4383,14 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     state->dataSize->ZoneEqSizing.allocate(1);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(HVAC::NumOfSizingTypes);
     state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod = 0;
     state->dataZoneEnergyDemand->CurDeadBandOrSetback.allocate(1);
     state->dataZoneEnergyDemand->CurDeadBandOrSetback(1) = false;
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
     state->dataSize->ZoneSizingRunDone = true;
     state->dataSize->FinalZoneSizing.allocate(1);
     auto &fZoneSizing(state->dataSize->FinalZoneSizing(1));
@@ -4474,7 +4457,6 @@ TEST_F(EnergyPlusFixture, FanCoil_CalcFanCoilElecHeatCoilPLRResidual)
 
 TEST_F(EnergyPlusFixture, FanCoil_ElectricHeatingCoilASHRAE90VariableFan)
 {
-
     int FanCoilNum(1);
     int ZoneNum(1);
     bool FirstHVACIteration(false);
@@ -4606,17 +4588,16 @@ TEST_F(EnergyPlusFixture, FanCoil_ElectricHeatingCoilASHRAE90VariableFan)
     state->dataEnvrn->StdRhoAir = 1.20;
     state->dataWaterCoils->GetWaterCoilsInputFlag = true;
     // NumCoils = 0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataSize->CurZoneEqNum = 1;
-    InitializePsychRoutines(*state);
+
+    state->init_state(*state);
 
     GetZoneData(*state, ErrorsFound);
     EXPECT_EQ("WEST ZONE", state->dataHeatBal->Zone(1).Name);
     GetZoneEquipmentData(*state);
-    ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     GetFanCoilUnits(*state);
     auto &thisFanCoil(state->dataFanCoilUnits->FanCoil(1));
     EXPECT_ENUM_EQ(CCM::ASHRAE, thisFanCoil.CapCtrlMeth_Num);
@@ -4658,10 +4639,6 @@ TEST_F(EnergyPlusFixture, FanCoil_ElectricHeatingCoilASHRAE90VariableFan)
     state->dataLoopNodes->Node(CWCoil.WaterInletNodeNum).MassFlowRate = ColdWaterMassFlowRate;
     state->dataLoopNodes->Node(CWCoil.WaterInletNodeNum).MassFlowRateMaxAvail = ColdWaterMassFlowRate;
     state->dataLoopNodes->Node(CWCoil.WaterInletNodeNum).Temp = 6.0;
-    CWCoil.WaterPlantLoc.loopNum = 1;
-    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    CWCoil.WaterPlantLoc.branchNum = 1;
-    CWCoil.WaterPlantLoc.compNum = 1;
     // electric heating coil
     auto &eHCoil(state->dataHeatingCoils->HeatingCoil(1));
     state->dataLoopNodes->Node(eHCoil.AirInletNodeNum).MassFlowRate = AirMassFlow;
@@ -4678,13 +4655,19 @@ TEST_F(EnergyPlusFixture, FanCoil_ElectricHeatingCoilASHRAE90VariableFan)
     // chilled water plant loop
     auto &CWLoop(state->dataPlnt->PlantLoop(1));
     CWLoop.Name = "ChilledWaterLoop";
-    CWLoop.FluidName = "ChilledWater";
-    CWLoop.FluidIndex = 1;
     CWLoop.FluidName = "WATER";
+    CWLoop.glycol = Fluid::GetWater(*state);
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = CWCoil.Name;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type = DataPlant::PlantEquipmentType::CoilWaterCooling;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = CWCoil.WaterInletNodeNum;
     CWLoop.LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut = CWCoil.WaterOutletNodeNum;
+
+    // Set plantLocation links now that plant objects are created
+    CWCoil.WaterPlantLoc.loopNum = 1;
+    CWCoil.WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
+    CWCoil.WaterPlantLoc.branchNum = 1;
+    CWCoil.WaterPlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, CWCoil.WaterPlantLoc);
 
     state->dataWaterCoils->MyUAAndFlowCalcFlag.allocate(1);
     state->dataWaterCoils->MyUAAndFlowCalcFlag(1) = true;
@@ -4704,12 +4687,12 @@ TEST_F(EnergyPlusFixture, FanCoil_ElectricHeatingCoilASHRAE90VariableFan)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     state->dataSize->ZoneEqSizing.allocate(1);
     state->dataZoneEnergyDemand->CurDeadBandOrSetback.allocate(1);
     state->dataZoneEnergyDemand->CurDeadBandOrSetback(1) = false;
     state->dataHeatBalFanSys->TempControlType.allocate(1);
-    state->dataHeatBalFanSys->TempControlType(1) = HVAC::ThermostatType::DualSetPointWithDeadBand;
+    state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
     state->dataSize->ZoneSizingRunDone = true;
     state->dataGlobal->SysSizingCalc = true;
     thisFanCoil.DesignHeatingCapacity = 6000.0;

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -47,9 +47,6 @@
 
 // C++ Headers
 #include <cmath>
-
-// ObjexxFCL Headers
-#include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/BranchNodeConnections.hh>
@@ -114,20 +111,24 @@ namespace UserDefinedComponents {
 
     void UserPlantComponentStruct::onInitLoopEquip(EnergyPlusData &state, const PlantLocation &calledFromLocation)
     {
-        bool anyEMSRan;
         Real64 myLoad = 0.0;
         int thisLoop = 0;
 
         this->initialize(state, calledFromLocation.loopNum, myLoad);
 
         for (int loop = 1; loop <= this->NumPlantConnections; ++loop) {
-            if (calledFromLocation.loopNum != this->Loop(loop).plantLoc.loopNum) continue;
-            if (calledFromLocation.loopSideNum != this->Loop(loop).plantLoc.loopSideNum) continue;
+            if (calledFromLocation.loopNum != this->Loop(loop).plantLoc.loopNum) {
+                continue;
+            }
+            if (calledFromLocation.loopSideNum != this->Loop(loop).plantLoc.loopSideNum) {
+                continue;
+            }
             thisLoop = loop;
         }
 
         if (thisLoop > 0) {
             if (this->Loop(thisLoop).ErlInitProgramMngr > 0) {
+                bool anyEMSRan;
                 EMSManager::ManageEMS(state, EMSManager::EMSCallFrom::UserDefinedComponentModel, anyEMSRan, this->Loop(thisLoop).ErlInitProgramMngr);
             } else if (this->Loop(thisLoop).initPluginLocation > -1) {
                 state.dataPluginManager->pluginManager->runSingleUserDefinedPlugin(state, this->Loop(thisLoop).initPluginLocation);
@@ -158,8 +159,12 @@ namespace UserDefinedComponents {
     {
         int thisLoop = 0;
         for (int loop = 1; loop <= this->NumPlantConnections; ++loop) {
-            if (calledFromLocation.loopNum != this->Loop(loop).plantLoc.loopNum) continue;
-            if (calledFromLocation.loopSideNum != this->Loop(loop).plantLoc.loopSideNum) continue;
+            if (calledFromLocation.loopNum != this->Loop(loop).plantLoc.loopNum) {
+                continue;
+            }
+            if (calledFromLocation.loopSideNum != this->Loop(loop).plantLoc.loopSideNum) {
+                continue;
+            }
             thisLoop = loop;
         }
 
@@ -191,8 +196,12 @@ namespace UserDefinedComponents {
         int thisLoop = 0;
 
         for (int loop = 1; loop <= this->NumPlantConnections; ++loop) {
-            if (calledFromLocation.loopNum != this->Loop(loop).plantLoc.loopNum) continue;
-            if (calledFromLocation.loopSideNum != this->Loop(loop).plantLoc.loopSideNum) continue;
+            if (calledFromLocation.loopNum != this->Loop(loop).plantLoc.loopNum) {
+                continue;
+            }
+            if (calledFromLocation.loopSideNum != this->Loop(loop).plantLoc.loopSideNum) {
+                continue;
+            }
             thisLoop = loop;
         }
 
@@ -1008,14 +1017,28 @@ namespace UserDefinedComponents {
 
                 // make sure user has entered at least some erl program managers to actually calculate something
                 int MgrCountTest = 0;
-                if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).ErlSimProgramMngr > 0) MgrCountTest = 1;
+                if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).ErlSimProgramMngr > 0) {
+                    MgrCountTest = 1;
+                }
                 for (int ConnectionLoop = 1; ConnectionLoop <= NumPlantConnections; ++ConnectionLoop) {
-                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).ErlInitProgramMngr > 0) ++MgrCountTest;
-                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).ErlSimProgramMngr > 0) ++MgrCountTest;
-                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).initPluginLocation >= 0) ++MgrCountTest;
-                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).simPluginLocation >= 0) ++MgrCountTest;
-                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).initCallbackIndex >= 0) ++MgrCountTest;
-                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).simCallbackIndex >= 0) ++MgrCountTest;
+                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).ErlInitProgramMngr > 0) {
+                        ++MgrCountTest;
+                    }
+                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).ErlSimProgramMngr > 0) {
+                        ++MgrCountTest;
+                    }
+                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).initPluginLocation >= 0) {
+                        ++MgrCountTest;
+                    }
+                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).simPluginLocation >= 0) {
+                        ++MgrCountTest;
+                    }
+                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).initCallbackIndex >= 0) {
+                        ++MgrCountTest;
+                    }
+                    if (state.dataUserDefinedComponents->UserPlantComp(CompLoop).Loop(ConnectionLoop).simCallbackIndex >= 0) {
+                        ++MgrCountTest;
+                    }
                 }
                 if (MgrCountTest == 0) {
                     ShowSevereError(state, format("Invalid {}={}", cCurrentModuleObject, cAlphaArgs(1)));
@@ -2088,7 +2111,9 @@ namespace UserDefinedComponents {
 
                 // Fill the Zone Equipment data with the inlet node number of this unit.
                 for (int CtrlZone = 1; CtrlZone <= state.dataGlobal->NumOfZones; ++CtrlZone) {
-                    if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZone).IsControlled) continue;
+                    if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZone).IsControlled) {
+                        continue;
+                    }
                     for (int SupAirIn = 1; SupAirIn <= state.dataZoneEquip->ZoneEquipConfig(CtrlZone).NumInletNodes; ++SupAirIn) {
                         if (state.dataUserDefinedComponents->UserAirTerminal(CompLoop).AirLoop.OutletNodeNum ==
                             state.dataZoneEquip->ZoneEquipConfig(CtrlZone).InletNode(SupAirIn)) {
@@ -2109,6 +2134,10 @@ namespace UserDefinedComponents {
                                     state.dataUserDefinedComponents->UserAirTerminal(CompLoop).AirLoop.InletNodeNum;
                                 state.dataZoneEquip->ZoneEquipConfig(CtrlZone).AirDistUnitCool(SupAirIn).OutNode =
                                     state.dataUserDefinedComponents->UserAirTerminal(CompLoop).AirLoop.OutletNodeNum;
+                                state.dataDefineEquipment->AirDistUnit(state.dataUserDefinedComponents->UserAirTerminal(CompLoop).ADUNum)
+                                    .TermUnitSizingNum = state.dataZoneEquip->ZoneEquipConfig(CtrlZone).AirDistUnitCool(SupAirIn).TermUnitSizingIndex;
+                                state.dataDefineEquipment->AirDistUnit(state.dataUserDefinedComponents->UserAirTerminal(CompLoop).ADUNum).ZoneEqNum =
+                                    CtrlZone;
                             }
 
                             state.dataUserDefinedComponents->UserAirTerminal(CompLoop).ActualCtrlZoneNum = CtrlZone;
@@ -2425,21 +2454,17 @@ namespace UserDefinedComponents {
 
         this->oneTimeInit(state);
 
-        if (LoopNum <= 0 || LoopNum > this->NumPlantConnections) return;
+        if (LoopNum <= 0 || LoopNum > this->NumPlantConnections) {
+            return;
+        }
 
         // fill internal variable targets
         this->Loop(LoopNum).MyLoad = MyLoad;
-        this->Loop(LoopNum).InletRho = FluidProperties::GetDensityGlycol(state,
-                                                                         state.dataPlnt->PlantLoop(this->Loop(LoopNum).plantLoc.loopNum).FluidName,
-                                                                         state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp,
-                                                                         state.dataPlnt->PlantLoop(this->Loop(LoopNum).plantLoc.loopNum).FluidIndex,
-                                                                         RoutineName);
+        this->Loop(LoopNum).InletRho = state.dataPlnt->PlantLoop(this->Loop(LoopNum).plantLoc.loopNum)
+                                           .glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp, RoutineName);
         this->Loop(LoopNum).InletCp =
-            FluidProperties::GetSpecificHeatGlycol(state,
-                                                   state.dataPlnt->PlantLoop(this->Loop(LoopNum).plantLoc.loopNum).FluidName,
-                                                   state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp,
-                                                   state.dataPlnt->PlantLoop(this->Loop(LoopNum).plantLoc.loopNum).FluidIndex,
-                                                   RoutineName);
+            state.dataPlnt->PlantLoop(this->Loop(LoopNum).plantLoc.loopNum)
+                .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp, RoutineName);
         this->Loop(LoopNum).InletMassFlowRate = state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).MassFlowRate;
         this->Loop(LoopNum).InletTemp = state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp;
         if (this->Air.InletNodeNum > 0) {
@@ -2498,16 +2523,10 @@ namespace UserDefinedComponents {
         }
 
         if (this->PlantIsConnected) {
-            this->Loop.InletRho = FluidProperties::GetDensityGlycol(state,
-                                                                    state.dataPlnt->PlantLoop(this->Loop.plantLoc.loopNum).FluidName,
-                                                                    state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp,
-                                                                    state.dataPlnt->PlantLoop(this->Loop.plantLoc.loopNum).FluidIndex,
-                                                                    RoutineName);
-            this->Loop.InletCp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                                        state.dataPlnt->PlantLoop(this->Loop.plantLoc.loopNum).FluidName,
-                                                                        state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp,
-                                                                        state.dataPlnt->PlantLoop(this->Loop.plantLoc.loopNum).FluidIndex,
-                                                                        RoutineName);
+            this->Loop.InletRho = state.dataPlnt->PlantLoop(this->Loop.plantLoc.loopNum)
+                                      .glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp, RoutineName);
+            this->Loop.InletCp = state.dataPlnt->PlantLoop(this->Loop.plantLoc.loopNum)
+                                     .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp, RoutineName);
             this->Loop.InletTemp = state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp;
             this->Loop.InletMassFlowRate = state.dataLoopNodes->Node(this->Loop.InletNodeNum).MassFlowRate;
         }
@@ -2581,17 +2600,12 @@ namespace UserDefinedComponents {
 
         if (this->NumPlantConnections > 0) {
             for (int loop = 1; loop <= this->NumPlantConnections; ++loop) {
-                this->Loop(loop).InletRho = FluidProperties::GetDensityGlycol(state,
-                                                                              state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum).FluidName,
-                                                                              state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp,
-                                                                              state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum).FluidIndex,
-                                                                              RoutineName);
+                this->Loop(loop).InletRho =
+                    state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum)
+                        .glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
                 this->Loop(loop).InletCp =
-                    FluidProperties::GetSpecificHeatGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum).FluidName,
-                                                           state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp,
-                                                           state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
+                    state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum)
+                        .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
                 this->Loop(loop).InletTemp = state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp;
                 this->Loop(loop).InletMassFlowRate = state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).MassFlowRate;
             }
@@ -2663,17 +2677,12 @@ namespace UserDefinedComponents {
 
         if (this->NumPlantConnections > 0) {
             for (int loop = 1; loop <= this->NumPlantConnections; ++loop) {
-                this->Loop(loop).InletRho = FluidProperties::GetDensityGlycol(state,
-                                                                              state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum).FluidName,
-                                                                              state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp,
-                                                                              state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum).FluidIndex,
-                                                                              RoutineName);
+                this->Loop(loop).InletRho =
+                    state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum)
+                        .glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
                 this->Loop(loop).InletCp =
-                    FluidProperties::GetSpecificHeatGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum).FluidName,
-                                                           state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp,
-                                                           state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
+                    state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum)
+                        .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
                 this->Loop(loop).InletTemp = state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp;
                 this->Loop(loop).InletMassFlowRate = state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).MassFlowRate;
             }

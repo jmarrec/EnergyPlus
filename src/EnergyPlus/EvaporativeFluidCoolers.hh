@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -134,6 +134,7 @@ namespace EvaporativeFluidCoolers {
         bool LowSpeedEvapFluidCoolerUAWasAutoSized = false;  // true if low speed UA set to autosize on input
         Real64 LowSpeedEvapFluidCoolerUASizingFactor = 0.0;  // sizing factor for low speed UA []
         Real64 DesignEnteringWaterTemp = 0.0;                // Entering water temperature at design conditions
+        Real64 DesignExitWaterTemp = -999;                   // Leaving water temperature at design conditions [C]
         Real64 DesignEnteringAirTemp = 0.0;                  // Design inlet air dry-bulb temperature (C)
         Real64 DesignEnteringAirWetBulbTemp = 0.0;           // Design inlet air wet-bulb temperature (C)
         Real64 EvapFluidCoolerMassFlowRateMultiplier = 0.0;  // Maximum evaporative fluid cooler flow rate is
@@ -153,7 +154,7 @@ namespace EvaporativeFluidCoolers {
         Real64 LowSpeedUserSpecifiedDesignCapacity = 0.0;  // User specified design capacity for at low speed for
         // two speed fluid cooler[W]
         Real64 Concentration = 0.0;           // fluid/glycol concentration - percent
-        int FluidIndex = 0;                   // Index to Property arrays
+        Fluid::GlycolProps *glycol = nullptr; // Index to Property arrays
         Real64 SizFac = 0.0;                  // sizing factor
         int WaterInletNodeNum = 0;            // Node number on the water inlet side of the evaporative fluid cooler
         int WaterOutletNodeNum = 0;           // Node number on the water outlet side of the evaporative fluid cooler
@@ -171,7 +172,7 @@ namespace EvaporativeFluidCoolers {
         // begin water system interactions
         EvapLoss EvapLossMode = EvapLoss::ByMoistTheory;   // sets how evaporative fluid cooler water evaporation is modeled
         Blowdown BlowdownMode = Blowdown::ByConcentration; // sets how evaporative fluid cooler water blowdown is modeled
-        int SchedIDBlowdown = 0;                           // index "pointer" to schedule of blowdown in [m3/s]
+        Sched::Schedule *blowdownSched = nullptr;          // schedule of blowdown in [m3/s]
         int WaterTankID = 0;                               // index "pointer" to WaterStorage structure
         int WaterTankDemandARRID = 0;                      // index "pointer" to demand array inside WaterStorage structure
         Real64 UserEvapLossFactor = 0.0;                   // simple model [%/Delt C]
@@ -258,9 +259,17 @@ struct EvaporativeFluidCoolersData : BaseGlobalStruct
     Array1D<EvaporativeFluidCoolers::EvapFluidCoolerSpecs> SimpleEvapFluidCooler; // dimension to number of machines
     std::unordered_map<std::string, std::string> UniqueSimpleEvapFluidCoolerNames;
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void clear_state() override
     {
-        *this = EvaporativeFluidCoolersData();
+        new (this) EvaporativeFluidCoolersData();
     }
 };
 

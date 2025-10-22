@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -53,7 +53,7 @@
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array2D.hh>
 #include <ObjexxFCL/ArrayS.functions.hh>
-#include <ObjexxFCL/Fmath.hh>
+// #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/char.functions.hh>
 #include <ObjexxFCL/random.hh>
 #include <ObjexxFCL/string.functions.hh>
@@ -118,9 +118,11 @@ void InitializeRuntimeLanguage(EnergyPlusData &state)
     // value(7)   Seconds (0-59)
     // value(8)   Milliseconds (0-999)
 
-    std::string datestring; // supposedly returns blank when no date available.
-
     if (state.dataRuntimeLangProcessor->InitializeOnce) {
+
+        std::string datestring; // supposedly returns blank when no date available.
+
+        state.dataRuntimeLang->emsVarBuiltInStart = state.dataRuntimeLang->NumErlVariables + 1;
 
         state.dataRuntimeLang->False = SetErlValueNumber(0.0);
         state.dataRuntimeLang->True = SetErlValueNumber(1.0);
@@ -134,7 +136,7 @@ void InitializeRuntimeLanguage(EnergyPlusData &state)
         state.dataRuntimeLangProcessor->OnVariableNum = NewEMSVariable(state, "ON", 0, state.dataRuntimeLang->True);
         state.dataRuntimeLangProcessor->PiVariableNum = NewEMSVariable(state, "PI", 0, SetErlValueNumber(Constant::Pi));
         state.dataRuntimeLangProcessor->TimeStepsPerHourVariableNum =
-            NewEMSVariable(state, "TIMESTEPSPERHOUR", 0, SetErlValueNumber(double(state.dataGlobal->NumOfTimeStepInHour)));
+            NewEMSVariable(state, "TIMESTEPSPERHOUR", 0, SetErlValueNumber(double(state.dataGlobal->TimeStepsInHour)));
 
         // Create dynamic built-in variables
         state.dataRuntimeLangProcessor->YearVariableNum = NewEMSVariable(state, "YEAR", 0);
@@ -159,6 +161,9 @@ void InitializeRuntimeLanguage(EnergyPlusData &state)
         state.dataRuntimeLangProcessor->ActualDateAndTimeNum = NewEMSVariable(state, "ACTUALDATEANDTIME", 0);
         state.dataRuntimeLangProcessor->ActualTimeNum = NewEMSVariable(state, "ACTUALTIME", 0);
         state.dataRuntimeLangProcessor->WarmUpFlagNum = NewEMSVariable(state, "WARMUPFLAG", 0);
+
+        // update the end of the built-in range so we can ignore those on API calls
+        state.dataRuntimeLang->emsVarBuiltInEnd = state.dataRuntimeLang->NumErlVariables;
 
         GetRuntimeLanguageUserInput(state); // Load and parse all runtime language objects
 
@@ -284,27 +289,53 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
     // reinitialize state of Erl variable values to zero, this gets sensors and internal variables used
     for (ErlVariableNum = 1; ErlVariableNum <= state.dataRuntimeLang->NumErlVariables; ++ErlVariableNum) {
         // but skip constant built-in variables so don't overwrite them
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->NullVariableNum) continue;
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->FalseVariableNum) continue;
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->TrueVariableNum) continue;
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->OffVariableNum) continue;
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->OnVariableNum) continue;
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->PiVariableNum) continue;
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->ZoneTimeStepVariableNum) continue;
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->ActualDateAndTimeNum) continue;
-        if (ErlVariableNum == state.dataRuntimeLangProcessor->ActualTimeNum) continue;
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->NullVariableNum) {
+            continue;
+        }
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->FalseVariableNum) {
+            continue;
+        }
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->TrueVariableNum) {
+            continue;
+        }
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->OffVariableNum) {
+            continue;
+        }
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->OnVariableNum) {
+            continue;
+        }
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->PiVariableNum) {
+            continue;
+        }
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->ZoneTimeStepVariableNum) {
+            continue;
+        }
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->ActualDateAndTimeNum) {
+            continue;
+        }
+        if (ErlVariableNum == state.dataRuntimeLangProcessor->ActualTimeNum) {
+            continue;
+        }
 
         // need to preserve curve index variables
         CycleThisVariable = false;
         for (loop = 1; loop <= state.dataRuntimeLang->NumEMSCurveIndices; ++loop) {
-            if (ErlVariableNum == state.dataRuntimeLangProcessor->CurveIndexVariableNums(loop)) CycleThisVariable = true;
+            if (ErlVariableNum == state.dataRuntimeLangProcessor->CurveIndexVariableNums(loop)) {
+                CycleThisVariable = true;
+            }
         }
-        if (CycleThisVariable) continue;
+        if (CycleThisVariable) {
+            continue;
+        }
         CycleThisVariable = false;
         for (loop = 1; loop <= state.dataRuntimeLang->NumEMSConstructionIndices; ++loop) {
-            if (ErlVariableNum == state.dataRuntimeLangProcessor->ConstructionIndexVariableNums(loop)) CycleThisVariable = true;
+            if (ErlVariableNum == state.dataRuntimeLangProcessor->ConstructionIndexVariableNums(loop)) {
+                CycleThisVariable = true;
+            }
         }
-        if (CycleThisVariable) continue;
+        if (CycleThisVariable) {
+            continue;
+        }
 
         if (state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.initialized) {
             state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value =
@@ -410,9 +441,11 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
     SavedWhileExpressionNum = 0;
     NumWhileGotos = 0;
 
-    while (LineNum <= state.dataRuntimeLang->ErlStack(StackNum).NumLines) {
+    auto &thisErlStack = state.dataRuntimeLang->ErlStack(StackNum);
 
-        Line = stripped(state.dataRuntimeLang->ErlStack(StackNum).Line(LineNum));
+    while (LineNum <= thisErlStack.NumLines) {
+
+        Line = stripped(thisErlStack.Line(LineNum));
         if (len(Line) == 0) {
             ++LineNum;
             continue; // Blank lines can be skipped
@@ -430,7 +463,9 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
 
         // the functionality in each block of this parser structure is so different that a regular IF block seems reasonable
         if (Keyword == "RETURN") {
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "RETURN \"{}\"\n", Line);
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "RETURN \"{}\"\n", Line);
+            }
             if (Remainder.empty()) {
                 InstructionNum = AddInstruction(state, StackNum, LineNum, RuntimeLanguageProcessor::ErlKeywordParam::Return);
             } else {
@@ -439,7 +474,9 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             }
 
         } else if (Keyword == "SET") {
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "SET \"{}\"\n", Line);
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "SET \"{}\"\n", Line);
+            }
             Pos = scan(Remainder, '=');
             if (Pos == std::string::npos) {
                 AddError(state, StackNum, LineNum, "Equal sign missing for the SET instruction.");
@@ -464,12 +501,16 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             }
 
         } else if (Keyword == "RUN") {
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "RUN \"{}\"\n", Line);
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "RUN \"{}\"\n", Line);
+            }
             if (Remainder.empty()) {
                 AddError(state, StackNum, LineNum, "Program or Subroutine name missing for the RUN instruction.");
             } else {
                 Pos = scan(Remainder, ' ');
-                if (Pos == std::string::npos) Pos = Remainder.length();
+                if (Pos == std::string::npos) {
+                    Pos = Remainder.length();
+                }
                 Variable = Util::makeUPPER(stripped(Remainder.substr(0, Pos))); // really the subroutine, or reference to instruction set
                 StackNum2 = Util::FindItemInList(Variable, state.dataRuntimeLang->ErlStack);
                 if (StackNum2 == 0) {
@@ -540,7 +581,7 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
                                             LineNum,
                                             DataRuntimeLanguage::ErlKeywordParam::If,
                                             ExpressionNum); // Arg2 added at next ELSEIF, ELSE, ENDIF
-            state.dataRuntimeLang->ErlStack(StackNum).Instruction(SavedIfInstructionNum(NestedIfDepth)).Argument2 = InstructionNum;
+            thisErlStack.Instruction(SavedIfInstructionNum(NestedIfDepth)).Argument2 = InstructionNum;
             SavedIfInstructionNum(NestedIfDepth) = InstructionNum;
 
         } else if (Keyword == "ELSE") {
@@ -572,7 +613,7 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             }
 
             InstructionNum = AddInstruction(state, StackNum, LineNum, DataRuntimeLanguage::ErlKeywordParam::Else); // can make this into a KeywordIf?
-            state.dataRuntimeLang->ErlStack(StackNum).Instruction(SavedIfInstructionNum(NestedIfDepth)).Argument2 = InstructionNum;
+            thisErlStack.Instruction(SavedIfInstructionNum(NestedIfDepth)).Argument2 = InstructionNum;
             SavedIfInstructionNum(NestedIfDepth) = InstructionNum;
 
         } else if (Keyword == "ENDIF") {
@@ -596,12 +637,12 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             }
 
             InstructionNum = AddInstruction(state, StackNum, LineNum, DataRuntimeLanguage::ErlKeywordParam::EndIf);
-            state.dataRuntimeLang->ErlStack(StackNum).Instruction(SavedIfInstructionNum(NestedIfDepth)).Argument2 = InstructionNum;
+            thisErlStack.Instruction(SavedIfInstructionNum(NestedIfDepth)).Argument2 = InstructionNum;
 
             // Go back and complete all of the GOTOs that terminate each IF and ELSEIF block
             for (GotoNum = 1; GotoNum <= NumGotos(NestedIfDepth); ++GotoNum) {
                 InstructionNum2 = SavedGotoInstructionNum(GotoNum, NestedIfDepth);
-                state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum2).Argument1 = InstructionNum;
+                thisErlStack.Instruction(InstructionNum2).Argument1 = InstructionNum;
                 SavedGotoInstructionNum(GotoNum, NestedIfDepth) = 0;
             }
 
@@ -610,7 +651,9 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             --NestedIfDepth;
 
         } else if (Keyword == "WHILE") {
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "WHILE \"{}\"\n", Line);
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "WHILE \"{}\"\n", Line);
+            }
             if (Remainder.empty()) {
                 AddError(state, StackNum, LineNum, "Expression missing for the WHILE instruction.");
                 ExpressionNum = 0;
@@ -630,7 +673,9 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             }
 
         } else if (Keyword == "ENDWHILE") {
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "ENDWHILE \"{}\"\n", Line);
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "ENDWHILE \"{}\"\n", Line);
+            }
             if (NestedWhileDepth == 0) {
                 AddError(state, StackNum, LineNum, "Starting WHILE instruction missing for the ENDWHILE instruction.");
                 break;
@@ -640,16 +685,18 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             }
 
             InstructionNum = AddInstruction(state, StackNum, LineNum, DataRuntimeLanguage::ErlKeywordParam::EndWhile);
-            state.dataRuntimeLang->ErlStack(StackNum).Instruction(SavedWhileInstructionNum).Argument2 = InstructionNum;
-            state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1 = SavedWhileExpressionNum;
-            state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument2 = SavedWhileInstructionNum;
+            thisErlStack.Instruction(SavedWhileInstructionNum).Argument2 = InstructionNum;
+            thisErlStack.Instruction(InstructionNum).Argument1 = SavedWhileExpressionNum;
+            thisErlStack.Instruction(InstructionNum).Argument2 = SavedWhileInstructionNum;
 
             NestedWhileDepth = 0;
             SavedWhileInstructionNum = 0;
             SavedWhileExpressionNum = 0;
 
         } else {
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "ERROR \"{}\"\n", Line);
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "ERROR \"{}\"\n", Line);
+            }
             AddError(state, StackNum, LineNum, "Unknown keyword [" + Keyword + "].");
         }
 
@@ -696,24 +743,29 @@ int AddInstruction(EnergyPlusData &state,
     // Object Data
     ErlStackType TempStack;
 
-    if (state.dataRuntimeLang->ErlStack(StackNum).NumInstructions == 0) {
-        state.dataRuntimeLang->ErlStack(StackNum).Instruction.allocate(1);
-        state.dataRuntimeLang->ErlStack(StackNum).NumInstructions = 1;
+    auto &thisErlStack = state.dataRuntimeLang->ErlStack(StackNum);
+
+    if (thisErlStack.NumInstructions == 0) {
+        thisErlStack.Instruction.allocate(1);
+        thisErlStack.NumInstructions = 1;
     } else {
-        TempStack = state.dataRuntimeLang->ErlStack(StackNum);
-        state.dataRuntimeLang->ErlStack(StackNum).Instruction.deallocate();
-        state.dataRuntimeLang->ErlStack(StackNum).Instruction.allocate(state.dataRuntimeLang->ErlStack(StackNum).NumInstructions + 1);
-        state.dataRuntimeLang->ErlStack(StackNum).Instruction({1, state.dataRuntimeLang->ErlStack(StackNum).NumInstructions}) =
-            TempStack.Instruction({1, state.dataRuntimeLang->ErlStack(StackNum).NumInstructions});
-        ++state.dataRuntimeLang->ErlStack(StackNum).NumInstructions;
+        TempStack = thisErlStack;
+        thisErlStack.Instruction.deallocate();
+        thisErlStack.Instruction.allocate(thisErlStack.NumInstructions + 1);
+        thisErlStack.Instruction({1, thisErlStack.NumInstructions}) = TempStack.Instruction({1, thisErlStack.NumInstructions});
+        ++thisErlStack.NumInstructions;
     }
 
-    InstructionNum = state.dataRuntimeLang->ErlStack(StackNum).NumInstructions;
-    state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).LineNum = LineNum;
-    state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Keyword = Keyword;
+    InstructionNum = thisErlStack.NumInstructions;
+    thisErlStack.Instruction(InstructionNum).LineNum = LineNum;
+    thisErlStack.Instruction(InstructionNum).Keyword = Keyword;
 
-    if (present(Argument1)) state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1 = Argument1;
-    if (present(Argument2)) state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument2 = Argument2;
+    if (present(Argument1)) {
+        thisErlStack.Instruction(InstructionNum).Argument1 = Argument1;
+    }
+    if (present(Argument2)) {
+        thisErlStack.Instruction(InstructionNum).Argument2 = Argument2;
+    }
 
     return InstructionNum;
 }
@@ -745,24 +797,23 @@ void AddError(EnergyPlusData &state,
     // Object Data
     ErlStackType TempStack; // temporary copy of single ErlStack
 
-    if (state.dataRuntimeLang->ErlStack(StackNum).NumErrors == 0) {
-        state.dataRuntimeLang->ErlStack(StackNum).Error.allocate(1);
-        state.dataRuntimeLang->ErlStack(StackNum).NumErrors = 1;
+    auto &thisErlStack = state.dataRuntimeLang->ErlStack(StackNum);
+    if (thisErlStack.NumErrors == 0) {
+        thisErlStack.Error.allocate(1);
+        thisErlStack.NumErrors = 1;
     } else {
-        TempStack = state.dataRuntimeLang->ErlStack(StackNum);
-        state.dataRuntimeLang->ErlStack(StackNum).Error.deallocate();
-        state.dataRuntimeLang->ErlStack(StackNum).Error.allocate(state.dataRuntimeLang->ErlStack(StackNum).NumErrors + 1);
-        state.dataRuntimeLang->ErlStack(StackNum).Error({1, state.dataRuntimeLang->ErlStack(StackNum).NumErrors}) =
-            TempStack.Error({1, state.dataRuntimeLang->ErlStack(StackNum).NumErrors});
-        ++state.dataRuntimeLang->ErlStack(StackNum).NumErrors;
+        TempStack = thisErlStack;
+        thisErlStack.Error.deallocate();
+        thisErlStack.Error.allocate(thisErlStack.NumErrors + 1);
+        thisErlStack.Error({1, thisErlStack.NumErrors}) = TempStack.Error({1, thisErlStack.NumErrors});
+        ++thisErlStack.NumErrors;
     }
 
-    ErrorNum = state.dataRuntimeLang->ErlStack(StackNum).NumErrors;
+    ErrorNum = thisErlStack.NumErrors;
     if (LineNum > 0) {
-        state.dataRuntimeLang->ErlStack(StackNum).Error(ErrorNum) =
-            format("Line {}:  {} \"{}\"", LineNum, Error, state.dataRuntimeLang->ErlStack(StackNum).Line(LineNum));
+        thisErlStack.Error(ErrorNum) = format("Line {}:  {} \"{}\"", LineNum, Error, thisErlStack.Line(LineNum));
     } else {
-        state.dataRuntimeLang->ErlStack(StackNum).Error(ErrorNum) = Error;
+        thisErlStack.Error(ErrorNum) = Error;
     }
 }
 
@@ -797,34 +848,41 @@ ErlValueType EvaluateStack(EnergyPlusData &state, int const StackNum)
     ReturnValue.Type = Value::Number;
     ReturnValue.Number = 0.0;
 
+    auto const &thisErlStack = state.dataRuntimeLang->ErlStack(StackNum);
+
     InstructionNum = 1;
-    while (InstructionNum <= state.dataRuntimeLang->ErlStack(StackNum).NumInstructions) {
+    while (InstructionNum <= thisErlStack.NumInstructions) {
+
+        auto const &thisInstruction = thisErlStack.Instruction(InstructionNum);
 
         {
-            DataRuntimeLanguage::ErlKeywordParam const SELECT_CASE_var =
-                state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Keyword;
+            DataRuntimeLanguage::ErlKeywordParam const SELECT_CASE_var = thisInstruction.Keyword;
 
             if (SELECT_CASE_var == DataRuntimeLanguage::ErlKeywordParam::None) {
                 // There probably shouldn't be any of these
 
             } else if (SELECT_CASE_var == DataRuntimeLanguage::ErlKeywordParam::Return) {
-                if (state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1 > 0)
-                    ReturnValue =
-                        EvaluateExpression(state, state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1, seriousErrorFound);
+                if (thisInstruction.Argument1 > 0) {
+                    ReturnValue = EvaluateExpression(state, thisInstruction.Argument1, seriousErrorFound);
+                }
                 WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
                 break; // RETURN always terminates an instruction stack
 
             } else if (SELECT_CASE_var == DataRuntimeLanguage::ErlKeywordParam::Set) {
 
-                ReturnValue =
-                    EvaluateExpression(state, state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument2, seriousErrorFound);
-                ESVariableNum = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1;
-                if ((!state.dataRuntimeLang->ErlVariable(ESVariableNum).ReadOnly) &&
-                    (!state.dataRuntimeLang->ErlVariable(ESVariableNum).Value.TrendVariable)) {
-                    state.dataRuntimeLang->ErlVariable(ESVariableNum).Value = ReturnValue;
-                } else if (state.dataRuntimeLang->ErlVariable(ESVariableNum).Value.TrendVariable) {
-                    state.dataRuntimeLang->ErlVariable(ESVariableNum).Value.Number = ReturnValue.Number;
-                    state.dataRuntimeLang->ErlVariable(ESVariableNum).Value.Error = ReturnValue.Error;
+                ESVariableNum = thisInstruction.Argument1;
+                auto &thisErlVar = state.dataRuntimeLang->ErlVariable(ESVariableNum);
+                ReturnValue = EvaluateExpression(state, thisInstruction.Argument2, seriousErrorFound);
+                if ((!thisErlVar.ReadOnly) && (!thisErlVar.Value.TrendVariable)) {
+                    // #10279 - We don't do `thisErlVar.Value = ReturnValue;` because we don't want to copy TrendVariable stuff
+                    thisErlVar.Value.Type = ReturnValue.Type;
+                    thisErlVar.Value.Number = ReturnValue.Number;
+                    // thisErlVar.Value.String = ReturnValue.String;
+                    thisErlVar.Value.Error = ReturnValue.Error;
+                    thisErlVar.Value.initialized = ReturnValue.initialized;
+                } else if (thisErlVar.Value.TrendVariable) {
+                    thisErlVar.Value.Number = ReturnValue.Number;
+                    thisErlVar.Value.Error = ReturnValue.Error;
                 }
 
                 WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
@@ -833,11 +891,11 @@ ErlValueType EvaluateStack(EnergyPlusData &state, int const StackNum)
                 ReturnValue.Type = Value::String;
                 ReturnValue.String = "";
                 WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
-                ReturnValue = EvaluateStack(state, state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1);
+                ReturnValue = EvaluateStack(state, thisInstruction.Argument1);
             } else if ((SELECT_CASE_var == DataRuntimeLanguage::ErlKeywordParam::If) ||
                        (SELECT_CASE_var == DataRuntimeLanguage::ErlKeywordParam::Else)) { // same???
-                ExpressionNum = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1;
-                InstructionNum2 = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument2;
+                ExpressionNum = thisInstruction.Argument1;
+                InstructionNum2 = thisInstruction.Argument2;
                 if (ExpressionNum > 0) { // could be 0 if this was an ELSE
                     ReturnValue = EvaluateExpression(state, ExpressionNum, seriousErrorFound);
                     WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
@@ -853,7 +911,7 @@ ErlValueType EvaluateStack(EnergyPlusData &state, int const StackNum)
                     WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
                 }
             } else if (SELECT_CASE_var == DataRuntimeLanguage::ErlKeywordParam::Goto) {
-                InstructionNum = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1;
+                InstructionNum = thisInstruction.Argument1;
 
                 // For debug purposes only...
                 ReturnValue.Type = Value::String;
@@ -869,8 +927,8 @@ ErlValueType EvaluateStack(EnergyPlusData &state, int const StackNum)
 
             } else if (SELECT_CASE_var == DataRuntimeLanguage::ErlKeywordParam::While) {
                 // evaluate expression at while, skip to past endwhile if not true
-                ExpressionNum = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1;
-                InstructionNum2 = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument2;
+                ExpressionNum = thisInstruction.Argument1;
+                InstructionNum2 = thisInstruction.Argument2;
                 ReturnValue = EvaluateExpression(state, ExpressionNum, seriousErrorFound);
                 WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
                 if (ReturnValue.Number == 0.0) { //  This is the FALSE case
@@ -881,8 +939,8 @@ ErlValueType EvaluateStack(EnergyPlusData &state, int const StackNum)
             } else if (SELECT_CASE_var == DataRuntimeLanguage::ErlKeywordParam::EndWhile) {
 
                 // reevaluate expression at While and goto there if true, otherwise continue
-                ExpressionNum = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument1;
-                InstructionNum2 = state.dataRuntimeLang->ErlStack(StackNum).Instruction(InstructionNum).Argument2;
+                ExpressionNum = thisInstruction.Argument1;
+                InstructionNum2 = thisInstruction.Argument2;
                 ReturnValue = EvaluateExpression(state, ExpressionNum, seriousErrorFound);
                 if ((ReturnValue.Number != 0.0) && (WhileLoopExitCounter <= MaxWhileLoopIterations)) { //  This is the True case
                     // Eventually should handle strings and arrays too
@@ -944,11 +1002,15 @@ void WriteTrace(EnergyPlusData &state, int const StackNum, int const Instruction
     std::string TimeString;
     std::string DuringWarmup;
 
-    if ((!state.dataRuntimeLang->OutputFullEMSTrace) && (!state.dataRuntimeLang->OutputEMSErrors) && (!seriousErrorFound)) return;
+    if ((!state.dataRuntimeLang->OutputFullEMSTrace) && (!state.dataRuntimeLang->OutputEMSErrors) && (!seriousErrorFound)) {
+        return;
+    }
 
     if ((state.dataRuntimeLang->OutputEMSErrors) && (!state.dataRuntimeLang->OutputFullEMSTrace) && (!seriousErrorFound)) {
         // see if error needs to be reported.
-        if (ReturnValue.Type != Value::Error) return;
+        if (ReturnValue.Type != Value::Error) {
+            return;
+        }
     }
 
     if (!state.dataRuntimeLangProcessor->WriteTraceMyOneTimeFlag) {
@@ -1100,7 +1162,9 @@ void ParseExpression(EnergyPlusData &state,
             MultFound = false;
             DivFound = false;
 
-            if (NextChar == '.') PeriodFound = true;
+            if (NextChar == '.') {
+                PeriodFound = true;
+            }
 
             while (Pos < LastPos) {
                 NextChar = String[Pos];
@@ -1159,9 +1223,13 @@ void ParseExpression(EnergyPlusData &state,
             if (!ErrorFlag) {
                 state.dataRuntimeLangProcessor->PEToken(NumTokens).Type = Token::Number;
                 state.dataRuntimeLangProcessor->PEToken(NumTokens).String = StringToken;
-                if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "Number=\"{}\"\n", StringToken);
+                if (state.dataSysVars->DeveloperFlag) {
+                    print(state.files.debug, "Number=\"{}\"\n", StringToken);
+                }
                 state.dataRuntimeLangProcessor->PEToken(NumTokens).Number = Util::ProcessNumber(StringToken, ErrorFlag);
-                if (state.dataSysVars->DeveloperFlag && ErrorFlag) print(state.files.debug, "{}\n", "Numeric error flagged");
+                if (state.dataSysVars->DeveloperFlag && ErrorFlag) {
+                    print(state.files.debug, "{}\n", "Numeric error flagged");
+                }
                 if (MinusFound) {
                     state.dataRuntimeLangProcessor->PEToken(NumTokens).Number = -state.dataRuntimeLangProcessor->PEToken(NumTokens).Number;
                     MinusFound = false;
@@ -1200,7 +1268,9 @@ void ParseExpression(EnergyPlusData &state,
             // Save the variable token
             state.dataRuntimeLangProcessor->PEToken(NumTokens).Type = Token::Variable;
             state.dataRuntimeLangProcessor->PEToken(NumTokens).String = StringToken;
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "Variable=\"{}\"\n", StringToken);
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "Variable=\"{}\"\n", StringToken);
+            }
             state.dataRuntimeLangProcessor->PEToken(NumTokens).Variable = NewEMSVariable(state, StringToken, StackNum);
 
         } else if (is_any_of(NextChar, "+-*/^=<>@|&")) {
@@ -1246,7 +1316,9 @@ void ParseExpression(EnergyPlusData &state,
                 const std::string potential_match = String.substr(Pos, len);
 
                 if ((case_insensitive && Util::SameString(potential_match, string)) || (!case_insensitive && potential_match == string)) {
-                    if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "OPERATOR \"{}\"\n", potential_match);
+                    if (state.dataSysVars->DeveloperFlag) {
+                        print(state.files.debug, "OPERATOR \"{}\"\n", potential_match);
+                    }
                     state.dataRuntimeLangProcessor->PEToken(NumTokens).Operator = op;
                     state.dataRuntimeLangProcessor->PEToken(NumTokens).String = potential_match;
                     Pos += (len - 1);
@@ -1308,7 +1380,9 @@ void ParseExpression(EnergyPlusData &state,
                     i_parse("@TOMORROWLIQUIDPRECIP", ErlFunc::TomorrowLiquidPrecip)) {
                     // was a built in function operator
                 } else { // throw error
-                    if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "ERROR \"{}\"\n", String);
+                    if (state.dataSysVars->DeveloperFlag) {
+                        print(state.files.debug, "ERROR \"{}\"\n", String);
+                    }
                     ShowFatalError(state, format("EMS Runtime Language: did not find valid input for built-in function ={}", String));
                 }
             } else {
@@ -1317,7 +1391,9 @@ void ParseExpression(EnergyPlusData &state,
                 MultFound = false;
                 DivFound = false;
 
-                if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "OPERATOR \"{}\"\n", StringToken);
+                if (state.dataSysVars->DeveloperFlag) {
+                    print(state.files.debug, "OPERATOR \"{}\"\n", StringToken);
+                }
 
                 if (StringToken == "+") {
                     if (!OperatorProcessing) {
@@ -1358,7 +1434,9 @@ void ParseExpression(EnergyPlusData &state,
                     state.dataRuntimeLangProcessor->PEToken(NumTokens).String = StringToken;
                 } else {
                     // Uh OH, this should never happen! throw error
-                    if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "ERROR \"{}\"\n", StringToken);
+                    if (state.dataSysVars->DeveloperFlag) {
+                        print(state.files.debug, "ERROR \"{}\"\n", StringToken);
+                    }
                     ShowFatalError(state, format("EMS, caught unexpected token = \"{}\" ; while parsing string={}", StringToken, String));
                 }
             }
@@ -1369,18 +1447,24 @@ void ParseExpression(EnergyPlusData &state,
             // Parse a parenthesis token
             ++Pos;
             StringToken = NextChar;
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "PAREN \"{}\"\n", StringToken);
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "PAREN \"{}\"\n", StringToken);
+            }
             state.dataRuntimeLangProcessor->PEToken(NumTokens).Type = Token::Parenthesis;
             state.dataRuntimeLangProcessor->PEToken(NumTokens).String = StringToken;
             if (NextChar == '(') {
                 state.dataRuntimeLangProcessor->PEToken(NumTokens).Parenthesis = Token::ParenthesisLeft;
                 OperatorProcessing = true;
             }
-            if (NextChar == ')') state.dataRuntimeLangProcessor->PEToken(NumTokens).Parenthesis = Token::ParenthesisRight;
+            if (NextChar == ')') {
+                state.dataRuntimeLangProcessor->PEToken(NumTokens).Parenthesis = Token::ParenthesisRight;
+            }
 
         } else if (is_any_of(NextChar, "\"")) {
             // Parse a string literal token
-            if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "{}\n", "LITERAL STRING");
+            if (state.dataSysVars->DeveloperFlag) {
+                print(state.files.debug, "{}\n", "LITERAL STRING");
+            }
             ++Pos;
 
         } else {
@@ -1389,7 +1473,9 @@ void ParseExpression(EnergyPlusData &state,
     }
 
     if (NumErrors > 0) {
-        if (state.dataSysVars->DeveloperFlag) print(state.files.debug, "{}\n", "ERROR OUT");
+        if (state.dataSysVars->DeveloperFlag) {
+            print(state.files.debug, "{}\n", "ERROR OUT");
+        }
         ShowFatalError(state, "EMS, previous errors cause termination.");
     }
 
@@ -1451,7 +1537,9 @@ int ProcessTokens(
         for (TokenNum = 1; TokenNum <= NumTokens; ++TokenNum) {
             if (Token(TokenNum).Type == Token::Parenthesis) {
                 if (Token(TokenNum).Parenthesis == Token::ParenthesisLeft) {
-                    if (Depth == 0) Pos = TokenNum; // Record position of first left parenthesis
+                    if (Depth == 0) {
+                        Pos = TokenNum; // Record position of first left parenthesis
+                    }
                     ++Depth;
                 }
                 if (Token(TokenNum).Parenthesis == Token::ParenthesisRight) {
@@ -1736,30 +1824,32 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
     ReturnValue.Number = 0.0;
 
     if (ExpressionNum > 0) {
+        auto const &thisErlExpression = state.dataRuntimeLang->ErlExpression(ExpressionNum);
         // is there a way to keep these and not allocate and deallocate all the time?
-        Operand.allocate(state.dataRuntimeLang->ErlExpression(ExpressionNum).NumOperands);
+        Operand.allocate(thisErlExpression.NumOperands);
         // Reduce operands down to literals
-        for (OperandNum = 1; OperandNum <= state.dataRuntimeLang->ErlExpression(ExpressionNum).NumOperands; ++OperandNum) {
-            Operand(OperandNum) = state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(OperandNum);
-            if (Operand(OperandNum).Type == Value::Expression) {
-                Operand(OperandNum) = EvaluateExpression(state, Operand(OperandNum).Expression, seriousErrorFound); // recursive call
+        for (OperandNum = 1; OperandNum <= thisErlExpression.NumOperands; ++OperandNum) {
+            auto &thisOperand = Operand(OperandNum);
+            thisOperand = thisErlExpression.Operand(OperandNum);
+            if (thisOperand.Type == Value::Expression) {
+                thisOperand = EvaluateExpression(state, thisOperand.Expression, seriousErrorFound); // recursive call
                 // check if recursive call found an error in nested expression, want to preserve error message from that
                 if (seriousErrorFound) {
                     ReturnValue.Type = Value::Error;
-                    ReturnValue.Error = Operand(OperandNum).Error;
+                    ReturnValue.Error = thisOperand.Error;
                 }
 
-            } else if (Operand(OperandNum).Type == Value::Variable) {
-                if (state.dataRuntimeLang->ErlVariable(Operand(OperandNum).Variable).Value.initialized) { // check that value has been initialized
-                    Operand(OperandNum) = state.dataRuntimeLang->ErlVariable(Operand(OperandNum).Variable).Value;
+            } else if (thisOperand.Type == Value::Variable) {
+                auto const &thisErlVar = state.dataRuntimeLang->ErlVariable(thisOperand.Variable);
+                if (thisErlVar.Value.initialized) { // check that value has been initialized
+                    thisOperand = thisErlVar.Value;
                 } else { // value has never been set
                     ReturnValue.Type = Value::Error;
-                    ReturnValue.Error = "EvaluateExpression: Variable = '" + state.dataRuntimeLang->ErlVariable(Operand(OperandNum).Variable).Name +
-                                        "' used in expression has not been initialized!";
+                    ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
                     if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
 
                         // check if this is an arg in CurveValue,
-                        if (state.dataRuntimeLang->ErlExpression(ExpressionNum).Operator !=
+                        if (thisErlExpression.Operator !=
                             ErlFunc::CurveValue) { // padding the argument list for CurveValue is too common to fatal on.  only reported to EDD
                             seriousErrorFound = true;
                         }
@@ -1772,7 +1862,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
 
             // Perform the operation
 
-            switch (state.dataRuntimeLang->ErlExpression(ExpressionNum).Operator) {
+            switch (thisErlExpression.Operator) {
 
             case ErlFunc::Literal:
                 ReturnValue = Operand(1);
@@ -1943,11 +2033,11 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 break;
 
             case ErlFunc::DegToRad:
-                ReturnValue = SetErlValueNumber(Operand(1).Number * Constant::DegToRadians);
+                ReturnValue = SetErlValueNumber(Operand(1).Number * Constant::DegToRad);
                 break;
 
             case ErlFunc::RadToDeg:
-                ReturnValue = SetErlValueNumber(Operand(1).Number / Constant::DegToRadians);
+                ReturnValue = SetErlValueNumber(Operand(1).Number / Constant::DegToRad);
                 break;
 
             case ErlFunc::Exp:
@@ -2004,7 +2094,9 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                     tmpRANDU1 = 2.0 * tmpRANDU1 - 1.0;
                     tmpRANDU2 = 2.0 * tmpRANDU2 - 1.0;
                     UnitCircleTest = square(tmpRANDU1) + square(tmpRANDU2);
-                    if (UnitCircleTest > 0.0 && UnitCircleTest < 1.0) break;
+                    if (UnitCircleTest > 0.0 && UnitCircleTest < 1.0) {
+                        break;
+                    }
                 }
                 tmpRANDG = std::sqrt(-2.0 * std::log(UnitCircleTest) / UnitCircleTest);
                 tmpRANDG *= tmpRANDU1; // standard normal ran
@@ -2434,7 +2526,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                                                                                                                 // independent | 5th independent
                 } else if (Operand(4).Type == Value::Null && Operand(5).Type == Value::Null && Operand(6).Type == Value::Null) {
                     Real64 curveVal = 0.0;
-                    switch (state.dataCurveManager->PerfCurve(std::floor(Operand(1).Number))->numDims) {
+                    switch (state.dataCurveManager->curves(std::floor(Operand(1).Number))->numDims) {
                     case 1:
                         curveVal = CurveValue(state, std::floor(Operand(1).Number), Operand(2).Number);
                         break;
@@ -2445,7 +2537,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                     ReturnValue = SetErlValueNumber(curveVal);
                 } else if (Operand(5).Type == Value::Null && Operand(6).Type == Value::Null) {
                     Real64 curveVal = 0.0;
-                    switch (state.dataCurveManager->PerfCurve(std::floor(Operand(1).Number))->numDims) {
+                    switch (state.dataCurveManager->curves(std::floor(Operand(1).Number))->numDims) {
                     case 1:
                         curveVal = CurveValue(state, std::floor(Operand(1).Number), Operand(2).Number);
                         break;
@@ -2459,7 +2551,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                     ReturnValue = SetErlValueNumber(curveVal);
                 } else if (Operand(6).Type == Value::Null) {
                     Real64 curveVal = 0.0;
-                    switch (state.dataCurveManager->PerfCurve(std::floor(Operand(1).Number))->numDims) {
+                    switch (state.dataCurveManager->curves(std::floor(Operand(1).Number))->numDims) {
                     case 1:
                         curveVal = CurveValue(state, std::floor(Operand(1).Number), Operand(2).Number);
                         break;
@@ -2477,7 +2569,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                     ReturnValue = SetErlValueNumber(curveVal);
                 } else {
                     Real64 curveVal = 0.0;
-                    switch (state.dataCurveManager->PerfCurve(std::floor(Operand(1).Number))->numDims) {
+                    switch (state.dataCurveManager->curves(std::floor(Operand(1).Number))->numDims) {
                     case 1:
                         curveVal = CurveValue(state, std::floor(Operand(1).Number), Operand(2).Number);
                         break;
@@ -2521,11 +2613,11 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
             case ErlFunc::TodayLiquidPrecip: {
                 int iHour = (Operand(1).Number + 1); // Operand 1 is hour from 0:23
                 int iTimeStep = Operand(2).Number;
-                if ((iHour > 0) && (iHour <= 24) && (iTimeStep > 0) && (iTimeStep <= state.dataGlobal->NumOfTimeStepInHour)) {
+                if ((iHour > 0) && (iHour <= 24) && (iTimeStep > 0) && (iTimeStep <= state.dataGlobal->TimeStepsInHour)) {
                     auto const &today = state.dataWeather->wvarsHrTsToday(iTimeStep, iHour);
                     ReturnValue.initialized = true;
                     ReturnValue.Type = Value::Number;
-                    switch (state.dataRuntimeLang->ErlExpression(ExpressionNum).Operator) {
+                    switch (thisErlExpression.Operator) {
                     case ErlFunc::TodayIsRain: {
                         ReturnValue.Number = today.IsRain ? 1.0 : 0.0;
                     } break;
@@ -2575,7 +2667,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 } else {
                     ReturnValue.Type = DataRuntimeLanguage::Value::Error;
                     ReturnValue.Error = format("{} function called with invalid arguments: Hour={:.1R}, Timestep={:.1R}",
-                                               ErlFuncNamesUC[(int)state.dataRuntimeLang->ErlExpression(ExpressionNum).Operator],
+                                               ErlFuncNamesUC[(int)thisErlExpression.Operator],
                                                Operand(1).Number,
                                                Operand(2).Number);
                 }
@@ -2597,11 +2689,11 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
             case ErlFunc::TomorrowLiquidPrecip: {
                 int iHour = (Operand(1).Number + 1); // Operand 1 is hour from 0:23
                 int iTimeStep = Operand(2).Number;
-                if ((iHour > 0) && (iHour <= Constant::HoursInDay) && (iTimeStep > 0) && (iTimeStep <= state.dataGlobal->NumOfTimeStepInHour)) {
+                if ((iHour > 0) && (iHour <= Constant::iHoursInDay) && (iTimeStep > 0) && (iTimeStep <= state.dataGlobal->TimeStepsInHour)) {
                     auto const &tomorrow = state.dataWeather->wvarsHrTsTomorrow(iTimeStep, iHour);
                     ReturnValue.initialized = true;
                     ReturnValue.Type = Value::Number;
-                    switch (state.dataRuntimeLang->ErlExpression(ExpressionNum).Operator) {
+                    switch (thisErlExpression.Operator) {
                     case ErlFunc::TomorrowIsRain: {
                         ReturnValue.Number = tomorrow.IsRain ? 1.0 : 0.0;
                     } break;
@@ -2651,7 +2743,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 } else {
                     ReturnValue.Type = DataRuntimeLanguage::Value::Error;
                     ReturnValue.Error = format("{} function called with invalid arguments: Hour={:.1R}, Timestep={:.1R}",
-                                               ErlFuncNamesUC[(int)state.dataRuntimeLang->ErlExpression(ExpressionNum).Operator],
+                                               ErlFuncNamesUC[(int)thisErlExpression.Operator],
                                                Operand(1).Number,
                                                Operand(2).Number);
                 }
@@ -3401,7 +3493,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 // Last field is index key, no indexing here so mimic weather output data
 
             } // RuntimeReportVarNum
-        }     // NumEMSOutputVariables > 0
+        } // NumEMSOutputVariables > 0
 
         if (state.dataRuntimeLang->NumEMSMeteredOutputVariables > 0) {
             cCurrentModuleObject = "EnergyManagementSystem:MeteredOutputVariable";
@@ -3868,7 +3960,9 @@ int FindEMSVariable(EnergyPlusData &state,
         }
     }
 
-    if (!Found) VariableNum = 0;
+    if (!Found) {
+        VariableNum = 0;
+    }
 
     return VariableNum;
 }
@@ -3897,12 +3991,15 @@ int NewEMSVariable(EnergyPlusData &state, std::string const &VariableName, int c
 
         // Add the new variable
         VariableNum = state.dataRuntimeLang->NumErlVariables;
-        state.dataRuntimeLang->ErlVariable(VariableNum).Name = Util::makeUPPER(VariableName);
-        state.dataRuntimeLang->ErlVariable(VariableNum).StackNum = StackNum;
-        state.dataRuntimeLang->ErlVariable(VariableNum).Value.Type = Value::Number; // ErlVariable values are numbers
+        auto &thisErlVar = state.dataRuntimeLang->ErlVariable(VariableNum);
+        thisErlVar.Name = Util::makeUPPER(VariableName);
+        thisErlVar.StackNum = StackNum;
+        thisErlVar.Value.Type = Value::Number; // ErlVariable values are numbers
     }
 
-    if (present(Value)) state.dataRuntimeLang->ErlVariable(VariableNum).Value = Value;
+    if (present(Value)) {
+        state.dataRuntimeLang->ErlVariable(VariableNum).Value = Value;
+    }
 
     return VariableNum;
 }

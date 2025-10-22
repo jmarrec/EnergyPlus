@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -259,7 +259,7 @@ void cleanEPJSON(json &epjson)
 void InputProcessor::processInput(EnergyPlusData &state)
 {
     if (!FileSystem::fileExists(state.dataStrGlobals->inputFilePath)) {
-        ShowFatalError(state, "Input file path " + state.dataStrGlobals->inputFilePath.string() + " not found");
+        ShowFatalError(state, fmt::format("Input file path {} not found", state.dataStrGlobals->inputFilePath));
         return;
     }
 
@@ -496,7 +496,9 @@ int InputProcessor::getNumSectionsFound(std::string const &SectionWord)
     // number of sections of that kind found in the current input.  If not, return -1.
 
     auto const SectionWord_iter = epJSON.find(SectionWord);
-    if (SectionWord_iter == epJSON.end()) return -1;
+    if (SectionWord_iter == epJSON.end()) {
+        return -1;
+    }
     return static_cast<int>(SectionWord_iter.value().size());
 }
 
@@ -630,7 +632,9 @@ std::string InputProcessor::getAlphaFieldValue(json const &ep_object, json const
     if (it != ep_object.end()) {
         auto const &val = it.value();
         assert(val.is_string());
-        if (!val.empty()) return uc ? Util::makeUPPER(val.get<std::string>()) : val.get<std::string>();
+        if (!val.empty()) {
+            return uc ? Util::makeUPPER(val.get<std::string>()) : val.get<std::string>();
+        }
     }
 
     auto const it2 = fprops.find("default");
@@ -648,7 +652,7 @@ std::string InputProcessor::getAlphaFieldValue(json const &ep_object, json const
 Real64 InputProcessor::getRealFieldValue(json const &ep_object, json const &schema_obj_props, std::string const &fieldName)
 {
     // Return the value of fieldName in ep_object as a Real64.
-    // If the field value is a string, then assum autosize and return Constant::AutoCalculate(-99999).
+    // If the field value is a string, then assume autosize and return Constant::AutoCalculate(-99999).
     // If the field is not present in ep_object then return its default if there is one, or return 0.0
     auto it = ep_object.find(fieldName);
     if (it != ep_object.end()) {
@@ -681,7 +685,7 @@ Real64 InputProcessor::getRealFieldValue(json const &ep_object, json const &sche
 int InputProcessor::getIntFieldValue(json const &ep_object, json const &schema_obj_props, std::string const &fieldName)
 {
     // Return the value of fieldName in ep_object as an integer.
-    // If the field value is a string, then assume autosize or autocalulate and return Constant::AutoCalculate(-99999).
+    // If the field value is a string, then assume autosize or autocalculate and return Constant::AutoCalculate(-99999).
     // If the field is not present in ep_object then return its default if there is one, or return 0
 
     auto const &schema_field_obj = schema_obj_props[fieldName];
@@ -763,7 +767,9 @@ InputProcessor::MaxFields InputProcessor::findMaxFields(
         maxFields.max_fields = min_fields;
         for (auto const &field : ep_object.items()) {
             auto const &field_key = field.key();
-            if (field_key == extension_key) continue;
+            if (field_key == extension_key) {
+                continue;
+            }
             for (std::size_t i = maxFields.max_fields; i < legacy_idd_fields.size(); ++i) {
                 if (field_key == legacy_idd_fields[i]) {
                     maxFields.max_fields = (i + 1);
@@ -829,7 +835,9 @@ void InputProcessor::setObjectItemValue(EnergyPlusData &state,
                 auto const value = getObjectItemValue(field_value.get<std::string>(), schema_field_obj); // (AUTO_OK_OBJ)
 
                 Alphas(alpha_index) = value.first;
-                if (is_AlphaBlank) AlphaBlank()(alpha_index) = value.second;
+                if (is_AlphaBlank) {
+                    AlphaBlank()(alpha_index) = value.second;
+                }
 
             } else {
                 if (field_value.is_number_integer()) {
@@ -838,7 +846,9 @@ void InputProcessor::setObjectItemValue(EnergyPlusData &state,
                     dtoa(field_value.get<double>(), s);
                 }
                 Alphas(alpha_index) = s;
-                if (is_AlphaBlank) AlphaBlank()(alpha_index) = false;
+                if (is_AlphaBlank) {
+                    AlphaBlank()(alpha_index) = false;
+                }
             }
         } else if (field_type == "n") {
             // process numeric value
@@ -848,7 +858,9 @@ void InputProcessor::setObjectItemValue(EnergyPlusData &state,
                 } else {
                     Numbers(numeric_index) = field_value.get<double>();
                 }
-                if (is_NumBlank) NumBlank()(numeric_index) = false;
+                if (is_NumBlank) {
+                    NumBlank()(numeric_index) = false;
+                }
             } else {
                 bool is_empty = field_value.get<std::string>().empty();
                 if (is_empty) {
@@ -856,7 +868,9 @@ void InputProcessor::setObjectItemValue(EnergyPlusData &state,
                 } else {
                     Numbers(numeric_index) = Constant::AutoCalculate; // autosize and autocalculate
                 }
-                if (is_NumBlank) NumBlank()(numeric_index) = is_empty;
+                if (is_NumBlank) {
+                    NumBlank()(numeric_index) = is_empty;
+                }
             }
         }
     } else {
@@ -864,20 +878,28 @@ void InputProcessor::setObjectItemValue(EnergyPlusData &state,
             if (!(findDefault(Alphas(alpha_index), schema_field_obj))) {
                 Alphas(alpha_index) = "";
             }
-            if (is_AlphaBlank) AlphaBlank()(alpha_index) = true;
+            if (is_AlphaBlank) {
+                AlphaBlank()(alpha_index) = true;
+            }
         } else if (field_type == "n") {
             findDefault(Numbers(numeric_index), schema_field_obj);
-            if (is_NumBlank) NumBlank()(numeric_index) = true;
+            if (is_NumBlank) {
+                NumBlank()(numeric_index) = true;
+            }
         }
     }
     if (field_type == "a") {
-        if (within_max_fields) NumAlphas = alpha_index;
+        if (within_max_fields) {
+            NumAlphas = alpha_index;
+        }
         if (is_AlphaFieldNames) {
             AlphaFieldNames()(alpha_index) = (state.dataGlobal->isEpJSON) ? field : legacy_field_info.at("field_name").get<std::string>();
         }
         alpha_index++;
     } else if (field_type == "n") {
-        if (within_max_fields) NumNumbers = numeric_index;
+        if (within_max_fields) {
+            NumNumbers = numeric_index;
+        }
         if (is_NumericFieldNames) {
             NumericFieldNames()(numeric_index) = (state.dataGlobal->isEpJSON) ? field : legacy_field_info.at("field_name").get<std::string>();
         }
@@ -1037,7 +1059,9 @@ void InputProcessor::getObjectItem(EnergyPlusData &state,
             } else {
                 Alphas(alpha_index) = Util::makeUPPER(objectInfo.objectName);
             }
-            if (is_AlphaBlank) AlphaBlank()(alpha_index) = objectInfo.objectName.empty();
+            if (is_AlphaBlank) {
+                AlphaBlank()(alpha_index) = objectInfo.objectName.empty();
+            }
             if (is_AlphaFieldNames) {
                 AlphaFieldNames()(alpha_index) = (state.dataGlobal->isEpJSON) ? field : field_info_val.at("field_name").get<std::string>();
             }
@@ -1064,9 +1088,9 @@ void InputProcessor::getObjectItem(EnergyPlusData &state,
                            NumericFieldNames);
     }
 
-    size_t extensible_count = 0;
     auto const legacy_idd_extensibles_iter = legacy_idd.find("extensibles");
     if (legacy_idd_extensibles_iter != legacy_idd.end()) {
+        size_t extensible_count = 0;
         auto const epJSON_extensions_array_itr = obj_val.find(extension_key);
         if (epJSON_extensions_array_itr != obj_val.end()) {
             auto const &legacy_idd_extensibles = legacy_idd_extensibles_iter.value();
@@ -1116,7 +1140,9 @@ int InputProcessor::getIDFObjNum(EnergyPlusData &state, std::string_view Object,
 
     // Only applicable if the incoming file was idf
     int idfOrderNumber = Number;
-    if (state.dataGlobal->isEpJSON || !state.dataGlobal->preserveIDFOrder) return idfOrderNumber;
+    if (state.dataGlobal->isEpJSON || !state.dataGlobal->preserveIDFOrder) {
+        return idfOrderNumber;
+    }
 
     json *obj;
     auto obj_iter = epJSON.find(std::string(Object));
@@ -1153,13 +1179,64 @@ int InputProcessor::getIDFObjNum(EnergyPlusData &state, std::string_view Object,
     return idfOrderNumber;
 }
 
+std::vector<std::string> InputProcessor::getIDFOrderedKeys(EnergyPlusData &state, std::string_view const Object)
+{
+    // Given the number (index) of an object in JSON order, return it's number in original idf order
+    std::vector<std::string> keys;
+    std::vector<int> nums;
+
+    json *obj;
+    auto obj_iter = epJSON.find(std::string(Object));
+    if (obj_iter == epJSON.end()) {
+        auto tmp_umit = caseInsensitiveObjectMap.find(convertToUpper(Object));
+        if (tmp_umit == caseInsensitiveObjectMap.end()) {
+            return keys;
+        }
+        obj = &epJSON[tmp_umit->second];
+    } else {
+        obj = &(obj_iter.value());
+    }
+
+    // Return names in JSON order
+    if (state.dataGlobal->isEpJSON || !state.dataGlobal->preserveIDFOrder) {
+        for (auto it = obj->begin(); it != obj->end(); ++it) {
+            keys.emplace_back(it.key());
+        }
+
+        return keys;
+    }
+
+    // Now, the real work begins
+
+    for (auto it = obj->begin(); it != obj->end(); ++it) {
+        nums.push_back(it.value()["idf_order"].get<int>());
+    }
+    std::sort(nums.begin(), nums.end());
+
+    // Reserve doesn't seem to work :(
+    for (int i = 0; i < (int)nums.size(); ++i) {
+        keys.push_back("");
+    }
+
+    // get list of saved object numbers from idf processing
+    for (auto it = obj->begin(); it != obj->end(); ++it) {
+        int objNum = it.value()["idf_order"].get<int>();
+        int objIdx = std::find(nums.begin(), nums.end(), objNum) - nums.begin();
+        keys[objIdx] = it.key();
+    }
+
+    return keys;
+}
+
 int InputProcessor::getJSONObjNum(EnergyPlusData &state, std::string const &Object, int const Number)
 {
     // Given the number (index) of an object in original idf order, return it's number in JSON order
 
     // Only applicable if the incoming file was idf
     int jSONOrderNumber = Number;
-    if (state.dataGlobal->isEpJSON || !state.dataGlobal->preserveIDFOrder) return jSONOrderNumber;
+    if (state.dataGlobal->isEpJSON || !state.dataGlobal->preserveIDFOrder) {
+        return jSONOrderNumber;
+    }
 
     json *obj;
     auto obj_iter = epJSON.find(Object);
@@ -1296,7 +1373,9 @@ void InputProcessor::getMaxSchemaArgs(int &NumArgs, int &NumAlpha, int &NumNumer
             auto const find_extensions = obj.find(extension_key);
             if (find_extensions != obj.end()) {
                 size_t const size = find_extensions.value().size();
-                if (size > max_size) max_size = size;
+                if (size > max_size) {
+                    max_size = size;
+                }
             }
         }
 
@@ -1320,8 +1399,12 @@ void InputProcessor::getMaxSchemaArgs(int &NumArgs, int &NumAlpha, int &NumNumer
                 num_numeric += numerics["extensions"].size() * max_size;
             }
         }
-        if (num_alpha > NumAlpha) NumAlpha = num_alpha;
-        if (num_numeric > NumNumeric) NumNumeric = num_numeric;
+        if (num_alpha > NumAlpha) {
+            NumAlpha = num_alpha;
+        }
+        if (num_numeric > NumNumeric) {
+            NumNumeric = num_numeric;
+        }
     }
 
     NumArgs = NumAlpha + NumNumeric;
@@ -1381,7 +1464,9 @@ void InputProcessor::getObjectDefMaxArgs(EnergyPlusData &state,
     for (auto const &obj : *objects) {
         if (auto found = obj.find(extension_key); found != obj.end()) {
             size_t const size = found.value().size();
-            if (size > max_size) max_size = size;
+            if (size > max_size) {
+                max_size = size;
+            }
         }
     }
 
@@ -1427,7 +1512,7 @@ void InputProcessor::reportIDFRecordsStats(EnergyPlusData &state)
     state.dataOutput->iNumberOfDefaultedFields = 0;     // Number of defaulted fields in IDF
     state.dataOutput->iTotalFieldsWithDefaults = 0;     // Total number of fields that could be defaulted
     state.dataOutput->iNumberOfAutoSizedFields = 0;     // Number of autosized fields in IDF
-    state.dataOutput->iTotalAutoSizableFields = 0;      // Total number of autosizeable fields
+    state.dataOutput->iTotalAutoSizableFields = 0;      // Total number of autosizable fields
     state.dataOutput->iNumberOfAutoCalcedFields = 0;    // Number of autocalculated fields
     state.dataOutput->iTotalAutoCalculatableFields = 0; // Total number of autocalculatable fields
 
@@ -1575,7 +1660,7 @@ void InputProcessor::reportIDFRecordsStats(EnergyPlusData &state)
             } // End extensible fields
 
         } // End loop on each object of a given objectType
-    }     // End loop on all objectTypes
+    } // End loop on all objectTypes
 }
 
 void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
@@ -1619,7 +1704,9 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
             ShowContinueError(state, " -- Object name: " + name);
         }
 
-        if (!state.dataGlobal->DisplayUnusedObjects) continue;
+        if (!state.dataGlobal->DisplayUnusedObjects) {
+            continue;
+        }
 
         if (!state.dataGlobal->DisplayAllWarnings) {
             auto found_type = unused_object_types.find(object_type);
@@ -1664,7 +1751,7 @@ void InputProcessor::preProcessorCheck(EnergyPlusData &state, bool &PreP_Fatal) 
     //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This routine checks for existance of "Preprocessor Message" object and
+    // This routine checks for existence of "Preprocessor Message" object and
     // performs appropriate action.
 
     // METHODOLOGY EMPLOYED:
@@ -1692,21 +1779,18 @@ void InputProcessor::preProcessorCheck(EnergyPlusData &state, bool &PreP_Fatal) 
     //    A11,       \field message line 9
     //    A12;       \field message line 10
 
-    int NumAlphas;  // Used to retrieve names from IDF
-    int NumNumbers; // Used to retrieve rNumericArgs from IDF
-    int IOStat;     // Could be used in the Get Routines, not currently checked
-    int NumParams;  // Total Number of Parameters in 'Output:PreprocessorMessage' Object
-    int NumPrePM;   // Number of Preprocessor Message objects in IDF
-    int CountP;
-    int CountM;
-    std::string Multiples;
-
     state.dataIPShortCut->cCurrentModuleObject = "Output:PreprocessorMessage";
-    NumPrePM = getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
+    int NumPrePM = getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
     if (NumPrePM > 0) {
+        int NumAlphas;  // Used to retrieve names from IDF
+        int NumNumbers; // Used to retrieve rNumericArgs from IDF
+        int IOStat;     // Could be used in the Get Routines, not currently checked
+        int NumParams;  // Total Number of Parameters in 'Output:PreprocessorMessage' Object
+        std::string Multiples;
+
         getObjectDefMaxArgs(state, state.dataIPShortCut->cCurrentModuleObject, NumParams, NumAlphas, NumNumbers);
         state.dataIPShortCut->cAlphaArgs({1, NumAlphas}) = BlankString;
-        for (CountP = 1; CountP <= NumPrePM; ++CountP) {
+        for (int CountP = 1; CountP <= NumPrePM; ++CountP) {
             getObjectItem(state,
                           state.dataIPShortCut->cCurrentModuleObject,
                           CountP,
@@ -1719,13 +1803,17 @@ void InputProcessor::preProcessorCheck(EnergyPlusData &state, bool &PreP_Fatal) 
                           state.dataIPShortCut->lAlphaFieldBlanks,
                           state.dataIPShortCut->cAlphaFieldNames,
                           state.dataIPShortCut->cNumericFieldNames);
-            if (state.dataIPShortCut->cAlphaArgs(1).empty()) state.dataIPShortCut->cAlphaArgs(1) = "Unknown";
+            if (state.dataIPShortCut->cAlphaArgs(1).empty()) {
+                state.dataIPShortCut->cAlphaArgs(1) = "Unknown";
+            }
             if (NumAlphas > 3) {
                 Multiples = "s";
             } else {
                 Multiples = BlankString;
             }
-            if (state.dataIPShortCut->cAlphaArgs(2).empty()) state.dataIPShortCut->cAlphaArgs(2) = "Unknown";
+            if (state.dataIPShortCut->cAlphaArgs(2).empty()) {
+                state.dataIPShortCut->cAlphaArgs(2) = "Unknown";
+            }
             {
                 std::string const errorType = uppercased(state.dataIPShortCut->cAlphaArgs(2));
                 if (errorType == "INFORMATION") {
@@ -1751,7 +1839,7 @@ void InputProcessor::preProcessorCheck(EnergyPlusData &state, bool &PreP_Fatal) 
                                         "\" has the following " + state.dataIPShortCut->cAlphaArgs(2) + " condition" + Multiples + ':');
                 }
             }
-            CountM = 3;
+            int CountM = 3;
             if (CountM > NumAlphas) {
                 ShowContinueError(state,
                                   state.dataIPShortCut->cCurrentModuleObject + " was blank.  Check " + state.dataIPShortCut->cAlphaArgs(1) +
@@ -2129,20 +2217,20 @@ void InputProcessor::addVariablesForMonthlyReport(EnergyPlusData &state, std::st
     } else if (reportName == "WINDOWZONESUMMARYMONTHLY") {
         addRecordToOutputVariableStructure(state, "*", "ZONE WINDOWS TOTAL HEAT GAIN RATE");
         addRecordToOutputVariableStructure(state, "*", "ZONE WINDOWS TOTAL HEAT LOSS RATE");
-        addRecordToOutputVariableStructure(state, "*", "ZONE WINDOWS TOTAL TRANSMITTED SOLAR RADIATION RATE");
-        addRecordToOutputVariableStructure(state, "*", "ZONE EXTERIOR WINDOWS TOTAL TRANSMITTED BEAM SOLAR RADIATION RATE");
-        addRecordToOutputVariableStructure(state, "*", "ZONE EXTERIOR WINDOWS TOTAL TRANSMITTED DIFFUSE SOLAR RADIATION RATE");
-        addRecordToOutputVariableStructure(state, "*", "ZONE INTERIOR WINDOWS TOTAL TRANSMITTED DIFFUSE SOLAR RADIATION RATE");
-        addRecordToOutputVariableStructure(state, "*", "ZONE INTERIOR WINDOWS TOTAL TRANSMITTED BEAM SOLAR RADIATION RATE");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE WINDOWS TOTAL TRANSMITTED SOLAR RADIATION RATE");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE EXTERIOR WINDOWS TOTAL TRANSMITTED BEAM SOLAR RADIATION RATE");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE EXTERIOR WINDOWS TOTAL TRANSMITTED DIFFUSE SOLAR RADIATION RATE");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE INTERIOR WINDOWS TOTAL TRANSMITTED DIFFUSE SOLAR RADIATION RATE");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE INTERIOR WINDOWS TOTAL TRANSMITTED BEAM SOLAR RADIATION RATE");
 
     } else if (reportName == "WINDOWENERGYZONESUMMARYMONTHLY") {
         addRecordToOutputVariableStructure(state, "*", "ZONE WINDOWS TOTAL HEAT GAIN ENERGY");
         addRecordToOutputVariableStructure(state, "*", "ZONE WINDOWS TOTAL HEAT LOSS ENERGY");
-        addRecordToOutputVariableStructure(state, "*", "ZONE WINDOWS TOTAL TRANSMITTED SOLAR RADIATION ENERGY");
-        addRecordToOutputVariableStructure(state, "*", "ZONE EXTERIOR WINDOWS TOTAL TRANSMITTED BEAM SOLAR RADIATION ENERGY");
-        addRecordToOutputVariableStructure(state, "*", "ZONE EXTERIOR WINDOWS TOTAL TRANSMITTED DIFFUSE SOLAR RADIATION ENERGY");
-        addRecordToOutputVariableStructure(state, "*", "ZONE INTERIOR WINDOWS TOTAL TRANSMITTED DIFFUSE SOLAR RADIATION ENERGY");
-        addRecordToOutputVariableStructure(state, "*", "ZONE INTERIOR WINDOWS TOTAL TRANSMITTED BEAM SOLAR RADIATION ENERGY");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE WINDOWS TOTAL TRANSMITTED SOLAR RADIATION ENERGY");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE EXTERIOR WINDOWS TOTAL TRANSMITTED BEAM SOLAR RADIATION ENERGY");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE EXTERIOR WINDOWS TOTAL TRANSMITTED DIFFUSE SOLAR RADIATION ENERGY");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE INTERIOR WINDOWS TOTAL TRANSMITTED DIFFUSE SOLAR RADIATION ENERGY");
+        addRecordToOutputVariableStructure(state, "*", "ENCLOSURE INTERIOR WINDOWS TOTAL TRANSMITTED BEAM SOLAR RADIATION ENERGY");
 
     } else if (reportName == "AVERAGEOUTDOORCONDITIONSMONTHLY") {
         addRecordToOutputVariableStructure(state, "*", "SITE OUTDOOR AIR DRYBULB TEMPERATURE");

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -64,6 +64,7 @@ using namespace EnergyPlus::Fans;
 
 TEST_F(EnergyPlusFixture, Fans_FanSizing)
 {
+    // state->init_state(*state);
     state->dataSize->CurZoneEqNum = 0;
     state->dataSize->CurSysNum = 0;
     state->dataSize->CurOASysNum = 0;
@@ -90,11 +91,17 @@ TEST_F(EnergyPlusFixture, Fans_FanSizing)
     fan1->set_size(*state);
     EXPECT_DOUBLE_EQ(1.00635, fan1->maxAirFlowRate);
     state->dataSize->DataNonZoneNonAirloopValue = 0.0;
-    EXPECT_NEAR(1.0371, fan1->designPointFEI, 0.0001);
+    EXPECT_NEAR(1.0352, fan1->designPointFEI, 0.0001);
+
+    std::string eiooutput = std::string("! <Component Sizing Information>, Component Type, Component Name, Input Field Description, Value\n"
+                                        " Component Sizing Information, Fan:OnOff, Test Fan, Design Size Maximum Flow Rate [m3/s], 1.00635\n"
+                                        " Component Sizing Information, Fan:OnOff, Test Fan, Design Electric Power Consumption [W], 1257.93750\n");
+    EXPECT_TRUE(compare_eio_stream(eiooutput, true));
 }
 
 TEST_F(EnergyPlusFixture, Fans_ConstantVolume_EMSPressureRiseResetTest)
 {
+    state->init_state(*state);
 
     // set standard air density
     state->dataEnvrn->StdRhoAir = 1.0;
@@ -109,7 +116,7 @@ TEST_F(EnergyPlusFixture, Fans_ConstantVolume_EMSPressureRiseResetTest)
     fan1->totalEff = 1.0;
     fan1->motorEff = 0.8;
     fan1->motorInAirFrac = 1.0;
-    fan1->availSchedNum = 0;
+    fan1->availSched = Sched::GetScheduleAlwaysOff(*state);
     fan1->maxAirFlowRate = 1.0;
     fan1->minAirMassFlowRate = 0.0;
     fan1->maxAirMassFlowRate = fan1->maxAirFlowRate;
@@ -136,8 +143,10 @@ TEST_F(EnergyPlusFixture, Fans_ConstantVolume_EMSPressureRiseResetTest)
     Real64 Result2_FanPower = max(0.0, fan1->maxAirMassFlowRate * fan1->EMSPressureValue / (fan1->totalEff * fan1->rhoAirStdInit));
     EXPECT_DOUBLE_EQ(Result2_FanPower, fan1->totalPower); // expects zero
 }
+
 TEST_F(EnergyPlusFixture, Fans_OnOff_EMSPressureRiseResetTest)
 {
+    state->init_state(*state);
     // set standard air density
     state->dataEnvrn->StdRhoAir = 1.0;
     // set fan model inputs
@@ -152,7 +161,7 @@ TEST_F(EnergyPlusFixture, Fans_OnOff_EMSPressureRiseResetTest)
     fan1->totalEff = 1.0;
     fan1->motorEff = 0.8;
     fan1->motorInAirFrac = 1.0;
-    fan1->availSchedNum = 0;
+    fan1->availSched = Sched::GetScheduleAlwaysOff(*state);
     fan1->maxAirFlowRate = 1.0;
     fan1->minAirMassFlowRate = 0.0;
     fan1->maxAirMassFlowRate = fan1->maxAirFlowRate;
@@ -181,8 +190,10 @@ TEST_F(EnergyPlusFixture, Fans_OnOff_EMSPressureRiseResetTest)
     Real64 Result2_FanPower = max(0.0, fan1->maxAirMassFlowRate * fan1->EMSPressureValue / (fan1->totalEff * fan1->rhoAirStdInit));
     EXPECT_DOUBLE_EQ(Result2_FanPower, fan1->totalPower); // expects zero
 }
+
 TEST_F(EnergyPlusFixture, Fans_VariableVolume_EMSPressureRiseResetTest)
 {
+    state->init_state(*state);
     // set standard air density
     state->dataEnvrn->StdRhoAir = 1.0;
     // set fan model inputs
@@ -195,7 +206,7 @@ TEST_F(EnergyPlusFixture, Fans_VariableVolume_EMSPressureRiseResetTest)
     fan1->totalEff = 1.0;
     fan1->motorEff = 0.8;
     fan1->motorInAirFrac = 1.0;
-    fan1->availSchedNum = 0;
+    fan1->availSched = Sched::GetScheduleAlwaysOff(*state);
     fan1->maxAirFlowRate = 1.0;
     fan1->minAirMassFlowRate = 0.0;
     fan1->maxAirMassFlowRate = fan1->maxAirFlowRate;

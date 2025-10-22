@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -375,7 +375,15 @@ struct WindowComplexManagerData : BaseGlobalStruct
     Array1D_int iMinDT = Array1D_int(1, 0);
     Array1D_int IDConst = Array1D_int(100, 0);
 
-    void clear_state() // override
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void clear_state() override
     {
         this->NumComplexWind = 0;
         this->BasisList.deallocate();

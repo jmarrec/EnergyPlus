@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -68,7 +68,7 @@
 #include <EnergyPlus/WeatherManager.hh>
 
 #if defined(_WIN32) && _MSC_VER < 1900
-#define snprintf _snprintf
+#    define snprintf _snprintf
 #endif
 
 namespace EnergyPlus::General {
@@ -186,7 +186,7 @@ void SolveRoot(const EnergyPlusData &state,
     Real64 X0 = X_0;   // present 1st bound
     Real64 X1 = X_1;   // present 2nd bound
     Real64 XTemp = X0; // new estimate
-    int NIte = 0;      // number of interations
+    int NIte = 0;      // number of iterations
     int AltIte = 0;    // an accounter used for Alternation choice
 
     Real64 Y0 = f(X0); // f at X0
@@ -202,12 +202,14 @@ void SolveRoot(const EnergyPlusData &state,
     while (true) {
 
         Real64 DY = Y0 - Y1;
-        if (std::abs(DY) < SMALL) DY = SMALL;
+        if (std::abs(DY) < SMALL) {
+            DY = SMALL;
+        }
         if (std::abs(X1 - X0) < SMALL) {
             break;
         }
         // new estimation
-        switch (state.dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolver) {
+        switch (state.dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod) {
         case HVACSystemRootSolverAlgorithm::RegulaFalsi: {
             XTemp = (Y0 * X1 - Y1 * X0) / DY;
             break;
@@ -235,7 +237,17 @@ void SolveRoot(const EnergyPlusData &state,
         case HVACSystemRootSolverAlgorithm::Alternation: {
             if (AltIte > state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
-                if (AltIte >= 2 * state.dataRootFinder->HVACSystemRootFinding.NumOfIter) AltIte = 0;
+                if (AltIte >= 2 * state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
+                    AltIte = 0;
+                }
+            } else {
+                XTemp = (Y0 * X1 - Y1 * X0) / DY;
+            }
+            break;
+        }
+        case HVACSystemRootSolverAlgorithm::ShortBisectionThenRegulaFalsi: {
+            if (NIte < 3) {
+                XTemp = (X1 + X0) / 2.0;
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
             }
@@ -259,7 +271,9 @@ void SolveRoot(const EnergyPlusData &state,
         };
 
         // OK, so we didn't converge, lets check max iterations to see if we should break early
-        if (NIte > MaxIte) break;
+        if (NIte > MaxIte) {
+            break;
+        }
 
         // Finally, if we make it here, we have not converged, and we still have iterations left, so continue
         // and reassign values (only if further iteration required)
@@ -280,7 +294,7 @@ void SolveRoot(const EnergyPlusData &state,
                 Y0 = YTemp;
             }
         } // ( Y0 < 0 )
-    }     // Cont
+    } // Cont
 
     // if we make it here we haven't converged, so just set the flag and leave
     Flag = -1;
@@ -289,7 +303,9 @@ void SolveRoot(const EnergyPlusData &state,
 
 void MovingAvg(Array1D<Real64> &DataIn, int const NumItemsInAvg)
 {
-    if (NumItemsInAvg <= 1) return; // no need to average/smooth
+    if (NumItemsInAvg <= 1) {
+        return; // no need to average/smooth
+    }
 
     Array1D<Real64> TempData(2 * DataIn.size()); // a scratch array twice the size, bottom end duplicate of top end
 
@@ -396,7 +412,7 @@ void DetermineDateTokens(EnergyPlusData &state,
     static constexpr std::array<std::string_view, NumSingleChars> SingleChars{"/", ":", "-"};
     static constexpr int NumDoubleChars(6);
     static constexpr std::array<std::string_view, NumDoubleChars> DoubleChars{
-        "ST ", "ND ", "RD ", "TH ", "OF ", "IN "}; // Need trailing spaces: Want thse only at end of words
+        "ST ", "ND ", "RD ", "TH ", "OF ", "IN "}; // Need trailing spaces: Want these only at end of words
     static constexpr std::array<std::string_view, 12> Months{"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
     static constexpr std::array<std::string_view, 7> Weekdays{"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
 
@@ -411,7 +427,9 @@ void DetermineDateTokens(EnergyPlusData &state,
     TokenMonth = 0;
     TokenWeekday = 0;
     DateType = Weather::DateType::Invalid;
-    if (present(TokenYear)) TokenYear = 0;
+    if (present(TokenYear)) {
+        TokenYear = 0;
+    }
     // Take out separator characters, other extraneous stuff
 
     for (int Loop = 0; Loop < NumSingleChars; ++Loop) {
@@ -442,10 +460,14 @@ void DetermineDateTokens(EnergyPlusData &state,
         int NumField2;
         int NumField3;
         while (Loop < 3) { // Max of 3 fields
-            if (CurrentString == BlankString) break;
+            if (CurrentString == BlankString) {
+                break;
+            }
             size_t Pos = index(CurrentString, ' ');
             ++Loop;
-            if (Pos == std::string::npos) Pos = CurrentString.length();
+            if (Pos == std::string::npos) {
+                Pos = CurrentString.length();
+            }
             Fields(Loop) = CurrentString.substr(0, Pos);
             CurrentString.erase(0, Pos);
             strip(CurrentString);
@@ -507,14 +529,20 @@ void DetermineDateTokens(EnergyPlusData &state,
                     if (TokenWeekday == 0) {
                         TokenMonth = Util::FindItemInList(Fields(2).substr(0, 3), Months.begin(), Months.end());
                         TokenWeekday = Util::FindItemInList(Fields(3).substr(0, 3), Weekdays.begin(), Weekdays.end());
-                        if (TokenMonth == 0 || TokenWeekday == 0) InternalError = true;
+                        if (TokenMonth == 0 || TokenWeekday == 0) {
+                            InternalError = true;
+                        }
                     } else {
                         TokenMonth = Util::FindItemInList(Fields(3).substr(0, 3), Months.begin(), Months.end());
-                        if (TokenMonth == 0) InternalError = true;
+                        if (TokenMonth == 0) {
+                            InternalError = true;
+                        }
                     }
                     DateType = Weather::DateType::NthDayInMonth;
                     NumTokens = 3;
-                    if (TokenDay < 0 || TokenDay > 5) InternalError = true;
+                    if (TokenDay < 0 || TokenDay > 5) {
+                        InternalError = true;
+                    }
                 } else { // first field was not numeric....
                     if (Fields(1) == "LA") {
                         DateType = Weather::DateType::LastDayInMonth;
@@ -523,10 +551,14 @@ void DetermineDateTokens(EnergyPlusData &state,
                         if (TokenWeekday == 0) {
                             TokenMonth = Util::FindItemInList(Fields(2).substr(0, 3), Months.begin(), Months.end());
                             TokenWeekday = Util::FindItemInList(Fields(3).substr(0, 3), Weekdays.begin(), Weekdays.end());
-                            if (TokenMonth == 0 || TokenWeekday == 0) InternalError = true;
+                            if (TokenMonth == 0 || TokenWeekday == 0) {
+                                InternalError = true;
+                            }
                         } else {
                             TokenMonth = Util::FindItemInList(Fields(3).substr(0, 3), Months.begin(), Months.end());
-                            if (TokenMonth == 0) InternalError = true;
+                            if (TokenMonth == 0) {
+                                InternalError = true;
+                            }
                         }
                     } else { // error....
                         ShowSevereError(state, format("First date field not numeric, field={}", String));
@@ -584,9 +616,13 @@ void ValidateMonthDay(EnergyPlusData &state,
     static constexpr std::array<int, 12> EndMonthDay = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     bool InternalError = false;
-    if (Month < 1 || Month > 12) InternalError = true;
+    if (Month < 1 || Month > 12) {
+        InternalError = true;
+    }
     if (!InternalError) {
-        if (Day < 1 || Day > EndMonthDay[Month - 1]) InternalError = true;
+        if (Day < 1 || Day > EndMonthDay[Month - 1]) {
+            InternalError = true;
+        }
     }
     if (InternalError) {
         ShowSevereError(state, format("Invalid Month Day date format={}", String));
@@ -652,7 +688,9 @@ void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)
     int LeapAddPrev;
     int LeapAddCur;
 
-    if (Number < 0 || Number > 366) return;
+    if (Number < 0 || Number > 366) {
+        return;
+    }
     for (WMonth = 1; WMonth <= 12; ++WMonth) {
         if (WMonth == 1) {
             LeapAddPrev = 0;
@@ -664,7 +702,9 @@ void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)
             LeapAddPrev = LeapYr;
             LeapAddCur = LeapYr;
         }
-        if (Number > (EndOfMonth[WMonth - 1] + LeapAddPrev) && Number <= (EndOfMonth[WMonth] + LeapAddCur)) break;
+        if (Number > (EndOfMonth[WMonth - 1] + LeapAddPrev) && Number <= (EndOfMonth[WMonth] + LeapAddCur)) {
+            break;
+        }
     }
     PMonth = WMonth;
     PDay = Number - (EndOfMonth[WMonth - 1] + LeapAddCur);
@@ -701,7 +741,7 @@ bool BetweenDates(int const TestDate,  // Date to test
     // METHODOLOGY EMPLOYED:
     // The input dates are Julian Day format, year is irrelevant.
     // Thus, if StartDate > EndDate (i.e. StartDate = 1Dec and EndDate = 31Jan),
-    // this routine accomodates.
+    // this routine accommodates.
 
     // REFERENCES:
     // Adapted from BLAST BTWEEN function.
@@ -709,9 +749,13 @@ bool BetweenDates(int const TestDate,  // Date to test
     bool BetweenDates = false; // Default case
 
     if (StartDate <= EndDate) { // Start Date <= End Date
-        if (TestDate >= StartDate && TestDate <= EndDate) BetweenDates = true;
+        if (TestDate >= StartDate && TestDate <= EndDate) {
+            BetweenDates = true;
+        }
     } else { // EndDate < StartDate
-        if (TestDate <= EndDate || TestDate >= StartDate) BetweenDates = true;
+        if (TestDate <= EndDate || TestDate >= StartDate) {
+            BetweenDates = true;
+        }
     }
 
     return BetweenDates;
@@ -736,8 +780,25 @@ std::string CreateSysTimeIntervalString(EnergyPlusData &state)
     //  ActualTimeS=INT(CurrentTime)+(SysTimeElapsed+(CurrentTime - INT(CurrentTime)))
     // CR6902  ActualTimeS=INT(CurrentTime-TimeStepZone)+SysTimeElapsed
     // [DC] TODO: Improve display accuracy up to fractional seconds using hh:mm:ss.0 format
-    Real64 ActualTimeS = state.dataGlobal->CurrentTime - state.dataGlobal->TimeStepZone + SysTimeElapsed;
-    Real64 ActualTimeE = ActualTimeS + TimeStepSys;
+
+    // NOTE: SysTimeElapsed is updated at the END of the HVAC time step (loop), so it's current value is
+    //       the end of the last HVAC time step not the end of the current HVAC time step.  The other
+    //       conditions below are for when we are in the zone heat balance (SysTimeElapsed = 0) or after
+    //       we have finished the last HVAC time step.
+
+    Real64 ActualTimeS;
+    Real64 ActualTimeE;
+    Real64 constexpr toleranceTime = 0.0001; // less than 1 second (to avoid comparisons that are not exactly identical but are essentially the same
+    if (SysTimeElapsed == 0.0) {
+        ActualTimeE = state.dataGlobal->CurrentTime;
+        ActualTimeS = ActualTimeE - state.dataGlobal->TimeStepZone;
+    } else if (std::abs(state.dataGlobal->TimeStepZone - SysTimeElapsed) <= toleranceTime) {
+        ActualTimeE = state.dataGlobal->CurrentTime;
+        ActualTimeS = ActualTimeE - TimeStepSys;
+    } else {
+        ActualTimeS = state.dataGlobal->CurrentTime - state.dataGlobal->TimeStepZone + SysTimeElapsed;
+        ActualTimeE = ActualTimeS + TimeStepSys;
+    }
     int ActualTimeHrS = int(ActualTimeS);
     //  ActualTimeHrE=INT(ActualTimeE)
     int ActualTimeMinS = nint((ActualTimeS - ActualTimeHrS) * FracToMin);
@@ -805,7 +866,7 @@ void Iterate(Real64 &ResultX,  // ResultX is the final Iteration result passed b
     //       DATE WRITTEN   March 2004
 
     // PURPOSE OF THIS SUBROUTINE:
-    // Iterately solves for the value of X which satisfies Y(X)=0.
+    // Iteratively solves for the value of X which satisfies Y(X)=0.
     // The subroutine tests for convergence and provides a new guess for the value of the
     // independent variable X.
 
@@ -1087,7 +1148,7 @@ void ScanForReports(EnergyPlusData &state,
                     state.dataGeneral->SurfDetWVert = true;
                     break;
                 case COSTINFO:
-                    //   Custom case for reporting surface info for cost estimates (for first costs in opitimzing)
+                    //   Custom case for reporting surface info for cost estimates (for first costs in optimizing)
                     state.dataGeneral->CostInfo = true;
                     break;
                 case VIEWFACTORINFO: // actual reporting is in HeatBalanceIntRadExchange
@@ -1255,18 +1316,28 @@ void ScanForReports(EnergyPlusData &state,
     switch (rptName) {
     case ReportName::Constructions: {
         if (present(ReportKey)) {
-            if (Util::SameString(ReportKey(), "Constructions")) DoReport = state.dataGeneral->Constructions;
-            if (Util::SameString(ReportKey(), "Materials")) DoReport = state.dataGeneral->Materials;
+            if (Util::SameString(ReportKey(), "Constructions")) {
+                DoReport = state.dataGeneral->Constructions;
+            }
+            if (Util::SameString(ReportKey(), "Materials")) {
+                DoReport = state.dataGeneral->Materials;
+            }
         }
     } break;
     case ReportName::Viewfactorinfo: {
         DoReport = state.dataGeneral->ViewFactorInfo;
-        if (present(Option1)) Option1 = state.dataGeneral->ViewRptOption1;
+        if (present(Option1)) {
+            Option1 = state.dataGeneral->ViewRptOption1;
+        }
     } break;
     case ReportName::Variabledictionary: {
         DoReport = state.dataGeneral->VarDict;
-        if (present(Option1)) Option1 = state.dataGeneral->VarDictOption1;
-        if (present(Option2)) Option2 = state.dataGeneral->VarDictOption2;
+        if (present(Option1)) {
+            Option1 = state.dataGeneral->VarDictOption1;
+        }
+        if (present(Option2)) {
+            Option2 = state.dataGeneral->VarDictOption2;
+        }
         //    CASE ('SCHEDULES')
         //     DoReport=SchRpt
         //      IF (PRESENT(Option1)) Option1=SchRptOption
@@ -1279,18 +1350,30 @@ void ScanForReports(EnergyPlusData &state,
         } break;
         case RptKey::DXF: {
             DoReport = state.dataGeneral->DXFReport;
-            if (present(Option1)) Option1 = state.dataGeneral->DXFOption1;
-            if (present(Option2)) Option2 = state.dataGeneral->DXFOption2;
+            if (present(Option1)) {
+                Option1 = state.dataGeneral->DXFOption1;
+            }
+            if (present(Option2)) {
+                Option2 = state.dataGeneral->DXFOption2;
+            }
         } break;
         case RptKey::DXFwireframe: {
             DoReport = state.dataGeneral->DXFWFReport;
-            if (present(Option1)) Option1 = state.dataGeneral->DXFWFOption1;
-            if (present(Option2)) Option2 = state.dataGeneral->DXFWFOption2;
+            if (present(Option1)) {
+                Option1 = state.dataGeneral->DXFWFOption1;
+            }
+            if (present(Option2)) {
+                Option2 = state.dataGeneral->DXFWFOption2;
+            }
         } break;
         case RptKey::VRML: {
             DoReport = state.dataGeneral->VRMLReport;
-            if (present(Option1)) Option1 = state.dataGeneral->VRMLOption1;
-            if (present(Option2)) Option2 = state.dataGeneral->VRMLOption2;
+            if (present(Option1)) {
+                Option1 = state.dataGeneral->VRMLOption1;
+            }
+            if (present(Option2)) {
+                Option2 = state.dataGeneral->VRMLOption2;
+            }
         } break;
         case RptKey::Vertices: {
             DoReport = state.dataGeneral->SurfVert;
@@ -1303,7 +1386,9 @@ void ScanForReports(EnergyPlusData &state,
         } break;
         case RptKey::Lines: {
             DoReport = state.dataGeneral->LineRpt;
-            if (present(Option1)) Option1 = state.dataGeneral->LineRptOption1;
+            if (present(Option1)) {
+                Option1 = state.dataGeneral->LineRptOption1;
+            }
         } break;
         default:
             break;
@@ -1362,7 +1447,9 @@ void CheckCreatedZoneItemName(EnergyPlusData &state,
     if (FoundItem != 0) {
         ShowSevereError(state, fmt::format("{}{}=\"{}\", Duplicate Generated name encountered.", calledFrom, CurrentObject, ItemName));
         ShowContinueError(state, format("name=\"{}\" has already been generated or entered as {} item=[{}].", ResultName, CurrentObject, FoundItem));
-        if (TooLong) ShowContinueError(state, "Duplicate name likely caused by the previous \"too long\" warning.");
+        if (TooLong) {
+            ShowContinueError(state, "Duplicate name likely caused by the previous \"too long\" warning.");
+        }
         ResultName = "xxxxxxx";
         errFlag = true;
     }

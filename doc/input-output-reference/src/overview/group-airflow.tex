@@ -6,7 +6,7 @@ The AirflowNetwork model can also be used to model infiltration and mixing (zone
 
 \subsection{ZoneInfiltration:DesignFlowRate}\label{zoneinfiltrationdesignflowrate}
 
-Infiltration is the unintended flow of air from the outdoor environment directly into a thermal zone. Infiltration is generally caused by the opening and closing of exterior doors, cracks around windows, and even in very small amounts through building elements. The basic equation used to calculate infiltration with this object is:
+Infiltration is the unintended flow of air from the outdoor environment directly into a thermal zone. Infiltration is generally caused by the opening and closing of exterior doors, cracks around windows and exterior doors, and even in very small amounts through building elements. The basic equation used to calculate infiltration with this object is:
 
 \begin{equation}
   \rm{Infiltration} = \left( {{I_{design}}} \right)\left( {{F_{schedule}}} \right)\left[ {A + B\left| {\left( {{T_{zone}} - {T_{odb}}} \right)} \right| + C\left( {WindSpeed} \right) + D\left( {Windspee{d^2}} \right)} \right]
@@ -14,9 +14,9 @@ Infiltration is the unintended flow of air from the outdoor environment directly
 
 More advanced infiltration calculations are possible using the EnergyPlus AirflowNetwork model for natural infiltration driven by wind and/or by forced air. Infiltration described by the equation shown above is entered into EnergyPlus using the following syntax. Exfiltration (the leakage of zone air to the outside) is generally handled better as zone exhaust air in the zone equipment description. The equation must always yield a non-negative results; negative values are set to 0.0.
 
-The question of typical values for these coefficients is subject to debate. Ideally, one should do a detailed analysis of the infiltration situation and then determine a custom set of coefficients using methods such as those laid out in Chapter 26 of the ASHRAE Handbook of Fundamentals. The EnergyPlus defaults are 1,0,0,0 which give a constant volume flow of infiltration under all conditions.
+The question of typical values for these coefficients is subject to debate. Ideally, one should do a detailed analysis of the infiltration situation and then determine a custom set of coefficients using methods such as those laid out in Chapter 26 of the ASHRAE Handbook of Fundamentals. The EnergyPlus defaults are 1,0,0,0 which give a constant volumetric flow of infiltration under all conditions.
 
-BLAST (one of the EnergyPlus predecessors) used the following values as defaults: 0.606, 0.03636, 0.1177, 0. These coefficients produce a value of 1.0 at 0$^\circ$C deltaT and 3.35 m/s (7.5 mph) windspeed, which corresponds to a typical summer condition. At a winter condition of 40$^\circ$C deltaT and 6 m/s (13.4 mph) windspeed, these coefficients would increase the infiltration rate by a factor of 2.75.
+BLAST (one of the EnergyPlus predecessors) used the following values as defaults: 0.606, 0.03636, 0.1177, 0. These coefficients produce a value of 1.0 at 0$^\circ$C temperature difference between the inside and outside air temperatures and 3.35 m/s (7.5 mph) windspeed, which corresponds to a typical summer condition. At a winter condition of 40$^\circ$C temperature difference between the inside and outside air temperatures and 6 m/s (13.4 mph) windspeed, these coefficients would increase the infiltration rate by a factor of 2.75.
 
 In DOE-2 (the other EnergyPlus predecessor), the air change method defaults are (adjusted to SI units) 0, 0, 0.224 (windspeed), 0. With these coefficients, the summer conditions above would give a factor of 0.75, and the winter conditions would give 1.34. A windspeed of 4.47 m/s (10 mph) gives a factor of 1.0.
 
@@ -30,10 +30,10 @@ The EnergyPlus example files use all of the above, the BLAST defaults in some (e
 
 The local outdoor dry-bulb temperature used in the above basic equation (T\(_{odb}\)) is typically a function of the height of the zone centroid above ground. The corresponding zone name is given in the second field. The local outdoor dry-bulb temperature calculation procedure is given in the section of ``Local Outdoor Air Temperature Calculation'' in the Engineering Reference.
 
-The local outdoor wind speed used in the above basic equation (WindSpeed) is also a function of the height of the zone centroid above ground. The corresponding zone name is given in the second filed. The local outdoor wind speed calculation procedure is given in the section of ``Local Wind Speed Calculation'' in the Engineering Reference.
+The local outdoor wind speed used in the above basic equation (WindSpeed) is also a function of the height of the zone centroid above ground. The corresponding zone name is given in the second field. The local outdoor wind speed calculation procedure is given in the section of ``Local Wind Speed Calculation'' in the Engineering Reference.
 
 \begin{callout}
-  Note: When the value of the Wind Speed Profile Exponent field in the \hyperref[siteheightvariation]{Site:HeightVariation} is equal to 0.0. The local wind speed is always equal to the wind speed given in the weather data and will not be dependent on zone centroid height. Similarly, if the value of the Air Temperature Gradient Coefficient is set equal to 0 the local air dry-bulb temperature is also always equal to the air dry-bulb temperature given in the weather data and will not be dependent on zone centroid height.
+  Note: When the value of the Wind Speed Profile Exponent field in the \hyperref[siteheightvariation]{Site:HeightVariation} is equal to 0.0, the local wind speed is always equal to the wind speed given in the weather data and will not be dependent on zone centroid height. Similarly, if the value of the Air Temperature Gradient Coefficient is set equal to 0, the local air dry-bulb temperature is also always equal to the air dry-bulb temperature given in the weather data and will not be dependent on zone centroid height.
 \end{callout}
 
 One or more infiltration objects can be defined for each zone, and the resulting infiltration rate for the zone will simply be the summation of the flow rates specified by the infiltration objects.
@@ -102,6 +102,22 @@ This number is the ``C'' parameter in the above infiltration equation. It is par
 
 This number is the ``D'' parameter in the above infiltration equation. It is part of the user specified modifying parameters that are a function of environmental factors. This parameter is modified by square of the speed of wind being experienced outside the building. The units for this parameter are s\(^{2}\)/m\(^{2}\).
 
+\paragraph{Field: Density Basis}\label{field-density-basis}
+
+This field specifies which density to use when converting the volume flow rate to mass flow rate. The choices are:
+
+\begin{description}
+
+\item[Outdoor] Use the current outdoor air density for the applicable zone or space. This is the default.
+
+\item[Standard] Use the altitude-adjusted standard density of dry air at 20 °C drybulb. This is the same density that is used to convert HVAC system volume flow rates to mass flow.
+
+\item[Indoor] Use the current indoor air density for the applicable zone or space.
+
+\end{description}
+
+
+
 An IDF example:
 
 \begin{lstlisting}
@@ -118,7 +134,8 @@ ZoneInfiltration:DesignFlowRate,
     0.6060000    ,  !- Constant Term Coefficient
     3.6359996E-02,  !- Temperature Term Coefficient
     0.1177165    ,  !- Velocity Term Coefficient
-    0.0000000E+00;  !- Velocity Squared Term Coefficient
+    0.0000000E+00,  !- Velocity Squared Term Coefficient
+    Outdoor;        !- Density Basis
 \end{lstlisting}
 
 Global Infiltration example:
@@ -407,6 +424,8 @@ Object level outputs include:
 \item
   HVAC,Average,Infiltration Standard Density Volume Flow Rate {[}m3/s{]}
 \item
+  HVAC,Average,Infiltration Outdoor Density Volume Flow Rate {[}m3/s{]}
+\item
   HVAC,Sum,Infiltration Current Density Volume {[}m3{]}
 \item
   HVAC,Sum,Infiltration Standard Density Volume {[}m3{]}
@@ -415,7 +434,11 @@ Object level outputs include:
 \item
   HVAC,Average,Infiltration Mass Flow Rate {[}kg/s{]}
 \item
-  HVAC,Average,Infiltration Air Change Rate {[}ACH{]}
+  HVAC,Average,Infiltration Current Density Air Change Rate {[}ACH{]}
+\item
+  HVAC,Average,Infiltration Standard Density Air Change Rate {[}ACH{]}
+\item
+  HVAC,Average,Infiltration Outdoor Density Air Change Rate {[}ACH{]}
 \end{itemize}
 
 Zone level outputs include:
@@ -438,6 +461,8 @@ Zone level outputs include:
 \item
   HVAC,Average,Zone Infiltration Standard Density Volume Flow Rate {[}m3/s{]}
 \item
+  HVAC,Average,Zone Infiltration Outdoor Density Volume Flow Rate {[}m3/s{]}
+\item
   HVAC,Sum,Zone Infiltration Current Density Volume {[}m3{]}
 \item
   HVAC,Sum,Zone Infiltration Standard Density Volume {[}m3{]}
@@ -446,7 +471,11 @@ Zone level outputs include:
 \item
   HVAC,Average,Zone Infiltration Mass Flow Rate {[}kg/s{]}
 \item
-  HVAC,Average,Zone Infiltration Air Change Rate {[}ACH{]}
+  HVAC,Average,Zone Infiltration Current Density Air Change Rate {[}ACH{]}
+\item
+  HVAC,Average,Zone Infiltration Standard Density Air Change Rate {[}ACH{]}
+\item
+  HVAC,Average,Zone Infiltration Outdoor Density Air Change Rate {[}ACH{]}
 \end{itemize}
 
 Note: If ZoneInfiltration:* objects and ZoneAirBalance:OutdoorAir (with Air Balance Method = Quadrature) objects reference the same Zone Name, the above infiltration output variables will not be reported for that zone. Instead, output variables for zone outdoor air flow will be reported by the corresponding ZoneAirBalance:OutdoorAir object.
@@ -487,6 +516,10 @@ These outputs are the total volume and volume flow rate of infiltration air base
 
 These outputs are the total volume and volume flow rate of infiltration air based on the standard density of air. Standard density in EnergyPlus corresponds to 20$^\circ$C drybulb, dry air, and nominally adjusted for elevation.
 
+\paragraph{Zone Infiltration Outdoor Density Volume Flow Rate {[}m3/s{]}}\label{zone-infiltration-outdoor-density-volume-flow-rate-m3s}
+
+This output is the volume flow rate of infiltration air based on the current density of outdoor air.
+
 \paragraph{Zone Infiltration Mass {[}kg{]}}\label{zone-infiltration-mass-kg}
 
 The mass flow of the Infiltration air.
@@ -495,9 +528,11 @@ The mass flow of the Infiltration air.
 
 The mass flow rate of the Infiltration air.
 
-\paragraph{Zone Infiltration Air Change Rate {[}ach{]}}\label{zone-infiltration-air-change-rate-ach}
+\paragraph{Zone Infiltration Current Density Air Change Rate {[}ach{]}}\label{zone-infiltration-air-change-rate-ach}
+\paragraph{Zone Infiltration Standard Density Air Change Rate {[}ach{]}}\label{zone-infiltration-standard-air-change-rate-ach}
+\paragraph{Zone Infiltration Outdoor Density Air Change Rate {[}ach{]}}\label{zone-infiltration-outdoor-air-change-rate-ach}
 
-The rate of infiltration in air changes per hour.
+These outputs are the rate of infiltration in air changes per hour, converted from mass flow rate to volume flow rate using the current zone air density, standard density, or the current outdoor density, respectively. Standard density in EnergyPlus corresponds to 20$^\circ$C drybulb, dry air, and nominally adjusted for elevation.
 
 \subsection{ZoneVentilation:DesignFlowRate}\label{zoneventilationdesignflowrate}
 
@@ -655,6 +690,20 @@ This alpha field contains the name of a schedule (ref. Schedule objects) which c
 
 This is the wind speed (m/s) above which ventilation is shut off. This can help simulate conditions where one would normally close windows to avoid chaos in a space (papers blowing around, etc.).
 
+\paragraph{Field: Density Basis}\label{field-density-basis-3}
+
+This field specifies which density to use when converting the volume flow rate to mass flow rate. The choices are:
+
+\begin{description}
+
+\item[Outdoor] Use the current outdoor air density for the applicable zone or space. This is the default.
+
+\item[Standard] Use the altitude-adjusted standard density of dry air at 20 °C drybulb. This is the same density that is used to convert HVAC system volume flow rates to mass flow.
+
+\item[Indoor] Use the current indoor air density for the applicable zone or space.
+
+\end{description}
+
 Two IDF examples are provided below:
 
 \begin{lstlisting}
@@ -679,7 +728,8 @@ ZoneVentilation:DesignFlowRate,
     ,               !- Minimum Indoor Temperature Schedule Name
     ,               !- Maximum Indoor Temperature {C}
     ,               !- Maximum Indoor Temperature Schedule Name
-    1.0;            !- Delta temperature {C}
+    1.0,            !- Delta temperature {C}
+    Outdoor;        !- Density Basis
 
   ZoneVentilation:DesignFlowRate,
       SPACE1-1 Ventl 1,        !-Name
@@ -936,6 +986,8 @@ Current ventilation output variables:
 \item
   HVAC,Average,Zone Ventilation Standard Density Volume Flow Rate {[}m3/s{]}
 \item
+  HVAC,Average,Zone Ventilation Outdoor Density Volume Flow Rate {[}m3/s{]}
+\item
   HVAC,Sum,Zone Ventilation Current Density Volume {[}m3{]}
 \item
   HVAC,Sum,Zone Ventilation Standard Density Volume {[}m3{]}
@@ -944,7 +996,11 @@ Current ventilation output variables:
 \item
   HVAC,Average,Zone Ventilation Mass Flow Rate {[}kg/s{]}
 \item
-  HVAC,Average,Zone Ventilation Air Change Rate {[}ACH{]}
+  HVAC,Average,Zone Ventilation Current Density Air Change Rate {[}ACH{]}
+\item
+  HVAC,Average,Zone Ventilation Standard Density Air Change Rate {[}ACH{]}
+\item
+  HVAC,Average,Zone Ventilation Outdoor Density Air Change Rate {[}ACH{]}
 \item
   HVAC,Sum,Zone Ventilation Fan Electricity Energy {[}J{]}
 \item
@@ -989,6 +1045,10 @@ These outputs are the total volume and volume flow rate of ventilation air based
 
 These outputs are the total volume and volume flow rate of ventilation air based on the standard density of air.~ Standard density in EnergyPlus corresponds to 20$^\circ$C drybulb, dry air, and nominally adjusted for elevation.
 
+\paragraph{Zone Ventilation Outdoor Density Volume Flow Rate {[}m3/s{]}}\label{zone-ventilation-outdoor-density-volume-flow-rate-m3s}
+
+This output is the volume flow rate of ventilation air based on the current density of outdoor air.
+
 \paragraph{Zone Ventilation Mass {[}kg{]}}\label{zone-ventilation-mass-kg}
 
 This output is the total mass flow into a particular zone from outdoors.
@@ -997,9 +1057,11 @@ This output is the total mass flow into a particular zone from outdoors.
 
 This output is the total mass flow rate into a particular zone from outdoors.
 
-\paragraph{Zone Ventilation Air Change Rate {[}ach{]}}\label{zone-ventilation-air-change-rate-ach}
+\paragraph{Zone Ventilation Current Density Air Change Rate {[}ach{]}}\label{zone-ventilation-air-change-rate-ach}
+\paragraph{Zone Ventilation Standard Density Air Change Rate {[}ach{]}}\label{zone-ventilation-standard-air-change-rate-ach}
+\paragraph{Zone Ventilation Outdoor Density Air Change Rate {[}ach{]}}\label{zone-ventilation-outdoor-air-change-rate-ach}
 
-The volume flow rate of the ventilation air in air changes per hour.
+These outputs are the rate of ventilation in air changes per hour, converted from mass flow rate to volume flow rate using the current zone air density, standard density, or the current outdoor density, respectively. Standard density in EnergyPlus corresponds to 20$^\circ$C drybulb, dry air, and nominally adjusted for elevation.
 
 \paragraph{Zone Ventilation Fan Electricity Energy {[}J{]}}\label{zone-ventilation-fan-electric-energy-j}
 
@@ -1518,7 +1580,7 @@ The total heat gain due to the sum of mixing, cross-mixing, and refrigeration-do
 
 ZoneRefrigerationDoorMixing is ideally suited for two zones, at least one of which is refrigerated, that exchange an equal amount of dry air. As with \hyperref[zonemixing]{ZoneMixing}, this is a simplified interzone airflow in EnergyPlus. The ZoneRefrigerationDoorMixing approach shares some features of both \hyperref[zonemixing]{ZoneMixing} and \hyperref[zonecrossmixing]{ZoneCrossMixing}. Like \hyperref[zonecrossmixing]{ZoneCrossMixing}, ZoneRefrigerationDoorMixing has an energy effect on both the source and the receiving zone, thus maintaining both the air mass and energy balances in the two zones. Unlike the other two mixing objects, ZoneRefrigerationDoorMixing always calculates the air exchange rate based on the zone temperature and relative humidity. That is, the user does not specify the air flow rate. The user can moderate the flow through a door-opening schedule.
 
-ZoneRefrigerationDoorMixing can only be entered once for any unique pair of zones. It doesn't matter which zone is listed first and the zones will automatically switch back and forth between source and receiving zones depending upon which zone is colder.
+ZoneRefrigerationDoorMixing can only be entered once for any unique pair of zones. It doesn't matter which zone is listed first and the zones will automatically switch back and forth between source and receiving zones depending upon which zone is colder. If space heat balance is active and a space name is specified for Zone or Space Name 1 or 2, then the space conditions will be used and the exchange will be with that space only. If space heat balance is active and a zone name is specified, then the aveerage zone conditions will be used, and the exchange will be proportioned to all spaces in the zone by space volume.
 
 \subsubsection{Inputs}\label{inputs-7-003}
 
@@ -1526,13 +1588,13 @@ ZoneRefrigerationDoorMixing can only be entered once for any unique pair of zone
 
 The name of the ZoneRefrigerationDoorMixing object.
 
-\paragraph{Field: Zone 1~ Name}\label{field-zone-1-name}
+\paragraph{Field: Zone or Space Name 1}\label{field-zone-1-name}
 
-This field is the name of one of the two zones (ref: Zone) exchanging air and attaches a particular refrigeration door~ mixing statement to both thermal zones in the building.
+This field is the name of one of the two zones (ref: Zone) or spaces exchanging air and attaches a particular refrigeration door~ mixing statement to both thermal zones or spaces in the building. If a space name is used, it must belong to a different zone than Zone or Space Name 2.
 
-\paragraph{Field: Zone 2~ Name}\label{field-zone-2-name}
+\paragraph{Field: Zone or Space Name 2}\label{field-zone-2-name}
 
-This field is the name of the other zone (ref: Zone) exchanging air and attaches a particular refrigeration door~ mixing statement to both thermal zones in the building.
+This field is the name of the other zone (ref: Zone) or space exchanging air and attaches a particular refrigeration door~ mixing statement to both thermal zones or spaces in the building. If a space name is used, it must belong to a different zone than Zone or Space Name 1.
 
 \paragraph{Field: Schedule Name}\label{field-schedule-name-5}
 
@@ -1927,7 +1989,7 @@ This is the rate of heat transfer from the earth tube to the outdoor air {[}W{]}
 
 This is the wet bulb temperature of the air entering the zone after passing through the earth tube {[}C{]}.
 
-\paragraph{Earth Tube Zone Inlet Humidity Ratio {[}kgWater/krDryAir{]}}\label{earth-tube-zone-inlet-humidity-ratio-kgWater/kgDryAir}
+\paragraph{Earth Tube Zone Inlet Humidity Ratio {[}kgWater/krDryAir{]}}\label{earth-tube-zone-inlet-humidity-ratio-kgWater-kgDryAir}
 
 This is the humidity ratio of the air entering the zone after passing through the earth tube {[}kgWater/kgDryAir{]}.
 
@@ -1965,9 +2027,9 @@ This field is a unique user assigned name for each cooltower.~ Any reference to 
 
 This field is the name of the schedule that denotes whether the cooltower can run during a given time period. A schedule value greater than 0 (usually 1 is used) indicates that the cooltower is available and can be on during the time period. A value less than or equal to 0 (usually 0 is used) denotes that the cooltower is not available and must be off for the time period. If this field is blank, the schedule has values of 1 for all time periods.
 
-\paragraph{Field: Zone Name}\label{field-zone-name-6}
+\paragraph{Field: Zone or Space Name}\label{field-zone-name-6}
 
-This field is the name of the zone (ref: Zone) and attaches a particular cooltower statement to a thermal zone in the building.
+This field is the name of the zone (ref: Zone) or space the cooltower is attached to.
 
 \paragraph{Field: Water Supply Storage Tank Name}\label{field-water-supply-storage-tank-name}
 
@@ -2185,9 +2247,9 @@ This number is the cross sectional area of air channel outlet. The area is expre
 
 This dimensionless number is the discharge coefficient of the thermal chimney. The ventilation rate enhanced by the thermal chimney is also dependent on the discharge coefficient.
 
-\paragraph{Field: Zone \textless{}\#\textgreater{} Name}\label{field-zone-name-8}
+\paragraph{Field: Zone or Space Name \textless{}\#\textgreater{}}\label{field-zone-name-8}
 
-This field is the name of the zone (ref: Zone) to which the thermal chimney is attached. It is used in conjunction with the next three fields. Note that up to 20 sets of zone name, distance from the top of the thermal chimney to each inlet, relative ratios of air flow rates passing through each zone and cross sectional areas of each air channel inlet may be entered for a single thermal chimney if multiple zones share the common thermal chimney.
+This field is the name of the zone (ref: Zone) or space to which the thermal chimney is attached. It is used in conjunction with the next three fields. Note that up to 20 sets of zone or space name, distance from the top of the thermal chimney to each inlet, relative ratios of air flow rates passing through each zone and cross sectional areas of each air channel inlet may be entered for a single thermal chimney if multiple zones or spaces share the common thermal chimney.  If space heat balance is active and a space name is specified for Zone or Space Name, then the space conditions will be used and the exchange will be with that space only. If space heat balance is active and a zone name is specified, then the aveerage zone conditions will be used, and the exchange will be proportioned to all spaces in the zone by space volume.
 
 \paragraph{Field: Distance from Top of Thermal Chimney to Inlet \textless{}\#\textgreater{}}\label{field-distance-from-top-of-thermal-chimney-to-inlet}
 

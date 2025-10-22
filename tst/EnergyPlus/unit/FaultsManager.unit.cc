@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -75,7 +75,6 @@ using namespace Curve;
 using namespace DataLoopNode;
 using namespace Fans;
 using namespace FaultsManager;
-using namespace EnergyPlus::ScheduleManager;
 
 namespace EnergyPlus {
 
@@ -85,19 +84,17 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
     //     To check whether the fan curve specified in the FaultModel:Fouling:AirFilter object
     //     covers the rated operational point of the corresponding fan
     //     Return true if the curve covers the fan rated operational point
+    state->init_state(*state);
 
     int numFans = 2;
     bool TestResult;
 
     // Allocate
-    state->dataCurveManager->allocateCurveVector(1);
-
     state->dataFaultsMgr->FaultsFouledAirFilters.allocate(numFans);
 
     // Inputs: fan curve
-    auto *curve = state->dataCurveManager->PerfCurve(1);
+    auto *curve = AddCurve(*state, "Curve1");
     curve->curveType = CurveType::Cubic;
-    curve->interpolationType = InterpType::EvaluateCurveToLimits;
     curve->coeff[0] = 1151.1;
     curve->coeff[1] = 13.509;
     curve->coeff[2] = -0.9105;
@@ -145,7 +142,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
     EXPECT_FALSE(TestResult);
 
     // Clean up
-    state->dataCurveManager->PerfCurve.deallocate();
+    state->dataCurveManager->curves.deallocate();
 }
 
 TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFilterFanCurve_AutosizedFan)
@@ -158,7 +155,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
         "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  1.5,                     !- Upper Limit Value",
         "  Continuous;              !- Numeric Type",
 
         "ScheduleTypeLimits,",
@@ -218,6 +215,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
 
     // Process inputs
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->StdRhoAir = 1.2;
 
@@ -245,7 +243,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
         "ScheduleTypeLimits,",
         "  Fraction,                !- Name",
         "  0,                       !- Lower Limit Value",
-        "  1,                       !- Upper Limit Value",
+        "  1.5,                     !- Upper Limit Value",
         "  Continuous;              !- Numeric Type",
 
         "ScheduleTypeLimits,",
@@ -305,6 +303,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CheckFaultyAirFil
 
     // Process inputs
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->StdRhoAir = 1.2;
 
@@ -339,17 +338,12 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CalFaultyFanAirFl
     //     Calculate the decrease of the fan air flow rate, given the fan curve
     //     and the increase of fan pressure rise due to fouling air filters
 
-    int FanNum;
     double FanDesignFlowRateDec;
     double FanFaultyDeltaPressInc = 0.10; // Increase by 10%
 
-    // Allocate
-    state->dataCurveManager->allocateCurveVector(1);
-
     // Inputs: fan curve
-    auto *curve = state->dataCurveManager->PerfCurve(1);
+    auto *curve = AddCurve(*state, "Curve1");
     curve->curveType = CurveType::Cubic;
-    curve->interpolationType = InterpType::EvaluateCurveToLimits;
     curve->coeff[0] = 1151.1;
     curve->coeff[1] = 13.509;
     curve->coeff[2] = -0.9105;
@@ -376,7 +370,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CalFaultyFanAirFl
     EXPECT_NEAR(3.845, FanDesignFlowRateDec, 0.005);
 
     // Clean up
-    state->dataCurveManager->PerfCurve.deallocate();
+    state->dataCurveManager->curves.deallocate();
 }
 
 TEST_F(EnergyPlusFixture, FaultsManager_TemperatureSensorOffset_CoilSAT)
@@ -421,6 +415,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_TemperatureSensorOffset_CoilSAT)
 
     // Process inputs
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Readin inputs
     SetPointManager::GetSetPointManagerInputs(*state);
@@ -441,6 +436,8 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultChillerSWTSensor_CalFaultChillerSWT
 {
     // PURPOSE OF THIS SUBROUTINE:
     // To check CalFaultChillerSWT which calculates the mass flow rate and supply water temperature of a chiller with faulty SWT sensor.
+
+    state->init_state(*state);
 
     bool FlagVariableFlow;         // True if chiller is variable flow and false if it is constant flow
     Real64 FaultyChillerSWTOffset; // Faulty chiller SWT sensor offset
@@ -484,12 +481,13 @@ TEST_F(EnergyPlusFixture, FaultsManager_CalFaultOffsetAct)
 {
     // PURPOSE OF THIS SUBROUTINE:
     // To check CalFaultOffsetAct which calculates the dynamic fault offset based on the fault availability schedule and severity schedule.
+    state->init_state(*state);
 
     Real64 OffsetAct;
     FaultProperties Fault;
 
-    Fault.availSchedNum = -1;
-    Fault.severitySchedNum = -1;
+    Fault.availSched = Sched::GetScheduleAlwaysOn(*state);
+    Fault.severitySched = Sched::GetScheduleAlwaysOn(*state);
     Fault.Offset = 10;
 
     // Run and Check
@@ -611,8 +609,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_EconomizerFaultGetInput)
 
     // Process inputs
     ASSERT_TRUE(process_idf(idf_objects));
-
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
+    state->init_state(*state);
 
     MixedAir::GetOAControllerInputs(*state);
 
@@ -657,10 +654,14 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_CoilNotFound)
 
     // Process inputs
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     ASSERT_THROW(FaultsManager::CheckAndReadFaults(*state), std::runtime_error);
 
     std::string const error_string = delimited_string({
+        "   ** Warning ** ProcessScheduleInput: Schedule:Compact = AVAILSCHED",
+        "   **   ~~~   ** Schedule Type Limits Name is empty.",
+        "   **   ~~~   ** Schedule will not be validated.",
         "   ** Severe  ** FaultModel:Fouling:Coil = \"FOULEDHEATINGCOIL\". Referenced Coil named \"NON EXISTENT COOLING COIL\" was not found.",
         "   **  Fatal  ** CheckAndReadFaults: Errors found in getting FaultModel input data. Preceding condition(s) cause termination.",
         "   ...Summary of Errors that led to program termination:",
@@ -722,10 +723,14 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_BadCoilType)
 
     // Process inputs
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     ASSERT_THROW(FaultsManager::CheckAndReadFaults(*state), std::runtime_error);
 
     std::string const error_string = delimited_string({
+        "   ** Warning ** ProcessScheduleInput: Schedule:Compact = AVAILSCHED",
+        "   **   ~~~   ** Schedule Type Limits Name is empty.",
+        "   **   ~~~   ** Schedule will not be validated.",
         "   ** Severe  ** FaultModel:Fouling:Coil = \"FOULEDHEATINGCOIL\" invalid Coil Name = \"DETAILED PRE COOLING COIL\".",
         "   **   ~~~   ** Coil was found but it is not one of the supported types (\"Coil:Cooling:Water\" or \"Coil:Heating:Water\").",
         "   **  Fatal  ** CheckAndReadFaults: Errors found in getting FaultModel input data. Preceding condition(s) cause termination.",
@@ -839,15 +844,16 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_AssignmentAndCalc)
     ASSERT_TRUE(process_idf(idf_objects));
 
     state->dataHVACGlobal->TimeStepSys = 1;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
-    state->dataGlobal->NumOfTimeStepInHour = 4;
-    state->dataGlobal->MinutesPerTimeStep = 60 / state->dataGlobal->NumOfTimeStepInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 60 / state->dataGlobal->TimeStepsInHour;
 
-    ScheduleManager::ProcessScheduleInput(*state); // read schedule data
-    int avaiSchedIndex = ScheduleManager::GetScheduleIndex(*state, "AVAILSCHED");
-    EXPECT_EQ(1, avaiSchedIndex);
-    int severitySchedIndex = ScheduleManager::GetScheduleIndex(*state, "SEVERITYSCHED");
-    EXPECT_EQ(2, severitySchedIndex);
+    state->init_state(*state);
+
+    auto *avaiSched = Sched::GetSchedule(*state, "AVAILSCHED");
+    EXPECT_NE(nullptr, avaiSched);
+    auto *severitySched = Sched::GetSchedule(*state, "SEVERITYSCHED");
+    EXPECT_NE(nullptr, severitySched);
 
     // Readin inputs
     // SetPointManager::GetSetPointManagerInputs();
@@ -861,7 +867,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_AssignmentAndCalc)
     state->dataGlobal->HourOfDay = 1;
     state->dataEnvrn->DayOfWeek = 1;
     state->dataEnvrn->DayOfYear_Schedule = 1;
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     EXPECT_EQ(2, state->dataFaultsMgr->NumFouledCoil);
     // This should also have called WaterCoil::GetWaterCoilInput
@@ -882,9 +888,9 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_AssignmentAndCalc)
         EXPECT_EQ(FaultIndex, state->dataWaterCoils->WaterCoil(CoilNum).FaultyCoilFoulingIndex);
 
         // Doesn't have an Availability Schedule
-        EXPECT_EQ(-1, state->dataFaultsMgr->FouledCoils(FaultIndex).availSchedNum);
+        EXPECT_EQ(state->dataFaultsMgr->FouledCoils(FaultIndex).availSched->Num, Sched::SchedNum_AlwaysOn);
         // Has a Severity Schedule
-        EXPECT_EQ(severitySchedIndex, state->dataFaultsMgr->FouledCoils(FaultIndex).severitySchedNum);
+        EXPECT_NE(nullptr, state->dataFaultsMgr->FouledCoils(FaultIndex).severitySched);
 
         EXPECT_ENUM_EQ(FaultsManager::FouledCoil::UARated, state->dataFaultsMgr->FouledCoils(FaultIndex).FoulingInputMethod);
         EXPECT_NEAR(3.32, state->dataFaultsMgr->FouledCoils(FaultIndex).UAFouled, 0.0001);
@@ -909,9 +915,9 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_AssignmentAndCalc)
         EXPECT_EQ(FaultIndex, state->dataWaterCoils->WaterCoil(CoilNum).FaultyCoilFoulingIndex);
 
         // Has an Availabity Schedule
-        EXPECT_EQ(avaiSchedIndex, state->dataFaultsMgr->FouledCoils(FaultIndex).availSchedNum);
+        EXPECT_NE(nullptr, state->dataFaultsMgr->FouledCoils(FaultIndex).availSched);
         // Has a Severity Schedule
-        EXPECT_EQ(severitySchedIndex, state->dataFaultsMgr->FouledCoils(FaultIndex).severitySchedNum);
+        EXPECT_NE(nullptr, state->dataFaultsMgr->FouledCoils(FaultIndex).severitySched);
 
         EXPECT_ENUM_EQ(FaultsManager::FouledCoil::FoulingFactor, state->dataFaultsMgr->FouledCoils(FaultIndex).FoulingInputMethod);
         EXPECT_NEAR(0.0005, state->dataFaultsMgr->FouledCoils(FaultIndex).Rfw, 0.0001);

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -98,8 +98,9 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_SolverTest_HorizontalOpening)
     state->afn->MultizoneSurfaceData(i).OpenFactor = 1.0;
 
     state->afn->node_states.clear();
-    for (int it = 0; it < 2; ++it)
+    for (int it = 0; it < 2; ++it) {
         state->afn->node_states.emplace_back(AirState(AIRDENSITY_CONSTEXPR(20.0, 101325.0, 0.0)));
+    }
     state->afn->node_states[0].density = 1.2;
     state->afn->node_states[1].density = 1.18;
 
@@ -152,8 +153,9 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_SolverTest_Coil)
     state->afn->DisSysCompCoilData[0].L = 1.0;
 
     state->afn->node_states.clear();
-    for (int it = 0; it < 2; ++it)
+    for (int it = 0; it < 2; ++it) {
         state->afn->node_states.emplace_back(AirState(AIRDENSITY_CONSTEXPR(20.0, 101325.0, 0.0)));
+    }
     state->afn->node_states[0].density = 1.2;
     state->afn->node_states[1].density = 1.2;
 
@@ -478,8 +480,18 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestTriangularWindowWarning)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     state->afn->get_input();
     std::string const error_string = delimited_string({
+        "   ** Warning ** ProcessScheduleInput: Schedule:Constant = ONSCH",
+        "   **   ~~~   ** Schedule Type Limits Name is empty.",
+        "   **   ~~~   ** Schedule will not be validated.",
+        "   ** Warning ** ProcessScheduleInput: Schedule:Constant = AULA PEOPLE SCHED",
+        "   **   ~~~   ** Schedule Type Limits Name is empty.",
+        "   **   ~~~   ** Schedule will not be validated.",
+        "   ** Warning ** ProcessScheduleInput: Schedule:Constant = SEMPRE 21",
+        "   **   ~~~   ** Schedule Type Limits Name is empty.",
+        "   **   ~~~   ** Schedule will not be validated.",
         "   ** Warning ** AirflowNetwork::Solver::get_input: AirflowNetwork:MultiZone:Surface=\"WINDOW1\".",
         "   **   ~~~   ** The opening is a Triangular subsurface. A rectangular subsurface will be used with equivalent width and height.",
     });
@@ -1859,13 +1871,14 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_UserDefinedDuctViewFactors)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Read objects
     HeatBalanceManager::GetHeatBalanceInput(*state);
     HeatBalanceManager::AllocateHeatBalArrays(*state);
     state->dataEnvrn->OutBaroPress = 101000;
     state->dataHVACGlobal->TimeStepSys = state->dataGlobal->TimeStepZone;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
 
     // Read AirflowNetwork inputs
     state->afn->get_input();
@@ -2441,6 +2454,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestPolygonalWindows)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->afn->get_input();
 
@@ -4373,6 +4387,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestFanModel)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataIPShortCut->lNumericFieldBlanks.allocate(1000);
     state->dataIPShortCut->lAlphaFieldBlanks.allocate(1000);
@@ -4393,7 +4408,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestFanModel)
     EXPECT_FALSE(ErrorsFound);
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
-    HeatBalanceManager::GetWindowGlassSpectralData(*state, ErrorsFound);
+    Material::GetWindowGlassSpectralData(*state, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
     Material::GetMaterialData(*state, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
@@ -4410,20 +4425,20 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestFanModel)
     // Read AirflowNetwork inputs
     state->afn->get_input();
 
-    state->dataScheduleMgr->Schedule(1).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(2).CurrentValue = 100.0;
-    state->dataScheduleMgr->Schedule(3).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(4).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(5).CurrentValue = 0.1;
-    state->dataScheduleMgr->Schedule(6).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(7).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(8).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(9).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(10).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(11).CurrentValue = 21.0;
-    state->dataScheduleMgr->Schedule(12).CurrentValue = 25.0;
-    state->dataScheduleMgr->Schedule(13).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(14).CurrentValue = 1.0;
+    Sched::GetSchedule(*state, "WINDOWVENTSCHED")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "ACTIVITY SCH")->currentVal = 100.0;
+    Sched::GetSchedule(*state, "WORK EFF SCH")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "CLOTHING SCH")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "AIR VELO SCH")->currentVal = 0.1;
+    Sched::GetSchedule(*state, "HOUSE OCCUPANCY")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "INTERMITTENT")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "HOUSE LIGHTING")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "REPORTSCH")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "HVACAVAILSCHED")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "DUAL HEATING SETPOINTS")->currentVal = 21.0;
+    Sched::GetSchedule(*state, "DUAL COOLING SETPOINTS")->currentVal = 25.0;
+    Sched::GetSchedule(*state, "DUAL ZONE CONTROL TYPE SCHED")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "CYCLINGFANSCHEDULE")->currentVal = 1.0;
 
     state->afn->AirflowNetworkFanActivated = true;
     state->dataEnvrn->OutDryBulbTemp = -17.29025;
@@ -4468,6 +4483,120 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestFanModel)
     EXPECT_NEAR(1.23, state->afn->AirflowNetworkLinkSimu(20).FLOW, 0.0001);
 
     state->dataAirLoop->AirLoopAFNInfo.deallocate();
+}
+
+TEST_F(EnergyPlusFixture, AirflowNetwork_get_people_indexTest)
+{
+    // Unit test added for fix to Defect #11027
+    int expectedIndexResult;
+    int actualIndexResult;
+    bool errFlag = false;
+
+    state->afn->MultizoneSurfaceData.allocate(10);
+    state->afn->MultizoneZoneData.allocate(3);
+    state->dataHeatBal->TotPeople = 3;
+    state->dataHeatBal->People.allocate(state->dataHeatBal->TotPeople);
+    state->dataSurface->Surface.allocate(10);
+    state->afn->AirflowNetworkNumOfZones = 3;
+
+    state->dataHeatBal->People(1).ZonePtr = 2;
+    state->dataHeatBal->People(1).AdaptiveASH55 = true;
+    state->dataHeatBal->People(1).AdaptiveCEN15251 = false;
+    state->dataHeatBal->People(2).ZonePtr = 3;
+    state->dataHeatBal->People(2).AdaptiveASH55 = false;
+    state->dataHeatBal->People(2).AdaptiveCEN15251 = true;
+    state->dataHeatBal->People(3).ZonePtr = 1;
+    state->dataHeatBal->People(3).AdaptiveASH55 = false;
+    state->dataHeatBal->People(3).AdaptiveCEN15251 = false;
+
+    state->afn->MultizoneZoneData(1).ZoneNum = 3;
+    state->afn->MultizoneZoneData(2).ZoneNum = 1;
+    state->afn->MultizoneZoneData(3).ZoneNum = 2;
+
+    state->afn->MultizoneSurfaceData(1).ZonePtr = 1;
+    state->afn->MultizoneSurfaceData(2).ZonePtr = 2;
+    state->afn->MultizoneSurfaceData(3).ZonePtr = 3;
+    state->afn->MultizoneSurfaceData(4).ZonePtr = 1;
+    state->afn->MultizoneSurfaceData(5).ZonePtr = 2;
+    state->afn->MultizoneSurfaceData(6).ZonePtr = 3;
+    state->afn->MultizoneSurfaceData(7).ZonePtr = 1;
+    state->afn->MultizoneSurfaceData(8).ZonePtr = 2;
+    state->afn->MultizoneSurfaceData(9).ZonePtr = 3;
+    state->afn->MultizoneSurfaceData(10).ZonePtr = 1;
+
+    // Tests S1A/C: Surface--AFN Surface 1 (points to Zone 1 which is People 3 which does not use ASH55 or CEN15251)
+    expectedIndexResult = 0;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneSurfaceData(1).ZonePtr, VentControlType::ASH55, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_TRUE(errFlag);
+    errFlag = false; // reset
+    expectedIndexResult = 0;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneSurfaceData(1).ZonePtr, VentControlType::CEN15251, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_TRUE(errFlag);
+    errFlag = false; // reset
+
+    // Tests S2A/C: Surface--AFN Surface 2 (points to Zone 2 which is People 1 which uses ASH55)
+    expectedIndexResult = 1;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneSurfaceData(2).ZonePtr, VentControlType::ASH55, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_FALSE(errFlag);
+    expectedIndexResult = 0;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneSurfaceData(2).ZonePtr, VentControlType::CEN15251, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_TRUE(errFlag);
+    errFlag = false; // reset
+
+    // Tests S3A/C: Surface--AFN Surface 3 (points to Zone 3 which is People 2 which uses CEN15251)    expectedIndexResult = 0;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneSurfaceData(3).ZonePtr, VentControlType::ASH55, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_TRUE(errFlag);
+    errFlag = false; // reset
+    expectedIndexResult = 2;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneSurfaceData(3).ZonePtr, VentControlType::CEN15251, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_FALSE(errFlag);
+
+    // Tests S10C: Surface--AFN Surface 10 (points to Zone 2 but RAFN is set so this goes to Zone 1 which is People 3 which is rest to use CEN15251)
+    state->dataHeatBal->People(3).AdaptiveCEN15251 = true;
+    expectedIndexResult = 3;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneSurfaceData(10).ZonePtr, VentControlType::CEN15251, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_FALSE(errFlag);
+    state->dataHeatBal->People(3).AdaptiveCEN15251 = false;
+
+    // Tests Z1A/C: Zone--Array 1 (points to Zone 3 which is People 2 which uses CEN15251)
+    expectedIndexResult = 0;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneZoneData(1).ZoneNum, VentControlType::ASH55, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_TRUE(errFlag);
+    errFlag = false; // reset
+    expectedIndexResult = 2;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneZoneData(1).ZoneNum, VentControlType::CEN15251, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_FALSE(errFlag);
+
+    // Tests Z2A/C: Zone--Array 2 (points to Zone 1 which is People 3 which uses neither ASH55 nor CEN15251)
+    expectedIndexResult = 0;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneZoneData(2).ZoneNum, VentControlType::ASH55, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_TRUE(errFlag);
+    errFlag = false; // reset
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneZoneData(2).ZoneNum, VentControlType::CEN15251, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_TRUE(errFlag);
+    errFlag = false; // reset
+
+    // Tests Z3A/C: Zone--Array 3 (points to Zone 2 which is People 1 which uses ASH55)
+    expectedIndexResult = 1;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneZoneData(3).ZoneNum, VentControlType::ASH55, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_FALSE(errFlag);
+    expectedIndexResult = 0;
+    actualIndexResult = state->afn->get_people_index(state->afn->MultizoneZoneData(3).ZoneNum, VentControlType::CEN15251, errFlag);
+    EXPECT_EQ(expectedIndexResult, actualIndexResult);
+    EXPECT_TRUE(errFlag);
+    errFlag = false; // reset (not really necessary unless more tests are added)
 }
 
 } // namespace EnergyPlus

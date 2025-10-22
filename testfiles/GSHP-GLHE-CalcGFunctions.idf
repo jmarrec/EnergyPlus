@@ -42,7 +42,7 @@
 !****** SIMULATION CONTROLS ********************************
 !***********************************************************
 
-  Version,24.2;
+  Version,25.2;
 
 !-   ===========  ALL OBJECTS IN CLASS: SIMULATIONCONTROL ===========
 
@@ -660,6 +660,7 @@
 
   Coil:Cooling:WaterToAirHeatPump:EquationFit,
     Main Floor WAHP Cooling Coil,  !- Name
+    ,                              !- Availability Schedule Name
     Main Floor WAHP Cooling Water Inlet Node,  !- Water Inlet Node Name
     Main Floor WAHP Cooling Water Outlet Node,  !- Water Outlet Node Name
     Main Floor WAHP Mixed Air Outlet,  !- Air Inlet Node Name
@@ -704,6 +705,7 @@
 
   Coil:Heating:WaterToAirHeatPump:EquationFit,
     Main Floor WAHP Heating Coil,  !- Name
+    ,                              !- Availability Schedule Name
     Main Floor WAHP Heating Water Inlet Node,  !- Water Inlet Node Name
     Main Floor WAHP Heating Water Outlet Node,  !- Water Outlet Node Name
     Main Floor WAHP Cooling Coil Outlet,  !- Air Inlet Node Name
@@ -1021,6 +1023,8 @@
     2.5E+06,                 !- Ground Thermal Heat Capacity {J/m3-K}
     ,                        !- GHE:Vertical:ResponseFactors Object Name
     UHFcalc,                 !- g-Function Calculation Method
+    ,                        !- GHE:Vertical:Sizing Object Type
+    ,                        !- GHE:Vertical:Sizing Object Name
     GHE-Array;               !- GHE:Vertical:Array Object Name
 
 !-   ===========  ALL OBJECTS IN CLASS: GROUNDHEATEXCHANGER:VERTICAL:PROPERTIES ===========

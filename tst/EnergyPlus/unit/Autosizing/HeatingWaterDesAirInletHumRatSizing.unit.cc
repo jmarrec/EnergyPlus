@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -159,7 +159,7 @@ TEST_F(AutoSizingFixture, HeatingWaterDesAirInletHumRatSizingGauntlet)
     // Test 4 - Zone Equipment, Powered Induction TU
     state->dataSize->TermUnitSingDuct = false;
     state->dataSize->TermUnitPIU = true;
-    state->dataSize->TermUnitSizing(1).MinFlowFrac = 0.0; // all zone air
+    state->dataSize->TermUnitSizing(1).MinPriFlowFrac = 0.0; // all zone air
     // start with an auto-sized value as the user input
     inputValue = DataSizing::AutoSize;
     // do sizing
@@ -172,7 +172,7 @@ TEST_F(AutoSizingFixture, HeatingWaterDesAirInletHumRatSizingGauntlet)
     sizer.autoSizedValue = 0.0; // reset for next test
 
     // Test 5 - Zone Equipment, Powered Induction TU with MinFlowFrac at 0.3
-    state->dataSize->TermUnitSizing(1).MinFlowFrac = 0.3; // mix zone air and DesHeatCoilInHumRatTU
+    state->dataSize->TermUnitSizing(1).MinPriFlowFrac = 0.3; // mix zone air and DesHeatCoilInHumRatTU
     // start with an auto-sized value as the user input
     inputValue = DataSizing::AutoSize;
     // do sizing

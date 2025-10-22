@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -52,6 +52,7 @@
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataSizing.hh>
+#include <EnergyPlus/FluidProperties.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/WaterCoils.hh>
 
@@ -59,6 +60,7 @@ namespace EnergyPlus {
 
 TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
 {
+    state->dataFluid->init_state(*state);
     // this global state is what would be set up by E+ currently
     state->dataEnvrn->StdRhoAir = 1.2;
     state->dataSize->ZoneEqSizing.allocate(1);
@@ -119,10 +121,9 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     state->dataWaterCoils->WaterCoil(1).InletAirMassFlowRate = 0.2;
     state->dataWaterCoils->WaterCoil(1).InletWaterMassFlowRate = 0.8;
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
-    state->dataWaterCoils->WaterCoil(1).SchedPtr = -1;
     state->dataWaterCoils->MyUAAndFlowCalcFlag.allocate(1);
     state->dataWaterCoils->MySizeFlag.allocate(1);
-    state->dataScheduleMgr->Schedule.allocate(1);
+    state->dataWaterCoils->WaterCoil(1).availSched = Sched::GetScheduleAlwaysOn(*state);
 
     // now allocate sizing arrays for testing autosized field
     state->dataSize->TermUnitSizing.allocate(1);
@@ -136,6 +137,7 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     state->dataSize->PlantSizData(1).ExitTemp = 60.0;
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).FluidIndex = 1;
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     state->dataSize->ZoneSizingRunDone = true;
 

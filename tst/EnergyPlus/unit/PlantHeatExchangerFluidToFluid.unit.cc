@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -65,6 +65,7 @@
 #include <EnergyPlus/OutputReportPredefined.hh>
 #include <EnergyPlus/Plant/PlantManager.hh>
 #include <EnergyPlus/PlantHeatExchangerFluidToFluid.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/SimulationManager.hh>
 #include <EnergyPlus/WeatherManager.hh>
@@ -1060,10 +1061,11 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileHi)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
     bool ErrorsFound = false;
 
     state->dataGlobal->BeginSimFlag = true;
-    SimulationManager::GetProjectData(*state);
 
     OutputReportPredefined::SetPredefinedTables(*state);
     HeatBalanceManager::SetPreConstructionInputParameters(*state); // establish array bounds for constructions early
@@ -1089,8 +1091,12 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileHi)
 
         Weather::GetNextEnvironment(*state, Available, ErrorsFound);
 
-        if (!Available) break;
-        if (ErrorsFound) break;
+        if (!Available) {
+            break;
+        }
+        if (ErrorsFound) {
+            break;
+        }
 
         ++EnvCount;
 
@@ -1116,7 +1122,7 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileHi)
                 state->dataGlobal->BeginHourFlag = true;
                 state->dataGlobal->EndHourFlag = false;
 
-                for (state->dataGlobal->TimeStep = 1; state->dataGlobal->TimeStep <= state->dataGlobal->NumOfTimeStepInHour;
+                for (state->dataGlobal->TimeStep = 1; state->dataGlobal->TimeStep <= state->dataGlobal->TimeStepsInHour;
                      ++state->dataGlobal->TimeStep) {
 
                     state->dataGlobal->BeginTimeStepFlag = true;
@@ -1128,7 +1134,7 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileHi)
                     // Note also that BeginTimeStepFlag, EndTimeStepFlag, and the
                     // SubTimeStepFlags can/will be set/reset in the HVAC Manager.
 
-                    if (state->dataGlobal->TimeStep == state->dataGlobal->NumOfTimeStepInHour) {
+                    if (state->dataGlobal->TimeStep == state->dataGlobal->TimeStepsInHour) {
                         state->dataGlobal->EndHourFlag = true;
                         if (state->dataGlobal->HourOfDay == 24) {
                             state->dataGlobal->EndDayFlag = true;
@@ -2152,10 +2158,10 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileLo)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     state->dataGlobal->BeginSimFlag = true;
-    SimulationManager::GetProjectData(*state);
 
     OutputReportPredefined::SetPredefinedTables(*state);
     HeatBalanceManager::SetPreConstructionInputParameters(*state); // establish array bounds for constructions early
@@ -2181,8 +2187,12 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileLo)
 
         Weather::GetNextEnvironment(*state, Available, ErrorsFound);
 
-        if (!Available) break;
-        if (ErrorsFound) break;
+        if (!Available) {
+            break;
+        }
+        if (ErrorsFound) {
+            break;
+        }
 
         ++EnvCount;
 
@@ -2208,7 +2218,7 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileLo)
                 state->dataGlobal->BeginHourFlag = true;
                 state->dataGlobal->EndHourFlag = false;
 
-                for (state->dataGlobal->TimeStep = 1; state->dataGlobal->TimeStep <= state->dataGlobal->NumOfTimeStepInHour;
+                for (state->dataGlobal->TimeStep = 1; state->dataGlobal->TimeStep <= state->dataGlobal->TimeStepsInHour;
                      ++state->dataGlobal->TimeStep) {
 
                     state->dataGlobal->BeginTimeStepFlag = true;
@@ -2220,7 +2230,7 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileLo)
                     // Note also that BeginTimeStepFlag, EndTimeStepFlag, and the
                     // SubTimeStepFlags can/will be set/reset in the HVAC Manager.
 
-                    if (state->dataGlobal->TimeStep == state->dataGlobal->NumOfTimeStepInHour) {
+                    if (state->dataGlobal->TimeStep == state->dataGlobal->TimeStepsInHour) {
                         state->dataGlobal->EndHourFlag = true;
                         if (state->dataGlobal->HourOfDay == 24) {
                             state->dataGlobal->EndDayFlag = true;
@@ -2259,6 +2269,11 @@ TEST_F(EnergyPlusFixture, PlantHXModulatedDualDeadDefectFileLo)
 
 TEST_F(EnergyPlusFixture, PlantHXControlWithFirstHVACIteration)
 {
+    // get availability schedule to work
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
+
     // this unit test is for issue #4959.  Added FirstHVACIteration to simulate and control routines
     // unit test checks that the change to logic for #4959 does work to affect node mass flow rate.  The conditions are set up such that the demand
     // side inlet is too warm to cool the supply side, so previous behavior would shut down flow.  Now if firstHVACIteration is true is should set
@@ -2267,11 +2282,6 @@ TEST_F(EnergyPlusFixture, PlantHXControlWithFirstHVACIteration)
 
     state->dataPlantHXFluidToFluid->FluidHX.allocate(1);
 
-    // get availability schedule to work
-    state->dataGlobal->NumOfTimeStepInHour = 1;    // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60;    // must initialize this to get schedules initialized
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     state->dataEnvrn->Month = 1;
     state->dataEnvrn->DayOfMonth = 21;
     state->dataGlobal->HourOfDay = 1;
@@ -2280,8 +2290,8 @@ TEST_F(EnergyPlusFixture, PlantHXControlWithFirstHVACIteration)
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    ScheduleManager::UpdateScheduleValues(*state);
-    state->dataPlantHXFluidToFluid->FluidHX(1).AvailSchedNum = -1;
+    Sched::UpdateScheduleVals(*state);
+    state->dataPlantHXFluidToFluid->FluidHX(1).availSched = Sched::GetScheduleAlwaysOn(*state);
 
     // setup four plant nodes for HX
     state->dataLoopNodes->Node.allocate(4);
@@ -2323,7 +2333,6 @@ TEST_F(EnergyPlusFixture, PlantHXControlWithFirstHVACIteration)
     }
 
     state->dataPlnt->PlantLoop(1).Name = "HX supply side loop ";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
         state->dataPlantHXFluidToFluid->FluidHX(1).Name;
@@ -2331,13 +2340,14 @@ TEST_F(EnergyPlusFixture, PlantHXControlWithFirstHVACIteration)
         DataPlant::PlantEquipmentType::FluidToFluidPlantHtExchg;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataPlantHXFluidToFluid->FluidHX(1).SupplySideLoop.inletNodeNum;
+
     state->dataPlantHXFluidToFluid->FluidHX(1).SupplySideLoop.loopNum = 1;
     state->dataPlantHXFluidToFluid->FluidHX(1).SupplySideLoop.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataPlantHXFluidToFluid->FluidHX(1).SupplySideLoop.branchNum = 1;
     state->dataPlantHXFluidToFluid->FluidHX(1).SupplySideLoop.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataPlantHXFluidToFluid->FluidHX(1).SupplySideLoop);
 
     state->dataPlnt->PlantLoop(2).Name = "HX demand side loop ";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
         state->dataPlantHXFluidToFluid->FluidHX(1).Name;
@@ -2350,6 +2360,7 @@ TEST_F(EnergyPlusFixture, PlantHXControlWithFirstHVACIteration)
     state->dataPlantHXFluidToFluid->FluidHX(1).DemandSideLoop.branchNum = 1;
     state->dataPlantHXFluidToFluid->FluidHX(1).DemandSideLoop.compNum = 1;
     state->dataPlantHXFluidToFluid->FluidHX(1).DemandSideLoop.MassFlowRateMax = 2.0;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataPlantHXFluidToFluid->FluidHX(1).DemandSideLoop);
 
     // when FirstHVACIteration is true, mass flow should match design max
     bool testFirstHVACIteration = true;
@@ -2368,13 +2379,13 @@ TEST_F(EnergyPlusFixture, PlantHXControl_CoolingSetpointOnOffWithComponentOverri
     // this unit test is for issue #5626.  Fixed logic for CoolingSetpointOnOffWithComponentOverride.
     // unit test checks that the change for #5626 adjusts the temperature value used in central plant dispatch routines by the tolerance value.
 
+    // get availability schedule to work
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
+
     state->dataPlantHXFluidToFluid->FluidHX.allocate(1);
 
-    // get availability schedule to work
-    state->dataGlobal->NumOfTimeStepInHour = 1;    // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60;    // must initialize this to get schedules initialized
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
     state->dataEnvrn->Month = 1;
     state->dataEnvrn->DayOfMonth = 21;
     state->dataGlobal->HourOfDay = 1;
@@ -2383,8 +2394,8 @@ TEST_F(EnergyPlusFixture, PlantHXControl_CoolingSetpointOnOffWithComponentOverri
     state->dataEnvrn->DayOfWeek = 2;
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    ScheduleManager::UpdateScheduleValues(*state);
-    state->dataPlantHXFluidToFluid->FluidHX(1).AvailSchedNum = -1;
+    Sched::UpdateScheduleVals(*state);
+    state->dataPlantHXFluidToFluid->FluidHX(1).availSched = Sched::GetScheduleAlwaysOn(*state);
 
     // setup four plant nodes for HX
     state->dataLoopNodes->Node.allocate(6);
@@ -2442,7 +2453,6 @@ TEST_F(EnergyPlusFixture, PlantHXControl_CoolingSetpointOnOffWithComponentOverri
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
 
     state->dataPlnt->PlantLoop(1).Name = "HX supply side loop ";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1).Name =
         state->dataPlantHXFluidToFluid->FluidHX(1).Name;
@@ -2452,7 +2462,6 @@ TEST_F(EnergyPlusFixture, PlantHXControl_CoolingSetpointOnOffWithComponentOverri
         state->dataPlantHXFluidToFluid->FluidHX(1).SupplySideLoop.inletNodeNum;
 
     state->dataPlnt->PlantLoop(2).Name = "HX demand side loop ";
-    state->dataPlnt->PlantLoop(2).FluidIndex = 1;
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name =
         state->dataPlantHXFluidToFluid->FluidHX(1).Name;
@@ -2468,6 +2477,7 @@ TEST_F(EnergyPlusFixture, PlantHXControl_CoolingSetpointOnOffWithComponentOverri
     state->dataPlantHXFluidToFluid->FluidHX(1).OtherCompSupplySideLoop.loopSideNum = DataPlant::LoopSideLocation::Supply;
     state->dataPlantHXFluidToFluid->FluidHX(1).OtherCompSupplySideLoop.branchNum = 2;
     state->dataPlantHXFluidToFluid->FluidHX(1).OtherCompSupplySideLoop.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataPlantHXFluidToFluid->FluidHX(1).OtherCompSupplySideLoop);
 
     state->dataPlantHXFluidToFluid->NumberOfPlantFluidHXs = 1;
 
