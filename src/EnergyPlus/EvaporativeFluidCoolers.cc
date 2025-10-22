@@ -1386,11 +1386,6 @@ namespace EvaporativeFluidCoolers {
                     BaseSizer::reportSizerOutput(
                         state, this->EvapFluidCoolerType, this->Name, "Design Entering Water Temperature [C]", this->DesignEnteringWaterTemp);
                 }
-                if (state.dataPlnt->PlantFirstSizesOkayToReport) {
-                    BaseSizer::reportSizerOutput(
-                        state, this->EvapFluidCoolerType, this->Name, "Design Entering Water Temperature [C]", this->DesignEnteringWaterTemp);
-                }
-
             } else if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                 ShowSevereError(state, format("Autosizing error for evaporative fluid cooler object = {}", this->Name));
                 ShowFatalError(state,
