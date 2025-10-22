@@ -2238,8 +2238,13 @@ namespace Sched {
             }
             print(state.files.eio, "\n");
 
-            // ! <Schedule_Hourly>,Name,ScheduleType,{Until Date,WeekSchedule}** Repeated until Dec 31
-            print(state.files.eio, "! <{}>,Name,ScheduleType,{{Until Date,WeekSchedule}}** Repeated until Dec 31\n", scheduleTableName);
+            print(state.files.eio,
+                  "! <{}>,Name,ScheduleType,"
+                  "Until Date 1,WeekSchedule 1,Until Date 2,WeekSchedule 2,Until Date 3,WeekSchedule 3,"
+                  "Until Date 4,WeekSchedule 4,Until Date 5,WeekSchedule 5,Until Date 6,WeekSchedule 6,"
+                  "Until Date 7,WeekSchedule 7,Until Date 8,WeekSchedule 8,Until Date 9,WeekSchedule 9,"
+                  "\n",
+                  scheduleTableName);
         }
 
         for (auto *daySched : s_sched->daySchedules) {

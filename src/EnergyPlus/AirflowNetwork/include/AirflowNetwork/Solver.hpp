@@ -219,6 +219,7 @@ namespace AirflowNetwork {
         bool allow_unsupported_zone_equipment = false; // Allow unsupported zone equipment
         bool autosize_ducts = false;                   // True: perform duct autosize, otherwise no duct autosize
         DuctSizing ductSizing;
+        bool DuctLoss = false; // Duct loss calculation without AFN flag
     };
 
     struct Solver : BaseGlobalStruct

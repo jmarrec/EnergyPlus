@@ -103,6 +103,7 @@ struct CoilCoolingDXPerformanceBase
     Real64 ModeRatio = 0.0;
     Real64 NormalSHR = 0.0;
     HVAC::CoilMode maxAvailCoilMode = HVAC::CoilMode::Normal; // max available coil mode, 0 Normal, 1 Enhanced, 2 SubcoolReheat
+    Sched::Schedule *coilCoolingDXAvailSched = nullptr;
 
     enum CapControlMethod
     {

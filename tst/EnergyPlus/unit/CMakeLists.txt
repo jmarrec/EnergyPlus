@@ -102,6 +102,7 @@ set(test_src
     DesiccantDehumidifiers.unit.cc
     DisplacementVentMgr.unit.cc
     DualDuct.unit.cc
+    DuctLoss.unit.cc
     EPVector.unit.cc
     EMSManager.unit.cc
     EarthTube.unit.cc
@@ -192,6 +193,7 @@ set(test_src
     OutsideEnergySources.unit.cc
     PVWatts.unit.cc
     PackagedTerminalHeatPump.unit.cc
+    PCMThermalTank.unit.cc
     Photovoltaics.unit.cc
     PhotovoltaicThermalCollectors.unit.cc
     PierceSurface.unit.cc
