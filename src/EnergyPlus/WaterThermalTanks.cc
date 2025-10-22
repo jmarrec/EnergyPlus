@@ -3927,32 +3927,6 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
         Tank.useInletTempSched = nullptr;
         Tank.UseEffectiveness =
             state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "use_side_heat_transfer_effectiveness");
-        Tank.UseInletHeight = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "use_side_inlet_height");
-
-        // default to always on
-        Tank.sourceSideAvailSched = Sched::GetScheduleAlwaysOn(state);
-        Tank.useSideAvailSched = Sched::GetScheduleAlwaysOn(state);
-
-        auto const &UseOutletHeight = fields.at("use_side_outlet_height");
-        if (UseOutletHeight == "AutoCalculate") {
-            Tank.UseOutletHeight = Tank.Height;
-        } else {
-            Tank.UseOutletHeight = UseOutletHeight.get<Real64>();
-        }
-        if (Tank.UseInletHeight > Tank.Height) {
-            ShowSevereError(state, format("{} = {}: Use inlet is located higher than overall tank height.", cCurrentModuleObject, thisObjectName));
-            ShowContinueError(state, format("{} = {:.4R}", "tank_height", Tank.Height));
-            ShowContinueError(state, format("{} = {:.4R}", "use_side_inlet_height", Tank.UseInletHeight));
-            ErrorsFound = true;
-        }
-
-        Tank.UseOutletHeight = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "use_side_outlet_height");
-        if (Tank.UseOutletHeight > Tank.Height) {
-            ShowSevereError(state, format("{} = {}: Use outlet is located higher than overall tank height.", cCurrentModuleObject, thisObjectName));
-            ShowContinueError(state, format("{} = {:.4R}", "tank_height", Tank.Height));
-            ShowContinueError(state, format("{} = {:.4R}", "use_side_outlet_height", Tank.UseOutletHeight));
-            ErrorsFound = true;
-        }
 
         Tank.SourceEffectiveness =
             state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "source_side_heat_transfer_effectiveness");
@@ -3961,28 +3935,55 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
             ErrorsFound = true;
         }
 
-        Tank.SourceInletHeight = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "source_side_inlet_height");
-        if (Tank.SourceInletHeight > Tank.Height) {
-            ShowSevereError(state, format("{} = {}: Source inlet is located higher than overall tank height.", cCurrentModuleObject, thisObjectName));
-            ShowContinueError(state, format("{} = {:.4R}", "tank_height", Tank.Height));
-            ShowContinueError(state, format("{} = {:.4R}", "source_side_inlet_height", Tank.SourceInletHeight));
-            ErrorsFound = true;
-        }
+        // default to always on
+        Tank.sourceSideAvailSched = Sched::GetScheduleAlwaysOn(state);
+        Tank.useSideAvailSched = Sched::GetScheduleAlwaysOn(state);
 
-        Tank.SourceOutletHeight = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "source_side_outlet_height");
+        // Inlet and Outlet Heights
+        {
+            // Use Side Inlet Height: AutoCalculatable and defaults to top of tank
+            Tank.UseInletHeight = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "use_side_inlet_height");
+            if (Tank.UseInletHeight == Constant::AutoCalculate) {
+                Tank.UseInletHeight = Tank.Height;
+            } else if (Tank.UseInletHeight > Tank.Height) {
+                ShowSevereError(state,
+                                format("{} = {}: Use inlet is located higher than overall tank height.", cCurrentModuleObject, thisObjectName));
+                ShowContinueError(state, format("{} = {:.4R}", "tank_height", Tank.Height));
+                ShowContinueError(state, format("{} = {:.4R}", "use_side_inlet_height", Tank.UseInletHeight));
+                ErrorsFound = true;
+            }
 
-        auto const &SourceOutletHeight = fields.at("source_side_outlet_height");
-        if (SourceOutletHeight == "AutoCalculate") {
-            Tank.SourceOutletHeight = Tank.Height;
-        } else {
-            Tank.SourceOutletHeight = SourceOutletHeight.get<Real64>();
-        }
-        if (Tank.SourceOutletHeight > Tank.Height) {
-            ShowSevereError(state,
-                            format("{} = {}: Source outlet is located higher than overall tank height.", cCurrentModuleObject, thisObjectName));
-            ShowContinueError(state, format("{} = {:.4R}", "tank_height", Tank.Height));
-            ShowContinueError(state, format("{} = {:.4R}", "source_side_outlet_height", Tank.SourceOutletHeight));
-            ErrorsFound = true;
+            // Defaults to 0.0
+            Tank.UseOutletHeight = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "use_side_outlet_height");
+            if (Tank.UseOutletHeight > Tank.Height) {
+                ShowSevereError(state,
+                                format("{} = {}: Use outlet is located higher than overall tank height.", cCurrentModuleObject, thisObjectName));
+                ShowContinueError(state, format("{} = {:.4R}", "tank_height", Tank.Height));
+                ShowContinueError(state, format("{} = {:.4R}", "use_side_outlet_height", Tank.UseOutletHeight));
+                ErrorsFound = true;
+            }
+
+            // Defaults to 0.0
+            Tank.SourceInletHeight = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "source_side_inlet_height");
+            if (Tank.SourceInletHeight > Tank.Height) {
+                ShowSevereError(state,
+                                format("{} = {}: Source inlet is located higher than overall tank height.", cCurrentModuleObject, thisObjectName));
+                ShowContinueError(state, format("{} = {:.4R}", "tank_height", Tank.Height));
+                ShowContinueError(state, format("{} = {:.4R}", "source_side_inlet_height", Tank.SourceInletHeight));
+                ErrorsFound = true;
+            }
+
+            // Source Side Outlet Height: AutoCalculatable and defaults to top of tank
+            Tank.SourceOutletHeight = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "source_side_outlet_height");
+            if (Tank.SourceOutletHeight == Constant::AutoCalculate) {
+                Tank.SourceOutletHeight = Tank.Height;
+            } else if (Tank.SourceOutletHeight > Tank.Height) {
+                ShowSevereError(state,
+                                format("{} = {}: Source outlet is located higher than overall tank height.", cCurrentModuleObject, thisObjectName));
+                ShowContinueError(state, format("{} = {:.4R}", "tank_height", Tank.Height));
+                ShowContinueError(state, format("{} = {:.4R}", "source_side_outlet_height", Tank.SourceOutletHeight));
+                ErrorsFound = true;
+            }
         }
 
         Tank.StandAlone = false;
