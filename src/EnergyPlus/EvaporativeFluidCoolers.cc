@@ -1360,6 +1360,11 @@ namespace EvaporativeFluidCoolers {
         int PltSizCondNum = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).PlantSizNum;
         if (PltSizCondNum > 0) {
             this->DesignExitWaterTemp = state.dataSize->PlantSizData(PltSizCondNum).ExitTemp;
+            // We still grab it here, because it's used in reporting the Range [C] in table "Cooling Towers and Fluid Coolers"
+            if (this->DesignEnteringWaterTemp == DataSizing::AutoSize && this->PerformanceInputMethod_Num != PIM::UserSpecifiedDesignCapacity) {
+                this->DesignEnteringWaterTemp =
+                    state.dataSize->PlantSizData(PltSizCondNum).ExitTemp + state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
+            }
         }
 
         if (this->DesignEnteringWaterTempWasAutoSized && this->PerformanceInputMethod_Num == PIM::UserSpecifiedDesignCapacity) {
