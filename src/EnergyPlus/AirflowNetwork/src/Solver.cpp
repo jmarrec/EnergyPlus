@@ -4847,19 +4847,14 @@ namespace AirflowNetwork {
                     count += 1;
                     auto const &fields = instance.value();
                     AirflowNetworkLinkageData(count).Name = instance.key();
-                    std::string tempName = AirflowNetworkLinkageData(count).Name;
                     m_state.dataInputProcessing->inputProcessor->markObjectAsUsed(CurrentModuleObject, AirflowNetworkLinkageData(count).Name);
                     AirflowNetworkLinkageData(count).NodeNames[0] = Util::makeUPPER(fields.at("node_1_name").get<std::string>());
-                    std::string tempNode1 = AirflowNetworkLinkageData(count).NodeNames[0];
                     AirflowNetworkLinkageData(count).NodeHeights[0] = 0.0;
                     AirflowNetworkLinkageData(count).NodeNames[1] = Util::makeUPPER(fields.at("node_2_name").get<std::string>());
-                    std::string tempNode2 = AirflowNetworkLinkageData(count).NodeNames[1];
                     AirflowNetworkLinkageData(count).NodeHeights[1] = 0.0;
                     AirflowNetworkLinkageData(count).CompName = Util::makeUPPER(fields.at("component_name").get<std::string>());
-                    std::string tempComp = AirflowNetworkLinkageData(count).CompName;
                     AirflowNetworkLinkageData(count).ZoneName =
                         Util::makeUPPER(m_state.dataInputProcessing->inputProcessor->getAlphaFieldValue(fields, schemaProps, "thermal_zone_name"));
-                    std::string tempZone = AirflowNetworkLinkageData(count).ZoneName;
                     AirflowNetworkLinkageData(count).LinkNum = count;
 
                     for (int i = 1; i <= DisSysNumOfDuctViewFactors; ++i) {
@@ -12805,7 +12800,7 @@ namespace AirflowNetwork {
                             ReturnTrunkD = hydraulicDiameter * factor;
                         }
                         ReturnTrunkArea = ReturnTrunkD * ReturnTrunkD / 4.0 * Constant::Pi;
-                        Velocity = flowrate / SupplyBranchArea;
+                        Velocity = flowrate / ReturnTrunkArea;
                     }
                     if (simulation_control.ductSizing.method == DuctSizingMethod::VelocityAndLoss) {
                         if (Velocity > simulation_control.ductSizing.max_velocity) {

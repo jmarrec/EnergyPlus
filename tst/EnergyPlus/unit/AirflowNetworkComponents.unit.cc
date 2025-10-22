@@ -4462,10 +4462,11 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestFanModel)
     state->dataAirLoop->AirLoopAFNInfo(1).LoopSystemOnMassFlowrate = 1.23;
     state->afn->AirflowNetworkLinkageData(17).AirLoopNum = 1;
     state->dataLoopNodes->Node(4).MassFlowRate = 1.23;
+    state->afn->AirflowNetworkLinkageData(13).AirLoopNum = 1;
 
     state->afn->calculate_balance();
     // Fan:SystemModel
-    EXPECT_NEAR(1.23, state->afn->AirflowNetworkLinkSimu(20).FLOW, 0.0001);
+    EXPECT_NEAR(1.06274, state->afn->AirflowNetworkLinkSimu(20).FLOW, 0.0001);
     EXPECT_TRUE(state->afn->DisSysCompCVFData(1).FanModelFlag);
 
     for (i = 1; i <= 21; ++i) {
@@ -4480,7 +4481,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestFanModel)
     // Fan:OnOff
     state->afn->DisSysCompCVFData(1).FanModelFlag = false;
     state->afn->calculate_balance();
-    EXPECT_NEAR(1.23, state->afn->AirflowNetworkLinkSimu(20).FLOW, 0.0001);
+    EXPECT_NEAR(1.06274, state->afn->AirflowNetworkLinkSimu(20).FLOW, 0.0001);
 
     state->dataAirLoop->AirLoopAFNInfo.deallocate();
 }

@@ -16808,8 +16808,8 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_DuctSizingTest)
     EXPECT_NEAR(state->afn->DisSysCompDuctData(6).hydraulicDiameter, 0.522597, 0.0001);
     EXPECT_NEAR(state->afn->DisSysCompDuctData(6).A, 0.214498, 0.0001);
     // Return trunk
-    EXPECT_NEAR(state->afn->DisSysCompDuctData(3).hydraulicDiameter, 0.466381, 0.0001);
-    EXPECT_NEAR(state->afn->DisSysCompDuctData(3).A, 0.170833, 0.0001);
+    EXPECT_NEAR(state->afn->DisSysCompDuctData(3).hydraulicDiameter, 0.653543, 0.0001);
+    EXPECT_NEAR(state->afn->DisSysCompDuctData(3).A, 0.335459, 0.0001);
 }
 
 TEST_F(EnergyPlusFixture, AirflowNetwork_CheckMultistageHeatingCoil)
