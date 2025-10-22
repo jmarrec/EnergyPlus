@@ -397,6 +397,7 @@ Version,
       \format singleLine
   A1 ; \field Version Identifier
       \default ${CMAKE_VERSION_MAJOR}.${CMAKE_VERSION_MINOR}
+        \blabla
 
 SimulationControl,
       \unique-object
@@ -57658,7 +57659,7 @@ Coil:Heating:WaterToAirHeatPump:ParameterEstimation,
         \note Availability schedule name for this system. Schedule value > 0 means the system is available.
         \note If this field is blank, the system is always available.
         \type object-list
-        \object-list ScheduleNames      
+        \object-list ScheduleNames
    A3 , \field Compressor Type
         \required-field
         \type choice
@@ -60106,7 +60107,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
        \note If this field is blank, the system is always available.
        \type object-list
-       \object-list ScheduleNames 
+       \object-list ScheduleNames
   N1,  \field Number of Speeds
        \units dimensionless
        \type integer
