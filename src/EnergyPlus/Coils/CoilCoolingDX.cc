@@ -231,6 +231,7 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
         ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", input_data.availability_schedule_name);
         errorsFound = true;
     }
+    this->performance->coilCoolingDXAvailSched = this->availSched;
 
     if (!input_data.condenser_zone_name.empty()) {
         this->isSecondaryDXCoilInZone = true;
