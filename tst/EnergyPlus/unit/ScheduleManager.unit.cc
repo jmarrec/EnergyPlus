@@ -1732,6 +1732,7 @@ TEST_F(EnergyPlusFixture, ShadowCalculation_CSV_broken)
 
     // a CSV exported with the extra '()' at the end (22.2.0 and below) should still be importable in E+ without crashing
     const fs::path scheduleFile = configured_source_directory() / "tst/EnergyPlus/unit/Resources/shading_data_2220_broken.csv";
+    scheduleFile.make_preferred();
 
     std::string const idf_objects = delimited_string({
         "Schedule:File:Shading,",
