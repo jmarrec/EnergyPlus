@@ -1772,7 +1772,7 @@ TEST_F(EnergyPlusFixture, WeatherManager_GroupReportPeriodByType)
                                                       "18;                           !- End Hour of Day",
 
                                                       "Output:Table:ReportPeriod,",
-                                                      "ThermalResilienceReportTimeWinter,  !- field Name,",
+                                                      "ThermalResilienceReportTimeSummer,  !- field Name,",
                                                       "ThermalResilienceSummary,     !- field Report Name,",
                                                       ",                             !- Begin Year",
                                                       "7,                            !- Begin Month",
