@@ -12523,7 +12523,9 @@ Real64 CalcEffectiveSHR(EnergyPlusData &state,
     To1 = aa + Tcl;
     Error = 1.0;
     while (Error > 0.001) {
-        To2 = aa - Tcl * (std::exp(-To1 / Tcl) - 1.0);
+        //  Floating overflow errors occur when -To1/Tcl is a large positive number.
+        //  Cap upper limit at 700 to avoid the overflow errors.
+        To2 = aa - Tcl * std::expm1(min(700.0, -To1 / Tcl));
         Error = std::abs((To2 - To1) / To1);
         To1 = To2;
     }
