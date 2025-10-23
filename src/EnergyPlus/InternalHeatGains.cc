@@ -150,10 +150,11 @@ namespace InternalHeatGains {
     static constexpr std::array<DataHeatBalance::IntGainType, 3> IntGainTypesWaterUse = {DataHeatBalance::IntGainType::WaterUseEquipment,
                                                                                          DataHeatBalance::IntGainType::WaterHeaterMixed,
                                                                                          DataHeatBalance::IntGainType::WaterHeaterStratified};
-    static constexpr std::array<DataHeatBalance::IntGainType, 20> IntGainTypesHvacLoss = {
+    static constexpr std::array<DataHeatBalance::IntGainType, 21> IntGainTypesHvacLoss = {
         DataHeatBalance::IntGainType::ZoneBaseboardOutdoorTemperatureControlled,
         DataHeatBalance::IntGainType::ThermalStorageChilledWaterMixed,
         DataHeatBalance::IntGainType::ThermalStorageChilledWaterStratified,
+        DataHeatBalance::IntGainType::ThermalStorageHotWaterStratified,
         DataHeatBalance::IntGainType::PipeIndoor,
         DataHeatBalance::IntGainType::Pump_VarSpeed,
         DataHeatBalance::IntGainType::Pump_ConSpeed,
@@ -8651,7 +8652,7 @@ namespace InternalHeatGains {
                 enclCLDayTS.powerGenRadSeq = SumEnclosureInternalRadiationGainsByTypes(state, iEncl, IntGainTypesPowerGen);
             }
             if (state.dataHeatBal->doSpaceHeatBalanceSizing) {
-                for (int iSpace = 1; iSpace <= state.dataGlobal->NumOfZones; ++iSpace) {
+                for (int iSpace = 1; iSpace <= state.dataGlobal->numSpaces; ++iSpace) {
                     auto &spCLDayTS =
                         state.dataOutRptTab->spCompLoads[state.dataSize->CurOverallSimDay - 1].ts[TimeStepInDay - 1].spacezone[iSpace - 1];
                     gatherCompLoadIntGain2(state, spCLDayTS, state.dataHeatBal->space(iSpace).zoneNum, iSpace);

@@ -1523,7 +1523,8 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
         ";",
 
         "  Coil:Cooling:DX:VariableSpeed,",
-        "Coil:Cooling:DX:VariableSpeed coil,    !- Name",
+        "    Coil:Cooling:DX:VariableSpeed coil,    !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Zone1WindACFanOutletNode,  !- Indoor Air Inlet Node Name",
         "    Zone1WindACAirOutletNode,  !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
@@ -1653,7 +1654,8 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
         ",,,,,,,,,,,,,,,,,;"
 
         "  Coil:Heating:DX:VariableSpeed,",
-        "Coil:Heating:DX:VariableSpeed coil,  !- Name",
+        "    Coil:Heating:DX:VariableSpeed coil,  !- Name",
+        "    ,                                    !- Availability Schedule Name",
         "    Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
         "    SuppHeating Coil Air Inlet Node,  !- Indoor Air Outlet Node Name",
         "    10,                      !- Number of Speeds {dimensionless}",
@@ -1790,6 +1792,7 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
 
         "Coil:WaterHeating:AirToWaterHeatPump:Wrapped,",
         "    HPWH Coil_1,             !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    1400,                    !- Rated Heating Capacity {W}",
         "    2.8,                     !- Rated COP {W/W}",
         "    0.88,                    !- Rated Sensible Heat Ratio",
@@ -1812,6 +1815,7 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
 
         "  Coil:WaterHeating:AirToWaterHeatPump:Pumped,",
         "    Zone4HPWHDXCoil,         !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    4000.0,                  !- Rated Heating Capacity {W}",
         "    3.2,                     !- Rated COP {W/W}",
         "    0.6956,                  !- Rated Sensible Heat Ratio",
@@ -1843,6 +1847,7 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
 
         "  Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,",
         "    HPWHOutdoorDXCoilVS,     !- Name",
+        "    ,                        !- Availability Schedule Name",
         "	10,						 !- Number of Speeds",
         "	10,						 !- Nominal speed level",
         "    4000.0,                  !- Rated Heating Capacity {W}",
@@ -6666,7 +6671,8 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
         ";",
 
         "  Coil:Cooling:DX:VariableSpeed,",
-        "Coil:Cooling:DX:VariableSpeed coil,    !- Name",
+        "    Coil:Cooling:DX:VariableSpeed coil,    !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Zone1WindACFanOutletNode,  !- Indoor Air Inlet Node Name",
         "    Zone1WindACAirOutletNode,  !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
@@ -6796,7 +6802,8 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
         ",,,,,,,,,,,,,,,,,;"
 
         "  Coil:Heating:DX:VariableSpeed,",
-        "Coil:Heating:DX:VariableSpeed coil,  !- Name",
+        "    Coil:Heating:DX:VariableSpeed coil,  !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
         "    SuppHeating Coil Air Inlet Node,  !- Indoor Air Outlet Node Name",
         "    10,                      !- Number of Speeds {dimensionless}",
@@ -6933,6 +6940,7 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
 
         "Coil:WaterHeating:AirToWaterHeatPump:Wrapped,",
         "    HPWH Coil_1,             !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    1400,                    !- Rated Heating Capacity {W}",
         "    2.8,                     !- Rated COP {W/W}",
         "    0.88,                    !- Rated Sensible Heat Ratio",
@@ -6955,6 +6963,7 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
 
         "  Coil:WaterHeating:AirToWaterHeatPump:Pumped,",
         "    Zone4HPWHDXCoil,         !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    4000.0,                  !- Rated Heating Capacity {W}",
         "    3.2,                     !- Rated COP {W/W}",
         "    0.6956,                  !- Rated Sensible Heat Ratio",
@@ -6986,6 +6995,7 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
 
         "  Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,",
         "    HPWHOutdoorDXCoilVS,     !- Name",
+        "    ,                        !- Availability Schedule Name",
         "	10,						 !- Number of Speeds",
         "	10,						 !- Nominal speed level",
         "    4000.0,                  !- Rated Heating Capacity {W}",
