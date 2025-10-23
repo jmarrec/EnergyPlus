@@ -125,18 +125,18 @@ namespace VariableSpeedCoils {
         Real64 EnergySource;               // Source Side Heat Transferred [J]
         Real64 COP;                        // Heat Pump Coefficient of Performance [-]
         Real64 RunFrac;                    // Duty Factor
-        Real64 RunFracHeat;
-        Real64 RunFracCool;
-        Real64 PartLoadRatio;    // Part Load Ratio
-        Real64 RatedPowerHeat;   // Rated/Ref Heating Power Consumption[W]
-        Real64 RatedCOPHeat;     // Rated/Ref Heating COP [W/W]
-        Real64 RatedCapCoolSens; // Rated/Ref Sensible Cooling Capacity [W]
-        Real64 RatedPowerCool;   // Rated/Ref Cooling Power Consumption[W]
-        Real64 RatedCOPCool;     // Rated/Ref Cooling COP [W/W]
-        int AirInletNodeNum;     // Node Number of the Air Inlet
-        int AirOutletNodeNum;    // Node Number of the Air Outlet
-        int WaterInletNodeNum;   // Node Number of the Water Onlet
-        int WaterOutletNodeNum;  // Node Number of the Water Outlet
+        Real64 RunFracHeat;                // Runtime fraction for heating operations [-]
+        Real64 RunFracCool;                // Runtime fraction for cooling operations [-]
+        Real64 PartLoadRatio;              // Part Load Ratio
+        Real64 RatedPowerHeat;             // Rated/Ref Heating Power Consumption[W]
+        Real64 RatedCOPHeat;               // Rated/Ref Heating COP [W/W]
+        Real64 RatedCapCoolSens;           // Rated/Ref Sensible Cooling Capacity [W]
+        Real64 RatedPowerCool;             // Rated/Ref Cooling Power Consumption[W]
+        Real64 RatedCOPCool;               // Rated/Ref Cooling COP [W/W]
+        int AirInletNodeNum;               // Node Number of the Air Inlet
+        int AirOutletNodeNum;              // Node Number of the Air Outlet
+        int WaterInletNodeNum;             // Node Number of the Water Onlet
+        int WaterOutletNodeNum;            // Node Number of the Water Outlet
         PlantLocation plantLoc;
         bool FrostHeatingCapacityMultiplierEMSOverrideOn; // if true, then EMS is calling to override multiplier for heating capacity when system is
                                                           // in defrost
@@ -286,7 +286,7 @@ namespace VariableSpeedCoils {
         // end variables for HPWH
         bool reportCoilFinalSizes; // one time report of sizes to coil selection report
         Real64 capModFacTotal;     // coil  TotCapTempModFac * TotCapAirFFModFac * TotCapWaterFFModFac, for result for simulation peak reporting
-        int AirLoopNum;
+        int AirLoopNum;            // Air loop number
 
         // default constructor
         VariableSpeedCoilData()
@@ -349,7 +349,8 @@ namespace VariableSpeedCoils {
               bIsDesuperheater(false),          // whether the coil is used for a desuperheater, i.e. zero all the cooling capacity and power
                                                 // end variables for HPWH
               reportCoilFinalSizes(true),       // coil report
-              capModFacTotal(0.0)               // coil report
+              capModFacTotal(0.0),              // coil report
+              AirLoopNum(0)                     // air loop number
 
         {
         }
