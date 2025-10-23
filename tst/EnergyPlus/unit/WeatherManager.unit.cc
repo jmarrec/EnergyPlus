@@ -934,6 +934,7 @@ TEST_F(SQLiteFixture, DesignDay_EnthalpyAtMaxDB)
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, false));
 
+    OutputReportTabular::setTabularReportStyles(*state);
     OutputReportTabular::WriteEioTables(*state);
 
     // Close output files *after* the EIO has been written to
@@ -1771,7 +1772,7 @@ TEST_F(EnergyPlusFixture, WeatherManager_GroupReportPeriodByType)
                                                       "18;                           !- End Hour of Day",
 
                                                       "Output:Table:ReportPeriod,",
-                                                      "ThermalResilienceReportTimeWinter,  !- field Name,",
+                                                      "ThermalResilienceReportTimeSummer,  !- field Name,",
                                                       "ThermalResilienceSummary,     !- field Report Name,",
                                                       ",                             !- Begin Year",
                                                       "7,                            !- Begin Month",

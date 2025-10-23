@@ -144,6 +144,8 @@ namespace PlantManager {
 
     void CheckOngoingPlantWarnings(EnergyPlusData &state);
 
+    void ReportPlantCompWaterFlowData(EnergyPlusData &state, bool const reportFlag);
+
     struct EmptyPlantComponent : PlantComponent
     {
         // this is for purely air side equipment or similar that dont need anything at all done on plant for now

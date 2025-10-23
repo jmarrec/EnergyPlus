@@ -2059,6 +2059,7 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
     Real64 DesCoilAirFlow = 0.0;
     Real64 DesCoilExitTemp = 0.0;
     Real64 CpAirStd = PsyCpAirFnW(0.0);
+    state.dataSize->DataCoilNum = CoilNum;
 
     auto &waterCoil = state.dataWaterCoils->WaterCoil(CoilNum);
     // cooling coils
@@ -2280,6 +2281,7 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
             sizerCWWaterflow.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
             waterCoil.MaxWaterVolFlowRate = sizerCWWaterflow.size(state, TempSize, ErrorsFound);
             state.dataSize->DataWaterFlowUsedForSizing = waterCoil.MaxWaterVolFlowRate;
+            state.dataSize->DataCoilNum = 0;
 
             if (waterCoil.WaterCoilModel == CoilModel::CoolingDetailed) { // 'DETAILED FLAT FIN'
                 bPRINT = false; // do not print this sizing request since this coil does not have a design air flow rate input field (we
@@ -2573,9 +2575,11 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
                 state.dataSize->DataConstantUsedForSizing = waterCoil.MaxWaterVolFlowRate;
                 state.dataSize->DataFractionUsedForSizing = 1.0;
             }
+            state.dataSize->DataCoilNum = CoilNum;
             HeatingWaterflowSizer sizerHWWaterflow;
             sizerHWWaterflow.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
             Real64 sizedMaxWaterVolFlowRate = sizerHWWaterflow.size(state, TempSize, ErrorsFound);
+            state.dataSize->DataCoilNum = 0;
             // Check if the water flow rate is defined in parent HVAC equipment and set water coil design water flow rate accordingly
             if (state.dataSize->CurZoneEqNum > 0) {
                 auto const &ZoneEqSizing = state.dataSize->ZoneEqSizing(state.dataSize->CurZoneEqNum);

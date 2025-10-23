@@ -604,6 +604,23 @@ namespace OutputReportPredefined {
         s->pdchBoilerPlantloopName = newPreDefColumn(state, s->pdstBoiler, "Plantloop Name");
         s->pdchBoilerPlantloopBranchName = newPreDefColumn(state, s->pdstBoiler, "Plantloop Branch Name");
 
+        // Heat Pumps in Equipment Summary
+        s->pdstAWHP = newPreDefSubTable(state, s->pdrEquip, "AWHPs");
+
+        s->pdchAWHPType = newPreDefColumn(state, s->pdstAWHP, "Type");
+        s->pdchAWHPRefCap = newPreDefColumn(state, s->pdstAWHP, "Reference Capacity[W]");
+        s->pdchAWHPRefCOP = newPreDefColumn(state, s->pdstAWHP, "Reference COP");
+        // s->pdchAWHPSEER = newPreDefColumn(state, s->pdstAWHP, "SEER");
+        // s->pdchAWHPHSPF = newPreDefColumn(state, s->pdstAWHP, "HSPF");
+        s->pdchAWHPMinPLR = newPreDefColumn(state, s->pdstAWHP, "Minimum Part Load Ratio");
+        s->pdchAWHPDesSizeRefAirTemp = newPreDefColumn(state, s->pdstAWHP, "Design Size Reference Air Temperature [C]");
+        s->pdchAWHPDesEnterWaterTemp = newPreDefColumn(state, s->pdstAWHP, "Entering Water Temperature [C]");
+        s->pdchAWHPDesLeaveWaterTemp = newPreDefColumn(state, s->pdstAWHP, "Leaving Water Temperature [C]");
+        s->pdchAWHPDesSizeRefAirFlowRate = newPreDefColumn(state, s->pdstAWHP, "Design Size Reference Air Flow Rate [kg/s]");
+        s->pdchAWHPDesSizeRefWaterFlowRate = newPreDefColumn(state, s->pdstAWHP, "Design Size Reference Water Flow Rate [kg/s]");
+        s->pdchAWHPPlantloopName = newPreDefColumn(state, s->pdstAWHP, "Plantloop Name");
+        s->pdchAWHPPlantloopBranchName = newPreDefColumn(state, s->pdstAWHP, "Plantloop Branch Name");
+
         // Std 229 cooling towers and fluid coolers Table in Equipment Summary
         s->pdstCTFC = newPreDefSubTable(state, s->pdrEquip, "Cooling Towers and Fluid Coolers");
 
@@ -740,7 +757,8 @@ namespace OutputReportPredefined {
         s->pdchSpClPkDOASHeatGain = newPreDefColumn(state, s->pdstSpaceClSize, "Heat Gain Rate from DOAS [W]");
         addFootNoteSubTable(state,
                             s->pdstSpaceClSize,
-                            "The Design Load is the space sensible load only. It does not include any system effects or ventilation loads.");
+                            "The Design Load is the space sensible load only. It does not include any system effects or ventilation loads. Values "
+                            "shown include multipliers.");
 
         s->pdstZoneClSize = newPreDefSubTable(state, s->pdrSizing, "Zone Sensible Cooling");
 
@@ -758,8 +776,10 @@ namespace OutputReportPredefined {
         s->pdchZnClPkOAHum = newPreDefColumn(state, s->pdstZoneClSize, "Outdoor Humidity Ratio at Peak Load [kgWater/kgDryAir]");
         s->pdchZnClPkOAMinFlow = newPreDefColumn(state, s->pdstZoneClSize, "Minimum Outdoor Air Flow Rate [m3/s]");
         s->pdchZnClPkDOASHeatGain = newPreDefColumn(state, s->pdstZoneClSize, "Heat Gain Rate from DOAS [W]");
-        addFootNoteSubTable(
-            state, s->pdstZoneClSize, "The Design Load is the zone sensible load only. It does not include any system effects or ventilation loads.");
+        addFootNoteSubTable(state,
+                            s->pdstZoneClSize,
+                            "The Design Load is the zone sensible load only. It does not include any system effects or ventilation loads. Values "
+                            "shown include multipliers.");
 
         s->pdstSpaceHtSize = newPreDefSubTable(state, s->pdrSizing, "Space Sensible Heating");
 
@@ -779,7 +799,8 @@ namespace OutputReportPredefined {
         s->pdchSpHtPkDOASHeatGain = newPreDefColumn(state, s->pdstSpaceHtSize, "Heat Gain Rate from DOAS [W]");
         addFootNoteSubTable(state,
                             s->pdstSpaceHtSize,
-                            "The Design Load is the space sensible load only. It does not include any system effects or ventilation loads.");
+                            "The Design Load is the space sensible load only. It does not include any system effects or ventilation loads. Values "
+                            "shown include multipliers.");
 
         s->pdstZoneHtSize = newPreDefSubTable(state, s->pdrSizing, "Zone Sensible Heating");
 
@@ -797,8 +818,10 @@ namespace OutputReportPredefined {
         s->pdchZnHtPkOAHum = newPreDefColumn(state, s->pdstZoneHtSize, "Outdoor Humidity Ratio at Peak Load [kgWater/kgDryAir]");
         s->pdchZnHtPkOAMinFlow = newPreDefColumn(state, s->pdstZoneHtSize, "Minimum Outdoor Air Flow Rate [m3/s]");
         s->pdchZnHtPkDOASHeatGain = newPreDefColumn(state, s->pdstZoneHtSize, "Heat Gain Rate from DOAS [W]");
-        addFootNoteSubTable(
-            state, s->pdstZoneHtSize, "The Design Load is the zone sensible load only. It does not include any system effects or ventilation loads.");
+        addFootNoteSubTable(state,
+                            s->pdstZoneHtSize,
+                            "The Design Load is the zone sensible load only. It does not include any system effects or ventilation loads. Values "
+                            "shown include multipliers.");
 
         s->pdstSystemSize = newPreDefSubTable(state, s->pdrSizing, "System Design Air Flow Rates");
 
@@ -1176,6 +1199,7 @@ namespace OutputReportPredefined {
         s->pdchOaMvZoneArea = newPreDefColumn(state, s->pdstOAmechVentParByZone, "Zone Area [m2]");
         s->pdchOaMvDesZnOa = newPreDefColumn(state, s->pdstOAmechVentParByZone, "Design Zone Outdoor Airflow - Voz [m3/s]");
         s->pdchOaMvMinDynTrgVent = newPreDefColumn(state, s->pdstOAmechVentParByZone, "Minimum Dynamic Target Ventilation - Voz-dyn-min [m3/s]");
+        s->pdchOaMvZoneMult = newPreDefColumn(state, s->pdstOAmechVentParByZone, "Zone Multiplier");
         addFootNoteSubTable(
             state, s->pdstOAmechVentParByZone, "Values shown for a single zone without multipliers. Total Facility includes multipliers.");
 
@@ -1190,6 +1214,7 @@ namespace OutputReportPredefined {
         s->pdchOaTaBzTmAt = newPreDefColumn(state, s->pdstOAtotAirByZone, "Time At Voz-dyn [hr]");
         s->pdchOaTaBzTmAbove = newPreDefColumn(state, s->pdstOAtotAirByZone, "Time Above Voz-dyn [hr]");
         s->pdchOaTaBzTmAboveUnocc = newPreDefColumn(state, s->pdstOAtotAirByZone, "Time Above Zero When Unoccupied [hr]");
+        s->pdchOaTaBzZoneMult = newPreDefColumn(state, s->pdstOAtotAirByZone, "Zone Multiplier");
         addFootNoteSubTable(state, s->pdstOAtotAirByZone, "Values shown for a single zone without multipliers. Total Facility includes multipliers.");
 
         s->pdstOAavgOccByZone = newPreDefSubTable(state, s->pdrOutsideAirDetails, "Average Outdoor Air During Occupancy by Zone - Flow Rates");
@@ -1202,6 +1227,7 @@ namespace OutputReportPredefined {
         s->pdchOaOccBzTmBelow = newPreDefColumn(state, s->pdstOAavgOccByZone, "Time Below Voz-dyn [hr]");
         s->pdchOaOccBzTmAt = newPreDefColumn(state, s->pdstOAavgOccByZone, "Time At Voz-dyn [hr]");
         s->pdchOaOccBzTmAbove = newPreDefColumn(state, s->pdstOAavgOccByZone, "Time Above Voz-dyn [hr]");
+        s->pdchOaOccBzZoneMult = newPreDefColumn(state, s->pdstOAavgOccByZone, "Zone Multiplier");
         addFootNoteSubTable(state, s->pdstOAavgOccByZone, "Values shown for a single zone without multipliers. Total Facility includes multipliers.");
 
         s->pdstOAtotAirByLoop = newPreDefSubTable(state, s->pdrOutsideAirDetails, "Total Outdoor Air by AirLoop");

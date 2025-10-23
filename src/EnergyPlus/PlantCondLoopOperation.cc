@@ -1293,8 +1293,19 @@ void LoadEquipList(EnergyPlusData &state,
                 state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp.allocate(
                     state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).NumComps);
                 for (MachineNum = 1; MachineNum <= state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).NumComps; ++MachineNum) {
-                    state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
-                        state.dataIPShortCut->cAlphaArgs(MachineNum * 2);
+                    auto const type_str = state.dataIPShortCut->cAlphaArgs(MachineNum * 2);
+                    if (type_str == "HEATPUMP:AIRTOWATER") {
+                        if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::HotWater) {
+                            state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
+                                "HEATPUMP:AIRTOWATER:HEATING";
+                        } else if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::ChilledWater) {
+                            state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
+                                "HEATPUMP:AIRTOWATER:COOLING";
+                        }
+                    } else {
+                        state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
+                            state.dataIPShortCut->cAlphaArgs(MachineNum * 2);
+                    }
                     state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).Name =
                         state.dataIPShortCut->cAlphaArgs(MachineNum * 2 + 1);
                 } // MachineList
