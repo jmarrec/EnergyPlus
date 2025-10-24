@@ -900,40 +900,40 @@ namespace UnitarySystems {
             state.dataLoopNodes->Node(this->m_HeatRecoveryInletNodeNum).MassFlowRate = mdotHR;
         }
 
-        // for systems without a fan, just read the inlet node flow rate and let air loop decide flow
-        if (this->m_ControlType == UnitarySysCtrlType::Setpoint && this->m_sysType == SysType::Unitary && this->m_FanExists) {
-            if (this->m_sysAvailSched->getCurrentVal() > 0.0) {
-                if (this->m_LastMode == CoolingMode) {
-                    if (this->m_MultiOrVarSpeedCoolCoil) {
-                        state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->m_CoolMassFlowRate[this->m_NumOfSpeedCooling];
-                    } else {
-                        state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxCoolAirMassFlow;
-                    }
-                } else if (this->m_LastMode == HeatingMode) {
-                    if (this->m_MultiOrVarSpeedHeatCoil) {
-                        state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->m_HeatMassFlowRate[this->m_NumOfSpeedHeating];
-                    } else {
-                        state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxHeatAirMassFlow;
-                    }
-                } else {
-                    if (this->m_AirFlowControl == UseCompFlow::Off) {
-                        if (this->m_MultiOrVarSpeedCoolCoil) {
-                            state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxNoCoolHeatAirMassFlow;
-                        } else {
-                            state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxNoCoolHeatAirMassFlow;
-                        }
-                    }
-                }
-            } else {
-                state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = 0.0;
-            }
-        }
-
         // get operating capacity of water and steam coil
         if (FirstHVACIteration || this->m_DehumidControlType_Num == DehumCtrlType::CoolReheat) {
             if (FirstHVACIteration) {
                 this->m_IterationCounter = 0;
                 std::fill(this->m_IterationMode.begin(), this->m_IterationMode.end(), 0);
+
+                // for systems without a fan, just read the inlet node flow rate and let air loop decide flow
+                if (this->m_ControlType == UnitarySysCtrlType::Setpoint && this->m_sysType == SysType::Unitary && this->m_FanExists) {
+                    if (this->m_sysAvailSched->getCurrentVal() > 0.0) {
+                        if (this->m_LastMode == CoolingMode) {
+                            if (this->m_MultiOrVarSpeedCoolCoil) {
+                                state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->m_CoolMassFlowRate[this->m_NumOfSpeedCooling];
+                            } else {
+                                state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxCoolAirMassFlow;
+                            }
+                        } else if (this->m_LastMode == HeatingMode) {
+                            if (this->m_MultiOrVarSpeedHeatCoil) {
+                                state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->m_HeatMassFlowRate[this->m_NumOfSpeedHeating];
+                            } else {
+                                state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxHeatAirMassFlow;
+                            }
+                        } else {
+                            if (this->m_AirFlowControl == UseCompFlow::Off) {
+                                if (this->m_MultiOrVarSpeedCoolCoil) {
+                                    state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxNoCoolHeatAirMassFlow;
+                                } else {
+                                    state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxNoCoolHeatAirMassFlow;
+                                }
+                            }
+                        }
+                    } else {
+                        state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = 0.0;
+                    }
+                }
 
                 if (this->m_WaterHRPlantLoopModel) {
                     // initialize loop water temp on FirstHVACIteration
@@ -14422,7 +14422,7 @@ namespace UnitarySystems {
 
         if (PartLoadFrac > 1.0) {
             PartLoadFrac = 1.0;
-        } else if (PartLoadFrac <= 0.0) {
+        } else if (PartLoadFrac < 0.0) {
             PartLoadFrac = 0.0;
         }
 
@@ -15063,7 +15063,7 @@ namespace UnitarySystems {
 
         if (PartLoadFrac > 1.0) {
             PartLoadFrac = 1.0;
-        } else if (PartLoadFrac <= 0.0) {
+        } else if (PartLoadFrac < 0.0) {
             PartLoadFrac = 0.0;
         }
 
