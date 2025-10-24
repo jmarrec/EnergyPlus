@@ -82003,6 +82003,7 @@ WaterHeater:Sizing,
        \required-field
        \type object-list
        \object-list WaterHeaterNames
+       \object-list ThermalStorageWaterNames
   A2 , \field Design Mode
        \type choice
        \key PeakDraw
@@ -82725,6 +82726,7 @@ ThermalStorage:ChilledWater:Mixed,
   A1 , \field Name
        \required-field
        \type alpha
+       \reference ThermalStorageWaterNames
        \reference-class-name validPlantEquipmentTypes
        \reference validPlantEquipmentNames
        \reference-class-name validCondenserEquipmentTypes
@@ -82827,6 +82829,7 @@ ThermalStorage:ChilledWater:Stratified,
   A1 , \field Name
        \required-field
        \type alpha
+       \reference ThermalStorageWaterNames
        \reference-class-name validPlantEquipmentTypes
        \reference validPlantEquipmentNames
        \reference-class-name validCondenserEquipmentTypes
@@ -83039,6 +83042,7 @@ ThermalStorage:HotWater:Stratified,
   A1 , \field Name
        \required-field
        \type alpha
+       \reference ThermalStorageWaterNames
        \reference-class-name validPlantEquipmentTypes
        \reference validPlantEquipmentNames
        \reference-class-name validCondenserEquipmentTypes
