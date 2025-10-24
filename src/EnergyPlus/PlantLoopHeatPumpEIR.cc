@@ -546,7 +546,7 @@ void EIRPlantLoopHeatPump::calcAvailableCapacity(
             this->calcLoadSideHeatTransfer(state, availableCapacity);
             this->calcPowerUsage(state);
             Real64 sourceSideHeatTransfer = this->calcQsource(availableCapacity * partLoadRatio, this->powerUsage);
-            // check to see if souce side outlet temp exceeds limit and reduce PLR if necessary
+            // check to see if source side outlet temp exceeds limit and reduce PLR if necessary
             Real64 const CpSrc = this->sourceSidePlantLoc.loop->glycol->getSpecificHeat(
                 state, this->sourceSideInletTemp, "EIRPlantLoopHeatPump::calcLoadSideHeatTransfer()");
             Real64 const sourceMCp = this->sourceSideMassFlowRate * CpSrc;
@@ -3081,7 +3081,7 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
         if (this->eirAuxElecFTErrorIndex == 0) {
             ShowSevereMessage(state, format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
             ShowContinueError(state,
-                              format(" Auxillary EIR Modifier curve (function of Temperatures) output is negative ({:.3T}).", eirAuxElecFuncTemp));
+                              format(" Auxiliary EIR Modifier curve (function of Temperatures) output is negative ({:.3T}).", eirAuxElecFuncTemp));
             ShowContinueError(state,
                               format(" Negative value occurs using a water temperature of {:.2T}C and an outdoor air temperature of {:.2T}C.",
                                      waterTempforCurve,
@@ -3090,7 +3090,7 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
         }
         ShowRecurringWarningErrorAtEnd(
             state,
-            format("{} \"{}\": Auxillary EIR Modifier curve (function of Temperatures) output is negative warning continues...",
+            format("{} \"{}\": Auxiliary EIR Modifier curve (function of Temperatures) output is negative warning continues...",
                    DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
                    this->name),
             this->eirAuxElecFTErrorIndex,
@@ -3108,12 +3108,12 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
         if (this->eirAuxElecFPLRErrorIndex == 0) {
             ShowSevereMessage(state, format("{} \"{}\":", DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)], this->name));
             ShowContinueError(state,
-                              format(" Auxillary EIR Modifier curve (function of Temperatures) output is negative ({:.3T}).", eirAuxElecFuncPLR));
+                              format(" Auxiliary EIR Modifier curve (function of Temperatures) output is negative ({:.3T}).", eirAuxElecFuncPLR));
             ShowContinueError(state, format(" Negative value occurs using a Part Load Ratio of {:.2T}.", partLoadRatio));
             ShowContinueErrorTimeStamp(state, " Resetting curve output to zero and continuing simulation.");
         }
         ShowRecurringWarningErrorAtEnd(state,
-                                       format("{} \"{}\": Auxillary EIR Modifier curve (function of PLR) output is negative warning continues...",
+                                       format("{} \"{}\": Auxiliary EIR Modifier curve (function of PLR) output is negative warning continues...",
                                               DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)],
                                               this->name),
                                        this->eirAuxElecFPLRErrorIndex,
@@ -3143,7 +3143,7 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
     } else if (this->airSource) {
         CpSrc = Psychrometrics::PsyCpAirFnW(state.dataEnvrn->OutHumRat);
     }
-    // this->sourceSideCp = CpSrc; // debuging variable
+    // this->sourceSideCp = CpSrc; // debugging variable
     // Real64 const sourceMCp = this->sourceSideMassFlowRate * CpSrc;
     Real64 const sourceMCp = (this->sourceSideMassFlowRate < 1e-6 ? 1.0 : this->sourceSideMassFlowRate) * CpSrc;
     this->sourceSideOutletTemp = this->calcSourceOutletTemp(this->sourceSideInletTemp, this->sourceSideHeatTransfer / sourceMCp);
