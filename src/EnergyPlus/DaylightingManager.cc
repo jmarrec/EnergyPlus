@@ -791,7 +791,7 @@ void CalcDayltgCoeffsRefPoints(EnergyPlusData &state, int const daylightCtrlNum)
     Real64 TVISIntWinDisk; // Visible transmittance of int win at COSBIntWin for sun
 
     Vector3<Real64> W2;
-    Vector3<Real64> W3;
+    Vector3<Real64> W3 = {0.0, 0.0, 0.0};
     Vector3<Real64> W21;
     Vector3<Real64> W23;
     Vector3<Real64> RREF2;
@@ -1177,7 +1177,7 @@ void CalcDayltgCoeffsMapPoints(EnergyPlusData &state, int const mapNum)
     auto const &thisEnclDaylight = dl->enclDaylight(enclNum);
 
     // Azimuth of view vector in absolute coord sys - set to zero here, because glare isn't calculated for map points
-    // but these are arguments to some of the functions that are shared with regular reference points, so initalize here.
+    // but these are arguments to some of the functions that are shared with regular reference points, so initialize here.
     Real64 AZVIEW = 0.0;
     // View vector components in absolute coord sys
     VIEWVC = {0.0, 0.0, 0.0};
@@ -1522,7 +1522,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
 
     IConst = s_surf->SurfActiveConstruction(IWin);
 
-    // For thermochromic windows, the daylight and glare factors are calculated for a base window cosntruction
+    // For thermochromic windows, the daylight and glare factors are calculated for a base window construction
     //  at base TC layer temperature. During each time step calculations at DayltgInteriorIllum,
     //  DayltgInteriorMapIllum, and DayltgGlare, the daylight and glare factors are adjusted by the visible
     //  transmittance ratio = VT of actual TC window based on last hour TC layer temperature / VT of the base TC window
@@ -1723,7 +1723,7 @@ void FigureDayltgCoeffsAtPointsSetupForWindow(EnergyPlusData &state,
 
         Vector3<Real64> U3 = surf2.Vertex(2);
         U2 = surf2.Vertex(3);
-        Vector3<Real64> U1;
+        Vector3<Real64> U1 = {0.0, 0.0, 0.0};
 
         if (surf2.Sides == 4) {
             // Vertices of window (numbered counter-clockwise starting
@@ -4124,7 +4124,6 @@ void GetInputIlluminanceMap(EnergyPlusData &state, bool &ErrorsFound)
 
     CheckForGeometricTransform(state, doTransform, OldAspectRatio, NewAspectRatio);
 
-    auto &ip = state.dataInputProcessing->inputProcessor;
     auto const &s_ipsc = state.dataIPShortCut;
     s_ipsc->cCurrentModuleObject = "Output:IlluminanceMap";
     int TotIllumMaps = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, s_ipsc->cCurrentModuleObject);
@@ -4971,11 +4970,11 @@ void CheckTDDsAndLightShelvesInDaylitZones(EnergyPlusData &state)
     //       DATE WRITTEN   Dec 2007
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine checks daylighting input for TDDs and light shelfs
+    // This subroutine checks daylighting input for TDDs and light shelves
     //  which need to be checked after daylighting input has been read in (CR 7145)
     //  (eventually this should be changed once/if implementations change to decouple from daylighting calcs so that
     //  these devices can be used in models without daylighting controls
-    // CR 7145 was for TDDs, but also implenting check for light shelves, the other "daylighting device"
+    // CR 7145 was for TDDs, but also implementing check for light shelves, the other "daylighting device"
 
     // METHODOLOGY EMPLOYED:
     // loop thru daylighting devices and check that their zones have daylight controls
@@ -5036,7 +5035,7 @@ void AssociateWindowShadingControlWithDaylighting(EnergyPlusData &state)
         } else {
             ShowWarningError(state, "AssociateWindowShadingControlWithDaylighting: Daylighting object name used in WindowShadingControl not found.");
             ShowContinueError(state,
-                              format("..The WindowShadingControl object=\"{}\" and referenes an object named: \"{}\"",
+                              format("..The WindowShadingControl object=\"{}\" and references an object named: \"{}\"",
                                      winShadeControl.Name,
                                      winShadeControl.DaylightingControlName));
         }
@@ -8011,7 +8010,7 @@ void DayltgInterReflectedIllum(EnergyPlusData &state,
 
                     auto const &surfShade = s_surf->surfShades(IWin);
                     auto const &btar = surfShade.blind.TAR;
-                    auto const *matBlind = dynamic_cast<Material::MaterialBlind const *>(s_mat->materials(surfShade.blind.matNum));
+                    [[maybe_unused]] auto const *matBlind = dynamic_cast<Material::MaterialBlind const *>(s_mat->materials(surfShade.blind.matNum));
 
                     assert(matBlind != nullptr);
 
@@ -8443,7 +8442,7 @@ void DayltgDirectIllumComplexFenestration(EnergyPlusData &state,
     Illums EDir = Illums();
 
     for (int iIncElem = 1; iIncElem <= NIncBasis; ++iIncElem) {
-        // LambdaInc = ComplexWind(IWin)%Geom(CurCplxFenState)%Inc%Lamda(iIncElem)
+        // LambdaInc = ComplexWind(IWin)%Geom(CurCplxFenState)%Inc%Lambda(iIncElem)
         dirTrans = state.dataConstruction->Construct(iConst).BSDFInput.VisFrtTrans(RefPointIndex, iIncElem);
 
         auto const &elemLum = ElementLuminance(iIncElem);
@@ -8453,7 +8452,7 @@ void DayltgDirectIllumComplexFenestration(EnergyPlusData &state,
 
         WinLum.sun += dirTrans * elemLum.sun;
 
-        // For sun disk need to go throug outgoing directions and see which directions actually contain reference point
+        // For sun disk need to go through outgoing directions and see which directions actually contain reference point
     }
 
     if (zProjection > 0.0) {
@@ -9124,7 +9123,7 @@ void ReportIllumMap(EnergyPlusData &state, int const MapNum)
 
     // PURPOSE OF THIS SUBROUTINE:
     // This subroutine produces the Daylighting Illuminance Map output.  Each separate map (by zone)
-    // is placed on a temporary file and later (see CloseReportIllumMaps) coallesced into a single
+    // is placed on a temporary file and later (see CloseReportIllumMaps) coalesced into a single
     // output file.
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:

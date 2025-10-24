@@ -2185,15 +2185,15 @@ This numeric input field contains the heat rejection capacity of the fluid coole
 
 \paragraph{Field:Design Entering Water Temperature}\label{fielddesign-entering-water-temperature}
 
-This numeric field contains entering water temperature at nominal conditions in degrees Celsius. The design entering water temperature must be greater than the design entering air temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored.
+This numeric field contains entering water temperature at nominal conditions in degrees Celsius. The design entering water temperature must be greater than the design entering air temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored. This field is autosizable and defaults to autosize (which means it will take the value from the corresponding Sizing:Plant object).
 
 \paragraph{Field:Design Entering Air Temperature}\label{fielddesign-entering-air-temperature}
 
-This numeric field contains entering air dry-bulb temperature at nominal conditions in degrees Celsius. The design entering air temperature must be greater than the design entering air wet-bulb temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored.
+This numeric field contains entering air dry-bulb temperature at nominal conditions in degrees Celsius. The design entering air temperature must be greater than the design entering air wet-bulb temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored.  This field defaults to 35.0C.
 
 \paragraph{Field:Design Entering Air Wet-bulb Temperature}\label{fielddesign-entering-air-wet-bulb-temperature}
 
-This numeric field contains entering air wetbulb temperature at nominal conditions in degrees Celsius. The design entering air wet-bulb temperature must be less than the design entering air (dry-bulb) temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored.
+This numeric field contains entering air wetbulb temperature at nominal conditions in degrees Celsius. The design entering air wet-bulb temperature must be less than the design entering air (dry-bulb) temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored. This field defaults to 25.6C.
 
 \paragraph{Field: Capacity Control}\label{field-capacity-control}
 
@@ -2484,15 +2484,15 @@ This field contains the sizing factor to use when calculating the Low-Speed User
 
 \paragraph{Field:Design Entering Water Temperature}\label{fielddesign-entering-water-temperature-1}
 
-This numeric field contains entering water temperature at nominal conditions in degrees Celsius. The design entering water temperature must be greater than the design entering air temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored.
+This numeric field contains entering water temperature at nominal conditions in degrees Celsius. The design entering water temperature must be greater than the design entering air temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored. This field is autosizable and defaults to autosize (which means it will take the value from the corresponding Sizing:Plant object).
 
 \paragraph{Field:Design Entering Air Temperature}\label{fielddesign-entering-air-temperature-1}
 
-This numeric field contains entering air dry-bulb temperature at nominal conditions in degrees Celsius. The design entering air temperature must be greater than the design entering air wet-bulb temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored.
+This numeric field contains entering air dry-bulb temperature at nominal conditions in degrees Celsius. The design entering air temperature must be greater than the design entering air wet-bulb temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored. This field defaults to 35.0C.
 
 \paragraph{Field:Design Entering Air Wet-bulb Temperature}\label{fielddesign-entering-air-wet-bulb-temperature-1}
 
-This numeric field contains entering air wetbulb temperature at nominal conditions in degrees Celsius. The design entering air wet-bulb temperature must be less than the design entering air (dry-bulb) temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored.
+This numeric field contains entering air wetbulb temperature at nominal conditions in degrees Celsius. The design entering air wet-bulb temperature must be less than the design entering air (dry-bulb) temperature. Only used for Performance Input Method = UserSpecifiedDesignCapacity; for other performance input methods this field is ignored. This field defaults to 25.6C.
 
 \paragraph{Field: High Speed Sizing Factor}\label{field-high-speed-sizing-factor}
 
@@ -2978,12 +2978,13 @@ The heat exchanger response is defined by a g-function which is a non-dimensiona
   GFNC\emph{i} is the g-function value
 \end{itemize}
 
-The g-function is different for each borehole field configuration (i.e.~a 4 $\times$ 4 field has a different response than a 80 $\times$ 80 field). It is also dependent on the ratio of borehole spacing to depth. g-function values, for accurate simulation, have to be computed for each specific heat exchanger design. The GroundHeatExchanger:System object will accept three different types of input in order to define the g-functions necessary for the ground heat exchanger calculations.
+The g-function is different for each borehole field configuration (i.e.~a 4 $\times$ 4 field has a different response than a 80 $\times$ 80 field). It is also dependent on the ratio of borehole spacing to depth. g-function values, for accurate simulation, have to be computed for each specific heat exchanger design. The GroundHeatExchanger:System object will accept four different types of input in order to define the g-functions necessary for the ground heat exchanger calculations.
 
 \begin{enumerate}
-    \item Use the \hyperref[groundheatexchangerverticalarray]{GroundHeatExchanger:Vertical:Array} object to define a rectangular borehole field. EnergyPlus will compute and cache the g-functions for reuse again in future simulations.
-    \item Use one or more \hyperref[groundheatexchangerverticalsingle]{GroundHeatExchanger:Vertical:Single} objects to define a vertical borehole field with the boreholes located arbitrarily. EnergyPlus will compute and cache the g-functions for reuse again in future simulations.
-    \item Use a third-party tool, such as GLHEPro, to compute the g-functions and pass them to EnergyPlus using the \hyperref[groundheatexchangerresponsefactors]{GroundHeatExchanger:ResponseFactors} object.
+    \item Use the \hyperref[groundheatexchangerverticalarray]{GroundHeatExchanger:Vertical:Array} object to define a rectangular borehole field.
+    \item Use one or more \hyperref[groundheatexchangerverticalsingle]{GroundHeatExchanger:Vertical:Single} objects to define a vertical borehole field with the boreholes located arbitrarily.
+    \item Use a third-party tool such as GLHEPro to compute the g-functions, or download them from a \href{https://gdr.openei.org/submissions/1325}{precomputed library} and pass them to EnergyPlus using the \hyperref[groundheatexchangerresponsefactors]{GroundHeatExchanger:ResponseFactors} object.
+    \item Request borehole field design and sizing by providing a single \hyperref[groundheatexchangerverticalsingle]{GroundHeatExchanger:Vertical:Single} object and also a \hyperref[groundheatexchangerverticalsizingrect]{GroundHeatExchanger:Vertical:Sizing:Rectangle} object.
 \end{enumerate}
 
 A small number of reference datasets containing example input data for 1 $\times$ 2, 4 $\times$ 4 and 8 $\times$ 8 configurations and for both standard and thermally enhanced grout are provided as well.
@@ -3036,7 +3037,30 @@ The unique name of the \hyperref[groundheatexchangerresponsefactors]{GroundHeatE
 
 \paragraph{Field: g-Function Calculation Method}
 
-If the GHE:ResponseFactors object is not provided, this input will be relevant to the calculation method used to generate the g-function values. There are two options for this input: ``UHFcalc" or ``UBHWTcalc". The default is UHFcalc, where a g-function is computed with the uniform heat flux boundary condition. The UBHWTcalc option computes the g-function with a uniform borehole wall temperature boundary condition. The g-function computed with a uniform borehole wall temperature boundary condition is expected to be a better approximation of the borehole physics and is also expected to be faster to compute.
+If the GHE:ResponseFactors object is not provided, this input will be relevant to the calculation method used to generate the g-function values.
+There are three options for this input:
+
+\begin{itemize}
+  \item ``UHFcalc''
+  \item ``UBHWTcalc''
+  \item ``FullDesign''
+\end{itemize}
+
+The default is UHFcalc, where a g-function is computed with the uniform heat flux boundary condition.
+The UBHWTcalc option computes the g-function with a uniform borehole wall temperature boundary condition.
+The g-function computed with a uniform borehole wall temperature boundary condition is expected to be a better approximation of the borehole physics and is also expected to be faster to compute.
+The final option of FullDesign allows a borehole field to be designed and sized based on loads and design parameters.
+For a designed borehole field, the input file should include a GHE:Vertical:Sizing object matching the next field in this object, a full annual weather file sizing period to allow a year of loads to be generated, and finally hvac sizing enabled in the simulation control object.
+
+\paragraph{Field: GHEVertical:Sizing object type}
+
+For borehole field design and sizing calculations, this should be the type of an object specifying the borehole field design parameters.
+Currently only GroundHeatExchanger:Vertical:Sizing:Rectangle is supported.
+
+\paragraph{Field: GHE:Vertical:Sizing object name}
+
+For borehole field design and sizing calculations, this should be the name of an object specifying the borehole field design parameters.
+See the full documentation for \hyperref[groundheatexchangerverticalsizingrect]{GroundHeatExchanger:Vertical:Sizing:Rectangle}.
 
 \paragraph{Field: GHE:Vertical:Array object name}
 
@@ -3044,9 +3068,12 @@ The unique name of the \hyperref[groundheatexchangerverticalarray]{GroundHeatExc
 
 \paragraph{Field: GHE:Vertical:Single names}
 
-The unique names of all single, vertical GLHE objects which are used to define and arbitrarily shaped GHE array. This field is extensible.
+The unique names of all single, vertical GLHE objects which are used to define and arbitrarily shaped GHE array.
+This field is extensible.
 
-The following is are example inputs corresponding to the input variations allowed which were described previously. The first example uses the \hyperref[groundheatexchangerverticalarray]{GroundHeatExchanger:Vertical:Array} object. The g-functions will be generated automatically by EnergyPlus and cached for later use.
+The following are example inputs corresponding to the input variations allowed which were described previously.
+The first example uses the \hyperref[groundheatexchangerverticalarray]{GroundHeatExchanger:Vertical:Array} object.
+The g-functions will be generated automatically by EnergyPlus.
 
 \begin{lstlisting}
   GroundHeatExchanger:System,
@@ -3060,6 +3087,8 @@ The following is are example inputs corresponding to the input variations allowe
     2.5E+06,            !- Ground Thermal Heat Capacity {J/m3-K}
     ,                   !- Response Factors Object Name
     UBHWTcalc,          !- g-Function Calculation Method
+    ,                   !- GHE:Vertical:Sizing Object Type
+    ,                   !- GHE:Vertical:Sizing Object Name
     GHE-Array;          !- GHE:Vertical:Array Object Name
 
   GroundHeatExchanger:Vertical:Properties,
@@ -3083,7 +3112,8 @@ The following is are example inputs corresponding to the input variations allowe
     5;                  !- Borehole Spacing {m}
 \end{lstlisting}
 
-The second example uses the \hyperref[groundheatexchangerverticalsingle]{GroundHeatExchanger:Vertical:Single} object. The g-functions will be generated automatically by EnergyPlus and cached for later use.
+The second example uses the \hyperref[groundheatexchangerverticalsingle]{GroundHeatExchanger:Vertical:Single} object.
+The g-functions will be generated automatically by EnergyPlus.
 
 \begin{lstlisting}
   GroundHeatExchanger:System,
@@ -3097,6 +3127,8 @@ The second example uses the \hyperref[groundheatexchangerverticalsingle]{GroundH
     2.5E+06,            !- Ground Thermal Heat Capacity {J/m3-K}
     ,                   !- Response Factors Object Name
     UBHWTcalc,          !- g-Function Calculation Method
+    ,                   !- GHE:Vertical:Sizing Object Type
+    ,                   !- GHE:Vertical:Sizing Object Name
     ,                   !- GHE Array Object Name
     GHE-1,              !- GHE Borehole Definition 1
     GHE-2,              !- GHE Borehole Definition 2
@@ -3236,6 +3268,91 @@ This is the average temperature of the working fluid inside the heat exchanger.
 \paragraph{Ground Heat Exchanger Farfield Ground Temperature}
 
 This is the farfield temperature used by the object which is provided by the undisturbed ground temperature object. The temperature is the average of the 5 evenly spaced points between the top of the borehole and the bottom of the borehole.
+
+\subsection{GroundHeatExchanger:Vertical:Sizing:Rectangle}\label{groundheatexchangerverticalsizingrect}
+
+The ground loop heat exchanger can be designed and sized using the packaged GHEDesigner library.
+Currently the design is limited to rectangular borehole fields, with future enhancements expected to allow more flexible field design.
+To achieve the design, several design parameters are required, and are supplied in this object.
+HVAC sizing must also be enabled.
+
+\subsubsection{Inputs}
+
+\paragraph{Field: Name}
+
+This alpha field contains the identifying name for the rectangle ground heat exchanger sizing object.
+This name will be referenced in a GroundHeatExchanger:System object.
+
+\paragraph{Field: SizingPeriod:WeatherFileDays Name}
+
+The name of the SizingPeriod:WeatherFileDays object, used to define the design period.
+This object is required and must specify a period of 356 days.
+
+\paragraph{Field: Design Flow Rate Per Borehole}
+
+This is the design flow rate per borehole in m3/s.
+Used only for sizing the ground heat exchanger.
+
+\paragraph{Field: Available Borehole Field Length}
+
+This is the available borehole field length, in meters, as looking down from above.
+
+\paragraph{Field: Available Borehole Field Width}
+
+This is the available borehole field width, in meters, as looking down from above.
+
+\paragraph{Field: Maximum Number of Boreholes}
+
+This is the maximum number of boreholes available for the design.
+
+\paragraph{Field: Minimum Borehole Spacing}
+
+This is the minimum borehole-to-borehole spacing, in meters.
+
+\paragraph{Field: Maximum Borehole Spacing}
+
+This is the maximum borehole-to-borehole spacing, in meters.
+
+\paragraph{Field: Minimum Borehole Vertical Length}
+
+This is the minimum vertical height, or total borehole ``length'', to be used when designing the borehole field.
+
+\paragraph{Field: Maximum Borehole Vertical Length}
+
+This is the maximum vertical height, or total borehole ``length'', to be used when designing the borehole field.
+
+\paragraph{Field: Minimum Exiting Fluid Temperature for Sizing}
+
+This is the minimum allowable exiting fluid temperature for the borehole heat exchanger when designing the borehole field.
+
+\paragraph{Field: Maximum Exiting Fluid Temperature for Sizing}
+
+This is the maximum allowable exiting fluid temperature for the borehole heat exchanger when designing the borehole field.
+
+\subsubsection{Example Inputs}
+
+This is an example input object for the sizing parameters:
+
+\begin{lstlisting}
+  GroundHeatExchanger:Vertical:Sizing:Rectangle,
+    GHE-1-Sizing,            !- Name
+    GHE Sizing Period,       !- SizingPeriod:WeatherFileDays Name
+    0.0005,                  !- Design Flow Rate Per Borehole
+    100.0,                   !- Available Borehole Field Length
+    100.0,                   !- Available Borehole Field Width
+    200.0,                   !- Maximum Number of Boreholes
+    3.0,                     !- Minimum Borehole Spacing
+    10.0,                    !- Maximum Borehole Spacing
+    60.0,                    !- Minimum Borehole Vertical Length
+    135.0,                   !- Maximum Borehole Vertical Length
+    5.0,                     !- Minimum Exiting Fluid Temperature for Sizing
+    35.0;                    !- Maximum Exiting Fluid Temperature for Sizing
+\end{lstlisting}
+
+\subsubsection{Outputs}
+
+This object does not have any specific output variables.
+However, by using the full design approach, there may be additional output files or sizing outputs available in the EIO.
 
 \subsection{GroundHeatExchanger:Vertical:Properties}\label{groundheatexchangerverticalproperties}
 

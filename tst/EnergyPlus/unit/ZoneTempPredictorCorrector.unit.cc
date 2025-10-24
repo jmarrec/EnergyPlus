@@ -783,7 +783,7 @@ TEST_F(EnergyPlusFixture, ZoneTempPredictorCorrector_AdaptiveThermostat)
         "  Until: 24:00,24.0;                     !- Field 3",
     });
 
-    ASSERT_TRUE(process_idf(idf_objects)); // Tstat should show if the idf is legel
+    ASSERT_TRUE(process_idf(idf_objects)); // Tstat should show if the idf is legal
 
     state->init_state(*state);
 
@@ -1214,7 +1214,6 @@ TEST_F(EnergyPlusFixture, temperatureAndCountInSch_test)
     Real64 valueAtTime;
     int numDays;
     std::string monthAssumed;
-    constexpr int wednesday = 4;
 
     state->dataEnvrn->Latitude = 30.; // northern hemisphere
     auto *sched1 = Sched::GetSchedule(*state, "SCHED1");

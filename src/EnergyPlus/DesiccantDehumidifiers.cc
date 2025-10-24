@@ -1991,7 +1991,7 @@ namespace DesiccantDehumidifiers {
         // METHODOLOGY EMPLOYED:
         // Given the entering conditions, the full-load outlet conditions are calculated.
         // Adjust for part-load if required.
-        // Caclulate required regen energy and call regen coil and regen fan.
+        // Calculate required regen energy and call regen coil and regen fan.
         // Desiccant wheel leaving conditions and regen energy requirements are calculated
         // from empirical curve fits.  The user can select either default built-in
         // performance curves, or use custom user-defined curves.
@@ -2307,7 +2307,7 @@ namespace DesiccantDehumidifiers {
         // Call regen heating coil
         CalcNonDXHeatingCoils(state, DesicDehumNum, FirstHVACIteration, QRegen, QDelivered);
 
-        // Verify is requestd flow was delivered (must do after heating coil has executed to pass flow to RegenAirInNode)
+        // Verify is requested flow was delivered (must do after heating coil has executed to pass flow to RegenAirInNode)
         if (state.dataLoopNodes->Node(desicDehum.RegenAirInNode).MassFlowRate != RegenAirMassFlowRate) {
             // Initialize standard air density
             ShowRecurringSevereErrorAtEnd(state,
@@ -2327,7 +2327,7 @@ namespace DesiccantDehumidifiers {
                 ((RegenAirMassFlowRate - state.dataLoopNodes->Node(desicDehum.RegenAirInNode).MassFlowRate) / state.dataEnvrn->StdRhoAir));
         }
 
-        // Verify is requestd heating was delivered
+        // Verify is requested heating was delivered
         if (QDelivered < QRegen) {
             ShowRecurringSevereErrorAtEnd(
                 state,
@@ -2812,13 +2812,13 @@ namespace DesiccantDehumidifiers {
                 if (desicDehum.ErrCount < 2) {
                     ShowWarningError(state,
                                      format("{} \"{}\" - Air volume flow rate per watt of total condenser waste heat is below the minimum "
-                                            "recommended at {:N} m3/s/W.",
+                                            "recommended at {:G} m3/s/W.",
                                             desicDehum.DehumType,
                                             desicDehum.Name,
                                             VolFlowPerRatedTotQ));
                     ShowContinueErrorTimeStamp(state, "");
                     ShowContinueError(state,
-                                      format("Expected minimum for VolumeFlowperRatedTotalCondenserWasteHeat = [{:N}]", MinVolFlowPerRatedTotQ));
+                                      format("Expected minimum for VolumeFlowperRatedTotalCondenserWasteHeat = [{:G}]", MinVolFlowPerRatedTotQ));
                     ShowContinueError(state, "Possible causes include inconsistent air flow rates in system components ");
                     ShowContinueError(state, "on the regeneration side of the desiccant dehumidifier.");
                 } else {
@@ -3152,7 +3152,7 @@ namespace DesiccantDehumidifiers {
     //     of either:
 
     //     A. Makes any warranty of representation, express or implied with respect to
-    //        the accuracy, completness, or usefulness of the information contained in
+    //        the accuracy, completeness, or usefulness of the information contained in
     //        in this program, including any warranty of merchantability or fitness of
     //        any purpose with respoect to the program, or that the use of any
     //        information disclosed in this program may not infringe privately-owned

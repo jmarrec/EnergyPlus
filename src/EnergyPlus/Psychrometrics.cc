@@ -403,9 +403,10 @@ namespace Psychrometrics {
         ++state.dataPsychCache->NumTimesCalled[static_cast<int>(PsychrometricFunction::TwbFnTdbWPb)];
 #endif
 
+#ifdef EP_psych_errors
         // CHECK TDB IN RANGE.
         bool FlagError = false;
-#ifdef EP_psych_errors
+
         if (TDB <= -100.0 || TDB >= 200.0) {
             if (!state.dataGlobal->WarmupFlag) {
                 if (state.dataPsychrometrics->iPsyErrIndex[static_cast<int>(PsychrometricFunction::TwbFnTdbWPb)] == 0) {
@@ -1315,8 +1316,8 @@ namespace Psychrometrics {
 #endif
 
         // Check press in range.
-        bool FlagError = false;
 #ifdef EP_psych_errors
+        bool FlagError = false;
         if (!state.dataGlobal->WarmupFlag) {
             if (Press <= 0.0017 || Press >= 1555000.0) {
                 if (state.dataPsychrometrics->iPsyErrIndex[static_cast<int>(PsychrometricFunction::TsatFnPb)] == 0) {
@@ -1346,7 +1347,7 @@ namespace Psychrometrics {
         state.dataPsychrometrics->Press_Save = Press;
         iter = 0;
         if (state.dataPsychrometrics->useInterpolationPsychTsatFnPb) {
-            int n_sample = 1651; // sample bin size = 64 Pa; continous sample size = 1651
+            int n_sample = 1651; // sample bin size = 64 Pa; continuous sample size = 1651
             // CSpline interpolation
             tSat = CSplineint(n_sample, Press); // Cubic spline interpolation
         } else {
@@ -1447,11 +1448,11 @@ namespace Psychrometrics {
     Real64 CSplineint(int const n, // sample data size
                       Real64 x)    // given value of x
     {                              // Cubic Spline interpolation
-        // Reference: Numerical Recipies in C (pp.97)
+        // Reference: Numerical Recipes in C (pp.97)
         Real64 A, B, y;
         // find location of x in arrays without searching since array bins are equally sized
         int x_int = static_cast<int>(x);
-        //********continous sample start
+        //********continuous sample start
         int j = (x_int >> 6) - 1; // sample bin 64, sample size=1651
         if (j < 0) {
             j = 0;
@@ -1460,7 +1461,7 @@ namespace Psychrometrics {
             j = n - 2;
         }
         static constexpr Real64 h(64); // sample bin 64, sample size=1651
-        //********continous sample end
+        //********continuous sample end
         int tsat_fn_pb_x_j1 = 64 * (j + 1); // sample data for pressure
         A = (tsat_fn_pb_x_j1 - x) / h;
         B = 1 - A;

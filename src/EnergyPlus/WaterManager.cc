@@ -84,28 +84,28 @@ namespace WaterManager {
 
     using namespace DataWater;
 
-    constexpr std::array<std::string_view, (int)ControlSupplyType::Num> controlSupplyTypeNames = {
-        "None", "Mains", "GroundwaterWell", "GroundwaterWellMainsBackup", "OtherTank", "OtherTankMainsBackup"};
+    // constexpr std::array<std::string_view, (int)ControlSupplyType::Num> controlSupplyTypeNames = {
+    //     "None", "Mains", "GroundwaterWell", "GroundwaterWellMainsBackup", "OtherTank", "OtherTankMainsBackup"};
     constexpr std::array<std::string_view, (int)ControlSupplyType::Num> controlSupplyTypeNamesUC = {
         "NONE", "MAINS", "GROUNDWATERWELL", "GROUNDWATERWELLMAINSBACKUP", "OTHERTANK", "OTHERTANKMAINSBACKUP"};
 
-    constexpr std::array<std::string_view, (int)TankThermalMode::Num> tankThermalModeNames = {"ScheduledTemperature", "ThermalModel"};
+    // constexpr std::array<std::string_view, (int)TankThermalMode::Num> tankThermalModeNames = {"ScheduledTemperature", "ThermalModel"};
     constexpr std::array<std::string_view, (int)TankThermalMode::Num> tankThermalModeNamesUC = {"SCHEDULEDTEMPERATURE", "THERMALMODEL"};
 
-    constexpr std::array<std::string_view, (int)AmbientTempType::Num> ambientTempTypeNames = {"Schedule", "Zone", "Outdoors"};
+    // constexpr std::array<std::string_view, (int)AmbientTempType::Num> ambientTempTypeNames = {"Schedule", "Zone", "Outdoors"};
     constexpr std::array<std::string_view, (int)AmbientTempType::Num> ambientTempTypeNamesUC = {"SCHEDULE", "ZONE", "OUTDOORS"};
 
-    constexpr std::array<std::string_view, (int)RainLossFactor::Num> rainLossFactorNames = {"Constant", "Scheduled"};
+    // constexpr std::array<std::string_view, (int)RainLossFactor::Num> rainLossFactorNames = {"Constant", "Scheduled"};
     constexpr std::array<std::string_view, (int)RainLossFactor::Num> rainLossFactorNamesUC = {"CONSTANT", "SCHEDULED"};
 
-    constexpr std::array<std::string_view, (int)GroundWaterTable::Num> groundWaterTableNames = {"Constant", "Scheduled"};
+    // constexpr std::array<std::string_view, (int)GroundWaterTable::Num> groundWaterTableNames = {"Constant", "Scheduled"};
     constexpr std::array<std::string_view, (int)GroundWaterTable::Num> groundWaterTableNamesUC = {"CONSTANT", "SCHEDULED"};
 
-    constexpr std::array<std::string_view, (int)IrrigationMode::Num> irrigationModeNames = {"Schedule", "SmartSchedule"};
+    // constexpr std::array<std::string_view, (int)IrrigationMode::Num> irrigationModeNames = {"Schedule", "SmartSchedule"};
     constexpr std::array<std::string_view, (int)IrrigationMode::Num> irrigationModeNamesUC = {"SCHEDULE", "SMARTSCHEDULE"};
 
-    constexpr std::array<std::string_view, (int)RainfallMode::Num> rainfallModeNames = {"None", "ScheduleAndDesignLevel", "EPWPrecipitation"};
-    constexpr std::array<std::string_view, (int)RainfallMode::Num> rainfallModeNamesUC = {"NONE", "SCHEDULEANDDESIGNLEVEL", "EPWPRECIPITATION"};
+    // constexpr std::array<std::string_view, (int)RainfallMode::Num> rainfallModeNames = {"None", "ScheduleAndDesignLevel", "EPWPrecipitation"};
+    // constexpr std::array<std::string_view, (int)RainfallMode::Num> rainfallModeNamesUC = {"NONE", "SCHEDULEANDDESIGNLEVEL", "EPWPRECIPITATION"};
 
     void ManageWater(EnergyPlusData &state)
     {
@@ -500,7 +500,7 @@ namespace WaterManager {
                         tmpDenominator += state.dataSurface->Surface(ThisSurf).GrossArea;
                     }
                     state.dataWaterData->RainCollector(Item).HorizArea = tmpArea;
-                    // now setup vertical hieght above ground for height dependent outdoor temps
+                    // now setup vertical height above ground for height dependent outdoor temps
                     state.dataWaterData->RainCollector(Item).MeanHeight = tmpNumerator / tmpDenominator;
 
                     // now set up tank supply connection
@@ -1580,7 +1580,7 @@ namespace WaterManager {
         //       RE-ENGINEERED  na
 
         // PURPOSE OF THIS SUBROUTINE:
-        // The water manger is iterating and
+        // The water manager is iterating and
         // we need to do the timestep record keeping
         // for tracking state variables.
         //  this routine updates variables

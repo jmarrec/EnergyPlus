@@ -3757,18 +3757,28 @@ namespace HeatBalanceManager {
         }
 
     Label10:;
-        for (LineNum = 2; LineNum <= 5; ++LineNum) {
+        NextLine = W5DataFile.readLine();
+        if (NextLine.eof) {
+            goto Label1000;
+        }
+        ++FileLineCount;
+        if (!has_prefixi(NextLine.data, "WINDOW NAME")) {
+            // Berkeley Lab WINDOW 7 has been found to include extra blank lines after the "WINDOW5" line
+            // so find the line that begins with "WINDOW NAME"
+            goto Label10;
+        } else {
+            // Get window name
+            W5Name = std::string{NextLine.data.substr(19)};
+            WindowNameInW5DataFile = Util::makeUPPER(W5Name);
+
+            // Get description (currently not used)
             NextLine = W5DataFile.readLine();
             if (NextLine.eof) {
                 goto Label1000;
             }
-            DataLine(LineNum) = NextLine.data;
             ++FileLineCount;
         }
-
-        // Get window name and check for match
-        W5Name = std::string{DataLine(4).substr(19)};
-        WindowNameInW5DataFile = Util::makeUPPER(W5Name);
+        // Check for window name match
         if (DesiredConstructionName != WindowNameInW5DataFile) {
             // Doesn't match; read through file until next window entry is found
         Label20:;
@@ -4913,10 +4923,8 @@ namespace HeatBalanceManager {
                     if (auto found = fields.find("simple_mixing_air_changes_per_hour"); found != fields.end()) {
                         thisConstruct.AirBoundaryACH = found.value().get<Real64>();
                     } else {
-                        if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                                state, cCurrentModuleObject, "simple_mixing_air_changes_per_hour", thisConstruct.AirBoundaryACH)) {
-                            errorsFound = true;
-                        }
+                        state.dataInputProcessing->inputProcessor->getDefaultValue(
+                            state, cCurrentModuleObject, "simple_mixing_air_changes_per_hour", thisConstruct.AirBoundaryACH);
                     }
 
                     if (auto found = fields.find("simple_mixing_schedule_name"); found != fields.end()) {
@@ -5653,7 +5661,7 @@ namespace HeatBalanceManager {
                 if (thisConstruct.BSDFInput.VisBkReflIndex == 0) {
                     ErrorsFound = true;
                     ShowSevereCustom(
-                        state, eoh, format("Visble back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(9)));
+                        state, eoh, format("Visible back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(9)));
                 } else {
                     MatrixDataManager::Get2DMatrix(state, thisConstruct.BSDFInput.VisBkReflIndex, thisConstruct.BSDFInput.VisBkRefl);
                 }
@@ -6043,7 +6051,7 @@ namespace HeatBalanceManager {
             thisConstruct.WindowTypeBSDF = true;
         }
 
-        // Do not forget to deallocate localy allocated variables
+        // Do not forget to deallocate locally allocated variables
         if (allocated(locAlphaFieldNames)) {
             locAlphaFieldNames.deallocate();
         }

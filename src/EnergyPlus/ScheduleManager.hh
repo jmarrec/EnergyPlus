@@ -223,7 +223,8 @@ namespace Sched {
         bool checkValsForLimitViolations(EnergyPlusData &state) const;
         bool checkValsForBadIntegers(EnergyPlusData &state) const;
         void populateFromMinuteVals(EnergyPlusData &state, std::array<Real64, Constant::iMinutesInDay> const &minuteVals);
-        std::vector<Real64> const &getDayVals([[maybe_unused]] EnergyPlusData &state, int jDay = -1, int dayOfWeek = -1)
+        std::vector<Real64> const &
+        getDayVals([[maybe_unused]] EnergyPlusData &state, [[maybe_unused]] int jDay = -1, [[maybe_unused]] int dayOfWeek = -1)
         {
             return tsVals;
         }
@@ -325,7 +326,7 @@ namespace Sched {
         std::array<bool, (int)DayType::Num> MaxMinByDayTypeSet = {false}; // minimum and maximum values by daytype have been stored
         std::array<Real64, (int)DayType::Num> MinByDayType = {0.0};       // minimum values by daytype for this schedule
         std::array<Real64, (int)DayType::Num> MaxByDayType = {0.0};       // maximum values by daytype for this schedule
-        bool UseDaylightSaving = true; // Toggles between daylight saving option to be inclused as "No" or "Yes" (default)
+        bool UseDaylightSaving = true; // Toggles between daylight saving option to be included as "No" or "Yes" (default)
 
         ScheduleDetailed()
         {
