@@ -73,9 +73,6 @@ using namespace EnergyPlus::DataLoopNode;
 
 TEST_F(EnergyPlusFixture, ChillerElectricEIR_TestNegativeCurveRoundingError)
 {
-    bool RunFlag(true);
-    Real64 MyLoad(-10000.0);
-
     state->dataPlnt->TotNumLoops = 2;
     state->dataEnvrn->OutBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.20;
