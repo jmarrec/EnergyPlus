@@ -935,7 +935,6 @@ namespace UnitarySystems {
                 this->m_IterationCounter = 0;
                 std::fill(this->m_IterationMode.begin(), this->m_IterationMode.end(), 0);
 
-
                 if (this->m_WaterHRPlantLoopModel) {
                     // initialize loop water temp on FirstHVACIteration
                     Real64 airInTemp = state.dataLoopNodes->Node(this->CoolCoilInletNodeNum).Temp;
@@ -14425,7 +14424,6 @@ namespace UnitarySystems {
             PartLoadFrac = 1.0;
         } else if (PartLoadFrac <= 0.0) {
             PartLoadFrac = 0.0;
-            if (this->m_LastMode == CoolingMode) this->m_LastMode = 0;
         }
 
         this->m_CoolingPartLoadFrac = PartLoadFrac;
@@ -15067,7 +15065,6 @@ namespace UnitarySystems {
             PartLoadFrac = 1.0;
         } else if (PartLoadFrac <= 0.0) {
             PartLoadFrac = 0.0;
-            if (this->m_LastMode == HeatingMode) this->m_LastMode = 0;
         }
 
         if (SolFla < 0) {
@@ -15462,7 +15459,6 @@ namespace UnitarySystems {
                         PartLoadFrac = 1.0;
                     } else if (PartLoadFrac < 0.0) {
                         PartLoadFrac = 0.0;
-                        if (this->m_LastMode == HeatingMode && this->m_HeatingPartLoadFrac == 0.0) this->m_LastMode = 0;
                     }
 
                     if (SolFla == -1) {
