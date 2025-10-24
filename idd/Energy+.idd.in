@@ -45221,7 +45221,7 @@ ZoneHVAC:CoolingPanel:RadiantConvective:Water,
        \note CoolingDesignCapacity => selected when the design cooling capacity value is specified or
        \note auto-sized. CapacityPerFloorArea => selected when the design cooling capacity is determined
        \note from user specified cooling capacity per floor area and total floor area of cooled zone
-       \note served by the hydrolic unit. FractionOfAutosizedCoolingCapacity => is selected when the
+       \note served by the hydraulic unit. FractionOfAutosizedCoolingCapacity => is selected when the
        \note design cooling capacity is determined from a user specified fraction and the auto-sized
        \note design cooling capacity of the system.
   N4 , \field Cooling Design Capacity
@@ -46273,7 +46273,7 @@ ZoneHVAC:LowTemperatureRadiant:VariableFlow:Design,
         \note CoolingDesignCapacity => selected when the design cooling capacity value is specified or
         \note auto-sized. CapacityPerFloorArea => selected when the design cooling capacity is determined
         \note from user specified cooling capacity per floor area and total floor area of cooled zone
-        \note served by the hydrolic unit. FractionOfAutosizedCoolingCapacity => is selected when the
+        \note served by the hydraulic unit. FractionOfAutosizedCoolingCapacity => is selected when the
         \note design cooling capacity is determined from a user specified fraction and the auto-sized
         \note design cooling capacity of the system.
   N7, \field Cooling Design Capacity Per Floor Area
@@ -80347,7 +80347,7 @@ GroundHeatExchanger:Vertical:Sizing:Rectangle,
         \minimum> 0.0
         \default 135.0
         \units m
-        \note Maximum drilled depth fo the vertical borehole
+        \note Maximum drilled depth of the vertical borehole
   N9,   \field Minimum Exiting Fluid Temperature for Sizing
         \type real
         \minimum> 0.0

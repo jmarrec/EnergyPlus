@@ -206,7 +206,7 @@ namespace VariableSpeedCoils {
         int EIRFPLR;                                      // index of energy input ratio vs part-load ratio curve
         int DefrostEIRFT;                                 // index of defrost mode total cooling capacity for reverse cycle heat pump
         Real64 MinOATCompressor;                          // Minimum OAT for heat pump compressor operation
-        Real64 OATempCompressorOn;                        // The outdoor tempearture when the compressor is automatically turned back on,
+        Real64 OATempCompressorOn;                        // The outdoor temperature when the compressor is automatically turned back on,
         // if applicable, following automatic shut off. This field is used only for
         // HSPF calculation.
         Real64 MaxOATDefrost;           // Maximum OAT for defrost operation
@@ -264,7 +264,7 @@ namespace VariableSpeedCoils {
         Real64 InletSourceAirEnthalpy; // source air enthalpy entering the outdoor coil [J/kg]
         // end variables for water system interactions
 
-        // begin varibles for HPWH
+        // begin variables for HPWH
         Real64 RatedCapWH;                                              // Rated water heating Capacity [W]
         HVAC::OATType InletAirTemperatureType = HVAC::OATType::Invalid; // Specifies to use either air wet-bulb or dry-bulb temp for curve objects
         Real64 WHRatedInletDBTemp;                                      // Rated inlet air dry-bulb temperature [C]
@@ -329,7 +329,7 @@ namespace VariableSpeedCoils {
               EvapWaterTankDemandARRID(0), CondensateCollectMode(1001), CondensateTankID(0), CondensateTankSupplyARRID(0), CondensateVdot(0.0),
               CondensateVol(0.0), CondInletTemp(0.0), SupplyFanIndex(0), supplyFanType(HVAC::FanType::Invalid), SourceAirMassFlowRate(0.0),
               InletSourceAirTemp(0.0), InletSourceAirEnthalpy(0.0),
-              // begin varibles for HPWH
+              // begin variables for HPWH
               RatedCapWH(0.0),                  // Rated water heating Capacity [W]
               WHRatedInletDBTemp(0.0),          // Rated inlet air dry-bulb temperature [C]
               WHRatedInletWBTemp(0.0),          // Rated inlet air wet-bulb temperature [C]

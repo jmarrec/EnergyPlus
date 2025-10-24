@@ -12124,7 +12124,7 @@ void writeVeriSumSpaceTables(EnergyPlusData &state, const tabularReportStyle &st
         spaceTypeTotPlugProcess(state.dataHeatBal->space(spaceNum).spaceTypeNum) += itEquip;
     }
 
-    // re-use existing zone total variables
+    // reuse existing zone total variables
     for (int iTotal = 1; iTotal <= 4; ++iTotal) {
         state.dataOutRptTab->zstArea(iTotal) = 0.0;
         state.dataOutRptTab->zstLight(iTotal) = 0.0;

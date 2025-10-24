@@ -2442,7 +2442,7 @@ namespace Sched {
         }
 
         // In the case where DST is applied on 12/31 at 24:00, which is the case for a Southern Hemisphere location for eg
-        // (DayOfYear_Schedule is a bit weird, ScheduleManager always assumes LeapYear)
+        // (DayOfYear_Schedule is a bit weird, ScheduleManager always assumes leap year)
         if (thisDayOfYear == 367) {
             thisDayOfYear = 1;
         }

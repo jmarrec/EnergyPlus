@@ -977,7 +977,7 @@ namespace InternalHeatGains {
                 std::string_view const levelField = IHGNumericFieldNames(fieldNum);
 
                 // Create one Lights instance for every space associated with this Lights input object
-                // Why? Why can't multple spaces share a single lights instance?
+                // Why? Why can't multiple spaces share a single lights instance?
                 // Answer: It followed the same pattern as when a ZoneList was used. It might/should be possible to refactor this.
                 for (int Item1 = 1; Item1 <= thisLightsInput.numOfSpaces; ++Item1) {
                     ++lightsNum;
