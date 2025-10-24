@@ -922,19 +922,16 @@ namespace UnitarySystems {
                                 state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxHeatAirMassFlow;
                             }
                         } else {
-                            if (this->m_AirFlowControl == UseCompFlow::Off) {
-                                if (this->m_MultiOrVarSpeedCoolCoil) {
-                                    state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxNoCoolHeatAirMassFlow;
-                                } else {
-                                    state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxNoCoolHeatAirMassFlow;
-                                }
+                            if (this->m_MultiOrVarSpeedCoolCoil) {
+                                state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxNoCoolHeatAirMassFlow;
+                            } else {
+                                state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = this->MaxNoCoolHeatAirMassFlow;
                             }
                         }
                     } else {
                         state.dataLoopNodes->Node(this->AirInNode).MassFlowRate = 0.0;
                     }
                 }
-
                 if (this->m_WaterHRPlantLoopModel) {
                     // initialize loop water temp on FirstHVACIteration
                     Real64 airInTemp = state.dataLoopNodes->Node(this->CoolCoilInletNodeNum).Temp;
@@ -7937,7 +7934,7 @@ namespace UnitarySystems {
                     thisSys.input_specs.design_specification_multispeed_object_name = Util::makeUPPER(it.value().get<std::string>());
                 }
 
-                thisSys.m_LastMode = CoolingMode;
+                thisSys.m_LastMode = (thisSys.m_CoolCoilExists) ? CoolingMode : HeatingMode;
                 thisSys.processInputSpec(state, thisSys.input_specs, sysNum, errorsFound, ZoneEquipment, ZoneOAUnitNum);
 
                 if (sysNum == -1) {

@@ -1902,8 +1902,6 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_MultiStageGasHeatCoil_Only)
                       latOut);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
-    thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 1
     state->dataLoopNodes->Node(1).MassFlowRate = thisSys->m_DesignMassFlowRate;
     state->dataLoopNodes->Node(1).MassFlowRateMaxAvail = thisSys->m_DesignMassFlowRate; // max avail at fan inlet so fan won't limit flow
@@ -2135,8 +2133,6 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_MultiStageElecHeatCoil_Only)
     EXPECT_EQ(0.0, thisSys->m_SensibleLoadMet);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
-    thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 1
     state->dataLoopNodes->Node(1).MassFlowRate = thisSys->m_DesignMassFlowRate;
     state->dataLoopNodes->Node(1).MassFlowRateMaxAvail = thisSys->m_DesignMassFlowRate; // max avail at fan inlet so fan won't limit flow
@@ -2708,8 +2704,6 @@ Curve:Quadratic,
     EXPECT_EQ(0.0, thisSys->m_SensibleLoadMet);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
-    thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 1
     state->dataLoopNodes->Node(1).MassFlowRate = thisSys->m_DesignMassFlowRate;
     state->dataLoopNodes->Node(1).MassFlowRateMaxAvail = thisSys->m_DesignMassFlowRate; // max avail at fan inlet so fan won't limit flow
@@ -3223,7 +3217,6 @@ Curve:Quadratic,
     EXPECT_EQ(0.0, thisSys->m_SensibleLoadMet);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
     thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 1
     state->dataLoopNodes->Node(1).MassFlowRate = thisSys->m_DesignMassFlowRate;
@@ -3457,8 +3450,6 @@ Curve:Quadratic,
                       latOut);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
-    thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 1
     state->dataLoopNodes->Node(1).MassFlowRate = thisSys->m_DesignMassFlowRate;
     state->dataLoopNodes->Node(1).MassFlowRateMaxAvail = thisSys->m_DesignMassFlowRate; // max avail at fan inlet so fan won't limit flow
@@ -3664,8 +3655,6 @@ Curve:Quadratic,
                       latOut);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
-    thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 1
     state->dataLoopNodes->Node(1).MassFlowRate = thisSys->m_DesignMassFlowRate;
     state->dataLoopNodes->Node(1).MassFlowRateMaxAvail = thisSys->m_DesignMassFlowRate; // max avail at fan inlet so fan won't limit flow
@@ -19215,8 +19204,6 @@ Curve:Quadratic,
                       latOut);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
-    thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 1
     state->dataLoopNodes->Node(1).MassFlowRate = thisSys->m_DesignMassFlowRate;
     state->dataLoopNodes->Node(1).MassFlowRateMaxAvail = thisSys->m_DesignMassFlowRate; // max avail at fan inlet so fan won't limit flow
@@ -19410,8 +19397,6 @@ Curve:Quadratic,
                       latOut);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
-    thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 1
     state->dataLoopNodes->Node(1).MassFlowRate = thisSys->m_DesignMassFlowRate;
     state->dataLoopNodes->Node(1).MassFlowRateMaxAvail = thisSys->m_DesignMassFlowRate; // max avail at fan inlet so fan won't limit flow
@@ -19708,8 +19693,6 @@ Schedule:Compact,
                       latOut);
 
     // set up node conditions to test UnitarySystem set point based control
-    thisSys->m_MaxCoolAirVolFlow = 1.2;
-    thisSys->m_MaxHeatAirVolFlow = 1.2;
     // Unitary system air inlet node = 3
     state->dataLoopNodes->Node(thisSys->AirInNode).MassFlowRate = thisSys->m_DesignMassFlowRate;
     state->dataLoopNodes->Node(thisSys->AirInNode).MassFlowRateMaxAvail =
