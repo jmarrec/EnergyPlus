@@ -484,7 +484,7 @@ namespace AirLoopHVACDOAS {
                 if (thisDOAS.m_OASystemNum == 0) {
                     cFieldName = "AirLoopHVAC:OutdoorAirSystem Name";
                     ShowSevereError(
-                        state, format(R"({}, "{}", {} not found: {}\n)", cCurrentModuleObject, thisDOAS.Name, cFieldName, thisDOAS.OASystemName));
+                        state, format(R"({}, "{}", {} not found: {})", cCurrentModuleObject, thisDOAS.Name, cFieldName, thisDOAS.OASystemName));
                     errorsFound = true;
                 }
                 // Check controller type
@@ -515,30 +515,14 @@ namespace AirLoopHVACDOAS {
                     const std::string typeNameUC = Util::makeUPPER(thisOutsideAirSys.ComponentType(CompNum));
                     switch (static_cast<ValidEquipListType>(getEnumValue(validEquipNamesUC, typeNameUC))) {
                     case ValidEquipListType::OutdoorAirMixer:
-                        ShowSevereError(state,
-                                        format("When {} = {} is used in AirLoopHVAC:DedicatedOutdoorAirSystem,", CurrentModuleObject, CompName));
-                        ShowContinueError(state, " the OUTDOORAIR:MIXER can not be used as a component. Please remove it");
-                        errorsFound = true;
-                        break;
-
                     case ValidEquipListType::FanConstantVolume:
-                        ShowSevereError(state,
-                                        format("When {} = {} is used in AirLoopHVAC:DedicatedOutdoorAirSystem,", CurrentModuleObject, CompName));
-                        ShowContinueError(state,
-                                          " the FAN:CONSTANTVOLUME can not be used as a component. The allowed fan types are FAN:SYSTEMMODEL and "
-                                          "FAN:COMPONENTMODEL. Please change it");
-                        errorsFound = true;
-                        break;
-
                     case ValidEquipListType::FanVariableVolume:
+                    case ValidEquipListType::CoilUserDefined:
                         ShowSevereError(state,
                                         format("When {} = {} is used in AirLoopHVAC:DedicatedOutdoorAirSystem,", CurrentModuleObject, CompName));
-                        ShowContinueError(state,
-                                          " the FAN:VARIABLEVOLUME can not be used as a component. The allowed fan types are FAN:SYSTEMMODEL and "
-                                          "FAN:COMPONENTMODEL. Please change it");
+                        ShowContinueError(state, format(" the {} can not be used as a component. Please remove it", typeNameUC));
                         errorsFound = true;
                         break;
-
                     case ValidEquipListType::FanSystemModel:
                         thisDOAS.FanName = CompName;
                         thisDOAS.m_FanTypeNum = SimAirServingZones::CompType::Fan_System_Object;
@@ -666,14 +650,6 @@ namespace AirLoopHVACDOAS {
                         thisOutsideAirSys.OutletNodeNum(CompNum) =
                             HVACDXHeatPumpSystem::GetHeatingCoilOutletNodeNum(state, CompName, OutletNodeErrFlag);
                         break;
-
-                    case ValidEquipListType::CoilUserDefined:
-                        ShowSevereError(state,
-                                        format("When {} = {} is used in AirLoopHVAC:DedicatedOutdoorAirSystem,", CurrentModuleObject, CompName));
-                        ShowContinueError(state, " the COIL:USERDEFINED can not be used as a component.");
-                        errorsFound = true;
-                        break;
-
                     case ValidEquipListType::HeatExchangerAirToAirFlatPlate:
                     case ValidEquipListType::HeatExchangerAirToAirSensibleAndLatent:
                     case ValidEquipListType::HeatExchangerDesiccantBalancedFlow:
