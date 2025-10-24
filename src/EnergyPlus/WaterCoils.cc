@@ -2646,9 +2646,9 @@ void SizeWaterCoil(EnergyPlusData &state, int const CoilNum)
 
             // zone and air loop coils use different design coil load calculations, air loop coils use air side capacity,
             // zone coils use water side capacity
-            state.dataSize->DataDesInletAirTemp = waterCoil.InletAirTemp;                                                  // used in error mesages
-            state.dataSize->DataDesInletAirHumRat = waterCoil.InletAirHumRat;                                              // used in error mesages
-            state.dataSize->DataFlowUsedForSizing = state.dataSize->DataAirFlowUsedForSizing * state.dataEnvrn->StdRhoAir; // used in error mesages
+            state.dataSize->DataDesInletAirTemp = waterCoil.InletAirTemp;                                                  // used in error messages
+            state.dataSize->DataDesInletAirHumRat = waterCoil.InletAirHumRat;                                              // used in error messages
+            state.dataSize->DataFlowUsedForSizing = state.dataSize->DataAirFlowUsedForSizing * state.dataEnvrn->StdRhoAir; // used in error messages
             waterCoil.MaxWaterVolFlowRate = state.dataSize->DataWaterFlowUsedForSizing;                                    // why is this here?
             if (!(waterCoil.CoilPerfInpMeth == state.dataWaterCoils->NomCap && NomCapUserInp)) {
                 // get the design coil load used to size UA
@@ -3856,7 +3856,7 @@ void CoilCompletelyWet(EnergyPlusData &state,
                        int const CoilNum,            // Number of Coil
                        Real64 const WaterTempIn,     // Water temperature IN to this function (C)
                        Real64 const AirTempIn,       // Air dry bulb temperature IN to this function(C)
-                       Real64 const AirHumRat,       // Air Humidity Ratio IN to this funcation (C)
+                       Real64 const AirHumRat,       // Air Humidity Ratio IN to this function (C)
                        Real64 const UAInternalTotal, // Internal overall heat transfer coefficient(W/m2 C)
                        Real64 const UAExternalTotal, // External overall heat transfer coefficient(W/m2 C)
                        Real64 &OutletWaterTemp,      // Leaving water temperature (C)
@@ -3888,8 +3888,8 @@ void CoilCompletelyWet(EnergyPlusData &state,
     // Solar Energy Laboratory, Univ. Wisconsin Madison, pp. 4.6.8-1 - 4.6.8-12.
     // Threlkeld, J.L.  1970.  Thermal Environmental Engineering, 2nd Edition,
     // Englewood Cliffs: Prentice-Hall,Inc. pp. 254-270.
-    // Coil Uses Enthalpy Based Heat Transfer Coefficents and converts them to
-    // convential UA values. Intermediate value of fictitious Cp is defined. This follow
+    // Coil Uses Enthalpy Based Heat Transfer Coefficients and converts them to
+    // conventional UA values. Intermediate value of fictitious Cp is defined. This follow
     // the same procedure followed in the Design Calculation of the Coil. See the node in
     // the one time calculation for design condition.
 
@@ -4473,7 +4473,7 @@ void CoilOutletStreamCondition(EnergyPlusData &state,
     EnergyOutStreamTwo = EnergyInStreamTwo + effectiveness * MaxHeatTransfer / max(CapacityStream2, SmallNo);
 }
 
-// Subroutine for caculating outlet condition if coil is wet , for Cooling Coil
+// Subroutine for calculating outlet condition if coil is wet , for Cooling Coil
 
 void WetCoilOutletCondition(EnergyPlusData &state,
                             int const CoilNum,
@@ -4549,7 +4549,7 @@ void WetCoilOutletCondition(EnergyPlusData &state,
 
     if ((TempAirDewPoint - TempCondensation) > 0.1) {
 
-        // Calculate Outlet Air Temperature using effectivness
+        // Calculate Outlet Air Temperature using effectiveness
         OutletAirTemp = AirTempIn - (AirTempIn - TempCondensation) * effectiveness;
         // Calculate Outlet air humidity ratio from PsyWFnTdbH routine
         OutletAirHumRat = PsyWFnTdbH(state, OutletAirTemp, EnthAirOutlet);
@@ -4719,7 +4719,7 @@ void CalcDryFinEffCoef(EnergyPlusData &state, Real64 const OutTubeEffFinDiamRati
     // The following subroutines are used once per cooling coil
     // simulation to obtain the coefficients of the dry fin
     // efficiency equation.  CalcDryFinEffCoef is the main calling
-    // routine which manages calls to the Bessel funtion and polynomial
+    // routine which manages calls to the Bessel function and polynomial
     // fit routines.
 
     // REFERENCES:
@@ -5224,7 +5224,7 @@ void CoilAreaFracIter(Real64 &NewSurfAreaWetFrac,       // Out Value of variable
         ErrorCurrent == 0.0) {
         // Setting value for surface area fraction for coil
         NewSurfAreaWetFrac = SurfAreaFracCurrent;
-        icvg = 1; // Convergance Flag
+        icvg = 1; // Convergence Flag
         return;
     }
 
@@ -5232,7 +5232,7 @@ void CoilAreaFracIter(Real64 &NewSurfAreaWetFrac,       // Out Value of variable
     // data (mode=1), Getting Third set of data by performing a  linear fit(Mode=2).
     // Now using the above 3 points generated by perturbation and Linear Fit to perform
     // a quadratic fit.This will happen after second iteration only.
-    icvg = 0; // Convergance flag = false
+    icvg = 0; // Convergence flag = false
     // For First Iteration Start with perturbation, For second iteration start with linear fit
     // from the previous two values
     mode = IterNum;
@@ -5296,7 +5296,7 @@ Label10:;
             goto Label10;
         }
 
-        // If value of Quadratic coefficients not suitable enought due to round off errors
+        // If value of Quadratic coefficients not suitable enough due to round off errors
         // to predict new point go to linear fit and acertain new values for the coefficients.
         if (std::abs((QuadCoefOne + (QuadCoefTwo + QuadCoefThree * SurfAreaFracPrevious) * SurfAreaFracPrevious - ErrorPrevious) / ErrorPrevious) >
             1.E-4) {
@@ -5693,7 +5693,7 @@ Real64 GetWaterCoilDesAirFlow(EnergyPlusData &state,
             ErrorsFound = true;
         }
     } else {
-        ShowSevereError(state, format("GetWaterCoilDesAirFlowRate: Funciton not valid for Coil, Type=\"{}\" Name=\"{}\"", CoilType, CoilName));
+        ShowSevereError(state, format("GetWaterCoilDesAirFlowRate: Function not valid for Coil, Type=\"{}\" Name=\"{}\"", CoilType, CoilName));
         ErrorsFound = true;
     }
 

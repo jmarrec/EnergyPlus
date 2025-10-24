@@ -11943,8 +11943,8 @@ void WaterThermalTankData::SizeDemandSidePlantConnections(EnergyPlusData &state)
             int PltSizNum = this->UseSidePlantSizNum;
             if (PltSizNum > 0) { // we have a Plant Sizing Object
                 if (this->UseSidePlantLoc.loopSideNum == DataPlant::LoopSideLocation::Demand) {
-                    // probably shouldn't come here as Use side is unlikley to be on demand side (?)
-                    // but going to treat component with symetry so if connections are reversed it'll still work
+                    // probably shouldn't come here as Use side is unlikely to be on demand side (?)
+                    // but going to treat component with symmetry so if connections are reversed it'll still work
                     // choose a flow rate that will allow the entire volume of the tank to go from 14.44 to 57.22 C
                     // in user specified hours.
                     //  using the plant inlet design temp for sizing.
@@ -12671,7 +12671,7 @@ void WaterThermalTankData::CalcStandardRatings(EnergyPlusData &state)
                 Real64 MdotWater = state.dataWaterThermalTanks->HPWaterHeater(HPNum).OperatingWaterFlowRate * Psychrometrics::RhoH2O(this->TankTemp);
                 Real64 mdotAir = state.dataWaterThermalTanks->HPWaterHeater(HPNum).OperatingAirMassFlowRate;
 
-                // ?? why is HPWH condenser inlet node temp reset inside the for loop? shouldn't it chnage with the tank temp throughout these
+                // ?? why is HPWH condenser inlet node temp reset inside the for loop? shouldn't it change with the tank temp throughout these
                 // iterations?
                 if (state.dataWaterThermalTanks->HPWaterHeater(HPNum).HPWHType == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterPumped) {
                     // set the condenser inlet node mass flow rate and temperature
@@ -13121,7 +13121,7 @@ void WaterThermalTankData::setBackupElementCapacity(EnergyPlusData &state)
 {
     // Fix for #9001: The BackupElementCapacity was not being reset from the autosize value (-99999) which resulted in
     // negative electric consumption.  Using a test for any negative numbers here instead of just -99999 for safety.
-    // Only reset the backup element capacity if a problem has been occured.
+    // Only reset the backup element capacity if a problem has been occurred.
     if (this->HeatPumpNum > 0) {
         if (state.dataWaterThermalTanks->HPWaterHeater(this->HeatPumpNum).HPWHType == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterWrapped) {
             return;
