@@ -4233,7 +4233,7 @@ void GetWaterThermalTankInput(EnergyPlusData &state)
             ErrorsFound |= getWaterTankStratifiedInput(state, cStratifiedCWTankModuleObj);
         }
 
-        //  =======   Get 'ThermalStorage:ChilledWater:Stratified' =======================================================
+        //  =======   Get 'ThermalStorage:HotWater:Stratified' =======================================================
         if (state.dataWaterThermalTanks->numHotWaterStratified > 0) {
             ErrorsFound |= getWaterTankStratifiedInput(state, cStratifiedHWTankModuleObj);
         }
@@ -4920,29 +4920,30 @@ void GetWaterThermalTankInput(EnergyPlusData &state)
         if (state.dataWaterThermalTanks->numWaterThermalTank > 0) {
             for (int WaterThermalTankNum = 1; WaterThermalTankNum <= state.dataWaterThermalTanks->numWaterThermalTank; ++WaterThermalTankNum) {
 
-                if ((state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).VolumeWasAutoSized) &&
-                    (state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Sizing.DesignMode == SizingMode::Invalid)) {
-                    ShowWarningError(
-                        state,
-                        format("Water heater named {}has tank volume set to AUTOSIZE but it is missing associated WaterHeater:Sizing object",
-                               state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Name));
-                    ErrorsFound = true;
-                }
-                if ((state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).MaxCapacityWasAutoSized) &&
-                    (state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Sizing.DesignMode == SizingMode::Invalid)) {
-                    ShowWarningError(
-                        state,
-                        format("Water heater named {}has heater capacity set to AUTOSIZE but it is missing associated WaterHeater:Sizing object",
-                               state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Name));
-                    ErrorsFound = true;
-                }
-                if ((state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).HeightWasAutoSized) &&
-                    (state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Sizing.DesignMode == SizingMode::Invalid)) {
-                    ShowWarningError(
-                        state,
-                        format("Water heater named {}has tank height set to AUTOSIZE but it is missing associated WaterHeater:Sizing object",
-                               state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Name));
-                    ErrorsFound = true;
+                auto const &Tank = state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum);
+
+                if (Tank.Sizing.DesignMode == SizingMode::Invalid) {
+                    if (Tank.VolumeWasAutoSized) {
+                        ShowSevereError(state,
+                                        format("{}='{}' has tank volume set to Autosize but it is missing associated WaterHeater:Sizing object",
+                                               DataPlant::PlantEquipTypeNames[static_cast<int>(Tank.WaterThermalTankType)],
+                                               Tank.Name));
+                        ErrorsFound = true;
+                    }
+                    if (Tank.MaxCapacityWasAutoSized) {
+                        ShowSevereError(state,
+                                        format("{}='{}' has heater capacity set to Autosize but it is missing associated WaterHeater:Sizing object",
+                                               DataPlant::PlantEquipTypeNames[static_cast<int>(Tank.WaterThermalTankType)],
+                                               Tank.Name));
+                        ErrorsFound = true;
+                    }
+                    if (Tank.HeightWasAutoSized) {
+                        ShowSevereError(state,
+                                        format("{}='{}' has tank height set to Autosize but it is missing associated WaterHeater:Sizing object",
+                                               DataPlant::PlantEquipTypeNames[static_cast<int>(Tank.WaterThermalTankType)],
+                                               Tank.Name));
+                        ErrorsFound = true;
+                    }
                 }
             }
         }
@@ -4950,28 +4951,21 @@ void GetWaterThermalTankInput(EnergyPlusData &state)
         //    now do calls to TestCompSet for tanks, depending on nodes and heat pump water heater
         if (state.dataWaterThermalTanks->numWaterThermalTank > 0) {
             for (int WaterThermalTankNum = 1; WaterThermalTankNum <= state.dataWaterThermalTanks->numWaterThermalTank; ++WaterThermalTankNum) {
-                if (state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).UseInletNode > 0 &&
-                    state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).UseOutletNode > 0) {
-                    if (state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).HeatPumpNum > 0) {
+
+                auto const &Tank = state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum);
+
+                if (Tank.UseInletNode > 0 && Tank.UseOutletNode > 0) {
+                    if (Tank.HeatPumpNum > 0) {
                         // do nothing, Use nodes are tested for HeatPump:WaterHeater not tank
                     } else {
-                        BranchNodeConnections::TestCompSet(state,
-                                                           state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Type,
-                                                           state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Name,
-                                                           state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).InletNodeName1,
-                                                           state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).OutletNodeName1,
-                                                           "Use Side Water Nodes");
+                        BranchNodeConnections::TestCompSet(
+                            state, Tank.Type, Tank.Name, Tank.InletNodeName1, Tank.OutletNodeName1, "Use Side Water Nodes");
                     }
                 }
-                if (state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).SourceInletNode > 0 &&
-                    state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).SourceOutletNode > 0) {
+                if (Tank.SourceInletNode > 0 && Tank.SourceOutletNode > 0) {
 
-                    BranchNodeConnections::TestCompSet(state,
-                                                       state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Type,
-                                                       state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).Name,
-                                                       state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).InletNodeName2,
-                                                       state.dataWaterThermalTanks->WaterThermalTank(WaterThermalTankNum).OutletNodeName2,
-                                                       "Source Side Water Nodes");
+                    BranchNodeConnections::TestCompSet(
+                        state, Tank.Type, Tank.Name, Tank.InletNodeName2, Tank.OutletNodeName2, "Source Side Water Nodes");
                 }
             }
         }

@@ -7007,14 +7007,13 @@ TEST_F(EnergyPlusFixture, thermalStorageTankInputReading_Autosize)
     state->dataWaterThermalTanks->WaterThermalTank.allocate(2);
 
     EXPECT_ANY_THROW(WaterThermalTanks::GetWaterThermalTankInput(*state)); // This throws a FatalError if ErrorsFound
+    EXPECT_TRUE(compare_err_stream_substring("   ** Severe  ** ThermalStorage:ChilledWater:Stratified='CHILLED WATER STORAGE TANK 1' has heater "
+                                             "capacity set to Autosize but it is missing associated WaterHeater:Sizing object",
+                                             false));
     EXPECT_TRUE(
-        compare_err_stream_substring("   ** Warning ** Water heater named CHILLED WATER STORAGE TANK 1has heater capacity set to AUTOSIZE but it is "
-                                     "missing associated WaterHeater:Sizing object",
+        compare_err_stream_substring("   ** Severe  ** ThermalStorage:HotWater:Stratified='HOT WATER STORAGE TANK 1' has heater capacity set to "
+                                     "Autosize but it is missing associated WaterHeater:Sizing object",
                                      false));
-    EXPECT_TRUE(compare_err_stream_substring(
-        "   ** Warning ** Water heater named HOT WATER STORAGE TANK 1has heater capacity set to AUTOSIZE but it is missing "
-        "associated WaterHeater:Sizing object",
-        false));
     EXPECT_TRUE(
         compare_err_stream_substring("   **  Fatal  ** GetWaterThermalTankInput: Errors found in processing Water Thermal Tank input.", true));
 }
