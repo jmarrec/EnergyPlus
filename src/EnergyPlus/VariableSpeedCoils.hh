@@ -125,6 +125,8 @@ namespace VariableSpeedCoils {
         Real64 EnergySource;               // Source Side Heat Transferred [J]
         Real64 COP;                        // Heat Pump Coefficient of Performance [-]
         Real64 RunFrac;                    // Duty Factor
+        Real64 RunFracHeat;                // Runtime fraction for heating operations [-]
+        Real64 RunFracCool;                // Runtime fraction for cooling operations [-]
         Real64 PartLoadRatio;              // Part Load Ratio
         Real64 RatedPowerHeat;             // Rated/Ref Heating Power Consumption[W]
         Real64 RatedCOPHeat;               // Rated/Ref Heating COP [W/W]
@@ -284,6 +286,7 @@ namespace VariableSpeedCoils {
         // end variables for HPWH
         bool reportCoilFinalSizes; // one time report of sizes to coil selection report
         Real64 capModFacTotal;     // coil  TotCapTempModFac * TotCapAirFFModFac * TotCapWaterFFModFac, for result for simulation peak reporting
+        int AirLoopNum;            // Air loop number
 
         // default constructor
         VariableSpeedCoilData()
@@ -295,12 +298,12 @@ namespace VariableSpeedCoils {
               InletAirDBTemp(0.0), InletAirHumRat(0.0), InletAirEnthalpy(0.0), OutletAirDBTemp(0.0), OutletAirHumRat(0.0), OutletAirEnthalpy(0.0),
               WaterVolFlowRate(0.0), WaterMassFlowRate(0.0), InletWaterTemp(0.0), InletWaterEnthalpy(0.0), OutletWaterTemp(0.0),
               OutletWaterEnthalpy(0.0), Power(0.0), QLoadTotal(0.0), QSensible(0.0), QLatent(0.0), QSource(0.0), QWasteHeat(0.0), Energy(0.0),
-              EnergyLoadTotal(0.0), EnergySensible(0.0), EnergyLatent(0.0), EnergySource(0.0), COP(0.0), RunFrac(0.0), PartLoadRatio(0.0),
-              RatedPowerHeat(0.0), RatedCOPHeat(0.0), RatedCapCoolSens(0.0), RatedPowerCool(0.0), RatedCOPCool(0.0), AirInletNodeNum(0),
-              AirOutletNodeNum(0), WaterInletNodeNum(0), WaterOutletNodeNum(0), plantLoc{}, FrostHeatingCapacityMultiplierEMSOverrideOn(false),
-              FrostHeatingCapacityMultiplierEMSOverrideValue(0.0), FrostHeatingInputPowerMultiplierEMSOverrideOn(false),
-              FrostHeatingInputPowerMultiplierEMSOverrideValue(0.0), FindCompanionUpStreamCoil(true), IsDXCoilInZone(false),
-              CompanionCoolingCoilNum(0), CompanionHeatingCoilNum(0), FanDelayTime(0.0),
+              EnergyLoadTotal(0.0), EnergySensible(0.0), EnergyLatent(0.0), EnergySource(0.0), COP(0.0), RunFrac(0.0), RunFracHeat(0.0),
+              RunFracCool(0.0), PartLoadRatio(0.0), RatedPowerHeat(0.0), RatedCOPHeat(0.0), RatedCapCoolSens(0.0), RatedPowerCool(0.0),
+              RatedCOPCool(0.0), AirInletNodeNum(0), AirOutletNodeNum(0), WaterInletNodeNum(0), WaterOutletNodeNum(0), plantLoc{},
+              FrostHeatingCapacityMultiplierEMSOverrideOn(false), FrostHeatingCapacityMultiplierEMSOverrideValue(0.0),
+              FrostHeatingInputPowerMultiplierEMSOverrideOn(false), FrostHeatingInputPowerMultiplierEMSOverrideValue(0.0),
+              FindCompanionUpStreamCoil(true), IsDXCoilInZone(false), CompanionCoolingCoilNum(0), CompanionHeatingCoilNum(0), FanDelayTime(0.0),
               // This one calls into a std::vector, so it's 0-indexed, so we initialize it to -1
               MSHPDesignSpecIndex(-1), MSErrIndex(HVAC::MaxSpeedLevels, 0), MSRatedPercentTotCap(HVAC::MaxSpeedLevels, 0.0),
               MSRatedTotCap(HVAC::MaxSpeedLevels, 0.0), MSRatedSHR(HVAC::MaxSpeedLevels, 0.0), MSRatedCOP(HVAC::MaxSpeedLevels, 0.0),
@@ -346,7 +349,8 @@ namespace VariableSpeedCoils {
               bIsDesuperheater(false),          // whether the coil is used for a desuperheater, i.e. zero all the cooling capacity and power
                                                 // end variables for HPWH
               reportCoilFinalSizes(true),       // coil report
-              capModFacTotal(0.0)               // coil report
+              capModFacTotal(0.0),              // coil report
+              AirLoopNum(0)                     // air loop number
 
         {
         }
@@ -521,6 +525,8 @@ namespace VariableSpeedCoils {
     );
 
     Real64 getVarSpeedPartLoadRatio(EnergyPlusData &state, int const DXCoilNum); // the number of the DX coil to mined for current PLR
+
+    void SetVarSpeedDXCoilAirLoopNumber(EnergyPlusData &state, std::string const &CoilName, int const AirLoopNum);
 
     void setVarSpeedHPWHFanType(EnergyPlusData &state, int const dXCoilNum, HVAC::FanType fanType);
 

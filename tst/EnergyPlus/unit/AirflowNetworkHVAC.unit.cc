@@ -6537,7 +6537,13 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistCoils)
     state->afn->DisSysCompCoilData(2).EPlusType = "COIL:HEATING:DX:VARIABLESPEED";
     state->afn->DisSysCompCoilData(2).name = "Super Heating Coil";
 
+    state->dataVariableSpeedCoils->GetCoilsInputFlag = false;
+    state->dataVariableSpeedCoils->VarSpeedCoil.allocate(2);
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).Name = "Super Coil";
+    state->dataVariableSpeedCoils->VarSpeedCoil(2).Name = "Super Heating Coil";
+
     state->afn->validate_distribution();
+    compare_err_stream("");
 }
 
 // Missing an AirflowNetwork:Distribution:Node for the Zone Air Node

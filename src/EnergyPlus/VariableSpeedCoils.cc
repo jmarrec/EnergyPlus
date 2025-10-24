@@ -51,6 +51,8 @@
 #include <ObjexxFCL/Array.functions.hh>
 
 // EnergyPlus Headers
+#include "AirflowNetwork/Solver.hpp"
+
 #include <EnergyPlus/Autosizing/Base.hh>
 #include <EnergyPlus/BranchNodeConnections.hh>
 #include <EnergyPlus/CurveManager.hh>
@@ -174,12 +176,14 @@ namespace VariableSpeedCoils {
             CalcVarSpeedCoilCooling(
                 state, DXCoilNum, fanOp, SensLoad, LatentLoad, compressorOp, PartLoadFrac, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
             UpdateVarSpeedCoil(state, DXCoilNum);
+            varSpeedCoil.RunFracCool = varSpeedCoil.RunFrac;
         } else if ((varSpeedCoil.VSCoilType == HVAC::Coil_HeatingWaterToAirHPVSEquationFit) ||
                    (varSpeedCoil.VSCoilType == HVAC::Coil_HeatingAirToAirVariableSpeed)) {
             // Heating mode
             InitVarSpeedCoil(state, DXCoilNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
             CalcVarSpeedCoilHeating(state, DXCoilNum, fanOp, SensLoad, compressorOp, PartLoadFrac, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
             UpdateVarSpeedCoil(state, DXCoilNum);
+            varSpeedCoil.RunFracHeat = varSpeedCoil.RunFrac;
         } else if (varSpeedCoil.VSCoilType == HVAC::CoilDX_HeatPumpWaterHeaterVariableSpeed) {
             // Heating mode
             InitVarSpeedCoil(state, DXCoilNum, SensLoad, LatentLoad, fanOp, OnOffAirFlowRatio, SpeedRatio, SpeedCal);
@@ -192,6 +196,10 @@ namespace VariableSpeedCoils {
         // two additional output variables
         varSpeedCoil.SpeedNumReport = SpeedCal;
         varSpeedCoil.SpeedRatioReport = SpeedRatio;
+
+        if (varSpeedCoil.AirLoopNum > 0 && state.afn->distribution_simulated) {
+            state.dataAirLoop->AirLoopAFNInfo(varSpeedCoil.AirLoopNum).AFNLoopDXCoilRTF = max(varSpeedCoil.RunFracCool, varSpeedCoil.RunFracHeat);
+        }
     }
 
     void GetVarSpeedCoilInput(EnergyPlusData &state)
@@ -7680,6 +7688,23 @@ namespace VariableSpeedCoils {
     Real64 getVarSpeedPartLoadRatio(EnergyPlusData &state, int const DXCoilNum)
     {
         return state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum).PartLoadRatio;
+    }
+
+    void SetVarSpeedDXCoilAirLoopNumber(EnergyPlusData &state, std::string const &CoilName, int const AirLoopNum)
+    {
+        int WhichCoil;
+
+        if (state.dataVariableSpeedCoils->GetCoilsInputFlag) {
+            GetVarSpeedCoilInput(state);
+            state.dataVariableSpeedCoils->GetCoilsInputFlag = false;
+        }
+
+        WhichCoil = Util::FindItemInList(CoilName, state.dataVariableSpeedCoils->VarSpeedCoil);
+        if (WhichCoil != 0) {
+            state.dataVariableSpeedCoils->VarSpeedCoil(WhichCoil).AirLoopNum = AirLoopNum;
+        } else {
+            ShowSevereError(state, format("SetVarSpeedDXCoilAirLoopNumber: Could not find Coil \"Name=\"{}\"", CoilName));
+        }
     }
 
 } // namespace VariableSpeedCoils
