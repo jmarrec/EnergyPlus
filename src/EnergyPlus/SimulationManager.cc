@@ -455,6 +455,9 @@ namespace SimulationManager {
                     state.dataReportFlag->cWarmupDay = fmt::to_string(state.dataReportFlag->NumOfWarmupDays);
                     DisplayString(state, "Warming up {" + state.dataReportFlag->cWarmupDay + '}');
                 } else if (state.dataGlobal->DayOfSim == 1) {
+                    if (state.dataSysVars->ReportDuringWarmup) {
+                        OutputProcessor::ResetAccumulationWhenWarmupComplete(state);
+                    }
                     if (state.dataGlobal->KindOfSim == Constant::KindOfSim::RunPeriodWeather) {
                         DisplayString(state, "Starting Simulation at " + state.dataEnvrn->CurMnDyYr + " for " + state.dataEnvrn->EnvironmentName);
                     } else {
