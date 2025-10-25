@@ -185,6 +185,7 @@ class EPlusRunManager(object):
             "Zsz.csv",
             "Ssz.csv",
             "Spsz.csv",
+            "Psz.csv",
             "DElight.in",
             "DElight.out",
             "Map.csv",
@@ -231,6 +232,8 @@ class EPlusRunManager(object):
             "Ssz.txt",
             "Spsz.tab",
             "Spsz.txt",
+            "Psz.tab",
+            "Psz.txt",
             "Map.tab",
             "Map.txt",
         ]

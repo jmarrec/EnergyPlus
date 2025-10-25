@@ -340,7 +340,8 @@
     Heating Coil Load Loop Demand Outlet Node,  !- Outlet Node Name
     Heating Coil Load Profile Load Schedule,  !- Load Schedule Name
     0.005,                   !- Peak Flow Rate {m3/s}
-    Heating Coil Load Profile Flow Frac Schedule;  !- Flow Rate Fraction Schedule Name
+    Heating Coil Load Profile Flow Frac Schedule,  !- Flow Rate Fraction Schedule Name
+    ;                        !- Plant Loop Fluid Type
 
 ! *** Cooling coil loop
 
@@ -502,7 +503,8 @@
     Cooling Coil Load Loop Demand Outlet Node,  !- Outlet Node Name
     Cooling Coil Load Profile Load Schedule,  !- Load Schedule Name
     0.005,                   !- Peak Flow Rate {m3/s}
-    Cooling Coil Load Profile Flow Frac Schedule;  !- Flow Rate Fraction Schedule Name
+    Cooling Coil Load Profile Flow Frac Schedule,  !- Flow Rate Fraction Schedule Name
+    ;                        !- Plant Loop Fluid Type
 
 ! *** Condenser Loop
 

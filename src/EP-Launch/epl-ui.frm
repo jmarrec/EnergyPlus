@@ -1197,6 +1197,9 @@ Begin VB.Form eplUI
          Begin VB.Menu mnuViewSpSZ
             Caption         =   "SpSZ File"
          End
+         Begin VB.Menu mnuViewPSZ
+            Caption         =   "PSZ File"
+         End
          Begin VB.Menu mnuViewAUDIT
             Caption         =   "AUDIT File"
             Shortcut        =   ^{F8}
@@ -1521,7 +1524,7 @@ Private Declare Function GetShortPathName Lib "kernel32.dll" Alias "GetShortPath
 ' The following code is from VBnet and is used for file associations
 '
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Copyright ©1996-2007 VBnet, Randy Birch, All Rights Reserved.
+' Copyright ï¿½1996-2007 VBnet, Randy Birch, All Rights Reserved.
 ' Some pages may also contain other copyrights by the author.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Distribution: You can freely use this code in your own
@@ -1697,7 +1700,7 @@ Private Declare Function RegSetValueEx Lib "advapi32" Alias "RegSetValueExA" (By
       End Function
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-' Copyright ©1996-2007 VBnet, Randy Birch, All Rights Reserved.
+' Copyright ï¿½1996-2007 VBnet, Randy Birch, All Rights Reserved.
 ' Some pages may also contain other copyrights by the author.
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Distribution: You can freely use this code in your own
@@ -2124,6 +2127,7 @@ End Sub
 
 
 
+
 Private Sub queueTimer_Timer()
 Call manageSimulationQueue
 End Sub
@@ -2209,6 +2213,9 @@ Call viewZSZFile
 End Sub
 Private Sub mnuViewSpSZ_Click()
 Call viewSpSZFile
+End Sub
+Private Sub mnuViewPSZ_Click()
+Call viewPSZFile
 End Sub
 Private Sub mnuViewTABLE_Click()
 Call viewTABLEfile
@@ -5703,6 +5710,39 @@ If Err.Number = 0 Then
 End If
 End Sub
 
+
+'=======================================================
+' View PSZ file
+'=======================================================
+Sub viewPSZFile()
+Dim filelength As Long
+' check first for text file
+On Error Resume Next
+Err.Clear
+filelength = FileLen(outputFileName & "Psz.txt")
+If Err.Number = 0 Then
+  Call RunOutputEditorSingleFile("Psz.txt")
+  Exit Sub
+End If
+Err.Clear
+filelength = FileLen(outputFileName & "Psz.csv")
+If Err.Number = 0 Then
+  Call runOutputSpreadsheetSingleFile("Psz.csv")
+  Exit Sub
+End If
+Err.Clear
+filelength = FileLen(outputFileName & "Psz.tab")
+If Err.Number = 0 Then
+  If tabWithSpreadsheet Then
+    Call runOutputSpreadsheetSingleFile("Psz.tab")
+  Else
+    Call RunOutputEditorSingleFile("Psz.tab")
+  End If
+  Exit Sub
+End If
+End Sub
+
+
 '=======================================================
 ' View TABLE file
 '=======================================================
@@ -7129,7 +7169,7 @@ End Sub
 '     WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
 '     the specific language governing rights and limitations under the License.
 '
-'     Copyright © 1996-2014 GARD Analytics.  All rights reserved.
+'     Copyright ï¿½ 1996-2014 GARD Analytics.  All rights reserved.
 '
 '     NOTICE: The U.S. Government is granted for itself and others acting on its
 '     behalf a paid-up, nonexclusive, irrevocable, worldwide license in this data to

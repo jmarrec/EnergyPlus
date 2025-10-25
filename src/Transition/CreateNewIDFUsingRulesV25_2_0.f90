@@ -382,6 +382,12 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
 !                 CurArgs = CurArgs + 1
 
               ! If your original object starts with A, insert the rules here
+              CASE('AIRLOOPHVAC:UNITARYHEATPUMP:AIRTOAIR:MULTISPEED')
+                 CALL GetNewObjectDefInIDD(ObjectName,NwNumArgs,NwAorN,NwReqFld,NwObjMinFlds,NwFldNames,NwFldDefaults,NwFldUnits)
+                 nodiff=.false.
+                 OutArgs(1:11)=InArgs(1:11)
+                 OutArgs(12) = " "
+                 OutArgs(13:CurArgs)=InArgs(13:CurArgs)
 
               ! If your original object starts with C, insert the rules here
               CASE('COIL:COOLING:WATERTOAIRHEATPUMP:VARIABLESPEEDEQUATIONFIT')
@@ -487,8 +493,11 @@ SUBROUTINE CreateNewIDFUsingRules(EndOfFile,DiffOnly,InLfn,AskForInput,InputFile
                    OutArgs(1:10)=InArgs(1:10)
                    OutArgs(11) = ''
                    OutArgs(12) = ''
-                   OutArgs(13:CurArgs+1)=InArgs(11:CurArgs)
-                   CurArgs = CurArgs + 1
+                   OutArgs(13:CurArgs+2)=InArgs(11:CurArgs)
+                   CurArgs = CurArgs + 2
+                 ELSE
+                   nodiff=.true.
+                   OutArgs(1:CurArgs)=InArgs(1:CurArgs)
                  END IF
 
               ! If your original object starts with H, insert the rules here

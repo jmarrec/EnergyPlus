@@ -808,7 +808,7 @@
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
     1584,                    !- Lighting Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.59,                    !- Fraction Radiant
@@ -822,7 +822,7 @@
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
     1056,                    !- Design Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
@@ -1023,7 +1023,7 @@
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
     684,                     !- Lighting Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.59,                    !- Fraction Radiant
@@ -1037,7 +1037,7 @@
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
     456,                     !- Design Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
@@ -1203,7 +1203,7 @@
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
     1584,                    !- Lighting Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.59,                    !- Fraction Radiant
@@ -1217,7 +1217,7 @@
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
     1056,                    !- Design Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
@@ -1398,7 +1398,7 @@
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
     684,                     !- Lighting Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.59,                    !- Fraction Radiant
@@ -1412,7 +1412,7 @@
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
     456,                     !- Design Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
@@ -1578,7 +1578,7 @@
     LIGHTS-1,                !- Schedule Name
     LightingLevel,           !- Design Level Calculation Method
     2964,                    !- Lighting Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Return Air Fraction
     0.59,                    !- Fraction Radiant
@@ -1592,7 +1592,7 @@
     EQUIP-1,                 !- Schedule Name
     EquipmentLevel,          !- Design Level Calculation Method
     1976,                    !- Design Level {W}
-    ,                        !- Watts per Zone Floor Area {W/m2}
+    ,                        !- Watts per Floor Area {W/m2}
     ,                        !- Watts per Person {W/person}
     0,                       !- Fraction Latent
     0.3,                     !- Fraction Radiant
@@ -1978,13 +1978,13 @@
     ;                        !- Zone Equipment 1 Sequential Heating Fraction Schedule Name
 
   AirTerminal:SingleDuct:VAV:NoReheat,
-    SPACE2-1 Air Terminal,                       !- Name
-    ,                       !- Availability Schedule Name
-    SPACE2-1 Zone Equip Inlet,                       !- Air Outlet Node Name
-    SPACE2-1 Zone Equip Inlet ATInlet,                       !- Air Inlet Node Name
-    autosize,                       !- Maximum Air Flow Rate {m3/s}
-    Constant,
-    0.0;
+    SPACE2-1 Air Terminal,   !- Name
+    ,                        !- Availability Schedule Name
+    SPACE2-1 Zone Equip Inlet,  !- Air Outlet Node Name
+    SPACE2-1 Zone Equip Inlet ATInlet,  !- Air Inlet Node Name
+    autosize,                !- Maximum Air Flow Rate {m3/s}
+    Constant,                !- Zone Minimum Air Flow Input Method
+    0.0;                     !- Constant Minimum Air Flow Fraction
 
   ZoneHVAC:AirDistributionUnit,
     SPACE2-1 Air Terminal ADU,  !- Name
@@ -2859,54 +2859,53 @@
     21;                      !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
 
   Coil:Heating:DX:VariableSpeed,
-    Sys 2 Furnace DX Cool Heating Coil,              !- Name
-    ,                                                !- Availability Schedule Name
-    Sys 2 Furnace DX Cool Cooling Coil Outlet,       !- Indoor Air Inlet Node Name
-    Sys 2 Furnace DX Cool Heating Coil Outlet,       !- Indoor Air Outlet Node Name
-    3,                                               !- Number of Speeds {dimensionless}
-    3,                                               !- Nominal Speed Level {dimensionless}
-    4000.00000,                                      !- Rated Heating Capacity At Selected Nominal Speed Level {W}
-    autosize,                                        !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}
-    Sys 3 Heat Pump Air Source Heat Coil PLF,        !- Energy Part Load Fraction Curve Name
-    Sys 3 Heat Pump Air Source Heat Coil Defr-FT,    !- Defrost Energy Input Ratio Function of Temperature Curve Name
-    -8.0,                                       !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
-    ,                                           !- Outdoor Dry-Bulb Temperature to Turn On Compressor {C}
-    5.0,                                        !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
-    ,                                           !- Crankcase Heater Capacity {W}
-    ,                                           !- Crankcase Heater Capacity Function of Temperature Curve Name
-    10.0,                                       !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
-    ReverseCycle,                               !- Defrost Strategy
-    Timed,                                      !- Defrost Control
-    0.058333,                                   !- Defrost Time Period Fraction
-    0.0,                                        !- Resistive Defrost Heater Capacity {W}
-    1333,                                       !- Speed 1 Reference Unit Gross Rated Heating Capacity {W}
-    3.0,                                        !- Speed 1 Reference Unit Gross Rated Heating COP {W/W}
-    0.10203099,                                 !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
-    773.3,                                      !- 2017 Speed 1 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
-    934.4,                                      !- 2023 Speed 1 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
-    HPACHeatCapFT,                              !- Speed 1 Heating Capacity Function of Temperature Curve Name
-    HPACHeatCapFFF,                             !- Speed 1 Total  Heating Capacity Function of Air Flow Fraction Curve Name
-    HPACHeatEIRFT,                              !- Speed 1 Energy Input Ratio Function of Temperature Curve Name
-    HPACHeatEIRFFF,                             !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
-    2666,                                       !- Speed 2 Reference Unit Gross Rated Heating Capacity {W}
-    3.0,                                        !- Speed 2 Reference Unit Gross Rated Heating COP {W/W}
-    0.127500495,                                !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
-    773.3,                                      !- 2017 Speed 2 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
-    934.4,                                      !- 2023 Speed 2 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
-    HPACHeatCapFT,                              !- Speed 2 Heating Capacity Function of Temperature Curve Name
-    HPACHeatCapFFF,                             !- Speed 2 Total  Heating Capacity Function of Air Flow Fraction Curve Name
-    HPACHeatEIRFT,                              !- Speed 2 Energy Input Ratio Function of Temperature Curve Name
-    HPACHeatEIRFFF,                             !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
-    4000.00000,                                 !- Speed 3 Reference Unit Gross Rated Heating Capacity {W}
-    3.0,                                        !- Speed 3 Reference Unit Gross Rated Heating COP {W/W}
-    0.15297,                                    !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}
-    773.3,                                      !- 2017 Speed 3 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
-    934.4,                                      !- 2023 Speed 3 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
-    HPACHeatCapFT,                              !- Speed 3 Heating Capacity Function of Temperature Curve Name
-    HPACHeatCapFFF,                             !- Speed 3 Total  Heating Capacity Function of Air Flow Fraction Curve Name
-    HPACHeatEIRFT,                              !- Speed 3 Energy Input Ratio Function of Temperature Curve Name
-    HPACHeatEIRFFF;                             !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
-
+    Sys 2 Furnace DX Cool Heating Coil,  !- Name
+    ,                        !- Availability Schedule Name
+    Sys 2 Furnace DX Cool Cooling Coil Outlet,  !- Indoor Air Inlet Node Name
+    Sys 2 Furnace DX Cool Heating Coil Outlet,  !- Indoor Air Outlet Node Name
+    3,                       !- Number of Speeds {dimensionless}
+    3,                       !- Nominal Speed Level {dimensionless}
+    4000.00000,              !- Rated Heating Capacity At Selected Nominal Speed Level {W}
+    autosize,                !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}
+    Sys 3 Heat Pump Air Source Heat Coil PLF,  !- Energy Part Load Fraction Curve Name
+    Sys 3 Heat Pump Air Source Heat Coil Defr-FT,  !- Defrost Energy Input Ratio Function of Temperature Curve Name
+    -8.0,                    !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
+    ,                        !- Outdoor Dry-Bulb Temperature to Turn On Compressor {C}
+    5.0,                     !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
+    ,                        !- Crankcase Heater Capacity {W}
+    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
+    10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
+    ReverseCycle,            !- Defrost Strategy
+    Timed,                   !- Defrost Control
+    0.058333,                !- Defrost Time Period Fraction
+    0.0,                     !- Resistive Defrost Heater Capacity {W}
+    1333,                    !- Speed 1 Reference Unit Gross Rated Heating Capacity {W}
+    3.0,                     !- Speed 1 Reference Unit Gross Rated Heating COP {W/W}
+    0.10203099,              !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
+    773.3,                   !- 2017 Speed 1 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
+    934.4,                   !- 2023 Speed 1 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
+    HPACHeatCapFT,           !- Speed 1 Heating Capacity Function of Temperature Curve Name
+    HPACHeatCapFFF,          !- Speed 1 Total Heating Capacity Function of Air Flow Fraction Curve Name
+    HPACHeatEIRFT,           !- Speed 1 Energy Input Ratio Function of Temperature Curve Name
+    HPACHeatEIRFFF,          !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
+    2666,                    !- Speed 2 Reference Unit Gross Rated Heating Capacity {W}
+    3.0,                     !- Speed 2 Reference Unit Gross Rated Heating COP {W/W}
+    0.127500495,             !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
+    773.3,                   !- 2017 Speed 2 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
+    934.4,                   !- 2023 Speed 2 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
+    HPACHeatCapFT,           !- Speed 2 Heating Capacity Function of Temperature Curve Name
+    HPACHeatCapFFF,          !- Speed 2 Total Heating Capacity Function of Air Flow Fraction Curve Name
+    HPACHeatEIRFT,           !- Speed 2 Energy Input Ratio Function of Temperature Curve Name
+    HPACHeatEIRFFF,          !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
+    4000.00000,              !- Speed 3 Reference Unit Gross Rated Heating Capacity {W}
+    3.0,                     !- Speed 3 Reference Unit Gross Rated Heating COP {W/W}
+    0.15297,                 !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}
+    773.3,                   !- 2017 Speed 3 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
+    934.4,                   !- 2023 Speed 3 Rated Supply Air Fan Power Per Volume Flow Rate {W/(m3/s)}
+    HPACHeatCapFT,           !- Speed 3 Heating Capacity Function of Temperature Curve Name
+    HPACHeatCapFFF,          !- Speed 3 Total Heating Capacity Function of Air Flow Fraction Curve Name
+    HPACHeatEIRFT,           !- Speed 3 Energy Input Ratio Function of Temperature Curve Name
+    HPACHeatEIRFFF;          !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
 
   Curve:Biquadratic,
     HPACHeatCapFT,           !- Name
@@ -3026,6 +3025,69 @@
     Sys 2 Furnace DX Cool Cool Coil EIR-FF;                   !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
 
 
+    Sys 2 Furnace DX Cool Cooling Coil,  !- Name
+    ,                        !- Availability Schedule Name
+    Sys 2 Furnace DX Cool Mixed Air Outlet,  !- Indoor Air Inlet Node Name
+    Sys 2 Furnace DX Cool Cooling Coil Outlet,  !- Indoor Air Outlet Node Name
+    3,                       !- Number of Speeds {dimensionless}
+    3,                       !- Nominal Speed Level {dimensionless}
+    3513.72009,              !- Gross Rated Total Cooling Capacity At Selected Nominal Speed Level {W}
+    0.15297,                 !- Rated Air Flow Rate At Selected Nominal Speed Level {m3/s}
+    0,                       !- Nominal Time for Condensate to Begin Leaving the Coil {s}
+    0,                       !- Initial Moisture Evaporation Rate Divided by Steady-State AC Latent Capacity {dimensionless}
+    2.5,                     !- Maximum Cycling Rate {cycles/hr}
+    60,                      !- Latent Capacity Time Constant {s}
+    60,                      !- Fan Delay Time {s}
+    Sys 3 Heat Pump Air Source Heat Coil PLF,  !- Energy Part Load Fraction Curve Name
+    ,                        !- Condenser Air Inlet Node Name
+    AirCooled,               !- Condenser Type
+    0.0,                     !- Evaporative Condenser Pump Rated Power Consumption {W}
+    0.0,                     !- Crankcase Heater Capacity {W}
+    ,                        !- Crankcase Heater Capacity Function of Temperature Curve Name
+    10.0,                    !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
+    -25.0,                   !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
+    ,                        !- Supply Water Storage Tank Name
+    ,                        !- Condensate Collection Water Storage Tank Name
+    0.0,                     !- Basin Heater Capacity {W/K}
+    2.0,                     !- Basin Heater Setpoint Temperature {C}
+    ,                        !- Basin Heater Operating Schedule Name
+    1171.24003,              !- Speed 1 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.72595,                 !- Speed 1 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    3,                       !- Speed 1 Reference Unit Gross Rated Cooling COP {W/W}
+    0.10203099,              !- Speed 1 Reference Unit Rated Air Flow Rate {m3/s}
+    773.3,                   !- 2017 Speed 1 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    934.4,                   !- 2023 Speed 1 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    0.10203099,              !- Speed 1 Reference Unit Rated Condenser Air Flow Rate {m3/s}
+    ,                        !- Speed 1 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
+    Sys 2 Furnace DX Cool Cool Coil Cap-FT,  !- Speed 1 Total Cooling Capacity Function of Temperature Curve Name
+    Sys 2 Furnace DX Cool Cool Coil Cap-FF,  !- Speed 1 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Sys 2 Furnace DX Cool Cool Coil EIR-FT,  !- Speed 1 Energy Input Ratio Function of Temperature Curve Name
+    Sys 2 Furnace DX Cool Cool Coil EIR-FF,  !- Speed 1 Energy Input Ratio Function of Air Flow Fraction Curve Name
+    2342.48006,              !- Speed 2 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.72595,                 !- Speed 2 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    3,                       !- Speed 2 Reference Unit Gross Rated Cooling COP {W/W}
+    0.127500495,             !- Speed 2 Reference Unit Rated Air Flow Rate {m3/s}
+    773.3,                   !- 2017 Speed 2 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    934.4,                   !- 2023 Speed 2 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    0.127500495,             !- Speed 2 Reference Unit Rated Condenser Air Flow Rate {m3/s}
+    ,                        !- Speed 2 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
+    Sys 2 Furnace DX Cool Cool Coil Cap-FT,  !- Speed 2 Total Cooling Capacity Function of Temperature Curve Name
+    Sys 2 Furnace DX Cool Cool Coil Cap-FF,  !- Speed 2 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Sys 2 Furnace DX Cool Cool Coil EIR-FT,  !- Speed 2 Energy Input Ratio Function of Temperature Curve Name
+    Sys 2 Furnace DX Cool Cool Coil EIR-FF,  !- Speed 2 Energy Input Ratio Function of Air Flow Fraction Curve Name
+    3513.72009,              !- Speed 3 Reference Unit Gross Rated Total Cooling Capacity {W}
+    0.72595,                 !- Speed 3 Reference Unit Gross Rated Sensible Heat Ratio {dimensionless}
+    3,                       !- Speed 3 Reference Unit Gross Rated Cooling COP {W/W}
+    0.15297,                 !- Speed 3 Reference Unit Rated Air Flow Rate {m3/s}
+    773.3,                   !- 2017 Speed 3 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    934.4,                   !- 2023 Speed 3 Rated Evaporator Fan Power Per Volume Flow Rate {W/(m3/s)}
+    0.15297,                 !- Speed 3 Reference Unit Rated Condenser Air Flow Rate {m3/s}
+    ,                        !- Speed 3 Reference Unit Rated Pad Effectiveness of Evap Precooling {dimensionless}
+    Sys 2 Furnace DX Cool Cool Coil Cap-FT,  !- Speed 3 Total Cooling Capacity Function of Temperature Curve Name
+    Sys 2 Furnace DX Cool Cool Coil Cap-FF,  !- Speed 3 Total Cooling Capacity Function of Air Flow Fraction Curve Name
+    Sys 2 Furnace DX Cool Cool Coil EIR-FT,  !- Speed 3 Energy Input Ratio Function of Temperature Curve Name
+    Sys 2 Furnace DX Cool Cool Coil EIR-FF;  !- Speed 3 Energy Input Ratio Function of Air Flow Fraction Curve Name
+
   Curve:Quadratic,
     fan_curve,               !- Name
     0,                       !- Coefficient1 Constant
@@ -3037,6 +3099,7 @@
     ,                        !- Maximum Curve Output
     Dimensionless,           !- Input Unit Type for X
     Dimensionless;           !- Output Unit Type
+
 ! Curves from example file MultiSpeedHeatPump.idf, Sep 2013, same curves for all speeds.
 
   Curve:Biquadratic,
@@ -3062,7 +3125,7 @@
     1.0,                     !- Coefficient1 Constant
     0.0,                     !- Coefficient2 x
     0.0,                     !- Coefficient3 x**2
-    0.0,                       !- Coefficient4 x**3
+    0.0,                     !- Coefficient4 x**3
     0.5,                     !- Minimum Value of x
     1.5;                     !- Maximum Value of x
 
@@ -3174,8 +3237,8 @@
     Sys 2 Furnace DX Cool Air Loop Inlet,  !- Return Air Node Name
     Sys 2 Furnace DX Cool Mixed Air Outlet,  !- Mixed Air Node Name
     Sys 2 Furnace DX Cool Outdoor Air Inlet,  !- Actuator Node Name
-    0,                !- Minimum Outdoor Air Flow Rate {m3/s}
-    0,                !- Maximum Outdoor Air Flow Rate {m3/s}
+    0,                       !- Minimum Outdoor Air Flow Rate {m3/s}
+    0,                       !- Maximum Outdoor Air Flow Rate {m3/s}
     NoEconomizer,            !- Economizer Control Type
     ModulateFlow,            !- Economizer Control Action Type
     20,                      !- Economizer Maximum Limit Dry-Bulb Temperature {C}
@@ -4955,27 +5018,51 @@
     Sys 4 Heat Pump Air Source Cool Coil EIR-FF;  !- Speed 4 Energy Input Ratio Function of Air Flow Fraction Curve Name
 
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,Unitary System DX Coil Speed Level,Detailed;
+
   Output:Variable,Space2-1,Zone Air Temperature,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Supply Fan Outlet,System Node Temperature,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,Unitary System DX Coil Speed Ratio,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Supply Fan Outlet,System Node Standard Density Volume Flow Rate,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Heating Coil,Heating Coil Heating Rate,Detailed;
-  Output:Variable,Sys 2 Furnace DX Cool Cooling Coil,Cooling Coil Upper Speed Level,Detailed; !- HVAC Average []
-  Output:Variable,Sys 2 Furnace DX Cool Heating Coil,Heating Coil Upper Speed Level,Detailed; !- HVAC Average []
-  Output:Variable,Sys 2 Furnace DX Cool Cooling Coil,Cooling Coil Neighboring Speed Levels Ratio,Detailed; !- HVAC Average []
+
+  Output:Variable,Sys 2 Furnace DX Cool Cooling Coil,Cooling Coil Upper Speed Level,Detailed;
+
+  Output:Variable,Sys 2 Furnace DX Cool Heating Coil,Heating Coil Upper Speed Level,Detailed;
+
+  Output:Variable,Sys 2 Furnace DX Cool Cooling Coil,Cooling Coil Neighboring Speed Levels Ratio,Detailed;
+
   Output:Variable,SPACE2-1,Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate,Detailed;
+
   Output:Variable,SPACE2-1,Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,Unitary System Part Load Ratio,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,Unitary System Fan Part Load Ratio,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,Unitary System Compressor Part Load Ratio,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Supply Fan,Fan Electricity Rate,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Cooling Coil,Cooling Coil Total Cooling Rate,Detailed;
+
   Output:Variable,SPACE2-1,Zone Predicted Sensible Load to Setpoint Heat Transfer Rate,Detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,SZVAV Mode,detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,SZVAV Boundary,detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,SZVAV Error,detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,SZVAV Flow,detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,SZVAV Load,detailed;
+
   Output:Variable,Sys 2 Furnace DX Cool Unitary System,Unitary System Predicted Sensible Load to Setpoint Heat Transfer Rate,detailed;
 
-  OutputControl:Files,Yes;
+  OutputControl:Files,
+    Yes;                     !- Output CSV
+

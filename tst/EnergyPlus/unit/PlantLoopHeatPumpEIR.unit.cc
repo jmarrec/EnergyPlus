@@ -7287,7 +7287,7 @@ TEST_F(EnergyPlusFixture, GAHP_AirSource_CurveEval)
 
     // I am picking a temperature that is:
     // * Below the 'Maximum Outdoor Dry-bulb Temperature for Defrost Operation' I entered (5.0C)
-    // * Between the harcoded min/max defrost temperatures of 16F/-8.88C | 38F/3.33C
+    // * Between the hardcoded min/max defrost temperatures of 16F/-8.88C | 38F/3.33C
     double constexpr oaTemp = 3.0;
     state->dataEnvrn->OutDryBulbTemp = oaTemp;
 
