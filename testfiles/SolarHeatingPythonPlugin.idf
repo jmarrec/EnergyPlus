@@ -414,20 +414,20 @@
 !-   ===========  ALL OBJECTS IN CLASS: PYTHONPLUGIN:INSTANCE ===========
 
   PythonPlugin:Instance,
-    DirectSolarHeatingEMS,    !- Name
-    No,                       !- Run During Warmup Days
-    SolarHeatingPythonPlugin, !- Python Module Name
-    DirectSolarHeating;       !- Plugin Class Name
+    DirectSolarHeatingEMS,   !- Name
+    No,                      !- Run During Warmup Days
+    SolarHeatingPythonPlugin,!- Python Module Name
+    DirectSolarHeating;      !- Plugin Class Name
 
   PythonPlugin:Instance,
-    IndirectSolarHeatingEMS,  !- Name
-    No,                       !- Run During Warmup Days
-    SolarHeatingPythonPlugin, !- Python Module Name
-    IndirectSolarHeating;     !- Plugin Class Name
+    IndirectSolarHeatingEMS, !- Name
+    No,                      !- Run During Warmup Days
+    SolarHeatingPythonPlugin,!- Python Module Name
+    IndirectSolarHeating;    !- Plugin Class Name
 
   PythonPlugin:Instance,
-    AirMixingEMS,             !- Name
-    No,                       !- Run During Warmup Days
-    SolarHeatingPythonPlugin, !- Python Module Name
-    AirMixing;                !- Plugin Class Name
+    AirMixingEMS,            !- Name
+    No,                      !- Run During Warmup Days
+    SolarHeatingPythonPlugin,!- Python Module Name
+    AirMixing;               !- Plugin Class Name
 

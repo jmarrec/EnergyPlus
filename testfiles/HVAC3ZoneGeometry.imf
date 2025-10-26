@@ -2,9 +2,11 @@
 !    8.9;                    !- Version Identifier
 !  Version,
 !    9.0;                    !- Version Identifier
-
 !  Version,
 !    9.6;                    !- Version Identifier
+
+!  Version,
+!    25.2;                   !- Version Identifier
 
   GlobalGeometryRules,
     UpperLeftCorner,         !- Starting Vertex Position
