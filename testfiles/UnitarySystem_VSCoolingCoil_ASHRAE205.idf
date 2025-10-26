@@ -1796,12 +1796,6 @@
     ;                        !- Evaporative Condenser Supply Water Storage Tank Name
 
   Coil:DX:ASHRAE205:Performance,
-    Heat Pump ACDXCoil 1 Performance,
-    residential-dx.RS0004.json,
-    Linear,
-    , !- Rated Total Cooling Capacity
-    ; !- Rated Steady-State Heating Capacity
-
     Heat Pump ACDXCoil 1 Performance,  !- Name
     residential-dx.RS0004.json,  !- Representation File Name
     Linear,                  !- Performance Interpolation Method
@@ -1920,8 +1914,6 @@
   Output:Variable,*,Heating Coil NaturalGas Rate,timestep;
 
   Output:Variable,*,Heating Coil Defrost Electricity Energy,timestep;
-
-  Output:Meter,Cooling:Electricity,timestep; !- [J]
 
   Output:Meter,Cooling:Electricity,timestep;
 

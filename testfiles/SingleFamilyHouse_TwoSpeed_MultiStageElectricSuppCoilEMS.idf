@@ -2063,17 +2063,6 @@
     SuppCoilSpeedControl;    !- Program Name 1
 
   EnergyManagementSystem:Program,
-    SuppCoilSpeedControl,                                                                            !- Name
-    IF (ZoneAirTemperature < HeatingSetpoint - 1.0),                                                   !- Program Line 1
-    SET SuppCoilSpeedOverride = 1.9,                                                                 !- Program Line 2
-    SET SuppCoilSpeedLevelOverrideReport = 1,
-    ELSEIF (ZoneAirTemperature < HeatingSetpoint - 0.1),                                         !- Program Line 4
-    SET SuppCoilSpeedOverride = 1,                                                                   !- Program Line 5
-    SET SuppCoilSpeedLevelOverrideReport = 1,                                                        !- Program Line 6
-    ELSE,                                                                                        !- Program Line 13
-    SET SuppCoilSpeedOverride = Null,                                                                !- Program Line 14
-    SET SuppCoilSpeedLevelOverrideReport = 0,                                                        !- Program Line 15
-    ENDIF;
     SuppCoilSpeedControl,    !- Name
     IF (ZoneAirTemperature < HeatingSetpoint - 1.0),  !- Program Line 1
     SET SuppCoilSpeedOverride = 1.9,  !- Program Line 2

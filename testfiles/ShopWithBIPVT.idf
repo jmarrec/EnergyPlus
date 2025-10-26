@@ -5141,23 +5141,6 @@
     4.0;                     !- Glass Extinction Coefficient {1/m}
 
   SolarCollectorPerformance:PhotovoltaicThermal:BIPVT,
-    ZN_1_FLR_1_SEC_4_Ceiling_BIPVT, !- Name
-    OSCM_ZN_1_FLR_1_SEC_4,  !- Boundary Conditions Model Name
-    , !- Availability Schedule Name
-    0.1, !- Effective Plenum Gap Thickness Behind PV Modules
-    0.957, !- PV Cell Normal Transmittance-Absorptance Product
-    0.87, !- Backing Material Normal Transmittance-Absorptance Product
-    0.85, !- Cladding Normal Transmittance-Absorptance Product
-    0.85, !- Fraction of Collector Gross Area Covered by PV module
-    0.9, !- Fraction of PV cell area to PV module area
-    0.0044, !- PV Module Thermal Resistance - Top
-    0.0039, !- PV Module Thermal Resistance - Bottom
-    0.85, !- PV Module Longwave Emissivity
-    0.9, !- Backing Material Longwave Emissivity
-    0.002, !- Glass Thickness
-    1.526, !- Glass Refraction Index
-    4.0; !- Glass Extinction Coefficient
-
     ZN_1_FLR_1_SEC_4_Ceiling_BIPVT,  !- Name
     OSCM_ZN_1_FLR_1_SEC_4,   !- Boundary Conditions Model Name
     ,                        !- Availability Schedule Name

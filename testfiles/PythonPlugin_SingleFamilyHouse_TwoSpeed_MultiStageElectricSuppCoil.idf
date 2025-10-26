@@ -2045,15 +2045,6 @@
 
   PythonPlugin:OutputVariable,
     PythonPlugin Coil Speed Level Override Value,  !- Name
-    CoilSpeedLevelOverrideValue,               !- Python Plugin Variable Name
-    Averaged,                                   !- Type of Data in Variable
-    SystemTimestep,                             !- Update Frequency
-    ;                                     !- Units
-
-  Output:Variable,
-    PythonPlugin Coil Speed Level Override On,  !- Name
-    PythonPlugin:OutputVariable,      !- EMS Variable Name
-    detailed;                          !- Type of Data in Variable
     CoilSpeedLevelOverrideValue,  !- Python Plugin Variable Name
     Averaged,                !- Type of Data in Variable
     SystemTimestep,          !- Update Frequency

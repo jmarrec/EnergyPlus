@@ -23066,12 +23066,6 @@
 !-   ===========  ALL OBJECTS IN CLASS: Chiller:Electric:ReformulatedEIR ===========
 
   Curve:Linear,
-    Y=F(X),
-    0,
-    1,
-    0,
-    1;
-
     Y=F(X),                  !- Name
     0,                       !- Coefficient1 Constant
     1,                       !- Coefficient2 x
