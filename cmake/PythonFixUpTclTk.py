@@ -155,12 +155,12 @@ if __name__ == "__main__":
         # along with the /usr/share/tcltk/tclX.Y and /usr/share/tcltk/tkX.Y folders.
         # while I think X.Y will be 8.6, I'll try my best to be flexible for version and architecture
         arch = platform.machine()  # x86_64, arm64, aarch64
-        if platform.freedesktop_os_release()['ID'] in ['centos', 'almalinux']:
-            arch_lib_dir = Path('/usr/lib64')
-            tcl_tk_root_dir = Path('/usr/share')
+        if platform.freedesktop_os_release()["ID"] in ["centos", "almalinux"]:
+            arch_lib_dir = Path("/usr/lib64")
+            tcl_tk_root_dir = Path("/usr/share")
         else:
-            arch_lib_dir = Path('/usr/lib') / f"{arch}-linux-gnu"
-            tcl_tk_root_dir = Path('/usr/share/tcltk')
+            arch_lib_dir = Path("/usr/lib") / f"{arch}-linux-gnu"
+            tcl_tk_root_dir = Path("/usr/share/tcltk")
 
         lib_tk_search_path = arch_lib_dir / "libtk[0-9]*.[0-9]*.so"
         tk_candidates = glob.glob(str(lib_tk_search_path))

@@ -188,7 +188,7 @@ extension_renaming = {
     "Output:Diagnostics": "diagnostics",
     "MaterialProperty:PhaseChange": "values",
     "MaterialProperty:VariableThermalConductivity": "values",
-    "ComfortViewFactorAngles": "angles"
+    "ComfortViewFactorAngles": "angles",
 }
 remaining_objects = [
     "Site:SpectrumData",
