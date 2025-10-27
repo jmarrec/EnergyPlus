@@ -97304,7 +97304,8 @@ Table:IndependentVariable,
        \begin-extensible
   N7,  \field Value 2
        \type real
-  N8,N9,N10,N11,N12,N13,N14,N15,N16,N17,N18,N19,N20;
+  N8,N9,N10,N11,N12,N13,N14,N15,N16,N17,N18,N19,N20,N21,N22,N23,N24,N25,N26,N27,N28,N29,N30,  \note fields as indicated
+  N31,N32,N33,N34,N35,N36,N37,N38,N39,N40,N41,N42,N43,N44,N45,N46,N47,N48,N49,N50;  \note fields as indicated
 
 Table:IndependentVariableList,
        \memo A sorted list of independent variables used by one or more Table:Lookup
