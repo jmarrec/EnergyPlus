@@ -193,7 +193,7 @@ jobs:
           architecture: ${{ matrix.arch }}
 
       - name: Gather Test Package from Artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: energyplus-x86_64
           path: package
