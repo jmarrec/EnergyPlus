@@ -634,8 +634,8 @@ TEST_F(ZoneUnitarySysTest, Test_UnitarySystemModel_factory)
           ,                               !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
           ,                               !- Outdoor Dry-Bulb Temperature Sensor Node Name
 
-          100,                            !- Ancilliary On-Cycle Electric Power
-          50,                             !- Ancilliary Off-Cycle Electric Power
+          100,                            !- Ancillary On-Cycle Electric Power
+          50,                             !- Ancillary Off-Cycle Electric Power
           ,                               !- Design Heat Recovery Water Flow Rate
           ,                               !- Maximum Temperature for Heat Recovery
           ,                               !- Heat Recovery Water Inlet Node Name
@@ -4295,7 +4295,7 @@ Curve:Biquadratic,
     EXPECT_EQ(0.05, state->dataUnitarySystems->designSpecMSHP[0].noLoadAirFlowRateRatio);
     EXPECT_EQ(result1_expected_NoLoadAirVolFlow, thisSys->m_MaxNoCoolHeatAirVolFlow);
 
-    // autosized air flow and capacity, unitary sytsem capacity matches coils
+    // autosized air flow and capacity, unitary system capacity matches coils
     EXPECT_EQ(thisSys->m_MaxCoolAirVolFlow, 1.5);
     EXPECT_EQ(thisSys->m_MaxHeatAirVolFlow, 1.5);
 
@@ -7199,7 +7199,7 @@ Curve:Biquadratic,
     OutletNode = thisSys->AirOutNode;
     ControlZoneNum = thisSys->NodeNumOfControlledZone;
 
-    // set up unitary system inlet condtions
+    // set up unitary system inlet conditions
     state->dataLoopNodes->Node(InletNode).Temp = 26.666667;             // AHRI condition 80F dry-bulb temp
     state->dataLoopNodes->Node(InletNode).HumRat = 0.01117049542334198; // AHRI condition at 80F DB/67F WB lb/lb or kg/kg
     state->dataLoopNodes->Node(InletNode).Enthalpy =
@@ -7436,7 +7436,7 @@ Curve:Biquadratic,
     Real64 SaveDeliveredSensibleCapacity = DeliveredSensibleCapacity;
     DeliveredSensibleCapacity = state->dataLoopNodes->Node(thisSys->AirOutNode).MassFlowRate * CpAir *
                                 (state->dataLoopNodes->Node(thisSys->AirOutNode).Temp - state->dataLoopNodes->Node(ControlZoneNum).Temp);
-    // same answers as above, wihtout heating coil present, and no crash
+    // same answers as above, without heating coil present, and no crash
     EXPECT_NEAR(DeliveredSensibleCapacity, SaveDeliveredSensibleCapacity, 0.0001);                                 // actual delivered capacity
     EXPECT_NEAR(DeliveredSensibleCapacity, 1010.6, 0.001);                                                         // actual delivered capacity
     EXPECT_NEAR(state->dataHeatingCoils->HeatingCoil(thisSys->m_SuppHeatCoilIndex).HeatingCoilRate, 18268.1, 0.1); // actual reheat load to meet SP
@@ -8209,7 +8209,7 @@ Curve:Biquadratic,
     OutletNode = thisSys->AirOutNode;
     ControlZoneNum = thisSys->NodeNumOfControlledZone;
 
-    // set up unitary system inlet condtions
+    // set up unitary system inlet conditions
     state->dataLoopNodes->Node(InletNode).Temp = 26.666667;             // AHRI condition 80F dry-bulb temp
     state->dataLoopNodes->Node(InletNode).HumRat = 0.01117049542334198; // AHRI condition at 80F DB/67F WB lb/lb or kg/kg
     state->dataLoopNodes->Node(InletNode).Enthalpy =
@@ -8708,7 +8708,7 @@ Curve:Biquadratic,
     OutletNode = thisSys->AirOutNode;
     ControlZoneNum = thisSys->NodeNumOfControlledZone;
 
-    // set up unitary system inlet condtions
+    // set up unitary system inlet conditions
     state->dataLoopNodes->Node(InletNode).Temp = 26.666667;             // AHRI condition 80F dry-bulb temp
     state->dataLoopNodes->Node(InletNode).HumRat = 0.01117049542334198; // AHRI condition at 80F DB/67F WB lb/lb or kg/kg
     state->dataLoopNodes->Node(InletNode).Enthalpy =
@@ -9418,8 +9418,8 @@ AirLoopHVAC:UnitarySystem,
   Autosize,                                                !- Maximum Supply Air Temperature {C}
   21,                                                      !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
   ,                                                        !- Outdoor Dry-Bulb Temperature Sensor Node Name
-  ,                                                        !- Ancilliary On-Cycle Electric Power
-  ,                                                        !- Ancilliary Off-Cycle Electric Power
+  ,                                                        !- Ancillary On-Cycle Electric Power
+  ,                                                        !- Ancillary Off-Cycle Electric Power
   ,                                                        !- Design Heat Recovery Water Flow Rate
   ,                                                        !- Maximum Temperature for Heat Recovery
   ,                                                        !- Heat Recovery Water Inlet Node Name
@@ -9675,7 +9675,7 @@ OutdoorAir:NodeList,
     // zone predicted load is assume to be heating and the unitary system zone equipment
     // inlet and outlet air conditions were set for heating
     state->dataUnitarySystems->HeatingLoad = true;
-    // set up zone equipment inlet node condtions
+    // set up zone equipment inlet node conditions
     state->dataLoopNodes->Node(InletNode).Temp = 17.57;
     state->dataLoopNodes->Node(InletNode).HumRat = 0.007;
     state->dataLoopNodes->Node(InletNode).Enthalpy =
@@ -10930,7 +10930,7 @@ Curve:QuadLinear,
     OutletNode = thisSys->AirOutNode;
     ControlZoneNum = thisSys->NodeNumOfControlledZone;
 
-    // set up unitary system inlet condtions
+    // set up unitary system inlet conditions
     state->dataLoopNodes->Node(InletNode).Temp = 26.666667;             // AHRI condition 80F dry-bulb temp
     state->dataLoopNodes->Node(InletNode).HumRat = 0.01117049542334198; // AHRI condition at 80F DB/67F WB lb/lb or kg/kg
     state->dataLoopNodes->Node(InletNode).Enthalpy =
@@ -11273,7 +11273,7 @@ Schedule:Compact,
     OutletNode = thisSys->AirOutNode;
     ControlZoneNum = thisSys->NodeNumOfControlledZone;
 
-    // set up unitary system inlet condtions
+    // set up unitary system inlet conditions
     state->dataLoopNodes->Node(InletNode).Temp = 20.0;    // zone winter dry-bulb temp
     state->dataLoopNodes->Node(InletNode).HumRat = 0.005; // dry winter condition
     state->dataLoopNodes->Node(InletNode).Enthalpy =
@@ -13121,7 +13121,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedCoils_SingleMode)
     OutletNode = thisSys->AirOutNode;
     int ControlZoneNodeNum = thisSys->NodeNumOfControlledZone;
 
-    // set up unitary system inlet condtions
+    // set up unitary system inlet conditions
     state->dataLoopNodes->Node(InletNode).Temp = 26.666667;             // AHRI condition 80F dry-bulb temp
     state->dataLoopNodes->Node(InletNode).HumRat = 0.01117049542334198; // AHRI condition at 80F DB/67F WB lb/lb or kg/kg
     state->dataLoopNodes->Node(InletNode).Enthalpy =
@@ -14613,8 +14613,8 @@ AirLoopHVAC:UnitarySystem,
   80.0,                           !- Maximum Supply Air Temperature{ C }
   ,                               !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
   ,                               !- Outdoor Dry-Bulb Temperature Sensor Node Name
-  ,                               !- Ancilliary On-Cycle Electric Power
-  ,                               !- Ancilliary Off-Cycle Electric Power
+  ,                               !- Ancillary On-Cycle Electric Power
+  ,                               !- Ancillary Off-Cycle Electric Power
   ,                               !- Design Heat Recovery Water Flow Rate
   ,                               !- Maximum Temperature for Heat Recovery
   ,                               !- Heat Recovery Water Inlet Node Name
@@ -14884,8 +14884,8 @@ AirLoopHVAC:UnitarySystem,
   80.0,                           !- Maximum Supply Air Temperature{ C }
   ,                               !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
   ,                               !- Outdoor Dry-Bulb Temperature Sensor Node Name
-  ,                               !- Ancilliary On-Cycle Electric Power
-  ,                               !- Ancilliary Off-Cycle Electric Power
+  ,                               !- Ancillary On-Cycle Electric Power
+  ,                               !- Ancillary Off-Cycle Electric Power
   ,                               !- Design Heat Recovery Water Flow Rate
   ,                               !- Maximum Temperature for Heat Recovery
   ,                               !- Heat Recovery Water Inlet Node Name
@@ -19660,8 +19660,8 @@ AirLoopHVAC:UnitarySystem,
   80.0,                           !- Maximum Supply Air Temperature{ C }
   ,                               !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
   ,                               !- Outdoor Dry-Bulb Temperature Sensor Node Name
-  ,                               !- Ancilliary On-Cycle Electric Power
-  ,                               !- Ancilliary Off-Cycle Electric Power
+  ,                               !- Ancillary On-Cycle Electric Power
+  ,                               !- Ancillary Off-Cycle Electric Power
   ,                               !- Design Heat Recovery Water Flow Rate
   ,                               !- Maximum Temperature for Heat Recovery
   ,                               !- Heat Recovery Water Inlet Node Name
@@ -20037,8 +20037,8 @@ AirLoopHVAC:UnitarySystem,
   80.0,                           !- Maximum Supply Air Temperature{ C }
   ,                               !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
   ,                               !- Outdoor Dry-Bulb Temperature Sensor Node Name
-  ,                               !- Ancilliary On-Cycle Electric Power
-  ,                               !- Ancilliary Off-Cycle Electric Power
+  ,                               !- Ancillary On-Cycle Electric Power
+  ,                               !- Ancillary Off-Cycle Electric Power
   ,                               !- Design Heat Recovery Water Flow Rate
   ,                               !- Maximum Temperature for Heat Recovery
   ,                               !- Heat Recovery Water Inlet Node Name
@@ -21436,7 +21436,7 @@ TEST_F(AirloopUnitarySysTest, WSHPVariableSpeedCoilSizing)
         state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).WaterInletNodeNum;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
         state->dataVariableSpeedCoils->VarSpeedCoil(CoilNum1).WaterOutletNodeNum;
-    // use psuedo real CapFT curve, use unity curves for all others
+    // use pseudo real CapFT curve, use unity curves for all others
     auto *curve1 = Curve::AddCurve(*state, "Curve1");
     curve1->curveType = Curve::CurveType::BiQuadratic;
     curve1->numDims = 2;
@@ -21562,8 +21562,8 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_LowerSpeedFlowSizingTest)
     80.0,                            !- Maximum Supply Air Temperature{ C }
     ,                                !- Maximum Outdoor Dry-Bulb Temperature for Supplemental Heater Operation {C}
     ,                                !- Outdoor Dry-Bulb Temperature Sensor Node Name
-    ,                                !- Ancilliary On-Cycle Electric Power
-    ,                                !- Ancilliary Off-Cycle Electric Power
+    ,                                !- Ancillary On-Cycle Electric Power
+    ,                                !- Ancillary Off-Cycle Electric Power
     ,                                !- Design Heat Recovery Water Flow Rate
     ,                                !- Maximum Temperature for Heat Recovery
     ,                                !- Heat Recovery Water Inlet Node Name
@@ -22491,7 +22491,7 @@ Schedule:Constant,
     InletNode = thisSys->AirInNode;
     OutletNode = thisSys->AirOutNode;
     ControlZoneNum = thisSys->NodeNumOfControlledZone;
-    // set up unitary system inlet condtions
+    // set up unitary system inlet conditions
     state->dataLoopNodes->Node(InletNode).Temp = 22.0;
     state->dataLoopNodes->Node(InletNode).HumRat = 0.010;
     state->dataLoopNodes->Node(InletNode).Enthalpy =

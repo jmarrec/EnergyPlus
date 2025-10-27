@@ -6537,7 +6537,13 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistCoils)
     state->afn->DisSysCompCoilData(2).EPlusType = "COIL:HEATING:DX:VARIABLESPEED";
     state->afn->DisSysCompCoilData(2).name = "Super Heating Coil";
 
+    state->dataVariableSpeedCoils->GetCoilsInputFlag = false;
+    state->dataVariableSpeedCoils->VarSpeedCoil.allocate(2);
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).Name = "Super Coil";
+    state->dataVariableSpeedCoils->VarSpeedCoil(2).Name = "Super Heating Coil";
+
     state->afn->validate_distribution();
+    compare_err_stream("");
 }
 
 // Missing an AirflowNetwork:Distribution:Node for the Zone Air Node
@@ -6732,7 +6738,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_DuplicatedNodeNameTest)
         "    4;                       !- Number of Timesteps per Hour",
 
         "  Site:Location,",
-        "    Pheonix,                 !- Name",
+        "    Phoenix,                 !- Name",
         "    33.43,                   !- Latitude {deg}",
         "    -112.02,                 !- Longitude {deg}",
         "    -7.0,                    !- Time Zone {hr}",
@@ -11074,7 +11080,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestZoneVentingAirBoundary)
          "   ** Warning ** AirflowNetwork::Solver::get_input: AirflowNetwork:MultiZone:Surface=\"AIR WALL AULA 2\" is an air boundary surface.",
          "   **   ~~~   ** Ventilation Control Mode = TEMPERATURE is not valid. Resetting to Constant.",
          "   ** Warning ** AirflowNetwork::Solver::get_input: : AirflowNetwork:MultiZone:Surface = AIR WALL AULA 2",
-         "   **   ~~~   ** Venting Availbility Schedule is not empty.",
+         "   **   ~~~   ** Venting Availability Schedule is not empty.",
          "   **   ~~~   ** Venting is always available for air-boundary surfaces."});
     EXPECT_TRUE(compare_err_stream(expectedErrString, true));
 

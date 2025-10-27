@@ -1253,7 +1253,7 @@ namespace WaterToAirHeatPumpSimple {
         Real64 RatedCoolPowerTempModFac = 1.0; // Rated cooling power curve modifier
         Real64 RatedHeatPowerTempModFac = 1.0; // Rated heating power curve modifier
         Real64 RatedCapCoolTotalDesCDD;        // Rated total cooling coil capacity determined at cooling design conditions
-        constexpr Real64 Tref(283.15);         // Refrence Temperature for performance curves,10C [K]
+        constexpr Real64 Tref(283.15);         // Reference Temperature for performance curves,10C [K]
         int PltSizNum;
         bool RatedCapCoolTotalAutoSized;
         bool RatedCapCoolSensAutoSized;
@@ -1264,7 +1264,7 @@ namespace WaterToAirHeatPumpSimple {
         bool IsAutoSize;                  // Indicator to autosize
         bool HardSizeNoDesRun;            // Indicator to hardsize and no sizing run
         Real64 RatedAirVolFlowRateDes;    // Autosized rated air flow for reporting
-        Real64 CoolingAirVolFlowRateDes;  // Cooling desing day air flow
+        Real64 CoolingAirVolFlowRateDes;  // Cooling design day air flow
         Real64 HeatingAirVolFlowRateDes;  // Heating design day air flow
         Real64 RatedAirVolFlowRateUser;   // Hardsized rated air flow for reporting
         Real64 RatedCapCoolTotalDes;      // Autosized rated cooling capacity for reporting
@@ -1981,7 +1981,7 @@ namespace WaterToAirHeatPumpSimple {
                             // based on cooling design day which is used to decide if the
                             // coil needs to be sized of the heating coil size
                             //
-                            // no capcity adjustment based on system flow because the capacity could change
+                            // no capacity adjustment based on system flow because the capacity could change
                             // once the heating coil has been sized
                             state.dataSize->DXCoolCap = RatedCapCoolTotalDes;
                         } else if (companionHeatingCoil.WAHPPlantType != DataPlant::PlantEquipmentType::CoilWAHPHeatingEquationFit) {
@@ -2378,7 +2378,7 @@ namespace WaterToAirHeatPumpSimple {
                             HeatratioTS = 0.0; // Clang complains it is used uninitialized if you don't give it a value
                             ErrorsFound = true;
                         }
-                        // calculate temperatue ratio at refrence conditions
+                        // calculate temperatue ratio at reference conditions
                         RatedHeatratioTDB = (RatedHeatMixDryBulb + state.dataWaterToAirHeatPumpSimple->CelsiustoKelvin) / Tref;
                         RatedHeatratioTS = (simpleWatertoAirHP.RatedEntWaterTemp + state.dataWaterToAirHeatPumpSimple->CelsiustoKelvin) / Tref;
                         // determine curve modifiers at peak and rated conditions
@@ -2482,7 +2482,7 @@ namespace WaterToAirHeatPumpSimple {
                             HeatratioTS = 0.0; // Clang complains it is used uninitialized if you don't give it a value
                             ErrorsFound = true;
                         }
-                        // calculate temperatue ratio at refrence conditions
+                        // calculate temperatue ratio at reference conditions
                         RatedHeatratioTDB = (RatedHeatMixDryBulb + state.dataWaterToAirHeatPumpSimple->CelsiustoKelvin) / Tref;
                         RatedHeatratioTS = (simpleWatertoAirHP.RatedEntWaterTemp + state.dataWaterToAirHeatPumpSimple->CelsiustoKelvin) / Tref;
                         // determine curve modifiers at peak and rated conditions
@@ -2541,7 +2541,7 @@ namespace WaterToAirHeatPumpSimple {
                             if (HeatingAirVolFlowRateDes > 0) {
                                 RatedCapCoolTotalDes *= (RatedAirVolFlowRateDes / HeatingAirVolFlowRateDes) * HeatdTratio;
                             }
-                            // calculate ajustment factor over previous capacity for sensible capacity adjustment
+                            // calculate adjustment factor over previous capacity for sensible capacity adjustment
                             Real64 CapCoolAdjFac = RatedCapCoolTotalDes / state.dataSize->DXCoolCap;
                             // update cooling coil rated capacity after adjustments based on heating coil size
                             state.dataSize->DXCoolCap = RatedCapCoolTotalDes;
@@ -4040,7 +4040,7 @@ namespace WaterToAirHeatPumpSimple {
 
     void CheckSimpleWAHPRatedCurvesOutputs(EnergyPlusData &state, std::string const &CoilName)
     {
-        constexpr Real64 Tref(283.15); // Refrence Temperature for performance curves,10C [K]
+        constexpr Real64 Tref(283.15); // Reference Temperature for performance curves,10C [K]
         static constexpr std::string_view RoutineName("CheckSimpleWAHPRatedCurvesOutputs");
 
         int WhichCoil = Util::FindItemInList(CoilName, state.dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP);
