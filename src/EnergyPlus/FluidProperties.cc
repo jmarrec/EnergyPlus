@@ -508,8 +508,6 @@ namespace Fluid {
 
     void InitConstantFluidPropertiesData(EnergyPlusData &state)
     {
-        constexpr std::string_view routineName = "InitConstantFluidPropertiesData";
-
         auto &df = state.dataFluid;
         bool ErrorsFound = false;
 
@@ -1391,7 +1389,7 @@ namespace Fluid {
         // be produced.
 
         CurrentModuleObject = "FluidProperties:Concentration";
-        for (int InData = 1; InData <= NumOfGlyFluidPropArrays; ++InData) { // check temperatures given for specific heat are consistant
+        for (int InData = 1; InData <= NumOfGlyFluidPropArrays; ++InData) { // check temperatures given for specific heat are consistent
             state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                      CurrentModuleObject,
                                                                      InData,
@@ -2261,7 +2259,6 @@ namespace Fluid {
 
         for (auto *glycol : df->glycols) {
 
-            int GlycolIndex = 0; // used in routine calls -- value is returned when first 0
             // Lay out the basic values:
             if (!glycol->GlycolName.empty()) {
                 print(state.files.debug, "Glycol={}, Mixture fluid={}\n", glycol->Name, glycol->GlycolName);
@@ -3012,7 +3009,7 @@ namespace Fluid {
 
         // PURPOSE OF THIS FUNCTION:
         // This finds enthalpy for given temperature and a quality under the vapor dome.
-        // This fucntion is only called with a valid refrigerant and quality between 0 and 1.
+        // This function is only called with a valid refrigerant and quality between 0 and 1.
 
         // METHODOLOGY EMPLOYED:
         // Calls GetInterpolatedSatProp to linearly interpolate between the saturated
@@ -3187,7 +3184,7 @@ namespace Fluid {
 
         // PURPOSE OF THIS SUBROUTINE:
         // This finds specific heat for given temperature and a quality under the vapor dome.
-        // This fucntion is only called with a valid refrigerant and quality between 0 and 1.
+        // This function is only called with a valid refrigerant and quality between 0 and 1.
 
         // METHODOLOGY EMPLOYED:
         // Calls GetInterpolatedSatProp to linearly interpolate between the saturated
@@ -4742,7 +4739,7 @@ namespace Fluid {
         auto &df = state.dataFluid;
         if (Idx > 0 && Idx <= df->glycols.isize()) {
             return df->glycols(Idx)->Name;
-        } else { // return blank - error checking in calling proceedure
+        } else { // return blank - error checking in calling procedure
             return "";
         }
     }
@@ -5009,13 +5006,13 @@ namespace Fluid {
         }
     }
 
-    void GlycolProps::getDensityTemperatureLimits(EnergyPlusData &state, Real64 &MinTempLimit, Real64 &MaxTempLimit)
+    void GlycolProps::getDensityTemperatureLimits([[maybe_unused]] EnergyPlusData &state, Real64 &MinTempLimit, Real64 &MaxTempLimit)
     {
         MinTempLimit = this->RhoLowTempValue;
         MaxTempLimit = this->RhoHighTempValue;
     }
 
-    void GlycolProps::getSpecificHeatTemperatureLimits(EnergyPlusData &state, Real64 &MinTempLimit, Real64 &MaxTempLimit)
+    void GlycolProps::getSpecificHeatTemperatureLimits([[maybe_unused]] EnergyPlusData &state, Real64 &MinTempLimit, Real64 &MaxTempLimit)
     {
         MinTempLimit = this->CpLowTempValue;
         MaxTempLimit = this->CpHighTempValue;

@@ -126,7 +126,7 @@ namespace ZoneDehumidifier {
         // Simulate a zone dehumidifier.
 
         // METHODOLOGY EMPLOYED:
-        // Call appropriate subroutines to get input values, initialize variables, model performanc
+        // Call appropriate subroutines to get input values, initialize variables, model performance
         // update node information, report model outputs.
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -216,7 +216,6 @@ namespace ZoneDehumidifier {
         Array1D_bool lAlphaBlanks;     // Logical array, alpha field input BLANK = .TRUE.
         Array1D_bool lNumericBlanks;   // Logical array, numeric field input BLANK = .TRUE.
         int TotalArgs(0);              // Total number of alpha and numeric arguments (max)
-        Real64 CurveVal;               // Output from curve object (water removal or energy factor curves)
 
         int NumDehumidifiers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, CurrentModuleObject);
 

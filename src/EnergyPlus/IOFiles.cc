@@ -411,9 +411,6 @@ void IOFiles::OutputControl::getInput(EnergyPlusData &state)
             { // "output_dfs"
                 dfs = boolean_choice(find_input(fields, "output_dfs"));
             }
-            { // "output_glhe"
-                glhe = boolean_choice(find_input(fields, "output_glhe"));
-            }
             { // "output_delightin"
                 delightin = boolean_choice(find_input(fields, "output_delightin"));
             }
@@ -458,6 +455,9 @@ void IOFiles::OutputControl::getInput(EnergyPlusData &state)
             }
             { // "sqlite"
                 sqlite = boolean_choice(find_input(fields, "output_sqlite"));
+            }
+            { // "psz"
+                psz = boolean_choice(find_input(fields, "output_plant_component_sizing"));
             }
         }
     }

@@ -593,6 +593,7 @@ namespace ThermalComfort {
             switch (people.clothingType) {
             case DataHeatBalance::ClothingType::InsulationSchedule:
                 state.dataThermalComforts->CloUnit = people.clothingSched->getCurrentVal();
+                comfort.ClothingValue = state.dataThermalComforts->CloUnit;
                 break;
             case DataHeatBalance::ClothingType::DynamicAshrae55:
                 comfort.ThermalComfortOpTemp = (state.dataThermalComforts->RadTemp + state.dataThermalComforts->AirTemp) / 2.0;
@@ -854,6 +855,7 @@ namespace ThermalComfort {
         switch (people.clothingType) {
         case DataHeatBalance::ClothingType::InsulationSchedule:
             state.dataThermalComforts->CloUnit = people.clothingSched->getCurrentVal();
+            comfort.ClothingValue = state.dataThermalComforts->CloUnit;
             break;
         case DataHeatBalance::ClothingType::DynamicAshrae55:
             comfort.ThermalComfortOpTemp = (state.dataThermalComforts->RadTemp + state.dataThermalComforts->AirTemp) / 2.0;
@@ -1248,6 +1250,7 @@ namespace ThermalComfort {
 
             comfort.ThermalComfortMRT = state.dataThermalComforts->RadTemp;
             comfort.ThermalComfortOpTemp = (state.dataThermalComforts->RadTemp + state.dataThermalComforts->AirTemp) / 2.0;
+            comfort.ClothingValue = state.dataThermalComforts->CloUnit;
             comfort.PierceSET = SET;
         }
     }
@@ -1506,6 +1509,7 @@ namespace ThermalComfort {
             switch (people.clothingType) {
             case DataHeatBalance::ClothingType::InsulationSchedule: {
                 state.dataThermalComforts->CloUnit = people.clothingSched->getCurrentVal();
+                comfort.ClothingValue = state.dataThermalComforts->CloUnit;
             } break;
             case DataHeatBalance::ClothingType::DynamicAshrae55: {
                 comfort.ThermalComfortOpTemp = (state.dataThermalComforts->RadTemp + state.dataThermalComforts->AirTemp) / 2.0;
@@ -2314,8 +2318,6 @@ namespace ThermalComfort {
         Real64 NumberOccupants;
         bool isComfortableWithSummerClothes;
         bool isComfortableWithWinterClothes;
-        int iPeople;
-        int iZone;
         Real64 allowedHours;
         bool showWarning;
 
@@ -2337,7 +2339,7 @@ namespace ThermalComfort {
         }
         // loop through the zones and determine if in simple ashrae 55 comfort regions
         // MJW MRT ToDo: Extend ASHRAE 55 to spaces?
-        for (iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
+        for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
             if (state.dataThermalComforts->ThermalComfortInASH55(iZone).ZoneIsOccupied) {
                 auto &thisZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(iZone);
                 // keep track of occupied hours
@@ -2420,7 +2422,7 @@ namespace ThermalComfort {
             allowedHours = double(state.dataGlobal->NumOfDayInEnvrn) * 24.0 * 0.04;
             // first check if warning should be printed
             showWarning = false;
-            for (iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
+            for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                 if (state.dataThermalComforts->ThermalComfortInASH55(iZone).Enable55Warning) {
                     if (state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotEither > allowedHours) {
                         showWarning = true;
@@ -2439,7 +2441,7 @@ namespace ThermalComfort {
                         state,
                         format("During SizingPeriod Environment [{}]: {}", state.dataEnvrn->EnvironmentStartEnd, state.dataEnvrn->EnvironmentName));
                 }
-                for (iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
+                for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                     if (state.dataThermalComforts->ThermalComfortInASH55(iZone).Enable55Warning) {
                         if (state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotEither > allowedHours) {
                             ShowContinueError(state,
@@ -2451,7 +2453,7 @@ namespace ThermalComfort {
                 }
             }
             // put in predefined reports
-            for (iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
+            for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                 PreDefTableEntry(state,
                                  state.dataOutRptPredefined->pdchSCwinterClothes,
                                  state.dataHeatBal->Zone(iZone).Name,
@@ -2474,7 +2476,7 @@ namespace ThermalComfort {
             // set value for ABUPS report
             state.dataOutRptPredefined->TotalTimeNotSimpleASH55EitherForABUPS = state.dataThermalComforts->TotalAnyZoneTimeNotSimpleASH55Either;
             // reset accumulation for new environment
-            for (iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
+            for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                 state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotWinter = 0.0;
                 state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotSummer = 0.0;
                 state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotEither = 0.0;
@@ -2497,7 +2499,7 @@ namespace ThermalComfort {
                 break;
             }
             // report number of occupied hours per week for LEED report
-            for (iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
+            for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                 PreDefTableEntry(state,
                                  state.dataOutRptPredefined->pdchLeedSutHrsWeek,
                                  state.dataHeatBal->Zone(iZone).Name,

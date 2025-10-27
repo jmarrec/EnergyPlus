@@ -2398,7 +2398,7 @@ namespace StandardRatings {
         }
         Real64 EER(0.0); // Energy Efficiency Rating
 
-        Real64 CD(0.0);               // Degradation Cofficient, (Btu/h)/(Btu/h)
+        Real64 CD(0.0);               // Degradation Coefficient, (Btu/h)/(Btu/h)
         Real64 LF(0.0);               // Fraction "on" time for the last stage at the tested load Point | Load Factor
         Real64 PL = ReducedPLR * 100; // Percent Load
 
@@ -2411,12 +2411,12 @@ namespace StandardRatings {
         // PC - Compressor power at the lowest machine unloading point operating at the applicable part-load Rating condition, W
         // PCD - Condenser Section Power, at the applicable part-load Rating condition, W
         Real64 PIF(0.0); // Indoor Fan Power, W
-        Real64 PCT(0.0); // Control Circuit Power and any auxilary Power, W
+        Real64 PCT(0.0); // Control Circuit Power and any auxiliary Power, W
         Real64 q(0.0);   // Cooling Capacity at the lowest machine unloading point operating at the applicable part-load Rating condition, Btu/h
 
         q = Qlx;
         PIF = FanPowerPerEvapAirFlowRate_2023 * RatedAirVolFlowRate; // Calculated for each Speed
-        PCT = 0;                                                     // Control Circuit Power  and any auxilary Power not in Energy Plus Object.
+        PCT = 0;                                                     // Control Circuit Power  and any auxiliary Power not in Energy Plus Object.
         Real64 PC_plus_PCD = EIR * (RatedTotalCapacity * TotCapTempModFac * TotCapFlowModFac);
         CD = (-0.13 * LF) + 1.13; // DegradationCoeff
         EER = (LF * q) / (LF * (CD * (PC_plus_PCD)) + PIF + PCT);
@@ -2450,7 +2450,7 @@ namespace StandardRatings {
 
             // Calculate the rated cooling capacity for the speed using Gross Total Cooling Capacity
             // and Gross Total Cooling Capacity Fraction of the speed.
-            MSRatedTotCap.push_back(speed.rated_total_capacity); // get the capcity at each speed bymultiplying this fraCTION WITH the gross.
+            MSRatedTotCap.push_back(speed.rated_total_capacity); // get the capacity at each speed bymultiplying this fraCTION WITH the gross.
             MSCCapAirFFlow.push_back(speed.indexCapFFF);
             MSRatedEvaporatorFanPowerPerVolumeFlowRate2023.push_back(speed.rated_evap_fan_power_per_volume_flow_rate_2023);
             // Calculate the rated evap air flow rate for the speed using Rated Evaporator Air flow Rate
@@ -2502,7 +2502,7 @@ namespace StandardRatings {
             MSCCapFTemp.push_back(speed.indexCapFT);
             // Calculate the rated cooling capacity for the speed using Gross Total Cooling Capacity
             // and Gross Total Cooling Capacity Fraction of the speed.
-            MSRatedTotCap.push_back(speed.rated_total_capacity); // get the capcity at each speed bymultiplying this fraCTION WITH the gross.
+            MSRatedTotCap.push_back(speed.rated_total_capacity); // get the capacity at each speed bymultiplying this fraCTION WITH the gross.
             MSCCapAirFFlow.push_back(speed.indexCapFFF);
             MSRatedEvaporatorFanPowerPerVolumeFlowRate2023.push_back(speed.rated_evap_fan_power_per_volume_flow_rate_2023);
             // Calculate the rated evap air flow rate for the speed using Rated Evaporator Air flow Rate
@@ -4176,7 +4176,7 @@ namespace StandardRatings {
 
         Real64 cop_low = q_low / p_low;
         Real64 cop_int = q_int / p_int;
-        Real64 cop_full = q_full / p_full; // About half of the variables in this function are unused
+        // Real64 cop_full = q_full / p_full; // About half of the variables in this function are unused
         // Low Speed
         Real64 cop_int_bin = cop_low + (cop_int - cop_low) / (q_int - q_low) * (bl - q_low); // Equation 11.101 (AHRI-2023)
         q = bl * n;                                                                          // 11.92 --> n is missing in the print ?
@@ -4206,7 +4206,7 @@ namespace StandardRatings {
         Real64 q(0.0);
         Real64 NetTotCoolCapBinned_2023(0.0);
         Real64 TotCoolElecPowerBinned_2023(0.0);
-        Real64 cop_low = q_low / p_low;
+        // Real64 cop_low = q_low / p_low;
         Real64 cop_int = q_int / p_int;
         Real64 cop_full = q_full / p_full;
         Real64 LoadFactorQEnt_2023 = min(1.0, (Q_E_Int - q_low) / (q_full - q_low));
@@ -4315,7 +4315,7 @@ namespace StandardRatings {
         Array1D<Real64> P_B_Full(nsp);                        // Outdoor Unit electric power at B2 test condition (High speed) | p_B_Full
         Array1D<Real64> P_B_Low(nsp);                         // Outdoor Unit electric power at B1 test condition (Low speed) | p_B_Low
         Array1D<Real64> P_F_Low(nsp);                         // Outdoor Unit electric power at F1 test condition | p_F_Low
-        Array1D<Real64> P_E_Int(nsp);                         // Outdoor Unit electric power at Eint (Ev) test conditon | p_E_Int
+        Array1D<Real64> P_E_Int(nsp);                         // Outdoor Unit electric power at Eint (Ev) test condition | p_E_Int
 
         Array1D<Real64> TotCapFlowModFac(nsp);        // Total capacity modifier f(actual flow vs rated flow) for each speed [-]
         Array1D<Real64> EIRFlowModFac(nsp);           // EIR modifier f(actual supply air flow vs rated flow) for each speed [-]
@@ -4336,7 +4336,7 @@ namespace StandardRatings {
         // Real64 constexpr V(1);     // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
         Real64 constexpr V(0.93); // V = 0.93 for Variable Speed Heat Pumps, otherwise V = 1.0
         // part-load factor based on user-input PLF curve and C_D value that accounts for the cyclic degradation, [-]
-        Real64 PartLoadFactorUser_2023(0.0);
+        // Real64 PartLoadFactorUser_2023(0.0);
 
         for (int spnum = 1; spnum <= nsp; ++spnum) {
             FanPowerPerEvapAirFlowRate_2023(spnum) = 0.0;
@@ -4911,9 +4911,6 @@ namespace StandardRatings {
         Real64 q_full(0.0);
         Real64 p_full(0.0);
 
-        Real64 SEER2_USER_C2(0.0);
-        Real64 SEER2_STANDARD_C2(0.0);
-
         q_sum = 0.0;
         e_sum = 0.0;
         NetCoolingCapWeighted2_2023 = 0.0;
@@ -4954,7 +4951,7 @@ namespace StandardRatings {
                                        (OutdoorBinTemperatureSEER[BN] - OutdoorCoilInletAirDryBulbTempTestB2);
 
             Real64 bl = BuildingCoolingLoad_2023;
-            Real64 t = OutdoorBinTemperatureSEER[BN];
+            // Real64 t = OutdoorBinTemperatureSEER[BN];
             Real64 n = CoolFracBinHoursAtOutdoorBinTemp[BN];
             Real64 q(0.0);
             Real64 e(0.0);
@@ -5005,13 +5002,13 @@ namespace StandardRatings {
                 // Prerequisites for Equations 11.83 & 11.84
                 // If the optional c_full and d_full Tests (see Table 7 AHRI-2023) are not conducted, set ccd_full equal to the lower of a) the
                 // ccd_low value calculated as per Equation 11.77 or b) the default value identified in Section 6.1.3.1
-                Real64 ccd_full_c3 = CyclicDegradationCoefficient;
-                Real64 clf_full_c3 = bl / q_full; // Equation 11.85 (AHRI-2023)
+                // Real64 ccd_full_c3 = CyclicDegradationCoefficient;
+                // Real64 clf_full_c3 = bl / q_full; // Equation 11.85 (AHRI-2023)
 
                 // SEER2 USER
-                Real64 PartLoadFactorUser_2023_c3 = Curve::CurveValue(state, PLFFPLRCurveIndex(1), clf_full_c3);
-                Real64 NetTotCoolCapBinned_2023_c3 = clf_full_c3 * q_full * CoolFracBinHoursAtOutdoorBinTemp[BN];
-                Real64 TotCoolElecPowerBinned_2023_c3 = (clf_full_c3 / PartLoadFactorUser_2023_c3) * p_full * CoolFracBinHoursAtOutdoorBinTemp[BN];
+                // Real64 PartLoadFactorUser_2023_c3 = Curve::CurveValue(state, PLFFPLRCurveIndex(1), clf_full_c3);
+                // Real64 NetTotCoolCapBinned_2023_c3 = clf_full_c3 * q_full * CoolFracBinHoursAtOutdoorBinTemp[BN];
+                // Real64 TotCoolElecPowerBinned_2023_c3 = (clf_full_c3 / PartLoadFactorUser_2023_c3) * p_full * CoolFracBinHoursAtOutdoorBinTemp[BN];
 
                 // The code below calculates coil Capacity and Energy for the case when a coil support for 'locked out'
                 // of the low stage on the compressor when outdoor air is very hot.  In this case, the compressor will cycle
@@ -5020,9 +5017,9 @@ namespace StandardRatings {
                 // so these values are not currently used.
 
                 // SEER2 STANDARD
-                Real64 plf_full_c3 = 1 - (ccd_full_c3 * (1 - clf_full_c3)); // Equation 11.86 (AHRI-2023)
-                Real64 q_c3 = clf_full_c3 * q_full * n;                     // Total Bin Capacity, Equation  11.83 (AHRI-2023)
-                Real64 e_c3 = (clf_full_c3 * p_full * n) / plf_full_c3;     // Total Bin Energy, Equation 11.84 (AHRI-2023)
+                // Real64 plf_full_c3 = 1 - (ccd_full_c3 * (1 - clf_full_c3)); // Equation 11.86 (AHRI-2023)
+                // Real64 q_c3 = clf_full_c3 * q_full * n;                     // Total Bin Capacity, Equation  11.83 (AHRI-2023)
+                // Real64 e_c3 = (clf_full_c3 * p_full * n) / plf_full_c3;     // Total Bin Energy, Equation 11.84 (AHRI-2023)
 
                 // SEER2 USER
                 NetTotCoolCapBinned_2023 = NetTotCoolCapBinned_2023_c2;
@@ -5088,10 +5085,10 @@ namespace StandardRatings {
         Array1D<Real64> P_B_Full(nsp);                        // Outdoor Unit electric power at B2 test condition (High speed) | p_B_Full
         Array1D<Real64> P_B_Low(nsp);                         // Outdoor Unit electric power at B1 test condition (Low speed) | p_B_Low
         Array1D<Real64> P_F_Low(nsp);                         // Outdoor Unit electric power at F1 test condition | p_F_Low
-        Array1D<Real64> P_E_Int(nsp);                         // Outdoor Unit electric power at Eint (Ev) test conditon | p_E_Int
+        Array1D<Real64> P_E_Int(nsp);                         // Outdoor Unit electric power at Eint (Ev) test condition | p_E_Int
 
-        Real64 PartLoadFactorUser_2023(
-            0.0); // part-load factor based on user-input PLF curve and C_D value that accounts for the cyclic degradation, [-]
+        // part-load factor based on user-input PLF curve and C_D value that accounts for the cyclic degradation, [-]
+        // Real64 PartLoadFactorUser_2023(0.0);
 
         Real64 NetCoolingCapWeighted_2023(0.0);         // net tot cooling cap weighted by the fraction of the binned cooling hours [W]
         Real64 TotCoolingElecPowerWeighted_2023(0.0);   // net total cooling electric power input weighted by the fraction of the temperature bins
@@ -5298,7 +5295,7 @@ namespace StandardRatings {
                                 p_int, q_int, q_low, bl, n, Q_E_Int(spnum), q_full, P_E_Int(spnum), p_full, p_low);
                             goto SpeedLoop3_exit;
                         } else {
-                            // if we're here then all the speeds (apart from max speed) failed to staisfy the case 2A
+                            // if we're here then all the speeds (apart from max speed) failed to satisfy the case 2A
                             if (bl < q_full) {
                                 // Section 11.2.1.3.2 CASE 2 - Building load can be matched by modulating the compressor speed between low speed &
                                 // full Speed
@@ -5306,7 +5303,7 @@ namespace StandardRatings {
                                     p_int, bl, q_int, n, Q_E_Int(spnum), P_E_Int(spnum), q_low, p_low, q_full, p_full);
                                 goto SpeedLoop3_exit;
                             } else {
-                                // if we're here then all the speeds (apart form max speed ?? ) failed to staisfy the case 2B
+                                // if we're here then all the speeds (apart form max speed ?? ) failed to satisfy the case 2B
                                 // max speed should include in cases 1,2A,2B or not ?? TBD:
 
                                 if (spnum == nsp - 1) {
@@ -5342,7 +5339,7 @@ namespace StandardRatings {
     std::map<std::string, Real64> MultiSpeedDXCoolingCoilStandardRatings(
         EnergyPlusData &state,
         std::string const &DXCoilType,                                  // Type of DX coil for which HSPF is calculated
-        std::string const &DXCoilName,                                  // Type of DX coil for which standard Ratings are calculated
+        [[maybe_unused]] std::string const &DXCoilName,                 // Type of DX coil for which standard Ratings are calculated
         Array1A_int const CapFTempCurveIndex,                           // Index for the capacity as a function of temperature modifier curve
         Array1A_int const CapFFlowCurveIndex,                           // Index for the capacity as a function of flow fraction modifier curve
         Array1A_int const EIRFTempCurveIndex,                           // Index for the EIR as a function of temperature modifier curve
@@ -5519,7 +5516,7 @@ namespace StandardRatings {
     std::map<std::string, Real64> VariableSpeedDXCoolingCoilStandardRatings(
         EnergyPlusData &state,
         std::string const &DXCoilType,                                  // Type of DX coil for which HSPF is calculated
-        std::string const &DXCoilName,                                  // Name of the DX Coil for which Standard Ratings are calculated.
+        [[maybe_unused]] std::string const &DXCoilName,                 // Name of the DX Coil for which Standard Ratings are calculated.
         Array1A_int const CapFTempCurveIndex,                           // Index for the capacity as a function of temperature modifier curve
         Array1A_int const CapFFlowCurveIndex,                           // Index for the capacity as a function of flow fraction modifier curve
         Array1A_int const EIRFTempCurveIndex,                           // Index for the EIR as a function of temperature modifier curve
@@ -5558,7 +5555,7 @@ namespace StandardRatings {
         Real64 EER2(0.0);
 
         Real64 IEER_2022(0.0);
-        Real64 NetCoolingCapRated2022(0.0); // ?? for which speed (NetCoolingCapRatedMaxSpeed2023)
+        // Real64 NetCoolingCapRated2022(0.0); // ?? for which speed (NetCoolingCapRatedMaxSpeed2023)
         Real64 EER_2022(0.0);
 
         std::map<std::string, Real64> StandardRatingsResult;
@@ -5728,7 +5725,7 @@ namespace StandardRatings {
         Real64 HeatingElecPowerHS;                       // outdoor unit electric power input at high speed, [W]
         Real64 HeatingCapacityMax;                       // cooling capacity of Mult-speed DX coil at max speed, [W]
         Real64 HeatingElecPowerMax;                      // outdoor unit electric power input at Max speed, [W]
-        Array1D<Real64> TotHeatCapTestH1High(nsp);       // net heating capacity high speed at H1 test conditon, [W]
+        Array1D<Real64> TotHeatCapTestH1High(nsp);       // net heating capacity high speed at H1 test condition, [W]
 
         // Intermediate values calculated from the inputs in the idf file
         Array1D<Real64> TotCapFlowModFac(nsp); // Total capacity modifier f(actual flow vs rated flow) for each speed [-]
@@ -5777,7 +5774,7 @@ namespace StandardRatings {
             }
         }
 
-        // Proceed withe HSPF value calculation
+        // Proceed with HSPF value calculation
         for (int spnum = 1; spnum <= nsp; ++spnum) {
             TotCapFlowModFac(spnum) = Curve::CurveValue(state, CapFFlowCurveIndex(spnum), AirMassFlowRatioRated);
             {
@@ -6055,7 +6052,7 @@ namespace StandardRatings {
         // Real64 HeatingElecPowerHS;                 // outdoor unit electric power input at high speed, [W]
         // Real64 HeatingCapacityMax;                 // cooling capacity of Mult-speed DX coil at max speed, [W]
         // Real64 HeatingElecPowerMax;                // outdoor unit electric power input at Max speed, [W]
-        // Array1D<Real64> TotHeatCapTestH1High(nsp); // net heating capacity high speed at H1 test conditon, [W]
+        // Array1D<Real64> TotHeatCapTestH1High(nsp); // net heating capacity high speed at H1 test condition, [W]
 
         // Intermediate values calculated from the inputs in the idf file
         Array1D<Real64> TotCapFlowModFac(nsp); // Total capacity modifier f(actual flow vs rated flow) for each speed [-]
@@ -6136,7 +6133,7 @@ namespace StandardRatings {
         Array1D<Real64> P_H3_Full(nsp); // Outdoor Unit electric power at H3 Full test condition (Full speed)
         Array1D<Real64> P_H4_Full(nsp); // Outdoor Unit electric power at H4 Full test condition (Full speed)
 
-        // Proceed withe HSPF2 value calculation
+        // Proceed with HSPF2 value calculation
         for (spnum = 1; spnum <= nsp; ++spnum) {
             TotCapFlowModFac(spnum) = Curve::CurveValue(state, CapFFlowCurveIndex(spnum), AirMassFlowRatioRated);
 
@@ -6386,7 +6383,7 @@ namespace StandardRatings {
                     q_low = Q_H2_Int(spnum) + ((Q_H0_Low(spnum) - Q_H1_Low(spnum)) * ratio);
                     // equation 11.183
                     p_low = P_H2_Int(spnum) + ((P_H0_Low(spnum) - P_H1_Low(spnum)) * ratio);
-                } else if (t < 1.67) {
+                } else { // if (t < 1.67)
                     // for now Q_H2_Int is replaced with Q_H_Int, no equation for the later
                     // equation 11.181
                     q_low = Q_H2_Int(spnum);

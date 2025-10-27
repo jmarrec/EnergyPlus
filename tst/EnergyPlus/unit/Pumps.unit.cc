@@ -670,7 +670,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedPump_MinFlowGreaterThanMax)
     std::string const error_string = delimited_string({
         "   ** Warning ** GetPumpInput: Pump:VariableSpeed=\"SUPPLY INLET PUMP\", Invalid 'Design Minimum Flow Rate'",
         "   **   ~~~   ** Entered Value=[2.00000E-003] is above or too close (equal) to the Design Maximum Flow Rate=[1.00000E-003].",
-        "   **   ~~~   ** Reseting value of 'Design Minimum Flow Rate' to the value of 99% of 'Design Maximum Flow Rate'.",
+        "   **   ~~~   ** Resetting value of 'Design Minimum Flow Rate' to the value of 99% of 'Design Maximum Flow Rate'.",
     });
 
     EXPECT_TRUE(compare_err_stream(error_string, true));
@@ -722,7 +722,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedPump_MinFlowEqualToMax)
     std::string const error_string = delimited_string({
         "   ** Warning ** GetPumpInput: Pump:VariableSpeed=\"SUPPLY INLET PUMP\", Invalid 'Design Minimum Flow Rate'",
         "   **   ~~~   ** Entered Value=[9.95000E-004] is above or too close (equal) to the Design Maximum Flow Rate=[1.00000E-003].",
-        "   **   ~~~   ** Reseting value of 'Design Minimum Flow Rate' to the value of 99% of 'Design Maximum Flow Rate'.",
+        "   **   ~~~   ** Resetting value of 'Design Minimum Flow Rate' to the value of 99% of 'Design Maximum Flow Rate'.",
     });
 
     EXPECT_TRUE(compare_err_stream(error_string, true));
@@ -767,7 +767,7 @@ TEST_F(EnergyPlusFixture, HeaderedVariableSpeedPumpEMSPressureTest)
     ASSERT_TRUE(process_idf(idf_objects));
     state->init_state(*state);
 
-    int thisLoopNum = 1, thisBranchNum = 1, thisCompNum = 1;
+    int thisBranchNum = 1;
     DataPlant::LoopSideLocation thisLoopSideNum = DataPlant::LoopSideLocation::Supply;
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";

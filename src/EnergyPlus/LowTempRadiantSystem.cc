@@ -151,14 +151,14 @@ namespace LowTempRadiantSystem {
     // Standard, run-of-the-mill variables...
 
     // Object Data
-    constexpr std::array<std::string_view, (int)CtrlType::Num> ctrlTypeNames = {"MeanAirTemperature",
-                                                                                "MeanRadiantTemperature",
-                                                                                "OperativeTemperature",
-                                                                                "OutdoorDryBulbTemperature",
-                                                                                "OutdoorWetBulbTemperature",
-                                                                                "SurfaceFaceTemperature",
-                                                                                "SurfaceInteriorTemperature",
-                                                                                "RunningMeanOutdoorDryBulbTemperature"};
+    [[maybe_unused]] constexpr std::array<std::string_view, (int)CtrlType::Num> ctrlTypeNames = {"MeanAirTemperature",
+                                                                                                 "MeanRadiantTemperature",
+                                                                                                 "OperativeTemperature",
+                                                                                                 "OutdoorDryBulbTemperature",
+                                                                                                 "OutdoorWetBulbTemperature",
+                                                                                                 "SurfaceFaceTemperature",
+                                                                                                 "SurfaceInteriorTemperature",
+                                                                                                 "RunningMeanOutdoorDryBulbTemperature"};
     constexpr std::array<std::string_view, (int)CtrlType::Num> ctrlTypeNamesUC = {"MEANAIRTEMPERATURE",
                                                                                   "MEANRADIANTTEMPERATURE",
                                                                                   "OPERATIVETEMPERATURE",
@@ -168,17 +168,17 @@ namespace LowTempRadiantSystem {
                                                                                   "SURFACEINTERIORTEMPERATURE",
                                                                                   "RUNNINGMEANOUTDOORDRYBULBTEMPERATURE"};
 
-    constexpr std::array<std::string_view, (int)SetpointType::Num> setpointTypeNames = {"HalfFlowPower", "ZeroFlowPower"};
+    [[maybe_unused]] constexpr std::array<std::string_view, (int)SetpointType::Num> setpointTypeNames = {"HalfFlowPower", "ZeroFlowPower"};
     constexpr std::array<std::string_view, (int)SetpointType::Num> setpointTypeNamesUC = {"HALFFLOWPOWER", "ZEROFLOWPOWER"};
 
-    constexpr std::array<std::string_view, (int)FluidToSlabHeatTransferType::Num> fluidToSlabHeatTransferTypeNames = {"ConvectionOnly",
-                                                                                                                      "ISOStandard"};
+    [[maybe_unused]] constexpr std::array<std::string_view, (int)FluidToSlabHeatTransferType::Num> fluidToSlabHeatTransferTypeNames = {
+        "ConvectionOnly", "ISOStandard"};
     constexpr std::array<std::string_view, (int)FluidToSlabHeatTransferType::Num> fluidToSlabHeatTransferTypeNamesUC = {"CONVECTIONONLY",
                                                                                                                         "ISOSTANDARD"};
 
     constexpr std::array<std::string_view, (int)CondCtrlType::Num> condCtrlTypeNamesUC = {"OFF", "SIMPLEOFF", "VARIABLEOFF"};
 
-    constexpr std::array<std::string_view, (int)CircuitCalc::Num> circuitCalcNames = {"OnePerSurface", "CalculateFromCircuitLength"};
+    [[maybe_unused]] constexpr std::array<std::string_view, (int)CircuitCalc::Num> circuitCalcNames = {"OnePerSurface", "CalculateFromCircuitLength"};
     constexpr std::array<std::string_view, (int)CircuitCalc::Num> circuitCalcNamesUC = {"ONEPERSURFACE", "CALCULATEFROMCIRCUITLENGTH"};
 
     void SimLowTempRadiantSystem(EnergyPlusData &state,
@@ -1561,7 +1561,7 @@ namespace LowTempRadiantSystem {
             SetupOutputVariable(state,
                                 "Zone Radiant HVAC Operation Mode",
                                 Constant::Units::None,
-                                (int &)thisHydrSys.opMode,
+                                thisHydrSys.opMode,
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 thisHydrSys.Name);
@@ -1736,7 +1736,7 @@ namespace LowTempRadiantSystem {
             SetupOutputVariable(state,
                                 "Zone Radiant HVAC Operation Mode",
                                 Constant::Units::None,
-                                (int &)thisCFloSys.opMode,
+                                thisCFloSys.opMode,
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 thisCFloSys.Name);
@@ -4659,13 +4659,13 @@ namespace LowTempRadiantSystem {
         Real64 Cp;                    // Intermediate calculational variable for specific heat of water
         Real64 DewPointTemp;          // Dew-point temperature based on the zone air conditions
         Real64 EpsMdotCp;             // Epsilon (heat exchanger terminology) times water mass flow rate times water specific heat
-        Real64 LoopTerm;              // Intermeidate calculation variable for determining the water inlet temperature
+        Real64 LoopTerm;              // Intermediate calculation variable for determining the water inlet temperature
         Real64 Mdot;                  // Intermediate calculation variable for mass flow rate in a surface within the radiant system
-        Real64 RecircTerm;            // Intermeidate calculation variable for determining the water inlet temperature
+        Real64 RecircTerm;            // Intermediate calculation variable for determining the water inlet temperature
         Real64 SumFlowFracCkCm;       // Summation of surface flow fraction, Ck, and Cm product for each surface in the system
         Real64 SumFlowFracOneMinusCm; // Summation of surface flow fraction times (1-Cm) for each surface in the radiant system
         Real64 TotalRadSysPower;      // Total heat source/sink to radiant system
-        Real64 TwiCoeff;              // Intermeidate calculation variable for determining the water inlet temperature
+        Real64 TwiCoeff;              // Intermediate calculation variable for determining the water inlet temperature
         Real64 WaterMassFlow;         // Water mass flow rate in the radiant system, kg/s
         Real64 WaterOutletTempCheck;  // Radiant system water outlet temperature (calculated from mixing all outlet streams together)
         Real64 WaterTempIn;           // Temperature of the water entering the radiant system, in C

@@ -771,7 +771,7 @@ namespace EMSManager {
                                                              thisEMSactuator.ComponentTypeName,
                                                              thisEMSactuator.ControlTypeName,
                                                              thisEMSactuator.UniqueIDName));
-                        EnergyPlus::ShowContinueError(state, "You should take note that there is a risk of overwritting.");
+                        EnergyPlus::ShowContinueError(state, "You should take note that there is a risk of overwriting.");
                     }
                     ++state.dataRuntimeLang->EMSActuatorAvailable(found->second).handleCount;
                 }
@@ -938,14 +938,11 @@ namespace EMSManager {
         //  so here we do a final pass and throw the errors that would usually occur during get input.
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        OutputProcessor::VariableType VarType;
+        OutputProcessor::VariableType VarType = OutputProcessor::VariableType::Invalid;
         bool ErrorsFound(false);
-        bool FoundObjectType;
-        bool FoundObjectName;
-        bool FoundActuatorName;
-        int ActuatorVariableNum;
-        int InternVarNum;        // local do loop index
-        int InternalVarAvailNum; // local do loop index
+        bool FoundObjectType = false;
+        bool FoundObjectName = false;
+        int InternalVarAvailNum = 0; // local do loop index
         std::string cCurrentModuleObject;
 
         cCurrentModuleObject = "EnergyManagementSystem:Sensor";
@@ -1073,7 +1070,7 @@ namespace EMSManager {
                                                          actuatorUsed.ComponentTypeName,
                                                          actuatorUsed.ControlTypeName,
                                                          actuatorUsed.UniqueIDName));
-                    EnergyPlus::ShowContinueError(state, "You should take note that there is a risk of overwritting.");
+                    EnergyPlus::ShowContinueError(state, "You should take note that there is a risk of overwriting.");
                 }
                 ++s_lang->EMSActuatorAvailable(found->second).handleCount;
 
@@ -1093,7 +1090,7 @@ namespace EMSManager {
         } // ActuatorNum
 
         cCurrentModuleObject = "EnergyManagementSystem:InternalVariable";
-        for (InternVarNum = 1; InternVarNum <= state.dataRuntimeLang->NumInternalVariablesUsed; ++InternVarNum) {
+        for (int InternVarNum = 1; InternVarNum <= state.dataRuntimeLang->NumInternalVariablesUsed; ++InternVarNum) {
             if (state.dataRuntimeLang->EMSInternalVarsUsed(InternVarNum).CheckedOkay) {
                 continue;
             }
@@ -1633,6 +1630,8 @@ namespace EMSManager {
         if (allocated(state.dataAirLoop->PriAirSysAvailMgr)) {
             int numAirLoops = isize(state.dataAirLoop->PriAirSysAvailMgr);
             for (int Loop = 1; Loop <= numAirLoops; ++Loop) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
                 SetupEMSActuator(state,
                                  "AirLoopHVAC",
                                  state.dataAirSystemsData->PrimaryAirSystems(Loop).Name,
@@ -1640,6 +1639,7 @@ namespace EMSManager {
                                  "[ ]",
                                  state.dataEMSMgr->lDummy2,
                                  (int &)state.dataAirLoop->PriAirSysAvailMgr(Loop).availStatus);
+#pragma GCC diagnostic pop
             }
         }
     }
@@ -2019,7 +2019,7 @@ void SetupEMSActuator(EnergyPlusData &state,
 
     auto &s_lang = state.dataRuntimeLang;
 
-    auto tup = std::make_tuple(std::move(Util::makeUPPER(objType)), std::move(Util::makeUPPER(objName)), std::move(Util::makeUPPER(controlTypeName)));
+    auto tup = std::make_tuple(Util::makeUPPER(objType), Util::makeUPPER(objName), Util::makeUPPER(controlTypeName));
 
     // DataRuntimeLanguage::EMSActuatorKey const key(UpperCaseObjectType, UpperCaseObjectName, UpperCaseActuatorName);
     if (s_lang->EMSActuatorAvailableMap.find(tup) != s_lang->EMSActuatorAvailableMap.end()) {
@@ -2042,8 +2042,8 @@ void SetupEMSActuator(EnergyPlusData &state,
     actuator.UniqueIDName = objName;
     actuator.ControlTypeName = controlTypeName;
     actuator.Units = cUnits;
-    actuator.Actuated = &lEMSActuated; // Pointer assigment
-    actuator.RealValue = &rValue;      // Pointer assigment
+    actuator.Actuated = &lEMSActuated; // Pointer assignment
+    actuator.RealValue = &rValue;      // Pointer assignment
     actuator.PntrVarTypeUsed = DataRuntimeLanguage::PtrDataType::Real;
     s_lang->EMSActuatorAvailableMap.insert_or_assign(std::move(tup), s_lang->numEMSActuatorsAvailable);
 }
@@ -2094,8 +2094,8 @@ void SetupEMSActuator(EnergyPlusData &state,
         actuator.UniqueIDName = cUniqueIDName;
         actuator.ControlTypeName = cControlTypeName;
         actuator.Units = cUnits;
-        actuator.Actuated = &lEMSActuated; // Pointer assigment
-        actuator.IntValue = &iValue;       // Pointer assigment
+        actuator.Actuated = &lEMSActuated; // Pointer assignment
+        actuator.IntValue = &iValue;       // Pointer assignment
         actuator.PntrVarTypeUsed = DataRuntimeLanguage::PtrDataType::Integer;
         s_lang->EMSActuatorAvailableMap.insert_or_assign(std::make_tuple(objType, objName, actuatorName), s_lang->numEMSActuatorsAvailable);
     }
@@ -2147,8 +2147,8 @@ void SetupEMSActuator(EnergyPlusData &state,
         actuator.UniqueIDName = cUniqueIDName;
         actuator.ControlTypeName = cControlTypeName;
         actuator.Units = cUnits;
-        actuator.Actuated = &lEMSActuated; // Pointer assigment
-        actuator.LogValue = &lValue;       // Pointer assigment
+        actuator.Actuated = &lEMSActuated; // Pointer assignment
+        actuator.LogValue = &lValue;       // Pointer assignment
         actuator.PntrVarTypeUsed = DataRuntimeLanguage::PtrDataType::Logical;
         s_lang->EMSActuatorAvailableMap.insert_or_assign(std::make_tuple(objType, objName, actuatorName), s_lang->numEMSActuatorsAvailable);
     }

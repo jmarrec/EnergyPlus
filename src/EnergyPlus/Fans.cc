@@ -106,7 +106,7 @@ void FanBase::simulate(EnergyPlusData &state,
                        ObjexxFCL::Optional<Real64 const> _massFlowRate1,    // Mass flow rate in operating mode 1 [kg/s]
                        ObjexxFCL::Optional<Real64 const> _runTimeFraction1, // Run time fraction in operating mode 1
                        ObjexxFCL::Optional<Real64 const> _massFlowRate2,    // Mass flow rate in operating mode 2 [kg/s]
-                       ObjexxFCL::Optional<Real64 const> _runTimeFraction2, // Run time fraction in opearating mode 2
+                       ObjexxFCL::Optional<Real64 const> _runTimeFraction2, // Run time fraction in operating mode 2
                        ObjexxFCL::Optional<Real64 const> _pressureRise2     // Pressure difference for operating mode 2
 )
 {
@@ -1350,7 +1350,9 @@ void FanComponent::set_size(EnergyPlusData &state)
     state.dataSize->DataAutosizable = maxAirFlowRateIsAutosized;
     state.dataSize->DataEMSOverrideON = EMSMaxAirFlowRateOverrideOn;
     state.dataSize->DataEMSOverride = EMSMaxAirFlowRateValue;
-    airLoopNum = state.dataSize->CurSysNum;
+    if (state.dataSize->CurSysNum > 0) {
+        airLoopNum = state.dataSize->CurSysNum;
+    }
 
     bool errorsFound = false;
     SystemAirFlowSizer sizerSystemAirFlow;
@@ -1577,6 +1579,15 @@ void FanComponent::set_size(EnergyPlusData &state)
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanMotorEff, Name, motorEff);
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanMotorHeatToZoneFrac, Name, 0.0);
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanMotorHeatZone, Name, "N/A");
+    if ((type == HVAC::FanType::VAV) || (type == HVAC::FanType::ComponentModel)) {
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchFanSpeedCtrlMethod, Name, speedControlNames[(int)SpeedControl::Continuous]);
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanNumSpeeds, Name, "N/A");
+    } else {
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchFanSpeedCtrlMethod, Name, speedControlNames[(int)SpeedControl::Discrete]);
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanNumSpeeds, Name, 1);
+    }
     if (airLoopNum == 0) {
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanAirLoopName, Name, "N/A");
     } else if (airLoopNum <= state.dataHVACGlobal->NumPrimaryAirSys) {
@@ -2591,7 +2602,9 @@ void FanSystem::set_size(EnergyPlusData &state)
     state.dataSize->DataAutosizable = true;
     state.dataSize->DataEMSOverrideON = EMSMaxAirFlowRateOverrideOn;
     state.dataSize->DataEMSOverride = EMSMaxAirFlowRateValue;
-    airLoopNum = state.dataSize->CurSysNum;
+    if (state.dataSize->CurSysNum > 0) {
+        airLoopNum = state.dataSize->CurSysNum;
+    }
 
     bool ErrorsFound = false;
     SystemAirFlowSizer sizerSystemAirFlow;
@@ -2679,6 +2692,16 @@ void FanSystem::set_size(EnergyPlusData &state)
                                              state.dataOutRptPredefined->pdchFanMotorHeatZone,
                                              Name,
                                              heatLossDest == HeatLossDest::Zone ? state.dataHeatBal->Zone(zoneNum).Name : "N/A");
+    if (speedControl != SpeedControl::Invalid) {
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchFanSpeedCtrlMethod, Name, speedControlNames[(int)speedControl]);
+        if (speedControl == SpeedControl::Discrete) {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanNumSpeeds, Name, numSpeeds);
+        } else {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanNumSpeeds, Name, "N/A");
+        }
+    }
+
     if (airLoopNum == 0) {
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanAirLoopName, Name, "N/A");
     } else if (airLoopNum <= state.dataHVACGlobal->NumPrimaryAirSys) {

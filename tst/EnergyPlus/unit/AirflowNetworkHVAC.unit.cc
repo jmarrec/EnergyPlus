@@ -6095,6 +6095,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistWAHPCoils)
     std::string const idf_objects = delimited_string({
         "Coil:Cooling:WaterToAirHeatPump:EquationFit,",
         "Super Coil,   !- Name",
+        ",             !- Availability Schedule Name",
         "GSHP Clg Inlet,          !- Water Inlet Node Name",
         "GSHP Clg Outlet,         !- Water Outlet Node Name",
         "Cooling Coil Air Inlet Node_unit1,  !- Air Inlet Node Name",
@@ -6118,6 +6119,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistWAHPCoils)
         "60;                      !- Fan Delay Time {s}",
         "Coil:Heating:WaterToAirHeatPump:EquationFit,",
         "Super Heating Coil,  !- Name",
+        ",                    !- Availability Schedule Name",
         "GSHP Htg Inlet,          !- Water Inlet Node Name",
         "GSHP Htg Outlet,         !- Water Outlet Node Name",
         "Heating Coil Air Inlet Node_unit1,  !- Air Inlet Node Name",
@@ -6161,6 +6163,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistWAHPVSCoils)
     std::string const idf_objects = delimited_string({
         "  Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit,",
         "    Super Coil,  !- Name",
+        "    ,            !- Availability Schedule Name",
         "    Lobby_ZN_1_FLR_2 WSHP Cooling Source Side Inlet Node,  !- Water-to-Refrigerant HX Water Inlet Node Name",
         "    Lobby_ZN_1_FLR_2 WSHP Cooling Source Side Outlet Node,  !- Water-to-Refrigerant HX Water Outlet Node Name",
         "    Lobby_ZN_1_FLR_2 WSHP Cooling Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
@@ -6296,6 +6299,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistWAHPVSCoils)
         "    wasteHeat VS Temp1 Test;                        !- Speed 9 Waste Heat Function of Temperature Curve Name",
         "  Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit,",
         "    Super Heating Coil,  !- Name",
+        "    ,                    !- Availability Schedule Name",
         "    Lobby_ZN_1_FLR_2 WSHP Heating Source Side Inlet Node,  !- Water-to-Refrigerant HX Water Inlet Node Name",
         "    Lobby_ZN_1_FLR_2 WSHP Heating Source Side Outlet Node,  !- Water-to-Refrigerant HX Water Outlet Node Name",
         "    Lobby_ZN_1_FLR_2 WSHP Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
@@ -6444,6 +6448,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistCoils)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    Super Coil,              !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Node_1,                  !- Indoor Air Inlet Node Name",
         "    Node_2,                  !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
@@ -6483,6 +6488,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistCoils)
         "",
         "  Coil:Heating:DX:VariableSpeed,",
         "    Super Heating Coil,      !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Node_1,                  !- Indoor Air Inlet Node Name",
         "    Node_2,                  !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
@@ -6531,7 +6537,13 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ValidateDistCoils)
     state->afn->DisSysCompCoilData(2).EPlusType = "COIL:HEATING:DX:VARIABLESPEED";
     state->afn->DisSysCompCoilData(2).name = "Super Heating Coil";
 
+    state->dataVariableSpeedCoils->GetCoilsInputFlag = false;
+    state->dataVariableSpeedCoils->VarSpeedCoil.allocate(2);
+    state->dataVariableSpeedCoils->VarSpeedCoil(1).Name = "Super Coil";
+    state->dataVariableSpeedCoils->VarSpeedCoil(2).Name = "Super Heating Coil";
+
     state->afn->validate_distribution();
+    compare_err_stream("");
 }
 
 // Missing an AirflowNetwork:Distribution:Node for the Zone Air Node
@@ -6726,7 +6738,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_DuplicatedNodeNameTest)
         "    4;                       !- Number of Timesteps per Hour",
 
         "  Site:Location,",
-        "    Pheonix,                 !- Name",
+        "    Phoenix,                 !- Name",
         "    33.43,                   !- Latitude {deg}",
         "    -112.02,                 !- Longitude {deg}",
         "    -7.0,                    !- Time Zone {hr}",
@@ -11068,7 +11080,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestZoneVentingAirBoundary)
          "   ** Warning ** AirflowNetwork::Solver::get_input: AirflowNetwork:MultiZone:Surface=\"AIR WALL AULA 2\" is an air boundary surface.",
          "   **   ~~~   ** Ventilation Control Mode = TEMPERATURE is not valid. Resetting to Constant.",
          "   ** Warning ** AirflowNetwork::Solver::get_input: : AirflowNetwork:MultiZone:Surface = AIR WALL AULA 2",
-         "   **   ~~~   ** Venting Availbility Schedule is not empty.",
+         "   **   ~~~   ** Venting Availability Schedule is not empty.",
          "   **   ~~~   ** Venting is always available for air-boundary surfaces."});
     EXPECT_TRUE(compare_err_stream(expectedErrString, true));
 
@@ -20287,7 +20299,6 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ZoneOrderTest)
     state->afn->AirflowNetworkNodeData(3).EPlusNodeNum = 0;
 
     // Check that the validation fails if the AFN exhaust fan is not well setup
-    int exhaustFanInletNodeIndex = state->afn->MultizoneCompExhaustFanData(1).InletNode;
     state->afn->MultizoneCompExhaustFanData(1).InletNode = 6;
     state->afn->ValidateExhaustFanInputOneTimeFlag = true;
     EXPECT_THROW(state->afn->validate_exhaust_fan_input(), std::runtime_error);
@@ -20380,7 +20391,6 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestZoneEqpSupportZoneWindowAC)
 
     // Create Fans
     Real64 supplyFlowRate = 0.005;
-    Real64 exhaustFlowRate = 0.005;
 
     auto *fan1 = new Fans::FanComponent;
     fan1->Name = "SupplyFan";
@@ -20516,7 +20526,6 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestZoneEqpSupportZoneVRF)
 
     // Create Fans
     Real64 supplyFlowRate = 0.005;
-    Real64 exhaustFlowRate = 0.005;
 
     auto *fan1 = new Fans::FanComponent;
     fan1->Name = "SupplyFan";
@@ -20667,7 +20676,6 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestZoneEqpSupportZonePTHP)
 
     // Create Fans
     Real64 supplyFlowRate = 0.005;
-    Real64 exhaustFlowRate = 0.005;
 
     auto *fan1 = new Fans::FanComponent;
     fan1->Name = "SupplyFan";
@@ -20709,9 +20717,9 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestZoneEqpSupportZonePTHP)
     thisSys.m_sysType = UnitarySystems::UnitarySys::SysType::PackagedWSHP;
     state->dataUnitarySystems->unitarySys.push_back(thisSys);
     state->dataUnitarySystems->unitarySys[0].Name = "ZonalWAHP";
-    state->dataUnitarySystems->unitarySys[0].m_CoolOutAirVolFlow == 0;
-    state->dataUnitarySystems->unitarySys[0].m_HeatOutAirVolFlow == 0;
-    state->dataUnitarySystems->unitarySys[0].m_NoCoolHeatOutAirVolFlow == 0;
+    state->dataUnitarySystems->unitarySys[0].m_CoolOutAirVolFlow = 0;
+    state->dataUnitarySystems->unitarySys[0].m_HeatOutAirVolFlow = 0;
+    state->dataUnitarySystems->unitarySys[0].m_NoCoolHeatOutAirVolFlow = 0;
     state->dataUnitarySystems->unitarySys[0].m_FanIndex = 1;
     state->dataUnitarySystems->unitarySys[0].AirInNode = 3;
     state->dataUnitarySystems->unitarySys[0].m_OAMixerNodes[0] = 4;
