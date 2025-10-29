@@ -4938,7 +4938,6 @@ Curve:Biquadratic,
     // check that heating coil outlet node is at set point
     EXPECT_NEAR(state->dataLoopNodes->Node(2).Temp, state->dataLoopNodes->Node(2).TempSetPoint, 0.001);
     EXPECT_NEAR(state->dataLoopNodes->Node(2).Temp, 16.0, 0.001);
-
 }
 
 TEST_F(ZoneUnitarySysTest, UnitarySystemModel_WaterCoilSPControl)
