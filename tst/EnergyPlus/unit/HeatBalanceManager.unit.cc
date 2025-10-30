@@ -2186,14 +2186,14 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
     std::string const idf_objects = delimited_string({
         "Version,",
         "  25.1;                                   !- Version Identifier",
-        "",
+
         "SimulationControl,",
         "  No,                                     !- Do Zone Sizing Calculation",
         "  No,                                     !- Do System Sizing Calculation",
         "  No,                                     !- Do Plant Sizing Calculation",
         "  Yes,                                    !- Run Simulation for Sizing Periods",
         "  No;                                     !- Run Simulation for Weather File Run Periods",
-        "",
+
         "SizingPeriod:DesignDay,",
         "  SunnyWinterDay,                         !- Name",
         "  1,                                      !- Month",
@@ -2221,24 +2221,24 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  ,                                       !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}",
         "  ,                                       !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}",
         "  1.00;                                   !- Sky Clearness",
-        "",
+
         "Site:Location,",
         "  Denver Stapleton Intl Arpt CO USA,      !- Name",
         "  39.77,                                  !- Latitude {deg}",
         "  -104.87,                                !- Longitude {deg}",
         "  -7.00,                                  !- Time Zone {hr}",
         "  1611.00;                                !- Elevation {m}",
-        "",
+
         "HeatBalanceAlgorithm,",
         "  ConductionTransferFunction,             !- Algorithm",
         "  200;                                    !- Surface Temperature Upper Limit {C}",
-        "",
+
         "HeatBalanceSettings:ConductionFiniteDifference,",
         "  ,                                       !- Difference Scheme",
         "  3.0,                                    !- Space Discretization Constant",
         "  1.0,                                    !- Relaxation Factor",
         "  0.002;                                  !- Inside Face Surface Temperature Convergence Criteria",
-        "",
+
         "Zone,",
         "  Zone1,                                  !- Name",
         "  ,                                       !- Direction of Relative North {deg}",
@@ -2253,7 +2253,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  ,                                       !- Zone Inside Convection Algorithm",
         "  ,                                       !- Zone Outside Convection Algorithm",
         "  Yes;                                    !- Part of Total Floor Area",
-        "",
+
         "BuildingSurface:Detailed,",
         "  Surface1,                               !- Name",
         "  Wall,                                   !- Surface Type",
@@ -2270,7 +2270,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  0, 3, 0,                                !- X,Y,Z Vertex 2 {m}",
         "  0, 0, 0,                                !- X,Y,Z Vertex 3 {m}",
         "  0, 0, 3;                                !- X,Y,Z Vertex 4 {m}",
-        "",
+
         "Construction,",
         "  WallPcmInternal,                        !- Name",
         "  PLA+,                                   !- Layer 1",
@@ -2280,7 +2280,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  PLA+,                                   !- Layer 5",
         "  AirGap,                                 !- Layer 6",
         "  Brick;                                  !- Layer 7",
-        "",
+
         "Construction,",
         "  WallPcmExternal,                        !- Name",
         "  PLA+,                                   !- Layer 1",
@@ -2290,7 +2290,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  PLA+,                                   !- Layer 5",
         "  AirGap,                                 !- Layer 6",
         "  Brick;                                  !- Layer 7",
-        "",
+
         "Material,",
         "  PLA+,                                   !- Name",
         "  MediumRough,                            !- Roughness",
@@ -2301,7 +2301,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  0.9,                                    !- Thermal Absorptance",
         "  0.7,                                    !- Solar Absorptance",
         "  0.7;                                    !- Visible Absorptance",
-        "",
+
         "Material,",
         "  EPSInsulation,                          !- Name",
         "  MediumRough,                            !- Roughness",
@@ -2312,7 +2312,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  0.9,                                    !- Thermal Absorptance",
         "  0.7,                                    !- Solar Absorptance",
         "  0.7;                                    !- Visible Absorptance",
-        "",
+
         "Material:NoMass,",
         "  AirGap,                                 !- Name",
         "  Smooth,                                 !- Roughness",
@@ -2320,7 +2320,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  0.9,                                    !- Thermal Absorptance",
         "  0.7,                                    !- Solar Absorptance",
         "  0.7;                                    !- Visible Absorptance",
-        "",
+
         "Material,",
         "  Brick,                                  !- Name",
         "  MediumRough,                            !- Roughness",
@@ -2331,7 +2331,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  0.9,                                    !- Thermal Absorptance",
         "  0.7,                                    !- Solar Absorptance",
         "  0.7;                                    !- Visible Absorptance",
-        "",
+
         "Material,",
         "  PCM,                                    !- Name",
         "  MediumRough,                            !- Roughness",
@@ -2342,7 +2342,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  0.9,                                    !- Thermal Absorptance",
         "  0.7,                                    !- Solar Absorptance",
         "  0.7;                                    !- Visible Absorptance",
-        "",
+
         "MaterialProperty:PhaseChangeHysteresis,",
         "  PCM,                                    !- Name",
         "  190000,                                 !- Latent Heat of Fusion {J/kg}",
@@ -2358,36 +2358,36 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
         "  1.5,                                    !- High Temperature Difference of Freezing Curve {deltaC}",
         "  43.0,                                   !- Peak Freezing Temperature {C}",
         "  1.5;                                    !- Low Temperature Difference of Freezing Curve {deltaC}",
-        "",
+
         "SurfaceProperty:HeatTransferAlgorithm:Construction,",
         "  WallPcmInternal Heat Transfer,          !- Name",
         "  ConductionFiniteDifference,             !- Algorithm",
         "  WallPcmInternal;                        !- Construction Name",
-        "",
+
         "SurfaceProperty:HeatTransferAlgorithm:Construction,",
         "  WallPcmExternal Heat Transfer,          !- Name",
         "  ConductionFiniteDifference,             !- Algorithm",
         "  WallPcmExternal;                        !- Construction Name",
-        "",
+
         "EnergyManagementSystem:ConstructionIndexVariable,",
         "  VarWallPcmInternal,                     !- Name",
         "  WallPcmInternal;                        !- Construction Object Name",
-        "",
+
         "EnergyManagementSystem:ConstructionIndexVariable,",
         "  VarWallPcmExternal,                     !- Name",
         "  WallPcmExternal;                        !- Construction Object Name",
-        "",
+
         "EnergyManagementSystem:Actuator,",
         "  Actuator1,                              !- Name",
         "  Surface1,                               !- Actuated Component Unique Name",
         "  Surface,                                !- Actuated Component Type",
         "  Construction State;                     !- Actuated Component Control Type",
-        "",
+
         "EnergyManagementSystem:ProgramCallingManager,",
         "  Manager1,                               !- Name",
         "  BeginNewEnvironment,                    !- Calling Point",
         "  Program1;                               !- Program Name",
-        "",
+
         "EnergyManagementSystem:Program,",
         "  Program1,                               !- Name",
         "  SET Actuator1 = VarWallPcmExternal;     !- Program Line",
