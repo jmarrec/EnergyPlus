@@ -2461,6 +2461,10 @@ Conditionally turn on or off ExtShd file output.
 
 Conditionally turn on or off Tarcog file output.
 
+\paragraph{Field: Output Plant Component Sizing}\label{field-output-plant-component-sizing}
+
+Conditionally turn on or off psz file output.
+
 An example of this object follows.
 
 \begin{lstlisting}
@@ -2495,7 +2499,8 @@ OutputControl:Files,
   No , ! WRL
   No , ! Screen
   No , ! ExtShd
-  No ; ! Tarcog
+  No , ! Tarcog
+  No ; ! Output Plant Component Sizing
 \end{lstlisting}
 
 \subsection{OutputControl:Timestamp}\label{outputcontrol_timestamp}
