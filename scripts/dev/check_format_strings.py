@@ -434,8 +434,9 @@ if __name__ == "__main__":
         del sys.argv[1:]
         unittest.main(exit=False, verbosity=0)
 
-    eplus_root = Path("/home/mitchute/eplus1/src/EnergyPlus").resolve()
-    tst_root = Path("/home/mitchute/eplus1/tst/EnergyPlus/unit").resolve()
-    files = get_sorted_file_list(eplus_root)
-    files.extend(get_sorted_file_list(tst_root))
+    root_path = Path(__file__).parent.parent.parent
+    src_path = root_path / "src" / "EnergyPlus"
+    files = get_sorted_file_list(src_path)
+    tst_path = root_path / "tst" / "EnergyPlus"
+    files.extend(get_sorted_file_list(tst_path))
     sys.exit(check_format_statements(files))
