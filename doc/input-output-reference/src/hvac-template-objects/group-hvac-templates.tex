@@ -2238,9 +2238,8 @@ HVACTemplate:Zone:VAV,
   ,                           !- Return Plenum Name
   None,                       !- Baseboard Heating Type
   ,                           !- Baseboard Heating Availability Schedule Name
-  autosize;                   !- Baseboard Heating Capacity {W}
-
-SystemSupplyAirTemperature,   !- Zone Cooling Design Supply Air . . . Input Method
+  autosize,                   !- Baseboard Heating Capacity {W}
+  SystemSupplyAirTemperature, !- Zone Cooling Design Supply Air . . . Input Method
   ,                           !- Zone Cooling Design Supply Air Temperature {C]
   ,                           !- Zone Cooling Design Supply Air Temperature Difference {deltaC]
   SupplyAirTemperature,       !- Zone Heating Design Supply Air Temperature Input Method
@@ -2472,9 +2471,8 @@ HVACTemplate:Zone:VAV:FanPowered,
   ,                           !- Return Plenum Name
   None,                       !- Baseboard Heating Type
   ,                           !- Baseboard Heating Availability Schedule Name
-  autosize;                   !- Baseboard Heating Capacity {W}
-
-SystemSupplyAirTemperature,   !- Zone Cooling Design Supply Air . . . Input Method
+  autosize,                   !- Baseboard Heating Capacity {W}
+  SystemSupplyAirTemperature, !- Zone Cooling Design Supply Air . . . Input Method
   ,                           !- Zone Cooling Design Supply Air Temperature {C]
   ,                           !- Zone Cooling Design Supply Air Temperature Difference {deltaC]
   SupplyAirTemperature,       !- Zone Heating Design Supply Air Temperature Input Method
@@ -2653,9 +2651,8 @@ HVACTemplate:Zone:VAV:HeatAndCool,
   ,                           !- Return Plenum Name
   None,                       !- Baseboard Heating Type
   ,                           !- Baseboard Heating Availability Schedule Name
-  autosize;                   !- Baseboard Heating Capacity {W}
-
-SystemSupplyAirTemperature,   !- Zone Cooling Design Supply Air . . . Input Method
+  autosize,                   !- Baseboard Heating Capacity {W}
+  SystemSupplyAirTemperature, !- Zone Cooling Design Supply Air . . . Input Method
   ,                           !- Zone Cooling Design Supply Air Temperature {C]
   ,                           !- Zone Cooling Design Supply Air Temperature Difference {deltaC]
   SupplyAirTemperature,       !- Zone Heating Design Supply Air Temperature Input Method
@@ -2826,9 +2823,8 @@ HVACTemplate:Zone:ConstantVolume,
   ,                           !- Return Plenum Name
   None,                       !- Baseboard Heating Type
   ,                           !- Baseboard Heating Availability Schedule Name
-  autosize;                   !- Baseboard Heating Capacity {W}
-
-SystemSupplyAirTemperature,   !- Zone Cooling Design Supply Air . . . Input Method
+  autosize,                   !- Baseboard Heating Capacity {W}
+  SystemSupplyAirTemperature, !- Zone Cooling Design Supply Air . . . Input Method
   12.8,                       !- Zone Cooling Design Supply Air Temperature {C]
   11.11,                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC]
   SupplyAirTemperature,       !- Zone Heating Design Supply Air Temperature Input Method
@@ -2988,9 +2984,8 @@ HVACTemplate:Zone:DualDuct,
   ,                           !- Return Plenum Name
   None,                       !- Baseboard Heating Type
   ,                           !- Baseboard Heating Availability Schedule Name
-  autosize;                   !- Baseboard Heating Capacity {W}
-
-SystemSupplyAirTemperature,   !- Zone Cooling Design Supply Air . . . Input Method
+  autosize,                   !- Baseboard Heating Capacity {W}
+  SystemSupplyAirTemperature, !- Zone Cooling Design Supply Air . . . Input Method
   12.8,                       !- Zone Cooling Design Supply Air Temperature {C]
   11.11,                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC]
   SystemSupplyAirTemperature, !- Zone Heating Design Supply Air . . . Input Method
@@ -6671,9 +6666,8 @@ HVACTemplate:System:DualDuct,
   0.7,                        !- Return Fan Total Efficiency
   600,                        !- Return Fan Delta Pressure {Pa}
   0.9,                        !- Return Fan Motor Efficiency
-  1.0;                        !- Return Fan Motor in Air Stream Fraction
-
-InletVaneDampers;             !- Return Fan Part-Load Power Coefficients
+  1.0,                        !- Return Fan Motor in Air Stream Fraction
+  InletVaneDampers;           !- Return Fan Part-Load Power Coefficients
 \end{lstlisting}
 
 \subsection{HVACTemplate:System:DedicatedOutdoorAir}\label{hvactemplatesystemdedicatedoutdoorair}

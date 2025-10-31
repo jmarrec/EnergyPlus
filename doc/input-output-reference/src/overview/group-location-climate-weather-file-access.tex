@@ -1449,9 +1449,8 @@ Site:GroundDomain:Slab,
   30,                         !- Soil Moisture Content Volume Fraction
   50,                         !- Soil Moisture Content Volume Fraction at Saturation
   Site:GroundTemperature:Undisturbed:KusudaAchenbach,  !- Type of Undisturbed Ground Temperature Object
-  KATemps;                    !- Name of Undisturbed Ground Temperature Object
-
-1,                            !- Evapotranspiration Ground Cover Parameter
+  KATemps,                    !- Name of Undisturbed Ground Temperature Object
+  1,                          !- Evapotranspiration Ground Cover Parameter
   GroundCoupledOSCM,          !- Name of Floor Boundary Condition Model
   OnGrade,                    !- Slab Location (InGrade/OnGrade)
   ,                           !- Slab Material Name
@@ -1519,9 +1518,8 @@ Site:GroundDomain:Basement,
   Yes,                        !- Basement Wall Vertical Insulation Present(Yes/No)
   Basement Insulation,        !- Basement Wall Vertical Insulation Material Name
   2.5,                        !- Vertical insulation depth from surface (m)
-  Hourly;                     !- Domain Update interval. (Timestep, Hourly)
-
-4;                            !- Mesh Density Parameter
+  Hourly,                     !- Domain Update interval. (Timestep, Hourly)
+  4;                          !- Mesh Density Parameter
 \end{lstlisting}
 
 \subsubsection{Inputs}\label{inputs-17-004}

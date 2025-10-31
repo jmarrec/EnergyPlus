@@ -832,9 +832,8 @@ AirflowNetwork:MultiZone:Surface,
   Zn001:Wall001:Win002,       !- Name of Associated Heat Transfer Surface
   WiOpen2,                    !- Leakage Component Name
   WFacade,                    !- External Node Name
-  0.5;                        !- Window/Door Opening Factor, or Crack Factor {dimensionless}
-
-Temperature,                  !- Ventilation Control Mode
+  0.5,                        !- Window/Door Opening Factor, or Crack Factor {dimensionless}
+  Temperature,                !- Ventilation Control Mode
   WindowVentSched,            !- Vent Temperature Schedule Name
   0.3,                        !- Limit Value on Multiplier for Modulating Venting Open Factor
                               !- {dimensionless}
@@ -1316,9 +1315,8 @@ An IDF example is shown below:
 AirflowNetwork:MultiZone:Component:ZoneExhaustFan,
   Zone3 Exhaust Fan,          !- Name
   0.01,                       !- Air Mass Flow Coefficient When the Zone Exhaust Fan is Off at Reference Conditions {kg/s}
-  0.667;                      !- Air Mass Flow Exponent When the Zone Exhaust Fan is Off{dimensionless}
-
-ReferenceCrackConditions;     !- Reference Crack Conditions
+  0.667,                      !- Air Mass Flow Exponent When the Zone Exhaust Fan is Off{dimensionless}
+  ReferenceCrackConditions;   !- Reference Crack Conditions
 \end{lstlisting}
 
 \subsection{AirflowNetwork:MultiZone:ExternalNode}\label{airflownetworkmultizoneexternalnode}
