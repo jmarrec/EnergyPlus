@@ -4891,7 +4891,7 @@ namespace AirflowNetwork {
                     count += 1;
                     auto const &fields = instance.value();
                     AirflowNetworkLinkageData(count).Name = Util::makeUPPER(instance.key());
-                    m_state.dataInputProcessing->inputProcessor->markObjectAsUsed(CurrentModuleObject, AirflowNetworkLinkageData(count).Name);
+                    m_state.dataInputProcessing->inputProcessor->markObjectAsUsed(CurrentModuleObject, instance.key());
                     AirflowNetworkLinkageData(count).NodeNames[0] = Util::makeUPPER(fields.at("node_1_name").get<std::string>());
                     AirflowNetworkLinkageData(count).NodeHeights[0] = 0.0;
                     AirflowNetworkLinkageData(count).NodeNames[1] = Util::makeUPPER(fields.at("node_2_name").get<std::string>());
