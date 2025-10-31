@@ -219,6 +219,7 @@ namespace AirflowNetwork {
         bool allow_unsupported_zone_equipment = false; // Allow unsupported zone equipment
         bool autosize_ducts = false;                   // True: perform duct autosize, otherwise no duct autosize
         DuctSizing ductSizing;
+        bool DuctLoss = false; // Duct loss calculation without AFN flag
     };
 
     struct Solver : BaseGlobalStruct
@@ -400,7 +401,7 @@ namespace AirflowNetwork {
         EPVector<AirflowNetwork::AirflowNetworkNodeReportData> nodeReport;
         EPVector<AirflowNetwork::AirflowNetworkLinkReportData> linkReport1;
 
-        // used to be statics
+        // used to be statistics
         Array1D<bool> onceZoneFlag;
         Array1D<bool> onceSurfFlag;
         bool onetime = false;
@@ -430,7 +431,7 @@ namespace AirflowNetwork {
         Array1D<Real64> PS;
         Array1D<Real64> PW;
 
-        // Common block CONTRL
+        // Common block CONTROL
         Real64 PB = 0.0;
 
         // Common block ZONL

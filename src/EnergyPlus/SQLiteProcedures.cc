@@ -119,29 +119,20 @@ bool ParseSQLiteInput(EnergyPlusData &state, bool &writeOutputToSQLite, bool &wr
                 writeOutputToSQLite = true;
             }
         }
+        auto const &sql_ort = state.dataOutRptTab;
         { // "unit_conversion_for_tabular_data"
             std::string tabularDataUnitConversion = find_input(fields, "unit_conversion_for_tabular_data");
-            auto const &sql_ort = state.dataOutRptTab;
-
-            if ("UseOutputControlTableStyles" == tabularDataUnitConversion) {
-                // Jan 2021 Note: Since here we do not know weather sql_ort->unitsStyle has been processed or not,
-                // the value "NotFound" is used for the option "UseOutputControlTableStyles" at this point;
-                // This will be updated again and got concretely assigned first thing in OutputReportTabular::WriteTabularReports().
-                sql_ort->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::NotFound;
-            } else if ("None" == tabularDataUnitConversion) {
-                sql_ort->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::None;
-            } else if ("JtoKWH" == tabularDataUnitConversion) {
-                sql_ort->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::JtoKWH;
-            } else if ("JtoMJ" == tabularDataUnitConversion) {
-                sql_ort->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::JtoMJ;
-            } else if ("JtoGJ" == tabularDataUnitConversion) {
-                sql_ort->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::JtoGJ;
-            } else if ("InchPound" == tabularDataUnitConversion) {
-                sql_ort->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
-            } else if ("InchPoundExceptElectricity" == tabularDataUnitConversion) {
-                sql_ort->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPoundExceptElectricity;
-            }
+            // Jan 2021 Note: Since here we do not know weather ort->unitsStyle_Tabular has been processed or not,
+            // the value "NotFound" is used for the option "UseOutputControlTableStyles" at this point;
+            // This will be updated again and got concretely assigned first thing in OutputReportTabular::WriteTabularReports().
+            sql_ort->unitsStyle_SQLite = OutputReportTabular::SetUnitsStyleFromString(tabularDataUnitConversion);
         }
+        sql_ort->formatReals_SQLite = true;
+        if (auto found = fields.find("format_numeric_values_for_tabular_data"); found != fields.end()) {
+            std::string formatNumerics = Util::makeUPPER(found.value().get<std::string>());
+            sql_ort->formatReals_SQLite = (getYesNoValue(formatNumerics) == BooleanSwitch::Yes);
+        }
+
         return true;
     }
     return false;

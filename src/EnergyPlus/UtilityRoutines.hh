@@ -287,6 +287,15 @@ void ShowSevereEmptyField(EnergyPlusData &state,
                           std::string_view depFieldName = {},
                           std::string_view depFieldValue = {});
 void ShowSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
+/// <summary>
+/// Similar to ShowSevereItemNotFound, except for the severe error added to the list contains the information about
+/// what item is missing.
+/// </summary>
+/// <param name="state">EnergyPus state, used for tracking the severe error</param>
+/// <param name="eoh">Error object header, used to get the routineName</param>
+/// <param name="fieldName">Name of the unmatched field</param>
+/// <param name="fieldValue">Value of the unmatched field</param>
+void ShowDetailedSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
 void ShowSevereItemNotFoundAudit(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
 
 void ShowSevereDuplicateAssignment(
@@ -802,7 +811,7 @@ namespace Util {
                                        bool &errorFound);                // set to true if an error is found
 
     // Two structs for case insensitive containers.
-    // Eg: for unordered_map, we need to have a case insenstive hasher and a case insensitive comparator
+    // Eg: for unordered_map, we need to have a case insensitive hasher and a case insensitive comparator
     // (The default allocator for unordered_map is fine)
     // For map, you'd only need the comparator
     struct case_insensitive_hasher

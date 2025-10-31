@@ -127,6 +127,7 @@ namespace Furnaces {
         int ReheatingCoilIndex;                                    // Index to reheat coil
         std::string HeatingCoilName;                               // name of heating coil
         std::string HeatingCoilType;                               // type of heating coil
+        Real64 HeatingSizingRatio = 1.0;                           // Ratio of heat pump heating to cooling capacity
         int CoilControlNode;                                       // control node for hot water and steam heating coils
         int HWCoilAirInletNode;                                    // air inlet node number of HW coil for PTAC, PTHP, HeatCool, HeatOnly
         int HWCoilAirOutletNode;                                   // air outlet node number of HW coil for PTAC, PTHP, HeatCool, HeatOnly
@@ -223,7 +224,7 @@ namespace Furnaces {
         Real64 EMSSensibleZoneLoadValue;      // Value EMS is directing to use
         bool EMSOverrideMoistZoneLoadRequest; // if true, then EMS is calling to override zone load
         Real64 EMSMoistureZoneLoadValue;      // Value EMS is directing to use
-        // starting added varibles for variable speed water source heat pump, Bo Shen, ORNL, March 2012
+        // starting added variables for variable speed water source heat pump, Bo Shen, ORNL, March 2012
         Furnaces::ModeOfOperation HeatCoolMode; // System operating mode (0 = floating, 1 = cooling, 2 = heating)
         int NumOfSpeedCooling;                  // The number of speeds for cooling
         int NumOfSpeedHeating;                  // The number of speeds for heating
@@ -563,10 +564,10 @@ struct FurnacesData : BaseGlobalStruct
     Array1D_bool MyFanFlag;               // used for sizing fan inputs one time
     Array1D_bool MyCheckFlag;             // Used to obtain the zone inlet node number in the controlled zone
     Array1D_bool MyFlowFracFlag;          // Used for calculatig flow fraction once
-    Array1D_bool MyPlantScanFlag;         // used to initializa plant comp for water and steam heating coils
+    Array1D_bool MyPlantScanFlag;         // used to initialize plant comp for water and steam heating coils
     Array1D_bool MySuppCoilPlantScanFlag; // used to initialize plant comp for water and steam heating coils
 
-    // used to be statics
+    // used to be statistics
     Real64 CoolCoilLoad;        // Negative value means cooling required
     Real64 SystemSensibleLoad;  // Positive value means heating required
     Real64 TotalZoneLatentLoad; // Total ZONE latent load (not including outside air) to be removed by furnace/unitary system

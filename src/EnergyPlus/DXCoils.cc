@@ -746,7 +746,6 @@ void GetDXCoils(EnergyPlusData &state)
     int NumNumbers2;                 // Number of numeric items in input for performance object
     int IOStatus;                    // Input status returned from GetObjectItem
     bool ErrorsFound(false);         // Set to true if errors in input, fatal at end of routine
-    int DXHPWaterHeaterCoilNum;      // Loop index for 1,NumDXHeatPumpWaterHeaterCoils
     int CapacityStageNum;            // Loop index for 1,Number of capacity stages
     int DehumidModeNum;              // Loop index for 1,Number of enhanced dehumidification modes
     int PerfModeNum;                 // Performance mode index
@@ -2995,503 +2994,527 @@ void GetDXCoils(EnergyPlusData &state)
 
     // Loop over the Pumped DX Water Heater Coils and get & load the data
     CurrentModuleObject = HVAC::cAllCoilTypes(HVAC::CoilDX_HeatPumpWaterHeaterPumped);
-    for (DXHPWaterHeaterCoilNum = 1; DXHPWaterHeaterCoilNum <= state.dataDXCoils->NumDXHeatPumpWaterHeaterPumpedCoils; ++DXHPWaterHeaterCoilNum) {
+    auto &s_ip = state.dataInputProcessing->inputProcessor;
+    auto const instances_whPumped = s_ip->epJSON.find(CurrentModuleObject);
+    if (instances_whPumped != s_ip->epJSON.end()) {
+        std::string cFieldName;
+        auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
+        auto &instancesValue = instances_whPumped.value();
+        for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
-        state.dataInputProcessing->inputProcessor->getObjectItem(state,
-                                                                 CurrentModuleObject,
-                                                                 DXHPWaterHeaterCoilNum,
-                                                                 Alphas,
-                                                                 NumAlphas,
-                                                                 Numbers,
-                                                                 NumNumbers,
-                                                                 IOStatus,
-                                                                 lNumericBlanks,
-                                                                 lAlphaBlanks,
-                                                                 cAlphaFields,
-                                                                 cNumericFields);
+            ++DXCoilNum;
+            auto const &fields = instance.value();
+            std::string const &thisObjectName = instance.key();
+            s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
 
-        ++DXCoilNum;
+            // allocate single performance mode for numeric field strings used for sizing routine
+            state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(1);
+            state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(1).FieldNames.allocate(MaxNumbers);
+            state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(1).FieldNames = cNumericFields;
 
-        // allocate single performance mode for numeric field strings used for sizing routine
-        state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(1);
-        state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(1).FieldNames.allocate(MaxNumbers);
-        state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(1).FieldNames = cNumericFields;
-        // ErrorsFound will be set to True if problem was found, left untouched otherwise
-        VerifyUniqueCoilName(state, CurrentModuleObject, Alphas(1), ErrorsFound, CurrentModuleObject + " Name");
+            auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);
+            thisDXCoil.Name = Util::makeUPPER(thisObjectName);
+            thisDXCoil.DXCoilType = CurrentModuleObject;
+            thisDXCoil.DXCoilType_Num = HVAC::CoilDX_HeatPumpWaterHeaterPumped;
 
-        auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);
-        thisDXCoil.Name = Alphas(1);
-        thisDXCoil.DXCoilType = CurrentModuleObject;
-        thisDXCoil.DXCoilType_Num = HVAC::CoilDX_HeatPumpWaterHeaterPumped;
-        thisDXCoil.availSched = Sched::GetScheduleAlwaysOff(state); // heat pump water heater DX coil has no schedule
+            ErrorObjectHeader eoh{routineName, CurrentModuleObject, thisDXCoil.Name};
 
-        // Store the HPWH DX coil heating capacity in RatedTotCap2. After backing off pump and fan heat,
-        // move to RatedTotCap() for use by DX coil
-        thisDXCoil.RatedTotCap2 = Numbers(1);
-        if (thisDXCoil.RatedTotCap2 <= 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 0.0, entered value=[{:.2T}].", cNumericFields(1), Numbers(1)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedCOP(1) = Numbers(2);
-        if (thisDXCoil.RatedCOP(1) <= 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 0.0, entered value=[{:.2T}].", cNumericFields(2), Numbers(2)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedSHR(1) = Numbers(3);
-        if (thisDXCoil.RatedSHR(1) <= 0.0 || thisDXCoil.RatedSHR(1) > 1.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 0 and <= 1.  entered value=[{:.3T}].", cNumericFields(3), Numbers(3)));
-
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedInletDBTemp = Numbers(4);
-        if (thisDXCoil.RatedInletDBTemp <= 5.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 5 {{C}}.  entered value=[{:.1T}].", cNumericFields(4), Numbers(4)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedInletWBTemp = Numbers(5);
-        if (thisDXCoil.RatedInletWBTemp <= 5.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 5 {{C}}.  entered value=[{:.1T}].", cNumericFields(5), Numbers(5)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedInletWaterTemp = Numbers(6);
-        if (thisDXCoil.RatedInletWaterTemp <= 25.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 25 {{C}}.  entered value=[{:.1T}].", cNumericFields(6), Numbers(6)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedAirVolFlowRate(1) = Numbers(7);
-        if (thisDXCoil.RatedAirVolFlowRate(1) != Constant::AutoCalculate) {
-            if (thisDXCoil.RatedAirVolFlowRate(1) <= 0.0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...{} must be > 0.0.  entered value=[{:.3T}].", cNumericFields(7), Numbers(7)));
+            std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
+            if (availSchedName.empty()) {
+                thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
+            } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
                 ErrorsFound = true;
             }
-        }
 
-        thisDXCoil.RatedHPWHCondWaterFlow = Numbers(8);
-        // move to init
-        if (thisDXCoil.RatedHPWHCondWaterFlow != Constant::AutoCalculate) {
-            if (thisDXCoil.RatedHPWHCondWaterFlow <= 0.0) {
+            // ErrorsFound will be set to True if problem was found, left untouched otherwise
+            VerifyUniqueCoilName(state, CurrentModuleObject, thisDXCoil.Name, ErrorsFound, CurrentModuleObject + " Name");
+
+            constexpr std::string_view cRatedHeatingCapFieldName = "Rated Heating Capacity";
+            thisDXCoil.RatedTotCap2 = s_ip->getRealFieldValue(fields, schemaProps, "rated_heating_capacity"); // Numbers(1);
+            if (thisDXCoil.RatedTotCap2 <= 0.0) {
                 ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...{} must be > 0.0  entered value=[{:.3T}].", cNumericFields(8), Numbers(8)));
+                ShowContinueError(state, format("...{} must be > 0.0, entered value=[{:.2T}].", cRatedHeatingCapFieldName, thisDXCoil.RatedTotCap2));
                 ErrorsFound = true;
             }
-            //   check the range of flow rate to be >= 1 gpm/ton and <= 5 gpm/ton
-            if (thisDXCoil.RatedHPWHCondWaterFlow / thisDXCoil.RatedTotCap2 < 1.79405e-8 ||
-                thisDXCoil.RatedHPWHCondWaterFlow / thisDXCoil.RatedTotCap2 > 8.97024e-8) {
-                ShowWarningError(state, format("{}{}=\"{}\", outside range", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+
+            cFieldName = "Rated COP";
+            thisDXCoil.RatedCOP(1) = s_ip->getRealFieldValue(fields, schemaProps, "rated_cop"); // Numbers(2);
+            if (thisDXCoil.RatedCOP(1) <= 0.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 0.0, entered value=[{:.2T}].", cFieldName, thisDXCoil.RatedCOP(1)));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Sensible Heat Ratio";
+            thisDXCoil.RatedSHR(1) = s_ip->getRealFieldValue(fields, schemaProps, "rated_sensible_heat_ratio"); // Numbers(3);
+            if (thisDXCoil.RatedSHR(1) <= 0.0 || thisDXCoil.RatedSHR(1) > 1.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 0 and <= 1.  entered value=[{:.3T}].", cFieldName, thisDXCoil.RatedSHR(1)));
+
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Evaporator Inlet Air Dry-Bulb Temperature";
+            thisDXCoil.RatedInletDBTemp =
+                s_ip->getRealFieldValue(fields, schemaProps, "rated_evaporator_inlet_air_dry_bulb_temperature"); // Numbers(4);
+            if (thisDXCoil.RatedInletDBTemp <= 5.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 5 {{C}}.  entered value=[{:.1T}].", cFieldName, thisDXCoil.RatedInletDBTemp));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Evaporator Inlet Air Wet-Bulb Temperature";
+            thisDXCoil.RatedInletWBTemp =
+                s_ip->getRealFieldValue(fields, schemaProps, "rated_evaporator_inlet_air_wet_bulb_temperature"); // Numbers(5);
+            if (thisDXCoil.RatedInletWBTemp <= 5.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 5 {{C}}.  entered value=[{:.1T}].", cFieldName, thisDXCoil.RatedInletWBTemp));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Condenser Inlet Water Temperature";
+            thisDXCoil.RatedInletWaterTemp = s_ip->getRealFieldValue(fields, schemaProps, "rated_condenser_inlet_water_temperature"); // Numbers(6);
+            if (thisDXCoil.RatedInletWaterTemp <= 25.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 25 {{C}}.  entered value=[{:.1T}].", cFieldName, thisDXCoil.RatedInletWaterTemp));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Evaporator Air Flow Rate";
+            thisDXCoil.RatedAirVolFlowRate(1) = s_ip->getRealFieldValue(fields, schemaProps, "rated_evaporator_air_flow_rate"); // Numbers(7);
+            if (thisDXCoil.RatedAirVolFlowRate(1) != Constant::AutoCalculate) {
+                if (thisDXCoil.RatedAirVolFlowRate(1) <= 0.0) {
+                    ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                    ShowContinueError(state, format("...{} must be > 0.0.  entered value=[{:.3T}].", cFieldName, thisDXCoil.RatedAirVolFlowRate(1)));
+                    ErrorsFound = true;
+                }
+            }
+
+            cFieldName = "Rated Condenser Water Flow Rate";
+            thisDXCoil.RatedHPWHCondWaterFlow = s_ip->getRealFieldValue(fields, schemaProps, "rated_condenser_water_flow_rate"); // Numbers(8);
+            // move to init
+            if (thisDXCoil.RatedHPWHCondWaterFlow != Constant::AutoCalculate) {
+                if (thisDXCoil.RatedHPWHCondWaterFlow <= 0.0) {
+                    ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                    ShowContinueError(state, format("...{} must be > 0.0  entered value=[{:.3T}].", cFieldName, thisDXCoil.RatedHPWHCondWaterFlow));
+                    ErrorsFound = true;
+                }
+                //   check the range of flow rate to be >= 1 gpm/ton and <= 5 gpm/ton
+                if (thisDXCoil.RatedHPWHCondWaterFlow / thisDXCoil.RatedTotCap2 < 1.79405e-8 ||
+                    thisDXCoil.RatedHPWHCondWaterFlow / thisDXCoil.RatedTotCap2 > 8.97024e-8) {
+                    ShowWarningError(state, format("{}{}=\"{}\", outside range", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                    ShowContinueError(state,
+                                      format("...{} per watt of {} is outside the recommended range of >= 1.79405E-8 m3/s/W (0.083 gpm/MBH) and <= "
+                                             "8.97024E-8 m3/s/W (0.417 gpm/MBH).",
+                                             cFieldName,
+                                             cRatedHeatingCapFieldName));
+                    ShowContinueError(
+                        state, format("...Entered Flow rate per watt = [{:.10T}].", (thisDXCoil.RatedHPWHCondWaterFlow / thisDXCoil.RatedTotCap2)));
+                }
+            }
+
+            cFieldName = "Evaporator Fan Power Included in Rated COP";
+            std::string fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_fan_power_included_in_rated_cop"); // Alphas(2)
+            BooleanSwitch fanPowerIncluded = static_cast<BooleanSwitch>(getYesNoValue(Util::makeUPPER(fieldValue)));
+            if (fanPowerIncluded != BooleanSwitch::Invalid) {
+                thisDXCoil.FanPowerIncludedInCOP = static_cast<bool>(fanPowerIncluded);
+            } else {
+                ShowSevereInvalidBool(state, eoh, cFieldName, fieldValue);
+                ErrorsFound = true;
+            }
+            cFieldName = "Condenser Pump Power Included in Rated COP";
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_pump_power_included_in_rated_cop"); // Alphas(3)
+            BooleanSwitch pumpPowerIncluded = static_cast<BooleanSwitch>(getYesNoValue(Util::makeUPPER(fieldValue)));
+            if (pumpPowerIncluded != BooleanSwitch::Invalid) {
+                thisDXCoil.CondPumpPowerInCOP = static_cast<bool>(pumpPowerIncluded);
+            } else {
+                ShowSevereInvalidBool(state, eoh, cFieldName, fieldValue);
+                ErrorsFound = true;
+            }
+            cFieldName = "Condenser Pump Heat Included in Rated Heating Capacity and Rated COP";
+            fieldValue =
+                s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_pump_heat_included_in_rated_heating_capacity_and_rated_cop"); // Alphas(4)
+            BooleanSwitch pumpHeatIncludedInCapAndCOP = static_cast<BooleanSwitch>(getYesNoValue(Util::makeUPPER(fieldValue)));
+            if (pumpHeatIncludedInCapAndCOP != BooleanSwitch::Invalid) {
+                thisDXCoil.CondPumpHeatInCapacity = static_cast<bool>(pumpHeatIncludedInCapAndCOP);
+            } else {
+                ShowSevereInvalidBool(state, eoh, cFieldName, fieldValue);
+                ErrorsFound = true;
+            }
+            cFieldName = "Condenser Water Pump Power";
+            thisDXCoil.HPWHCondPumpElecNomPower = s_ip->getRealFieldValue(fields, schemaProps, "condenser_water_pump_power"); // Numbers(9);
+            if (thisDXCoil.HPWHCondPumpElecNomPower < 0.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be >= 0.0  entered value=[{:.3T}].", cFieldName, thisDXCoil.HPWHCondPumpElecNomPower));
+                ErrorsFound = true;
+            }
+            cFieldName = "Fraction of Condenser Pump Heat to Water";
+            thisDXCoil.HPWHCondPumpFracToWater =
+                s_ip->getRealFieldValue(fields, schemaProps, "fraction_of_condenser_pump_heat_to_water"); // Numbers(10);
+            if (thisDXCoil.HPWHCondPumpFracToWater <= 0.0 || thisDXCoil.HPWHCondPumpFracToWater > 1.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
                 ShowContinueError(state,
-                                  format("...{} per watt of {} is outside the recommended range of >= 1.79405E-8 m3/s/W (0.083 gpm/MBH) and <= "
-                                         "8.97024E-8 m3/s/W (0.417 gpm/MBH).",
-                                         cNumericFields(8),
-                                         cNumericFields(1)));
-                ShowContinueError(
-                    state, format("...Entered Flow rate per watt = [{:.10T}].", (thisDXCoil.RatedHPWHCondWaterFlow / thisDXCoil.RatedTotCap2)));
-            }
-        }
-
-        if (Util::SameString(Alphas(2), "Yes") || Util::SameString(Alphas(2), "No")) {
-            //  initialized to TRUE on allocate
-            if (Util::SameString(Alphas(2), "No")) {
-                thisDXCoil.FanPowerIncludedInCOP = false;
-            }
-        } else {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format(",,,invalid choice for {}.  Entered choice = {}", cAlphaFields(2), Alphas(2)));
-            ShowContinueError(state, "Valid choices are Yes or No.");
-            ErrorsFound = true;
-        }
-
-        if (Util::SameString(Alphas(3), "Yes") || Util::SameString(Alphas(3), "No")) {
-            //  initialized to FALSE on allocate
-            if (Util::SameString(Alphas(3), "Yes")) {
-                thisDXCoil.CondPumpPowerInCOP = true;
-            }
-        } else {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format(",,,invalid choice for {}.  Entered choice = {}", cAlphaFields(3), Alphas(3)));
-            ShowContinueError(state, "Valid choices are Yes or No.");
-            ErrorsFound = true;
-        }
-
-        if (Util::SameString(Alphas(4), "Yes") || Util::SameString(Alphas(4), "No")) {
-            //  initialized to FALSE on allocate
-            if (Util::SameString(Alphas(4), "Yes")) {
-                thisDXCoil.CondPumpHeatInCapacity = true;
-            }
-        } else {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format(",,,invalid choice for {}.  Entered choice = {}", cAlphaFields(4), Alphas(4)));
-            ShowContinueError(state, "Valid choices are Yes or No.");
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.HPWHCondPumpElecNomPower = Numbers(9);
-        if (thisDXCoil.HPWHCondPumpElecNomPower < 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be >= 0.0  entered value=[{:.3T}].", cNumericFields(9), Numbers(9)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.HPWHCondPumpFracToWater = Numbers(10);
-        if (thisDXCoil.HPWHCondPumpFracToWater <= 0.0 || thisDXCoil.HPWHCondPumpFracToWater > 1.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be >= 0 and <= 1.  entered value=[{:.3T}].", cNumericFields(10), Numbers(10)));
-            ErrorsFound = true;
-        }
-
-        // Air nodes
-        thisDXCoil.AirInNode = GetOnlySingleNode(state,
-                                                 Alphas(5),
-                                                 ErrorsFound,
-                                                 DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
-                                                 Alphas(1),
-                                                 DataLoopNode::NodeFluidType::Air,
-                                                 DataLoopNode::ConnectionType::Inlet,
-                                                 NodeInputManager::CompFluidStream::Primary,
-                                                 ObjectIsNotParent);
-
-        thisDXCoil.AirOutNode = GetOnlySingleNode(state,
-                                                  Alphas(6),
-                                                  ErrorsFound,
-                                                  DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
-                                                  Alphas(1),
-                                                  DataLoopNode::NodeFluidType::Air,
-                                                  DataLoopNode::ConnectionType::Outlet,
-                                                  NodeInputManager::CompFluidStream::Primary,
-                                                  ObjectIsNotParent);
-
-        TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(5), Alphas(6), "Air Nodes");
-
-        // Check if the air inlet node is OA node, to justify whether the coil is placed in zone or not
-        thisDXCoil.IsDXCoilInZone = !CheckOutAirNodeNumber(state, thisDXCoil.AirInNode);
-
-        // Water nodes
-        thisDXCoil.WaterInNode = GetOnlySingleNode(state,
-                                                   Alphas(7),
-                                                   ErrorsFound,
-                                                   DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
-                                                   Alphas(1),
-                                                   DataLoopNode::NodeFluidType::Water,
-                                                   DataLoopNode::ConnectionType::Inlet,
-                                                   NodeInputManager::CompFluidStream::Secondary,
-                                                   ObjectIsNotParent);
-
-        thisDXCoil.WaterOutNode = GetOnlySingleNode(state,
-                                                    Alphas(8),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
-                                                    Alphas(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Secondary,
-                                                    ObjectIsNotParent);
-
-        TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(7), Alphas(8), "Water Nodes");
-
-        thisDXCoil.CrankcaseHeaterCapacity = Numbers(11);
-        if (thisDXCoil.CrankcaseHeaterCapacity < 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be >= 0.0  entered value=[{:.1T}].", cNumericFields(11), Numbers(11)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.MaxOATCrankcaseHeater = Numbers(12);
-        if (thisDXCoil.MaxOATCrankcaseHeater < 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be >= 0 {{C}}.  entered value=[{:.1T}].", cNumericFields(12), Numbers(12)));
-            ErrorsFound = true;
-        }
-
-        if (!lAlphaBlanks(9)) {
-            thisDXCoil.CrankcaseHeaterCapacityCurveIndex = Curve::GetCurveIndex(state, Alphas(9));
-            if (thisDXCoil.CrankcaseHeaterCapacityCurveIndex == 0) { // can't find the curve
-                ShowSevereError(state, format("{} = {}:  {} not found = {}", CurrentModuleObject, thisDXCoil.Name, cAlphaFields(9), Alphas(9)));
+                                  format("...{} must be >= 0 and <= 1.  entered value=[{:.3T}].", cFieldName, thisDXCoil.HPWHCondPumpElecNomPower));
                 ErrorsFound = true;
-            } else {
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.CrankcaseHeaterCapacityCurveIndex, // Curve index
-                                                     {1},                                          // Valid dimensions
-                                                     RoutineName,                                  // Routine name
-                                                     CurrentModuleObject,                          // Object Type
-                                                     thisDXCoil.Name,                              // Object Name
-                                                     cAlphaFields(9));                             // Field Name
             }
-        }
 
-        thisDXCoil.InletAirTemperatureType = static_cast<HVAC::OATType>(getEnumValue(HVAC::oatTypeNamesUC, Alphas(10)));
+            std::string evapAirInletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_air_inlet_node_name");
+            std::string evapAirOutletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_air_outlet_node_name");
+            // Air nodes
+            thisDXCoil.AirInNode = GetOnlySingleNode(state,
+                                                     evapAirInletNodeName,
+                                                     ErrorsFound,
+                                                     DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
+                                                     thisDXCoil.Name,
+                                                     DataLoopNode::NodeFluidType::Air,
+                                                     DataLoopNode::ConnectionType::Inlet,
+                                                     NodeInputManager::CompFluidStream::Primary,
+                                                     ObjectIsNotParent);
 
-        // set rated inlet air temperature for curve object verification
-        if (thisDXCoil.InletAirTemperatureType == HVAC::OATType::WetBulb) {
-            InletAirTemp = thisDXCoil.RatedInletWBTemp;
-        } else {
-            InletAirTemp = thisDXCoil.RatedInletDBTemp;
-        }
-        // set rated water temperature for curve object verification
-        InletWaterTemp = thisDXCoil.RatedInletWaterTemp;
+            thisDXCoil.AirOutNode = GetOnlySingleNode(state,
+                                                      evapAirOutletNodeName,
+                                                      ErrorsFound,
+                                                      DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
+                                                      thisDXCoil.Name,
+                                                      DataLoopNode::NodeFluidType::Air,
+                                                      DataLoopNode::ConnectionType::Outlet,
+                                                      NodeInputManager::CompFluidStream::Primary,
+                                                      ObjectIsNotParent);
 
-        if (!lAlphaBlanks(11)) {
-            thisDXCoil.HCapFTemp = GetCurveIndex(state, Alphas(11));
-            if (thisDXCoil.HCapFTemp == 0) {
+            TestCompSet(state, CurrentModuleObject, thisDXCoil.Name, evapAirInletNodeName, evapAirOutletNodeName, "Air Nodes");
+
+            // Check if the air inlet node is OA node, to justify whether the coil is placed in zone or not
+            thisDXCoil.IsDXCoilInZone = !CheckOutAirNodeNumber(state, thisDXCoil.AirInNode);
+
+            std::string condWaterInletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_water_inlet_node_name");
+            std::string condWaterOutletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_water_outlet_node_name");
+            // Water nodes
+            thisDXCoil.WaterInNode = GetOnlySingleNode(state,
+                                                       condWaterInletNodeName,
+                                                       ErrorsFound,
+                                                       DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
+                                                       thisDXCoil.Name,
+                                                       DataLoopNode::NodeFluidType::Water,
+                                                       DataLoopNode::ConnectionType::Inlet,
+                                                       NodeInputManager::CompFluidStream::Secondary,
+                                                       ObjectIsNotParent);
+
+            thisDXCoil.WaterOutNode = GetOnlySingleNode(state,
+                                                        condWaterOutletNodeName,
+                                                        ErrorsFound,
+                                                        DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
+                                                        thisDXCoil.Name,
+                                                        DataLoopNode::NodeFluidType::Water,
+                                                        DataLoopNode::ConnectionType::Outlet,
+                                                        NodeInputManager::CompFluidStream::Secondary,
+                                                        ObjectIsNotParent);
+
+            TestCompSet(state, CurrentModuleObject, thisDXCoil.Name, condWaterInletNodeName, condWaterOutletNodeName, "Water Nodes");
+
+            cFieldName = "Crankcase Heater Capacity";
+            thisDXCoil.CrankcaseHeaterCapacity = s_ip->getRealFieldValue(fields, schemaProps, "crankcase_heater_capacity"); // Numbers(8);
+            if (thisDXCoil.CrankcaseHeaterCapacity < 0.0) {
                 ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(11), Alphas(11)));
+                ShowContinueError(state, format("...{} must be >= 0.0  entered value=[{:.1T}].", cFieldName, thisDXCoil.CrankcaseHeaterCapacity));
                 ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are BiQuadratic or Cubic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCapFTemp, // Curve index
-                                                     {1, 2},               // Valid dimensions  // MULTIPLECURVEDIMS
-                                                     RoutineName,          // Routine name
-                                                     CurrentModuleObject,  // Object Type
-                                                     thisDXCoil.Name,      // Object Name
-                                                     cAlphaFields(11));    // Field Name
+            }
 
-                if (!ErrorsFound) {
-                    if (state.dataCurveManager->curves(thisDXCoil.HCapFTemp)->numDims == 1) {
-                        checkCurveIsNormalizedToOne(state,
-                                                    std::string{RoutineName} + CurrentModuleObject,
-                                                    thisDXCoil.Name,
-                                                    thisDXCoil.HCapFTemp,
-                                                    cAlphaFields(11),
-                                                    Alphas(11),
-                                                    InletAirTemp);
-                    } else {
-                        checkCurveIsNormalizedToOne(state,
-                                                    std::string{RoutineName} + CurrentModuleObject,
-                                                    thisDXCoil.Name,
-                                                    thisDXCoil.HCapFTemp,
-                                                    cAlphaFields(11),
-                                                    Alphas(11),
-                                                    InletAirTemp,
-                                                    InletWaterTemp);
-                    }
+            cFieldName = "Maximum Ambient Temperature for Crankcase Heater Operation";
+            thisDXCoil.MaxOATCrankcaseHeater =
+                s_ip->getRealFieldValue(fields, schemaProps, "maximum_ambient_temperature_for_crankcase_heater_operation"); // Numbers(12);
+            if (thisDXCoil.MaxOATCrankcaseHeater < 0.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be >= 0 {{C}}.  entered value=[{:.1T}].", cFieldName, thisDXCoil.MaxOATCrankcaseHeater));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Crankcase Heater Capacity Function of Temperature Curve Name"; // cAlphaFields(9)
+            std::string const whPLFCurveName =
+                s_ip->getAlphaFieldValue(fields, schemaProps, "crankcase_heater_capacity_function_of_temperature_curve_name");
+            // Coil:WaterHeating:AirToWaterHeatPump:Wrapped
+            if (!whPLFCurveName.empty()) {
+                thisDXCoil.CrankcaseHeaterCapacityCurveIndex = Curve::GetCurveIndex(state, whPLFCurveName);
+                if (thisDXCoil.CrankcaseHeaterCapacityCurveIndex == 0) { // can't find the curve
+                    ShowSevereItemNotFound(state, eoh, cFieldName, whPLFCurveName);
+                    ErrorsFound = true;
+                } else {
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.CrankcaseHeaterCapacityCurveIndex, // Curve index
+                                                         {1},                                          // Valid dimensions
+                                                         RoutineName,                                  // Routine name
+                                                         CurrentModuleObject,                          // Object Type
+                                                         thisDXCoil.Name,                              // Object Name
+                                                         cFieldName);                                  // Field Name
                 }
             }
-        }
 
-        if (!lAlphaBlanks(12)) {
-            thisDXCoil.HCapFAirFlow = GetCurveIndex(state, Alphas(12));
-            if (thisDXCoil.HCapFAirFlow == 0) {
+            cFieldName = "Evaporator Air Temperature Type for Curve Objects"; // Alphas(10)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_air_temperature_type_for_curve_objects");
+            thisDXCoil.InletAirTemperatureType = static_cast<HVAC::OATType>(getEnumValue(HVAC::oatTypeNamesUC, Util::makeUPPER(fieldValue)));
+            if (thisDXCoil.InletAirTemperatureType == HVAC::OATType::Invalid) {
+                //   wrong temperature type selection
                 ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(12), Alphas(12)));
+                ShowContinueError(state, format("...{} must be DryBulbTemperature or WetBulbTemperature.", cFieldName));
+                ShowContinueError(state, format("...entered value=\"{}\".", fieldValue));
                 ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are Cubic or Quadratic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCapFAirFlow, // Curve index
-                                                     {1},                     // Valid dimensions
-                                                     RoutineName,             // Routine name
-                                                     CurrentModuleObject,     // Object Type
-                                                     thisDXCoil.Name,         // Object Name
-                                                     cAlphaFields(12));       // Field Name
-
-                if (!ErrorsFound) {
-                    checkCurveIsNormalizedToOne(state,
-                                                std::string{RoutineName} + CurrentModuleObject,
-                                                thisDXCoil.Name,
-                                                thisDXCoil.HCapFAirFlow,
-                                                cAlphaFields(12),
-                                                Alphas(12),
-                                                1.0);
-                }
             }
-        }
-
-        if (!lAlphaBlanks(13)) {
-            thisDXCoil.HCapFWaterFlow = GetCurveIndex(state, Alphas(13));
-            if (thisDXCoil.HCapFWaterFlow == 0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(13), Alphas(13)));
-                ErrorsFound = true;
+            // set rated inlet air temperature for curve object verification
+            if (thisDXCoil.InletAirTemperatureType == HVAC::OATType::WetBulb) {
+                InletAirTemp = thisDXCoil.RatedInletWBTemp;
             } else {
-                // Verify Curve Object, only legal types are Cubic or Quadratic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCapFWaterFlow, // Curve index
-                                                     {1},                       // Valid dimensions
-                                                     RoutineName,               // Routine name
-                                                     CurrentModuleObject,       // Object Type
-                                                     thisDXCoil.Name,           // Object Name
-                                                     cAlphaFields(13));         // Field Name
-
-                if (!ErrorsFound) {
-                    checkCurveIsNormalizedToOne(state,
-                                                std::string{RoutineName} + CurrentModuleObject,
-                                                thisDXCoil.Name,
-                                                thisDXCoil.HCapFWaterFlow,
-                                                cAlphaFields(13),
-                                                Alphas(13),
-                                                1.0);
-                }
+                InletAirTemp = thisDXCoil.RatedInletDBTemp;
             }
-        }
+            // set rated water temperature for curve object verification
+            InletWaterTemp = thisDXCoil.RatedInletWaterTemp;
 
-        if (!lAlphaBlanks(14)) {
-            thisDXCoil.HCOPFTemp = GetCurveIndex(state, Alphas(14));
-            if (thisDXCoil.HCOPFTemp == 0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(14), Alphas(14)));
-                ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are BiQuadratic or Cubic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCOPFTemp, // Curve index
-                                                     {1, 2},               // Valid dimensions  // MULTIPLECURVEDIMS
-                                                     RoutineName,          // Routine name
-                                                     CurrentModuleObject,  // Object Type
-                                                     thisDXCoil.Name,      // Object Name
-                                                     cAlphaFields(14));    // Field Name
+            cFieldName = "Heating Capacity Function of Temperature Curve Name"; // Alphas(11)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_capacity_function_of_temperature_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCapFTemp = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are BiQuadratic or Cubic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCapFTemp, // Curve index
+                                                         {1, 2},               // Valid dimensions  // MULTIPLECURVEDIMS
+                                                         RoutineName,          // Routine name
+                                                         CurrentModuleObject,  // Object Type
+                                                         thisDXCoil.Name,      // Object Name
+                                                         cFieldName);          // Field Name
 
-                if (!ErrorsFound) {
-                    if (state.dataCurveManager->curves(thisDXCoil.HCOPFTemp)->numDims == 1) {
-                        checkCurveIsNormalizedToOne(state,
-                                                    std::string{RoutineName} + CurrentModuleObject,
-                                                    thisDXCoil.Name,
-                                                    thisDXCoil.HCOPFTemp,
-                                                    cAlphaFields(14),
-                                                    Alphas(14),
-                                                    InletAirTemp);
-                    } else {
-                        checkCurveIsNormalizedToOne(state,
-                                                    std::string{RoutineName} + CurrentModuleObject,
-                                                    thisDXCoil.Name,
-                                                    thisDXCoil.HCOPFTemp,
-                                                    cAlphaFields(14),
-                                                    Alphas(14),
-                                                    InletAirTemp,
-                                                    InletWaterTemp);
-                    }
-                }
-            }
-        }
-
-        if (!lAlphaBlanks(15)) {
-            thisDXCoil.HCOPFAirFlow = GetCurveIndex(state, Alphas(15));
-            if (thisDXCoil.HCOPFAirFlow == 0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(15), Alphas(15)));
-                ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are Cubic or Quadratic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCOPFAirFlow, // Curve index
-                                                     {1},                     // Valid dimensions
-                                                     RoutineName,             // Routine name
-                                                     CurrentModuleObject,     // Object Type
-                                                     thisDXCoil.Name,         // Object Name
-                                                     cAlphaFields(15));       // Field Name
-
-                if (!ErrorsFound) {
-                    checkCurveIsNormalizedToOne(state,
-                                                std::string{RoutineName} + CurrentModuleObject,
-                                                thisDXCoil.Name,
-                                                thisDXCoil.HCOPFAirFlow,
-                                                cAlphaFields(15),
-                                                Alphas(15),
-                                                1.0);
-                }
-            }
-        }
-
-        if (!lAlphaBlanks(16)) {
-            thisDXCoil.HCOPFWaterFlow = GetCurveIndex(state, Alphas(16));
-            if (thisDXCoil.HCOPFWaterFlow == 0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(16), Alphas(16)));
-                ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are Cubic or Quadratic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCOPFWaterFlow, // Curve index
-                                                     {1},                       // Valid dimensions
-                                                     RoutineName,               // Routine name
-                                                     CurrentModuleObject,       // Object Type
-                                                     thisDXCoil.Name,           // Object Name
-                                                     cAlphaFields(16));         // Field Name
-
-                if (!ErrorsFound) {
-                    checkCurveIsNormalizedToOne(state,
-                                                std::string{RoutineName} + CurrentModuleObject,
-                                                thisDXCoil.Name,
-                                                thisDXCoil.HCOPFWaterFlow,
-                                                cAlphaFields(16),
-                                                Alphas(16),
-                                                1.0);
-                }
-            }
-        }
-
-        if (!lAlphaBlanks(17)) {
-            thisDXCoil.PLFFPLR(1) = GetCurveIndex(state, Alphas(17));
-            if (thisDXCoil.PLFFPLR(1) == 0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(17), Alphas(17)));
-                ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are Cubic or Quadratic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.PLFFPLR(1), // Curve index
-                                                     {1},                   // Valid dimensions
-                                                     RoutineName,           // Routine name
-                                                     CurrentModuleObject,   // Object Type
-                                                     thisDXCoil.Name,       // Object Name
-                                                     cAlphaFields(17));     // Field Name
-
-                if (!ErrorsFound) {
-                    //       Test PLF curve minimum and maximum. Cap if less than 0.7 or greater than 1.0.
-                    MinCurveVal = 999.0;
-                    MaxCurveVal = -999.0;
-                    CurveInput = 0.0;
-                    while (CurveInput <= 1.0) {
-                        CurveVal = CurveValue(state, thisDXCoil.PLFFPLR(1), CurveInput);
-                        if (CurveVal < MinCurveVal) {
-                            MinCurveVal = CurveVal;
-                            MinCurvePLR = CurveInput;
+                    if (!ErrorsFound) {
+                        if (state.dataCurveManager->curves(thisDXCoil.HCapFTemp)->numDims == 1) {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCapFTemp,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        InletAirTemp);
+                        } else {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCapFTemp,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        InletAirTemp,
+                                                        InletWaterTemp);
                         }
-                        if (CurveVal > MaxCurveVal) {
-                            MaxCurveVal = CurveVal;
-                            MaxCurvePLR = CurveInput;
-                        }
-                        CurveInput += 0.01;
-                    }
-                    if (MinCurveVal < 0.7) {
-                        ShowWarningError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                        ShowContinueError(state, format("...{} = {} has out of range value.", cAlphaFields(17), Alphas(17)));
-                        ShowContinueError(state,
-                                          format("...Curve minimum must be >= 0.7, curve min at PLR = {:.2T} is {:.3T}", MinCurvePLR, MinCurveVal));
-                        ShowContinueError(state, "...Setting curve minimum to 0.7 and simulation continues.");
-                        Curve::SetCurveOutputMinValue(state, thisDXCoil.PLFFPLR(1), ErrorsFound, 0.7);
-                    }
-
-                    if (MaxCurveVal > 1.0) {
-                        ShowWarningError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                        ShowContinueError(state, format("...{} = {} has out of range value.", cAlphaFields(17), Alphas(17)));
-                        ShowContinueError(state,
-                                          format("...Curve maximum must be <= 1.0, curve max at PLR = {:.2T} is {:.3T}", MaxCurvePLR, MaxCurveVal));
-                        ShowContinueError(state, "...Setting curve maximum to 1.0 and simulation continues.");
-                        Curve::SetCurveOutputMaxValue(state, thisDXCoil.PLFFPLR(1), ErrorsFound, 1.0);
                     }
                 }
             }
+
+            cFieldName = "Heating Capacity Function of Air Flow Fraction Curve Name"; // Alphas(12)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_capacity_function_of_air_flow_fraction_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCapFAirFlow = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are Cubic or Quadratic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCapFAirFlow, // Curve index
+                                                         {1},                     // Valid dimensions
+                                                         RoutineName,             // Routine name
+                                                         CurrentModuleObject,     // Object Type
+                                                         thisDXCoil.Name,         // Object Name
+                                                         cFieldName);             // Field Name
+
+                    if (!ErrorsFound) {
+                        if (state.dataCurveManager->curves(thisDXCoil.HCapFTemp)->numDims == 1) {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCapFAirFlow,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        1.0);
+                        }
+                    }
+                }
+            }
+
+            cFieldName = "Heating Capacity Function of Water Flow Fraction Curve Name"; // Alphas(13)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_capacity_function_of_water_flow_fraction_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCapFWaterFlow = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are Cubic or Quadratic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCapFWaterFlow, // Curve index
+                                                         {1},                       // Valid dimensions
+                                                         RoutineName,               // Routine name
+                                                         CurrentModuleObject,       // Object Type
+                                                         thisDXCoil.Name,           // Object Name
+                                                         cFieldName);               // Field Name
+
+                    if (!ErrorsFound) {
+                        checkCurveIsNormalizedToOne(state,
+                                                    std::string{RoutineName} + CurrentModuleObject,
+                                                    thisDXCoil.Name,
+                                                    thisDXCoil.HCapFWaterFlow,
+                                                    cFieldName,
+                                                    fieldValue,
+                                                    1.0);
+                    }
+                }
+            }
+
+            cFieldName = "Heating COP Function of Temperature Curve Name"; // Alphas(14)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_cop_function_of_temperature_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCOPFTemp = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are BiQuadratic or Cubic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCOPFTemp, // Curve index
+                                                         {1, 2},               // Valid dimensions  // MULTIPLECURVEDIMS
+                                                         RoutineName,          // Routine name
+                                                         CurrentModuleObject,  // Object Type
+                                                         thisDXCoil.Name,      // Object Name
+                                                         cFieldName);          // Field Name
+
+                    if (!ErrorsFound) {
+                        if (state.dataCurveManager->curves(thisDXCoil.HCOPFTemp)->numDims == 1) {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCOPFTemp,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        InletAirTemp);
+                        } else {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCOPFTemp,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        InletAirTemp,
+                                                        InletWaterTemp);
+                        }
+                    }
+                }
+            }
+
+            cFieldName = "Heating COP Function of Air Flow Fraction Curve Name"; // Alphas(15)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_cop_function_of_air_flow_fraction_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCOPFAirFlow = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are Cubic or Quadratic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCOPFAirFlow, // Curve index
+                                                         {1},                     // Valid dimensions
+                                                         RoutineName,             // Routine name
+                                                         CurrentModuleObject,     // Object Type
+                                                         thisDXCoil.Name,         // Object Name
+                                                         cFieldName);             // Field Name
+
+                    if (!ErrorsFound) {
+                        checkCurveIsNormalizedToOne(state,
+                                                    std::string{RoutineName} + CurrentModuleObject,
+                                                    thisDXCoil.Name,
+                                                    thisDXCoil.HCOPFAirFlow,
+                                                    cFieldName,
+                                                    fieldValue,
+                                                    1.0);
+                    }
+                }
+            }
+
+            cFieldName = "Heating COP Function of Water Flow Fraction Curve Name"; // Alphas(16)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_cop_function_of_water_flow_fraction_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCOPFWaterFlow = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are Cubic or Quadratic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCOPFWaterFlow, // Curve index
+                                                         {1},                       // Valid dimensions
+                                                         RoutineName,               // Routine name
+                                                         CurrentModuleObject,       // Object Type
+                                                         thisDXCoil.Name,           // Object Name
+                                                         cFieldName);               // Field Name
+
+                    if (!ErrorsFound) {
+                        checkCurveIsNormalizedToOne(state,
+                                                    std::string{RoutineName} + CurrentModuleObject,
+                                                    thisDXCoil.Name,
+                                                    thisDXCoil.HCOPFWaterFlow,
+                                                    cFieldName,
+                                                    fieldValue,
+                                                    1.0);
+                    }
+                }
+            }
+
+            cFieldName = "Part Load Fraction Correlation Curve Name"; // Alphas(17)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "part_load_fraction_correlation_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.PLFFPLR(1) = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are Cubic or Quadratic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.PLFFPLR(1), // Curve index
+                                                         {1},                   // Valid dimensions
+                                                         RoutineName,           // Routine name
+                                                         CurrentModuleObject,   // Object Type
+                                                         thisDXCoil.Name,       // Object Name
+                                                         cFieldName);           // Field Name
+
+                    if (!ErrorsFound) {
+                        // Test PLF curve minimum and maximum. Cap if less than 0.7 or greater than 1.0.
+                        MinCurveVal = 999.0;
+                        MaxCurveVal = -999.0;
+                        CurveInput = 0.0;
+                        while (CurveInput <= 1.0) {
+                            CurveVal = CurveValue(state, thisDXCoil.PLFFPLR(1), CurveInput);
+                            if (CurveVal < MinCurveVal) {
+                                MinCurveVal = CurveVal;
+                                MinCurvePLR = CurveInput;
+                            }
+                            if (CurveVal > MaxCurveVal) {
+                                MaxCurveVal = CurveVal;
+                                MaxCurvePLR = CurveInput;
+                            }
+                            CurveInput += 0.01;
+                        }
+                        if (MinCurveVal < 0.7) {
+                            ShowSevereBadMin(
+                                state, eoh, cFieldName, MinCurveVal, Clusive::In, 0.7, "Setting curve minimum to 0.7 and simulation continues.");
+                            Curve::SetCurveOutputMinValue(state, thisDXCoil.PLFFPLR(1), ErrorsFound, 0.7);
+                        }
+                        if (MaxCurveVal > 1.0) {
+                            ShowSevereBadMax(
+                                state, eoh, cFieldName, MaxCurveVal, Clusive::In, 1.0, "Setting curve maximum to 1.0 and simulation continues.");
+                            Curve::SetCurveOutputMaxValue(state, thisDXCoil.PLFFPLR(1), ErrorsFound, 1.0);
+                        }
+                    }
+                }
+            }
+
+            // assume compressor resides at the inlet to the DX Coil
+            thisDXCoil.CondenserInletNodeNum(1) = thisDXCoil.AirInNode;
+
+            // set condenser type as HPWH
+            thisDXCoil.CondenserType(1) = DataHeatBalance::RefrigCondenserType::WaterHeater;
         }
-
-        // assume compressor resides at the inlet to the DX Coil
-        thisDXCoil.CondenserInletNodeNum(1) = thisDXCoil.AirInNode;
-
-        // set condenser type as HPWH
-        thisDXCoil.CondenserType(1) = DataHeatBalance::RefrigCondenserType::WaterHeater;
-
-    } // end of the DX water heater coil loop
+    }
+    //} // end of the DX water heater coil loop
 
     if (ErrorsFound) {
         ShowFatalError(state,
@@ -3499,399 +3522,411 @@ void GetDXCoils(EnergyPlusData &state)
     }
     // Loop over the Wrapped DX Water Heater Coils and get & load the data
     CurrentModuleObject = HVAC::cAllCoilTypes(HVAC::CoilDX_HeatPumpWaterHeaterWrapped);
-    for (DXHPWaterHeaterCoilNum = 1; DXHPWaterHeaterCoilNum <= state.dataDXCoils->NumDXHeatPumpWaterHeaterWrappedCoils; ++DXHPWaterHeaterCoilNum) {
+    auto const instances_whWrapped = s_ip->epJSON.find(CurrentModuleObject);
+    if (instances_whWrapped != s_ip->epJSON.end()) {
+        std::string cFieldName;
+        auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
+        auto &instancesValue = instances_whWrapped.value();
+        for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
-        state.dataInputProcessing->inputProcessor->getObjectItem(state,
-                                                                 CurrentModuleObject,
-                                                                 DXHPWaterHeaterCoilNum,
-                                                                 Alphas,
-                                                                 NumAlphas,
-                                                                 Numbers,
-                                                                 NumNumbers,
-                                                                 IOStatus,
-                                                                 lNumericBlanks,
-                                                                 lAlphaBlanks,
-                                                                 cAlphaFields,
-                                                                 cNumericFields);
+            ++DXCoilNum;
+            auto const &fields = instance.value();
+            std::string const &thisObjectName = instance.key();
+            s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
 
-        ++DXCoilNum;
+            // allocate single performance mode for numeric field strings used for sizing routine
+            state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(1);
+            state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(1).FieldNames.allocate(MaxNumbers);
+            state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(1).FieldNames = cNumericFields;
 
-        // allocate single performance mode for numeric field strings used for sizing routine
-        state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(1);
-        state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(1).FieldNames.allocate(MaxNumbers);
-        state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode(1).FieldNames = cNumericFields;
-        // ErrorsFound will be set to True if problem was found, left untouched otherwise
-        VerifyUniqueCoilName(state, CurrentModuleObject, Alphas(1), ErrorsFound, CurrentModuleObject + " Name");
+            auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);
+            thisDXCoil.Name = Util::makeUPPER(thisObjectName);
+            thisDXCoil.DXCoilType = CurrentModuleObject;
+            thisDXCoil.DXCoilType_Num = HVAC::CoilDX_HeatPumpWaterHeaterWrapped;
 
-        auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);
-        thisDXCoil.Name = Alphas(1);
-        thisDXCoil.DXCoilType = CurrentModuleObject;
-        thisDXCoil.DXCoilType_Num = HVAC::CoilDX_HeatPumpWaterHeaterWrapped;
-        thisDXCoil.availSched = Sched::GetScheduleAlwaysOff(state); // heat pump water heater DX coil has no schedule
+            ErrorObjectHeader eoh{routineName, CurrentModuleObject, thisDXCoil.Name};
 
-        // Store the HPWH DX coil heating capacity in RatedTotCap2. After backing off pump and fan heat,
-        // move to RatedTotCap() for use by DX coil
-        thisDXCoil.RatedTotCap2 = Numbers(1);
-        if (thisDXCoil.RatedTotCap2 <= 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 0.0, entered value=[{:.2T}].", cNumericFields(1), Numbers(1)));
-            ErrorsFound = true;
-        }
+            std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
+            if (availSchedName.empty()) {
+                thisDXCoil.availSched = Sched::GetScheduleAlwaysOn(state);
+            } else if ((thisDXCoil.availSched = Sched::GetSchedule(state, availSchedName)) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, "Availability Schedule Name", availSchedName);
+                ErrorsFound = true;
+            }
+            // ErrorsFound will be set to True if problem was found, left untouched otherwise
+            VerifyUniqueCoilName(state, CurrentModuleObject, thisDXCoil.Name, ErrorsFound, CurrentModuleObject + " Name");
 
-        thisDXCoil.RatedCOP(1) = Numbers(2);
-        if (thisDXCoil.RatedCOP(1) <= 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 0.0, entered value=[{:.2T}].", cNumericFields(2), Numbers(2)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedSHR(1) = Numbers(3);
-        if (thisDXCoil.RatedSHR(1) <= 0.0 || thisDXCoil.RatedSHR(1) > 1.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 0 and <= 1.  entered value=[{:.3T}].", cNumericFields(3), Numbers(3)));
-
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedInletDBTemp = Numbers(4);
-        if (thisDXCoil.RatedInletDBTemp <= 5.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 5 {{C}}.  entered value=[{:.1T}].", cNumericFields(4), Numbers(4)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedInletWBTemp = Numbers(5);
-        if (thisDXCoil.RatedInletWBTemp <= 5.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 5 {{C}}.  entered value=[{:.1T}].", cNumericFields(5), Numbers(5)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedInletWaterTemp = Numbers(6);
-        if (thisDXCoil.RatedInletWaterTemp <= 25.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be > 25 {{C}}.  entered value=[{:.1T}].", cNumericFields(6), Numbers(6)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.RatedAirVolFlowRate(1) = Numbers(7);
-        if (thisDXCoil.RatedAirVolFlowRate(1) != Constant::AutoCalculate) {
-            if (thisDXCoil.RatedAirVolFlowRate(1) <= 0.0) {
+            cFieldName = "Rated Heating Capacity";
+            thisDXCoil.RatedTotCap2 = s_ip->getRealFieldValue(fields, schemaProps, "rated_heating_capacity"); // Numbers(1);
+            if (thisDXCoil.RatedTotCap2 <= 0.0) {
                 ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...{} must be > 0.0.  entered value=[{:.3T}].", cNumericFields(7), Numbers(7)));
+                ShowContinueError(state, format("...{} must be > 0.0, entered value=[{:.2T}].", cFieldName, thisDXCoil.RatedTotCap2));
                 ErrorsFound = true;
             }
-        }
 
-        if (Util::SameString(Alphas(2), "Yes") || Util::SameString(Alphas(2), "No")) {
-            //  initialized to TRUE on allocate
-            if (Util::SameString(Alphas(2), "No")) {
-                thisDXCoil.FanPowerIncludedInCOP = false;
-            }
-        } else {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format(",,,invalid choice for {}.  Entered choice = {}", cAlphaFields(2), Alphas(2)));
-            ShowContinueError(state, "Valid choices are Yes or No.");
-            ErrorsFound = true;
-        }
-
-        // Air nodes
-        thisDXCoil.AirInNode = GetOnlySingleNode(state,
-                                                 Alphas(3),
-                                                 ErrorsFound,
-                                                 DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
-                                                 Alphas(1),
-                                                 DataLoopNode::NodeFluidType::Air,
-                                                 DataLoopNode::ConnectionType::Inlet,
-                                                 NodeInputManager::CompFluidStream::Primary,
-                                                 ObjectIsNotParent);
-
-        thisDXCoil.AirOutNode = GetOnlySingleNode(state,
-                                                  Alphas(4),
-                                                  ErrorsFound,
-                                                  DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
-                                                  Alphas(1),
-                                                  DataLoopNode::NodeFluidType::Air,
-                                                  DataLoopNode::ConnectionType::Outlet,
-                                                  NodeInputManager::CompFluidStream::Primary,
-                                                  ObjectIsNotParent);
-
-        TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(3), Alphas(4), "Air Nodes");
-
-        // Check if the air inlet node is OA node, to justify whether the coil is placed in zone or not
-        thisDXCoil.IsDXCoilInZone = !CheckOutAirNodeNumber(state, thisDXCoil.AirInNode);
-
-        std::string const DummyCondenserInletName("DUMMY CONDENSER INLET " + thisDXCoil.Name);
-        std::string const DummyCondenserOutletName("DUMMY CONDENSER OUTLET " + thisDXCoil.Name);
-        thisDXCoil.WaterInNode = GetOnlySingleNode(state,
-                                                   DummyCondenserInletName,
-                                                   ErrorsFound,
-                                                   DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
-                                                   Alphas(1),
-                                                   DataLoopNode::NodeFluidType::Water,
-                                                   DataLoopNode::ConnectionType::Inlet,
-                                                   NodeInputManager::CompFluidStream::Secondary,
-                                                   ObjectIsNotParent);
-
-        thisDXCoil.WaterOutNode = GetOnlySingleNode(state,
-                                                    DummyCondenserOutletName,
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
-                                                    Alphas(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Secondary,
-                                                    ObjectIsNotParent);
-
-        TestCompSet(state, CurrentModuleObject, Alphas(1), DummyCondenserInletName, DummyCondenserOutletName, "Water Nodes");
-
-        thisDXCoil.CrankcaseHeaterCapacity = Numbers(8);
-        if (thisDXCoil.CrankcaseHeaterCapacity < 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be >= 0.0  entered value=[{:.1T}].", cNumericFields(8), Numbers(8)));
-            ErrorsFound = true;
-        }
-
-        thisDXCoil.MaxOATCrankcaseHeater = Numbers(9);
-        if (thisDXCoil.MaxOATCrankcaseHeater < 0.0) {
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be >= 0 {{C}}.  entered value=[{:.1T}].", cNumericFields(9), Numbers(9)));
-            ErrorsFound = true;
-        }
-
-        // Coil:WaterHeating:AirToWaterHeatPump:Wrapped
-        if (!lAlphaBlanks(5)) {
-            thisDXCoil.CrankcaseHeaterCapacityCurveIndex = Curve::GetCurveIndex(state, Alphas(5));
-            if (thisDXCoil.CrankcaseHeaterCapacityCurveIndex == 0) { // can't find the curve
-                ShowSevereError(state, format("{} = {}:  {} not found = {}", CurrentModuleObject, thisDXCoil.Name, cAlphaFields(5), Alphas(5)));
-                ErrorsFound = true;
-            } else {
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.CrankcaseHeaterCapacityCurveIndex, // Curve index
-                                                     {1},                                          // Valid dimensions
-                                                     RoutineName,                                  // Routine name
-                                                     CurrentModuleObject,                          // Object Type
-                                                     thisDXCoil.Name,                              // Object Name
-                                                     cAlphaFields(5));                             // Field Name
-            }
-        }
-
-        if (Util::SameString(Alphas(6), "DryBulbTemperature")) {
-            thisDXCoil.InletAirTemperatureType = HVAC::OATType::DryBulb;
-        } else if (Util::SameString(Alphas(6), "WetBulbTemperature")) {
-            thisDXCoil.InletAirTemperatureType = HVAC::OATType::WetBulb;
-        } else {
-            //   wrong temperature type selection
-            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-            ShowContinueError(state, format("...{} must be DryBulbTemperature or WetBulbTemperature.", cAlphaFields(6)));
-            ShowContinueError(state, format("...entered value=\"{}\".", Alphas(6)));
-            ErrorsFound = true;
-        }
-
-        // set rated inlet air temperature for curve object verification
-        if (thisDXCoil.InletAirTemperatureType == HVAC::OATType::WetBulb) {
-            InletAirTemp = thisDXCoil.RatedInletWBTemp;
-        } else {
-            InletAirTemp = thisDXCoil.RatedInletDBTemp;
-        }
-        // set rated water temperature for curve object verification
-        InletWaterTemp = thisDXCoil.RatedInletWaterTemp;
-
-        if (!lAlphaBlanks(7)) {
-            thisDXCoil.HCapFTemp = GetCurveIndex(state, Alphas(7));
-            if (thisDXCoil.HCapFTemp == 0) {
+            cFieldName = "Rated COP";
+            thisDXCoil.RatedCOP(1) = s_ip->getRealFieldValue(fields, schemaProps, "rated_cop"); // Numbers(2);
+            if (thisDXCoil.RatedCOP(1) <= 0.0) {
                 ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(7), Alphas(7)));
+                ShowContinueError(state, format("...{} must be > 0.0, entered value=[{:.2T}].", cFieldName, thisDXCoil.RatedCOP(1)));
                 ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are BiQuadratic or Cubic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCapFTemp, // Curve index
-                                                     {1, 2},               // Valid dimensions  // MULTIPLECURVEDIMS
-                                                     RoutineName,          // Routine name
-                                                     CurrentModuleObject,  // Object Type
-                                                     thisDXCoil.Name,      // Object Name
-                                                     cAlphaFields(7));     // Field Name
+            }
 
-                if (!ErrorsFound) {
-                    if (state.dataCurveManager->curves(thisDXCoil.HCapFTemp)->numDims == 1) {
-                        checkCurveIsNormalizedToOne(state,
-                                                    std::string{RoutineName} + CurrentModuleObject,
-                                                    thisDXCoil.Name,
-                                                    thisDXCoil.HCapFTemp,
-                                                    cAlphaFields(7),
-                                                    Alphas(7),
-                                                    InletAirTemp);
-                    } else {
-                        checkCurveIsNormalizedToOne(state,
-                                                    std::string{RoutineName} + CurrentModuleObject,
-                                                    thisDXCoil.Name,
-                                                    thisDXCoil.HCapFTemp,
-                                                    cAlphaFields(7),
-                                                    Alphas(7),
-                                                    InletAirTemp,
-                                                    InletWaterTemp);
-                    }
+            cFieldName = "Rated Sensible Heat Ratio";
+            thisDXCoil.RatedSHR(1) = s_ip->getRealFieldValue(fields, schemaProps, "rated_sensible_heat_ratio"); // Numbers(3);
+            if (thisDXCoil.RatedSHR(1) <= 0.0 || thisDXCoil.RatedSHR(1) > 1.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 0 and <= 1.  entered value=[{:.3T}].", cFieldName, thisDXCoil.RatedSHR(1)));
+
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Evaporator Inlet Air Dry-Bulb Temperature";
+            thisDXCoil.RatedInletDBTemp =
+                s_ip->getRealFieldValue(fields, schemaProps, "rated_evaporator_inlet_air_dry_bulb_temperature"); // Numbers(4);
+            if (thisDXCoil.RatedInletDBTemp <= 5.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 5 {{C}}.  entered value=[{:.1T}].", cFieldName, thisDXCoil.RatedInletDBTemp));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Evaporator Inlet Air Wet-Bulb Temperature";
+            thisDXCoil.RatedInletWBTemp =
+                s_ip->getRealFieldValue(fields, schemaProps, "rated_evaporator_inlet_air_wet_bulb_temperature"); // Numbers(5);
+            if (thisDXCoil.RatedInletWBTemp <= 5.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 5 {{C}}.  entered value=[{:.1T}].", cFieldName, thisDXCoil.RatedInletWBTemp));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Condenser Water Temperature";
+            thisDXCoil.RatedInletWaterTemp = s_ip->getRealFieldValue(fields, schemaProps, "rated_condenser_water_temperature"); // Numbers(6);
+            if (thisDXCoil.RatedInletWaterTemp <= 25.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be > 25 {{C}}.  entered value=[{:.1T}].", cFieldName, thisDXCoil.RatedInletWaterTemp));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Rated Evaporator Air Flow Rate";
+            thisDXCoil.RatedAirVolFlowRate(1) = s_ip->getRealFieldValue(fields, schemaProps, "rated_evaporator_air_flow_rate"); // Numbers(7);
+            if (thisDXCoil.RatedAirVolFlowRate(1) != Constant::AutoCalculate) {
+                if (thisDXCoil.RatedAirVolFlowRate(1) <= 0.0) {
+                    ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                    ShowContinueError(state, format("...{} must be > 0.0.  entered value=[{:.3T}].", cFieldName, thisDXCoil.RatedAirVolFlowRate(1)));
+                    ErrorsFound = true;
                 }
             }
-        }
 
-        if (!lAlphaBlanks(8)) {
-            thisDXCoil.HCapFAirFlow = GetCurveIndex(state, Alphas(8));
-            if (thisDXCoil.HCapFAirFlow == 0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(8), Alphas(8)));
-                ErrorsFound = true;
+            cFieldName = "Evaporator Fan Power Included in Rated COP";
+            std::string fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_fan_power_included_in_rated_cop"); // Alphas(2)
+            BooleanSwitch fanPowerIncluded = static_cast<BooleanSwitch>(getYesNoValue(Util::makeUPPER(fieldValue)));
+            if (fanPowerIncluded != BooleanSwitch::Invalid) {
+                thisDXCoil.FanPowerIncludedInCOP = static_cast<bool>(fanPowerIncluded);
             } else {
-                // Verify Curve Object, only legal types are Cubic or Quadratic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCapFAirFlow, // Curve index
-                                                     {1},                     // Valid dimensions
-                                                     RoutineName,             // Routine name
-                                                     CurrentModuleObject,     // Object Type
-                                                     thisDXCoil.Name,         // Object Name
-                                                     cAlphaFields(8));        // Field Name
+                ShowSevereInvalidBool(state, eoh, cFieldName, fieldValue);
+                ErrorsFound = true;
+            }
+            std::string evapAirInletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_air_inlet_node_name");
+            std::string evapAirOutletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_air_outlet_node_name");
 
-                if (!ErrorsFound) {
-                    checkCurveIsNormalizedToOne(state,
-                                                std::string{RoutineName} + CurrentModuleObject,
-                                                thisDXCoil.Name,
-                                                thisDXCoil.HCapFAirFlow,
-                                                cAlphaFields(8),
-                                                Alphas(8),
-                                                1.0);
+            // Air nodes
+            thisDXCoil.AirInNode = GetOnlySingleNode(state,
+                                                     evapAirInletNodeName,
+                                                     ErrorsFound,
+                                                     DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
+                                                     thisDXCoil.Name,
+                                                     DataLoopNode::NodeFluidType::Air,
+                                                     DataLoopNode::ConnectionType::Inlet,
+                                                     NodeInputManager::CompFluidStream::Primary,
+                                                     ObjectIsNotParent);
+
+            thisDXCoil.AirOutNode = GetOnlySingleNode(state,
+                                                      evapAirOutletNodeName,
+                                                      ErrorsFound,
+                                                      DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
+                                                      thisDXCoil.Name,
+                                                      DataLoopNode::NodeFluidType::Air,
+                                                      DataLoopNode::ConnectionType::Outlet,
+                                                      NodeInputManager::CompFluidStream::Primary,
+                                                      ObjectIsNotParent);
+
+            TestCompSet(state, CurrentModuleObject, thisDXCoil.Name, evapAirInletNodeName, evapAirOutletNodeName, "Air Nodes");
+
+            // Check if the air inlet node is OA node, to justify whether the coil is placed in zone or not
+            thisDXCoil.IsDXCoilInZone = !CheckOutAirNodeNumber(state, thisDXCoil.AirInNode);
+
+            std::string const DummyCondenserInletName("DUMMY CONDENSER INLET " + thisDXCoil.Name);
+            std::string const DummyCondenserOutletName("DUMMY CONDENSER OUTLET " + thisDXCoil.Name);
+            thisDXCoil.WaterInNode = GetOnlySingleNode(state,
+                                                       DummyCondenserInletName,
+                                                       ErrorsFound,
+                                                       DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
+                                                       thisDXCoil.Name,
+                                                       DataLoopNode::NodeFluidType::Water,
+                                                       DataLoopNode::ConnectionType::Inlet,
+                                                       NodeInputManager::CompFluidStream::Secondary,
+                                                       ObjectIsNotParent);
+
+            thisDXCoil.WaterOutNode = GetOnlySingleNode(state,
+                                                        DummyCondenserOutletName,
+                                                        ErrorsFound,
+                                                        DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
+                                                        thisDXCoil.Name,
+                                                        DataLoopNode::NodeFluidType::Water,
+                                                        DataLoopNode::ConnectionType::Outlet,
+                                                        NodeInputManager::CompFluidStream::Secondary,
+                                                        ObjectIsNotParent);
+
+            TestCompSet(state, CurrentModuleObject, thisDXCoil.Name, DummyCondenserInletName, DummyCondenserOutletName, "Water Nodes");
+
+            cFieldName = "Crankcase Heater Capacity";
+            thisDXCoil.CrankcaseHeaterCapacity = s_ip->getRealFieldValue(fields, schemaProps, "crankcase_heater_capacity"); // Numbers(8);
+            if (thisDXCoil.CrankcaseHeaterCapacity < 0.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be >= 0.0  entered value=[{:.1T}].", cFieldName, thisDXCoil.CrankcaseHeaterCapacity));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Maximum Ambient Temperature for Crankcase Heater Operation";
+            thisDXCoil.MaxOATCrankcaseHeater =
+                s_ip->getRealFieldValue(fields, schemaProps, "maximum_ambient_temperature_for_crankcase_heater_operation"); // Numbers(9);
+            if (thisDXCoil.MaxOATCrankcaseHeater < 0.0) {
+                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
+                ShowContinueError(state, format("...{} must be >= 0 {{C}}.  entered value=[{:.1T}].", cFieldName, thisDXCoil.MaxOATCrankcaseHeater));
+                ErrorsFound = true;
+            }
+
+            cFieldName = "Crankcase Heater Capacity Function of Temperature Curve Name"; // cAlphaFields(5)
+            std::string const whCapFTCurveName =
+                s_ip->getAlphaFieldValue(fields, schemaProps, "crankcase_heater_capacity_function_of_temperature_curve_name");
+            // Coil:WaterHeating:AirToWaterHeatPump:Wrapped
+            if (!whCapFTCurveName.empty()) {
+                thisDXCoil.CrankcaseHeaterCapacityCurveIndex = Curve::GetCurveIndex(state, whCapFTCurveName);
+                if (thisDXCoil.CrankcaseHeaterCapacityCurveIndex == 0) { // can't find the curve
+                    ShowSevereError(state, format("{} = {}:  {} not found = {}", CurrentModuleObject, thisDXCoil.Name, cFieldName, whCapFTCurveName));
+                    ErrorsFound = true;
+                } else {
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.CrankcaseHeaterCapacityCurveIndex, // Curve index
+                                                         {1},                                          // Valid dimensions
+                                                         RoutineName,                                  // Routine name
+                                                         CurrentModuleObject,                          // Object Type
+                                                         thisDXCoil.Name,                              // Object Name
+                                                         cFieldName);                                  // Field Name
                 }
             }
-        }
 
-        if (!lAlphaBlanks(9)) {
-            thisDXCoil.HCOPFTemp = GetCurveIndex(state, Alphas(9));
-            if (thisDXCoil.HCOPFTemp == 0) {
+            cFieldName = "Evaporator Air Temperature Type for Curve Objects"; // Alphas(6)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_air_temperature_type_for_curve_objects");
+            thisDXCoil.InletAirTemperatureType = static_cast<HVAC::OATType>(getEnumValue(HVAC::oatTypeNamesUC, Util::makeUPPER(fieldValue)));
+            if (thisDXCoil.InletAirTemperatureType == HVAC::OATType::Invalid) {
+                //   wrong temperature type selection
                 ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(9), Alphas(9)));
+                ShowContinueError(state, format("...{} must be DryBulbTemperature or WetBulbTemperature.", cFieldName));
+                ShowContinueError(state, format("...entered value=\"{}\".", fieldValue));
                 ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are BiQuadratic or Cubic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCOPFTemp, // Curve index
-                                                     {1, 2},               // Valid dimensions  // MULTIPLECURVEDIMS
-                                                     RoutineName,          // Routine name
-                                                     CurrentModuleObject,  // Object Type
-                                                     thisDXCoil.Name,      // Object Name
-                                                     cAlphaFields(9));     // Field Name
-
-                if (!ErrorsFound) {
-                    if (state.dataCurveManager->curves(thisDXCoil.HCOPFTemp)->numDims == 1) {
-                        checkCurveIsNormalizedToOne(state,
-                                                    std::string{RoutineName} + CurrentModuleObject,
-                                                    thisDXCoil.Name,
-                                                    thisDXCoil.HCOPFTemp,
-                                                    cAlphaFields(9),
-                                                    Alphas(9),
-                                                    InletAirTemp);
-                    } else {
-                        checkCurveIsNormalizedToOne(state,
-                                                    std::string{RoutineName} + CurrentModuleObject,
-                                                    thisDXCoil.Name,
-                                                    thisDXCoil.HCOPFTemp,
-                                                    cAlphaFields(9),
-                                                    Alphas(9),
-                                                    InletAirTemp,
-                                                    InletWaterTemp);
-                    }
-                }
             }
-        }
 
-        if (!lAlphaBlanks(10)) {
-            thisDXCoil.HCOPFAirFlow = GetCurveIndex(state, Alphas(10));
-            if (thisDXCoil.HCOPFAirFlow == 0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(10), Alphas(10)));
-                ErrorsFound = true;
+            // set rated inlet air temperature for curve object verification
+            if (thisDXCoil.InletAirTemperatureType == HVAC::OATType::WetBulb) {
+                InletAirTemp = thisDXCoil.RatedInletWBTemp;
             } else {
-                // Verify Curve Object, only legal types are Cubic or Quadratic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.HCOPFAirFlow, // Curve index
-                                                     {1},                     // Valid dimensions
-                                                     RoutineName,             // Routine name
-                                                     CurrentModuleObject,     // Object Type
-                                                     thisDXCoil.Name,         // Object Name
-                                                     cAlphaFields(10));       // Field Name
-
-                if (!ErrorsFound) {
-                    checkCurveIsNormalizedToOne(state,
-                                                std::string{RoutineName} + CurrentModuleObject,
-                                                thisDXCoil.Name,
-                                                thisDXCoil.HCOPFAirFlow,
-                                                cAlphaFields(10),
-                                                Alphas(10),
-                                                1.0);
-                }
+                InletAirTemp = thisDXCoil.RatedInletDBTemp;
             }
-        }
+            // set rated water temperature for curve object verification
+            InletWaterTemp = thisDXCoil.RatedInletWaterTemp;
 
-        if (!lAlphaBlanks(11)) {
-            thisDXCoil.PLFFPLR(1) = GetCurveIndex(state, Alphas(11));
-            if (thisDXCoil.PLFFPLR(1) == 0) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                ShowContinueError(state, format("...not found {}=\"{}\".", cAlphaFields(11), Alphas(11)));
-                ErrorsFound = true;
-            } else {
-                // Verify Curve Object, only legal types are Cubic or Quadratic
-                ErrorsFound |= Curve::CheckCurveDims(state,
-                                                     thisDXCoil.PLFFPLR(1), // Curve index
-                                                     {1},                   // Valid dimensions
-                                                     RoutineName,           // Routine name
-                                                     CurrentModuleObject,   // Object Type
-                                                     thisDXCoil.Name,       // Object Name
-                                                     cAlphaFields(11));     // Field Name
+            cFieldName = "Heating Capacity Function of Temperature Curve Name"; // Alphas(7)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_capacity_function_of_temperature_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCapFTemp = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are BiQuadratic or Cubic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCapFTemp, // Curve index
+                                                         {1, 2},               // Valid dimensions  // MULTIPLECURVEDIMS
+                                                         RoutineName,          // Routine name
+                                                         CurrentModuleObject,  // Object Type
+                                                         thisDXCoil.Name,      // Object Name
+                                                         cFieldName);          // Field Name
 
-                if (!ErrorsFound) {
-                    //       Test PLF curve minimum and maximum. Cap if less than 0.7 or greater than 1.0.
-                    MinCurveVal = 999.0;
-                    MaxCurveVal = -999.0;
-                    CurveInput = 0.0;
-                    while (CurveInput <= 1.0) {
-                        CurveVal = CurveValue(state, thisDXCoil.PLFFPLR(1), CurveInput);
-                        if (CurveVal < MinCurveVal) {
-                            MinCurveVal = CurveVal;
-                            MinCurvePLR = CurveInput;
+                    if (!ErrorsFound) {
+                        if (state.dataCurveManager->curves(thisDXCoil.HCapFTemp)->numDims == 1) {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCapFTemp,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        InletAirTemp);
+                        } else {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCapFTemp,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        InletAirTemp,
+                                                        InletWaterTemp);
                         }
-                        if (CurveVal > MaxCurveVal) {
-                            MaxCurveVal = CurveVal;
-                            MaxCurvePLR = CurveInput;
-                        }
-                        CurveInput += 0.01;
-                    }
-                    if (MinCurveVal < 0.7) {
-                        ShowWarningError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                        ShowContinueError(state, format("...{} = {} has out of range value.", cAlphaFields(11), Alphas(11)));
-                        ShowContinueError(state,
-                                          format("...Curve minimum must be >= 0.7, curve min at PLR = {:.2T} is {:.3T}", MinCurvePLR, MinCurveVal));
-                        ShowContinueError(state, "...Setting curve minimum to 0.7 and simulation continues.");
-                        Curve::SetCurveOutputMinValue(state, thisDXCoil.PLFFPLR(1), ErrorsFound, 0.7);
-                    }
-
-                    if (MaxCurveVal > 1.0) {
-                        ShowWarningError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
-                        ShowContinueError(state, format("...{} = {} has out of range value.", cAlphaFields(11), Alphas(11)));
-                        ShowContinueError(state,
-                                          format("...Curve maximum must be <= 1.0, curve max at PLR = {:.2T} is {:.3T}", MaxCurvePLR, MaxCurveVal));
-                        ShowContinueError(state, "...Setting curve maximum to 1.0 and simulation continues.");
-                        Curve::SetCurveOutputMaxValue(state, thisDXCoil.PLFFPLR(1), ErrorsFound, 1.0);
                     }
                 }
             }
+
+            cFieldName = "Heating Capacity Function of Air Flow Fraction Curve Name"; // Alphas(8)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_capacity_function_of_air_flow_fraction_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCapFAirFlow = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are Cubic or Quadratic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCapFAirFlow, // Curve index
+                                                         {1},                     // Valid dimensions
+                                                         RoutineName,             // Routine name
+                                                         CurrentModuleObject,     // Object Type
+                                                         thisDXCoil.Name,         // Object Name
+                                                         cFieldName);             // Field Name
+
+                    if (!ErrorsFound) {
+                        checkCurveIsNormalizedToOne(state,
+                                                    std::string{RoutineName} + CurrentModuleObject,
+                                                    thisDXCoil.Name,
+                                                    thisDXCoil.HCapFAirFlow,
+                                                    cFieldName,
+                                                    fieldValue,
+                                                    1.0);
+                    }
+                }
+            }
+
+            cFieldName = "Heating COP Function of Temperature Curve Name"; // Alphas(9)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_cop_function_of_temperature_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCOPFTemp = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are BiQuadratic or Cubic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCOPFTemp, // Curve index
+                                                         {1, 2},               // Valid dimensions  // MULTIPLECURVEDIMS
+                                                         RoutineName,          // Routine name
+                                                         CurrentModuleObject,  // Object Type
+                                                         thisDXCoil.Name,      // Object Name
+                                                         cFieldName);          // Field Name
+
+                    if (!ErrorsFound) {
+                        if (state.dataCurveManager->curves(thisDXCoil.HCOPFTemp)->numDims == 1) {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCOPFTemp,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        InletAirTemp);
+                        } else {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCOPFTemp,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        InletAirTemp,
+                                                        InletWaterTemp);
+                        }
+                    }
+                }
+            }
+
+            cFieldName = "Heating COP Function of Air Flow Fraction Curve Name"; // Alphas(10)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "heating_cop_function_of_air_flow_fraction_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.HCOPFAirFlow = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are Cubic or Quadratic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.HCOPFAirFlow, // Curve index
+                                                         {1},                     // Valid dimensions
+                                                         RoutineName,             // Routine name
+                                                         CurrentModuleObject,     // Object Type
+                                                         thisDXCoil.Name,         // Object Name
+                                                         cFieldName);             // Field Name
+
+                    if (!ErrorsFound) {
+                        if (state.dataCurveManager->curves(thisDXCoil.HCOPFTemp)->numDims == 1) {
+                            checkCurveIsNormalizedToOne(state,
+                                                        std::string{RoutineName} + CurrentModuleObject,
+                                                        thisDXCoil.Name,
+                                                        thisDXCoil.HCOPFAirFlow,
+                                                        cFieldName,
+                                                        fieldValue,
+                                                        1.0);
+                        }
+                    }
+                }
+            }
+
+            cFieldName = "Part Load Fraction Correlation Curve Name"; // Alphas(11)
+            fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "part_load_fraction_correlation_curve_name");
+            if (!fieldValue.empty()) {
+                if ((thisDXCoil.PLFFPLR(1) = Curve::GetCurveIndex(state, fieldValue)) == 0) {
+                    ShowSevereItemNotFound(state, eoh, cFieldName, fieldValue);
+                    ErrorsFound = true;
+                } else {
+                    // Verify Curve Object, only legal types are Cubic or Quadratic
+                    ErrorsFound |= Curve::CheckCurveDims(state,
+                                                         thisDXCoil.PLFFPLR(1), // Curve index
+                                                         {1},                   // Valid dimensions
+                                                         RoutineName,           // Routine name
+                                                         CurrentModuleObject,   // Object Type
+                                                         thisDXCoil.Name,       // Object Name
+                                                         cFieldName);           // Field Name
+
+                    if (!ErrorsFound) {
+                        // Test PLF curve minimum and maximum. Cap if less than 0.7 or greater than 1.0.
+                        MinCurveVal = 999.0;
+                        MaxCurveVal = -999.0;
+                        CurveInput = 0.0;
+                        while (CurveInput <= 1.0) {
+                            CurveVal = CurveValue(state, thisDXCoil.PLFFPLR(1), CurveInput);
+                            if (CurveVal < MinCurveVal) {
+                                MinCurveVal = CurveVal;
+                                MinCurvePLR = CurveInput;
+                            }
+                            if (CurveVal > MaxCurveVal) {
+                                MaxCurveVal = CurveVal;
+                                MaxCurvePLR = CurveInput;
+                            }
+                            CurveInput += 0.01;
+                        }
+                        if (MinCurveVal < 0.7) {
+                            ShowSevereBadMin(
+                                state, eoh, cFieldName, MinCurveVal, Clusive::In, 0.7, "Setting curve minimum to 0.7 and simulation continues.");
+                            Curve::SetCurveOutputMinValue(state, thisDXCoil.PLFFPLR(1), ErrorsFound, 0.7);
+                        }
+                        if (MaxCurveVal > 1.0) {
+                            ShowSevereBadMax(
+                                state, eoh, cFieldName, MaxCurveVal, Clusive::In, 1.0, "Setting curve maximum to 1.0 and simulation continues.");
+                            Curve::SetCurveOutputMaxValue(state, thisDXCoil.PLFFPLR(1), ErrorsFound, 1.0);
+                        }
+                    }
+                }
+            }
+
+            // assume compressor resides at the inlet to the DX Coil
+            thisDXCoil.CondenserInletNodeNum(1) = thisDXCoil.AirInNode;
+
+            // set condenser type as HPWH
+            thisDXCoil.CondenserType(1) = DataHeatBalance::RefrigCondenserType::WaterHeater;
         }
-
-        // assume compressor resides at the inlet to the DX Coil
-        thisDXCoil.CondenserInletNodeNum(1) = thisDXCoil.AirInNode;
-
-        // set condenser type as HPWH
-        thisDXCoil.CondenserType(1) = DataHeatBalance::RefrigCondenserType::WaterHeater;
-
-    } // end of the DX water heater wrapped coil loop
+    }
+    //} // end of the DX water heater wrapped coil loop
 
     if (ErrorsFound) {
         ShowFatalError(state,
@@ -6582,7 +6617,7 @@ void GetDXCoils(EnergyPlusData &state)
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 thisDXCoil.Name);
-            // Followings for VRF_FluidTCtrl Only
+            // Following for VRF_FluidTCtrl Only
             SetupOutputVariable(state,
                                 "Cooling Coil VRF Evaporating Temperature",
                                 Constant::Units::C,
@@ -6647,7 +6682,7 @@ void GetDXCoils(EnergyPlusData &state)
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 thisDXCoil.Name);
-            // Followings for VRF_FluidTCtrl Only
+            // Following for VRF_FluidTCtrl Only
             SetupOutputVariable(state,
                                 "Heating Coil VRF Condensing Temperature",
                                 Constant::Units::C,
@@ -6848,28 +6883,29 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
         if (state.dataAirLoop->AirLoopInputsFilled) {
             //     Set report variables for DX cooling coils that will have a crankcase heater (all DX coils not used in a HP AC unit)
             for (DXCoilNumTemp = 1; DXCoilNumTemp <= state.dataDXCoils->NumDXCoils; ++DXCoilNumTemp) {
-                if ((state.dataDXCoils->DXCoil(DXCoilNumTemp).DXCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) ||
-                    (state.dataDXCoils->DXCoil(DXCoilNumTemp).DXCoilType_Num == HVAC::CoilDX_CoolingSingleSpeed) ||
-                    (state.dataDXCoils->DXCoil(DXCoilNumTemp).DXCoilType_Num == HVAC::CoilDX_MultiSpeedCooling)) {
-                    if (state.dataDXCoils->DXCoil(DXCoilNumTemp).ReportCoolingCoilCrankcasePower) {
+                auto &dXCoil_withCrankCase = state.dataDXCoils->DXCoil(DXCoilNumTemp);
+                if ((dXCoil_withCrankCase.DXCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) ||
+                    (dXCoil_withCrankCase.DXCoilType_Num == HVAC::CoilDX_CoolingSingleSpeed) ||
+                    (dXCoil_withCrankCase.DXCoilType_Num == HVAC::CoilDX_MultiSpeedCooling)) {
+                    if (dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower) {
                         SetupOutputVariable(state,
                                             "Cooling Coil Crankcase Heater Electricity Rate",
                                             Constant::Units::W,
-                                            state.dataDXCoils->DXCoil(DXCoilNumTemp).CrankcaseHeaterPower,
+                                            dXCoil_withCrankCase.CrankcaseHeaterPower,
                                             OutputProcessor::TimeStepType::System,
                                             OutputProcessor::StoreType::Average,
-                                            state.dataDXCoils->DXCoil(DXCoilNumTemp).Name);
+                                            dXCoil_withCrankCase.Name);
                         SetupOutputVariable(state,
                                             "Cooling Coil Crankcase Heater Electricity Energy",
                                             Constant::Units::J,
-                                            state.dataDXCoils->DXCoil(DXCoilNumTemp).CrankcaseHeaterConsumption,
+                                            dXCoil_withCrankCase.CrankcaseHeaterConsumption,
                                             OutputProcessor::TimeStepType::System,
                                             OutputProcessor::StoreType::Sum,
-                                            state.dataDXCoils->DXCoil(DXCoilNumTemp).Name,
+                                            dXCoil_withCrankCase.Name,
                                             Constant::eResource::Electricity,
                                             OutputProcessor::Group::HVAC,
                                             OutputProcessor::EndUseCat::Cooling);
-                        state.dataDXCoils->DXCoil(DXCoilNumTemp).ReportCoolingCoilCrankcasePower = false;
+                        dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower = false;
                     }
                 }
             }
@@ -7695,7 +7731,6 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 state.dataSize->DataCapacityUsedForSizing = thisDXCoil.RatedTotCap(Mode);
                 state.dataSize->DataEMSOverrideON = thisDXCoil.RatedSHREMSOverrideOn(Mode);
                 state.dataSize->DataEMSOverride = thisDXCoil.RatedSHREMSOverrideValue(Mode);
-                bool ErrorsFound = false;
                 sizerCoolingSHR.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
                 thisDXCoil.RatedSHR(Mode) = sizerCoolingSHR.size(state, TempSize, ErrorsFound);
                 state.dataSize->DataDXSpeedNum = 0;
@@ -7946,7 +7981,6 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 state.dataSize->DataConstantUsedForSizing = thisDXCoil.RatedSHR(Mode);
                 state.dataSize->DataFractionUsedForSizing = 1.0;
                 state.dataSize->DataDXSpeedNum = 2; // refers to low speed in sizer
-                bool ErrorsFound = false;
                 TempSize = thisDXCoil.RatedSHR2;
                 sizerCoolingSHR.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
                 thisDXCoil.RatedSHR2 = sizerCoolingSHR.size(state, TempSize, ErrorsFound);
@@ -8166,7 +8200,6 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 state.dataSize->DataCapacityUsedForSizing = MSRatedTotCapDesAtMaxSpeed;
                 state.dataSize->DataEMSOverrideON = thisDXCoil.RatedSHREMSOverrideOn(Mode);
                 state.dataSize->DataEMSOverride = thisDXCoil.RatedSHREMSOverrideValue(Mode);
-                bool ErrorsFound = false;
                 state.dataSize->DataDXSpeedNum = Mode;
                 sizerCoolingSHR.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
                 thisDXCoil.MSRatedSHR(Mode) = sizerCoolingSHR.size(state, TempSize, ErrorsFound);
@@ -8178,7 +8211,6 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                 MSRatedSHRDes = thisDXCoil.MSRatedSHR(Mode);
             } else {
                 TempSize = thisDXCoil.MSRatedSHR(Mode);
-                bool ErrorsFound = false;
                 state.dataSize->DataDXSpeedNum = Mode;
                 state.dataSize->DataFractionUsedForSizing = MSRatedSHRDes;
                 state.dataSize->DataConstantUsedForSizing = 1.0;
@@ -9432,10 +9464,7 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
     thisDXCoil.PrintLowAmbMessage = false;
     thisDXCoil.PrintLowOutTempMessage = false;
 
-    if ((AirMassFlow > 0.0) &&
-        (thisDXCoil.availSched->getCurrentVal() > 0.0 || thisDXCoil.DXCoilType_Num == HVAC::CoilDX_HeatPumpWaterHeaterPumped ||
-         thisDXCoil.DXCoilType_Num == HVAC::CoilDX_HeatPumpWaterHeaterWrapped) &&
-        (PartLoadRatio > 0.0) && (compressorOp == HVAC::CompressorOp::On) &&
+    if ((AirMassFlow > 0.0) && (thisDXCoil.availSched->getCurrentVal() > 0.0) && (PartLoadRatio > 0.0) && (compressorOp == HVAC::CompressorOp::On) &&
         CompAmbTemp > thisDXCoil.MinOATCompressor) { // criteria for coil operation
         if (fanOp == HVAC::FanOp::Cycling) {
             AirMassFlow /= (PartLoadRatio / DXcoolToHeatPLRRatio);
@@ -9528,12 +9557,12 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
         RatedCBF = thisDXCoil.RatedCBF(Mode);
         if (RatedCBF > 0.0) {
             A0 = -std::log(RatedCBF) * thisDXCoil.RatedAirMassFlowRate(Mode);
-        } else {
-            A0 = 0.0;
-        }
-        ADiff = -A0 / AirMassFlow;
-        if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
-            CBF = std::exp(ADiff);
+            ADiff = -A0 / AirMassFlow;
+            if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
+                CBF = std::exp(ADiff);
+            } else {
+                CBF = 0.0;
+            }
         } else {
             CBF = 0.0;
         }
@@ -10508,12 +10537,12 @@ void CalcVRFCoolingCoil(EnergyPlusData &state,
         RatedCBF = thisDXCoil.RatedCBF(Mode);
         if (RatedCBF > 0.0) {
             A0 = -std::log(RatedCBF) * thisDXCoil.RatedAirMassFlowRate(Mode);
-        } else {
-            A0 = 0.0;
-        }
-        ADiff = -A0 / AirMassFlow;
-        if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
-            CBF = std::exp(ADiff);
+            ADiff = -A0 / AirMassFlow;
+            if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
+                CBF = std::exp(ADiff);
+            } else {
+                CBF = 0.0;
+            }
         } else {
             CBF = 0.0;
         }
@@ -11967,12 +11996,12 @@ Real64 AdjustCBF(Real64 const CBFNom,             // nominal coil bypass factor
 
     if (CBFNom > 0.0) {
         A0 = -std::log(CBFNom) * AirMassFlowRateNom;
-    } else {
-        A0 = 0.0;
-    }
-    ADiff = -A0 / AirMassFlowRate;
-    if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
-        CBFAdj = std::exp(ADiff);
+        ADiff = -A0 / AirMassFlowRate;
+        if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
+            CBFAdj = std::exp(ADiff);
+        } else {
+            CBFAdj = 1.0e-6;
+        }
     } else {
         CBFAdj = 1.0e-6;
     }
@@ -12024,6 +12053,7 @@ Real64 CalcCBF(EnergyPlusData &state,
     Real64 DeltaHumRat(0.0);                // Humidity ratio drop across evaporator at given conditions [kg/kg]
     Real64 OutletAirTemp(InletAirTemp);     // Outlet dry-bulb temperature from evaporator at given conditions [C]
     Real64 OutletAirTempSat(InletAirTemp);  // Saturation dry-bulb temperature from evaporator at outlet air enthalpy [C]
+    Real64 OutletAirDPTemp(InletAirTemp);   // Dew point temperature from evaporator at outlet air enthalpy [C]
     Real64 OutletAirEnthalpy;               // Enthalpy of outlet air at given conditions [J/kg]
     Real64 OutletAirHumRat(InletAirHumRat); // Outlet humidity ratio from evaporator at given conditions [kg/kg]
     Real64 OutletAirRH;                     // relative humidity of the outlet air
@@ -12055,6 +12085,25 @@ Real64 CalcCBF(EnergyPlusData &state,
     DeltaHumRat = InletAirHumRat - OutletAirHumRat;
     OutletAirEnthalpy = InletAirEnthalpy - DeltaH;
     OutletAirTemp = PsyTdbFnHW(OutletAirEnthalpy, OutletAirHumRat);
+    OutletAirDPTemp = PsyTdpFnWPb(state, OutletAirHumRat, DataEnvironment::StdPressureSeaLevel);
+    if (OutletAirTemp < OutletAirDPTemp) {
+        ShowSevereError(state, format("For object = {}, name = \"{}\"", UnitType, UnitName));
+        ShowContinueError(state, "Calculated outlet air temperature is lower than the dew point temperature at the same humidity ratio.");
+        ShowContinueError(state, format("...Inlet Air Temperature                      = {:.2R} C", InletAirTemp));
+        ShowContinueError(state, format("...Outlet Air Temperature                     = {:.2R} C", OutletAirTemp));
+        ShowContinueError(state, format("...Dew Point Temperature                      = {:.2R} C", OutletAirDPTemp));
+        ShowContinueError(state, format("...Inlet Air Humidity Ratio                   = {:.6R} kgWater/kgDryAir", InletAirHumRat));
+        ShowContinueError(state, format("...Outlet Air Humidity Ratio                  = {:.6R} kgWater/kgDryAir", OutletAirHumRat));
+        ShowContinueError(state, format("...Dew Point Humidity Ratio                   = {:.6R} kgWater/kgDryAir", OutletAirHumRat));
+        ShowContinueError(state, format("...Inlet Air Enthalpy                         = {:.2R} J/kg", InletAirEnthalpy));
+        ShowContinueError(state, format("...Outlet Air Enthalpy                        = {:.2R} J/kg", OutletAirEnthalpy));
+        ShowContinueError(state, format("...Total Cooling Capacity used in calculation = {:.2R} W", TotCap));
+        ShowContinueError(state, format("...Air Mass Flow Rate used in calculation     = {:.6R} kg/s", AirMassFlowRate));
+        ShowContinueError(state, format("...Air Volume Flow Rate used in calculation   = {:.6R} m3/s", AirVolFlowRate));
+        ShowContinueError(state, format("...Sensible Heat Ratio                        = {:.2R}", SHR));
+        ShowContinueError(state, "Check coil design sensible heat ratio, total gross rated capacity, and air flow inputs.");
+    }
+
     //  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
     //  Pressure will have to be pass into this subroutine to fix this one
     OutletAirRH = PsyRhFnTdbWPb(state, OutletAirTemp, OutletAirHumRat, DataEnvironment::StdPressureSeaLevel, RoutineName);
@@ -12177,8 +12226,12 @@ Real64 CalcCBF(EnergyPlusData &state,
             Slope = (InletAirHumRat - ADPHumRat) / max(0.001, (InletAirTemp - ADPTemp));
 
             //     check for convergence (slopes are equal to within error tolerance)
+            if (SlopeAtConds > 0) {
+                Error = (Slope - SlopeAtConds) / SlopeAtConds;
+            } else {
+                Error = 0; // SHR = 1
+            }
 
-            Error = (Slope - SlopeAtConds) / SlopeAtConds;
             if ((Error > 0.0) && (ErrorLast < 0.0)) {
                 DeltaADPTemp = -DeltaADPTemp / 2.0;
             } else if ((Error < 0.0) && (ErrorLast > 0.0)) {
@@ -12280,10 +12333,31 @@ Real64 ValidateADP(EnergyPlusData &state,
     SHR = InitialSHR;
     AirMassFlow =
         AirVolFlowRate * PsyRhoAirFnPbTdbW(state, DataEnvironment::StdPressureSeaLevel, RatedInletAirTemp, RatedInletAirHumRat, CallingRoutine);
+    DeltaH = TotCap / AirMassFlow;
+    InletAirEnthalpy = PsyHFnTdbW(RatedInletAirTemp, RatedInletAirHumRat);
+    Real64 enthalpyMaxADP = InletAirEnthalpy - DeltaH;
+    Real64 tempADPMax = PsyTsatFnHPb(state, enthalpyMaxADP, DataEnvironment::StdPressureSeaLevel, CallingRoutine);
+    Real64 humRatADP = PsyWFnTdbH(state, tempADPMax, enthalpyMaxADP, CallingRoutine);
+    Real64 enthalpyTempinHumRatADP = PsyHFnTdbW(RatedInletAirTemp, humRatADP);
+    Real64 shrADPMax = (enthalpyTempinHumRatADP - enthalpyMaxADP) / (InletAirEnthalpy - enthalpyMaxADP);
+    if (shrADPMax > 1.0) {
+        ShowWarningError(state, format("ValidateADP: Sensible heat ratio (SHR) calculation error for {} \"{} ", UnitType, UnitName));
+        ShowContinueError(state, "The maximum design SHR calculated based on the design total cooling capacity and flow rate is greater than 1.0.");
+        ShowContinueError(state, format("...Total Cooling Capacity                  = {:.2R} W", TotCap));
+        ShowContinueError(state, format("...Mass Flow Rate                          = {:.6R} kg/s", AirMassFlow));
+        ShowContinueError(state, format("...Volumetric Flow Rate                    = {:.6R} m3/s", AirVolFlowRate));
+        ShowContinueError(state, format("...Coil Inlet Temperature                  = {:.2R} C", RatedInletAirTemp));
+        ShowContinueError(state, format("...Coil Inlet Humidity Ratio               = {:.6R} kgWater/kgDryAir", RatedInletAirHumRat));
+        ShowContinueError(state, format("...Coil Inlet Enthalpy                     = {:.6R} J/kg", InletAirEnthalpy));
+        ShowContinueError(state, format("...Coil Apparatus Dew Point Temperature     = {:.2R} C", tempADPMax));
+        ShowContinueError(state, format("...Coil Apparatus Dew Point Humidity Ratio  = {:.6R} kgWater/kgDryAir", humRatADP));
+        ShowContinueError(
+            state, format("...Coil Enthalpy at Inlet Temperature and Apparatus Dew Point Humidity Ratio  = {:.2R} C", enthalpyTempinHumRatADP));
+        ShowContinueError(state, "The maximum design SHR is assumed to be 1.0.");
+    }
+    shrADPMax = min(1.0, shrADPMax);
     while (bStillValidating) {
         CBF_calculated = max(0.0, CalcCBF(state, UnitType, UnitName, RatedInletAirTemp, RatedInletAirHumRat, TotCap, AirMassFlow, SHR, bNoReporting));
-        DeltaH = TotCap / AirMassFlow;
-        InletAirEnthalpy = PsyHFnTdbW(RatedInletAirTemp, RatedInletAirHumRat);
         HTinHumRatOut = InletAirEnthalpy - (1.0 - SHR) * DeltaH;
         OutletAirHumRat = PsyWFnTdbH(state, RatedInletAirTemp, HTinHumRatOut, CallingRoutine);
         DeltaHumRat = RatedInletAirHumRat - OutletAirHumRat;
@@ -12314,8 +12388,9 @@ Real64 ValidateADP(EnergyPlusData &state,
                     SHR += 0.001; // increase SHR slowly until ADP temps are resolved
                 }
             }
-            if (SHR > 0.8) {
-                bStillValidating = false; // have to stop somewhere, this is the upper limit of SHR empirical model (see Autosizing/CoolingSHRSizing)
+            if (SHR > shrADPMax) {
+                SHR = shrADPMax;
+                bStillValidating = false;
             }
         } else {
             bStillValidating = false; // ADP temps are close enough. Normal input files hit this on first pass
@@ -12450,7 +12525,9 @@ Real64 CalcEffectiveSHR(EnergyPlusData &state,
     To1 = aa + Tcl;
     Error = 1.0;
     while (Error > 0.001) {
-        To2 = aa - Tcl * (std::exp(-To1 / Tcl) - 1.0);
+        //  Floating overflow errors occur when -To1/Tcl is a large positive number.
+        //  Cap upper limit at 700 to avoid the overflow errors.
+        To2 = aa - Tcl * std::expm1(min(700.0, -To1 / Tcl));
         Error = std::abs((To2 - To1) / To1);
         To1 = To2;
     }
@@ -15008,9 +15085,8 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
         // determine footnote content
         countStaticInputs = 0;
         for (index = 1; index <= state.dataDXCoils->NumDXCoils; ++index) {
-
-            if (state.dataDXCoils->DXCoil(index).RateWithInternalStaticAndFanObject &&
-                state.dataDXCoils->DXCoil(index).DXCoilType_Num == HVAC::CoilDX_CoolingTwoSpeed) {
+            auto &dxCoil_temp = state.dataDXCoils->DXCoil(index);
+            if (dxCoil_temp.RateWithInternalStaticAndFanObject && dxCoil_temp.DXCoilType_Num == HVAC::CoilDX_CoolingTwoSpeed) {
                 ++countStaticInputs;
             }
         }
@@ -15147,31 +15223,29 @@ void GetFanIndexForTwoSpeedCoil(
     int BranchNum;
     int CompNum;
 
+    auto &thisDXCoil = state.dataDXCoils->DXCoil(CoolingCoilIndex);
+
     FoundBranch = 0;
     FoundAirSysNum = 0;
     SupplyFanIndex = 0;
     SupplyFanName = "n/a";
     for (AirSysNum = 1; AirSysNum <= NumPrimaryAirSys; ++AirSysNum) {
+        auto &primaryAirSystem = state.dataAirSystemsData->PrimaryAirSystems(AirSysNum);
+        for (BranchNum = 1; BranchNum <= primaryAirSystem.NumBranches; ++BranchNum) {
 
-        for (BranchNum = 1; BranchNum <= state.dataAirSystemsData->PrimaryAirSystems(AirSysNum).NumBranches; ++BranchNum) {
+            for (CompNum = 1; CompNum <= primaryAirSystem.Branch(BranchNum).TotalComponents; ++CompNum) {
+                auto &comp = primaryAirSystem.Branch(BranchNum).Comp(CompNum);
+                if (comp.CompType_Num == SimAirServingZones::CompType::DXSystem) {
 
-            for (CompNum = 1; CompNum <= state.dataAirSystemsData->PrimaryAirSystems(AirSysNum).Branch(BranchNum).TotalComponents; ++CompNum) {
-
-                if (state.dataAirSystemsData->PrimaryAirSystems(AirSysNum).Branch(BranchNum).Comp(CompNum).CompType_Num ==
-                    SimAirServingZones::CompType::DXSystem) {
-
-                    if (Util::SameString(state.dataAirSystemsData->PrimaryAirSystems(AirSysNum).Branch(BranchNum).Comp(CompNum).Name,
-                                         state.dataDXCoils->DXCoil(CoolingCoilIndex).CoilSystemName)) {
+                    if (Util::SameString(comp.Name, thisDXCoil.CoilSystemName)) {
                         FoundBranch = BranchNum;
                         FoundAirSysNum = AirSysNum;
                         break;
                     }
                     // these are specified in SimAirServingZones and need to be moved to a Data* file. UnitarySystem=19
-                } else if (state.dataAirSystemsData->PrimaryAirSystems(AirSysNum).Branch(BranchNum).Comp(CompNum).CompType_Num ==
-                           SimAirServingZones::CompType::UnitarySystemModel) {
+                } else if (comp.CompType_Num == SimAirServingZones::CompType::UnitarySystemModel) {
 
-                    if (Util::SameString(state.dataAirSystemsData->PrimaryAirSystems(AirSysNum).Branch(BranchNum).Comp(CompNum).Name,
-                                         state.dataDXCoils->DXCoil(CoolingCoilIndex).CoilSystemName)) {
+                    if (Util::SameString(comp.Name, thisDXCoil.CoilSystemName)) {
                         FoundBranch = BranchNum;
                         FoundAirSysNum = AirSysNum;
                         break;
@@ -15180,26 +15254,24 @@ void GetFanIndexForTwoSpeedCoil(
             }
 
             if (FoundBranch > 0 && FoundAirSysNum > 0) {
-                for (CompNum = 1; CompNum <= state.dataAirSystemsData->PrimaryAirSystems(FoundAirSysNum).Branch(FoundBranch).TotalComponents;
-                     ++CompNum) {
-                    if (state.dataAirSystemsData->PrimaryAirSystems(FoundAirSysNum).Branch(FoundBranch).Comp(CompNum).CompType_Num ==
-                        SimAirServingZones::CompType::Fan_Simple_VAV) {
-                        SupplyFanName = state.dataAirSystemsData->PrimaryAirSystems(FoundAirSysNum).Branch(FoundBranch).Comp(CompNum).Name;
+                auto &primaryAirSystem_BranchFound = state.dataAirSystemsData->PrimaryAirSystems(FoundAirSysNum).Branch(FoundBranch);
+                for (CompNum = 1; CompNum <= primaryAirSystem_BranchFound.TotalComponents; ++CompNum) {
+                    auto &comp = primaryAirSystem_BranchFound.Comp(CompNum);
+                    if (comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_VAV) {
+                        SupplyFanName = comp.Name;
                         SupplyFanIndex = Fans::GetFanIndex(state, SupplyFanName);
                         supplyFanType = HVAC::FanType::VAV;
                         break;
                         // these are specified in SimAirServingZones and need to be moved to a Data* file. UnitarySystem=19
-                    } else if (state.dataAirSystemsData->PrimaryAirSystems(FoundAirSysNum).Branch(FoundBranch).Comp(CompNum).CompType_Num ==
-                               SimAirServingZones::CompType::Fan_System_Object) {
-                        SupplyFanName = state.dataAirSystemsData->PrimaryAirSystems(FoundAirSysNum).Branch(FoundBranch).Comp(CompNum).Name;
+                    } else if (comp.CompType_Num == SimAirServingZones::CompType::Fan_System_Object) {
+                        SupplyFanName = comp.Name;
                         SupplyFanIndex = Fans::GetFanIndex(state, SupplyFanName);
                         supplyFanType = HVAC::FanType::SystemModel;
 
-                    } else if (state.dataAirSystemsData->PrimaryAirSystems(FoundAirSysNum).Branch(FoundBranch).Comp(CompNum).CompType_Num ==
-                               SimAirServingZones::CompType::UnitarySystemModel) {
+                    } else if (comp.CompType_Num == SimAirServingZones::CompType::UnitarySystemModel) {
                         // fan may not be specified in a unitary system object, keep looking
                         // Unitary System will "set" the fan index to the DX coil if contained within the HVAC system
-                        if (state.dataDXCoils->DXCoil(CoolingCoilIndex).SupplyFanIndex > 0) {
+                        if (thisDXCoil.SupplyFanIndex > 0) {
                             break;
                         }
                     }
@@ -15777,13 +15849,13 @@ int GetHPCoolingCoilIndex(EnergyPlusData &state,
 
     // Check and warn user is crankcase heater power or max OAT for crankcase heater differs in DX cooling and heating coils
     if (DXCoolingCoilIndex > 0) {
-        if (state.dataDXCoils->DXCoil(DXCoolingCoilIndex).CrankcaseHeaterCapacity != 0.0) {
-            if (state.dataDXCoils->DXCoil(DXCoolingCoilIndex).CrankcaseHeaterCapacity !=
-                    state.dataDXCoils->DXCoil(HeatingCoilIndex).CrankcaseHeaterCapacity ||
-                state.dataDXCoils->DXCoil(DXCoolingCoilIndex).MaxOATCrankcaseHeater !=
-                    state.dataDXCoils->DXCoil(HeatingCoilIndex).MaxOATCrankcaseHeater) {
+        auto &thisDXCoolingCoil = state.dataDXCoils->DXCoil(DXCoolingCoilIndex);
+        auto &thisDXHeatingCoil = state.dataDXCoils->DXCoil(HeatingCoilIndex);
+        if (thisDXCoolingCoil.CrankcaseHeaterCapacity != 0.0) {
+            if (thisDXCoolingCoil.CrankcaseHeaterCapacity != thisDXHeatingCoil.CrankcaseHeaterCapacity ||
+                thisDXCoolingCoil.MaxOATCrankcaseHeater != thisDXHeatingCoil.MaxOATCrankcaseHeater) {
                 ShowWarningError(state, "Crankcase heater capacity or max outdoor temp for crankcase heater operation specified in");
-                ShowContinueError(state, format("Coil:Cooling:DX:SingleSpeed = {}", state.dataDXCoils->DXCoil(DXCoolingCoilIndex).Name));
+                ShowContinueError(state, format("Coil:Cooling:DX:SingleSpeed = {}", thisDXCoolingCoil.Name));
                 ShowContinueError(state, format("is different than that specified in Coil:Heating:DX:SingleSpeed = {}.", HeatingCoilName));
                 ShowContinueError(state,
                                   format("Both of these DX coils are part of {}={}.",
@@ -16758,7 +16830,7 @@ void CalcVRFCoolingCoil_FluidTCtrl(EnergyPlusData &state,
     Real64 OutletAirEnthalpy; // Supply air enthalpy (average value if constant fan, full output if cycling fan)
     Real64 ADiff;             // Used for exponential
 
-    // Followings for VRF FluidTCtrl Only
+    // Following for VRF FluidTCtrl Only
     Real64 QCoilReq;       // Coil load (W)
     Real64 FanSpdRatio;    // Fan speed ratio
     Real64 AirMassFlowMin; // Min air mass flow rate due to OA requirement [kg/s]
@@ -16957,12 +17029,12 @@ void CalcVRFCoolingCoil_FluidTCtrl(EnergyPlusData &state,
         RatedCBF = thisDXCoil.RatedCBF(Mode);
         if (RatedCBF > 0.0) {
             A0 = -std::log(RatedCBF) * thisDXCoil.RatedAirMassFlowRate(Mode);
-        } else {
-            A0 = 0.0;
-        }
-        ADiff = -A0 / AirMassFlow;
-        if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
-            CBF = std::exp(ADiff);
+            ADiff = -A0 / AirMassFlow;
+            if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
+                CBF = std::exp(ADiff);
+            } else {
+                CBF = 0.0;
+            }
         } else {
             CBF = 0.0;
         }
@@ -16997,7 +17069,7 @@ void CalcVRFCoolingCoil_FluidTCtrl(EnergyPlusData &state,
         // }
 
         //  Get total capacity modifying factor (function of temperature) for off-rated conditions
-        //  InletAirHumRat may be modified in this ADP/BF loop, use temporary varible for calculations
+        //  InletAirHumRat may be modified in this ADP/BF loop, use temporary variable for calculations
 
         // commented, not used issue #6950
         // InletAirHumRatTemp = InletAirHumRat;
@@ -17222,7 +17294,7 @@ void CalcVRFHeatingCoil_FluidTCtrl(EnergyPlusData &state,
     Real64 OutletAirHumRat;           // Supply air humidity ratio (average value if constant fan, full output if cycling fan)
     Real64 OutletAirEnthalpy;         // Supply air enthalpy (average value if constant fan, full output if cycling fan)
 
-    // Followings for VRF FluidTCtrl Only
+    // Following for VRF FluidTCtrl Only
     Real64 QCoilReq;       // Coil load (W)
     Real64 FanSpdRatio;    // Fan Speed Ratio
     Real64 AirMassFlowMin; // Min air mass flow rate due to OA requirement [kg/s]
@@ -17528,7 +17600,9 @@ void ControlVRFIUCoil(EnergyPlusData &state,
     RHsat = 0.98; // Saturated RH
     MaxSH = 15;
     MaxSC = 20;
-    Garate = state.dataDXCoils->DXCoil(CoilIndex).RatedAirMassFlowRate(1);
+
+    auto const &thisDXCoil = state.dataDXCoils->DXCoil(CoilIndex);
+    Garate = thisDXCoil.RatedAirMassFlowRate(1);
     FanSpdRatioMin = min(OAMassFlow / Garate, 1.0); // ensure that coil flow rate is higher than OA flow rate
 
     if (QCoil == 0) {
@@ -17549,11 +17623,11 @@ void ControlVRFIUCoil(EnergyPlusData &state,
         QCoilSenCoolingLoad = -QCoil;
 
         // Coefficients describing coil performance
-        SH = state.dataDXCoils->DXCoil(CoilIndex).SH;
-        C1Tevap = state.dataDXCoils->DXCoil(CoilIndex).C1Te;
-        C2Tevap = state.dataDXCoils->DXCoil(CoilIndex).C2Te;
-        C3Tevap = state.dataDXCoils->DXCoil(CoilIndex).C3Te;
-        BF = state.dataDXCoils->DXCoil(CoilIndex).RateBFVRFIUEvap;
+        SH = thisDXCoil.SH;
+        C1Tevap = thisDXCoil.C1Te;
+        C2Tevap = thisDXCoil.C2Te;
+        C3Tevap = thisDXCoil.C3Te;
+        BF = thisDXCoil.RateBFVRFIUEvap;
 
         // Coil sensible heat transfer_minimum value
         CalcVRFCoilSenCap(state, FlagCoolMode, CoilIndex, Tin, TeTc, SH, BF, QinSenPerFlowRate, Ts_1);
@@ -17648,11 +17722,11 @@ void ControlVRFIUCoil(EnergyPlusData &state,
         QCoilSenHeatingLoad = QCoil;
 
         // Coefficients describing coil performance
-        SC = state.dataDXCoils->DXCoil(CoilIndex).SC;
-        C1Tcond = state.dataDXCoils->DXCoil(CoilIndex).C1Tc;
-        C2Tcond = state.dataDXCoils->DXCoil(CoilIndex).C2Tc;
-        C3Tcond = state.dataDXCoils->DXCoil(CoilIndex).C3Tc;
-        BF = state.dataDXCoils->DXCoil(CoilIndex).RateBFVRFIUCond;
+        SC = thisDXCoil.SC;
+        C1Tcond = thisDXCoil.C1Tc;
+        C2Tcond = thisDXCoil.C2Tc;
+        C3Tcond = thisDXCoil.C3Tc;
+        BF = thisDXCoil.RateBFVRFIUCond;
 
         // Coil sensible heat transfer_minimum value
         CalcVRFCoilSenCap(state, FlagHeatMode, CoilIndex, Tin, TeTc, SC, BF, QinSenPerFlowRate, Ts_1);
@@ -17740,7 +17814,7 @@ void CalcVRFCoilSenCap(EnergyPlusData &state,
     //        (1) refrigerant temperature (Te or Tc), (2) SH or SC, and (3) inlet air temperature.
     //
     // METHODOLOGY EMPLOYED:
-    //        A new physics based VRF model appliable for Fluid Temperature Control.
+    //        A new physics based VRF model applicable for Fluid Temperature Control.
     //
 
     int constexpr FlagCoolMode(0); // Flag for cooling mode
@@ -17757,12 +17831,14 @@ void CalcVRFCoilSenCap(EnergyPlusData &state,
     Real64 T_coil_in;              // Air temperature at coil inlet (C)
     Real64 T_coil_out;             // Air temperature at coil outlet (C)
 
+    auto const &thisDXCoil = state.dataDXCoils->DXCoil(CoilNum);
+
     if (OperationMode == FlagCoolMode) {
         // Cooling: OperationMode 0
 
-        C1Tevap = state.dataDXCoils->DXCoil(CoilNum).C1Te;
-        C2Tevap = state.dataDXCoils->DXCoil(CoilNum).C2Te;
-        C3Tevap = state.dataDXCoils->DXCoil(CoilNum).C3Te;
+        C1Tevap = thisDXCoil.C1Te;
+        C2Tevap = thisDXCoil.C2Te;
+        C3Tevap = thisDXCoil.C3Te;
         SH = SHSC;
         T_coil_in = Tinlet;
 
@@ -17779,9 +17855,9 @@ void CalcVRFCoilSenCap(EnergyPlusData &state,
     } else if (OperationMode == FlagHeatMode) {
         // Heating: OperationMode 1
 
-        C1Tcond = state.dataDXCoils->DXCoil(CoilNum).C1Tc;
-        C2Tcond = state.dataDXCoils->DXCoil(CoilNum).C2Tc;
-        C3Tcond = state.dataDXCoils->DXCoil(CoilNum).C3Tc;
+        C1Tcond = thisDXCoil.C1Tc;
+        C2Tcond = thisDXCoil.C2Tc;
+        C3Tcond = thisDXCoil.C3Tc;
         SC = SHSC;
         T_coil_in = Tinlet;
 
