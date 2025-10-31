@@ -467,16 +467,16 @@ An example of this object follows.
 
 \begin{lstlisting}
 SolarCollector:FlatPlate:PhotovoltaicThermal,
-  PVT: 1_Ceiling ,            !- Name
-  1_Ceiling ,                 !- Surface Name
-  30percentPVThalfArea ,      !- Photovoltaic-Thermal Model Performance Name
-  PV:ZN_1_FLR_1_SEC_1_Ceiling ,  !- Photovoltaic Name
-  Air ,                       !- Thermal Working Fluid Type
+  PVT: 1_Ceiling,             !- Name
+  1_Ceiling,                  !- Surface Name
+  30percentPVThalfArea,       !- Photovoltaic-Thermal Model Performance Name
+  PV:ZN_1_FLR_1_SEC_1_Ceiling,!- Photovoltaic Name
+  Air,                        !- Thermal Working Fluid Type
   ,                           !- Water Inlet Node Name
   ,                           !- Water Outlet Node Name
-  ZN_1_FLR_1_SEC_1:Sys_OAInlet Node ,  !- Air Inlet Node Name
-  PVT:ZN_1_FLR_1_SEC_1_Ceiling Outlet ,  !- Air Outlet Node Name
-  Autosize ;                  !- Design Flow Rate
+  ZN_1_FLR_1_SEC_1:Sys_OAInlet Node,  !- Air Inlet Node Name
+  PVT:ZN_1_FLR_1_SEC_1_Ceiling Outlet,  !- Air Outlet Node Name
+  Autosize;                   !- Design Flow Rate
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-3-018}
@@ -554,12 +554,12 @@ An example input object follows.
 
 \begin{lstlisting}
 SolarCollectorPerformance:PhotovoltaicThermal:Simple,
-  20percentEffPVhalfArea ,    !- Name
-  0.5 ,                       !- Fraction of Surface Area with Active Thermal Collector
-  Fixed ,                     !- Thermal Conversion Efficiency Input Mode Type
-  0.2 ,                       !- Value for Thermal Conversion Efficiency if Fixed
+  20percentEffPVhalfArea,     !- Name
+  0.5,                        !- Fraction of Surface Area with Active Thermal Collector
+  Fixed,                      !- Thermal Conversion Efficiency Input Mode Type
+  0.2,                        !- Value for Thermal Conversion Efficiency if Fixed
   ,                           !- Name of Schedule for Thermal Conversion Efficiency
-  0.84 ;                      !- Front Surface Emittance
+  0.84;                       !- Front Surface Emittance
 \end{lstlisting}
 
 \subsection{SolarCollectorPerformance:PhotovoltaicThermal:BIPVT}\label{solarcollectorperformancephotovoltaicthermalBIPVT}
@@ -904,10 +904,10 @@ An example of this object follows.
 SolarCollector:UnglazedTranspired,
   Shop OA UTSC ZN11,          !- Name
   UTSC OSCM ZN11,             !- Boundary Conditions Model Name
-  HeatingAvailSched ,         !- Availability Schedule Name
-  Outside Air Inlet Node ZN11 ,  !- Inlet Node Name
-  UTSC Outlet Node ZN11 ,     !- Outlet Node Name
-  Mixed Air Node ZN11 ,       !- Setpoint Node Name
+  HeatingAvailSched,          !- Availability Schedule Name
+  Outside Air Inlet Node ZN11,!- Inlet Node Name
+  UTSC Outlet Node ZN11,      !- Outlet Node Name
+  Mixed Air Node ZN11,        !- Setpoint Node Name
   ZN11 Node,                  !- Zone Node Name
   ShopFreeHeatingSetpoints,   !- Free Heating Setpoint Schedule Name
   0.0016,                     !- Diameter of Perforations in Collector
@@ -920,7 +920,7 @@ SolarCollector:UnglazedTranspired,
   Triangle,                   !- Hole Layout Pattern for Pitch
   Kutscher1994,               !- Heat Exchange Effectiveness Correlation
   1.165,                      !- Ratio of Actual Collector Surface Area to Projected Surface Area
-  MediumRough ,               !- Roughness of Collector
+  MediumRough,                !- Roughness of Collector
   0.00086,                    !- Collector Thickness
   0.25,                       !- Effectiveness for Perforations with Respect to Wind
   0.5,                        !- Discharge Coefficient for Openings with Respect to Buoyancy Driven Flow
@@ -1068,7 +1068,7 @@ An example of this object follows.
 
 \begin{lstlisting}
 SolarCollector:UnglazedTranspired:Multisystem,
-  OFFICE MultiSystem OA UTSC ,!- Solar Collector Name
+  OFFICE MultiSystem OA UTSC, !- Solar Collector Name
   Outside Air Inlet Node ZN1, !- Outdoor Air System 1 Collector Inlet Node
   UTSC Outlet Node ZN1,       !- Outdoor Air System 1 Collector Outlet Node
   Mixed Air Node ZN1,         !- Outdoor Air System 1 Mixed Air Node

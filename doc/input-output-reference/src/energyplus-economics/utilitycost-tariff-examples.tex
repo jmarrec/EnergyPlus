@@ -202,7 +202,7 @@ UtilityCost:Charge:Block,
   remaining,                  !- Block Size 3 Value or Variable Name
   0.07103;                    !- Block 3 Cost per Unit Value or Variable Name
 
-Schedule:Compact, TwoSeasonSchedule, number,
+  Schedule:Compact, TwoSeasonSchedule, number,
   Through: 5/31, For: AllDays, Until: 24:00, 1,
   Through: 9/30, For: AllDays, Until: 24:00, 3,
   Through: 12/31, For: AllDays, Until: 24:00, 1;
@@ -330,21 +330,21 @@ UtilityCost:Qualify,
   Count,                      !- Threshold Test
   1;                          !- Number of Months
 
-Schedule:Compact, TwoSeasonSchedule, number,
+  Schedule:Compact, TwoSeasonSchedule, number,
   Through: 5/31, For: AllDays,  Until: 24:00, 1,
   Through: 9/30, For: AllDays,  Until: 24:00, 3,
   Through: 12/31, For: AllDays, Until: 24:00, 1;
 
-Schedule:Compact, TimeOfDaySchedule, number,
+  Schedule:Compact, TimeOfDaySchedule, number,
   Through: 5/31, For: AllDays,  Until: 15:00, 3,
-  Until: 22:00, 1,
-  Until: 24:00, 3,
+                                Until: 22:00, 1,
+                                Until: 24:00, 3,
   Through: 9/30, For: AllDays,  Until: 10:00, 3,
-  Until: 19:00, 1,
-  Until: 24:00, 3,
+                                Until: 19:00, 1,
+                                Until: 24:00, 3,
   Through: 12/31, For: AllDays, Until: 15:00, 3,
-  Until: 22:00, 1,
-  Until: 24:00, 3;
+                                Until: 22:00, 1,
+                                Until: 24:00, 3;
 \end{lstlisting}
 
 \subsubsection{Example G -- Blocks within Blocks}\label{example-g-blocks-within-blocks}
@@ -527,7 +527,7 @@ UtilityCost:Charge:Simple,
 The next part of this example is a rate that uses net-metering. With net metering the meter conceptually turns backwards when the energy is being sold to the utility directly reducing the energy consumption being charged.~ Effectively, the rate charge for purchased electricity is the same as the rate credited for electricity sold to the utility. In this the ``Buy or Sell'' field should be set to ``netMetering.''~ It is also important the ``Output Meter'' is set to a meter that represents net metering such as ``ElectricityNet:Facility.'' The following example shows a simple example tariff using net metering with a single UtilityCost:Charge:Simple:
 
 \begin{lstlisting}
-!- EXAMPLE I – Net Metering
+!  EXAMPLE I – Net Metering
   UtilityCost:Tariff,
   ExampleI-NetMeter,          !- Name
   ElectricityNet:Facility,    !- Output Meter Name

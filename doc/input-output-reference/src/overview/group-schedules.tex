@@ -391,16 +391,16 @@ Schedule:Compact,
   For: AllOtherDays,
   Until: 24:00,  .1;
 
-!- Schedule Continuous
-  Schedule:Compact,
+! Schedule Continuous
+Schedule:Compact,
   Continuous,
   on/off,
   Through: 12/31,
   For: AllDays,
   Until: 24:00, 1.0;
 
-!- Schedule Daytime Ventilation
-  Schedule:Compact,
+! Schedule Daytime Ventilation
+Schedule:Compact,
   Daytime Ventilation,
   Fraction,
   Through: 12/31,
@@ -541,7 +541,7 @@ Schedule:File,
 
 \paragraph{Field: Adjust Schedule for Daylight Savings}\label{adjust-schedule-for-daylight-savings-1}
 
-This field indicates whether or not to shift the schedule forward an hour during daylight savings time. If ``Yes'' the schedule skips forward an hour in the CSV on the ``spring forward'' day and repeats an hour on the ``fall back'' day. If  ``No'', the schedule is read and applied in standard time, without adjusting for daylight savings time (\textbf{\hyperref[runperiodcontroldaylightsavingtime]{RunPeriodControl:DaylightSavingTime}}). This indicator is defaulted to ``Yes'' if no input is provided.
+This field indicates whether or not to shift the schedule forward an hour during daylight savings time. If ``Yes'' the schedule skips forward an hour in the CSV on the ``spring forward'' day and repeats an hour on the ``fall back'' day. If  ``No'', the schedule is read and applied in standard time, without adjusting for daylight savings time (\textbf{\hyperref[runperiodcontroldaylightsavingtime]{RunPeriodControl:DaylightSavingTime}}). This indicator is defaulted to ``Yes'' if no input is provided. 
 
 Here is an IDF example:
 
@@ -564,8 +564,11 @@ Schedule:File,
 An optional report can be used to gain the values described in the previous Schedule objects. This is a condensed reporting that illustrates the full range of schedule values---in the style of input: DaySchedule, WeekSchedule, Annual Schedule.
 
 \begin{lstlisting}
-Output:Schedules, Hourly;  !- will give them on hourly increments (day schedule resolution)
-Output:Schedules, Timestep;  !- will give them at the timestep of the simulation
+! will give them on hourly increments (day schedule resolution)
+Output:Schedules, Hourly;
+
+! will give them at the timestep of the simulation
+Output:Schedules, Timestep;
 \end{lstlisting}
 
 This report is placed on the eplusout.eio file. Details of this reporting are shown in the Output Details and Examples document.

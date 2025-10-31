@@ -130,9 +130,9 @@ ZoneInfiltration:DesignFlowRate,
   ,                           !- Flow Rate per Floor Area {m3/s/m2}
   ,                           !- Flow Rate per Exterior Surface Area {m3/s/m2}
   ,                           !- Air Changes per Hour
-  0.6060000    ,              !- Constant Term Coefficient
+  0.6060000,                  !- Constant Term Coefficient
   3.6359996E-02,              !- Temperature Term Coefficient
-  0.1177165    ,              !- Velocity Term Coefficient
+  0.1177165,                  !- Velocity Term Coefficient
   0.0000000E+00,              !- Velocity Squared Term Coefficient
   Outdoor;                    !- Density Basis
 \end{lstlisting}
@@ -258,7 +258,7 @@ ZoneInfiltration:EffectiveLeakageArea,
   INF-SCHED,                  !- Schedule Name
   500.0,                      !- Effective Air Leakage Area
   0.000145,                   !- Stack Coefficient
-  0.000174 ;                  !- Wind Coefficient
+  0.000174;                   !- Wind Coefficient
 \end{lstlisting}
 
 \subsection{ZoneInfiltration:FlowCoefficient}\label{zoneinfiltrationflowcoefficient}
@@ -390,8 +390,8 @@ ZoneInfiltration:FlowCoefficient,
   INF-SCHED,                  !- Schedule Name
   0.05,                       !- Flow Coefficient
   0.089,                      !- Stack Coefficient
-  0.67  ,                     !- Pressure Exponent
-  0.156 ,                     !- Wind Coefficient
+  0.67,                       !- Pressure Exponent
+  0.156,                      !- Wind Coefficient
   0.64;                       !- Shelter Factor
 \end{lstlisting}
 
@@ -714,7 +714,7 @@ ZoneVentilation:DesignFlowRate,
   INTAKE,                     !- Ventilation Type
   400.0,                      !- Fan Pressure Rise{Pa}
   0.9,                        !- Fan Total Efficiency
-  0.6060000    ,              !- Constant Term Coefficient
+  0.6060000,                  !- Constant Term Coefficient
   2.0199999E-02,              !- Temperature Term Coefficient
   5.9800001E-04,              !- Velocity Term Coefficient
   0.0000000E+00               !- Velocity Squared Term Coefficient
@@ -2373,10 +2373,9 @@ An IDF example is shown below:
 
 \begin{lstlisting}
 ZoneAirMassFlowConservation,
-  AdjustReturnOnly,           !- Adjust Zone Mixing and Return For Air Mass Flow Balance
-  AdjustInfiltrationFlow;     !- Infiltration Balancing Method
-
-AllZones;                     !- Infiltration Balancing Zones
+  AdjustReturnOnly,          !- Adjust Zone Mixing and Return For Air Mass Flow Balance
+  AdjustInfiltrationFlow,    !- Infiltration Balancing Method
+  AllZones;                  !- Infiltration Balancing Zones
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-7-000}

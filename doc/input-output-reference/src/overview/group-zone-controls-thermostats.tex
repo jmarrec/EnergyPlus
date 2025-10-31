@@ -153,13 +153,13 @@ ZoneControl:Thermostat,
 A complete zone thermostat example showing this statement and all of the objects it must reference is:
 
 \begin{lstlisting}
-!- Zone control object which links thermostats to a particular zone
-ZoneControl:Thermostat, Zone 2 Thermostat, EAST ZONE,
+! Zone control object which links thermostats to a particular zone
+  ZoneControl:Thermostat, Zone 2 Thermostat, EAST ZONE,
   Zone Control Type Sched,
   ThermostatSetpoint:SingleCooling, Cooling Setpoint with SB,
   ThermostatSetpoint:SingleHeating; Heating Setpoint with SB;
 
-!- Control type objects     these may be used in more than one zone
+! Control type objects     these may be used in more than one zone
   ThermostatSetpoint:SingleCooling,
   Cooling Setpoint with SB,
   Cooling Setpoints;
@@ -168,15 +168,13 @@ ThermostatSetpoint:SingleHeating,
   Heating Setpoint with SB,
   Heating Setpoints;
 
-!- Schedule type definitions
-  ScheduleTypeLimits,Temperature,-60:200,CONTINUOUS;
+! Schedule type definitions
+ScheduleTypeLimits,Temperature,-60:200,CONTINUOUS;
 
 ScheduleTypeLimits,Control Type,0:4,DISCRETE;
 
-!- Control type schedule definition
-  Schedule:Compact,
-  Zone Control Type Sched,
-  Control Type,
+! Control type schedule definition
+Schedule:Compact, Zone Control Type Sched, Control Type,
   Through: 3/31,
   For: AllDays,
   Until: 24:00, 1,            !- Single Heating
@@ -187,20 +185,16 @@ ScheduleTypeLimits,Control Type,0:4,DISCRETE;
   For: AllDays,
   Until: 24:00, 1;            !- Single Heating
 
-!- Heating setpoint schedule definition
-Schedule:Compact,
-  Heating Setpoints,
-  Temperature,
+! Heating setpoint schedule definition
+Schedule:Compact, Heating Setpoints, Temperature,
   Through: 12/31,
   For: AllDays,
   Until: 7:00, 15.,
   Until: 17:00,20.,
   Until: 24:00,15.;
 
-!- Cooling setpoint schedule definition
-Schedule:Compact,
-  Cooling Setpoints,
-  Temperature,
+! Cooling setpoint schedule definition
+Schedule:Compact, Cooling Setpoints, Temperature,
   Through: 12/31,
   For: AllDays,
   Until: 7:00, 30.,

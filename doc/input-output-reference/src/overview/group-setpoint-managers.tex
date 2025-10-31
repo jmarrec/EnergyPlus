@@ -1497,11 +1497,11 @@ An example input follows.
 
 \begin{lstlisting}
 SetpointManager:SingleZone:OneStageCooling,
-  ZSF2 cooling on_off ,       !- Name
-  -99.0 ,                     !- Cooling Stage On Supply Air Setpoint Temperature
-  99.0 ,                      !- Cooling Stage Off Supply Air Setpoint Temperature
-  ZSF2 ,                      !- Control Zone Name
-  DX Cooling Coil 3 Outlet Node ;  !- Setpoint Node or NodeList Name
+  ZSF2 cooling on_off,        !- Name
+  -99.0,                      !- Cooling Stage On Supply Air Setpoint Temperature
+  99.0,                       !- Cooling Stage Off Supply Air Setpoint Temperature
+  ZSF2,                       !- Control Zone Name
+  DX Cooling Coil 3 Outlet Node;  !- Setpoint Node or NodeList Name
 \end{lstlisting}
 
 \subsection{SetpointManager:SingleZone:OneStageHeating}\label{setpointmanagersinglezoneonestageheating}
@@ -1534,11 +1534,11 @@ An example input follows.
 
 \begin{lstlisting}
 SetpointManager:SingleZone:OneStageHeating,
-  ZNF1 heating on_off ,       !- Name
-  99.0 ,                      !- Heating Stage On Supply Air Setpoint Temperature
-  -99.0 ,                     !- Heating Stage Off Supply Air Setpoint Temperature
-  ZNF1 ,                      !- Control Zone Name
-  Main Heating Coil 2 Air Outlet Node ;  !- Setpoint Node or NodeList Name
+  ZNF1 heating on_off,        !- Name
+  99.0,                       !- Heating Stage On Supply Air Setpoint Temperature
+  -99.0,                      !- Heating Stage Off Supply Air Setpoint Temperature
+  ZNF1,                       !- Control Zone Name
+  Main Heating Coil 2 Air Outlet Node;  !- Setpoint Node or NodeList Name
 \end{lstlisting}
 
 \subsection{SetpointManager:ReturnTemperature:ChilledWater}\label{setpointmanagerreturntemperaturechilledwater}

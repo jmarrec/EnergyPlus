@@ -947,10 +947,10 @@ An example IDF showing how this object is used is provided below:
 
 \begin{lstlisting}
 ElectricLoadCenter:Storage:Converter,
-  Grid Charge Converter ,     !- Name
-  ALWAYS\_ON ,                !- Availability Schedule Name
-  SimpleFixed ,               !- Power Conversion Efficiency Method
-  0.95 ,                      !- Simple Fixed Efficiency
+  Grid Charge Converter,      !- Name
+  ALWAYS\_ON,                 !- Availability Schedule Name
+  SimpleFixed,                !- Power Conversion Efficiency Method
+  0.95,                       !- Simple Fixed Efficiency
   ,                           !- Design Maximum Continuous Input Power
   ,                           !- Efficiency Function of Power Curve Name 20
   ,                           !- Ancillary Power Consumed In Standby
@@ -2360,8 +2360,8 @@ Generator:MicroTurbine,
   300,                        !- Standby Power {W}
   4500;                       !- Ancillary Power {W}
 
-!- Electrical Power Modifier Curve (function of temperature and elevation)
-!- x = Dry-Bulb Temperature of Combustion Inlet Air (C) and y = Elevation (meters)
+! Electrical Power Modifier Curve (function of temperature and elevation)
+! x = Dry-Bulb Temperature of Combustion Inlet Air (C) and y = Elevation (meters)
   Curve:Biquadratic,
   Power_vs_Temp_Elev,         !- Name
   1.2027697,                  !- Coefficient1 Constant
@@ -2375,8 +2375,8 @@ Generator:MicroTurbine,
   0.0,                        !- Minimum Value of y
   3050.;                      !- Maximum Value of y
 
-!- Electrical Efficiency Modifier Curve (function of temperature)
-!- x = Dry-Bulb Temperature of Combustion Inlet Air (C)
+! Electrical Efficiency Modifier Curve (function of temperature)
+! x = Dry-Bulb Temperature of Combustion Inlet Air (C)
   Curve:Cubic,
   Efficiency_vs_Temp,         !- Name
   1.0402217,                  !- Coefficient1 Constant
@@ -2386,8 +2386,8 @@ Generator:MicroTurbine,
   -20.0,                      !- Minimum Value of x
   50.0;                       !- Maximum Value of x
 
-!- Electrical Efficiency Modifier Curve (function of part-load ratio)
-!- x = Part-Load Ratio (electrical load/steady-state electrical power output)
+! Electrical Efficiency Modifier Curve (function of part-load ratio)
+! x = Part-Load Ratio (electrical load/steady-state electrical power output)
   Curve:Cubic,
   Efficiency_vs_PLR,          !- Name
   0.215290,                   !- Coefficient1 Constant
@@ -4345,7 +4345,7 @@ This field contains the name of a \hyperref[curvecubic]{Curve:Cubic} input objec
 
 This field describes the portion of the compressor electrical power that is lost to the surroundings. The rest of the energy is added to the fuel stream. A heat loss factor of 1.0 indicates that all the heat is lost to the surroundings and no energy is added to the fuel inlet stream.
 
-Note with \emph{LiquidGeneric} fuel type, currently this value would not taken into effect. In this case a heat loss factor of 1.0 is always used for this fuel type.
+Note with \emph{LiquidGeneric} fuel type, currently this value would not taken into effect. In this case a heat loss factor of 1.0 is always used for this fuel type. 
 
 \paragraph{Field: Fuel Type}\label{field-fuel-type-3}
 
@@ -4547,9 +4547,9 @@ An example idf instance of this object follows:
 \begin{lstlisting}
 PhotovoltaicPerformance:Simple,
   Simple PV Flat,             !- Name
-  0.1044 ,                    !- Fraction of Surface area that has active solar cells
-  FIXED ,                     !- Conversion efficiency input mode
-  0.12 ,                      !- Value for cell efficiency if fixed
+  0.1044,                     !- Fraction of Surface area that has active solar cells
+  FIXED,                      !- Conversion efficiency input mode
+  0.12,                       !- Value for cell efficiency if fixed
   ;                           !- Name of Schedule that Defines Efficiency
 \end{lstlisting}
 

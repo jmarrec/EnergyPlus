@@ -2775,29 +2775,29 @@ The following is an example input for an evaporative condenser
 
 \begin{lstlisting}
 Refrigeration:Condenser:EvaporativeCooled,
-  MedTempEvapCooledCondenser ,!- Refrigeration Condenser Name
-  64800. ,                    !- Rated Total Heat Rejection Effect, {W}
-  0. ,                        !- Rated Subcooling
-  VariableSpeed ,             !- Condenser Fan Speed Control
+  MedTempEvapCooledCondenser, !- Refrigeration Condenser Name
+  64800.,                     !- Rated Total Heat Rejection Effect, {W}
+  0.,                         !- Rated Subcooling
+  VariableSpeed,              !- Condenser Fan Speed Control
   746.,                       !- Rated Condenser Fan Power
   0.25,                       !- Minimum air flow fraction through condenser fan {dimensionless}
-  6.63  ,                     !- Evaporative Condenser Approach Temp Const, {C}
-  0.468 ,                     !- Evaporative Condenser Approach Temp HRCF Coefficient
-  17.93 ,                     !- Evaporative Condenser Approach Temp 1/hrcf coefficient
+  6.63,                       !- Evaporative Condenser Approach Temp Const, {C}
+  0.468,                      !- Evaporative Condenser Approach Temp HRCF Coefficient
+  17.93,                      !- Evaporative Condenser Approach Temp 1/hrcf coefficient
   -0.322,                     !- Evaporative Condenser Approach Temp Twb coefficient {1/C}
-  0.6  ,                      !- Minimum Condenser Capacity Factor
-  4.8  ,                      !- Maximum Condenser Capacity Factor
+  0.6,                        !- Minimum Condenser Capacity Factor
+  4.8,                        !- Maximum Condenser Capacity Factor
   Outside Air Inlet Node,     !- Condenser Air Inlet Node Name
-  1.79 ,                      !- Rated Air Flow Rate {m3/s}
-  66.7 ,                      !- Basin Heater Capacity {W/C}
-  1.0  ,                      !- Basin Heater Set Point Temperature {C}
-  250. ,                      !- Rated Water Pump Power {W}
+  1.79,                       !- Rated Air Flow Rate {m3/s}
+  66.7,                       !- Basin Heater Capacity {W/C}
+  1.0,                        !- Basin Heater Set Point Temperature {C}
+  250.,                       !- Rated Water Pump Power {W}
   EvapWaterStorageTank,       !- Evaporative Water Supply Tank Name
   EvapCondAvail,              !- Evaporative Condenser Availability Schedule Name
   ,                           !- End-UseSubcategory
-  21.9 ,                      !- Condenser Refrigerant Operating Charge {kg}
-  10.  ,                      !- Condensate Receiver Refrigerant Inventory
-  25. ;                       !- Condensate Piping Refrigerant Inventory
+  21.9,                       !- Condenser Refrigerant Operating Charge {kg}
+  10.,                        !- Condensate Receiver Refrigerant Inventory
+  25.;                        !- Condensate Piping Refrigerant Inventory
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-7-008}
@@ -3085,10 +3085,10 @@ The following is an example input for a water cooled condenser.
 
 \begin{lstlisting}
 Refrigeration:Condenser:WaterCooled,
-  MediumTempCondenser ,       !- Name
-  58000. ,                    !- Rated Effective Total Heat Rejection Rate {W}
-  29.4 ,                      !- Rated Condensing Temperature {C}
-  0.0 ,                       !- Rated Subcooling Temperature Difference{deltaC}
+  MediumTempCondenser,        !- Name
+  58000.,                     !- Rated Effective Total Heat Rejection Rate {W}
+  29.4,                       !- Rated Condensing Temperature {C}
+  0.0,                        !- Rated Subcooling Temperature Difference{deltaC}
   10.0,                       !- Rated Water Inlet Temperature {C}
   Condenser Inlet Node,       !- Water Inlet Node Name
   Condenser Outlet Node,      !- Water- Outlet Node Name
@@ -3099,9 +3099,9 @@ Refrigeration:Condenser:WaterCooled,
   55.,                        !- Maximum Water Outlet Temperature {C}
   ,                           !- Minimum Water Inlet Temperature {C}
   ,                           !- End-Use Subcategory
-  30. ,                       !- Condenser Refrigerant Operating Charge {kg}
-  65. ,                       !- Condensate Receiver Refrigerant Inventory {kg}
-  20. ;                       !- Condensate Piping Refrigerant Inventory {kg}
+  30.,                        !- Condenser Refrigerant Operating Charge {kg}
+  65.,                        !- Condensate Receiver Refrigerant Inventory {kg}
+  20.;                        !- Condensate Piping Refrigerant Inventory {kg}
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-8-007}
@@ -3270,10 +3270,10 @@ The following is an example input for a cascade condenser.
 
 \begin{lstlisting}
 Refrigeration:Condenser:Cascade,
-  CascadeCondenser1 ,         !- Name
-  -4. ,                       !- Rated Condensing Temperature {C}
-  3. ,                        !- Rated Approach Temperature Difference {DeltaC}
-  20000.0 ,                   !- Rated Effective Total Heat Rejection Rate {W}
+  CascadeCondenser1,          !- Name
+  -4.,                        !- Rated Condensing Temperature {C}
+  3.,                         !- Rated Approach Temperature Difference {DeltaC}
+  20000.0,                    !- Rated Effective Total Heat Rejection Rate {W}
   Fixed;                      !- Condensing Temperature Control Type
 \end{lstlisting}
 
@@ -3470,7 +3470,7 @@ The following is an example input for a transfer load list.
 
 \begin{lstlisting}
 Refrigeration:TransferLoadList,
-  MedTempTransferLoads ,      !- Name
+  MedTempTransferLoads,       !- Name
   CascadeCondFrozen,          !- Cascade Condenser Name or Secondary System Name
   SecondLoopDairy;            !- Cascade Condenser Name or Secondary System Name
 \end{lstlisting}

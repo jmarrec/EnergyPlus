@@ -680,7 +680,7 @@ Timestep,
   12;
 
 Material,
-  PCMPlasterBoard ,           !- Name
+  PCMPlasterBoard,            !- Name
   Smooth,                     !- Roughness
   1.9050000E-02,              !- Thickness {m}
   4.2,                        !- Conductivity {W/m-K}
@@ -1454,9 +1454,9 @@ WindowMaterial:Glazing:RefractionExtinctionMethod,
   4MM CLEAR GLASS,            !- Material name
   0.004,                      !- Thickness {m}
   1.526,                      !- Solar index of refraction
-  30.0 ,                      !- Solar extinction coefficient (1/m)
+  30.0,                       !- Solar extinction coefficient (1/m)
   1.526,                      !- Visible index of refraction
-  30.0 ,                      !- Visible extinction coefficient (1/m)
+  30.0,                       !- Visible extinction coefficient (1/m)
   0.0,                        !- IR transmittance at normal incidence
   0.84,                       !- IR emissivity
   0.9;                        !- Conductivity {W/m-K}
@@ -1548,7 +1548,7 @@ WindowMaterial:Gas,
   Air,                        !- Gas Type
   0.0063;                     !- Thickness {m}
 
-!- Added for thermochromic glazings
+! Added for thermochromic glazings
   WindowMaterial:GlazingGroup:Thermochromic,
   TCGlazings,
   0 ,  TCGlazing0,
@@ -2120,10 +2120,10 @@ An example of this object is as follows:
 
 \begin{lstlisting}
 WindowMaterial:SimpleGlazingSystem,
-  SimpleWindow:DOUBLE PANE WINDOW ,  !- Name
-  2.716 ,                     !- U-Factor
-  0.763 ,                     !- Solar Heat Gain Coefficient
-  0.812 ;                     !- Visible Transmittance
+  SimpleWindow:DOUBLE PANE WINDOW,  !- Name
+  2.716,                      !- U-Factor
+  0.763,                      !- Solar Heat Gain Coefficient
+  0.812;                      !- Visible Transmittance
 \end{lstlisting}
 
 \subsection{WindowMaterial:Shade}\label{windowmaterialshade}
@@ -2145,7 +2145,7 @@ There are two methods of assigning a shade to a window:
 \begin{itemize}
 
 \item 1) Define the construction of the window without the shade, the so-called ``bare'' construction.
-
+	
 \item 2) Reference the bare construction in the \hyperref[fenestrationsurfacedetailed]{FenestrationSurface:Detailed} for the window.
 
 \item 3) Define the WindowMaterial:Shade.
@@ -2458,31 +2458,31 @@ An IDF example:
 WindowMaterial:Blind,
   White Painted Metal Blind,  !- Name
   HORIZONTAL,                 !- Slat orientation
-  0.025   ,                   !- Slat width (m)
-  0.01875 ,                   !- Slat separation (m)
-  0.001   ,                   !- Slat thickness (m)
-  45.0    ,                   !- Slat angle (deg)
-  44.9    ,                   !- Slat conductivity (W/m-K)
-  0.0     ,                   !- Slat beam solar transmittance
-  0.8     ,                   !- Front Side Slat beam solar reflectance
-  0.8     ,                   !- Back Side Slat beam solar reflectance
-  0.0     ,                   !- Slat diffuse solar transmittance
-  0.8     ,                   !- Front Side Slat diffuse solar reflectance
-  0.8     ,                   !- Back Side Slat diffuse solar reflectance
-  0.0     ,                   !- Slat beam visible transmittance
-  0.7     ,                   !- Front Side Slat beam visible reflectance
-  0.7     ,                   !- Back Side Slat beam visible reflectance
-  0.0     ,                   !- Slat diffuse visible transmittance
-  0.7     ,                   !- Front Side Slat diffuse visible reflectance
-  0.7     ,                   !- Back Side Slat diffuse visible reflectance
-  0.0     ,                   !- Slat Infrared hemispherical transmittance
-  0.9     ,                   !- Front Side Slat Infrared hemispherical emissivity
-  0.9     ,                   !- Back Side Slat Infrared hemispherical emissivity
-  0.050   ,                   !- Blind-to-glass distance
-  0.0     ,                   !- Blind top opening multiplier
-  0.0     ,                   !- Blind bottom opening multiplier
-  0.5     ,                   !- Blind left-side opening multiplier
-  0.5     ,                   !- Blind right-side opening multiplier
+  0.025,                      !- Slat width (m)
+  0.01875,                    !- Slat separation (m)
+  0.001,                      !- Slat thickness (m)
+  45.0,                       !- Slat angle (deg)
+  44.9,                       !- Slat conductivity (W/m-K)
+  0.0,                        !- Slat beam solar transmittance
+  0.8,                        !- Front Side Slat beam solar reflectance
+  0.8,                        !- Back Side Slat beam solar reflectance
+  0.0,                        !- Slat diffuse solar transmittance
+  0.8,                        !- Front Side Slat diffuse solar reflectance
+  0.8,                        !- Back Side Slat diffuse solar reflectance
+  0.0,                        !- Slat beam visible transmittance
+  0.7,                        !- Front Side Slat beam visible reflectance
+  0.7,                        !- Back Side Slat beam visible reflectance
+  0.0,                        !- Slat diffuse visible transmittance
+  0.7,                        !- Front Side Slat diffuse visible reflectance
+  0.7,                        !- Back Side Slat diffuse visible reflectance
+  0.0,                        !- Slat Infrared hemispherical transmittance
+  0.9,                        !- Front Side Slat Infrared hemispherical emissivity
+  0.9,                        !- Back Side Slat Infrared hemispherical emissivity
+  0.050,                      !- Blind-to-glass distance
+  0.0,                        !- Blind top opening multiplier
+  0.0,                        !- Blind bottom opening multiplier
+  0.5,                        !- Blind left-side opening multiplier
+  0.5,                        !- Blind right-side opening multiplier
   ,                           !- Minimum slat angle (deg)
   ;                           !- Maximum slat angle (deg)
 \end{lstlisting}
@@ -3783,12 +3783,12 @@ An IDF example:
 \begin{lstlisting}
 MaterialProperty:GlazingSpectralData,
   TestSpectralDataSet,
-!- { from WINDOW 4 library }
-!- { actual 9.91mm clear laminate: 15_mil PVB, ID:37966/50032-39-9 } 10.38
-!- { conductivity PVB adjusted, W/M/K  } 0.798
-!- { thermal IR transmittance, assumed } tir = 0.00
-!- { thermal IR hemispherical emittance, assumed } emis = 0.84 0.84
-!- WL   T     Rfront Rback
+         ! { from WINDOW 4 library }
+         ! { actual 9.91mm clear laminate: 15_mil PVB, ID:37966/50032-39-9 } 10.38
+         ! { conductivity PVB adjusted, W/M/K  } 0.798
+         ! { thermal IR transmittance, assumed } tir = 0.00
+         ! { thermal IR hemispherical emittance, assumed } emis = 0.84 0.84
+         ! WL   T     Rfront Rback
   .300, 0.000, 0.045, 0.045,
   .310, 0.000, 0.044, 0.044,
   .320, 0.000, 0.044, 0.044,
@@ -4465,7 +4465,7 @@ Input Example
 Construction:WindowDataFile,
   DoubleClear;                !- Name of a Window on the Window Data File
 
-!- Note -- Window5DataFile.dat is presumed to be in the "run" folder where EnergyPlus.exe is
+! Note -- Window5DataFile.dat is presumed to be in the "run" folder where EnergyPlus.exe is
   FenestrationSurface:Detailed,
   Zn001:Wall001:Win001,       !- Name
   Window,                     !- Class

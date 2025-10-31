@@ -598,18 +598,18 @@ IDF examples:
 WaterUse:Storage,
   Tower 2 water tank,         !- Name
   Tower water make up Holding tank,  !- Water Quality Subcategory
-  30.0 ,                      !- Maximum Capacity {m3}
-  10.0 ,                      !- Initial Volume   {m3}
+  30.0,                       !- Maximum Capacity {m3}
+  10.0,                       !- Initial Volume   {m3}
   20.0,                       !- Design In Flow Rate {m3}
   20.0,                       !- Design Out Flow Rate {m3}
   ,                           !- Overflow Destination
   Mains,                      !- Type of Supply Controlled by Float Valve
-  8.0 ,                       !- Float Valve On Capacity {m3}
+  8.0,                        !- Float Valve On Capacity {m3}
   10.0,                       !- Float Valve Off Capacity {m3}
   3.0,                        !- Backup Mains Capacity {m3}
   ,                           !- Other Tank Name
-  ScheduledTemperature ,      !- Water Thermal Mode
-  Water Tank Temp Sched ,     !- Water Temperature Schedule Name
+  ScheduledTemperature,       !- Water Thermal Mode
+  Water Tank Temp Sched,      !- Water Temperature Schedule Name
   ,                           !- Ambient Temperature Indicator
   ,                           !- Ambient Temperature Schedule Name
   ,                           !- Zone Name
@@ -723,16 +723,16 @@ IDF examples:
 
 \begin{lstlisting}
 WaterUse:RainCollector,
-  My Test Rain Collector ,    !- Name
-  My Test Tank ,              !- Storage Tank Name
+  My Test Rain Collector,     !- Name
+  My Test Tank,               !- Storage Tank Name
   CONSTANT,                   !- Loss Factor Mode
-  0.9 ,                       !- Collection Loss Factor
+  0.9,                        !- Collection Loss Factor
   ,                           !- Collection Loss Factor Schedule Name
-  1.0 ,                       !- Maximum Collection Rate
-  SouthRoof ,                 !- Collection Surface 1 Name
+  1.0,                        !- Maximum Collection Rate
+  SouthRoof,                  !- Collection Surface 1 Name
   NorthRoof1,                 !- Collection Surface 2 Name
-  NorthRoof3 ,                !- Collection Surface 3 Name
-  NorthRoof2 ;                !- Collection Surface 4 Name
+  NorthRoof3,                 !- Collection Surface 3 Name
+  NorthRoof2;                 !- Collection Surface 4 Name
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-3-023}

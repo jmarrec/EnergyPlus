@@ -134,10 +134,10 @@ Some examples of this object in an IDF:
 
 \begin{lstlisting}
 ComponentCost:LineItem,
-  PSZ Equipment from scaling ,!- Name
+  PSZ Equipment from scaling, !- Name
   ,                           !- Type
   Coil:DX,                    !- Line Item Type
-  ACDXCoil ZN1 ,              !- Item Name
+  ACDXCoil ZN1,               !- Item Name
   ,                           !- Object End Use Key
   ,                           !- Cost per Each {$}
   ,                           !- Cost per Area {$/m2}
@@ -145,16 +145,21 @@ ComponentCost:LineItem,
   82.5;                       !- Cost per Unit of Output Capacity per COP {$/kW}
 
 ComponentCost:LineItem,
-  Lighting Equip: ZN2_E_Space_1, ,
+  Lighting Equip: ZN2_E_Space_1,  !- Name
+  ,                           !- Type
   Lights,                     !- Line Item Type
-  ZN2_E_Space_1, ,
+  ZN2_E_Space_1,              !- Item Name
+  ,                           !- Object End Use Key
   ,                           !- Cost per Each {$}
   ,                           !- Cost per Area {$/m2}
   3300.000;                   !- Cost per Unit of Output Capacity {$/kW}
 
-ComponentCost:LineItem, DL controls: ZN4_W_Space_1, ,
+ComponentCost:LineItem,
+  DL controls: ZN4_W_Space_1,  !- Name
+  ,                           !- Type
   Daylighting:Detailed,       !- Line Item Type
-  ZN4_W_Space_1, ,            !- Item Name
+  ZN4_W_Space_1,              !- Item Name
+  ,                           !- Object End Use Key
   125.000,                    !- Cost per Each {$}
   ,                           !- Cost per Area {$/m2}
   ;                           !- Cost per Unit of Output Capacity {$/kW}

@@ -1455,16 +1455,16 @@ Coil:WaterHeating:AirToWaterHeatPump:Pumped,
   HPWHPLFFPLR;                !- Part Load Fraction Correlation Curve Name
 
 Fan:SystemModel,
-  HPWHPlantFan ,              !- Name
-  PlantHPWHSch ,              !- Availability Schedule Name
+  HPWHPlantFan,               !- Name
+  PlantHPWHSch,               !- Availability Schedule Name
   HPPlantAirInletNode,        !- Air Inlet Node Name
   HPPlantFanAirOutletNode,    !- Air Outlet Node Name
-  2.2685 ,                    !- Design Maximum Air Flow Rate
-  Discrete ,                  !- Speed Control Method
+  2.2685,                     !- Design Maximum Air Flow Rate
+  Discrete,                   !- Speed Control Method
   0.0,                        !- Electric Power Minimum Flow Rate Fraction
   100.0,                      !- Design Pressure Rise
-  0.9 ,                       !- Motor Efficiency
-  1.0 ,                       !- Motor In Air Stream Fraction
+  0.9,                        !- Motor Efficiency
+  1.0,                        !- Motor In Air Stream Fraction
   AUTOSIZE,                   !- Design Electric Power Consumption
   TotalEfficiencyAndPressure, !- Design Power Sizing Method
   ,                           !- Electric Power Per Unit Flow Rate
@@ -2343,27 +2343,27 @@ An example input object follows.
 
 \begin{lstlisting}
 ThermalStorage:ChilledWater:Mixed,
-  Chilled Water Storage Tank 1 ,  !- Name
-  4.0 ,                       !- Tank Volume
+  Chilled Water Storage Tank 1,  !- Name
+  4.0,                        !- Tank Volume
   CW-Tank-Temp-Schedule,      !- Setpoint Temperature Schedule Name
   3.5,                        !- Deadband Temperature Difference
-  1.0 ,                       !- Minimum Temperature Limit
-  25000 ,                     !- Nominal Cooling Capacity
-  Zone ,                      !- Ambient Temperature Indicator
+  1.0,                        !- Minimum Temperature Limit
+  25000,                      !- Nominal Cooling Capacity
+  Zone,                       !- Ambient Temperature Indicator
   ,                           !- Ambient Temperature Schedule Name
-  ZN_1_FLR_1_SEC_5 ,          !- Ambient Temperature Zone Name
+  ZN_1_FLR_1_SEC_5,           !- Ambient Temperature Zone Name
   ,                           !- Ambient Temperature Outdoor Air Node Name
-  5.0 ,                       !- Heat Gain Coefficient from Ambient Temperature
+  5.0,                        !- Heat Gain Coefficient from Ambient Temperature
   CW Tank Discharge Inlet node,  !- Use Side Inlet Node Name
-  CW Tank Discharge Outlet node ,  !- Use Side Outlet Node Name
-  1.0 ,                       !- Use Side Effectiveness
+  CW Tank Discharge Outlet node,  !- Use Side Outlet Node Name
+  1.0,                        !- Use Side Effectiveness
   TES Use Schedule,           !- Use Side Availability Schedule Name
-  Autosize ,                  !- Use Side Design Flow Rate
+  Autosize,                   !- Use Side Design Flow Rate
   CW Tank Charge Inlet Node,  !- Source Side Inlet Node Name
   CW Tank Charge Outlet Node, !- Source Side Outlet Node Name
   1.0,                        !- Source Side Effectiveness
   TES Charge Schedule,        !- Source Side Availability Schedule Name
-  Autosize ,                  !- Source Side Design Flow Rate
+  Autosize,                   !- Source Side Design Flow Rate
   4.0;                        !- Tank Recovery Time
 \end{lstlisting}
 
@@ -2616,27 +2616,27 @@ An example input object follows.
 
 \begin{lstlisting}
 ThermalStorage:ChilledWater:Stratified,
-  Chilled Water Storage Tank 1 ,  !- Name
-  4.0  ,                      !- Tank Volume
-  2.0 ,                       !- Tank Height
+  Chilled Water Storage Tank 1,  !- Name
+  4.0,                        !- Tank Volume
+  2.0,                        !- Tank Height
   VerticalCylinder,           !- Tank Shape
   ,                           !- Tank Perimeter
-  CW-Tank-Temp-Schedule ,     !- Setpoint Temperature Schedule Name
-  3.5 ,                       !- Deadband Temperature Difference
-  1.4 ,                       !- Temperature Sensor Height
-  1.0 ,                       !- Minimum Temperature Limit
+  CW-Tank-Temp-Schedule,      !- Setpoint Temperature Schedule Name
+  3.5,                        !- Deadband Temperature Difference
+  1.4,                        !- Temperature Sensor Height
+  1.0,                        !- Minimum Temperature Limit
   2500,                       !- Nominal Cooling Capacity
   Zone,                       !- Ambient Temperature Indicator
   ,                           !- Ambient Temperature Schedule Name
-  ZN_1_FLR_1_SEC_5 ,          !- Ambient Temperature Zone Name
+  ZN_1_FLR_1_SEC_5,           !- Ambient Temperature Zone Name
   ,                           !- Ambient Temperature OutdoorAir:Node Name
   4.2,                        !- Uniform Skin Loss Coefficient Per Unit Area To Ambient Temperature
   CW Tank Discharge Inlet node,  !- Use Side Inlet Node Name
   CW Tank Discharge Outlet node,  !- Use Side Outlet Node Name
   1.0,                        !- Use Side Effectiveness
   ALWAYS_ON,                  !- Use Side Availability Schedule Name
-  1.85 ,                      !- Use Side Inlet Height
-  0.15 ,                      !- Use Side Outlet Height
+  1.85,                       !- Use Side Inlet Height
+  0.15,                       !- Use Side Outlet Height
   autosize,                   !- Use Side Design Flow Rate
   CW Tank Charge Inlet Node,  !- Source Side Inlet Node Name
   CW Tank Charge Outlet Node, !- Source Side Outlet Node Name

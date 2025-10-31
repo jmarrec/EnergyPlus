@@ -330,8 +330,8 @@ Optional choice field to control if zone heat balance history terms should be re
 IDF Examples:
 
 \begin{lstlisting}
-!- Phoenix Sky Harbor Intl Ap_AZ_USA Annual Cooling (WB = >MDB)
-!- .4%, MDB = 35.8°C WB = 24.5°C
+! Phoenix Sky Harbor Intl Ap_AZ_USA Annual Cooling (WB = >MDB)
+!   .4%, MDB = 35.8°C WB = 24.5°C
   SizingPeriod:DesignDay,
   Phoenix Sky Harbor Intl Ap Ann Clg .4% Condns WB = >MDB,  !- Name
   7,                          !- Month
@@ -740,7 +740,7 @@ RunPeriod,                    !- Winter Simulation
   No,                         !- Treat Weather as Actual
   Hour24;                     !- First Hour Interpolation Starting Values
 
-!- Actual weather simulation example
+! Actual weather simulation example
   RunPeriod,
   Multiple Years,             !- Name
   1,                          !- Begin Month
@@ -843,17 +843,17 @@ This is the ending date of the daylight saving period. Note that it can be enter
 And in the IDF:
 
 \begin{lstlisting}
-!- U.S. Standard for Daylight Saving
-  RunPeriodControl:DaylightSavingTime,2nd Sunday in March, 1st Sunday in November;  !- 2007
+! U.S. Standard for Daylight Saving
+RunPeriodControl:DaylightSavingTime,2nd Sunday in March, 1st Sunday in November;  !- 2007
 
-!- Brazil standard
-  RunPeriodControl:DaylightSavingTime,1st Sunday in October, Last Sunday in February;
+! Brazil standard
+RunPeriodControl:DaylightSavingTime,1st Sunday in October, Last Sunday in February;
 
-!- European Standard
-  RunPeriodControl:DaylightSavingTime, Last Sunday in March, Last Sunday in October;
+! European Standard
+RunPeriodControl:DaylightSavingTime, Last Sunday in March, Last Sunday in October;
 
-!- Syria Standard
-  RunPeriodControl:DaylightSavingTime, 4/1, 10/1;
+! Syria Standard
+RunPeriodControl:DaylightSavingTime, 4/1, 10/1;
 \end{lstlisting}
 
 Of course, these could not all appear in the same IDF as only one DaylightSavingPeriod object per input file is allowed. More information on Daylight Saving Periods can be seen on the web at: \url{http://www.webexhibits.org/daylightsaving/}. The ASHRAE Handbook of Fundamentals {[}ASHRAE 2005{]} also contains information about daylight saving periods and their climatic information now includes start and end dates for many locations.

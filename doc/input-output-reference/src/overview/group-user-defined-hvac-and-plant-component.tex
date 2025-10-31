@@ -91,13 +91,13 @@ An example of this input object follows.
 \begin{lstlisting}
 ZoneHVAC:ForcedAir:UserDefined,
   Zone1WindAC,                !- Name
-  Zone 1 Window AC Model Program Manager ,  !- Overall Model Simulation Program Calling Manager Name
-  Zone 1 Window AC Init Program Manager ,  !- Model Setup and Sizing Program Calling Manager Name
-  Zone1WindACAirInletNode ,   !- Primary Air Inlet Node Name
+  Zone 1 Window AC Model Program Manager,  !- Overall Model Simulation Program Calling Manager Name
+  Zone 1 Window AC Init Program Manager,  !- Model Setup and Sizing Program Calling Manager Name
+  Zone1WindACAirInletNode,    !- Primary Air Inlet Node Name
   Zone1WindACAirOutletNode,   !- Primary Air Outlet Node Name
   Zone1WindACOAInNode,        !- Secondary Air Inlet Node Name
   Zone1WindACExhNode,         !- Secondary Air Outlet Node Name
-  0 ;                         !- Number of Plant Loop Connections
+  0;                          !- Number of Plant Loop Connections
 \end{lstlisting}
 
 \subsection{AirTerminal:SingleDuct:UserDefined}\label{airterminalsingleductuserdefined}
@@ -169,14 +169,14 @@ An example of this input object follows.
 \begin{lstlisting}
 AirTerminal:SingleDuct:UserDefined,
   SPACE1-1 VAV Reheat,        !- Name
-  Space1 ATU Sim Programs ,   !- Overall Model Simulation Program Calling Manager Name
-  Space1 ATU Init Programs ,  !- Model Setup and Sizing Program Calling Manager Name
-  SPACE1-1 ATU In Node ,      !- Primary Air Inlet Node Name
-  SPACE1-1 In Node ,          !- Primary Air Outlet Node Name
+  Space1 ATU Sim Programs,    !- Overall Model Simulation Program Calling Manager Name
+  Space1 ATU Init Programs,   !- Model Setup and Sizing Program Calling Manager Name
+  SPACE1-1 ATU In Node,       !- Primary Air Inlet Node Name
+  SPACE1-1 In Node,           !- Primary Air Outlet Node Name
   ,                           !- Secondary Air Inlet Node Name
   ,                           !- Secondary Air Outlet Node Name
   1,                          !- Number of Plant Loop Connections
-  SPACE1-1 Zone Coil Water In Node ,  !- Plant Connection 1 Inlet Node Name
+  SPACE1-1 Zone Coil Water In Node,  !- Plant Connection 1 Inlet Node Name
   SPACE1-1 Zone Coil Water Out Node;  !- Plant Connection 1 Outlet Node Name
 \end{lstlisting}
 
@@ -245,14 +245,14 @@ An example of this input object follows.
 \begin{lstlisting}
 Coil:UserDefined,
   Main Cooling Coil 1,        !- Name
-  Main Cooling Coil Model Program Manager ,  !- Overall Model Simulation Program Calling Manager Name
-  Main Cooling Coil Init Program Manager ,  !- Model Setup and Sizing Program Calling Manager Name
-  1 ,                         !- Number of Air Connections
-  Mixed Air Node 1 ,          !- Air Connection 1 Inlet Node Name
-  Main Cooling Coil 1 Outlet Node ,  !- Air Connection 1 Outlet Node Name
+  Main Cooling Coil Model Program Manager,  !- Overall Model Simulation Program Calling Manager Name
+  Main Cooling Coil Init Program Manager,  !- Model Setup and Sizing Program Calling Manager Name
+  1,                          !- Number of Air Connections
+  Mixed Air Node 1,           !- Air Connection 1 Inlet Node Name
+  Main Cooling Coil 1 Outlet Node,  !- Air Connection 1 Outlet Node Name
   ,                           !- Air Connection 2 Inlet Node Name
   ,                           !- Air Connection 2 Outlet Node Name
-  Yes ,                       !- Plant Connection is Used
+  Yes,                        !- Plant Connection is Used
   Main Cooling Coil 1 Water Inlet Node,  !- Plant Connection Inlet Node Name
   Main Cooling Coil 1 Water Outlet Node;  !- Plant Connection Outlet Node Name
 \end{lstlisting}
@@ -382,13 +382,13 @@ An example of this input object follows:
 PlantComponent:UserDefined,
   Central Chiller,            !- Name
   ,                           !- Main Model Program Calling Manager Name
-  1 ,                         !- Number of Plant Loop Connections
+  1,                          !- Number of Plant Loop Connections
   Central Chiller Inlet Node, !- Plant Connection 1 Inlet Node Name
-  Central Chiller Outlet Node ,  !- Plant Connection 1 Outlet Node Name
+  Central Chiller Outlet Node,!- Plant Connection 1 Outlet Node Name
   MeetsLoadWithNominalCapacityLowOutLimit,  !- Plant Connection 1 Loading Mode
-  NeedsFlowIfLoopOn ,         !- Plant Connection 1 Loop Flow Request Mode
+  NeedsFlowIfLoopOn,          !- Plant Connection 1 Loop Flow Request Mode
   Chiller model init programs,!- Plant Connection 1 Initialization Program Calling Manager Name
-  Chiller model simulation programs ,  !- Plant Connection 1 Simulation Program Calling Manager Name
+  Chiller model simulation programs,  !- Plant Connection 1 Simulation Program Calling Manager Name
   ,                           !- Plant Connection 2 Inlet Node Name
   ,                           !- Plant Connection 2 Outlet Node Name
   ,                           !- Plant Connection 2 Loading Mode
@@ -449,7 +449,7 @@ The following example shows control of a chilled water plant with two chillers t
 \begin{lstlisting}
 PlantEquipmentOperation:UserDefined,
   CoolSys1 Operation Scheme,  !- Name
-  Cooling_dispatch ,          !- Main Model Program Calling Manager Name
+  Cooling_dispatch,           !- Main Model Program Calling Manager Name
   Init_Chiller_Capacity,      !- Initialization Program Calling Manager Name
   Chiller:Electric:ReformulatedEIR,  !- Equipment 1 Object Type
   CoolSys1 Chiller 1,         !- Equipment 1 Name
@@ -481,8 +481,8 @@ EnergyManagementSystem:Program,
   SET Chil1_Disptch = UniformPLR\*Chil1_Cap,
   SET Chil2_Disptch = UniformPLR\*Chil2_Cap,
   ELSE,
-  SET Chil1_Disptch = 0.0 ,
-  SET Chil2_Disptch = 0.0 ,
+  SET Chil1_Disptch = 0.0,
+  SET Chil2_Disptch = 0.0,
   ENDIF;
 
 EnergyManagementSystem:InternalVariable, CoolSys1_LoopDmnd,CoolSys1 Operation Scheme,Supply Side Current Demand Rate;  !- ,[W]

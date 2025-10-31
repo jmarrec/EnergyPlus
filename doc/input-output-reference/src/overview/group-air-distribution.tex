@@ -63,13 +63,13 @@ An example of this statement in an IDF is:
 AirLoopHVAC,
   Main Dual Duct Air Loop,    !- Name
   Dual Duct System 1 Controllers,  !- Controller List Name
-  Dual Duct System 1 Schedule List ,  !- Availability Manager List Name
-  1.3 ,                       !- Design Supply Air Flow Rate {m3/s}
-  Dual Duct Air Loop Branches ,  !- Branch List Name
-  Dual Duct Connectors ,      !- Connector List Name
-  Supply Fan Inlet Node ,     !- Supply Side Inlet Node Name
-  Return Air Mixer Outlet ,   !- Demand Side Outlet Node Name
-  Zone Equipment Inlet Node List ,  !- Demand Side Inlet Node Names
+  Dual Duct System 1 Schedule List,  !- Availability Manager List Name
+  1.3,                        !- Design Supply Air Flow Rate {m3/s}
+  Dual Duct Air Loop Branches,!- Branch List Name
+  Dual Duct Connectors,       !- Connector List Name
+  Supply Fan Inlet Node,      !- Supply Side Inlet Node Name
+  Return Air Mixer Outlet,    !- Demand Side Outlet Node Name
+  Zone Equipment Inlet Node List,  !- Demand Side Inlet Node Names
   Air Loop Outlet Node List,  !- Supply Side Outlet Node Names
   1.0;                        !- Design Return Air Flow Fraction of Supply Air Flow
 \end{lstlisting}
@@ -377,22 +377,14 @@ OutputControl:Table:Style, HTML;  !- ColumnSeparator
 Output:Table:Monthly,
   Ventilation Loads,          !- Name
   ,                           !- DigitsAfterDecimal
-  Zone Mechanical Ventilation No Load Heat Removal Energy,
-  SumOrAverage,
-  Zone Mechanical Ventilation Cooling Load Increase Due to Overheating Energy,
-  SumOrAverage,
-  Zone Mechanical Ventilation Cooling Load Decrease Energy,
-  SumOrAverage,
-  Zone Mechanical Ventilation Cooling Load Increase Energy,
-  SumOrAverage,
-  Zone Mechanical Ventilation No Load Heat Addition Energy,
-  SumOrAverage,
-  Zone Mechanical Ventilation Heating Load Increase Due to Overcooling Energy,
-  SumOrAverage,
-  Zone Mechanical Ventilation Heating Load Decrease Energy,
-  SumOrAverage,
-  Zone Mechanical Ventilation Heating Load Increase Energy,
-  SumOrAverage;
+  Zone Mechanical Ventilation No Load Heat Removal Energy, SumOrAverage,
+  Zone Mechanical Ventilation Cooling Load Increase Due to Overheating Energy, SumOrAverage,
+  Zone Mechanical Ventilation Cooling Load Decrease Energy, SumOrAverage,
+  Zone Mechanical Ventilation Cooling Load Increase Energy, SumOrAverage,
+  Zone Mechanical Ventilation No Load Heat Addition Energy, SumOrAverage,
+  Zone Mechanical Ventilation Heating Load Increase Due to Overcooling Energy, SumOrAverage,
+  Zone Mechanical Ventilation Heating Load Decrease Energy, SumOrAverage,
+  Zone Mechanical Ventilation Heating Load Increase Energy, SumOrAverage;
 \end{lstlisting}
 
 This combination will report the ventilation loads on a monthly basis in a HTML style report that can be easily read in a web browser. Review the Output:Table:Monthly object for other methods of display or further options on this report item.
@@ -694,7 +686,7 @@ AvailabilityManagerAssignmentList,
   Collector Loop Availability Manager List,  !- Name
   AvailabilityManager:HighTemperatureTurnOff,  !- System Availability Manager Type 1
   High Temperature Turn Off Availability Manager,  !- System Availability Manager Name 1
-  AvailabilityManager:LowTemperatureTurnOn ,  !- System Availability Manager Type 2
+  AvailabilityManager:LowTemperatureTurnOn,  !- System Availability Manager Type 2
   Low Temperature Turn On Availability Manager,  !- System Availability Manager Name 2
   AvailabilityManager:DifferentialThermostat,  !- System Availability Manager Type 3
   Differential Thermostat Availability Manager;  !- System Availability Manager Name 3
@@ -755,10 +747,13 @@ Branch, Air Loop Main Branch,
   Coil:Cooling:Water:DetailedGeometry, Detailed Cooling Coil,
   Cooling Coil Air Inlet Node, Air Loop Outlet Node;
 
-AvailabilityManagerAssignmentList, Reheat System 1 Avail List,
-  AvailabilityManager:Scheduled, Reheat System 1 Avail;
+AvailabilityManagerAssignmentList, 
+  Reheat System 1 Avail List,
+  AvailabilityManager:Scheduled,
+  Reheat System 1 Avail;
 
-AvailabilityManager:Scheduled, Reheat System 1 Avail,
+AvailabilityManager:Scheduled, 
+  Reheat System 1 Avail,
   FanAndCoilAvailSched;
 
 AirLoopHVAC:OutdoorAirSystem,

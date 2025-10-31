@@ -106,9 +106,8 @@ ZoneHVAC:Baseboard:RadiantConvective:Water,
   C4-1,                       !- Surface 2 Name
   0.2,                        !- fraction of radiant energy from heater distributed to surface 2
   SB45,                       !- Surface 3 Name
-  0.1;                        !- fraction of radiant energy from heater distributed to surface 3
-
-SB23,                         !- Surface 4 Name
+  0.1,                        !- fraction of radiant energy from heater distributed to surface 3
+  SB23,                       !- Surface 4 Name
   0.1,                        !- fraction of radiant energy from heater distributed to surface 4
   SB25,                       !- Surface 5 Name
   0.1,                        !- fraction of radiant energy from heater distributed to surface 5
@@ -312,9 +311,8 @@ ZoneHVAC:Baseboard:RadiantConvective:Steam,
   C1-1,                       !- Surface 2 Name
   0.2,                        !- Fraction of radiant energy from heater distributed to surface 2
   SB15,                       !- Surface 3 Name
-  0.1;                        !- Fraction of radiant energy from heater distributed to surface 3
-
-Floor,                        !- Surface 4 Name
+  0.1,                        !- Fraction of radiant energy from heater distributed to surface 3
+  Floor,                      !- Surface 4 Name
   0.1;                        !- Fraction of radiant energy from heater distributed to surface 4
 \end{lstlisting}
 
@@ -1848,17 +1846,17 @@ An example IDF with an electric low temperature radiant system is shown below.
 \begin{lstlisting}
 ZoneHVAC:LowTemperatureRadiant:Electric,
   Zone 2 Radiant Floor,       !- Name
-  RadiantPanelAvailSched ,    !- Availability Schedule Name
-  EAST ZONE ,                 !- Zone name (name of zone system is serving)
-  Zn002:Flr001 ,              !- Surface Name or Radiant Surface Group Name
+  RadiantPanelAvailSched,     !- Availability Schedule Name
+  EAST ZONE,                  !- Zone name (name of zone system is serving)
+  Zn002:Flr001,               !- Surface Name or Radiant Surface Group Name
   HeatingDesignCapacity,      !- Heating Design Capacity Method
   10000,                      !- Heating Design Capacity{ W }
   ,                           !- Heating Design Capacity Per Floor Area{ W/m2 }
   ,                           !- Fraction of Autosized Heating Design Capacity{ - }
   MeanAirTemperature,         !- Temperature Control Type (control on mean air temperature)
   HalfFlowPower,              !- Setpoint Control Type
-  2.0 ,                       !- Heating Throttling Range { deltaC }
-  Radiant Heating Setpoints ; !- Heating Setpoint Temperature Schedule Name
+  2.0,                        !- Heating Throttling Range { deltaC }
+  Radiant Heating Setpoints;  !- Heating Setpoint Temperature Schedule Name
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-7-007}
@@ -2026,8 +2024,8 @@ An example IDF with a high temperature radiant system is shown below.
 
 \begin{lstlisting}
 ZoneHVAC:HighTemperatureRadiant, Zone 2 Radiant Heater,
-  RadiantPanelAvailSched ,    !- Availability schedule
-  EAST ZONE ,                 !- Zone name (name of zone system is serving)
+  RadiantPanelAvailSched,     !- Availability schedule
+  EAST ZONE,                  !- Zone name (name of zone system is serving)
   10000,                      !- Heating Design Capacity{ W }
   ,                           !- Heating Design Capacity Per Floor Area{ W / m2 }
   ,                           !- Fraction of Autosized Heating Design Capacity{ -}
@@ -2037,7 +2035,7 @@ ZoneHVAC:HighTemperatureRadiant, Zone 2 Radiant Heater,
   0.00,                       !- fraction latent
   0.00,                       !- fraction lost
   OperativeTemperature,       !- temperature control type (controls on operative temperature)
-  2.0 ,                       !- heating throttling range (in C)
+  2.0,                        !- heating throttling range (in C)
   Radiant Heating Setpoints,  !- heating setpoint temperatures
   0.04,                       !- fraction of radiant energy that is incident directly on people
   Zn002:Flr001, 0.80,         !- fraction of radiant energy that is incident on the surface indicated

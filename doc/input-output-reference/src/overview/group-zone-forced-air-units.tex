@@ -1608,15 +1608,15 @@ An example input object follows.
 \begin{lstlisting}
 ZoneHVAC:EvaporativeCoolerUnit,
   Zone Evap Unit,             !- Name
-  System Availability Schedule ,  !- Availability Schedule Name
+  System Availability Schedule,  !- Availability Schedule Name
   ,                           !- Availability Manager List Name
-  Cooler Unit OA inlet ,      !- Outdoor Air Inlet Node Name
+  Cooler Unit OA inlet,       !- Outdoor Air Inlet Node Name
   Main Zone Inlet Node,       !- Cooler Outlet Node Name
-  Main Zone Relief Node ,     !- Zone Relief Air Node Name
-  Fan:SystemModel ,           !- Supply Air Fan Object Type
-  Supply Fan ,                !- Supply Air Fan Name
+  Main Zone Relief Node,      !- Zone Relief Air Node Name
+  Fan:SystemModel,            !- Supply Air Fan Object Type
+  Supply Fan,                 !- Supply Air Fan Name
   2.0,                        !- Design Supply Air Flow Rate
-  DrawThrough ,               !- Fan Placement
+  DrawThrough,                !- Fan Placement
   ZoneCoolingLoadOnOffCycling,!- Cooler Unit Control Method
   1.1,                        !- Throttling Range Temperature Difference
   100.0,                      !- Cooling Load Control Threshold Heat Transfer Rate
@@ -2089,16 +2089,16 @@ OutdoorAir:Mixer,
   Zone3WindACAirInletNode;    !- Return Air Stream Node Name
 
 Fan:SystemModel,
-  Zone3WindACFan ,            !- Name
-  FanAndCoilAvailSched ,      !- Availability Schedule Name
+  Zone3WindACFan,             !- Name
+  FanAndCoilAvailSched,       !- Availability Schedule Name
   Zone3WindACDXOutletNode,    !- Air Inlet Node Name
   Zone3WindACAirOutletNode,   !- Air Outlet Node Name
-  0.6 ,                       !- Design Maximum Air Flow Rate
-  Discrete ,                  !- Speed Control Method
+  0.6,                        !- Design Maximum Air Flow Rate
+  Discrete,                   !- Speed Control Method
   0.0,                        !- Electric Power Minimum Flow Rate Fraction
   75.0,                       !- Design Pressure Rise
-  0.9 ,                       !- Motor Efficiency
-  1.0 ,                       !- Motor In Air Stream Fraction
+  0.9,                        !- Motor Efficiency
+  1.0,                        !- Motor In Air Stream Fraction
   AUTOSIZE,                   !- Design Electric Power Consumption
   TotalEfficiencyAndPressure, !- Design Power Sizing Method
   ,                           !- Electric Power Per Unit Flow Rate
@@ -3011,7 +3011,7 @@ The following is an example input for a refrigeration chiller set.
 
 \begin{lstlisting}
 ZoneHVAC:RefrigerationChillerSet,
-  SubFreezerChillerSet ,      !- Name
+  SubFreezerChillerSet,       !- Name
   ,                           !- Availability Schedule Name
   SubFreezer,                 !- Zone Name
   NODE_142,                   !- Air Inlet Node Name

@@ -257,7 +257,7 @@ This field specifies the inside to outside surface area ratio of the cooling or 
 \paragraph{IDF Examples}
 
 \begin{lstlisting}
-!- example faults for an air economizer
+! example faults for an air economizer
   Schedule:Compact,
   OATSeveritySch,             !- Name
   On/Off,                     !- Schedule Type Limits Name
@@ -292,7 +292,7 @@ FaultModel:EnthalpySensorOffset:ReturnAir,
   VAV_2_OA_Controller,        !- Controller Object Name
   -2000;                      !- Enthalpy Sensor Offset, J/Kg
 
-!- example faults for a fouling coil
+! example faults for a fouling coil
   FaultModel:Fouling:Coil,
   CoolingCoilFault,           !- Name
   VAV_2_CoolC,                !- Heating or Cooling Coil Name
@@ -369,8 +369,8 @@ This field provides the name of a Thermostat Offset Fault object that causes the
 \paragraph{IDF Examples}\label{an-example-of-idf-codes-for-the-thermostathumidistat-offset-fault-models}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the thermostat/humidistat offset
+! IDF examples:
+! example faults for the thermostat/humidistat offset
   FaultModel:ThermostatOffset,
   Ther_Offset_Zone1,          !- Name
   Zone 1 Thermostat,          !- Thermostat Name
@@ -430,8 +430,8 @@ This field provides the name of a fan curve for the fan associated with the faul
 \paragraph{IDF Examples}\label{an-example-of-idf-codes-for-the-fouling-air-filter-fault-models}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the fouling air filter
+! IDF examples:
+! example faults for the fouling air filter
   FaultModel:Fouling:AirFilter,
   DF_VAV_1_Fan,               !- Name
   VAV_1_Fan,                  !- Fan Name
@@ -510,8 +510,8 @@ This field defines the reference offset of the temperature sensor. A positive va
 \paragraph{IDF Examples}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the chiller supply water temperature sensor offset
+! IDF examples:
+! example faults for the chiller supply water temperature sensor offset
   Chiller:Electric:ReformulatedEIR,
   MainChiller,                !- Name
   AUTOSIZE,                   !- Reference Capacity {W}
@@ -583,8 +583,8 @@ This field defines the reference offset of the temperature sensor. A positive va
 \paragraph{IDF Examples}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the condenser supply water temperature sensor offset
+! IDF examples:
+! example faults for the condenser supply water temperature sensor offset
   CoolingTower:TwoSpeed,
   Cond Tower 1,               !- Name
   Condenser Tower 1 Outlet Node,  !- Water Inlet Node Name
@@ -655,8 +655,8 @@ This field defines the UA reduction factor of the faulty cooling tower. The fact
 \paragraph{IDF Examples}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the fouling cooling tower
+! IDF examples:
+! example faults for the fouling cooling tower
   CoolingTower:SingleSpeed,
   Cond Tower1,                !- Name
   Condenser Tower 1 Inlet Node,  !- Water Inlet Node Name
@@ -719,8 +719,8 @@ This field defines the fouling factor of the faulty boiler. The factor indicates
 \paragraph{IDF Examples}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the fouling boilers
+! IDF examples:
+! example faults for the fouling boilers
   Boiler:HotWater,
   HeatSys1 Boiler,            !- Name
   NATURALGAS,                 !- Fuel Type
@@ -784,8 +784,8 @@ This field defines the fouling factor of the faulty chiller. The factor indicate
 \paragraph{IDF Examples}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the fouling chillers
+! IDF examples:
+! example faults for the fouling chillers
   Chiller:Electric:ReformulatedEIR,
   CoolSys1 Chiller 1,         !- Name
   AUTOSIZE,                   !- Reference Capacity {W}
@@ -858,8 +858,8 @@ This field defines the fouling factor of the faulty evaporative cooler. The fact
 \paragraph{IDF Examples}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the fouling evaporative coolers
+! IDF examples:
+! example faults for the fouling evaporative coolers
   EvaporativeCooler:Indirect:WetCoil,
   Evaporative Cooler 1,       !- Name
   ALWAYS_ON,                  !- Availability Schedule Name
@@ -922,8 +922,8 @@ This field defines the reference offset of the temperature sensor. A positive va
 \paragraph{IDF Examples}
 
 \begin{lstlisting}
-!- IDF examples:
-!- example faults for the coil supply air temperature sensor offset
+! IDF examples:
+! example faults for the coil supply air temperature sensor offset
   Coil:Cooling:Water,
   Main Cooling Coil 1,        !- Name
   CoolingCoilAvailSched,      !- Availability Schedule Name

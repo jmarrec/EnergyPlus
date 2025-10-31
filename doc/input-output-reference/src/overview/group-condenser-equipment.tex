@@ -808,9 +808,8 @@ CoolingTower:TwoSpeed,
   10000.0,                    !- Low Speed Nominal Capacity {W}
   ,                           !- Low Speed Nominal Capacity Sizing Factor
   2000.0,                     !- Free Convection Nominal Capacity {W}
-  ;                           !- Free Convection Nominal Capacity Sizing Factor
-
-,                             !- Design Inlet Air Dry-Bulb Temperature {C}
+  ,                           !- Free Convection Nominal Capacity Sizing Factor
+  ,                           !- Design Inlet Air Dry-Bulb Temperature {C}
   ,                           !- Design Inlet Air Wet-Bulb Temperature {C}
   ,                           !- Design Approach Temperature {deltaC}
   ,                           !- Design Range Temperature {deltaC}
@@ -1276,49 +1275,49 @@ CoolingTower:VariableSpeed:Merkel,
 
 Curve:Cubic,
   VS tower fan power mod func air flow ratio,  !- Name
-  0.02 ,                      !- Coefficient1 Constant
-  0.0 ,                       !- Coefficient2 x
-  0.0 ,                       !- Coefficient3 x**2
-  0.98 ,                      !- Coefficient4 x**3
+  0.02,                       !- Coefficient1 Constant
+  0.0,                        !- Coefficient2 x
+  0.0,                        !- Coefficient3 x**2
+  0.98,                       !- Coefficient4 x**3
   0.2,                        !- Minimum Value of x
-  1.0 ,                       !- Maximum Value of x
-  0.0 ,                       !- Minimum Curve Output
-  1.0 ,                       !- Maximum Curve Output
+  1.0,                        !- Maximum Value of x
+  0.0,                        !- Minimum Curve Output
+  1.0,                        !- Maximum Curve Output
   Dimensionless,              !- Input Unit Type for X
   Dimensionless;              !- Output Unit Type
 
 Curve:Quadratic,
   VS tower UA mod func air flow ratio,  !- Name
-  0.0 ,                       !- Coefficient1 Constant
-  1.3 ,                       !- Coefficient2 x
-  -0.3 ,                      !- Coefficient3 x**2
-  0.2 ,                       !- Minimum Value of x
-  1.0 ,                       !- Maximum Value of x
-  0.0 ,                       !- Minimum Curve Output
-  1.0 ,                       !- Maximum Curve Output
+  0.0,                        !- Coefficient1 Constant
+  1.3,                        !- Coefficient2 x
+  -0.3,                       !- Coefficient3 x**2
+  0.2,                        !- Minimum Value of x
+  1.0,                        !- Maximum Value of x
+  0.0,                        !- Minimum Curve Output
+  1.0,                        !- Maximum Curve Output
   Dimensionless,              !- Input Unit Type for X
   Dimensionless;              !- Output Unit Type
 
 Curve:Linear,
-  VS tower UA mod func wetbulb difference ,  !- Name
-  1.0 ,                       !- Coefficient1 Constant
-  0.0081 ,                    !- Coefficient2 x
-  -10 ,                       !- Minimum Value of x
-  25.0 ,                      !- Maximum Value of x
-  0.85 ,                      !- Minimum Curve Output
-  1.3 ,                       !- Maximum Curve Output
+  VS tower UA mod func wetbulb difference,  !- Name
+  1.0,                        !- Coefficient1 Constant
+  0.0081,                     !- Coefficient2 x
+  -10,                        !- Minimum Value of x
+  25.0,                       !- Maximum Value of x
+  0.85,                       !- Minimum Curve Output
+  1.3,                        !- Maximum Curve Output
   Dimensionless,              !- Input Unit Type for X
   Dimensionless;              !- Output Unit Type
 
 Curve:Quadratic,
   VS tower UA mod func water flow ratio,  !- Name
-  0.1082 ,                    !- Coefficient1 Constant
-  1.667 ,                     !- Coefficient2 x
-  -0.7713 ,                   !- Coefficient3 x**2
-  0.3 ,                       !- Minimum Value of x
-  1.0 ,                       !- Maximum Value of x
-  0.5 ,                       !- Minimum Curve Output
-  1.1 ,                       !- Maximum Curve Output
+  0.1082,                     !- Coefficient1 Constant
+  1.667,                      !- Coefficient2 x
+  -0.7713,                    !- Coefficient3 x**2
+  0.3,                        !- Minimum Value of x
+  1.0,                        !- Maximum Value of x
+  0.5,                        !- Minimum Curve Output
+  1.1,                        !- Maximum Curve Output
   Dimensionless,              !- Input Unit Type for X
   Dimensionless;              !- Output Unit Type
 \end{lstlisting}
@@ -1666,7 +1665,7 @@ CoolingTower:VariableSpeed,
   MinimalCell,                !- Cell Control
   ,                           !- Cell Minimum Water Flow Rate Fraction
   ,                           !- Cell Maximum Water Flow Rate Fraction
-  1.000 ;                     !- Sizing Factor
+  1.000;                      !- Sizing Factor
 \end{lstlisting}
 
 \subsubsection{Outputs}\label{outputs-3-001}
@@ -4315,19 +4314,19 @@ HeatExchanger:FluidToFluid,
   FreeCooling;                !- Heat Transfer Metering End Use Type
 
 HeatExchanger:FluidToFluid,
-  SOURCE to TRANSFER HX ,     !- Name
+  SOURCE to TRANSFER HX,      !- Name
   AlwaysOnSchedule,           !- Availability Schedule Name
-  SOURCE Demand HX Inlet Node ,  !- Loop Demand Side Inlet Node Name
-  SOURCE Demand HX Outlet Node ,  !- Loop Demand Side Outlet Node Name
-  0.003 ,                     !- Loop Demand Side Design Flow Rate
+  SOURCE Demand HX Inlet Node,!- Loop Demand Side Inlet Node Name
+  SOURCE Demand HX Outlet Node,  !- Loop Demand Side Outlet Node Name
+  0.003,                      !- Loop Demand Side Design Flow Rate
   TRANSFER HX Supply Inlet Node,  !- Loop Supply Side Inlet Node Name
   TRANSFER HX Supply Outlet Node,  !- Loop Supply Side Outlet Node Name
-  0.003 ,                     !- Loop Supply Side Design Flow Rate
+  0.003,                      !- Loop Supply Side Design Flow Rate
   CrossFlow,                  !- Heat Exchange Model Type
-  15000 ,                     !- Heat Exchanger U-Factor Times Area Value
-  DualDeadbandSetpointModulated ,  !- Control Type
+  15000,                      !- Heat Exchanger U-Factor Times Area Value
+  DualDeadbandSetpointModulated,  !- Control Type
   TRANSFER Supply Outlet Node,!- Heat Exchanger Setpoint Node Name
-  0.2 ,                       !- Minimum Temperature Difference to Activate Heat Exchanger
+  0.2,                        !- Minimum Temperature Difference to Activate Heat Exchanger
   LoopToLoop;                 !- Heat Transfer Metering End Use Type
 \end{lstlisting}
 

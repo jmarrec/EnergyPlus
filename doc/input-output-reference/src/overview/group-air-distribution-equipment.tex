@@ -1672,25 +1672,25 @@ An example input follows:
 \begin{lstlisting}
 AirTerminal:SingleDuct:ConstantVolume:FourPipeBeam,
   Zone One 4pipe Beam,        !- Name
-  ALWAYS_ON ,                 !- Primary Air Availability Schedule Name
-  ALWAYS_ON ,                 !- Cooling Availability Schedule Name
-  ALWAYS_ON ,                 !- Heating Availability Schedule Name
-  Zone One 4pipe Beam Inlet Node Name ,  !- Primary Air Inlet Node Name
-  Zone One 4pipe Beam Outlet Node Name ,  !- Primary Air Outlet Node Name
-  Zone One 4pipe Beam CW Inlet Node ,  !- Chilled Water Inlet Node Name
-  Zone One 4pipe Beam CW Outlet Node ,  !- Chilled Water Outlet Node Name
-  AUTOSIZE ,                  !- Design Primary Air Volume Flow Rate
-  AUTOSIZE ,                  !- Design Chilled Water Volume Flow Rate
-  AUTOSIZE ,                  !- Design Hot Water Volume Flow Rate
-  AUTOSIZE ,                  !- Zone Total Beam Length
-  0.036 ,                     !- Rated Primary Air Flow Rate per Beam Length
-  597 ,                       !- Rated Beam Cooling Capacity per Beam Length
-  10.0 ,                      !- Rated Cooling Room Air Chilled Water Temperature Difference
-  5.2E-5 ,                    !- Rated Chilled Water Volume Flow Rate per Beam Length
+  ALWAYS_ON,                  !- Primary Air Availability Schedule Name
+  ALWAYS_ON,                  !- Cooling Availability Schedule Name
+  ALWAYS_ON,                  !- Heating Availability Schedule Name
+  Zone One 4pipe Beam Inlet Node Name,  !- Primary Air Inlet Node Name
+  Zone One 4pipe Beam Outlet Node Name,  !- Primary Air Outlet Node Name
+  Zone One 4pipe Beam CW Inlet Node,  !- Chilled Water Inlet Node Name
+  Zone One 4pipe Beam CW Outlet Node,  !- Chilled Water Outlet Node Name
+  AUTOSIZE,                   !- Design Primary Air Volume Flow Rate
+  AUTOSIZE,                   !- Design Chilled Water Volume Flow Rate
+  AUTOSIZE,                   !- Design Hot Water Volume Flow Rate
+  AUTOSIZE,                   !- Zone Total Beam Length
+  0.036,                      !- Rated Primary Air Flow Rate per Beam Length
+  597,                        !- Rated Beam Cooling Capacity per Beam Length
+  10.0,                       !- Rated Cooling Room Air Chilled Water Temperature Difference
+  5.2E-5,                     !- Rated Chilled Water Volume Flow Rate per Beam Length
   CapModFuncOfTempDiff,       !- Beam Cooling Capacity Temperature Difference Modification Factor Curve or Table Name
   CoolCapModFuncOfSAFlow,     !- Beam Cooling Capacity Air Flow Modification Factor Curve or Table Name
   CapModFuncOfWaterFlow,      !- Beam Cooling Capacity Chilled Water Flow Modification Factor Curve or Table Name
-  1548 ,                      !- Rated Beam Heating Capacity per Beam Length
+  1548,                       !- Rated Beam Heating Capacity per Beam Length
   27.8,                       !- Rated Heating Room Air Hot Water Temperature Difference
   5.2E-5,                     !- Rated Hot Water Volume Flow Rate per Beam Length
   CapModFuncOfTempDiff,       !- Beam Heating Capacity Temperature Difference Modification Factor Curve or Table Name
@@ -2164,7 +2164,7 @@ AirTerminal:DualDuct:VAV,
   ZoneMinOARequirements,      !- Design Specification Outdoor Air Object Name
   TurndownMinAirFlowSch;      !- Minimum Air Flow Turndown Schedule Name
 
-!- Outdoor air specification should be consistent with Sizing:Zone object inputs.
+! Outdoor air specification should be consistent with Sizing:Zone object inputs.
   DesignSpecification:OutdoorAir,
   ZoneMinOARequirements,      !- Name
   Sum,                        !- Outdoor Air Method
