@@ -3383,8 +3383,11 @@ void AddTOCReportPeriod(const int nReportPeriods,
 {
     static std::string const Entire_Facility("Entire Facility");
     for (int i = 1; i <= nReportPeriods; i++) {
-        std::string ReportPeriod_Resilience_Summary = fmt::format(
-            "{} Resilience Summary for Reporting Period {}: {} {}", kw, i, ReportPeriodInputData(i).title, ReportPeriodInputData(i).totalElectricityUse);
+        std::string ReportPeriod_Resilience_Summary = fmt::format("{} Resilience Summary for Reporting Period {}: {} {}",
+                                                                  kw,
+                                                                  i,
+                                                                  ReportPeriodInputData(i).title,
+                                                                  ReportPeriodInputData(i).totalElectricityUse);
         tbl_stream << "<br><a href=\"#" << MakeAnchorName(ReportPeriod_Resilience_Summary, Entire_Facility) << "\">" << kw
                    << " Resilience Summary for Reporting Period " << i << ": " << ReportPeriodInputData(i).title << "</a>\n";
     }
