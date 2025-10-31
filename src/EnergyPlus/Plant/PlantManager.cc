@@ -1219,12 +1219,14 @@ void GetPlantInput(EnergyPlusData &state)
                             this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
                                 state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
                             this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterHeating;
-                            this_comp.TypeOf = "HeatPumpAirToWaterHeating";
                         } else if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::ChilledWater) {
                             this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
                                 state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
                             this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterCooling;
-                            this_comp.TypeOf = "HeatPumpAirToWaterCooling";
+                        } else { // need to have this to reach later checks of TypeOfWaterLoop in onetimeInit
+                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
+                                state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
+                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterHeating;
                         }
                         this_comp.CurOpSchemeType = OpScheme::Invalid;
                         break;
