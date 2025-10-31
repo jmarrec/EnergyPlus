@@ -1156,7 +1156,7 @@
     1.500,                   !- <none>
     1.625,                   !- <none>
     1.750,                   !- <none>
-    1.875;                   !- Extended Field
+    1.875;                   !- <none>
 
   Table:IndependentVariableList,
     IECEffWBFlowMod_IndependentVariableList,  !- Name
