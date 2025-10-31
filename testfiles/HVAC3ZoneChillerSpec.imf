@@ -1,8 +1,10 @@
 !  Version,
 !    8.9;                    !- Version Identifier
-
 !  Version,
 !    9.0;                    !- Version Identifier
+
+!  Version,
+!    25.2;                   !- Version Identifier
 
   DistrictCooling,
     Purchased Cooling,       !- Name
