@@ -1538,7 +1538,7 @@ RunPeriodControl:DaylightSavingTime,
      \note  <number>/<number>  (month/day)
      \note  <number> <Month>
      \note  <Month> <number>
-     \note <Nth> <Weekday> in <Month)
+     \note <Nth> <Weekday> in <Month>
      \note Last <WeekDay> in <Month>
      \note <Month> can be January, February, March, April, May, June, July, August, September, October, November, December
      \note Months can be the first 3 letters of the month
@@ -57659,7 +57659,7 @@ Coil:Heating:WaterToAirHeatPump:ParameterEstimation,
         \note Availability schedule name for this system. Schedule value > 0 means the system is available.
         \note If this field is blank, the system is always available.
         \type object-list
-        \object-list ScheduleNames      
+        \object-list ScheduleNames
    A3 , \field Compressor Type
         \required-field
         \type choice
@@ -60107,7 +60107,7 @@ Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,
        \note Availability schedule name for this system. Schedule value > 0 means the system is available.
        \note If this field is blank, the system is always available.
        \type object-list
-       \object-list ScheduleNames 
+       \object-list ScheduleNames
   N1,  \field Number of Speeds
        \units dimensionless
        \type integer
@@ -67863,49 +67863,49 @@ AirLoopHVAC:ControllerList,
        \required-field
        \type object-list
        \object-list AirLoopControllers
-  A4 , \field  Controller 2 Object Type
+  A4 , \field Controller 2 Object Type
        \type choice
        \key Controller:WaterCoil
        \key Controller:OutdoorAir
   A5 , \field Controller 2 Name
        \type object-list
        \object-list AirLoopControllers
-  A6 , \field  Controller 3 Object Type
+  A6 , \field Controller 3 Object Type
        \type choice
        \key Controller:WaterCoil
        \key Controller:OutdoorAir
   A7 , \field Controller 3 Name
        \type object-list
        \object-list AirLoopControllers
-  A8 , \field  Controller 4 Object Type
+  A8 , \field Controller 4 Object Type
        \type choice
        \key Controller:WaterCoil
        \key Controller:OutdoorAir
   A9 , \field Controller 4 Name
        \type object-list
        \object-list AirLoopControllers
-  A10, \field  Controller 5 Object Type
+  A10, \field Controller 5 Object Type
        \type choice
        \key Controller:WaterCoil
        \key Controller:OutdoorAir
   A11, \field Controller 5 Name
        \type object-list
        \object-list AirLoopControllers
-  A12, \field  Controller 6 Object Type
+  A12, \field Controller 6 Object Type
        \type choice
        \key Controller:WaterCoil
        \key Controller:OutdoorAir
   A13, \field Controller 6 Name
        \type object-list
        \object-list AirLoopControllers
-  A14, \field  Controller 7 Object Type
+  A14, \field Controller 7 Object Type
        \type choice
        \key Controller:WaterCoil
        \key Controller:OutdoorAir
   A15, \field Controller 7 Name
        \type object-list
        \object-list AirLoopControllers
-  A16, \field  Controller 8 Object Type
+  A16, \field Controller 8 Object Type
        \type choice
        \key Controller:WaterCoil
        \key Controller:OutdoorAir
