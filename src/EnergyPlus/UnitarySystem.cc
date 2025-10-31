@@ -1462,7 +1462,7 @@ namespace UnitarySystems {
 
         // PURPOSE OF THIS SUBROUTINE:
         // This subroutine is for sizing unitary system components for which nominal capacities
-        // and flow rates have not been specified in the input. Coil sizing is preformed in the coil module.
+        // and flow rates have not been specified in the input. Coil sizing is performed in the coil module.
         // Future modifications will size coils here and "push" this info to the specific coil.
 
         // METHODOLOGY EMPLOYED:
@@ -6523,8 +6523,8 @@ namespace UnitarySystems {
                         ShowSevereError(state, format("{} = {}", cCurrentModuleObject, thisObjectName));
                         ShowContinueError(state, "The reheat coil outlet node name must be the same as the unitary system outlet node name.");
                         ShowContinueError(state,
-                                          format("...Reheat coil outlet node name   = {}" + state.dataLoopNodes->NodeID(SupHeatCoilOutletNode)));
-                        ShowContinueError(state, format("...UnitarySystem outlet node name = {}" + state.dataLoopNodes->NodeID(this->AirOutNode)));
+                                          format("...Reheat coil outlet node name   = {}", state.dataLoopNodes->NodeID(SupHeatCoilOutletNode)));
+                        ShowContinueError(state, format("...UnitarySystem outlet node name = {}", state.dataLoopNodes->NodeID(this->AirOutNode)));
                         errorsFound = true;
                     }
                 } else { // IF((this->m_Humidistat ...
@@ -11544,7 +11544,7 @@ namespace UnitarySystems {
         }
 
         // BEGIN - refactor/move this to Init during FirstHVACIteration, need struct or module level global for turnFansOn and turnFansOff
-        // If the unitary system is scheduled on or nightime cycle overrides fan schedule. Uses same logic as fan.
+        // If the unitary system is scheduled on or nighttime cycle overrides fan schedule. Uses same logic as fan.
         FanOn = (this->m_FanExists) ? (this->m_fanAvailSched->getCurrentVal() > 0) : true;
         // END - move this to Init during FirstHVACIteration
 

@@ -476,7 +476,7 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
             this->reportSizerOutput(
                 state, this->compType, this->compName, "User-Specified " + this->sizingStringScalable + this->sizingString, this->autoSizedValue);
             if (Util::SameString(this->compType, "COIL:COOLING:DX:TWOSTAGEWITHHUMIDITYCONTROLMODE")) {
-                this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remianing simulation calcs
+                this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remaining simulation calcs
                 this->reportSizerOutput(state,
                                         this->compType,
                                         this->compName,
@@ -488,7 +488,7 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
             this->reportSizerOutput(
                 state, this->compType, this->compName, "User-Specified " + this->sizingStringScalable + this->sizingString, this->autoSizedValue);
             if (Util::SameString(this->compType, "COIL:COOLING:DX:TWOSTAGEWITHHUMIDITYCONTROLMODE")) {
-                this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remianing simulation calcs
+                this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remaining simulation calcs
                 this->reportSizerOutput(state,
                                         this->compType,
                                         this->compName,
@@ -500,7 +500,7 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
             this->reportSizerOutput(
                 state, this->compType, this->compName, "User-Specified " + this->sizingStringScalable + this->sizingString, this->autoSizedValue);
             if (Util::SameString(this->compType, "COIL:COOLING:DX:TWOSTAGEWITHHUMIDITYCONTROLMODE")) {
-                this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remianing simulation calcs
+                this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remaining simulation calcs
                 this->reportSizerOutput(state,
                                         this->compType,
                                         this->compName,
@@ -517,7 +517,7 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
                 this->reportSizerOutput(state, this->compType, this->compName, "Design Size " + this->sizingString, this->autoSizedValue);
             }
             if (Util::SameString(this->compType, "COIL:COOLING:DX:TWOSTAGEWITHHUMIDITYCONTROLMODE")) {
-                this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remianing simulation calcs
+                this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remaining simulation calcs
                 this->reportSizerOutput(
                     state, this->compType, this->compName, "Design Size " + this->sizingString + " ( non-bypassed )", this->autoSizedValue);
             }
@@ -531,8 +531,8 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
                                         "User-Specified " + this->sizingStringScalable + this->sizingString,
                                         this->originalValue);
                 if (Util::SameString(this->compType, "COIL:COOLING:DX:TWOSTAGEWITHHUMIDITYCONTROLMODE")) {
-                    this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remianing simulation calcs
-                    this->originalValue *= (1 - this->dataBypassFrac);  // now reapply for second message and remianing simulation calcs
+                    this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remaining simulation calcs
+                    this->originalValue *= (1 - this->dataBypassFrac);  // now reapply for second message and remaining simulation calcs
                     this->reportSizerOutput(state,
                                             this->compType,
                                             this->compName,
@@ -548,7 +548,7 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
                 this->reportSizerOutput(
                     state, this->compType, this->compName, "User-Specified " + this->sizingStringScalable + this->sizingString, this->originalValue);
                 if (Util::SameString(this->compType, "COIL:COOLING:DX:TWOSTAGEWITHHUMIDITYCONTROLMODE")) {
-                    this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remianing simulation calcs
+                    this->autoSizedValue *= (1 - this->dataBypassFrac); // now reapply for second message and remaining simulation calcs
                     this->reportSizerOutput(state,
                                             this->compType,
                                             this->compName,

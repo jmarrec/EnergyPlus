@@ -402,7 +402,7 @@ namespace AirflowNetwork {
         EPVector<AirflowNetwork::AirflowNetworkNodeReportData> nodeReport;
         EPVector<AirflowNetwork::AirflowNetworkLinkReportData> linkReport1;
 
-        // used to be statics
+        // used to be statistics
         Array1D<bool> onceZoneFlag;
         Array1D<bool> onceSurfFlag;
         bool onetime = false;
@@ -432,7 +432,7 @@ namespace AirflowNetwork {
         Array1D<Real64> PS;
         Array1D<Real64> PW;
 
-        // Common block CONTRL
+        // Common block CONTROL
         Real64 PB = 0.0;
 
         // Common block ZONL

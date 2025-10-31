@@ -455,6 +455,9 @@ namespace SimulationManager {
                     state.dataReportFlag->cWarmupDay = fmt::to_string(state.dataReportFlag->NumOfWarmupDays);
                     DisplayString(state, "Warming up {" + state.dataReportFlag->cWarmupDay + '}');
                 } else if (state.dataGlobal->DayOfSim == 1) {
+                    if (state.dataSysVars->ReportDuringWarmup) {
+                        OutputProcessor::ResetAccumulationWhenWarmupComplete(state);
+                    }
                     if (state.dataGlobal->KindOfSim == Constant::KindOfSim::RunPeriodWeather) {
                         DisplayString(state, "Starting Simulation at " + state.dataEnvrn->CurMnDyYr + " for " + state.dataEnvrn->EnvironmentName);
                     } else {
@@ -1233,7 +1236,7 @@ namespace SimulationManager {
                         overrideMinNumWarmupDays = true;
                         overrideBeginEnvResetSuppress = true;
                     } else if (overrideModeValue == "MODE05") {
-                        // Mode04 plus Minimun System Timestep will be set to 1hr
+                        // Mode04 plus Minimum System Timestep will be set to 1hr
                         overrideTimestep = true;
                         overrideZoneAirHeatBalAlg = true;
                         overrideMinNumWarmupDays = true;
