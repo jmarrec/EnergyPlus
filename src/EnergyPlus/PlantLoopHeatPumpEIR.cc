@@ -2590,7 +2590,7 @@ void EIRPlantLoopHeatPump::oneTimeInit(EnergyPlusData &state)
                                        state.dataPlnt->PlantLoop(this->loadSidePlantLoc.loopNum).Name,
                                        "HeatPump:AirToWater",
                                        this->name));
-                ShowContinueError(state, "The load and source sides need to be on different loops.");
+                ShowContinueError(state, "The Hot Water nodes must be connected to a HotWater loop. The Chilled Water nodes must be ChilledWater loop");
                 errFlag = true;
             }
         }
