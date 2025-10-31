@@ -1,11 +1,3 @@
-!  Version,
-!    8.9;                    !- Version Identifier
-!  Version,
-!    9.0;                    !- Version Identifier
-
-!  Version,
-!    25.2;                   !- Version Identifier
-
   People,
     West Zone,               !- Name
     West Zone,               !- Zone or ZoneList or Space or SpaceList Name
