@@ -1736,6 +1736,10 @@ namespace OutputProcessor {
                 meter->periods[iPeriod].resetVals();
             }
             meter->periodFinYrSM.resetVals();
+
+            for (int iMeter = 0; iMeter < (int)op->meters.size(); ++iMeter) {
+                op->meterValues[iMeter] = 0.0;
+            }
         }
 
         for (auto *var : op->outVars) {

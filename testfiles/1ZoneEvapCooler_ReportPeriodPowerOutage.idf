@@ -736,8 +736,8 @@
     AllSummary;              !- Report 1 Name
 
   Output:Table:ReportPeriod,
-    ThermalResilienceReportTimeSummer,  !- Name,
-    ThermalResilienceSummary,!- Report Name,
+    ThermalResilienceReportTimeSummer,  !- Name
+    ThermalResilienceSummary,!- Report Name
     ,                        !- Begin Year
     7,                       !- Begin Month
     25,                      !- Begin Day of Month
