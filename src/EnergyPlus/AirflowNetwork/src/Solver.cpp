@@ -4882,75 +4882,92 @@ namespace AirflowNetwork {
                 e.ZoneNum = 0;
             }
 
-            for (count = AirflowNetworkNumOfSurfaces + 1; count <= AirflowNetworkNumOfLinks; ++count) {
+            count = AirflowNetworkNumOfSurfaces;
+            auto const instances = m_state.dataInputProcessing->inputProcessor->epJSON.find(CurrentModuleObject);
+            if (instances != m_state.dataInputProcessing->inputProcessor->epJSON.end()) {
+                auto &instancesValue = instances.value();
+                auto const &schemaProps = m_state.dataInputProcessing->inputProcessor->getObjectSchemaProps(m_state, CurrentModuleObject);
+                for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
+                    count += 1;
+                    auto const &fields = instance.value();
+                    AirflowNetworkLinkageData(count).Name = Util::makeUPPER(instance.key());
+                    m_state.dataInputProcessing->inputProcessor->markObjectAsUsed(CurrentModuleObject, instance.key());
+                    AirflowNetworkLinkageData(count).NodeNames[0] = Util::makeUPPER(fields.at("node_1_name").get<std::string>());
+                    AirflowNetworkLinkageData(count).NodeHeights[0] = 0.0;
+                    AirflowNetworkLinkageData(count).NodeNames[1] = Util::makeUPPER(fields.at("node_2_name").get<std::string>());
+                    AirflowNetworkLinkageData(count).NodeHeights[1] = 0.0;
+                    AirflowNetworkLinkageData(count).CompName = Util::makeUPPER(fields.at("component_name").get<std::string>());
+                    AirflowNetworkLinkageData(count).ZoneName =
+                        Util::makeUPPER(m_state.dataInputProcessing->inputProcessor->getAlphaFieldValue(fields, schemaProps, "thermal_zone_name"));
+                    AirflowNetworkLinkageData(count).LinkNum = count;
 
-                m_state.dataInputProcessing->inputProcessor->getObjectItem(m_state,
-                                                                           CurrentModuleObject,
-                                                                           count - AirflowNetworkNumOfSurfaces,
-                                                                           Alphas,
-                                                                           NumAlphas,
-                                                                           Numbers,
-                                                                           NumNumbers,
-                                                                           IOStatus,
-                                                                           lNumericBlanks,
-                                                                           lAlphaBlanks,
-                                                                           cAlphaFields,
-                                                                           cNumericFields);
-                AirflowNetworkLinkageData(count).Name = Alphas(1);
-                AirflowNetworkLinkageData(count).NodeNames[0] = Alphas(2);
-                AirflowNetworkLinkageData(count).NodeHeights[0] = 0.0;
-                AirflowNetworkLinkageData(count).NodeNames[1] = Alphas(3);
-                AirflowNetworkLinkageData(count).NodeHeights[1] = 0.0;
-                AirflowNetworkLinkageData(count).CompName = Alphas(4);
-                AirflowNetworkLinkageData(count).ZoneName = Alphas(5);
-                AirflowNetworkLinkageData(count).LinkNum = count;
-
-                for (int i = 1; i <= DisSysNumOfDuctViewFactors; ++i) {
-                    if (AirflowNetworkLinkageData(count).Name == AirflowNetworkLinkageViewFactorData(i).LinkageName) {
-                        AirflowNetworkLinkageData(count).LinkageViewFactorObjectNum = AirflowNetworkLinkageViewFactorData(i).ObjectNum;
-                        break;
+                    for (int i = 1; i <= DisSysNumOfDuctViewFactors; ++i) {
+                        if (AirflowNetworkLinkageData(count).Name == AirflowNetworkLinkageViewFactorData(i).LinkageName) {
+                            AirflowNetworkLinkageData(count).LinkageViewFactorObjectNum = AirflowNetworkLinkageViewFactorData(i).ObjectNum;
+                            break;
+                        }
                     }
-                }
 
-                if (!lAlphaBlanks(5)) {
-                    AirflowNetworkLinkageData(count).ZoneNum = Util::FindItemInList(AirflowNetworkLinkageData(count).ZoneName, Zone);
-                    if (AirflowNetworkLinkageData(count).ZoneNum == 0) {
+                    if (AirflowNetworkLinkageData(count).ZoneName != "") {
+                        AirflowNetworkLinkageData(count).ZoneNum = Util::FindItemInList(AirflowNetworkLinkageData(count).ZoneName, Zone);
+                        if (AirflowNetworkLinkageData(count).ZoneNum == 0) {
+                            ShowSevereError(m_state,
+                                            format(RoutineName) + CurrentModuleObject + ": Invalid " + AirflowNetworkLinkageData(count).ZoneName +
+                                                " given = " + AirflowNetworkLinkageData(count).ZoneName);
+                            ErrorsFound = true;
+                        }
+                    }
+                    if (AirflowNetworkLinkageData(count).NodeNames[0] == AirflowNetworkLinkageData(count).NodeNames[1]) {
                         ShowSevereError(m_state,
-                                        format(RoutineName) + CurrentModuleObject + ": Invalid " + cAlphaFields(5) +
-                                            " given = " + AirflowNetworkLinkageData(count).ZoneName);
+                                        format(RoutineName) + CurrentModuleObject + ", " + AirflowNetworkLinkageData(count).NodeNames[0] + " = " +
+                                            AirflowNetworkLinkageData(count).NodeNames[1] + " in " + AirflowNetworkLinkageData(count).Name);
                         ErrorsFound = true;
                     }
-                }
-                if (Alphas(2) == Alphas(3)) {
-                    ShowSevereError(m_state,
-                                    format(RoutineName) + CurrentModuleObject + ", " + cAlphaFields(2) + " = " + cAlphaFields(3) + " in " +
-                                        AirflowNetworkLinkageData(count).Name);
-                    ErrorsFound = true;
-                }
-                // Find component number
-                auto afe = elements.find(AirflowNetworkLinkageData(count).CompName);
-                if (afe != elements.end()) {
-                    AirflowNetworkLinkageData(count).element = afe->second;
+                    // Find component number
+                    auto afe = elements.find(AirflowNetworkLinkageData(count).CompName);
+                    if (afe != elements.end()) {
+                        AirflowNetworkLinkageData(count).element = afe->second;
 
-                    // Get CompTypeNum here, this is a hack to hold us over until the introspection is dealt with
-                    auto compnum_iter = compnum.find(AirflowNetworkLinkageData(count).CompName);
-                    assert(compnum_iter != compnum.end());
-                    int compnum = compnum_iter->second;
-                    AirflowNetworkLinkageData(count).CompNum = compnum;
-                } else {
-                    ShowSevereError(m_state,
-                                    format(RoutineName) + CurrentModuleObject + ": The " + cAlphaFields(4) + " is not defined in " +
-                                        AirflowNetworkLinkageData(count).Name);
-                    ErrorsFound = true;
-                }
-                // Find Node number
-                found = false;
-                for (int i = 1; i <= AirflowNetworkNumOfNodes; ++i) {
-                    if (AirflowNetworkLinkageData(count).NodeNames[0] == AirflowNetworkNodeData(i).Name) {
-                        AirflowNetworkLinkageData(count).NodeNums[0] = i;
-                        AirflowNetworkLinkageData(count).NodeHeights[0] += AirflowNetworkNodeData(i).NodeHeight;
-                        found = true;
-                        break;
+                        // Get CompTypeNum here, this is a hack to hold us over until the introspection is dealt with
+                        auto compnum_iter = compnum.find(AirflowNetworkLinkageData(count).CompName);
+                        assert(compnum_iter != compnum.end());
+                        int compnum = compnum_iter->second;
+                        AirflowNetworkLinkageData(count).CompNum = compnum;
+                    } else {
+                        ShowSevereError(m_state,
+                                        format(RoutineName) + CurrentModuleObject + ": The " + AirflowNetworkLinkageData(count).CompName +
+                                            " is not defined in " + AirflowNetworkLinkageData(count).Name);
+                        ErrorsFound = true;
+                    }
+                    // Find Node number
+                    found = false;
+                    for (int i = 1; i <= AirflowNetworkNumOfNodes; ++i) {
+                        if (AirflowNetworkLinkageData(count).NodeNames[0] == AirflowNetworkNodeData(i).Name) {
+                            AirflowNetworkLinkageData(count).NodeNums[0] = i;
+                            AirflowNetworkLinkageData(count).NodeHeights[0] += AirflowNetworkNodeData(i).NodeHeight;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        ShowSevereError(m_state,
+                                        format(RoutineName) + CurrentModuleObject + ": The " + AirflowNetworkLinkageData(count).NodeNames[0] +
+                                            " is not found in the node data " + AirflowNetworkLinkageData(count).Name);
+                        ErrorsFound = true;
+                    }
+                    for (int i = 1; i <= AirflowNetworkNumOfNodes; ++i) {
+                        if (AirflowNetworkLinkageData(count).NodeNames[1] == AirflowNetworkNodeData(i).Name) {
+                            AirflowNetworkLinkageData(count).NodeNums[1] = i;
+                            AirflowNetworkLinkageData(count).NodeHeights[1] += AirflowNetworkNodeData(i).NodeHeight;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        ShowSevereError(m_state,
+                                        format(RoutineName) + CurrentModuleObject + ": The " + AirflowNetworkLinkageData(count).NodeNames[1] +
+                                            " is not found in the node data " + AirflowNetworkLinkageData(count).Name);
+                        ErrorsFound = true;
                     }
                 }
                 if (!found && !simulation_control.DuctLoss) {
@@ -10671,45 +10688,12 @@ namespace AirflowNetwork {
             }
         }
         // Air Distribution system
+        Solver::resolveAirLoopNum(ErrorsFound); // make sure all AirLoopNum values have been assigned
+
+        // Set AirLoopNum to fans and coils
         for (int i = AirflowNetworkNumOfSurfaces + 1; i <= AirflowNetworkNumOfLinks; ++i) {
             int j = AirflowNetworkLinkageData(i).NodeNums[0];
             int k = AirflowNetworkLinkageData(i).NodeNums[1];
-            if (AirflowNetworkNodeData(j).AirLoopNum == 0 && AirflowNetworkNodeData(k).AirLoopNum == 0) {
-                // Error messaage
-                ShowSevereError(m_state,
-                                format(RoutineName) + "AIRFLOWNETWORK:DISTRIBUTION:LINKAGE = " + AirflowNetworkLinkageData(i).Name +
-                                    " is not valid for AirLoopNum assignment");
-                ShowContinueError(m_state,
-                                  "AirLoopNum is not found in both nodes for the linkage: " + AirflowNetworkLinkageData(i).NodeNames[0] + " and " +
-                                      AirflowNetworkLinkageData(i).NodeNames[1]);
-                ShowContinueError(m_state,
-                                  "Please ensure one of two AIRFLOWNETWORK:DISTRIBUTION:NODEs in the first AIRFLOWNETWORK:DISTRIBUTION:LINKAGE "
-                                  "object should be defined as EnergyPlus NodeID.");
-                ErrorsFound = true;
-            }
-            if (AirflowNetworkNodeData(j).AirLoopNum > 0 && AirflowNetworkNodeData(k).AirLoopNum == 0) {
-                AirflowNetworkNodeData(k).AirLoopNum = AirflowNetworkNodeData(j).AirLoopNum;
-            }
-            if (AirflowNetworkNodeData(j).AirLoopNum == 0 && AirflowNetworkNodeData(k).AirLoopNum > 0) {
-                AirflowNetworkNodeData(j).AirLoopNum = AirflowNetworkNodeData(k).AirLoopNum;
-            }
-            if (AirflowNetworkNodeData(j).AirLoopNum == AirflowNetworkNodeData(k).AirLoopNum) {
-                AirflowNetworkLinkageData(i).AirLoopNum = AirflowNetworkNodeData(j).AirLoopNum;
-            }
-            if (AirflowNetworkNodeData(j).AirLoopNum != AirflowNetworkNodeData(k).AirLoopNum && AirflowNetworkNodeData(j).AirLoopNum > 0 &&
-                AirflowNetworkNodeData(k).AirLoopNum > 0) {
-                AirflowNetworkLinkageData(i).AirLoopNum = AirflowNetworkNodeData(j).AirLoopNum;
-                ShowSevereError(m_state,
-                                "The AirLoopNum defined in both AIRFLOWNETWORK:DISTRIBUTION:NODE objects in " + AirflowNetworkLinkageData(i).Name +
-                                    " are not the same. Please make sure both nodes should be listed in the same AirLoop as a valid linkage.");
-                ShowContinueError(m_state,
-                                  "AirLoop defined in " + AirflowNetworkNodeData(j).Name + " is " +
-                                      m_state.dataAirSystemsData->PrimaryAirSystems(AirflowNetworkNodeData(j).AirLoopNum).Name +
-                                      ", and AirLoop defined in " + AirflowNetworkNodeData(k).Name + " is " +
-                                      m_state.dataAirSystemsData->PrimaryAirSystems(AirflowNetworkNodeData(k).AirLoopNum).Name);
-                ErrorsFound = true;
-            }
-            // Set AirLoopNum to fans and coils
             if (AirflowNetworkCompData(AirflowNetworkLinkageData(i).CompNum).EPlusTypeNum == iEPlusComponentType::FAN) {
                 n = m_state.afn->DisSysCompCVFData(AirflowNetworkCompData(AirflowNetworkLinkageData(i).CompNum).TypeNum).FanIndex;
                 m_state.afn->DisSysCompCVFData(AirflowNetworkCompData(AirflowNetworkLinkageData(i).CompNum).TypeNum).AirLoopNum =
@@ -12402,6 +12386,78 @@ namespace AirflowNetwork {
         return AirLoopNumber;
     }
 
+    void Solver::resolveAirLoopNum(bool &errorFound)
+    {
+        // With the change to JSON for input, objects are read in but the order in the input file is not maintained.
+        // So, because of this and the fact that users could get the order wrong and get an unnecessary error message,
+        // this routine was created.  The intent is to populate all of the .AirLoopNum values correctly so that every
+        // :Linkage in the input gets the right AirLoopNum and these do not need to be in proper order.  This requires
+        // multiple passes through the various linkages to make sure that everything is set.  Note that this was also
+        // a potential problem using the legacy IP if the user did not get the :Linkage statements entered in the
+        // correct order in the IDF.
+        for (int outerLoop = 1; outerLoop <= AirflowNetworkNumOfLinks - AirflowNetworkNumOfSurfaces; ++outerLoop) {
+            for (int i = AirflowNetworkNumOfSurfaces + 1; i <= AirflowNetworkNumOfLinks; ++i) {
+                int j = AirflowNetworkLinkageData(i).NodeNums[0];
+                int k = AirflowNetworkLinkageData(i).NodeNums[1];
+                if (AirflowNetworkNodeData(j).AirLoopNum == 0 && AirflowNetworkNodeData(k).AirLoopNum == 0) {
+                    // Search to see if either has already been set at another linkage
+                    for (int i2 = AirflowNetworkNumOfSurfaces + 1; i2 <= AirflowNetworkNumOfLinks; ++i2) {
+                        if (i2 != i) { // skip the one that we are already on
+                            int j2 = AirflowNetworkLinkageData(i2).NodeNums[0];
+                            if ((j2 == j) && (AirflowNetworkNodeData(j2).AirLoopNum > 0)) {
+                                // Found the same node somewhere else and it has a positive AirLoopNum so use it
+                                AirflowNetworkNodeData(j).AirLoopNum = AirflowNetworkNodeData(j2).AirLoopNum;
+                            }
+                            int k2 = AirflowNetworkLinkageData(i2).NodeNums[1];
+                            if ((k2 == k) && (AirflowNetworkNodeData(k2).AirLoopNum > 0)) {
+                                // Found the same node somewhere else and it has a positive AirLoopNum so use it
+                                AirflowNetworkNodeData(k).AirLoopNum = AirflowNetworkNodeData(k2).AirLoopNum;
+                            }
+                        }
+                    }
+                }
+                if (AirflowNetworkNodeData(j).AirLoopNum > 0 && AirflowNetworkNodeData(k).AirLoopNum == 0) {
+                    AirflowNetworkNodeData(k).AirLoopNum = AirflowNetworkNodeData(j).AirLoopNum;
+                }
+                if (AirflowNetworkNodeData(j).AirLoopNum == 0 && AirflowNetworkNodeData(k).AirLoopNum > 0) {
+                    AirflowNetworkNodeData(j).AirLoopNum = AirflowNetworkNodeData(k).AirLoopNum;
+                }
+                if (AirflowNetworkNodeData(j).AirLoopNum == AirflowNetworkNodeData(k).AirLoopNum) {
+                    AirflowNetworkLinkageData(i).AirLoopNum = AirflowNetworkNodeData(j).AirLoopNum;
+                }
+                if (AirflowNetworkNodeData(j).AirLoopNum != AirflowNetworkNodeData(k).AirLoopNum && AirflowNetworkNodeData(j).AirLoopNum > 0 &&
+                    AirflowNetworkNodeData(k).AirLoopNum > 0) {
+                    AirflowNetworkLinkageData(i).AirLoopNum = AirflowNetworkNodeData(j).AirLoopNum;
+                    ShowSevereError(m_state,
+                                    "The AirLoopNum defined in both AIRFLOWNETWORK:DISTRIBUTION:NODE objects in " +
+                                        AirflowNetworkLinkageData(i).Name +
+                                        " are not the same. Please make sure both nodes should be listed in the same AirLoop as a valid linkage.");
+                    ShowContinueError(m_state,
+                                      "AirLoop defined in " + AirflowNetworkNodeData(j).Name + " is " +
+                                          m_state.dataAirSystemsData->PrimaryAirSystems(AirflowNetworkNodeData(j).AirLoopNum).Name +
+                                          ", and AirLoop defined in " + AirflowNetworkNodeData(k).Name + " is " +
+                                          m_state.dataAirSystemsData->PrimaryAirSystems(AirflowNetworkNodeData(k).AirLoopNum).Name);
+                    errorFound = true;
+                }
+            }
+        }
+        // One last check to make sure that everything was set.  If not, something was wrong with the input (linkage to nowhere).
+        for (int i = AirflowNetworkNumOfSurfaces + 1; i <= AirflowNetworkNumOfLinks; ++i) {
+            int j = AirflowNetworkLinkageData(i).NodeNums[0];
+            int k = AirflowNetworkLinkageData(i).NodeNums[1];
+            if (AirflowNetworkNodeData(j).AirLoopNum == 0 || AirflowNetworkNodeData(k).AirLoopNum == 0) {
+                ShowSevereError(m_state,
+                                "resolveAirLoopNum: AIRFLOWNETWORK:DISTRIBUTION:LINKAGE = " + AirflowNetworkLinkageData(i).Name +
+                                    " is missing a valid AirLoopNum assignment.");
+                ShowContinueError(m_state,
+                                  "An AirLoopNum connection could not found in onr or both nodes for the linkage: " +
+                                      AirflowNetworkLinkageData(i).NodeNames[0] + " and " + AirflowNetworkLinkageData(i).NodeNames[1]);
+                ShowContinueError(m_state, "Please check to make sure that both nodes are connected the rest of the Airflow Network.");
+                errorFound = true;
+            }
+        }
+    }
+
     void Solver::SizeDucts()
     {
         Real64 constexpr EPS(0.001);
@@ -12839,7 +12895,7 @@ namespace AirflowNetwork {
                             ReturnTrunkD = hydraulicDiameter * factor;
                         }
                         ReturnTrunkArea = ReturnTrunkD * ReturnTrunkD / 4.0 * Constant::Pi;
-                        Velocity = flowrate / SupplyBranchArea;
+                        Velocity = flowrate / ReturnTrunkArea;
                     }
                     if (simulation_control.ductSizing.method == DuctSizingMethod::VelocityAndLoss) {
                         if (Velocity > simulation_control.ductSizing.max_velocity) {
