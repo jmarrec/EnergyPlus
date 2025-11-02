@@ -272,8 +272,6 @@ struct WaterToAirHeatPumpData : BaseGlobalStruct
     Real64 initialQSource_calc = 0.0;    // Guess Source Side Heat Transfer Rate [W]
     Real64 initialQLoadTotal_calc = 0.0; // Guess Load Side Heat Transfer rate [W]
 
-    Real64 CompSuctionTemp = 0.0; // Temperature of the Refrigerant Entering the Compressor [C]
-
     Real64 LoadSideInletDBTemp_Init = 0.0;  // rated conditions
     Real64 LoadSideInletHumRat_Init = 0.0;  // rated conditions
     Real64 LoadSideAirInletEnth_Init = 0.0; // rated conditions
@@ -300,7 +298,6 @@ struct WaterToAirHeatPumpData : BaseGlobalStruct
         this->MyEnvrnFlag.deallocate();
         this->initialQSource_calc = 0.0;
         this->initialQLoadTotal_calc = 0.0;
-        this->CompSuctionTemp = 0.0;
         this->LoadSideInletDBTemp_Init = 0.0;
         this->LoadSideInletHumRat_Init = 0.0;
         this->LoadSideAirInletEnth_Init = 0.0;

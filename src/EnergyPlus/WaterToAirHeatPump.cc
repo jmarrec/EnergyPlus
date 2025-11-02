@@ -1225,7 +1225,6 @@ namespace WaterToAirHeatPump {
         // Simulates a parameter estimation based water to air heat pump model
 
         // Using/Aliasing
-        using General::SolveRoot;
         using Psychrometrics::PsyCpAirFnW;
         using Psychrometrics::PsyHFnTdbW; // ,PsyHFnTdbRhPb,PsyWFnTdpPb
         using Psychrometrics::PsyTdbFnHW;
@@ -1568,16 +1567,16 @@ namespace WaterToAirHeatPump {
                         return (compSuctionEnth - SuperHeatEnth) / SuperHeatEnth;
                     };
 
-                    General::SolveRoot(
-                        state, ERR, STOP1, SolFlag, state.dataWaterToAirHeatPump->CompSuctionTemp, f, CompSuctionTemp1, CompSuctionTemp2);
-                    if (SolFlag == -1) {
+                    // Shared between all instances so that we can learn best algorithm
+                    static SolveRootConfig solveRootConfig;
+                    Real64 CompSuctionTemp = General::SolveRoot2(state, ERR, f, CompSuctionTemp1, CompSuctionTemp2, solveRootConfig);
+                    if (solveRootConfig.numIters == SOLVEROOT_ERROR_ITER) {
                         heatPump.SimFlag = false;
                         return;
                     }
-                    CompSuctionEnth = heatPump.refrig->getSupHeatEnthalpy(
-                        state, state.dataWaterToAirHeatPump->CompSuctionTemp, SuctionPr, RoutineNameCompSuctionTemp);
-                    CompSuctionDensity = heatPump.refrig->getSupHeatDensity(
-                        state, state.dataWaterToAirHeatPump->CompSuctionTemp, SuctionPr, RoutineNameCompSuctionTemp);
+                    
+                    CompSuctionEnth = heatPump.refrig->getSupHeatEnthalpy(state, CompSuctionTemp, SuctionPr, RoutineNameCompSuctionTemp);
+                    CompSuctionDensity = heatPump.refrig->getSupHeatDensity(state, CompSuctionTemp, SuctionPr, RoutineNameCompSuctionTemp);
 
                     // Find Refrigerant Flow Rate
                     switch (heatPump.compressorType) {
@@ -1733,7 +1732,6 @@ namespace WaterToAirHeatPump {
         // Simulates a parameter estimation based water to air heat pump model
 
         // Using/Aliasing
-        using General::SolveRoot;
         using Psychrometrics::PsyCpAirFnW; // ,PsyHFnTdbRhPb,PsyWFnTdpPb
         using Psychrometrics::PsyTdbFnHW;
         using Psychrometrics::PsyWFnTdbH;
@@ -2013,8 +2011,11 @@ namespace WaterToAirHeatPump {
                     return (compSuctionEnth - SuperHeatEnth) / SuperHeatEnth;
                 };
 
-                General::SolveRoot(state, ERR, STOP1, SolFlag, CompSuctionTemp, f, CompSuctionTemp1, CompSuctionTemp2);
-                if (SolFlag == -1) {
+                // Share between all instances so that we can learn best algorithm
+                static SolveRootConfig solveRootConfig;
+                CompSuctionTemp = General::SolveRoot2(state, ERR, f, CompSuctionTemp1, CompSuctionTemp2, solveRootConfig);
+                
+                if (solveRootConfig.numIters == SOLVEROOT_ERROR_ITER) {
                     heatPump.SimFlag = false;
                     return;
                 }

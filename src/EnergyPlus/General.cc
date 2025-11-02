@@ -207,41 +207,41 @@ void SolveRoot(const EnergyPlusData &state,
             break;
         }
         // new estimation
-        switch (state.dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod) {
-        case HVACSystemRootSolverAlgorithm::RegulaFalsi: {
+        switch (state.dataRootFinder->rootAlgo) {
+        case RootAlgo::RegulaFalsi: {
             XTemp = (Y0 * X1 - Y1 * X0) / DY;
             break;
         }
-        case HVACSystemRootSolverAlgorithm::Bisection: {
+        case RootAlgo::Bisection: {
             XTemp = (X1 + X0) / 2.0;
             break;
         }
-        case HVACSystemRootSolverAlgorithm::RegulaFalsiThenBisection: {
-            if (NIte > state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
+        case RootAlgo::RegulaFalsiThenBisection: {
+            if (NIte > state.dataRootFinder->NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
             }
             break;
         }
-        case HVACSystemRootSolverAlgorithm::BisectionThenRegulaFalsi: {
-            if (NIte <= state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
+        case RootAlgo::BisectionThenRegulaFalsi: {
+            if (NIte <= state.dataRootFinder->NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
             }
             break;
         }
-        case HVACSystemRootSolverAlgorithm::Alternation: {
-            if (AltIte > state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
+        case RootAlgo::Alternation: {
+            if (AltIte > state.dataRootFinder->NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
-                if (AltIte >= 2 * state.dataRootFinder->HVACSystemRootFinding.NumOfIter) AltIte = 0;
+                if (AltIte >= 2 * state.dataRootFinder->NumOfIter) AltIte = 0;
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
             }
             break;
         }
-        case HVACSystemRootSolverAlgorithm::ShortBisectionThenRegulaFalsi: {
+        case RootAlgo::ShortBisectionThenRegulaFalsi: {
             if (NIte < 3) {
                 XTemp = (X1 + X0) / 2.0;
             } else {
@@ -266,6 +266,13 @@ void SolveRoot(const EnergyPlusData &state,
             return;
         };
 
+        if (NIte > 20) {
+            assert(false);
+            Flag = NIte;
+            XRes = XTemp;
+            return;
+        }        
+        
         // OK, so we didn't converge, lets check max iterations to see if we should break early
         if (NIte > MaxIte) break;
 
@@ -295,6 +302,320 @@ void SolveRoot(const EnergyPlusData &state,
     XRes = XTemp;
 }
 
+// A second version that does not require a payload -- use lambdas
+Real64 SolveRoot2(const EnergyPlusData &state,
+                  Real64 Eps,   // required absolute accuracy
+                  const std::function<Real64(Real64)> &f,
+                  Real64 X_0, // 1st bound of interval that contains the solution
+                  Real64 X_1, // 2nd bound of interval that contains the solution
+                  SolveRootConfig &config) 
+{
+    // SUBROUTINE INFORMATION:
+    //       AUTHOR         Michael Wetter
+    //       DATE WRITTEN   March 1999
+    //       MODIFIED       Fred Buhl November 2000, R. Raustad October 2006 - made subroutine RECURSIVE
+    //                      L. Gu, May 2017 - allow both Bisection and RegulaFalsi
+
+    // PURPOSE OF THIS SUBROUTINE:
+    // Find the value of x between x0 and x1 such that f(x)
+    // is equal to zero.
+
+    // METHODOLOGY EMPLOYED:
+    // Uses the Regula Falsi (false position) method (similar to secant method)
+
+    // REFERENCES:
+    // See Press et al., Numerical Recipes in Fortran, Cambridge University Press,
+    // 2nd edition, 1992. Page 347 ff.
+
+    // SUBROUTINE ARGUMENT DEFINITIONS:
+    // = -2: f(x0) and f(x1) have the same sign
+    // = -1: no convergence
+    // >  0: number of iterations performed
+
+    Real64 constexpr SMALL(1.e-10);
+    Real64 X0 = X_0;   // present 1st bound
+    Real64 X1 = X_1;   // present 2nd bound
+    Real64 XTemp = X0; // new estimate
+    
+    config.numIters = 0;
+    int AltIte = 0;    // a counter used for Alternation choice
+
+    Real64 Y0 = f(X0); // f at X0
+    Real64 Y1 = f(X1); // f at X1
+    // check initial values
+    if (Y0 * Y1 > 0) {
+        config.numIters = SOLVEROOT_ERROR_INIT;
+        return X0;
+    }
+
+    constexpr int TRIALS_PER_COUNT = 10;
+
+    // Trial period, cycle thru algorithms
+    if (config.counts < TRIALS_PER_COUNT * (int)RootAlgo::Num) {
+        config.algo = static_cast<RootAlgo>((int)config.algo+1);
+        if (config.algo == RootAlgo::Num) config.algo = RootAlgo::RegulaFalsi;
+
+    // Choose base algorithm, i.e., fewest total iterations
+    } else if (config.counts == TRIALS_PER_COUNT * (int)RootAlgo::Num) {
+        int minIters = config.maxIters * (int)RootAlgo::Num;
+        config.algo = RootAlgo::Invalid;
+        for (int i = 0; i < (int)RootAlgo::Num; ++i)
+            if (config.algoIters[i] < minIters) {
+                config.algo = static_cast<RootAlgo>(i);
+                minIters = config.algoIters[i];
+          }
+      
+    // Have chosen an algorithm, config.algo should be it
+    } else {
+    }
+        
+    while (true) {
+
+        Real64 DY = Y0 - Y1;
+        if (std::abs(DY) < SMALL) DY = SMALL;
+        if (std::abs(X1 - X0) < SMALL) {
+            break;
+        }
+
+        // new estimation
+        switch (config.algo) {
+        case RootAlgo::RegulaFalsi: {
+            XTemp = (Y0 * X1 - Y1 * X0) / DY;
+        } break;
+          
+        case RootAlgo::Bisection: {
+            XTemp = (X1 + X0) / 2.0;
+        } break;
+          
+        case RootAlgo::RegulaFalsiThenBisection: {
+            if (config.numIters > state.dataRootFinder->NumOfIter) {
+                XTemp = (X1 + X0) / 2.0;
+            } else {
+                XTemp = (Y0 * X1 - Y1 * X0) / DY;
+            }
+        } break;
+          
+        case RootAlgo::BisectionThenRegulaFalsi: {
+            if (config.numIters <= state.dataRootFinder->NumOfIter) {
+                XTemp = (X1 + X0) / 2.0;
+            } else {
+                XTemp = (Y0 * X1 - Y1 * X0) / DY;
+            }
+        } break;
+          
+        case RootAlgo::Alternation: {
+            if (AltIte > state.dataRootFinder->NumOfIter) {
+                XTemp = (X1 + X0) / 2.0;
+                if (AltIte >= 2 * state.dataRootFinder->NumOfIter) AltIte = 0;
+            } else {
+                XTemp = (Y0 * X1 - Y1 * X0) / DY;
+            }
+        } break;
+          
+        case RootAlgo::ShortBisectionThenRegulaFalsi: {
+            if (config.numIters < 3) {
+                XTemp = (X1 + X0) / 2.0;
+            } else {
+                XTemp = (Y0 * X1 - Y1 * X0) / DY;
+            }
+        } break;
+          
+        default: { // RegulaFalsi
+            XTemp = (Y0 * X1 - Y1 * X0) / DY;
+        } break;
+        } // switch (algo)
+
+        Real64 const YTemp = f(XTemp);
+
+        ++config.numIters;
+        ++AltIte;
+
+        // check convergence
+        if (std::abs(YTemp) < Eps) {
+            config.algoCounts[(int)config.algo] ++;
+            config.algoIters[(int)config.algo] += config.numIters;
+            return XTemp;
+        };
+
+        // This is just a trap to make sure Epsilon is not set too low.
+        if (config.numIters > 20) {
+            assert(false);
+            return XTemp;
+        }        
+        
+        // OK, so we didn't converge, lets check max iterations to see if we should break early
+        if (config.numIters > config.maxIters) break;
+
+        // Finally, if we make it here, we have not converged, and we still have iterations left, so continue
+        // and reassign values (only if further iteration required)
+        if (Y0 < 0.0) {
+            if (YTemp < 0.0) {
+                X0 = XTemp;
+                Y0 = YTemp;
+            } else {
+                X1 = XTemp;
+                Y1 = YTemp;
+            }
+        } else {
+            if (YTemp < 0.0) {
+                X1 = XTemp;
+                Y1 = YTemp;
+            } else {
+                X0 = XTemp;
+                Y0 = YTemp;
+            }
+        } // ( Y0 < 0 )
+    }     // Cont
+
+    // if we make it here we haven't converged, so just set the flag and leave
+    config.numIters = SOLVEROOT_ERROR_ITER;
+    config.algoCounts[(int)config.algo] ++;
+    config.algoIters[(int)config.algo] += config.numIters;
+    return XTemp;
+}
+
+// A second version that does not require a payload -- use lambdas
+Real64 SolveRootRel(const EnergyPlusData &state,
+                    RootAlgo rootAlgo,
+                    Real64 RelTol,   // required absolute accuracy
+                    int MaxIte,   // maximum number of allowed iterations
+                    int &Flag,    // integer storing exit status
+                    const std::function<Real64(Real64)> &f,
+                    Real64 Y_target,
+                    Real64 X_0, // 1st bound of interval that contains the solution
+                    Real64 X_1) // 2nd bound of interval that contains the solution
+{
+    // SUBROUTINE INFORMATION:
+    //       AUTHOR         Michael Wetter
+    //       DATE WRITTEN   March 1999
+    //       MODIFIED       Fred Buhl November 2000, R. Raustad October 2006 - made subroutine RECURSIVE
+    //                      L. Gu, May 2017 - allow both Bisection and RegulaFalsi
+
+    // PURPOSE OF THIS SUBROUTINE:
+    // Find the value of x between x0 and x1 such that f(x,Par)
+    // is equal to zero.
+
+    // METHODOLOGY EMPLOYED:
+    // Uses the Regula Falsi (false position) method (similar to secant method)
+
+    // REFERENCES:
+    // See Press et al., Numerical Recipes in Fortran, Cambridge University Press,
+    // 2nd edition, 1992. Page 347 ff.
+
+    // SUBROUTINE ARGUMENT DEFINITIONS:
+    // = -2: f(x0) and f(x1) have the same sign
+    // = -1: no convergence
+    // >  0: number of iterations performed
+  
+    Real64 constexpr SMALL(1.e-10);
+    Real64 X0 = X_0;   // present 1st bound
+    Real64 X1 = X_1;   // present 2nd bound
+    Real64 XTemp = X0; // new estimate
+    int NIte = 0;      // number of iterations
+    int AltIte = 0;    // an accounter used for Alternation choice
+
+    Real64 Y0 = f(X0); // f at X0
+    Real64 Y1 = f(X1); // f at X1
+
+    Real64 DY0 = Y_target - Y0;
+    Real64 DY1 = Y_target - Y1;
+    
+    int numTrialIters = 3;
+    int numBiWins = 0;
+    int numRFWins = 0;
+    
+    // check initial values
+    // X0 and X1 are both on the same side of the root, not on either side
+    if (DY0 * DY1 > 0) {
+        Flag = -2;
+        return X0;
+    }
+
+    while (true) {
+
+        Real64 DY = DY0 - DY1;
+        if (std::abs(DY) < SMALL) DY = SMALL;
+        if (std::abs(X1 - X0) < SMALL) {
+            break;
+        }
+
+        Real64 YTemp = 0.0;
+        
+        if (numTrialIters > 0) {
+            Real64 XTempBi = 1.001 * (X1 + X0) / 2.0;
+            Real64 XTempRF = 1.001 * (DY0 * X1 - DY1 * X0) / DY;
+
+            Real64 YTempBi = f(XTempBi);
+            Real64 YTempRF = f(XTempRF);
+
+            if (std::abs(Y_target - YTempBi) < std::abs(Y_target - YTempRF)) {
+                ++numBiWins;
+                XTemp = XTempBi;
+                YTemp = f(XTempBi); // Need to redo this if this is what we are going with because of side effects
+            } else {
+                ++numRFWins;
+                XTemp = XTempRF;
+                YTemp = YTempRF;
+            }
+
+            --numTrialIters;
+
+        } else {
+            XTemp = (numBiWins > numRFWins) ? (1.001 * (X1 + X0) / 2.0) : (1.001 * (DY0 * X1 - DY1 * X0) / DY);
+            YTemp = f(XTemp);
+        }          
+
+        // ((YT - Y0)/YT * X1 - (YT - Y1)/YT * X0) / ((YT - Y0)/YT - (YT - Y1)/YT)
+        // ((YT - Y0) * X1 - (YT - Y1) * X0) / ((YT - Y0) - (YT - Y1))
+        // (YT * X1 - YT * X0 - Y0 * X1 + Y1 * X0) / (Y1 - Y0)
+        
+
+        // X0 + ((YT - Y0) / (Y1 - Y0)) * (X1 - X0)
+        // X0 + (YT * (X1 - X0) - Y0 * (X1 - X0)) / (Y1 - Y0)
+        // new estimation
+
+        ++NIte;
+        ++AltIte;
+
+        // check convergence
+        if (std::abs((Y_target - YTemp) / Y_target) < RelTol) {
+            Flag = NIte;
+            return XTemp;
+        };
+
+        // OK, so we didn't converge, lets check max iterations to see if we should break early
+        if (NIte > MaxIte) break;
+
+        // Finally, if we make it here, we have not converged, and we still have iterations left, so continue
+        // and reassign values (only if further iteration required)
+        if (DY0 < 0.0) {
+            if (Y_target - YTemp < 0.0) {
+                X0 = XTemp;
+                Y0 = YTemp;
+                DY0 = Y_target - YTemp;
+            } else {
+                X1 = XTemp;
+                Y1 = YTemp;
+                DY1 = Y_target - YTemp;
+            }
+        } else {
+            if (Y_target - YTemp < 0.0) {
+                X1 = XTemp;
+                Y1 = YTemp;
+                DY1 = Y_target - YTemp;
+            } else {
+                X0 = XTemp;
+                Y0 = YTemp;
+                DY0 = Y_target - YTemp;
+            }
+        } // ( Y0 < 0 )
+    }     // Cont
+
+    // if we make it here we haven't converged, so just set the flag and leave
+    Flag = -1;
+    return XTemp;
+}
+  
 void MovingAvg(Array1D<Real64> &DataIn, int const NumItemsInAvg)
 {
     if (NumItemsInAvg <= 1) return; // no need to average/smooth

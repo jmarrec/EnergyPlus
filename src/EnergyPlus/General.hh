@@ -60,6 +60,8 @@
 #include <EnergyPlus/EPVector.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 
+#include <EnergyPlus/HVACSystemRootFindingAlgorithm.hh>
+
 namespace EnergyPlus {
 
 // Forward declarations
@@ -82,6 +84,23 @@ namespace General {
                    Real64 X_0,  // 1st bound of interval that contains the solution
                    Real64 X_1); // 2nd bound of interval that contains the solution
 
+    Real64 SolveRoot2(const EnergyPlusData &state,
+                     Real64 Eps,   // required absolute accuracy
+                     const std::function<Real64(Real64)> &f,
+                     Real64 X_0,  // 1st bound of interval that contains the solution
+                     Real64 X_1,
+                     SolveRootConfig &config); // 2nd bound of interval that contains the solution
+  
+    Real64 SolveRootRel(const EnergyPlusData &state,
+                       RootAlgo rootAlgo,
+                       Real64 RelTol,   // required absolute accuracy
+                       int MaxIte,   // maximum number of allowed iterations
+                       int &Flag,    // integer storing exit status
+                       const std::function<Real64(Real64)> &f,
+                       Real64 Y_target,
+                       Real64 X_0, // 1st bound of interval that contains the solution
+                       Real64 X_1); // 2nd bound of interval that contains the solution
+     
     void MovingAvg(Array1D<Real64> &DataIn, int NumItemsInAvg);
 
     void ProcessDateString(EnergyPlusData &state,

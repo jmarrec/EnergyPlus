@@ -14454,6 +14454,7 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
                 Real64 OutletAirTemp = state.dataDXCoils->DXCoilOutletTemp(DXCoilNum);
                 return TempDryBulb_Leaving_Apoint - OutletAirTemp;
             };
+        
         General::SolveRoot(state,
                            AccuracyTolerance,
                            MaximumIterations,

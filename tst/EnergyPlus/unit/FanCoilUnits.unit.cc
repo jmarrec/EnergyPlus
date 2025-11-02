@@ -2514,14 +2514,14 @@ TEST_F(EnergyPlusFixture, Test_TightenWaterFlowLimits)
         return (QUnitOut - QZnReq2) / QZnReq2;
     };
 
-    state->dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::Bisection;
+    state->dataRootFinder->rootAlgo = RootAlgo::Bisection;
     General::SolveRoot(*state, ErrorToler, MaxIte, SolFla, mdot, f, MinWaterFlow, MaxWaterFlow);
     EXPECT_EQ(-1, SolFla);
 
     MaxIte = 20;
     MinWaterFlow = 0.0;
     MaxWaterFlow = 0.09375;
-    state->dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
+    state->dataRootFinder->rootAlgo = RootAlgo::RegulaFalsi;
     General::SolveRoot(*state, ErrorToler, MaxIte, SolFla, mdot, f, MinWaterFlow, MaxWaterFlow);
     EXPECT_EQ(3, SolFla);
 }

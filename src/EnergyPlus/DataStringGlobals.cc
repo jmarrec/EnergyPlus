@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -45,65 +45,27 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef ENERGYPLUS_HVACSYSTEMROOTFINDINGALGORITHM_HH
-#define ENERGYPLUS_HVACSYSTEMROOTFINDINGALGORITHM_HH
+// EnergyPlus Headers
+#include <EnergyPlus/DataStringGlobals.hh>
 
-#include <EnergyPlus/Data/BaseData.hh>
+namespace EnergyPlus::DataStringGlobals {
 
-namespace EnergyPlus {
+// MODULE INFORMATION:
+//       AUTHOR         Linda K. Lawrie
+//       DATE WRITTEN   September 1997
+//       MODIFIED       na
+//       RE-ENGINEERED  na
 
-enum class RootAlgo : int
-{
-    Invalid = -1,
-    RegulaFalsi,
-    Bisection,
-    RegulaFalsiThenBisection,
-    BisectionThenRegulaFalsi,
-    Alternation,
-    ShortBisectionThenRegulaFalsi,
-    Num
-};
+// PURPOSE OF THIS MODULE:
+// This data-only module is a repository for string variables used in parsing
+// "pieces" of EnergyPlus.
 
-static constexpr std::array<std::string_view, (int)RootAlgo::Num> rootAlgoNamesUC = {
-    "REGULAFALSI",
-    "BISECTION",
-    "REGULAFALSITHENBISECTION",
-    "BISECTIONTHENREGULAFALSI",
-    "ALTERNATION",
-    "SHORTBISECTIONTHENREGULAFALSI"};
-
-    constexpr int SOLVEROOT_ERROR_INIT = -2;
-    constexpr int SOLVEROOT_ERROR_ITER = -1;
-  
-struct SolveRootConfig
-{
-    RootAlgo algo = RootAlgo::Bisection;
-    int maxIters = 0;
-    int numIters = 0;
-    int counts = 0;
-    std::array<int, (int)RootAlgo::Num> algoCounts = {0};
-    std::array<int, (int)RootAlgo::Num> algoIters = {0};
-};
-  
-struct RootFindingData : BaseGlobalStruct
-{
-    std::string Algorithm = {}; // Choice of algorithm
-    int NumOfIter = 5;          // Number of Iteration Before Algorith Switch
-    RootAlgo rootAlgo = RootAlgo::RegulaFalsi;
-
-    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
-    {
-    }
-
-    void init_state([[maybe_unused]] EnergyPlusData &state) override
-    {
-    }
-
-    void clear_state() override
-    {
-    }
-};
-
-} // namespace EnergyPlus
-
-#endif // ENERGYPLUS_HVACSYSTEMROOTFINDINGALGORITHM_HH
+// String that represents version information
+std::string const VerString("EnergyPlus, Version 25.1.0-aa39f9fea7");
+// String to be matched by Version object
+std::string const MatchVersion("25.1");
+// API version string to be matched when using the Python API
+std::string const PythonAPIVersion("0.2");
+// Build platform for reporting in the help output
+std::string const BuildPlatformString("macOS14.5_x86_64");
+} // namespace EnergyPlus::DataStringGlobals

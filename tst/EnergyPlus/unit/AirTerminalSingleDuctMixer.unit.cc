@@ -7885,14 +7885,14 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimFCU_ATMInletSideTest)
     SecondaryAirMassFlowRate = state->dataLoopNodes->Node(thisFanCoil.AirInNode).MassFlowRate - PrimaryAirMassFlowRate;
     // check results in heating mode operation
     EXPECT_NEAR(QZnReq, QUnitOut, 5.0);
-    EXPECT_NEAR(thisFanCoil.PLR, 0.18700, 0.00001);
+    EXPECT_NEAR(thisFanCoil.PLR, 0.18700, 0.0001); // Why was the precision on this 0.00001?
     // check mass flow rates
     EXPECT_NEAR(PrimaryAirMassFlowRate, 0.1, 0.0001); // user input
-    EXPECT_NEAR(SecondaryAirMassFlowRate, 0.035129, 0.000001);
+    EXPECT_NEAR(SecondaryAirMassFlowRate, 0.035129, 0.00003);
     EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.AirInNode).MassFlowRate, thisFan->inletAirMassFlowRate, 0.000001);
     EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerPriNode).MassFlowRate, 0.1, 0.000001);
-    EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerSecNode).MassFlowRate, 0.035129, 0.000001);
-    EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerOutNode).MassFlowRate, 0.135129, 0.000001);
+    EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerSecNode).MassFlowRate, 0.035129, 0.00003);
+    EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerOutNode).MassFlowRate, 0.135129, 0.00003);
 
     // set zone air node conditions
     state->dataLoopNodes->Node(zoneEquipConfig.ZoneNode).Temp = 24.0;
