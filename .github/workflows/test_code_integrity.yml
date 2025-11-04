@@ -178,9 +178,9 @@ jobs:
           --suppress=unusedFunction:src/EnergyPlus/api/state.cc
           --suppress=unusedFunction:src/EnergyPlus/Psychrometrics.cc
           --enable=all
-          -i EnergyPlus/DXCoils.cc
-          -i EnergyPlus/RefrigeratedCase.cc
-          -i EnergyPlus/SolarShading.cc
+#          -i EnergyPlus/DXCoils.cc
+#          -i EnergyPlus/RefrigeratedCase.cc
+#          -i EnergyPlus/SolarShading.cc
           -j $(nproc)
           --template='[{file}:{line}]:({severity}),[{id}],{message}'
           --suppress="uninitvar:*"
