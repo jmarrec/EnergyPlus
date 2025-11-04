@@ -2691,8 +2691,9 @@ void AnisoSkyViewFactors(EnergyPlusData &state)
             break;
         }
     }
-    F1 = max(0.0, F11R[EpsilonBin] + F12R[EpsilonBin] * Delta + F13R[EpsilonBin] * ZenithAng);
-    F2 = F21R[EpsilonBin] + F22R[EpsilonBin] * Delta + F23R[EpsilonBin] * ZenithAng;
+    const auto i = std::clamp(EpsilonBin, 0, static_cast<int>(F11R.size() - 1));
+    F1 = max(0.0, F11R[i] + F12R[i] * Delta + F13R[i] * ZenithAng);
+    F2 = F21R[i] + F22R[i] * Delta + F23R[i] * ZenithAng;
 
     for (int SurfNum : s_surf->AllExtSolarSurfaceList) {
 
