@@ -140,10 +140,13 @@ namespace PCMStorage {
         Real64 temp = state.dataLoopNodes->Node(this->UseSideInletNode).Temp;
 
         // get the water fluid property object
-        EnergyPlus::Fluid::GlycolProps *waterProps = EnergyPlus::Fluid::GetWater(state);
+        std::string fluidNameUse = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).FluidName;
+        EnergyPlus::Fluid::GlycolProps *rhoUseProps = EnergyPlus::Fluid::GetGlycol(state, fluidNameUse);
+        double rhoUse = rhoUseProps->getDensity(state, temp, "PCMStorageData::Calculate");
 
-        // retrieve density [kg/m3]
-        double rho = waterProps->getDensity(state, temp, "PCMStorageData::Calculate");
+        std::string fluidNamePlant = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).FluidName;
+        EnergyPlus::Fluid::GlycolProps *rhoPlantProps = EnergyPlus::Fluid::GetGlycol(state, fluidNamePlant);
+        double rhoPlant = rhoPlantProps->getDensity(state, temp, "PCMStorageData::Calculate");
 
         // At the beginning of each new environment (e.g. design day) perform one-time initializations.
         if (state.dataGlobal->BeginEnvrnFlag && this->MyEnvrnFlag) {
@@ -157,7 +160,7 @@ namespace PCMStorage {
                     initMassFlow = state.dataLoopNodes->Node(this->UseSideInletNode).MassFlowRate;
                 }
                 if (initMassFlow > 0.0) {
-                    this->UseSideDesignFlowRate = initMassFlow / rho;
+                    this->UseSideDesignFlowRate = initMassFlow / rhoUse;
                 } else if (this->PlantSideDesignFlowRate > 0.0) {
                     this->UseSideDesignFlowRate = this->PlantSideDesignFlowRate;
                 } else {
@@ -171,15 +174,15 @@ namespace PCMStorage {
                     initMassFlow = state.dataLoopNodes->Node(this->PlantSideInletNode).MassFlowRate;
                 }
                 if (initMassFlow > 0.0) {
-                    this->PlantSideDesignFlowRate = initMassFlow / rho;
+                    this->PlantSideDesignFlowRate = initMassFlow / rhoPlant;
                 } else {
                     // If nothing else is known use the use side design flow rate as the plant side design flow rate.
                     this->PlantSideDesignFlowRate = this->UseSideDesignFlowRate;
                 }
             }
             // Convert design volumetric flow rates (m3/s) to mass flow rates (kg/s).
-            this->UseSideMassFlowRate = this->UseSideDesignFlowRate * rho;
-            this->PlantSideMassFlowRate = this->PlantSideDesignFlowRate * rho;
+            this->UseSideMassFlowRate = this->UseSideDesignFlowRate * rhoUse;
+            this->PlantSideMassFlowRate = this->PlantSideDesignFlowRate * rhoPlant;
 
             // If the tank capacity has been set to zero or negative (autosize request), estimate a capacity.
             // The estimate here is based on storing one hour of flow on the larger of the use side or plant side.
@@ -254,9 +257,13 @@ namespace PCMStorage {
 
         Real64 temp = state.dataLoopNodes->Node(this->UseSideInletNode).Temp;
 
-        EnergyPlus::Fluid::GlycolProps *waterProps = EnergyPlus::Fluid::GetWater(state);
+        std::string fluidNameUse = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).FluidName;
+        EnergyPlus::Fluid::GlycolProps *cpUseProps = EnergyPlus::Fluid::GetGlycol(state, fluidNameUse);
+        Real64 CpWaterUse = cpUseProps->getSpecificHeat(state, temp, "PCMStorageData::Calculate"); // J/kg-C
 
-        Real64 CpWater = waterProps->getSpecificHeat(state, temp, "PCMStorageData::Calculate"); // J/kg-C
+        std::string fluidNamePlant = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).FluidName;
+        EnergyPlus::Fluid::GlycolProps *cpPlantProps = EnergyPlus::Fluid::GetGlycol(state, fluidNamePlant);
+        Real64 CpWaterPlant = cpPlantProps->getSpecificHeat(state, temp, "PCMStorageData::Calculate"); // J/kg-C
         // Real64 massFlowUse = useInlet.MassFlowRate;
         // Real64 massFlowPlant = plantInlet.MassFlowRate;
 
@@ -349,8 +356,8 @@ namespace PCMStorage {
 
         // Recompute heat-transfer rates using the requested flows (W)
         // (deltaTUse/deltaTPlant were computed above; keep your existing outlet temp calcs)
-        Real64 useheatTransfer_req = mUseReq * CpWater * (useInlet.Temp - useOutletTemp);
-        Real64 plantheatTransfer_req = mPlantReq * CpWater * (plantInlet.Temp - plantOutletTemp);
+        Real64 useheatTransfer_req = mUseReq * CpWaterUse * (useInlet.Temp - useOutletTemp);
+        Real64 plantheatTransfer_req = mPlantReq * CpWaterPlant * (plantInlet.Temp - plantOutletTemp);
 
         // Only one side should contribute per timestep by construction; but compute net formally:
         Real64 netPowerW = plantheatTransfer_req + useheatTransfer_req - HeatLossRate;
