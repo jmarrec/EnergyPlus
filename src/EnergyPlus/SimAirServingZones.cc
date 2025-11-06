@@ -2697,7 +2697,7 @@ void SimAirLoop(EnergyPlusData &state,
     // controllers on the air loop in the order they are specified.
 
     // METHODOLOGY EMPLOYED:
-    // To speed up the simulation, we introduced the possiblity to perform the controller
+    // To speed up the simulation, we introduced the possibility to perform the controller
     // simulation on each air loop using a warm restart from the solution obtained
     // at the previous HVAC step iteration. This is only attempted if the air mass flow
     // rate(s) for the air system have not changed since the last iteration.
@@ -2835,7 +2835,7 @@ void SolveAirLoopControllers(
     //      RE-ENGINEERED:  This is reengineered code that used to be in SimAirLoops()
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine solves for the controllers on the specfied air loop assuming a cold start.
+    // This subroutine solves for the controllers on the specified air loop assuming a cold start.
 
     // METHODOLOGY EMPLOYED:
     // For the specified primary air system:
@@ -2883,7 +2883,7 @@ void SolveAirLoopControllers(
     IterTot = 0;
 
     AirLoopConvergedFlag = true;
-    state.dataSimAirServingZones->BypassOAControllerSALC = true; // don't simulate OA contollers at this time (see SolveWaterCoilController)
+    state.dataSimAirServingZones->BypassOAControllerSALC = true; // don't simulate OA controllers at this time (see SolveWaterCoilController)
     IsUpToDateFlag = false;
     PrimaryAirSystems(AirLoopNum).ControlConverged = false;
 
@@ -2892,7 +2892,7 @@ void SolveAirLoopControllers(
 
     if (PrimaryAirSystems(AirLoopNum).SizeAirloopCoil) { // one time flag to initialize controller index and size coils if needed
         // Loop through the controllers first to set the controller index in the PrimaryAirSystem array.
-        // Need to actaully simulate controller to get controller index.
+        // Need to actually simulate controller to get controller index.
         for (int AirLoopControlNum = 1; AirLoopControlNum <= PrimaryAirSystems(AirLoopNum).NumControllers; ++AirLoopControlNum) {
             PrimaryAirSystems(AirLoopNum).ControllerIndex(AirLoopControlNum) =
                 HVACControllers::GetControllerIndex(state, PrimaryAirSystems(AirLoopNum).ControllerName(AirLoopControlNum));
@@ -3071,7 +3071,7 @@ void SolveWaterCoilController(EnergyPlusData &state,
     //       DATE WRITTEN:  July 2017
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine solves for the controllers in the specfied air loop OA system.
+    // This subroutine solves for the controllers in the specified air loop OA system.
 
     // METHODOLOGY EMPLOYED:
     // For the specified primary air system:
@@ -3276,7 +3276,7 @@ void ReSolveAirLoopControllers(
     //      RE-ENGINEERED:  This is new code
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine solves for the controllers on the specfied air loop by reusing
+    // This subroutine solves for the controllers on the specified air loop by reusing
     // the solution from the previous HVAC iteration.
     // It is used in the context of the optimization technique referred to as
     // speculative warm restart.
@@ -4241,6 +4241,8 @@ void SetUpSysSizingArrays(EnergyPlusData &state)
             sysSizing.loadSizingType = sysSizInput.loadSizingType;
             sysSizing.coolingPeakLoad = sysSizInput.coolingPeakLoad;
             sysSizing.CoolCapControl = sysSizInput.CoolCapControl;
+            sysSizing.heatCoilSizingMethod = sysSizInput.heatCoilSizingMethod;
+            sysSizing.maxHeatCoilToCoolingLoadSizingRatio = sysSizInput.maxHeatCoilToCoolingLoadSizingRatio;
             sysSizing.DesOutAirVolFlow = sysSizInput.DesOutAirVolFlow;
             sysSizing.SysAirMinFlowRat = sysSizInput.SysAirMinFlowRat;
             sysSizing.SysAirMinFlowRatWasAutoSized = sysSizInput.SysAirMinFlowRatWasAutoSized;
@@ -4302,6 +4304,8 @@ void SetUpSysSizingArrays(EnergyPlusData &state)
         finalSysSizing.loadSizingType = sysSizInput.loadSizingType;
         finalSysSizing.coolingPeakLoad = sysSizInput.coolingPeakLoad;
         finalSysSizing.CoolCapControl = sysSizInput.CoolCapControl;
+        finalSysSizing.heatCoilSizingMethod = sysSizInput.heatCoilSizingMethod;
+        finalSysSizing.maxHeatCoilToCoolingLoadSizingRatio = sysSizInput.maxHeatCoilToCoolingLoadSizingRatio;
         finalSysSizing.DesOutAirVolFlow = sysSizInput.DesOutAirVolFlow;
         finalSysSizing.SysAirMinFlowRat = sysSizInput.SysAirMinFlowRat;
         finalSysSizing.SysAirMinFlowRatWasAutoSized = sysSizInput.SysAirMinFlowRatWasAutoSized;
@@ -4349,6 +4353,8 @@ void SetUpSysSizingArrays(EnergyPlusData &state)
         calcSysSizing.loadSizingType = sysSizInput.loadSizingType;
         calcSysSizing.coolingPeakLoad = sysSizInput.coolingPeakLoad;
         calcSysSizing.CoolCapControl = sysSizInput.CoolCapControl;
+        calcSysSizing.heatCoilSizingMethod = sysSizInput.heatCoilSizingMethod;
+        calcSysSizing.maxHeatCoilToCoolingLoadSizingRatio = sysSizInput.maxHeatCoilToCoolingLoadSizingRatio;
         calcSysSizing.DesOutAirVolFlow = sysSizInput.DesOutAirVolFlow;
         calcSysSizing.SysAirMinFlowRat = sysSizInput.SysAirMinFlowRat;
         calcSysSizing.SysAirMinFlowRatWasAutoSized = sysSizInput.SysAirMinFlowRatWasAutoSized;
@@ -4733,7 +4739,7 @@ void SizeSysOutdoorAir(EnergyPlusData &state)
                     ZoneSA = max(termUnitSizing.AirVolFlow, ZonePA);
 
                     // For re-circulation systems, Vpz used to determine Zpz is the design terminal airflow
-                    // Std 62.1-2010, section 6.2.5.1: "Vpz (used to determin Zpz) is the primary airflow rate
+                    // Std 62.1-2010, section 6.2.5.1: "Vpz (used to determine Zpz) is the primary airflow rate
                     // rate to the ventilation zone from the air handler, including outdoor air and recirculated air.
                     // MJW - Not sure this is correct, seems like it should be ZonePA - above comments contradict each other
                     state.dataSize->VpzMinClgByZone(TermUnitSizingIndex) = ZoneSA;
@@ -4909,7 +4915,7 @@ void SizeSysOutdoorAir(EnergyPlusData &state)
                         ZoneSA = max(termUnitSizing.AirVolFlow, ZonePA);
 
                         // For re-circulation systems, Vpz used to determine Zpz is the design terminal airflow
-                        // Std 62.1-2010, section 6.2.5.1: "Vpz (used to determin Zpz) is the primary airflow rate
+                        // Std 62.1-2010, section 6.2.5.1: "Vpz (used to determine Zpz) is the primary airflow rate
                         // rate to the ventilation zone from the air handler, including outdoor air and recirculated air.
                         state.dataSize->VpzMinHtgByZone(TermUnitSizingIndex) = ZoneSA;
 
@@ -5230,7 +5236,8 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
                                                 state.dataSize->FinalZoneSizing(CtrlZoneNum).ZoneName));
                     }
                 } else if (!state.dataSize->FinalZoneSizing.empty()) { // not latent sizing for air loop
-                    if (state.dataSize->FinalZoneSizing(CtrlZoneNum).zoneLatentSizing && state.dataSize->CurOverallSimDay == 1) {
+                    if (state.dataSize->FinalZoneSizing(CtrlZoneNum).zoneLatentSizing && state.dataSize->CurOverallSimDay == 1 &&
+                        state.dataSize->FinalZoneSizing(CtrlZoneNum).heatCoilSizingMethod == DataSizing::HeatCoilSizMethod::None) {
                         ShowWarningError(state,
                                          format("Sizing for AirLoop = {} includes latent sizing in Sizing:Zone object for Zone = {}",
                                                 airToZoneNodeInfo.AirLoopName,

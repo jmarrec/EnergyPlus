@@ -456,14 +456,12 @@ void CoilCoolingDXCurveFitSpeed::CalcSpeedOutput(EnergyPlus::EnergyPlusData &sta
     Real64 CBF;    // adjusted coil bypass factor
     if (RatedCBF > 0.0) {
         A0 = -std::log(RatedCBF) * RatedAirMassFlowRate;
-    } else {
-        // This is bad - results in CBF = 1.0 which results in divide by zero below: hADP = inletState.h - hDelta / (1.0 - CBF)
-        ShowFatalError(state, format("{}Rated CBF={:.6R} is <= 0.0 for {}={}", RoutineName, RatedCBF, object_name, name));
-        A0 = 0.0;
-    }
-    Real64 ADiff = -A0 / AirMassFlow;
-    if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
-        CBF = std::exp(ADiff);
+        Real64 ADiff = -A0 / AirMassFlow;
+        if (ADiff >= DataPrecisionGlobals::EXP_LowerLimit) {
+            CBF = std::exp(ADiff);
+        } else {
+            CBF = 0.0;
+        }
     } else {
         CBF = 0.0;
     }
@@ -837,7 +835,7 @@ Real64 CoilCoolingDXCurveFitSpeed::calcEffectiveSHR(const DataLoopNode::NodeData
     //  and real world applications would use a single heating coil for both purposes, the actual
     //  fan operation is based on HeatingPLR + ReheatPLR. For cycling fan RH control, latent
     //  degradation only occurs when a heating load exists, in this case the reheat load is
-    //  equal to and oposite in magnitude to the cooling coil sensible output but the reheat
+    //  equal to and opposite in magnitude to the cooling coil sensible output but the reheat
     //  coil is not always active. This additional fan run time has not been accounted for at this time.
     //  Recalculate Toff for cycling fan systems when heating is active
     if (HeatingRTF > 0.0) {
@@ -850,12 +848,14 @@ Real64 CoilCoolingDXCurveFitSpeed::calcEffectiveSHR(const DataLoopNode::NodeData
         }
     }
 
-    //  Use sucessive substitution to solve for To
+    //  Use successive substitution to solve for To
     aa = (Gamma * Toffa) - (0.25 / Twet) * pow_2(Gamma) * pow_2(Toffa);
     To1 = aa + Tcl;
     Error = 1.0;
     while (Error > 0.001) {
-        To2 = aa - Tcl * std::expm1(-To1 / Tcl);
+        //  Floating overflow errors occur when -To1/Tcl is a large positive number.
+        //  Cap upper limit at 700 to avoid the overflow errors.
+        To2 = aa - Tcl * std::expm1(min(700.0, -To1 / Tcl));
         Error = std::abs((To2 - To1) / To1);
         To1 = To2;
     }

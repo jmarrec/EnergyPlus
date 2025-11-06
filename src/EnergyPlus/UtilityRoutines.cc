@@ -738,7 +738,7 @@ void ConvertCaseToUpper(std::string_view InputString, // Input string
     // Convert a string to upper case
 
     // METHODOLOGY EMPLOYED:
-    // This routine is not dependant upon the ASCII
+    // This routine is not dependent upon the ASCII
     // code.  It works by storing the upper and lower case alphabet.  It
     // scans the whole input string.  If it finds a character in the lower
     // case alphabet, it makes an appropriate substitution.
@@ -770,7 +770,7 @@ void ConvertCaseToLower(std::string_view InputString, // Input string
     // Convert a string to lower case
 
     // METHODOLOGY EMPLOYED:
-    // This routine is not dependant upon the ASCII
+    // This routine is not dependent upon the ASCII
     // code.  It works by storing the upper and lower case alphabet.  It
     // scans the whole input string.  If it finds a character in the lower
     // case alphabet, it makes an appropriate substitution.
@@ -1682,6 +1682,11 @@ void ShowSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh,
     ShowContinueError(state, format("{} = {}, item not found.", fieldName, fieldVal));
 }
 
+void ShowDetailedSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldVal)
+{
+    ShowSevereError(state, format("{}: {} = {}, item not found.", eoh.routineName, fieldName, fieldVal));
+    ShowContinueError(state, format("{} = {}, item not found.", fieldName, fieldVal));
+}
 void ShowSevereItemNotFoundAudit(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldVal)
 {
     ShowSevereError(state, format("{}: {} = {}", eoh.routineName, eoh.objectType, eoh.objectName), OptionalOutputFileRef{state.files.audit});

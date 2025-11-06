@@ -248,6 +248,7 @@ namespace DataHeatBalance {
         WaterHeaterStratified,
         ThermalStorageChilledWaterMixed,
         ThermalStorageChilledWaterStratified,
+        ThermalStorageHotWaterStratified,
         GeneratorFuelCell,
         GeneratorMicroCHP,
         ElectricLoadCenterTransformer,
@@ -330,6 +331,7 @@ namespace DataHeatBalance {
         "WATERHEATER:STRATIFIED",
         "THERMALSTORAGE:CHILLEDWATER:MIXED",
         "THERMALSTORAGE:CHILLEDWATER:STRATIFIED",
+        "THERMALSTORAGE:HOTWATER:STRATIFIED",
         "GENERATOR:FUELCELL",
         "GENERATOR:MICROCHP",
         "ELECTRICLOADCENTER:TRANSFORMER",
@@ -387,6 +389,7 @@ namespace DataHeatBalance {
         "WaterHeater:Stratified",
         "ThermalStorage:ChilledWater:Mixed",
         "ThermalStorage:ChilledWater:Stratified",
+        "ThermalStorage:HotWater:Stratified",
         "Generator:FuelCell",
         "Generator:MicroCHP",
         "ElectricLoadCenter:Transformer",
@@ -456,7 +459,7 @@ namespace DataHeatBalance {
 
     struct SpaceData : ZoneSpaceData
     {
-        int zoneNum = 0;                                       // Pointer to Zone wich contains this space
+        int zoneNum = 0;                                       // Pointer to Zone which contains this space
         Real64 userEnteredFloorArea = Constant::AutoCalculate; // User input floor area for this space
         std::string spaceType = "General";                     // Space type tag
         int spaceTypeNum = 0;                                  // Points to spaceType for this space
@@ -1327,7 +1330,7 @@ namespace DataHeatBalance {
         Real64 CarbonDioxideGainRate = 0.0;           // current timestep value of carbon dioxide gain rate for device
         Real64 *PtrGenericContamGainRate = nullptr;   // POINTER to value of generic contaminant gain rate for device
         Real64 GenericContamGainRate = 0.0;           // current timestep value of generic contaminant gain rate for device
-        int ReturnAirNodeNum = 0;                     // return air node number for retrun air convection heat gain
+        int ReturnAirNodeNum = 0;                     // return air node number for return air convection heat gain
     };
 
     struct SpaceZoneSimData // Calculated data by Space or Zone during each time step/hour
@@ -1491,7 +1494,7 @@ namespace DataHeatBalance {
         Real64 SumEnthalpyM = 0.0;           // Zone sum of EnthalpyM
         Real64 SumEnthalpyH = 0.0;           // Zone sum of EnthalpyH
         // reporting flags
-        bool ReportWBGT = false; // whether the wetbulb globe temperature is reqeusted as an output variable or used as an EMS sensor
+        bool ReportWBGT = false; // whether the wetbulb globe temperature is requested as an output variable or used as an EMS sensor
 
         void setUpOutputVars(EnergyPlusData &state, std::string_view prefix, std::string const &name);
     };

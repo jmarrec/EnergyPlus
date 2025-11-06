@@ -3663,7 +3663,7 @@ void CalcTESCoilDischargeOnlyMode(EnergyPlusData &state, int const TESCoilNum, R
 
     Real64 QdotDischargeLimit;     // limit for how much storage can be discharged without overshooting
     Real64 sTES = 0.0;             // state of charge of Thermal Energy Storage
-    bool TESHasSomeCharge = false; // true when there is something avaiable in storage
+    bool TESHasSomeCharge = false; // true when there is something available in storage
 
     switch (thisTESCoil.StorageMedia) {
     case MediaType::Water:

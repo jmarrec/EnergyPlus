@@ -1523,7 +1523,8 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
         ";",
 
         "  Coil:Cooling:DX:VariableSpeed,",
-        "Coil:Cooling:DX:VariableSpeed coil,    !- Name",
+        "    Coil:Cooling:DX:VariableSpeed coil,    !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Zone1WindACFanOutletNode,  !- Indoor Air Inlet Node Name",
         "    Zone1WindACAirOutletNode,  !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
@@ -1653,7 +1654,8 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
         ",,,,,,,,,,,,,,,,,;"
 
         "  Coil:Heating:DX:VariableSpeed,",
-        "Coil:Heating:DX:VariableSpeed coil,  !- Name",
+        "    Coil:Heating:DX:VariableSpeed coil,  !- Name",
+        "    ,                                    !- Availability Schedule Name",
         "    Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
         "    SuppHeating Coil Air Inlet Node,  !- Indoor Air Outlet Node Name",
         "    10,                      !- Number of Speeds {dimensionless}",
@@ -1790,6 +1792,7 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
 
         "Coil:WaterHeating:AirToWaterHeatPump:Wrapped,",
         "    HPWH Coil_1,             !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    1400,                    !- Rated Heating Capacity {W}",
         "    2.8,                     !- Rated COP {W/W}",
         "    0.88,                    !- Rated Sensible Heat Ratio",
@@ -1812,6 +1815,7 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
 
         "  Coil:WaterHeating:AirToWaterHeatPump:Pumped,",
         "    Zone4HPWHDXCoil,         !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    4000.0,                  !- Rated Heating Capacity {W}",
         "    3.2,                     !- Rated COP {W/W}",
         "    0.6956,                  !- Rated Sensible Heat Ratio",
@@ -1843,6 +1847,7 @@ TEST_F(EnergyPlusFixture, TestReadingCoilCoolingHeatingDX)
 
         "  Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,",
         "    HPWHOutdoorDXCoilVS,     !- Name",
+        "    ,                        !- Availability Schedule Name",
         "	10,						 !- Number of Speeds",
         "	10,						 !- Nominal speed level",
         "    4000.0,                  !- Rated Heating Capacity {W}",
@@ -2548,6 +2553,45 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedWasteHeat)
     EXPECT_NEAR(1302.748, state->dataHVACGlobal->MSHPWasteHeat, 0.001);
 }
 
+TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunctionAlone)
+{
+    state->init_state(*state);
+    // Define coil parameters
+    Real64 constexpr RatedInletAirTemp(26.666699999999999);
+    Real64 constexpr RatedInletAirHumRat(0.011184700000000001);
+    state->dataDXCoils->DXCoil.allocate(1);
+    state->dataDXCoils->DXCoil(1).DXCoilType = "Coil:Cooling:DX:SingleSpeed";
+    state->dataDXCoils->DXCoil(1).Name = "Test Coil";
+    state->dataDXCoils->DXCoil(1).RatedTotCap(1) = 4480.6580719394560;
+    state->dataDXCoils->DXCoil(1).RatedAirVolFlowRate(1) = 0.23519298920287324;
+    state->dataDXCoils->DXCoil(1).RatedSHR(1) = 0.75045855035287490;
+    std::string const CallingRoutine("DXCoil_ValidateADPFunctionAlone");
+
+    // Calculate new SHR
+    Real64 newSHR = ValidateADP(*state,
+                                state->dataDXCoils->DXCoil(1).DXCoilType,
+                                state->dataDXCoils->DXCoil(1).Name,
+                                RatedInletAirTemp,
+                                RatedInletAirHumRat,
+                                state->dataDXCoils->DXCoil(1).RatedTotCap(1),
+                                state->dataDXCoils->DXCoil(1).RatedAirVolFlowRate(1),
+                                state->dataDXCoils->DXCoil(1).RatedSHR(1),
+                                CallingRoutine);
+
+    // Make sure that the outlet conditions are below the saturation
+    Real64 airMassFlowRate =
+        state->dataDXCoils->DXCoil(1).RatedAirVolFlowRate(1) *
+        Psychrometrics::PsyRhoAirFnPbTdbW(*state, DataEnvironment::StdPressureSeaLevel, RatedInletAirTemp, RatedInletAirHumRat, CallingRoutine);
+    Real64 deltaH = state->dataDXCoils->DXCoil(1).RatedTotCap(1) / airMassFlowRate;
+    Real64 inletAirEnthalpy = Psychrometrics::PsyHFnTdbW(RatedInletAirTemp, RatedInletAirHumRat);
+    Real64 hTinHumRatOut = inletAirEnthalpy - (1.0 - newSHR) * deltaH;
+    Real64 outletAirHumRat = Psychrometrics::PsyWFnTdbH(*state, RatedInletAirTemp, hTinHumRatOut); // 0.0098703703931385892
+    Real64 outletAirEnthalpy = inletAirEnthalpy - deltaH;                                          // 38853.039955973931
+    Real64 outletAirTemp = Psychrometrics::PsyTdbFnHW(outletAirEnthalpy, outletAirHumRat);         // 13.846750113203081
+    Real64 dewPointTempOutHumRat = Psychrometrics::PsyTdpFnWPb(*state, outletAirHumRat, DataEnvironment::StdPressureSeaLevel);
+    ASSERT_TRUE(dewPointTempOutHumRat < outletAirTemp);
+}
+
 TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
 {
 
@@ -2688,7 +2732,7 @@ TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
                                     state->dataDXCoils->DXCoil(1).RatedSHR(1),
                                     true);
 
-    EXPECT_NEAR(0.792472, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
+    EXPECT_NEAR(0.79201121, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
     EXPECT_NEAR(0.00213735, CBF_calculated, 0.0000001);
 
     state->dataDXCoils->DXCoil(1).RatedTotCap(1) = 35000.0; // simulate outlet condition right at the saturation curve
@@ -2705,7 +2749,7 @@ TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
                              state->dataDXCoils->DXCoil(1).RatedSHR(1),
                              true);
 
-    EXPECT_NEAR(0.67908322, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
+    EXPECT_NEAR(0.67892329, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
     EXPECT_NEAR(0.00298921, CBF_calculated, 0.0000001);
 
     state->dataDXCoils->DXCoil(1).RatedTotCap(1) = 40000.0; // reverse perturb SHR (i.e., decrease SHR), CalcCBF would have failed with RH >= 1.0
@@ -2722,7 +2766,7 @@ TEST_F(EnergyPlusFixture, DXCoil_ValidateADPFunction)
                              state->dataDXCoils->DXCoil(1).RatedSHR(1),
                              true);
 
-    EXPECT_NEAR(0.64708322, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
+    EXPECT_NEAR(0.64719495, state->dataDXCoils->DXCoil(1).RatedSHR(1), 0.0000001);
     EXPECT_NEAR(0.00252307, CBF_calculated, 0.0000001);
 }
 
@@ -4983,8 +5027,8 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoilsAutoSizingOutput)
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Air Flow Rate [m3/s], 0.87500
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Gross Rated Total Cooling Capacity [W], 32731.91226
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Gross Rated Total Cooling Capacity [W], 16365.95613
- Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Rated Sensible Heat Ratio, 0.80039
- Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Sensible Heat Ratio, 0.80039
+ Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Rated Sensible Heat Ratio, 0.80369
+ Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Sensible Heat Ratio, 0.80369
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Evaporative Condenser Air Flow Rate [m3/s], 1.86572
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 2 Evaporative Condenser Air Flow Rate [m3/s], 3.73144
  Component Sizing Information, Coil:Cooling:DX:MultiSpeed, ASHP CLG COIL, Design Size Speed 1 Rated Evaporative Condenser Pump Power Consumption [W], 69.81717
@@ -5267,8 +5311,8 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoolingCoilPartialAutoSizeOutput)
     EXPECT_NEAR(32731.91, state->dataDXCoils->DXCoil(1).MSRatedTotCap(2), 0.01);
     EXPECT_NEAR(16365.95, state->dataDXCoils->DXCoil(1).MSRatedTotCap(1), 0.01);
     // Design SHR at speed 2 and speed 1
-    EXPECT_NEAR(0.80038, state->dataDXCoils->DXCoil(1).MSRatedSHR(2), 0.00001);
-    EXPECT_NEAR(0.80038, state->dataDXCoils->DXCoil(1).MSRatedSHR(1), 0.00001);
+    EXPECT_NEAR(0.80369, state->dataDXCoils->DXCoil(1).MSRatedSHR(2), 0.00001);
+    EXPECT_NEAR(0.80369, state->dataDXCoils->DXCoil(1).MSRatedSHR(1), 0.00001);
 
     // test SHR design size when partial autosizing (capacity is hardsized)
     state->dataDXCoils->DXCoil(1).MSRatedTotCap(1) = 17500.0; // DataSizing::AutoSize;
@@ -5276,8 +5320,8 @@ TEST_F(EnergyPlusFixture, TestMultiSpeedCoolingCoilPartialAutoSizeOutput)
 
     SizeDXCoil(*state, 1);
     // Design size SHR at speed 2 and speed 1
-    EXPECT_NEAR(0.80038, state->dataDXCoils->DXCoil(1).MSRatedSHR(2), 0.00001);
-    EXPECT_NEAR(0.80038, state->dataDXCoils->DXCoil(1).MSRatedSHR(1), 0.00001);
+    EXPECT_NEAR(0.80369, state->dataDXCoils->DXCoil(1).MSRatedSHR(2), 0.00001);
+    EXPECT_NEAR(0.80369, state->dataDXCoils->DXCoil(1).MSRatedSHR(1), 0.00001);
     // Design Capacity at speed 2 and speed 1
     EXPECT_NEAR(32731.91, state->dataDXCoils->DXCoil(1).MSRatedTotCapDes(2), 0.01);
     EXPECT_EQ(35000.0, state->dataDXCoils->DXCoil(1).MSRatedTotCap(2));
@@ -5627,7 +5671,7 @@ TEST_F(EnergyPlusFixture, MultiSpeedDXCoolingCoilOutputTest)
     Coil.AirOutNode = 2;
     // set coil parameter
     Coil.MSRatedTotCap(1) = 10710.0; // 60 % of full capacity
-    Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capcity
+    Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capacity
     Coil.InletAirMassFlowRate = state->dataHVACGlobal->MSHPMassFlowRateHigh;
     Coil.MSRatedAirMassFlowRate(1) = state->dataHVACGlobal->MSHPMassFlowRateLow;
     Coil.MSRatedAirMassFlowRate(2) = state->dataHVACGlobal->MSHPMassFlowRateHigh;
@@ -5897,7 +5941,7 @@ TEST_F(EnergyPlusFixture, TwoSpeedDXCoilStandardRatingsTest)
     EXPECT_TRUE(coolcoilTwoSpeed.RateWithInternalStaticAndFanObject);
     EXPECT_EQ("8.77", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilEERIP, coolcoilTwoSpeed.Name));
     EXPECT_EQ("10.8", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
-    // TODO: The IEER will not be generated for this particular coil because the cpacity is below the minimum for IEER
+    // TODO: The IEER will not be generated for this particular coil because the capacity is below the minimum for IEER
     // i.e, 65,000 Btu/h (19049.61955 Watts)
     // EXPECT_EQ("N/A", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
     // test 2: using default fan power per evap air flow rate, 365 W/1000 scfm or 773.3 W/(m3/s)
@@ -6144,7 +6188,7 @@ TEST_F(EnergyPlusFixture, TwoSpeedDXCoilStandardRatings_Curve_Fix_Test)
     EXPECT_TRUE(coolcoilTwoSpeed.RateWithInternalStaticAndFanObject);
     EXPECT_EQ("8.77", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilEERIP, coolcoilTwoSpeed.Name));
     EXPECT_EQ("10.8", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
-    // The IEER will not be generated for this particular coil because the cpacity is below the minimum for IEER
+    // The IEER will not be generated for this particular coil because the capacity is below the minimum for IEER
     // TODO: EXPECT_EQ("N/A", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
 
     EXPECT_EQ(state->dataErrTracking->TotalSevereErrors, 0);
@@ -6156,7 +6200,7 @@ TEST_F(EnergyPlusFixture, TwoSpeedDXCoilStandardRatings_Curve_Fix_Test)
     CalcTwoSpeedDXCoilStandardRating(*state, dXCoilIndex);
     EXPECT_EQ("8.72", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilEERIP, coolcoilTwoSpeed.Name));
     EXPECT_EQ("9.8", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
-    // TODO: The IEER will not be generated for this particular coil because the cpacity is below the minimum for IEER
+    // TODO: The IEER will not be generated for this particular coil because the capacity is below the minimum for IEER
     // EXPECT_EQ("N/A", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchDXCoolCoilIEERIP, coolcoilTwoSpeed.Name));
 
     EXPECT_EQ(state->dataErrTracking->TotalSevereErrors, 0);
@@ -6627,7 +6671,8 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
         ";",
 
         "  Coil:Cooling:DX:VariableSpeed,",
-        "Coil:Cooling:DX:VariableSpeed coil,    !- Name",
+        "    Coil:Cooling:DX:VariableSpeed coil,    !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Zone1WindACFanOutletNode,  !- Indoor Air Inlet Node Name",
         "    Zone1WindACAirOutletNode,  !- Indoor Air Outlet Node Name",
         "    1,                       !- Number of Speeds {dimensionless}",
@@ -6757,7 +6802,8 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
         ",,,,,,,,,,,,,,,,,;"
 
         "  Coil:Heating:DX:VariableSpeed,",
-        "Coil:Heating:DX:VariableSpeed coil,  !- Name",
+        "    Coil:Heating:DX:VariableSpeed coil,  !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    Heating Coil Air Inlet Node,  !- Indoor Air Inlet Node Name",
         "    SuppHeating Coil Air Inlet Node,  !- Indoor Air Outlet Node Name",
         "    10,                      !- Number of Speeds {dimensionless}",
@@ -6894,6 +6940,7 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
 
         "Coil:WaterHeating:AirToWaterHeatPump:Wrapped,",
         "    HPWH Coil_1,             !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    1400,                    !- Rated Heating Capacity {W}",
         "    2.8,                     !- Rated COP {W/W}",
         "    0.88,                    !- Rated Sensible Heat Ratio",
@@ -6916,6 +6963,7 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
 
         "  Coil:WaterHeating:AirToWaterHeatPump:Pumped,",
         "    Zone4HPWHDXCoil,         !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    4000.0,                  !- Rated Heating Capacity {W}",
         "    3.2,                     !- Rated COP {W/W}",
         "    0.6956,                  !- Rated Sensible Heat Ratio",
@@ -6947,6 +6995,7 @@ TEST_F(EnergyPlusFixture, Test_DHW_End_Use_Cat_Removal)
 
         "  Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed,",
         "    HPWHOutdoorDXCoilVS,     !- Name",
+        "    ,                        !- Availability Schedule Name",
         "	10,						 !- Number of Speeds",
         "	10,						 !- Nominal speed level",
         "    4000.0,                  !- Rated Heating Capacity {W}",

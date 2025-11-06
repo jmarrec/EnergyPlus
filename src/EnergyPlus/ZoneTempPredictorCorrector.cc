@@ -74,6 +74,7 @@
 #include <EnergyPlus/DataZoneControls.hh>
 #include <EnergyPlus/DataZoneEnergyDemands.hh>
 #include <EnergyPlus/DataZoneEquipment.hh>
+#include <EnergyPlus/DuctLoss.hh>
 #include <EnergyPlus/FaultsManager.hh>
 #include <EnergyPlus/FileSystem.hh>
 #include <EnergyPlus/General.hh>
@@ -3934,6 +3935,9 @@ Real64 ZoneSpaceHeatBalanceData::correctAirTemp(
         if (state.afn->distribution_simulated) {
             this->TempIndCoef += state.afn->exchangeData(zoneNum).TotalSen;
         }
+        if (state.dataDuctLoss->DuctLossSimu) {
+            this->TempIndCoef += state.dataDuctLoss->ZoneSen(zoneNum);
+        }
 
         // Solve for zone air temperature
         switch (state.dataHeatBal->ZoneAirSolutionAlgo) {
@@ -4045,6 +4049,9 @@ Real64 ZoneSpaceHeatBalanceData::correctAirTemp(
 
         if (state.afn->distribution_simulated) {
             this->TempIndCoef += state.afn->exchangeData(zoneNum).TotalSen;
+        }
+        if (state.dataDuctLoss->DuctLossSimu) {
+            this->TempIndCoef += state.dataDuctLoss->ZoneSen(zoneNum);
         }
 
         // Solve for zone air temperature
@@ -4506,6 +4513,9 @@ void ZoneSpaceHeatBalanceData::correctHumRat(EnergyPlusData &state, int const zo
     if (state.afn->distribution_simulated) {
         B += state.afn->exchangeData(zoneNum).TotalLat;
     }
+    if (state.dataDuctLoss->DuctLossSimu) {
+        B += state.dataDuctLoss->ZoneLat(zoneNum);
+    }
 
     // Use a 3rd order derivative to predict final zone humidity ratio and
     // smooth the changes using the zone air capacitance.
@@ -4809,6 +4819,9 @@ void InverseModelTemperature(EnergyPlusData &state,
 
             if (state.afn->distribution_simulated) {
                 TempIndCoef += state.afn->exchangeData(ZoneNum).TotalSen;
+            }
+            if (state.dataDuctLoss->DuctLossSimu) {
+                TempIndCoef += state.dataDuctLoss->ZoneLat(ZoneNum);
             }
             // Calculate air capacity using DataHeatBalance::SolutionAlgo::AnalyticalSolution
             if (TempDepCoef == 0.0) {
@@ -5169,7 +5182,7 @@ void ZoneSpaceHeatBalanceData::calcZoneOrSpaceSums(EnergyPlusData &state,
         if (thisZone.IsControlled) {
             auto const &zsec = (isSpaceControlled ? state.dataZoneEquip->spaceEquipConfig(spaceNum) : state.dataZoneEquip->ZoneEquipConfig(zoneNum));
             for (int NodeNum = 1, NodeNum_end = zsec.NumInletNodes; NodeNum <= NodeNum_end; ++NodeNum) {
-                // Get node conditions, this next block is of interest to irratic system loads... maybe nodes are not accurate at time of call?
+                // Get node conditions, this next block is of interest to erratic system loads... maybe nodes are not accurate at time of call?
                 //  how can we tell?  predict step must be lagged ?  correct step, systems have run.
                 auto const &node(state.dataLoopNodes->Node(zsec.InletNode(NodeNum)));
                 Real64 CpAir = Psychrometrics::PsyCpAirFnW(this->airHumRat);
@@ -6850,7 +6863,7 @@ void ZoneSpaceHeatBalanceData::calcPredictedSystemLoad(EnergyPlusData &state, Re
         default: {
             assert(false);
         } break;
-        } // swtich (Algo)
+        } // switch (Algo)
 
         if (RAFNFrac > 0.0) {
             LoadToHeatingSetPoint = LoadToHeatingSetPoint / RAFNFrac;
@@ -6895,7 +6908,7 @@ void ZoneSpaceHeatBalanceData::calcPredictedSystemLoad(EnergyPlusData &state, Re
         default: {
             assert(false);
         } break;
-        } // swtich (Algo)
+        } // switch (Algo)
 
         ZoneSetPoint = zoneTstatSetpt.setpt;
         if (RAFNFrac > 0.0) {
@@ -7053,7 +7066,7 @@ void ZoneSpaceHeatBalanceData::calcPredictedSystemLoad(EnergyPlusData &state, Re
 
     default: {
     } break;
-    } // swtich (setptType)
+    } // switch (setptType)
 
     int systemNodeNumber = 0;
     int stageNum = 0;
