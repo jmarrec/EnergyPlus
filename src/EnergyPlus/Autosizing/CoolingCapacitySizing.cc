@@ -504,7 +504,7 @@ Real64 CoolingCapacitySizer::size(EnergyPlusData &state, Real64 _originalValue, 
                         ShowContinueError(state, format("...Requested capacity ( W ) = {:.3T}", this->autoSizedValue));
                         ShowContinueError(state, format("...Requested flow/capacity ratio ( m3/s/W ) = {:.3T}", RatedVolFlowPerRatedTotCap));
                         ShowContinueError(state,
-                                          format("...Minimum flow/capacity ratio (m3/s/W) = {:.3T}",
+                                          format("...Minimum flow/capacity ratio ( m3/s/W ) = {:.3T}",
                                                  HVAC::MinRatedVolFlowPerRatedTotCap[(int)state.dataHVACGlobal->DXCT]));
                     }
 
