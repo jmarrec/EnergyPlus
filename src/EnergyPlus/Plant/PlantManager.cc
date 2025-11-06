@@ -1449,7 +1449,7 @@ void GetPlantInput(EnergyPlusData &state)
                     }
                     }
 
-                    if (!this_comp.compPtr) {
+                    if (this_comp.compPtr == nullptr) {
                         ShowFatalError(state, format(" Plant component \"{}\" was not assigned a pointer.", this_comp_type));
                     }
 

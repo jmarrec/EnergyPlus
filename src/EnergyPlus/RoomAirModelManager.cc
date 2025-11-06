@@ -1500,7 +1500,6 @@ namespace RoomAir {
         ipsc->cCurrentModuleObject = "RoomAir:Node:AirflowNetwork:InternalGains";
         TotNumOfRAFNNodeGainsLists = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, ipsc->cCurrentModuleObject);
         for (int Loop = 1; Loop <= TotNumOfRAFNNodeGainsLists; ++Loop) {
-            int foundList = false;
             state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                      ipsc->cCurrentModuleObject,
                                                                      Loop,
@@ -1537,7 +1536,6 @@ namespace RoomAir {
                 }
 
                 // found it
-                foundList = true;
                 int numInputGains = (NumAlphas + NumNumbers - 1) / 3;
                 int numSpacesInZone = state.dataHeatBal->Zone(iZone).numSpaces;
                 int maxNumGains = numInputGains * numSpacesInZone;

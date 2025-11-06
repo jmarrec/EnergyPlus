@@ -1271,7 +1271,7 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
         if (state.dataSize->PlantSizData(pltLoadSizNum).DesVolFlowRate > HVAC::SmallWaterVolFlow) {
             tmpLoadVolFlow = state.dataSize->PlantSizData(pltLoadSizNum).DesVolFlowRate * this->sizingFactor;
             Real64 deltaT = state.dataSize->PlantSizData(pltLoadSizNum).DeltaT;
-            if (this->companionHeatPumpCoil) {
+            if (this->companionHeatPumpCoil != nullptr) {
                 if (this->companionHeatPumpCoil->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRHeating) {
                     heatingSizingMethod = this->companionHeatPumpCoil->heatSizingMethod;
                 }
@@ -1332,7 +1332,7 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
             } else {
                 tmpCapacity = Cp * rho * deltaT * tmpLoadVolFlow * this->heatSizingRatio;
             }
-        } else if (this->companionHeatPumpCoil && this->companionHeatPumpCoil->loadSideDesignVolFlowRate > 0.0) {
+        } else if ((this->companionHeatPumpCoil != nullptr) && this->companionHeatPumpCoil->loadSideDesignVolFlowRate > 0.0) {
             tmpLoadVolFlow = this->companionHeatPumpCoil->loadSideDesignVolFlowRate;
             if (this->companionHeatPumpCoil->referenceCapacity == DataSizing::AutoSize) {
                 // use reverse init temp, e.g., if this is cooling use HWInitConvTemp
@@ -1450,7 +1450,7 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
         }
     } else {
         // no plant sizing available...try to use the companion coil
-        if (this->companionHeatPumpCoil) {
+        if (this->companionHeatPumpCoil != nullptr) {
             if (this->companionHeatPumpCoil->loadSideDesignVolFlowRateWasAutoSized && this->companionHeatPumpCoil->loadSideDesignVolFlowRate > 0.0) {
                 tmpLoadVolFlow = this->companionHeatPumpCoil->loadSideDesignVolFlowRate;
                 if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
@@ -1584,7 +1584,7 @@ void EIRPlantLoopHeatPump::sizeSrcSideWSHP(EnergyPlusData &state)
             tmpSourceVolFlow = hardSizedSourceSideFlow;
         }
     }
-    if (this->companionHeatPumpCoil) {
+    if (this->companionHeatPumpCoil != nullptr) {
         tmpSourceVolFlow *= this->companionHeatPumpCoil->heatSizingRatio;
     } else {
         tmpSourceVolFlow *= this->heatSizingRatio;
@@ -1673,7 +1673,7 @@ void EIRPlantLoopHeatPump::sizeSrcSideASHP(EnergyPlusData &state)
         tmpSourceVolFlow = tmpLoadVolFlow; // LCOV_EXCL_LINE
     }
 
-    if (this->companionHeatPumpCoil) {
+    if (this->companionHeatPumpCoil != nullptr) {
         tmpSourceVolFlow *= this->companionHeatPumpCoil->heatSizingRatio;
     } else {
         tmpSourceVolFlow *= this->heatSizingRatio;
@@ -1764,7 +1764,7 @@ void EIRPlantLoopHeatPump::sizeHeatRecoveryASHP(EnergyPlusData &state)
         tmpHeatRecoveryVolFlow = tmpLoadVolFlow;
     }
     // check if the sizing ratio is based on the this->EIRHPType
-    if (this->companionHeatPumpCoil) {
+    if (this->companionHeatPumpCoil != nullptr) {
         tmpHeatRecoveryVolFlow *= this->companionHeatPumpCoil->heatSizingRatio;
     } else {
         tmpHeatRecoveryVolFlow *= this->heatSizingRatio;
@@ -1857,7 +1857,7 @@ void EIRPlantLoopHeatPump::pairUpCompanionCoils(EnergyPlusData &state)
                     break;
                 }
             }
-            if (!thisHP.companionHeatPumpCoil) {
+            if (thisHP.companionHeatPumpCoil == nullptr) {
                 ShowSevereError(state, "Could not find matching companion heat pump coil.");
                 ShowContinueError(state, format("Base coil: {}", thisCoilName));
                 ShowContinueError(state, format("Looking for companion coil named: {}", targetCompanionName));
@@ -2288,7 +2288,7 @@ void EIRPlantLoopHeatPump::checkConcurrentOperation(EnergyPlusData &state)
     //  vector each pass, and check then each loop.  This seemed really bulky and inefficient, so I chose to
     //  leave a tight loop here of just reporting for each coil if it and the companion are running.
     for (auto &thisPLHP : state.dataEIRPlantLoopHeatPump->heatPumps) {
-        if (!thisPLHP.companionHeatPumpCoil) {
+        if (thisPLHP.companionHeatPumpCoil == nullptr) {
             continue;
         }
         if (thisPLHP.running && thisPLHP.companionHeatPumpCoil->running && !thisPLHP.companionHeatPumpCoil->heatRecoveryAvailable) {
@@ -3297,7 +3297,7 @@ void EIRFuelFiredHeatPump::pairUpCompanionCoils(EnergyPlusData &state)
                     break;
                 }
             }
-            if (!thisHP.companionHeatPumpCoil) {
+            if (thisHP.companionHeatPumpCoil == nullptr) {
                 ShowSevereError(state, "Could not find matching companion heat pump coil.");
                 ShowContinueError(state, format("Base coil: {}", thisCoilName));
                 ShowContinueError(state, format("Looking for companion coil named: {}", targetCompanionName));

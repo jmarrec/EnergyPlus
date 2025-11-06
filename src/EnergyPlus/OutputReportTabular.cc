@@ -18670,7 +18670,7 @@ bool isNumber(std::string const &s)
 {
     char *p;
     strtod(s.c_str(), &p);
-    for (; isspace(*p); ++p) {
+    for (; isspace(*p) != 0; ++p) {
         ; // handle trailing whitespace
     }
     return *p == 0;

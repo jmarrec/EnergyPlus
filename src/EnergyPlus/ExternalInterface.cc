@@ -801,7 +801,7 @@ void InstantiateInitializeFMUImport(EnergyPlusData &state)
             fmuInst.fmicomponent = fmiEPlusInstantiateSlave(
                 (char *)folderStr.c_str(), &fmuInst.LenWorkingFolder, &fmu.TimeOut, &fmu.Visible, &fmu.Interactive, &fmu.LoggingOn, &fmuInst.Index);
             // TODO: This is doing a null pointer check; OK?
-            if (!fmuInst.fmicomponent) {
+            if (fmuInst.fmicomponent == nullptr) {
                 ShowSevereError(state, "ExternalInterface/CalcExternalInterfaceFMUImport: Error when trying to instantiate");
                 ShowContinueError(state, format("instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
                 state.dataExternalInterface->ErrorsFound = true;
@@ -878,7 +878,7 @@ void TerminateResetFreeFMUImport(EnergyPlusData &state, int fmiEndSimulation)
                 fmuInst.fmistatus = fmiEPlusFreeSlave(&fmuInst.fmicomponent, &fmuInst.Index, &fmiEndSimulation);
             }
             // check if fmiComponent has been freed
-            if (!fmuInst.fmicomponent) {
+            if (fmuInst.fmicomponent == nullptr) {
                 ShowSevereError(state, "ExternalInterface/TerminateResetFreeFMUImport: Error when trying to terminate");
                 ShowContinueError(state, format("instance \"{}\" of FMU \"{}\"", fmuInst.Name, fmu.Name));
                 state.dataExternalInterface->ErrorsFound = true;

@@ -237,6 +237,8 @@ namespace SZVAVModel {
                 }
             }
             FanCoilUnits::Calc4PipeFanCoil(state, SysIndex, SZVAVModel.ControlZoneNum, FirstHVACIteration, TempSensOutput, PartLoadRatio);
+
+            // what's going on here?
             coilActive = state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp;
 
             if (!coilActive) { // if the coil is schedule off or the plant cannot provide water
@@ -437,6 +439,7 @@ namespace SZVAVModel {
                     }
                 }
                 FanCoilUnits::Calc4PipeFanCoil(state, SysIndex, SZVAVModel.ControlZoneNum, FirstHVACIteration, TempSensOutput, PartLoadRatio);
+                // what's going on here?
                 coilActive = state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp;
                 if (!coilActive) { // if the coil is schedule off or the plant cannot provide water
                     if (coilPlantLoc.loopNum > 0) {
@@ -746,6 +749,7 @@ namespace SZVAVModel {
                                                 SupHeaterLoad,
                                                 CompressorONFlag);
             }
+            // what's going on here?
             coilActive = state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp;
 
             if (!coilActive) { // if the coil is schedule off or the plant cannot provide water
@@ -846,7 +850,7 @@ namespace SZVAVModel {
                                                                                           AirMassFlow,
                                                                                           0.0,
                                                                                           maxAirMassFlow,
-                                                                                          CoolingLoad,
+                                                                                          CoolingLoad, // passing a bool but expecting a float
                                                                                           1.0);
                 };
                 General::SolveRoot(state, 0.001, MaxIter, SolFlag, PartLoadRatio, f, 0.0, 1.0);
@@ -859,6 +863,8 @@ namespace SZVAVModel {
                     if (CoolingLoad) {
                         szVAVModelSpeed = SZVAVModel.m_CoolingSpeedNum + 1;
                         szVAVModelSpeedMax = SZVAVModel.m_NumOfSpeedCooling;
+
+                        // what's going on here? Real64 = bool
                         sysLoad = CoolingLoad;
                     } else {
                         szVAVModelSpeed = SZVAVModel.m_HeatingSpeedNum + 1;
@@ -955,6 +961,7 @@ namespace SZVAVModel {
                                                     SupHeaterLoad,
                                                     CompressorONFlag);
                 }
+                // what's going on here?
                 coilActive = state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp;
                 if (!coilActive) { // if the coil is schedule off or the plant cannot provide water
                     if (coilPlantLoc.loopNum > 0) {
@@ -996,7 +1003,7 @@ namespace SZVAVModel {
                                                                                           maxAirMassFlow,
                                                                                           0.0,
                                                                                           maxAirMassFlow,
-                                                                                          CoolingLoad,
+                                                                                          CoolingLoad, // passing bool, expecting float
                                                                                           1.0);
                 };
                 General::SolveRoot(state, 0.001, MaxIter, SolFlag, PartLoadRatio, f, 0.0, 1.0);

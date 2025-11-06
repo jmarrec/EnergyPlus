@@ -253,7 +253,7 @@ namespace Material {
 
         // Radiation parameters // Are these for windows or for opaque materials also?
         bool AbsorpSolarEMSOverrideOn = false;   // if true, then EMS calling to override value for solar absorptance
-        Real64 AbsorpSolarEMSOverride = false;   // value to use when EMS calling to override value for solar absorptance
+        Real64 AbsorpSolarEMSOverride = 0.0;     // value to use when EMS calling to override value for solar absorptance
         bool AbsorpThermalEMSOverrideOn = false; // if true, then EMS calling to override value for thermal absorptance
         Real64 AbsorpThermalEMSOverride = 0.0;   // value to use when EMS calling to override value for thermal absorptance
         bool AbsorpVisibleEMSOverrideOn = false; // if true, then EMS calling to override value for visible absorptance

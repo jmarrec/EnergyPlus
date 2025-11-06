@@ -8519,11 +8519,11 @@ void DayltgDirectSunDiskComplexFenestration(EnergyPlusData &state,
     int NTrnBasis = complexWindowGeom.Trn.NBasis;
     for (int iTrnElem = 1; iTrnElem <= NTrnBasis; ++iTrnElem) {
         // if ray from any part of the window can reach reference point
-        int refPointIntersect = (CalledFrom == CalledFor::RefPoint)
+        bool refPointIntersect = (CalledFrom == CalledFor::RefPoint)
                                     ? complexWindowDayltgGeom.RefPoint(iRefPoint).RefPointIntersection(iTrnElem)
                                     : complexWindowDayltgGeom.IlluminanceMap(iRefPoint, MapNum).RefPointIntersection(iTrnElem);
 
-        if (refPointIntersect == 0) {
+        if (refPointIntersect) {
             continue;
         }
 

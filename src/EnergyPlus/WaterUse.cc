@@ -555,7 +555,7 @@ namespace WaterUse {
             // set logical if either hot water temp or target temp schedule are missing (will use cold water otherwise)
             // if a connections object is used then don't need to hot temp schedule
             waterEquipment.allowHotControl =
-                (waterEquipment.targetTempSched != nullptr && waterEquipment.hotTempSched != nullptr) || waterEquipment.Connections;
+                (waterEquipment.targetTempSched != nullptr && waterEquipment.hotTempSched != nullptr) || (waterEquipment.Connections != 0);
         }
     }
 

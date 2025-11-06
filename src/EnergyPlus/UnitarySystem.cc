@@ -7143,6 +7143,8 @@ namespace UnitarySystems {
             (this->m_HeatingCoilType_Num == HVAC::Coil_HeatingGasOrOtherFuel &&
              (this->m_CoolingCoilType_Num == HVAC::CoilDX_MultiSpeedCooling || this->m_CoolingCoilType_Num == HVAC::CoilDX_Cooling))) {
             if (this->m_DesignSpecMSHPIndex > -1) {
+
+                // should one of these be eliminated?
                 if (this->m_CompPointerMSHP->m_SingleModeFlag) {
                     this->m_SingleMode = 1;
                 }
@@ -13570,7 +13572,7 @@ namespace UnitarySystems {
                             this->m_CompPartLoadRatio = PartLoadFrac;
                         } else if (CoilType_Num == HVAC::CoilDX_Cooling) { // CoilCoolingDX
                             auto f = [&state, this, DesOutTemp, DehumidMode, fanOp](Real64 const PartLoadRatio) {
-                                bool const singleMode = this->m_SingleMode;
+                                bool const singleMode = this->m_SingleMode != 0;
                                 state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex].simulate(
                                     state, DehumidMode, this->m_CoolingSpeedNum, PartLoadRatio, fanOp, singleMode);
                                 Real64 outletCondition =
@@ -16296,7 +16298,7 @@ namespace UnitarySystems {
         UnitarySys &thisSys = state.dataUnitarySystems->unitarySys[UnitarySysNum];
         Real64 CoolPLR = coolHeatFlag == 1.0 ? PartLoadRatio : 0.0;
         Real64 HeatPLR = coolHeatFlag == 1.0 ? 0.0 : PartLoadRatio;
-        thisSys.setSpeedVariables(state, SensibleLoad, PartLoadRatio);
+        thisSys.setSpeedVariables(state, SensibleLoad != 0.0, PartLoadRatio);
         thisSys.calcUnitarySystemToLoad(state,
                                         AirLoopNum,
                                         FirstHVACIteration,

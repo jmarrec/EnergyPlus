@@ -3589,7 +3589,7 @@ namespace PlantPipingSystemsManager {
                     }
 
                     // if we were found on a pipe circuit, get some things for convenience
-                    if (circuitReference) {
+                    if (circuitReference != nullptr) {
                         if (circuitReference->HasInsulation) {
                             InsulationThickness = circuitReference->InsulationSize.thickness();
                         }
@@ -5579,7 +5579,7 @@ namespace PlantPipingSystemsManager {
                         for (auto &soilCell : cell.PipeCellData.Soil) {
                             soilCell.Properties = this->GroundProperties;
                         }
-                        if (thisCircuit) {
+                        if (thisCircuit != nullptr) {
                             cell.PipeCellData.Pipe.Properties = thisCircuit->PipeProperties;
                             if (thisCircuit->HasInsulation) {
                                 cell.PipeCellData.Insulation.Properties = thisCircuit->InsulationProperties;
@@ -5668,7 +5668,7 @@ namespace PlantPipingSystemsManager {
                         cell.PipeCellData.Pipe.Temperature = ThisCellTemp;
                         cell.PipeCellData.Pipe.Temperature_PrevIteration = ThisCellTemp;
                         cell.PipeCellData.Pipe.Temperature_PrevTimeStep = ThisCellTemp;
-                        if (thisCircuit) {
+                        if (thisCircuit != nullptr) {
                             if (thisCircuit->HasInsulation) {
                                 cell.PipeCellData.Insulation.Temperature = ThisCellTemp;
                                 cell.PipeCellData.Insulation.Temperature_PrevIteration = ThisCellTemp;
