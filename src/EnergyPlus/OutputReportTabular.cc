@@ -3383,8 +3383,11 @@ void AddTOCReportPeriod(const int nReportPeriods,
 {
     static std::string const Entire_Facility("Entire Facility");
     for (int i = 1; i <= nReportPeriods; i++) {
-        std::string ReportPeriod_Resilience_Summary = fmt::format(
-            "{} Resilience Summary for Reporting Period {}: {}", kw, i, ReportPeriodInputData(i).title, ReportPeriodInputData(i).totalElectricityUse);
+        std::string ReportPeriod_Resilience_Summary = fmt::format("{} Resilience Summary for Reporting Period {}: {} {}",
+                                                                  kw,
+                                                                  i,
+                                                                  ReportPeriodInputData(i).title,
+                                                                  ReportPeriodInputData(i).totalElectricityUse);
         tbl_stream << "<br><a href=\"#" << MakeAnchorName(ReportPeriod_Resilience_Summary, Entire_Facility) << "\">" << kw
                    << " Resilience Summary for Reporting Period " << i << ": " << ReportPeriodInputData(i).title << "</a>\n";
     }
@@ -12124,7 +12127,7 @@ void writeVeriSumSpaceTables(EnergyPlusData &state, const tabularReportStyle &st
         spaceTypeTotPlugProcess(state.dataHeatBal->space(spaceNum).spaceTypeNum) += itEquip;
     }
 
-    // re-use existing zone total variables
+    // reuse existing zone total variables
     for (int iTotal = 1; iTotal <= 4; ++iTotal) {
         state.dataOutRptTab->zstArea(iTotal) = 0.0;
         state.dataOutRptTab->zstLight(iTotal) = 0.0;
