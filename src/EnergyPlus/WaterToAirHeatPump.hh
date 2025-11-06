@@ -259,22 +259,11 @@ struct WaterToAirHeatPumpData : BaseGlobalStruct
 
     bool GetCoilsInputFlag; // Flag set to make sure you get input once
     bool MyOneTimeFlag;
-    bool firstTime;
 
     Array1D<WaterToAirHeatPump::WatertoAirHPEquipConditions> WatertoAirHP;
 
-    Real64 initialQSource = 0.0; // Guess Source Side Heat Transfer Rate [W]
-    Real64 initialQLoad = 0.0;   // Guess Load Side Heat Transfer rate [W]
-
     Array1D_bool MyPlantScanFlag;
     Array1D_bool MyEnvrnFlag;
-
-    Real64 initialQSource_calc = 0.0;    // Guess Source Side Heat Transfer Rate [W]
-    Real64 initialQLoadTotal_calc = 0.0; // Guess Load Side Heat Transfer rate [W]
-
-    Real64 LoadSideInletDBTemp_Init = 0.0;  // rated conditions
-    Real64 LoadSideInletHumRat_Init = 0.0;  // rated conditions
-    Real64 LoadSideAirInletEnth_Init = 0.0; // rated conditions
 
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
     {
@@ -290,21 +279,13 @@ struct WaterToAirHeatPumpData : BaseGlobalStruct
         this->CheckEquipName.clear();
         this->GetCoilsInputFlag = true;
         this->MyOneTimeFlag = true;
-        this->firstTime = true;
         this->WatertoAirHP.clear();
-        this->initialQSource = 0.0;
-        this->initialQLoad = 0.0;
         this->MyPlantScanFlag.deallocate();
         this->MyEnvrnFlag.deallocate();
-        this->initialQSource_calc = 0.0;
-        this->initialQLoadTotal_calc = 0.0;
-        this->LoadSideInletDBTemp_Init = 0.0;
-        this->LoadSideInletHumRat_Init = 0.0;
-        this->LoadSideAirInletEnth_Init = 0.0;
     }
 
     // Default Constructor
-    WaterToAirHeatPumpData() : NumWatertoAirHPs(0), GetCoilsInputFlag(true), MyOneTimeFlag(true), firstTime(true)
+    WaterToAirHeatPumpData() : NumWatertoAirHPs(0), GetCoilsInputFlag(true), MyOneTimeFlag(true)
     {
     }
 };
