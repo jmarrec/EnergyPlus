@@ -8751,6 +8751,9 @@ namespace SurfaceGeometry {
             }
 
             if (!ErrorsFoundByConstruct) {
+                if (tmpAlgoInput == DataSurfaces::HeatTransferModel::CondFD) {
+                    state.dataConstruction->Construct(Found).IsCondFD = true;
+                }
                 for (Item1 = 1; Item1 <= state.dataSurface->TotSurfaces; ++Item1) {
                     if (state.dataSurface->Surface(Item1).Construction == Found) {
                         state.dataSurface->Surface(Item1).HeatTransferAlgorithm = tmpAlgoInput;
