@@ -78,7 +78,7 @@
       </div>
       <div class="row">
         <div class="col-md-12" style="text-align: center">
-          <a class="btn btn-primary margin-bottom-6" href="https://energyplus.net/quickstart" role="button">
+          <a class="btn btn-primary margin-bottom-6" href="https://energyplus.net/quick-start" role="button">
             <span class="fa fa-external-link"></span> Go to the EnergyPlus Quick-Start Guide
           </a>
         </div>
@@ -90,7 +90,7 @@
         and EP-Launch. Many graphical user interfaces for EnergyPlus are available or under development. For the latest
         tools, please see
         <a
-          href="https://www.buildingenergysoftwaretools.com/?capabilities=Whole-building+Energy+Simulation&keywords=EnergyPlus"
+          href="https://www.ibpsa.us/best-directory-list/?_sf_s=EnergyPlus"
         >
           this website for third party interfaces</a
         >. A completely new cross-platform version of EP-Launch has been developed and is available separate from the
@@ -113,7 +113,7 @@
       </p>
       <p>
         In addition to the Pip Install work coming along, we are also working to improve our Python integration for
-        traditional EnergyPlus use cases. When a user downloads the install package onto their machine, they will get
+        traditional EnergyPlus use cases. When a user downloads the installer package onto their machine, they will get
         the new cross-platform Python-based EP-Launch and Version Updater utilities. The classic tools are still
         packaged for now, but will likely be deprecated in favor of the Python tools soon. There are a couple ways to
         launch the tools, that slightly differ between platforms.
@@ -181,7 +181,7 @@
         <li class="list-group-item">
           We are excited for users to give these tools a try and let us know how it goes. As always, we appreciate issue
           reports on our
-          <a href="https://github.com/NREL/EnergyPlus/issues/new">GitHub repository</a>. We will be addressing any
+          <a href="https://github.com/NREL/EnergyPlus/issues/">GitHub repository</a>. We will be addressing any
           issues identified from user feedback, and at some point deprecating some of these classic tools. We are also
           planning to add more tools to this integration, such as a new EpJSON editor.
         </li>
@@ -210,7 +210,7 @@
                 gathering results of interest. All this power is still available. &#128077; <br />
                 As of EnergyPlus 9.3, EnergyPlus started becoming a bit more flexible thanks to the addition of a formal
                 C API with Python Bindings, as well as the ability to execute user-defined Python "plugins" in lieu of
-                writing user-defined Erl code. In the library mode, a client can make function calls to setup and
+                writing user-defined Erl code. In the library mode, a client can make function calls to set up and
                 execute a simulation, as well as interact with simulation results <b>during</b> a simulation. &#128077;
                 &#128077; &#128077;<br />
                 A key effort completed with 9.5 was making EnergyPlus "thread-safe" by removing all global and static
@@ -311,8 +311,8 @@
 
       <h2><a id="Multiple_Version_Conversions_51"></a>Multiple Version Conversions</h2>
       <p>
-        The install includes the IDFVersionUpdater program (see Python section above!) and the necessary programs to
-        convert from the previous version (including .rvi and .mvi files) to the current version. The install also
+        The installer includes the IDFVersionUpdater program (see Python section above!) and the necessary programs to
+        convert from the previous version (including .rvi and .mvi files) to the current version. The installer also
         includes the necessary programs to convert from older versions back to v9.0.0. For versions older than that,
         first we applaud your dedication to EnergyPlus that stretches for quite some time, and second you will need to
         visit the
@@ -329,9 +329,9 @@
         listing. Big Ladder Software is also hosting html versions of the EnergyPlus Documentation
         <a href="https://bigladdersoftware.com/epx/docs/">online</a>.
       </p>
-      <p>There are some other documents of interest available on the EnergyPlus web site including:</p>
+      <p>There are some other documents of interest available on the EnergyPlus website including:</p>
       <div class="list-group">
-        <a href="https://energyplus.net/quickstart" class="list-group-item list-group-item-action"
+        <a href="https://energyplus.net/quick-start" class="list-group-item list-group-item-action"
           >An EnergyPlus QuickStart Guide</a
         >
         <a href="https://energyplus.net/testing" class="list-group-item list-group-item-action"
@@ -341,13 +341,13 @@
       <p>
         In addition, we are working to make our API documentation dynamic and hosted on ReadTheDocs. The
         <a href="https://github.com/NREL/EnergyPlus/blob/develop/README.md">README</a>
-        on our Github Repo will be kept up to date with links to our documentation sources as we get things settled
+        on our GitHub Repo will be kept up to date with links to our documentation sources as we get things settled
         there.
       </p>
 
       <h2><a id="Weather_Data_63"></a>Weather Data</h2>
       <p>
-        A small subset of weather files that are available on the web site are also installed in the WeatherData folder.
+        A small subset of weather files that are available on the website are also installed in the WeatherData folder.
         EnergyPlus uses these files directly for annual simulations. The Weather Converter program that is part of
         EnergyPlus can read these weather files and provide .csv (comma separated variable) as well as statistics
         reports about the included (or other) files. Weather data for more than 3000 locations in more than 100
@@ -453,8 +453,8 @@
       <h2><a id="Platforms_90"></a>Platforms</h2>
       <p>
         We test and develop on Windows 11, and currently produce 64 bit builds on Windows. For Linux, we provide
-        packages for Ubuntu 22.04 and 24.04. On Mac, we are releasing an installer for OSX on both intel architecture as
-        well as ARM.
+        packages for Ubuntu 22.04 and 24.04. On Mac, we are releasing an installer for OSX on both Intel and ARM
+        architectures.
       </p>
       <ul class="list-group">
         <li class="list-group-item">Windows 11</li>
@@ -566,7 +566,7 @@
         <p>
           Other Notices and Acknowledgments are found in the
           <!--suppress HtmlUnknownTarget -->
-          <a href="Documentation/Acknowledgments.pdf">Acknowledgments</a>
+          <a href="https://energyplus.readthedocs.io/en/stable/acknowledgments/acknowledgments.html">Acknowledgments</a>
           document.
         </p>
       </footer>
