@@ -5219,6 +5219,7 @@ namespace SurfaceGeometry {
                 }
             }
             surfTemp.Vertex.allocate(surfTemp.Sides);
+            surfTemp.NewVertex.allocate(surfTemp.Sides);
             if (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor || surfTemp.Class == SurfaceClass::Door) {
                 surfTemp.Multiplier = int(s_ipsc->rNumericArgs(2));
             }
