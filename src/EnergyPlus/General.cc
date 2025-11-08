@@ -202,7 +202,9 @@ void SolveRoot(const EnergyPlusData &state,
     while (true) {
 
         Real64 DY = Y0 - Y1;
-        if (std::abs(DY) < SMALL) DY = SMALL;
+        if (std::abs(DY) < SMALL) {
+            DY = SMALL;
+        }
         if (std::abs(X1 - X0) < SMALL) {
             break;
         }
@@ -235,6 +237,7 @@ void SolveRoot(const EnergyPlusData &state,
         case RootAlgo::Alternation: {
             if (AltIte > state.dataRootFinder->NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
+
                 if (AltIte >= 2 * state.dataRootFinder->NumOfIter) AltIte = 0;
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
@@ -266,15 +269,19 @@ void SolveRoot(const EnergyPlusData &state,
             return;
         };
 
+#ifdef GET_OUT        
         if (NIte > 20) {
             assert(false);
             Flag = NIte;
             XRes = XTemp;
             return;
         }        
+#endif // GET_OUT
         
         // OK, so we didn't converge, lets check max iterations to see if we should break early
-        if (NIte > MaxIte) break;
+        if (NIte > MaxIte) {
+            break;
+        }
 
         // Finally, if we make it here, we have not converged, and we still have iterations left, so continue
         // and reassign values (only if further iteration required)
@@ -295,7 +302,7 @@ void SolveRoot(const EnergyPlusData &state,
                 Y0 = YTemp;
             }
         } // ( Y0 < 0 )
-    }     // Cont
+    } // Cont
 
     // if we make it here we haven't converged, so just set the flag and leave
     Flag = -1;
@@ -348,7 +355,7 @@ Real64 SolveRoot2(const EnergyPlusData &state,
         return X0;
     }
 
-    constexpr int TRIALS_PER_COUNT = 10;
+    constexpr int TRIALS_PER_COUNT = 5;
 
     // Trial period, cycle thru algorithms
     if (config.counts < TRIALS_PER_COUNT * (int)RootAlgo::Num) {
@@ -357,7 +364,7 @@ Real64 SolveRoot2(const EnergyPlusData &state,
 
     // Choose base algorithm, i.e., fewest total iterations
     } else if (config.counts == TRIALS_PER_COUNT * (int)RootAlgo::Num) {
-        int minIters = config.maxIters * (int)RootAlgo::Num;
+        int minIters = config.maxIters * TRIALS_PER_COUNT;
         config.algo = RootAlgo::Invalid;
         for (int i = 0; i < (int)RootAlgo::Num; ++i)
             if (config.algoIters[i] < minIters) {
@@ -432,16 +439,19 @@ Real64 SolveRoot2(const EnergyPlusData &state,
 
         // check convergence
         if (std::abs(YTemp) < Eps) {
+            config.counts ++;
             config.algoCounts[(int)config.algo] ++;
             config.algoIters[(int)config.algo] += config.numIters;
             return XTemp;
         };
 
+#ifdef GET_OUT
         // This is just a trap to make sure Epsilon is not set too low.
         if (config.numIters > 20) {
             assert(false);
             return XTemp;
         }        
+#endif // GET_OUT
         
         // OK, so we didn't converge, lets check max iterations to see if we should break early
         if (config.numIters > config.maxIters) break;
@@ -465,160 +475,20 @@ Real64 SolveRoot2(const EnergyPlusData &state,
                 Y0 = YTemp;
             }
         } // ( Y0 < 0 )
-    }     // Cont
-
+    }
+    
     // if we make it here we haven't converged, so just set the flag and leave
     config.numIters = SOLVEROOT_ERROR_ITER;
     config.algoCounts[(int)config.algo] ++;
     config.algoIters[(int)config.algo] += config.numIters;
     return XTemp;
 }
-
-// A second version that does not require a payload -- use lambdas
-Real64 SolveRootRel(const EnergyPlusData &state,
-                    RootAlgo rootAlgo,
-                    Real64 RelTol,   // required absolute accuracy
-                    int MaxIte,   // maximum number of allowed iterations
-                    int &Flag,    // integer storing exit status
-                    const std::function<Real64(Real64)> &f,
-                    Real64 Y_target,
-                    Real64 X_0, // 1st bound of interval that contains the solution
-                    Real64 X_1) // 2nd bound of interval that contains the solution
-{
-    // SUBROUTINE INFORMATION:
-    //       AUTHOR         Michael Wetter
-    //       DATE WRITTEN   March 1999
-    //       MODIFIED       Fred Buhl November 2000, R. Raustad October 2006 - made subroutine RECURSIVE
-    //                      L. Gu, May 2017 - allow both Bisection and RegulaFalsi
-
-    // PURPOSE OF THIS SUBROUTINE:
-    // Find the value of x between x0 and x1 such that f(x,Par)
-    // is equal to zero.
-
-    // METHODOLOGY EMPLOYED:
-    // Uses the Regula Falsi (false position) method (similar to secant method)
-
-    // REFERENCES:
-    // See Press et al., Numerical Recipes in Fortran, Cambridge University Press,
-    // 2nd edition, 1992. Page 347 ff.
-
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-    // = -2: f(x0) and f(x1) have the same sign
-    // = -1: no convergence
-    // >  0: number of iterations performed
-  
-    Real64 constexpr SMALL(1.e-10);
-    Real64 X0 = X_0;   // present 1st bound
-    Real64 X1 = X_1;   // present 2nd bound
-    Real64 XTemp = X0; // new estimate
-    int NIte = 0;      // number of iterations
-    int AltIte = 0;    // an accounter used for Alternation choice
-
-    Real64 Y0 = f(X0); // f at X0
-    Real64 Y1 = f(X1); // f at X1
-
-    Real64 DY0 = Y_target - Y0;
-    Real64 DY1 = Y_target - Y1;
-    
-    int numTrialIters = 3;
-    int numBiWins = 0;
-    int numRFWins = 0;
-    
-    // check initial values
-    // X0 and X1 are both on the same side of the root, not on either side
-    if (DY0 * DY1 > 0) {
-        Flag = -2;
-        return X0;
-    }
-
-    while (true) {
-
-        Real64 DY = DY0 - DY1;
-        if (std::abs(DY) < SMALL) DY = SMALL;
-        if (std::abs(X1 - X0) < SMALL) {
-            break;
-        }
-
-        Real64 YTemp = 0.0;
-        
-        if (numTrialIters > 0) {
-            Real64 XTempBi = 1.001 * (X1 + X0) / 2.0;
-            Real64 XTempRF = 1.001 * (DY0 * X1 - DY1 * X0) / DY;
-
-            Real64 YTempBi = f(XTempBi);
-            Real64 YTempRF = f(XTempRF);
-
-            if (std::abs(Y_target - YTempBi) < std::abs(Y_target - YTempRF)) {
-                ++numBiWins;
-                XTemp = XTempBi;
-                YTemp = f(XTempBi); // Need to redo this if this is what we are going with because of side effects
-            } else {
-                ++numRFWins;
-                XTemp = XTempRF;
-                YTemp = YTempRF;
-            }
-
-            --numTrialIters;
-
-        } else {
-            XTemp = (numBiWins > numRFWins) ? (1.001 * (X1 + X0) / 2.0) : (1.001 * (DY0 * X1 - DY1 * X0) / DY);
-            YTemp = f(XTemp);
-        }          
-
-        // ((YT - Y0)/YT * X1 - (YT - Y1)/YT * X0) / ((YT - Y0)/YT - (YT - Y1)/YT)
-        // ((YT - Y0) * X1 - (YT - Y1) * X0) / ((YT - Y0) - (YT - Y1))
-        // (YT * X1 - YT * X0 - Y0 * X1 + Y1 * X0) / (Y1 - Y0)
-        
-
-        // X0 + ((YT - Y0) / (Y1 - Y0)) * (X1 - X0)
-        // X0 + (YT * (X1 - X0) - Y0 * (X1 - X0)) / (Y1 - Y0)
-        // new estimation
-
-        ++NIte;
-        ++AltIte;
-
-        // check convergence
-        if (std::abs((Y_target - YTemp) / Y_target) < RelTol) {
-            Flag = NIte;
-            return XTemp;
-        };
-
-        // OK, so we didn't converge, lets check max iterations to see if we should break early
-        if (NIte > MaxIte) break;
-
-        // Finally, if we make it here, we have not converged, and we still have iterations left, so continue
-        // and reassign values (only if further iteration required)
-        if (DY0 < 0.0) {
-            if (Y_target - YTemp < 0.0) {
-                X0 = XTemp;
-                Y0 = YTemp;
-                DY0 = Y_target - YTemp;
-            } else {
-                X1 = XTemp;
-                Y1 = YTemp;
-                DY1 = Y_target - YTemp;
-            }
-        } else {
-            if (Y_target - YTemp < 0.0) {
-                X1 = XTemp;
-                Y1 = YTemp;
-                DY1 = Y_target - YTemp;
-            } else {
-                X0 = XTemp;
-                Y0 = YTemp;
-                DY0 = Y_target - YTemp;
-            }
-        } // ( Y0 < 0 )
-    }     // Cont
-
-    // if we make it here we haven't converged, so just set the flag and leave
-    Flag = -1;
-    return XTemp;
-}
   
 void MovingAvg(Array1D<Real64> &DataIn, int const NumItemsInAvg)
 {
-    if (NumItemsInAvg <= 1) return; // no need to average/smooth
+    if (NumItemsInAvg <= 1) {
+        return; // no need to average/smooth
+    }
 
     Array1D<Real64> TempData(2 * DataIn.size()); // a scratch array twice the size, bottom end duplicate of top end
 
@@ -740,7 +610,9 @@ void DetermineDateTokens(EnergyPlusData &state,
     TokenMonth = 0;
     TokenWeekday = 0;
     DateType = Weather::DateType::Invalid;
-    if (present(TokenYear)) TokenYear = 0;
+    if (present(TokenYear)) {
+        TokenYear = 0;
+    }
     // Take out separator characters, other extraneous stuff
 
     for (int Loop = 0; Loop < NumSingleChars; ++Loop) {
@@ -771,10 +643,14 @@ void DetermineDateTokens(EnergyPlusData &state,
         int NumField2;
         int NumField3;
         while (Loop < 3) { // Max of 3 fields
-            if (CurrentString == BlankString) break;
+            if (CurrentString == BlankString) {
+                break;
+            }
             size_t Pos = index(CurrentString, ' ');
             ++Loop;
-            if (Pos == std::string::npos) Pos = CurrentString.length();
+            if (Pos == std::string::npos) {
+                Pos = CurrentString.length();
+            }
             Fields(Loop) = CurrentString.substr(0, Pos);
             CurrentString.erase(0, Pos);
             strip(CurrentString);
@@ -836,14 +712,20 @@ void DetermineDateTokens(EnergyPlusData &state,
                     if (TokenWeekday == 0) {
                         TokenMonth = Util::FindItemInList(Fields(2).substr(0, 3), Months.begin(), Months.end());
                         TokenWeekday = Util::FindItemInList(Fields(3).substr(0, 3), Weekdays.begin(), Weekdays.end());
-                        if (TokenMonth == 0 || TokenWeekday == 0) InternalError = true;
+                        if (TokenMonth == 0 || TokenWeekday == 0) {
+                            InternalError = true;
+                        }
                     } else {
                         TokenMonth = Util::FindItemInList(Fields(3).substr(0, 3), Months.begin(), Months.end());
-                        if (TokenMonth == 0) InternalError = true;
+                        if (TokenMonth == 0) {
+                            InternalError = true;
+                        }
                     }
                     DateType = Weather::DateType::NthDayInMonth;
                     NumTokens = 3;
-                    if (TokenDay < 0 || TokenDay > 5) InternalError = true;
+                    if (TokenDay < 0 || TokenDay > 5) {
+                        InternalError = true;
+                    }
                 } else { // first field was not numeric....
                     if (Fields(1) == "LA") {
                         DateType = Weather::DateType::LastDayInMonth;
@@ -852,10 +734,14 @@ void DetermineDateTokens(EnergyPlusData &state,
                         if (TokenWeekday == 0) {
                             TokenMonth = Util::FindItemInList(Fields(2).substr(0, 3), Months.begin(), Months.end());
                             TokenWeekday = Util::FindItemInList(Fields(3).substr(0, 3), Weekdays.begin(), Weekdays.end());
-                            if (TokenMonth == 0 || TokenWeekday == 0) InternalError = true;
+                            if (TokenMonth == 0 || TokenWeekday == 0) {
+                                InternalError = true;
+                            }
                         } else {
                             TokenMonth = Util::FindItemInList(Fields(3).substr(0, 3), Months.begin(), Months.end());
-                            if (TokenMonth == 0) InternalError = true;
+                            if (TokenMonth == 0) {
+                                InternalError = true;
+                            }
                         }
                     } else { // error....
                         ShowSevereError(state, format("First date field not numeric, field={}", String));
@@ -913,9 +799,13 @@ void ValidateMonthDay(EnergyPlusData &state,
     static constexpr std::array<int, 12> EndMonthDay = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     bool InternalError = false;
-    if (Month < 1 || Month > 12) InternalError = true;
+    if (Month < 1 || Month > 12) {
+        InternalError = true;
+    }
     if (!InternalError) {
-        if (Day < 1 || Day > EndMonthDay[Month - 1]) InternalError = true;
+        if (Day < 1 || Day > EndMonthDay[Month - 1]) {
+            InternalError = true;
+        }
     }
     if (InternalError) {
         ShowSevereError(state, format("Invalid Month Day date format={}", String));
@@ -981,7 +871,9 @@ void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)
     int LeapAddPrev;
     int LeapAddCur;
 
-    if (Number < 0 || Number > 366) return;
+    if (Number < 0 || Number > 366) {
+        return;
+    }
     for (WMonth = 1; WMonth <= 12; ++WMonth) {
         if (WMonth == 1) {
             LeapAddPrev = 0;
@@ -993,7 +885,9 @@ void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)
             LeapAddPrev = LeapYr;
             LeapAddCur = LeapYr;
         }
-        if (Number > (EndOfMonth[WMonth - 1] + LeapAddPrev) && Number <= (EndOfMonth[WMonth] + LeapAddCur)) break;
+        if (Number > (EndOfMonth[WMonth - 1] + LeapAddPrev) && Number <= (EndOfMonth[WMonth] + LeapAddCur)) {
+            break;
+        }
     }
     PMonth = WMonth;
     PDay = Number - (EndOfMonth[WMonth - 1] + LeapAddCur);
@@ -1038,9 +932,13 @@ bool BetweenDates(int const TestDate,  // Date to test
     bool BetweenDates = false; // Default case
 
     if (StartDate <= EndDate) { // Start Date <= End Date
-        if (TestDate >= StartDate && TestDate <= EndDate) BetweenDates = true;
+        if (TestDate >= StartDate && TestDate <= EndDate) {
+            BetweenDates = true;
+        }
     } else { // EndDate < StartDate
-        if (TestDate <= EndDate || TestDate >= StartDate) BetweenDates = true;
+        if (TestDate <= EndDate || TestDate >= StartDate) {
+            BetweenDates = true;
+        }
     }
 
     return BetweenDates;
@@ -1065,8 +963,25 @@ std::string CreateSysTimeIntervalString(EnergyPlusData &state)
     //  ActualTimeS=INT(CurrentTime)+(SysTimeElapsed+(CurrentTime - INT(CurrentTime)))
     // CR6902  ActualTimeS=INT(CurrentTime-TimeStepZone)+SysTimeElapsed
     // [DC] TODO: Improve display accuracy up to fractional seconds using hh:mm:ss.0 format
-    Real64 ActualTimeS = state.dataGlobal->CurrentTime - state.dataGlobal->TimeStepZone + SysTimeElapsed;
-    Real64 ActualTimeE = ActualTimeS + TimeStepSys;
+
+    // NOTE: SysTimeElapsed is updated at the END of the HVAC time step (loop), so it's current value is
+    //       the end of the last HVAC time step not the end of the current HVAC time step.  The other
+    //       conditions below are for when we are in the zone heat balance (SysTimeElapsed = 0) or after
+    //       we have finished the last HVAC time step.
+
+    Real64 ActualTimeS;
+    Real64 ActualTimeE;
+    Real64 constexpr toleranceTime = 0.0001; // less than 1 second (to avoid comparisons that are not exactly identical but are essentially the same
+    if (SysTimeElapsed == 0.0) {
+        ActualTimeE = state.dataGlobal->CurrentTime;
+        ActualTimeS = ActualTimeE - state.dataGlobal->TimeStepZone;
+    } else if (std::abs(state.dataGlobal->TimeStepZone - SysTimeElapsed) <= toleranceTime) {
+        ActualTimeE = state.dataGlobal->CurrentTime;
+        ActualTimeS = ActualTimeE - TimeStepSys;
+    } else {
+        ActualTimeS = state.dataGlobal->CurrentTime - state.dataGlobal->TimeStepZone + SysTimeElapsed;
+        ActualTimeE = ActualTimeS + TimeStepSys;
+    }
     int ActualTimeHrS = int(ActualTimeS);
     //  ActualTimeHrE=INT(ActualTimeE)
     int ActualTimeMinS = nint((ActualTimeS - ActualTimeHrS) * FracToMin);
@@ -1584,18 +1499,28 @@ void ScanForReports(EnergyPlusData &state,
     switch (rptName) {
     case ReportName::Constructions: {
         if (present(ReportKey)) {
-            if (Util::SameString(ReportKey(), "Constructions")) DoReport = state.dataGeneral->Constructions;
-            if (Util::SameString(ReportKey(), "Materials")) DoReport = state.dataGeneral->Materials;
+            if (Util::SameString(ReportKey(), "Constructions")) {
+                DoReport = state.dataGeneral->Constructions;
+            }
+            if (Util::SameString(ReportKey(), "Materials")) {
+                DoReport = state.dataGeneral->Materials;
+            }
         }
     } break;
     case ReportName::Viewfactorinfo: {
         DoReport = state.dataGeneral->ViewFactorInfo;
-        if (present(Option1)) Option1 = state.dataGeneral->ViewRptOption1;
+        if (present(Option1)) {
+            Option1 = state.dataGeneral->ViewRptOption1;
+        }
     } break;
     case ReportName::Variabledictionary: {
         DoReport = state.dataGeneral->VarDict;
-        if (present(Option1)) Option1 = state.dataGeneral->VarDictOption1;
-        if (present(Option2)) Option2 = state.dataGeneral->VarDictOption2;
+        if (present(Option1)) {
+            Option1 = state.dataGeneral->VarDictOption1;
+        }
+        if (present(Option2)) {
+            Option2 = state.dataGeneral->VarDictOption2;
+        }
         //    CASE ('SCHEDULES')
         //     DoReport=SchRpt
         //      IF (PRESENT(Option1)) Option1=SchRptOption
@@ -1608,18 +1533,30 @@ void ScanForReports(EnergyPlusData &state,
         } break;
         case RptKey::DXF: {
             DoReport = state.dataGeneral->DXFReport;
-            if (present(Option1)) Option1 = state.dataGeneral->DXFOption1;
-            if (present(Option2)) Option2 = state.dataGeneral->DXFOption2;
+            if (present(Option1)) {
+                Option1 = state.dataGeneral->DXFOption1;
+            }
+            if (present(Option2)) {
+                Option2 = state.dataGeneral->DXFOption2;
+            }
         } break;
         case RptKey::DXFwireframe: {
             DoReport = state.dataGeneral->DXFWFReport;
-            if (present(Option1)) Option1 = state.dataGeneral->DXFWFOption1;
-            if (present(Option2)) Option2 = state.dataGeneral->DXFWFOption2;
+            if (present(Option1)) {
+                Option1 = state.dataGeneral->DXFWFOption1;
+            }
+            if (present(Option2)) {
+                Option2 = state.dataGeneral->DXFWFOption2;
+            }
         } break;
         case RptKey::VRML: {
             DoReport = state.dataGeneral->VRMLReport;
-            if (present(Option1)) Option1 = state.dataGeneral->VRMLOption1;
-            if (present(Option2)) Option2 = state.dataGeneral->VRMLOption2;
+            if (present(Option1)) {
+                Option1 = state.dataGeneral->VRMLOption1;
+            }
+            if (present(Option2)) {
+                Option2 = state.dataGeneral->VRMLOption2;
+            }
         } break;
         case RptKey::Vertices: {
             DoReport = state.dataGeneral->SurfVert;
@@ -1632,7 +1569,9 @@ void ScanForReports(EnergyPlusData &state,
         } break;
         case RptKey::Lines: {
             DoReport = state.dataGeneral->LineRpt;
-            if (present(Option1)) Option1 = state.dataGeneral->LineRptOption1;
+            if (present(Option1)) {
+                Option1 = state.dataGeneral->LineRptOption1;
+            }
         } break;
         default:
             break;
@@ -1691,7 +1630,9 @@ void CheckCreatedZoneItemName(EnergyPlusData &state,
     if (FoundItem != 0) {
         ShowSevereError(state, fmt::format("{}{}=\"{}\", Duplicate Generated name encountered.", calledFrom, CurrentObject, ItemName));
         ShowContinueError(state, format("name=\"{}\" has already been generated or entered as {} item=[{}].", ResultName, CurrentObject, FoundItem));
-        if (TooLong) ShowContinueError(state, "Duplicate name likely caused by the previous \"too long\" warning.");
+        if (TooLong) {
+            ShowContinueError(state, "Duplicate name likely caused by the previous \"too long\" warning.");
+        }
         ResultName = "xxxxxxx";
         errFlag = true;
     }

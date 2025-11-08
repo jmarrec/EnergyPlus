@@ -158,6 +158,11 @@ namespace DataHeatBalance {
         Num
     };
 
+    constexpr std::array<std::string_view, (int)RefrigCondenserType::Num> refrigCondenserTypeNames = {
+        "AirCooled", "EvaporativelyCooled", "WaterCooled", "Cascade", "WaterHeater"}; // Are the last two used?
+    constexpr std::array<std::string_view, (int)RefrigCondenserType::Num> refrigCondenserTypeNamesUC = {
+        "AIRCOOLED", "EVAPORATIVELYCOOLED", "WATERCOOLED", "CASCADE", "WATERHEATER"}; // Are the last two used?
+
     // Parameters for type of infiltration model
     enum class InfiltrationModelType
     {
@@ -243,6 +248,7 @@ namespace DataHeatBalance {
         WaterHeaterStratified,
         ThermalStorageChilledWaterMixed,
         ThermalStorageChilledWaterStratified,
+        ThermalStorageHotWaterStratified,
         GeneratorFuelCell,
         GeneratorMicroCHP,
         ElectricLoadCenterTransformer,
@@ -325,6 +331,7 @@ namespace DataHeatBalance {
         "WATERHEATER:STRATIFIED",
         "THERMALSTORAGE:CHILLEDWATER:MIXED",
         "THERMALSTORAGE:CHILLEDWATER:STRATIFIED",
+        "THERMALSTORAGE:HOTWATER:STRATIFIED",
         "GENERATOR:FUELCELL",
         "GENERATOR:MICROCHP",
         "ELECTRICLOADCENTER:TRANSFORMER",
@@ -382,6 +389,7 @@ namespace DataHeatBalance {
         "WaterHeater:Stratified",
         "ThermalStorage:ChilledWater:Mixed",
         "ThermalStorage:ChilledWater:Stratified",
+        "ThermalStorage:HotWater:Stratified",
         "Generator:FuelCell",
         "Generator:MicroCHP",
         "ElectricLoadCenter:Transformer",
@@ -451,7 +459,7 @@ namespace DataHeatBalance {
 
     struct SpaceData : ZoneSpaceData
     {
-        int zoneNum = 0;                                       // Pointer to Zone wich contains this space
+        int zoneNum = 0;                                       // Pointer to Zone which contains this space
         Real64 userEnteredFloorArea = Constant::AutoCalculate; // User input floor area for this space
         std::string spaceType = "General";                     // Space type tag
         int spaceTypeNum = 0;                                  // Points to spaceType for this space
@@ -1110,29 +1118,32 @@ namespace DataHeatBalance {
         Real64 BasicStackCoefficient = 0.0; // "Cs" Stack coefficient
         Real64 BasicWindCoefficient = 0.0;  // "Cw" wind coefficient
         // Flow Coefficient, AIM-2, Walker and Wilson terms
-        Real64 FlowCoefficient = 0.0;       // "c" Flow coefficient
-        Real64 AIM2StackCoefficient = 0.0;  // "Cs" stack coefficient
-        Real64 AIM2WindCoefficient = 0.0;   // "Cw" wind coefficient
-        Real64 PressureExponent = 0.0;      // "n" pressure power law exponent
-        Real64 ShelterFactor = 0.0;         // "s" shelter factor
-        bool EMSOverrideOn = false;         // if true then EMS is requesting to override
-        Real64 EMSAirFlowRateValue = 0.0;   // value EMS is setting for air flow rate
-        Real64 VolumeFlowRate = 0.0;        // infiltration air volume flow rate
-        Real64 MassFlowRate = 0.0;          // infiltration air mass flow rate
-        Real64 MCpI_temp = 0.0;             // INFILTRATION MASS FLOW * AIR SPECIFIC HEAT
-        Real64 InfilHeatGain = 0.0;         // Heat Gain {J} due to infiltration
-        Real64 InfilHeatLoss = 0.0;         // Heat Loss {J} due to infiltration
-        Real64 InfilLatentGain = 0.0;       // Latent Gain {J} due to infiltration
-        Real64 InfilLatentLoss = 0.0;       // Latent Loss {J} due to infiltration
-        Real64 InfilTotalGain = 0.0;        // Total Gain {J} due to infiltration (sensible+latent)
-        Real64 InfilTotalLoss = 0.0;        // Total Loss {J} due to infiltration (sensible+latent)
-        Real64 InfilVolumeCurDensity = 0.0; // Volume of Air {m3} due to infiltration at current zone air density
-        Real64 InfilVolumeStdDensity = 0.0; // Volume of Air {m3} due to infiltration at standard density (adjusted for elevation)
-        Real64 InfilVdotCurDensity = 0.0;   // Volume flow rate of Air {m3/s} due to infiltration at current zone air density
-        Real64 InfilVdotStdDensity = 0.0;   // Volume flow rate of Air {m3/s} due to infiltration standard density (adjusted elevation)
-        Real64 InfilMdot = 0.0;             // Mass flow rate {kg/s} due to infiltration for reporting
-        Real64 InfilMass = 0.0;             // Mass of Air {kg} due to infiltration
-        Real64 InfilAirChangeRate = 0.0;    // Infiltration air change rate {ach}
+        Real64 FlowCoefficient = 0.0;              // "c" Flow coefficient
+        Real64 AIM2StackCoefficient = 0.0;         // "Cs" stack coefficient
+        Real64 AIM2WindCoefficient = 0.0;          // "Cw" wind coefficient
+        Real64 PressureExponent = 0.0;             // "n" pressure power law exponent
+        Real64 ShelterFactor = 0.0;                // "s" shelter factor
+        bool EMSOverrideOn = false;                // if true then EMS is requesting to override
+        Real64 EMSAirFlowRateValue = 0.0;          // value EMS is setting for air flow rate
+        Real64 VolumeFlowRate = 0.0;               // infiltration air volume flow rate
+        Real64 MassFlowRate = 0.0;                 // infiltration air mass flow rate
+        Real64 MCpI_temp = 0.0;                    // INFILTRATION MASS FLOW * AIR SPECIFIC HEAT
+        Real64 InfilHeatGain = 0.0;                // Heat Gain {J} due to infiltration
+        Real64 InfilHeatLoss = 0.0;                // Heat Loss {J} due to infiltration
+        Real64 InfilLatentGain = 0.0;              // Latent Gain {J} due to infiltration
+        Real64 InfilLatentLoss = 0.0;              // Latent Loss {J} due to infiltration
+        Real64 InfilTotalGain = 0.0;               // Total Gain {J} due to infiltration (sensible+latent)
+        Real64 InfilTotalLoss = 0.0;               // Total Loss {J} due to infiltration (sensible+latent)
+        Real64 InfilVolumeCurDensity = 0.0;        // Volume of Air {m3} due to infiltration at current zone air density
+        Real64 InfilVolumeStdDensity = 0.0;        // Volume of Air {m3} due to infiltration at standard density (adjusted for elevation)
+        Real64 InfilVdotCurDensity = 0.0;          // Volume flow rate of Air {m3/s} due to infiltration at current zone air density
+        Real64 InfilVdotStdDensity = 0.0;          // Volume flow rate of Air {m3/s} due to infiltration standard density (adjusted elevation)
+        Real64 InfilVdotOutDensity = 0.0;          // Volume flow rate of Air {m3/s} due to infiltration at current outdoor air density
+        Real64 InfilMdot = 0.0;                    // Mass flow rate {kg/s} due to infiltration for reporting
+        Real64 InfilMass = 0.0;                    // Mass of Air {kg} due to infiltration
+        Real64 InfilAirChangeRateCurDensity = 0.0; // Infiltration air change rate {ach} at current zone air density
+        Real64 InfilAirChangeRateStdDensity = 0.0; // Infiltration air change rate {ach} at standard density (adjusted elevation)
+        Real64 InfilAirChangeRateOutDensity = 0.0; // Infiltration air change rate {ach} at current outdoor air density
     };
 
     struct VentilationData
@@ -1319,7 +1330,7 @@ namespace DataHeatBalance {
         Real64 CarbonDioxideGainRate = 0.0;           // current timestep value of carbon dioxide gain rate for device
         Real64 *PtrGenericContamGainRate = nullptr;   // POINTER to value of generic contaminant gain rate for device
         Real64 GenericContamGainRate = 0.0;           // current timestep value of generic contaminant gain rate for device
-        int ReturnAirNodeNum = 0;                     // return air node number for retrun air convection heat gain
+        int ReturnAirNodeNum = 0;                     // return air node number for return air convection heat gain
     };
 
     struct SpaceZoneSimData // Calculated data by Space or Zone during each time step/hour
@@ -1390,62 +1401,68 @@ namespace DataHeatBalance {
     struct AirReportVars
     {
         // Members
-        Real64 MeanAirTemp = 0.0;            // Mean Air Temperature {C}
-        Real64 OperativeTemp = 0.0;          // Average of Mean Air Temperature {C} and Mean Radiant Temperature {C}
-        Real64 WetbulbGlobeTemp = 0.0;       // Wet-bulb Globe Temperature
-        Real64 MeanAirHumRat = 0.0;          // Mean Air Humidity Ratio {kg/kg} (averaged over zone time step)
-        Real64 MeanAirDewPointTemp = 0.0;    // Mean Air Dewpoint Temperature {C}
-        Real64 ThermOperativeTemp = 0.0;     // Mix of MRT and MAT for Zone Control:Thermostatic:Operative Temperature {C}
-        Real64 InfilHeatGain = 0.0;          // Heat Gain {J} due to infiltration
-        Real64 InfilHeatLoss = 0.0;          // Heat Loss {J} due to infiltration
-        Real64 InfilLatentGain = 0.0;        // Latent Gain {J} due to infiltration
-        Real64 InfilLatentLoss = 0.0;        // Latent Loss {J} due to infiltration
-        Real64 InfilTotalGain = 0.0;         // Total Gain {J} due to infiltration (sensible+latent)
-        Real64 InfilTotalLoss = 0.0;         // Total Loss {J} due to infiltration (sensible+latent)
-        Real64 InfilVolumeCurDensity = 0.0;  // Volume of Air {m3} due to infiltration at current zone air density
-        Real64 InfilVolumeStdDensity = 0.0;  // Volume of Air {m3} due to infiltration at standard density (adjusted for elevation)
-        Real64 InfilVdotCurDensity = 0.0;    // Volume flow rate of Air {m3/s} due to infiltration at current zone air density
-        Real64 InfilVdotStdDensity = 0.0;    // Volume flow rate of Air {m3/s} due to infiltration standard density (adjusted elevation)
-        Real64 InfilMass = 0.0;              // Mass of Air {kg} due to infiltration
-        Real64 InfilMdot = 0.0;              // Mass flow rate of Air (kg/s) due to infiltration
-        Real64 InfilAirChangeRate = 0.0;     // Infiltration air change rate {ach}
-        Real64 VentilHeatLoss = 0.0;         // Heat Gain {J} due to ventilation
-        Real64 VentilHeatGain = 0.0;         // Heat Loss {J} due to ventilation
-        Real64 VentilLatentLoss = 0.0;       // Latent Gain {J} due to ventilation
-        Real64 VentilLatentGain = 0.0;       // Latent Loss {J} due to ventilation
-        Real64 VentilTotalLoss = 0.0;        // Total Gain {J} due to ventilation
-        Real64 VentilTotalGain = 0.0;        // Total Loss {J} due to ventilation
-        Real64 VentilVolumeCurDensity = 0.0; // Volume of Air {m3} due to ventilation at current zone air density
-        Real64 VentilVolumeStdDensity = 0.0; // Volume of Air {m3} due to ventilation at standard density (adjusted for elevation)
-        Real64 VentilVdotCurDensity = 0.0;   // Volume flow rate of Air {m3/s} due to ventilation at current zone air density
-        Real64 VentilVdotStdDensity = 0.0;   // Volume flow rate of Air {m3/s} due to ventilation at standard density (adjusted elevation)
-        Real64 VentilMass = 0.0;             // Mass of Air {kg} due to ventilation
-        Real64 VentilMdot = 0.0;             // Mass flow rate of Air {kg/s} due to ventilation
-        Real64 VentilAirChangeRate = 0.0;    // Ventilation air change rate (ach)
-        Real64 VentilFanElec = 0.0;          // Fan Electricity {W} due to ventilation
-        Real64 VentilAirTemp = 0.0;          // Air Temp {C} of ventilation
-        Real64 MixVolume = 0.0;              // Mixing volume of Air {m3}
-        Real64 MixVdotCurDensity = 0.0;      // Mixing volume flow rate of Air {m3/s} at current zone air density
-        Real64 MixVdotStdDensity = 0.0;      // Mixing volume flow rate of Air {m3/s} at standard density (adjusted for elevation)
-        Real64 MixMass = 0.0;                // Mixing mass of air {kg}
-        Real64 MixMdot = 0.0;                // Mixing mass flow rate of air {kg/s}
-        Real64 MixSenLoad = 0.0;             // Heat Gain(+)/Loss(-) {J} due to mixing and cross mixing and refrigeration door mixing
-        Real64 MixLatLoad = 0.0;             // Latent Gain(+)/Loss(-) {J} due to mixing and cross mixing and refrigeration door mixing
-        Real64 MixHeatLoss = 0.0;            // Heat Gain {J} due to mixing and cross mixing and refrigeration door mixing
-        Real64 MixHeatGain = 0.0;            // Heat Loss {J} due to mixing and cross mixing and refrigeration door mixing
-        Real64 MixLatentLoss = 0.0;          // Latent Gain {J} due to mixing and cross mixing and refrigeration door mixing
-        Real64 MixLatentGain = 0.0;          // Latent Loss {J} due to mixing and cross mixing and refrigeration door mixing
-        Real64 MixTotalLoss = 0.0;           // Total Gain {J} due to mixing and cross mixing and refrigeration door mixing
-        Real64 MixTotalGain = 0.0;           // Total Loss {J} due to mixing and cross mixing and refrigeration door mixing
-        Real64 SysInletMass = 0.0;           // Total mass of Air {kg} from all system inlets
-        Real64 SysOutletMass = 0.0;          // Total mass of Air {kg} from all system outlets
-        Real64 ExfilMass = 0.0;              // Mass of Air {kg} due to exfiltration
-        Real64 ExfilTotalLoss = 0.0;         // Total Loss rate {W} due to exfiltration (sensible+latent)
-        Real64 ExfilSensiLoss = 0.0;         // Sensible Loss rate {W} due to exfiltration
-        Real64 ExfilLatentLoss = 0.0;        // Latent Loss rate {W} due to exfiltration
-        Real64 ExhTotalLoss = 0.0;           // Total Loss rate {W} due to zone exhaust air (sensible+latent)
-        Real64 ExhSensiLoss = 0.0;           // Sensible Loss rate {W} due to zone exhaust air
-        Real64 ExhLatentLoss = 0.0;          // Latent Loss rate {W} due to zone exhaust air
+        Real64 MeanAirTemp = 0.0;                   // Mean Air Temperature {C}
+        Real64 OperativeTemp = 0.0;                 // Average of Mean Air Temperature {C} and Mean Radiant Temperature {C}
+        Real64 WetbulbGlobeTemp = 0.0;              // Wet-bulb Globe Temperature
+        Real64 MeanAirHumRat = 0.0;                 // Mean Air Humidity Ratio {kg/kg} (averaged over zone time step)
+        Real64 MeanAirDewPointTemp = 0.0;           // Mean Air Dewpoint Temperature {C}
+        Real64 ThermOperativeTemp = 0.0;            // Mix of MRT and MAT for Zone Control:Thermostatic:Operative Temperature {C}
+        Real64 InfilHeatGain = 0.0;                 // Heat Gain {J} due to infiltration
+        Real64 InfilHeatLoss = 0.0;                 // Heat Loss {J} due to infiltration
+        Real64 InfilLatentGain = 0.0;               // Latent Gain {J} due to infiltration
+        Real64 InfilLatentLoss = 0.0;               // Latent Loss {J} due to infiltration
+        Real64 InfilTotalGain = 0.0;                // Total Gain {J} due to infiltration (sensible+latent)
+        Real64 InfilTotalLoss = 0.0;                // Total Loss {J} due to infiltration (sensible+latent)
+        Real64 InfilVolumeCurDensity = 0.0;         // Volume of Air {m3} due to infiltration at current zone air density
+        Real64 InfilVolumeStdDensity = 0.0;         // Volume of Air {m3} due to infiltration at standard density (adjusted for elevation)
+        Real64 InfilVdotCurDensity = 0.0;           // Volume flow rate of Air {m3/s} due to infiltration at current zone air density
+        Real64 InfilVdotStdDensity = 0.0;           // Volume flow rate of Air {m3/s} due to infiltration standard density (adjusted elevation)
+        Real64 InfilVdotOutDensity = 0.0;           // Volume flow rate of Air {m3/s} due to infiltration  at current outdoor density
+        Real64 InfilMass = 0.0;                     // Mass of Air {kg} due to infiltration
+        Real64 InfilMdot = 0.0;                     // Mass flow rate of Air (kg/s) due to infiltration
+        Real64 InfilAirChangeRateCurDensity = 0.0;  // Infiltration air change rate {ach} at current zone air density
+        Real64 InfilAirChangeRateStdDensity = 0.0;  // Infiltration air change rate {ach} at standard density (adjusted elevation)
+        Real64 InfilAirChangeRateOutDensity = 0.0;  // Infiltration air change rate {ach} at current outdoor density
+        Real64 VentilHeatLoss = 0.0;                // Heat Gain {J} due to ventilation
+        Real64 VentilHeatGain = 0.0;                // Heat Loss {J} due to ventilation
+        Real64 VentilLatentLoss = 0.0;              // Latent Gain {J} due to ventilation
+        Real64 VentilLatentGain = 0.0;              // Latent Loss {J} due to ventilation
+        Real64 VentilTotalLoss = 0.0;               // Total Gain {J} due to ventilation
+        Real64 VentilTotalGain = 0.0;               // Total Loss {J} due to ventilation
+        Real64 VentilVolumeCurDensity = 0.0;        // Volume of Air {m3} due to ventilation at current zone air density
+        Real64 VentilVolumeStdDensity = 0.0;        // Volume of Air {m3} due to ventilation at standard density (adjusted for elevation)
+        Real64 VentilVdotCurDensity = 0.0;          // Volume flow rate of Air {m3/s} due to ventilation at current zone air density
+        Real64 VentilVdotStdDensity = 0.0;          // Volume flow rate of Air {m3/s} due to ventilation at standard density (adjusted elevation)
+        Real64 VentilVdotOutDensity = 0.0;          // Volume flow rate of Air {m3/s} due to ventilation at outdoor density
+        Real64 VentilMass = 0.0;                    // Mass of Air {kg} due to ventilation
+        Real64 VentilMdot = 0.0;                    // Mass flow rate of Air {kg/s} due to ventilation
+        Real64 VentilAirChangeRateCurDensity = 0.0; // Ventilation air change rate (ach) at current zone air density
+        Real64 VentilAirChangeRateStdDensity = 0.0; // Ventilation air change rate (ach) at standard density (adjusted elevation)
+        Real64 VentilAirChangeRateOutDensity = 0.0; // Ventilation air change rate (ach) at current outdoor density
+        Real64 VentilFanElec = 0.0;                 // Fan Electricity {W} due to ventilation
+        Real64 VentilAirTemp = 0.0;                 // Air Temp {C} of ventilation
+        Real64 MixVolume = 0.0;                     // Mixing volume of Air {m3}
+        Real64 MixVdotCurDensity = 0.0;             // Mixing volume flow rate of Air {m3/s} at current zone air density
+        Real64 MixVdotStdDensity = 0.0;             // Mixing volume flow rate of Air {m3/s} at standard density (adjusted for elevation)
+        Real64 MixMass = 0.0;                       // Mixing mass of air {kg}
+        Real64 MixMdot = 0.0;                       // Mixing mass flow rate of air {kg/s}
+        Real64 MixSenLoad = 0.0;                    // Heat Gain(+)/Loss(-) {J} due to mixing and cross mixing and refrigeration door mixing
+        Real64 MixLatLoad = 0.0;                    // Latent Gain(+)/Loss(-) {J} due to mixing and cross mixing and refrigeration door mixing
+        Real64 MixHeatLoss = 0.0;                   // Heat Gain {J} due to mixing and cross mixing and refrigeration door mixing
+        Real64 MixHeatGain = 0.0;                   // Heat Loss {J} due to mixing and cross mixing and refrigeration door mixing
+        Real64 MixLatentLoss = 0.0;                 // Latent Gain {J} due to mixing and cross mixing and refrigeration door mixing
+        Real64 MixLatentGain = 0.0;                 // Latent Loss {J} due to mixing and cross mixing and refrigeration door mixing
+        Real64 MixTotalLoss = 0.0;                  // Total Gain {J} due to mixing and cross mixing and refrigeration door mixing
+        Real64 MixTotalGain = 0.0;                  // Total Loss {J} due to mixing and cross mixing and refrigeration door mixing
+        Real64 SysInletMass = 0.0;                  // Total mass of Air {kg} from all system inlets
+        Real64 SysOutletMass = 0.0;                 // Total mass of Air {kg} from all system outlets
+        Real64 ExfilMass = 0.0;                     // Mass of Air {kg} due to exfiltration
+        Real64 ExfilTotalLoss = 0.0;                // Total Loss rate {W} due to exfiltration (sensible+latent)
+        Real64 ExfilSensiLoss = 0.0;                // Sensible Loss rate {W} due to exfiltration
+        Real64 ExfilLatentLoss = 0.0;               // Latent Loss rate {W} due to exfiltration
+        Real64 ExhTotalLoss = 0.0;                  // Total Loss rate {W} due to zone exhaust air (sensible+latent)
+        Real64 ExhSensiLoss = 0.0;                  // Sensible Loss rate {W} due to zone exhaust air
+        Real64 ExhLatentLoss = 0.0;                 // Latent Loss rate {W} due to zone exhaust air
         // air heat balance component load summary results
         Real64 SumIntGains = 0.0;     // Zone sum of convective internal gains
         Real64 SumHADTsurfs = 0.0;    // Zone sum of Hc*Area*(Tsurf - Tz)
@@ -1477,7 +1494,7 @@ namespace DataHeatBalance {
         Real64 SumEnthalpyM = 0.0;           // Zone sum of EnthalpyM
         Real64 SumEnthalpyH = 0.0;           // Zone sum of EnthalpyH
         // reporting flags
-        bool ReportWBGT = false; // whether the wetbulb globe temperature is reqeusted as an output variable or used as an EMS sensor
+        bool ReportWBGT = false; // whether the wetbulb globe temperature is requested as an output variable or used as an EMS sensor
 
         void setUpOutputVars(EnergyPlusData &state, std::string_view prefix, std::string const &name);
     };
@@ -1909,8 +1926,8 @@ struct HeatBalanceData : BaseGlobalStruct
     Array1D<Real64> ZoneDifSolFrIntWinsRepEnergy;   // Energy of ZoneDifSolFrIntWinsRep [J]
     Array1D<Real64> ZnOpqSurfInsFaceCondGnRepEnrg;  // Energy of ZoneOpaqSurfInsFaceCondGainRep [J]
     Array1D<Real64> ZnOpqSurfInsFaceCondLsRepEnrg;  // Energy of ZoneOpaqSurfInsFaceCondLossRep [J]
-    Array1D<Real64> ZnOpqSurfExtFaceCondGnRepEnrg;  // Energy of ZoneOpaqSurfInsFaceCondGainRep [J]
-    Array1D<Real64> ZnOpqSurfExtFaceCondLsRepEnrg;  // Energy of ZoneOpaqSurfInsFaceCondLossRep [J]
+    Array1D<Real64> ZnOpqSurfExtFaceCondGnRepEnrg;  // Energy of ZoneOpaqSurfExtFaceCondGainRep [J]
+    Array1D<Real64> ZnOpqSurfExtFaceCondLsRepEnrg;  // Energy of ZoneOpaqSurfExtFaceCondLossRep [J]
 
     Array1D<Real64> SurfQdotRadIntGainsInPerArea;       // Thermal radiation absorbed on inside surfaces
     Array1D<Real64> SurfQRadSWOutIncident;              // Exterior beam plus diffuse solar incident on surface (W/m2)
@@ -2017,7 +2034,7 @@ struct HeatBalanceData : BaseGlobalStruct
     EPVector<DataHeatBalance::HeatReclaimDataBase> HeatReclaimRefrigeratedRack;
     EPVector<DataHeatBalance::HeatReclaimRefrigCondenserData> HeatReclaimRefrigCondenser;
     EPVector<DataHeatBalance::HeatReclaimDataBase> HeatReclaimDXCoil;
-    EPVector<DataHeatBalance::HeatReclaimDataBase> HeatReclaimVS_DXCoil;
+    EPVector<DataHeatBalance::HeatReclaimDataBase> HeatReclaimVS_Coil;
     EPVector<DataHeatBalance::HeatReclaimDataBase> HeatReclaimSimple_WAHPCoil;
     EPVector<DataHeatBalance::AirReportVars> ZnAirRpt;
     EPVector<DataHeatBalance::AirReportVars> spaceAirRpt;

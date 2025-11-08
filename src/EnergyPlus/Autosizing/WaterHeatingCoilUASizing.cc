@@ -79,11 +79,13 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                            dataCapacityUsedForSizing;
                 };
 
-                SolveRootConfig solveRootConfig;
+                static SolveRootConfig solveRootConfig;
                 solveRootConfig.maxIters = 500;
                 constexpr Real64 Acc = 0.0001; // Accuracy of result (is this really necessary? Isn't 0.001 sufficient?)
-
-                this->autoSizedValue = General::SolveRoot2(state, Acc, f, UA0, UA1, solveRootConfig);
+                int SolFla;
+                
+                General::SolveRoot(state, Acc, 500, SolFla, this->autoSizedValue, f, UA0, UA1);
+                this->autoSizedValue = General::SolveRoot2(state, 0.0001, f, UA0, UA1, solveRootConfig);
                 
                 if (solveRootConfig.numIters == SOLVEROOT_ERROR_ITER) {
                     errorsFound = true;
@@ -262,11 +264,15 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                            dataCapacityUsedForSizing;
                 };
 
-                SolveRootConfig solveRootConfig;
+                static SolveRootConfig solveRootConfig;
                 solveRootConfig.maxIters = 500;
                 constexpr Real64 Acc = 0.0001; // Necessary?
+                int SolFla;
+
+                General::SolveRoot(state, Acc, 500, SolFla, this->autoSizedValue, f, UA0, UA1);
                 this->autoSizedValue = General::SolveRoot2(state, Acc, f, UA0, UA1, solveRootConfig);
-                if (solveRootConfig.numIters = SOLVEROOT_ERROR_ITER) {
+                
+                if (solveRootConfig.numIters == SOLVEROOT_ERROR_ITER) {
                     errorsFound = true;
                     std::string msg = "Autosizing of heating coil UA failed for Coil:Heating:Water \"" + this->compName + "\"";
                     this->addErrorMessage(msg);
@@ -394,9 +400,13 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
             }
         }
     }
-    if (this->dataErrorsFound) state.dataSize->DataErrorsFound = true;
+    if (this->dataErrorsFound) {
+        state.dataSize->DataErrorsFound = true;
+    }
     if (this->overrideSizeString) {
-        if (this->isEpJSON) this->sizingString = "u-factor_times_area_value [W/K]";
+        if (this->isEpJSON) {
+            this->sizingString = "u-factor_times_area_value [W/K]";
+        }
     }
     this->selectSizerOutput(state, errorsFound);
     if (this->isCoilReportObject && this->curSysNum <= state.dataHVACGlobal->NumPrimaryAirSys) {

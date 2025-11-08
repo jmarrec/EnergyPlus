@@ -432,13 +432,15 @@ EnergyPlus IDF Excerpt Data
 The preferred method of using WINDOW data in EnergyPlus is to excerpt or
 “report” a specific Window from the Window library screen (see below):
 
+.. _fig-window-screen-for-exporting-idf-window:
+
 .. figure:: media/image001.jpg
    :alt: WINDOW screen for exporting IDF Window specifications
    :name: fig:window-screen-for-exporting-idf-window
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
    WINDOW screen for exporting IDF Window specifications
-   `fig:window-screen-for-exporting-idf-window`_
 
 The file can then be saved at a location of your choice and added into
 your overall simulation IDF file.
@@ -543,13 +545,15 @@ dimensions will be overridden by the systems dimensions from the Window
 data file. Two windows will be made and called WinOriginal and
 WinOriginal:2.**
 
+.. _fig-window-glazing-system-with-dual-glazing:
+
 .. figure:: media/image002.png
    :alt: Window Glazing system with dual glazing constructions
    :name: fig:window-glazing-system-with-dual-glazing
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
    Window Glazing system with dual glazing constructions
-   `fig:window-glazing-system-with-dual-glazing`_
 
 The Window Data File contains no information on shading devices. See
 “Specify the Material Name of the Shading Device” under
@@ -911,31 +915,33 @@ Describing Roof Overhangs
 
 Building heat transfer surfaces, such as roofs and walls, only cast
 shadows in a hemisphere in the direction of the outward facing normal
-(see
-Figure `fig:building-heat-transfer-surfaces-cast-shadows`_.
+(see :numref:`fig-building-heat-transfer-surfaces-cast-shadows`.
 Because roof surfaces generally face upward, a roof surface which
 extends beyond the walls of the building will not cast shadows on the
-walls below it (see
-Figure `fig:extended-roof-surface-will-not-shade`_.
+walls below it (see :numref: `fig-extended-roof-surface-will-not-shade`.
+
+.. _fig-building-heat-transfer-surfaces-cast-shadows:
 
 .. figure:: media/image003.png
    :alt: Building heat transfer surfaces cast shadows in the direction of outward facing normal.
    :name: fig:building-heat-transfer-surfaces-cast-shadows
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
    Building heat transfer surfaces cast shadows in the direction of
    outward facing normal.
-   `fig:building-heat-transfer-surfaces-cast-shadows`_
+
+.. _fig-extended-roof-surface-will-not-shade:
 
 .. figure:: media/image004.png
    :alt: Extended roof surface will not shade the walls below.
    :name: fig:extended-roof-surface-will-not-shade
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
    Extended roof surface will not shade the walls below.
-   `fig:extended-roof-surface-will-not-shade`_
 
-Figure `fig:proper-surface-configurations-for-roof`_
+:numref:`fig-proper-surface-configurations-for-roof`
 shows the proper surface configurations for two types of attic
 construction. In all cases, the roof surface should only include the
 area of the roof which contacts the zone below it. In these drawings,
@@ -956,13 +962,16 @@ downward. The central portion of the attic floor would be described as
 an interzone floor surface where the outside boundary condition is the
 ceiling surface in the zone below.
 
+.. _fig-proper-surface-configurations-for-roof:
+
 .. figure:: media/image005.png
    :alt: Proper surface configurations for roof overhangs for two types of attic construction.
    :name: fig:proper-surface-configurations-for-roof
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
    Proper surface configurations for roof overhangs for two types of
-   attic construction. [fig:proper-surface-configurations-for-roof]
+   attic construction.
 
 Solar Reflection from Shading Surfaces
 --------------------------------------
@@ -982,14 +991,16 @@ three areas A1, A2, and A3. Surface A should be entered as the shown
 three shading areas in order to correctly model sky diffuse solar
 reflection from Shading Surface A.
 
+.. _fig-limitations-in-modeling-reflections-from:
+
 .. figure:: media/image006.jpg
    :alt: Limitations in modeling reflections from surfaces
    :name: fig:limitations-in-modeling-reflections-from
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
    Limitations in modeling reflections from surfaces
-   [fig:limitations-in-modeling-reflections-from]
-
+   
 Air wall, Open air connection between zones
 -------------------------------------------
 
@@ -1168,12 +1179,15 @@ the original represents 4 zones (multiplier = 4) and the middle floor
 (ZoneGroup) represents 8 floors (ZoneGroup multiplier = 8). Clone
 representations were made for comparisons:
 
+.. _fig-original-multistory-idf:
+
 .. figure:: media/image007.png
    :alt: Original Multistory IDF
    :name: fig:original-multistory-idf
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
-   Original Multistory IDF [fig:original-multistory-idf]
+   Original Multistory IDF
 
 In the figure above, each “middle” zone represents 4 zones. The middle
 “floor” represents 8 floors. Additionally, each of the windows has a
@@ -1223,23 +1237,27 @@ uses the Zone object multiplier for the center zones. Specifically:
 
 For comparison purposes, clones of the middle zones were done.
 
+.. _fig-multistory-with-cloned-middle-zones:
+
 .. figure:: media/image008.png
    :alt: Multistory with cloned middle zones.
    :name: fig:multistory-with-cloned-middle-zones
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
    Multistory with cloned middle zones.
-   [fig:multistory-with-cloned-middle-zones.]
 
 And, finally, the entire building was created:
+
+.. _fig-multistory-building-fully-cloned:
 
 .. figure:: media/image009.png
    :alt: Multistory building – fully cloned.
    :name: fig:multistory-building-fully-cloned
-   :width: 90.0%
+   :align: center
+   :width: 50.0%
 
    Multistory building – fully cloned.
-   [fig:multistory-building-fully-cloned.]
 
 The building is autosized. For convenience in comparison, the extreme
 summer and winter days were used for autosizing and the simulation was
@@ -1256,10 +1274,9 @@ those limits).
 
 For the purposes of discussion, the buildings will be called:
 
-* Multistory 1 – the original 9 zone building (with multipliers and groups) ref: Figure `fig:original-multistory-idf`_;
-* Multistory 2 – the building shown in Figure `fig:multistory-with-cloned-middle-zones`_.
-* Multistory with cloned middle zones.
-* Multistory 3 – the fully configured building – ref Figure `fig:multistory-building-fully-cloned`_.
+* Multistory 1 – the original 9 zone building (with multipliers and groups) ref: :numref:`fig-original-multistory-idf`;
+* Multistory 2 – the building (with cloned middle zones) shown in :numref:`fig-multistory-with-cloned-middle-zones`.
+* Multistory 3 – the fully configured building – ref :numref:`fig-multistory-building-fully-cloned`.
 
 The following table illustrates the regression testing for Multistory 2
 and Multistory 3, group loads and meters versus Multistory 1 results.

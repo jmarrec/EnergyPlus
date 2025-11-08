@@ -134,11 +134,11 @@ TEST_F(EnergyPlusFixture, SkyTempTest)
     state->init_state(*state);
 
     auto *tSkySched = Sched::GetSchedule(*state, "TSKYSCHEDULE");
-    // Febuary 27
+    // February 27
 
     EXPECT_NEAR(2.27, tSkySched->getDayVals(*state, 58, 3)[0 * state->dataGlobal->TimeStepsInHour + 0], .001);
 
-    // Febuary 28
+    // February 28
     EXPECT_NEAR(2.28, tSkySched->getDayVals(*state, 59, 4)[0 * state->dataGlobal->TimeStepsInHour + 0], .001);
 
     // March 1
@@ -185,6 +185,8 @@ TEST_F(EnergyPlusFixture, WaterMainsCorrelationTest)
     state->dataWeather->WaterMainsTempsMethod = Weather::WaterMainsTempCalcMethod::Correlation;
     state->dataWeather->WaterMainsTempsAnnualAvgAirTemp = 9.69;
     state->dataWeather->WaterMainsTempsMaxDiffAirTemp = 28.1;
+    state->dataWeather->WaterMainsTempsMultiplier = 1.0;
+    state->dataWeather->WaterMainsTempsOffset = 0.0;
     state->dataEnvrn->DayOfYear = 50;
 
     state->dataEnvrn->Latitude = 40.0;
@@ -194,6 +196,25 @@ TEST_F(EnergyPlusFixture, WaterMainsCorrelationTest)
     state->dataEnvrn->Latitude = -40.0;
     Weather::CalcWaterMainsTemp(*state);
     EXPECT_NEAR(state->dataEnvrn->WaterMainsTemp, 19.3799, 0.0001);
+}
+
+TEST_F(EnergyPlusFixture, WaterMainsCorrelationTestWithMultiplierAndOffset)
+{
+
+    state->dataWeather->WaterMainsTempsMethod = Weather::WaterMainsTempCalcMethod::Correlation;
+    state->dataWeather->WaterMainsTempsAnnualAvgAirTemp = 9.69;
+    state->dataWeather->WaterMainsTempsMaxDiffAirTemp = 28.1;
+    state->dataWeather->WaterMainsTempsMultiplier = 1.1;
+    state->dataWeather->WaterMainsTempsOffset = 5.0;
+    state->dataEnvrn->DayOfYear = 50;
+
+    state->dataEnvrn->Latitude = 40.0;
+    Weather::CalcWaterMainsTemp(*state);
+    EXPECT_NEAR(state->dataEnvrn->WaterMainsTemp, 12.3334, 0.0001);
+
+    state->dataEnvrn->Latitude = -40.0;
+    Weather::CalcWaterMainsTemp(*state);
+    EXPECT_NEAR(state->dataEnvrn->WaterMainsTemp, 26.3179, 0.0001);
 }
 
 TEST_F(EnergyPlusFixture, JGDate_Test)
@@ -913,6 +934,7 @@ TEST_F(SQLiteFixture, DesignDay_EnthalpyAtMaxDB)
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, false));
 
+    OutputReportTabular::setTabularReportStyles(*state);
     OutputReportTabular::WriteEioTables(*state);
 
     // Close output files *after* the EIO has been written to
@@ -1750,7 +1772,7 @@ TEST_F(EnergyPlusFixture, WeatherManager_GroupReportPeriodByType)
                                                       "18;                           !- End Hour of Day",
 
                                                       "Output:Table:ReportPeriod,",
-                                                      "ThermalResilienceReportTimeWinter,  !- field Name,",
+                                                      "ThermalResilienceReportTimeSummer,  !- field Name,",
                                                       "ThermalResilienceSummary,     !- field Report Name,",
                                                       ",                             !- Begin Year",
                                                       "7,                            !- Begin Month",

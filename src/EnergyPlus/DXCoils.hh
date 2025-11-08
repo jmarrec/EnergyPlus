@@ -54,14 +54,11 @@
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
-#include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataGlobalConstants.hh>
-#include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/StandardRatings.hh>
-#include <EnergyPlus/UtilityRoutines.hh>
 
 namespace EnergyPlus {
 
@@ -116,15 +113,20 @@ namespace DXCoils {
         Sched::Schedule *availSched = nullptr; // availability schedule
         //          RatedCoolCap, RatedSHR and RatedCOP do not include the thermal or electrical
         //          effects due to the supply air fan
-        Array1D<Real64> RatedTotCap;                 // Gross total cooling capacity at rated conditions [watts]
-        Real64 HeatSizeRatio;                        // heat pump heating to cooling sizing ratio when autosized
-        Array1D_bool RatedTotCapEMSOverrideOn;       // if true, then EMS is calling to override rated total capacity
-        Array1D<Real64> RatedTotCapEMSOverrideValue; // value to use for EMS override
-        Array1D<Real64> RatedSHR;                    // Sensible heat ratio (sens cap/total cap) at rated conditions
-        Array1D_bool RatedSHREMSOverrideOn;          // if true, then EMS is calling to override Sensible heat ratio
-        Array1D<Real64> RatedSHREMSOverrideValue;    // value to use for EMS override forSensible heat ratio
-        Array1D<Real64> RatedCOP;                    // Coefficient of performance at rated conditions
-        Array1D<Real64> RatedAirVolFlowRate;         // Air volume flow rate through coil at rated conditions [m3/s]
+        Array1D<Real64> RatedTotCap;                      // Gross total cooling capacity at rated conditions [watts]
+        Real64 HeatSizeRatio;                             // heat pump heating to cooling sizing ratio when autosized
+        Array1D_bool RatedTotCapEMSOverrideOn;            // if true, then EMS is calling to override rated total capacity
+        Array1D<Real64> RatedTotCapEMSOverrideValue;      // value to use for EMS override
+        bool FrostHeatingCapacityMultiplierEMSOverrideOn; // if true, then EMS is calling to override multiplier for heating capacity when system is
+                                                          // in defrost
+        Real64 FrostHeatingCapacityMultiplierEMSOverrideValue; // value to use for EMS override
+        bool FrostHeatingInputPowerMultiplierEMSOverrideOn; // if true, then EMS is calling to override multiplier for power when system is in defrost
+        Real64 FrostHeatingInputPowerMultiplierEMSOverrideValue; // value to use for EMS override
+        Array1D<Real64> RatedSHR;                                // Sensible heat ratio (sens cap/total cap) at rated conditions
+        Array1D_bool RatedSHREMSOverrideOn;                      // if true, then EMS is calling to override Sensible heat ratio
+        Array1D<Real64> RatedSHREMSOverrideValue;                // value to use for EMS override forSensible heat ratio
+        Array1D<Real64> RatedCOP;                                // Coefficient of performance at rated conditions
+        Array1D<Real64> RatedAirVolFlowRate;                     // Air volume flow rate through coil at rated conditions [m3/s]
         // This is adjusted for bypassed air if any (see BypassedFlowFrac)
         Array1D_bool RatedAirVolFlowRateEMSOverrideON;       // if true, then EMS is calling to override Air volume flow rate
         Array1D<Real64> RatedAirVolFlowRateEMSOverrideValue; // value to use for EMS override Air volume flow rate
@@ -229,7 +231,7 @@ namespace DXCoils {
         int DefrostEIRFT;                                 // index of defrost mode total cooling capacity for reverse cycle heat pump
         int RegionNum;                                    // Region number for calculating HSPF of single speed DX heating coil
         Real64 MinOATCompressor;                          // Minimum OAT for heat pump compressor operation
-        Real64 OATempCompressorOn;                        // The outdoor tempearture when the compressor is automatically turned back on,
+        Real64 OATempCompressorOn;                        // The outdoor temperature when the compressor is automatically turned back on,
         // if applicable, following automatic shut off. This field is used only for
         // HSPF calculation.
         Real64 MaxOATCompressor;                 // Maximum OAT for VRF heat pump compressor operation
@@ -455,7 +457,9 @@ namespace DXCoils {
         // Default Constructor
         DXCoilData()
             : DXCoilType_Num(0), RatedTotCap(MaxModes, 0.0), HeatSizeRatio(1.0), RatedTotCapEMSOverrideOn(MaxModes, false),
-              RatedTotCapEMSOverrideValue(MaxModes, 0.0), RatedSHR(MaxModes, 0.0), RatedSHREMSOverrideOn(MaxModes, false),
+              RatedTotCapEMSOverrideValue(MaxModes, 0.0), FrostHeatingCapacityMultiplierEMSOverrideOn(false),
+              FrostHeatingCapacityMultiplierEMSOverrideValue(0.0), FrostHeatingInputPowerMultiplierEMSOverrideOn(false),
+              FrostHeatingInputPowerMultiplierEMSOverrideValue(0.0), RatedSHR(MaxModes, 0.0), RatedSHREMSOverrideOn(MaxModes, false),
               RatedSHREMSOverrideValue(MaxModes, 0.0), RatedCOP(MaxModes, 0.0), RatedAirVolFlowRate(MaxModes, 0.0),
               RatedAirVolFlowRateEMSOverrideON(MaxModes, false), RatedAirVolFlowRateEMSOverrideValue(MaxModes, 0.0),
               FanPowerPerEvapAirFlowRate(MaxModes, 0.0), FanPowerPerEvapAirFlowRate_2023(MaxModes, 0.0), RatedAirMassFlowRate(MaxModes, 0.0),
@@ -984,7 +988,7 @@ struct DXCoilsData : BaseGlobalStruct
     Real64 CalcVRFCoolingCoilCurrentEndTime = 0.0;
     Real64 NetCoolingCapRated = 0.0; // Net Cooling Coil capacity at Rated conditions, accounting for supply fan heat [W]
     Real64 EER = 0.0;                // Energy Efficiency Ratio in SI [W/W]
-    Real64 IEER = 0.0;               // Integerated Energy Efficiency Ratio in SI [W/W]
+    Real64 IEER = 0.0;               // Integrated Energy Efficiency Ratio in SI [W/W]
     Real64 TotCapTempModFac = 0.0;   // Total capacity modifier (function of entering wetbulb, outside drybulb) [-]
     Real64 TotCapFlowModFac = 0.0;   // Total capacity modifier (function of actual supply air flow vs rated flow) [-]
     Real64 EIRTempModFac = 0.0;      // EIR modifier (function of entering wetbulb, outside drybulb) [-]

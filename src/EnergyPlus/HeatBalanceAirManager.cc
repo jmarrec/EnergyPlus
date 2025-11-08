@@ -95,7 +95,7 @@ namespace EnergyPlus::HeatBalanceAirManager {
 // manage the air simluation heat balance on the building.
 
 // REFERENCES:
-// The heat balance method is outlined in the "Tarp Alogorithms Manual"
+// The heat balance method is outlined in the "Tarp Algorithms Manual"
 // The methods are also summarized in many BSO Theses and papers.
 
 // OTHER NOTES:
@@ -281,9 +281,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
     int ZoneNumB;
 
     // Formats
-    static constexpr std::string_view Format_720(" {} Airflow Stats Nominal, {},{},{},{:.2R},{:.1R},");
+    static constexpr std::string_view Format_720(" {} Airflow Stats Nominal, {},{},{},{},{:.2R},{:.1R},");
     static constexpr std::string_view Format_721(
-        "! <{} Airflow Stats Nominal>,Name,Schedule Name,Zone Name, Zone Floor Area {{m2}}, # Zone Occupants,{}\n");
+        "! <{} Airflow Stats Nominal>,Name,Input Object, Schedule Name,Zone Name, Zone Floor Area {{m2}}, # Zone Occupants,{}\n");
     static constexpr std::string_view Format_722(" {}, {}\n");
 
     RepVarSet.dimension(state.dataGlobal->NumOfZones, true);
@@ -578,14 +578,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                 Constant::Units::m3_s,
                                 state.dataHeatBal->ZnAirRpt(thisZoneAirBalance.ZonePtr).OABalanceVdotCurDensity,
                                 OutputProcessor::TimeStepType::System,
-                                OutputProcessor::StoreType::Sum,
+                                OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Zone(thisZoneAirBalance.ZonePtr).Name);
             SetupOutputVariable(state,
                                 "Zone Combined Outdoor Air Standard Density Volume Flow Rate",
                                 Constant::Units::m3_s,
                                 state.dataHeatBal->ZnAirRpt(thisZoneAirBalance.ZonePtr).OABalanceVdotStdDensity,
                                 OutputProcessor::TimeStepType::System,
-                                OutputProcessor::StoreType::Sum,
+                                OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Zone(thisZoneAirBalance.ZonePtr).Name);
             SetupOutputVariable(state,
                                 "Zone Combined Outdoor Air Current Density Volume",
@@ -911,10 +911,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                         ShowContinueError(state, "Infiltration Coefficients are all zero.  No Infiltration will be reported.");
                     }
                 }
-                if (!lAlphaFieldBlanks(5)) {
-                    thisInfiltration.densityBasis = static_cast<DataHeatBalance::InfVentDensityBasis>(
-                        getEnumValue(infVentDensityBasisNamesUC, cAlphaArgs(5))); // NOLINT(modernize-use-auto)
-                }
+                thisInfiltration.densityBasis = static_cast<DataHeatBalance::InfVentDensityBasis>(
+                    getEnumValue(infVentDensityBasisNamesUC, cAlphaArgs(5))); // NOLINT(modernize-use-auto)
             }
         }
     }
@@ -1146,6 +1144,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                 OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Infiltration(Loop).Name);
             SetupOutputVariable(state,
+                                "Infiltration Outdoor Density Volume Flow Rate",
+                                Constant::Units::m3_s,
+                                state.dataHeatBal->Infiltration(Loop).InfilVdotOutDensity,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Infiltration(Loop).Name);
+            SetupOutputVariable(state,
                                 "Infiltration Current Density Volume",
                                 Constant::Units::m3,
                                 state.dataHeatBal->Infiltration(Loop).InfilVolumeCurDensity,
@@ -1174,9 +1179,23 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                 OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Infiltration(Loop).Name);
             SetupOutputVariable(state,
-                                "Infiltration Air Change Rate",
+                                "Infiltration Current Density Air Change Rate",
                                 Constant::Units::ach,
-                                state.dataHeatBal->Infiltration(Loop).InfilAirChangeRate,
+                                state.dataHeatBal->Infiltration(Loop).InfilAirChangeRateCurDensity,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Infiltration(Loop).Name);
+            SetupOutputVariable(state,
+                                "Infiltration Standard Density Air Change Rate",
+                                Constant::Units::ach,
+                                state.dataHeatBal->Infiltration(Loop).InfilAirChangeRateStdDensity,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
+                                state.dataHeatBal->Infiltration(Loop).Name);
+            SetupOutputVariable(state,
+                                "Infiltration Outdoor Density Air Change Rate",
+                                Constant::Units::ach,
+                                state.dataHeatBal->Infiltration(Loop).InfilAirChangeRateOutDensity,
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 state.dataHeatBal->Infiltration(Loop).Name);
@@ -1240,6 +1259,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                     OutputProcessor::StoreType::Average,
                                     state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
                 SetupOutputVariable(state,
+                                    "Zone Infiltration Outdoor Density Volume Flow Rate",
+                                    Constant::Units::m3_s,
+                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilVdotOutDensity,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Average,
+                                    state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
+                SetupOutputVariable(state,
                                     "Zone Infiltration Current Density Volume",
                                     Constant::Units::m3,
                                     state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilVolumeCurDensity,
@@ -1268,9 +1294,23 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                     OutputProcessor::StoreType::Average,
                                     state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
                 SetupOutputVariable(state,
-                                    "Zone Infiltration Air Change Rate",
+                                    "Zone Infiltration Current Density Air Change Rate",
                                     Constant::Units::ach,
-                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilAirChangeRate,
+                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilAirChangeRateCurDensity,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Average,
+                                    state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
+                SetupOutputVariable(state,
+                                    "Zone Infiltration Standard Density Air Change Rate",
+                                    Constant::Units::ach,
+                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilAirChangeRateStdDensity,
+                                    OutputProcessor::TimeStepType::System,
+                                    OutputProcessor::StoreType::Average,
+                                    state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
+                SetupOutputVariable(state,
+                                    "Zone Infiltration Outdoor Density Air Change Rate",
+                                    Constant::Units::ach,
+                                    state.dataHeatBal->ZnAirRpt(state.dataHeatBal->Infiltration(Loop).ZonePtr).InfilAirChangeRateOutDensity,
                                     OutputProcessor::TimeStepType::System,
                                     OutputProcessor::StoreType::Average,
                                     state.dataHeatBal->Zone(state.dataHeatBal->Infiltration(Loop).ZonePtr).Name);
@@ -1741,7 +1781,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                         ShowWarningCustom(
                             state,
                             eoh,
-                            format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(10), cNumericFieldNames(15), cAlphaFieldNames(15)));
+                            format("Both {} and {} provided, {} will be used.", cAlphaFieldNames(10), cNumericFieldNames(15), cAlphaFieldNames(10)));
                     }
                 }
 
@@ -1757,10 +1797,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     }
                 }
 
-                if (!lAlphaFieldBlanks(11)) {
-                    thisVentilation.densityBasis = static_cast<DataHeatBalance::InfVentDensityBasis>(
-                        getEnumValue(infVentDensityBasisNamesUC, cAlphaArgs(11))); // NOLINT(modernize-use-auto)
-                }
+                thisVentilation.densityBasis = static_cast<DataHeatBalance::InfVentDensityBasis>(
+                    getEnumValue(infVentDensityBasisNamesUC, cAlphaArgs(11))); // NOLINT(modernize-use-auto)
 
                 // Report variables should be added for individual VENTILATION objects, in addition to zone totals below
 
@@ -1824,6 +1862,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
                         SetupOutputVariable(state,
+                                            "Zone Ventilation Outdoor Density Volume Flow Rate",
+                                            Constant::Units::m3_s,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilVdotOutDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
                                             "Zone Ventilation Current Density Volume",
                                             Constant::Units::m3,
                                             state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilVolumeCurDensity,
@@ -1852,9 +1897,23 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
                         SetupOutputVariable(state,
-                                            "Zone Ventilation Air Change Rate",
+                                            "Zone Ventilation Current Density Air Change Rate",
                                             Constant::Units::ach,
-                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRate,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateCurDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
+                                            "Zone Ventilation Standard Density Air Change Rate",
+                                            Constant::Units::ach,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateStdDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
+                                            "Zone Ventilation Outdoor Density Air Change Rate",
+                                            Constant::Units::ach,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateOutDensity,
                                             OutputProcessor::TimeStepType::System,
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
@@ -2233,6 +2292,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
                         SetupOutputVariable(state,
+                                            "Zone Ventilation Outdoor Density Volume Flow Rate",
+                                            Constant::Units::m3_s,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilVdotOutDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
                                             "Zone Ventilation Current Density Volume",
                                             Constant::Units::m3,
                                             state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilVolumeCurDensity,
@@ -2261,9 +2327,23 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
                         SetupOutputVariable(state,
-                                            "Zone Ventilation Air Change Rate",
+                                            "Zone Ventilation Current Density Air Change Rate",
                                             Constant::Units::ach,
-                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRate,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateCurDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
+                                            "Zone Ventilation Standard Density Air Change Rate",
+                                            Constant::Units::ach,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateStdDensity,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            thisZone.Name);
+                        SetupOutputVariable(state,
+                                            "Zone Ventilation Outdoor Density Air Change Rate",
+                                            Constant::Units::ach,
+                                            state.dataHeatBal->ZnAirRpt(thisVentilation.ZonePtr).VentilAirChangeRateOutDensity,
                                             OutputProcessor::TimeStepType::System,
                                             OutputProcessor::StoreType::Average,
                                             thisZone.Name);
@@ -2526,11 +2606,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                     } else if (!thisMixing.deltaTempSched->checkMinVal(state, Clusive::In, -MixingTempLimit)) {
                         Sched::ShowSevereBadMin(state, eoh, cAlphaFieldNames(6), cAlphaArgs(6), Clusive::In, -MixingTempLimit);
                         ErrorsFound = true;
-                    } else if (!lNumericFieldBlanks(5))
+                    } else if (!lNumericFieldBlanks(5)) {
                         ShowWarningCustom(
                             state,
                             eoh,
                             format("{} and {} are provided, {} will be used.", cAlphaFieldNames(6), cNumericFieldNames(5), cAlphaFieldNames(6)));
+                    }
                 }
 
                 // Min indoor temp
@@ -2734,7 +2815,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         // check zones which are used only as a source zones
         for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
             for (int Loop = 1; Loop <= state.dataHeatBal->TotMixing; ++Loop) {
-                if (ZoneNum != state.dataHeatBal->Mixing(Loop).FromZone) continue;
+                if (ZoneNum != state.dataHeatBal->Mixing(Loop).FromZone) {
+                    continue;
+                }
                 state.dataHeatBal->MassConservation(ZoneNum).IsOnlySourceZone = true;
                 for (int Loop1 = 1; Loop1 <= state.dataHeatBal->TotMixing; ++Loop1) {
                     if (ZoneNum == state.dataHeatBal->Mixing(Loop1).ZonePtr) {
@@ -2770,7 +2853,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                 state.dataHeatBal->MassConservation(ZoneNum).IsSourceAndReceivingZone = true;
             }
         }
-        if (allocated(ZoneMixingNum)) ZoneMixingNum.deallocate();
+        if (allocated(ZoneMixingNum)) {
+            ZoneMixingNum.deallocate();
+        }
     }
 
     // zone mass conservation calculation order starts with receiving zones
@@ -3320,8 +3405,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
     state.dataHeatBal->TotRefDoorMixing = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
     if (state.dataHeatBal->TotRefDoorMixing > 0) {
         state.dataHeatBal->RefDoorMixing.allocate(state.dataGlobal->NumOfZones);
-        for (auto &e : state.dataHeatBal->RefDoorMixing)
+        for (auto &e : state.dataHeatBal->RefDoorMixing) {
             e.NumRefDoorConnections = 0;
+        }
 
         for (int Loop = 1; Loop <= state.dataHeatBal->TotRefDoorMixing; ++Loop) {
 
@@ -3456,7 +3542,9 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             if (zoneA.RefDoorMixFlag && zoneB.RefDoorMixFlag) {
                 if (zoneA.NumRefDoorConnections > 1) {
                     for (int ConnectTest = 1; ConnectTest <= (ConnectionNumber - 1); ++ConnectTest) {
-                        if (zoneA.MateZonePtr(ConnectTest) != zoneA.MateZonePtr(ConnectionNumber)) continue;
+                        if (zoneA.MateZonePtr(ConnectTest) != zoneA.MateZonePtr(ConnectionNumber)) {
+                            continue;
+                        }
                         ShowSevereError(
                             state,
                             format("{}{}=\"{}\", and {}", RoutineName, cCurrentModuleObject, cAlphaArgs(1), zoneA.DoorMixingObjectName(ConnectTest)));
@@ -3467,8 +3555,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                                  state.dataHeatBal->Zone(ZoneNumB).Name));
                         ErrorsFound = true;
                     } // ConnectTest
-                }     // NumRefDoorconnections > 1
-            } else {  // Both zones need to be flagged with ref doors
+                } // NumRefDoorconnections > 1
+            } else { // Both zones need to be flagged with ref doors
                 zoneA.RefDoorMixFlag = true;
                 zoneB.RefDoorMixFlag = true;
             } // Both zones already flagged with ref doors
@@ -3555,7 +3643,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                            cAlphaArgs(5)));
                     ErrorsFound = true;
                 } // =none, etc.
-            }     // Blank
+            } // Blank
 
             if (ZoneNumA > 0) {
                 if (RepVarSet(ZoneNumA)) {
@@ -3741,7 +3829,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                                  state.dataHeatBal->RefDoorMixing(ZoneNumA).EMSRefDoorFlowRate(ConnectionNumber));
             }
         } // DO Loop=1,TotRefDoorMixing
-    }     // TotRefDoorMixing > 0)
+    } // TotRefDoorMixing > 0)
 
     RepVarSet.deallocate();
     cAlphaArgs.deallocate();
@@ -3762,13 +3850,14 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
     };
 
     for (int Loop = 1; Loop <= state.dataHeatBal->TotInfiltration; ++Loop) {
-        if (Loop == 1)
+        if (Loop == 1) {
             print(state.files.eio,
                   Format_721,
                   "ZoneInfiltration",
                   "Design Volume Flow Rate {m3/s},Volume Flow Rate/Floor Area {m3/s-m2},Volume Flow Rate/Exterior Surface Area {m3/s-m2},ACH - "
                   "Air Changes per Hour,Equation A - Constant Term Coefficient {},Equation B - Temperature Term Coefficient {1/C},Equation C - "
                   "Velocity Term Coefficient {s/m}, Equation D - Velocity Squared Term Coefficient {s2/m2}");
+        }
 
         int ZoneNum = state.dataHeatBal->Infiltration(Loop).ZonePtr;
         if (ZoneNum == 0) {
@@ -3776,10 +3865,27 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             continue;
         }
         TotInfilVentFlow(ZoneNum) += state.dataHeatBal->Infiltration(Loop).DesignLevel;
+
+        std::string infilInputObjectType = "";
+        switch (state.dataHeatBal->Infiltration(Loop).ModelType) {
+        case DataHeatBalance::InfiltrationModelType::DesignFlowRate:
+            infilInputObjectType = "ZoneInfiltration:DesignFlowRate";
+            break;
+        case DataHeatBalance::InfiltrationModelType::ShermanGrimsrud:
+            infilInputObjectType = "ZoneInfiltration:EffectiveLeakageArea";
+            break;
+        case DataHeatBalance::InfiltrationModelType::AIM2:
+            infilInputObjectType = "ZoneInfiltration:FlowCoefficient";
+            break;
+        default:
+            infilInputObjectType = "unknown";
+        };
+
         print(state.files.eio,
               Format_720,
               "ZoneInfiltration",
               state.dataHeatBal->Infiltration(Loop).Name,
+              infilInputObjectType,
               state.dataHeatBal->Infiltration(Loop).sched->Name,
               state.dataHeatBal->Zone(ZoneNum).Name,
               state.dataHeatBal->Zone(ZoneNum).FloorArea,
@@ -3824,10 +3930,24 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
             continue;
         }
         TotInfilVentFlow(ZoneNum) += state.dataHeatBal->Ventilation(Loop).DesignLevel;
+
+        std::string ventInputObjectType = "";
+        switch (state.dataHeatBal->Ventilation(Loop).ModelType) {
+        case DataHeatBalance::VentilationModelType::DesignFlowRate:
+            ventInputObjectType = "ZoneVentilation:DesignFlowRate";
+            break;
+        case DataHeatBalance::VentilationModelType::WindAndStack:
+            ventInputObjectType = "ZoneVentilation:WindandStackOpenArea";
+            break;
+        default:
+            ventInputObjectType = "unknown";
+        };
+
         print(state.files.eio,
               Format_720,
               "ZoneVentilation",
               state.dataHeatBal->Ventilation(Loop).Name,
+              ventInputObjectType,
               state.dataHeatBal->Ventilation(Loop).availSched->Name,
               state.dataHeatBal->Zone(ZoneNum).Name,
               state.dataHeatBal->Zone(ZoneNum).FloorArea,
@@ -3883,12 +4003,13 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
 
     TotMixingFlow.dimension(state.dataGlobal->NumOfZones, 0.0);
     for (int Loop = 1; Loop <= state.dataHeatBal->TotMixing; ++Loop) {
-        if (Loop == 1)
+        if (Loop == 1) {
             print(state.files.eio,
                   Format_721,
                   "Mixing",
                   "Design Volume Flow Rate {m3/s},Volume Flow Rate/Floor Area {m3/s-m2},Volume Flow Rate/person Area {m3/s-person},ACH - Air "
                   "Changes per Hour,From/Source Zone,Delta Temperature {C}");
+        }
 
         int ZoneNum = state.dataHeatBal->Mixing(Loop).ZonePtr;
         if (ZoneNum == 0) {
@@ -3900,6 +4021,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
               Format_720,
               "Mixing",
               state.dataHeatBal->Mixing(Loop).Name,
+              "ZoneMixing",
               state.dataHeatBal->Mixing(Loop).sched->Name,
               state.dataHeatBal->Zone(ZoneNum).Name,
               state.dataHeatBal->Zone(ZoneNum).FloorArea,
@@ -3933,6 +4055,7 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
               Format_720,
               "CrossMixing",
               state.dataHeatBal->CrossMixing(Loop).Name,
+              "ZoneCrossMixing",
               state.dataHeatBal->CrossMixing(Loop).sched->Name,
               state.dataHeatBal->Zone(ZoneNum).Name,
               state.dataHeatBal->Zone(ZoneNum).FloorArea,
@@ -3953,10 +4076,12 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
         static constexpr std::string_view Format_724("! <{} Airflow Stats Nominal>, {}\n");
         print(state.files.eio,
               Format_724,
-              "RefrigerationDoorMixing ",
+              "RefrigerationDoorMixing",
               "Name, Zone 1 Name,Zone 2 Name,Door Opening Schedule Name,Door Height {m},Door Area {m2},Door Protection Type");
         for (ZoneNumA = 1; ZoneNumA <= (state.dataGlobal->NumOfZones - 1); ++ZoneNumA) {
-            if (!state.dataHeatBal->RefDoorMixing(ZoneNumA).RefDoorMixFlag) continue;
+            if (!state.dataHeatBal->RefDoorMixing(ZoneNumA).RefDoorMixFlag) {
+                continue;
+            }
             for (ConnectionNumber = 1; ConnectionNumber <= state.dataHeatBal->RefDoorMixing(ZoneNumA).NumRefDoorConnections; ++ConnectionNumber) {
                 ZoneNumB = state.dataHeatBal->RefDoorMixing(ZoneNumA).MateZonePtr(ConnectionNumber);
                 // TotMixingFlow(ZoneNum)=TotMixingFlow(ZoneNum)+RefDoorMixing(Loop)%!DesignLevel
@@ -3972,8 +4097,8 @@ void GetSimpleAirModelInputs(EnergyPlusData &state, bool &ErrorsFound) // IF err
                       state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorArea(ConnectionNumber),
                       state.dataHeatBal->RefDoorMixing(ZoneNumA).DoorProtTypeName(ConnectionNumber));
             } // ConnectionNumber
-        }     // ZoneNumA
-    }         //(TotRefDoorMixing .GT. 0)
+        } // ZoneNumA
+    } //(TotRefDoorMixing .GT. 0)
 
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
         state.dataHeatBal->Zone(ZoneNum).NominalInfilVent = TotInfilVentFlow(ZoneNum);
@@ -4345,7 +4470,9 @@ void InitSimpleMixingConvectiveHeatGains(EnergyPlusData &state)
         // Process the scheduled Mixing for air heat balance
         for (auto &thisMixing : state.dataHeatBal->Mixing) {
             thisMixing.DesiredAirFlowRate = thisMixing.DesignLevel * thisMixing.sched->getCurrentVal();
-            if (thisMixing.EMSSimpleMixingOn) thisMixing.DesiredAirFlowRate = thisMixing.EMSimpleMixingFlowRate;
+            if (thisMixing.EMSSimpleMixingOn) {
+                thisMixing.DesiredAirFlowRate = thisMixing.EMSimpleMixingFlowRate;
+            }
             thisMixing.DesiredAirFlowRateSaved = thisMixing.DesiredAirFlowRate;
         }
 
@@ -4370,7 +4497,9 @@ void InitSimpleMixingConvectiveHeatGains(EnergyPlusData &state)
         // Process the scheduled CrossMixing for air heat balance
         for (auto &thisCrossMix : state.dataHeatBal->CrossMixing) {
             thisCrossMix.DesiredAirFlowRate = thisCrossMix.DesignLevel * thisCrossMix.sched->getCurrentVal();
-            if (thisCrossMix.EMSSimpleMixingOn) thisCrossMix.DesiredAirFlowRate = thisCrossMix.EMSimpleMixingFlowRate;
+            if (thisCrossMix.EMSSimpleMixingOn) {
+                thisCrossMix.DesiredAirFlowRate = thisCrossMix.EMSimpleMixingFlowRate;
+            }
         }
 
         // Note - do each Pair a Single time, so must do increment reports for both zones
@@ -4382,11 +4511,15 @@ void InitSimpleMixingConvectiveHeatGains(EnergyPlusData &state)
             for (int NZ = 1; NZ <= (state.dataGlobal->NumOfZones - 1);
                  ++NZ) { // Can't have %ZonePtr==NumOfZones because lesser zone # of pair placed in ZonePtr in input
                 auto &thisRefDoor = state.dataHeatBal->RefDoorMixing(NZ);
-                if (!thisRefDoor.RefDoorMixFlag) continue;
+                if (!thisRefDoor.RefDoorMixFlag) {
+                    continue;
+                }
                 if (thisRefDoor.ZonePtr == NZ) {
                     for (int J = 1; J <= thisRefDoor.NumRefDoorConnections; ++J) {
                         thisRefDoor.VolRefDoorFlowRate(J) = 0.0;
-                        if (thisRefDoor.EMSRefDoorMixingOn(J)) thisRefDoor.VolRefDoorFlowRate(J) = thisRefDoor.EMSRefDoorFlowRate(J);
+                        if (thisRefDoor.EMSRefDoorMixingOn(J)) {
+                            thisRefDoor.VolRefDoorFlowRate(J) = thisRefDoor.EMSRefDoorFlowRate(J);
+                        }
                     }
                 }
             }
@@ -4516,10 +4649,10 @@ void calcMeanAirTemps(EnergyPlusData &state,
         // find TempControlledZoneID from ZoneLoop index
         int TempControlledZoneID = state.dataHeatBal->Zone(zoneNum).TempControlledZoneIndex;
         if (state.dataHeatBal->Zone(zoneNum).IsControlled) {
-            if ((state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OperativeTempControl)) {
+            if ((state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OpTempCtrl != DataZoneControls::TempCtrl::None)) {
                 Real64 thisMRTFraction; // temp working value for radiative fraction/weight
                 // is operative temp radiative fraction scheduled or fixed?
-                if (state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OpTempCntrlModeScheduled) {
+                if (state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).OpTempCtrl == DataZoneControls::TempCtrl::Scheduled) {
                     thisMRTFraction = state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).opTempRadiativeFractionSched->getCurrentVal();
                 } else {
                     thisMRTFraction = state.dataZoneCtrls->TempControlledZone(TempControlledZoneID).FixedRadiativeFraction;

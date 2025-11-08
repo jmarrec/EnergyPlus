@@ -377,14 +377,17 @@ TEST_F(EnergyPlusFixture, InfiltrationObjectLevelReport)
     EXPECT_NEAR(ZnAirRpt(4).InfilVolumeCurDensity, infiltration(5).InfilVolumeCurDensity,
                 0.000001); // zone level reporting matches object level
 
-    EXPECT_NEAR(ZnAirRpt(1).InfilAirChangeRate, infiltration(1).InfilAirChangeRate,
+    EXPECT_NEAR(ZnAirRpt(1).InfilAirChangeRateCurDensity,
+                infiltration(1).InfilAirChangeRateCurDensity,
                 0.000001); // zone level reporting matches object level
-    expectedValue = infiltration(2).InfilAirChangeRate + infiltration(3).InfilAirChangeRate;
-    EXPECT_NEAR(ZnAirRpt(2).InfilAirChangeRate, expectedValue,
+    expectedValue = infiltration(2).InfilAirChangeRateCurDensity + infiltration(3).InfilAirChangeRateCurDensity;
+    EXPECT_NEAR(ZnAirRpt(2).InfilAirChangeRateCurDensity, expectedValue,
                 0.000001); // zone level reporting matches object level
-    EXPECT_NEAR(ZnAirRpt(3).InfilAirChangeRate, infiltration(4).InfilAirChangeRate,
+    EXPECT_NEAR(ZnAirRpt(3).InfilAirChangeRateCurDensity,
+                infiltration(4).InfilAirChangeRateCurDensity,
                 0.000001); // zone level reporting matches object level
-    EXPECT_NEAR(ZnAirRpt(4).InfilAirChangeRate, infiltration(5).InfilAirChangeRate,
+    EXPECT_NEAR(ZnAirRpt(4).InfilAirChangeRateCurDensity,
+                infiltration(5).InfilAirChangeRateCurDensity,
                 0.000001); // zone level reporting matches object level
 
     EXPECT_NEAR(ZnAirRpt(1).InfilVdotCurDensity, infiltration(1).InfilVdotCurDensity,
@@ -461,27 +464,45 @@ TEST_F(EnergyPlusFixture, InfiltrationReportTest)
     // Call HVACManager
     ReportAirHeatBalance(*state);
 
-    EXPECT_NEAR(2.9971591, state->dataHeatBal->ZnAirRpt(1).InfilVolumeCurDensity, 0.0001);
-    EXPECT_NEAR(5.9943183, state->dataHeatBal->ZnAirRpt(1).VentilVolumeCurDensity, 0.0001);
-    EXPECT_NEAR(2.9827908, state->dataHeatBal->ZnAirRpt(1).InfilVolumeStdDensity, 0.0001);
-    EXPECT_NEAR(5.9655817, state->dataHeatBal->ZnAirRpt(1).VentilVolumeStdDensity, 0.0001);
-    EXPECT_NEAR(4.5421638, state->dataHeatBal->ZnAirRpt(2).InfilVolumeCurDensity, 0.0001);
-    EXPECT_NEAR(7.5702731, state->dataHeatBal->ZnAirRpt(2).VentilVolumeCurDensity, 0.0001);
-    EXPECT_NEAR(4.4741862, state->dataHeatBal->ZnAirRpt(2).InfilVolumeStdDensity, 0.0001);
-    EXPECT_NEAR(7.4569771, state->dataHeatBal->ZnAirRpt(2).VentilVolumeStdDensity, 0.0001);
+    auto &znAirRpt1 = state->dataHeatBal->ZnAirRpt(1);
+    auto &znAirRpt2 = state->dataHeatBal->ZnAirRpt(2);
+
+    EXPECT_NEAR(2.9971591, znAirRpt1.InfilVolumeCurDensity, 0.0001);
+    EXPECT_NEAR(5.9943183, znAirRpt1.VentilVolumeCurDensity, 0.0001);
+    EXPECT_NEAR(2.9827908, znAirRpt1.InfilVolumeStdDensity, 0.0001);
+    EXPECT_NEAR(5.9655817, znAirRpt1.VentilVolumeStdDensity, 0.0001);
+    EXPECT_NEAR(4.5421638, znAirRpt2.InfilVolumeCurDensity, 0.0001);
+    EXPECT_NEAR(7.5702731, znAirRpt2.VentilVolumeCurDensity, 0.0001);
+    EXPECT_NEAR(4.4741862, znAirRpt2.InfilVolumeStdDensity, 0.0001);
+    EXPECT_NEAR(7.4569771, znAirRpt2.VentilVolumeStdDensity, 0.0001);
 
     // #8068
-    Real64 deltah = state->dataZoneTempPredictorCorrector->zoneHeatBalance(1).MCPI / (Psychrometrics::PsyCpAirFnW(state->dataEnvrn->OutHumRat)) *
-                    3600.0 *
-                    (Psychrometrics::PsyHFnTdbW(state->dataHeatBal->Zone(1).OutDryBulbTemp, state->dataEnvrn->OutHumRat) -
-                     Psychrometrics::PsyHFnTdbW(state->dataZoneTempPredictorCorrector->zoneHeatBalance(1).MAT,
-                                                state->dataZoneTempPredictorCorrector->zoneHeatBalance(1).airHumRat));
-    EXPECT_NEAR(-deltah, state->dataHeatBal->ZnAirRpt(1).InfilTotalLoss, 0.0001);
-    deltah = state->dataZoneTempPredictorCorrector->zoneHeatBalance(1).MCPV / (Psychrometrics::PsyCpAirFnW(state->dataEnvrn->OutHumRat)) * 3600.0 *
-             (Psychrometrics::PsyHFnTdbW(state->dataHeatBal->Zone(1).OutDryBulbTemp, state->dataEnvrn->OutHumRat) -
-              Psychrometrics::PsyHFnTdbW(state->dataZoneTempPredictorCorrector->zoneHeatBalance(1).MAT,
-                                         state->dataZoneTempPredictorCorrector->zoneHeatBalance(1).airHumRat));
-    EXPECT_NEAR(-deltah, state->dataHeatBal->ZnAirRpt(1).VentilTotalLoss, 0.0001);
+    auto &zoneHB1 = state->dataZoneTempPredictorCorrector->zoneHeatBalance(1);
+    auto &zone1 = state->dataHeatBal->Zone(1);
+    Real64 deltah =
+        zoneHB1.MCPI / (Psychrometrics::PsyCpAirFnW(state->dataEnvrn->OutHumRat)) * 3600.0 *
+        (Psychrometrics::PsyHFnTdbW(zone1.OutDryBulbTemp, state->dataEnvrn->OutHumRat) - Psychrometrics::PsyHFnTdbW(zoneHB1.MAT, zoneHB1.airHumRat));
+    EXPECT_NEAR(-deltah, znAirRpt1.InfilTotalLoss, 0.0001);
+    deltah =
+        zoneHB1.MCPV / (Psychrometrics::PsyCpAirFnW(state->dataEnvrn->OutHumRat)) * 3600.0 *
+        (Psychrometrics::PsyHFnTdbW(zone1.OutDryBulbTemp, state->dataEnvrn->OutHumRat) - Psychrometrics::PsyHFnTdbW(zoneHB1.MAT, zoneHB1.airHumRat));
+    EXPECT_NEAR(-deltah, znAirRpt1.VentilTotalLoss, 0.0001);
+
+    // Check outdoor density outputs
+    Real64 outdoorRho = Psychrometrics::PsyRhoAirFnPbTdbW(state->dataEnvrn->OutBaroPress, zone1.OutDryBulbTemp, state->dataEnvrn->OutHumRat);
+    Real64 expected = znAirRpt1.InfilVdotStdDensity * outdoorRho / state->dataEnvrn->StdRhoAir;
+    EXPECT_NEAR(znAirRpt1.InfilVdotOutDensity, expected, 0.0001);
+    expected = znAirRpt1.VentilVdotStdDensity * outdoorRho / state->dataEnvrn->StdRhoAir;
+    EXPECT_NEAR(znAirRpt1.VentilVdotOutDensity, expected, 0.0001);
+
+    // Check ACH outputs
+    expected = znAirRpt1.InfilVdotCurDensity * Constant::rSecsInHour / zone1.Volume;
+    EXPECT_NEAR(znAirRpt1.InfilAirChangeRateCurDensity, expected, 0.001);
+    Real64 zoneRho = Psychrometrics::PsyRhoAirFnPbTdbW(state->dataEnvrn->OutBaroPress, zoneHB1.MAT, zoneHB1.airHumRat);
+    expected = znAirRpt1.InfilAirChangeRateCurDensity * outdoorRho / zoneRho;
+    EXPECT_NEAR(znAirRpt1.InfilAirChangeRateOutDensity, expected, 0.001);
+    expected = znAirRpt1.InfilAirChangeRateCurDensity * state->dataEnvrn->StdRhoAir / zoneRho;
+    EXPECT_NEAR(znAirRpt1.InfilAirChangeRateStdDensity, expected, 0.001);
 }
 
 TEST_F(EnergyPlusFixture, ExfilAndExhaustReportTest)

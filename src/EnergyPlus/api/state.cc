@@ -70,6 +70,7 @@ void stateReset(EnergyPlusState state)
 {
     auto *this_state = reinterpret_cast<EnergyPlus::EnergyPlusData *>(state);
     this_state->clear_state();
+    this_state->init_constant_state(*this_state);
 }
 
 void stateDelete(EnergyPlusState state)

@@ -82,7 +82,7 @@
 #include <EnergyPlus/ZoneEquipmentManager.hh>
 #include <EnergyPlus/ZoneTempPredictorCorrector.hh>
 
-#include <nlohmann/json_literals.hpp>
+#include <nlohmann/json.hpp>
 
 #include "Fixtures/EnergyPlusFixture.hh"
 
@@ -95,6 +95,7 @@ using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataAirLoop;
 using namespace EnergyPlus::DataAirSystems;
+using namespace nlohmann::literals;
 
 namespace EnergyPlus {
 
@@ -360,7 +361,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_GetWindowConstructData)
 
     state->dataHeatBal->NominalRforNominalUCalculation.allocate(1);
     state->dataHeatBal->NominalRforNominalUCalculation(1) = 0.0;
-    mat1->NominalR = 0.4; // Set these explicity for each material layer to avoid random failures of check for
+    mat1->NominalR = 0.4; // Set these explicitly for each material layer to avoid random failures of check for
                           // NominalRforNominalUCalculation == 0.0 at end of GetConstructData
     mat2->NominalR = 0.4;
 
@@ -2312,6 +2313,23 @@ TEST_F(EnergyPlusFixture, Window5DataFileSpaceInName)
     SearchWindow5DataFile(*state, window5DataFilePath, ConstructName, ConstructionFound, EOFonW5File, ErrorsFound);
 
     EXPECT_EQ(ConstructName, "DOUBLE CLEAR");
+    EXPECT_TRUE(ConstructionFound);
+}
+
+TEST_F(EnergyPlusFixture, Window5DataExtraBlankLines)
+{
+
+    fs::path window5DataFilePath;
+    window5DataFilePath = configured_source_directory() / "tst/EnergyPlus/unit/Resources/Window5DataFile_ExtraBlankLines.dat";
+    std::string ConstructName{"EXAMPLE B"};
+    bool ConstructionFound{false};
+    bool EOFonW5File{false};
+    bool ErrorsFound{false};
+    state->dataHeatBal->MaxSolidWinLayers = 2;
+
+    SearchWindow5DataFile(*state, window5DataFilePath, ConstructName, ConstructionFound, EOFonW5File, ErrorsFound);
+
+    EXPECT_EQ(ConstructName, "EXAMPLE B");
     EXPECT_TRUE(ConstructionFound);
 }
 

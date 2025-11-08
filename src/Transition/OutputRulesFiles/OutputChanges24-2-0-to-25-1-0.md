@@ -35,3 +35,26 @@ See Pull Request [#10760](https://github.com/NREL/EnergyPlus/pull/10760).
 * Added columns for *Zone* and *Space* to sub-tables "Exterior Fenestration", "Interior Fenestration", "Exterior Door", and "Interior Door".
 
 See Pull Request [#10914](https://github.com/NREL/EnergyPlus/pull/10914).
+
+### Infiltration and Ventilation Output Variable Name Change and New Outputs
+* Changed the name of these output variables:
+```
+Infiltration Air Change Rate --> Infiltration Current Density Air Change Rate
+Zone Infiltration Air Change Rate --> Zone Infiltration Current Density Air Change Rate
+Zone Ventilation Air Change Rate --> Zone Ventilation Current Density Air Change Rate
+```
+
+* Added new output variables:
+```
+Infiltration Outdoor Density Volume Flow Rate
+Infiltration Standard Density Air Change Rate
+Infiltration Outdoor Density Air Change Rate
+Zone Infiltration Outdoor Density Volume Flow Rate
+Zone Infiltration Standard Density Air Change Rate
+Zone Infiltration Outdoor Density Air Change Rate
+Zone Ventilation Outdoor Density Volume Flow Rate
+Zone Ventilation Standard Density Air Change Rate
+Zone Ventilation Outdoor Density Air Change Rate
+```
+
+See Pull Request [#10940](https://github.com/NREL/EnergyPlus/pull/10940).

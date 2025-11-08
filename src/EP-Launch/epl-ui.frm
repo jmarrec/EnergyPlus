@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Begin VB.Form eplUI 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "EP-Launch"
@@ -212,6 +212,15 @@ Begin VB.Form eplUI
             TabIndex        =   53
             Top             =   360
             Width           =   7455
+            Begin VB.CommandButton cmdSpSZ 
+               Caption         =   "SpSZ"
+               Height          =   255
+               Left            =   6360
+               TabIndex        =   106
+               ToolTipText     =   "Zone sizing and flow rates"
+               Top             =   1560
+               Width           =   1020
+            End
             Begin VB.CommandButton cmdPerfLogCSV 
                Caption         =   "PerfLog.csv"
                Height          =   255
@@ -1185,6 +1194,12 @@ Begin VB.Form eplUI
             Caption         =   "SSZ File"
             Shortcut        =   ^{F6}
          End
+         Begin VB.Menu mnuViewSpSZ 
+            Caption         =   "SpSZ File"
+         End
+         Begin VB.Menu mnuViewPSZ 
+            Caption         =   "PSZ File"
+         End
          Begin VB.Menu mnuViewAUDIT 
             Caption         =   "AUDIT File"
             Shortcut        =   ^{F8}
@@ -1353,6 +1368,9 @@ Begin VB.Form eplUI
       Begin VB.Menu mnuHelpAuxProgs 
          Caption         =   "EnergyPlus Auxiliary Programs"
       End
+      Begin VB.Menu mnuHelpTips 
+         Caption         =   "EnergyPlus Tips and Tricks"
+      End
       Begin VB.Menu mnuHelpAcknowledge 
          Caption         =   "EnergyPlus Acknowledgments"
       End
@@ -1470,7 +1488,7 @@ Private Type utilProgType
     includeExtensionInCall As Boolean 'if the extension should be included when the file is passed to the application
     waitUntilUtilityExits As Boolean 'true if EP-Launch should wait until the called program is done
 End Type
-Const numUtilProg = 10
+Const numUtilProg = 9
 Dim utilProg(numUtilProg) As utilProgType
 
 Private Type SimQueueType
@@ -1779,6 +1797,9 @@ End Function
 
 
 
+
+
+
 Private Sub cmdViewDefine_Click()
 frmDefineViewResults.Show vbModal
 Call checkOutputButtonsFiles
@@ -1983,6 +2004,10 @@ Private Sub cmdZSZ_Click()
 Call viewZSZFile
 End Sub
 
+Private Sub cmdSpSZ_Click()
+Call viewSpSZFile
+End Sub
+
 Private Sub cmdBsmt_Click()
 Call RunOutputEditorSingleFile(".bsmt")
 End Sub
@@ -2102,6 +2127,7 @@ End Sub
 
 
 
+
 Private Sub queueTimer_Timer()
 Call manageSimulationQueue
 End Sub
@@ -2185,6 +2211,12 @@ End Sub
 Private Sub mnuViewZSZ_Click()
 Call viewZSZFile
 End Sub
+Private Sub mnuViewSpSZ_Click()
+Call viewSpSZFile
+End Sub
+Private Sub mnuViewPSZ_Click()
+Call viewPSZFile
+End Sub
 Private Sub mnuViewTABLE_Click()
 Call viewTABLEfile
 End Sub
@@ -2264,7 +2296,8 @@ Private Sub mnuHelpEPDocs_Click()
 Call viewWebPage(appPath & "Documentation\index.html")
 End Sub
 Private Sub mnuHelpEssentials_Click()
-Call startAcrobat("EnergyPlusEssentials.pdf")
+'Call startAcrobat("EnergyPlusEssentials.pdf")
+Call viewWebPage("https://energyplus.readthedocs.io/en/latest/essentials/essentials.html")
 End Sub
 Private Sub mnuHelpGettingStarted_Click()
 Call startAcrobat("GettingStarted.pdf")
@@ -2280,7 +2313,8 @@ Call startAcrobat("OutputDetailsAndExamples.pdf")
 End Sub
 Private Sub mnuHelpAuxProgs_Click()
 'Call startAcrobat("OtherInformation.pdf") change for 1.09 version on Dec 12, 2002
-Call startAcrobat("AuxiliaryPrograms.pdf")
+'Call startAcrobat("AuxiliaryPrograms.pdf")
+Call viewWebPage("https://energyplus.readthedocs.io/en/latest/auxiliary-programs/auxiliary-programs.html")
 End Sub
 Private Sub mnuHelpCompliance_Click()
 Call startAcrobat("UsingEnergyPlusForCompliance.pdf")
@@ -2289,16 +2323,19 @@ Private Sub mnuHelpPlantAppl_Click()
 Call startAcrobat("PlantApplicationGuide.pdf")
 End Sub
 Private Sub mnuHelpEMS_Click()
-Call startAcrobat("EMSApplicationGuide.pdf")
+'Call startAcrobat("EMSApplicationGuide.pdf")
+Call viewWebPage("https://energyplus.readthedocs.io/en/latest/ems-application-guide/ems-application-guide.html")
 End Sub
 Private Sub mnuHelpExtInterface_Click()
 Call startAcrobat("ExternalInterfacesApplicationGuide.pdf")
 End Sub
 Private Sub mnuHelpTips_Click()
-Call startAcrobat("TipsAndTricksUsingEnergyPlus.pdf")
+'Call startAcrobat("TipsAndTricksUsingEnergyPlus.pdf")
+Call viewWebPage("https://energyplus.readthedocs.io/en/latest/tips_and_tricks/tips_and_tricks.html")
 End Sub
 Private Sub mnuHelpAcknowledge_Click()
-Call startAcrobat("Acknowledgments.pdf")
+'Call startAcrobat("Acknowledgments.pdf")
+Call viewWebPage("https://energyplus.readthedocs.io/en/latest/acknowledgments/acknowledgments.html")
 End Sub
 Private Sub mnuHelpCheckUpdates_Click()
 Call checkForUpdatesNow(True)
@@ -5178,6 +5215,7 @@ On Error Resume Next
 'TEXT BUTTON CHECKING
 cmdZSZ.Enabled = False
 cmdSSZ.Enabled = False
+cmdSpSZ.Enabled = False
 cmdMAP.Enabled = False
 cmdESO.Enabled = False
 cmdRDD.Enabled = False
@@ -5238,6 +5276,9 @@ If checkIfFileExists(outputFileName & ".SHD") Then
 End If
 If checkIfFileExists(outputFileName & "ZSZ.TXT") Then
   cmdZSZ.Enabled = True
+End If
+If checkIfFileExists(outputFileName & "SpSZ.TXT") Then
+  cmdSpSZ.Enabled = True
 End If
 If checkIfFileExists(outputFileName & "SSZ.TXT") Then
   cmdSSZ.Enabled = True
@@ -5323,6 +5364,9 @@ If Not tabWithSpreadsheet Then
   If checkIfFileExists(outputFileName & "ZSZ.TAB") Then
     cmdZSZ.Enabled = True
   End If
+  If checkIfFileExists(outputFileName & "SpSZ.TAB") Then
+    cmdSpSZ.Enabled = True
+  End If
   If checkIfFileExists(outputFileName & "SSZ.TAB") Then
     cmdSSZ.Enabled = True
   End If
@@ -5362,6 +5406,9 @@ End If
 If checkIfFileExists(outputFileName & "Zsz.csv") Then
   cmdZSZ.Enabled = True
 End If
+If checkIfFileExists(outputFileName & "Spsz.csv") Then
+  cmdSpSZ.Enabled = True
+End If
 If checkIfFileExists(outputFileName & "Ssz.csv") Then
   cmdSSZ.Enabled = True
 End If
@@ -5383,6 +5430,9 @@ End If
 If tabWithSpreadsheet Then
   If checkIfFileExists(outputFileName & "Zsz.tab") Then
     cmdZSZ.Enabled = True
+  End If
+  If checkIfFileExists(outputFileName & "Spsz.tab") Then
+    cmdSpSZ.Enabled = True
   End If
   If checkIfFileExists(outputFileName & "Ssz.tab") Then
     cmdSSZ.Enabled = True
@@ -5627,6 +5677,71 @@ If Err.Number = 0 Then
   Exit Sub
 End If
 End Sub
+
+
+'=======================================================
+' View SpSZ file
+'=======================================================
+Sub viewSpSZFile()
+Dim filelength As Long
+' check first for text file
+On Error Resume Next
+Err.Clear
+filelength = FileLen(outputFileName & "Spsz.txt")
+If Err.Number = 0 Then
+  Call RunOutputEditorSingleFile("Spsz.txt")
+  Exit Sub
+End If
+Err.Clear
+filelength = FileLen(outputFileName & "Spsz.csv")
+If Err.Number = 0 Then
+  Call runOutputSpreadsheetSingleFile("Spsz.csv")
+  Exit Sub
+End If
+Err.Clear
+filelength = FileLen(outputFileName & "Spsz.tab")
+If Err.Number = 0 Then
+  If tabWithSpreadsheet Then
+    Call runOutputSpreadsheetSingleFile("Spsz.tab")
+  Else
+    Call RunOutputEditorSingleFile("Spsz.tab")
+  End If
+  Exit Sub
+End If
+End Sub
+
+
+'=======================================================
+' View PSZ file
+'=======================================================
+Sub viewPSZFile()
+Dim filelength As Long
+' check first for text file
+On Error Resume Next
+Err.Clear
+filelength = FileLen(outputFileName & "Psz.txt")
+If Err.Number = 0 Then
+  Call RunOutputEditorSingleFile("Psz.txt")
+  Exit Sub
+End If
+Err.Clear
+filelength = FileLen(outputFileName & "Psz.csv")
+If Err.Number = 0 Then
+  Call runOutputSpreadsheetSingleFile("Psz.csv")
+  Exit Sub
+End If
+Err.Clear
+filelength = FileLen(outputFileName & "Psz.tab")
+If Err.Number = 0 Then
+  If tabWithSpreadsheet Then
+    Call runOutputSpreadsheetSingleFile("Psz.tab")
+  Else
+    Call RunOutputEditorSingleFile("Psz.tab")
+  End If
+  Exit Sub
+End If
+End Sub
+
 
 '=======================================================
 ' View TABLE file
@@ -6023,7 +6138,7 @@ utilProg(7).outExt3Alt = "-GAVGTable.htm"
 utilProg(7).outExt4 = "-AppGErr.txt"
 utilProg(7).outExt5 = ""
 utilProg(7).outExt6 = ""
-utilProg(7).applicationFile = "PostProcess\AppGPostProcess\appgpostprocess.exe"
+utilProg(7).applicationFile = "PostProcess\AppGPostProcess.exe"
 utilProg(7).appIsSpreadsheet = False
 utilProg(7).batchFile = ""
 utilProg(7).useInputAsExeArgument = True
@@ -6074,32 +6189,31 @@ utilProg(9).useInputAsExeArgument = False
 utilProg(9).fileSuffix = ""
 utilProg(9).includeExtensionInCall = False
 utilProg(9).waitUntilUtilityExits = False
-'
-utilProg(10).name = "EP-Compare"
-utilProg(10).about = "Graphs the values from the tabular report for multiple simulations side by side."
-utilProg(10).enableInput = False
-utilProg(10).enableWthr = False
-utilProg(10).enableInTextEdit = True
-utilProg(10).IDFEdOpt = ""
-utilProg(10).inExt = ""
-utilProg(10).outExt1 = ""
-utilProg(10).outExt2 = ""
-utilProg(10).outExt3 = ""
-utilProg(10).outExt4 = ""
-utilProg(10).outExt5 = ""
-utilProg(10).outExt6 = ""
-utilProg(10).applicationFile = "PostProcess\EP-Compare\EP-Compare.exe"
-utilProg(10).appIsSpreadsheet = False
-utilProg(10).batchFile = ""
-utilProg(10).useInputAsExeArgument = False
-utilProg(10).fileSuffix = ""
-utilProg(10).includeExtensionInCall = False
-utilProg(10).waitUntilUtilityExits = False
-
-
 
 '
 ' NOT SUPPORTED
+'
+'utilProg(10).name = "EP-Compare"
+'utilProg(10).about = "Graphs the values from the tabular report for multiple simulations side by side."
+'utilProg(10).enableInput = False
+'utilProg(10).enableWthr = False
+'utilProg(10).enableInTextEdit = True
+'utilProg(10).IDFEdOpt = ""
+'utilProg(10).inExt = ""
+'utilProg(10).outExt1 = ""
+'utilProg(10).outExt2 = ""
+'utilProg(10).outExt3 = ""
+'utilProg(10).outExt4 = ""
+'utilProg(10).outExt5 = ""
+'utilProg(10).outExt6 = ""
+'utilProg(10).applicationFile = "PostProcess\EP-Compare\EP-Compare.exe"
+'utilProg(10).appIsSpreadsheet = False
+'utilProg(10).batchFile = ""
+'utilProg(10).useInputAsExeArgument = False
+'utilProg(10).fileSuffix = ""
+'utilProg(10).includeExtensionInCall = False
+'utilProg(10).waitUntilUtilityExits = False
+'
 'utilProg(8).name = "View3D"
 'utilProg(8).about = "EnergyPlus has the capability of accepting user defined view factors for special research " & _
 '"situations. This option is not recommended for general use. However, when a user desires to supply view " & _

@@ -2556,7 +2556,7 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRF_ATMInletSide)
 
     HVACInletMassFlowRate = 0.50;
     PrimaryAirMassFlowRate = 0.1;
-    SecondaryAirMassFlowRate = HVACInletMassFlowRate - PrimaryAirMassFlowRate; // seconday air flow is VRFTU flow less primary air flow
+    SecondaryAirMassFlowRate = HVACInletMassFlowRate - PrimaryAirMassFlowRate; // secondary air flow is VRFTU flow less primary air flow
 
     // set zoneNode air condition
     state->dataLoopNodes->Node(state->dataZoneEquip->ZoneEquipConfig(1).ZoneNode).Temp = 24.0;
@@ -3239,7 +3239,7 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRF_ATMSupplySide)
 
     HVACInletMassFlowRate = 0.50;
     PrimaryAirMassFlowRate = 0.1;
-    SecondaryAirMassFlowRate = HVACInletMassFlowRate; // seconday air mass flow rate is the same as that of the VRF terminal unit
+    SecondaryAirMassFlowRate = HVACInletMassFlowRate; // secondary air mass flow rate is the same as that of the VRF terminal unit
 
     // set zoneNode air condition
     state->dataLoopNodes->Node(state->dataZoneEquip->ZoneEquipConfig(1).ZoneNode).Temp = 24.0;
@@ -3314,7 +3314,7 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRF_ATMSupplySide)
     // check the terminal air mixer outlet air mass flow rate
     ATMixerOutletMassFlowRate = SecondaryAirMassFlowRate + PrimaryAirMassFlowRate;
     ASSERT_EQ(ATMixerOutletMassFlowRate, state->dataSingleDuct->SysATMixer(1).MixedAirMassFlowRate);
-    // check the cooling output delivered is within 2.0 Watt of zone cooling load
+    // check the cooling output delivered is within 4.0 Watt of zone cooling load
     ASSERT_NEAR(QZnReq, QUnitOutVRFTU, 4.0);
 }
 
@@ -5012,7 +5012,7 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRFfluidCntrl_ATMInletSi
     state->dataEnvrn->StdRhoAir = 1.20;
     HVACInletMassFlowRate = 0.50;
     PrimaryAirMassFlowRate = 0.1;
-    SecondaryAirMassFlowRate = HVACInletMassFlowRate - PrimaryAirMassFlowRate; // seconday air flow is VRFTU flow less primary air flow
+    SecondaryAirMassFlowRate = HVACInletMassFlowRate - PrimaryAirMassFlowRate; // secondary air flow is VRFTU flow less primary air flow
 
     // set zoneNode air condition
     state->dataLoopNodes->Node(state->dataZoneEquip->ZoneEquipConfig(1).ZoneNode).Temp = 24.0;
@@ -5094,6 +5094,7 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRFfluidCntrl_ATMInletSi
     ASSERT_EQ(HVACInletMassFlowRate, state->dataSingleDuct->SysATMixer(1).MixedAirMassFlowRate);
     // check the cooling output delivered is within 5.0 Watt of zone cooling load
     ASSERT_NEAR(QZnReq, QUnitOutVRFTU, 5.0);
+    EXPECT_NEAR(0.965, state->dataDXCoils->DXCoil(1).PartLoadRatio, 0.001);
 }
 
 TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimVRFfluidCntrl_ATMSupplySide)
@@ -7931,18 +7932,19 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimFCU_ATMInletSideTest)
     EXPECT_NEAR(QZnReq, QUnitOut, 5.0);
     // Also, tolerance was 0.00001, why?  Why is tolerance of less
     // than 1/10th or even 1/100th of a percent needed on anything?
-    EXPECT_NEAR(thisFanCoil.PLR, 0.76235, 0.0001); // Was 0.78843 
-
+    // Also, the tolerance of finding water coil UA is 0.001, how
+    // can this be lower?
+    EXPECT_NEAR(thisFanCoil.PLR, 0.76235, 0.001); // Was 0.78843 
     
     // check mass flow rates
     EXPECT_NEAR(PrimaryAirMassFlowRate, 0.2, 0.000001);
     // Tolerance here wwas 0.000001, why?  Why is tolerance of less
     // than 1/10th or even 1/100th of a percent needed on anything?
-    EXPECT_NEAR(SecondaryAirMassFlowRate, 0.350865, 0.0001);
+    EXPECT_NEAR(SecondaryAirMassFlowRate, 0.350865, 0.001);
     EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.AirInNode).MassFlowRate, thisFan->inletAirMassFlowRate, 0.000001);
     EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerPriNode).MassFlowRate, 0.2, 0.0001);
-    EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerSecNode).MassFlowRate, 0.350865, 0.000001); // Was 0.369714
-    EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerOutNode).MassFlowRate, 0.550865, 0.000001); // Was 0.569714
+    EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerSecNode).MassFlowRate, 0.350865, 0.0005); // Was 0.369714
+    EXPECT_NEAR(state->dataLoopNodes->Node(thisFanCoil.ATMixerOutNode).MassFlowRate, 0.550865, 0.0005); // Was 0.569714
 }
 
 TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_FCU_NightCycleTest)

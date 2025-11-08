@@ -77,7 +77,7 @@ static constexpr std::array<std::string_view, (int)RootAlgo::Num> rootAlgoNamesU
   
 struct SolveRootConfig
 {
-    RootAlgo algo = RootAlgo::Bisection;
+    RootAlgo algo = RootAlgo::Invalid;
     int maxIters = 0;
     int numIters = 0;
     int counts = 0;
@@ -88,6 +88,7 @@ struct SolveRootConfig
 struct RootFindingData : BaseGlobalStruct
 {
     std::string Algorithm = {}; // Choice of algorithm
+
     int NumOfIter = 5;          // Number of Iteration Before Algorith Switch
     RootAlgo rootAlgo = RootAlgo::RegulaFalsi;
 

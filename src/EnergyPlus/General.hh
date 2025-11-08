@@ -91,16 +91,6 @@ namespace General {
                      Real64 X_1,
                      SolveRootConfig &config); // 2nd bound of interval that contains the solution
   
-    Real64 SolveRootRel(const EnergyPlusData &state,
-                       RootAlgo rootAlgo,
-                       Real64 RelTol,   // required absolute accuracy
-                       int MaxIte,   // maximum number of allowed iterations
-                       int &Flag,    // integer storing exit status
-                       const std::function<Real64(Real64)> &f,
-                       Real64 Y_target,
-                       Real64 X_0, // 1st bound of interval that contains the solution
-                       Real64 X_1); // 2nd bound of interval that contains the solution
-     
     void MovingAvg(Array1D<Real64> &DataIn, int NumItemsInAvg);
 
     void ProcessDateString(EnergyPlusData &state,
@@ -240,8 +230,9 @@ namespace General {
     )
     {
         Array1D_string ItemNames(Items.size());
-        for (std::size_t i = 0, e = Items.size(); i < e; ++i)
+        for (std::size_t i = 0, e = Items.size(); i < e; ++i) {
             ItemNames[i] = Items[i].Name;
+        }
         CheckCreatedZoneItemName(state, calledFrom, CurrentObject, ZoneName, MaxZoneNameLength, ItemName, ItemNames, NumItems, ResultName, errFlag);
     }
 
