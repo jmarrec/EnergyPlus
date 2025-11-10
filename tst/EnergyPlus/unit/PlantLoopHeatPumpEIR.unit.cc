@@ -2009,12 +2009,13 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
         "   **   ~~~   **   A temperature setpoint is needed at the load side outlet node, use a SetpointManager",
         "   **   ~~~   **   The overall loop setpoint will be assumed for the Heat Pump. The simulation continues ... ",
     }));
-    EXPECT_TRUE(thisHeatingPLHP->SetpointSetToLoop);
+    EXPECT_TRUE(thisHeatingPLHP->SetpointSetToLoopErrDone);
+    EXPECT_EQ(loadSidePlantOutletNodeIndex, thisHeatingPLHP->setPointNodeNum);
 
     EXPECT_NEAR(30.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
-    EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint, 0.001);
-    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi, 0.001);
-    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo, 0.001);
+    EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint, 0.001);
+    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointHi, 0.001);
+    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointLo, 0.001);
 
     // test for dual setpoint operation
     loadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand;
@@ -2027,7 +2028,6 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
 
     // reset the flag to force re-running oneTimeInit
     thisHeatingPLHP->oneTimeInitFlag = true;
-    thisHeatingPLHP->SetpointSetToLoop = false;
     thisHeatingPLHP->SetpointSetToLoopErrDone = false;
     thisHeatingPLHP->onInitLoopEquip(*state, myLocation);
 
@@ -2037,12 +2037,13 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
         "   **   ~~~   **   A temperature setpoint is needed at the load side outlet node, use a SetpointManager",
         "   **   ~~~   **   The overall loop setpoint will be assumed for the Heat Pump. The simulation continues ... ",
     }));
-    EXPECT_TRUE(thisHeatingPLHP->SetpointSetToLoop);
+    EXPECT_TRUE(thisHeatingPLHP->SetpointSetToLoopErrDone);
+    EXPECT_EQ(loadSidePlantOutletNodeIndex, thisHeatingPLHP->setPointNodeNum);
 
     EXPECT_NEAR(10.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
-    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint, 0.001);
-    EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi, 0.001);
-    EXPECT_NEAR(10.0, state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo, 0.001);
+    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint, 0.001);
+    EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointHi, 0.001);
+    EXPECT_NEAR(10.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointLo, 0.001);
 
     // validate that location work got done correctly
     EXPECT_EQ(1, thisHeatingPLHP->loadSidePlantLoc.loopNum);

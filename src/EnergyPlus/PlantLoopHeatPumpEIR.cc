@@ -139,18 +139,6 @@ void EIRPlantLoopHeatPump::simulate(
 
     if (this->running) {
         if (this->sysControlType == ControlType::Setpoint) {
-            if (this->SetpointSetToLoop) {
-                // Copy the overall loop setpoints to the Heat Pump outlet node
-                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint =
-                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
-                // Hi is used when (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
-                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointHi =
-                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
-                // Lo when HeatPumpEIRHeating
-                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointLo =
-                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
-            }
-
             // Call the helper so we handle SingleSetpoint versus DualSetpointDeadband instead of just grabbing TempSetPoint;
             Real64 leavingSetpoint = this->getLoadSideOutletSetPointTemp(state);
             Real64 CurSpecHeat = this->loadSidePlantLoc.loop->glycol->getSpecificHeat(state, loadSideInletTemp, "EIRPlantLoopHeatPump::simulate");
@@ -173,7 +161,7 @@ Real64 EIRPlantLoopHeatPump::getLoadSideOutletSetPointTemp(EnergyPlusData &state
     if (this->loadSidePlantLoc.loop->LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::SingleSetPoint) {
         if (this->loadSidePlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) {
             // there will be a valid set-point on outlet
-            return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint;
+            return state.dataLoopNodes->Node(this->setPointNodeNum).TempSetPoint;
         } // use plant loop overall set-point
         return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
     }
@@ -181,9 +169,9 @@ Real64 EIRPlantLoopHeatPump::getLoadSideOutletSetPointTemp(EnergyPlusData &state
         if (this->loadSidePlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) {
             // there will be a valid set-point on outlet
             if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
-                return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointHi;
+                return state.dataLoopNodes->Node(this->setPointNodeNum).TempSetPointHi;
             }
-            return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointLo;
+            return state.dataLoopNodes->Node(this->setPointNodeNum).TempSetPointLo;
 
         } // use plant loop overall set-point
         if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
@@ -2699,14 +2687,12 @@ void EIRPlantLoopHeatPump::oneTimeInit(EnergyPlusData &state)
                         }
                     }
                 }
-                this->SetpointSetToLoop = true;
-                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint =
-                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
-                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointLo =
-                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
-                state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointHi =
-                    state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
+                this->setPointNodeNum = this->loadSidePlantLoc.loop->TempSetPointNodeNum;
+            } else {
+                this->setPointNodeNum = this->loadSideNodes.outlet;
             }
+        } else {
+            this->setPointNodeNum = this->loadSidePlantLoc.loop->TempSetPointNodeNum;
         }
 
         if (errFlag) {

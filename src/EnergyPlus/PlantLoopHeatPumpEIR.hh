@@ -123,8 +123,7 @@ namespace EIRPlantLoopHeatPumps {
         ControlType sysControlType = ControlType::Invalid;
         DataPlant::FlowMode flowMode = DataPlant::FlowMode::Invalid;
 
-        bool SetpointSetToLoop = false;        // True if the setpoint is missing at the outlet node
-        bool SetpointSetToLoopErrDone = false; // True if setpoint warning issued
+        bool SetpointSetToLoopErrDone = false; // True if the warning about setpoint is missing at the outlet node has been issued
 
         // sizing data
         Real64 heatSizingRatio = 1.0;
@@ -199,6 +198,8 @@ namespace EIRPlantLoopHeatPumps {
         PlantLocation heatRecoveryPlantLoc;
         InOutNodePair heatRecoveryNodes;
         bool heatRecoveryHeatPump = false; // HP that transfers heat between plants and should not increase plant size
+
+        int setPointNodeNum = 0;
 
         // counters and indexes
         int condMassFlowRateTriggerIndex = 0;
