@@ -4850,7 +4850,7 @@ void InitEMSControlledConstructions(EnergyPlusData &state)
                                                      state.dataHeatBalFiniteDiffMgr->ConstructFD(surface.Construction).TotNodes));
                             ShowContinueError(
                                 state,
-                                format("While construction named = {}has number of finite difference nodes ={}",
+                                format("While construction named = {} has number of finite difference nodes ={}",
                                        state.dataConstruction->Construct(state.dataSurface->SurfEMSConstructionOverrideValue(SurfNum)).Name,
                                        state.dataHeatBalFiniteDiffMgr->ConstructFD(state.dataSurface->SurfEMSConstructionOverrideValue(SurfNum))
                                            .TotNodes));
