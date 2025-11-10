@@ -1471,8 +1471,7 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
             UA0 = 0.1 * waterCoil.UACoilExternal;
             UA1 = 10.0 * waterCoil.UACoilExternal;
 
-            static SolveRootConfig solveRootConfig; 
-            solveRootConfig.maxIters = 500;
+            static General::SolveRootStats solveRootStats; 
             
             // Invert the simple cooling coil model: given the design inlet conditions and the design load, find the design UA
             auto f = [&state, CoilNum](Real64 const UA) {
@@ -1493,11 +1492,10 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
             };
 
             int SolFlag; 
-            UA = General::SolveRoot2(state, 0.0001, f, UA0, UA1, solveRootConfig);
-            General::SolveRoot(state, 0.001, 500, SolFlag, UA, f, UA0, UA1);
+            UA = General::SolveRoot2(state, 0.001, 500, SolFlag, f, UA0, UA1, solveRootStats);
 
             // if the numerical inversion failed, issue error messages.
-            if (solveRootConfig.numIters == SOLVEROOT_ERROR_ITER) {
+            if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                 ShowSevereError(state, format("Calculation of cooling coil design UA failed for coil {}", waterCoil.Name));
                 ShowContinueError(state, "  Iteration limit exceeded in calculating coil UA");
                 waterCoil.UACoilExternal = UA0 * 10.0;
@@ -1508,7 +1506,7 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
                 waterCoil.UAWetExtPerUnitArea = waterCoil.UACoilExternal / waterCoil.TotCoilOutsideSurfArea;
                 waterCoil.UADryExtPerUnitArea = waterCoil.UAWetExtPerUnitArea;
                 ShowContinueError(state, format(" Coil design UA set to {:.6R} [W/C]", waterCoil.UACoilTotal));
-            } else if (solveRootConfig.numIters  == SOLVEROOT_ERROR_INIT) {
+            } else if (SolFlag  == General::SOLVEROOT_ERROR_INIT) {
                 ShowSevereError(state, format("Calculation of cooling coil design UA failed for coil {}", waterCoil.Name));
                 ShowContinueError(state, "  Bad starting values for UA");
                 waterCoil.UACoilExternal = UA0 * 10.0;
@@ -5868,17 +5866,17 @@ Real64 TdbFnHRhPb(EnergyPlusData &state,
     
     auto f = [&state, H, RH, PB](Real64 const Tprov) { return H - Psychrometrics::PsyHFnTdbRhPb(state, Tprov, RH, PB); };
 
-    static SolveRootConfig solveRootConfig;
-    solveRootConfig.maxIters = 500;
+    static General::SolveRootStats solveRootStats;
+    int SolFla;
     
-    Real64 Tprov = General::SolveRoot2(state, Acc, f, 1.0, 50.0, solveRootConfig);
+    Real64 Tprov = General::SolveRoot2(state, Acc, 500, SolFla, f, 1.0, 50.0, solveRootStats);
     // if the numerical inversion failed, issue error messages.
-    if (solveRootConfig.numIters == SOLVEROOT_ERROR_ITER) {
+    if (SolFla == General::SOLVEROOT_ERROR_ITER) {
         ShowSevereError(state, "Calculation of drybulb temperature failed in TdbFnHRhPb(H,RH,PB)");
         ShowContinueError(state, "   Iteration limit exceeded");
         ShowContinueError(state, format("   H=[{:.6R}], RH=[{:.4R}], PB=[{:.5R}].", H, RH, PB));
         return 0.0;
-    } else if (solveRootConfig.numIters == SOLVEROOT_ERROR_INIT) {
+    } else if (SolFla == General::SOLVEROOT_ERROR_INIT) {
         ShowSevereError(state, "Calculation of drybulb temperature failed in TdbFnHRhPb(H,RH,PB)");
         ShowContinueError(state, "  Bad starting values for Tdb");
         ShowContinueError(state, format("   H=[{:.6R}], RH=[{:.4R}], PB=[{:.5R}].", H, RH, PB));

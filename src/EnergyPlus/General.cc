@@ -193,7 +193,7 @@ void SolveRoot(const EnergyPlusData &state,
     Real64 Y1 = f(X1); // f at X1
     // check initial values
     if (Y0 * Y1 > 0) {
-        Flag = -2;
+        Flag = SOLVEROOT_ERROR_INIT;
         XRes = X0;
         return;
     }
@@ -305,183 +305,66 @@ void SolveRoot(const EnergyPlusData &state,
     } // Cont
 
     // if we make it here we haven't converged, so just set the flag and leave
-    Flag = -1;
+    Flag = SOLVEROOT_ERROR_ITER;
     XRes = XTemp;
 }
 
 // A second version that does not require a payload -- use lambdas
 Real64 SolveRoot2(const EnergyPlusData &state,
                   Real64 Eps,   // required absolute accuracy
+                  int maxIters,
+                  int &SolFla,
                   const std::function<Real64(Real64)> &f,
                   Real64 X_0, // 1st bound of interval that contains the solution
                   Real64 X_1, // 2nd bound of interval that contains the solution
-                  SolveRootConfig &config) 
+                  SolveRootStats &stats) 
 {
     // SUBROUTINE INFORMATION:
-    //       AUTHOR         Michael Wetter
-    //       DATE WRITTEN   March 1999
-    //       MODIFIED       Fred Buhl November 2000, R. Raustad October 2006 - made subroutine RECURSIVE
-    //                      L. Gu, May 2017 - allow both Bisection and RegulaFalsi
+    //       AUTHOR         Amir Roth
+    //       DATE WRITTEN   Nov. 2025
 
     // PURPOSE OF THIS SUBROUTINE:
-    // Find the value of x between x0 and x1 such that f(x)
-    // is equal to zero.
+    // This is a wrapper to SolveRoot that iterates over all root finding algorithms to find the best one.
 
-    // METHODOLOGY EMPLOYED:
-    // Uses the Regula Falsi (false position) method (similar to secant method)
 
-    // REFERENCES:
-    // See Press et al., Numerical Recipes in Fortran, Cambridge University Press,
-    // 2nd edition, 1992. Page 347 ff.
-
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-    // = -2: f(x0) and f(x1) have the same sign
-    // = -1: no convergence
-    // >  0: number of iterations performed
-
-    Real64 constexpr SMALL(1.e-10);
-    Real64 X0 = X_0;   // present 1st bound
-    Real64 X1 = X_1;   // present 2nd bound
-    Real64 XTemp = X0; // new estimate
+    Real64 XRes;
     
-    config.numIters = 0;
-    int AltIte = 0;    // a counter used for Alternation choice
+    // Save and restore "global" root finding algorithm
+    RootAlgo algoTemp = state.dataRootFinder->rootAlgo;
+    state.dataRootFinder->rootAlgo = stats.algo;
 
-    Real64 Y0 = f(X0); // f at X0
-    Real64 Y1 = f(X1); // f at X1
-    // check initial values
-    if (Y0 * Y1 > 0) {
-        config.numIters = SOLVEROOT_ERROR_INIT;
-        return X0;
-    }
+    SolveRoot(state, Eps, maxIters, SolFla, XRes, f, X_0, X_1);
 
-    constexpr int TRIALS_PER_COUNT = 5;
+    state.dataRootFinder->rootAlgo = algoTemp;
 
-    // Trial period, cycle thru algorithms
-    if (config.counts < TRIALS_PER_COUNT * (int)RootAlgo::Num) {
-        config.algo = static_cast<RootAlgo>((int)config.algo+1);
-        if (config.algo == RootAlgo::Num) config.algo = RootAlgo::RegulaFalsi;
+    if (SolFla > 0) {
+        stats.counts ++;
+        stats.algoCounts[(int)stats.algo] ++;
+        stats.algoIters[(int)stats.algo] += SolFla;
 
-    // Choose base algorithm, i.e., fewest total iterations
-    } else if (config.counts == TRIALS_PER_COUNT * (int)RootAlgo::Num) {
-        int minIters = config.maxIters * TRIALS_PER_COUNT;
-        config.algo = RootAlgo::Invalid;
-        for (int i = 0; i < (int)RootAlgo::Num; ++i)
-            if (config.algoIters[i] < minIters) {
-                config.algo = static_cast<RootAlgo>(i);
-                minIters = config.algoIters[i];
+        constexpr int TRIALS_PER_COUNT = 5;
+
+        // Trial period, cycle thru algorithms
+        if (stats.counts < TRIALS_PER_COUNT * (int)RootAlgo::Num) {
+            stats.algo = static_cast<RootAlgo>((int)stats.algo+1);
+            if (stats.algo == RootAlgo::Num) stats.algo = RootAlgo::RegulaFalsi;
+
+        // Choose base algorithm, i.e., fewest total iterations
+        } else if (stats.counts == TRIALS_PER_COUNT * (int)RootAlgo::Num) {
+            int minIters = maxIters * TRIALS_PER_COUNT;
+            stats.algo = RootAlgo::Invalid;
+            for (int i = 0; i < (int)RootAlgo::Num; ++i)
+                if (stats.algoIters[i] < minIters) {
+                    stats.algo = static_cast<RootAlgo>(i);
+                    minIters = stats.algoIters[i];
           }
       
-    // Have chosen an algorithm, config.algo should be it
-    } else {
-    }
-        
-    while (true) {
-
-        Real64 DY = Y0 - Y1;
-        if (std::abs(DY) < SMALL) DY = SMALL;
-        if (std::abs(X1 - X0) < SMALL) {
-            break;
-        }
-
-        // new estimation
-        switch (config.algo) {
-        case RootAlgo::RegulaFalsi: {
-            XTemp = (Y0 * X1 - Y1 * X0) / DY;
-        } break;
-          
-        case RootAlgo::Bisection: {
-            XTemp = (X1 + X0) / 2.0;
-        } break;
-          
-        case RootAlgo::RegulaFalsiThenBisection: {
-            if (config.numIters > state.dataRootFinder->NumOfIter) {
-                XTemp = (X1 + X0) / 2.0;
-            } else {
-                XTemp = (Y0 * X1 - Y1 * X0) / DY;
-            }
-        } break;
-          
-        case RootAlgo::BisectionThenRegulaFalsi: {
-            if (config.numIters <= state.dataRootFinder->NumOfIter) {
-                XTemp = (X1 + X0) / 2.0;
-            } else {
-                XTemp = (Y0 * X1 - Y1 * X0) / DY;
-            }
-        } break;
-          
-        case RootAlgo::Alternation: {
-            if (AltIte > state.dataRootFinder->NumOfIter) {
-                XTemp = (X1 + X0) / 2.0;
-                if (AltIte >= 2 * state.dataRootFinder->NumOfIter) AltIte = 0;
-            } else {
-                XTemp = (Y0 * X1 - Y1 * X0) / DY;
-            }
-        } break;
-          
-        case RootAlgo::ShortBisectionThenRegulaFalsi: {
-            if (config.numIters < 3) {
-                XTemp = (X1 + X0) / 2.0;
-            } else {
-                XTemp = (Y0 * X1 - Y1 * X0) / DY;
-            }
-        } break;
-          
-        default: { // RegulaFalsi
-            XTemp = (Y0 * X1 - Y1 * X0) / DY;
-        } break;
-        } // switch (algo)
-
-        Real64 const YTemp = f(XTemp);
-
-        ++config.numIters;
-        ++AltIte;
-
-        // check convergence
-        if (std::abs(YTemp) < Eps) {
-            config.counts ++;
-            config.algoCounts[(int)config.algo] ++;
-            config.algoIters[(int)config.algo] += config.numIters;
-            return XTemp;
-        };
-
-#ifdef GET_OUT
-        // This is just a trap to make sure Epsilon is not set too low.
-        if (config.numIters > 20) {
-            assert(false);
-            return XTemp;
-        }        
-#endif // GET_OUT
-        
-        // OK, so we didn't converge, lets check max iterations to see if we should break early
-        if (config.numIters > config.maxIters) break;
-
-        // Finally, if we make it here, we have not converged, and we still have iterations left, so continue
-        // and reassign values (only if further iteration required)
-        if (Y0 < 0.0) {
-            if (YTemp < 0.0) {
-                X0 = XTemp;
-                Y0 = YTemp;
-            } else {
-                X1 = XTemp;
-                Y1 = YTemp;
-            }
+        // Have chosen an algorithm, stats.algo should be it
         } else {
-            if (YTemp < 0.0) {
-                X1 = XTemp;
-                Y1 = YTemp;
-            } else {
-                X0 = XTemp;
-                Y0 = YTemp;
-            }
-        } // ( Y0 < 0 )
+        }
     }
     
-    // if we make it here we haven't converged, so just set the flag and leave
-    config.numIters = SOLVEROOT_ERROR_ITER;
-    config.algoCounts[(int)config.algo] ++;
-    config.algoIters[(int)config.algo] += config.numIters;
-    return XTemp;
+    return XRes;
 }
   
 void MovingAvg(Array1D<Real64> &DataIn, int const NumItemsInAvg)

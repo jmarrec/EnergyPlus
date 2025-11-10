@@ -1111,6 +1111,10 @@ namespace WaterToAirHeatPump {
         constexpr Real64 ERR(0.01);               // Error Value
         constexpr Real64 PB(1.013e5);             // Barometric Pressure (Pa)
 
+        constexpr int STOP1(1000); // Iteration stopper1
+        constexpr int STOP2(1000); // Iteration stopper2
+        constexpr int STOP3(1000); // Iteration stopper3
+
         static constexpr std::string_view RoutineNameSourceSideInletTemp("CalcWatertoAirHPCooling:SourceSideInletTemp");
         static constexpr std::string_view RoutineNameSourceSideTemp("CalcWatertoAirHPCooling:SourceSideTemp");
         static constexpr std::string_view RoutineNameLoadSideTemp("CalcWatertoAirHPCooling:LoadSideTemp");
@@ -1171,25 +1175,27 @@ namespace WaterToAirHeatPump {
         Real64 QLatActual;                // Qlatent at actual operating conditions
         Real64 SHRss;                     // Sensible heat ratio at steady state
         Real64 SHReff;                    // Effective sensible heat ratio at part-load condition
+        int SolFlag;                      // Solution flag returned from RegulaFalsi function
         Real64 LoadSideAirInletEnth_Unit; // calc conditions for unit
         Real64 LoadResidual;              // loop convergence criteria
         Real64 SourceResidual;            // loop convergence criteria
         Real64 RelaxParam(0.5);           // Relaxation Parameter
 
-        constexpr Real64 LoadSideInletDBTemp_Init = 26.7;  // rated conditions
-        constexpr Real64 LoadSideInletHumRat_Init = 0.0111;  // rated conditions
-        // Static makes sure this initialization happens only once
-        static const Real64 LoadSideAirInletEnth_Init = Psychrometrics::PsyHFnTdbW(LoadSideInletDBTemp_Init, LoadSideInletHumRat_Init);
+        if (state.dataWaterToAirHeatPump->firstTime) {
+            // Set indoor air conditions to the rated condition
+            state.dataWaterToAirHeatPump->LoadSideInletDBTemp_Init = 26.7;
+            state.dataWaterToAirHeatPump->LoadSideInletHumRat_Init = 0.0111;
+            state.dataWaterToAirHeatPump->LoadSideAirInletEnth_Init = Psychrometrics::PsyHFnTdbW(
+                state.dataWaterToAirHeatPump->LoadSideInletDBTemp_Init, state.dataWaterToAirHeatPump->LoadSideInletHumRat_Init);
+            state.dataWaterToAirHeatPump->firstTime = false;
+        }
 
-        constexpr int STOP2 = 1000; // why so large?
-        constexpr int STOP3 = 1000;
         //  SET LOCAL VARIABLES FROM DATA STRUCTURE (for code readability)
         // Set indoor air conditions to the actual condition
         CpAir = Psychrometrics::PsyCpAirFnW(heatPump.InletAirHumRat);
         LoadSideAirInletEnth_Unit = Psychrometrics::PsyHFnTdbW(heatPump.InletAirDBTemp, heatPump.InletAirHumRat);
         SourceSideVolFlowRate =
-            heatPump.InletWaterMassFlowRate /
-            heatPump.plantLoc.loop->glycol->getDensity(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
+            heatPump.InletWaterMassFlowRate / heatPump.plantLoc.loop->glycol->getDensity(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
 
         StillSimulatingFlag = true;
 
@@ -1207,21 +1213,17 @@ namespace WaterToAirHeatPump {
             return;
         }
 
-        
-        // These two used to be state variables, i.e., they were in state->dataWaterToAirHeatPump.  If the intent was/is to
-        // have these values persist acrss different calls to this function, then that is not the way to do it because a
-        // single state variable is shared by all heat pump objects.
-        
-        Real64 initialQSource_calc = 0.0;    // Guess Source Side Heat Transfer Rate [W]
-        Real64 initialQLoadTotal_calc = 0.0; // Guess Load Side Heat Transfer rate [W]
-        
         if (FirstHVACIteration) {
-            initialQSource_calc = heatPump.CoolingCapacity;
-            initialQLoadTotal_calc = heatPump.CoolingCapacity;
+            state.dataWaterToAirHeatPump->initialQSource_calc = heatPump.CoolingCapacity;
+            state.dataWaterToAirHeatPump->initialQLoadTotal_calc = heatPump.CoolingCapacity;
         }
 
-        if (initialQLoadTotal_calc == 0.0) initialQLoadTotal_calc = heatPump.CoolingCapacity;
-        if (initialQSource_calc == 0.0) initialQSource_calc = heatPump.CoolingCapacity;
+        if (state.dataWaterToAirHeatPump->initialQLoadTotal_calc == 0.0) {
+            state.dataWaterToAirHeatPump->initialQLoadTotal_calc = heatPump.CoolingCapacity;
+        }
+        if (state.dataWaterToAirHeatPump->initialQSource_calc == 0.0) {
+            state.dataWaterToAirHeatPump->initialQSource_calc = heatPump.CoolingCapacity;
+        }
 
         // Loop the calculation at least twice depending whether the latent degradation model
         // is enabled. 1st iteration to calculate the QLatent(rated) at (TDB,TWB)indoorair=(26.7C,19.4C)
@@ -1264,14 +1266,14 @@ namespace WaterToAirHeatPump {
             ++NumIteration4;
             if (NumIteration4 == 1) {
                 // Set indoor air conditions to the rated condition
-                LoadSideInletDBTemp = LoadSideInletDBTemp_Init;
-                LoadSideInletHumRat = LoadSideInletHumRat_Init;
-                LoadSideAirInletEnth = LoadSideAirInletEnth_Init;
+                LoadSideInletDBTemp = state.dataWaterToAirHeatPump->LoadSideInletDBTemp_Init;
+                LoadSideInletHumRat = state.dataWaterToAirHeatPump->LoadSideInletHumRat_Init;
+                LoadSideAirInletEnth = state.dataWaterToAirHeatPump->LoadSideAirInletEnth_Init;
             } else {
                 // Set indoor air conditions to the actual condition
                 LoadSideInletDBTemp = heatPump.InletAirDBTemp;
                 LoadSideInletHumRat = heatPump.InletAirHumRat;
-                LoadSideAirInletEnth = LoadSideAirInletEnth_Unit; // Unit vs. Init, this confused me!!
+                LoadSideAirInletEnth = LoadSideAirInletEnth_Unit;
             }
 
             // Outerloop: Calculate source side heat transfer
@@ -1317,16 +1319,18 @@ namespace WaterToAirHeatPump {
                             1.0 / ((heatPump.SourceSideHTR1 * std::pow(SourceSideVolFlowRate, -0.8)) / DegradFactor + heatPump.SourceSideHTR2);
                     }
 
-                    // Determine Source Side Tempertaure (Condensing Temp in this case)
-                    SourceSideTemp = heatPump.InletWaterTemp + initialQSource_calc / (SourceSideEffect * CpFluid * heatPump.InletWaterMassFlowRate);
+                    // Determine Source Side Temperature (Condensing Temp in this case)
+                    SourceSideTemp = heatPump.InletWaterTemp + state.dataWaterToAirHeatPump->initialQSource_calc /
+                                                                   (SourceSideEffect * CpFluid * heatPump.InletWaterMassFlowRate);
 
                     // Compute the Effective Surface Temperature
-                    EffectiveSatEnth = LoadSideAirInletEnth - initialQLoadTotal_calc * LoadSideEffec_MassFlowRate_inv;
+                    EffectiveSatEnth = LoadSideAirInletEnth - state.dataWaterToAirHeatPump->initialQLoadTotal_calc * LoadSideEffec_MassFlowRate_inv;
 
                     EffectiveSurfaceTemp = Psychrometrics::PsyTsatFnHPb(state, EffectiveSatEnth, PB, RoutineNameLoadSideSurfaceTemp);
 
                     QSensible = heatPump.InletAirMassFlowRate * CpAir * (LoadSideInletDBTemp - EffectiveSurfaceTemp) * LoadSideEffec;
-                    EvapSatEnth = LoadSideAirInletEnth - initialQLoadTotal_calc / (EffectWET * heatPump.InletAirMassFlowRate);
+                    EvapSatEnth =
+                        LoadSideAirInletEnth - state.dataWaterToAirHeatPump->initialQLoadTotal_calc / (EffectWET * heatPump.InletAirMassFlowRate);
 
                     EvapTemp = Psychrometrics::PsyTsatFnHPb(state, EvapSatEnth, PB, RoutineNameLoadSideEvapTemp);
 
@@ -1413,18 +1417,16 @@ namespace WaterToAirHeatPump {
                         return (compSuctionEnth - SuperHeatEnth) / SuperHeatEnth;
                     };
 
-                    // Shared between all instances so that we can learn best algorithm
-                    static SolveRootConfig solveRootConfig;
-                    Real64 CompSuctionTemp = General::SolveRoot2(state, ERR, f, CompSuctionTemp1, CompSuctionTemp2, solveRootConfig);
-                    int SolFla;
-                    General::SolveRoot(state, ERR, 500, SolFla, CompSuctionTemp, f, CompSuctionTemp1, CompSuctionTemp2);
-                    if (solveRootConfig.numIters == SOLVEROOT_ERROR_ITER) {
+                    static General::SolveRootStats solveRootStats;
+                    state.dataWaterToAirHeatPump->CompSuctionTemp = General::SolveRoot2(state, ERR, STOP1, SolFlag, f, CompSuctionTemp1, CompSuctionTemp2, solveRootStats);
+                    if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                         heatPump.SimFlag = false;
                         return;
                     }
-                    
-                    CompSuctionEnth = heatPump.refrig->getSupHeatEnthalpy(state, CompSuctionTemp, SuctionPr, RoutineNameCompSuctionTemp);
-                    CompSuctionDensity = heatPump.refrig->getSupHeatDensity(state, CompSuctionTemp, SuctionPr, RoutineNameCompSuctionTemp);
+                    CompSuctionEnth = heatPump.refrig->getSupHeatEnthalpy(
+                        state, state.dataWaterToAirHeatPump->CompSuctionTemp, SuctionPr, RoutineNameCompSuctionTemp);
+                    CompSuctionDensity = heatPump.refrig->getSupHeatDensity(
+                        state, state.dataWaterToAirHeatPump->CompSuctionTemp, SuctionPr, RoutineNameCompSuctionTemp);
 
                     // Find Refrigerant Flow Rate
                     switch (heatPump.compressorType) {
@@ -1449,10 +1451,13 @@ namespace WaterToAirHeatPump {
 
                     // Find the Load Side Heat Transfer
                     QLoadTotal = MassRef * (LoadSideOutletEnth - SourceSideOutletEnth);
-
-                    LoadResidual = std::abs(QLoadTotal - initialQLoadTotal_calc) / initialQLoadTotal_calc;
-                    initialQLoadTotal_calc += RelaxParam * (QLoadTotal - initialQLoadTotal_calc);
-                    if (NumIteration3 > 8) RelaxParam = 0.3;
+                    LoadResidual = std::abs(QLoadTotal - state.dataWaterToAirHeatPump->initialQLoadTotal_calc) /
+                                   state.dataWaterToAirHeatPump->initialQLoadTotal_calc;
+                    state.dataWaterToAirHeatPump->initialQLoadTotal_calc +=
+                        RelaxParam * (QLoadTotal - state.dataWaterToAirHeatPump->initialQLoadTotal_calc);
+                    if (NumIteration3 > 8) {
+                        RelaxParam = 0.3;
+                    }
                 }
 
                 // Determine the Power Consumption
@@ -1475,10 +1480,15 @@ namespace WaterToAirHeatPump {
 
                 // Determine the Sourceside Heat Rate
                 QSource = Power + QLoadTotal;
-                SourceResidual = std::abs(QSource - initialQSource_calc) / initialQSource_calc;
-                if (SourceResidual < ERR) Converged = true;
-                initialQSource_calc += RelaxParam * (QSource - initialQSource_calc);
-                if (NumIteration2 > 8) RelaxParam = 0.2;
+                SourceResidual =
+                    std::abs(QSource - state.dataWaterToAirHeatPump->initialQSource_calc) / state.dataWaterToAirHeatPump->initialQSource_calc;
+                if (SourceResidual < ERR) {
+                    Converged = true;
+                }
+                state.dataWaterToAirHeatPump->initialQSource_calc += RelaxParam * (QSource - state.dataWaterToAirHeatPump->initialQSource_calc);
+                if (NumIteration2 > 8) {
+                    RelaxParam = 0.2;
+                }
             }
 
             if (SuctionPr < heatPump.LowPressCutoff) {
@@ -1585,9 +1595,9 @@ namespace WaterToAirHeatPump {
         Real64 constexpr gamma(1.114);            // Expnasion Coefficient
         Real64 RelaxParam(0.5);                   // Relaxation Parameter
         Real64 constexpr ERR(0.01);               // Error Value
-        // int constexpr STOP1(1000);                // Iteration stopper1
-        // int constexpr STOP2(1000);                // Iteration stopper2
-        // int constexpr STOP3(1000);                // Iteration stopper3
+        int constexpr STOP1(1000);                // Iteration stopper1
+        int constexpr STOP2(1000);                // Iteration stopper2
+        int constexpr STOP3(1000);                // Iteration stopper3
 
         static constexpr std::string_view RoutineNameSourceSideInletTemp("CalcWatertoAirHPHeating:SourceSideInletTemp");
         static constexpr std::string_view RoutineNameSourceSideTemp("CalcWatertoAirHPHeating:SourceSideTemp");
@@ -1633,18 +1643,15 @@ namespace WaterToAirHeatPump {
         Real64 CompSuctionSatTemp; // Temperature of Saturated Refrigerant at Compressor Suction Pressure [C]
         bool StillSimulatingFlag;  // Final Simulation Flag
         bool Converged;            // Overall convergence Flag
+        int SolFlag;               // Solution flag returned from RegulaFalsi function
         Real64 LoadResidual;       // loop convergence criteria
         Real64 SourceResidual;     // loop convergence criteria
 
-        constexpr int STOP2 = 1000; // Really? Why are these so large? Is this machine learning?
-        constexpr int STOP3 = 1000;
-        
         //  LOAD LOCAL VARIABLES FROM DATA STRUCTURE (for code readability)
 
         CpAir = Psychrometrics::PsyCpAirFnW(heatPump.InletAirHumRat);
         SourceSideVolFlowRate =
-            heatPump.InletWaterMassFlowRate /
-            heatPump.plantLoc.loop->glycol->getDensity(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
+            heatPump.InletWaterMassFlowRate / heatPump.plantLoc.loop->glycol->getDensity(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
 
         // If heat pump is not operating, return
         if (SensDemand == 0.0 || heatPump.InletAirMassFlowRate <= 0.0 || heatPump.InletWaterMassFlowRate <= 0.0 ||
@@ -1660,21 +1667,17 @@ namespace WaterToAirHeatPump {
             return;
         }
 
-        // These two used to be state variables, i.e., they were in
-        // state->dataWaterToAirHeatPump.  If the intent was/is to
-        // have these values persist acrss different calls to this
-        // function, then that is not the way to do it because a
-        // single state variable is shared by all heat pump objects.
-        Real64 initialQLoad = 0.0;
-        Real64 initialQSource = 0.0;
-  
         if (FirstHVACIteration) {
-            initialQLoad = heatPump.HeatingCapacity;
-            initialQSource = heatPump.HeatingCapacity;
+            state.dataWaterToAirHeatPump->initialQLoad = heatPump.HeatingCapacity;
+            state.dataWaterToAirHeatPump->initialQSource = heatPump.HeatingCapacity;
         }
 
-        if (initialQLoad == 0.0) initialQLoad = heatPump.HeatingCapacity;
-        if (initialQSource == 0.0) initialQSource = heatPump.HeatingCapacity;
+        if (state.dataWaterToAirHeatPump->initialQLoad == 0.0) {
+            state.dataWaterToAirHeatPump->initialQLoad = heatPump.HeatingCapacity;
+        }
+        if (state.dataWaterToAirHeatPump->initialQSource == 0.0) {
+            state.dataWaterToAirHeatPump->initialQSource = heatPump.HeatingCapacity;
+        }
 
         // Tuned Hoisted quantities out of nested loop that don't change
         Real64 const LoadSideMassFlowRate_CpAir_inv(1.0 / (heatPump.InletAirMassFlowRate * CpAir));
@@ -1726,11 +1729,12 @@ namespace WaterToAirHeatPump {
                         1.0 / ((heatPump.SourceSideHTR1 * std::pow(SourceSideVolFlowRate, -0.8)) / DegradFactor + heatPump.SourceSideHTR2);
                 }
 
-                // Determine Source Side Tempertaure (Evap. Temp for this mode)
-                SourceSideTemp = heatPump.InletWaterTemp - initialQSource / (SourceSideEffect * CpFluid * heatPump.InletWaterMassFlowRate);
+                // Determine Source Side Temperature (Evap. Temp for this mode)
+                SourceSideTemp = heatPump.InletWaterTemp -
+                                 state.dataWaterToAirHeatPump->initialQSource / (SourceSideEffect * CpFluid * heatPump.InletWaterMassFlowRate);
 
-                // Determine Load Side Tempertaure (Condensing Temp for this mode)
-                LoadSideTemp = heatPump.InletAirDBTemp + initialQLoad * LoadSideEffect_CpAir_MassFlowRate_inv;
+                // Determine Load Side Temperature (Condensing Temp for this mode)
+                LoadSideTemp = heatPump.InletAirDBTemp + state.dataWaterToAirHeatPump->initialQLoad * LoadSideEffect_CpAir_MassFlowRate_inv;
 
                 // Determine the Load Side and Source Side Saturated Temp (evaporating and condensing pressures)
                 SourceSidePressure = heatPump.refrig->getSatPressure(state, SourceSideTemp, RoutineNameSourceSideTemp);
@@ -1828,13 +1832,9 @@ namespace WaterToAirHeatPump {
                     return (compSuctionEnth - SuperHeatEnth) / SuperHeatEnth;
                 };
 
-                // Share between all instances so that we can learn best algorithm
-                static SolveRootConfig solveRootConfig;
-                CompSuctionTemp = General::SolveRoot2(state, ERR, f, CompSuctionTemp1, CompSuctionTemp2, solveRootConfig);
-                int SolFla;
-                General::SolveRoot(state, ERR, 500, SolFla, CompSuctionTemp, f, CompSuctionTemp1, CompSuctionTemp2);
-                
-                if (solveRootConfig.numIters == SOLVEROOT_ERROR_ITER) {
+                static General::SolveRootStats solveRootStats;
+                CompSuctionTemp = General::SolveRoot2(state, ERR, STOP1, SolFlag, f, CompSuctionTemp1, CompSuctionTemp2, solveRootStats);
+                if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                     heatPump.SimFlag = false;
                     return;
                 }
@@ -1863,11 +1863,12 @@ namespace WaterToAirHeatPump {
 
                 // Find the Source Side Heat Transfer
                 QSource = MassRef * (SourceSideOutletEnth - LoadSideOutletEnth);
-
-                SourceResidual = std::abs(QSource - initialQSource) / initialQSource;
-                initialQSource += RelaxParam * (QSource - initialQSource);
-                if (NumIteration2 > 8) RelaxParam = 0.3;
-            } // while (SourceResidual > ERR) 
+                SourceResidual = std::abs(QSource - state.dataWaterToAirHeatPump->initialQSource) / state.dataWaterToAirHeatPump->initialQSource;
+                state.dataWaterToAirHeatPump->initialQSource += RelaxParam * (QSource - state.dataWaterToAirHeatPump->initialQSource);
+                if (NumIteration2 > 8) {
+                    RelaxParam = 0.3;
+                }
+            }
 
             // Determine the Power Consumption
             switch (heatPump.compressorType) {
@@ -1889,12 +1890,15 @@ namespace WaterToAirHeatPump {
 
             // Determine the Load Side Heat Rate
             QLoadTotal = Power + QSource;
-
-            LoadResidual = std::abs(QLoadTotal - initialQLoad) / initialQLoad;
-            if (LoadResidual < ERR) Converged = true;
-            initialQLoad += RelaxParam * (QLoadTotal - initialQLoad);
-            if (NumIteration3 > 8) RelaxParam = 0.2;
-        } // while (StillSimulatingFlag)
+            LoadResidual = std::abs(QLoadTotal - state.dataWaterToAirHeatPump->initialQLoad) / state.dataWaterToAirHeatPump->initialQLoad;
+            if (LoadResidual < ERR) {
+                Converged = true;
+            }
+            state.dataWaterToAirHeatPump->initialQLoad += RelaxParam * (QLoadTotal - state.dataWaterToAirHeatPump->initialQLoad);
+            if (NumIteration3 > 8) {
+                RelaxParam = 0.2;
+            }
+        }
 
         if (SuctionPr < heatPump.LowPressCutoff && !FirstHVACIteration) {
             ShowWarningError(state, "Heat pump:heating shut down on low pressure");

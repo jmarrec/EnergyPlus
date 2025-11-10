@@ -72,19 +72,6 @@ static constexpr std::array<std::string_view, (int)RootAlgo::Num> rootAlgoNamesU
     "ALTERNATION",
     "SHORTBISECTIONTHENREGULAFALSI"};
 
-    constexpr int SOLVEROOT_ERROR_INIT = -2;
-    constexpr int SOLVEROOT_ERROR_ITER = -1;
-  
-struct SolveRootConfig
-{
-    RootAlgo algo = RootAlgo::Invalid;
-    int maxIters = 0;
-    int numIters = 0;
-    int counts = 0;
-    std::array<int, (int)RootAlgo::Num> algoCounts = {0};
-    std::array<int, (int)RootAlgo::Num> algoIters = {0};
-};
-  
 struct RootFindingData : BaseGlobalStruct
 {
     std::string Algorithm = {}; // Choice of algorithm

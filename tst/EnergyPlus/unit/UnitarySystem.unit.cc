@@ -351,6 +351,7 @@ TEST_F(AirloopUnitarySysTest, MultipleWaterCoolingCoilSizing)
     int CoilNum = 1;
     state->dataWaterCoils->WaterCoil(CoilNum).Name = "Test Water Cooling Coil";
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loopNum = 1;
+    state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.compNum = 1;
@@ -420,6 +421,7 @@ TEST_F(AirloopUnitarySysTest, MultipleWaterCoolingCoilSizing)
     state->dataWaterCoils->WaterCoil(CoilNum).AirOutletNodeNum = 8;
     state->dataWaterCoils->WaterCoil(CoilNum).Name = "Test Water Heating Coil";
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loopNum = 2;
+    state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(2);
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.compNum = 1;

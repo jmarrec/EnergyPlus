@@ -281,8 +281,9 @@ TEST_F(EnergyPlusFixture, General_SolveRootTest)
 
 TEST_F(EnergyPlusFixture, General_SolveRoot2)
 {
-    SolveRootConfig solveRootConfig;
-    solveRootConfig.maxIters = 30;
+    SolveRootStats solveRootStats;
+    int maxIters = 30;
+    int SolFla;
     
     for (int i = 0; i < 100; ++i) {
         Real64 Request = (Real64)((i % 13) + 0.172);
@@ -290,10 +291,10 @@ TEST_F(EnergyPlusFixture, General_SolveRoot2)
             Real64 const Actual = 1.0 + 2.0 * Frac + 10.0 * Frac * Frac;
             return (Actual - Request) / Request;
         };
-        General::SolveRoot2(*state, 0.001, residual, 0.0, 1.0, solveRootConfig);
+        General::SolveRoot2(*state, 0.001, maxIters, SolFla, residual, 0.0, 1.0, solveRootStats);
     }
 
-    EXPECT_ENUM_EQ(solveRootConfig.algo, RootAlgo::ShortBisectionThenRegulaFalsi);
+    EXPECT_ENUM_EQ(solveRootStats.algo, RootAlgo::ShortBisectionThenRegulaFalsi);
 
     for (int i = 0; i < 100; ++i) {
         Real64 Request = (Real64)(1.00 / (i + 1));
@@ -301,10 +302,10 @@ TEST_F(EnergyPlusFixture, General_SolveRoot2)
             Real64 const Actual = 1.0 + 1.0 / (1.0 + Frac);
             return (Actual - Request) / Request;
         };
-        General::SolveRoot2(*state, 0.001, residual, 0.0, 1.0, solveRootConfig);
+        General::SolveRoot2(*state, 0.001, maxIters, SolFla, residual, 0.0, 1.0, solveRootStats);
     }
     
-    EXPECT_ENUM_EQ(solveRootConfig.algo, RootAlgo::ShortBisectionThenRegulaFalsi);
+    EXPECT_ENUM_EQ(solveRootStats.algo, RootAlgo::ShortBisectionThenRegulaFalsi);
 }
 
 TEST_F(EnergyPlusFixture, nthDayOfWeekOfMonth_test)
