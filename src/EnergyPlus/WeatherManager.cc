@@ -288,21 +288,22 @@ namespace Weather {
                                                                  ipsc->cAlphaFieldNames,
                                                                  ipsc->cNumericFieldNames);
 
-        ErrorObjectHeader eoh{routineName, ipsc->cCurrentModuleObject, ""};
-
-        if (ipsc->lAlphaFieldBlanks(1)) {
-        } else if ((state.dataEnvrn->varyingLocationLatSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(1))) == nullptr) {
-            ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(1), ipsc->cAlphaArgs(1));
-        }
+        std::string newName = Util::makeUPPER(ipsc->cAlphaArgs(1));
+        ErrorObjectHeader eoh{routineName, ipsc->cCurrentModuleObject, newName};
 
         if (ipsc->lAlphaFieldBlanks(2)) {
-        } else if ((state.dataEnvrn->varyingLocationLongSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(2))) == nullptr) {
+        } else if ((state.dataEnvrn->varyingLocationLatSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(2))) == nullptr) {
             ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(2), ipsc->cAlphaArgs(2));
         }
 
         if (ipsc->lAlphaFieldBlanks(3)) {
-        } else if ((state.dataEnvrn->varyingOrientationSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(3))) == nullptr) {
+        } else if ((state.dataEnvrn->varyingLocationLongSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(3))) == nullptr) {
             ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(3), ipsc->cAlphaArgs(3));
+        }
+
+        if (ipsc->lAlphaFieldBlanks(4)) {
+        } else if ((state.dataEnvrn->varyingOrientationSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(4))) == nullptr) {
+            ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(4), ipsc->cAlphaArgs(4));
         }
     }
 

@@ -3179,6 +3179,9 @@ namespace Sched {
         assert(!this->isMinMaxSet);
 
         auto *daySched1 = this->dayScheds[1];
+        if (daySched1 == nullptr) {
+            return;
+        }
         if (!daySched1->isMinMaxSet) {
             daySched1->setMinMaxVals(state);
         }
@@ -3213,6 +3216,9 @@ namespace Sched {
         assert(!this->isMinMaxSet);
 
         auto *weekSched1 = this->weekScheds[1];
+        if (weekSched1 == nullptr) {
+            return;
+        }
         if (!weekSched1->isMinMaxSet) {
             weekSched1->setMinMaxVals(state);
         }

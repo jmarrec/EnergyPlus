@@ -5219,6 +5219,7 @@ namespace SurfaceGeometry {
                 }
             }
             surfTemp.Vertex.allocate(surfTemp.Sides);
+            surfTemp.NewVertex.allocate(surfTemp.Sides);
             if (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor || surfTemp.Class == SurfaceClass::Door) {
                 surfTemp.Multiplier = int(s_ipsc->rNumericArgs(2));
             }
@@ -8751,6 +8752,9 @@ namespace SurfaceGeometry {
             }
 
             if (!ErrorsFoundByConstruct) {
+                if (tmpAlgoInput == DataSurfaces::HeatTransferModel::CondFD) {
+                    state.dataConstruction->Construct(Found).IsCondFD = true;
+                }
                 for (Item1 = 1; Item1 <= state.dataSurface->TotSurfaces; ++Item1) {
                     if (state.dataSurface->Surface(Item1).Construction == Found) {
                         state.dataSurface->Surface(Item1).HeatTransferAlgorithm = tmpAlgoInput;
