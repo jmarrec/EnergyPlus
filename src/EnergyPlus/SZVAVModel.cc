@@ -855,15 +855,11 @@ namespace SZVAVModel {
                 if (SolFlag == -2 && ((CoolingLoad && SZVAVModel.m_CoolingSpeedNum < SZVAVModel.m_NumOfSpeedCooling) ||
                                       (HeatingLoad && SZVAVModel.m_HeatingSpeedNum < SZVAVModel.m_NumOfSpeedHeating))) {
                     // attempt to meet the load with the next speed
-                    Real64 sysLoad = 0.0;
                     int szVAVModelSpeed = 0;
                     int szVAVModelSpeedMax = 0;
                     if (CoolingLoad) {
                         szVAVModelSpeed = SZVAVModel.m_CoolingSpeedNum + 1;
                         szVAVModelSpeedMax = SZVAVModel.m_NumOfSpeedCooling;
-
-                        // what's going on here? Real64 = bool
-                        sysLoad = CoolingLoad;
                     } else {
                         szVAVModelSpeed = SZVAVModel.m_HeatingSpeedNum + 1;
                         szVAVModelSpeedMax = SZVAVModel.m_NumOfSpeedHeating;
@@ -885,7 +881,7 @@ namespace SZVAVModel {
                                   lowSpeedFanRatio,
                                   AirMassFlow,
                                   maxAirMassFlow,
-                                  sysLoad,
+                                  CoolingLoad,
                                   maxCoilFluidFlow](Real64 const PartLoadRatio) {
                             return UnitarySystems::UnitarySys::calcUnitarySystemWaterFlowResidual(state,
                                                                                                   PartLoadRatio,
@@ -901,7 +897,7 @@ namespace SZVAVModel {
                                                                                                   AirMassFlow,
                                                                                                   0.0,
                                                                                                   maxAirMassFlow,
-                                                                                                  sysLoad,
+                                                                                                  CoolingLoad,
                                                                                                   1.0);
                         };
                         General::SolveRoot(state, 0.001, MaxIter, SolFlag, PartLoadRatio, f, 0.0, 1.0);
