@@ -911,7 +911,7 @@ namespace UnitarySystems {
                                                          Real64 airMdot,
                                                          Real64 par13_SATempTarget,
                                                          Real64 systemMaxAirFlowRate,
-                                                         Real64 par15_LoadType,
+                                                         bool isCoolingLoad,
                                                          Real64 par16_IterationMethod);
 
         void simulate(EnergyPlusData &state,

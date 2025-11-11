@@ -89,14 +89,6 @@ namespace TarcogShading {
     using namespace TARCOGGasses90;
     using namespace TARCOGParams;
 
-    enum class CalcForcedVentilation
-    {
-        Invalid = -1,
-        Skip,
-        Allow,
-        Num
-    };
-
     // Functions
 
     void shading(EnergyPlusData &state,
@@ -381,7 +373,7 @@ namespace TarcogShading {
                     // speed1 = vvent(i)
                     // speed2 = vvent(i+1)
 
-                    if (((vvent(i) != 0) || (vvent(i + 1) != 0))) {
+                    if ((vvent(i) != 0) || (vvent(i + 1) != 0)) {
                         forcedventilation(state,
                                           state.dataTarcogShading->iprop1,
                                           state.dataTarcogShading->frct1,
