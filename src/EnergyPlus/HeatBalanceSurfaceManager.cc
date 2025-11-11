@@ -690,7 +690,6 @@ void GatherForPredefinedReport(EnergyPlusData &state)
     };
 
     constexpr std::array<std::string_view, static_cast<int>(DataSurfaces::WindowShadingControlType::Num)> WindowShadingControlTypeNames = {
-        "Uncontrolled",
         "AlwaysOn",
         "AlwaysOff",
         "OnIfScheduleAllows",
@@ -711,7 +710,10 @@ void GatherForPredefinedReport(EnergyPlusData &state)
         "OnIfHighOutdoorAirTempAndHighSolarOnWindow",
         "OnIfHighOutdoorAirTempAndHighHorizontalSolar",
         "OnIfHighZoneAirTempAndHighSolarOnWindow",
-        "OnIfHighZoneAirTempAndHighHorizontalSolar"};
+        "OnIfHighZoneAirTempAndHighHorizontalSolar",
+        "OnIfHighSolarOrHighLuminanceTillMidnight",
+        "OnIfHighSolarOrHighLuminanceTillSunset",
+        "OnIfHighSolarOrHighLuminanceTillNextMorning"};
 
     constexpr std::array<std::string_view, static_cast<int>(DataSurfaces::NfrcProductOptions::Num)> NfrcProductNames = {
         "CasementDouble", "CasementSingle",   "DualAction",
