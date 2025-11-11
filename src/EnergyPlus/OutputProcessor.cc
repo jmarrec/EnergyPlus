@@ -4880,6 +4880,12 @@ int initErrorFile(EnergyPlusData &state)
         DisplayString(state, fmt::format("ERROR: Could not open file {} for output (write).", state.files.outputErrFilePath));
         return EXIT_FAILURE;
     }
+
+    // Unless requested to be buffered: unbuffer it, flushes automatically on each output
+    if (!state.dataSysVars->BufferedErrFileEnvVar) {
+        state.files.err_stream->setf(std::ios::unitbuf);
+    }
+
     return EXIT_SUCCESS;
 } // initErrorFile()
 
