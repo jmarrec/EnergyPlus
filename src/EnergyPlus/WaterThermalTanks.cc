@@ -3554,7 +3554,7 @@ bool getWaterTankMixedInput(EnergyPlusData &state)
             Tank.UseDesignVolFlowRate = 0.0;
         } else {
             Tank.UseDesignVolFlowRate = state.dataIPShortCut->rNumericArgs(7);
-            if (Tank.UseDesignVolFlowRate != 0.0) {
+            if (Tank.UseDesignVolFlowRate == DataSizing::AutoSize) {
                 Tank.UseDesignVolFlowRateWasAutoSized = true;
             }
         }

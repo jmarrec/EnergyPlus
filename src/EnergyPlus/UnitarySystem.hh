@@ -322,7 +322,7 @@ namespace UnitarySystems {
         int m_DesignSpecMSHPIndex = -1;
         Real64 m_NoLoadAirFlowRateRatio = 1.0;
         bool m_useNoLoadLowSpeedAirFlow = true;
-        int m_SingleMode = 0;
+        bool m_SingleMode = false;
         bool m_MultiOrVarSpeedHeatCoil = false;
         bool m_MultiOrVarSpeedCoolCoil = false;
         Real64 m_PartLoadFrac = 0.0;
