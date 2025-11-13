@@ -1295,12 +1295,31 @@ void LoadEquipList(EnergyPlusData &state,
                 for (MachineNum = 1; MachineNum <= state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).NumComps; ++MachineNum) {
                     auto const type_str = state.dataIPShortCut->cAlphaArgs(MachineNum * 2);
                     if (type_str == "HEATPUMP:AIRTOWATER") {
-                        if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::HotWater) {
+                        // This type needs special treatment due to its dual personality, hopefully this can go away in the future
+                        std::string machineName = state.dataIPShortCut->cAlphaArgs(MachineNum * 2 + 1);
+                        bool thisErrFlag = false;
+                        PlantLocation plantLoc;
+                        // See if the heating side is on this plantloop
+                        PlantUtilities::ScanPlantLoopsForObject(
+                            state, machineName, DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating, plantLoc, thisErrFlag);
+                        if (plantLoc.loopNum == LoopNum && !thisErrFlag) {
                             state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
                                 "HEATPUMP:AIRTOWATER:HEATING";
-                        } else if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::ChilledWater) {
-                            state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
-                                "HEATPUMP:AIRTOWATER:COOLING";
+                        } else {
+                            // See if the cooling side is on this plantloop
+                            PlantUtilities::ScanPlantLoopsForObject(
+                                state, machineName, DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling, plantLoc, thisErrFlag);
+                            if (plantLoc.loopNum == LoopNum && !thisErrFlag) {
+                                state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
+                                    "HEATPUMP:AIRTOWATER:COOLING";
+                            } else {
+                                ShowSevereError(state,
+                                                format("Equipment type={} with Name={} not found on PlantLoop={}.",
+                                                       type_str,
+                                                       machineName,
+                                                       state.dataPlnt->PlantLoop(LoopNum).Name));
+                                ErrorsFound = true;
+                            }
                         }
                     } else {
                         state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
