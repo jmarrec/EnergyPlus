@@ -60,7 +60,7 @@
           <div class="col-md-8 text-center">
             EnergyPlus is a simulation program designed for modeling buildings with all their associated heating,
             cooling, lighting, ventilating, and other energy flows. EnergyPlus is a stand-alone simulation engine
-            without a ‘user friendly’ graphical interface. EnergyPlus reads input and writes output as text files,
+            without a 'user-friendly' graphical interface. EnergyPlus reads input and writes output as text files,
             although as of 9.3, EnergyPlus became a library.
           </div>
           <div class="col-md-2"></div>
@@ -102,11 +102,10 @@
       <p>
         The EnergyPlus-Python connections continue to grow. The Python-focused deployment via PyPi is still coming, but
         will remain on the
-        <a href="https://test.pypi.org/project/energyplus/">test server</a> on PyPi for now. Once official releases are
-        ready, they will be on the <a href="https://pypi.org/project/energyplus/">main PyPi</a> page, so check there if
-        interested. The <code>pip install energyplus</code> experience will bring EnergyPlus native libraries plus the
-        Python API bindings, ready to be used by the user's desired Python environment. This should make setting up
-        EnergyPlus much easier for many Python-facing use cases!
+        <a href="https://test.pypi.org/project/energyplus/">test server</a> on PyPi for now. The
+        <code>pip install energyplus</code>
+        experience will bring EnergyPlus native libraries plus the Python API bindings, ready to be used by the user's
+        desired Python environment. This should make setting up EnergyPlus much easier for many Python-facing use cases!
       </p>
       <p>
         In addition to the Pip Install work coming along, we are also working to improve our Python integration for
@@ -184,7 +183,7 @@
         </li>
       </ul>
 
-      <h2><a id="Whats_going_on"></a>What’s going on in V@CMAKE_VERSION_MAJOR@.@CMAKE_VERSION_MINOR@?</h2>
+      <h2><a id="Whats_going_on"></a>What's going on in V@CMAKE_VERSION_MAJOR@.@CMAKE_VERSION_MINOR@?</h2>
       <div class="row">
         <div class="col-md-12">
           <a
@@ -264,20 +263,41 @@
           </a>
           <div class="collapse" id="collapseCompatible">
             <div class="card card-body">
-              <h5 class="card-title">??Some objects require transition??</h5>
+              <h5 class="card-title">Some objects require transition</h5>
               There have been changes in the following objects which require conversion. Either read and follow the
-              "Rules" document or use the IDFVersionUpdater utility. The “Rules” document contains information on exact
+              "Rules" document or use the IDFVersionUpdater utility. The "INSTALL
+              DIRECTORY\PreProcess\IDFVersionUpdater\Rules25-1-0-to-25-2-0.md" document contains information on exact
               object changes that you can do by hand. The updater program is described more fully in the Auxiliary
               Programs document.
               <ul class="list-group">
+                <li class="list-group-item transition-object-name">AirLoopHVAC:UnitaryHeatPump:AirToAir:MultiSpeed</li>
+                <li class="list-group-item transition-object-name">Coil:Cooling:VariableSpeed</li>
+                <li class="list-group-item transition-object-name">Coil:Cooling:WaterToAirHeatPump:EquationFit</li>
                 <li class="list-group-item transition-object-name">
-                  <b>NONE!</b>
+                  Coil:Cooling:WaterToAirHeatPump:ParameterEstimation
                 </li>
+                <li class="list-group-item transition-object-name">
+                  Coil:Cooling:WaterToAirHeatPump:VariableSpeedEquationFit
+                </li>
+                <li class="list-group-item transition-object-name">Coil:Heating:VariableSpeed</li>
+                <li class="list-group-item transition-object-name">Coil:Heating:WaterToAirHeatPump:EquationFit</li>
+                <li class="list-group-item transition-object-name">
+                  Coil:Heating:WaterToAirHeatPump:ParameterEstimation
+                </li>
+                <li class="list-group-item transition-object-name">
+                  Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit
+                </li>
+                <li class="list-group-item transition-object-name">Coil:WaterHeating:AirToWaterHeatPump:Pumped</li>
+                <li class="list-group-item transition-object-name">
+                  Coil:WaterHeating:AirToWaterHeatPump:VariableSpeedEquationFit
+                </li>
+                <li class="list-group-item transition-object-name">Coil:WaterHeating:AirToWaterHeatPump:Wrapped</li>
+                <li class="list-group-item transition-object-name">GroundHeatExchanger:System</li>
+                <li class="list-group-item transition-object-name">ZoneHVAC:IdealLoadsAirSystem</li>
               </ul>
-              In a shocking turn of events, EnergyPlus 24.2.0 and 25.1.0 share the same input fields. However, there are
-              a few report variables that have changed names. Check the output rules file and the
-              <code>Report Variables 24-2-0-to-25-2-0.csv</code> document for details, or just let the transition
-              program run to automatically update them in your input file.
+              Check the output rules file and the "INSTALL DIRECTORY\PreProcess\IDFVersionUpdater\Report Variables
+              25-1-0-to-25-2-0.csv" document for details, or just let the transition program run to automatically update
+              them in your input file.
             </div>
           </div>
         </div>
@@ -313,7 +333,7 @@
         includes the necessary programs to convert from older versions back to v9.0.0. For versions older than that,
         first we applaud your dedication to EnergyPlus that stretches for quite some time, and second you will need to
         visit the
-        <a href="https://energyplushelp.freshdesk.com/support/solutions/folders/67000241428">Helpdesk</a>
+        <a href="https://energyplushelp.freshdesk.com/support/solutions/folders/67000579810">Helpdesk</a>
         to request multiple conversion set of programs.
       </p>
 
@@ -489,7 +509,7 @@
         few known (and even more unknown) probably remain. Specifics on the remaining known problems can be found on the
         GitHub repository
         <a href="https://github.com/NREL/EnergyPlus/issues">issues page</a>. If you are interested in what has been
-        addressed, the issues resolved in this release are installed similarly in the
+        addressed, the issues resolved in this release are listed in the
         <a href="https://github.com/NREL/EnergyPlus/releases/latest">release details</a>.
       </p>
 
