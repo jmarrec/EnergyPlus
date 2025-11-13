@@ -144,7 +144,9 @@ if __name__ == "__main__":
             subprocess.check_output(["install_name_tool", "-id", str(new_tcl_tk_so.name), str(new_tcl_tk_so)])
 
             # Grab the necessary tcl and tk folders
-            support_folder = tcl_tk_so.parent / tcl_tk_so.stem.replace('lib', '')
+            # At tcl8: libtcl8.6.dylib, libtk8.6.dylib           -> support folders are 'tcl8.6', 'tk8.6'
+            # At tcl9: libtcl9.0.dylib, but 'libtcl9tk9.0.dylib' -> support folders are 'tcl9.0', 'tk9.0'
+            support_folder = tcl_tk_so.parent / tcl_tk_so.stem.replace('lib', '').replace('tcl9tk', 'tk')
             if not support_folder.is_dir():
                 print(f"Could not find support folder at {support_folder}")
                 any_missing = True
