@@ -3250,7 +3250,10 @@ PlantComponent *HeatPumpAirToWater::factory(
 
     for (auto &awhp : state.dataHeatPumpAirToWater->heatPumps) {
         if (awhp.name == Util::makeUPPER(hp_name)) {
-            if ((awhp.loadSideNodes.inlet == inletNodeNum) && (awhp.loadSideNodes.outlet == outletNodeNum)) {
+            // Match specific equipment type or match nodes to determine correct equipment type
+            if (awhp.EIRHPType == hp_type) {
+                return &awhp;
+            } else if ((awhp.loadSideNodes.inlet == inletNodeNum) && (awhp.loadSideNodes.outlet == outletNodeNum)) {
                 hp_type = awhp.EIRHPType;
                 return &awhp;
             }

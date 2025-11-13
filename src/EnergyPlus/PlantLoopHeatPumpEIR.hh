@@ -539,8 +539,8 @@ namespace EIRPlantLoopHeatPumps {
         static PlantComponent *factory(EnergyPlusData &state,
                                        DataPlant::PlantEquipmentType &hp_type,
                                        const std::string &hp_name,
-                                       int const inletNodeNum,
-                                       int const outletNodeNum);
+                                       int const inletNodeNum = 0,
+                                       int const outletNodeNum = 0);
         static void processInputForEIRPLHP(EnergyPlusData &state);
         void sizeLoadSide(EnergyPlusData &state);
     }; // HeatPumpAirToWater
