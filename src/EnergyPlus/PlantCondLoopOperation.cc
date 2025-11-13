@@ -1299,17 +1299,36 @@ void LoadEquipList(EnergyPlusData &state,
                         std::string machineName = state.dataIPShortCut->cAlphaArgs(MachineNum * 2 + 1);
                         bool thisErrFlag = false;
                         PlantLocation plantLoc;
+                        int matchCount = 0;
                         // See if the heating side is on this plantloop
-                        PlantUtilities::ScanPlantLoopsForObject(
-                            state, machineName, DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating, plantLoc, thisErrFlag);
-                        if (plantLoc.loopNum == LoopNum && !thisErrFlag) {
+                        PlantUtilities::ScanPlantLoopsForObject(state,
+                                                                machineName,
+                                                                DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating,
+                                                                plantLoc,
+                                                                thisErrFlag,
+                                                                _,
+                                                                _,
+                                                                matchCount,
+                                                                _,
+                                                                LoopNum,
+                                                                true);
+                        if (matchCount > 0) {
                             state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
                                 "HEATPUMP:AIRTOWATER:HEATING";
                         } else {
                             // See if the cooling side is on this plantloop
-                            PlantUtilities::ScanPlantLoopsForObject(
-                                state, machineName, DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling, plantLoc, thisErrFlag);
-                            if (plantLoc.loopNum == LoopNum && !thisErrFlag) {
+                            PlantUtilities::ScanPlantLoopsForObject(state,
+                                                                    machineName,
+                                                                    DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling,
+                                                                    plantLoc,
+                                                                    thisErrFlag,
+                                                                    _,
+                                                                    _,
+                                                                    matchCount,
+                                                                    _,
+                                                                    LoopNum,
+                                                                    true);
+                            if (matchCount > 0) {
                                 state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
                                     "HEATPUMP:AIRTOWATER:COOLING";
                             } else {
