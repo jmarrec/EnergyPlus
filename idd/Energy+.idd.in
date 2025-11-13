@@ -83459,19 +83459,13 @@ PlantLoop,
         \key LoopFlowCorrection
         \key None
         \default None
-   N6,  \field Loop Circulation Time
+   N6;  \field Loop Circulation Time
         \note This field is only used to autocalculate the Plant Loop Volume.
         \note Loop Volume = Loop Circulation Time * Maximum Loop Flow Rate
         \type real
         \units minutes
         \minimum 0.0
         \default 2.0
-  A19;  \field Water Loop Type
-        \type choice
-        \key HotWater
-        \key ChilledWater
-        \key None
-        \default None
 
 CondenserLoop,
        \memo Defines a central plant condenser loop. CondenserLoop and PlantLoop are nearly
