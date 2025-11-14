@@ -2581,21 +2581,6 @@ void EIRPlantLoopHeatPump::oneTimeInit(EnergyPlusData &state)
             errFlag = true;
         }
 
-        if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating ||
-            this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
-            if (state.dataPlnt->PlantLoop(this->loadSidePlantLoc.loopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::None) {
-                ShowSevereError(state,
-                                format("{}: Missing value for input field \"Water Loop Type\" in Plant Loop = {}. It's required for {} name = \"{}\"",
-                                       routineName,
-                                       state.dataPlnt->PlantLoop(this->loadSidePlantLoc.loopNum).Name,
-                                       "HeatPump:AirToWater",
-                                       this->name));
-                ShowContinueError(state,
-                                  "The Hot Water nodes must be connected to a HotWater loop. The Chilled Water nodes must be ChilledWater loop");
-                errFlag = true;
-            }
-        }
-
         thisErrFlag = false;
         if (this->waterSource) {
             PlantUtilities::ScanPlantLoopsForObject(
@@ -3254,7 +3239,8 @@ PlantComponent *EIRFuelFiredHeatPump::factory(EnergyPlusData &state, DataPlant::
     return nullptr; // LCOV_EXCL_LINE
 }
 
-PlantComponent *HeatPumpAirToWater::factory(EnergyPlusData &state, DataPlant::PlantEquipmentType hp_type, const std::string &hp_name)
+PlantComponent *HeatPumpAirToWater::factory(
+    EnergyPlusData &state, DataPlant::PlantEquipmentType &hp_type, const std::string &hp_name, int const inletNodeNum, int const outletNodeNum)
 {
     if (state.dataHeatPumpAirToWater->getInputsAWHP) {
         HeatPumpAirToWater::processInputForEIRPLHP(state);
@@ -3263,12 +3249,18 @@ PlantComponent *HeatPumpAirToWater::factory(EnergyPlusData &state, DataPlant::Pl
     }
 
     for (auto &awhp : state.dataHeatPumpAirToWater->heatPumps) {
-        if (awhp.name == Util::makeUPPER(hp_name) && awhp.EIRHPType == hp_type) {
-            return &awhp;
+        if (awhp.name == Util::makeUPPER(hp_name)) {
+            // Match specific equipment type or match nodes to determine correct equipment type
+            if (awhp.EIRHPType == hp_type) {
+                return &awhp;
+            } else if ((awhp.loadSideNodes.inlet == inletNodeNum) && (awhp.loadSideNodes.outlet == outletNodeNum)) {
+                hp_type = awhp.EIRHPType;
+                return &awhp;
+            }
         }
     }
 
-    ShowFatalError(state, format("Air To Water Heat Pump factory: Error getting inputs for PLFFHP named: {}.", hp_name));
+    ShowFatalError(state, format("Air To Water Heat Pump factory: Error getting inputs for AWHP named: {}.", hp_name));
     return nullptr; // LCOV_EXCL_LINE
 }
 

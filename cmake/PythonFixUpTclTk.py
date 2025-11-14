@@ -143,6 +143,21 @@ if __name__ == "__main__":
             # Change the id that's the first line of the otool -L in this case and it's confusing
             subprocess.check_output(["install_name_tool", "-id", str(new_tcl_tk_so.name), str(new_tcl_tk_so)])
 
+            # Grab the necessary tcl and tk folders
+            # At tcl8: libtcl8.6.dylib, libtk8.6.dylib           -> support folders are 'tcl8.6', 'tk8.6'
+            # At tcl9: libtcl9.0.dylib, but 'libtcl9tk9.0.dylib' -> support folders are 'tcl9.0', 'tk9.0'
+            support_folder = tcl_tk_so.parent / tcl_tk_so.stem.replace('lib', '').replace('tcl9tk', 'tk')
+            if not support_folder.is_dir():
+                print(f"Could not find support folder at {support_folder}")
+                any_missing = True
+                continue
+            target_support_folder = python_dir / support_folder.name
+            if target_support_folder.is_dir():
+                # Remove it first
+                shutil.rmtree(target_support_folder)
+            print(f"Copying support folder from {support_folder} to {target_support_folder}")
+            shutil.copytree(support_folder, target_support_folder)
+
         if any_missing:
             sys.exit(1)
 
