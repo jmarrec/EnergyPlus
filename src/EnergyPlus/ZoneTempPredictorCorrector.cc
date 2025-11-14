@@ -1647,7 +1647,7 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                         if (NumAlphas >= 4 && !s_ipsc->lAlphaFieldBlanks(4)) {
                             int adaptiveComfortModelTypeIndex =
                                 Util::FindItem(s_ipsc->cAlphaArgs(4), AdaptiveComfortModelTypes, AdaptiveComfortModelTypes.isize());
-                            if (!adaptiveComfortModelTypeIndex) {
+                            if (adaptiveComfortModelTypeIndex == 0) {
                                 ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4));
                                 ErrorsFound = true;
                             } else if (adaptiveComfortModelTypeIndex != static_cast<int>(AdaptiveComfortModel::ADAP_NONE)) {
@@ -1717,7 +1717,7 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                     if (NumAlphas >= 4 && !s_ipsc->lAlphaFieldBlanks(4)) {
                         int adaptiveComfortModelTypeIndex =
                             Util::FindItem(s_ipsc->cAlphaArgs(4), AdaptiveComfortModelTypes, AdaptiveComfortModelTypes.isize());
-                        if (!adaptiveComfortModelTypeIndex) {
+                        if (adaptiveComfortModelTypeIndex == 0) {
                             ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4));
                             ErrorsFound = true;
                         } else if (adaptiveComfortModelTypeIndex != static_cast<int>(AdaptiveComfortModel::ADAP_NONE)) {
@@ -4127,8 +4127,8 @@ Real64 ZoneSpaceHeatBalanceData::correctAirTemp(
     bool isMixed = true;
     // SpaceHB TODO: For now, room air model is only for zones
     if (spaceNum == 0 && state.dataRoomAir->anyNonMixingRoomAirModel) {
-        isMixed = !((state.dataRoomAir->IsZoneDispVent3Node(zoneNum) && !state.dataRoomAir->ZoneDispVent3NodeMixedFlag(zoneNum)) ||
-                    (state.dataRoomAir->IsZoneUFAD(zoneNum) && !state.dataRoomAir->ZoneUFADMixedFlag(zoneNum)));
+        isMixed = !((state.dataRoomAir->IsZoneDispVent3Node(zoneNum) && (state.dataRoomAir->ZoneDispVent3NodeMixedFlag(zoneNum) == 0)) ||
+                    (state.dataRoomAir->IsZoneUFAD(zoneNum) && (state.dataRoomAir->ZoneUFADMixedFlag(zoneNum) == 0)));
     }
     switch (state.dataHeatBal->ZoneAirSolutionAlgo) {
     case DataHeatBalance::SolutionAlgo::ThirdOrder: {
@@ -4766,8 +4766,10 @@ void InverseModelTemperature(EnergyPlusData &state,
 
             if (hmZone.IncludeSystemSupplyParameters) {
                 zone.ZoneMeasuredSupplyAirTemperature = hmZone.supplyAirTempSched->getCurrentVal();
-                zone.ZoneMeasuredSupplyAirFlowRate = hmZone.supplyAirMassFlowRateSched ? hmZone.supplyAirMassFlowRateSched->getCurrentVal() : 0.0;
-                zone.ZoneMeasuredSupplyAirHumidityRatio = hmZone.supplyAirHumRatSched ? hmZone.supplyAirHumRatSched->getCurrentVal() : 0.0;
+                zone.ZoneMeasuredSupplyAirFlowRate =
+                    (hmZone.supplyAirMassFlowRateSched != nullptr) ? hmZone.supplyAirMassFlowRateSched->getCurrentVal() : 0.0;
+                zone.ZoneMeasuredSupplyAirHumidityRatio =
+                    (hmZone.supplyAirHumRatSched != nullptr) ? hmZone.supplyAirHumRatSched->getCurrentVal() : 0.0;
                 // Calculate the air humidity ratio at supply air inlet.
                 Real64 CpAirInlet(0.0);
                 CpAirInlet = Psychrometrics::PsyCpAirFnW(zone.ZoneMeasuredSupplyAirHumidityRatio);
@@ -4867,13 +4869,13 @@ void InverseModelTemperature(EnergyPlusData &state,
         // Hybrid model people count calculation
         if (hmZone.PeopleCountCalc_T && state.dataHVACGlobal->UseZoneTimeStepHistory) {
             zone.ZoneMeasuredTemperature = hmZone.measuredTempSched->getCurrentVal();
-            zone.ZonePeopleActivityLevel = hmZone.peopleActivityLevelSched ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
-            zone.ZonePeopleSensibleHeatFraction = hmZone.peopleSensibleFracSched ? hmZone.peopleSensibleFracSched->getCurrentVal() : 0.0;
-            zone.ZonePeopleRadiantHeatFraction = hmZone.peopleRadiantFracSched ? hmZone.peopleRadiantFracSched->getCurrentVal() : 0.0;
+            zone.ZonePeopleActivityLevel = (hmZone.peopleActivityLevelSched != nullptr) ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
+            zone.ZonePeopleSensibleHeatFraction = (hmZone.peopleSensibleFracSched != nullptr) ? hmZone.peopleSensibleFracSched->getCurrentVal() : 0.0;
+            zone.ZonePeopleRadiantHeatFraction = (hmZone.peopleRadiantFracSched != nullptr) ? hmZone.peopleRadiantFracSched->getCurrentVal() : 0.0;
 
             Real64 FractionSensible = zone.ZonePeopleSensibleHeatFraction;
             Real64 FractionRadiation = zone.ZonePeopleRadiantHeatFraction;
-            Real64 ActivityLevel = hmZone.peopleActivityLevelSched ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
+            Real64 ActivityLevel = (hmZone.peopleActivityLevelSched != nullptr) ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
 
             if (FractionSensible <= 0.0) {
                 FractionSensible = 0.6;
@@ -4891,8 +4893,10 @@ void InverseModelTemperature(EnergyPlusData &state,
 
             if (hmZone.IncludeSystemSupplyParameters) {
                 zone.ZoneMeasuredSupplyAirTemperature = hmZone.supplyAirTempSched->getCurrentVal();
-                zone.ZoneMeasuredSupplyAirFlowRate = hmZone.supplyAirMassFlowRateSched ? hmZone.supplyAirMassFlowRateSched->getCurrentVal() : 0.0;
-                zone.ZoneMeasuredSupplyAirHumidityRatio = hmZone.supplyAirHumRatSched ? hmZone.supplyAirHumRatSched->getCurrentVal() : 0.0;
+                zone.ZoneMeasuredSupplyAirFlowRate =
+                    (hmZone.supplyAirMassFlowRateSched != nullptr) ? hmZone.supplyAirMassFlowRateSched->getCurrentVal() : 0.0;
+                zone.ZoneMeasuredSupplyAirHumidityRatio =
+                    (hmZone.supplyAirHumRatSched != nullptr) ? hmZone.supplyAirHumRatSched->getCurrentVal() : 0.0;
 
                 // Calculate the air humidity ratio at supply air inlet.
                 Real64 CpAirInlet = Psychrometrics::PsyCpAirFnW(zone.ZoneMeasuredSupplyAirHumidityRatio);
@@ -5052,9 +5056,9 @@ void InverseModelHumidity(EnergyPlusData &state,
 
         // Hybrid Model calculate people count
         if (hmZone.PeopleCountCalc_H && state.dataHVACGlobal->UseZoneTimeStepHistory) {
-            zone.ZonePeopleActivityLevel = hmZone.peopleActivityLevelSched ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
-            zone.ZonePeopleSensibleHeatFraction = hmZone.peopleSensibleFracSched ? hmZone.peopleSensibleFracSched->getCurrentVal() : 0.0;
-            zone.ZonePeopleRadiantHeatFraction = hmZone.peopleRadiantFracSched ? hmZone.peopleRadiantFracSched->getCurrentVal() : 0.0;
+            zone.ZonePeopleActivityLevel = (hmZone.peopleActivityLevelSched != nullptr) ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
+            zone.ZonePeopleSensibleHeatFraction = (hmZone.peopleSensibleFracSched != nullptr) ? hmZone.peopleSensibleFracSched->getCurrentVal() : 0.0;
+            zone.ZonePeopleRadiantHeatFraction = (hmZone.peopleRadiantFracSched != nullptr) ? hmZone.peopleRadiantFracSched->getCurrentVal() : 0.0;
 
             Real64 FractionSensible = zone.ZonePeopleSensibleHeatFraction;
 

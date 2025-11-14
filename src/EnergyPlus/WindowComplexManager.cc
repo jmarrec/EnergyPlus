@@ -2972,7 +2972,7 @@ namespace WindowComplexManager {
 
                 PillarSpacing(IGap) = matGap->pillarSpacing;
                 PillarRadius(IGap) = matGap->pillarRadius;
-                SupportPlr(IGap) = matGap->pillarSpacing != 0.0 && matGap->pillarRadius != 0.0;
+                SupportPlr(IGap) = static_cast<int>(matGap->pillarSpacing != 0.0 && matGap->pillarRadius != 0.0);
 
                 nmix(IGap + 1) = matGap->numGases;
                 for (IMix = 1; IMix <= nmix(IGap + 1); ++IMix) {

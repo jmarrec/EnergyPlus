@@ -1576,7 +1576,7 @@ namespace Weather {
                 ThisDay += 7;
             }
             ThisDay += 7 * (state.dataWeather->DST.EnDay - 1);
-            if (ThisDay >> state.dataWeather->EndDayOfMonthWithLeapDay(state.dataWeather->DST.EnMon)) {
+            if ((ThisDay >> state.dataWeather->EndDayOfMonthWithLeapDay(state.dataWeather->DST.EnMon)) != 0) {
                 ActEndMonth = 0; // Suppress uninitialized warning
                 ActEndDay = 0;   // Suppress uninitialized warning
                 ShowSevereError(state, format("{}Determining DST: DST End Date, Nth Day of Month, not enough Nths", RoutineName));

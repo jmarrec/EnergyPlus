@@ -321,9 +321,9 @@ json IdfParser::parse_object(
     std::string patternProperty;
     int dot_star_present = schema_patternProperties.count(".*");
     int no_whitespace_present = schema_patternProperties.count(R"(^.*\S.*$)");
-    if (dot_star_present) {
+    if (dot_star_present != 0) {
         patternProperty = ".*";
-    } else if (no_whitespace_present) {
+    } else if (no_whitespace_present != 0) {
         patternProperty = R"(^.*\S.*$)";
     } else {
         throw std::runtime_error(R"(The patternProperties value is not a valid choice (".*", "^.*\S.*$"))");
@@ -370,7 +370,7 @@ json IdfParser::parse_object(
                     extensible_index++;
                     //                    extensible[ field_name ] = "";
                 }
-                if (ext_size && extensible_index % ext_size == 0) {
+                if ((ext_size != 0) && extensible_index % ext_size == 0) {
                     array_of_extensions.push_back(extensible);
                     extensible.clear();
                 }
@@ -423,7 +423,7 @@ json IdfParser::parse_object(
             extensible[field_name] = std::move(val);
             was_value_parsed = true;
             extensible_index++;
-            if (extensible_index && extensible_index % size == 0) {
+            if ((extensible_index != 0u) && extensible_index % size == 0) {
                 array_of_extensions.push_back(extensible);
                 extensible.clear();
             }

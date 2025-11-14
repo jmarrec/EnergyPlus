@@ -3274,7 +3274,7 @@ void GetZoneSizingInput(EnergyPlusData &state)
                                             state.dataIPShortCut->cAlphaFieldNames(14),
                                             state.dataIPShortCut->cAlphaArgs(14),
                                             "Schedule will not be used and simulation continues.");
-                } else if (zoneSizingIndex.zoneRHDehumidifySched) {
+                } else if (zoneSizingIndex.zoneRHDehumidifySched != nullptr) {
                     // check max and min of each schedule and compare RHHumidify > RHDehumidify and warn
                     Real64 maxHumidify = zoneSizingIndex.zoneRHHumidifySched->getMaxVal(state);
                     Real64 minDehumidify = zoneSizingIndex.zoneRHDehumidifySched->getMinVal(state);

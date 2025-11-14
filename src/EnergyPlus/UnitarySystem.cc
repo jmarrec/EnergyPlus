@@ -7143,8 +7143,10 @@ namespace UnitarySystems {
             (this->m_HeatingCoilType_Num == HVAC::Coil_HeatingGasOrOtherFuel &&
              (this->m_CoolingCoilType_Num == HVAC::CoilDX_MultiSpeedCooling || this->m_CoolingCoilType_Num == HVAC::CoilDX_Cooling))) {
             if (this->m_DesignSpecMSHPIndex > -1) {
+
+                // should one of these be eliminated?
                 if (this->m_CompPointerMSHP->m_SingleModeFlag) {
-                    this->m_SingleMode = 1;
+                    this->m_SingleMode = true;
                 }
             }
         } else {
@@ -9248,7 +9250,7 @@ namespace UnitarySystems {
                         } else {
                             this->m_CoolingCycRatio = 1.0;
                             this->m_CoolingSpeedRatio = 0.0;
-                            if (this->m_SingleMode == 1) {
+                            if (this->m_SingleMode) {
                                 CoolPLR = 1.0;
                             }
                         }
@@ -9972,7 +9974,7 @@ namespace UnitarySystems {
                 if (this->m_SimASHRAEModel) {
                     this->m_HeatingCycRatio = PartLoadRatio;
                     this->m_HeatingSpeedRatio = 1.0;
-                } else if (this->m_SingleMode == 0) {
+                } else if (!this->m_SingleMode) {
                     this->m_HeatingCycRatio = 1.0;
                     this->m_HeatingSpeedRatio = PartLoadRatio;
                 } else {
@@ -9992,7 +9994,7 @@ namespace UnitarySystems {
                 if (this->m_SimASHRAEModel) {
                     this->m_CoolingCycRatio = PartLoadRatio;
                     this->m_CoolingSpeedRatio = 1.0;
-                } else if (this->m_SingleMode == 0) {
+                } else if (!this->m_SingleMode) {
                     this->m_CoolingCycRatio = 1.0;
                     this->m_CoolingSpeedRatio = PartLoadRatio;
                 } else {
@@ -10170,7 +10172,7 @@ namespace UnitarySystems {
                             } else {
                                 this->m_CoolingCycRatio = 1.0;
                                 this->m_CoolingSpeedRatio = 0.0;
-                                if (this->m_SingleMode == 1) {
+                                if (this->m_SingleMode) {
                                     CoolPLR = 1.0;
                                 }
                             }
@@ -11519,7 +11521,7 @@ namespace UnitarySystems {
         }
 
         if (!(state.dataUnitarySystems->HeatingLoad && this->m_NumOfSpeedHeating == 0)) {
-            if (this->m_SingleMode == 1) {
+            if (this->m_SingleMode) {
                 if (this->m_FanOpMode == HVAC::FanOp::Continuous) {
                     AverageUnitMassFlow = state.dataUnitarySystems->CompOnMassFlow;
                     state.dataUnitarySystems->FanSpeedRatio = state.dataUnitarySystems->CompOnFlowRatio;
@@ -12037,7 +12039,7 @@ namespace UnitarySystems {
             this->m_CoolCompPartLoadRatio = (CompressorOn == HVAC::CompressorOp::On) ? PartLoadRatio : 0.0;
         } break;
         case HVAC::CoilDX_Cooling: { // CoilCoolingDX
-            bool const singleMode = (this->m_SingleMode == 1);
+            bool const singleMode = (this->m_SingleMode);
             CoilPLR = 0.0;
             if (this->m_ControlType == UnitarySysCtrlType::Setpoint) {
                 if (CompressorOn == HVAC::CompressorOp::On) {
@@ -12134,7 +12136,7 @@ namespace UnitarySystems {
                                              CompressorOn,
                                              this->m_SingleMode);
                 if (this->m_CoolingSpeedNum > 1) {
-                    if (this->m_SingleMode == 0) {
+                    if (!this->m_SingleMode) {
                         this->m_CoolCompPartLoadRatio = (CompressorOn == HVAC::CompressorOp::On) ? 1.0 : 0.0;
                     } else {
                         this->m_CoolCompPartLoadRatio = (CompressorOn == HVAC::CompressorOp::On) ? this->m_CoolingCycRatio : 0.0;
@@ -12873,7 +12875,7 @@ namespace UnitarySystems {
                         } else if (this->m_DehumidificationMode == HVAC::CoilMode::Enhanced) {
                             coilMode = HVAC::CoilMode::Enhanced;
                         }
-                        bool const singleMode = (this->m_SingleMode == 1);
+                        bool const singleMode = (this->m_SingleMode);
                         state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex].simulate(
                             state, coilMode, this->m_CoolingSpeedNum, PartLoadFrac, this->m_FanOpMode, singleMode);
                     }
@@ -12938,7 +12940,7 @@ namespace UnitarySystems {
                     } else if (this->m_DehumidificationMode == HVAC::CoilMode::Enhanced) {
                         coilMode = HVAC::CoilMode::Enhanced;
                     }
-                    bool const singleMode = (this->m_SingleMode == 1);
+                    bool const singleMode = (this->m_SingleMode);
                     // PartLoadFrac has not been set in this branch - so use m_CoolingSpeedRatio?
                     state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex].simulate(
                         state, coilMode, this->m_CoolingSpeedNum, this->m_CoolingSpeedRatio, this->m_FanOpMode, singleMode);
@@ -13155,7 +13157,7 @@ namespace UnitarySystems {
                             coilMode = HVAC::CoilMode::Enhanced;
                         }
                         this->m_CoolingSpeedRatio = 1.0;
-                        bool const singleMode = (this->m_SingleMode == 1);
+                        bool const singleMode = (this->m_SingleMode);
                         for (int speedNum = 1; speedNum <= this->m_NumOfSpeedCooling; speedNum++) {
                             this->m_CoolingSpeedNum = speedNum;
                             state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex].simulate(
@@ -13570,7 +13572,7 @@ namespace UnitarySystems {
                             this->m_CompPartLoadRatio = PartLoadFrac;
                         } else if (CoilType_Num == HVAC::CoilDX_Cooling) { // CoilCoolingDX
                             auto f = [&state, this, DesOutTemp, DehumidMode, fanOp](Real64 const PartLoadRatio) {
-                                bool const singleMode = this->m_SingleMode;
+                                bool const singleMode = this->m_SingleMode != 0;
                                 state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex].simulate(
                                     state, DehumidMode, this->m_CoolingSpeedNum, PartLoadRatio, fanOp, singleMode);
                                 Real64 outletCondition =
@@ -13779,7 +13781,7 @@ namespace UnitarySystems {
                     if (this->m_CoolingSpeedNum == 0) {
                         this->m_CoolingSpeedNum = 1;
                     }
-                    bool const singleMode = (this->m_SingleMode == 1);
+                    bool const singleMode = (this->m_SingleMode);
                     PartLoadFrac = 1.0;
                     for (int speedNum = this->m_CoolingSpeedNum; speedNum <= this->m_NumOfSpeedCooling; speedNum++) {
                         this->m_CoolingSpeedNum = speedNum;
@@ -14214,7 +14216,7 @@ namespace UnitarySystems {
                         if (this->m_CoolingSpeedNum == 0) {
                             this->m_CoolingSpeedNum = 1;
                         }
-                        bool const singleMode = (this->m_SingleMode == 1);
+                        bool const singleMode = (this->m_SingleMode);
                         PartLoadFrac = 1.0;
                         for (int speedNum = this->m_CoolingSpeedNum; speedNum <= this->m_NumOfSpeedCooling; speedNum++) {
                             this->m_CoolingSpeedNum = speedNum;
@@ -15600,7 +15602,7 @@ namespace UnitarySystems {
                 state, CompName, 0.0, PartLoadFrac, CompIndex, SpeedNumber, this->m_FanOpMode, HVAC::CompressorOp::On, this->m_SingleMode);
 
         } else if (CoilTypeNum == HVAC::CoilDX_Cooling) {
-            bool const singleMode = (this->m_SingleMode == 1);
+            bool const singleMode = (this->m_SingleMode);
             HVAC::CoilMode coilMode = HVAC::CoilMode::Normal;
             if (state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex].subcoolReheatFlag) {
                 coilMode = HVAC::CoilMode::SubcoolReheat;
@@ -16296,7 +16298,7 @@ namespace UnitarySystems {
         UnitarySys &thisSys = state.dataUnitarySystems->unitarySys[UnitarySysNum];
         Real64 CoolPLR = coolHeatFlag == 1.0 ? PartLoadRatio : 0.0;
         Real64 HeatPLR = coolHeatFlag == 1.0 ? 0.0 : PartLoadRatio;
-        thisSys.setSpeedVariables(state, SensibleLoad, PartLoadRatio);
+        thisSys.setSpeedVariables(state, SensibleLoad != 0.0, PartLoadRatio);
         thisSys.calcUnitarySystemToLoad(state,
                                         AirLoopNum,
                                         FirstHVACIteration,
@@ -16808,7 +16810,7 @@ namespace UnitarySystems {
                                                           Real64 airMdot,
                                                           Real64 par13_SATempTarget,
                                                           Real64 systemMaxAirFlowRate,
-                                                          Real64 par15_LoadType,
+                                                          bool const isCoolingLoad,
                                                           Real64 par16_IterationMethod)
     {
 
@@ -16835,7 +16837,6 @@ namespace UnitarySystems {
             SATempTarget = par13_SATempTarget;
         }
         bool iterateOnAirOnly = (par16_IterationMethod > 1.0);
-        bool coolingLoad = (par15_LoadType > 0.0);
 
         bool HXUnitOn = true;
 
@@ -16881,7 +16882,7 @@ namespace UnitarySystems {
             if (thisSys.MaxHeatCoilFluidFlow > 0.0) {
                 thisSys.HeatCoilWaterFlowRatio = state.dataLoopNodes->Node(WaterControlNode).MassFlowRate / thisSys.MaxHeatCoilFluidFlow;
             }
-        } else if (coolingLoad) { // non-water coil with cooling load
+        } else if (isCoolingLoad) { // non-water coil with cooling load
             coolingPLR = PartLoadRatio;
             thisSys.m_CoolingPartLoadFrac = coolingPLR;
         } else { // must be non-water coil with heating load
@@ -16942,7 +16943,7 @@ namespace UnitarySystems {
                     this->m_HeatingCycRatio = PartLoadRatio;
                     state.dataHVACGlobal->MSHPMassFlowRateLow = state.dataUnitarySystems->CompOnMassFlow;
                 } else {
-                    if (this->m_SingleMode == 0) {
+                    if (!this->m_SingleMode) {
                         this->m_HeatingSpeedRatio = PartLoadRatio;
                         this->m_HeatingCycRatio = 1.0;
                     } else {
@@ -16964,7 +16965,7 @@ namespace UnitarySystems {
                     this->m_CoolingCycRatio = PartLoadRatio;
                     state.dataHVACGlobal->MSHPMassFlowRateLow = state.dataUnitarySystems->CompOnMassFlow;
                 } else {
-                    if (this->m_SingleMode == 0) {
+                    if (!this->m_SingleMode) {
                         this->m_CoolingSpeedRatio = PartLoadRatio;
                         this->m_CoolingCycRatio = 1.0;
                     } else {

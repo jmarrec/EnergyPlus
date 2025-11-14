@@ -15481,10 +15481,10 @@ Real64 VRFTerminalUnitEquipment::HotWaterHeatingCoilResidual(EnergyPlusData &sta
     Real64 Residuum; // Residual to be minimized to zero
 
     // local variables declaration:
-    int VRFTUNum = int(Par[1]);       // index to current terminal unit simulated
-    bool FirstHVACIteration = Par[2]; // 0 flag if it first HVAC iteration, or else 1
-    Real64 SuppHeatCoilLoad = Par[3]; // supplemental heating coil load to be met [W]
-    Real64 QActual = 0.0;             // actual heating load delivered [W]
+    int VRFTUNum = int(Par[1]);              // index to current terminal unit simulated
+    bool FirstHVACIteration = Par[2] != 0.0; // 0 flag if it first HVAC iteration, or else 1
+    Real64 SuppHeatCoilLoad = Par[3];        // supplemental heating coil load to be met [W]
+    Real64 QActual = 0.0;                    // actual heating load delivered [W]
 
     // Real64 mdot = min(state.dataLoopNodes->Node(VRFTU(VRFTUNum).SuppHeatCoilFluidOutletNode).MassFlowRateMaxAvail,
     //                  VRFTU(VRFTUNum).SuppHeatCoilFluidMaxFlow * PartLoadFrac);
