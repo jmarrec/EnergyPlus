@@ -140,12 +140,10 @@ namespace PCMStorage {
         Real64 temp = state.dataLoopNodes->Node(this->UseSideInletNode).Temp;
 
         // get the water fluid property object
-        std::string fluidNameUse = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).FluidName;
-        EnergyPlus::Fluid::GlycolProps *rhoUseProps = EnergyPlus::Fluid::GetGlycol(state, fluidNameUse);
+        EnergyPlus::Fluid::GlycolProps *rhoUseProps = this->usePlantLoc.loop->glycol;
         double rhoUse = rhoUseProps->getDensity(state, temp, "PCMStorageData::Calculate");
 
-        std::string fluidNamePlant = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).FluidName;
-        EnergyPlus::Fluid::GlycolProps *rhoPlantProps = EnergyPlus::Fluid::GetGlycol(state, fluidNamePlant);
+        EnergyPlus::Fluid::GlycolProps *rhoPlantProps = this->sourcePlantLoc.loop->glycol;
         double rhoPlant = rhoPlantProps->getDensity(state, temp, "PCMStorageData::Calculate");
 
         // At the beginning of each new environment (e.g. design day) perform one-time initializations.
@@ -257,12 +255,10 @@ namespace PCMStorage {
 
         Real64 temp = state.dataLoopNodes->Node(this->UseSideInletNode).Temp;
 
-        std::string fluidNameUse = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).FluidName;
-        EnergyPlus::Fluid::GlycolProps *cpUseProps = EnergyPlus::Fluid::GetGlycol(state, fluidNameUse);
+        EnergyPlus::Fluid::GlycolProps *cpUseProps = this->usePlantLoc.loop->glycol;
         Real64 CpWaterUse = cpUseProps->getSpecificHeat(state, temp, "PCMStorageData::Calculate"); // J/kg-C
 
-        std::string fluidNamePlant = state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum).FluidName;
-        EnergyPlus::Fluid::GlycolProps *cpPlantProps = EnergyPlus::Fluid::GetGlycol(state, fluidNamePlant);
+        EnergyPlus::Fluid::GlycolProps *cpPlantProps = this->sourcePlantLoc.loop->glycol;
         Real64 CpWaterPlant = cpPlantProps->getSpecificHeat(state, temp, "PCMStorageData::Calculate"); // J/kg-C
         // Real64 massFlowUse = useInlet.MassFlowRate;
         // Real64 massFlowPlant = plantInlet.MassFlowRate;
