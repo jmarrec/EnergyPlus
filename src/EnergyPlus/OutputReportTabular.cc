@@ -6354,7 +6354,7 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
 
             // air loop name
             if (thisZone.IsControlled) {
-                std::string airLoopName = "";
+                std::string airLoopName;
                 for (int zoneInNode = 1; zoneInNode <= state.dataZoneEquip->ZoneEquipConfig(iZone).NumInletNodes; ++zoneInNode) {
                     int airLoopNumber = state.dataZoneEquip->ZoneEquipConfig(iZone).InletNodeAirLoopNum(zoneInNode);
                     if (airLoopNumber > 0) {
@@ -14762,7 +14762,7 @@ int unitsFromHeading(EnergyPlusData &state, std::string &heading)
 // Glazer Nov 2016
 int unitsFromHeading(EnergyPlusData &state, std::string &heading, UnitsStyle unitsStyle_para)
 {
-    std::string curHeading = "";
+    std::string curHeading;
     int unitConv = 0;
     if (unitsStyle_para == UnitsStyle::InchPound) {
         LookupSItoIP(state, heading, unitConv, curHeading);

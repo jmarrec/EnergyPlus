@@ -1012,7 +1012,7 @@ void InitExternalInterfaceFMUImport(EnergyPlusData &state)
         for (int i = 1; i <= state.dataExternalInterface->NumFMUObjects; ++i) {
             auto &fmu = state.dataExternalInterface->FMU(i);
 
-            std::string Name_OLD = "";
+            std::string Name_OLD;
             int j = 1;
             int k = 1;
             fmu.Instance.allocate(NumFMUInputVariables);

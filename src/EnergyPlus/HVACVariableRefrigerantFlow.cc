@@ -5902,7 +5902,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                 if (ctrlZoneNum > 0) {
                     int inletNodeADUNum = 0;
                     DataZoneEquipment::ZoneEquipType sysType_Num = DataZoneEquipment::ZoneEquipType::Invalid;
-                    std::string sysName = "";
+                    std::string sysName;
                     for (int inletNode = 1; inletNode <= state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).NumInletNodes; inletNode++) {
                         if (state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).InletNodeAirLoopNum(inletNode) !=
                             state.dataHVACVarRefFlow->VRFTU(TUIndex).airLoopNum) {

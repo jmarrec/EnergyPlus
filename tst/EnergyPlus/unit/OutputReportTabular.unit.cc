@@ -473,7 +473,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetColumnUsingTabs)
     }
 
     {
-        std::string inString = "";
+        std::string inString;
         EXPECT_EQ("", GetColumnUsingTabs(inString, 1));
         EXPECT_EQ("", GetColumnUsingTabs(inString, 2));
     }
@@ -8592,9 +8592,9 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_8317_ValidateOutputTableMon
 
     InitializeOutput(*state);
 
-    std::string endUseSub("");
-    std::string const zoneName("");
-    std::string const spaceType("");
+    std::string endUseSub;
+    std::string const zoneName;
+    std::string const spaceType;
 
     // AttachMeters(*state, Constant::Units::J, resource, sovEndUseCat, endUseSub, sovGroup, zoneName, spaceType, -1);
     Meter *meter1 = new Meter("NATURALGAS:FACILITY");

@@ -3894,12 +3894,12 @@ void LEEDtariffReporting(EnergyPlusData &state)
         othrUnits = EconConv::USERDEF;
         gasDemWindowUnits = DemandWindow::Invalid;
         othrDemWindowUnits = DemandWindow::Invalid;
-        std::string elecTariffNames = "";
-        std::string gasTariffNames = "";
-        std::string distCoolTariffNames = "";
-        std::string distHeatWaterTariffNames = "";
-        std::string distHeatSteamTariffNames = "";
-        std::string othrTariffNames = "";
+        std::string elecTariffNames;
+        std::string gasTariffNames;
+        std::string distCoolTariffNames;
+        std::string distHeatWaterTariffNames;
+        std::string distHeatSteamTariffNames;
+        std::string othrTariffNames;
         for (int iTariff = 1; iTariff <= s_econ->numTariff; ++iTariff) {
             auto &tariff = s_econ->tariff(iTariff);
             if (tariff.isSelected) {
@@ -4451,7 +4451,7 @@ void WriteTabularTariffReports(EnergyPlusData &state)
                             } else {
                                 OutputReportTabular::WriteTextLine(state, "Computation -  Automatic", true);
                             }
-                            std::string outString = "";
+                            std::string outString;
                             for (int lStep = computation.firstStep; lStep <= computation.lastStep; ++lStep) {
                                 auto &step = s_econ->steps(lStep);
 

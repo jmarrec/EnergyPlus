@@ -10592,7 +10592,7 @@ namespace SurfaceGeometry {
 
                     // Set return air node number
                     state.dataSurface->SurfWinAirflowReturnNodePtr(SurfNum) = 0;
-                    std::string retNodeName = "";
+                    std::string retNodeName;
                     if (!s_ipsc->lAlphaFieldBlanks(7)) {
                         retNodeName = s_ipsc->cAlphaArgs(7);
                     }
@@ -14629,7 +14629,7 @@ namespace SurfaceGeometry {
         bool anyGroupedSpaces = false;
         bool radiantSetup = false;
         bool solarSetup = false;
-        std::string RadiantOrSolar = "";
+        std::string RadiantOrSolar;
         int enclosureNum = 0;
         if (EnclosureType == RadiantEnclosures) {
             radiantSetup = true;

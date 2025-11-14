@@ -111,8 +111,8 @@ namespace UnitarySystems {
     int constexpr HeatingCoil = 1;
     int constexpr SuppHeatCoil = 2;
 
-    static constexpr std::string_view blankString("");
-    static const std::string blankStdString("");
+    static constexpr std::string_view blankString;
+    static const std::string blankStdString;
 
     void UnitarySys::simulate(EnergyPlusData &state,
                               std::string_view Name,
@@ -561,8 +561,8 @@ namespace UnitarySystems {
             DataPlant::PlantEquipmentType TypeOfCoilWaterCooling{DataPlant::PlantEquipmentType::Invalid};
             if (this->m_CoolingCoilType_Num == HVAC::Coil_CoolingWater || this->m_CoolingCoilType_Num == HVAC::Coil_CoolingWaterDetailed ||
                 this->m_CoolingCoilType_Num == HVAC::CoilWater_CoolingHXAssisted) {
-                std::string CoolingCoilType = "";
-                std::string CoolingCoilName = "";
+                std::string CoolingCoilType;
+                std::string CoolingCoilName;
                 if (this->m_CoolingCoilType_Num == HVAC::Coil_CoolingWater) {
                     TypeOfCoilWaterCooling = DataPlant::PlantEquipmentType::CoilWaterCooling;
                     CoolingCoilType = "Coil:Cooling:Water";
@@ -617,7 +617,7 @@ namespace UnitarySystems {
             }
             DataPlant::PlantEquipmentType TypeOfCoilWaterHeating = DataPlant::PlantEquipmentType::Invalid;
             if (this->m_HeatingCoilType_Num == HVAC::Coil_HeatingWater || this->m_HeatingCoilType_Num == HVAC::Coil_HeatingSteam) {
-                std::string HeatingCoilType = "";
+                std::string HeatingCoilType;
                 if (this->m_HeatingCoilType_Num == HVAC::Coil_HeatingWater) {
                     TypeOfCoilWaterHeating = DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
                     HeatingCoilType = "Coil:Heating:Water";
@@ -784,7 +784,7 @@ namespace UnitarySystems {
 
                 if (this->MaxCoolCoilFluidFlow == DataSizing::AutoSize) {
                     // If water coil max water flow rate is DataSizing::AutoSized, simulate once in order to mine max flow rate
-                    std::string CoolingCoilType = "";
+                    std::string CoolingCoilType;
                     if (this->m_CoolingCoilType_Num == HVAC::Coil_CoolingWater) {
                         CoolingCoilType = "Coil:Cooling:Water";
                     } else {
@@ -3232,8 +3232,8 @@ namespace UnitarySystems {
                 int BranchNum = BranchInputManager::GetAirBranchIndex(state, "AirloopHVAC:UnitarySystem", this->Name);
                 BranchFanFlow = 0.0;
                 if (BranchNum > 0.0) {
-                    std::string FanType = "";
-                    std::string FanName = "";
+                    std::string FanType;
+                    std::string FanName;
                     BranchInputManager::GetBranchFanTypeName(state, BranchNum, FanType, FanName, ErrFound);
                     if (!ErrFound) {
                         BranchFanFlow = state.dataFans->fans(this->m_FanIndex)->maxAirFlowRate;
@@ -7330,14 +7330,14 @@ namespace UnitarySystems {
                     // find default value
                     thisSys.input_specs.dehumidification_control_type = "None";
                 }
-                std::string loc_RunOnSensLoad("");
+                std::string loc_RunOnSensLoad;
                 if (auto it = fields.find("run_on_sensible_load"); it != fields.end()) { // not required field
                     loc_RunOnSensLoad = Util::makeUPPER(it.value().get<std::string>());
                 } else {
                     // find default value
                     loc_RunOnSensLoad = "YES";
                 }
-                std::string loc_RunOnLatLoad("");
+                std::string loc_RunOnLatLoad;
                 if (auto it = fields.find("run_on_latent_load"); it != fields.end()) { // not required field
                     loc_RunOnLatLoad = Util::makeUPPER(it.value().get<std::string>());
                 } else {
@@ -7612,7 +7612,7 @@ namespace UnitarySystems {
                 thisSys.input_specs.control_type = "Setpoint";
                 thisSys.input_specs.air_inlet_node_name = Util::makeUPPER(fields.at("air_inlet_node_name").get<std::string>());
                 thisSys.input_specs.air_outlet_node_name = Util::makeUPPER(fields.at("air_outlet_node_name").get<std::string>());
-                std::string availScheduleName("");
+                std::string availScheduleName;
                 if (auto it = fields.find("availability_schedule_name"); it != fields.end()) { // not required field, has default value of Always On
                     availScheduleName = Util::makeUPPER(it.value().get<std::string>());
                 }

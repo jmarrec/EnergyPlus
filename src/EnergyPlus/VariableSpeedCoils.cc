@@ -1747,9 +1747,9 @@ namespace VariableSpeedCoils {
                     ShowContinueError(state, format("...{} = 0.0 for defrost strategy = RESISTIVE.", cFieldName));
                 }
 
-                std::string cFieldName = "";
-                std::string fieldValue = "";
-                std::string fieldName = "";
+                std::string cFieldName;
+                std::string fieldValue;
+                std::string fieldName;
                 for (int I = 1; I <= varSpeedCoil.NumOfSpeeds; ++I) {
                     fieldName = format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_heating_capacity");
                     varSpeedCoil.MSRatedTotCap(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
