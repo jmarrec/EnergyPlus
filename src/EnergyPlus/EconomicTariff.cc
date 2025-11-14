@@ -4220,7 +4220,7 @@ void WriteTabularTariffReports(EnergyPlusData &state)
                         tableBody(4, iTariff) = "Net";
                     }
 
-                    if (tariff.groupName == "") {
+                    if (tariff.groupName.empty()) {
                         tableBody(5, iTariff) = "(none)";
                     } else {
                         tableBody(5, iTariff) = tariff.groupName;
@@ -4284,7 +4284,7 @@ void WriteTabularTariffReports(EnergyPlusData &state)
                         } else {
                             tableBody(1, 2) = "No";
                         }
-                        if (tariff.groupName == "") {
+                        if (tariff.groupName.empty()) {
                             tableBody(1, 3) = "(none)";
                         } else {
                             tableBody(1, 3) = tariff.groupName;

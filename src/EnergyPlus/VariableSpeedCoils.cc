@@ -4432,7 +4432,7 @@ namespace VariableSpeedCoils {
         } else {
             // HPWH, the mass flow rate will be updated by a revised entering air density
 
-            if (varSpeedCoil.MSHPDesignSpecIndex > -1 && state.dataUnitarySystems->designSpecMSHP.size() > 0) {
+            if (varSpeedCoil.MSHPDesignSpecIndex > -1 && !state.dataUnitarySystems->designSpecMSHP.empty()) {
                 if (varSpeedCoil.VSCoilType == HVAC::Coil_CoolingWaterToAirHPVSEquationFit ||
                     varSpeedCoil.VSCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) {
                     if (state.dataUnitarySystems->designSpecMSHP[varSpeedCoil.MSHPDesignSpecIndex].numOfSpeedCooling != varSpeedCoil.NumOfSpeeds) {

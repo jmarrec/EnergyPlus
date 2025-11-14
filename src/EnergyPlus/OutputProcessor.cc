@@ -1615,7 +1615,7 @@ namespace OutputProcessor {
 
         auto &op = state.dataOutputProcessor;
 
-        if (op->meters.size() == 0 || op->meterValues.size() == 0) {
+        if (op->meters.empty() || op->meterValues.empty()) {
             return;
         }
 

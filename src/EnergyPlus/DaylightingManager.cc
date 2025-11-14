@@ -9834,7 +9834,7 @@ void MapShadeDeploymentOrderToLoopNumber(EnergyPlusData &state, int const enclNu
 
     for (int controlNum : thisEnclDaylight.daylightControlIndexes) {
         auto &thisDaylightCtrl = dl->daylightControl(controlNum);
-        if (thisDaylightCtrl.ShadeDeployOrderExtWins.size() == 0) {
+        if (thisDaylightCtrl.ShadeDeployOrderExtWins.empty()) {
             continue;
         }
 

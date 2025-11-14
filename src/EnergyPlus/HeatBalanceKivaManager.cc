@@ -84,7 +84,7 @@ void kivaErrorCallback(const int messageType, const std::string message, void *c
     }
     std::string fullMessage;
     std::pair<EnergyPlusData *, std::string> contextPair = *(std::pair<EnergyPlusData *, std::string> *)contextPtr;
-    if (contextPair.second.size() > 0) {
+    if (!contextPair.second.empty()) {
         fullMessage = format("{}: {}", contextPair.second, message);
     } else {
         fullMessage = format("Kiva: {}", message);

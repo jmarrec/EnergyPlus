@@ -5773,9 +5773,9 @@ namespace UnitarySystems {
         // alleviate input requirements. check if coil has no air flow input (VolFlow = 0) and other coil isDataSizing::AutoSized. If so,
         // use AutoSize for coil with 0 air flow rate. This means that the coils MUST mine the air flow rate if it exists
         if (this->m_CoolCoilExists && this->m_HeatCoilExists) {
-            if (this->m_MaxCoolAirVolFlow == DataSizing::AutoSize && this->m_MaxHeatAirVolFlow == 0 && loc_m_HeatingSAFMethod == "") {
+            if (this->m_MaxCoolAirVolFlow == DataSizing::AutoSize && this->m_MaxHeatAirVolFlow == 0 && loc_m_HeatingSAFMethod.empty()) {
                 this->m_MaxHeatAirVolFlow = DataSizing::AutoSize;
-            } else if (this->m_MaxCoolAirVolFlow == 0 && this->m_MaxHeatAirVolFlow == DataSizing::AutoSize && loc_m_CoolingSAFMethod == "") {
+            } else if (this->m_MaxCoolAirVolFlow == 0 && this->m_MaxHeatAirVolFlow == DataSizing::AutoSize && loc_m_CoolingSAFMethod.empty()) {
                 this->m_MaxCoolAirVolFlow = DataSizing::AutoSize;
             }
         }
@@ -6012,7 +6012,7 @@ namespace UnitarySystems {
                 errorsFound = true;
             }
 
-        } else if (Util::SameString(loc_m_CoolingSAFMethod, "None") || loc_m_CoolingSAFMethod == "") {
+        } else if (Util::SameString(loc_m_CoolingSAFMethod, "None") || loc_m_CoolingSAFMethod.empty()) {
             this->m_CoolingSAFMethod = DataSizing::None;
             if (this->m_CoolCoilExists && this->m_MaxCoolAirVolFlow == 0) {
                 ShowSevereError(state, format("{} = {}", cCurrentModuleObject, thisObjectName));
@@ -6141,11 +6141,11 @@ namespace UnitarySystems {
                 ShowContinueError(state, "Blank field not allowed for Heating Supply Air Flow Rate Per Unit of Capacity");
                 errorsFound = true;
             }
-        } else if (Util::SameString(loc_m_HeatingSAFMethod, "None") || loc_m_HeatingSAFMethod == "") {
+        } else if (Util::SameString(loc_m_HeatingSAFMethod, "None") || loc_m_HeatingSAFMethod.empty()) {
             this->m_HeatingSAFMethod = DataSizing::None;
             if (this->m_HeatCoilExists && this->m_MaxHeatAirVolFlow == 0) {
                 ShowSevereError(state, format("{} = {}", cCurrentModuleObject, thisObjectName));
-                if (loc_m_HeatingSAFMethod == "") {
+                if (loc_m_HeatingSAFMethod.empty()) {
                     ShowContinueError(state, "Input for Heating Supply Air Flow Rate Method is blank.");
                 } else {
                     ShowContinueError(state, "Input for Heating Supply Air Flow Rate Method = None.");
@@ -6333,7 +6333,7 @@ namespace UnitarySystems {
                 ShowContinueError(state, "Blank field not allowed for No Load Supply Air Flow Rate Per Unit of Capacity During Heating Operation");
                 errorsFound = true;
             }
-        } else if (Util::SameString(loc_m_NoCoolHeatSAFMethod, "None") || loc_m_NoCoolHeatSAFMethod == "") {
+        } else if (Util::SameString(loc_m_NoCoolHeatSAFMethod, "None") || loc_m_NoCoolHeatSAFMethod.empty()) {
             this->m_NoCoolHeatSAFMethod = DataSizing::None;
             if (this->m_ControlType == UnitarySysCtrlType::CCMASHRAE) {
                 if (loc_m_NoCoolHeatSAFMethod_SAFlow == -99999.0) { // no load air flow is autosized
@@ -6440,7 +6440,7 @@ namespace UnitarySystems {
             ShowSevereError(state, format("{} = {}", cCurrentModuleObject, thisObjectName));
             ShowContinueError(state, format("Illegal Dehumidification Control Type = {}", input_data.dehumidification_control_type));
             ShowContinueError(state, "Multimode control must be used with a Heat Exchanger Assisted or Multimode Cooling Coil.");
-            if (this->m_SuppHeatCoilName == "" && this->m_SuppHeatCoilTypeName == "") {
+            if (this->m_SuppHeatCoilName.empty() && this->m_SuppHeatCoilTypeName.empty()) {
             } else {
                 if (this->m_CoolingCoilType_Num == HVAC::Coil_UserDefined) {
                     ShowContinueError(state, "Dehumidification control type is assumed to be None and the simulation continues.");
@@ -6854,7 +6854,7 @@ namespace UnitarySystems {
             // GetHXDXCoilName(state,  CoolingCoilType, this->m_CoolingCoilName, errFlag ), errFlag );
 
         } else {
-            if (input_data.outdoor_dry_bulb_temperature_sensor_node_name != "") {
+            if (!input_data.outdoor_dry_bulb_temperature_sensor_node_name.empty()) {
                 this->m_CondenserNodeNum = NodeInputManager::GetOnlySingleNode(state,
                                                                                input_data.outdoor_dry_bulb_temperature_sensor_node_name,
                                                                                errFlag,
@@ -6880,7 +6880,7 @@ namespace UnitarySystems {
 
         if (this->m_DesignHRWaterVolumeFlow > 0.0) {
             this->m_HeatRecActive = true;
-            if (input_data.heat_recovery_water_inlet_node_name != "" && input_data.heat_recovery_water_outlet_node_name != "") {
+            if (!input_data.heat_recovery_water_inlet_node_name.empty() && !input_data.heat_recovery_water_outlet_node_name.empty()) {
                 this->m_HeatRecoveryInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
                                                                                        input_data.heat_recovery_water_inlet_node_name,
                                                                                        errFlag,

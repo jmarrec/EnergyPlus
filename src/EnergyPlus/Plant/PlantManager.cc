@@ -4628,7 +4628,7 @@ void ReportPlantCompWaterFlowData(EnergyPlusData &state, bool const reportFlag)
     // Could be changed to report all loop's and components at the same time (i.e., as single group from 00:15 to 24:00 instead of multiple groups)
     // sum equipment water flow rate time series
     for (int LoopNum = 1; LoopNum <= state.dataHVACGlobal->NumPlantLoops; ++LoopNum) {
-        if (state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate.size() == 0) {
+        if (state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate.empty()) {
             continue;
         }
         OpenPszFile = true;

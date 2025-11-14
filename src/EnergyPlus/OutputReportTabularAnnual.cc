@@ -187,7 +187,7 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
 
     std::string filterFieldUpper = m_filter;
     std::transform(filterFieldUpper.begin(), filterFieldUpper.end(), filterFieldUpper.begin(), ::toupper);
-    bool useFilter = (m_filter.size() != 0);
+    bool useFilter = (!m_filter.empty());
 
     std::vector<AnnualFieldSet>::iterator fldStIt;
     for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
@@ -707,7 +707,7 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
     int columnRecount = 0;
     for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
         std::string curAggString = aggString[(int)fldStIt->m_aggregate];
-        if (curAggString.size() > 0) {
+        if (!curAggString.empty()) {
             curAggString = " {" + trim(curAggString) + '}';
         }
         // do the unit conversions
@@ -1393,7 +1393,7 @@ void AnnualTable::columnHeadersToTitleCase(EnergyPlusData &state)
     std::vector<AnnualFieldSet>::iterator fldStIt;
     for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
         if (fldStIt->m_variMeter == fldStIt->m_colHead) {
-            if (fldStIt->m_indexesForKeyVar.size() > 0) {
+            if (!fldStIt->m_indexesForKeyVar.empty()) {
                 int varNum = fldStIt->m_indexesForKeyVar[0];
                 if (fldStIt->m_typeOfVar == OutputProcessor::VariableType::Real) {
                     fldStIt->m_colHead = state.dataOutputProcessor->outVars[varNum]->name;
@@ -1458,7 +1458,7 @@ std::vector<std::string> AnnualTable::inspectTableFieldSets(int fldIndex)
     outStr = std::to_string(fldSt.m_timeBelowBottomBinTotal);
     ret.push_back(outStr);
     // cell value
-    if (fldSt.m_cell.size() > 0) {
+    if (!fldSt.m_cell.empty()) {
         outStr = std::to_string(fldSt.m_cell[0].result);
         ret.push_back(outStr);
     }

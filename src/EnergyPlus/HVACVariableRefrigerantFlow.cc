@@ -5736,7 +5736,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     goto EquipList_exit; // already found previously
                 }
                 for (ELLoop = 1; ELLoop <= state.dataGlobal->NumOfZones; ++ELLoop) { // NumOfZoneEquipLists
-                    if (state.dataZoneEquip->ZoneEquipList(ELLoop).Name == "") {
+                    if (state.dataZoneEquip->ZoneEquipList(ELLoop).Name.empty()) {
                         continue; // dimensioned by NumOfZones.  Only valid ones have names.
                     }
                     for (ListLoop = 1; ListLoop <= state.dataZoneEquip->ZoneEquipList(ELLoop).NumOfEquipTypes; ++ListLoop) {

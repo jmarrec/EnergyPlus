@@ -3414,7 +3414,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
 
             // A7 End use category
             thisPLHP.endUseSubcat = Util::makeUPPER(fields.at("end_use_subcategory").get<std::string>());
-            if (thisPLHP.endUseSubcat == "") {
+            if (thisPLHP.endUseSubcat.empty()) {
                 thisPLHP.endUseSubcat = "Heat Pump Fuel Fired"; // or "General"?
             }
 

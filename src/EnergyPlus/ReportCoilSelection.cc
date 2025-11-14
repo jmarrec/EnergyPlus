@@ -1308,7 +1308,7 @@ void ReportCoilSelection::setCoilCoolingCapacity(
                 }
             }
         }
-        if (c->zoneNum.size() > 0 && sumVdot > 0.0) {
+        if (!c->zoneNum.empty() && sumVdot > 0.0) {
             c->rmPeakTemp = (sumT_Vdot / sumVdot);
             c->rmPeakHumRat = (sumW_Vdot / sumVdot);
             c->rmPeakRelHum =
@@ -1575,7 +1575,7 @@ void ReportCoilSelection::setCoilHeatingCapacity(
             }
         }
 
-        if (c->zoneNum.size() > 0 && sumVdot > 0.0) {
+        if (!c->zoneNum.empty() && sumVdot > 0.0) {
             c->rmPeakTemp = (sumT_Vdot / sumVdot);
             c->rmPeakHumRat = (sumW_Vdot / sumVdot);
             c->rmPeakRelHum =
