@@ -737,8 +737,7 @@ bool KivaManager::setupKivaInstances(EnergyPlusData &state)
             }
 
             Kiva::Polygon floorPolygon;
-            for (std::size_t i = 0; i < surface.Vertex.size(); ++i) {
-                auto const &v = surface.Vertex[i];
+            for (const auto &v : surface.Vertex) {
                 floorPolygon.outer().push_back(Kiva::Point(v.x, v.y));
                 if (!userSetExposedPerimeter) {
                     isExposedPerimeter.push_back(true);

@@ -174,8 +174,8 @@ void ReportCoilSelection::writeCoilSelectionOutput(EnergyPlusData &state)
         } else if (c->zoneName.size() > 1) {
             // make list of zone names
             std::string tmpZoneList;
-            for (std::size_t vecLoop = 0; vecLoop < c->zoneName.size(); ++vecLoop) {
-                tmpZoneList += c->zoneName[vecLoop] + "; ";
+            for (const auto &vecLoop : c->zoneName) {
+                tmpZoneList += vecLoop + "; ";
             }
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCoilZoneName, c->coilName_, tmpZoneList);
             // begin std 229 New coil connections table entries

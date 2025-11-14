@@ -1011,24 +1011,24 @@ struct OutputProcessorData : BaseGlobalStruct
             new (&this->TimeValue[i]) OutputProcessor::TimeSteps();
         }
 
-        for (int i = 0; i < (int)this->outVars.size(); ++i) {
-            delete this->outVars[i];
+        for (auto &outVar : this->outVars) {
+            delete outVar;
         }
         this->outVars.clear();
 
-        for (int i = 0; i < (int)this->ddOutVars.size(); ++i) {
-            delete this->ddOutVars[i];
+        for (auto &ddOutVar : this->ddOutVars) {
+            delete ddOutVar;
         }
         this->ddOutVars.clear();
         this->ddOutVarMap.clear();
 
-        for (int i = 0; i < (int)this->reqVars.size(); ++i) {
-            delete this->reqVars[i];
+        for (auto &reqVar : this->reqVars) {
+            delete reqVar;
         }
         this->reqVars.clear();
 
-        for (int i = 0; i < (int)this->meters.size(); ++i) {
-            delete this->meters[i];
+        for (auto &meter : this->meters) {
+            delete meter;
         }
         this->meters.clear();
         this->meterMap.clear();

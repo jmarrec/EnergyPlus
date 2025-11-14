@@ -4555,8 +4555,8 @@ bool ReportingThisVariable(EnergyPlusData &state, std::string const &RepVarName)
 
     std::string name = Util::makeUPPER(RepVarName);
 
-    for (int iReqVar = 0; iReqVar < (int)op->reqVars.size(); ++iReqVar) {
-        if (op->reqVars[iReqVar]->name == name) {
+    for (auto &reqVar : op->reqVars) {
+        if (reqVar->name == name) {
             return true;
         }
     }
