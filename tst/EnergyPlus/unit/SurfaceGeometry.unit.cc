@@ -1210,10 +1210,10 @@ TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_findIndexOfVertex)
 
     EXPECT_EQ(0, findIndexOfVertex(a, list));
 
-    list.emplace_back(DataVectorTypes::Vector(3., 2., 4.));
-    list.emplace_back(DataVectorTypes::Vector(4., 3., 5.));
-    list.emplace_back(DataVectorTypes::Vector(8., 1., 2.));
-    list.emplace_back(DataVectorTypes::Vector(4., 7., 3.));
+    list.emplace_back(3., 2., 4.);
+    list.emplace_back(4., 3., 5.);
+    list.emplace_back(8., 1., 2.);
+    list.emplace_back(4., 7., 3.);
 
     EXPECT_EQ(0, findIndexOfVertex(a, list));
 

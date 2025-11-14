@@ -3282,7 +3282,7 @@ void DistributePlantLoad(EnergyPlusData &state,
                 LargestMinCompPLR = max(LargestMinCompPLR, MinCompPLR);
 
                 // Update the array
-                accrued_load_plr_values.push_back(LoadPLRPoint(PlantCapacity, LargestMinCompPLR));
+                accrued_load_plr_values.emplace_back(PlantCapacity, LargestMinCompPLR);
             }
 
             // work backwards from full capacity down to 1 unit on

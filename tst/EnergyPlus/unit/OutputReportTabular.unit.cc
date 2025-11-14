@@ -194,13 +194,13 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_digitsAferDecimal)
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_splitCommaString)
 {
     std::vector<std::string> actual;
-    actual.push_back("part1");
+    actual.emplace_back("part1");
     EXPECT_EQ(actual, splitCommaString("part1"));
-    actual.push_back("part2");
+    actual.emplace_back("part2");
     EXPECT_EQ(actual, splitCommaString("part1,part2"));
     EXPECT_EQ(actual, splitCommaString(" part1,part2 "));
     EXPECT_EQ(actual, splitCommaString(" part1 , part2 "));
-    actual.push_back("part3");
+    actual.emplace_back("part3");
     EXPECT_EQ(actual, splitCommaString("part1,part2,part3"));
     EXPECT_EQ(actual, splitCommaString(" part1 , part2 , part3 "));
 }
@@ -209,12 +209,12 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_stringJoinDelimiter)
 {
     std::vector<std::string> original;
     EXPECT_EQ("", stringJoinDelimiter(original, ";"));
-    original.push_back("part1");
+    original.emplace_back("part1");
     EXPECT_EQ("part1", stringJoinDelimiter(original, ";"));
-    original.push_back("part2");
+    original.emplace_back("part2");
     EXPECT_EQ("part1;part2", stringJoinDelimiter(original, ";"));
     EXPECT_EQ("part1 ; part2", stringJoinDelimiter(original, " ; "));
-    original.push_back("part3");
+    original.emplace_back("part3");
     EXPECT_EQ("part1;part2;part3", stringJoinDelimiter(original, ";"));
     EXPECT_EQ("part1 ; part2 ; part3", stringJoinDelimiter(original, " ; "));
 }

@@ -1215,7 +1215,7 @@ std::vector<std::string> InputProcessor::getIDFOrderedKeys(EnergyPlusData &state
 
     // Reserve doesn't seem to work :(
     for (int i = 0; i < (int)nums.size(); ++i) {
-        keys.push_back("");
+        keys.emplace_back("");
     }
 
     // get list of saved object numbers from idf processing
