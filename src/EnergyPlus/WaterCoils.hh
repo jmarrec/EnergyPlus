@@ -156,7 +156,7 @@ namespace WaterCoils {
         // END calculated parameters for detailed flat fin coil
         // Design Input Variables to the Design Detailed Simple inputs model
         Real64 DesInletWaterTemp;   // Entering water temperature at Design(C)
-        Real64 DesAirVolFlowRate;   // Entering Air Volume Flow Rate Design( m3/s)
+        Real64 DesAirVolFlowRate;   // Entering Air Volume Flow Rate Design (m3/s)
         Real64 DesInletAirTemp;     // Entering air dry bulb temperature at Design(C)
         Real64 DesInletAirHumRat;   // Entering air humidity ratio at design conditions
         Real64 DesTotWaterCoilLoad; // Total heat transfer rate at Design(Watt)
