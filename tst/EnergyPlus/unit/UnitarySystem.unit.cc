@@ -13330,7 +13330,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedCoils_SingleMode)
     state->dataEnvrn->OutHumRat = 0.1;
     state->dataEnvrn->OutBaroPress = 101325.0;
     state->dataEnvrn->OutWetBulbTemp = 30.0;
-    thisSys->m_SingleMode = 0;
+    thisSys->m_SingleMode = false;
 
     thisSys->simulate(*state,
                       thisSys->Name,
@@ -25354,7 +25354,7 @@ TEST_F(ZoneUnitarySysTest, ZeroCoolingSpeedTest)
     Real64 CoilCoolHeatRat(1.0);
     HVAC::CompressorOp CompressorOn(HVAC::CompressorOp::On);
     thisSys->m_CoolingSpeedNum = 0;
-    thisSys->m_SingleMode = 0;
+    thisSys->m_SingleMode = false;
     thisSys->m_CoolingPartLoadFrac = 0.5;
     thisSys->calcUnitaryCoolingSystem(
         *state, AirLoopNum, FirstHVACIteration, thisSys->m_CoolingPartLoadFrac, CompressorOn, OnOffAirFlowRatio, CoilCoolHeatRat, false);
