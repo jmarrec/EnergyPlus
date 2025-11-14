@@ -1215,29 +1215,11 @@ void GetPlantInput(EnergyPlusData &state)
                         break;
                     }
                     case PlantEquipmentType::HeatPumpAirToWater: {
-                        if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::HotWater) {
-                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
-                                state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
-                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterHeating;
-                            this_comp.TypeOf = "HeatPumpAirToWaterHeating";
-                        } else if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::ChilledWater) {
-                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
-                                state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
-                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterCooling;
-                            this_comp.TypeOf = "HeatPumpAirToWaterCooling";
-                        }
-                        this_comp.CurOpSchemeType = OpScheme::Invalid;
-                        break;
-                    }
-                    case PlantEquipmentType::HeatPumpAirToWaterHeating: {
+                        DataPlant::PlantEquipmentType eqType = PlantEquipmentType::HeatPumpAirToWater;
+                        // Compare node nums to identify which side of the heat pump this is
                         this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
-                            state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
-                        this_comp.CurOpSchemeType = OpScheme::Invalid;
-                        break;
-                    }
-                    case PlantEquipmentType::HeatPumpAirToWaterCooling: {
-                        this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
-                            state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
+                            state, eqType, CompNames(CompNum), InletNodeNumbers(CompNum), OutletNodeNumbers(CompNum));
+                        this_comp.Type = eqType; // reset by factory to heating or cooling
                         this_comp.CurOpSchemeType = OpScheme::Invalid;
                         break;
                     }

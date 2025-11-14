@@ -690,7 +690,6 @@ void GatherForPredefinedReport(EnergyPlusData &state)
     };
 
     constexpr std::array<std::string_view, static_cast<int>(DataSurfaces::WindowShadingControlType::Num)> WindowShadingControlTypeNames = {
-        "Uncontrolled",
         "AlwaysOn",
         "AlwaysOff",
         "OnIfScheduleAllows",
@@ -711,7 +710,10 @@ void GatherForPredefinedReport(EnergyPlusData &state)
         "OnIfHighOutdoorAirTempAndHighSolarOnWindow",
         "OnIfHighOutdoorAirTempAndHighHorizontalSolar",
         "OnIfHighZoneAirTempAndHighSolarOnWindow",
-        "OnIfHighZoneAirTempAndHighHorizontalSolar"};
+        "OnIfHighZoneAirTempAndHighHorizontalSolar",
+        "OnIfHighSolarOrHighLuminanceTillMidnight",
+        "OnIfHighSolarOrHighLuminanceTillSunset",
+        "OnIfHighSolarOrHighLuminanceTillNextMorning"};
 
     constexpr std::array<std::string_view, static_cast<int>(DataSurfaces::NfrcProductOptions::Num)> NfrcProductNames = {
         "CasementDouble", "CasementSingle",   "DualAction",
@@ -4850,7 +4852,7 @@ void InitEMSControlledConstructions(EnergyPlusData &state)
                                                      state.dataHeatBalFiniteDiffMgr->ConstructFD(surface.Construction).TotNodes));
                             ShowContinueError(
                                 state,
-                                format("While construction named = {}has number of finite difference nodes ={}",
+                                format("While construction named = {} has number of finite difference nodes ={}",
                                        state.dataConstruction->Construct(state.dataSurface->SurfEMSConstructionOverrideValue(SurfNum)).Name,
                                        state.dataHeatBalFiniteDiffMgr->ConstructFD(state.dataSurface->SurfEMSConstructionOverrideValue(SurfNum))
                                            .TotNodes));

@@ -3005,6 +3005,7 @@ void GetDXCoils(EnergyPlusData &state)
             ++DXCoilNum;
             auto const &fields = instance.value();
             std::string const &thisObjectName = instance.key();
+            s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
 
             // allocate single performance mode for numeric field strings used for sizing routine
             state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(1);
@@ -3531,6 +3532,7 @@ void GetDXCoils(EnergyPlusData &state)
             ++DXCoilNum;
             auto const &fields = instance.value();
             std::string const &thisObjectName = instance.key();
+            s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
 
             // allocate single performance mode for numeric field strings used for sizing routine
             state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(1);

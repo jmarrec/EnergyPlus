@@ -1853,8 +1853,10 @@ void InitSetPointManagers(EnergyPlusData &state)
                                     LookForFan = true;
                                 }
                                 if (LookForFan) {
-                                    if (Util::SameString(comp.TypeOf, "Fan:ConstantVolume") || Util::SameString(comp.TypeOf, "Fan:VariableVolume") ||
-                                        Util::SameString(comp.TypeOf, "Fan:OnOff") || Util::SameString(comp.TypeOf, "Fan:ComponentModel")) {
+                                    if (comp.CompType_Num == SimAirServingZones::CompType::Fan_ComponentModel ||
+                                        comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_CV ||
+                                        comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_VAV ||
+                                        comp.CompType_Num == SimAirServingZones::CompType::Fan_System_Object) {
                                         FanNodeIn = comp.NodeNumIn;
                                         FanNodeOut = comp.NodeNumOut;
                                         break;
@@ -1865,8 +1867,10 @@ void InitSetPointManagers(EnergyPlusData &state)
                     } else {
                         for (auto const &branch : primaryAirSystem.Branch) {
                             for (auto const &comp : branch.Comp) {
-                                if (Util::SameString(comp.TypeOf, "Fan:ConstantVolume") || Util::SameString(comp.TypeOf, "Fan:VariableVolume") ||
-                                    Util::SameString(comp.TypeOf, "Fan:OnOff") || Util::SameString(comp.TypeOf, "Fan:ComponentModel")) {
+                                if (comp.CompType_Num == SimAirServingZones::CompType::Fan_ComponentModel ||
+                                    comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_CV ||
+                                    comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_VAV ||
+                                    comp.CompType_Num == SimAirServingZones::CompType::Fan_System_Object) {
                                     FanNodeIn = comp.NodeNumIn;
                                     FanNodeOut = comp.NodeNumOut;
                                 }
