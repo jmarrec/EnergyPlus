@@ -176,8 +176,7 @@
     ,                        !- Plant Loop Demand Calculation Scheme
     ,                        !- Common Pipe Simulation
     ,                        !- Pressure Simulation Type
-    ,                        !- Loop Circulation Time {minutes}
-    HotWater;                !- Water Loop Type
+    ;                        !- Loop Circulation Time {minutes}
 
   Sizing:Plant,
     Heating Coil Load Loop,  !- Plant or Condenser Loop Name
