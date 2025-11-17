@@ -813,7 +813,7 @@ namespace OutputProcessor {
                                                  meterOrVarNameUC));
                         ShowContinueError(state,
                                           format("...will not be shown with the Meter results; units for meter={}, units for this variable={}.",
-                                                 Constant::unitNames[(int)units],
+                                                 units != Constant::Units::Invalid ? Constant::unitNames[(int)units] : "Unknown",
                                                  Constant::unitNames[(int)srcDDVar->units]));
                         foundBadSrc = true;
                         break;
@@ -878,7 +878,8 @@ namespace OutputProcessor {
             if (!itemsAssigned) {
                 ShowWarningError(state, format("Meter:Custom=\"{}\", no items assigned ", ipsc->cAlphaArgs(1)));
                 ShowContinueError(
-                    state, "...will not be shown with the Meter results. This may be caused by a Meter:Custom be assigned to another Meter:Custom.");
+                    state,
+                    "...will not be shown with the Meter results. This may be caused by a Meter:Custom being assigned to another Meter:Custom.");
                 continue;
             }
 
@@ -1208,7 +1209,8 @@ namespace OutputProcessor {
             if (!itemsAssigned) {
                 ShowWarningError(state, format("Meter:Custom=\"{}\", no items assigned ", ipsc->cAlphaArgs(1)));
                 ShowContinueError(
-                    state, "...will not be shown with the Meter results. This may be caused by a Meter:Custom be assigned to another Meter:Custom.");
+                    state,
+                    "...will not be shown with the Meter results. This may be caused by a Meter:Custom being assigned to another Meter:Custom.");
                 continue;
             }
 
@@ -4878,6 +4880,12 @@ int initErrorFile(EnergyPlusData &state)
         DisplayString(state, fmt::format("ERROR: Could not open file {} for output (write).", state.files.outputErrFilePath));
         return EXIT_FAILURE;
     }
+
+    // Unless requested to be buffered: unbuffer it, flushes automatically on each output
+    if (!state.dataSysVars->BufferedErrFileEnvVar) {
+        state.files.err_stream->setf(std::ios::unitbuf);
+    }
+
     return EXIT_SUCCESS;
 } // initErrorFile()
 

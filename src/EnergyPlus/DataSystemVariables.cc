@@ -112,6 +112,8 @@ namespace DataSystemVariables {
 
     constexpr const char *ciForceTimeStepEnvVar("CI_FORCE_TIME_STEP"); // environment var forcing 30 minute time steps on CI for efficiency
 
+    constexpr const char *cBufferedErrFileEnvVar("BufferedErrFile"); // environment var to enable buffered eplusout.err
+
     fs::path CheckForActualFilePath(EnergyPlusData &state,
                                     fs::path const &originalInputFilePath, // path (or filename only) as input for object
                                     const std::string &contextString       //
@@ -352,6 +354,11 @@ namespace DataSystemVariables {
         get_environment_variable(ciForceTimeStepEnvVar, cEnvValue);
         if (!cEnvValue.empty()) {
             state.dataSysVars->ciForceTimeStep = env_var_on(cEnvValue); // Yes or True
+        }
+
+        get_environment_variable(cBufferedErrFileEnvVar, cEnvValue);
+        if (!cEnvValue.empty()) {
+            state.dataSysVars->BufferedErrFileEnvVar = env_var_on(cEnvValue); // Yes or True
         }
     }
 

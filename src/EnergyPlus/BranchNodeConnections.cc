@@ -752,10 +752,10 @@ void RegisterNodeConnection(EnergyPlusData &state,
             }
 
             // Check out AirTerminal inlet/outlet nodes
-            bool Found = Util::FindItemInList(NodeName,
-                                              state.dataBranchNodeConnections->AirTerminalNodeConnections,
-                                              &EqNodeConnectionDef::NodeName,
-                                              state.dataBranchNodeConnections->NumOfAirTerminalNodes - 1);
+            int Found = Util::FindItemInList(NodeName,
+                                             state.dataBranchNodeConnections->AirTerminalNodeConnections,
+                                             &EqNodeConnectionDef::NodeName,
+                                             state.dataBranchNodeConnections->NumOfAirTerminalNodes - 1);
             if (Found != 0) { // Nodename already used
                 ShowSevereError(state, fmt::format("{}{}=\"{}\" node name duplicated", RoutineName, ObjectType, ObjectName));
                 ShowContinueError(state, format("NodeName=\"{}\", entered as type={}", NodeName, conTypeStr));

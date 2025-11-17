@@ -2429,7 +2429,7 @@ namespace Sched {
             ShowFatalError(state, format("LookUpScheduleValue called with thisHour={}", hr));
         }
 
-        int thisHr = hr + state.dataEnvrn->DSTIndicator * this->UseDaylightSaving;
+        int thisHr = hr + state.dataEnvrn->DSTIndicator * static_cast<int>(this->UseDaylightSaving);
 
         int thisDayOfYear = state.dataEnvrn->DayOfYear_Schedule;
         int thisDayOfWeek = state.dataEnvrn->DayOfWeek;

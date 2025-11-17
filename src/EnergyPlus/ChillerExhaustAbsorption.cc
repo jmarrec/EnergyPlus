@@ -164,12 +164,12 @@ void ExhaustAbsorberSpecs::simulate(
     }
 
     if (brIdentity == DataPlant::BrLoopType::Chiller) {
-        this->InCoolingMode = RunFlag != 0;
+        this->InCoolingMode = RunFlag != false;
         this->initialize(state);
         this->calcChiller(state, CurLoad);
         this->updateCoolRecords(state, CurLoad, RunFlag);
     } else if (brIdentity == DataPlant::BrLoopType::Heater) {
-        this->InHeatingMode = RunFlag != 0;
+        this->InHeatingMode = RunFlag != false;
         this->initialize(state);
         this->calcHeater(state, CurLoad, RunFlag);
         this->updateHeatRecords(state, CurLoad, RunFlag);

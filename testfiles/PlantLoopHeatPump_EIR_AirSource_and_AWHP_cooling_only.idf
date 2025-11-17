@@ -327,8 +327,7 @@
     ,                        !- Plant Loop Demand Calculation Scheme
     ,                        !- Common Pipe Simulation
     ,                        !- Pressure Simulation Type
-    ,                        !- Loop Circulation Time {minutes}
-    ChilledWater;            !- Water Loop Type
+    ;                        !- Loop Circulation Time {minutes}
 
   SetpointManager:Scheduled,
     Cooling Coil Load Loop Setpoint Manager,  !- Name

@@ -826,7 +826,7 @@ int nthDayOfWeekOfMonth(const EnergyPlusData &state,
 )
 {
     // J. Glazer - August 2017
-    int firstDayOfMonth = OrdinalDay(monthNumber, 1, state.dataEnvrn->CurrentYearIsLeapYear);
+    int firstDayOfMonth = OrdinalDay(monthNumber, 1, static_cast<int>(state.dataEnvrn->CurrentYearIsLeapYear));
     int dayOfWeekForFirstDay = (state.dataEnvrn->RunPeriodStartDayOfWeek + firstDayOfMonth - 1) % 7;
     if (dayOfWeek >= dayOfWeekForFirstDay) {
         return firstDayOfMonth + (dayOfWeek - dayOfWeekForFirstDay) + 7 * (nthTime - 1);

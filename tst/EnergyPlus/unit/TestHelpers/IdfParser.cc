@@ -285,7 +285,7 @@ IdfParser::Token IdfParser::next_token(std::string const &idf, size_t &index)
         return Token::SEMICOLON;
     default:
         static constexpr std::string_view search_chars("-:.#/\\[]{}_@$%^&*()|+=<>?'\"~");
-        if (isalnum(c) || (std::string::npos != search_chars.find_first_of(c))) {
+        if ((isalnum(c) != 0) || (std::string::npos != search_chars.find_first_of(c))) {
             return Token::STRING;
         }
         break;
