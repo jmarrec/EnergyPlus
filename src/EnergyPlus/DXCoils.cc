@@ -6872,6 +6872,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                     thisDXCoil.CondenserInletNodeNum(Mode) =
                         state.dataDXCoils->DXCoil(thisDXCoil.CompanionUpstreamDXCoil).CondenserInletNodeNum(Mode);
                 }
+            } else {
+                thisDXCoil.FindCompanionUpStreamCoil = false;
             }
         } else {
             thisDXCoil.FindCompanionUpStreamCoil = false;
