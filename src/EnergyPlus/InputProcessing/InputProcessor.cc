@@ -173,9 +173,9 @@ json const &InputProcessor::getPatternProperties(EnergyPlusData &state, json con
     auto const &pattern_properties = schema_obj["patternProperties"];
     int dot_star_present = pattern_properties.count(".*");
     int no_whitespace_present = pattern_properties.count(R"(^.*\S.*$)");
-    if (dot_star_present) {
+    if (dot_star_present != 0) {
         pattern_property = ".*";
-    } else if (no_whitespace_present) {
+    } else if (no_whitespace_present != 0) {
         pattern_property = R"(^.*\S.*$)";
     } else {
         ShowFatalError(state, R"(The patternProperties value is not a valid choice (".*", "^.*\S.*$"))");
@@ -1679,7 +1679,7 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
     std::unordered_set<std::string> unused_object_types;
     unused_object_types.reserve(unusedInputs.size());
 
-    if (unusedInputs.size() && state.dataGlobal->DisplayUnusedObjects) {
+    if ((unusedInputs.size() != 0u) && state.dataGlobal->DisplayUnusedObjects) {
         ShowWarningError(state, "The following lines are \"Unused Objects\".  These objects are in the input");
         ShowContinueError(state, " file but are never obtained by the simulation and therefore are NOT used.");
         if (!state.dataGlobal->DisplayAllWarnings) {
@@ -1734,7 +1734,7 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
         }
     }
 
-    if (unusedInputs.size() && !state.dataGlobal->DisplayUnusedObjects) {
+    if ((unusedInputs.size() != 0u) && !state.dataGlobal->DisplayUnusedObjects) {
         u64toa(unusedInputs.size(), s);
         ShowMessage(state, "There are " + std::string(s) + " unused objects in input.");
         ShowMessage(state, "Use Output:Diagnostics,DisplayUnusedObjects; to see them.");

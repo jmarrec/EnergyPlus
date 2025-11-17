@@ -1341,7 +1341,7 @@ namespace HeatBalanceManager {
         static constexpr std::string_view routineName = "GetConstructData";
 
         // If UniqueConstructionNames size, then input has already been gotten
-        if (state.dataHeatBalMgr->UniqueConstructNames.size()) {
+        if (state.dataHeatBalMgr->UniqueConstructNames.size() != 0u) {
             return;
         }
 

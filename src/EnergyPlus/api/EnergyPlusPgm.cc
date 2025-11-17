@@ -294,7 +294,7 @@ int commonRun(EnergyPlus::EnergyPlusData &state)
     using namespace EnergyPlus;
 
     int errStatus = initErrorFile(state);
-    if (errStatus) {
+    if (errStatus != 0) {
         return errStatus;
     }
 
@@ -384,7 +384,7 @@ int wrapUpEnergyPlus(EnergyPlus::EnergyPlusData &state)
                 ShowWarningMessage(state, "This will overwrite the native CSV output.");
             }
             int status = CommandLineInterface::runReadVarsESO(state);
-            if (status) {
+            if (status != 0) {
                 return status;
             }
         }
@@ -416,7 +416,7 @@ int RunEnergyPlus(EnergyPlus::EnergyPlusData &state, std::string const &filepath
     // as possible and contain all "simulation" code in other modules and files.
     using namespace EnergyPlus;
     int status = initializeEnergyPlus(state, filepath);
-    if (status || state.dataGlobal->outputEpJSONConversionOnly) {
+    if ((status != 0) || state.dataGlobal->outputEpJSONConversionOnly) {
         return status;
     }
     try {
@@ -471,7 +471,7 @@ int runEnergyPlusAsLibrary(EnergyPlus::EnergyPlusData &state, const std::vector<
     }
 
     int status = initializeAsLibrary(state);
-    if (status || state.dataGlobal->outputEpJSONConversionOnly) {
+    if ((status != 0) || state.dataGlobal->outputEpJSONConversionOnly) {
         return status;
     }
     try {

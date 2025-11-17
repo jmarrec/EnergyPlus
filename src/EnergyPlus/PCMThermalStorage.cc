@@ -266,7 +266,7 @@ namespace PCMStorage {
         HeatLossRate_W = HeatLossRate;
 
         // Calculate tank temperature from stored energy
-        if (this->PCMmat) {
+        if (this->PCMmat != nullptr) {
             Real64 targetEnthalpy = EnergyStored / TankCapacity;
             Real64 Tlow = this->PCMmat->peakTempMelting - 30.0;
             Real64 Thigh = this->PCMmat->peakTempMelting + 30.0;

@@ -1863,7 +1863,7 @@ namespace AirflowNetwork {
                     }
                 }
                 // Check continuity of both curves at boundary point
-                if (OccupantVentilationControl(i).ComfortLowTempCurveNum > 0 && OccupantVentilationControl(i).ComfortHighTempCurveNum) {
+                if (OccupantVentilationControl(i).ComfortLowTempCurveNum > 0 && OccupantVentilationControl(i).ComfortHighTempCurveNum > 0) {
                     if (std::abs(CurveValue(m_state, OccupantVentilationControl(i).ComfortLowTempCurveNum, Numbers(3)) -
                                  CurveValue(m_state, OccupantVentilationControl(i).ComfortHighTempCurveNum, Numbers(3))) > 0.1) {
                         ShowSevereError(m_state,
@@ -2685,7 +2685,7 @@ namespace AirflowNetwork {
                 MultizoneSurfaceData(i).OpeningName = Alphas(2); // Name of crack or opening component,
                 // either simple or detailed large opening, or crack
                 MultizoneSurfaceData(i).ExternalNodeName = Alphas(3); // Name of external node, but not used at WPC="INPUT"
-                if (Util::FindItemInList(Alphas(3), MultizoneExternalNodeData) &&
+                if ((Util::FindItemInList(Alphas(3), MultizoneExternalNodeData) != 0) &&
                     m_state.afn->MultizoneExternalNodeData(Util::FindItemInList(Alphas(3), MultizoneExternalNodeData)).curve == 0) {
                     ShowSevereError(m_state, format(RoutineName) + "Invalid " + cAlphaFields(3) + "=" + Alphas(3));
                     ShowContinueError(m_state,
@@ -10150,7 +10150,8 @@ namespace AirflowNetwork {
         // Note in the following that individual venting control for a window/door takes
         // precedence over zone-level control
         if (MultizoneSurfaceData(i).IndVentControl) {
-            VentTemp = MultizoneSurfaceData(i).ventTempControlSched ? MultizoneSurfaceData(i).ventTempControlSched->getCurrentVal() : 0.0;
+            VentTemp =
+                (MultizoneSurfaceData(i).ventTempControlSched != nullptr) ? MultizoneSurfaceData(i).ventTempControlSched->getCurrentVal() : 0.0;
             VentCtrlNum = MultizoneSurfaceData(i).VentSurfCtrNum;
             if (MultizoneSurfaceData(i).ventAvailSched != nullptr) {
                 VentingSchVal = MultizoneSurfaceData(i).ventAvailSched->getCurrentVal();
@@ -10161,7 +10162,7 @@ namespace AirflowNetwork {
             }
         } else {
             // Zone level only by Gu on Nov. 8, 2005
-            VentTemp = MultizoneZoneData(IZ).ventTempControlSched ? MultizoneZoneData(IZ).ventTempControlSched->getCurrentVal() : 0.0;
+            VentTemp = (MultizoneZoneData(IZ).ventTempControlSched != nullptr) ? MultizoneZoneData(IZ).ventTempControlSched->getCurrentVal() : 0.0;
             VentCtrlNum = MultizoneZoneData(IZ).VentCtrNum;
             if (MultizoneZoneData(IZ).ventAvailSched != nullptr) {
                 VentingSchVal = MultizoneZoneData(IZ).ventAvailSched->getCurrentVal();
