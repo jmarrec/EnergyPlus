@@ -7038,6 +7038,7 @@ TEST_F(EnergyPlusFixture, VSCoilUnitary_NoNegativeCapacity)
 
         "Coil:Cooling:DX:VariableSpeed,",
         "Heat Pump ACDXCoil 1 Cooling Coil,              !- Name",
+        ",                                               !- Availability Schedule Name",
         "DX COOLING COIL AIR INLET NODE,                 !- Air Inlet Node Name",
         "Heating Coil Air Inlet Node,                    !- Air Outlet Node Name",
         "2,                                              !- Number of Speeds",
