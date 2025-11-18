@@ -109,7 +109,7 @@ void EIRPlantLoopHeatPump::simulate(
                                                                 this->EIRHPType,
                                                                 this->sourceSideNodes.inlet,
                                                                 this->sourceSideNodes.outlet,
-                                                                this->sourceSideHeatTransfer,
+                                                                sourceQdotArg,
                                                                 this->sourceSideInletTemp,
                                                                 this->sourceSideOutletTemp,
                                                                 this->sourceSideMassFlowRate,
