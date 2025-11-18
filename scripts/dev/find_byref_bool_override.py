@@ -368,7 +368,7 @@ def parse_function_signatures_in_header(header_file: Path) -> list[dict[str, Any
     signature_re = re.compile(signature_pattern, re.MULTILINE | re.DOTALL)
 
     try:
-        content = header_file.read_text()
+        content = header_file.read_text(encoding="utf-8")
     except UnicodeDecodeError as e:
         # This shouldn't anymore, we have check_non_utf8_files.py
         raise e
@@ -433,7 +433,7 @@ def lookup_errors_in_source_file(source_file: Path, found_functions: list[dict[s
     log_messages: list[LogMessage] = []
 
     try:
-        content = source_file.read_text()
+        content = source_file.read_text(encoding="utf-8")
     except UnicodeDecodeError as e:
         # This shouldn't anymore, we have check_non_utf8_files.py
         raise e

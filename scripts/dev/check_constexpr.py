@@ -417,7 +417,7 @@ class TestMatching(unittest.TestCase):
 
 
 def constexpr_check(filepath: Path) -> list[LogMessage]:
-    lines = [x.strip() for x in filepath.read_text().splitlines()]
+    lines = [x.strip() for x in filepath.read_text(encoding="utf-8").splitlines()]
 
     bracket_count = 0
     errors: list[LogMessage] = []

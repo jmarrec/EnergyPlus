@@ -76,7 +76,7 @@ EXTENSIONS = {".hh", ".cc"}
 
 def check_for_c_style_comment(filepath: Path) -> list[LogMessage]:
     """Check a single file for C style comments."""
-    lines = filepath.read_text().splitlines()[75:82]
+    lines = filepath.read_text(encoding="utf-8").splitlines()[75:82]
 
     log_messages: list[LogMessage] = []
 

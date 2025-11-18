@@ -39,7 +39,7 @@ repos:
   hooks:
 #  - id: test-hook
 #    name:  test-hook
-#    entry: python3 scripts/dev/test_hook.py
+#    entry: python scripts/dev/test_hook.py
 #    args: ['--verbose'] #, '--gha']
 #    language: system
 #    files: '.*\.cc'
@@ -51,7 +51,7 @@ repos:
 
   - id: check-constexpr
     name: check constexpr usage
-    entry: python3 scripts/dev/check_constexpr.py
+    entry: python scripts/dev/check_constexpr.py
     args: ['--verbose']
     language: system
     files: '^src/EnergyPlus/.*\.(cc|hh)$|^tst/EnergyPlus/unit/.*\.(cc|hh)$'
@@ -60,7 +60,7 @@ repos:
 
   - id: license-check
     name: license check
-    entry: python3 scripts/dev/license-check.py
+    entry: python scripts/dev/license-check.py
     args: ['--verbose']
     language: system
     types_or: [python, c, c++]
@@ -69,7 +69,7 @@ repos:
 
   - id: validate-idd-units
     name: validate IDD units
-    entry: python3 scripts/dev/validate_idd_units.py
+    entry: python scripts/dev/validate_idd_units.py
     args: ['--verbose']
     language: system
     # files: '.*\.(idd.in|idd)'
@@ -79,7 +79,7 @@ repos:
 
   - id: check-stray-fields-in-idd
     name: check stray fields in IDD
-    entry: python3 scripts/dev/check_stray_fields_in_idd.py
+    entry: python scripts/dev/check_stray_fields_in_idd.py
     args: ['--verbose']
     language: system
     files: '.*\.idd.in$'  # The old IDDs will issue a ton of warnings
@@ -88,7 +88,7 @@ repos:
 
   - id: verify-idfs-in-cmake
     name: verify IDFs in testfiles CMake
-    entry: python3 scripts/dev/verify_idfs_in_cmake.py
+    entry: python scripts/dev/verify_idfs_in_cmake.py
     args: ['--verbose']
     language: system
     files: '^testfiles/.*\.(idf|imf)$|^testfiles/CMakeLists\.txt$'
@@ -97,7 +97,7 @@ repos:
 
   - id: check-non-utf8
     name: check files are UTF-8
-    entry: python3 scripts/dev/check_non_utf8.py
+    entry: python scripts/dev/check_non_utf8.py
     language: system
     args: ['--fix', '--verbose']
     pass_filenames: true
@@ -105,7 +105,7 @@ repos:
 
   - id: verify-cmake-dirs
     name: verify cmake dirs
-    entry: python3 scripts/dev/verify_cmake_dirs.py
+    entry: python scripts/dev/verify_cmake_dirs.py
     args: ['--verbose']
     language: system
     files: "^testfiles/.*"
@@ -113,7 +113,7 @@ repos:
 
   - id: find-byref-bool-override
     name: find byref bool override
-    entry: python3 scripts/dev/find_byref_bool_override.py
+    entry: python scripts/dev/find_byref_bool_override.py
     args: ['--verbose']
     language: system
     files: '^src/EnergyPlus/.*\.cc$'
@@ -122,7 +122,7 @@ repos:
 
   - id: check-for-tabs
     name: check for tabs in IDFs
-    entry: python3 scripts/dev/check_for_tabs.py
+    entry: python scripts/dev/check_for_tabs.py
     language: system
     args: ['--verbose']
     files: '^testfiles/.*\.(idf|imf)$|^datasets/.*\.(idf|imf)$|.*\.idd.in$'
@@ -131,7 +131,7 @@ repos:
 
   - id: find-included-cc-files
     name: find included cc files
-    entry: python3 scripts/dev/find_included_cc_files.py
+    entry: python scripts/dev/find_included_cc_files.py
     args: ['--verbose']
     language: system
     files: '^src/EnergyPlus/.*\.(cc|hh)$|^tst/EnergyPlus/unit/.*\.(cc|hh)$'
@@ -140,7 +140,7 @@ repos:
 
   - id: analyze-state
     name: analyze state
-    entry: python3 scripts/dev/analyze_state.py
+    entry: python scripts/dev/analyze_state.py
     args: ['--verbose']
     language: system
     files: '^src/EnergyPlus/Data/EnergyPlusData\.(cc|hh)$'
@@ -148,7 +148,7 @@ repos:
 
   - id: check-for-c-style-comments
     name: check for C style comments
-    entry: python3 scripts/dev/check_for_c_style_comments.py
+    entry: python scripts/dev/check_for_c_style_comments.py
     args: ['--verbose']
     language: system
     files: '^src/EnergyPlus/.*\.(cc|hh)$|^tst/EnergyPlus/unit/.*\.(cc|hh)$'
@@ -157,7 +157,7 @@ repos:
 
   - id: check-for-switch-case-parentheses
     name: check for switch case parentheses
-    entry: python3 scripts/dev/check_for_switch_case_parentheses.py
+    entry: python scripts/dev/check_for_switch_case_parentheses.py
     args: ['--verbose']
     language: system
     files: '^src/EnergyPlus/.*\.(cc|hh)$'
@@ -166,7 +166,7 @@ repos:
 
   - id: check-for-malformed-enums
     name: check for malformed enums
-    entry: python3 scripts/dev/check_for_malformed_enums.py
+    entry: python scripts/dev/check_for_malformed_enums.py
     args: ['--verbose']
     language: system
     files: '^src/EnergyPlus/.*\.(cc|hh)$'
@@ -175,7 +175,7 @@ repos:
 
   - id: check-format-strings
     name: check format strings
-    entry: python3 scripts/dev/check_format_strings.py
+    entry: python scripts/dev/check_format_strings.py
     args: ['--verbose']
     language: system
     files: '^src/EnergyPlus/.*\.(cc|hh)$|^tst/EnergyPlus/.*\.(cc|hh)$'
@@ -187,7 +187,7 @@ repos:
   - id: check-for-enum-scope-usage
     stages: [manual]
     name: check_for_enum_scope_usage
-    entry: python3 scripts/dev/check_for_enum_scope_usage.py
+    entry: python scripts/dev/check_for_enum_scope_usage.py
     args: ['--verbose']
     language: system
     pass_filenames: false

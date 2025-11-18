@@ -277,7 +277,7 @@ def process_enum_str(input_str: str, filepath: Path, line_no: int) -> list[LogMe
 
 def check_for_malformed_enums(filepath: Path) -> list[LogMessage]:
     """Check a single file for malformed enums."""
-    lines = [x.strip() for x in filepath.read_text().splitlines()]
+    lines = [x.strip() for x in filepath.read_text(encoding="utf-8").splitlines()]
 
     start_found = False
     start_line = 0
