@@ -587,15 +587,11 @@ namespace DesiccantDehumidifiers {
             } else {
                 // If DEFAULT performance model, set operating limits curves.  Unit is off outside this range
                 desicDehum.PerformanceModel_Num = PerformanceModel::Default;
-                // this is wrong to initialize all dehumidifiers, it should be just this specific dehumidifier
-                // this was likely tested with only 1 desiccant dehumidifier so this was never discovered
-                // or maybe if there were more than 1 these data would not be used when Alphas(12) == "UserCurves" ???
-                for (auto &e : state.dataDesiccantDehumidifiers->DesicDehum) {
-                    e.MinProcAirInTemp = 1.67;       //  35 F
-                    e.MaxProcAirInTemp = 48.89;      // 120 F
-                    e.MinProcAirInHumRat = 0.002857; //  20 gr/lb
-                    e.MaxProcAirInHumRat = 0.02857;  // 200 gr/lb
-                }
+                desicDehum.MinProcAirInTemp = 1.67;       //  35 F
+                desicDehum.MaxProcAirInTemp = 48.89;      // 120 F
+                desicDehum.MinProcAirInHumRat = 0.002857; //  20 gr/lb
+                desicDehum.MaxProcAirInHumRat = 0.02857;  // 200 gr/lb
+
                 //  If DEFAULT performance model, warn if curve names and nominal regen temp have values
                 if ((!lAlphaBlanks(13)) || (!lAlphaBlanks(14)) || (!lAlphaBlanks(15)) || (!lAlphaBlanks(16)) || (!lAlphaBlanks(17)) ||
                     (!lAlphaBlanks(18)) || (!lAlphaBlanks(19)) || (!lAlphaBlanks(20))) {
@@ -1535,10 +1531,9 @@ namespace DesiccantDehumidifiers {
                                 desicDehum.Name);
         }
 
-        for (int DesicDehumIndex = 1; DesicDehumIndex <= state.dataDesiccantDehumidifiers->NumGenericDesicDehums; ++DesicDehumIndex) {
-            // this is wrong, should be a loop from (state.dataDesiccantDehumidifiers->NumSolidDesicDehums + 1) to
-            // (state.dataDesiccantDehumidifiers->NumDesicDehums = NumSolidDesicDehums + NumGenericDesicDehums)
-            // DesicDehumNum = DesicDehumIndex + state.dataDesiccantDehumidifiers->NumSolidDesicDehums;
+        for (int DesicDehumIndex = state.dataDesiccantDehumidifiers->NumSolidDesicDehums + 1;
+             DesicDehumIndex <= state.dataDesiccantDehumidifiers->NumDesicDehums;
+             ++DesicDehumIndex) {
             auto &desicDehum = state.dataDesiccantDehumidifiers->DesicDehum(DesicDehumIndex);
             // Setup Report variables for the Desiccant Dehumidifiers
             SetupOutputVariable(state,
