@@ -1002,7 +1002,7 @@ void UpdateChillerComponentCondenserSide(EnergyPlusData &state,
 
     // could also check heat rate against McDeltaT from node data
 
-    if ((state.dataLoopNodes->Node(InletNodeNum).MassFlowRate == 0.0) && (ModelCondenserHeatRate > 0.0)) {
+    if ((state.dataLoopNodes->Node(InletNodeNum).MassFlowRate == 0.0) && (std::abs(ModelCondenserHeatRate) > 0.0)) {
 
         // TODO also send a request that condenser loop be made available, interlock message infrastructure??
 
