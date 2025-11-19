@@ -4040,12 +4040,21 @@ namespace VariableSpeedCoils {
                         TotCapTempModFac =
                             Curve::CurveValue(state, varSpeedCoil.MSCCapFTemp(varSpeedCoil.NormSpedLevel), MixWetBulb, RatedSourceTempCool);
 
-                        //       The mixed air temp for zone equipment without an OA mixer is 0.
-                        //       This test avoids a negative capacity until a solution can be found.
-                        if (MixEnth > SupEnth) {
-                            CoolCapAtPeak = (rhoair * VolFlowRate * (MixEnth - SupEnth)) + FanCoolLoad;
-                        } else {
-                            CoolCapAtPeak = (rhoair * VolFlowRate * (48000.0 - SupEnth)) + FanCoolLoad;
+                        CoolCapAtPeak = (rhoair * VolFlowRate * (MixEnth - SupEnth)) + FanCoolLoad;
+                        if (CoolCapAtPeak < 0) { // This conditional will also catch the initialization value, -999.0
+                            ShowWarningError(
+                                state,
+                                format(
+                                    "In calculating capacity for coil {} on design day {}, the air state would yield negative coil capacity sizing.",
+                                    varSpeedCoil.Name,
+                                    state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).CoolDesDay));
+                            ShowContinueError(state, format("The air properties are: T_mix = {:.4R}", MixTemp));
+                            ShowContinueError(state, format("                        T_supply = {:.4R}", SupTemp));
+                            ShowContinueError(state, format("                        H_mix = {:.4R}", MixEnth));
+                            ShowContinueError(state, format("                        H_supply = {:.4R}", SupEnth));
+                            ShowContinueError(state, format("                        W_mix = {:.4R}", MixHumRat));
+                            ShowContinueError(state, format("                        W_supply = {:.4R}", SupHumRat));
+                            ShowContinueError(state, "Cooling capacity is set to zero during sizing; simulation continues.");
                         }
                         if (state.dataSize->UnitarySysEqSizing(state.dataSize->CurSysNum).CoolingCapacity &&
                             finalSysSizing.heatCoilSizingMethod != DataSizing::HeatCoilSizMethod::None) {
