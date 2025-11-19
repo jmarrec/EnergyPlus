@@ -467,7 +467,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
                 state.dataPlantHXFluidToFluid->FluidHX(CompLoop).HeatTransferMeteringEndUse = OutputProcessor::EndUseCat::HeatRejection;
             } else if (endUseCat == "HEATRECOVERYFORCOOLING") {
                 state.dataPlantHXFluidToFluid->FluidHX(CompLoop).HeatTransferMeteringEndUse = OutputProcessor::EndUseCat::HeatRecoveryForCooling;
-            } else if (endUseCat == "HEATRECOVERYFORCOOLING") {
+            } else if (endUseCat == "HEATRECOVERYFORHEATING") {
                 state.dataPlantHXFluidToFluid->FluidHX(CompLoop).HeatTransferMeteringEndUse = OutputProcessor::EndUseCat::HeatRecoveryForHeating;
             } else if (endUseCat == "LOOPTOLOOP") {
                 state.dataPlantHXFluidToFluid->FluidHX(CompLoop).HeatTransferMeteringEndUse = OutputProcessor::EndUseCat::LoopToLoop;
