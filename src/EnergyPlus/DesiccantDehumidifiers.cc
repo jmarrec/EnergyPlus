@@ -513,12 +513,6 @@ namespace DesiccantDehumidifiers {
             // Set up component set for regen fan
             BranchNodeConnections::SetUpCompSets(state, desicDehum.DehumType, desicDehum.Name, Alphas(10), Alphas(11), Alphas(6), "UNDEFINED");
 
-            if ((!Util::SameString(Alphas(12), "Default")) && (Util::SameString(Alphas(12), "UserCurves"))) {
-                ShowWarningError(state, format("{}{}: Invalid{} = {}", RoutineName, CurrentModuleObject, cAlphaFields(12), Alphas(12)));
-                ShowContinueError(state, "resetting to Default");
-                desicDehum.PerformanceModel_Num = PerformanceModel::Default;
-            }
-
             if (Util::SameString(Alphas(12), "UserCurves")) {
                 desicDehum.PerformanceModel_Num = PerformanceModel::UserCurves;
                 desicDehum.ProcDryBulbCurvefTW = Curve::GetCurveIndex(state, Alphas(13));
