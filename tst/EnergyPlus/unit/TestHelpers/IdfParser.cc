@@ -125,9 +125,9 @@ std::vector<std::string> IdfParser::parse_object(std::string const &idf, size_t 
             }
             token = look_ahead(idf, index);
             if (Token::COMMA == token) {
-                array.push_back("");
+                array.emplace_back("");
             } else if (Token::SEMICOLON == token) {
-                array.push_back("");
+                array.emplace_back("");
                 break;
             }
         } else if (token == Token::SEMICOLON) {

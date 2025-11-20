@@ -621,8 +621,8 @@ namespace ResultsFramework {
         json cols = json::array();
         json rows;
 
-        for (size_t col = 0; col < ColHeaders.size(); ++col) {
-            cols.push_back(ColHeaders[col]);
+        for (const auto &ColHeader : ColHeaders) {
+            cols.push_back(ColHeader);
         }
 
         for (size_t row = 0; row < RowHeaders.size(); ++row) {
