@@ -97,16 +97,16 @@ public: // Creation
     // Default Constructor
     SurfaceOctreeCube() : d_(0u), n_(0u), l_(Vertex(0.0)), u_(Vertex(0.0)), c_(Vertex(0.0)), w_(0.0), r_(0.0)
     {
-        for (std::uint8_t i = 0; i < 8; ++i) {
-            cubes_[i] = nullptr; // VC++ 2013 compatible initialization
+        for (auto &cube : cubes_) {
+            cube = nullptr; // VC++ 2013 compatible initialization
         }
     }
 
     // Surfaces Outer Cube Constructor
     SurfaceOctreeCube(EPVector<Surface> &surfaces) : d_(0u), n_(0u), l_(Vertex(0.0)), u_(Vertex(0.0)), c_(Vertex(0.0)), w_(0.0), r_(0.0)
     {
-        for (std::uint8_t i = 0; i < 8; ++i) {
-            cubes_[i] = nullptr; // VC++ 2013 compatible initialization
+        for (auto &cube : cubes_) {
+            cube = nullptr; // VC++ 2013 compatible initialization
         }
         init(surfaces);
     }
@@ -115,8 +115,8 @@ public: // Creation
     SurfaceOctreeCube(std::uint8_t const d, Vertex const &l, Vertex const &u, Real const w)
         : d_(d), n_(0u), l_(l), u_(u), c_(cen(l, u)), w_(w), r_(0.75 * (w * w))
     {
-        for (std::uint8_t i = 0; i < 8; ++i) {
-            cubes_[i] = nullptr; // VC++ 2013 compatible initialization
+        for (auto &cube : cubes_) {
+            cube = nullptr; // VC++ 2013 compatible initialization
         }
         assert(valid());
     }

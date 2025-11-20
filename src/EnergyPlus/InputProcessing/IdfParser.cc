@@ -117,8 +117,8 @@ std::string IdfParser::encode(json const &root, json const &schema)
         for (auto obj_in = obj.value().begin(); obj_in != obj.value().end(); ++obj_in) {
             encoded += obj.key();
             size_t skipped_fields = 0;
-            for (size_t i = 0; i < legacy_idd_field.size(); i++) {
-                std::string const &entry = legacy_idd_field[i].get<std::string>();
+            for (const auto &i : legacy_idd_field) {
+                std::string const &entry = i.get<std::string>();
                 if (obj_in.value().find(entry) == obj_in.value().end()) {
                     if (entry == "name") {
                         encoded += std::string{end_of_field} + obj_in.key();
@@ -149,11 +149,10 @@ std::string IdfParser::encode(json const &root, json const &schema)
             }
 
             auto &extensions = obj_in.value()[extension_key];
-            for (size_t extension_i = 0; extension_i < extensions.size(); extension_i++) {
-                auto const &cur_extension_obj = extensions[extension_i];
+            for (const auto &cur_extension_obj : extensions) {
                 auto const &extensible = schema["properties"][obj.key()]["legacy_idd"]["extensibles"];
-                for (size_t i = 0; i < extensible.size(); i++) {
-                    std::string const &tmp = extensible[i].get<std::string>();
+                for (const auto &i : extensible) {
+                    std::string const &tmp = i.get<std::string>();
                     if (cur_extension_obj.find(tmp) == cur_extension_obj.end()) {
                         skipped_fields++;
                         continue;

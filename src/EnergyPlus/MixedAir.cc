@@ -5334,7 +5334,7 @@ void CheckControllerLists(EnergyPlusData &state, bool &ErrFound)
 
     int NumControllers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, CurrentModuleObject);
     int NumAirLoop = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, AirLoopObject);
-    std::string_view AirLoopName = "";
+    std::string_view AirLoopName;
 
     for (int Item = 1; Item <= NumControllers; ++Item) {
 

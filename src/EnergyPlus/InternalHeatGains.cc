@@ -601,7 +601,7 @@ namespace InternalHeatGains {
                                     state.dataHeatBal->AnyThermalComfortAnkleDraftModel = true;
                                     usingThermalComfort = true;
 
-                                } else if (thermalComfortType == "") { // Blank input field--just ignore this
+                                } else if (thermalComfortType.empty()) { // Blank input field--just ignore this
 
                                 } else { // An invalid keyword was entered--warn but ignore
                                     if (Item1 == 1) {

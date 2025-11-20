@@ -2521,8 +2521,8 @@ namespace PlantPipingSystemsManager {
         Real64 const MaxLimit = this->SimControls.MaximumTemperatureLimit;
         Real64 const MinLimit = this->SimControls.MinimumTemperatureLimit;
 
-        for (std::size_t i = 0, e = this->Cells.size(); i < e; ++i) {
-            double const Temperature(this->Cells[i].Temperature);
+        for (const auto &Cell : this->Cells) {
+            double const Temperature(Cell.Temperature);
             if ((Temperature > MaxLimit) || (Temperature < MinLimit)) {
                 return true;
             }

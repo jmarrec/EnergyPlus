@@ -129,7 +129,7 @@ Surface2D::Surface2D(ShapeCat const shapeCat, int const axis, Vertices const &v,
             Real64 xu(std::numeric_limits<Real64>::lowest());
             Real64 const yl(slabYs[iSlab]);
             Real64 const yu(slabYs[iSlab + 1]);
-            slabs.push_back(Slab(yl, yu));
+            slabs.emplace_back(yl, yu);
             Slab &slab(slabs.back());
             using CrossEdge = std::tuple<Real64, Real64, size_type>;
             using CrossEdges = std::vector<CrossEdge>;
@@ -147,7 +147,7 @@ Surface2D::Surface2D(ShapeCat const shapeCat, int const axis, Vertices const &v,
                     Real64 const xt(v.x + (yu - v.y) * exy); // x_top coordinate where edge intersects yu
                     xl = std::min(xl, std::min(xb, xt));
                     xu = std::max(xu, std::max(xb, xt));
-                    crossEdges.push_back(std::make_tuple(xb, xt, i));
+                    crossEdges.emplace_back(xb, xt, i);
                 }
             }
             slab.xl = xl;

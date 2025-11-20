@@ -122,7 +122,7 @@ void GetInputTabularAnnual(EnergyPlusData &state)
     for (int tabNum = 1; tabNum <= objCount; ++tabNum) {
         state.dataInputProcessing->inputProcessor->getObjectItem(state, currentModuleObject, tabNum, alphArray, numAlphas, numArray, numNums, IOStat);
         if (numAlphas >= 5) {
-            annualTables.push_back(AnnualTable(state, alphArray(1), alphArray(2), alphArray(3)));
+            annualTables.emplace_back(state, alphArray(1), alphArray(2), alphArray(3));
             // the remaining fields are repeating in groups of three and need to be added to the data structure
             for (jAlpha = 4; jAlpha <= numAlphas; jAlpha += 2) {
                 std::string curVarMtr = alphArray(jAlpha);
@@ -160,7 +160,7 @@ void AnnualTable::addFieldSet(std::string varName, AnnualFieldSet::AggregationKi
 // This method is used along with the constructor to convert the GetInput for REPORT:TABLE:ANNUAL
 // into the class data.
 {
-    m_annualFields.push_back(AnnualFieldSet(varName, aggKind, dgts));
+    m_annualFields.emplace_back(varName, aggKind, dgts);
     m_annualFields.back().m_colHead = varName; // use the variable name for the column heading
 }
 
@@ -168,7 +168,7 @@ void AnnualTable::addFieldSet(std::string varName, std::string colName, AnnualFi
 // Jason Glazer, August 2015
 // This overloaded method allows for a specific column name to be different than the output variable or meter name
 {
-    m_annualFields.push_back(AnnualFieldSet(varName, aggKind, dgts));
+    m_annualFields.emplace_back(varName, aggKind, dgts);
     m_annualFields.back().m_colHead = colName; // use the user supplied column heading instead of just the variable name
 }
 
@@ -187,7 +187,7 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
 
     std::string filterFieldUpper = m_filter;
     std::transform(filterFieldUpper.begin(), filterFieldUpper.end(), filterFieldUpper.begin(), ::toupper);
-    bool useFilter = (m_filter.size() != 0);
+    bool useFilter = (!m_filter.empty());
 
     std::vector<AnnualFieldSet>::iterator fldStIt;
     for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
@@ -707,7 +707,7 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
     int columnRecount = 0;
     for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
         std::string curAggString = aggString[(int)fldStIt->m_aggregate];
-        if (curAggString.size() > 0) {
+        if (!curAggString.empty()) {
             curAggString = " {" + trim(curAggString) + '}';
         }
         // do the unit conversions
@@ -1393,7 +1393,7 @@ void AnnualTable::columnHeadersToTitleCase(EnergyPlusData &state)
     std::vector<AnnualFieldSet>::iterator fldStIt;
     for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
         if (fldStIt->m_variMeter == fldStIt->m_colHead) {
-            if (fldStIt->m_indexesForKeyVar.size() > 0) {
+            if (!fldStIt->m_indexesForKeyVar.empty()) {
                 int varNum = fldStIt->m_indexesForKeyVar[0];
                 if (fldStIt->m_typeOfVar == OutputProcessor::VariableType::Real) {
                     fldStIt->m_colHead = state.dataOutputProcessor->outVars[varNum]->name;
@@ -1434,7 +1434,7 @@ std::vector<std::string> AnnualTable::inspectTableFieldSets(int fldIndex)
     fldSt = m_annualFields[fldIndex];
     ret.push_back(fldSt.m_colHead);
     ret.push_back(fldSt.m_variMeter);
-    ret.push_back(std::string(Constant::unitNames[(int)fldSt.m_varUnits]));
+    ret.emplace_back(Constant::unitNames[(int)fldSt.m_varUnits]);
     std::string outStr = std::to_string(fldSt.m_showDigits);
     // ints
     ret.push_back(outStr);
@@ -1458,7 +1458,7 @@ std::vector<std::string> AnnualTable::inspectTableFieldSets(int fldIndex)
     outStr = std::to_string(fldSt.m_timeBelowBottomBinTotal);
     ret.push_back(outStr);
     // cell value
-    if (fldSt.m_cell.size() > 0) {
+    if (!fldSt.m_cell.empty()) {
         outStr = std::to_string(fldSt.m_cell[0].result);
         ret.push_back(outStr);
     }

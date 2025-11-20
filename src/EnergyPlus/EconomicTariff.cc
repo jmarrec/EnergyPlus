@@ -3894,12 +3894,12 @@ void LEEDtariffReporting(EnergyPlusData &state)
         othrUnits = EconConv::USERDEF;
         gasDemWindowUnits = DemandWindow::Invalid;
         othrDemWindowUnits = DemandWindow::Invalid;
-        std::string elecTariffNames = "";
-        std::string gasTariffNames = "";
-        std::string distCoolTariffNames = "";
-        std::string distHeatWaterTariffNames = "";
-        std::string distHeatSteamTariffNames = "";
-        std::string othrTariffNames = "";
+        std::string elecTariffNames;
+        std::string gasTariffNames;
+        std::string distCoolTariffNames;
+        std::string distHeatWaterTariffNames;
+        std::string distHeatSteamTariffNames;
+        std::string othrTariffNames;
         for (int iTariff = 1; iTariff <= s_econ->numTariff; ++iTariff) {
             auto &tariff = s_econ->tariff(iTariff);
             if (tariff.isSelected) {
@@ -4220,7 +4220,7 @@ void WriteTabularTariffReports(EnergyPlusData &state)
                         tableBody(4, iTariff) = "Net";
                     }
 
-                    if (tariff.groupName == "") {
+                    if (tariff.groupName.empty()) {
                         tableBody(5, iTariff) = "(none)";
                     } else {
                         tableBody(5, iTariff) = tariff.groupName;
@@ -4284,7 +4284,7 @@ void WriteTabularTariffReports(EnergyPlusData &state)
                         } else {
                             tableBody(1, 2) = "No";
                         }
-                        if (tariff.groupName == "") {
+                        if (tariff.groupName.empty()) {
                             tableBody(1, 3) = "(none)";
                         } else {
                             tableBody(1, 3) = tariff.groupName;
@@ -4451,7 +4451,7 @@ void WriteTabularTariffReports(EnergyPlusData &state)
                             } else {
                                 OutputReportTabular::WriteTextLine(state, "Computation -  Automatic", true);
                             }
-                            std::string outString = "";
+                            std::string outString;
                             for (int lStep = computation.firstStep; lStep <= computation.lastStep; ++lStep) {
                                 auto &step = s_econ->steps(lStep);
 

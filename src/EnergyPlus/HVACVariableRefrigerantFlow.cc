@@ -5736,7 +5736,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     goto EquipList_exit; // already found previously
                 }
                 for (ELLoop = 1; ELLoop <= state.dataGlobal->NumOfZones; ++ELLoop) { // NumOfZoneEquipLists
-                    if (state.dataZoneEquip->ZoneEquipList(ELLoop).Name == "") {
+                    if (state.dataZoneEquip->ZoneEquipList(ELLoop).Name.empty()) {
                         continue; // dimensioned by NumOfZones.  Only valid ones have names.
                     }
                     for (ListLoop = 1; ListLoop <= state.dataZoneEquip->ZoneEquipList(ELLoop).NumOfEquipTypes; ++ListLoop) {
@@ -5902,7 +5902,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                 if (ctrlZoneNum > 0) {
                     int inletNodeADUNum = 0;
                     DataZoneEquipment::ZoneEquipType sysType_Num = DataZoneEquipment::ZoneEquipType::Invalid;
-                    std::string sysName = "";
+                    std::string sysName;
                     for (int inletNode = 1; inletNode <= state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).NumInletNodes; inletNode++) {
                         if (state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).InletNodeAirLoopNum(inletNode) !=
                             state.dataHVACVarRefFlow->VRFTU(TUIndex).airLoopNum) {

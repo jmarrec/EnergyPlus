@@ -388,8 +388,8 @@ bool InputProcessor::checkForUnsupportedObjects(EnergyPlusData &state)
     // For EnergyPlus, there is no option to convert or allow these objects
     bool objectFound = false;
     std::string objectType;
-    for (size_t count = 0; count < hvacTemplateObjects.size(); ++count) {
-        objectType = hvacTemplateObjects[count];
+    for (auto hvacTemplateObject : hvacTemplateObjects) {
+        objectType = hvacTemplateObject;
         auto it = epJSON.find(objectType);
         if (it != epJSON.end()) {
             objectFound = true;
@@ -430,8 +430,8 @@ bool InputProcessor::checkForUnsupportedObjects(EnergyPlusData &state)
                                                                          "GroundHeatTransfer:Basement:ZFACE"};
 
     objectFound = false;
-    for (size_t count = 0; count < groundHTObjects.size(); ++count) {
-        objectType = groundHTObjects[count];
+    for (auto groundHTObject : groundHTObjects) {
+        objectType = groundHTObject;
         auto it = epJSON.find(objectType);
         if (it != epJSON.end()) {
             objectFound = true;
@@ -448,8 +448,8 @@ bool InputProcessor::checkForUnsupportedObjects(EnergyPlusData &state)
         "Parametric:SetValueForRun", "Parametric:Logic", "Parametric:RunControl", "Parametric:FileNameSuffix"};
 
     objectFound = false;
-    for (size_t count = 0; count < parametricObjects.size(); ++count) {
-        objectType = parametricObjects[count];
+    for (auto parametricObject : parametricObjects) {
+        objectType = parametricObject;
         auto it = epJSON.find(objectType);
         if (it != epJSON.end()) {
             objectFound = true;
@@ -1215,7 +1215,7 @@ std::vector<std::string> InputProcessor::getIDFOrderedKeys(EnergyPlusData &state
 
     // Reserve doesn't seem to work :(
     for (int i = 0; i < (int)nums.size(); ++i) {
-        keys.push_back("");
+        keys.emplace_back("");
     }
 
     // get list of saved object numbers from idf processing
@@ -1616,9 +1616,9 @@ void InputProcessor::reportIDFRecordsStats(EnergyPlusData &state)
             ++state.dataOutput->iNumberOfRecords;
 
             // Loop on all regular fields
-            for (size_t i = 0; i < legacy_idd_fields.size(); ++i) {
+            for (const auto &legacy_idd_field : legacy_idd_fields) {
 
-                std::string const field = legacy_idd_fields[i].get<std::string>();
+                std::string const field = legacy_idd_field.get<std::string>();
 
                 // This is weird, but some objects like Building have a Name default... and it's not in the patternProperties
                 if (has_idd_name_field && field == "name") {
@@ -1649,8 +1649,8 @@ void InputProcessor::reportIDFRecordsStats(EnergyPlusData &state)
 
                     for (auto it = epJSON_extensions_array.begin(); it != epJSON_extensions_array.end(); ++it) {
                         auto const &epJSON_extension_obj = it.value();
-                        for (size_t i = 0; i < legacy_idd_extensibles.size(); ++i) {
-                            std::string const &field = legacy_idd_extensibles[i].get<std::string>();
+                        for (const auto &legacy_idd_extensible : legacy_idd_extensibles) {
+                            std::string const &field = legacy_idd_extensible.get<std::string>();
                             auto const &schema_extension_field_obj = schema_extension_fields[field];
 
                             processField(field, epJSON_extension_obj, schema_extension_field_obj);
@@ -1679,7 +1679,7 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
     std::unordered_set<std::string> unused_object_types;
     unused_object_types.reserve(unusedInputs.size());
 
-    if ((unusedInputs.size() != 0u) && state.dataGlobal->DisplayUnusedObjects) {
+    if ((!unusedInputs.empty()) && state.dataGlobal->DisplayUnusedObjects) {
         ShowWarningError(state, "The following lines are \"Unused Objects\".  These objects are in the input");
         ShowContinueError(state, " file but are never obtained by the simulation and therefore are NOT used.");
         if (!state.dataGlobal->DisplayAllWarnings) {
@@ -1734,7 +1734,7 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
         }
     }
 
-    if ((unusedInputs.size() != 0u) && !state.dataGlobal->DisplayUnusedObjects) {
+    if ((!unusedInputs.empty()) && !state.dataGlobal->DisplayUnusedObjects) {
         u64toa(unusedInputs.size(), s);
         ShowMessage(state, "There are " + std::string(s) + " unused objects in input.");
         ShowMessage(state, "Use Output:Diagnostics,DisplayUnusedObjects; to see them.");

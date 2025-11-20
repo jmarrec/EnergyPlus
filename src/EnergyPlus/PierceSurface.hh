@@ -204,7 +204,7 @@ inline bool PierceSurface_Nonconvex(DataSurfaces::Surface2D const &s2d, // 2D su
     assert(s2d.vertices.size() >= 3u);
     Surface2D::Slabs const &slabs(s2d.slabs);    // 2D surface y slice slabs
     Surface2D::SlabYs const &slabYs(s2d.slabYs); // 2D surface slab y coordinates
-    assert(slabYs.size() > 0u);
+    assert(!slabYs.empty());
     Real64 const yHit(h2d.y); // Hit point y coordinate
 
     // Find slab with y range containing hit point
