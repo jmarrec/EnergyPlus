@@ -1215,29 +1215,11 @@ void GetPlantInput(EnergyPlusData &state)
                         break;
                     }
                     case PlantEquipmentType::HeatPumpAirToWater: {
-                        if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::HotWater) {
-                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
-                                state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
-                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterHeating;
-                            this_comp.TypeOf = "HeatPumpAirToWaterHeating";
-                        } else if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::ChilledWater) {
-                            this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
-                                state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
-                            this_comp.Type = PlantEquipmentType::HeatPumpAirToWaterCooling;
-                            this_comp.TypeOf = "HeatPumpAirToWaterCooling";
-                        }
-                        this_comp.CurOpSchemeType = OpScheme::Invalid;
-                        break;
-                    }
-                    case PlantEquipmentType::HeatPumpAirToWaterHeating: {
+                        DataPlant::PlantEquipmentType eqType = PlantEquipmentType::HeatPumpAirToWater;
+                        // Compare node nums to identify which side of the heat pump this is
                         this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
-                            state, PlantEquipmentType::HeatPumpAirToWaterHeating, CompNames(CompNum));
-                        this_comp.CurOpSchemeType = OpScheme::Invalid;
-                        break;
-                    }
-                    case PlantEquipmentType::HeatPumpAirToWaterCooling: {
-                        this_comp.compPtr = EIRPlantLoopHeatPumps::HeatPumpAirToWater::factory(
-                            state, PlantEquipmentType::HeatPumpAirToWaterCooling, CompNames(CompNum));
+                            state, eqType, CompNames(CompNum), InletNodeNumbers(CompNum), OutletNodeNumbers(CompNum));
+                        this_comp.Type = eqType; // reset by factory to heating or cooling
                         this_comp.CurOpSchemeType = OpScheme::Invalid;
                         break;
                     }
@@ -1447,7 +1429,7 @@ void GetPlantInput(EnergyPlusData &state)
                     }
                     }
 
-                    if (!this_comp.compPtr) {
+                    if (this_comp.compPtr == nullptr) {
                         ShowFatalError(state, format(" Plant component \"{}\" was not assigned a pointer.", this_comp_type));
                     }
 
@@ -4641,6 +4623,7 @@ void CheckOngoingPlantWarnings(EnergyPlusData &state)
 
 void ReportPlantCompWaterFlowData(EnergyPlusData &state, bool const reportFlag)
 {
+    bool OpenPszFile = false;
     // Reporting will be 24 hrs of data by plant loop for each component connected to that loop. Then the next loop's component will be reported.
     // Could be changed to report all loop's and components at the same time (i.e., as single group from 00:15 to 24:00 instead of multiple groups)
     // sum equipment water flow rate time series
@@ -4648,6 +4631,7 @@ void ReportPlantCompWaterFlowData(EnergyPlusData &state, bool const reportFlag)
         if (state.dataPlnt->PlantLoop(LoopNum).compDesWaterFlowRate.size() == 0) {
             continue;
         }
+        OpenPszFile = true;
         state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate.resize(size_t(24 * state.dataGlobal->TimeStepsInHour));
         for (size_t ts = 0; ts < state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate.size(); ++ts) {
             state.dataPlnt->PlantLoop(LoopNum).plantDesWaterFlowRate[ts] = 0.0;
@@ -4659,6 +4643,9 @@ void ReportPlantCompWaterFlowData(EnergyPlusData &state, bool const reportFlag)
     if (reportFlag) {
         state.dataGlobal->ReportPlantCompWaterFlowDataFlag = false;
     } else {
+        return;
+    }
+    if (!OpenPszFile) {
         return;
     }
     for (int LoopNum = 1; LoopNum <= state.dataHVACGlobal->NumPlantLoops; ++LoopNum) {

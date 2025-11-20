@@ -10966,7 +10966,7 @@ void VRFCondenserEquipment::CalcVRFIUTeTc_FluidTCtrl(EnergyPlusData &state)
     //       and then decide and Te/Tc that can satisfy all the zones (2) TeTcConstant method uses fixed values provided
     //       by the user.
 
-    // Followings for FluidTCtrl Only
+    // Following for FluidTCtrl Only
     Array1D<Real64> EvapTemp;
     Array1D<Real64> CondTemp;
     Real64 IUMinEvapTemp;
@@ -11207,7 +11207,7 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
     bool HRHeatRequestFlag;           // flag indicating VRF TU could operate in heating mode
     bool HRCoolRequestFlag;           // flag indicating VRF TU could operate in cooling mode
 
-    // Followings for VRF FluidTCtrl Only
+    // Following for VRF FluidTCtrl Only
     int Counter;                     // index for iterations [-]
     int NumIteHIUIn;                 // index for HIU calculation iterations [-]
     int NumOfCompSpdInput;           // Number of compressor speed input by the user [-]
@@ -15481,10 +15481,10 @@ Real64 VRFTerminalUnitEquipment::HotWaterHeatingCoilResidual(EnergyPlusData &sta
     Real64 Residuum; // Residual to be minimized to zero
 
     // local variables declaration:
-    int VRFTUNum = int(Par[1]);       // index to current terminal unit simulated
-    bool FirstHVACIteration = Par[2]; // 0 flag if it first HVAC iteration, or else 1
-    Real64 SuppHeatCoilLoad = Par[3]; // supplemental heating coil load to be met [W]
-    Real64 QActual = 0.0;             // actual heating load delivered [W]
+    int VRFTUNum = int(Par[1]);              // index to current terminal unit simulated
+    bool FirstHVACIteration = Par[2] != 0.0; // 0 flag if it first HVAC iteration, or else 1
+    Real64 SuppHeatCoilLoad = Par[3];        // supplemental heating coil load to be met [W]
+    Real64 QActual = 0.0;                    // actual heating load delivered [W]
 
     // Real64 mdot = min(state.dataLoopNodes->Node(VRFTU(VRFTUNum).SuppHeatCoilFluidOutletNode).MassFlowRateMaxAvail,
     //                  VRFTU(VRFTUNum).SuppHeatCoilFluidMaxFlow * PartLoadFrac);

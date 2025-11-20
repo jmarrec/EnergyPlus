@@ -1058,10 +1058,10 @@ namespace DataSizing {
         int NumTimeStepsInAvg = 1;                        // number of zone timesteps in the averaging window for coincident plant flow
         int SizingFactorOption = 0;                       // option for what sizing factor to apply
         // Calculated
-        Real64 DesVolFlowRate = 0.0; // loop design flow rate in m3/s
-        bool VolFlowSizingDone = 0;  // flag to indicate when this loop has finished sizing flow rate
-        Real64 PlantSizFac = 0.0;    // hold the loop and pump sizing factor
-        Real64 DesCapacity = 0.0;    // final capacity in W
+        Real64 DesVolFlowRate = 0.0;    // loop design flow rate in m3/s
+        bool VolFlowSizingDone = false; // flag to indicate when this loop has finished sizing flow rate
+        Real64 PlantSizFac = 0.0;       // hold the loop and pump sizing factor
+        Real64 DesCapacity = 0.0;       // final capacity in W
     };
 
     // based on ZoneSizingData but only have member variables that are related to the CheckSum/
@@ -1325,7 +1325,7 @@ struct SizingData : BaseGlobalStruct
     int DataZoneUsedForSizing = 0;                        // pointer to control zone for air loop equipment
     int DataZoneNumber = 0;                               // a pointer to a served by zoneHVAC equipment
     int NumZoneHVACSizing = 0;                            // Number of design specification zone HVAC sizing objects
-    int NumAirTerminalSizingSpec = 0;                     // Number of design specfication air terminal sizing objects
+    int NumAirTerminalSizingSpec = 0;                     // Number of design specification air terminal sizing objects
     int NumAirTerminalUnits = 0;                          // Number of air terminal units (same as total number of zone inlet nodes)
     Real64 DXCoolCap = 0.0;                               // The rated cooling capacity of a DX unit.
     Real64 GlobalHeatSizingFactor = 0.0;                  // the global heating sizing ratio

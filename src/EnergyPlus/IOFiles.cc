@@ -182,7 +182,7 @@ bool InputFile::is_open() const noexcept
 {
     if (is) {
         auto *ss = dynamic_cast<std::ifstream *>(is.get());
-        if (ss) {
+        if (ss != nullptr) {
             return ss->is_open();
         } else {
             return true;
@@ -263,7 +263,7 @@ void InputOutputFile::flush()
 std::string InputOutputFile::get_output()
 {
     auto *ss = dynamic_cast<std::stringstream *>(os.get());
-    if (ss) {
+    if (ss != nullptr) {
         return ss->str();
     } else {
         return "";
@@ -455,6 +455,9 @@ void IOFiles::OutputControl::getInput(EnergyPlusData &state)
             }
             { // "sqlite"
                 sqlite = boolean_choice(find_input(fields, "output_sqlite"));
+            }
+            { // "psz"
+                psz = boolean_choice(find_input(fields, "output_plant_component_sizing"));
             }
         }
     }

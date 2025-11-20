@@ -1341,7 +1341,7 @@ namespace HeatBalanceManager {
         static constexpr std::string_view routineName = "GetConstructData";
 
         // If UniqueConstructionNames size, then input has already been gotten
-        if (state.dataHeatBalMgr->UniqueConstructNames.size()) {
+        if (state.dataHeatBalMgr->UniqueConstructNames.size() != 0u) {
             return;
         }
 
@@ -5661,7 +5661,7 @@ namespace HeatBalanceManager {
                 if (thisConstruct.BSDFInput.VisBkReflIndex == 0) {
                     ErrorsFound = true;
                     ShowSevereCustom(
-                        state, eoh, format("Visble back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(9)));
+                        state, eoh, format("Visible back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(9)));
                 } else {
                     MatrixDataManager::Get2DMatrix(state, thisConstruct.BSDFInput.VisBkReflIndex, thisConstruct.BSDFInput.VisBkRefl);
                 }
@@ -6051,7 +6051,7 @@ namespace HeatBalanceManager {
             thisConstruct.WindowTypeBSDF = true;
         }
 
-        // Do not forget to deallocate localy allocated variables
+        // Do not forget to deallocate locally allocated variables
         if (allocated(locAlphaFieldNames)) {
             locAlphaFieldNames.deallocate();
         }

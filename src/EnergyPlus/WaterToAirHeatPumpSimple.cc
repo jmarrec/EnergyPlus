@@ -1253,7 +1253,7 @@ namespace WaterToAirHeatPumpSimple {
         Real64 RatedCoolPowerTempModFac = 1.0; // Rated cooling power curve modifier
         Real64 RatedHeatPowerTempModFac = 1.0; // Rated heating power curve modifier
         Real64 RatedCapCoolTotalDesCDD;        // Rated total cooling coil capacity determined at cooling design conditions
-        constexpr Real64 Tref(283.15);         // Refrence Temperature for performance curves,10C [K]
+        constexpr Real64 Tref(283.15);         // Reference Temperature for performance curves,10C [K]
         int PltSizNum;
         bool RatedCapCoolTotalAutoSized;
         bool RatedCapCoolSensAutoSized;
@@ -1264,7 +1264,7 @@ namespace WaterToAirHeatPumpSimple {
         bool IsAutoSize;                  // Indicator to autosize
         bool HardSizeNoDesRun;            // Indicator to hardsize and no sizing run
         Real64 RatedAirVolFlowRateDes;    // Autosized rated air flow for reporting
-        Real64 CoolingAirVolFlowRateDes;  // Cooling desing day air flow
+        Real64 CoolingAirVolFlowRateDes;  // Cooling design day air flow
         Real64 HeatingAirVolFlowRateDes;  // Heating design day air flow
         Real64 RatedAirVolFlowRateUser;   // Hardsized rated air flow for reporting
         Real64 RatedCapCoolTotalDes;      // Autosized rated cooling capacity for reporting
@@ -1381,14 +1381,24 @@ namespace WaterToAirHeatPumpSimple {
             } else {
                 if (simpleWatertoAirHP.RatedAirVolFlowRate > 0.0 && RatedAirVolFlowRateDes > 0.0) {
                     RatedAirVolFlowRateUser = simpleWatertoAirHP.RatedAirVolFlowRate;
-                    BaseSizer::reportSizerOutput(
-                        state,
-                        format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
-                        simpleWatertoAirHP.Name,
-                        "Design Size Rated Air Flow Rate [m3/s]",
-                        RatedAirVolFlowRateDes,
-                        "User-Specified Rated Air Flow Rate [m3/s]",
-                        RatedAirVolFlowRateUser);
+                    if ((std::abs(RatedAirVolFlowRateDes - RatedAirVolFlowRateUser) / RatedAirVolFlowRateUser) >
+                        state.dataSize->AutoVsHardSizingThreshold) {
+                        BaseSizer::reportSizerOutput(
+                            state,
+                            format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                            simpleWatertoAirHP.Name,
+                            "Design Size Rated Air Flow Rate [m3/s]",
+                            RatedAirVolFlowRateDes,
+                            "User-Specified Rated Air Flow Rate [m3/s]",
+                            RatedAirVolFlowRateUser);
+                    } else {
+                        BaseSizer::reportSizerOutput(
+                            state,
+                            format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                            simpleWatertoAirHP.Name,
+                            "User-Specified Rated Air Flow Rate [m3/s]",
+                            RatedAirVolFlowRateUser);
+                    }
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(RatedAirVolFlowRateDes - RatedAirVolFlowRateUser) / RatedAirVolFlowRateUser) >
                             state.dataSize->AutoVsHardSizingThreshold) {
@@ -1971,7 +1981,7 @@ namespace WaterToAirHeatPumpSimple {
                             // based on cooling design day which is used to decide if the
                             // coil needs to be sized of the heating coil size
                             //
-                            // no capcity adjustment based on system flow because the capacity could change
+                            // no capacity adjustment based on system flow because the capacity could change
                             // once the heating coil has been sized
                             state.dataSize->DXCoolCap = RatedCapCoolTotalDes;
                         } else if (companionHeatingCoil.WAHPPlantType != DataPlant::PlantEquipmentType::CoilWAHPHeatingEquationFit) {
@@ -2016,14 +2026,24 @@ namespace WaterToAirHeatPumpSimple {
                         RatedCapCoolTotalUser = simpleWatertoAirHP.RatedCapCoolTotal;
                         state.dataSize->DXCoolCap = simpleWatertoAirHP.RatedCapCoolTotal;
                         simpleWatertoAirHP.RatedPowerCool = simpleWatertoAirHP.RatedCapCoolTotal / simpleWatertoAirHP.RatedCOPCoolAtRatedCdts;
-                        BaseSizer::reportSizerOutput(
-                            state,
-                            format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
-                            simpleWatertoAirHP.Name,
-                            "Design Size Rated Total Cooling Capacity [W]",
-                            RatedCapCoolTotalDes,
-                            "User-Specified Rated Total Cooling Capacity [W]",
-                            RatedCapCoolTotalUser);
+                        if ((std::abs(RatedCapCoolTotalDes - RatedCapCoolTotalUser) / RatedCapCoolTotalUser) >
+                            state.dataSize->AutoVsHardSizingThreshold) {
+                            BaseSizer::reportSizerOutput(
+                                state,
+                                format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                                simpleWatertoAirHP.Name,
+                                "Design Size Rated Total Cooling Capacity [W]",
+                                RatedCapCoolTotalDes,
+                                "User-Specified Rated Total Cooling Capacity [W]",
+                                RatedCapCoolTotalUser);
+                        } else {
+                            BaseSizer::reportSizerOutput(
+                                state,
+                                format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                                simpleWatertoAirHP.Name,
+                                "User-Specified Rated Total Cooling Capacity [W]",
+                                RatedCapCoolTotalUser);
+                        }
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(RatedCapCoolTotalDes - RatedCapCoolTotalUser) / RatedCapCoolTotalUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
@@ -2111,14 +2131,24 @@ namespace WaterToAirHeatPumpSimple {
                 } else {
                     if (simpleWatertoAirHP.RatedCapCoolSens > 0.0 && RatedCapCoolSensDes > 0.0) {
                         RatedCapCoolSensUser = simpleWatertoAirHP.RatedCapCoolSens;
-                        BaseSizer::reportSizerOutput(
-                            state,
-                            format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
-                            simpleWatertoAirHP.Name,
-                            "Design Size Rated Sensible Cooling Capacity [W]",
-                            RatedCapCoolSensDes,
-                            "User-Specified Rated Sensible Cooling Capacity [W]",
-                            RatedCapCoolSensUser);
+                        if ((std::abs(RatedCapCoolSensDes - RatedCapCoolSensUser) / RatedCapCoolSensUser) >
+                            state.dataSize->AutoVsHardSizingThreshold) {
+                            BaseSizer::reportSizerOutput(
+                                state,
+                                format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                                simpleWatertoAirHP.Name,
+                                "Design Size Rated Sensible Cooling Capacity [W]",
+                                RatedCapCoolSensDes,
+                                "User-Specified Rated Sensible Cooling Capacity [W]",
+                                RatedCapCoolSensUser);
+                        } else {
+                            BaseSizer::reportSizerOutput(
+                                state,
+                                format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                                simpleWatertoAirHP.Name,
+                                "User-Specified Rated Sensible Cooling Capacity [W]",
+                                RatedCapCoolSensUser);
+                        }
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(RatedCapCoolSensDes - RatedCapCoolSensUser) / RatedCapCoolSensUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
@@ -2348,7 +2378,7 @@ namespace WaterToAirHeatPumpSimple {
                             HeatratioTS = 0.0; // Clang complains it is used uninitialized if you don't give it a value
                             ErrorsFound = true;
                         }
-                        // calculate temperatue ratio at refrence conditions
+                        // calculate temperatue ratio at reference conditions
                         RatedHeatratioTDB = (RatedHeatMixDryBulb + state.dataWaterToAirHeatPumpSimple->CelsiustoKelvin) / Tref;
                         RatedHeatratioTS = (simpleWatertoAirHP.RatedEntWaterTemp + state.dataWaterToAirHeatPumpSimple->CelsiustoKelvin) / Tref;
                         // determine curve modifiers at peak and rated conditions
@@ -2452,7 +2482,7 @@ namespace WaterToAirHeatPumpSimple {
                             HeatratioTS = 0.0; // Clang complains it is used uninitialized if you don't give it a value
                             ErrorsFound = true;
                         }
-                        // calculate temperatue ratio at refrence conditions
+                        // calculate temperatue ratio at reference conditions
                         RatedHeatratioTDB = (RatedHeatMixDryBulb + state.dataWaterToAirHeatPumpSimple->CelsiustoKelvin) / Tref;
                         RatedHeatratioTS = (simpleWatertoAirHP.RatedEntWaterTemp + state.dataWaterToAirHeatPumpSimple->CelsiustoKelvin) / Tref;
                         // determine curve modifiers at peak and rated conditions
@@ -2511,7 +2541,7 @@ namespace WaterToAirHeatPumpSimple {
                             if (HeatingAirVolFlowRateDes > 0) {
                                 RatedCapCoolTotalDes *= (RatedAirVolFlowRateDes / HeatingAirVolFlowRateDes) * HeatdTratio;
                             }
-                            // calculate ajustment factor over previous capacity for sensible capacity adjustment
+                            // calculate adjustment factor over previous capacity for sensible capacity adjustment
                             Real64 CapCoolAdjFac = RatedCapCoolTotalDes / state.dataSize->DXCoolCap;
                             // update cooling coil rated capacity after adjustments based on heating coil size
                             state.dataSize->DXCoolCap = RatedCapCoolTotalDes;
@@ -2617,14 +2647,23 @@ namespace WaterToAirHeatPumpSimple {
             } else {
                 if (simpleWatertoAirHP.RatedCapHeat > 0.0 && RatedCapHeatDes > 0.0 && !HardSizeNoDesRun) {
                     RatedCapHeatUser = simpleWatertoAirHP.RatedCapHeat;
-                    BaseSizer::reportSizerOutput(
-                        state,
-                        format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
-                        simpleWatertoAirHP.Name,
-                        "Design Size Rated Heating Capacity [W]",
-                        RatedCapHeatDes,
-                        "User-Specified Rated Heating Capacity [W]",
-                        RatedCapHeatUser);
+                    if ((std::abs(RatedCapHeatDes - RatedCapHeatUser) / RatedCapHeatUser) > state.dataSize->AutoVsHardSizingThreshold) {
+                        BaseSizer::reportSizerOutput(
+                            state,
+                            format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                            simpleWatertoAirHP.Name,
+                            "Design Size Rated Heating Capacity [W]",
+                            RatedCapHeatDes,
+                            "User-Specified Rated Heating Capacity [W]",
+                            RatedCapHeatUser);
+                    } else {
+                        BaseSizer::reportSizerOutput(
+                            state,
+                            format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                            simpleWatertoAirHP.Name,
+                            "User-Specified Rated Heating Capacity [W]",
+                            RatedCapHeatUser);
+                    }
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(RatedCapHeatDes - RatedCapHeatUser) / RatedCapHeatUser) > state.dataSize->AutoVsHardSizingThreshold) {
                             ShowMessage(
@@ -2869,14 +2908,24 @@ namespace WaterToAirHeatPumpSimple {
         } else {
             if (simpleWatertoAirHP.RatedWaterVolFlowRate > 0.0 && RatedWaterVolFlowRateDes > 0.0) {
                 RatedWaterVolFlowRateUser = simpleWatertoAirHP.RatedWaterVolFlowRate;
-                BaseSizer::reportSizerOutput(
-                    state,
-                    format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
-                    simpleWatertoAirHP.Name,
-                    "Design Size Rated Water Flow Rate [m3/s]",
-                    RatedWaterVolFlowRateDes,
-                    "User-Specified Rated Water Flow Rate [m3/s]",
-                    RatedWaterVolFlowRateUser);
+                if ((std::abs(RatedWaterVolFlowRateDes - RatedWaterVolFlowRateUser) / RatedWaterVolFlowRateUser) >
+                    state.dataSize->AutoVsHardSizingThreshold) {
+                    BaseSizer::reportSizerOutput(
+                        state,
+                        format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                        simpleWatertoAirHP.Name,
+                        "Design Size Rated Water Flow Rate [m3/s]",
+                        RatedWaterVolFlowRateDes,
+                        "User-Specified Rated Water Flow Rate [m3/s]",
+                        RatedWaterVolFlowRateUser);
+                } else {
+                    BaseSizer::reportSizerOutput(
+                        state,
+                        format("COIL:{}:WATERTOAIRHEATPUMP:EQUATIONFIT", WatertoAirHPNamesUC[static_cast<int>(simpleWatertoAirHP.WAHPType)]),
+                        simpleWatertoAirHP.Name,
+                        "User-Specified Rated Water Flow Rate [m3/s]",
+                        RatedWaterVolFlowRateUser);
+                }
                 if (state.dataGlobal->DisplayExtraWarnings) {
                     if ((std::abs(RatedWaterVolFlowRateDes - RatedWaterVolFlowRateUser) / RatedWaterVolFlowRateUser) >
                         state.dataSize->AutoVsHardSizingThreshold) {
@@ -3682,13 +3731,14 @@ namespace WaterToAirHeatPumpSimple {
             Toffa = Toff;
         }
 
-        //  Use sucessive substitution to solve for To
+        //  Use successive substitution to solve for To
         aa = (Gamma * Toffa) - (0.25 / Twet) * pow_2(Gamma) * pow_2(Toffa);
-
         To1 = aa + LatentCapacityTimeConstant;
         Error = 1.0;
         while (Error > 0.001) {
-            To2 = aa - LatentCapacityTimeConstant * std::expm1(-To1 / LatentCapacityTimeConstant);
+            //  Floating overflow errors occur when -To1/LatentCapacityTimeConstant is a large positive number.
+            //  Cap upper limit at 700 to avoid the overflow errors.
+            To2 = aa - LatentCapacityTimeConstant * std::expm1(min(700.0, -To1 / LatentCapacityTimeConstant));
             Error = std::abs((To2 - To1) / To1);
             To1 = To2;
         }
@@ -3990,7 +4040,7 @@ namespace WaterToAirHeatPumpSimple {
 
     void CheckSimpleWAHPRatedCurvesOutputs(EnergyPlusData &state, std::string const &CoilName)
     {
-        constexpr Real64 Tref(283.15); // Refrence Temperature for performance curves,10C [K]
+        constexpr Real64 Tref(283.15); // Reference Temperature for performance curves,10C [K]
         static constexpr std::string_view RoutineName("CheckSimpleWAHPRatedCurvesOutputs");
 
         int WhichCoil = Util::FindItemInList(CoilName, state.dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP);

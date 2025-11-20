@@ -1183,8 +1183,8 @@ void InitZoneContSetPoints(EnergyPlusData &state)
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     Real64 GCGain; // Zone generic contaminant gain
-    Real64 Pi;     // Pressue at zone i
-    Real64 Pj;     // Pressue at zone j
+    Real64 Pi;     // Pressure at zone i
+    Real64 Pj;     // Pressure at zone j
     Real64 Sch;    // Schedule value
 
     if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
@@ -1513,7 +1513,7 @@ void InitZoneContSetPoints(EnergyPlusData &state)
             con.GenRate = GCGain;
         }
 
-        // From boudary layer diffusion
+        // From boundary layer diffusion
         for (auto &con : state.dataContaminantBalance->ZoneContamGenericBLDiff) {
             int SurfNum = con.SurfNum;
             int ZoneNum = state.dataSurface->Surface(SurfNum).Zone;
@@ -2102,9 +2102,9 @@ void InverseModelCO2(EnergyPlusData &state,
         // Hybrid Model calculate people count
         if (hmZone.PeopleCountCalc_C && state.dataHVACGlobal->UseZoneTimeStepHistory) {
             state.dataHeatBal->Zone(ZoneNum).ZonePeopleActivityLevel =
-                hmZone.peopleActivityLevelSched ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
-            Real64 ActivityLevel = hmZone.peopleActivityLevelSched ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
-            Real64 CO2GenRate = hmZone.peopleCO2GenRateSched ? hmZone.peopleCO2GenRateSched->getCurrentVal() : 0.0;
+                (hmZone.peopleActivityLevelSched != nullptr) ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
+            Real64 ActivityLevel = (hmZone.peopleActivityLevelSched != nullptr) ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
+            Real64 CO2GenRate = (hmZone.peopleCO2GenRateSched != nullptr) ? hmZone.peopleCO2GenRateSched->getCurrentVal() : 0.0;
             if (ActivityLevel <= 0.0) {
                 ActivityLevel = 130.0; // 130.0 is the default people activity level [W]
             }
@@ -2227,7 +2227,7 @@ void CorrectZoneContaminants(EnergyPlusData &state,
             }
         }
 
-        // Start to calculate zone CO2 and genric contaminant levels
+        // Start to calculate zone CO2 and generic contaminant levels
         Real64 CO2MassFlowRate = 0.0;
         Real64 GCMassFlowRate = 0.0;
         Real64 ZoneMassFlowRate = 0.0;
@@ -2351,7 +2351,7 @@ void CorrectZoneContaminants(EnergyPlusData &state,
             CO2Gain = state.dataContaminantBalance->ZoneCO2Gain(ZoneNum) * RhoAir * 1.0e6;
         }
         if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
-            CO2GainExceptPeople = state.dataContaminantBalance->ZoneCO2GainExceptPeople(ZoneNum) * RhoAir * 1.0e6; // Addded for hybrid model
+            CO2GainExceptPeople = state.dataContaminantBalance->ZoneCO2GainExceptPeople(ZoneNum) * RhoAir * 1.0e6; // Added for hybrid model
         }
         if (state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
             GCGain = state.dataContaminantBalance->ZoneGCGain(ZoneNum) * RhoAir * 1.0e6;

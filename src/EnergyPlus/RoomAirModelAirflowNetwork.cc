@@ -736,7 +736,7 @@ namespace RoomAir {
             zoneRetPlenumNum = iPlenum;
             break;
         }
-        bool zoneSupPlenumNum = false;
+        int zoneSupPlenumNum = 0;
         for (int iPlenum = 1; iPlenum <= state.dataZonePlenum->NumZoneSupplyPlenums; ++iPlenum) {
             if (state.dataZonePlenum->ZoneSupPlenCond(iPlenum).ActualZoneNum != zoneNum) {
                 continue;

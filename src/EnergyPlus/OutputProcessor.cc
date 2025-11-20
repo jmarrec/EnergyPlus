@@ -813,7 +813,7 @@ namespace OutputProcessor {
                                                  meterOrVarNameUC));
                         ShowContinueError(state,
                                           format("...will not be shown with the Meter results; units for meter={}, units for this variable={}.",
-                                                 Constant::unitNames[(int)units],
+                                                 units != Constant::Units::Invalid ? Constant::unitNames[(int)units] : "Unknown",
                                                  Constant::unitNames[(int)srcDDVar->units]));
                         foundBadSrc = true;
                         break;
@@ -878,7 +878,8 @@ namespace OutputProcessor {
             if (!itemsAssigned) {
                 ShowWarningError(state, format("Meter:Custom=\"{}\", no items assigned ", ipsc->cAlphaArgs(1)));
                 ShowContinueError(
-                    state, "...will not be shown with the Meter results. This may be caused by a Meter:Custom be assigned to another Meter:Custom.");
+                    state,
+                    "...will not be shown with the Meter results. This may be caused by a Meter:Custom being assigned to another Meter:Custom.");
                 continue;
             }
 
@@ -1208,7 +1209,8 @@ namespace OutputProcessor {
             if (!itemsAssigned) {
                 ShowWarningError(state, format("Meter:Custom=\"{}\", no items assigned ", ipsc->cAlphaArgs(1)));
                 ShowContinueError(
-                    state, "...will not be shown with the Meter results. This may be caused by a Meter:Custom be assigned to another Meter:Custom.");
+                    state,
+                    "...will not be shown with the Meter results. This may be caused by a Meter:Custom being assigned to another Meter:Custom.");
                 continue;
             }
 
@@ -1736,6 +1738,10 @@ namespace OutputProcessor {
                 meter->periods[iPeriod].resetVals();
             }
             meter->periodFinYrSM.resetVals();
+
+            for (int iMeter = 0; iMeter < (int)op->meters.size(); ++iMeter) {
+                op->meterValues[iMeter] = 0.0;
+            }
         }
 
         for (auto *var : op->outVars) {
@@ -2842,7 +2848,7 @@ namespace OutputProcessor {
         //       DATE WRITTEN   May 2009
 
         // PURPOSE OF THIS FUNCTION:
-        // This function attemps to guess determine how a meter variable should be
+        // This function attempts to guess determine how a meter variable should be
         // grouped.  It does this by parsing the meter name and then assigns a
         // indexGroupKey based on the name
 
@@ -2894,7 +2900,7 @@ namespace OutputProcessor {
         //       RE-ENGINEERED  na
 
         // PURPOSE OF THIS FUNCTION:
-        // This function attemps to determine how a meter variable should be
+        // This function attempts to determine how a meter variable should be
         // grouped.  It does this by parsing the meter group
 
         // Return value
@@ -3122,7 +3128,7 @@ void SetupOutputVariable(EnergyPlusData &state,
                          OutputProcessor::StoreType storeType,       // State, Average=1, NonState, Sum=2
                          std::string const &key,                     // Associated Key for this variable
                          [[maybe_unused]] int const indexGroupKey,   // Group identifier for SQL output
-                         OutputProcessor::ReportFreq freq            // Internal use -- causes reporting at this freqency
+                         OutputProcessor::ReportFreq freq            // Internal use -- causes reporting at this frequency
 )
 {
 
@@ -4874,6 +4880,12 @@ int initErrorFile(EnergyPlusData &state)
         DisplayString(state, fmt::format("ERROR: Could not open file {} for output (write).", state.files.outputErrFilePath));
         return EXIT_FAILURE;
     }
+
+    // Unless requested to be buffered: unbuffer it, flushes automatically on each output
+    if (!state.dataSysVars->BufferedErrFileEnvVar) {
+        state.files.err_stream->setf(std::ios::unitbuf);
+    }
+
     return EXIT_SUCCESS;
 } // initErrorFile()
 

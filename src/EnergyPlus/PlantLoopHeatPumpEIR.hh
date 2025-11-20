@@ -536,8 +536,13 @@ namespace EIRPlantLoopHeatPumps {
         void resetReportingVariables() override;
         Real64 calcCrankcaseHeaterPower(EnergyPlusData &state) const;
         void setUpEMS(EnergyPlusData &state) override;
-        static PlantComponent *factory(EnergyPlusData &state, DataPlant::PlantEquipmentType hp_type, const std::string &hp_name);
+        static PlantComponent *factory(EnergyPlusData &state,
+                                       DataPlant::PlantEquipmentType &hp_type,
+                                       const std::string &hp_name,
+                                       int const inletNodeNum = 0,
+                                       int const outletNodeNum = 0);
         static void processInputForEIRPLHP(EnergyPlusData &state);
+        void sizeLoadSide(EnergyPlusData &state);
     }; // HeatPumpAirToWater
 } // namespace EIRPlantLoopHeatPumps
 

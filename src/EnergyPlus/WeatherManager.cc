@@ -288,21 +288,22 @@ namespace Weather {
                                                                  ipsc->cAlphaFieldNames,
                                                                  ipsc->cNumericFieldNames);
 
-        ErrorObjectHeader eoh{routineName, ipsc->cCurrentModuleObject, ""};
-
-        if (ipsc->lAlphaFieldBlanks(1)) {
-        } else if ((state.dataEnvrn->varyingLocationLatSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(1))) == nullptr) {
-            ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(1), ipsc->cAlphaArgs(1));
-        }
+        std::string newName = Util::makeUPPER(ipsc->cAlphaArgs(1));
+        ErrorObjectHeader eoh{routineName, ipsc->cCurrentModuleObject, newName};
 
         if (ipsc->lAlphaFieldBlanks(2)) {
-        } else if ((state.dataEnvrn->varyingLocationLongSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(2))) == nullptr) {
+        } else if ((state.dataEnvrn->varyingLocationLatSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(2))) == nullptr) {
             ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(2), ipsc->cAlphaArgs(2));
         }
 
         if (ipsc->lAlphaFieldBlanks(3)) {
-        } else if ((state.dataEnvrn->varyingOrientationSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(3))) == nullptr) {
+        } else if ((state.dataEnvrn->varyingLocationLongSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(3))) == nullptr) {
             ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(3), ipsc->cAlphaArgs(3));
+        }
+
+        if (ipsc->lAlphaFieldBlanks(4)) {
+        } else if ((state.dataEnvrn->varyingOrientationSched = Sched::GetSchedule(state, ipsc->cAlphaArgs(4))) == nullptr) {
+            ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(4), ipsc->cAlphaArgs(4));
         }
     }
 
@@ -1230,7 +1231,7 @@ namespace Weather {
                 envNew.Title = format("{} HVAC Sizing Pass {}", envBase.Title, HVACSizingIterCount);
                 envNew.HVACSizingIterationNum = HVACSizingIterCount;
             }
-        } // for each loop over Environment data strucure
+        } // for each loop over Environment data structure
     }
 
     void SetupWeekDaysByMonth(EnergyPlusData &state, int const StMon, int const StDay, int const StWeekDay, Array1D_int &WeekDays)
@@ -1282,7 +1283,7 @@ namespace Weather {
 
         if (any_eq(WeekDays, 0)) {
             // need to start at StMon and go backwards.
-            // EndDayOfMonth is also "days" in month.  (without leapyear day in February)
+            // EndDayOfMonth is also "days" in month.  (without leap year day in February)
             CurWeekDay = StWeekDay;
             for (int i = 1; i <= StDay - 1; ++i) {
                 --CurWeekDay;
@@ -1382,7 +1383,7 @@ namespace Weather {
 
             if (any_eq(WeekDays, 0)) {
                 // need to start at StMon and go backwards.
-                // EndDayOfMonth is also "days" in month.  (without leapyear day in February)
+                // EndDayOfMonth is also "days" in month.  (without leap year day in February)
                 CurWeekDay = WeekDays(StartMonth);
                 for (int i = 1; i <= StartMonthDay - 1; ++i) {
                     --CurWeekDay;
@@ -1479,7 +1480,7 @@ namespace Weather {
 
                 if (any_eq(WeekDays, 0)) {
                     // need to start at StMon and go backwards.
-                    // EndDayOfMonth is also "days" in month.  (without leapyear day in February)
+                    // EndDayOfMonth is also "days" in month.  (without leap year day in February)
                     CurWeekDay = WeekDays(StartMonth);
                     for (int i = 1; i <= StartMonthDay - 1; ++i) {
                         --CurWeekDay;
@@ -1575,7 +1576,7 @@ namespace Weather {
                 ThisDay += 7;
             }
             ThisDay += 7 * (state.dataWeather->DST.EnDay - 1);
-            if (ThisDay >> state.dataWeather->EndDayOfMonthWithLeapDay(state.dataWeather->DST.EnMon)) {
+            if ((ThisDay >> state.dataWeather->EndDayOfMonthWithLeapDay(state.dataWeather->DST.EnMon)) != 0) {
                 ActEndMonth = 0; // Suppress uninitialized warning
                 ActEndDay = 0;   // Suppress uninitialized warning
                 ShowSevereError(state, format("{}Determining DST: DST End Date, Nth Day of Month, not enough Nths", RoutineName));
@@ -3801,7 +3802,7 @@ namespace Weather {
                         Psychrometrics::PsyRhFnTdbWPb(state, tomorrowTs.OutDryBulbTemp, OutHumRat, desDayInput.PressBarom, WeatherManager) * 100.0;
                 } else if (ConstantHumidityRatio) {
                     //  Need Dew Point Temperature.  Use Relative Humidity to get Humidity Ratio, unless Humidity Ratio is constant
-                    // BG 9-26-07  moved following inside this IF statment; when HumIndType is 'Schedule' HumidityRatio wasn't being initialized
+                    // BG 9-26-07  moved following inside this IF statement; when HumIndType is 'Schedule' HumidityRatio wasn't being initialized
                     Real64 WetBulb =
                         Psychrometrics::PsyTwbFnTdbWPb(state, tomorrowTs.OutDryBulbTemp, HumidityRatio, desDayInput.PressBarom, RoutineNameLong);
 
@@ -3873,7 +3874,7 @@ namespace Weather {
                             } else {
                                 TotHoriz = desDayInput.SkyClear * A * (C + CosZenith) * std::exp(-B / CosZenith);
                             }
-                            // Radiation on an extraterrestial horizontal surface
+                            // Radiation on an extraterrestrial horizontal surface
                             Real64 HO = GlobalSolarConstant * AVSC * CosZenith;
                             Real64 KT = TotHoriz / HO; // Radiation ratio
                             KT = min(KT, 0.75);
@@ -4728,7 +4729,7 @@ namespace Weather {
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         bool ErrorsFound(false);
 
-        // Get the number of design days and annual runs from user inpout
+        // Get the number of design days and annual runs from user input
         state.dataEnvrn->TotDesDays = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "SizingPeriod:DesignDay");
         int RPD1 = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "SizingPeriod:WeatherFileDays");
         int RPD2 = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "SizingPeriod:WeatherFileConditionType");
@@ -5114,7 +5115,7 @@ namespace Weather {
                     runPeriodInput.startWeekDay = static_cast<Sched::DayType>(dayType);
                     inputWeekday = true;
                 }
-            } else { // No input, set the default as Sunday. This may get overriden below
+            } else { // No input, set the default as Sunday. This may get overridden below
                 runPeriodInput.startWeekDay = Sched::DayType::Sunday;
             }
 
@@ -7829,7 +7830,7 @@ namespace Weather {
             }
         } break;
         case Weather::EpwHeaderType::HolidaysDST: {
-            // A1, \field LeapYear Observed
+            // A1, \field leap year Observed
             // \type choice
             // \key Yes
             // \key No
@@ -8603,7 +8604,7 @@ namespace Weather {
         //       DATE WRITTEN   October 31, 2017
 
         // PURPOSE OF THIS FUNCTION:
-        // Determine if a month/day+leapyear combination is valid.
+        // Determine if a month/day+leap year combination is valid.
 
         switch (month) {
         case 1:

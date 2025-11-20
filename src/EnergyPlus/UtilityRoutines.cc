@@ -158,7 +158,7 @@ namespace Util {
                 ++result.ptr;
                 remaining_size = result.ptr - String.data();
                 for (size_t i = remaining_size; i < String.size(); ++i, ++result.ptr) {
-                    if (!std::isdigit(*result.ptr)) {
+                    if (std::isdigit(*result.ptr) == 0) {
                         rProcessNumber = 0.0;
                         ErrorFlag = true;
                         return rProcessNumber;
@@ -707,7 +707,7 @@ int EndEnergyPlus(EnergyPlusData &state)
         ExternalInterface::CloseSocket(state, 1);
     }
 
-    if (state.dataGlobal->fProgressPtr) {
+    if (state.dataGlobal->fProgressPtr != nullptr) {
         state.dataGlobal->fProgressPtr(100);
     }
     if (state.dataGlobal->progressCallback) {
@@ -738,7 +738,7 @@ void ConvertCaseToUpper(std::string_view InputString, // Input string
     // Convert a string to upper case
 
     // METHODOLOGY EMPLOYED:
-    // This routine is not dependant upon the ASCII
+    // This routine is not dependent upon the ASCII
     // code.  It works by storing the upper and lower case alphabet.  It
     // scans the whole input string.  If it finds a character in the lower
     // case alphabet, it makes an appropriate substitution.
@@ -770,7 +770,7 @@ void ConvertCaseToLower(std::string_view InputString, // Input string
     // Convert a string to lower case
 
     // METHODOLOGY EMPLOYED:
-    // This routine is not dependant upon the ASCII
+    // This routine is not dependent upon the ASCII
     // code.  It works by storing the upper and lower case alphabet.  It
     // scans the whole input string.  If it finds a character in the lower
     // case alphabet, it makes an appropriate substitution.
@@ -1512,13 +1512,13 @@ void ShowErrorMessage(EnergyPlusData &state, std::string const &ErrorMessage, Op
 
     auto *err_stream = state.files.err_stream.get();
 
-    if (state.dataUtilityRoutines->outputErrorHeader && err_stream) {
+    if (state.dataUtilityRoutines->outputErrorHeader && (err_stream != nullptr)) {
         *err_stream << "Program Version," << state.dataStrGlobals->VerStringVar << ',' << state.dataStrGlobals->IDDVerString << '\n';
         state.dataUtilityRoutines->outputErrorHeader = false;
     }
 
     if (!state.dataGlobal->DoingInputProcessing) {
-        if (err_stream) {
+        if (err_stream != nullptr) {
             *err_stream << "  " << ErrorMessage << '\n';
         }
     } else {

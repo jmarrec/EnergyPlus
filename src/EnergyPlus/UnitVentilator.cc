@@ -771,7 +771,7 @@ namespace UnitVentilator {
                         ErrorsFound = true;
                     }
 
-                    // check that air teminal mixer outlet node is the same as a zone inlet node.
+                    // check that air terminal mixer outlet node is the same as a zone inlet node.
                     ZoneNodeNotFound = true;
                     for (int NodeNum = 1; NodeNum <= state.dataZoneEquip->ZoneEquipConfig(unitVent.ZonePtr).NumInletNodes; ++NodeNum) {
                         if (unitVent.ATMixerOutNode == state.dataZoneEquip->ZoneEquipConfig(unitVent.ZonePtr).InletNode(NodeNum)) {
@@ -2571,7 +2571,7 @@ namespace UnitVentilator {
                                 auto f = [&state, UnitVentNum, FirstHVACIteration, fanOp](Real64 const PartLoadRatio) {
                                     Real64 QUnitOut = 0.0; // heating/Cooling provided by unit ventilator [watts]
                                     CalcUnitVentilatorComponents(state, UnitVentNum, FirstHVACIteration, QUnitOut, fanOp, PartLoadRatio);
-                                    if (state.dataUnitVentilators->QZnReq) {
+                                    if (state.dataUnitVentilators->QZnReq != 0.0) {
                                         return (QUnitOut - state.dataUnitVentilators->QZnReq) / state.dataUnitVentilators->QZnReq;
                                     } else {
                                         return 0.0;
@@ -2806,7 +2806,7 @@ namespace UnitVentilator {
 
                                     // Convert parameters to usable variables
                                     CalcUnitVentilatorComponents(state, UnitVentNum, FirstHVACIteration, QUnitOut, fanOp, PartLoadRatio);
-                                    if (state.dataUnitVentilators->QZnReq) {
+                                    if (state.dataUnitVentilators->QZnReq != 0.0) {
                                         return (QUnitOut - state.dataUnitVentilators->QZnReq) / state.dataUnitVentilators->QZnReq;
                                     }
                                     return 0.0;

@@ -2373,7 +2373,7 @@ TEST_F(EnergyPlusFixture, VSParallelPIUModulatedHeat)
     // - reheat: yes
     // - discharge air temperature: DAT below design heating DAT
     // - primary air flow rate: minimum value
-    // - secondary air flow rate: minmum value
+    // - secondary air flow rate: minimum value
     state->dataLoopNodes->Node(PriNodeNum).MassFlowRate = PriMinMassFlow;
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand(ZoneNodeNum).RemainingOutputRequired = 500.0;
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand(ZoneNodeNum).RemainingOutputReqToHeatSP = 500.0;
@@ -2825,7 +2825,7 @@ TEST_F(EnergyPlusFixture, VSSeriesPIUModulatedHeat)
     // - reheat: yes
     // - discharge air temperature: DAT below design heating DAT
     // - primary air flow rate: minimum value
-    // - secondary air flow rate: minmum value
+    // - secondary air flow rate: minimum value
     state->dataLoopNodes->Node(PriNodeNum).MassFlowRate = PriMinMassFlow;
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand(ZoneNodeNum).RemainingOutputRequired = 500.0;
     state->dataZoneEnergyDemand->ZoneSysEnergyDemand(ZoneNodeNum).RemainingOutputReqToHeatSP = 500.0;

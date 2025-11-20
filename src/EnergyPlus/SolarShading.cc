@@ -8168,7 +8168,7 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                                                         }
                                                     }
                                                 }
-                                                // CurLambda = ComplexWind(BackSurfaceNumber)%Geom(CurBackState)%Trn%Lamda(CurTrnDir)
+                                                // CurLambda = ComplexWind(BackSurfaceNumber)%Geom(CurBackState)%Trn%Lambda(CurTrnDir)
                                                 // Add influence of this exact direction to what stays in the zone.  It is important to note that
                                                 // this needs to be done for each outgoing direction
                                                 Real64 babs = CFDirBoverlap(IBack, CurTrnDir) * (1 - s_surf->SurfaceWindow(BackSurfaceNumber)
@@ -9706,8 +9706,8 @@ void WindowShadingManager(EnergyPlusData &state)
                     }
                 }
 
-                Real64 GlareControlIsActive = (state.dataDayltg->ZoneDaylight(IZone).totRefPts > 0 && state.dataEnvrn->SunIsUp &&
-                                               s_surf->WindowShadingControl(IShadingCtrl).GlareControlIsActive); // True if glare control is active
+                bool GlareControlIsActive = (state.dataDayltg->ZoneDaylight(IZone).totRefPts > 0 && state.dataEnvrn->SunIsUp &&
+                                             s_surf->WindowShadingControl(IShadingCtrl).GlareControlIsActive); // True if glare control is active
 
                 Real64 SolarOnWindow = 0.0;     // Direct plus diffuse solar intensity on window (W/m2)
                 Real64 BeamSolarOnWindow = 0.0; // Direct solar intensity on window (W/m2)

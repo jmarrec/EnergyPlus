@@ -1295,12 +1295,50 @@ void LoadEquipList(EnergyPlusData &state,
                 for (MachineNum = 1; MachineNum <= state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).NumComps; ++MachineNum) {
                     auto const type_str = state.dataIPShortCut->cAlphaArgs(MachineNum * 2);
                     if (type_str == "HEATPUMP:AIRTOWATER") {
-                        if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::HotWater) {
+                        // This type needs special treatment due to its dual personality, hopefully this can go away in the future
+                        std::string machineName = state.dataIPShortCut->cAlphaArgs(MachineNum * 2 + 1);
+                        bool thisErrFlag = false;
+                        PlantLocation plantLoc;
+                        int matchCount = 0;
+                        // See if the heating side is on this plantloop
+                        PlantUtilities::ScanPlantLoopsForObject(state,
+                                                                machineName,
+                                                                DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating,
+                                                                plantLoc,
+                                                                thisErrFlag,
+                                                                _,
+                                                                _,
+                                                                matchCount,
+                                                                _,
+                                                                LoopNum,
+                                                                true);
+                        if (matchCount > 0) {
                             state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
                                 "HEATPUMP:AIRTOWATER:HEATING";
-                        } else if (state.dataPlnt->PlantLoop(LoopNum).TypeOfWaterLoop == DataPlant::WaterLoopType::ChilledWater) {
-                            state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
-                                "HEATPUMP:AIRTOWATER:COOLING";
+                        } else {
+                            // See if the cooling side is on this plantloop
+                            PlantUtilities::ScanPlantLoopsForObject(state,
+                                                                    machineName,
+                                                                    DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling,
+                                                                    plantLoc,
+                                                                    thisErrFlag,
+                                                                    _,
+                                                                    _,
+                                                                    matchCount,
+                                                                    _,
+                                                                    LoopNum,
+                                                                    true);
+                            if (matchCount > 0) {
+                                state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
+                                    "HEATPUMP:AIRTOWATER:COOLING";
+                            } else {
+                                ShowSevereError(state,
+                                                format("Equipment type={} with Name={} not found on PlantLoop={}.",
+                                                       type_str,
+                                                       machineName,
+                                                       state.dataPlnt->PlantLoop(LoopNum).Name));
+                                ErrorsFound = true;
+                            }
                         }
                     } else {
                         state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).Comp(MachineNum).TypeOf =
@@ -2120,7 +2158,7 @@ void GetChillerHeaterChangeoverOpSchemeInput(EnergyPlusData &state,
                 }
             }
 
-            // process simulataneous heating and cooling mode cooling equipment lists and ranges
+            // process simultaneous heating and cooling mode cooling equipment lists and ranges
 
             for (auto instance = coolLoadInstancesValue.begin(); instance != coolLoadInstancesValue.end(); ++instance) {
                 auto const &fields = instance.value();
@@ -2801,7 +2839,7 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
                     auto &this_branch = this_loop_side.Branch(BranchNum);
                     for (int CompNum = 1, CompNum_end = this_branch.TotalComponents; CompNum <= CompNum_end; ++CompNum) {
                         auto &this_component = this_branch.Comp(CompNum);
-                        // initalize components 'ON-AVAILABLE-NO LOAD-NO EMS CTRL'
+                        // initialize components 'ON-AVAILABLE-NO LOAD-NO EMS CTRL'
                         this_component.ON = true;
                         this_component.Available = true;
                         this_component.MyLoad = 0.0;

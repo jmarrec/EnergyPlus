@@ -3005,6 +3005,7 @@ void GetDXCoils(EnergyPlusData &state)
             ++DXCoilNum;
             auto const &fields = instance.value();
             std::string const &thisObjectName = instance.key();
+            s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
 
             // allocate single performance mode for numeric field strings used for sizing routine
             state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(1);
@@ -3531,6 +3532,7 @@ void GetDXCoils(EnergyPlusData &state)
             ++DXCoilNum;
             auto const &fields = instance.value();
             std::string const &thisObjectName = instance.key();
+            s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
 
             // allocate single performance mode for numeric field strings used for sizing routine
             state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(1);
@@ -6615,7 +6617,7 @@ void GetDXCoils(EnergyPlusData &state)
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 thisDXCoil.Name);
-            // Followings for VRF_FluidTCtrl Only
+            // Following for VRF_FluidTCtrl Only
             SetupOutputVariable(state,
                                 "Cooling Coil VRF Evaporating Temperature",
                                 Constant::Units::C,
@@ -6680,7 +6682,7 @@ void GetDXCoils(EnergyPlusData &state)
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 thisDXCoil.Name);
-            // Followings for VRF_FluidTCtrl Only
+            // Following for VRF_FluidTCtrl Only
             SetupOutputVariable(state,
                                 "Heating Coil VRF Condensing Temperature",
                                 Constant::Units::C,
@@ -6870,6 +6872,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                     thisDXCoil.CondenserInletNodeNum(Mode) =
                         state.dataDXCoils->DXCoil(thisDXCoil.CompanionUpstreamDXCoil).CondenserInletNodeNum(Mode);
                 }
+            } else {
+                thisDXCoil.FindCompanionUpStreamCoil = false;
             }
         } else {
             thisDXCoil.FindCompanionUpStreamCoil = false;
@@ -12340,17 +12344,17 @@ Real64 ValidateADP(EnergyPlusData &state,
     Real64 shrADPMax = (enthalpyTempinHumRatADP - enthalpyMaxADP) / (InletAirEnthalpy - enthalpyMaxADP);
     if (shrADPMax > 1.0) {
         ShowWarningError(state, format("ValidateADP: Sensible heat ratio (SHR) calculation error for {} \"{} ", UnitType, UnitName));
-        ShowContinueError(state, "The maxium design SHR calculated based on the design total cooling capacity and flow rate is greater than 1.0.");
+        ShowContinueError(state, "The maximum design SHR calculated based on the design total cooling capacity and flow rate is greater than 1.0.");
         ShowContinueError(state, format("...Total Cooling Capacity                  = {:.2R} W", TotCap));
         ShowContinueError(state, format("...Mass Flow Rate                          = {:.6R} kg/s", AirMassFlow));
         ShowContinueError(state, format("...Volumetric Flow Rate                    = {:.6R} m3/s", AirVolFlowRate));
         ShowContinueError(state, format("...Coil Inlet Temperature                  = {:.2R} C", RatedInletAirTemp));
         ShowContinueError(state, format("...Coil Inlet Humidity Ratio               = {:.6R} kgWater/kgDryAir", RatedInletAirHumRat));
         ShowContinueError(state, format("...Coil Inlet Enthalpy                     = {:.6R} J/kg", InletAirEnthalpy));
-        ShowContinueError(state, format("...Coil Aparatus Dew Point Temperature     = {:.2R} C", tempADPMax));
-        ShowContinueError(state, format("...Coil Aparatus Dew Point Humidity Ratio  = {:.6R} kgWater/kgDryAir", humRatADP));
-        ShowContinueError(state,
-                          format("...Coil Enthalpy at Inlet Temperature and Aparatus Dew Point Humidity Ratio  = {:.2R} C", enthalpyTempinHumRatADP));
+        ShowContinueError(state, format("...Coil Apparatus Dew Point Temperature     = {:.2R} C", tempADPMax));
+        ShowContinueError(state, format("...Coil Apparatus Dew Point Humidity Ratio  = {:.6R} kgWater/kgDryAir", humRatADP));
+        ShowContinueError(
+            state, format("...Coil Enthalpy at Inlet Temperature and Apparatus Dew Point Humidity Ratio  = {:.2R} C", enthalpyTempinHumRatADP));
         ShowContinueError(state, "The maximum design SHR is assumed to be 1.0.");
     }
     shrADPMax = min(1.0, shrADPMax);
@@ -12523,7 +12527,9 @@ Real64 CalcEffectiveSHR(EnergyPlusData &state,
     To1 = aa + Tcl;
     Error = 1.0;
     while (Error > 0.001) {
-        To2 = aa - Tcl * (std::exp(-To1 / Tcl) - 1.0);
+        //  Floating overflow errors occur when -To1/Tcl is a large positive number.
+        //  Cap upper limit at 700 to avoid the overflow errors.
+        To2 = aa - Tcl * std::expm1(min(700.0, -To1 / Tcl));
         Error = std::abs((To2 - To1) / To1);
         To1 = To2;
     }
@@ -16826,7 +16832,7 @@ void CalcVRFCoolingCoil_FluidTCtrl(EnergyPlusData &state,
     Real64 OutletAirEnthalpy; // Supply air enthalpy (average value if constant fan, full output if cycling fan)
     Real64 ADiff;             // Used for exponential
 
-    // Followings for VRF FluidTCtrl Only
+    // Following for VRF FluidTCtrl Only
     Real64 QCoilReq;       // Coil load (W)
     Real64 FanSpdRatio;    // Fan speed ratio
     Real64 AirMassFlowMin; // Min air mass flow rate due to OA requirement [kg/s]
@@ -17065,7 +17071,7 @@ void CalcVRFCoolingCoil_FluidTCtrl(EnergyPlusData &state,
         // }
 
         //  Get total capacity modifying factor (function of temperature) for off-rated conditions
-        //  InletAirHumRat may be modified in this ADP/BF loop, use temporary varible for calculations
+        //  InletAirHumRat may be modified in this ADP/BF loop, use temporary variable for calculations
 
         // commented, not used issue #6950
         // InletAirHumRatTemp = InletAirHumRat;
@@ -17290,7 +17296,7 @@ void CalcVRFHeatingCoil_FluidTCtrl(EnergyPlusData &state,
     Real64 OutletAirHumRat;           // Supply air humidity ratio (average value if constant fan, full output if cycling fan)
     Real64 OutletAirEnthalpy;         // Supply air enthalpy (average value if constant fan, full output if cycling fan)
 
-    // Followings for VRF FluidTCtrl Only
+    // Following for VRF FluidTCtrl Only
     Real64 QCoilReq;       // Coil load (W)
     Real64 FanSpdRatio;    // Fan Speed Ratio
     Real64 AirMassFlowMin; // Min air mass flow rate due to OA requirement [kg/s]
@@ -17810,7 +17816,7 @@ void CalcVRFCoilSenCap(EnergyPlusData &state,
     //        (1) refrigerant temperature (Te or Tc), (2) SH or SC, and (3) inlet air temperature.
     //
     // METHODOLOGY EMPLOYED:
-    //        A new physics based VRF model appliable for Fluid Temperature Control.
+    //        A new physics based VRF model applicable for Fluid Temperature Control.
     //
 
     int constexpr FlagCoolMode(0); // Flag for cooling mode

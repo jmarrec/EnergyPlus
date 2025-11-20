@@ -977,7 +977,7 @@ namespace InternalHeatGains {
                 std::string_view const levelField = IHGNumericFieldNames(fieldNum);
 
                 // Create one Lights instance for every space associated with this Lights input object
-                // Why? Why can't multple spaces share a single lights instance?
+                // Why? Why can't multiple spaces share a single lights instance?
                 // Answer: It followed the same pattern as when a ZoneList was used. It might/should be possible to refactor this.
                 for (int Item1 = 1; Item1 <= thisLightsInput.numOfSpaces; ++Item1) {
                     ++lightsNum;
@@ -2780,7 +2780,7 @@ namespace InternalHeatGains {
                 } else {
                     print(state.files.eio, "N/A,");
                 }
-                print(state.files.eio, "{},", people.workEffSched ? people.workEffSched->Name : "");
+                print(state.files.eio, "{},", (people.workEffSched != nullptr) ? people.workEffSched->Name : "");
 
                 print(state.files.eio, clothingTypeEIOStrings[(int)people.clothingType]);
 
@@ -2790,8 +2790,8 @@ namespace InternalHeatGains {
                     print(state.files.eio, "N/A,");
                 }
 
-                print(state.files.eio, "{},", people.clothingSched ? people.clothingSched->Name : "");
-                print(state.files.eio, "{},", people.airVelocitySched ? people.airVelocitySched->Name : "");
+                print(state.files.eio, "{},", (people.clothingSched != nullptr) ? people.clothingSched->Name : "");
+                print(state.files.eio, "{},", (people.airVelocitySched != nullptr) ? people.airVelocitySched->Name : "");
 
                 print(state.files.eio, "{},", yesNoNames[(int)people.Fanger]);
                 print(state.files.eio, "{},", yesNoNames[(int)people.Pierce]);
@@ -8652,7 +8652,7 @@ namespace InternalHeatGains {
                 enclCLDayTS.powerGenRadSeq = SumEnclosureInternalRadiationGainsByTypes(state, iEncl, IntGainTypesPowerGen);
             }
             if (state.dataHeatBal->doSpaceHeatBalanceSizing) {
-                for (int iSpace = 1; iSpace <= state.dataGlobal->NumOfZones; ++iSpace) {
+                for (int iSpace = 1; iSpace <= state.dataGlobal->numSpaces; ++iSpace) {
                     auto &spCLDayTS =
                         state.dataOutRptTab->spCompLoads[state.dataSize->CurOverallSimDay - 1].ts[TimeStepInDay - 1].spacezone[iSpace - 1];
                     gatherCompLoadIntGain2(state, spCLDayTS, state.dataHeatBal->space(iSpace).zoneNum, iSpace);
