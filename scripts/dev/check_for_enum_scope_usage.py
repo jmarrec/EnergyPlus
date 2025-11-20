@@ -284,7 +284,7 @@ class EnumScopeEvaluator:
         Because processing the source files was taking 80 seconds, this was extracted to a static method
         """
         usages: List[PotentialUsage] = []
-        content = filepath.read_text()
+        content = filepath.read_text(encoding="utf-8")
         # if not any([enum_name in content for enum_name in known_enum_names]):
         #     return usages
 
