@@ -2530,7 +2530,7 @@ TEST_F(EnergyPlusFixture, PlantHXFluidToFluid_HeatTransferMeteringEndUseType)
     std::array<std::string, 5> const validEndUses = {
         "FreeCooling", "HeatRejection", "HeatRecoveryForCooling", "HeatRecoveryForHeating", "LoopToLoop"};
 
-    for (const std::string validEndUse : validEndUses) {
+    for (std::string validEndUse : validEndUses) {
         state->dataInputProcessing->clear_state();
 
         std::string idf_objects_copy(idf_objects);
