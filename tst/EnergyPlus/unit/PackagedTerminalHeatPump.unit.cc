@@ -1347,7 +1347,7 @@ TEST_F(EnergyPlusFixture, PTACDrawAirfromReturnNodeAndPlenum_Test)
 {
 
     std::string const idf_objects = delimited_string({
-        "  Version,9.4;",
+        "  Version," + DataStringGlobals::MatchVersion + ";",
 
         "  SimulationControl,",
         "    No,                     !- Do Zone Sizing Calculation",
