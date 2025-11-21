@@ -5,7 +5,7 @@ Air Leakage in Parallel Fan-Powered Terminal Units
 
  - Original Date: 04/07/2025
  - Revision Date: 10/10/2025
- 
+
 
 ## Justification for New Feature ##
 
@@ -181,5 +181,5 @@ Curve:Linear,
 
 ## References ##
 
-- Energy modeling and analysis of inherent air leakage from parallel fan-powered terminal units using EMS in EnergyPlus, Zahra Sardoueinasab, Peng Yin, Dennis O'Neal, (2018), Energy and Buildings, https://doi.org/10.1016/j.enbuild.2018.07.019 
+- Energy modeling and analysis of inherent air leakage from parallel fan-powered terminal units using EMS in EnergyPlus, Zahra Sardoueinasab, Peng Yin, Dennis O'Neal, (2018), Energy and Buildings, https://doi.org/10.1016/j.enbuild.2018.07.019
 - Characterizing air leakage in parallel fan-powered terminal units, D.L. O'Neal, J.L. Edmondson, ASHRAE Trans., 122 (1) (2016), pp. 343-353

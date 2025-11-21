@@ -3717,15 +3717,15 @@
   Output:Variable,*,Zone Air Terminal VAV Damper Position,hourly;
 
   Output:Variable,VAV Sys 1 Outlet Node,System Node Standard Density Volume Flow Rate,hourly;
-  
+
   Output:Variable,*,Zone Air Terminal Primary Air Mass Flow Rate,hourly;
-  
+
   Output:Variable,*,Zone Air Terminal Backdraft Damper Leakage Mass Flow Rate,hourly;
-  
+
   Output:Variable,*,Zone Heating Setpoint Not Met While Occupied Time,hourly;
-  
+
   Output:Variable,*,Zone Cooling Setpoint Not Met While Occupied Time,hourly;
-  
+
   Output:Variable,SPACE1-1 PIU FAN Outlet,System Node Standard Density Volume Flow Rate,hourly;
 
   Output:VariableDictionary,Regular;
