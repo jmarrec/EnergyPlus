@@ -4171,23 +4171,22 @@ namespace Fluid {
             }
             return this->CpValues(this->CpHighTempIndex);
 
-        } else { // Temperature somewhere between the lowest and highest value
+        } // Temperature somewhere between the lowest and highest value
 #ifdef PERFORMANCE_OPT
-            if (Temp < this->CpTemps(this->LoCpTempIdxLast) || Temp > this->CpTemps(this->LoCpTempIdxLast + 1)) {
-                this->LoCpTempIdxLast = FindArrayIndex(Temp, this->CpTemps, 1, this->NumCpTempPoints);
-            }
-            return this->CpValues(this->LoCpTempIdxLast) + (Temp - this->CpTemps(this->LoCpTempIdxLast)) * this->CpTempRatios(this->LoCpTempIdxLast);
-#else  // !PERFORMANCE_OPT
-            assert(this->CpTemps.size() <= static_cast<std::size_t>(std::numeric_limits<int>::max()));
-            int beg(1), end(this->CpTemps.isize()); // 1-based indexing
-            assert(end > 0);
-            while (beg + 1 < end) {
-                int mid = ((beg + end) >> 1); // bit shifting is faster than /2
-                (Temp > this->CpTemps(mid) ? beg : end) = mid;
-            } // Invariant: glycol_CpTemps[beg] <= Temperature <= glycol_CpTemps[end]
-            return GetInterpValue(Temp, this->CpTemps(beg), this->CpTemps(end), this->CpValues(beg), this->CpValues(end));
-#endif // PERFORMANCE_OPT
+        if (Temp < this->CpTemps(this->LoCpTempIdxLast) || Temp > this->CpTemps(this->LoCpTempIdxLast + 1)) {
+            this->LoCpTempIdxLast = FindArrayIndex(Temp, this->CpTemps, 1, this->NumCpTempPoints);
         }
+        return this->CpValues(this->LoCpTempIdxLast) + (Temp - this->CpTemps(this->LoCpTempIdxLast)) * this->CpTempRatios(this->LoCpTempIdxLast);
+#else  // !PERFORMANCE_OPT
+        assert(this->CpTemps.size() <= static_cast<std::size_t>(std::numeric_limits<int>::max()));
+        int beg(1), end(this->CpTemps.isize()); // 1-based indexing
+        assert(end > 0);
+        while (beg + 1 < end) {
+            int mid = ((beg + end) >> 1); // bit shifting is faster than /2
+            (Temp > this->CpTemps(mid) ? beg : end) = mid;
+        } // Invariant: glycol_CpTemps[beg] <= Temperature <= glycol_CpTemps[end]
+        return GetInterpValue(Temp, this->CpTemps(beg), this->CpTemps(end), this->CpValues(beg), this->CpValues(end));
+#endif // PERFORMANCE_OPT
     }
 #ifdef GET_OUT
     Real64 GetSpecificHeatGlycol(EnergyPlusData &state,
@@ -4788,14 +4787,13 @@ namespace Fluid {
         size_type end(UpperBound - l);
         if (Value > Array[end]) {
             return UpperBound;
-        } else { // Binary search
-            size_type mid;
-            while (beg + 1 < end) {
-                mid = ((beg + end) >> 1);
-                (Value > Array[mid] ? beg : end) = mid;
-            }
-            return l + beg;
+        } // Binary search
+        size_type mid;
+        while (beg + 1 < end) {
+            mid = ((beg + end) >> 1);
+            (Value > Array[mid] ? beg : end) = mid;
         }
+        return l + beg;
     }
 
     int FindArrayIndex(Real64 const Value,          // Value to be placed/found within the array of values
@@ -4834,14 +4832,13 @@ namespace Fluid {
         size_type end(Array.size() - 1u);
         if (Value > Array[end]) {
             return Array.u();
-        } else { // Binary search
-            size_type beg(0), mid;
-            while (beg + 1 < end) {
-                mid = ((beg + end) >> 1);
-                (Value > Array[mid] ? beg : end) = mid;
-            }
-            return Array.l() + beg;
+        } // Binary search
+        size_type beg(0), mid;
+        while (beg + 1 < end) {
+            mid = ((beg + end) >> 1);
+            (Value > Array[mid] ? beg : end) = mid;
         }
+        return Array.l() + beg;
     }
 
     //*****************************************************************************

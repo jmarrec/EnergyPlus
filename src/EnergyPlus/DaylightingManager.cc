@@ -6729,12 +6729,11 @@ void DayltgInteriorIllum(EnergyPlusData &state,
                                     breakOuterLoop = true;
                                     break;
 
-                                } else {
-                                    // Glare too high, exit and use previous switching state
-                                    tmpSWFactor += tmpSWIterStep;
-                                    breakOuterLoop = true;
-                                    break;
-                                }
+                                } // Glare too high, exit and use previous switching state
+                                tmpSWFactor += tmpSWIterStep;
+                                breakOuterLoop = true;
+                                break;
+
                             } // if (tmpSWFactor > 0)
 
                             // Final re-calculation if needed

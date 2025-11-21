@@ -675,12 +675,10 @@ Real64 InputProcessor::getRealFieldValue(json const &ep_object, json const &sche
         }
         if (default_val.is_number_integer()) {
             return default_val.get<std::int64_t>();
-        } else {
-            return default_val.get<double>();
         }
-    } else {
-        return 0.0;
+        return default_val.get<double>();
     }
+    return 0.0;
 }
 
 int InputProcessor::getIntFieldValue(json const &ep_object, json const &schema_obj_props, std::string const &fieldName)

@@ -286,11 +286,9 @@ void ManagePlantLoadDistribution(EnergyPlusData &state,
                     break;
                 }
                 continue;
-
-            } else {
-                CurListNum = ListNum;
-                break;
             }
+            CurListNum = ListNum;
+            break;
         }
 
         if (CurListNum > 0) {
@@ -3302,9 +3300,8 @@ void DistributePlantLoad(EnergyPlusData &state,
                     continue;
 
                     // if the capacity is less than the demand, accept the last values from the previous iteration and exit
-                } else {
-                    break;
                 }
+                break;
             }
 
             // Determine PLR for uniform PLR loading of all equipment

@@ -2322,9 +2322,9 @@ namespace EvaporativeFluidCoolers {
                             this->OutletWaterTemp = OutletWaterTempPrev;
                         }
                         break;
-                    } else {
-                        BypassFraction2 = (TempSetPoint - this->OutletWaterTemp) / (inletWaterTemp - this->OutletWaterTemp);
                     }
+                    BypassFraction2 = (TempSetPoint - this->OutletWaterTemp) / (inletWaterTemp - this->OutletWaterTemp);
+
                     // Compare two bypassFraction to determine when to stop
                     if (std::abs(BypassFraction2 - bypassFraction) <= BypassFractionThreshold) {
                         break;

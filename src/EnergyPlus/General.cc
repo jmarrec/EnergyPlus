@@ -658,14 +658,12 @@ int OrdinalDay(int const Month,        // Month, 1..12
     if (Month == 2) {
         //                                       CASE 2: FEBRUARY
         return Day + EndDayofMonth[0];
-
-    } else if ((Month >= 3) && (Month <= 12)) {
+    }
+    if ((Month >= 3) && (Month <= 12)) {
         //                                       CASE 3: REMAINING MONTHS
         return Day + EndDayofMonth[Month - 2] + LeapYearValue;
-
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)

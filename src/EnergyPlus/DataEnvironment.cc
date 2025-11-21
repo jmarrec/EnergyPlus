@@ -181,13 +181,11 @@ Real64 WindSpeedAt(const EnergyPlusData &state, Real64 const Z) // Height above 
     }
     if (state.dataEnvrn->SiteWindExp == 0.0) {
         return state.dataEnvrn->WindSpeed;
-    } else {
-        //  [Met] - at meterological Station, Height of measurement is usually 10m above ground
-        //  LocalWindSpeed = Windspeed [Met] * (Wind Boundary LayerThickness [Met]/Height [Met])**Wind Exponent[Met] &
-        //                     * (Height above ground / Site Wind Boundary Layer Thickness) ** Site Wind Exponent
-        return state.dataEnvrn->WindSpeed * state.dataEnvrn->WeatherFileWindModCoeff *
-               std::pow(Z / state.dataEnvrn->SiteWindBLHeight, state.dataEnvrn->SiteWindExp);
-    }
+    } //  [Met] - at meterological Station, Height of measurement is usually 10m above ground
+    //  LocalWindSpeed = Windspeed [Met] * (Wind Boundary LayerThickness [Met]/Height [Met])**Wind Exponent[Met] &
+    //                     * (Height above ground / Site Wind Boundary Layer Thickness) ** Site Wind Exponent
+    return state.dataEnvrn->WindSpeed * state.dataEnvrn->WeatherFileWindModCoeff *
+           std::pow(Z / state.dataEnvrn->SiteWindBLHeight, state.dataEnvrn->SiteWindExp);
 }
 
 Real64 OutBaroPressAt(EnergyPlusData &state, Real64 const Z) // Height above ground (m)

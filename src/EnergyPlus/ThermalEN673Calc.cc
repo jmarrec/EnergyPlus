@@ -450,52 +450,51 @@ namespace ThermalEN673Calc {
 
             if ((standard == TARCOGGassesParams::Stdrd::EN673) && (nlayer == 2)) {
                 return; // If EN673 declared values path and glazing has 2 layers, end calculations and return
-            } else {
-                if (tind > tout) {
-                    for (i = 1; i <= nlayer - 1; ++i) {
-                        dT(i) = 15.0 * (1.0 / hs(i)) / sumRsold; // updated temperature distribution
-                        if (standard == TARCOGGassesParams::Stdrd::EN673) {
-                            Tm = 283.0;
-                        } else {
-                            Tm = (theta(2 * i) + theta(2 * i + 1)) / 2.0;
-                        }
-                        for (j = 1; j <= nmix(i + 1); ++j) {
-                            ipropg(j) = iprop(i + 1, j);
-                            frctg(j) = frct(i + 1, j);
-                        } // j, gas mix
-                        GASSES90(state,
-                                 Tm,
-                                 ipropg,
-                                 frctg,
-                                 presure(i + 1),
-                                 nmix(i + 1),
-                                 xwght,
-                                 xgcon,
-                                 xgvis,
-                                 xgcp,
-                                 con,
-                                 visc,
-                                 dens,
-                                 cp,
-                                 pr,
-                                 standard,
-                                 nperr,
-                                 ErrorMessage);
-                        Gr(i) = (Constant::Gravity * pow_3(gap(i)) * dT(i) * pow_2(dens)) / (Tm * pow_2(visc));
-                        Ra(i) = Gr(i) * pr;
-                        Nu(i) = A * std::pow(Ra(i), n);
-                        if (Nu(i) < 1.0) {
-                            Nu(i) = 1.0;
-                        }
-                        hg(i) = Nu(i) * con / gap(i);
-                    } // i, gaps
-                } else {
-                    for (i = 1; i <= nlayer - 1; ++i) {
-                        Nu(i) = 1.0;
-                        hg(i) = Nu(i) * con / gap(i); // Autodesk:Uninit con was possibly uninitialized
-                    }
-                } // tind > tout
             }
+            if (tind > tout) {
+                for (i = 1; i <= nlayer - 1; ++i) {
+                    dT(i) = 15.0 * (1.0 / hs(i)) / sumRsold; // updated temperature distribution
+                    if (standard == TARCOGGassesParams::Stdrd::EN673) {
+                        Tm = 283.0;
+                    } else {
+                        Tm = (theta(2 * i) + theta(2 * i + 1)) / 2.0;
+                    }
+                    for (j = 1; j <= nmix(i + 1); ++j) {
+                        ipropg(j) = iprop(i + 1, j);
+                        frctg(j) = frct(i + 1, j);
+                    } // j, gas mix
+                    GASSES90(state,
+                             Tm,
+                             ipropg,
+                             frctg,
+                             presure(i + 1),
+                             nmix(i + 1),
+                             xwght,
+                             xgcon,
+                             xgvis,
+                             xgcp,
+                             con,
+                             visc,
+                             dens,
+                             cp,
+                             pr,
+                             standard,
+                             nperr,
+                             ErrorMessage);
+                    Gr(i) = (Constant::Gravity * pow_3(gap(i)) * dT(i) * pow_2(dens)) / (Tm * pow_2(visc));
+                    Ra(i) = Gr(i) * pr;
+                    Nu(i) = A * std::pow(Ra(i), n);
+                    if (Nu(i) < 1.0) {
+                        Nu(i) = 1.0;
+                    }
+                    hg(i) = Nu(i) * con / gap(i);
+                } // i, gaps
+            } else {
+                for (i = 1; i <= nlayer - 1; ++i) {
+                    Nu(i) = 1.0;
+                    hg(i) = Nu(i) * con / gap(i); // Autodesk:Uninit con was possibly uninitialized
+                }
+            } // tind > tout
 
             for (i = 1; i <= nlayer - 1; ++i) {
                 //      hr(i) = 4 * sigma * (1/emis(2*i) + 1/emis(2*i+1) - 1)**(-1) * Tm**3

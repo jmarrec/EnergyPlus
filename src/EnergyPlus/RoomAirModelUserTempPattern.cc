@@ -482,11 +482,11 @@ Real64 OutdoorDryBulbGrad(Real64 DryBulbTemp, // Zone(ZoneNum).OutDryBulbTemp
     }
     if (DryBulbTemp <= LowerBound) {
         return LowGradient;
-    } else if ((UpperBound - LowerBound) == 0.0) {
-        return LowGradient;
-    } else {
-        return LowGradient + ((DryBulbTemp - LowerBound) / (UpperBound - LowerBound)) * (HiGradient - LowGradient);
     }
+    if ((UpperBound - LowerBound) == 0.0) {
+        return LowGradient;
+    }
+    return LowGradient + ((DryBulbTemp - LowerBound) / (UpperBound - LowerBound)) * (HiGradient - LowGradient);
 }
 
 void FigureConstGradPattern(EnergyPlusData &state, int const PattrnID, int const ZoneNum)

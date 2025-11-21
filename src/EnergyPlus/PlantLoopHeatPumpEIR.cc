@@ -163,8 +163,8 @@ Real64 EIRPlantLoopHeatPump::getLoadSideOutletSetPointTemp(EnergyPlusData &state
             return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint;
         } // use plant loop overall set-point
         return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
-
-    } else if (this->loadSidePlantLoc.loop->LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand) {
+    }
+    if (this->loadSidePlantLoc.loop->LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand) {
         if (this->loadSidePlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) {
             // there will be a valid set-point on outlet
             if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
@@ -172,19 +172,17 @@ Real64 EIRPlantLoopHeatPump::getLoadSideOutletSetPointTemp(EnergyPlusData &state
             }
             return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointLo;
 
-        } else { // use plant loop overall set-point
-            if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
-                return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
-            }
-            return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
+        } // use plant loop overall set-point
+        if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
+            return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
         }
-    } else {
-        // there's no other enums for loop demand calcs, so I don't have a reasonable unit test for these
-        // lines, they simply should not be able to get here.  But a fatal is here anyway just in case,
-        // and the lines are excluded from coverage.
-        ShowFatalError(state, "Unsupported loop demand calculation scheme in EIR heat pump"); // LCOV_EXCL_LINE
-        return -999; // not actually returned with Fatal Error call above  // LCOV_EXCL_LINE
-    }
+        return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
+
+    } // there's no other enums for loop demand calcs, so I don't have a reasonable unit test for these
+    // lines, they simply should not be able to get here.  But a fatal is here anyway just in case,
+    // and the lines are excluded from coverage.
+    ShowFatalError(state, "Unsupported loop demand calculation scheme in EIR heat pump"); // LCOV_EXCL_LINE
+    return -999; // not actually returned with Fatal Error call above  // LCOV_EXCL_LINE
 }
 
 void EIRPlantLoopHeatPump::resetReportingVariables()
@@ -585,10 +583,8 @@ Real64 EIRPlantLoopHeatPump::heatingCapacityModifierASHP(EnergyPlusData &state) 
         Real64 semiDryFactor = dryCorrectionFactor + (1.0 - dryCorrectionFactor) * (1.0 - ((RH90 - state.dataEnvrn->OutRelHum) / rangeRH));
         return semiDryFactor;
 
-    } else {
-        // no correction needed, use full capacity
-        return 1.0;
-    }
+    } // no correction needed, use full capacity
+    return 1.0;
 }
 
 void EIRPlantLoopHeatPump::setPartLoadAndCyclingRatio([[maybe_unused]] EnergyPlusData &state, Real64 &partLoadRatio)

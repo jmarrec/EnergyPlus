@@ -9716,9 +9716,8 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
                     continue; // Recalculate with modified inlet conditions
                 }
                 break;
-            } else {
-                break;
             }
+            break;
 
         } // end of DO iteration loop
 

@@ -2027,9 +2027,8 @@ Real64 ConstructionProps::setUserTemperatureLocationPerpendicular(EnergyPlusData
                          "ConstructionProperty:InternalHeatSource has a perpendicular temperature location parameter that is greater than one.");
         ShowContinueError(state, format("Construction={} has this error.  The parameter has been reset to 1.", this->Name));
         return 1.0;
-    } else { // Valid value between 0 and 1
-        return userValue;
-    }
+    } // Valid value between 0 and 1
+    return userValue;
 }
 
 void ConstructionProps::setNodeSourceAndUserTemp(Array1D_int &Nodes)

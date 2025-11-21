@@ -1200,9 +1200,8 @@ Real64 IS_F(EnergyPlusData &state,
     }
     if (OPT == state.dataWindowEquivalentLayer->hipTAU) {
         return TAU_BB + TAU_BD;
-    } else {
-        return -1.0;
     }
+    return -1.0;
 }
 
 void IS_BEAM(EnergyPlusData &state,
@@ -1372,9 +1371,8 @@ Real64 FM_F(EnergyPlusData &state,
     }
     if (Opt == state.dataWindowEquivalentLayer->hipTAU) {
         return TAU_BB + TAU_BD;
-    } else {
-        return -1.0;
     }
+    return -1.0;
 }
 
 void FM_BEAM(EnergyPlusData &state,
@@ -5816,9 +5814,8 @@ Real64 FNU(Real64 const RA) // Rayleigh number
     }
     if (ARA <= 50000.0) {
         return 0.028154 * std::pow(ARA, 0.413993);
-    } else {
-        return 0.0673838 * std::pow(ARA, 1.0 / 3.0);
     }
+    return 0.0673838 * std::pow(ARA, 1.0 / 3.0);
 }
 
 Real64 HConvGap(CFSGAP const &G, // gap

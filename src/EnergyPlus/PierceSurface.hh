@@ -319,14 +319,16 @@ bool PierceSurface_polygon(DataSurfaces::SurfaceData const &surface, // Surface
     }
     if (shapeCat == ShapeCat::Triangular) { // Cross products all nonnegative <=> Hit point in triangle
         return PierceSurface_Triangular(s2d, h2d);
-    } else if ((shapeCat == ShapeCat::Nonconvex) ||
-               (s2d.vertices.size() >= nVerticesBig)) { // O( log n ) algorithm for nonconvex and many-vertex convex surfaces
-        return PierceSurface_Nonconvex(s2d, h2d);
-    } else if (shapeCat == ShapeCat::Convex) { // O( n ) algorithm for convex surface without too many vertices
-        return PierceSurface_Convex(s2d, h2d);
-    } else {
-        return false; // Should we assert here also?
     }
+    if ((shapeCat == ShapeCat::Nonconvex) ||
+        (s2d.vertices.size() >= nVerticesBig)) { // O( log n ) algorithm for nonconvex and many-vertex convex surfaces
+        return PierceSurface_Nonconvex(s2d, h2d);
+    }
+    if (shapeCat == ShapeCat::Convex) { // O( n ) algorithm for convex surface without too many vertices
+        return PierceSurface_Convex(s2d, h2d);
+    }
+    return false; // Should we assert here also?
+
 } // PierceSurface_Polygon()
 
 ALWAYS_INLINE
@@ -350,17 +352,16 @@ bool PierceSurface(DataSurfaces::SurfaceData const &surface, // Surface
     Real64 const den((plane.x * rayDir.x) + (plane.y * rayDir.y) + (plane.z * rayDir.z));
     if (den == 0.0) { // Ray is parallel to plane: This not treated as piercing even if ray lies in plane
         return false;
-    } else { // Ray's line intersects plane
-        Real64 const num(-((plane.x * rayOri.x) + (plane.y * rayOri.y) + (plane.z * rayOri.z) + plane.w));
-        if (num * den <=
-            0.0) { // Ray points away from surface or ray origin is on surface: This looks odd but is fast way to check for different signs
-            return false;
-        } // Ray points toward surface: Compute hit point
-        Real64 const t(num / den);           // Ray parameter at plane intersection: hitPt = rayOri + t * rayDir
-        hitPt.x = rayOri.x + (t * rayDir.x); // Compute by coordinate to avoid Vertex temporaries
-        hitPt.y = rayOri.y + (t * rayDir.y);
-        hitPt.z = rayOri.z + (t * rayDir.z);
     }
+    // Ray's line intersects plane
+    Real64 const num(-((plane.x * rayOri.x) + (plane.y * rayOri.y) + (plane.z * rayOri.z) + plane.w));
+    if (num * den <= 0.0) { // Ray points away from surface or ray origin is on surface: This looks odd but is fast way to check for different signs
+        return false;
+    } // Ray points toward surface: Compute hit point
+    Real64 const t(num / den);           // Ray parameter at plane intersection: hitPt = rayOri + t * rayDir
+    hitPt.x = rayOri.x + (t * rayDir.x); // Compute by coordinate to avoid Vertex temporaries
+    hitPt.y = rayOri.y + (t * rayDir.y);
+    hitPt.z = rayOri.z + (t * rayDir.z);
 
     // Check if hit point is in surface polygon
     return PierceSurface_polygon(surface, hitPt);

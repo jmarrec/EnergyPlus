@@ -3365,10 +3365,8 @@ namespace HeatingCoils {
             ShowSevereError(state, format("GetHeatingCoilPLFCurveIndex: Could not find Coil, Type=\"{}\" Name=\"{}\"", CoilType, CoilName));
             ErrorsFound = true;
             return 0;
-
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     int GetHeatingCoilNumberOfStages(EnergyPlusData &state,

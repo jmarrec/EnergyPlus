@@ -266,12 +266,11 @@ namespace Material {
         }
         if (T == criticalTemperature) {
             return (EnthalpyNew - EnthalpyOld) / (temperatureCurrent - temperaturePrev);
-        } else {
-            Real64 DEta2 = (this->totalLatentHeat * (T - criticalTemperature) * exp(-2 * std::abs(T - criticalTemperature) / tau2)) /
-                           (tau2 * std::abs(T - criticalTemperature));
-            Real64 Cp2 = this->specificHeatLiquid;
-            return Cp2 + DEta2;
         }
+        Real64 DEta2 = (this->totalLatentHeat * (T - criticalTemperature) * exp(-2 * std::abs(T - criticalTemperature) / tau2)) /
+                       (tau2 * std::abs(T - criticalTemperature));
+        Real64 Cp2 = this->specificHeatLiquid;
+        return Cp2 + DEta2;
     }
 
     Real64 MaterialPhaseChange::getConductivity(Real64 T) const
@@ -281,9 +280,8 @@ namespace Material {
         }
         if (T > this->peakTempFreezing) {
             return this->fullyLiquidThermalConductivity;
-        } else {
-            return (this->fullySolidThermalConductivity + this->fullyLiquidThermalConductivity) / 2.0;
         }
+        return (this->fullySolidThermalConductivity + this->fullyLiquidThermalConductivity) / 2.0;
     }
 
     Real64 MaterialPhaseChange::getDensity(Real64 T) const
@@ -293,9 +291,8 @@ namespace Material {
         }
         if (T > this->peakTempFreezing) {
             return this->fullyLiquidDensity;
-        } else {
-            return (this->fullySolidDensity + this->fullyLiquidDensity) / 2.0;
         }
+        return (this->fullySolidDensity + this->fullyLiquidDensity) / 2.0;
     }
 
     void GetHysteresisData(EnergyPlusData &state, bool &ErrorsFound)

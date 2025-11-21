@@ -2037,15 +2037,17 @@ bool ReportCoilSelection::isCompTypeFan(std::string const &compType // string co
     }
     if (Util::SameString(compType, "Fan:ComponentModel")) {
         return true;
-    } else if (Util::SameString(compType, "Fan:OnOff")) {
-        return true;
-    } else if (Util::SameString(compType, "Fan:ConstantVolume")) {
-        return true;
-    } else if (Util::SameString(compType, "Fan:VariableVolume")) {
-        return true;
-    } else {
-        return false;
     }
+    if (Util::SameString(compType, "Fan:OnOff")) {
+        return true;
+    }
+    if (Util::SameString(compType, "Fan:ConstantVolume")) {
+        return true;
+    }
+    if (Util::SameString(compType, "Fan:VariableVolume")) {
+        return true;
+    }
+    return false;
 }
 
 bool ReportCoilSelection::isCompTypeCoil(std::string const &compType // string component type, input object class name

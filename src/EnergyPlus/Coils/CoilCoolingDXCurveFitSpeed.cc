@@ -220,26 +220,24 @@ bool CoilCoolingDXCurveFitSpeed::processCurve(EnergyPlus::EnergyPlusData &state,
         ShowSevereError(state, std::string{routineName} + this->object_name + "=\"" + this->name + "\", invalid");
         ShowContinueError(state, "...not found " + fieldName + "=\"" + curveName + "\".");
         return true;
-    } else {
-        // Verify Curve Object dimensions
-        bool errorFound = Curve::CheckCurveDims(state,
-                                                curveIndex,           // Curve index
-                                                std::move(validDims), // Valid dimensions
-                                                routineName,          // Routine name
-                                                this->object_name,    // Object Type
-                                                this->name,           // Object Name
-                                                fieldName);           // Field Name
-        if (!errorFound) {
-            if (Var2.present()) {
-                Curve::checkCurveIsNormalizedToOne(
-                    state, std::string{routineName} + this->object_name, this->name, curveIndex, fieldName, curveName, Var1, Var2);
-            } else {
-                Curve::checkCurveIsNormalizedToOne(
-                    state, std::string{routineName} + this->object_name, this->name, curveIndex, fieldName, curveName, Var1);
-            }
+    } // Verify Curve Object dimensions
+    bool errorFound = Curve::CheckCurveDims(state,
+                                            curveIndex,           // Curve index
+                                            std::move(validDims), // Valid dimensions
+                                            routineName,          // Routine name
+                                            this->object_name,    // Object Type
+                                            this->name,           // Object Name
+                                            fieldName);           // Field Name
+    if (!errorFound) {
+        if (Var2.present()) {
+            Curve::checkCurveIsNormalizedToOne(
+                state, std::string{routineName} + this->object_name, this->name, curveIndex, fieldName, curveName, Var1, Var2);
+        } else {
+            Curve::checkCurveIsNormalizedToOne(
+                state, std::string{routineName} + this->object_name, this->name, curveIndex, fieldName, curveName, Var1);
         }
-        return errorFound;
     }
+    return errorFound;
 }
 
 CoilCoolingDXCurveFitSpeed::CoilCoolingDXCurveFitSpeed(EnergyPlus::EnergyPlusData &state,
@@ -527,9 +525,8 @@ void CoilCoolingDXCurveFitSpeed::CalcSpeedOutput(EnergyPlus::EnergyPlusData &sta
                 continue; // Recalculate with modified inlet conditions
             }
             break;
-        } else {
-            break;
         }
+        break;
     }
 
     assert(SHR >= 0.0);

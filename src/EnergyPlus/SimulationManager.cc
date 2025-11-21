@@ -2516,9 +2516,8 @@ namespace SimulationManager {
                     }
                     if (LoopSideNum == DataPlant::LoopSideLocation::Supply) {
                         return "Supply";
-                    } else {
-                        return "";
                     }
+                    return "";
                 }();
 
                 print(state.files.bnd,

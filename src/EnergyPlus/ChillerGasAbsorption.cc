@@ -146,12 +146,12 @@ void GasAbsorberSpecs::simulate(
         if (compInletNodeNum == this->HeatReturnNodeNum) { // Operate as heater
             brIdentity = DataPlant::BrLoopType::Heater;
             break;
-        } else if (compInletNodeNum == this->CondReturnNodeNum) { // called from condenser loop
+        }
+        if (compInletNodeNum == this->CondReturnNodeNum) { // called from condenser loop
             brIdentity = DataPlant::BrLoopType::Condenser;
             break;
-        } else {
-            brIdentity = DataPlant::BrLoopType::NoMatch;
         }
+        brIdentity = DataPlant::BrLoopType::NoMatch;
     }
 
     if (brIdentity == DataPlant::BrLoopType::Chiller) {
@@ -215,15 +215,15 @@ void GasAbsorberSpecs::getDesignCapacities(
             OptLoad = Sim_HeatCap * this->OptPartLoadRat;
             matchfound = true;
             break;
-        } else if (compInletNodeNum == this->CondReturnNodeNum) { // called from condenser loop
+        }
+        if (compInletNodeNum == this->CondReturnNodeNum) { // called from condenser loop
             MinLoad = 0.0;
             MaxLoad = 0.0;
             OptLoad = 0.0;
             matchfound = true;
             break;
-        } else {
-            matchfound = false;
         }
+        matchfound = false;
     }
 
     if (!matchfound) {

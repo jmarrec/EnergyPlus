@@ -1529,24 +1529,23 @@ namespace HeatBalFiniteDiffManager {
         }
         if (x1 >= a[lind + last]) { // [ lind + last ] == ( nind, last )
             return a[ldep + last];  // [ ldep + last ] == ( ndep, last )
-        } else {
-            int i;
-            int i1(first);
-            int i2(last);
-            while ((i2 - i1) > 1) {
-                i = i1 + ((i2 - i1) >> 1); // Tuned bit shift replaces / 2
-                if (x1 < a[lind + i]) {    // [ lind + i ] == ( nind, i )
-                    i2 = i;
-                } else {
-                    i1 = i;
-                }
-            }
-            i = i2;
-            lind += i;
-            ldep += i;
-            Real64 const fract((x1 - a[lind - 1]) / (a[lind] - a[lind - 1])); // [ lind ] == ( nind, i ), [ lind - 1 ] == ( nind, i - 1 )
-            return a[ldep - 1] + fract * (a[ldep] - a[ldep - 1]);             // [ ldep ] == ( ndep, i ), [ ldep - 1 ] == ( ndep, i - 1 )
         }
+        int i;
+        int i1(first);
+        int i2(last);
+        while ((i2 - i1) > 1) {
+            i = i1 + ((i2 - i1) >> 1); // Tuned bit shift replaces / 2
+            if (x1 < a[lind + i]) {    // [ lind + i ] == ( nind, i )
+                i2 = i;
+            } else {
+                i1 = i;
+            }
+        }
+        i = i2;
+        lind += i;
+        ldep += i;
+        Real64 const fract((x1 - a[lind - 1]) / (a[lind] - a[lind - 1])); // [ lind ] == ( nind, i ), [ lind - 1 ] == ( nind, i - 1 )
+        return a[ldep - 1] + fract * (a[ldep] - a[ldep - 1]);             // [ ldep ] == ( ndep, i ), [ ldep - 1 ] == ( ndep, i - 1 )
     }
 
     void ExteriorBCEqns(EnergyPlusData &state,

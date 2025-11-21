@@ -12200,13 +12200,12 @@ namespace SurfaceGeometry {
         std::vector<EdgeOfSurf> edgeNot2again = edgesNotTwoForEnclosedVolumeTest(updatedZonePoly, uniqueVertices);
         if (edgeNot2again.empty()) {
             return true;
-        } else {
-            edgeNot2 = edgesInBoth(edgeNot2orig,
-                                   edgeNot2again); // only return a list of those edges that appear in both the original edge and the
-                                                   // revised edges this eliminates added edges that will confuse users and edges that
-                                                   // were caught by the updateZonePoly routine
-            return false;
         }
+        edgeNot2 = edgesInBoth(edgeNot2orig,
+                               edgeNot2again); // only return a list of those edges that appear in both the original edge and the
+                                               // revised edges this eliminates added edges that will confuse users and edges that
+                                               // were caught by the updateZonePoly routine
+        return false;
     }
 
     // returns a vector of edges that are in both vectors
@@ -15233,10 +15232,8 @@ namespace SurfaceGeometry {
                 return true;
             }
             return false;
-
-        } else {
-            return false;
         }
+        return false;
     }
 
     void MakeEquivalentRectangle(EnergyPlusData &state,

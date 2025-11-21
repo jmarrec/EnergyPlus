@@ -9073,13 +9073,11 @@ namespace Furnaces {
                 return (SensibleLoadMet - LoadToBeMet) / 100.0;
             }
             return (SensibleLoadMet - LoadToBeMet) / LoadToBeMet;
-
-        } else {
-            if (LoadToBeMet == 0.0) {
-                return (LatentLoadMet - LoadToBeMet) / 100.0;
-            }
-            return (LatentLoadMet - LoadToBeMet) / LoadToBeMet;
         }
+        if (LoadToBeMet == 0.0) {
+            return (LatentLoadMet - LoadToBeMet) / 100.0;
+        }
+        return (LatentLoadMet - LoadToBeMet) / LoadToBeMet;
     }
 
     Real64 CalcWaterToAirResidual(EnergyPlusData &state,

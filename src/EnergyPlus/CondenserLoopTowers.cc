@@ -4601,9 +4601,8 @@ namespace CondenserLoopTowers {
                                     this->OutletWaterTemp = OutletWaterTempPrev;
                                 }
                                 break;
-                            } else {
-                                BypassFraction2 = (TempSetPoint - this->OutletWaterTemp) / (this->InletWaterTemp - this->OutletWaterTemp);
                             }
+                            BypassFraction2 = (TempSetPoint - this->OutletWaterTemp) / (this->InletWaterTemp - this->OutletWaterTemp);
 
                             // Compare two BypassFraction to determine when to stop
                             if (std::abs(BypassFraction2 - bypassFraction) <= BypassFractionThreshold) {

@@ -16910,10 +16910,8 @@ namespace UnitarySystems {
             }
             return (SensOutput - QZnReq) / QZnReq;
 
-        } else {
-            // Calculate residual based on outlet temperature
-            return (state.dataLoopNodes->Node(thisSys.AirOutNode).Temp - SATempTarget) * 10.0;
-        }
+        } // Calculate residual based on outlet temperature
+        return (state.dataLoopNodes->Node(thisSys.AirOutNode).Temp - SATempTarget) * 10.0;
     }
 
     void UnitarySys::setSpeedVariables(EnergyPlusData &state,

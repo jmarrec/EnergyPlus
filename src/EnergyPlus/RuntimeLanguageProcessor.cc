@@ -1660,45 +1660,43 @@ int ProcessTokens(
                 ShowSevereError(state, format("The operator \"{}\" is missing the left-hand operand!", ErlFuncNamesUC[OperatorNum]));
                 ShowContinueError(state, format("String being parsed=\"{}\".", ParsingString));
                 break;
-
-            } else if (Pos == NumTokens) {
+            }
+            if (Pos == NumTokens) {
                 ShowSevereError(state, format("The operator \"{}\" is missing the right-hand operand!", ErlFuncNamesUC[OperatorNum]));
                 ShowContinueError(state, format("String being parsed=\"{}\".", ParsingString));
                 break;
-            } else {
+            }
+            ExpressionNum = NewExpression(state);
+            state.dataRuntimeLang->ErlExpression(ExpressionNum).Operator = static_cast<ErlFunc>(OperatorNum);
+            NumOperands = ErlFuncNumOperands[OperatorNum];
+            state.dataRuntimeLang->ErlExpression(ExpressionNum).NumOperands = NumOperands;
+            state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand.allocate(NumOperands);
 
-                ExpressionNum = NewExpression(state);
-                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operator = static_cast<ErlFunc>(OperatorNum);
-                NumOperands = ErlFuncNumOperands[OperatorNum];
-                state.dataRuntimeLang->ErlExpression(ExpressionNum).NumOperands = NumOperands;
-                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand.allocate(NumOperands);
+            // PE comment: Need a right-hand and left-hand check for these, not just number of operators
+            // Unification of TYPEs would turn these into one-liners
 
-                // PE comment: Need a right-hand and left-hand check for these, not just number of operators
-                // Unification of TYPEs would turn these into one-liners
+            state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(1).Type = static_cast<Value>(static_cast<int>(Token(Pos - 1).Type));
+            state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(1).Number = Token(Pos - 1).Number;
+            state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(1).Expression = Token(Pos - 1).Expression;
+            state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(1).Variable = Token(Pos - 1).Variable;
 
-                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(1).Type = static_cast<Value>(static_cast<int>(Token(Pos - 1).Type));
-                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(1).Number = Token(Pos - 1).Number;
-                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(1).Expression = Token(Pos - 1).Expression;
-                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(1).Variable = Token(Pos - 1).Variable;
+            if (NumOperands >= 2) {
+                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(2).Type = static_cast<Value>(static_cast<int>(Token(Pos + 1).Type));
+                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(2).Number = Token(Pos + 1).Number;
+                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(2).Expression = Token(Pos + 1).Expression;
+                state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(2).Variable = Token(Pos + 1).Variable;
+            }
 
-                if (NumOperands >= 2) {
-                    state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(2).Type = static_cast<Value>(static_cast<int>(Token(Pos + 1).Type));
-                    state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(2).Number = Token(Pos + 1).Number;
-                    state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(2).Expression = Token(Pos + 1).Expression;
-                    state.dataRuntimeLang->ErlExpression(ExpressionNum).Operand(2).Variable = Token(Pos + 1).Variable;
+            // Replace the three tokens with one expression token
+            if ((NumOperands == 2) && (NumTokens - 2 > 0)) {
+                if (Pos + 2 <= NumTokens) {
+                    Token({Pos, NumTokens - 2}) = Token({Pos + 2, _});
                 }
-
-                // Replace the three tokens with one expression token
-                if ((NumOperands == 2) && (NumTokens - 2 > 0)) {
-                    if (Pos + 2 <= NumTokens) {
-                        Token({Pos, NumTokens - 2}) = Token({Pos + 2, _});
-                    }
-                    Token(Pos - 1).Type = Token::Expression;
-                    Token(Pos - 1).Expression = ExpressionNum;
-                    Token(Pos - 1).String = "Expr";
-                    NumTokens -= 2;
-                    Token.redimension(NumTokens);
-                }
+                Token(Pos - 1).Type = Token::Expression;
+                Token(Pos - 1).Expression = ExpressionNum;
+                Token(Pos - 1).String = "Expr";
+                NumTokens -= 2;
+                Token.redimension(NumTokens);
             }
 
             // Find the next occurrence of the operator  (this repeats code, but don't have better idea)

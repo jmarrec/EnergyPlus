@@ -1139,8 +1139,8 @@ namespace FourPipeBeam {
             } // can run flat out without overcooling, which we just did
             NonAirSysOutput = this->qDotBeamCooling;
             return;
-
-        } else if (qDotBeamReq > HVAC::SmallLoad && this->heatingAvailable) { // beam heating needed
+        }
+        if (qDotBeamReq > HVAC::SmallLoad && this->heatingAvailable) { // beam heating needed
             // first calc with max hot water flow
             this->mDotCW = 0.0;
             if (this->beamCoolingPresent) {
@@ -1177,23 +1177,21 @@ namespace FourPipeBeam {
             } // can run flat out without overheating, which we just did
             NonAirSysOutput = this->qDotBeamHeating;
             return;
-
-        } else {
-            this->mDotHW = 0.0;
-            if (this->beamHeatingPresent) {
-                SetComponentFlowRate(state, this->mDotHW, this->hWInNodeNum, this->hWOutNodeNum, this->hWplantLoc);
-            }
-            this->hWTempOut = this->hWTempIn;
-            // assume if there is still flow that unit has an internal bypass and convector does not still heat
-            this->mDotCW = 0.0;
-            this->cWTempOut = this->cWTempIn;
-            if (this->beamCoolingPresent) {
-                SetComponentFlowRate(state, this->mDotCW, this->cWInNodeNum, this->cWOutNodeNum, this->cWplantLoc);
-            }
-            // assume if there is still flow that unit has an internal bypass and convector does not still cool
-            // don't even need to run calc
-            return;
         }
+        this->mDotHW = 0.0;
+        if (this->beamHeatingPresent) {
+            SetComponentFlowRate(state, this->mDotHW, this->hWInNodeNum, this->hWOutNodeNum, this->hWplantLoc);
+        }
+        this->hWTempOut = this->hWTempIn;
+        // assume if there is still flow that unit has an internal bypass and convector does not still heat
+        this->mDotCW = 0.0;
+        this->cWTempOut = this->cWTempIn;
+        if (this->beamCoolingPresent) {
+            SetComponentFlowRate(state, this->mDotCW, this->cWInNodeNum, this->cWOutNodeNum, this->cWplantLoc);
+        }
+        // assume if there is still flow that unit has an internal bypass and convector does not still cool
+        // don't even need to run calc
+        return;
     }
 
     void HVACFourPipeBeam::calc(EnergyPlusData &state)

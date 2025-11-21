@@ -7720,10 +7720,9 @@ Real64 GetQdotConvOutPerArea(EnergyPlusData &state, int const SurfNum)
     if (state.dataEnvrn->IsRain) {
         return -state.dataHeatBalSurf->SurfHConvExt(SurfNum) *
                (state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum) - state.dataSurface->SurfOutWetBulbTemp(SurfNum));
-    } else {
-        return -state.dataHeatBalSurf->SurfHConvExt(SurfNum) *
-               (state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum) - state.dataSurface->SurfOutDryBulbTemp(SurfNum));
     }
+    return -state.dataHeatBalSurf->SurfHConvExt(SurfNum) *
+           (state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum) - state.dataSurface->SurfOutDryBulbTemp(SurfNum));
 }
 
 void CalcHeatBalanceInsideSurf(EnergyPlusData &state,
@@ -9863,9 +9862,8 @@ Real64 GetSurfIncidentSolarMultiplier(EnergyPlusData &state, int SurfNum)
     }
     if (state.dataSurface->SurfIncSolMultiplier(SurfNum).sched != nullptr) {
         return state.dataSurface->SurfIncSolMultiplier(SurfNum).sched->getCurrentVal() * state.dataSurface->SurfIncSolMultiplier(SurfNum).Scaler;
-    } else {
-        return state.dataSurface->SurfIncSolMultiplier(SurfNum).Scaler;
     }
+    return state.dataSurface->SurfIncSolMultiplier(SurfNum).Scaler;
 }
 
 void InitSurfacePropertyViewFactors(EnergyPlusData &state)

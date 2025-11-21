@@ -252,13 +252,11 @@ public:
                     return value;
                 }
                 return std::nextafter(value, std::numeric_limits<decltype(value)>::lowest());
-
-            } else {
-                if (value == 0.0) {
-                    return value;
-                }
-                return std::nextafter(value, std::numeric_limits<decltype(value)>::max());
             }
+            if (value == 0.0) {
+                return value;
+            }
+            return std::nextafter(value, std::numeric_limits<decltype(value)>::max());
         };
 
         double val = doubleWrapper;
@@ -296,19 +294,17 @@ public:
                         return fmt::format_to(ctx.out(), fmt_buffer, val);
                     }
                     return fmt::format_to(ctx.out(), spec_builder(), val);
-
-                } else {
-                    if (val == 0.0 || val == -0.0) {
-                        return fmt::format_to(ctx.out(), spec_builder(), 0.0);
-                    } // nudge up to next rounded val
-                    return fmt::format_to(ctx.out(), spec_builder(), next_float(next_float(next_float(val))));
                 }
-            } else {
-                specs_.type = 'E';
-                auto str = fmt::format(spec_builder(), next_float(val));
-                return fmt::format_to(ctx.out(), "{}", zero_pad_exponent(str));
+                if (val == 0.0 || val == -0.0) {
+                    return fmt::format_to(ctx.out(), spec_builder(), 0.0);
+                } // nudge up to next rounded val
+                return fmt::format_to(ctx.out(), spec_builder(), next_float(next_float(next_float(val))));
             }
-        } else if (specs_.type == 'T') { // matches TrimSigDigits behavior
+            specs_.type = 'E';
+            auto str = fmt::format(spec_builder(), next_float(val));
+            return fmt::format_to(ctx.out(), "{}", zero_pad_exponent(str));
+        }
+        if (specs_.type == 'T') { // matches TrimSigDigits behavior
             const auto fixed_output = should_be_fixed_output(val);
 
             if (fixed_output) {
@@ -767,10 +763,9 @@ template <FormatSyntax formatSyntax, typename... Args> void print(InputOutputFil
         }
         if (outputFile.defaultToStdOut) {
             return &std::cout;
-        } else {
-            assert(outputFile.os);
-            return nullptr;
         }
+        assert(outputFile.os);
+        return nullptr;
     }();
     if constexpr (formatSyntax == FormatSyntax::Fortran) {
         print_fortran_syntax(*outputStream, format_str, args...);

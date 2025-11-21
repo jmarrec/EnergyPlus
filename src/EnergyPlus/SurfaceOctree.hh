@@ -248,9 +248,8 @@ public: // Methods
         Real const projection_fac(((ac.x * ab.x) + (ac.y * ab.y) + (ac.z * ab.z)) / ab_mag_squared);
         if ((0.0 <= projection_fac) && (projection_fac <= 1.0)) { // Projected (closest) point is on ab segment
             return ObjexxFCL::distance_squared(ac, projection_fac * ab) <= r_;
-        } else { // Projection (closest) point is outside of ab segment: Intersects iff a or b are in sphere
-            return (ObjexxFCL::distance_squared(a, c_) <= r_) || (ObjexxFCL::distance_squared(b, c_) <= r_);
-        }
+        } // Projection (closest) point is outside of ab segment: Intersects iff a or b are in sphere
+        return (ObjexxFCL::distance_squared(a, c_) <= r_) || (ObjexxFCL::distance_squared(b, c_) <= r_);
     }
 
     // Ray Intersects Enclosing Sphere?

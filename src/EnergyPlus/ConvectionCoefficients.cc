@@ -1860,20 +1860,20 @@ Real64 CalcASHRAESimpleIntConvCoeff(Real64 const Tsurf, Real64 const Tamb, Real6
     if (std::abs(cosTilt) >= 0.9239) { // Horizontal Surface
         if (DeltaTempCosTilt > 0.0) {  // Enhanced Convection
             return 4.040;
-        } else if (DeltaTempCosTilt < 0.0) { // Reduced Convection
+        }
+        if (DeltaTempCosTilt < 0.0) { // Reduced Convection
             return 0.948;
-        } else { // Zero DeltaTemp
-            return 3.076;
-        }
-    } else {                          // tilted surface
-        if (DeltaTempCosTilt > 0.0) { // Enhanced Convection
-            return 3.870;
-        } else if (DeltaTempCosTilt < 0.0) { // Reduced Convection
-            return 2.281;
-        } else { // Zero DeltaTemp
-            return 3.076;
-        }
+        } // Zero DeltaTemp
+        return 3.076;
+
+    } // tilted surface
+    if (DeltaTempCosTilt > 0.0) { // Enhanced Convection
+        return 3.870;
     }
+    if (DeltaTempCosTilt < 0.0) { // Reduced Convection
+        return 2.281;
+    } // Zero DeltaTemp
+    return 3.076;
 }
 
 void CalcASHRAESimpleIntConvCoeff(EnergyPlusData &state,
@@ -1936,11 +1936,11 @@ Real64 CalcASHRAETARPNatural(Real64 const Tsurf, Real64 const Tamb, Real64 const
 
         return CalcWaltonUnstableHorizontalOrTilt(DeltaTemp, cosTilt);
 
-    } else { // (((DeltaTemp > 0.0) && (cosTilt < 0.0)) || ((DeltaTemp < 0.0) && (cosTilt > 0.0))) // Reduced Convection
+    } // (((DeltaTemp > 0.0) && (cosTilt < 0.0)) || ((DeltaTemp < 0.0) && (cosTilt > 0.0))) // Reduced Convection
 
-        return CalcWaltonStableHorizontalOrTilt(DeltaTemp, cosTilt);
+    return CalcWaltonStableHorizontalOrTilt(DeltaTemp, cosTilt);
 
-    } // ...end of IF-THEN block to set HConvIn
+    // ...end of IF-THEN block to set HConvIn
 }
 
 void CalcASHRAEDetailedIntConvCoeff(EnergyPlusData &state,
@@ -2180,9 +2180,8 @@ Real64 CalcCeilingDiffuserIntConvCoeff(EnergyPlusData &state,
     }
     if (cosTilt > cos45) {
         return CalcFisherPedersenCeilDiffuserCeiling(state, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow); // Ceiling correlation
-    } else {
-        return CalcFisherPedersenCeilDiffuserWalls(state, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow); // Wall correlation
     }
+    return CalcFisherPedersenCeilDiffuserWalls(state, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow); // Wall correlation
 }
 
 void CalcCeilingDiffuserIntConvCoeff(EnergyPlusData &state,
@@ -4402,9 +4401,8 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
         }
         if (deltaT < 0.0) {
             return (int)ConvSurfDeltaT::Negative;
-        } else {
-            return (int)ConvSurfDeltaT::Zero;
         }
+        return (int)ConvSurfDeltaT::Zero;
     };
 
     // now finish out specific model eq for this surface
@@ -6255,21 +6253,22 @@ Real64 CalcBlockenWindward(EnergyPlusData &state,
     }
     if (Theta <= 33.75) {
         return 5.0 * std::pow(WindAt10m, 0.8);
-    } else if (Theta <= 56.25) {
-        return 4.6 * std::pow(WindAt10m, 0.84);
-    } else if (Theta <= 100.0) {
-        return 4.5 * std::pow(WindAt10m, 0.81);
-    } else {
-        if (state.dataConvect->CalcBlockenWindwardErrorIDX == 0) {
-            ShowSevereMessage(state, "CalcBlockenWindward: Convection model wind angle calculation suspect (developer issue)");
-            ShowContinueError(state, format("Value for theta angle = {:.5R}", Theta));
-            ShowContinueError(state, format("Occurs for surface named = {}", state.dataSurface->Surface(SurfNum).Name));
-            ShowContinueError(state, "Convection model uses EmmelVertical correlation and the simulation continues");
-        }
-        ShowRecurringSevereErrorAtEnd(
-            state, "CalcBlockenWindward: Convection model wind angle calculation suspect.", state.dataConvect->CalcBlockenWindwardErrorIDX);
-        return CalcEmmelVertical(WindAt10m, WindDir, SurfAzimuth);
     }
+    if (Theta <= 56.25) {
+        return 4.6 * std::pow(WindAt10m, 0.84);
+    }
+    if (Theta <= 100.0) {
+        return 4.5 * std::pow(WindAt10m, 0.81);
+    }
+    if (state.dataConvect->CalcBlockenWindwardErrorIDX == 0) {
+        ShowSevereMessage(state, "CalcBlockenWindward: Convection model wind angle calculation suspect (developer issue)");
+        ShowContinueError(state, format("Value for theta angle = {:.5R}", Theta));
+        ShowContinueError(state, format("Occurs for surface named = {}", state.dataSurface->Surface(SurfNum).Name));
+        ShowContinueError(state, "Convection model uses EmmelVertical correlation and the simulation continues");
+    }
+    ShowRecurringSevereErrorAtEnd(
+        state, "CalcBlockenWindward: Convection model wind angle calculation suspect.", state.dataConvect->CalcBlockenWindwardErrorIDX);
+    return CalcEmmelVertical(WindAt10m, WindDir, SurfAzimuth);
 }
 
 Real64 CalcEmmelVertical(Real64 const WindAt10m,
@@ -6297,13 +6296,14 @@ Real64 CalcEmmelVertical(Real64 const WindAt10m,
     }
     if (Theta <= 67.5) {
         return 3.34 * std::pow(WindAt10m, 0.84);
-    } else if (Theta <= 112.5) {
-        return 4.78 * std::pow(WindAt10m, 0.71);
-    } else if (Theta <= 157.5) {
-        return 4.05 * std::pow(WindAt10m, 0.77);
-    } else {
-        return 3.54 * std::pow(WindAt10m, 0.76);
     }
+    if (Theta <= 112.5) {
+        return 4.78 * std::pow(WindAt10m, 0.71);
+    }
+    if (Theta <= 157.5) {
+        return 4.05 * std::pow(WindAt10m, 0.77);
+    }
+    return 3.54 * std::pow(WindAt10m, 0.76);
 }
 
 Real64 CalcEmmelRoof(Real64 const WindAt10m,
@@ -6331,13 +6331,14 @@ Real64 CalcEmmelRoof(Real64 const WindAt10m,
     }
     if (Theta <= 67.5) {
         return 4.60 * std::pow(WindAt10m, 0.79);
-    } else if (Theta <= 112.5) {
-        return 3.67 * std::pow(WindAt10m, 0.85);
-    } else if (Theta <= 157.5) {
-        return 4.60 * std::pow(WindAt10m, 0.79);
-    } else {
-        return 5.11 * std::pow(WindAt10m, 0.78);
     }
+    if (Theta <= 112.5) {
+        return 3.67 * std::pow(WindAt10m, 0.85);
+    }
+    if (Theta <= 157.5) {
+        return 4.60 * std::pow(WindAt10m, 0.79);
+    }
+    return 5.11 * std::pow(WindAt10m, 0.78);
 }
 
 Real64 CalcClearRoof(EnergyPlusData &state,
@@ -6580,15 +6581,17 @@ SurfOrientation GetSurfConvOrientation(Real64 const Tilt)
     }
     if ((Tilt >= 5.0) && (Tilt < 85.0)) {
         return SurfOrientation::TiltedDownward;
-    } else if ((Tilt >= 85.0) && (Tilt < 95.0)) {
-        return SurfOrientation::Vertical;
-    } else if ((Tilt >= 95.0) && (Tilt < 175.0)) {
-        return SurfOrientation::TiltedUpward;
-    } else if (Tilt >= 175.0) {
-        return SurfOrientation::HorizontalUp;
-    } else {
-        return SurfOrientation::Invalid;
     }
+    if ((Tilt >= 85.0) && (Tilt < 95.0)) {
+        return SurfOrientation::Vertical;
+    }
+    if ((Tilt >= 95.0) && (Tilt < 175.0)) {
+        return SurfOrientation::TiltedUpward;
+    }
+    if (Tilt >= 175.0) {
+        return SurfOrientation::HorizontalUp;
+    }
+    return SurfOrientation::Invalid;
 }
 
 Real64 SurroundingSurfacesRadCoeffAverage(EnergyPlusData &state, int const SurfNum, Real64 const TSurfK, Real64 const AbsExt)

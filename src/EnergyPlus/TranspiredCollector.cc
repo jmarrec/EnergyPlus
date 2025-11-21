@@ -1996,15 +1996,14 @@ namespace TranspiredCollector {
 
             // linear interpolation for layers inclined at angles between 60 and 90 deg
             return ((90.0 - Tilt) * gnu60 + (Tilt - 60.0) * gnu90) / 30.0;
-        } else { // eq. 42
-            Real64 cra = Ra * std::cos(tiltr);
-            Real64 a = 1.0 - 1708.0 / cra;
-            Real64 b = std::pow(cra / 5830.0, 0.33333) - 1.0;
-            Real64 gnua = (std::abs(a) + a) / 2.0;
-            Real64 gnub = (std::abs(b) + b) / 2.0;
-            Real64 ang = 1708.0 * std::pow(std::sin(1.8 * tiltr), 1.6);
-            return 1.0 + 1.44 * gnua * (1.0 - ang / cra) + gnub;
-        }
+        } // eq. 42
+        Real64 cra = Ra * std::cos(tiltr);
+        Real64 a = 1.0 - 1708.0 / cra;
+        Real64 b = std::pow(cra / 5830.0, 0.33333) - 1.0;
+        Real64 gnua = (std::abs(a) + a) / 2.0;
+        Real64 gnub = (std::abs(b) + b) / 2.0;
+        Real64 ang = 1708.0 * std::pow(std::sin(1.8 * tiltr), 1.6);
+        return 1.0 + 1.44 * gnua * (1.0 - ang / cra) + gnub;
     }
 
 } // namespace TranspiredCollector

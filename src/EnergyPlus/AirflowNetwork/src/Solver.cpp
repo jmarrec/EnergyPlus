@@ -10607,13 +10607,12 @@ namespace AirflowNetwork {
                         if (i == GetOAMixerInletNodeNumber(m_state, OAMixerNum)) {
                             NodeFound(i) = true;
                             break;
-                        } else {
-                            if (OAMixerNum == GetNumOAMixers(m_state)) {
-                                ShowSevereError(m_state,
-                                                format(RoutineName) + "'" + m_state.dataLoopNodes->NodeID(i) +
-                                                    "' is not defined as an AirflowNetwork:Distribution:Node object.");
-                                ErrorsFound = true;
-                            }
+                        }
+                        if (OAMixerNum == GetNumOAMixers(m_state)) {
+                            ShowSevereError(m_state,
+                                            format(RoutineName) + "'" + m_state.dataLoopNodes->NodeID(i) +
+                                                "' is not defined as an AirflowNetwork:Distribution:Node object.");
+                            ErrorsFound = true;
                         }
                     }
                 } else if (GetNumOAMixers(m_state) == 0) {
@@ -13320,9 +13319,8 @@ namespace AirflowNetwork {
         RandomValue = Real64(rand()) / RAND_MAX;
         if (SchValue > RandomValue) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     bool OccupantVentilationControlProp::closing_probability(EnergyPlusData &state,
@@ -13341,9 +13339,8 @@ namespace AirflowNetwork {
         RandomValue = Real64(rand()) / RAND_MAX;
         if (SchValue > RandomValue) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     void Solver::allocate()

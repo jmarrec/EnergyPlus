@@ -7237,8 +7237,8 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
                     Qunmet = 0.0;
                     Mode_loc = TankOperatingMode::Floating;
                     continue;
-
-                } else if (Qneeded < Qmincap) {
+                }
+                if (Qneeded < Qmincap) {
                     // Heater is required at less than the minimum capacity
                     // If cycling, Qmincap = Qmaxcap.  Once the setpoint is reached, heater will almost always be shut off here
 
@@ -7248,8 +7248,8 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
                         Qunmet = 0.0;
                         Mode_loc = TankOperatingMode::Floating;
                         continue;
-
-                    } else if (this->ControlType == HeaterControlMode::Modulate) {
+                    }
+                    if (this->ControlType == HeaterControlMode::Modulate) {
                         // Control will cycle on and off based on DeadBandTemp until Qneeded > Qmincap again
                         Qheater = 0.0;
                         Qunmet = Qneeded;
@@ -8451,14 +8451,11 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
                             return Qheatpump;
                         }
                         return 0.0;
-
-                    } else {
-                        assert(HPWHCondenserConfig == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterWrapped);
-                        return Qheatpump * node.HPWHWrappedCondenserHeatingFrac;
                     }
-                } else {
-                    return node.SourceMassFlowRate * Cp * (this->SourceInletTemp - Tavg[i]);
+                    assert(HPWHCondenserConfig == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterWrapped);
+                    return Qheatpump * node.HPWHWrappedCondenserHeatingFrac;
                 }
+                return node.SourceMassFlowRate * Cp * (this->SourceInletTemp - Tavg[i]);
             }();
 
             if (this->HeaterOn1 || this->HeaterOn2) {
@@ -8487,14 +8484,11 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
                 }
                 assert(HPWHCondenserConfig == DataPlant::PlantEquipmentType::HeatPumpWtrHeaterWrapped);
                 return 0.0;
-
-            } else {
-                if (this->SourceOutletStratNode > 0) {
-                    return this->SourceEffectiveness * this->SourceMassFlowRate * Cp *
-                           (this->SourceInletTemp - Tavg[this->SourceOutletStratNode - 1]);
-                }
-                return 0.0;
             }
+            if (this->SourceOutletStratNode > 0) {
+                return this->SourceEffectiveness * this->SourceMassFlowRate * Cp * (this->SourceInletTemp - Tavg[this->SourceOutletStratNode - 1]);
+            }
+            return 0.0;
         }();
         Esource += Qsource * dt;
         if (this->HeaterOn1) {

@@ -161,11 +161,11 @@ std::string InputFile::error_state_to_string() const
     }
     if (state == std::ios_base::badbit) {
         return "irrecoverable stream error";
-    } else if (state == std::ios_base::eofbit) {
-        return "end of file reached";
-    } else {
-        return "no error";
     }
+    if (state == std::ios_base::eofbit) {
+        return "end of file reached";
+    }
+    return "no error";
 }
 
 std::istream::iostate InputFile::rdstate() const noexcept
@@ -184,10 +184,8 @@ bool InputFile::is_open() const noexcept
             return ss->is_open();
         }
         return true;
-
-    } else {
-        return false;
     }
+    return false;
 }
 
 void InputFile::backspace() noexcept
@@ -229,9 +227,8 @@ bool InputOutputFile::good() const
     }
     if (os) {
         return os->good();
-    } else {
-        return false;
     }
+    return false;
 }
 
 void InputOutputFile::close()

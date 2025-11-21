@@ -5534,10 +5534,8 @@ namespace LowTempRadiantSystem {
         }
         if (throttlingRange < 0.001) {
             return 1.0; // Throttling range is essentially zero and there is a temperature difference--turn it full on
-        } else {
-            // Temperature difference is non-zero and less than the throttling range--calculate the operation fraction, but limit to a maximum of 1.0
-            return min(temperatureDifference / throttlingRange, 1.0);
-        }
+        } // Temperature difference is non-zero and less than the throttling range--calculate the operation fraction, but limit to a maximum of 1.0
+        return min(temperatureDifference / throttlingRange, 1.0);
     }
 
     Real64 RadiantSystemBaseData::setOffTemperatureLowTemperatureRadiantSystem(EnergyPlusData &state,

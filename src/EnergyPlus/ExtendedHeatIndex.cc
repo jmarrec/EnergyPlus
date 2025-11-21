@@ -92,9 +92,9 @@ namespace ExtendedHI {
         }
         if (T < Ttrip) {
             return ptrip * pow((T / Ttrip), ((cpv - cvs) / rgasv)) * exp((E0v + E0s - (cvv - cvs) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
-        } else {
-            return ptrip * pow((T / Ttrip), ((cpv - cvl) / rgasv)) * exp((E0v - (cvv - cvl) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
         }
+        return ptrip * pow((T / Ttrip), ((cpv - cvl) / rgasv)) * exp((E0v - (cvv - cvl) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
+
         return 0.0;
     }
 
@@ -469,42 +469,40 @@ namespace ExtendedHI {
                 Ts_bar);
             Rf = Ra_bar(Tf, Ta) * (Ts_bar - Tf) / (Tf - Ta);
             return Rf;
-        } else {
-            Real64 const flux3 = Q - Qv(Ta, Pa) - (Tc - Ta) / Ra_un(Tc, Ta) - (phi_salt * pvstar(Tc) - Pa) / Za_un;
-            if (flux3 < 0.0) {
-                varname = EqvarName::Rs;
+        }
+        Real64 const flux3 = Q - Qv(Ta, Pa) - (Tc - Ta) / Ra_un(Tc, Ta) - (phi_salt * pvstar(Tc) - Pa) / Za_un;
+        if (flux3 < 0.0) {
+            varname = EqvarName::Rs;
+            General::SolveRoot(
+                state,
+                tol,
+                maxIter,
+                SolFla,
+                Ts,
+                [&](Real64 Ts) { return (Ts - Ta) / Ra_un(Ts, Ta) + (Pc - Pa) / (Zs((Tc - Ts) / (Q - Qv(Ta, Pa))) + Za_un) - (Q - Qv(Ta, Pa)); },
+                0.0,
+                Tc);
+            Rs = (Tc - Ts) / (Q - Qv(Ta, Pa));
+            ZsRs = Zs(Rs);
+            Real64 const Ps = Pc - (Pc - Pa) * ZsRs / (ZsRs + Za_un);
+            if (Ps > phi_salt * pvstar(Ts)) {
                 General::SolveRoot(
                     state,
                     tol,
                     maxIter,
                     SolFla,
                     Ts,
-                    [&](Real64 Ts) { return (Ts - Ta) / Ra_un(Ts, Ta) + (Pc - Pa) / (Zs((Tc - Ts) / (Q - Qv(Ta, Pa))) + Za_un) - (Q - Qv(Ta, Pa)); },
+                    [&](Real64 Ts) { return (Ts - Ta) / Ra_un(Ts, Ta) + (phi_salt * pvstar(Ts) - Pa) / Za_un - (Q - Qv(Ta, Pa)); },
                     0.0,
                     Tc);
                 Rs = (Tc - Ts) / (Q - Qv(Ta, Pa));
-                ZsRs = Zs(Rs);
-                Real64 const Ps = Pc - (Pc - Pa) * ZsRs / (ZsRs + Za_un);
-                if (Ps > phi_salt * pvstar(Ts)) {
-                    General::SolveRoot(
-                        state,
-                        tol,
-                        maxIter,
-                        SolFla,
-                        Ts,
-                        [&](Real64 Ts) { return (Ts - Ta) / Ra_un(Ts, Ta) + (phi_salt * pvstar(Ts) - Pa) / Za_un - (Q - Qv(Ta, Pa)); },
-                        0.0,
-                        Tc);
-                    Rs = (Tc - Ts) / (Q - Qv(Ta, Pa));
-                }
-                return Rs;
-            } else {
-                varname = EqvarName::DTcdt;
-                Rs = 0.0;
-                dTcdt = (1.0 / C) * flux3;
-                return dTcdt;
             }
+            return Rs;
         }
+        varname = EqvarName::DTcdt;
+        Rs = 0.0;
+        dTcdt = (1.0 / C) * flux3;
+        return dTcdt;
     }
 
     // Convert the find_T function

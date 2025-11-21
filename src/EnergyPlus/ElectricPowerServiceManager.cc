@@ -3577,16 +3577,15 @@ Real64 checkUserEfficiencyInput(EnergyPlusData &state, Real64 userInputValue, bo
         }
         return userInputValue;
 
-    } else { // discharging
-        if (userInputValue < minDischargeEfficiency) {
-            ShowSevereError(
-                state, format("ElectricStorage discharge efficiency was too low.  This occurred for electric storage unit named {}", deviceName));
-            ShowContinueError(state, "Please check your input value  for this electric storage unit and fix the discharge efficiency.");
-            errorsFound = true;
-            return minDischargeEfficiency;
-        }
-        return userInputValue;
+    } // discharging
+    if (userInputValue < minDischargeEfficiency) {
+        ShowSevereError(state,
+                        format("ElectricStorage discharge efficiency was too low.  This occurred for electric storage unit named {}", deviceName));
+        ShowContinueError(state, "Please check your input value  for this electric storage unit and fix the discharge efficiency.");
+        errorsFound = true;
+        return minDischargeEfficiency;
     }
+    return userInputValue;
 }
 
 void checkChargeDischargeVoltageCurves(

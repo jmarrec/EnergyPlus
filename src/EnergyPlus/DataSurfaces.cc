@@ -366,21 +366,29 @@ ShapeCat SurfaceData::computed_shapeCat() const
     }
     if (Shape == SurfaceShape::TriangularWindow) {
         return ShapeCat::Triangular;
-    } else if (Shape == SurfaceShape::TriangularDoor) {
+    }
+    if (Shape == SurfaceShape::TriangularDoor) {
         return ShapeCat::Triangular;
-    } else if (Shape == SurfaceShape::Rectangle) {
+    }
+    if (Shape == SurfaceShape::Rectangle) {
         return ShapeCat::Rectangular;
-    } else if (Shape == SurfaceShape::RectangularDoorWindow) {
+    }
+    if (Shape == SurfaceShape::RectangularDoorWindow) {
         return ShapeCat::Rectangular;
-    } else if (Shape == SurfaceShape::RectangularOverhang) {
+    }
+    if (Shape == SurfaceShape::RectangularOverhang) {
         return ShapeCat::Rectangular;
-    } else if (Shape == SurfaceShape::RectangularLeftFin) {
+    }
+    if (Shape == SurfaceShape::RectangularLeftFin) {
         return ShapeCat::Rectangular;
-    } else if (Shape == SurfaceShape::RectangularRightFin) {
+    }
+    if (Shape == SurfaceShape::RectangularRightFin) {
         return ShapeCat::Rectangular;
-    } else if (IsConvex) {
+    }
+    if (IsConvex) {
         return ShapeCat::Convex;
-    } else {
+    }
+    {
         return ShapeCat::Nonconvex;
     }
 }
@@ -448,19 +456,18 @@ Surface2D SurfaceData::computed_surface2d() const
             zu = std::max(zu, v.z);
         }
         return Surface2D(shapeCat, axis, v2d, Vertex2D(xl, zl), Vertex2D(xu, zu));
-    } else {                       // Use x,y for 2D surface
-        Real64 xl(v0.x), xu(v0.x); // x coordinate ranges
-        Real64 yl(v0.y), yu(v0.y); // y coordinate ranges
-        for (Vertices::size_type i = 0; i < n; ++i) {
-            Vector const &v(Vertex[i]);
-            v2d[i] = Vertex2D(v.x, v.y);
-            xl = std::min(xl, v.x);
-            xu = std::max(xu, v.x);
-            yl = std::min(yl, v.y);
-            yu = std::max(yu, v.y);
-        }
-        return Surface2D(shapeCat, axis, v2d, Vertex2D(xl, yl), Vertex2D(xu, yu));
+    } // Use x,y for 2D surface
+    Real64 xl(v0.x), xu(v0.x); // x coordinate ranges
+    Real64 yl(v0.y), yu(v0.y); // y coordinate ranges
+    for (Vertices::size_type i = 0; i < n; ++i) {
+        Vector const &v(Vertex[i]);
+        v2d[i] = Vertex2D(v.x, v.y);
+        xl = std::min(xl, v.x);
+        xu = std::max(xu, v.x);
+        yl = std::min(yl, v.y);
+        yu = std::max(yu, v.y);
     }
+    return Surface2D(shapeCat, axis, v2d, Vertex2D(xl, yl), Vertex2D(xu, yu));
 }
 
 Real64 SurfaceData::get_average_height(EnergyPlusData &state) const

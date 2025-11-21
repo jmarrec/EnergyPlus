@@ -3941,11 +3941,12 @@ namespace PlantPipingSystemsManager {
         }
         if (dir == RegionType::YDirection) {
             return this->Mesh.Y.RegionMeshCount;
-        } else if (dir == RegionType::ZDirection) {
-            return this->Mesh.Z.RegionMeshCount;
-        } else {
-            return 1; // it's either a mesh region (X,Y,ZDirection), or it is some form of partition -- so 1
         }
+        if (dir == RegionType::ZDirection) {
+            return this->Mesh.Z.RegionMeshCount;
+        }
+        return 1; // it's either a mesh region (X,Y,ZDirection), or it is some form of partition -- so 1
+
         return 0;
     }
 

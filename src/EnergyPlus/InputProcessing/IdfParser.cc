@@ -233,14 +233,17 @@ json IdfParser::parse_idf(std::string_view idf, size_t &index, bool &success, js
         if (token == Token::NONE) {
             success = false;
             return root;
-        } else if (token == Token::SEMICOLON) {
+        }
+        if (token == Token::SEMICOLON) {
             next_token(idf, index);
             continue;
-        } else if (token == Token::COMMA) {
+        }
+        if (token == Token::COMMA) {
             errors_.emplace_back(fmt::format("Line: {} Index: {} - Extraneous comma found.", cur_line_num, index_into_cur_line));
             success = false;
             return root;
-        } else if (token == Token::EXCLAMATION) {
+        }
+        if (token == Token::EXCLAMATION) {
             eat_comment(idf, index);
         } else {
             ++idfObjectCount;
@@ -358,7 +361,8 @@ json IdfParser::parse_object(
         }
         if (token == Token::END) {
             return root;
-        } else if (token == Token::COMMA || token == Token::SEMICOLON) {
+        }
+        if (token == Token::COMMA || token == Token::SEMICOLON) {
             if (!was_value_parsed) {
                 int ext_size = 0;
                 if (legacy_idd_index < legacy_idd_fields_array.size()) {
@@ -528,21 +532,20 @@ json IdfParser::parse_number(std::string_view idf, size_t &index)
         if (result.ptr != str_end) {
             if (*result.ptr == '.' || *result.ptr == 'e' || *result.ptr == 'E') {
                 return convert_double(str);
-            } else {
-                auto const initial_ptr = result.ptr; // (AUTO_OK)
-                while (result.ptr != str_end) {
-                    if (*result.ptr != ' ') {
-                        break;
-                    }
-                    ++result.ptr;
-                }
-                if (result.ptr == str_end) {
-                    index -= (str_end - initial_ptr);
-                    this->index_into_cur_line -= (str_end - initial_ptr);
-                    return val;
-                }
-                return rtrim(str);
             }
+            auto const initial_ptr = result.ptr; // (AUTO_OK)
+            while (result.ptr != str_end) {
+                if (*result.ptr != ' ') {
+                    break;
+                }
+                ++result.ptr;
+            }
+            if (result.ptr == str_end) {
+                index -= (str_end - initial_ptr);
+                this->index_into_cur_line -= (str_end - initial_ptr);
+                return val;
+            }
+            return rtrim(str);
         }
         return val;
     };
