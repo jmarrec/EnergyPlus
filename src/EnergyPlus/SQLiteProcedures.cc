@@ -1578,7 +1578,7 @@ void SQLite::createSQLiteTimeIndexRecord(OutputProcessor::ReportFreq const repor
         switch (reportFreq) {
         case OutputProcessor::ReportFreq::EachCall:
         case OutputProcessor::ReportFreq::TimeStep: {
-            if (month == -1 || dayOfMonth == -1 || hour == -1 || endMinute == -1.0 || startMinute == -1.0 || dst == -1 || dayType == "") {
+            if (month == -1 || dayOfMonth == -1 || hour == -1 || endMinute == -1.0 || startMinute == -1.0 || dst == -1 || dayType.empty()) {
                 sqliteWriteMessage("Empty month, dayOfMonth, hour, endMinute, startMinute, dst, or dayType passed to CreateSQLiteTimeIndexRecord");
                 break;
             }
@@ -1610,7 +1610,7 @@ void SQLite::createSQLiteTimeIndexRecord(OutputProcessor::ReportFreq const repor
             break;
         }
         case OutputProcessor::ReportFreq::Hour: {
-            if (month == -1 || dayOfMonth == -1 || hour == -1 || dst == -1 || dayType == "") {
+            if (month == -1 || dayOfMonth == -1 || hour == -1 || dst == -1 || dayType.empty()) {
                 sqliteWriteMessage("Empty month, dayOfMonth, hour, dst, or dayType passed to CreateSQLiteTimeIndexRecord");
                 break;
             }
@@ -1635,7 +1635,7 @@ void SQLite::createSQLiteTimeIndexRecord(OutputProcessor::ReportFreq const repor
             break;
         }
         case OutputProcessor::ReportFreq::Day: {
-            if (month == -1 || dayOfMonth == -1 || dst == -1 || dayType == "") {
+            if (month == -1 || dayOfMonth == -1 || dst == -1 || dayType.empty()) {
                 sqliteWriteMessage("Empty month, dayOfMonth, dst, or dayType passed to CreateSQLiteTimeIndexRecord");
                 break;
             }

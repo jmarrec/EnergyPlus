@@ -1511,7 +1511,7 @@ namespace HeatBalFiniteDiffManager {
 
         int const first(a.l2());
 
-        assert(a.size() > 0u);
+        assert(!a.empty());
         Array2<Real64>::size_type l(1);
         Real64 r(a[0]);
         int last(first);

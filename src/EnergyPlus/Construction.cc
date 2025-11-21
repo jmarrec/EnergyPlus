@@ -1966,7 +1966,7 @@ void ConstructionProps::reportLayers(EnergyPlusData &state)
 {
     // Report the layers for each opaque construction in predefined tabular report
     // J. Glazer March 2024
-    if (state.dataOutRptPredefined->pdchOpqConsLayCol.size() > 0) {
+    if (!state.dataOutRptPredefined->pdchOpqConsLayCol.empty()) {
         for (int i = 1; i <= this->TotLayers; ++i) {
             int layerIndex = this->LayerPoint(i);
             auto const *mat = state.dataMaterial->materials(layerIndex);

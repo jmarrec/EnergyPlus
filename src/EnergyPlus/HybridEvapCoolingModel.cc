@@ -956,7 +956,7 @@ namespace HybridEvapCoolingModel {
 
         // if the map of the solution space looks valid then populate the class member oStandBy (CSetting) with the settings data (what OSAF it runs
         // at, and how much power it uses etc.
-        if (Mode0.sol.MassFlowRatio.size() > 0) {
+        if (!Mode0.sol.MassFlowRatio.empty()) {
             Real64 MsaRatio = Mode0.sol.MassFlowRatio[0];
             Real64 OSAF = Mode0.sol.OutdoorAirFraction[0];
 
@@ -1693,7 +1693,7 @@ namespace HybridEvapCoolingModel {
 
         // Using/Aliasing
 
-        if (CurrentOperatingSettings.size() > 0) {
+        if (!CurrentOperatingSettings.empty()) {
             return CurrentOperatingSettings[0].Mode;
         } else {
             return -1;
@@ -1717,7 +1717,7 @@ namespace HybridEvapCoolingModel {
         // na
 
         // Using/Aliasing
-        if (CurrentOperatingSettings.size() > 0) {
+        if (!CurrentOperatingSettings.empty()) {
             return CurrentOperatingSettings[0].Runtime_Fraction;
         } else {
             return -1;

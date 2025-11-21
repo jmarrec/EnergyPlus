@@ -9775,7 +9775,7 @@ void CreateShadeDeploymentOrder(EnergyPlusData &state, int const enclNum)
         for (int spaceNum : state.dataHeatBal->Zone(winShadeControl.ZoneIndex).spaceIndexes) {
             int shadeCtrlEnclNum = state.dataHeatBal->space(spaceNum).solarEnclosureNum;
             if (shadeCtrlEnclNum == enclNum) {
-                shadeControlSequence.push_back(std::make_pair(winShadeControl.SequenceNumber, iShadeCtrl));
+                shadeControlSequence.emplace_back(winShadeControl.SequenceNumber, iShadeCtrl);
                 break;
             }
         }
@@ -9834,7 +9834,7 @@ void MapShadeDeploymentOrderToLoopNumber(EnergyPlusData &state, int const enclNu
 
     for (int controlNum : thisEnclDaylight.daylightControlIndexes) {
         auto &thisDaylightCtrl = dl->daylightControl(controlNum);
-        if (thisDaylightCtrl.ShadeDeployOrderExtWins.size() == 0) {
+        if (thisDaylightCtrl.ShadeDeployOrderExtWins.empty()) {
             continue;
         }
 
