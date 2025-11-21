@@ -505,7 +505,7 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                     }
                 }
 
-                if (tempZone.DeltaTCutSet > 0.0 && tempZone.setpts[(int)HVAC::SetptType::SingleHeatCool].Name != "") {
+                if (tempZone.DeltaTCutSet > 0.0 && !tempZone.setpts[(int)HVAC::SetptType::SingleHeatCool].Name.empty()) {
                     ShowWarningError(state,
                                      format("{}=\"{}: The choice of Temperature Difference Between Cutout And Setpoint will not be applied "
                                             "to ThermostatSetpoint:SingleHeatingOrCooling.",

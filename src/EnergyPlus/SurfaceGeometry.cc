@@ -1246,7 +1246,7 @@ namespace SurfaceGeometry {
                 newSurf.Zone = Found;
                 auto &newZone = state.dataHeatBal->Zone(Found);
                 newSurf.ZoneName = newZone.Name;
-                assert(newZone.spaceIndexes.size() >= 1);
+                assert(!newZone.spaceIndexes.empty());
                 newSurf.spaceNum = 0; // clear this here and set later
             } else if (surfTemp.ExtBoundCond == unenteredAdjacentSpaceSurface) {
                 int Found = Util::FindItemInList(surfTemp.ExtBoundCondName, state.dataHeatBal->space, state.dataGlobal->numSpaces);
@@ -4328,7 +4328,7 @@ namespace SurfaceGeometry {
         int ExtSurfNum;
         for (int i = 1; i <= SurfNum; i++) {
             if (state.dataSurfaceGeometry->SurfaceTmp(i).ExtBoundCond == unreconciledZoneSurface &&
-                state.dataSurfaceGeometry->SurfaceTmp(i).ExtBoundCondName != "") {
+                !state.dataSurfaceGeometry->SurfaceTmp(i).ExtBoundCondName.empty()) {
                 ExtSurfNum = Util::FindItemInList(state.dataSurfaceGeometry->SurfaceTmp(i).ExtBoundCondName, state.dataSurfaceGeometry->SurfaceTmp);
                 // If we cannot find the referenced surface
                 if (ExtSurfNum == 0) {
@@ -10592,7 +10592,7 @@ namespace SurfaceGeometry {
 
                     // Set return air node number
                     state.dataSurface->SurfWinAirflowReturnNodePtr(SurfNum) = 0;
-                    std::string retNodeName = "";
+                    std::string retNodeName;
                     if (!s_ipsc->lAlphaFieldBlanks(7)) {
                         retNodeName = s_ipsc->cAlphaArgs(7);
                     }
@@ -12322,7 +12322,7 @@ namespace SurfaceGeometry {
         for (int iFace = 1; iFace <= zonePoly.NumSurfaceFaces; ++iFace) {
             for (int jVertex = 1; jVertex <= zonePoly.SurfaceFace(iFace).NSides; ++jVertex) {
                 Vector curVertex = zonePoly.SurfaceFace(iFace).FacePoints(jVertex);
-                if (uniqVertices.size() == 0) {
+                if (uniqVertices.empty()) {
                     uniqVertices.emplace_back(curVertex);
                 } else {
                     bool found = false;
@@ -12427,7 +12427,7 @@ namespace SurfaceGeometry {
         // now make sure every point has been counted and even number of times (usually twice)
         // if they are then the ceiling and floor are (almost certainly) the same x and y coordinates.
         bool areFlrAndClgSame = true;
-        if (floorCeilingXY.size() > 0) {
+        if (!floorCeilingXY.empty()) {
             for (auto const &curFloorCeiling : floorCeilingXY) {
                 if (curFloorCeiling.count % 2 != 0) {
                     areFlrAndClgSame = false;
@@ -14629,7 +14629,7 @@ namespace SurfaceGeometry {
         bool anyGroupedSpaces = false;
         bool radiantSetup = false;
         bool solarSetup = false;
-        std::string RadiantOrSolar = "";
+        std::string RadiantOrSolar;
         int enclosureNum = 0;
         if (EnclosureType == RadiantEnclosures) {
             radiantSetup = true;

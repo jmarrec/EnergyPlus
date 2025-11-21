@@ -876,7 +876,7 @@ void GetAirPathData(EnergyPlusData &state)
         SplitterExists = false;
         MixerExists = false;
 
-        if (ConnectorListName != std::string()) {
+        if (!ConnectorListName.empty()) {
             ConListNum = state.dataInputProcessing->inputProcessor->getObjectItemNum(state, "ConnectorList", ConnectorListName);
             if (ConListNum > 0) {
                 state.dataInputProcessing->inputProcessor->getObjectItem(
@@ -1021,7 +1021,7 @@ void GetAirPathData(EnergyPlusData &state)
         }
 
         NumControllers = 0;
-        if (ControllerListName != std::string()) { // If not blank, then must be there and valid
+        if (!ControllerListName.empty()) { // If not blank, then must be there and valid
             // Loop through the controller lists until you find the one attached to this primary air system
             ControllerListNum = state.dataInputProcessing->inputProcessor->getObjectItemNum(state, "AirLoopHVAC:ControllerList", ControllerListName);
             if (ControllerListNum > 0) {

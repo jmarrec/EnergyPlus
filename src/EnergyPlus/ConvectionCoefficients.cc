@@ -1692,7 +1692,7 @@ void ApplyIntConvValueMulti(EnergyPlusData &state, SurfaceFilter surfaceFilter, 
     // PURPOSE OF THIS SUBROUTINE:
     // This subroutine applies a convection type to a set of surfaces.
 
-    if (state.dataSurface->SurfaceFilterLists[(int)surfaceFilter].size() == 0) {
+    if (state.dataSurface->SurfaceFilterLists[(int)surfaceFilter].empty()) {
         ShowWarningError(state,
                          format("User Supplied Convection Coefficients, Multiple Surface Assignments=\"{}\", there were no surfaces of that type "
                                 "found for Inside assignment.",
@@ -1757,7 +1757,7 @@ void ApplyExtConvValueMulti(EnergyPlusData &state, SurfaceFilter surfaceFilter, 
     // PURPOSE OF THIS SUBROUTINE:
     // This subroutine applies a convection type to a set of surfaces.
 
-    if (state.dataSurface->SurfaceFilterLists[(int)surfaceFilter].size() == 0) {
+    if (state.dataSurface->SurfaceFilterLists[(int)surfaceFilter].empty()) {
         return;
     }
 

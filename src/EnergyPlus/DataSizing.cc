@@ -478,7 +478,7 @@ void resetHVACSizingGlobals(EnergyPlusData &state,
     // Reset to avoid chance that second zone equipment will size using these variables set by first zone equipment to be sized
     if (curZoneEqNum > 0) {
 
-        if (state.dataSize->ZoneEqSizing.size() == 0) {
+        if (state.dataSize->ZoneEqSizing.empty()) {
             firstPassFlag = false;
             return;
         }
@@ -505,7 +505,7 @@ void resetHVACSizingGlobals(EnergyPlusData &state,
 
     if (curSysNum > 0) {
 
-        if (state.dataSize->UnitarySysEqSizing.size() == 0) {
+        if (state.dataSize->UnitarySysEqSizing.empty()) {
             firstPassFlag = false;
             return;
         }

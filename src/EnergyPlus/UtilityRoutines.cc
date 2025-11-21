@@ -1633,7 +1633,7 @@ void ShowRecurringErrors(EnergyPlusData &state)
                     state.dataGlobal->errorCallback(Error::Continue, "");
                 }
             }
-            std::string StatMessage = "";
+            std::string StatMessage;
             if (error.ReportMax) {
                 std::string MaxOut = format("{:.6f}", error.MaxValue);
                 StatMessage += "  Max=" + MaxOut;

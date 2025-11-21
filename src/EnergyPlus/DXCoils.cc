@@ -456,7 +456,7 @@ void SimDXCoilMultiMode(EnergyPlusData &state,
                                   CompName));
         }
         if (state.dataDXCoils->CheckEquipName(DXCoilNum)) {
-            if ((CompName != "") && (CompName != state.dataDXCoils->DXCoil(DXCoilNum).Name)) {
+            if ((!CompName.empty()) && (CompName != state.dataDXCoils->DXCoil(DXCoilNum).Name)) {
                 ShowFatalError(state,
                                format("SimDXCoilMultiMode: Invalid CompIndex passed={}, Coil name={}, stored Coil Name for that index={}",
                                       DXCoilNum,

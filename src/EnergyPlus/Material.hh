@@ -218,7 +218,7 @@ namespace Material {
     struct MaterialBase
     {
         // Members
-        std::string Name = "";        // Name of material layer
+        std::string Name;             // Name of material layer
         int Num = 0;                  // Index in material array, comes in handy sometimes
         Group group = Group::Invalid; // Material group type (see Material Parameters above.  Currently
 
