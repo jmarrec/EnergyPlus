@@ -57,7 +57,6 @@
 # Attempt to automatically change the version number of all idf and imf files in a repo
 # Two arguments: old version number and new version number
 
-import codecs
 import fnmatch
 import json
 import os
@@ -92,11 +91,11 @@ for extension in ["*.idf", "*.imf"]:
         this_dir = os.path.join(repo, folder)
         for root, dir_names, file_names in os.walk(this_dir):
             for filename in fnmatch.filter(file_names, extension):
-                with codecs.open(os.path.join(root, filename), encoding="utf-8", errors="ignore") as input_file:
+                with open(os.path.join(root, filename), encoding="utf-8", errors="ignore") as input_file:
                     file_data = input_file.read()
                     file_data = file_data.replace("Version," + v_old, "Version," + v_new)
                     file_data = file_data.replace("VERSION," + v_old, "Version," + v_new)
-                with codecs.open(os.path.join(root, filename), "w", encoding="utf-8") as output_file:
+                with open(os.path.join(root, filename), "w", encoding="utf-8") as output_file:
                     output_file.write(file_data)
 
 # also epJSON files
@@ -104,11 +103,11 @@ for folder in ["testfiles", "performance_tests", "datasets", os.path.join("testf
     this_dir = os.path.join(repo, folder)
     for root, dir_names, file_names in os.walk(this_dir):
         for filename in fnmatch.filter(file_names, "*.epJSON"):
-            with codecs.open(os.path.join(root, filename), encoding="utf-8", errors="ignore") as input_file:
+            with open(os.path.join(root, filename), encoding="utf-8", errors="ignore") as input_file:
                 file_data = input_file.read()
                 json_data = json.loads(file_data)
                 json_data["Version"]["Version 1"]["version_identifier"] = v_new
-            with codecs.open(os.path.join(root, filename), "w", encoding="utf-8") as output_file:
+            with open(os.path.join(root, filename), "w", encoding="utf-8") as output_file:
                 output_file.write(json.dumps(json_data, indent=EPJSON_INDENT))
 
 # then walk across all the unit test files too
@@ -116,9 +115,9 @@ for folder in [os.path.join("tst", "EnergyPlus", "unit")]:
     this_dir = os.path.join(repo, folder)
     for root, dir_names, file_names in os.walk(this_dir):
         for filename in fnmatch.filter(file_names, "*.cc"):
-            with codecs.open(os.path.join(root, filename), encoding="utf-8", errors="ignore") as input_file:
+            with open(os.path.join(root, filename), encoding="utf-8", errors="ignore") as input_file:
                 file_data = input_file.read()
                 file_data = file_data.replace("Version," + v_old, "Version," + v_new)
                 file_data = file_data.replace("VERSION," + v_old, "Version," + v_new)
-            with codecs.open(os.path.join(root, filename), "w", encoding="utf-8") as output_file:
+            with open(os.path.join(root, filename), "w", encoding="utf-8") as output_file:
                 output_file.write(file_data)
