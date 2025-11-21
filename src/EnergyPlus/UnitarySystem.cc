@@ -14346,7 +14346,11 @@ namespace UnitarySystems {
                 }
             }
         } else if (SolFla == -2) {
-            PartLoadFrac = ReqOutput / FullOutput;
+            if (FullOutput != 0) {
+                PartLoadFrac = ReqOutput / FullOutput;
+            } else {
+                PartLoadFrac = 0.0;
+            }
             if (!state.dataGlobal->WarmupFlag) {
                 if (this->warnIndex.m_SensPLRFail < 1) {
                     ++this->warnIndex.m_SensPLRFail;
