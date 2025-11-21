@@ -3574,9 +3574,9 @@ Real64 checkUserEfficiencyInput(EnergyPlusData &state, Real64 userInputValue, bo
             ShowContinueError(state, "Please check your input value  for this electric storage unit and fix the charge efficiency.");
             errorsFound = true;
             return minChargeEfficiency;
-        } else {
-            return userInputValue;
         }
+        return userInputValue;
+
     } else { // discharging
         if (userInputValue < minDischargeEfficiency) {
             ShowSevereError(
@@ -3584,9 +3584,8 @@ Real64 checkUserEfficiencyInput(EnergyPlusData &state, Real64 userInputValue, bo
             ShowContinueError(state, "Please check your input value  for this electric storage unit and fix the discharge efficiency.");
             errorsFound = true;
             return minDischargeEfficiency;
-        } else {
-            return userInputValue;
         }
+        return userInputValue;
     }
 }
 

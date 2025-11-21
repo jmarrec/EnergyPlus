@@ -1453,9 +1453,8 @@ namespace PlantPipingSystemsManager {
 
         if ((MaterialThickness <= 0.0) || (state.dataMaterial->materials(MaterialNum)->ROnly)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     void SiteGroundDomainNoMassMatError(EnergyPlusData &state,
@@ -3939,7 +3938,8 @@ namespace PlantPipingSystemsManager {
 
         if (dir == RegionType::XDirection) {
             return this->Mesh.X.RegionMeshCount;
-        } else if (dir == RegionType::YDirection) {
+        }
+        if (dir == RegionType::YDirection) {
             return this->Mesh.Y.RegionMeshCount;
         } else if (dir == RegionType::ZDirection) {
             return this->Mesh.Z.RegionMeshCount;

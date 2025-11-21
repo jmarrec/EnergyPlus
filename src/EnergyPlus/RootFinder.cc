@@ -1784,7 +1784,8 @@ Real64 BrentMethod(RootFinderDataType &RootFinderData) // Data used by root find
             BrentMethod = C;
             return BrentMethod;
             // Should never happen if CheckRootFinderConvergence() is invoked prior to this subroutine
-        } else if (FA == 0.0) {
+        }
+        if (FA == 0.0) {
             BrentMethod = A;
             return BrentMethod;
         } else {

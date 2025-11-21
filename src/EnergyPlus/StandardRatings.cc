@@ -2652,7 +2652,8 @@ namespace StandardRatings {
                 if ((int)(ratioArray(i)) == 100.0) {
                     speedsForA.push_back(i);
                     continue;
-                } else if ((int)(ratioArray(i)) == 75.0) {
+                }
+                if ((int)(ratioArray(i)) == 75.0) {
                     speedsForB.push_back(i);
                     bFound = true;
                     smallerThanSpeedB = 0;

@@ -8715,9 +8715,8 @@ namespace InternalHeatGains {
                 (state.dataHeatBal->spaceIntGainDevices(spaceNum).device(DeviceNum).CompType == intGainType)) {
                 DeviceIndex = DeviceNum;
                 break;
-            } else {
-                DeviceIndex = -1;
             }
+            DeviceIndex = -1;
         }
         return DeviceIndex;
     }

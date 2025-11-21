@@ -624,7 +624,8 @@ bool BaseSizer::isValidFanType(std::string const &_compType)
     // if compType name is one of the fan objects, then return true
     if (Util::SameString(_compType, "Fan:SystemModel")) {
         return true;
-    } else if (Util::SameString(_compType, "Fan:ComponentModel")) {
+    }
+    if (Util::SameString(_compType, "Fan:ComponentModel")) {
         return true;
     } else if (Util::SameString(_compType, "Fan:OnOff")) {
         return true;

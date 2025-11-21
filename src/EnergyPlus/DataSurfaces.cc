@@ -363,7 +363,8 @@ ShapeCat SurfaceData::computed_shapeCat() const
 {
     if (Shape == SurfaceShape::Triangle) {
         return ShapeCat::Triangular;
-    } else if (Shape == SurfaceShape::TriangularWindow) {
+    }
+    if (Shape == SurfaceShape::TriangularWindow) {
         return ShapeCat::Triangular;
     } else if (Shape == SurfaceShape::TriangularDoor) {
         return ShapeCat::Triangular;
@@ -434,7 +435,8 @@ Surface2D SurfaceData::computed_surface2d() const
             zu = std::max(zu, v.z);
         }
         return Surface2D(shapeCat, axis, v2d, Vertex2D(yl, zl), Vertex2D(yu, zu));
-    } else if (axis == 1) {        // Use x,z for 2D surface
+    }
+    if (axis == 1) {               // Use x,z for 2D surface
         Real64 xl(v0.x), xu(v0.x); // x coordinate ranges
         Real64 zl(v0.z), zu(v0.z); // z coordinate ranges
         for (Vertices::size_type i = 0; i < n; ++i) {

@@ -4090,7 +4090,8 @@ Real64 interpSetPoint(Real64 const LowVal, Real64 const HighVal, Real64 const Re
 {
     if (LowVal >= HighVal) {
         return 0.5 * (SetptAtLowVal + SetptAtHighVal);
-    } else if (RefVal <= LowVal) {
+    }
+    if (RefVal <= LowVal) {
         return SetptAtLowVal;
     } else if (RefVal >= HighVal) {
         return SetptAtHighVal;

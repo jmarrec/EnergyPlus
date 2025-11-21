@@ -4147,8 +4147,8 @@ namespace Fluid {
                     "{C}");
             }
             return this->CpValues(this->CpLowTempIndex);
-
-        } else if (Temp > this->CpHighTempValue) { // Temperature too high
+        }
+        if (Temp > this->CpHighTempValue) { // Temperature too high
             if (!state.dataGlobal->WarmupFlag) {
                 df->glycolErrorLimits[(int)GlycolError::SpecHeatHigh] = ++this->errors[(int)GlycolError::SpecHeatHigh].count;
                 if (df->glycolErrorLimits[(int)GlycolError::SpecHeatHigh] <= df->GlycolErrorLimitTest) {
@@ -4739,9 +4739,8 @@ namespace Fluid {
         auto &df = state.dataFluid;
         if (Idx > 0 && Idx <= df->glycols.isize()) {
             return df->glycols(Idx)->Name;
-        } else { // return blank - error checking in calling procedure
-            return "";
-        }
+        } // return blank - error checking in calling procedure
+        return "";
     }
 
     //*****************************************************************************
@@ -4785,18 +4784,17 @@ namespace Fluid {
         size_type beg(LowBound - l);
         if (Value < Array[beg]) {
             return 0;
-        } else {
-            size_type end(UpperBound - l);
-            if (Value > Array[end]) {
-                return UpperBound;
-            } else { // Binary search
-                size_type mid;
-                while (beg + 1 < end) {
-                    mid = ((beg + end) >> 1);
-                    (Value > Array[mid] ? beg : end) = mid;
-                }
-                return l + beg;
+        }
+        size_type end(UpperBound - l);
+        if (Value > Array[end]) {
+            return UpperBound;
+        } else { // Binary search
+            size_type mid;
+            while (beg + 1 < end) {
+                mid = ((beg + end) >> 1);
+                (Value > Array[mid] ? beg : end) = mid;
             }
+            return l + beg;
         }
     }
 
@@ -4832,18 +4830,17 @@ namespace Fluid {
         assert(Array.l() > 0);  // Returning 0 for Value smaller than lowest doesn't make sense if l() <= 0
         if (Value < Array[0]) {
             return 0;
-        } else {
-            size_type end(Array.size() - 1u);
-            if (Value > Array[end]) {
-                return Array.u();
-            } else { // Binary search
-                size_type beg(0), mid;
-                while (beg + 1 < end) {
-                    mid = ((beg + end) >> 1);
-                    (Value > Array[mid] ? beg : end) = mid;
-                }
-                return Array.l() + beg;
+        }
+        size_type end(Array.size() - 1u);
+        if (Value > Array[end]) {
+            return Array.u();
+        } else { // Binary search
+            size_type beg(0), mid;
+            while (beg + 1 < end) {
+                mid = ((beg + end) >> 1);
+                (Value > Array[mid] ? beg : end) = mid;
             }
+            return Array.l() + beg;
         }
     }
 

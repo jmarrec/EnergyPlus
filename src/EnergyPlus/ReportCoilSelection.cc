@@ -840,14 +840,12 @@ int ReportCoilSelection::getIndexForOrCreateDataObjFromCoilName(EnergyPlusData &
             if (Util::SameString(coilSelectionDataObjs[i]->coilName_, coilName)) {
                 if (Util::SameString(coilSelectionDataObjs[i]->coilObjName, coilType)) {
                     return index = i;
-                } else {
-                    // throw error  coil type does not match coil name, check for unique names across coil types
-                    ShowWarningError(state,
-                                     format("check for unique coil names across different coil types: {} occurs in both {} and {}",
-                                            coilName,
-                                            coilType,
-                                            coilSelectionDataObjs[i]->coilObjName));
-                }
+                } // throw error  coil type does not match coil name, check for unique names across coil types
+                ShowWarningError(state,
+                                 format("check for unique coil names across different coil types: {} occurs in both {} and {}",
+                                        coilName,
+                                        coilType,
+                                        coilSelectionDataObjs[i]->coilObjName));
             }
         }
     }
@@ -2036,7 +2034,8 @@ bool ReportCoilSelection::isCompTypeFan(std::string const &compType // string co
     // if compType name is one of the fan objects, then return true
     if (Util::SameString(compType, "Fan:SystemModel")) {
         return true;
-    } else if (Util::SameString(compType, "Fan:ComponentModel")) {
+    }
+    if (Util::SameString(compType, "Fan:ComponentModel")) {
         return true;
     } else if (Util::SameString(compType, "Fan:OnOff")) {
         return true;

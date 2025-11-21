@@ -1984,7 +1984,8 @@ namespace TranspiredCollector {
 
         if (Tso > Tsi) {                                  // window heated from above
             return 1.0 + (gnu90 - 1.0) * std::sin(tiltr); // eq. 53
-        } else if (Tilt >= 60.0) {
+        }
+        if (Tilt >= 60.0) {
             Real64 g = 0.5 * std::pow(1.0 + std::pow(Ra / 3160.0, 20.6), -0.1);     // eq. 47
             Real64 gnu601a = 1.0 + pow_7(0.0936 * std::pow(Ra, 0.314) / (1.0 + g)); // eq. 45
             Real64 gnu601 = std::pow(gnu601a, 0.142857);

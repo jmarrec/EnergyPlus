@@ -178,7 +178,8 @@ Real64 WindSpeedAt(const EnergyPlusData &state, Real64 const Z) // Height above 
 
     if (Z <= 0.0) {
         return 0.0;
-    } else if (state.dataEnvrn->SiteWindExp == 0.0) {
+    }
+    if (state.dataEnvrn->SiteWindExp == 0.0) {
         return state.dataEnvrn->WindSpeed;
     } else {
         //  [Met] - at meterological Station, Height of measurement is usually 10m above ground

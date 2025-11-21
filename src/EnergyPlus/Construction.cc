@@ -2021,7 +2021,8 @@ Real64 ConstructionProps::setUserTemperatureLocationPerpendicular(EnergyPlusData
         ShowWarningError(state, "ConstructionProperty:InternalHeatSource has a perpendicular temperature location parameter that is less than zero.");
         ShowContinueError(state, format("Construction={} has this error.  The parameter has been reset to 0.", this->Name));
         return 0.0;
-    } else if (userValue > 1.0) {
+    }
+    if (userValue > 1.0) {
         ShowWarningError(state,
                          "ConstructionProperty:InternalHeatSource has a perpendicular temperature location parameter that is greater than one.");
         ShowContinueError(state, format("Construction={} has this error.  The parameter has been reset to 1.", this->Name));

@@ -229,7 +229,8 @@ json IdfParser::parse_idf(std::string_view idf, size_t &index, bool &success, js
         token = look_ahead(idf, index);
         if (token == Token::END) {
             break;
-        } else if (token == Token::NONE) {
+        }
+        if (token == Token::NONE) {
             success = false;
             return root;
         } else if (token == Token::SEMICOLON) {
@@ -354,7 +355,8 @@ json IdfParser::parse_object(
         if (token == Token::NONE) {
             success = false;
             return root;
-        } else if (token == Token::END) {
+        }
+        if (token == Token::END) {
             return root;
         } else if (token == Token::COMMA || token == Token::SEMICOLON) {
             if (!was_value_parsed) {
@@ -497,7 +499,8 @@ json IdfParser::parse_number(std::string_view idf, size_t &index)
         auto result = fast_float::from_chars(str.data() + plus_sign, str.data() + str.size(), val); // (AUTO_OK)
         if (result.ec == std::errc::invalid_argument || result.ec == std::errc::result_out_of_range) {
             return rtrim(str);
-        } else if (result.ptr != str_end) {
+        }
+        if (result.ptr != str_end) {
             auto const initial_ptr = result.ptr; // (AUTO_OK)
             while (result.ptr != str_end) {
                 if (*result.ptr != ' ') {
@@ -521,7 +524,8 @@ json IdfParser::parse_number(std::string_view idf, size_t &index)
         auto result = FromChars::from_chars(str.data(), str.data() + str.size(), val); // (AUTO_OK)
         if (result.ec == std::errc::result_out_of_range || result.ec == std::errc::invalid_argument) {
             return convert_double(str);
-        } else if (result.ptr != str_end) {
+        }
+        if (result.ptr != str_end) {
             if (*result.ptr == '.' || *result.ptr == 'e' || *result.ptr == 'E') {
                 return convert_double(str);
             } else {
@@ -584,7 +588,8 @@ json IdfParser::parse_integer(std::string_view idf, size_t &index)
     if (result.ec == std::errc::result_out_of_range || result.ec == std::errc::invalid_argument) {
         // Failure, return the string
         return rtrim(string_value);
-    } else if (result.ptr != string_end) {
+    }
+    if (result.ptr != string_end) {
         // Didn't use the entire string, try again via double conversion + rounding
         size_t plus_sign = 0;
         if (string_value.front() == '+') {
@@ -641,9 +646,8 @@ json IdfParser::parse_value(std::string_view idf, size_t &index, bool &success, 
             // in the future this might not hold true for the array indexes.
             if (default_it != field_loc.end()) {
                 return field_loc.at("anyOf")[1]["enum"][1];
-            } else {
-                return field_loc.at("anyOf")[1]["enum"][0];
             }
+            return field_loc.at("anyOf")[1]["enum"][0];
         }
         return parsed_string;
     }
@@ -681,9 +685,8 @@ std::string IdfParser::parse_string(std::string_view idf, size_t &index)
         if (c == ',' || c == ';' || c == '!') {
             decrement_both_index(index, index_into_cur_line);
             break;
-        } else {
-            str += c;
         }
+        str += c;
     }
 
     return rtrim(str);
@@ -805,7 +808,8 @@ std::string IdfParser::rtrim(std::string_view str)
     size_t const index = str.find_last_not_of(whitespace);
     if (index == std::string::npos) {
         return std::string{};
-    } else if (index + 1 < str.length()) {
+    }
+    if (index + 1 < str.length()) {
         return std::string{str.substr(0, index + 1)};
     }
     return std::string{str};

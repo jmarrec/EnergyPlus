@@ -4151,7 +4151,8 @@ void CLIPRECT(EnergyPlusData &state, int const NS2, int const NV1, int &NV3)
                     incr++;
                 }
                 continue;
-            } else if (edgeCount > 1) { // On corner
+            }
+            if (edgeCount > 1) { // On corner
                 if (d_eq(currX, minX)) {
                     if (d_eq(currY, minY)) {
                         EdgeIndex = 3;
@@ -9657,9 +9658,7 @@ void WindowShadingManager(EnergyPlusData &state)
                 }
                 if (!s_surf->Surface(ISurf).HasShadeControl) {
                     continue;
-                } else {
-                    //
-                }
+                } //
 
                 // Initialize switching factor (applicable only to switchable glazing) to unswitched
                 s_surf->SurfWinSwitchingFactor(ISurf) = 0.0;

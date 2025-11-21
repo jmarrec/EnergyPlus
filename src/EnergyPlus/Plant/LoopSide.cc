@@ -1163,10 +1163,9 @@ namespace DataPlant {
                                         loop_side.Branch(BranchCounter).RequestedMassFlow = steps;
                                         LoopFlow = tmpLoopFlow;
                                         break;
-                                    } else {
-                                        AccumFlowSteps += steps;
-                                        loop_side.Branch(BranchCounter).RequestedMassFlow = steps;
                                     }
+                                    AccumFlowSteps += steps;
+                                    loop_side.Branch(BranchCounter).RequestedMassFlow = steps;
                                 }
                             }
                         }
@@ -1341,13 +1340,12 @@ namespace DataPlant {
                 state.dataLoopNodes->Node(FirstNodeOnBranch).MassFlowRate = min(max(ThisLoopSideFlow, BranchMinAvail), BranchMaxAvail);
                 // now with flow locked, this single branch will just ran at the specified flow rate, so we are done
                 return;
-            } else {
-                ShowSevereError(state, "Plant topology problem on \"" + this->loopSideDescription + "\"");
-                ShowContinueError(state, "There are multiple branches, yet no splitter.  This is an invalid configuration.");
-                ShowContinueError(state, "Add a set of connectors, use put components on a single branch.");
-                ShowFatalError(state, "Invalid plant topology causes program termination.");
-                return;
             }
+            ShowSevereError(state, "Plant topology problem on \"" + this->loopSideDescription + "\"");
+            ShowContinueError(state, "There are multiple branches, yet no splitter.  This is an invalid configuration.");
+            ShowContinueError(state, "Add a set of connectors, use put components on a single branch.");
+            ShowFatalError(state, "Invalid plant topology causes program termination.");
+            return;
         }
 
         // If a splitter/mixer combination exist on the loop
@@ -1457,7 +1455,8 @@ namespace DataPlant {
                     }
                 }
                 return;
-            } else if (FlowRemaining >= TotParallelBranchFlowReq) {
+            }
+            if (FlowRemaining >= TotParallelBranchFlowReq) {
 
                 // 1) Satisfy flow demand of ACTIVE splitter outlet branches
                 for (int OutletNum = 1; OutletNum <= NumSplitOutlets; ++OutletNum) {

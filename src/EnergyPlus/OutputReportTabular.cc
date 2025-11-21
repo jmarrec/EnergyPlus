@@ -1231,9 +1231,8 @@ bool warningAboutKeyNotFound(EnergyPlusData &state, int foundIndex, int inObjInd
                                 state.dataOutRptTab->OutputTableBinned(inObjIndex).keyValue,
                                 state.dataOutRptTab->OutputTableBinned(inObjIndex).varOrMeter));
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void GetInputTabularStyle(EnergyPlusData &state)
@@ -6611,9 +6610,8 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
                 if (time > 0) {
                     return state.dataSysRpts->SysPreDefRep(sysNum).MechVentTotAtLimitOcc[static_cast<int>(limitingFactorType)] /
                            (time * Constant::rSecsInHour);
-                } else {
-                    return 0.0;
                 }
+                return 0.0;
             };
             PreDefTableEntry(
                 state, state.dataOutRptPredefined->pdchOaAvFctNoLimit, thisPrimaryAirSys.Name, avgFlowRate(iSys, MixedAir::OALimitFactor::None), 4);
@@ -12424,9 +12422,8 @@ std::string formatReportPeriodTimestamp(const int year, const int month, const i
 {
     if (year != 0) {
         return fmt::format("{}/{}/{} {}:00", year, month, day, hour);
-    } else {
-        return fmt::format("{}/{} {}:00", month, day, hour);
     }
+    return fmt::format("{}/{} {}:00", month, day, hour);
 }
 
 void WriteReportHeaderReportingPeriod(EnergyPlusData &state,
@@ -18594,9 +18591,9 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
 
     if (std::abs(RealIn) > maxvalDigitsA.at(nDigits)) {
         return format("{:12.6E}", RealIn);
-    } else {
-        return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
     }
+    return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
+
     //  WRITE(FMT=, UNIT=stringOut) RealIn
     // check if it did not fit
     //  IF (stringOut(1:1) .EQ. "*") THEN

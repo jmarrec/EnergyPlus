@@ -414,9 +414,8 @@ namespace Util {
         auto it = std::find(first, last, str);
         if (it != last) {
             return std::distance(first, it) + 1;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     inline int FindItemInList(std::string_view const String, Array1S_string const ListOfItems)
@@ -501,7 +500,8 @@ namespace Util {
             if (equali(String, ListOfItems(Probe))) {
                 Found = true;
                 break;
-            } else if (lessthani(String, ListOfItems(Probe))) {
+            }
+            if (lessthani(String, ListOfItems(Probe))) {
                 UBnd = Probe;
             } else {
                 LBnd = Probe;

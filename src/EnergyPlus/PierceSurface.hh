@@ -316,7 +316,8 @@ bool PierceSurface_polygon(DataSurfaces::SurfaceData const &surface, // Surface
             return false;
         }
         return true;
-    } else if (shapeCat == ShapeCat::Triangular) { // Cross products all nonnegative <=> Hit point in triangle
+    }
+    if (shapeCat == ShapeCat::Triangular) { // Cross products all nonnegative <=> Hit point in triangle
         return PierceSurface_Triangular(s2d, h2d);
     } else if ((shapeCat == ShapeCat::Nonconvex) ||
                (s2d.vertices.size() >= nVerticesBig)) { // O( log n ) algorithm for nonconvex and many-vertex convex surfaces
@@ -354,12 +355,11 @@ bool PierceSurface(DataSurfaces::SurfaceData const &surface, // Surface
         if (num * den <=
             0.0) { // Ray points away from surface or ray origin is on surface: This looks odd but is fast way to check for different signs
             return false;
-        } else {                                 // Ray points toward surface: Compute hit point
-            Real64 const t(num / den);           // Ray parameter at plane intersection: hitPt = rayOri + t * rayDir
-            hitPt.x = rayOri.x + (t * rayDir.x); // Compute by coordinate to avoid Vertex temporaries
-            hitPt.y = rayOri.y + (t * rayDir.y);
-            hitPt.z = rayOri.z + (t * rayDir.z);
-        }
+        } // Ray points toward surface: Compute hit point
+        Real64 const t(num / den);           // Ray parameter at plane intersection: hitPt = rayOri + t * rayDir
+        hitPt.x = rayOri.x + (t * rayDir.x); // Compute by coordinate to avoid Vertex temporaries
+        hitPt.y = rayOri.y + (t * rayDir.y);
+        hitPt.z = rayOri.z + (t * rayDir.z);
     }
 
     // Check if hit point is in surface polygon
@@ -417,15 +417,14 @@ bool PierceSurface(DataSurfaces::SurfaceData const &surface, // Surface
         if (num * den <=
             0.0) { // Ray points away from surface or ray origin is on surface: This looks odd but is fast way to check for different signs
             return false;
-        } else {                       // Ray points toward surface: Compute hit point
-            Real64 const t(num / den); // Ray parameter at plane intersection: hitPt = rayOri + t * rayDir
-            if (t > dMax) {
-                return false; // Hit point exceeds distance from rayOri limit
-            }
-            hitPt.x = rayOri.x + (t * rayDir.x); // Compute by coordinate to avoid Vertex temporaries
-            hitPt.y = rayOri.y + (t * rayDir.y);
-            hitPt.z = rayOri.z + (t * rayDir.z);
+        } // Ray points toward surface: Compute hit point
+        Real64 const t(num / den); // Ray parameter at plane intersection: hitPt = rayOri + t * rayDir
+        if (t > dMax) {
+            return false; // Hit point exceeds distance from rayOri limit
         }
+        hitPt.x = rayOri.x + (t * rayDir.x); // Compute by coordinate to avoid Vertex temporaries
+        hitPt.y = rayOri.y + (t * rayDir.y);
+        hitPt.z = rayOri.z + (t * rayDir.z);
     }
 
     // Check if hit point is in surface polygon

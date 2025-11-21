@@ -654,8 +654,8 @@ int OrdinalDay(int const Month,        // Month, 1..12
     if (Month == 1) {
         //                                       CASE 1: JANUARY
         return Day;
-
-    } else if (Month == 2) {
+    }
+    if (Month == 2) {
         //                                       CASE 2: FEBRUARY
         return Day + EndDayofMonth[0];
 
@@ -719,9 +719,8 @@ bool BetweenDateHoursLeftInclusive(
 
     if (StartDate + StartRatioOfDay <= EndDate + EndRatioOfDay) { // Start Date <= End Date
         return (StartDate + StartRatioOfDay <= TestDate + TestRatioOfDay) && (TestDate + TestRatioOfDay <= EndDate + EndRatioOfDay);
-    } else { // EndDate < StartDate
-        return (EndDate + EndRatioOfDay <= TestDate + TestRatioOfDay) && (TestDate + TestRatioOfDay <= StartDate + StartRatioOfDay);
-    }
+    } // EndDate < StartDate
+    return (EndDate + EndRatioOfDay <= TestDate + TestRatioOfDay) && (TestDate + TestRatioOfDay <= StartDate + StartRatioOfDay);
 }
 
 bool BetweenDates(int const TestDate,  // Date to test
@@ -830,9 +829,8 @@ int nthDayOfWeekOfMonth(const EnergyPlusData &state,
     int dayOfWeekForFirstDay = (state.dataEnvrn->RunPeriodStartDayOfWeek + firstDayOfMonth - 1) % 7;
     if (dayOfWeek >= dayOfWeekForFirstDay) {
         return firstDayOfMonth + (dayOfWeek - dayOfWeekForFirstDay) + 7 * (nthTime - 1);
-    } else {
-        return firstDayOfMonth + ((dayOfWeek + 7) - dayOfWeekForFirstDay) + 7 * (nthTime - 1);
     }
+    return firstDayOfMonth + ((dayOfWeek + 7) - dayOfWeekForFirstDay) + 7 * (nthTime - 1);
 }
 
 Real64 SafeDivide(Real64 const a, Real64 const b)
@@ -845,9 +843,8 @@ Real64 SafeDivide(Real64 const a, Real64 const b)
 
     if (std::abs(b) >= SMALL) {
         return a / b;
-    } else {
-        return a / sign(SMALL, b);
     }
+    return a / sign(SMALL, b);
 }
 
 void Iterate(Real64 &ResultX,  // ResultX is the final Iteration result passed back to the calling routine

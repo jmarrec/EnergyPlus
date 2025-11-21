@@ -142,7 +142,8 @@ void GasAbsorberSpecs::simulate(
         if (compInletNodeNum == this->ChillReturnNodeNum) { // Operate as chiller
             brIdentity = DataPlant::BrLoopType::Chiller;
             break;
-        } else if (compInletNodeNum == this->HeatReturnNodeNum) { // Operate as heater
+        }
+        if (compInletNodeNum == this->HeatReturnNodeNum) { // Operate as heater
             brIdentity = DataPlant::BrLoopType::Heater;
             break;
         } else if (compInletNodeNum == this->CondReturnNodeNum) { // called from condenser loop
@@ -206,7 +207,8 @@ void GasAbsorberSpecs::getDesignCapacities(
             OptLoad = this->NomCoolingCap * this->OptPartLoadRat;
             matchfound = true;
             break;
-        } else if (compInletNodeNum == this->HeatReturnNodeNum) { // Operate as heater
+        }
+        if (compInletNodeNum == this->HeatReturnNodeNum) { // Operate as heater
             Real64 Sim_HeatCap = this->NomCoolingCap * this->NomHeatCoolRatio;
             MinLoad = Sim_HeatCap * this->MinPartLoadRat;
             MaxLoad = Sim_HeatCap * this->MaxPartLoadRat;

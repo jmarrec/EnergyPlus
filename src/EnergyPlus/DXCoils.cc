@@ -8851,17 +8851,16 @@ void CalcHPWHDXCoil(EnergyPlusData &state,
         WaterOutletNode = WaterInletNode;
         Coil.TotalHeatingEnergyRate = 0.0;
         return;
-    } else {
-        RatedHeatingCapacity = Coil.RatedTotCap2;
-        RatedHeatingCOP = Coil.RatedCOP(1);
-        InletWaterTemp = WaterInletNode.Temp;
-        CondInletMassFlowRate = WaterInletNode.MassFlowRate / PartLoadRatio;
-        EvapInletMassFlowRate = AirInletNode.MassFlowRate / PartLoadRatio;
-        CpWater = CPHW(InletWaterTemp);
-        CompressorPower = 0.0;
-        OperatingHeatingPower = 0.0;
-        TankHeatingCOP = 0.0;
     }
+    RatedHeatingCapacity = Coil.RatedTotCap2;
+    RatedHeatingCOP = Coil.RatedCOP(1);
+    InletWaterTemp = WaterInletNode.Temp;
+    CondInletMassFlowRate = WaterInletNode.MassFlowRate / PartLoadRatio;
+    EvapInletMassFlowRate = AirInletNode.MassFlowRate / PartLoadRatio;
+    CpWater = CPHW(InletWaterTemp);
+    CompressorPower = 0.0;
+    OperatingHeatingPower = 0.0;
+    TankHeatingCOP = 0.0;
 
     // determine inlet air temperature type for curve objects
     if (Coil.InletAirTemperatureType == HVAC::OATType::WetBulb) {
@@ -9686,42 +9685,41 @@ void CalcDoe2DXCoil(EnergyPlusData &state,
                                                thisDXCoil.RatedSHR(Mode));
                 hDelta = TotCap / AirMassFlow;
                 break;
+            } // Calculate apparatus dew point conditions using TotCap and CBF
+            hDelta = TotCap / AirMassFlow;
+            hADP = InletAirEnthalpy - hDelta / (1.0 - CBF);
+            tADP = PsyTsatFnHPb(state, hADP, OutdoorPressure, calcDoe2DXCoil);
+            //  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
+            //  tADP = PsyTsatFnHPb(hADP,InletAirPressure)
+            wADP = PsyWFnTdbH(state, tADP, hADP, calcDoe2DXCoil);
+            hTinwADP = PsyHFnTdbW(InletAirDryBulbTemp, wADP);
+            if ((InletAirEnthalpy - hADP) > 1.e-10) {
+                SHR = min((hTinwADP - hADP) / (InletAirEnthalpy - hADP), 1.0);
             } else {
-                // Calculate apparatus dew point conditions using TotCap and CBF
-                hDelta = TotCap / AirMassFlow;
-                hADP = InletAirEnthalpy - hDelta / (1.0 - CBF);
-                tADP = PsyTsatFnHPb(state, hADP, OutdoorPressure, calcDoe2DXCoil);
-                //  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment line
-                //  tADP = PsyTsatFnHPb(hADP,InletAirPressure)
-                wADP = PsyWFnTdbH(state, tADP, hADP, calcDoe2DXCoil);
-                hTinwADP = PsyHFnTdbW(InletAirDryBulbTemp, wADP);
-                if ((InletAirEnthalpy - hADP) > 1.e-10) {
-                    SHR = min((hTinwADP - hADP) / (InletAirEnthalpy - hADP), 1.0);
-                } else {
-                    SHR = 1.0;
-                }
-                // Check for dry evaporator conditions (win < wadp)
-                if (wADP > InletAirHumRatTemp || (Counter >= 1 && Counter < MaxIter)) {
-                    if (InletAirHumRatTemp == 0.0) {
-                        InletAirHumRatTemp = 0.00001;
-                    }
-                    werror = (InletAirHumRatTemp - wADP) / InletAirHumRatTemp;
-                    // Increase InletAirHumRatTemp at constant InletAirTemp to find coil dry-out point. Then use the
-                    // capacity at the dry-out point to determine exiting conditions from coil. This is required
-                    // since the TotCapTempModFac doesn't work properly with dry-coil conditions.
-                    InletAirHumRatTemp = RF * wADP + (1.0 - RF) * InletAirHumRatTemp;
-                    InletAirWetBulbC = PsyTwbFnTdbWPb(state, InletAirDryBulbTemp, InletAirHumRatTemp, OutdoorPressure);
-                    //  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment
-                    //  line InletAirWetBulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRatTemp,InletAirPressure)
-                    ++Counter;
-                    if (std::abs(werror) > Tolerance) {
-                        continue; // Recalculate with modified inlet conditions
-                    }
-                    break;
-                } else {
-                    break;
-                }
+                SHR = 1.0;
             }
+            // Check for dry evaporator conditions (win < wadp)
+            if (wADP > InletAirHumRatTemp || (Counter >= 1 && Counter < MaxIter)) {
+                if (InletAirHumRatTemp == 0.0) {
+                    InletAirHumRatTemp = 0.00001;
+                }
+                werror = (InletAirHumRatTemp - wADP) / InletAirHumRatTemp;
+                // Increase InletAirHumRatTemp at constant InletAirTemp to find coil dry-out point. Then use the
+                // capacity at the dry-out point to determine exiting conditions from coil. This is required
+                // since the TotCapTempModFac doesn't work properly with dry-coil conditions.
+                InletAirHumRatTemp = RF * wADP + (1.0 - RF) * InletAirHumRatTemp;
+                InletAirWetBulbC = PsyTwbFnTdbWPb(state, InletAirDryBulbTemp, InletAirHumRatTemp, OutdoorPressure);
+                //  Eventually inlet air conditions will be used in DX Coil, these lines are commented out and marked with this comment
+                //  line InletAirWetBulbC = PsyTwbFnTdbWPb(InletAirDryBulbTemp,InletAirHumRatTemp,InletAirPressure)
+                ++Counter;
+                if (std::abs(werror) > Tolerance) {
+                    continue; // Recalculate with modified inlet conditions
+                }
+                break;
+            } else {
+                break;
+            }
+
         } // end of DO iteration loop
 
         if (thisDXCoil.PLFFPLR(Mode) > 0) {
@@ -12680,9 +12678,8 @@ void CalcTotCapSHR(EnergyPlusData &state,
                 continue; // Recalculate with modified inlet conditions
             }
             break; // conditions are satisfied
-        } else {
-            break; // conditions are satisfied
         }
+        break; // conditions are satisfied
     }
 
     // END DO
@@ -15113,9 +15110,8 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
     const auto &fan_type_name = [&]() -> std::pair<const char *, std::string> {
         if (thisDXCoil.RateWithInternalStaticAndFanObject) {
             return {"Fan:VariableVolume", thisDXCoil.SupplyFanName};
-        } else {
-            return {"N/A", "N/A"};
         }
+        return {"N/A", "N/A"};
     }();
 
     print(state.files.eio,
@@ -15265,7 +15261,8 @@ void GetFanIndexForTwoSpeedCoil(
                         supplyFanType = HVAC::FanType::VAV;
                         break;
                         // these are specified in SimAirServingZones and need to be moved to a Data* file. UnitarySystem=19
-                    } else if (comp.CompType_Num == SimAirServingZones::CompType::Fan_System_Object) {
+                    }
+                    if (comp.CompType_Num == SimAirServingZones::CompType::Fan_System_Object) {
                         SupplyFanName = comp.Name;
                         SupplyFanIndex = Fans::GetFanIndex(state, SupplyFanName);
                         supplyFanType = HVAC::FanType::SystemModel;
@@ -15346,10 +15343,8 @@ GetDXCoilName(EnergyPlusData &state, int &DXCoilIndex, bool &ErrorsFound, std::s
         }
         ErrorsFound = true;
         return " "; // This does not seem great
-
-    } else {
-        return state.dataDXCoils->DXCoil(DXCoilIndex).Name;
     }
+    return state.dataDXCoils->DXCoil(DXCoilIndex).Name;
 }
 
 Real64 GetCoilCapacity(EnergyPlusData &state,
@@ -15534,9 +15529,8 @@ Real64 GetMinOATCompressor(EnergyPlusData &state,
         ShowContinueError(state, "... returning Min OAT for compressor operation as -1000.");
         ErrorsFound = true;
         return -1000.0;
-    } else {
-        return state.dataDXCoils->DXCoil(CoilIndex).MinOATCompressor;
     }
+    return state.dataDXCoils->DXCoil(CoilIndex).MinOATCompressor;
 }
 
 int GetCoilInletNode(EnergyPlusData &state,
@@ -15942,24 +15936,23 @@ Sched::Schedule *GetDXCoilAvailSched(EnergyPlusData &state,
             ShowContinueError(state, "... returning DXCoilAvailSchPtr as -1.");
             ErrorsFound = true;
             return nullptr;
-        } else {
-            WhichCoil = CoilIndex;
         }
+        WhichCoil = CoilIndex;
+
     } else {
         WhichCoil = Util::FindItemInList(CoilName, state.dataDXCoils->DXCoil);
     }
     if (WhichCoil != 0) {
         return state.dataDXCoils->DXCoil(WhichCoil).availSched;
-    } else {
-        if (!present(CoilIndex)) {
-            ShowSevereError(state,
-                            format("GetDXCoilAvailSch: Could not find Coil, Type=\"{}\" Name=\"{}\" when accessing coil availability schedule index.",
-                                   CoilType,
-                                   CoilName));
-        }
-        ErrorsFound = true;
-        return nullptr;
     }
+    if (!present(CoilIndex)) {
+        ShowSevereError(state,
+                        format("GetDXCoilAvailSch: Could not find Coil, Type=\"{}\" Name=\"{}\" when accessing coil availability schedule index.",
+                               CoilType,
+                               CoilName));
+    }
+    ErrorsFound = true;
+    return nullptr;
 }
 
 Real64 GetDXCoilAirFlow(EnergyPlusData &state,

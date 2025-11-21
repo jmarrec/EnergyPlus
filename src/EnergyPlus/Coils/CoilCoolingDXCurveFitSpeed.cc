@@ -214,32 +214,31 @@ bool CoilCoolingDXCurveFitSpeed::processCurve(EnergyPlus::EnergyPlusData &state,
 {
     if (curveName.empty()) {
         return false;
+    }
+    curveIndex = Curve::GetCurveIndex(state, curveName);
+    if (curveIndex == 0) {
+        ShowSevereError(state, std::string{routineName} + this->object_name + "=\"" + this->name + "\", invalid");
+        ShowContinueError(state, "...not found " + fieldName + "=\"" + curveName + "\".");
+        return true;
     } else {
-        curveIndex = Curve::GetCurveIndex(state, curveName);
-        if (curveIndex == 0) {
-            ShowSevereError(state, std::string{routineName} + this->object_name + "=\"" + this->name + "\", invalid");
-            ShowContinueError(state, "...not found " + fieldName + "=\"" + curveName + "\".");
-            return true;
-        } else {
-            // Verify Curve Object dimensions
-            bool errorFound = Curve::CheckCurveDims(state,
-                                                    curveIndex,           // Curve index
-                                                    std::move(validDims), // Valid dimensions
-                                                    routineName,          // Routine name
-                                                    this->object_name,    // Object Type
-                                                    this->name,           // Object Name
-                                                    fieldName);           // Field Name
-            if (!errorFound) {
-                if (Var2.present()) {
-                    Curve::checkCurveIsNormalizedToOne(
-                        state, std::string{routineName} + this->object_name, this->name, curveIndex, fieldName, curveName, Var1, Var2);
-                } else {
-                    Curve::checkCurveIsNormalizedToOne(
-                        state, std::string{routineName} + this->object_name, this->name, curveIndex, fieldName, curveName, Var1);
-                }
+        // Verify Curve Object dimensions
+        bool errorFound = Curve::CheckCurveDims(state,
+                                                curveIndex,           // Curve index
+                                                std::move(validDims), // Valid dimensions
+                                                routineName,          // Routine name
+                                                this->object_name,    // Object Type
+                                                this->name,           // Object Name
+                                                fieldName);           // Field Name
+        if (!errorFound) {
+            if (Var2.present()) {
+                Curve::checkCurveIsNormalizedToOne(
+                    state, std::string{routineName} + this->object_name, this->name, curveIndex, fieldName, curveName, Var1, Var2);
+            } else {
+                Curve::checkCurveIsNormalizedToOne(
+                    state, std::string{routineName} + this->object_name, this->name, curveIndex, fieldName, curveName, Var1);
             }
-            return errorFound;
         }
+        return errorFound;
     }
 }
 
@@ -502,36 +501,34 @@ void CoilCoolingDXCurveFitSpeed::CalcSpeedOutput(EnergyPlus::EnergyPlusData &sta
             SHR = this->grossRatedSHR * SHRTempModFrac * SHRFlowModFrac;
             SHR = max(min(SHR, 1.0), 0.0);
             break;
+        } // Calculate apparatus dew point conditions using TotCap and CBF
+        Real64 hADP = inletNode.Enthalpy - hDelta / (1.0 - CBF);
+        Real64 tADP = Psychrometrics::PsyTsatFnHPb(state, hADP, ambPressure, RoutineName);
+        Real64 wADP = Psychrometrics::PsyWFnTdbH(state, tADP, hADP, RoutineName);
+        Real64 hTinwADP = Psychrometrics::PsyHFnTdbW(inletNode.Temp, wADP);
+        if ((inletNode.Enthalpy - hADP) > 1.e-10) {
+            SHR = min((hTinwADP - hADP) / (inletNode.Enthalpy - hADP), 1.0);
         } else {
-            // Calculate apparatus dew point conditions using TotCap and CBF
-            Real64 hADP = inletNode.Enthalpy - hDelta / (1.0 - CBF);
-            Real64 tADP = Psychrometrics::PsyTsatFnHPb(state, hADP, ambPressure, RoutineName);
-            Real64 wADP = Psychrometrics::PsyWFnTdbH(state, tADP, hADP, RoutineName);
-            Real64 hTinwADP = Psychrometrics::PsyHFnTdbW(inletNode.Temp, wADP);
-            if ((inletNode.Enthalpy - hADP) > 1.e-10) {
-                SHR = min((hTinwADP - hADP) / (inletNode.Enthalpy - hADP), 1.0);
-            } else {
-                SHR = 1.0;
+            SHR = 1.0;
+        }
+        // Check for dry evaporator conditions (win < wadp)
+        if (wADP > inletw || (Counter >= 1 && Counter < MaxIter)) {
+            if (inletw == 0.0) {
+                inletw = 0.00001;
             }
-            // Check for dry evaporator conditions (win < wadp)
-            if (wADP > inletw || (Counter >= 1 && Counter < MaxIter)) {
-                if (inletw == 0.0) {
-                    inletw = 0.00001;
-                }
-                Real64 werror = (inletw - wADP) / inletw;
-                // Increase InletAirHumRatTemp at constant InletAirTemp to find coil dry-out point. Then use the
-                // capacity at the dry-out point to determine exiting conditions from coil. This is required
-                // since the TotCapTempModFac doesn't work properly with dry-coil conditions.
-                inletw = RF * wADP + (1.0 - RF) * inletw;
-                inletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(state, inletNode.Temp, inletw, ambPressure);
-                ++Counter;
-                if (std::abs(werror) > Tolerance) {
-                    continue; // Recalculate with modified inlet conditions
-                }
-                break;
-            } else {
-                break;
+            Real64 werror = (inletw - wADP) / inletw;
+            // Increase InletAirHumRatTemp at constant InletAirTemp to find coil dry-out point. Then use the
+            // capacity at the dry-out point to determine exiting conditions from coil. This is required
+            // since the TotCapTempModFac doesn't work properly with dry-coil conditions.
+            inletw = RF * wADP + (1.0 - RF) * inletw;
+            inletWetBulb = Psychrometrics::PsyTwbFnTdbWPb(state, inletNode.Temp, inletw, ambPressure);
+            ++Counter;
+            if (std::abs(werror) > Tolerance) {
+                continue; // Recalculate with modified inlet conditions
             }
+            break;
+        } else {
+            break;
         }
     }
 

@@ -1513,7 +1513,8 @@ namespace OutputProcessor {
     {
         if (!endUseSubName.empty()) {
             return std::string(endUseSubName);
-        } else if (endUseCat == EndUseCat::Invalid) {
+        }
+        if (endUseCat == EndUseCat::Invalid) {
             return "";
         } else if (endUseCat2endUse[(int)endUseCat] != Constant::EndUse::Invalid) {
             return "General";
@@ -2855,7 +2856,8 @@ namespace OutputProcessor {
         // Facility indices are in the 100s
         if (has(meterName, "Electricity:Facility")) {
             return 100;
-        } else if (has(meterName, "NaturalGas:Facility")) {
+        }
+        if (has(meterName, "NaturalGas:Facility")) {
             return 101;
         } else if (has(meterName, "DistricHeatingWater:Facility")) {
             return 102;
@@ -4837,8 +4839,8 @@ int AddDDOutVar(EnergyPlusData const &state,
             ddVar->unitNameCustomEMS = customUnitName;
         }
         return op->ddOutVars.size() - 1;
-
-    } else if (units == op->ddOutVars[found->second]->units) {
+    }
+    if (units == op->ddOutVars[found->second]->units) {
         return found->second;
 
     } else {           // not the same as first units

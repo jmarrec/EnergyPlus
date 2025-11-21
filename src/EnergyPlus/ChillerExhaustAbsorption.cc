@@ -152,8 +152,9 @@ void ExhaustAbsorberSpecs::simulate(
         if (compInletNodeNum == this->ChillReturnNodeNum) { // Operate as chiller
             brIdentity = DataPlant::BrLoopType::Chiller;    // chiller
             break;
-        } else if (compInletNodeNum == this->HeatReturnNodeNum) { // Operate as heater
-            brIdentity = DataPlant::BrLoopType::Heater;           // heater
+        }
+        if (compInletNodeNum == this->HeatReturnNodeNum) { // Operate as heater
+            brIdentity = DataPlant::BrLoopType::Heater;    // heater
             break;
         } else if (compInletNodeNum == this->CondReturnNodeNum) { // called from condenser loop
             brIdentity = DataPlant::BrLoopType::Condenser;        // condenser
@@ -220,7 +221,8 @@ void ExhaustAbsorberSpecs::getDesignCapacities(
             OptLoad = this->NomCoolingCap * this->OptPartLoadRat;
             matchfound = true;
             break;
-        } else if (compInletNodeNum == this->HeatReturnNodeNum) {              // Operate as heater
+        }
+        if (compInletNodeNum == this->HeatReturnNodeNum) {                     // Operate as heater
             Real64 Sim_HeatCap = this->NomCoolingCap * this->NomHeatCoolRatio; // W - nominal heating capacity
             MinLoad = Sim_HeatCap * this->MinPartLoadRat;
             MaxLoad = Sim_HeatCap * this->MaxPartLoadRat;

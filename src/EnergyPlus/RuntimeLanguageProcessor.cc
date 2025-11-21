@@ -539,14 +539,13 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             if (NestedIfDepth > IfDepthAllowed) {
                 AddError(state, StackNum, LineNum, "Detected IF nested deeper than is allowed; need to terminate an earlier IF instruction.");
                 break;
-            } else {
-                InstructionNum = AddInstruction(state,
-                                                StackNum,
-                                                LineNum,
-                                                DataRuntimeLanguage::ErlKeywordParam::If,
-                                                ExpressionNum); // Arg2 added at next ELSEIF, ELSE, ENDIF
-                SavedIfInstructionNum(NestedIfDepth) = InstructionNum;
             }
+            InstructionNum = AddInstruction(state,
+                                            StackNum,
+                                            LineNum,
+                                            DataRuntimeLanguage::ErlKeywordParam::If,
+                                            ExpressionNum); // Arg2 added at next ELSEIF, ELSE, ENDIF
+            SavedIfInstructionNum(NestedIfDepth) = InstructionNum;
 
         } else if (Keyword == "ELSEIF") {
             if (state.dataSysVars->DeveloperFlag) {
@@ -564,9 +563,8 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             if (NumGotos(NestedIfDepth) > ELSEIFLengthAllowed) {
                 AddError(state, StackNum, LineNum, "Detected ELSEIF series that is longer than allowed; terminate earlier IF instruction.");
                 break;
-            } else {
-                SavedGotoInstructionNum(NumGotos(NestedIfDepth), NestedIfDepth) = InstructionNum;
             }
+            SavedGotoInstructionNum(NumGotos(NestedIfDepth), NestedIfDepth) = InstructionNum;
 
             if (Remainder.empty()) {
                 AddError(state, StackNum, LineNum, "Expression missing for the ELSEIF instruction.");
@@ -604,9 +602,8 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             if (NumGotos(NestedIfDepth) > ELSEIFLengthAllowed) {
                 AddError(state, StackNum, LineNum, "Detected ELSEIF-ELSE series that is longer than allowed.");
                 break;
-            } else {
-                SavedGotoInstructionNum(NumGotos(NestedIfDepth), NestedIfDepth) = InstructionNum;
             }
+            SavedGotoInstructionNum(NumGotos(NestedIfDepth), NestedIfDepth) = InstructionNum;
 
             if (!Remainder.empty()) {
                 AddError(state, StackNum, LineNum, "Nothing is allowed to follow the ELSE instruction.");
@@ -666,11 +663,10 @@ void ParseStack(EnergyPlusData &state, int const StackNum)
             if (NestedWhileDepth > WhileDepthAllowed) {
                 AddError(state, StackNum, LineNum, "Detected WHILE nested deeper than is allowed; need to terminate an earlier WHILE instruction.");
                 break;
-            } else {
-                InstructionNum = AddInstruction(state, StackNum, LineNum, DataRuntimeLanguage::ErlKeywordParam::While, ExpressionNum);
-                SavedWhileInstructionNum = InstructionNum;
-                SavedWhileExpressionNum = ExpressionNum;
             }
+            InstructionNum = AddInstruction(state, StackNum, LineNum, DataRuntimeLanguage::ErlKeywordParam::While, ExpressionNum);
+            SavedWhileInstructionNum = InstructionNum;
+            SavedWhileExpressionNum = ExpressionNum;
 
         } else if (Keyword == "ENDWHILE") {
             if (state.dataSysVars->DeveloperFlag) {
@@ -949,19 +945,19 @@ ErlValueType EvaluateStack(EnergyPlusData &state, int const StackNum)
                     ++WhileLoopExitCounter;
 
                     continue;
-                } else { // false, leave while block
-                    if (WhileLoopExitCounter > MaxWhileLoopIterations) {
-                        WhileLoopExitCounter = 0;
-                        ReturnValue.Type = Value::Error;
-                        ReturnValue.Error = "Maximum WHILE loop iteration limit reached";
-                        WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
-                    } else {
-                        ReturnValue.Type = Value::Number;
-                        ReturnValue.Number = 0.0;
-                        WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
-                        WhileLoopExitCounter = 0;
-                    }
+                } // false, leave while block
+                if (WhileLoopExitCounter > MaxWhileLoopIterations) {
+                    WhileLoopExitCounter = 0;
+                    ReturnValue.Type = Value::Error;
+                    ReturnValue.Error = "Maximum WHILE loop iteration limit reached";
+                    WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
+                } else {
+                    ReturnValue.Type = Value::Number;
+                    ReturnValue.Number = 0.0;
+                    WriteTrace(state, StackNum, InstructionNum, ReturnValue, seriousErrorFound);
+                    WhileLoopExitCounter = 0;
                 }
+
             } else {
                 ShowFatalError(state, "Fatal error in RunStack:  Unknown keyword.");
             }
@@ -1180,9 +1176,8 @@ void ParseExpression(EnergyPlusData &state,
                             ++NumErrors;
                             ErrorFlag = true;
                             break;
-                        } else {
-                            PeriodFound = true;
                         }
+                        PeriodFound = true;
                     }
                     if (is_any_of(NextChar, "eEdD")) {
                         StringToken += NextChar;
@@ -1195,9 +1190,9 @@ void ParseExpression(EnergyPlusData &state,
                             ErrorFlag = true;
                             // error
                             break;
-                        } else {
-                            LastED = true;
                         }
+                        LastED = true;
+
                     } else {
                         StringToken += NextChar;
                     }
@@ -1323,9 +1318,8 @@ void ParseExpression(EnergyPlusData &state,
                     state.dataRuntimeLangProcessor->PEToken(NumTokens).String = potential_match;
                     Pos += (len - 1);
                     return true;
-                } else {
-                    return false;
                 }
+                return false;
             };
 
             // case insensitive wrapper call to parse
@@ -1662,11 +1656,11 @@ int ProcessTokens(
                         }
                     }
                     break;
-                } else {
-                    ShowSevereError(state, format("The operator \"{}\" is missing the left-hand operand!", ErlFuncNamesUC[OperatorNum]));
-                    ShowContinueError(state, format("String being parsed=\"{}\".", ParsingString));
-                    break;
                 }
+                ShowSevereError(state, format("The operator \"{}\" is missing the left-hand operand!", ErlFuncNamesUC[OperatorNum]));
+                ShowContinueError(state, format("String being parsed=\"{}\".", ParsingString));
+                break;
+
             } else if (Pos == NumTokens) {
                 ShowSevereError(state, format("The operator \"{}\" is missing the right-hand operand!", ErlFuncNamesUC[OperatorNum]));
                 ShowContinueError(state, format("String being parsed=\"{}\".", ParsingString));
@@ -3281,10 +3275,9 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                         if (loop == 1) {
                             state.dataRuntimeLang->TrendVariable(TrendNum).TimeARR(loop) = -state.dataGlobal->TimeStepZone;
                             continue;
-                        } else {
-                            state.dataRuntimeLang->TrendVariable(TrendNum).TimeARR(loop) =
-                                state.dataRuntimeLang->TrendVariable(TrendNum).TimeARR(loop - 1) - state.dataGlobal->TimeStepZone; // fractional hours
                         }
+                        state.dataRuntimeLang->TrendVariable(TrendNum).TimeARR(loop) =
+                            state.dataRuntimeLang->TrendVariable(TrendNum).TimeARR(loop - 1) - state.dataGlobal->TimeStepZone; // fractional hours
                     }
                 } else {
                     ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));

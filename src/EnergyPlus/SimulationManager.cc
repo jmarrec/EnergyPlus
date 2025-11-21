@@ -1521,9 +1521,8 @@ namespace SimulationManager {
     {
         if (logical) {
             return ("True");
-        } else {
-            return ("False");
         }
+        return ("False");
     }
 
     void CheckForMisMatchedEnvironmentSpecifications(EnergyPlusData &state)
@@ -2514,7 +2513,8 @@ namespace SimulationManager {
                 const auto LoopString = [&]() {
                     if (LoopSideNum == DataPlant::LoopSideLocation::Demand) {
                         return "Demand";
-                    } else if (LoopSideNum == DataPlant::LoopSideLocation::Supply) {
+                    }
+                    if (LoopSideNum == DataPlant::LoopSideLocation::Supply) {
                         return "Supply";
                     } else {
                         return "";

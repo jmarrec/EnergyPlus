@@ -89,7 +89,8 @@ namespace ExtendedHI {
 
         if (T == 0.0) {
             return 0.0;
-        } else if (T < Ttrip) {
+        }
+        if (T < Ttrip) {
             return ptrip * pow((T / Ttrip), ((cpv - cvs) / rgasv)) * exp((E0v + E0s - (cvv - cvs) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
         } else {
             return ptrip * pow((T / Ttrip), ((cpv - cvl) / rgasv)) * exp((E0v - (cvv - cvl) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
@@ -450,7 +451,8 @@ namespace ExtendedHI {
             varname = EqvarName::Phi;
             phi = 1.0 - (Q - Qv(Ta, Pa)) * Rs / (Tc - Ts);
             return phi;
-        } else if (flux2 <= 0.0) {
+        }
+        if (flux2 <= 0.0) {
             varname = EqvarName::Rf;
             Real64 const Ts_bar = Tc - (Q - Qv(Ta, Pa)) * Rs / phi + (1.0 / phi - 1.0) * (Tc - Ts);
             General::SolveRoot(

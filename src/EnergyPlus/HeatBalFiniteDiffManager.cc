@@ -1526,8 +1526,9 @@ namespace HeatBalFiniteDiffManager {
         Array2<Real64>::size_type ldep(a.index(ndep, 0));
         if ((a.size2() == 1u) || (x1 <= a[lind + first])) { // [ lind + first ] == ( nind, first )
             return a[ldep + first];                         // [ ldep + first ] == ( ndep, first )
-        } else if (x1 >= a[lind + last]) {                  // [ lind + last ] == ( nind, last )
-            return a[ldep + last];                          // [ ldep + last ] == ( ndep, last )
+        }
+        if (x1 >= a[lind + last]) { // [ lind + last ] == ( nind, last )
+            return a[ldep + last];  // [ ldep + last ] == ( ndep, last )
         } else {
             int i;
             int i1(first);

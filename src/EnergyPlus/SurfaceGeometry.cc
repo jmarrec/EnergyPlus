@@ -1049,9 +1049,8 @@ namespace SurfaceGeometry {
 
         if (state.dataSurfaceGeometry->GetSurfaceDataOneTimeFlag) {
             return;
-        } else {
-            state.dataSurfaceGeometry->GetSurfaceDataOneTimeFlag = true;
         }
+        state.dataSurfaceGeometry->GetSurfaceDataOneTimeFlag = true;
 
         GetGeometryParameters(state, ErrorsFound);
 
@@ -5031,10 +5030,9 @@ namespace SurfaceGeometry {
                                        s_ipsc->cAlphaArgs(3)));
                 ErrorsFound = true;
                 continue;
-            } else {
-                state.dataConstruction->Construct(surfTemp.Construction).IsUsed = true;
-                surfTemp.ConstructionStoredInputValue = surfTemp.Construction;
             }
+            state.dataConstruction->Construct(surfTemp.Construction).IsUsed = true;
+            surfTemp.ConstructionStoredInputValue = surfTemp.Construction;
 
             if (surfTemp.Class == SurfaceClass::Window || surfTemp.Class == SurfaceClass::GlassDoor || surfTemp.Class == SurfaceClass::TDD_Diffuser ||
                 surfTemp.Class == SurfaceClass::TDD_Dome) {
@@ -10290,14 +10288,13 @@ namespace SurfaceGeometry {
                     ErrorsFound = true;
                 }
                 break;
-            } else {
-                ShowSevereError(state,
-                                format("{}: Date On Month [{}], invalid for WindowProperty:StormWindow Input #{}",
-                                       s_ipsc->cCurrentModuleObject,
-                                       state.dataSurface->StormWindow(StormWinNum).MonthOn,
-                                       StormWinNum));
-                ErrorsFound = true;
             }
+            ShowSevereError(state,
+                            format("{}: Date On Month [{}], invalid for WindowProperty:StormWindow Input #{}",
+                                   s_ipsc->cCurrentModuleObject,
+                                   state.dataSurface->StormWindow(StormWinNum).MonthOn,
+                                   StormWinNum));
+            ErrorsFound = true;
 
             int const monthOff = state.dataSurface->StormWindow(StormWinNum).MonthOff;
             if (monthOff >= January && monthOff <= December) {
@@ -10311,14 +10308,13 @@ namespace SurfaceGeometry {
                     ErrorsFound = true;
                 }
                 break;
-            } else {
-                ShowSevereError(state,
-                                format("{}: Date Off Month [{}], invalid for WindowProperty:StormWindow Input #{}",
-                                       s_ipsc->cCurrentModuleObject,
-                                       state.dataSurface->StormWindow(StormWinNum).MonthOff,
-                                       StormWinNum));
-                ErrorsFound = true;
             }
+            ShowSevereError(state,
+                            format("{}: Date Off Month [{}], invalid for WindowProperty:StormWindow Input #{}",
+                                   s_ipsc->cCurrentModuleObject,
+                                   state.dataSurface->StormWindow(StormWinNum).MonthOff,
+                                   StormWinNum));
+            ErrorsFound = true;
         }
 
         // Error checks
@@ -10926,9 +10922,9 @@ namespace SurfaceGeometry {
                                                s_ipsc->cAlphaFieldNames(alpF - 1),
                                                s_ipsc->cNumericFieldNames(numF)));
                         continue;
-                    } else {
-                        fndInput.intHIns.width = -s_ipsc->rNumericArgs(numF);
                     }
+                    fndInput.intHIns.width = -s_ipsc->rNumericArgs(numF);
+
                     numF++;
                 } else {
                     if (!s_ipsc->lNumericFieldBlanks(numF)) {
@@ -10989,9 +10985,9 @@ namespace SurfaceGeometry {
                                                s_ipsc->cAlphaFieldNames(alpF - 1),
                                                s_ipsc->cNumericFieldNames(numF)));
                         continue;
-                    } else {
-                        fndInput.intVIns.depth = s_ipsc->rNumericArgs(numF);
                     }
+                    fndInput.intVIns.depth = s_ipsc->rNumericArgs(numF);
+
                     numF++;
                 } else {
                     if (!s_ipsc->lNumericFieldBlanks(numF)) {
@@ -11050,9 +11046,9 @@ namespace SurfaceGeometry {
                                                s_ipsc->cAlphaFieldNames(alpF - 1),
                                                s_ipsc->cNumericFieldNames(numF)));
                         continue;
-                    } else {
-                        fndInput.extHIns.width = s_ipsc->rNumericArgs(numF);
                     }
+                    fndInput.extHIns.width = s_ipsc->rNumericArgs(numF);
+
                     numF++;
                 } else {
                     if (!s_ipsc->lNumericFieldBlanks(numF)) {
@@ -11113,9 +11109,9 @@ namespace SurfaceGeometry {
                                                s_ipsc->cAlphaFieldNames(alpF - 1),
                                                s_ipsc->cNumericFieldNames(numF)));
                         continue;
-                    } else {
-                        fndInput.extVIns.depth = s_ipsc->rNumericArgs(numF);
                     }
+                    fndInput.extVIns.depth = s_ipsc->rNumericArgs(numF);
+
                     numF++;
                 } else {
                     if (!s_ipsc->lNumericFieldBlanks(numF)) {
@@ -11210,9 +11206,9 @@ namespace SurfaceGeometry {
                                                s_ipsc->cAlphaFieldNames(alpF - 1),
                                                s_ipsc->cNumericFieldNames(numF)));
                         continue;
-                    } else {
-                        fndInput.footing.depth = s_ipsc->rNumericArgs(numF);
                     }
+                    fndInput.footing.depth = s_ipsc->rNumericArgs(numF);
+
                     numF++;
                 } else {
                     if (!s_ipsc->lNumericFieldBlanks(numF)) {
@@ -11290,9 +11286,9 @@ namespace SurfaceGeometry {
                                                    s_ipsc->cAlphaFieldNames(alpF - 1),
                                                    s_ipsc->cNumericFieldNames(numF)));
                             continue;
-                        } else {
-                            block.x = s_ipsc->rNumericArgs(numF);
                         }
+                        block.x = s_ipsc->rNumericArgs(numF);
+
                         numF++;
 
                         if (s_ipsc->lNumericFieldBlanks(numF)) {
@@ -11742,7 +11738,8 @@ namespace SurfaceGeometry {
                 ShowSevereEmptyField(state, eoh, s_ipsc->cAlphaFieldNames(4));
                 ErrorsFound = true;
                 continue;
-            } else if ((sched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(4))) == nullptr) {
+            }
+            if ((sched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(4))) == nullptr) {
                 ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4));
                 ErrorsFound = true;
                 continue;
@@ -12195,21 +12192,20 @@ namespace SurfaceGeometry {
         if (edgeNot2orig.empty()) {
             edgeNot2 = edgeNot2orig;
             return true;
-        } else { // if the count is three or greater it is likely that a vertex that is colinear was counted on the faces on one edge and not
-                 // on the "other side" of the edge Go through all the points looking for the number that are colinear and see if that is
-                 // consistent with the number of edges found that didn't have a count of two
-            DataVectorTypes::Polyhedron updatedZonePoly = updateZonePolygonsForMissingColinearPoints(
-                zonePoly, uniqueVertices); // this is done after initial test since it is computationally intensive.
-            std::vector<EdgeOfSurf> edgeNot2again = edgesNotTwoForEnclosedVolumeTest(updatedZonePoly, uniqueVertices);
-            if (edgeNot2again.empty()) {
-                return true;
-            } else {
-                edgeNot2 = edgesInBoth(edgeNot2orig,
-                                       edgeNot2again); // only return a list of those edges that appear in both the original edge and the
-                                                       // revised edges this eliminates added edges that will confuse users and edges that
-                                                       // were caught by the updateZonePoly routine
-                return false;
-            }
+        } // if the count is three or greater it is likely that a vertex that is colinear was counted on the faces on one edge and not
+          // on the "other side" of the edge Go through all the points looking for the number that are colinear and see if that is
+          // consistent with the number of edges found that didn't have a count of two
+        DataVectorTypes::Polyhedron updatedZonePoly = updateZonePolygonsForMissingColinearPoints(
+            zonePoly, uniqueVertices); // this is done after initial test since it is computationally intensive.
+        std::vector<EdgeOfSurf> edgeNot2again = edgesNotTwoForEnclosedVolumeTest(updatedZonePoly, uniqueVertices);
+        if (edgeNot2again.empty()) {
+            return true;
+        } else {
+            edgeNot2 = edgesInBoth(edgeNot2orig,
+                                   edgeNot2again); // only return a list of those edges that appear in both the original edge and the
+                                                   // revised edges this eliminates added edges that will confuse users and edges that
+                                                   // were caught by the updateZonePoly routine
+            return false;
         }
     }
 
@@ -15235,9 +15231,9 @@ namespace SurfaceGeometry {
             DotProd = dot(Vect32, Vect21);
             if (std::abs(DotProd) <= cos89deg) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
+
         } else {
             return false;
         }
@@ -15281,7 +15277,8 @@ namespace SurfaceGeometry {
         if (surf.Sides != 4) {
             // the method is designed for 4-sided surface
             return;
-        } else if (isRectangle(state, SurfNum)) {
+        }
+        if (isRectangle(state, SurfNum)) {
             // no need to transform
             return;
         }
