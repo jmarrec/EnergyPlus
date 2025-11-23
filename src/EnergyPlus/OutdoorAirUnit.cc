@@ -1873,9 +1873,6 @@ namespace OutdoorAirUnit {
         int const InletNodeNum = thisOAEquip.CoilAirInletNode;
         int const OutletNodeNum = thisOAEquip.CoilAirOutletNode;
 
-        int UnitNum = OAUnitNum;
-        int SimCompNum = EquipNum;
-
         Real64 const CompAirOutTemp = thisOutAirUnit.CompOutSetTemp;
         Operation const OpMode = thisOutAirUnit.OperatingMode;
         CompType const EquipTypeNum = thisOAEquip.Type;
@@ -1888,6 +1885,9 @@ namespace OutdoorAirUnit {
         // checking equipment index
 
         {
+            int UnitNum = OAUnitNum;
+            int SimCompNum = EquipNum;
+
             switch (EquipTypeNum) {
             // Heat recovery
             case CompType::HeatXchngrFP: // 'HeatExchanger:AirToAir:FlatPlate',

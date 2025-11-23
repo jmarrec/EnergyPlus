@@ -885,7 +885,6 @@ namespace WindowAC {
         std::string const CompType = "ZoneHVAC:WindowAirConditioner"; // component name
         std::string const CompName = windowAC.Name;                   // component type
         Real64 TempSize = AutoSize;                                   // autosized value of coil input field
-        bool PrintFlag = false;                                       // TRUE when sizing information is reported in the eio file
 
         state.dataSize->DataFracOfAutosizedCoolingAirflow = 1.0;
         state.dataSize->DataFracOfAutosizedHeatingAirflow = 1.0;
@@ -902,6 +901,7 @@ namespace WindowAC {
 
         if (state.dataSize->CurZoneEqNum > 0) {
             auto &zoneEqSizing = state.dataSize->ZoneEqSizing(state.dataSize->CurZoneEqNum);
+            bool PrintFlag = false; // TRUE when sizing information is reported in the eio file
 
             if (windowAC.HVACSizingIndex > 0) {
                 // N1 , \field Maximum Supply Air Flow Rate

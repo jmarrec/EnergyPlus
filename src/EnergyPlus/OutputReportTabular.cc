@@ -15983,12 +15983,12 @@ void GetDelaySequences(EnergyPlusData &state,
 {
 
     // static bool initAdjFenDone(false); moved to anonymous namespace for unit testing
-    auto &ort = state.dataOutRptTab;
     int const szNumMinus1 = (iSpace == 0) ? zoneIndex - 1 : iSpace - 1; // space or zone num minus 1 for vector
     // reset to zero
     surfDelaySeq = 0.0;
 
     if (desDaySelected != 0) {
+        auto &ort = state.dataOutRptTab;
         auto const &surfCLDay = ort->surfCompLoads[desDaySelected - 1];
         auto const &enclCLDay = ort->enclCompLoads[desDaySelected - 1];
         auto &szCLDay = szCompLoadLoc[desDaySelected - 1];

@@ -197,11 +197,10 @@ namespace PhotovoltaicThermalCollectors {
 
         static constexpr std::string_view routineName = "GetPVTSimpleCollectorsInput";
 
-        int Item;                // Item to be "gotten"
-        int NumAlphas;           // Number of Alphas for each GetObjectItem call
-        int NumNumbers;          // Number of Numbers for each GetObjectItem call
-        int IOStatus;            // Used in GetObjectItem
-        bool ErrorsFound(false); // Set to true if errors in input, fatal at end of routine
+        int Item;       // Item to be "gotten"
+        int NumAlphas;  // Number of Alphas for each GetObjectItem call
+        int NumNumbers; // Number of Numbers for each GetObjectItem call
+        int IOStatus;   // Used in GetObjectItem
 
         tmpSimplePVTperf.allocate(NumSimplePVTPerform);
         for (Item = 1; Item <= NumSimplePVTPerform; ++Item) {
@@ -228,6 +227,7 @@ namespace PhotovoltaicThermalCollectors {
             thisTmpSimplePVTperf.ThermEffic = state.dataIPShortCut->rNumericArgs(2);
 
             if (thisTmpSimplePVTperf.ThermEfficMode == ThermEfficEnum::SCHEDULED) {
+                bool ErrorsFound(false); // Set to true if errors in input, fatal at end of routine
                 if (state.dataIPShortCut->lAlphaFieldBlanks(3)) {
                     ShowSevereEmptyField(state, eoh, state.dataIPShortCut->cAlphaFieldNames(3));
                     ErrorsFound = true;

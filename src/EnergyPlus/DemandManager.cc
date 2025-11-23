@@ -316,7 +316,6 @@ void GetDemandManagerListInput(EnergyPlusData &state)
     static constexpr std::string_view routineName = "GetDemandManagerListInput";
     constexpr std::string_view cCurrentModuleObject = "DemandManagerAssignmentList";
 
-    auto &s_ipsc = state.dataIPShortCut;
     auto const &s_ip = state.dataInputProcessing->inputProcessor;
 
     state.dataDemandManager->NumDemandManagerList = s_ip->getNumObjectsFound(state, cCurrentModuleObject);
@@ -332,7 +331,7 @@ void GetDemandManagerListInput(EnergyPlusData &state)
         for (int ListNum = 1; ListNum <= state.dataDemandManager->NumDemandManagerList; ++ListNum) {
 
             auto &thisDemandMgrList = state.dataDemandManager->DemandManagerList(ListNum);
-
+            auto &s_ipsc = state.dataIPShortCut;
             s_ip->getObjectItem(state,
                                 cCurrentModuleObject,
                                 ListNum,
@@ -544,7 +543,6 @@ void GetDemandManagerInput(EnergyPlusData &state)
 
     static constexpr std::string_view routineName = "GetDemandManagerInput";
 
-    auto &s_ipsc = state.dataIPShortCut;
     auto const &s_ip = state.dataInputProcessing->inputProcessor;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -602,6 +600,7 @@ void GetDemandManagerInput(EnergyPlusData &state)
         AlphArray.dimension(MaxAlphas, std::string());
         NumArray.dimension(MaxNums, 0.0);
         int IOStat; // IO Status when calling get input subroutine
+        auto &s_ipsc = state.dataIPShortCut;
 
         DemandMgr.allocate(state.dataDemandManager->NumDemandMgr);
         state.dataDemandManager->UniqueDemandMgrNames.reserve(state.dataDemandManager->NumDemandMgr);

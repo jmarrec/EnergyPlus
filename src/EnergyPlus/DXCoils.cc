@@ -393,10 +393,7 @@ void SimDXCoilMultiMode(EnergyPlusData &state,
     static constexpr std::string_view RoutineName("SimDXCoilMultiMode");
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int DXCoilNum; // index of coil being simulated
-    int PerfMode;  // Performance mode for MultiMode DX coil; Always 1 for other coil types
-    // 1-2=normal mode: 1=stage 1 only, 2=stage 1&2
-    // 3-4=enhanced dehumidification mode: 3=stage 1 only, 4=stage 1&2
+    int DXCoilNum;      // index of coil being simulated
     Real64 AirMassFlow; // Dry air mass flow rate through coil [kg/s]
 
     Real64 S1OutletAirTemp;     // Stage 1   Outlet air dry bulb temp [C]
@@ -497,6 +494,10 @@ void SimDXCoilMultiMode(EnergyPlusData &state,
         S12CrankcaseHeaterPower = 0.0;
         S12EvapWaterConsumpRate = 0.0;
         S12EvapCondPumpElecPower = 0.0;
+
+        int PerfMode; // Performance mode for MultiMode DX coil; Always 1 for other coil types
+                      // 1-2=normal mode: 1=stage 1 only, 2=stage 1&2
+                      // 3-4=enhanced dehumidification mode: 3=stage 1 only, 4=stage 1&2
 
         thisDXCoil.DehumidificationMode = DehumidMode;
         if ((int)DehumidMode > thisDXCoil.NumDehumidModes) {
@@ -750,7 +751,6 @@ void GetDXCoils(EnergyPlusData &state)
     int DehumidModeNum;              // Loop index for 1,Number of enhanced dehumidification modes
     int PerfModeNum;                 // Performance mode index
     int PerfObjectNum;               // Item number for performance object
-    int AlphaIndex;                  // Index for current alpha field
     std::string CurrentModuleObject; // Object type for getting and error messages
     std::string PerfObjectType;      // Performance object type for getting and error messages
     std::string PerfObjectName;      // Performance object name for getting and error messages
@@ -1493,7 +1493,8 @@ void GetDXCoils(EnergyPlusData &state)
         }
 
         //  Set starting alpha index for coil performance inputs
-        AlphaIndex = 6;
+
+        int AlphaIndex = 6; // Index for current alpha field
         // allocate performance modes for numeric field strings used for sizing routine
         state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(
             thisDXCoil.NumDehumidModes * 2 + thisDXCoil.NumCapacityStages * 2); // not sure this math is correct, ask MW
@@ -2997,12 +2998,12 @@ void GetDXCoils(EnergyPlusData &state)
     auto &s_ip = state.dataInputProcessing->inputProcessor;
     auto const instances_whPumped = s_ip->epJSON.find(CurrentModuleObject);
     if (instances_whPumped != s_ip->epJSON.end()) {
-        std::string cFieldName;
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
         auto &instancesValue = instances_whPumped.value();
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
             ++DXCoilNum;
+            std::string cFieldName;
             auto const &fields = instance.value();
             std::string const &thisObjectName = instance.key();
             s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
@@ -3524,12 +3525,12 @@ void GetDXCoils(EnergyPlusData &state)
     CurrentModuleObject = HVAC::cAllCoilTypes(HVAC::CoilDX_HeatPumpWaterHeaterWrapped);
     auto const instances_whWrapped = s_ip->epJSON.find(CurrentModuleObject);
     if (instances_whWrapped != s_ip->epJSON.end()) {
-        std::string cFieldName;
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
         auto &instancesValue = instances_whWrapped.value();
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
             ++DXCoilNum;
+            std::string cFieldName;
             auto const &fields = instance.value();
             std::string const &thisObjectName = instance.key();
             s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
@@ -6774,13 +6775,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
     Real64 RatedHeatPumpIndoorHumRat;  // Inlet humidity ratio to heat pump evaporator at rated conditions [kgWater/kgDryAir]
     Real64 RatedVolFlowPerRatedTotCap; // Rated Air Volume Flow Rate divided by Rated Total Capacity [m3/s-W)
     Real64 HPInletAirHumRat;           // Rated inlet air humidity ratio for heat pump water heater [kgWater/kgDryAir]
-    bool ErrorsFound(false);           // TRUE when errors found
-    int CapacityStageNum;              // Loop index for 1,Number of capacity stages
-    int DehumidModeNum;                // Loop index for 1,Number of enhanced dehumidification modes
     int Mode;                          // Performance mode for MultiMode DX coil; Always 1 for other coil types
-    int DXCoilNumTemp;                 // Counter for crankcase heater report variable DO loop
     int AirInletNode;                  // Air inlet node number
-    int SpeedNum;                      // Speed number for multispeed coils
 
     if (state.dataDXCoils->MyOneTimeFlag) {
         // initialize the environment and sizing flags
@@ -6846,6 +6842,7 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
         state.dataDXCoils->MyEnvrnFlag(DXCoilNum)) {
         if (thisDXCoil.FuelType != Constant::eFuel::Electricity) {
             if (thisDXCoil.MSHPHeatRecActive) {
+                int SpeedNum; // Speed number for multispeed coils
                 for (SpeedNum = 1; SpeedNum <= thisDXCoil.NumOfSpeeds; ++SpeedNum) {
                     if (thisDXCoil.MSWasteHeat(SpeedNum) == 0) {
                         ShowWarningError(
@@ -6882,6 +6879,7 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
     if (state.dataDXCoils->CrankcaseHeaterReportVarFlag) {
         if (state.dataAirLoop->AirLoopInputsFilled) {
             //     Set report variables for DX cooling coils that will have a crankcase heater (all DX coils not used in a HP AC unit)
+            int DXCoilNumTemp; // Counter for crankcase heater report variable DO loop
             for (DXCoilNumTemp = 1; DXCoilNumTemp <= state.dataDXCoils->NumDXCoils; ++DXCoilNumTemp) {
                 auto &dXCoil_withCrankCase = state.dataDXCoils->DXCoil(DXCoilNumTemp);
                 if ((dXCoil_withCrankCase.DXCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) ||
@@ -6917,6 +6915,7 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
         // for each coil, do the sizing once.
         SizeDXCoil(state, DXCoilNum);
         state.dataDXCoils->MySizeFlag(DXCoilNum) = false;
+        bool ErrorsFound(false); // TRUE when errors found
 
         if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_CoolingSingleSpeed || thisDXCoil.DXCoilType_Num == HVAC::CoilDX_CoolingTwoSpeed ||
             thisDXCoil.DXCoilType_Num == HVAC::CoilVRF_Cooling || thisDXCoil.DXCoilType_Num == HVAC::CoilVRF_FluidTCtrl_Cooling) {
@@ -7039,7 +7038,9 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
         }
 
         if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) {
+            int DehumidModeNum; // Loop index for 1,Number of enhanced dehumidification modes
             for (DehumidModeNum = 0; DehumidModeNum <= thisDXCoil.NumDehumidModes; ++DehumidModeNum) {
+                int CapacityStageNum; // Loop index for 1,Number of capacity stages
                 for (CapacityStageNum = 1; CapacityStageNum <= thisDXCoil.NumCapacityStages; ++CapacityStageNum) {
                     Mode = DehumidModeNum * 2 + CapacityStageNum;
                     // Check for zero capacity or zero max flow rate
@@ -7396,11 +7397,10 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
     static constexpr std::string_view RoutineName("SizeDXCoil");
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    Real64 CoilInTemp;       // DX coil inlet temperature
-    int CapacityStageNum;    // Loop index for 1,Number of capacity stages
-    int DehumidModeNum;      // Loop index for 1,Number of enhanced dehumidification modes
-    int Mode;                // Operating mode for MultiMode DX coil; Always 1 for other coil types
-    int NumOfSpeedCompanion; // Number of speed for a companion cooling coil (Multispeed HO heating coil only
+    Real64 CoilInTemp;    // DX coil inlet temperature
+    int CapacityStageNum; // Loop index for 1,Number of capacity stages
+    int DehumidModeNum;   // Loop index for 1,Number of enhanced dehumidification modes
+    int Mode;             // Operating mode for MultiMode DX coil; Always 1 for other coil types
     std::string equipName;
     Real64 DefrostCapacityDes;             // Design defrost heater capacity for reporting
     Real64 DefrostCapacityUser;            // Hard-sized defrost heater capacity for reporting
@@ -8496,6 +8496,7 @@ void SizeDXCoil(EnergyPlusData &state, int const DXCoilNum)
                     PrintFlag = false;
                     state.dataSize->DataFractionUsedForSizing = 1.0;
                     if (thisDXCoil.CompanionUpstreamDXCoil > 0) {
+                        int NumOfSpeedCompanion; // Number of speed for a companion cooling coil (Multispeed HO heating coil only)
                         NumOfSpeedCompanion = state.dataDXCoils->DXCoil(thisDXCoil.CompanionUpstreamDXCoil).NumOfSpeeds;
                         state.dataSize->DataConstantUsedForSizing =
                             state.dataDXCoils->DXCoil(thisDXCoil.CompanionUpstreamDXCoil).MSRatedTotCapDes(NumOfSpeedCompanion);
@@ -11946,16 +11947,14 @@ void CalcBasinHeaterPowerForMultiModeDXCoil(EnergyPlusData &state,
     //    b) Elseif the CondenserType for stage 2 is EvapCooled, then the basin heater power is calculated for
     //       (1-runtimefractionofstage2) of DX coil
 
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int PerfMode; // Performance mode for MultiMode DX coil; Always 1 for other coil types
-    // 1-2=normal mode: 1=stage 1 only, 2=stage 1&2
-    // 3-4=enhanced dehumidification mode: 3=stage 1 only, 4=stage 1&2
-
     auto &thisDXCoil = state.dataDXCoils->DXCoil(DXCoilNum);
 
     if (thisDXCoil.NumCapacityStages == 1) {
         thisDXCoil.BasinHeaterPower *= (1.0 - thisDXCoil.CoolingCoilRuntimeFraction);
     } else {
+        int PerfMode; // Performance mode for MultiMode DX coil; Always 1 for other coil types
+                      // 1-2=normal mode: 1=stage 1 only, 2=stage 1&2
+                      // 3-4=enhanced dehumidification mode: 3=stage 1 only, 4=stage 1&2
         PerfMode = (int)DehumidMode * 2 + 1;
         if (thisDXCoil.CondenserType(PerfMode) == DataHeatBalance::RefrigCondenserType::Evap) {
             thisDXCoil.BasinHeaterPower *= (1.0 - thisDXCoil.CoolingCoilRuntimeFraction);
@@ -12059,8 +12058,6 @@ Real64 CalcCBF(EnergyPlusData &state,
     Real64 OutletAirRH;                     // relative humidity of the outlet air
     Real64 Error;                           // Error term used in given coil bypass factor (CBF) calculations
     Real64 ErrorLast;                       // Error term, from previous iteration
-    int Iter;                               // Iteration loop counter in CBF calculations
-    int IterMax(50);                        // Maximum number of iterations in CBF calculations
     Real64 ADPTemp;                         // Apparatus dewpoint temperature used in CBF calculations [C]
     Real64 ADPHumRat;                       // Apparatus dewpoint humidity used in CBF calculations [kg/kg]
     Real64 ADPEnthalpy;                     // Air enthalpy at apparatus dew point [J/kg]
@@ -12207,9 +12204,10 @@ Real64 CalcCBF(EnergyPlusData &state,
         //  Pressure will have to be pass into this subroutine to fix this one
         ADPTemp = PsyTdpFnWPb(state, OutletAirHumRat, DataEnvironment::StdPressureSeaLevel);
 
+        int Iter = 0;    // Iteration loop counter in CBF calculations
+        int IterMax(50); // Maximum number of iterations in CBF calculations
         Tolerance = 1.0; // initial conditions for iteration
         ErrorLast = 100.0;
-        Iter = 0;
         DeltaADPTemp = 5.0;
         while ((Iter <= IterMax) && (Tolerance > 0.001)) {
             //     Do for IterMax iterations or until the error gets below .1%
@@ -14606,7 +14604,6 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
     Real64 EIR_LowSpeed;
     int FanInletNode;
     int FanOutletNode;
-    int Iter;
     Real64 ExternalStatic;
     Real64 FanStaticPressureRise;
     Real64 FanHeatCorrection;
@@ -14627,8 +14624,6 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
     Real64 RunTimeFraction;
     Real64 LowerBoundMassFlowRate;
     int PartLoadTestPoint;
-    int countStaticInputs;
-    int index;
 
     // Formats
     static constexpr std::string_view Header(
@@ -14667,7 +14662,7 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
 
         TotCapFlowModFac = CurveValue(state, thisDXCoil.CCapFFlow(1), AirMassFlowRatioRated);
         TotCapTempModFac = CurveValue(state, thisDXCoil.CCapFTemp(1), CoolingCoilInletAirWetBulbTempRated, OutdoorUnitInletAirDryBulbTempRated);
-        for (Iter = 1; Iter <= 4; ++Iter) { // iterative solution in the event that net capacity is near a threshold for external static
+        for (int Iter = 1; Iter <= 4; ++Iter) { // iterative solution in the event that net capacity is near a threshold for external static
             // Obtain external static pressure from Table 5 in ANSI/AHRI Std. 340/360-2007
             if (NetCoolingCapRated <= 21000.0) {
                 ExternalStatic = 50.0;
@@ -14778,13 +14773,12 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
         int fanInNode = 0;
         int fanOutNode = 0;
         Real64 externalStatic = 0.0;
-        int fanIndex = 0;
         if (thisDXCoil.RateWithInternalStaticAndFanObject) {
             par7 = 0.0;
             fanInNode = FanInletNode;
             fanOutNode = FanOutletNode;
             externalStatic = ExternalStatic;
-            fanIndex = thisDXCoil.SupplyFanIndex;
+            int fanIndex = thisDXCoil.SupplyFanIndex;
         }
 
         LowerBoundMassFlowRate = 0.01 * thisDXCoil.RatedAirMassFlowRate(1);
@@ -15083,8 +15077,8 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
             newPreDefColumn(state, state.dataOutRptPredefined->pdstVAVDXCoolCoil, "Supply Air Flow 25% [kg/s]");
 
         // determine footnote content
-        countStaticInputs = 0;
-        for (index = 1; index <= state.dataDXCoils->NumDXCoils; ++index) {
+        int countStaticInputs = 0;
+        for (int index = 1; index <= state.dataDXCoils->NumDXCoils; ++index) {
             auto &dxCoil_temp = state.dataDXCoils->DXCoil(index);
             if (dxCoil_temp.RateWithInternalStaticAndFanObject && dxCoil_temp.DXCoilType_Num == HVAC::CoilDX_CoolingTwoSpeed) {
                 ++countStaticInputs;
@@ -16427,10 +16421,6 @@ void CalcSecondaryDXCoils(EnergyPlusData &state, int const DXCoilNum)
     Real64 SecCoilFlowFraction;    // secondary coil flow fraction, is 1.0 for single speed machine
     Real64 TotalHeatRemovalRate;   // secondary coil total heat removal rate
     Real64 TotalHeatRejectionRate; // secondary coil total heat rejection rate
-    int SecCoilSHRFT;              // index of the SHR modifier curve for temperature of a secondary DX coil
-    int SecCoilSHRFF;              // index of the sHR modifier curve for flow fraction of a secondary DX coil
-    int MSSpeedNumLS;              // current low speed number of multispeed HP
-    int MSSpeedNumHS;              // current high speed number of multispeed HP
     Real64 MSSpeedRatio;           // current speed ratio of multispeed HP
     Real64 MSCycRatio;             // current cycling ratio of multispeed HP
     Real64 SHRHighSpeed;           // sensible heat ratio at high speed
@@ -16443,6 +16433,10 @@ void CalcSecondaryDXCoils(EnergyPlusData &state, int const DXCoilNum)
     if (thisDXCoil.IsSecondaryDXCoilInZone) {
         auto &secZoneHB = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisDXCoil.SecZonePtr);
         // Select the correct unit type
+        int SecCoilSHRFT; // index of the SHR modifier curve for temperature of a secondary DX coil
+        int SecCoilSHRFF; // index of the sHR modifier curve for flow fraction of a secondary DX coil
+        int MSSpeedNumLS; // current low speed number of multispeed HP
+        int MSSpeedNumHS; // current high speed number of multispeed HP
         switch (thisDXCoil.DXCoilType_Num) {
         case HVAC::CoilDX_CoolingSingleSpeed:
         case HVAC::CoilDX_CoolingTwoSpeed:
@@ -16705,8 +16699,6 @@ Real64 CalcSecondaryDXCoilsSHR(EnergyPlusData &state,
     Real64 wADP;                        // humidity ratio of air at secondary coil at ADP
     Real64 HumRatError;                 // humidity ratio error
     bool CoilMightBeDry;                // TRUE means the secondary DX coil runs dry
-    int Counter;                        // iteration counter
-    bool Converged;                     // convergence flag
     Real64 SHR;                         // current time step sensible heat ratio of secondary coil
 
     CoilMightBeDry = false;
@@ -16717,8 +16709,8 @@ Real64 CalcSecondaryDXCoilsSHR(EnergyPlusData &state,
         // find wADP, humidity ratio at apparatus dewpoint and inlet hum rat that would have dry coil
         DryCoilTestEvapInletHumRat = EvapInletHumRat;
         DryCoilTestEvapInletWetBulb = EvapInletWetBulb;
-        Counter = 0;
-        Converged = false;
+        int Counter = 0;        // iteration counter
+        bool Converged = false; // convergence flag
         while (!Converged) {
             // assumes coil bypass factor (CBF) = 0.0
             hADP = EvapInletEnthalpy - (TotalHeatRemovalRate / PartLoadRatio) / EvapAirMassFlow;
@@ -17897,7 +17889,6 @@ void CalcVRFCoilCapModFac(EnergyPlusData &state,
     //        A new physics based VRF model applicable for Fluid Temperature Control.
     //
 
-    bool ErrorsFound(false);       // Flag for errors
     int constexpr FlagCoolMode(0); // Flag for cooling mode
     int constexpr FlagHeatMode(1); // Flag for heating mode
     Real64 constexpr SH_rate(3);   // Super heating at cooling mode, default 3(C)
@@ -17917,6 +17908,7 @@ void CalcVRFCoilCapModFac(EnergyPlusData &state,
     if (present(CoilIndex)) {
         CoilNum = CoilIndex;
     } else {
+        bool ErrorsFound(false); // Flag for errors
         GetDXCoilIndex(state, CoilName, CoilNum, ErrorsFound, "", true);
     }
 

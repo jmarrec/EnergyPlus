@@ -256,6 +256,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
 
     if (state.dataPlantHXFluidToFluid->NumberOfPlantFluidHXs > 0) {
         state.dataPlantHXFluidToFluid->FluidHX.allocate(state.dataPlantHXFluidToFluid->NumberOfPlantFluidHXs);
+        int IOStat; // IO Status when calling get input subroutine
         for (int CompLoop = 1; CompLoop <= state.dataPlantHXFluidToFluid->NumberOfPlantFluidHXs; ++CompLoop) {
             state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                      cCurrentModuleObject,

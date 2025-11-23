@@ -11183,7 +11183,6 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
     Real64 CoolingPLR;                // condenser cooling PLR
     Real64 HeatingPLR;                // condenser heating PLR
     Real64 CyclingRatio;              // cycling ratio of condenser's compressors
-    int Stage;                        // used for crankcase heater power calculation
     Real64 UpperStageCompressorRatio; // used for crankcase heater power calculation
     Real64 RhoAir;                    // Density of air [kg/m3]
     Real64 PartLoadFraction;          // Part load fraction from PLFFPLR curve
@@ -12368,6 +12367,7 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
         this->CrankCaseHeaterPower = this->CCHeaterPower * (1.0 - VRFRTF);
         if (this->NumCompressors > 1) {
             UpperStageCompressorRatio = (1.0 - this->CompressorSizeRatio) / (this->NumCompressors - 1);
+            int Stage; // used for crankcase heater power calculation
             for (Stage = 1; Stage <= this->NumCompressors - 2; ++Stage) {
                 if (this->VRFCondPLR < (this->CompressorSizeRatio + Stage * UpperStageCompressorRatio)) {
                     this->CrankCaseHeaterPower += this->CCHeaterPower;

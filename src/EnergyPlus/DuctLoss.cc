@@ -597,7 +597,6 @@ namespace DuctLoss {
         Real64 CpAir;
         int NodeNum1;
         int NodeNum2;
-        int NodeNum;
         NodeNum1 = state.afn->AirflowNetworkLinkageData(this->LinkageNum).NodeNums[0];
         NodeNum2 = state.afn->AirflowNetworkLinkageData(this->LinkageNum).NodeNums[1];
 
@@ -660,7 +659,7 @@ namespace DuctLoss {
             state.afn->AirflowNetworkNodeSimu(NodeNum2).WZ = Wout;
         } break;
         case DuctLossSubType::RetLeakBranch: {
-            NodeNum = state.afn->DisSysNodeData(NodeNum2).EPlusNodeNum;
+            int NodeNum = state.afn->DisSysNodeData(NodeNum2).EPlusNodeNum;
             MassFlowRate = state.dataLoopNodes->Node(NodeNum).MassFlowRate;
             Tout = state.dataLoopNodes->Node(this->RetLeakZoneNum).Temp * (1.0 - LeakRatio) +
                    state.dataZoneTempPredictorCorrector->zoneHeatBalance(state.afn->AirflowNetworkNodeData(NodeNum1).EPlusZoneNum).MAT * LeakRatio;
@@ -718,14 +717,12 @@ namespace DuctLoss {
 
     void InitDuctLoss(EnergyPlusData &state)
     {
-        bool errorsFound(false);
-        std::string CurrentModuleObject;
-
         if (state.dataDuctLoss->AirLoopConnectionFlag) {
+            bool errorsFound(false);
 
             for (int DuctLossNum = 1; DuctLossNum <= state.dataDuctLoss->NumOfDuctLosses; DuctLossNum++) {
                 auto &thisDuctLoss(state.dataDuctLoss->ductloss(DuctLossNum));
-
+                std::string CurrentModuleObject;
                 thisDuctLoss.AirLoopNum = Util::FindItemInList(thisDuctLoss.AirLoopName, state.dataAirSystemsData->PrimaryAirSystems);
                 if (thisDuctLoss.LossType == DuctLossType::Conduction) {
                     CurrentModuleObject = cCMO_DuctLossConduction;

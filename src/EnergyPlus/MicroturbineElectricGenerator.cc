@@ -1933,7 +1933,6 @@ void MTGeneratorSpecs::oneTimeInit(EnergyPlusData &state)
 {
 
     std::string const RoutineName("InitMTGenerators");
-    bool errFlag;
 
     if (this->myFlag) {
         this->setupOutputVars(state);
@@ -1941,7 +1940,7 @@ void MTGeneratorSpecs::oneTimeInit(EnergyPlusData &state)
     }
 
     if (this->MyPlantScanFlag && allocated(state.dataPlnt->PlantLoop) && this->HeatRecActive) {
-        errFlag = false;
+        bool errFlag = false;
         PlantUtilities::ScanPlantLoopsForObject(
             state, this->Name, DataPlant::PlantEquipmentType::Generator_MicroTurbine, this->HRPlantLoc, errFlag, _, _, _, _, _);
         if (errFlag) {

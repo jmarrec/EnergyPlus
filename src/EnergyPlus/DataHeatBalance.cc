@@ -806,7 +806,6 @@ int AssignReverseConstructionNumber(EnergyPlusData &state,
     // METHODOLOGY EMPLOYED:
     // Create reverse layers.  Look in current constructions to see if match.  If no match, create a new one.
 
-    auto &s_mat = state.dataMaterial;
     // Return value
     int NewConstrNum; // Reverse Construction Number
 
@@ -864,6 +863,7 @@ int AssignReverseConstructionNumber(EnergyPlusData &state,
         for (nLayer = 1; nLayer <= Construction::MaxLayersInConstruct; ++nLayer) {
             state.dataConstruction->Construct(state.dataHeatBal->TotConstructs).LayerPoint(nLayer) = state.dataConstruction->LayerPoint(nLayer);
             if (state.dataConstruction->LayerPoint(nLayer) != 0) {
+                auto &s_mat = state.dataMaterial;
                 state.dataHeatBal->NominalRforNominalUCalculation(state.dataHeatBal->TotConstructs) +=
                     s_mat->materials(state.dataConstruction->LayerPoint(nLayer))->NominalR;
             }

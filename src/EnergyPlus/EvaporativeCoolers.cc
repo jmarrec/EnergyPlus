@@ -1182,7 +1182,6 @@ void SizeEvapCooler(EnergyPlusData &state, int const EvapCoolNum)
 
     bool HardSizeNoDesRun = !((state.dataSize->SysSizingRunDone || state.dataSize->ZoneSizingRunDone));
     bool SizingDesRunThisAirSys = false; // true if a particular air system had a Sizing:System object and system sizing done
-    bool SizingDesRunThisZone = false;   // true if a particular zone had a Sizing:Zone object and zone sizing was done
 
     if (CurSysNum > 0) {
         CheckThisAirSystemForSizing(state, CurSysNum, SizingDesRunThisAirSys);
@@ -1191,6 +1190,7 @@ void SizeEvapCooler(EnergyPlusData &state, int const EvapCoolNum)
         }
     }
     if (CurZoneEqNum > 0) {
+        bool SizingDesRunThisZone = false; // true if a particular zone had a Sizing:Zone object and zone sizing was done
         CheckThisZoneForSizing(state, CurZoneEqNum, SizingDesRunThisZone);
         // This next check was added during CppCheck corrections. This does not cause diffs
         // because SizingDesRunThisZone is not used below this point.

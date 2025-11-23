@@ -1500,7 +1500,6 @@ namespace RoomAir {
         ipsc->cCurrentModuleObject = "RoomAir:Node:AirflowNetwork:InternalGains";
         TotNumOfRAFNNodeGainsLists = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, ipsc->cCurrentModuleObject);
         for (int Loop = 1; Loop <= TotNumOfRAFNNodeGainsLists; ++Loop) {
-            int foundList = false;
             state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                      ipsc->cCurrentModuleObject,
                                                                      Loop,
@@ -1526,6 +1525,7 @@ namespace RoomAir {
 
             for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                 auto &roomAFNZoneInfo = state.dataRoomAir->AFNZoneInfo(iZone);
+                int foundList = false;
                 // find surface list
                 int RAFNNodeNum = 0;
                 if (roomAFNZoneInfo.NumOfAirNodes > 0) {

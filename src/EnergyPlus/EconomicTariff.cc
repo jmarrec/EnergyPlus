@@ -1921,7 +1921,6 @@ void warnIfNativeVarname(
 
     //   Issue a warning if the variable name (usually the object name) is
     //   one of the names of native variables
-    auto &s_econ = state.dataEconTariff;
 
     bool throwError = false;
     if (getEnumValue(nativeNamesUC, objName) != -1) {
@@ -1931,6 +1930,7 @@ void warnIfNativeVarname(
     }
 
     if (throwError) {
+        auto &s_econ = state.dataEconTariff;
         ErrorsFound = true;
         if (curTariffIndex >= 1 && curTariffIndex <= s_econ->numTariff) {
             ShowSevereError(state, format("UtilityCost:Tariff=\"{}\" invalid referenced name", s_econ->tariff(curTariffIndex).tariffName));
@@ -1958,10 +1958,10 @@ int AssignVariablePt(EnergyPlusData &state,
     //   the variable using the string as its name.
     //   Return the index of the variable.
 
-    auto &s_econ = state.dataEconTariff;
     int AssignVariablePt;
 
     if (flagIfNotNumeric && (len(stringIn) >= 1)) {
+        auto &s_econ = state.dataEconTariff;
         std::string inNoSpaces = RemoveSpaces(state, stringIn);
         int found = 0;
         if (allocated(s_econ->econVar)) {
@@ -2446,9 +2446,9 @@ void addOperand(EnergyPlusData &state, int const varMe, int const varOperand)
     //   relationship in the EconVar array
 
     int constexpr sizeIncrement(100);
-    auto &s_econ = state.dataEconTariff;
 
     if (varOperand != 0) {
+        auto &s_econ = state.dataEconTariff;
         // increment the numOperand and allocate/reallocate the array
         // if necessary
         if (!allocated(s_econ->operands)) {
@@ -3865,11 +3865,10 @@ void LEEDtariffReporting(EnergyPlusData &state)
     DemandWindow distHeatSteamDemWindowUnits;
     DemandWindow othrDemWindowUnits;
 
-    auto &s_orp = state.dataOutRptPredefined;
-
     auto &s_econ = state.dataEconTariff;
 
     if (s_econ->numTariff > 0) {
+        auto &s_orp = state.dataOutRptPredefined;
         int distCoolFacilMeter = GetMeterIndex(state, "DISTRICTCOOLING:FACILITY");
         int distHeatWaterFacilMeter = GetMeterIndex(state, "DISTRICTHEATINGWATER:FACILITY");
         int distHeatSteamFacilMeter = GetMeterIndex(state, "DISTRICTHEATINGSTEAM:FACILITY");
@@ -4086,9 +4085,8 @@ void WriteTabularTariffReports(EnergyPlusData &state)
     }
 
     if (s_econ->numTariff > 0) {
-        auto &econVar = s_econ->econVar;
-
         if (state.dataOutRptTab->displayEconomicResultSummary) {
+            auto &econVar = s_econ->econVar;
             DisplayString(state, "Writing Tariff Reports");
             showWarningsBasedOnTotal(state);
             //---------------------------------
@@ -4545,7 +4543,6 @@ void ReportEconomicVariable(EnergyPlusData &state,
     Real64 curVal;
     int curIndex;
     int curCatPt;
-    int curCategory;
 
     int iVar;
     int jMonth;
@@ -4622,7 +4619,7 @@ void ReportEconomicVariable(EnergyPlusData &state,
             tableBody(14, nCntOfVar) = OutputReportTabular::RealToStr(style.formatReals, maximumVal, 2);
             if (includeCategory) {
                 // first find category
-                curCategory = 0;
+                int curCategory = 0;
                 curIndex = econVar(iVar).index;
 
                 switch (econVar(iVar).kindOfObj) {
