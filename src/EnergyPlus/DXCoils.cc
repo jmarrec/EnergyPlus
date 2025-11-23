@@ -14775,12 +14775,13 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
         int fanInNode = 0;
         int fanOutNode = 0;
         Real64 externalStatic = 0.0;
+        int fanIndex = 0;
         if (thisDXCoil.RateWithInternalStaticAndFanObject) {
             par7 = 0.0;
             fanInNode = FanInletNode;
             fanOutNode = FanOutletNode;
             externalStatic = ExternalStatic;
-            int fanIndex = thisDXCoil.SupplyFanIndex;
+            fanIndex = thisDXCoil.SupplyFanIndex;
         }
 
         LowerBoundMassFlowRate = 0.01 * thisDXCoil.RatedAirMassFlowRate(1);
