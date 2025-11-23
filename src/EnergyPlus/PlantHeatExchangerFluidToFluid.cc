@@ -224,7 +224,6 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
     bool ErrorsFound(false);
     int NumAlphas;        // Number of elements in the alpha array
     int NumNums;          // Number of elements in the numeric array
-    int IOStat;           // IO Status when calling get input subroutine
     int MaxNumAlphas(0);  // argument for call to GetObjectDefMaxArgs
     int MaxNumNumbers(0); // argument for call to GetObjectDefMaxArgs
     int TotalArgs(0);     // argument for call to GetObjectDefMaxArgs
