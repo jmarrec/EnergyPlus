@@ -132,7 +132,7 @@ private:
     {
         // if necessary, pad the exponent with a 0 to match the old formatting from Objexx
         if (str.size() > 3) {
-            if (!std::isdigit(str[str.size() - 3])) {
+            if (std::isdigit(str[str.size() - 3]) == 0) {
                 // wants a 0 inserted
                 str.insert(str.size() - 2, "0");
             }
@@ -150,19 +150,19 @@ private:
         //    [[fill]align]
         switch (specs_.align) {
         case align_t::left:
-            if (specs_.fill.size()) {
+            if (specs_.fill.size() != 0u) {
                 buffer.append(specs_.fill);
             }
             buffer.push_back('<');
             break;
         case align_t::right:
-            if (specs_.fill.size()) {
+            if (specs_.fill.size() != 0u) {
                 buffer.append(specs_.fill);
             }
             buffer.push_back('>');
             break;
         case align_t::center:
-            if (specs_.fill.size()) {
+            if (specs_.fill.size() != 0u) {
                 buffer.append(specs_.fill);
             }
             buffer.push_back('^');

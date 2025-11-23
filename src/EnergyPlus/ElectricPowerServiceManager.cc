@@ -471,8 +471,8 @@ void ElectricPowerServiceManager::reinitAtBeginEnvironment()
 
 void ElectricPowerServiceManager::verifyCustomMetersElecPowerMgr(EnergyPlusData &state)
 {
-    for (std::size_t loop = 0; loop < elecLoadCenterObjs.size(); ++loop) {
-        elecLoadCenterObjs[loop]->setupLoadCenterMeterIndices(state);
+    for (const auto &elecLoadCenterObj : elecLoadCenterObjs) {
+        elecLoadCenterObj->setupLoadCenterMeterIndices(state);
     }
 }
 

@@ -5586,7 +5586,7 @@ void FillWeatherPredefinedEntries(EnergyPlusData &state)
                                  state.dataOutRptPredefined->pdchWthrVal,
                                  "Weather File Design Conditions",
                                  "Climate Design Data " + ashDesYear + "ASHRAE Handbook");
-            } else if (has(lineIn, "not calculated") || lineIn == "") {
+            } else if (has(lineIn, "not calculated") || lineIn.empty()) {
                 iscalc = false;
                 PreDefTableEntry(
                     state, state.dataOutRptPredefined->pdchWthrVal, "Weather File Design Conditions", "not calculated, Number of days < 1 year");
@@ -5992,7 +5992,7 @@ void FillWeatherPredefinedEntries(EnergyPlusData &state)
             PreDefTableEntry(state, state.dataOutRptPredefined->pdchWthrVal, "Max Hourly Precipitation Occurs in", Months[MaxHourlyPrecIdx]);
         } break;
         case StatLineType::WithHDDLine: { //  - 1745 (wthr file) annual heating degree-days (10°C baseline)
-            if (storeASHRAEHDD != "") {
+            if (!storeASHRAEHDD.empty()) {
                 if (ort->ip()) {
                     curNameWithSIUnits = "ASHRAE Handbook 2009 Heating Degree-Days - base 65°(C)";
                     LookupSItoIP(state, curNameWithSIUnits, indexUnitConv, curNameAndUnits);
@@ -6031,7 +6031,7 @@ void FillWeatherPredefinedEntries(EnergyPlusData &state)
             PreDefTableEntry(state, state.dataOutRptPredefined->pdchLeedGenData, "HDD and CDD data source", "Weather File Stat");
         } break;
         case StatLineType::WithCDDLine: { //  -  464 (wthr file) annual cooling degree-days (18°C baseline)
-            if (storeASHRAECDD != "") {
+            if (!storeASHRAECDD.empty()) {
                 if (ort->ip()) {
                     curNameWithSIUnits = "ASHRAE Handbook 2009  Cooling Degree-Days - base 50°(C)";
                     LookupSItoIP(state, curNameWithSIUnits, indexUnitConv, curNameAndUnits);
@@ -6354,7 +6354,7 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
 
             // air loop name
             if (thisZone.IsControlled) {
-                std::string airLoopName = "";
+                std::string airLoopName;
                 for (int zoneInNode = 1; zoneInNode <= state.dataZoneEquip->ZoneEquipConfig(iZone).NumInletNodes; ++zoneInNode) {
                     int airLoopNumber = state.dataZoneEquip->ZoneEquipConfig(iZone).InletNodeAirLoopNum(zoneInNode);
                     if (airLoopNumber > 0) {
@@ -14762,7 +14762,7 @@ int unitsFromHeading(EnergyPlusData &state, std::string &heading)
 // Glazer Nov 2016
 int unitsFromHeading(EnergyPlusData &state, std::string &heading, UnitsStyle unitsStyle_para)
 {
-    std::string curHeading = "";
+    std::string curHeading;
     int unitConv = 0;
     if (unitsStyle_para == UnitsStyle::InchPound) {
         LookupSItoIP(state, heading, unitConv, curHeading);
@@ -17637,14 +17637,14 @@ void WriteTable(EnergyPlusData &state,
             // body with row headers
             for (int jRow = 1; jRow <= rowsBody; ++jRow) {
                 tbl_stream << "  <tr>\n";
-                if (rowLabels(jRow) != "") {
+                if (!rowLabels(jRow).empty()) {
                     tbl_stream << "    <td align=\"right\">" << ConvertToEscaped(InsertCurrencySymbol(state, rowLabels(jRow), true), false)
                                << "</td>\n";
                 } else {
                     tbl_stream << "    <td align=\"right\">&nbsp;</td>\n";
                 }
                 for (int iCol = 1; iCol <= colsBody; ++iCol) {
-                    if (body(iCol, jRow) != "") {
+                    if (!body(iCol, jRow).empty()) {
                         tbl_stream << "    <td align=\"right\">" << ConvertToEscaped(InsertCurrencySymbol(state, body(iCol, jRow), true), false)
                                    << "</td>\n";
                     } else {
@@ -17951,7 +17951,7 @@ std::string ConvertToElementTag(std::string const &inString) // Input String
             foundOther = false;
         } else if ((curCharVal >= 48) && (curCharVal <= 57)) { // 0-9 numbers
             // if first character is a number then prepend with the letter "t"
-            if (outString.length() == 0) {
+            if (outString.empty()) {
                 outString += 't';
             }
             outString += c;
@@ -18670,7 +18670,7 @@ bool isNumber(std::string const &s)
 {
     char *p;
     strtod(s.c_str(), &p);
-    for (; isspace(*p); ++p) {
+    for (; isspace(*p) != 0; ++p) {
         ; // handle trailing whitespace
     }
     return *p == 0;

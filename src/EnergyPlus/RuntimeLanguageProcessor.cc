@@ -168,7 +168,7 @@ void InitializeRuntimeLanguage(EnergyPlusData &state)
         GetRuntimeLanguageUserInput(state); // Load and parse all runtime language objects
 
         date_and_time(datestring, _, _, datevalues);
-        if (datestring != "") {
+        if (!datestring.empty()) {
             state.dataRuntimeLang->ErlVariable(state.dataRuntimeLangProcessor->ActualDateAndTimeNum).Value =
                 SetErlValueNumber(double(sum(datevalues)));
             // datevalues(1)+datevalues(2)+datevalues(3)+  &
@@ -3367,13 +3367,13 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                         }
                         strip(UnitsB);
                     }
-                    if (UnitsA != "" && UnitsB != "") {
+                    if (!UnitsA.empty() && !UnitsB.empty()) {
                         if (UnitsA != UnitsB) {
                             ShowWarningError(state, format("{}{}=\"{} mismatched units.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                             ShowContinueError(state, format("...Units entered in {} (deprecated use)=\"{}\"", cAlphaFieldNames(1), UnitsA));
                             ShowContinueError(state, format("...{}=\"{}\" (will be used)", cAlphaFieldNames(6), UnitsB));
                         }
-                    } else if (UnitsB == "" && UnitsA != "") {
+                    } else if (UnitsB.empty() && !UnitsA.empty()) {
                         UnitsB = UnitsA;
                         ShowWarningError(state,
                                          format("{}{}=\"{}\" using deprecated units designation.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
@@ -3540,13 +3540,13 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                         }
                         strip(UnitsB);
                     }
-                    if (UnitsA != "" && UnitsB != "") {
+                    if (!UnitsA.empty() && !UnitsB.empty()) {
                         if (UnitsA != UnitsB) {
                             ShowWarningError(state, format("{}{}=\"{} mismatched units.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                             ShowContinueError(state, format("...Units entered in {} (deprecated use)=\"{}\"", cAlphaFieldNames(1), UnitsA));
                             ShowContinueError(state, format("...{}=\"{}\" (will be used)", cAlphaFieldNames(9), UnitsB));
                         }
-                    } else if (UnitsB == "" && UnitsA != "") {
+                    } else if (UnitsB.empty() && !UnitsA.empty()) {
                         UnitsB = UnitsA;
                         ShowWarningError(state,
                                          format("{}{}=\"{}\" using deprecated units designation.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));

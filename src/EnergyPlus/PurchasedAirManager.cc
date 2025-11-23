@@ -259,8 +259,8 @@ void GetPurchasedAir(EnergyPlusData &state)
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, s_ipsc->cCurrentModuleObject);
         auto &instancesValue = instances_PurchAir.value();
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-            std::string fieldValue = "";
-            std::string cAlphaFieldName = "";
+            std::string fieldValue;
+            std::string cAlphaFieldName;
             ++purchAirNum;
             auto const &fields = instance.value();
             std::string thisObjectName = instance.key();

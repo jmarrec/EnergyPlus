@@ -1537,7 +1537,6 @@ namespace RoomAir {
                 }
 
                 // found it
-                foundList = true;
                 int numInputGains = (NumAlphas + NumNumbers - 1) / 3;
                 int numSpacesInZone = state.dataHeatBal->Zone(iZone).numSpaces;
                 int maxNumGains = numInputGains * numSpacesInZone;

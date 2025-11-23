@@ -1687,7 +1687,7 @@ namespace HeatRecovery {
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRLatEffAt100PerCoolAirFlow, this->Name, "N/A");
         }
 
-        std::string_view loopName = "";
+        std::string_view loopName;
 
         if ((state.dataSize->CurSysNum > 0) && (state.dataSize->CurSysNum <= state.dataHVACGlobal->NumPrimaryAirSys)) {
             loopName = state.dataAirSystemsData->PrimaryAirSystems(state.dataSize->CurSysNum).Name;

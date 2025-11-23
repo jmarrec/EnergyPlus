@@ -761,10 +761,10 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
     // these checks protect non-autosized simulations, plant only autosizing, etc.
     // NumPlantLoops for "PlantLoop" and NumCondLoops for "CondenserLoop" or TotNumLoops for both
     if (loopNum > 0 && loopNum <= state.dataHVACGlobal->NumPlantLoops &&
-        ((curZoneEqNum > 0 && finalZoneSizing.size() > 0) || (curSysNum > 0 && finalSysSizing.size() > 0) ||
-         (curOASysNum > 0 && finalSysSizing.size() > 0))) {
+        ((curZoneEqNum > 0 && !finalZoneSizing.empty()) || (curSysNum > 0 && !finalSysSizing.empty()) ||
+         (curOASysNum > 0 && !finalSysSizing.empty()))) {
         bool heatingLoop = false;
-        if (state.dataSize->PlantSizData.size() > 0) {
+        if (!state.dataSize->PlantSizData.empty()) {
             int plntSizIndex = Util::FindItemInList(
                 state.dataPlnt->PlantLoop(loopNum).Name, state.dataSize->PlantSizData, &DataSizing::PlantSizingData::PlantLoopName);
             if (plntSizIndex > 0 && state.dataSize->PlantSizData(plntSizIndex).LoopType == DataSizing::TypeOfPlantLoop::Heating) {
@@ -774,7 +774,7 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
         auto &plntComps = state.dataPlnt->PlantLoop(loopNum).plantCoilObjectNames;
         int arrayIndex = -1;
         // check if component has been added to array
-        if (plntComps.size() > 0) {
+        if (!plntComps.empty()) {
             for (size_t i = 0; i < plntComps.size(); ++i) {
                 auto &cmpType = state.dataPlnt->PlantLoop(loopNum).plantCoilObjectTypes;
                 if (plntComps[i] == compName &&

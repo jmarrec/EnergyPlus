@@ -158,7 +158,7 @@ namespace Util {
                 ++result.ptr;
                 remaining_size = result.ptr - String.data();
                 for (size_t i = remaining_size; i < String.size(); ++i, ++result.ptr) {
-                    if (!std::isdigit(*result.ptr)) {
+                    if (std::isdigit(*result.ptr) == 0) {
                         rProcessNumber = 0.0;
                         ErrorFlag = true;
                         return rProcessNumber;
@@ -707,7 +707,7 @@ int EndEnergyPlus(EnergyPlusData &state)
         ExternalInterface::CloseSocket(state, 1);
     }
 
-    if (state.dataGlobal->fProgressPtr) {
+    if (state.dataGlobal->fProgressPtr != nullptr) {
         state.dataGlobal->fProgressPtr(100);
     }
     if (state.dataGlobal->progressCallback) {
@@ -1512,13 +1512,13 @@ void ShowErrorMessage(EnergyPlusData &state, std::string const &ErrorMessage, Op
 
     auto *err_stream = state.files.err_stream.get();
 
-    if (state.dataUtilityRoutines->outputErrorHeader && err_stream) {
+    if (state.dataUtilityRoutines->outputErrorHeader && (err_stream != nullptr)) {
         *err_stream << "Program Version," << state.dataStrGlobals->VerStringVar << ',' << state.dataStrGlobals->IDDVerString << '\n';
         state.dataUtilityRoutines->outputErrorHeader = false;
     }
 
     if (!state.dataGlobal->DoingInputProcessing) {
-        if (err_stream) {
+        if (err_stream != nullptr) {
             *err_stream << "  " << ErrorMessage << '\n';
         }
     } else {
@@ -1633,7 +1633,7 @@ void ShowRecurringErrors(EnergyPlusData &state)
                     state.dataGlobal->errorCallback(Error::Continue, "");
                 }
             }
-            std::string StatMessage = "";
+            std::string StatMessage;
             if (error.ReportMax) {
                 std::string MaxOut = format("{:.6f}", error.MaxValue);
                 StatMessage += "  Max=" + MaxOut;

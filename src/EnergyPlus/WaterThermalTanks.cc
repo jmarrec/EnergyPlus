@@ -3554,7 +3554,7 @@ bool getWaterTankMixedInput(EnergyPlusData &state)
             Tank.UseDesignVolFlowRate = 0.0;
         } else {
             Tank.UseDesignVolFlowRate = state.dataIPShortCut->rNumericArgs(7);
-            if (Tank.UseDesignVolFlowRate) {
+            if (Tank.UseDesignVolFlowRate == DataSizing::AutoSize) {
                 Tank.UseDesignVolFlowRateWasAutoSized = true;
             }
         }
@@ -3739,7 +3739,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
         }
         }
         Real64 TankTempLimit;
-        std::string kwHeatingCooling = "";
+        std::string kwHeatingCooling;
         if (objectType == "ThermalStorage:ChilledWater:Stratified") {
             Tank.WaterThermalTankType = DataPlant::PlantEquipmentType::ChilledWaterTankStratified;
             TankTempLimit = state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "minimum_temperature_limit");
@@ -3848,7 +3848,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
         Tank.AmbientTempIndicator = static_cast<WTTAmbientTemp>(
             getEnumValue(TankAmbientTempNamesUC, Util::makeUPPER(fields.at("ambient_temperature_indicator").get<std::string>())));
         auto const ambientTempSched = fields.find("ambient_temperature_schedule_name");
-        std::string fieldName = "";
+        std::string fieldName;
         switch (Tank.AmbientTempIndicator) {
 
         case WTTAmbientTemp::Schedule: {

@@ -1511,7 +1511,7 @@ namespace HeatBalFiniteDiffManager {
 
         int const first(a.l2());
 
-        assert(a.size() > 0u);
+        assert(!a.empty());
         Array2<Real64>::size_type l(1);
         Real64 r(a[0]);
         int last(first);
@@ -2764,6 +2764,9 @@ namespace HeatBalFiniteDiffManager {
 
     bool findAnySurfacesUsingConstructionAndCondFD(EnergyPlusData const &state, int const constructionNum)
     {
+        if (state.dataConstruction->Construct(constructionNum).IsCondFD) {
+            return true;
+        }
         for (auto const &thisSurface : state.dataSurface->Surface) {
             if (thisSurface.Construction == constructionNum) {
                 if (thisSurface.HeatTransferAlgorithm == DataSurfaces::HeatTransferModel::CondFD) {

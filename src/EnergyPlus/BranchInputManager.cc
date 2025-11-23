@@ -2455,7 +2455,7 @@ namespace BranchInputManager {
         NeverFound = true;
         for (BrN = 1; BrN <= (int)state.dataBranchInputManager->Branch.size(); ++BrN) {
             int Found = 0;
-            std::string FoundBranchName = "";
+            std::string FoundBranchName;
             if (present(CompType) && present(CompName)) {
                 for (CpN = 1; CpN <= state.dataBranchInputManager->Branch(BrN).NumOfComponents; ++CpN) {
                     if (!Util::SameString(CompType(), state.dataBranchInputManager->Branch(BrN).Component(CpN).CType) ||

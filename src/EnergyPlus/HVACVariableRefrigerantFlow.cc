@@ -5736,7 +5736,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                     goto EquipList_exit; // already found previously
                 }
                 for (ELLoop = 1; ELLoop <= state.dataGlobal->NumOfZones; ++ELLoop) { // NumOfZoneEquipLists
-                    if (state.dataZoneEquip->ZoneEquipList(ELLoop).Name == "") {
+                    if (state.dataZoneEquip->ZoneEquipList(ELLoop).Name.empty()) {
                         continue; // dimensioned by NumOfZones.  Only valid ones have names.
                     }
                     for (ListLoop = 1; ListLoop <= state.dataZoneEquip->ZoneEquipList(ELLoop).NumOfEquipTypes; ++ListLoop) {
@@ -5902,7 +5902,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                 if (ctrlZoneNum > 0) {
                     int inletNodeADUNum = 0;
                     DataZoneEquipment::ZoneEquipType sysType_Num = DataZoneEquipment::ZoneEquipType::Invalid;
-                    std::string sysName = "";
+                    std::string sysName;
                     for (int inletNode = 1; inletNode <= state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).NumInletNodes; inletNode++) {
                         if (state.dataZoneEquip->ZoneEquipConfig(ctrlZoneNum).InletNodeAirLoopNum(inletNode) !=
                             state.dataHVACVarRefFlow->VRFTU(TUIndex).airLoopNum) {
@@ -15481,10 +15481,10 @@ Real64 VRFTerminalUnitEquipment::HotWaterHeatingCoilResidual(EnergyPlusData &sta
     Real64 Residuum; // Residual to be minimized to zero
 
     // local variables declaration:
-    int VRFTUNum = int(Par[1]);       // index to current terminal unit simulated
-    bool FirstHVACIteration = Par[2]; // 0 flag if it first HVAC iteration, or else 1
-    Real64 SuppHeatCoilLoad = Par[3]; // supplemental heating coil load to be met [W]
-    Real64 QActual = 0.0;             // actual heating load delivered [W]
+    int VRFTUNum = int(Par[1]);              // index to current terminal unit simulated
+    bool FirstHVACIteration = Par[2] != 0.0; // 0 flag if it first HVAC iteration, or else 1
+    Real64 SuppHeatCoilLoad = Par[3];        // supplemental heating coil load to be met [W]
+    Real64 QActual = 0.0;                    // actual heating load delivered [W]
 
     // Real64 mdot = min(state.dataLoopNodes->Node(VRFTU(VRFTUNum).SuppHeatCoilFluidOutletNode).MassFlowRateMaxAvail,
     //                  VRFTU(VRFTUNum).SuppHeatCoilFluidMaxFlow * PartLoadFrac);

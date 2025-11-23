@@ -1862,7 +1862,7 @@ namespace AirflowNetwork {
                     }
                 }
                 // Check continuity of both curves at boundary point
-                if (OccupantVentilationControl(i).ComfortLowTempCurveNum > 0 && OccupantVentilationControl(i).ComfortHighTempCurveNum) {
+                if (OccupantVentilationControl(i).ComfortLowTempCurveNum > 0 && OccupantVentilationControl(i).ComfortHighTempCurveNum > 0) {
                     if (std::abs(CurveValue(m_state, OccupantVentilationControl(i).ComfortLowTempCurveNum, Numbers(3)) -
                                  CurveValue(m_state, OccupantVentilationControl(i).ComfortHighTempCurveNum, Numbers(3))) > 0.1) {
                         ShowSevereError(m_state,
@@ -2685,7 +2685,7 @@ namespace AirflowNetwork {
                 MultizoneSurfaceData(i).OpeningName = Alphas(2); // Name of crack or opening component,
                 // either simple or detailed large opening, or crack
                 MultizoneSurfaceData(i).ExternalNodeName = Alphas(3); // Name of external node, but not used at WPC="INPUT"
-                if (Util::FindItemInList(Alphas(3), MultizoneExternalNodeData) &&
+                if ((Util::FindItemInList(Alphas(3), MultizoneExternalNodeData) != 0) &&
                     m_state.afn->MultizoneExternalNodeData(Util::FindItemInList(Alphas(3), MultizoneExternalNodeData)).curve == 0) {
                     ShowSevereError(m_state, format(RoutineName) + "Invalid " + cAlphaFields(3) + "=" + Alphas(3));
                     ShowContinueError(m_state,
@@ -4908,7 +4908,7 @@ namespace AirflowNetwork {
                         }
                     }
 
-                    if (AirflowNetworkLinkageData(count).ZoneName != "") {
+                    if (!AirflowNetworkLinkageData(count).ZoneName.empty()) {
                         AirflowNetworkLinkageData(count).ZoneNum = Util::FindItemInList(AirflowNetworkLinkageData(count).ZoneName, Zone);
                         if (AirflowNetworkLinkageData(count).ZoneNum == 0) {
                             ShowSevereError(m_state,
@@ -7463,7 +7463,7 @@ namespace AirflowNetwork {
                                  AirflowNetworkNodeSimu(AirflowNetworkLinkageData(i).NodeNums[1]).WZ) /
                                 2.0);
             // Calculate duct conduction loss
-            if (CompTypeNum == iComponentTypeNum::DWC && CompName == std::string()) { // Duct element only
+            if (CompTypeNum == iComponentTypeNum::DWC && CompName.empty()) { // Duct element only
                 int TypeNum = AirflowNetworkCompData(CompNum).TypeNum;
                 if (AirflowNetworkLinkSimu(i).FLOW > 0.0) { // flow direction is the same as input from node 1 to node 2
                     LF = AirflowNetworkLinkageData(i).NodeNums[0];
@@ -7713,8 +7713,8 @@ namespace AirflowNetwork {
                 }
             }
             // Calculate temp in a constant pressure drop element
-            if (CompTypeNum == iComponentTypeNum::CPD && CompName == std::string()) { // constant pressure element only
-                if (AirflowNetworkLinkSimu(i).FLOW > 0.0) {                           // flow direction is the same as input from node 1 to node 2
+            if (CompTypeNum == iComponentTypeNum::CPD && CompName.empty()) { // constant pressure element only
+                if (AirflowNetworkLinkSimu(i).FLOW > 0.0) {                  // flow direction is the same as input from node 1 to node 2
                     LF = AirflowNetworkLinkageData(i).NodeNums[0];
                     LT = AirflowNetworkLinkageData(i).NodeNums[1];
                 } else { // flow direction is the opposite as input from node 2 to node 1
@@ -7731,7 +7731,7 @@ namespace AirflowNetwork {
                 MV(LT) = 0.0;
             }
             // Calculate return leak
-            if ((CompTypeNum == iComponentTypeNum::PLR || CompTypeNum == iComponentTypeNum::ELR) && CompName == std::string()) {
+            if ((CompTypeNum == iComponentTypeNum::PLR || CompTypeNum == iComponentTypeNum::ELR) && CompName.empty()) {
                 // Return leak element only
                 if ((AirflowNetworkNodeData(AirflowNetworkLinkageData(i).NodeNums[0]).EPlusZoneNum > 0) &&
                     (AirflowNetworkNodeData(AirflowNetworkLinkageData(i).NodeNums[1]).EPlusZoneNum == 0) && (AirflowNetworkLinkSimu(i).FLOW > 0.0)) {
@@ -7941,7 +7941,7 @@ namespace AirflowNetwork {
             CompTypeNum = AirflowNetworkCompData(CompNum).CompTypeNum;
             std::string CompName = AirflowNetworkCompData(CompNum).EPlusName;
             // Calculate duct moisture diffusion loss
-            if (CompTypeNum == iComponentTypeNum::DWC && CompName == std::string()) { // Duct component only
+            if (CompTypeNum == iComponentTypeNum::DWC && CompName.empty()) { // Duct component only
                 TypeNum = AirflowNetworkCompData(CompNum).TypeNum;
                 if (AirflowNetworkLinkSimu(i).FLOW > 0.0) { // flow direction is the same as input from node 1 to node 2
                     LF = AirflowNetworkLinkageData(i).NodeNums[0];
@@ -8016,8 +8016,8 @@ namespace AirflowNetwork {
                 }
             }
             // Calculate temp in a constant pressure drop component
-            if (CompTypeNum == iComponentTypeNum::CPD && CompName == std::string()) { // constant pressure element only
-                if (AirflowNetworkLinkSimu(i).FLOW > 0.0) {                           // flow direction is the same as input from node 1 to node 2
+            if (CompTypeNum == iComponentTypeNum::CPD && CompName.empty()) { // constant pressure element only
+                if (AirflowNetworkLinkSimu(i).FLOW > 0.0) {                  // flow direction is the same as input from node 1 to node 2
                     LF = AirflowNetworkLinkageData(i).NodeNums[0];
                     LT = AirflowNetworkLinkageData(i).NodeNums[1];
                 } else { // flow direction is the opposite as input from node 2 to node 1
@@ -8034,7 +8034,7 @@ namespace AirflowNetwork {
                 MV(LT) = 0.0;
             }
             // Calculate return leak
-            if ((CompTypeNum == iComponentTypeNum::PLR || CompTypeNum == iComponentTypeNum::ELR) && CompName == std::string()) {
+            if ((CompTypeNum == iComponentTypeNum::PLR || CompTypeNum == iComponentTypeNum::ELR) && CompName.empty()) {
                 // Return leak component only
                 if ((AirflowNetworkNodeData(AirflowNetworkLinkageData(i).NodeNums[0]).EPlusZoneNum > 0) &&
                     (AirflowNetworkNodeData(AirflowNetworkLinkageData(i).NodeNums[1]).EPlusZoneNum == 0) && (AirflowNetworkLinkSimu(i).FLOW > 0.0)) {
@@ -8225,7 +8225,7 @@ namespace AirflowNetwork {
             CompTypeNum = AirflowNetworkCompData(CompNum).CompTypeNum;
             std::string CompName = AirflowNetworkCompData(CompNum).EPlusName;
             // Calculate duct moisture diffusion loss
-            if (CompTypeNum == iComponentTypeNum::DWC && CompName == std::string()) { // Duct component only
+            if (CompTypeNum == iComponentTypeNum::DWC && CompName.empty()) { // Duct component only
                 // TypeNum = AirflowNetworkCompData(CompNum).TypeNum;
                 if (AirflowNetworkLinkSimu(i).FLOW > 0.0) { // flow direction is the same as input from node 1 to node 2
                     LF = AirflowNetworkLinkageData(i).NodeNums[0];
@@ -8266,8 +8266,8 @@ namespace AirflowNetwork {
                 }
             }
             // Calculate temp in a constant pressure drop component
-            if (CompTypeNum == iComponentTypeNum::CPD && CompName == std::string()) { // constant pressure element only
-                if (AirflowNetworkLinkSimu(i).FLOW > 0.0) {                           // flow direction is the same as input from node 1 to node 2
+            if (CompTypeNum == iComponentTypeNum::CPD && CompName.empty()) { // constant pressure element only
+                if (AirflowNetworkLinkSimu(i).FLOW > 0.0) {                  // flow direction is the same as input from node 1 to node 2
                     LF = AirflowNetworkLinkageData(i).NodeNums[0];
                     LT = AirflowNetworkLinkageData(i).NodeNums[1];
                 } else { // flow direction is the opposite as input from node 2 to node 1
@@ -8279,7 +8279,7 @@ namespace AirflowNetwork {
                 MV(LT) = 0.0;
             }
             // Calculate return leak
-            if ((CompTypeNum == iComponentTypeNum::PLR || CompTypeNum == iComponentTypeNum::ELR) && CompName == std::string()) {
+            if ((CompTypeNum == iComponentTypeNum::PLR || CompTypeNum == iComponentTypeNum::ELR) && CompName.empty()) {
                 // Return leak component only
                 if ((AirflowNetworkNodeData(AirflowNetworkLinkageData(i).NodeNums[0]).EPlusZoneNum > 0) &&
                     (AirflowNetworkNodeData(AirflowNetworkLinkageData(i).NodeNums[1]).EPlusZoneNum == 0) && (AirflowNetworkLinkSimu(i).FLOW > 0.0)) {
@@ -8478,8 +8478,8 @@ namespace AirflowNetwork {
                 }
             }
             // Calculate temp in a constant pressure drop component
-            if (CompTypeNum == iComponentTypeNum::CPD && CompName == std::string()) { // constant pressure element only
-                if (AirflowNetworkLinkSimu(i).FLOW > 0.0) {                           // flow direction is the same as input from node 1 to node 2
+            if (CompTypeNum == iComponentTypeNum::CPD && CompName.empty()) { // constant pressure element only
+                if (AirflowNetworkLinkSimu(i).FLOW > 0.0) {                  // flow direction is the same as input from node 1 to node 2
                     LF = AirflowNetworkLinkageData(i).NodeNums[0];
                     LT = AirflowNetworkLinkageData(i).NodeNums[1];
                 } else { // flow direction is the opposite as input from node 2 to node 1
@@ -8491,7 +8491,7 @@ namespace AirflowNetwork {
                 MV(LT) = 0.0;
             }
             // Calculate return leak
-            if ((CompTypeNum == iComponentTypeNum::PLR || CompTypeNum == iComponentTypeNum::ELR) && CompName == std::string()) {
+            if ((CompTypeNum == iComponentTypeNum::PLR || CompTypeNum == iComponentTypeNum::ELR) && CompName.empty()) {
                 // Return leak component only
                 if ((AirflowNetworkNodeData(AirflowNetworkLinkageData(i).NodeNums[0]).EPlusZoneNum > 0) &&
                     (AirflowNetworkNodeData(AirflowNetworkLinkageData(i).NodeNums[1]).EPlusZoneNum == 0) && (AirflowNetworkLinkSimu(i).FLOW > 0.0)) {
@@ -10150,7 +10150,8 @@ namespace AirflowNetwork {
         // Note in the following that individual venting control for a window/door takes
         // precedence over zone-level control
         if (MultizoneSurfaceData(i).IndVentControl) {
-            VentTemp = MultizoneSurfaceData(i).ventTempControlSched ? MultizoneSurfaceData(i).ventTempControlSched->getCurrentVal() : 0.0;
+            VentTemp =
+                (MultizoneSurfaceData(i).ventTempControlSched != nullptr) ? MultizoneSurfaceData(i).ventTempControlSched->getCurrentVal() : 0.0;
             VentCtrlNum = MultizoneSurfaceData(i).VentSurfCtrNum;
             if (MultizoneSurfaceData(i).ventAvailSched != nullptr) {
                 VentingSchVal = MultizoneSurfaceData(i).ventAvailSched->getCurrentVal();
@@ -10161,7 +10162,7 @@ namespace AirflowNetwork {
             }
         } else {
             // Zone level only by Gu on Nov. 8, 2005
-            VentTemp = MultizoneZoneData(IZ).ventTempControlSched ? MultizoneZoneData(IZ).ventTempControlSched->getCurrentVal() : 0.0;
+            VentTemp = (MultizoneZoneData(IZ).ventTempControlSched != nullptr) ? MultizoneZoneData(IZ).ventTempControlSched->getCurrentVal() : 0.0;
             VentCtrlNum = MultizoneZoneData(IZ).VentCtrNum;
             if (MultizoneZoneData(IZ).ventAvailSched != nullptr) {
                 VentingSchVal = MultizoneZoneData(IZ).ventAvailSched->getCurrentVal();

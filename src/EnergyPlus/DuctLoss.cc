@@ -749,7 +749,7 @@ namespace DuctLoss {
                 if (thisDuctLoss.LossType == DuctLossType::Conduction) {
                     AFNNodeNum1 = state.afn->AirflowNetworkLinkageData(thisDuctLoss.LinkageNum).NodeNums[0];
                     AFNNodeNum2 = state.afn->AirflowNetworkLinkageData(thisDuctLoss.LinkageNum).NodeNums[1];
-                    if (state.afn->DisSysNodeData(AFNNodeNum1).EPlusName != "") {
+                    if (!state.afn->DisSysNodeData(AFNNodeNum1).EPlusName.empty()) {
                         NodeNum1 = Util::FindItemInList(state.afn->DisSysNodeData(AFNNodeNum1).EPlusName, state.dataLoopNodes->NodeID);
                         state.afn->DisSysNodeData(AFNNodeNum1).EPlusNodeNum = NodeNum1;
                     } else {
@@ -773,7 +773,7 @@ namespace DuctLoss {
                             }
                         }
                     } else {
-                        if (state.afn->DisSysNodeData(AFNNodeNum2).EPlusName != "") {
+                        if (!state.afn->DisSysNodeData(AFNNodeNum2).EPlusName.empty()) {
                             NodeNum2 = Util::FindItemInList(state.afn->DisSysNodeData(AFNNodeNum2).EPlusName, state.dataLoopNodes->NodeID);
                             state.afn->DisSysNodeData(AFNNodeNum2).EPlusNodeNum = NodeNum2;
                         } else {
@@ -817,7 +817,7 @@ namespace DuctLoss {
                 if (thisDuctLoss.LossType == DuctLossType::Leakage) {
                     AFNNodeNum1 = state.afn->AirflowNetworkLinkageData(thisDuctLoss.LinkageNum).NodeNums[0];
                     AFNNodeNum2 = state.afn->AirflowNetworkLinkageData(thisDuctLoss.LinkageNum).NodeNums[1];
-                    if (state.afn->DisSysNodeData(AFNNodeNum1).EPlusName != "" && state.afn->DisSysNodeData(AFNNodeNum1).EPlusType != "ZONE") {
+                    if (!state.afn->DisSysNodeData(AFNNodeNum1).EPlusName.empty() && state.afn->DisSysNodeData(AFNNodeNum1).EPlusType != "ZONE") {
                         NodeNum1 = Util::FindItemInList(state.afn->DisSysNodeData(AFNNodeNum1).EPlusName, state.dataLoopNodes->NodeID);
                         // Zone inlet
                         state.afn->DisSysNodeData(AFNNodeNum1).EPlusNodeNum = NodeNum1;
@@ -843,7 +843,7 @@ namespace DuctLoss {
                     if (Util::SameString(state.afn->DisSysNodeData(AFNNodeNum1).EPlusType, "Zone") ||
                         Util::SameString(state.afn->DisSysNodeData(AFNNodeNum1).EPlusType, "OutdoorAir:NodeList") ||
                         Util::SameString(state.afn->DisSysNodeData(AFNNodeNum1).EPlusType, "OutdoorAir:Node")) {
-                        if (state.afn->DisSysNodeData(AFNNodeNum2).EPlusName != "") {
+                        if (!state.afn->DisSysNodeData(AFNNodeNum2).EPlusName.empty()) {
                             // Zone outlet
                             NodeNum2 = Util::FindItemInList(state.afn->DisSysNodeData(AFNNodeNum2).EPlusName, state.dataLoopNodes->NodeID);
                             if (NodeNum2 > 0) {

@@ -453,7 +453,7 @@ void SimDXCoilMultiMode(EnergyPlusData &state,
                                   CompName));
         }
         if (state.dataDXCoils->CheckEquipName(DXCoilNum)) {
-            if ((CompName != "") && (CompName != state.dataDXCoils->DXCoil(DXCoilNum).Name)) {
+            if ((!CompName.empty()) && (CompName != state.dataDXCoils->DXCoil(DXCoilNum).Name)) {
                 ShowFatalError(state,
                                format("SimDXCoilMultiMode: Invalid CompIndex passed={}, Coil name={}, stored Coil Name for that index={}",
                                       DXCoilNum,
@@ -6869,6 +6869,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
                     thisDXCoil.CondenserInletNodeNum(Mode) =
                         state.dataDXCoils->DXCoil(thisDXCoil.CompanionUpstreamDXCoil).CondenserInletNodeNum(Mode);
                 }
+            } else {
+                thisDXCoil.FindCompanionUpStreamCoil = false;
             }
         } else {
             thisDXCoil.FindCompanionUpStreamCoil = false;
