@@ -60,7 +60,7 @@ jobs:
           python-arch: arm64
           vs-generator: ARM64
           package-arch: arm64
-          enable_hardened_runtime: ON
+          enable_hardened_runtime: OFF
           pretty: "Windows arm64"
           python-version: 3.12.10
           allow_failure: true
