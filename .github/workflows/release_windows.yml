@@ -194,9 +194,30 @@ jobs:
         file_glob: true
 
   test_package:
-    name: Test Built Package
+    name: Test Built Package for ${{ matrix.pretty }}
     needs: build_installer_artifact
-    runs-on: windows-2022
+    runs-on: ${{ matrix.os }}
+    fail-fast: false
+    matrix:
+        name: [x64, arm64]
+        include:
+        - name: x64
+          os: windows-2022
+          test_config: win64
+          package-arch: x86_64
+          pretty: "Windows x64"
+          python-version: 3.12.2
+          python-arch: x64
+          allow_failure: false
+
+        - name: arm64
+          os: windows-11-arm
+          test_config: ARM64
+          package-arch: arm64
+          pretty: "Windows arm64"
+          python-version: 3.12.10
+          python-arch: arm64
+          allow_failure: true
 
     steps:
       - uses: actions/checkout@v6  # Still need E+ checked out to get testing scripts
@@ -213,7 +234,7 @@ jobs:
       - name: Gather Test Package from Artifacts
         uses: actions/download-artifact@v6
         with:
-          name: energyplus-x86_64
+          name: energyplus-${{ matrix.package-arch }}
           path: package
 
       - name: Check Contents
@@ -226,4 +247,4 @@ jobs:
         run: ls
 
       - name: Run Package Tests
-        run: python checkout/scripts/package_tests/runner.py --verbose --msvc 2022 win64 package/
+        run: python checkout/scripts/package_tests/runner.py --verbose --msvc 2022 ${{ matrix.test_config }} package/

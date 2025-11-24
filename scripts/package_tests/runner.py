@@ -108,6 +108,9 @@ CONFIGURATIONS = {
     'win64': {
         'os': OS.Windows, 'bitness': Bitness.X64, 'asset_pattern': 'Windows-x86_64.zip', 'os_version': '2022'
     },
+    'win-arm64': {
+        'os': OS.Windows, 'bitness': Bitness.ARM64, 'asset_pattern': 'Windows-arm64.zip', 'os_version': '2022'
+    },
 }
 # fmt: on
 
