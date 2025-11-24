@@ -1525,7 +1525,6 @@ namespace RoomAir {
 
             for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                 auto &roomAFNZoneInfo = state.dataRoomAir->AFNZoneInfo(iZone);
-                bool foundList = false;
                 // find surface list
                 int RAFNNodeNum = 0;
                 if (roomAFNZoneInfo.NumOfAirNodes > 0) {
