@@ -125,10 +125,10 @@ jobs:
         mpm --find-updates
         mpm --admin --find-updates
 
-    - name: Downgrade cmake to 3.28
-      run: |
-        cmake --version
-        choco install cmake --version=3.28.4 --allow-downgrade --installargs 'ADD_CMAKE_TO_PATH=System'
+    # - name: Downgrade cmake to 3.28
+    #   run: |
+    #     cmake --version
+    #     choco install cmake --version=3.28.4 --allow-downgrade --installargs 'ADD_CMAKE_TO_PATH=System'
 
     - name: Check cmake
       run: |
