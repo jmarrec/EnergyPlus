@@ -217,7 +217,7 @@ jobs:
 
         - name: arm64
           os: windows-11-arm
-          test_config: ARM64
+          test_config: win-arm64
           package-arch: arm64
           pretty: "Windows arm64"
           python-version: 3.12.10
