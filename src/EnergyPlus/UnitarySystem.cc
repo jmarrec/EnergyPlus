@@ -14332,7 +14332,8 @@ namespace UnitarySystems {
                     ++this->warnIndex.m_SensPLRIter;
                     ShowWarningError(state,
                                      format("{} - Iteration limit exceeded calculating part-load ratio for unit = {}", this->UnitType, this->Name));
-                    ShowContinueError(state, format("Estimated part-load ratio  = {:.3R}", (ReqOutput / FullOutput)));
+                    ShowContinueError(state,
+                                      format("Estimated part-load ratio  = {:.3R}", (FullOutput != 0 ? (ReqOutput / FullOutput) : PartLoadFrac)));
                     ShowContinueError(state, format("Calculated part-load ratio = {:.3R}", PartLoadFrac));
                     ShowContinueErrorTimeStamp(state, "The calculated part-load ratio will be used and the simulation continues. Occurrence info:");
                 } else {
@@ -14348,8 +14349,6 @@ namespace UnitarySystems {
         } else if (SolFla == -2) {
             if (FullOutput != 0) {
                 PartLoadFrac = ReqOutput / FullOutput;
-            } else {
-                PartLoadFrac = 0.0;
             }
             if (!state.dataGlobal->WarmupFlag) {
                 if (this->warnIndex.m_SensPLRFail < 1) {
@@ -14378,7 +14377,8 @@ namespace UnitarySystems {
                     ++this->warnIndex.m_LatPLRIter;
                     ShowWarningError(
                         state, format("{} - Iteration limit exceeded calculating latent part-load ratio for unit = {}", this->UnitType, this->Name));
-                    ShowContinueError(state, format("Estimated part-load ratio   = {:.3R}", (ReqOutput / FullOutput)));
+                    ShowContinueError(state,
+                                      format("Estimated part-load ratio  = {:.3R}", (FullOutput != 0 ? (ReqOutput / FullOutput) : PartLoadFrac)));
                     ShowContinueError(state, format("Calculated part-load ratio = {:.3R}", PartLoadFrac));
                     ShowContinueErrorTimeStamp(state, "The calculated part-load ratio will be used and the simulation continues. Occurrence info:");
                 }
