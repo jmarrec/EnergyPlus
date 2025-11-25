@@ -51,6 +51,8 @@
 // C++ Headers
 #include <functional>
 #include <optional>
+#include <type_traits>
+#include <utility>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
@@ -451,11 +453,34 @@ namespace Util {
         return 0; // Not found
     }
 
+    template <typename...> using void_t = void;
+
+    // Primary template: assume no isize()
+    template <typename, typename = void> struct has_isize : std::false_type
+    {
+    };
+
+    // Specialization: has a member function isize()
+    template <typename T> struct has_isize<T, void_t<decltype(std::declval<T>().isize())>> : std::true_type
+    {
+    };
+
+    template <typename T> inline constexpr bool has_isize_v = has_isize<T>::value;
+
+    // Unified size helper
+    template <typename Container> inline int container_isize(Container const &c)
+    {
+        if constexpr (has_isize_v<Container>) {
+            return c.isize(); // Objexx containers
+        } else {
+            return static_cast<int>(c.size()); // std::vector, std::array, etc.
+        }
+    }
+
     template <typename Container, class = typename std::enable_if<!std::is_same<typename Container::value_type, std::string>::value>::type>
-    // Container needs isize() and operator[i] and elements need Name
     inline int FindItemInList(std::string_view const String, Container const &ListOfItems)
     {
-        return Util::FindItemInList(String, ListOfItems, ListOfItems.isize());
+        return Util::FindItemInList(String, ListOfItems, container_isize(ListOfItems));
     }
 
     template <typename Container, class = typename std::enable_if<!std::is_same<typename Container::value_type, std::string>::value>::type>

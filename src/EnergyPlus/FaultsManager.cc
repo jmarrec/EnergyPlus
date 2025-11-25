@@ -757,8 +757,8 @@ namespace FaultsManager {
                     state.dataFaultsMgr->ErrorsFound = true;
                 } else {
                     // Link the boiler with the fault model
-                    state.dataBoilers->Boiler(BoilerNum).FaultyBoilerFoulingFlag = true;
-                    state.dataBoilers->Boiler(BoilerNum).FaultyBoilerFoulingIndex = jFault_BoilerFouling;
+                    state.dataBoilers->Boiler[BoilerNum - 1].FaultyBoilerFoulingFlag = true;
+                    state.dataBoilers->Boiler[BoilerNum - 1].FaultyBoilerFoulingIndex = jFault_BoilerFouling;
                 }
             }
         }

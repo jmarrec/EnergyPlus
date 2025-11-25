@@ -4329,10 +4329,9 @@ void CalcHeatEmissionReport(EnergyPlusData &state)
     }
 
     // Water / steam boiler
-    for (int iBoiler = 1; iBoiler <= (int)state.dataBoilers->Boiler.size(); ++iBoiler) {
+    for (auto &boiler : state.dataBoilers->Boiler) {
         state.dataHeatBal->SysTotalHVACRejectHeatLoss +=
-            state.dataBoilers->Boiler(iBoiler).FuelConsumed + state.dataBoilers->Boiler(iBoiler).ParasiticFuelConsumption +
-            state.dataBoilers->Boiler(iBoiler).ParasiticElecConsumption - state.dataBoilers->Boiler(iBoiler).BoilerEnergy;
+            boiler.FuelConsumed + boiler.ParasiticFuelConsumption + boiler.ParasiticElecConsumption - boiler.BoilerEnergy;
     }
 
     // DX Coils air to air
