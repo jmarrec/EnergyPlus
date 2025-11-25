@@ -71,6 +71,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
+      # If you need to rebuild for a specific branch or tag **after** you fixed the workflow and you have no other changes or only a few you can download from github
+      with:
+        ref: cf7368216c73c43181e057fa33b479c4e0c86df0 # v25.2.0
+
+    - name: download patched CMakeLists.txt and package test runner.py
+      shell: bash
+      run: |
+        cd src/EnergyPlus
+        rm CMakeLists.txt
+        aria2c https://raw.githubusercontent.com/jmarrec/EnergyPlus/refs/heads/WoA/src/EnergyPlus/CMakeLists.txt
+        cd ../../
+        cd scripts/package_tests
+        rm runner.py
+        aria2c https://raw.githubusercontent.com/jmarrec/EnergyPlus/refs/heads/WoA/scripts/package_tests/runner.py
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
