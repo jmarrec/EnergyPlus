@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -149,7 +149,7 @@ struct BaseSizer
     int curSysNum = 0;
     int curOASysNum = 0;
     int curZoneEqNum = 0;
-    DataHVACGlobals::AirDuctType curDuctType = DataHVACGlobals::AirDuctType::Invalid;
+    HVAC::AirDuctType curDuctType = HVAC::AirDuctType::Invalid;
     int curTermUnitSizingNum = 0; // index in zone equipment vector - for single duct, IU, and PIU
     int numPrimaryAirSys = 0;
     int numSysSizInput = 0;
@@ -185,8 +185,8 @@ struct BaseSizer
     // HeatingWaterDesCoilWaterVolFlowUsedForUASizer, HeaterWaterflowSizing
     int dataWaterLoopNum = 0;
     // CoolingWaterflowSizing, CoolingWaterDesAirInletTempSizer
-    int dataFanIndex = -1;
-    int dataFanEnumType = -1;
+    int dataFanIndex = 0;
+    HVAC::FanType dataFanType = HVAC::FanType::Invalid;
     // CoolingWaterflowSizing
     Real64 dataWaterCoilSizCoolDeltaT = 0.0;
     // HeaterWaterflowSizing
@@ -202,7 +202,7 @@ struct BaseSizer
     Real64 dataAirFlowUsedForSizing = 0.0;
     Real64 dataDesInletAirTemp = 0.0;
     bool dataDesAccountForFanHeat = false;
-    DataSizing::ZoneFanPlacement dataFanPlacement = DataSizing::ZoneFanPlacement::NotSet;
+    HVAC::FanPlace dataFanPlacement = HVAC::FanPlace::Invalid;
 
     // CoolingWaterDesAirInletHumRatSizer, HeatingWaterDesAirInletHumRatSizer,
     // HeatingWaterDesAirInletTempSizer
@@ -235,7 +235,7 @@ struct BaseSizer
     // WaterHeatingCoilUASizing
     bool dataNomCapInpMeth = false;
     int dataCoilNum = 0;
-    int dataFanOpMode = 0;
+    HVAC::FanOp dataFanOp = HVAC::FanOp::Invalid;
     Real64 dataDesignCoilCapacity = 0.0;
     bool dataErrorsFound = false;
 
@@ -307,6 +307,9 @@ public:
                                   ObjexxFCL::Optional_string_const UsrDesc = _,
                                   ObjexxFCL::Optional<Real64 const> UsrValue = _);
 
+    static void reportSizerStrOutput(
+        EnergyPlusData &state, std::string_view CompType, std::string_view CompName, std::string_view VarDesc, std::string_view VarValue);
+
     static Real64 setOAFracForZoneEqSizing(const EnergyPlusData &state, Real64 desMassFlow, DataSizing::ZoneEqSizingData const &zoneEqSizing);
     static Real64 setHeatCoilInletTempForZoneEqSizing(Real64 outAirFrac,
                                                       DataSizing::ZoneEqSizingData const &zoneEqSizing,
@@ -320,6 +323,16 @@ public:
     static Real64 setCoolCoilInletHumRatForZoneEqSizing(Real64 outAirFrac,
                                                         DataSizing::ZoneEqSizingData const &zoneEqSizing,
                                                         DataSizing::ZoneSizingData const &finalZoneSizing);
+    static void calcCoilWaterFlowRates(EnergyPlusData &state,
+                                       std::string const &compName,
+                                       std::string const &compType,
+                                       Real64 const peakWaterFlow,
+                                       int const loopNum,
+                                       int const curZoneEqNum,
+                                       int const curSysNum,
+                                       int const curOASysNum,
+                                       EPVector<DataSizing::ZoneSizingData> const &finalZoneSizing,
+                                       EPVector<DataSizing::SystemSizingData> const &finalSysSizing);
 };
 
 } // namespace EnergyPlus

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -55,6 +55,7 @@
 #include <EnergyPlus/Construction.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
+#include <EnergyPlus/DataErrorTracking.hh>
 #include <EnergyPlus/DataHeatBalSurface.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataSurfaces.hh>
@@ -86,7 +87,7 @@ using namespace EnergyPlus::Material;
 
 TEST_F(EnergyPlusFixture, BaseSurfaceRectangularTest)
 {
-
+    state->init_state(*state);
     // Test base surfaces for rectangular shape in ProcessSurfaceVertices
 
     state->dataSurface->TotSurfaces = 5;
@@ -125,7 +126,7 @@ TEST_F(EnergyPlusFixture, BaseSurfaceRectangularTest)
 
     ProcessSurfaceVertices(*state, ThisSurf, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Rectangle, state->dataSurface->Surface(ThisSurf).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Rectangle, state->dataSurface->Surface(ThisSurf).Shape);
 
     // Surface 2 - Isosceles Trapezoid
     ThisSurf = 2;
@@ -152,7 +153,7 @@ TEST_F(EnergyPlusFixture, BaseSurfaceRectangularTest)
 
     ProcessSurfaceVertices(*state, ThisSurf, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Quadrilateral, state->dataSurface->Surface(ThisSurf).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Quadrilateral, state->dataSurface->Surface(ThisSurf).Shape);
 
     // Surface 3 - Parallelogram
     ThisSurf = 3;
@@ -179,7 +180,7 @@ TEST_F(EnergyPlusFixture, BaseSurfaceRectangularTest)
 
     ProcessSurfaceVertices(*state, ThisSurf, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Quadrilateral, state->dataSurface->Surface(ThisSurf).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Quadrilateral, state->dataSurface->Surface(ThisSurf).Shape);
 
     // Surface 4 - Triangle
     ThisSurf = 4;
@@ -202,7 +203,7 @@ TEST_F(EnergyPlusFixture, BaseSurfaceRectangularTest)
 
     ProcessSurfaceVertices(*state, ThisSurf, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Triangle, state->dataSurface->Surface(ThisSurf).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Triangle, state->dataSurface->Surface(ThisSurf).Shape);
 
     // Surface 5 - Polygon
     ThisSurf = 5;
@@ -233,12 +234,11 @@ TEST_F(EnergyPlusFixture, BaseSurfaceRectangularTest)
 
     ProcessSurfaceVertices(*state, ThisSurf, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Polygonal, state->dataSurface->Surface(ThisSurf).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Polygonal, state->dataSurface->Surface(ThisSurf).Shape);
 }
 
 TEST_F(EnergyPlusFixture, DataSurfaces_SurfaceShape)
 {
-
     bool ErrorsFound(false);
 
     std::string const idf_objects = delimited_string({
@@ -484,9 +484,7 @@ TEST_F(EnergyPlusFixture, DataSurfaces_SurfaceShape)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
-    GetProjectControlData(*state, ErrorsFound); // read project control data
-    EXPECT_FALSE(ErrorsFound);                  // expect no errors
+    state->init_state(*state);
 
     GetMaterialData(*state, ErrorsFound); // read material data
     EXPECT_FALSE(ErrorsFound);            // expect no errors
@@ -500,8 +498,8 @@ TEST_F(EnergyPlusFixture, DataSurfaces_SurfaceShape)
     state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
     state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
 
-    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
-    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
     state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
     state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
 
@@ -519,71 +517,69 @@ TEST_F(EnergyPlusFixture, DataSurfaces_SurfaceShape)
     //	"Surface 1 - Triangle"
     int surfNum = Util::FindItemInList("SURFACE 1 - TRIANGLE", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Triangle, state->dataSurface->Surface(surfNum).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Triangle, state->dataSurface->Surface(surfNum).Shape);
 
     //	enum surfaceShape:Quadrilateral = 2
     //	"Surface 2 - Quadrilateral"
     surfNum = Util::FindItemInList("SURFACE 2 - QUADRILATERAL", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Quadrilateral, state->dataSurface->Surface(surfNum).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Quadrilateral, state->dataSurface->Surface(surfNum).Shape);
 
     //	enum surfaceShape:Rectangle = 3
     //	"Surface 3 - Rectangle"
     surfNum = Util::FindItemInList("SURFACE 3 - RECTANGLE", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Rectangle, state->dataSurface->Surface(surfNum).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Rectangle, state->dataSurface->Surface(surfNum).Shape);
 
     //	enum surfaceShape:RectangularDoorWindow = 4
     //	"Surface 4 - RectangularDoorWindow"
     surfNum = Util::FindItemInList("SURFACE 4 - RECTANGULARDOORWINDOW", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::RectangularDoorWindow, state->dataSurface->Surface(surfNum).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::RectangularDoorWindow, state->dataSurface->Surface(surfNum).Shape);
 
     //	enum surfaceShape:RectangularOverhang = 5
     //	"Surface 5 - RectangularOverhang"
     surfNum = Util::FindItemInList("SURFACE 5 - RECTANGULAROVERHANG", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_FALSE(compare_enums(SurfaceShape::RectangularOverhang,
-                               state->dataSurface->Surface(surfNum).Shape,
-                               false)); // fins and overhangs will not get set to the proper surface shape.
+    EXPECT_ENUM_NE(SurfaceShape::RectangularOverhang,
+                   state->dataSurface->Surface(surfNum).Shape); // fins and overhangs will not get set to the proper surface shape.
 
     //	enum surfaceShape:RectangularLeftFin = 6
     //	"Surface 6 - RectangularLeftFin"
     surfNum = Util::FindItemInList("SURFACE 6 - RECTANGULARLEFTFIN Left", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_FALSE(compare_enums(SurfaceShape::RectangularLeftFin,
-                               state->dataSurface->Surface(surfNum).Shape,
-                               false)); // fins and overhangs will not get set to the proper surface shape.
+    EXPECT_ENUM_NE(SurfaceShape::RectangularLeftFin,
+                   state->dataSurface->Surface(surfNum).Shape); // fins and overhangs will not get set to the proper surface shape.
 
     //	enum surfaceShape:RectangularRightFin = 7
     //	"Surface 7 - RectangularRightFin"
     surfNum = Util::FindItemInList("SURFACE 7 - RECTANGULARRIGHTFIN Right", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_FALSE(compare_enums(SurfaceShape::RectangularRightFin,
-                               state->dataSurface->Surface(surfNum).Shape,
-                               false)); // fins and overhangs will not get set to the proper surface shape.
+    EXPECT_ENUM_NE(SurfaceShape::RectangularRightFin,
+                   state->dataSurface->Surface(surfNum).Shape); // fins and overhangs will not get set to the proper surface shape.
 
     //	enum surfaceShape:TriangularWindow = 8
     //	"Surface 8 - TriangularWindow"
     surfNum = Util::FindItemInList("SURFACE 8 - TRIANGULARWINDOW", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::TriangularWindow, state->dataSurface->Surface(surfNum).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::TriangularWindow, state->dataSurface->Surface(surfNum).Shape);
 
     //	enum surfaceShape:TriangularDoor = 9
     //	"Surface 9 - TriangularDoor"
     surfNum = Util::FindItemInList("SURFACE 9 - TRIANGULARDOOR", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::TriangularDoor, state->dataSurface->Surface(surfNum).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::TriangularDoor, state->dataSurface->Surface(surfNum).Shape);
 
     //	enum surfaceShape:Polygonal = 10
     //	"Surface 10 - Polygonal"
     surfNum = Util::FindItemInList("SURFACE 10 - POLYGONAL", state->dataSurface->Surface);
     ProcessSurfaceVertices(*state, surfNum, ErrorsFound);
-    EXPECT_TRUE(compare_enums(SurfaceShape::Polygonal, state->dataSurface->Surface(surfNum).Shape));
+    EXPECT_ENUM_EQ(SurfaceShape::Polygonal, state->dataSurface->Surface(surfNum).Shape);
 }
 
 TEST_F(EnergyPlusFixture, ConfirmCheckSubSurfAzTiltNorm)
 {
+    state->init_state(*state);
     SurfaceData BaseSurface;
     SurfaceData SubSurface;
     bool surfaceError;
@@ -603,7 +599,8 @@ TEST_F(EnergyPlusFixture, ConfirmCheckSubSurfAzTiltNorm)
     SubSurface.NewellSurfaceNormalVector.z = 1.;
     checkSubSurfAzTiltNorm(*state, BaseSurface, SubSurface, surfaceError);
     EXPECT_FALSE(surfaceError);
-    EXPECT_FALSE(has_err_output());
+    EXPECT_EQ(state->dataErrTracking->TotalSevereErrors, 0);
+    EXPECT_EQ(state->dataErrTracking->TotalWarningErrors, 1); // IDF version object
 
     // Case 2 - Base surface and subsurface face the opposite way - should be error message and surfaceError=true
     surfaceError = false;
@@ -714,6 +711,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_MakeMirrorSurface)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool FoundError = false;
     GetMaterialData(*state, FoundError);
@@ -775,6 +773,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_MakeMirrorSurface)
 
 TEST_F(EnergyPlusFixture, SurfacesGeometry_CalcSurfaceCentroid_NonconvexRealisticZ)
 {
+    state->init_state(*state);
     state->dataSurface->TotSurfaces = 10;
     state->dataSurface->Surface.allocate(state->dataSurface->TotSurfaces);
 
@@ -808,7 +807,6 @@ TEST_F(EnergyPlusFixture, SurfacesGeometry_CalcSurfaceCentroid_NonconvexRealisti
 
 TEST_F(EnergyPlusFixture, MakeEquivalentRectangle)
 {
-
     bool ErrorsFound(false);
 
     std::string const idf_objects = delimited_string({
@@ -952,6 +950,8 @@ TEST_F(EnergyPlusFixture, MakeEquivalentRectangle)
 
     // Prepare data for the test
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
     GetMaterialData(*state, ErrorsFound); // read material data
     EXPECT_FALSE(ErrorsFound);
     GetConstructData(*state, ErrorsFound); // read construction data
@@ -962,8 +962,8 @@ TEST_F(EnergyPlusFixture, MakeEquivalentRectangle)
     EXPECT_FALSE(ErrorsFound);
     state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
     state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
-    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
-    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
     state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
     state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
     GetSurfaceData(*state, ErrorsFound); // setup zone geometry and get zone data
@@ -992,7 +992,6 @@ TEST_F(EnergyPlusFixture, MakeEquivalentRectangle)
 
 TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_distance)
 {
-
     DataVectorTypes::Vector a;
     DataVectorTypes::Vector b;
 
@@ -1058,9 +1057,9 @@ TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_isAlmostEqual3dPt)
 
     EXPECT_TRUE(isAlmostEqual3dPt(a, b));
 
-    b.x = 7.01;
-    b.y = 11.01;
-    b.z = 17.01;
+    b.x = 7.0095;
+    b.y = 11.0095;
+    b.z = 17.0095;
 
     EXPECT_TRUE(isAlmostEqual3dPt(a, b));
 
@@ -1074,9 +1073,9 @@ TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_isAlmostEqual3dPt)
     a.y = -11.;
     a.z = -17.;
 
-    b.x = -7.01;
-    b.y = -11.01;
-    b.z = -17.01;
+    b.x = -7.0095;
+    b.y = -11.0095;
+    b.z = -17.0095;
 
     EXPECT_TRUE(isAlmostEqual3dPt(a, b));
 }
@@ -1104,8 +1103,8 @@ TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_isAlmostEqual2dPt)
 
     EXPECT_TRUE(isAlmostEqual2dPt(a, b));
 
-    b.x = 7.01;
-    b.y = 11.01;
+    b.x = 7.0095;
+    b.y = 11.0095;
 
     EXPECT_TRUE(isAlmostEqual2dPt(a, b));
 
@@ -1117,8 +1116,8 @@ TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_isAlmostEqual2dPt)
     a.x = -7.;
     a.y = -11.;
 
-    b.x = -7.01;
-    b.y = -11.01;
+    b.x = -7.0095;
+    b.y = -11.0095;
 
     EXPECT_TRUE(isAlmostEqual2dPt(a, b));
 }
@@ -1211,10 +1210,10 @@ TEST_F(EnergyPlusFixture, SurfaceGeometryUnitTests_findIndexOfVertex)
 
     EXPECT_EQ(0, findIndexOfVertex(a, list));
 
-    list.emplace_back(DataVectorTypes::Vector(3., 2., 4.));
-    list.emplace_back(DataVectorTypes::Vector(4., 3., 5.));
-    list.emplace_back(DataVectorTypes::Vector(8., 1., 2.));
-    list.emplace_back(DataVectorTypes::Vector(4., 7., 3.));
+    list.emplace_back(3., 2., 4.);
+    list.emplace_back(4., 3., 5.);
+    list.emplace_back(8., 1., 2.);
+    list.emplace_back(4., 7., 3.);
 
     EXPECT_EQ(0, findIndexOfVertex(a, list));
 
@@ -2817,8 +2816,8 @@ TEST_F(EnergyPlusFixture, MakeRectangularVertices)
 
     state->dataSurfaceGeometry->CosZoneRelNorth.allocate(zoneNum);
     state->dataSurfaceGeometry->SinZoneRelNorth.allocate(zoneNum);
-    state->dataSurfaceGeometry->CosZoneRelNorth(zoneNum) = std::cos(-state->dataHeatBal->Zone(zoneNum).RelNorth * Constant::DegToRadians);
-    state->dataSurfaceGeometry->SinZoneRelNorth(zoneNum) = std::sin(-state->dataHeatBal->Zone(zoneNum).RelNorth * Constant::DegToRadians);
+    state->dataSurfaceGeometry->CosZoneRelNorth(zoneNum) = std::cos(-state->dataHeatBal->Zone(zoneNum).RelNorth * Constant::DegToRad);
+    state->dataSurfaceGeometry->SinZoneRelNorth(zoneNum) = std::sin(-state->dataHeatBal->Zone(zoneNum).RelNorth * Constant::DegToRad);
 
     state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
     state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
@@ -2967,6 +2966,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_VertexNumberMismatchTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->NumOfZones = 2;
     state->dataHeatBal->Zone.allocate(2);
@@ -3121,7 +3121,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_CheckConvexityTest)
 TEST_F(EnergyPlusFixture, SurfaceGeometry_CheckConvexityTest_9118)
 {
 
-    // Test for #9118. The key point is that a collinear vertex should be found on the first occurence (that is vertex 2 is collinear with 1 and 3)
+    // Test for #9118. The key point is that a collinear vertex should be found on the first occurrence (that is vertex 2 is collinear with 1 and 3)
     //      y
     //     ▲
     //     │ [5]     [4]
@@ -3700,12 +3700,12 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_isWindowShadingControlSimilar_Test)
     state->dataSurface->WindowShadingControl(1).ShadingType = WinShadingType::ExtShade;
     state->dataSurface->WindowShadingControl(1).ShadingDevice = 17;
     state->dataSurface->WindowShadingControl(1).shadingControlType = WindowShadingControlType::OnIfScheduled;
-    state->dataSurface->WindowShadingControl(1).Schedule = 83;
+    state->dataSurface->WindowShadingControl(1).sched = nullptr;
     state->dataSurface->WindowShadingControl(1).SetPoint = 200;
     state->dataSurface->WindowShadingControl(1).SetPoint2 = 170;
     state->dataSurface->WindowShadingControl(1).ShadingControlIsScheduled = true;
     state->dataSurface->WindowShadingControl(1).GlareControlIsActive = false;
-    state->dataSurface->WindowShadingControl(1).SlatAngleSchedule = 84;
+    state->dataSurface->WindowShadingControl(1).slatAngleSched = nullptr;
     state->dataSurface->WindowShadingControl(1).slatAngleControl = SlatAngleControl::BlockBeamSolar;
     state->dataSurface->WindowShadingControl(1).DaylightingControlName = "TheDaylightingControl";
     state->dataSurface->WindowShadingControl(1).DaylightControlIndex = 7;
@@ -3741,11 +3741,11 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_isWindowShadingControlSimilar_Test)
     EXPECT_TRUE(isWindowShadingControlSimilar(*state, 1, 2));
     state->dataSurface->WindowShadingControl(2) = state->dataSurface->WindowShadingControl(1);
 
-    state->dataSurface->WindowShadingControl(2).Schedule = 91;
+    state->dataSurface->WindowShadingControl(2).sched = Sched::GetScheduleAlwaysOn(*state);
     EXPECT_TRUE(isWindowShadingControlSimilar(*state, 1, 2));
     state->dataSurface->WindowShadingControl(2) = state->dataSurface->WindowShadingControl(1);
 
-    state->dataSurface->WindowShadingControl(2).SlatAngleSchedule = 76;
+    state->dataSurface->WindowShadingControl(2).slatAngleSched = Sched::GetScheduleAlwaysOff(*state);
     EXPECT_TRUE(isWindowShadingControlSimilar(*state, 1, 2));
     state->dataSurface->WindowShadingControl(2) = state->dataSurface->WindowShadingControl(1);
 
@@ -3826,12 +3826,12 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_CheckWindowShadingControlSimilarForWin
     state->dataSurface->WindowShadingControl(1).ShadingType = WinShadingType::ExtShade;
     state->dataSurface->WindowShadingControl(1).ShadingDevice = 17;
     state->dataSurface->WindowShadingControl(1).shadingControlType = WindowShadingControlType::OnIfScheduled;
-    state->dataSurface->WindowShadingControl(1).Schedule = 83;
+    state->dataSurface->WindowShadingControl(1).sched = nullptr;
     state->dataSurface->WindowShadingControl(1).SetPoint = 200;
     state->dataSurface->WindowShadingControl(1).SetPoint2 = 170;
     state->dataSurface->WindowShadingControl(1).ShadingControlIsScheduled = true;
     state->dataSurface->WindowShadingControl(1).GlareControlIsActive = false;
-    state->dataSurface->WindowShadingControl(1).SlatAngleSchedule = 84;
+    state->dataSurface->WindowShadingControl(1).slatAngleSched = nullptr;
     state->dataSurface->WindowShadingControl(1).slatAngleControl = SlatAngleControl::BlockBeamSolar;
     state->dataSurface->WindowShadingControl(1).DaylightingControlName = "TheDaylightingControl";
     state->dataSurface->WindowShadingControl(1).DaylightControlIndex = 7;
@@ -3862,50 +3862,57 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_CheckWindowShadingControlSimilarForWin
 
 TEST_F(EnergyPlusFixture, SurfaceGeometry_createAirMaterialFromDistance_Test)
 {
-    state->dataMaterial->TotMaterials = 0;
+    auto &s_mat = state->dataMaterial;
     createAirMaterialFromDistance(*state, 0.008, "test_air_");
-    auto *thisMaterial = dynamic_cast<Material::MaterialChild *>(state->dataMaterial->Material(state->dataMaterial->TotMaterials));
-    EXPECT_EQ(state->dataMaterial->TotMaterials, 1);
-    EXPECT_EQ(thisMaterial->Name, "test_air_8MM");
-    EXPECT_EQ(thisMaterial->Thickness, 0.008);
-    EXPECT_EQ(thisMaterial->GasCon(1, 1), 2.873e-3);
-    EXPECT_EQ(thisMaterial->GasCon(2, 1), 7.760e-5);
+    auto const *mat1 = dynamic_cast<Material::MaterialGasMix const *>(s_mat->materials(1));
+    EXPECT_EQ(mat1->Name, "test_air_8MM");
+    EXPECT_EQ(mat1->Thickness, 0.008);
+    EXPECT_EQ(mat1->gases[0].con.c0, 2.873e-3);
+    EXPECT_EQ(mat1->gases[0].con.c1, 7.760e-5);
 
     createAirMaterialFromDistance(*state, 0.012, "test_air_");
-    thisMaterial = dynamic_cast<Material::MaterialChild *>(state->dataMaterial->Material(state->dataMaterial->TotMaterials));
-    EXPECT_EQ(state->dataMaterial->TotMaterials, 2);
-    EXPECT_EQ(thisMaterial->Name, "test_air_12MM");
-    EXPECT_EQ(thisMaterial->Thickness, 0.012);
+    auto const *mat2 = dynamic_cast<Material::MaterialGasMix const *>(s_mat->materials(2));
+    EXPECT_EQ(mat2->Name, "test_air_12MM");
+    EXPECT_EQ(mat2->Thickness, 0.012);
 
     createAirMaterialFromDistance(*state, 0.008, "test_air_");
-    EXPECT_EQ(state->dataMaterial->TotMaterials, 2);
+    EXPECT_EQ(s_mat->materials.isize(), 2);
 }
 
 TEST_F(EnergyPlusFixture, SurfaceGeometry_createConstructionWithStorm_Test)
 {
+    auto &s_mat = state->dataMaterial;
     state->dataHeatBal->TotConstructs = 1;
     state->dataConstruction->Construct.allocate(state->dataHeatBal->TotConstructs);
 
-    for (int i = 1; i <= 60; i++) {
-        Material::MaterialBase *p = new Material::MaterialChild;
-        state->dataMaterial->Material.push_back(p);
-    }
-    dynamic_cast<Material::MaterialChild *>(state->dataMaterial->Material(47))->AbsorpThermalFront = 0.11;
+    auto *matStorm = new Material::MaterialGlass;
+    s_mat->materials.push_back(matStorm);
+    matStorm->AbsorpThermalFront = 0.11;
+
+    auto *matGap = new Material::MaterialGasMix;
+    s_mat->materials.push_back(matGap);
+
+    auto *mat3 = new Material::MaterialGlass;
+    s_mat->materials.push_back(mat3);
+    auto *mat4 = new Material::MaterialGlass;
+    s_mat->materials.push_back(mat4);
+    auto *mat5 = new Material::MaterialGlass;
+    s_mat->materials.push_back(mat5);
 
     // Case 1a: Constructs with regular materials are a reverse of each other--material layers match in reverse (should get a "false" answer)
     state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).TotLayers = 3;
-    state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(1) = 11;
-    state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(2) = 22;
-    state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(3) = 33;
+    state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(1) = 3;
+    state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(2) = 4;
+    state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(3) = 5;
 
-    createConstructionWithStorm(*state, 1, "construction_A", 47, 59);
+    createConstructionWithStorm(*state, 1, "construction_A", 1, 2);
     EXPECT_EQ(state->dataHeatBal->TotConstructs, 2);
     EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).Name, "construction_A");
-    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(1), 47);
-    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(2), 59);
-    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(3), 11);
-    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(4), 22);
-    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(5), 33);
+    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(1), 1);
+    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(2), 2);
+    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(3), 3);
+    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(4), 4);
+    EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).LayerPoint(5), 5);
     EXPECT_EQ(state->dataConstruction->Construct(state->dataHeatBal->TotConstructs).OutsideAbsorpThermal, 0.11);
 }
 
@@ -3915,6 +3922,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_HeatTransferAlgorithmTest)
     bool ErrorsFound(false);
 
     std::string const idf_objects = delimited_string({
+        "  Timestep, 20;"
         "  HeatBalanceAlgorithm,",
         "  MoisturePenetrationDepthConductionTransferFunction; !- Algorithm",
         "Material,",
@@ -4100,6 +4108,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_HeatTransferAlgorithmTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetProjectControlData(*state, ErrorsFound); // read project control data
     EXPECT_FALSE(ErrorsFound);                  // expect no errors
@@ -4116,8 +4125,8 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_HeatTransferAlgorithmTest)
     state->dataSurfaceGeometry->CosZoneRelNorth.allocate(2);
     state->dataSurfaceGeometry->SinZoneRelNorth.allocate(2);
 
-    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
-    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
     state->dataSurfaceGeometry->CosZoneRelNorth(2) = state->dataSurfaceGeometry->CosZoneRelNorth(1);
     state->dataSurfaceGeometry->SinZoneRelNorth(2) = state->dataSurfaceGeometry->SinZoneRelNorth(1);
     state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
@@ -4127,19 +4136,19 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_HeatTransferAlgorithmTest)
     EXPECT_FALSE(ErrorsFound);           // expect no errors
 
     int surfNum = Util::FindItemInList("DATATELCOM_CEILING_1_0_0", state->dataSurface->Surface);
-    EXPECT_TRUE(compare_enums(DataSurfaces::HeatTransferModel::CondFD, state->dataSurface->Surface(surfNum).HeatTransferAlgorithm));
+    EXPECT_ENUM_EQ(DataSurfaces::HeatTransferModel::CondFD, state->dataSurface->Surface(surfNum).HeatTransferAlgorithm);
     EXPECT_TRUE(state->dataHeatBal->AnyCondFD);
 
     surfNum = Util::FindItemInList("ZONE1_FLOOR_4_0_10000", state->dataSurface->Surface);
-    EXPECT_TRUE(compare_enums(DataSurfaces::HeatTransferModel::CondFD, state->dataSurface->Surface(surfNum).HeatTransferAlgorithm));
-    EXPECT_TRUE(state->dataHeatBal->AnyEMPD); // input as EMPD but then later overriden to CondFD - see error message below
+    EXPECT_ENUM_EQ(DataSurfaces::HeatTransferModel::CondFD, state->dataSurface->Surface(surfNum).HeatTransferAlgorithm);
+    EXPECT_TRUE(state->dataHeatBal->AnyEMPD); // input as EMPD but then later overridden to CondFD - see error message below
 
     surfNum = Util::FindItemInList("ZONE1_FLOOR_4_0_20000", state->dataSurface->Surface);
-    EXPECT_TRUE(compare_enums(DataSurfaces::HeatTransferModel::HAMT, state->dataSurface->Surface(surfNum).HeatTransferAlgorithm));
+    EXPECT_ENUM_EQ(DataSurfaces::HeatTransferModel::HAMT, state->dataSurface->Surface(surfNum).HeatTransferAlgorithm);
     EXPECT_TRUE(state->dataHeatBal->AnyHAMT);
 
     surfNum = Util::FindItemInList("ZONE1_FLOOR_4_0_30000", state->dataSurface->Surface);
-    EXPECT_TRUE(compare_enums(DataSurfaces::HeatTransferModel::CTF, state->dataSurface->Surface(surfNum).HeatTransferAlgorithm));
+    EXPECT_ENUM_EQ(DataSurfaces::HeatTransferModel::CTF, state->dataSurface->Surface(surfNum).HeatTransferAlgorithm);
     EXPECT_TRUE(state->dataHeatBal->AnyCTF);
 
     std::string const error_string = delimited_string({
@@ -4216,6 +4225,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_SurfaceReferencesNonExistingSurface)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Read Material and Construction, and expect no errors
     GetMaterialData(*state, ErrorsFound);
@@ -4575,6 +4585,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_InternalMassSurfacesCount)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Read Materials
     GetMaterialData(*state, ErrorsFound);
@@ -4916,6 +4927,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_CreateInternalMassSurfaces)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Read Materials
     GetMaterialData(*state, ErrorsFound);
@@ -4984,6 +4996,7 @@ TEST_F(EnergyPlusFixture, WorldCoord_with_RelativeRectSurfCoord_test1)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound(false);
 
@@ -5014,6 +5027,7 @@ TEST_F(EnergyPlusFixture, WorldCoord_with_RelativeRectSurfCoord_test2)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound(false);
 
@@ -5044,6 +5058,7 @@ TEST_F(EnergyPlusFixture, WorldCoord_with_RelativeRectSurfCoord_test3)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound(false);
 
@@ -5068,7 +5083,7 @@ TEST_F(EnergyPlusFixture, WorldCoord_with_RelativeRectSurfCoord_test3)
 
 TEST_F(EnergyPlusFixture, WorldCoord_with_RelativeRectSurfCoord_test4)
 {
-    // Case 4) World coordinate system & Defalut Rect. surf, coordinate system & Non-zero zone origin
+    // Case 4) World coordinate system & Default Rect. surf, coordinate system & Non-zero zone origin
 
     std::string const idf_objects = delimited_string({
 
@@ -5080,6 +5095,7 @@ TEST_F(EnergyPlusFixture, WorldCoord_with_RelativeRectSurfCoord_test4)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound(false);
 
@@ -5104,12 +5120,9 @@ TEST_F(EnergyPlusFixture, WorldCoord_with_RelativeRectSurfCoord_test4)
 
 TEST_F(EnergyPlusFixture, SurfaceGeometry_CheckForReversedLayers)
 {
+    auto &s_mat = state->dataMaterial;
     bool RevLayerDiffs;
     state->dataConstruction->Construct.allocate(6);
-    for (int i = 1; i <= 60; i++) {
-        Material::MaterialChild *p = new Material::MaterialChild;
-        state->dataMaterial->Material.push_back(p);
-    }
 
     // Case 1a: Constructs with regular materials are a reverse of each other--material layers match in reverse (should get a "false" answer)
     state->dataConstruction->Construct(1).TotLayers = 3;
@@ -5128,9 +5141,19 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_CheckForReversedLayers)
     // Case 1a: Constructs with regular materials are not reverse of each other--material layers do not match in reverse (should get a "true" answer)
     state->dataConstruction->Construct(2).LayerPoint(1) = 1;
     state->dataConstruction->Construct(2).LayerPoint(3) = 3;
-    state->dataMaterial->Material(1)->group = Material::Group::Regular;
-    state->dataMaterial->Material(2)->group = Material::Group::Regular;
-    state->dataMaterial->Material(3)->group = Material::Group::Regular;
+
+    auto *mat1 = new Material::MaterialBase;
+    mat1->group = Material::Group::Regular;
+    s_mat->materials.push_back(mat1);
+
+    auto *mat2 = new Material::MaterialBase;
+    mat2->group = Material::Group::Regular;
+    s_mat->materials.push_back(mat2);
+
+    auto *mat3 = new Material::MaterialBase;
+    mat3->group = Material::Group::Regular;
+    s_mat->materials.push_back(mat3);
+
     RevLayerDiffs = false;
     // ExpectResult = true;
     CheckForReversedLayers(*state, RevLayerDiffs, 1, 2, 3);
@@ -5145,46 +5168,52 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_CheckForReversedLayers)
     state->dataConstruction->Construct(4).LayerPoint(1) = 4;
     state->dataConstruction->Construct(4).LayerPoint(2) = 2;
     state->dataConstruction->Construct(4).LayerPoint(3) = 5;
-    auto *thisMaterial_4 = dynamic_cast<Material::MaterialChild *>(state->dataMaterial->Material(4));
-    thisMaterial_4->group = Material::Group::WindowGlass;
-    thisMaterial_4->Thickness = 0.15;
-    thisMaterial_4->ReflectSolBeamFront = 0.35;
-    thisMaterial_4->ReflectSolBeamBack = 0.25;
-    thisMaterial_4->TransVis = 0.45;
-    thisMaterial_4->ReflectVisBeamFront = 0.34;
-    thisMaterial_4->ReflectVisBeamBack = 0.24;
-    thisMaterial_4->TransThermal = 0.44;
-    thisMaterial_4->AbsorpThermalFront = 0.33;
-    thisMaterial_4->AbsorpThermalBack = 0.23;
-    thisMaterial_4->Conductivity = 0.43;
-    thisMaterial_4->GlassTransDirtFactor = 0.67;
-    thisMaterial_4->SolarDiffusing = true;
-    thisMaterial_4->YoungModulus = 0.89;
-    thisMaterial_4->PoissonsRatio = 1.11;
-    auto *thisMaterial_5 = dynamic_cast<Material::MaterialChild *>(state->dataMaterial->Material(5));
-    thisMaterial_5->group = Material::Group::WindowGlass;
-    thisMaterial_5->Thickness = 0.15;
-    thisMaterial_5->ReflectSolBeamFront = 0.25;
-    thisMaterial_5->ReflectSolBeamBack = 0.35;
-    thisMaterial_5->TransVis = 0.45;
-    thisMaterial_5->ReflectVisBeamFront = 0.24;
-    thisMaterial_5->ReflectVisBeamBack = 0.34;
-    thisMaterial_5->TransThermal = 0.44;
-    thisMaterial_5->AbsorpThermalFront = 0.23;
-    thisMaterial_5->AbsorpThermalBack = 0.33;
-    thisMaterial_5->Conductivity = 0.43;
-    thisMaterial_5->GlassTransDirtFactor = 0.67;
-    thisMaterial_5->SolarDiffusing = true;
-    thisMaterial_5->YoungModulus = 0.89;
-    thisMaterial_5->PoissonsRatio = 1.11;
+
+    auto *mat4 = new Material::MaterialGlass;
+    mat4->group = Material::Group::Glass;
+    s_mat->materials.push_back(mat4);
+
+    mat4->Thickness = 0.15;
+    mat4->ReflectSolBeamFront = 0.35;
+    mat4->ReflectSolBeamBack = 0.25;
+    mat4->TransVis = 0.45;
+    mat4->ReflectVisBeamFront = 0.34;
+    mat4->ReflectVisBeamBack = 0.24;
+    mat4->TransThermal = 0.44;
+    mat4->AbsorpThermalFront = 0.33;
+    mat4->AbsorpThermalBack = 0.23;
+    mat4->Conductivity = 0.43;
+    mat4->GlassTransDirtFactor = 0.67;
+    mat4->SolarDiffusing = true;
+    mat4->YoungModulus = 0.89;
+    mat4->PoissonsRatio = 1.11;
+
+    auto *mat5 = new Material::MaterialGlass;
+    mat5->group = Material::Group::Glass;
+    s_mat->materials.push_back(mat5);
+
+    mat5->Thickness = 0.15;
+    mat5->ReflectSolBeamFront = 0.25;
+    mat5->ReflectSolBeamBack = 0.35;
+    mat5->TransVis = 0.45;
+    mat5->ReflectVisBeamFront = 0.24;
+    mat5->ReflectVisBeamBack = 0.34;
+    mat5->TransThermal = 0.44;
+    mat5->AbsorpThermalFront = 0.23;
+    mat5->AbsorpThermalBack = 0.33;
+    mat5->Conductivity = 0.43;
+    mat5->GlassTransDirtFactor = 0.67;
+    mat5->SolarDiffusing = true;
+    mat5->YoungModulus = 0.89;
+    mat5->PoissonsRatio = 1.11;
     RevLayerDiffs = true;
     // ExpectResult = false;
     CheckForReversedLayers(*state, RevLayerDiffs, 3, 4, 3);
     EXPECT_FALSE(RevLayerDiffs);
 
     // Case 2b: Constructs are reverse of each other using WindowGlass, front/back properties NOT properly switched (should get a "true" answer)
-    thisMaterial_5->ReflectVisBeamFront = 0.34; // correct would be 0.24
-    thisMaterial_5->ReflectVisBeamBack = 0.24;  // correct would be 0.34
+    mat5->ReflectVisBeamFront = 0.34; // correct would be 0.24
+    mat5->ReflectVisBeamBack = 0.24;  // correct would be 0.34
     RevLayerDiffs = false;
     // ExpectResult = true;
     CheckForReversedLayers(*state, RevLayerDiffs, 3, 4, 3);
@@ -5195,69 +5224,74 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_CheckForReversedLayers)
     state->dataConstruction->Construct(5).LayerPoint(1) = 6;
     state->dataConstruction->Construct(6).TotLayers = 1;
     state->dataConstruction->Construct(6).LayerPoint(1) = 7;
-    auto *thisMaterial_6 = dynamic_cast<Material::MaterialChild *>(state->dataMaterial->Material(6));
-    thisMaterial_6->group = Material::Group::GlassEquivalentLayer;
-    thisMaterial_6->TausFrontBeamBeam = 0.39;
-    thisMaterial_6->TausBackBeamBeam = 0.29;
-    thisMaterial_6->ReflFrontBeamBeam = 0.38;
-    thisMaterial_6->ReflBackBeamBeam = 0.28;
-    thisMaterial_6->TausFrontBeamBeamVis = 0.37;
-    thisMaterial_6->TausBackBeamBeamVis = 0.27;
-    thisMaterial_6->ReflFrontBeamBeamVis = 0.36;
-    thisMaterial_6->ReflBackBeamBeamVis = 0.26;
-    thisMaterial_6->TausFrontBeamDiff = 0.35;
-    thisMaterial_6->TausBackBeamDiff = 0.25;
-    thisMaterial_6->ReflFrontBeamDiff = 0.34;
-    thisMaterial_6->ReflBackBeamDiff = 0.24;
-    thisMaterial_6->TausFrontBeamDiffVis = 0.33;
-    thisMaterial_6->TausBackBeamDiffVis = 0.23;
-    thisMaterial_6->ReflFrontBeamDiffVis = 0.32;
-    thisMaterial_6->ReflBackBeamDiffVis = 0.22;
-    thisMaterial_6->TausDiffDiff = 0.456;
-    thisMaterial_6->ReflFrontDiffDiff = 0.31;
-    thisMaterial_6->ReflBackDiffDiff = 0.21;
-    thisMaterial_6->TausDiffDiffVis = 0.345;
-    thisMaterial_6->ReflFrontDiffDiffVis = 0.30;
-    thisMaterial_6->ReflBackDiffDiffVis = 0.20;
-    thisMaterial_6->TausThermal = 0.234;
-    thisMaterial_6->EmissThermalFront = 0.888;
-    thisMaterial_6->EmissThermalBack = 0.777;
-    thisMaterial_6->Resistance = 1.234;
-    auto *thisMaterial_7 = dynamic_cast<Material::MaterialChild *>(state->dataMaterial->Material(7));
-    thisMaterial_7->group = Material::Group::GlassEquivalentLayer;
-    thisMaterial_7->TausFrontBeamBeam = 0.29;
-    thisMaterial_7->TausBackBeamBeam = 0.39;
-    thisMaterial_7->ReflFrontBeamBeam = 0.28;
-    thisMaterial_7->ReflBackBeamBeam = 0.38;
-    thisMaterial_7->TausFrontBeamBeamVis = 0.27;
-    thisMaterial_7->TausBackBeamBeamVis = 0.37;
-    thisMaterial_7->ReflFrontBeamBeamVis = 0.26;
-    thisMaterial_7->ReflBackBeamBeamVis = 0.36;
-    thisMaterial_7->TausFrontBeamDiff = 0.25;
-    thisMaterial_7->TausBackBeamDiff = 0.35;
-    thisMaterial_7->ReflFrontBeamDiff = 0.24;
-    thisMaterial_7->ReflBackBeamDiff = 0.34;
-    thisMaterial_7->TausFrontBeamDiffVis = 0.23;
-    thisMaterial_7->TausBackBeamDiffVis = 0.33;
-    thisMaterial_7->ReflFrontBeamDiffVis = 0.22;
-    thisMaterial_7->ReflBackBeamDiffVis = 0.32;
-    thisMaterial_7->TausDiffDiff = 0.456;
-    thisMaterial_7->ReflFrontDiffDiff = 0.21;
-    thisMaterial_7->ReflBackDiffDiff = 0.31;
-    thisMaterial_7->TausDiffDiffVis = 0.345;
-    thisMaterial_7->ReflFrontDiffDiffVis = 0.20;
-    thisMaterial_7->ReflBackDiffDiffVis = 0.30;
-    thisMaterial_7->TausThermal = 0.234;
-    thisMaterial_7->EmissThermalFront = 0.777;
-    thisMaterial_7->EmissThermalBack = 0.888;
-    thisMaterial_7->Resistance = 1.234;
+
+    auto *mat6 = new Material::MaterialGlassEQL;
+    mat6->group = Material::Group::GlassEQL;
+    s_mat->materials.push_back(mat6);
+    mat6->TAR.Sol.Ft.Bm[0].BmTra = 0.39;
+    mat6->TAR.Sol.Bk.Bm[0].BmTra = 0.29;
+    mat6->TAR.Sol.Ft.Bm[0].BmRef = 0.38;
+    mat6->TAR.Sol.Bk.Bm[0].BmRef = 0.28;
+    mat6->TAR.Vis.Ft.Bm[0].BmTra = 0.37;
+    mat6->TAR.Vis.Bk.Bm[0].BmTra = 0.27;
+    mat6->TAR.Vis.Ft.Bm[0].BmRef = 0.36;
+    mat6->TAR.Vis.Bk.Bm[0].BmRef = 0.26;
+    mat6->TAR.Sol.Ft.Bm[0].DfTra = 0.35;
+    mat6->TAR.Sol.Bk.Bm[0].DfTra = 0.25;
+    mat6->TAR.Sol.Ft.Bm[0].DfRef = 0.34;
+    mat6->TAR.Sol.Bk.Bm[0].DfRef = 0.24;
+    mat6->TAR.Vis.Ft.Bm[0].DfTra = 0.33;
+    mat6->TAR.Vis.Bk.Bm[0].DfTra = 0.23;
+    mat6->TAR.Vis.Ft.Bm[0].DfRef = 0.32;
+    mat6->TAR.Vis.Bk.Bm[0].DfRef = 0.22;
+    mat6->TAR.Sol.Ft.Df.Tra = 0.456;
+    mat6->TAR.Sol.Ft.Df.Ref = 0.31;
+    mat6->TAR.Sol.Bk.Df.Ref = 0.21;
+    mat6->TAR.Vis.Ft.Df.Tra = 0.345;
+    mat6->TAR.Vis.Ft.Df.Ref = 0.30;
+    mat6->TAR.Vis.Bk.Df.Ref = 0.20;
+    mat6->TAR.IR.Ft.Tra = 0.234;
+    mat6->TAR.IR.Ft.Emi = 0.888;
+    mat6->TAR.IR.Bk.Emi = 0.777;
+    mat6->Resistance = 1.234;
+
+    auto *mat7 = new Material::MaterialGlassEQL;
+    mat7->group = Material::Group::GlassEQL;
+    s_mat->materials.push_back(mat7);
+
+    mat7->TAR.Sol.Ft.Bm[0].BmTra = 0.29;
+    mat7->TAR.Sol.Bk.Bm[0].BmTra = 0.39;
+    mat7->TAR.Sol.Ft.Bm[0].BmRef = 0.28;
+    mat7->TAR.Sol.Bk.Bm[0].BmRef = 0.38;
+    mat7->TAR.Vis.Ft.Bm[0].BmTra = 0.27;
+    mat7->TAR.Vis.Bk.Bm[0].BmTra = 0.37;
+    mat7->TAR.Vis.Ft.Bm[0].BmRef = 0.26;
+    mat7->TAR.Vis.Bk.Bm[0].BmRef = 0.36;
+    mat7->TAR.Sol.Ft.Bm[0].DfTra = 0.25;
+    mat7->TAR.Sol.Bk.Bm[0].DfTra = 0.35;
+    mat7->TAR.Sol.Ft.Bm[0].DfRef = 0.24;
+    mat7->TAR.Sol.Bk.Bm[0].DfRef = 0.34;
+    mat7->TAR.Vis.Ft.Bm[0].DfTra = 0.23;
+    mat7->TAR.Vis.Bk.Bm[0].DfTra = 0.33;
+    mat7->TAR.Vis.Ft.Bm[0].DfRef = 0.22;
+    mat7->TAR.Vis.Bk.Bm[0].DfRef = 0.32;
+    mat7->TAR.Sol.Ft.Df.Tra = 0.456;
+    mat7->TAR.Sol.Ft.Df.Ref = 0.21;
+    mat7->TAR.Sol.Bk.Df.Ref = 0.31;
+    mat7->TAR.Vis.Ft.Df.Tra = 0.345;
+    mat7->TAR.Vis.Ft.Df.Ref = 0.20;
+    mat7->TAR.Vis.Bk.Df.Ref = 0.30;
+    mat7->TAR.IR.Ft.Tra = 0.234;
+    mat7->TAR.IR.Ft.Emi = 0.777;
+    mat7->TAR.IR.Bk.Emi = 0.888;
+    mat7->Resistance = 1.234;
     RevLayerDiffs = true;
     // ExpectResult = false;
     CheckForReversedLayers(*state, RevLayerDiffs, 5, 6, 1);
     EXPECT_FALSE(RevLayerDiffs);
 
     // Case 3a: Single layer constructs using Equivalent Glass, front/back properties NOT properly switched (should get a "true" answer)
-    thisMaterial_7->EmissThermalFront = 0.888;
+    mat7->TAR.IR.Ft.Emi = 0.888;
     RevLayerDiffs = false;
     // ExpectResult = true;
     CheckForReversedLayers(*state, RevLayerDiffs, 5, 6, 1);
@@ -5372,6 +5406,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceIntRadExchange_SetupEnclosuresNoAirBoundari
         "    0,0,1;              !- Vertex 1",
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -5575,6 +5610,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceIntRadExchange_SetupEnclosuresWithAirBounda
 
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -5775,6 +5811,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceIntRadExchange_SetupEnclosuresWithAirBounda
 
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -6232,6 +6269,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceIntRadExchange_SetupEnclosuresWithAirBounda
 
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -6785,6 +6823,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceIntRadExchange_SetupEnclosuresWithAirBounda
 
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -6804,7 +6843,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceIntRadExchange_SetupEnclosuresWithAirBounda
 
     // This test is designed to reproduce issue #9218 Crash with many airwalls collapsing into a single enclosure.
     // That proved difficult to reproduce, however the root cause of the crash is space enclosure nums that are not consistent
-    // with the enclosures that hold them. This test demostrates that failure.
+    // with the enclosures that hold them. This test demonstrates that failure.
     EXPECT_EQ(state->dataViewFactor->NumOfRadiantEnclosures, 3);
     EXPECT_TRUE(Util::SameString(state->dataViewFactor->EnclRadInfo(1).Name, "Radiant Enclosure 1"));
     EXPECT_TRUE(Util::SameString(state->dataViewFactor->EnclRadInfo(1).spaceNames[0], "Space 3"));
@@ -7428,6 +7467,8 @@ TEST_F(EnergyPlusFixture, TwoZones_With_AirDoor)
 
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -7762,6 +7803,7 @@ TEST_F(EnergyPlusFixture, TwoZones_With_AirWindow)
     state->dataSurfaceGeometry->NoGroundTempObjWarning = false;
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -8646,9 +8688,7 @@ TEST_F(EnergyPlusFixture, GetSurfaceData_SurfaceOrder)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
-    GetProjectControlData(*state, ErrorsFound); // read project control data
-    EXPECT_FALSE(ErrorsFound);                  // expect no errors
+    state->init_state(*state);
 
     GetMaterialData(*state, ErrorsFound); // read material data
     EXPECT_FALSE(ErrorsFound);            // expect no errors
@@ -8971,7 +9011,7 @@ TEST_F(EnergyPlusFixture, GetSurfaceData_SurfaceOrder)
 
     int thisSurface = siteShadeShadeFlatShadeSurface;
     EXPECT_FALSE(std::find(HTSurfaces.begin(), HTSurfaces.end(), thisSurface) != HTSurfaces.end());
-    EXPECT_FALSE(std::find(ExtSolarSurfaces.begin(), ExtSolarSurfaces.end(), thisSurface) != ExtSolarSurfaces.end());
+    EXPECT_TRUE(std::find(ExtSolarSurfaces.begin(), ExtSolarSurfaces.end(), thisSurface) != ExtSolarSurfaces.end());
     EXPECT_TRUE(std::find(ExtSolAndShadingSurfaces.begin(), ExtSolAndShadingSurfaces.end(), thisSurface) != ExtSolAndShadingSurfaces.end());
     EXPECT_TRUE(std::find(ShadowPossObstrSurfaces.begin(), ShadowPossObstrSurfaces.end(), thisSurface) != ShadowPossObstrSurfaces.end());
     EXPECT_FALSE(std::find(IZSurfaces.begin(), IZSurfaces.end(), thisSurface) != IZSurfaces.end());
@@ -9631,6 +9671,7 @@ TEST_F(EnergyPlusFixture, GetSurfaceData_SurfaceOrder2)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetProjectControlData(*state, ErrorsFound); // read project control data
     EXPECT_FALSE(ErrorsFound);                  // expect no errors
@@ -10484,6 +10525,7 @@ TEST_F(EnergyPlusFixture, GetSurfaceData_SurfaceOrder3)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetProjectControlData(*state, ErrorsFound); // read project control data
     EXPECT_FALSE(ErrorsFound);                  // expect no errors
@@ -11251,6 +11293,7 @@ TEST_F(EnergyPlusFixture, GetSurfaceData_SurfaceOrder4)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetProjectControlData(*state, ErrorsFound); // read project control data
     EXPECT_FALSE(ErrorsFound);                  // expect no errors
@@ -11639,6 +11682,7 @@ TEST_F(EnergyPlusFixture, Use_Gross_Roof_Area_for_Averge_Height)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetProjectControlData(*state, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
@@ -11938,6 +11982,7 @@ TEST_F(EnergyPlusFixture, Use_Gross_Roof_Area_for_Averge_Height_with_Window)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetProjectControlData(*state, ErrorsFound);
     EXPECT_FALSE(ErrorsFound);
@@ -12007,6 +12052,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetKivaFoundationTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetFoundationData(*state, ErrorsFound);
     std::string const error_string = delimited_string({
@@ -12035,6 +12081,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetKivaFoundationTest2)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->Elevation = 600.;
 
@@ -12044,6 +12091,57 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetKivaFoundationTest2)
                           "   **   ~~~   ** the user-specified Deep-Ground Depth (20.0 m)\n"
                           "   **   ~~~   ** will be overridden with the Autoselected depth (40.0 m)"});
     EXPECT_TRUE(compare_err_stream(error_string, true));
+}
+TEST_F(EnergyPlusFixture, SurfaceGeometry_GetKivaFoundationTest3)
+{
+    bool ErrorsFound(false);
+
+    std::string const idf_objects = delimited_string({
+        "Material,",
+        "  exterior vertical ins,                  !- Name",
+        "  Rough,                                  !- Roughness",
+        "  0.04611624,                             !- Thickness {m}",
+        "  0.029427,                               !- Conductivity {W/m-K}",
+        "  32.04,                                  !- Density {kg/m3}",
+        "  1214.23,                                !- Specific Heat {J/kg-K}",
+        "  0.9,                                    !- Thermal Absorptance",
+        "  0.7,                                    !- Solar Absorptance",
+        "  0.7;                                    !- Visible Absorptance",
+
+        "Foundation:Kiva,",
+        "  Foundation Kiva 1,                      !- Name",
+        "  20,                                     !- Initial Indoor Air Temperature {C}",
+        "  ,                                       !- Interior Horizontal Insulation Material Name",
+        "  ,                                       !- Interior Horizontal Insulation Depth {m}",
+        "  ,                                       !- Interior Horizontal Insulation Width {m}",
+        "  ,                                       !- Interior Vertical Insulation Material Name",
+        "  ,                                       !- Interior Vertical Insulation Depth {m}",
+        "  ,                                       !- Exterior Horizontal Insulation Material Name",
+        "  ,                                       !- Exterior Horizontal Insulation Depth {m}",
+        "  ,                                       !- Exterior Horizontal Insulation Width {m}",
+        "  ,                                       !- Exterior Vertical Insulation Material Name",
+        "  ,                                       !- Exterior Vertical Insulation Depth {m}",
+        "  0.3048,                                 !- Wall Height Above Grade {m}",
+        "  0.2032,                                 !- Wall Depth Below Slab {m}",
+        "  ,                                       !- Footing Wall Construction Name",
+        "  ,                                       !- Footing Material Name",
+        "  ,                                       !- Footing Depth {m}",
+        "  exterior vertical ins,                  !- Custom Block Material Name 1",
+        "  2.4384,                                 !- Custom Block Depth 1 {m}",
+        "  0.2159,                                 !- Custom Block X Position 1 {m}",
+        "  0;                                      !- Custom Block Z Position 1 {m}",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->dataEnvrn->Elevation = 600.;
+
+    Material::GetMaterialData(*state, ErrorsFound);
+    EXPECT_FALSE(ErrorsFound);
+
+    GetFoundationData(*state, ErrorsFound);
+    EXPECT_FALSE(ErrorsFound);
+    EXPECT_TRUE(compare_err_stream(""));
 }
 TEST_F(EnergyPlusFixture, SurfaceGeometry_ZoneAndSpaceAreas)
 {
@@ -12180,6 +12278,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_ZoneAndSpaceAreas)
 
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -12199,17 +12298,14 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_ZoneAndSpaceAreas)
     // Space 2 has a floor surface of area 2.0, user-entered floor area is blank
     EXPECT_EQ(state->dataHeatBal->space(1).Name, "SPACE 1A");
     EXPECT_NEAR(state->dataHeatBal->space(1).userEnteredFloorArea, Constant::AutoCalculate, 0.001);
-    EXPECT_NEAR(state->dataHeatBal->space(1).calcFloorArea, 1.0, 0.001);
     EXPECT_NEAR(state->dataHeatBal->space(1).FloorArea, 10.0, 0.001);
 
     EXPECT_EQ(state->dataHeatBal->space(2).Name, "SPACE 1B");
     EXPECT_NEAR(state->dataHeatBal->space(2).userEnteredFloorArea, Constant::AutoCalculate, 0.001);
-    EXPECT_NEAR(state->dataHeatBal->space(2).calcFloorArea, 2.0, 0.001);
     EXPECT_NEAR(state->dataHeatBal->space(2).FloorArea, 20.0, 0.001);
 
     EXPECT_EQ(state->dataHeatBal->Zone(1).Name, "ZONE 1");
     EXPECT_NEAR(state->dataHeatBal->Zone(1).UserEnteredFloorArea, 30.0, 0.001);
-    EXPECT_NEAR(state->dataHeatBal->Zone(1).CalcFloorArea, 3.0, 0.001);
     EXPECT_NEAR(state->dataHeatBal->Zone(1).FloorArea, 30.0, 0.001);
     Real64 zone1Area = state->dataHeatBal->space(1).FloorArea + state->dataHeatBal->space(2).FloorArea;
     EXPECT_NEAR(state->dataHeatBal->Zone(1).FloorArea, zone1Area, 0.001);
@@ -12218,22 +12314,18 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_ZoneAndSpaceAreas)
     // Space 3 has a floor surface of area 1.0, user-entered floor is 5.0
     EXPECT_EQ(state->dataHeatBal->Zone(3).Name, "ZONE 3");
     EXPECT_NEAR(state->dataHeatBal->Zone(3).UserEnteredFloorArea, Constant::AutoCalculate, 0.001);
-    EXPECT_NEAR(state->dataHeatBal->Zone(3).CalcFloorArea, 5.0, 0.001);
     EXPECT_NEAR(state->dataHeatBal->Zone(3).FloorArea, 5.0, 0.001);
     EXPECT_EQ(state->dataHeatBal->space(3).Name, "SPACE 3");
     EXPECT_NEAR(state->dataHeatBal->space(3).userEnteredFloorArea, 5.0, 0.001);
-    EXPECT_NEAR(state->dataHeatBal->space(3).calcFloorArea, 1.0, 0.001);
     EXPECT_NEAR(state->dataHeatBal->space(3).FloorArea, 5.0, 0.001);
 
     // Zone 2 consists of auto-generated Space 4, user-entered floor area is 20.0
     // Space 4 has a floor surface of area 1.0, user-entered floor is blank
     EXPECT_EQ(state->dataHeatBal->Zone(2).Name, "ZONE 2");
     EXPECT_NEAR(state->dataHeatBal->Zone(2).UserEnteredFloorArea, 20.0, 0.001);
-    EXPECT_NEAR(state->dataHeatBal->Zone(2).CalcFloorArea, 1.0, 0.001);
     EXPECT_NEAR(state->dataHeatBal->Zone(2).FloorArea, 20.0, 0.001);
     EXPECT_EQ(state->dataHeatBal->space(4).Name, "ZONE 2");
     EXPECT_NEAR(state->dataHeatBal->space(4).userEnteredFloorArea, Constant::AutoCalculate, 0.001);
-    EXPECT_NEAR(state->dataHeatBal->space(4).calcFloorArea, 1.0, 0.001);
     EXPECT_NEAR(state->dataHeatBal->space(4).FloorArea, 20.0, 0.001);
 }
 
@@ -12377,6 +12469,8 @@ TEST_F(EnergyPlusFixture, ZoneFloorAreaTest)
 
     // Prepare data for the test
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
     GetMaterialData(*state, ErrorsFound); // read material data
     EXPECT_FALSE(ErrorsFound);
     GetConstructData(*state, ErrorsFound); // read construction data
@@ -12387,15 +12481,14 @@ TEST_F(EnergyPlusFixture, ZoneFloorAreaTest)
     EXPECT_FALSE(ErrorsFound);
     state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
     state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
-    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
-    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
     state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
     state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
     GetSurfaceData(*state, ErrorsFound); // setup zone geometry and get zone data
     EXPECT_FALSE(ErrorsFound);           // expect no errors
 
     EXPECT_NEAR(state->dataHeatBal->Zone(1).FloorArea, 1.0, 0.001);
-    EXPECT_NEAR(state->dataHeatBal->Zone(1).CalcFloorArea, 1.0, 0.001);
 }
 
 TEST_F(EnergyPlusFixture, SurfaceGeometry_GetSurfaceGroundSurfsTest)
@@ -12554,7 +12647,8 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetSurfaceGroundSurfsTest)
                           "    autocalculate;                !- Volume {m3}"});
 
     ASSERT_TRUE(process_idf(idf_objects));
-    ScheduleManager::ProcessScheduleInput(*state);
+    state->init_state(*state);
+
     state->dataHeatBal->ZoneIntGain.allocate(1);
 
     createFacilityElectricPowerServiceObject(*state);
@@ -12569,7 +12663,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetSurfaceGroundSurfsTest)
     state->dataGlobal->TimeStepZone = 1;
     state->dataGlobal->TimeStepZoneSec = 3600.0;
     state->dataGlobal->HourOfDay = 1;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->BeginSimFlag = true;
     state->dataGlobal->BeginEnvrnFlag = true;
     state->dataEnvrn->OutBaroPress = 100000;
@@ -12666,6 +12760,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetVerticesDropDuplicates)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->NumOfZones = 2;
     state->dataHeatBal->Zone.allocate(2);
@@ -12810,6 +12905,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_GetVerticesDropDuplicates_Once)
                                                 fmt::arg("max_y", max_y),
                                                 fmt::arg("off_y", off_y));
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->NumOfZones = 2;
     state->dataHeatBal->Zone.allocate(2);
@@ -12942,6 +13038,7 @@ TEST_F(EnergyPlusFixture, Wrong_Window_Construction)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetProjectControlData(*state, ErrorsFound); // read project control data
     EXPECT_FALSE(ErrorsFound);                  // expect no errors
@@ -12958,8 +13055,8 @@ TEST_F(EnergyPlusFixture, Wrong_Window_Construction)
     state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
     state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
 
-    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
-    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
     state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
     state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
 
@@ -13156,6 +13253,7 @@ TEST_F(EnergyPlusFixture, CalculateZoneVolume_WithAirBoundaries)
     )IDF";
     ASSERT_TRUE(process_idf(idf_objects));
     bool ErrorsFound = false;
+    state->init_state(*state);
 
     GetMaterialData(*state, ErrorsFound); // read material data
     EXPECT_FALSE(ErrorsFound);            // expect no errors
@@ -13173,7 +13271,6 @@ TEST_F(EnergyPlusFixture, CalculateZoneVolume_WithAirBoundaries)
     auto const &zone3 = state->dataHeatBal->Zone(3);
 
     EXPECT_EQ(zone1.UserEnteredFloorArea, -99999.0);
-    EXPECT_EQ(zone1.CalcFloorArea, 0.0);
     EXPECT_EQ(zone1.FloorArea, 0.0);
     EXPECT_EQ(zone1.geometricFloorArea, 1.0);
     EXPECT_FALSE(zone1.HasFloor);
@@ -13184,7 +13281,6 @@ TEST_F(EnergyPlusFixture, CalculateZoneVolume_WithAirBoundaries)
     EXPECT_EQ(zone1.Volume, 2.0);
 
     EXPECT_EQ(zone2.UserEnteredFloorArea, -99999.0);
-    EXPECT_EQ(zone2.CalcFloorArea, 1.0);
     EXPECT_EQ(zone2.FloorArea, 1.0);
     EXPECT_EQ(zone2.geometricFloorArea, 1.0);
     EXPECT_TRUE(zone2.HasFloor);
@@ -13195,7 +13291,6 @@ TEST_F(EnergyPlusFixture, CalculateZoneVolume_WithAirBoundaries)
     EXPECT_EQ(zone2.Volume, 2.0);
 
     EXPECT_EQ(zone3.UserEnteredFloorArea, -99999.0);
-    EXPECT_EQ(zone3.CalcFloorArea, 4.0);
     EXPECT_EQ(zone3.FloorArea, 4.0);
     EXPECT_EQ(zone3.geometricFloorArea, 4.0);
     EXPECT_TRUE(zone3.HasFloor);
@@ -13382,6 +13477,7 @@ TEST_F(EnergyPlusFixture, CalculatZoneVolume_WithoutAirBoundaries)
 
     )IDF";
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     bool ErrorsFound = false;
 
     GetMaterialData(*state, ErrorsFound); // read material data
@@ -13400,7 +13496,6 @@ TEST_F(EnergyPlusFixture, CalculatZoneVolume_WithoutAirBoundaries)
     auto const &zone3 = state->dataHeatBal->Zone(3);
 
     EXPECT_EQ(zone1.UserEnteredFloorArea, -99999.0);
-    EXPECT_EQ(zone1.CalcFloorArea, 1.0);
     EXPECT_EQ(zone1.FloorArea, 1.0);
     EXPECT_EQ(zone1.geometricFloorArea, 1.0);
     EXPECT_TRUE(zone1.HasFloor);
@@ -13411,7 +13506,6 @@ TEST_F(EnergyPlusFixture, CalculatZoneVolume_WithoutAirBoundaries)
     EXPECT_EQ(zone1.Volume, 2.0);
 
     EXPECT_EQ(zone2.UserEnteredFloorArea, -99999.0);
-    EXPECT_EQ(zone2.CalcFloorArea, 1.0);
     EXPECT_EQ(zone2.FloorArea, 1.0);
     EXPECT_EQ(zone2.geometricFloorArea, 1.0);
     EXPECT_TRUE(zone2.HasFloor);
@@ -13422,7 +13516,6 @@ TEST_F(EnergyPlusFixture, CalculatZoneVolume_WithoutAirBoundaries)
     EXPECT_EQ(zone2.Volume, 2.0);
 
     EXPECT_EQ(zone3.UserEnteredFloorArea, -99999.0);
-    EXPECT_EQ(zone3.CalcFloorArea, 4.0);
     EXPECT_EQ(zone3.FloorArea, 4.0);
     EXPECT_EQ(zone3.geometricFloorArea, 4.0);
     EXPECT_TRUE(zone3.HasFloor);
@@ -13726,9 +13819,7 @@ TEST_F(EnergyPlusFixture, GetSurfaceData_ShadingSurfaceScheduleChecks)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
-    SimulationManager::GetProjectData(*state); // read project data
-    ScheduleManager::ProcessScheduleInput(*state);
+    state->init_state(*state);
 
     GetMaterialData(*state, ErrorsFound); // read material data
     EXPECT_FALSE(ErrorsFound);            // expect no errors
@@ -13973,9 +14064,7 @@ TEST_F(EnergyPlusFixture, GetSurfaceData_ShadingSurfaceScheduleOutOfRange)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
-    SimulationManager::GetProjectData(*state); // read project data
-    ScheduleManager::ProcessScheduleInput(*state);
+    state->init_state(*state);
 
     GetMaterialData(*state, ErrorsFound); // read material data
     EXPECT_FALSE(ErrorsFound);            // expect no errors
@@ -13989,31 +14078,15 @@ TEST_F(EnergyPlusFixture, GetSurfaceData_ShadingSurfaceScheduleOutOfRange)
     EXPECT_THROW(SetupZoneGeometry(*state, ErrorsFound), std::runtime_error);
     // EXPECT_THROW(GetSurfaceData(*state, ErrorsFound), std::runtime_error);
     EXPECT_TRUE(ErrorsFound);
-    std::string const error_string = delimited_string(
-        {"   ** Severe  ** Shading:Building:Detailed=\"BUILDINGSHADE:TILTEDSHADESURFACE\", Transmittance Schedule Name=\"OUTOFRANGE\", values not in "
-         "range [0,1].",
-         "   ** Severe  ** Shading:Building:Detailed=\"BUILDINGSHADE:TILTEDSHADESURFACE\", Transmittance Schedule Name=\"OUTOFRANGE\", "
-         "has schedule values < 0.",
-         "   **   ~~~   ** ...Schedule values < 0 have no meaning for shading elements.",
-         "   ** Severe  ** "
-         "Shading:Building:Detailed=\"BUILDINGSHADE:TILTEDSHADESURFACE\", Transmittance Schedule Name=\"OUTOFRANGE\", has schedule values > 1.",
-         "   **   ~~~   ** ...Schedule values > 1 have no meaning for shading elements.",
-         "   ** Severe  ** "
-         "Shading:Zone:Detailed=\"ZONESHADE:LIVING:SOUTH:SHADE001\", Transmittance Schedule Name=\"OUTOFRANGE\", values not in range [0,1].",
-         "   ** "
-         "Severe  ** Shading:Zone:Detailed=\"ZONESHADE:LIVING:SOUTH:SHADE001\", Base Surface Name=\"LIVING:SOUTH\", has schedule values < 0.",
-         "   **  "
-         " ~~~   ** ...Schedule values < 0 have no meaning for shading elements.",
-         "   ** Severe  ** "
-         "Shading:Zone:Detailed=\"ZONESHADE:LIVING:SOUTH:SHADE001\", Base Surface Name=\"LIVING:SOUTH\", has schedule values > 1.",
-         "   **   ~~~   ** "
-         "...Schedule values > 1 have no meaning for shading elements.",
-         "   **  Fatal  ** GetSurfaceData: Errors discovered, program terminates.",
-         "   "
-         "...Summary of Errors that led to program termination:",
-         "   ..... Reference severe error count=6",
-         "   ..... Last severe error=Shading:Zone:Detailed=\"ZONESHADE:LIVING:SOUTH:SHADE001\", Base Surface Name=\"LIVING:SOUTH\", has schedule "
-         "values > 1."});
+    std::string const error_string =
+        delimited_string({"   ** Severe  ** GetDetShdSurfaceData: Shading:Building:Detailed = BUILDINGSHADE:TILTEDSHADESURFACE",
+                          "   **   ~~~   ** Transmittance Schedule Name = OUTOFRANGE, schedule contains values that are < 0 and/or > 1",
+                          "   ** Severe  ** GetAttShdSurfaceData: Shading:Zone:Detailed = ZONESHADE:LIVING:SOUTH:SHADE001",
+                          "   **   ~~~   ** Transmittance Schedule Name = OUTOFRANGE, schedule contains values that are < 0 and/or > 1",
+                          "   **  Fatal  ** GetSurfaceData: Errors discovered, program terminates.",
+                          "   ...Summary of Errors that led to program termination:",
+                          "   ..... Reference severe error count=2",
+                          "   ..... Last severe error=GetAttShdSurfaceData: Shading:Zone:Detailed = ZONESHADE:LIVING:SOUTH:SHADE001"});
 
     compare_err_stream(error_string);
     // compare_err_stream( "" ); // just for debugging
@@ -14096,7 +14169,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_SurroundingSurfacesViewFactorTest)
         1,                            !- Multiplier
         autocalculate,                !- Ceiling Height {m}
         autocalculate;                !- Volume {m3}
-                          
+
 	  Material,
         Concrete Block,               !- Name
         MediumRough,                  !- Roughness
@@ -14203,7 +14276,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_SurroundingSurfacesViewFactorTest)
         SrdSurfs:Surface 3,           !- Surrounding Surface 3 Name
         0.1,                          !- Surrounding Surface 3 View Factor
         Surrounding Temp Sch 3;       !- Surrounding Surface 3 Temperature Schedule Name
-							
+
       Schedule:Compact,
         Surrounding Temp Sch 1,       !- Name
         Any Number,                   !- Schedule Type Limits Name
@@ -14224,14 +14297,13 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_SurroundingSurfacesViewFactorTest)
         Through: 12/31,               !- Field 1
         For: AllDays,                 !- Field 2
         Until: 24:00, 15.0;           !- Field 3
-	
+
     )IDF";
 
     bool ErrorsFound = false;
     ASSERT_TRUE(process_idf(idf_objects));
-    // process schedules
-    ScheduleManager::ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
+    state->init_state(*state);
+
     state->dataHeatBal->ZoneIntGain.allocate(1);
     createFacilityElectricPowerServiceObject(*state);
     HeatBalanceManager::SetPreConstructionInputParameters(*state);
@@ -14311,7 +14383,7 @@ TEST_F(EnergyPlusFixture, SurfaceGeometry_SurroundingSurfacesViewFactorTest)
 
 TEST_F(EnergyPlusFixture, Fix_checkSubSurfAzTiltNorm_Horizontal_Surf_Random)
 {
-    // Unit Test for Pull Request 10104 that addresses a potential illy functioned (or redudant) `if` condition
+    // Unit Test for Pull Request 10104 that addresses a potential illy functioned (or redundant) `if` condition
     SurfaceData BaseSurface;
     SurfaceData SubSurface;
     SurfaceData SubSurface_Same;
@@ -14412,4 +14484,1631 @@ TEST_F(EnergyPlusFixture, Fix_checkSubSurfAzTiltNorm_Horizontal_Surf_Random)
     EXPECT_DOUBLE_EQ(BaseSurface.lcsz.z, SubSurface_Same.lcsz.z);
     EXPECT_DOUBLE_EQ(BaseSurface.lcsz.y, SubSurface_Same.lcsz.y);
     EXPECT_DOUBLE_EQ(BaseSurface.lcsz.x, SubSurface_Same.lcsz.x);
+}
+
+TEST_F(EnergyPlusFixture, ExtSolarForShadingTest)
+{
+    // Unit test added as part of the fix for Defect #5949 (certain output variables not being produced for shading elements
+    bool ErrorsFound = false;
+    std::string const idf_objects = delimited_string({
+        "Shading:Building:Detailed,",
+        "  ShadeTest1BuildingDetailed, !- Name",
+        "  ,                           !- Transmittance Schedule Name",
+        "  4,                          !- Number of Vertices",
+        "  -20.0,4.0,10.0,             !- X,Y,Z ==> Vertex 1 {m}",
+        "  -20.0,0.00,10.0,            !- X,Y,Z ==> Vertex 2 {m}",
+        "  -55.0,0.00,0.0,             !- X,Y,Z ==> Vertex 3 {m}",
+        "  -55.0,4.0,0.0;              !- X,Y,Z ==> Vertex 4 {m}",
+
+        "Shading:Site:Detailed,",
+        "  ShadeTest2SiteDetailed, !- Name",
+        "  ,                       !- Transmittance Schedule Name",
+        "  4,                      !- Number of Vertices",
+        "  20.0,14.0,23.0,         !- X,Y,Z ==> Vertex 1 {m}",
+        "  20.0,0.00,23.0,         !- X,Y,Z ==> Vertex 2 {m}",
+        "  55.0,0.00,23.0,         !- X,Y,Z ==> Vertex 3 {m}",
+        "  55.0,14.0,23.0;         !- X,Y,Z ==> Vertex 4 {m}",
+
+        "Shading:Building,",
+        "  ShadeTest3Building, !- Name",
+        "  123.4,              !- Azimuth Angle {deg}",
+        "  45,                 !- Tilt Angle {deg}",
+        "  0.1,                !- Starting X Coordinate {m}",
+        "  2.3,                !- Starting Y Coordinate {m}",
+        "  4.5,                !- Starting Z Coordinate {m}",
+        "  6.7,                !- Length {m}",
+        "  8.9;                !- Height {m}",
+
+        "Shading:Site,",
+        "  ShadeTest4Site, !- Name",
+        "  154.1,          !- Azimuth Angle {deg}",
+        "  45,             !- Tilt Angle {deg}",
+        "  -8.5,           !- Starting X Coordinate {m}",
+        "  2.5,            !- Starting Y Coordinate {m}",
+        "  6.3,            !- Starting Z Coordinate {m}",
+        "  3.6,            !- Length {m}",
+        "  1.5;            !- Height {m}",
+
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    int TotSurfaces = 8;                                          // Need to double the number of surfaces because E+ will add mirrored surfaces
+    state->dataSurfaceGeometry->SurfaceTmp.allocate(TotSurfaces); // Allocate the Surface derived type appropriately
+    state->dataSurface->Corner = LowerLeftCorner;
+    state->dataSurface->WorldCoordSystem = true;
+
+    int NumSurfs = 0;
+    int TotDetachedFixed = 1;
+    int TotDetachedBldg = 1;
+    int TotRectDetachedFixed = 1;
+    int TotRectDetachedBldg = 1;
+    SurfaceGeometry::GetDetShdSurfaceData(*state, ErrorsFound, NumSurfs, TotDetachedFixed, TotDetachedBldg);
+    SurfaceGeometry::GetRectDetShdSurfaceData(*state, ErrorsFound, NumSurfs, TotRectDetachedFixed, TotRectDetachedBldg);
+    EXPECT_FALSE(ErrorsFound); // expect no errors
+
+    // Check set-up of select variables for all four detached shading types
+    auto &thisSG = state->dataSurfaceGeometry;
+
+    // First processed surface will be the detailed site shading surface
+    EXPECT_EQ(thisSG->SurfaceTmp(1).Name, "SHADETEST2SITEDETAILED");
+    EXPECT_ENUM_EQ(thisSG->SurfaceTmp(1).Class, SurfaceClass::Detached_F);
+    EXPECT_FALSE(thisSG->SurfaceTmp(1).HeatTransSurf);
+    EXPECT_TRUE(thisSG->SurfaceTmp(1).ExtSolar);
+    EXPECT_EQ(thisSG->SurfaceTmp(2).Name, "Mir-SHADETEST2SITEDETAILED");
+    EXPECT_ENUM_EQ(thisSG->SurfaceTmp(2).Class, SurfaceClass::Detached_F);
+    EXPECT_FALSE(thisSG->SurfaceTmp(2).HeatTransSurf);
+    EXPECT_TRUE(thisSG->SurfaceTmp(2).ExtSolar);
+
+    // Second processed surface will be the detailed building shading surface
+    EXPECT_EQ(thisSG->SurfaceTmp(3).Name, "SHADETEST1BUILDINGDETAILED");
+    EXPECT_ENUM_EQ(thisSG->SurfaceTmp(3).Class, SurfaceClass::Detached_B);
+    EXPECT_FALSE(thisSG->SurfaceTmp(3).HeatTransSurf);
+    EXPECT_TRUE(thisSG->SurfaceTmp(3).ExtSolar);
+    EXPECT_EQ(thisSG->SurfaceTmp(4).Name, "Mir-SHADETEST1BUILDINGDETAILED");
+    EXPECT_ENUM_EQ(thisSG->SurfaceTmp(4).Class, SurfaceClass::Detached_B);
+    EXPECT_FALSE(thisSG->SurfaceTmp(4).HeatTransSurf);
+    EXPECT_TRUE(thisSG->SurfaceTmp(4).ExtSolar);
+
+    // Third processed surface will be the site (simple) shading surface
+    EXPECT_EQ(thisSG->SurfaceTmp(5).Name, "SHADETEST4SITE");
+    EXPECT_ENUM_EQ(thisSG->SurfaceTmp(5).Class, SurfaceClass::Detached_F);
+    EXPECT_FALSE(thisSG->SurfaceTmp(5).HeatTransSurf);
+    EXPECT_TRUE(thisSG->SurfaceTmp(5).ExtSolar);
+    EXPECT_EQ(thisSG->SurfaceTmp(6).Name, "Mir-SHADETEST4SITE");
+    EXPECT_ENUM_EQ(thisSG->SurfaceTmp(6).Class, SurfaceClass::Detached_F);
+    EXPECT_FALSE(thisSG->SurfaceTmp(6).HeatTransSurf);
+    EXPECT_TRUE(thisSG->SurfaceTmp(6).ExtSolar);
+
+    // Fourth processed surface will be the building (simple) shading surface
+    EXPECT_EQ(thisSG->SurfaceTmp(7).Name, "SHADETEST3BUILDING");
+    EXPECT_ENUM_EQ(thisSG->SurfaceTmp(7).Class, SurfaceClass::Detached_B);
+    EXPECT_FALSE(thisSG->SurfaceTmp(7).HeatTransSurf);
+    EXPECT_TRUE(thisSG->SurfaceTmp(7).ExtSolar);
+    EXPECT_EQ(thisSG->SurfaceTmp(8).Name, "Mir-SHADETEST3BUILDING");
+    EXPECT_ENUM_EQ(thisSG->SurfaceTmp(8).Class, SurfaceClass::Detached_B);
+    EXPECT_FALSE(thisSG->SurfaceTmp(8).HeatTransSurf);
+    EXPECT_TRUE(thisSG->SurfaceTmp(8).ExtSolar);
+}
+TEST_F(EnergyPlusFixture, SurfaceGeometry_ZoneOutsideBC_SpacesNotInput)
+{
+    // Two 10x10m zones. A door between both that has a Construction:AirBoundary assigned (its base surface is a regular interior wall)
+    std::string const idf_objects = delimited_string({
+
+        "Material,",
+        "  8IN Concrete HW,                        !- Name",
+        "  MediumRough,                            !- Roughness",
+        "  0.2033,                                 !- Thickness {m}",
+        "  1.72959999999999,                       !- Conductivity {W/m-K}",
+        "  2242.99999999999,                       !- Density {kg/m3}",
+        "  836.999999999999,                       !- Specific Heat {J/kg-K}",
+        "  0.9,                                    !- Thermal Absorptance",
+        "  0.65,                                   !- Solar Absorptance",
+        "  0.65;                                   !- Visible Absorptance",
+
+        "Material,",
+        "    Gypsum Board,            !- Name",
+        "    MediumSmooth,            !- Roughness",
+        "    0.0159,                  !- Thickness {m}",
+        "    0.16,                    !- Conductivity {W/m-K}",
+        "    800,                     !- Density {kg/m3}",
+        "    1090,                    !- Specific Heat {J/kg-K}",
+        "    0.9,                     !- Thermal Absorptance",
+        "    0.7,                     !- Solar Absorptance",
+        "    0.7;                     !- Visible Absorptance",
+
+        "Construction,",
+        "  Regular Construction,                   !- Name",
+        "  8IN Concrete HW,                        !- Layer 1",
+        "  Gypsum Board;                           !- Layer 2",
+
+        "Zone,",
+        "  Zone1;                                  !- Name",
+
+        "Zone,",
+        "  Zone2;                                  !- Name",
+
+        "Zone,",
+        "  Zone3;                                  !- Name",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Ceiling,                         !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 3 {m}",
+        "  0, 0, 2.4384;                           !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Floor,                           !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 0, 0,                                !- X,Y,Z Vertex 1 {m}",
+        "  0, 10, 0,                               !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-InteriorWall,                    !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Zone,                                   !- Outside Boundary Condition",
+        "  Zone2,                                  !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Space1-InteriorDoor,                    !- Name",
+        "  Door,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Space1-InteriorWall,                    !- Building Surface Name",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Frame and Divider Name",
+        "  ,                                       !- Multiplier",
+        "  ,                                       !- Number of Vertices",
+        "  10, 7.05, 2,                            !- X,Y,Z Vertex 1 {m}",
+        "  10, 7.05, 0,                            !- X,Y,Z Vertex 2 {m}",
+        "  10, 7.95, 0,                            !- X,Y,Z Vertex 3 {m}",
+        "  10, 7.95, 2;                            !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-North,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  0, 10, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-South,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  0, 0, 2.4384,                           !- X,Y,Z Vertex 2 {m}",
+        "  0, 0, 0,                                !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-West,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 0, 2.4384,                           !- X,Y,Z Vertex 1 {m}",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  0, 10, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  0, 0, 0;                                !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Ceiling,                         !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 2.4384;                          !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Floor,                           !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-East,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  20, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-North,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-South,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Ceiling,                          !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 2.4384;                          !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Floor,                            !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-East,                        !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  20, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-North,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-South,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-InteriorWall2,                    !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  ,                                       !- Space Name",
+        "  Zone,                                   !- Outside Boundary Condition",
+        "  Zone3,                                  !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Space1-InteriorWindow,                  !- Name",
+        "  Window,                                 !- Surface Type",
+        "  SINGLE PANE HW WINDOW,                  !- Construction Name",
+        "  Space1-InteriorWall2,                   !- Building Surface Name",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Frame and Divider Name",
+        "  ,                                       !- Multiplier",
+        "  ,                                       !- Number of Vertices",
+        "  10, 7.05, 2,                            !- X,Y,Z Vertex 1 {m}",
+        "  10, 7.05, 0,                            !- X,Y,Z Vertex 2 {m}",
+        "  10, 7.95, 0,                            !- X,Y,Z Vertex 3 {m}",
+        "  10, 7.95, 2;                            !- X,Y,Z Vertex 4 {m}",
+
+        " Construction,",
+        "    SINGLE PANE HW WINDOW,   !- Name",
+        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        " WindowMaterial:Glazing,",
+        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "    SpectralAverage,         !- Optical Data Type",
+        "    ,                        !- Window Glass Spectral Data Set Name",
+        "    6.0000001E-03,           !- Thickness {m}",
+        "    0.7750000,               !- Solar Transmittance at Normal Incidence",
+        "    7.1000002E-02,           !- Front Side Solar Reflectance at Normal Incidence",
+        "    7.1000002E-02,           !- Back Side Solar Reflectance at Normal Incidence",
+        "    0.8810000,               !- Visible Transmittance at Normal Incidence",
+        "    7.9999998E-02,           !- Front Side Visible Reflectance at Normal Incidence",
+        "    7.9999998E-02,           !- Back Side Visible Reflectance at Normal Incidence",
+        "    0,                       !- Infrared Transmittance at Normal Incidence",
+        "    0.8400000,               !- Front Side Infrared Hemispherical Emissivity",
+        "    0.8400000,               !- Back Side Infrared Hemispherical Emissivity",
+        "    0.9000000;               !- Conductivity {W/m-K}",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    bool ErrorsFound = false;
+
+    GetMaterialData(*state, ErrorsFound); // read material data
+    EXPECT_FALSE(ErrorsFound);            // expect no errors
+
+    GetConstructData(*state, ErrorsFound); // read construction data
+    EXPECT_FALSE(ErrorsFound);             // expect no errors
+
+    GetZoneData(*state, ErrorsFound); // read zone data
+    EXPECT_FALSE(ErrorsFound);        // expect no errors
+
+    // This is ill-named, but it will shut the "No Ground Temperature" warning when set to false
+    state->dataSurfaceGeometry->NoGroundTempObjWarning = false;
+
+    // I don't do ASSERT_NO_THROW because I want to see the err stream to show original defect. But I ASSERT there's no err_stream because we can't
+    // continue if it did throw
+    EXPECT_NO_THROW(SetupZoneGeometry(*state, ErrorsFound));
+    ASSERT_TRUE(compare_err_stream(
+        "   ** Warning ** CalculateZoneVolume: 1 zone is not fully enclosed. For more details use:  Output:Diagnostics,DisplayExtrawarnings; \n"));
+
+    EXPECT_FALSE(ErrorsFound); // expect no errors
+
+    EXPECT_EQ(state->dataViewFactor->NumOfRadiantEnclosures, 3);
+    EXPECT_EQ("ZONE1", state->dataViewFactor->EnclRadInfo(1).Name);
+    EXPECT_EQ("ZONE2", state->dataViewFactor->EnclRadInfo(2).Name);
+    EXPECT_EQ("ZONE3", state->dataViewFactor->EnclRadInfo(3).Name);
+    EXPECT_EQ("ZONE1", state->dataViewFactor->EnclRadInfo(1).spaceNames[0]);
+    EXPECT_EQ("ZONE2", state->dataViewFactor->EnclRadInfo(2).spaceNames[0]);
+    EXPECT_EQ("ZONE3", state->dataViewFactor->EnclRadInfo(3).spaceNames[0]);
+    EXPECT_EQ(state->dataHeatBal->space(1).radiantEnclosureNum, 1);
+    EXPECT_EQ(state->dataHeatBal->space(2).radiantEnclosureNum, 2);
+    EXPECT_EQ(state->dataHeatBal->space(3).radiantEnclosureNum, 3);
+    EXPECT_EQ(state->dataHeatBal->space(1).surfaces.size(), 9);
+    EXPECT_EQ(state->dataHeatBal->space(2).surfaces.size(), 7);
+    EXPECT_EQ(state->dataHeatBal->space(3).surfaces.size(), 7);
+
+    int originalIntWallNum = Util::FindItemInList("SPACE1-INTERIORWALL", state->dataSurface->Surface);
+    int originalIntDoorNum = Util::FindItemInList("SPACE1-INTERIORDOOR", state->dataSurface->Surface);
+    int originalIntWall2Num = Util::FindItemInList("SPACE1-INTERIORWALL2", state->dataSurface->Surface);
+    int originalIntWinNum = Util::FindItemInList("SPACE1-INTERIORWINDOW", state->dataSurface->Surface);
+    int izIntWallNum = Util::FindItemInList("iz-SPACE1-INTERIORWALL", state->dataSurface->Surface);
+    int izIntDoorNum = Util::FindItemInList("iz-SPACE1-INTERIORDOOR", state->dataSurface->Surface);
+    int izIntWall2Num = Util::FindItemInList("iz-SPACE1-INTERIORWALL2", state->dataSurface->Surface);
+    int izIntWinNum = Util::FindItemInList("iz-SPACE1-INTERIORWINDOW", state->dataSurface->Surface);
+    auto &originalIntWall = state->dataSurface->Surface(originalIntWallNum);
+    auto &originalIntDoor = state->dataSurface->Surface(originalIntDoorNum);
+    auto &originalIntWall2 = state->dataSurface->Surface(originalIntWall2Num);
+    auto &originalIntWin = state->dataSurface->Surface(originalIntWinNum);
+    auto &izIntWall = state->dataSurface->Surface(izIntWallNum);
+    auto &izIntDoor = state->dataSurface->Surface(izIntDoorNum);
+    auto &izIntWall2 = state->dataSurface->Surface(izIntWall2Num);
+    auto &izIntWin = state->dataSurface->Surface(izIntWinNum);
+
+    // Original wall input with Zone outside boundary condition
+    // Now points to auto-generated wall in Zone2
+    EXPECT_EQ(originalIntWall.Zone, 1);
+    EXPECT_EQ(originalIntWall.spaceNum, 1);
+    EXPECT_EQ(originalIntWall.ExtBoundCond, izIntWallNum);
+    EXPECT_EQ(originalIntWall.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWall.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated wall in Zone2, points to original wall in Zone1
+    EXPECT_EQ(izIntWall.Zone, 2);
+    EXPECT_EQ(izIntWall.spaceNum, 2);
+    EXPECT_EQ(izIntWall.ExtBoundCond, originalIntWallNum);
+    EXPECT_EQ(izIntWall.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWall.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original wall input with Zone outside boundary condition
+    // Now points to auto-generated wall in Zone3, Space3
+    EXPECT_EQ(originalIntWall2.Zone, 1);
+    EXPECT_EQ(originalIntWall2.spaceNum, 1);
+    EXPECT_EQ(originalIntWall2.ExtBoundCond, izIntWall2Num);
+    EXPECT_EQ(originalIntWall2.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWall2.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated wall in Zone3, Space3, points to original wall in Zone1
+    EXPECT_EQ(izIntWall2.Zone, 3);
+    EXPECT_EQ(izIntWall2.spaceNum, 3);
+    EXPECT_EQ(izIntWall2.ExtBoundCond, originalIntWall2Num);
+    EXPECT_EQ(izIntWall2.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWall2.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original Door input with blank outside boundary condition, inherits base surface boundary condition
+    // Now points to auto-generated door in Zone2
+    EXPECT_EQ(originalIntDoor.Zone, 1);
+    EXPECT_EQ(originalIntDoor.spaceNum, 1);
+    EXPECT_EQ(originalIntDoor.ExtBoundCond, izIntDoorNum);
+    EXPECT_EQ(originalIntDoor.Class, DataSurfaces::SurfaceClass::Door);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntDoor.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated door in Zone2, points to original door in Zone1
+    EXPECT_EQ(izIntDoor.Zone, 2);
+    EXPECT_EQ(izIntDoor.spaceNum, 2);
+    EXPECT_EQ(izIntDoor.ExtBoundCond, originalIntDoorNum);
+    EXPECT_EQ(izIntDoor.Class, DataSurfaces::SurfaceClass::Door);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntDoor.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original Window input with blank outside boundary condition, inherits base surface boundary condition
+    // Now points to auto-generated window in Zone3, Space3
+    EXPECT_EQ(originalIntWin.Zone, 1);
+    EXPECT_EQ(originalIntWin.spaceNum, 1);
+    EXPECT_EQ(originalIntWin.ExtBoundCond, izIntWinNum);
+    EXPECT_EQ(originalIntWin.Class, DataSurfaces::SurfaceClass::Window);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWin.Construction).Name, "SINGLE PANE HW WINDOW");
+    // Auto-generated window in Zone3, points to original window in Zone1
+    EXPECT_EQ(izIntWin.Zone, 3);
+    EXPECT_EQ(izIntWin.spaceNum, 3);
+    EXPECT_EQ(izIntWin.ExtBoundCond, originalIntWinNum);
+    EXPECT_EQ(izIntWin.Class, DataSurfaces::SurfaceClass::Window);
+    // SINGLE PANE HW WINDOW is a single-layer construction, so the same construction works for both sides
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWin.Construction).Name, "SINGLE PANE HW WINDOW");
+}
+TEST_F(EnergyPlusFixture, SurfaceGeometry_ZoneOutsideBC_SpacesInput)
+{
+    // Two 10x10m zones. A door between both that has a Construction:AirBoundary assigned (its base surface is a regular interior wall)
+    std::string const idf_objects = delimited_string({
+
+        "Material,",
+        "  8IN Concrete HW,                        !- Name",
+        "  MediumRough,                            !- Roughness",
+        "  0.2033,                                 !- Thickness {m}",
+        "  1.72959999999999,                       !- Conductivity {W/m-K}",
+        "  2242.99999999999,                       !- Density {kg/m3}",
+        "  836.999999999999,                       !- Specific Heat {J/kg-K}",
+        "  0.9,                                    !- Thermal Absorptance",
+        "  0.65,                                   !- Solar Absorptance",
+        "  0.65;                                   !- Visible Absorptance",
+
+        "Material,",
+        "    Gypsum Board,            !- Name",
+        "    MediumSmooth,            !- Roughness",
+        "    0.0159,                  !- Thickness {m}",
+        "    0.16,                    !- Conductivity {W/m-K}",
+        "    800,                     !- Density {kg/m3}",
+        "    1090,                    !- Specific Heat {J/kg-K}",
+        "    0.9,                     !- Thermal Absorptance",
+        "    0.7,                     !- Solar Absorptance",
+        "    0.7;                     !- Visible Absorptance",
+
+        "Construction,",
+        "  Regular Construction,                   !- Name",
+        "  8IN Concrete HW,                        !- Layer 1",
+        "  Gypsum Board;                           !- Layer 2",
+
+        "Zone,",
+        "  Zone1;                                  !- Name",
+
+        "Zone,",
+        "  Zone2;                                  !- Name",
+
+        "Zone,",
+        "  Zone3;                                  !- Name",
+
+        "Space,",
+        "  Space1,                                 !- Name",
+        "  Zone1;                                  !- Zone Name",
+
+        "Space,",
+        "  Space2,                                 !- Name",
+        "  Zone2;                                  !- Zone Name",
+
+        "Space,",
+        "  Space3a,                                 !- Name",
+        "  Zone3;                                  !- Zone Name",
+
+        "Space,",
+        "  Space3b,                                 !- Name",
+        "  Zone3;                                  !- Zone Name",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Ceiling,                         !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 3 {m}",
+        "  0, 0, 2.4384;                           !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Floor,                           !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 0, 0,                                !- X,Y,Z Vertex 1 {m}",
+        "  0, 10, 0,                               !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-InteriorWall,                    !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Zone,                                   !- Outside Boundary Condition",
+        "  Zone2,                                  !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Space1-InteriorDoor,                    !- Name",
+        "  Door,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Space1-InteriorWall,                    !- Building Surface Name",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Frame and Divider Name",
+        "  ,                                       !- Multiplier",
+        "  ,                                       !- Number of Vertices",
+        "  10, 7.05, 2,                            !- X,Y,Z Vertex 1 {m}",
+        "  10, 7.05, 0,                            !- X,Y,Z Vertex 2 {m}",
+        "  10, 7.95, 0,                            !- X,Y,Z Vertex 3 {m}",
+        "  10, 7.95, 2;                            !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-North,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  0, 10, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-South,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  0, 0, 2.4384,                           !- X,Y,Z Vertex 2 {m}",
+        "  0, 0, 0,                                !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-West,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 0, 2.4384,                           !- X,Y,Z Vertex 1 {m}",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  0, 10, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  0, 0, 0;                                !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Ceiling,                         !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 2.4384;                          !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Floor,                           !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-East,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  20, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-North,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-South,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Ceiling,                          !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3a,                                !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 2.4384;                          !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Floor,                            !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3a,                                !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-East,                        !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3b,                                !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  20, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-North,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3b,                                !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-South,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3a,                                !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-InteriorWall2,                    !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Zone,                                   !- Outside Boundary Condition",
+        "  Zone3,                                  !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Space1-InteriorWindow,                  !- Name",
+        "  Window,                                 !- Surface Type",
+        "  SINGLE PANE HW WINDOW,                  !- Construction Name",
+        "  Space1-InteriorWall2,                   !- Building Surface Name",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Frame and Divider Name",
+        "  ,                                       !- Multiplier",
+        "  ,                                       !- Number of Vertices",
+        "  10, 7.05, 2,                            !- X,Y,Z Vertex 1 {m}",
+        "  10, 7.05, 0,                            !- X,Y,Z Vertex 2 {m}",
+        "  10, 7.95, 0,                            !- X,Y,Z Vertex 3 {m}",
+        "  10, 7.95, 2;                            !- X,Y,Z Vertex 4 {m}",
+
+        " Construction,",
+        "    SINGLE PANE HW WINDOW,   !- Name",
+        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        " WindowMaterial:Glazing,",
+        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "    SpectralAverage,         !- Optical Data Type",
+        "    ,                        !- Window Glass Spectral Data Set Name",
+        "    6.0000001E-03,           !- Thickness {m}",
+        "    0.7750000,               !- Solar Transmittance at Normal Incidence",
+        "    7.1000002E-02,           !- Front Side Solar Reflectance at Normal Incidence",
+        "    7.1000002E-02,           !- Back Side Solar Reflectance at Normal Incidence",
+        "    0.8810000,               !- Visible Transmittance at Normal Incidence",
+        "    7.9999998E-02,           !- Front Side Visible Reflectance at Normal Incidence",
+        "    7.9999998E-02,           !- Back Side Visible Reflectance at Normal Incidence",
+        "    0,                       !- Infrared Transmittance at Normal Incidence",
+        "    0.8400000,               !- Front Side Infrared Hemispherical Emissivity",
+        "    0.8400000,               !- Back Side Infrared Hemispherical Emissivity",
+        "    0.9000000;               !- Conductivity {W/m-K}",
+
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    bool ErrorsFound = false;
+
+    GetMaterialData(*state, ErrorsFound); // read material data
+    EXPECT_FALSE(ErrorsFound);            // expect no errors
+
+    GetConstructData(*state, ErrorsFound); // read construction data
+    EXPECT_FALSE(ErrorsFound);             // expect no errors
+
+    GetZoneData(*state, ErrorsFound); // read zone data
+    EXPECT_FALSE(ErrorsFound);        // expect no errors
+
+    // This is ill-named, but it will shut the "No Ground Temperature" warning when set to false
+    state->dataSurfaceGeometry->NoGroundTempObjWarning = false;
+
+    // I don't do ASSERT_NO_THROW because I want to see the err stream to show original defect. But I ASSERT there's no err_stream because we can't
+    // continue if it did throw
+    EXPECT_NO_THROW(SetupZoneGeometry(*state, ErrorsFound));
+
+    std::string const error_string = delimited_string(
+        {"   ** Warning ** CreateMissingSpaces: Surface=\"SPACE1-INTERIORWALL2\" has Outside Boundary Condition=Zone, but Zone=\"ZONE3\" has more "
+         "than 1 Space.",
+         "   **   ~~~   ** Auto-generated surface=\"iz-SPACE1-INTERIORWALL2\" will be assigned to Space=\"SPACE3B\"",
+         "   **   ~~~   ** Use Outside Boundary Condition = Space to specify the exact Space for the outside boundary.",
+         "   ** Warning ** CreateMissingSpaces: Surface=\"SPACE1-INTERIORWINDOW\" has Outside Boundary Condition=Zone, but Zone=\"ZONE3\" has more "
+         "than 1 Space.",
+         "   **   ~~~   ** Auto-generated surface=\"iz-SPACE1-INTERIORWINDOW\" will be assigned to Space=\"SPACE3B\"",
+         "   **   ~~~   ** Use Outside Boundary Condition = Space to specify the exact Space for the outside boundary.",
+         "   ** Warning ** CalculateZoneVolume: 1 zone is not fully enclosed. For more details use:  Output:Diagnostics,DisplayExtrawarnings; "});
+
+    ASSERT_TRUE(compare_err_stream(error_string));
+
+    EXPECT_FALSE(ErrorsFound); // expect no errors
+
+    EXPECT_EQ(state->dataViewFactor->NumOfRadiantEnclosures, 4);
+    EXPECT_EQ("SPACE1", state->dataViewFactor->EnclRadInfo(1).Name);
+    EXPECT_EQ("SPACE2", state->dataViewFactor->EnclRadInfo(2).Name);
+    EXPECT_EQ("SPACE3A", state->dataViewFactor->EnclRadInfo(3).Name);
+    EXPECT_EQ("SPACE3B", state->dataViewFactor->EnclRadInfo(4).Name);
+    EXPECT_EQ("SPACE1", state->dataViewFactor->EnclRadInfo(1).spaceNames[0]);
+    EXPECT_EQ("SPACE2", state->dataViewFactor->EnclRadInfo(2).spaceNames[0]);
+    EXPECT_EQ("SPACE3A", state->dataViewFactor->EnclRadInfo(3).spaceNames[0]);
+    EXPECT_EQ("SPACE3B", state->dataViewFactor->EnclRadInfo(4).spaceNames[0]);
+    EXPECT_EQ(state->dataHeatBal->space(1).radiantEnclosureNum, 1);
+    EXPECT_EQ(state->dataHeatBal->space(2).radiantEnclosureNum, 2);
+    EXPECT_EQ(state->dataHeatBal->space(3).radiantEnclosureNum, 3);
+    EXPECT_EQ(state->dataHeatBal->space(4).radiantEnclosureNum, 4);
+    EXPECT_EQ(state->dataHeatBal->space(1).surfaces.size(), 9);
+    EXPECT_EQ(state->dataHeatBal->space(2).surfaces.size(), 7);
+    EXPECT_EQ(state->dataHeatBal->space(3).surfaces.size(), 3);
+    EXPECT_EQ(state->dataHeatBal->space(4).surfaces.size(), 4);
+
+    int originalIntWallNum = Util::FindItemInList("SPACE1-INTERIORWALL", state->dataSurface->Surface);
+    int originalIntDoorNum = Util::FindItemInList("SPACE1-INTERIORDOOR", state->dataSurface->Surface);
+    int originalIntWall2Num = Util::FindItemInList("SPACE1-INTERIORWALL2", state->dataSurface->Surface);
+    int originalIntWinNum = Util::FindItemInList("SPACE1-INTERIORWINDOW", state->dataSurface->Surface);
+    int izIntWallNum = Util::FindItemInList("iz-SPACE1-INTERIORWALL", state->dataSurface->Surface);
+    int izIntDoorNum = Util::FindItemInList("iz-SPACE1-INTERIORDOOR", state->dataSurface->Surface);
+    int izIntWall2Num = Util::FindItemInList("iz-SPACE1-INTERIORWALL2", state->dataSurface->Surface);
+    int izIntWinNum = Util::FindItemInList("iz-SPACE1-INTERIORWINDOW", state->dataSurface->Surface);
+    auto &originalIntWall = state->dataSurface->Surface(originalIntWallNum);
+    auto &originalIntDoor = state->dataSurface->Surface(originalIntDoorNum);
+    auto &originalIntWall2 = state->dataSurface->Surface(originalIntWall2Num);
+    auto &originalIntWin = state->dataSurface->Surface(originalIntWinNum);
+    auto &izIntWall = state->dataSurface->Surface(izIntWallNum);
+    auto &izIntDoor = state->dataSurface->Surface(izIntDoorNum);
+    auto &izIntWall2 = state->dataSurface->Surface(izIntWall2Num);
+    auto &izIntWin = state->dataSurface->Surface(izIntWinNum);
+    // Original wall input with Zone outside boundary condition
+    // Now points to auto-generated wall in Zone2
+    EXPECT_EQ(originalIntWall.Zone, 1);
+    EXPECT_EQ(originalIntWall.spaceNum, 1);
+    EXPECT_EQ(originalIntWall.ExtBoundCond, izIntWallNum);
+    EXPECT_EQ(originalIntWall.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWall.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated wall in Zone2, points to original wall in Zone1
+    EXPECT_EQ(izIntWall.Zone, 2);
+    EXPECT_EQ(izIntWall.spaceNum, 2);
+    EXPECT_EQ(izIntWall.ExtBoundCond, originalIntWallNum);
+    EXPECT_EQ(izIntWall.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWall.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original wall input with Zone outside boundary condition
+    // Now points to auto-generated wall in Zone3, Space3B
+    EXPECT_EQ(originalIntWall2.Zone, 1);
+    EXPECT_EQ(originalIntWall2.spaceNum, 1);
+    EXPECT_EQ(originalIntWall2.ExtBoundCond, izIntWall2Num);
+    EXPECT_EQ(originalIntWall2.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWall2.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated wall in Zone3, Space3B, points to original wall in Zone1
+    EXPECT_EQ(izIntWall2.Zone, 3);
+    EXPECT_EQ(izIntWall2.spaceNum, 4);
+    EXPECT_EQ(izIntWall2.ExtBoundCond, originalIntWall2Num);
+    EXPECT_EQ(izIntWall2.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWall2.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original Door input with blank outside boundary condition, inherits base surface boundary condition
+    // Now points to auto-generated door in Zone2
+    EXPECT_EQ(originalIntDoor.Zone, 1);
+    EXPECT_EQ(originalIntDoor.spaceNum, 1);
+    EXPECT_EQ(originalIntDoor.ExtBoundCond, izIntDoorNum);
+    EXPECT_EQ(originalIntDoor.Class, DataSurfaces::SurfaceClass::Door);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntDoor.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated door in Zone2, points to original door in Zone1
+    EXPECT_EQ(izIntDoor.Zone, 2);
+    EXPECT_EQ(izIntDoor.spaceNum, 2);
+    EXPECT_EQ(izIntDoor.ExtBoundCond, originalIntDoorNum);
+    EXPECT_EQ(izIntDoor.Class, DataSurfaces::SurfaceClass::Door);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntDoor.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original Window input with blank outside boundary condition, inherits base surface boundary condition
+    // Now points to auto-generated window in Zone3, Space3B
+    EXPECT_EQ(originalIntWin.Zone, 1);
+    EXPECT_EQ(originalIntWin.spaceNum, 1);
+    EXPECT_EQ(originalIntWin.ExtBoundCond, izIntWinNum);
+    EXPECT_EQ(originalIntWin.Class, DataSurfaces::SurfaceClass::Window);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWin.Construction).Name, "SINGLE PANE HW WINDOW");
+    // Auto-generated window in Zone3, Space3B, points to original window in Zone1
+    EXPECT_EQ(izIntWin.Zone, 3);
+    EXPECT_EQ(izIntWin.spaceNum, 4);
+    EXPECT_EQ(izIntWin.ExtBoundCond, originalIntWinNum);
+    EXPECT_EQ(izIntWin.Class, DataSurfaces::SurfaceClass::Window);
+    // SINGLE PANE HW WINDOW is a single-layer construction, so the same construction works for both sides
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWin.Construction).Name, "SINGLE PANE HW WINDOW");
+}
+TEST_F(EnergyPlusFixture, SurfaceGeometry_SpaceOutsideBC_SpacesInput)
+{
+    // Two 10x10m zones. A door between both that has a Construction:AirBoundary assigned (its base surface is a regular interior wall)
+    std::string const idf_objects = delimited_string({
+
+        "Material,",
+        "  8IN Concrete HW,                        !- Name",
+        "  MediumRough,                            !- Roughness",
+        "  0.2033,                                 !- Thickness {m}",
+        "  1.72959999999999,                       !- Conductivity {W/m-K}",
+        "  2242.99999999999,                       !- Density {kg/m3}",
+        "  836.999999999999,                       !- Specific Heat {J/kg-K}",
+        "  0.9,                                    !- Thermal Absorptance",
+        "  0.65,                                   !- Solar Absorptance",
+        "  0.65;                                   !- Visible Absorptance",
+
+        "Material,",
+        "    Gypsum Board,            !- Name",
+        "    MediumSmooth,            !- Roughness",
+        "    0.0159,                  !- Thickness {m}",
+        "    0.16,                    !- Conductivity {W/m-K}",
+        "    800,                     !- Density {kg/m3}",
+        "    1090,                    !- Specific Heat {J/kg-K}",
+        "    0.9,                     !- Thermal Absorptance",
+        "    0.7,                     !- Solar Absorptance",
+        "    0.7;                     !- Visible Absorptance",
+
+        "Construction,",
+        "  Regular Construction,                   !- Name",
+        "  8IN Concrete HW,                        !- Layer 1",
+        "  Gypsum Board;                           !- Layer 2",
+
+        "Zone,",
+        "  Zone1;                                  !- Name",
+
+        "Zone,",
+        "  Zone2;                                  !- Name",
+
+        "Zone,",
+        "  Zone3;                                  !- Name",
+
+        "Space,",
+        "  Space1,                                 !- Name",
+        "  Zone1;                                  !- Zone Name",
+
+        "Space,",
+        "  Space2,                                 !- Name",
+        "  Zone2;                                  !- Zone Name",
+
+        "Space,",
+        "  Space3a,                                 !- Name",
+        "  Zone3;                                  !- Zone Name",
+
+        "Space,",
+        "  Space3b,                                 !- Name",
+        "  Zone3;                                  !- Zone Name",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Ceiling,                         !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 3 {m}",
+        "  0, 0, 2.4384;                           !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Floor,                           !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 0, 0,                                !- X,Y,Z Vertex 1 {m}",
+        "  0, 10, 0,                               !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-InteriorWall,                    !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Space,                                  !- Outside Boundary Condition",
+        "  Space2,                                 !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Space1-InteriorDoor,                    !- Name",
+        "  Door,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Space1-InteriorWall,                    !- Building Surface Name",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Frame and Divider Name",
+        "  ,                                       !- Multiplier",
+        "  ,                                       !- Number of Vertices",
+        "  10, 7.05, 2,                            !- X,Y,Z Vertex 1 {m}",
+        "  10, 7.05, 0,                            !- X,Y,Z Vertex 2 {m}",
+        "  10, 7.95, 0,                            !- X,Y,Z Vertex 3 {m}",
+        "  10, 7.95, 2;                            !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-North,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  0, 10, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-South,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  0, 0, 2.4384,                           !- X,Y,Z Vertex 2 {m}",
+        "  0, 0, 0,                                !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-Wall-West,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  0, 0, 2.4384,                           !- X,Y,Z Vertex 1 {m}",
+        "  0, 10, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  0, 10, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  0, 0, 0;                                !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Ceiling,                         !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 2.4384;                          !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Floor,                           !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-East,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  20, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-North,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space2-Wall-South,                      !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone2,                                  !- Zone Name",
+        "  Space2,                                 !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Ceiling,                          !- Name",
+        "  Roof,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3a,                                !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 3 {m}",
+        "  10, 0, 2.4384;                          !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Floor,                            !- Name",
+        "  Floor,                                  !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3a,                                !- Space Name",
+        "  Ground,                                 !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 1 {m}",
+        "  10, 10, 0,                              !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-East,                        !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3b,                                !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  20, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-North,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3b,                                !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  20, 10, 2.4384,                         !- X,Y,Z Vertex 2 {m}",
+        "  20, 10, 0,                              !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Zone3-Wall-South,                       !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone3,                                  !- Zone Name",
+        "  Space3a,                                !- Space Name",
+        "  Outdoors,                               !- Outside Boundary Condition",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  SunExposed,                             !- Sun Exposure",
+        "  WindExposed,                            !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  20, 0, 2.4384,                          !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  20, 0, 0;                               !- X,Y,Z Vertex 4 {m}",
+
+        "BuildingSurface:Detailed,",
+        "  Space1-InteriorWall2,                    !- Name",
+        "  Wall,                                   !- Surface Type",
+        "  Regular Construction,                   !- Construction Name",
+        "  Zone1,                                  !- Zone Name",
+        "  Space1,                                 !- Space Name",
+        "  Space,                                  !- Outside Boundary Condition",
+        "  Space3a,                                !- Outside Boundary Condition Object",
+        "  NoSun,                                  !- Sun Exposure",
+        "  NoWind,                                 !- Wind Exposure",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Number of Vertices",
+        "  10, 10, 2.4384,                         !- X,Y,Z Vertex 1 {m}",
+        "  10, 0, 2.4384,                          !- X,Y,Z Vertex 2 {m}",
+        "  10, 0, 0,                               !- X,Y,Z Vertex 3 {m}",
+        "  10, 10, 0;                              !- X,Y,Z Vertex 4 {m}",
+
+        "FenestrationSurface:Detailed,",
+        "  Space1-InteriorWindow,                  !- Name",
+        "  Window,                                 !- Surface Type",
+        "  SINGLE PANE HW WINDOW,                  !- Construction Name",
+        "  Space1-InteriorWall2,                   !- Building Surface Name",
+        "  ,                                       !- Outside Boundary Condition Object",
+        "  ,                                       !- View Factor to Ground",
+        "  ,                                       !- Frame and Divider Name",
+        "  ,                                       !- Multiplier",
+        "  ,                                       !- Number of Vertices",
+        "  10, 7.05, 2,                            !- X,Y,Z Vertex 1 {m}",
+        "  10, 7.05, 0,                            !- X,Y,Z Vertex 2 {m}",
+        "  10, 7.95, 0,                            !- X,Y,Z Vertex 3 {m}",
+        "  10, 7.95, 2;                            !- X,Y,Z Vertex 4 {m}",
+
+        " Construction,",
+        "    SINGLE PANE HW WINDOW,   !- Name",
+        "    GLASS - CLEAR PLATE 1 / 4 IN;  !- Outside Layer",
+
+        " WindowMaterial:Glazing,",
+        "    GLASS - CLEAR PLATE 1 / 4 IN,  !- Name",
+        "    SpectralAverage,         !- Optical Data Type",
+        "    ,                        !- Window Glass Spectral Data Set Name",
+        "    6.0000001E-03,           !- Thickness {m}",
+        "    0.7750000,               !- Solar Transmittance at Normal Incidence",
+        "    7.1000002E-02,           !- Front Side Solar Reflectance at Normal Incidence",
+        "    7.1000002E-02,           !- Back Side Solar Reflectance at Normal Incidence",
+        "    0.8810000,               !- Visible Transmittance at Normal Incidence",
+        "    7.9999998E-02,           !- Front Side Visible Reflectance at Normal Incidence",
+        "    7.9999998E-02,           !- Back Side Visible Reflectance at Normal Incidence",
+        "    0,                       !- Infrared Transmittance at Normal Incidence",
+        "    0.8400000,               !- Front Side Infrared Hemispherical Emissivity",
+        "    0.8400000,               !- Back Side Infrared Hemispherical Emissivity",
+        "    0.9000000;               !- Conductivity {W/m-K}",
+
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    bool ErrorsFound = false;
+
+    GetMaterialData(*state, ErrorsFound); // read material data
+    EXPECT_FALSE(ErrorsFound);            // expect no errors
+
+    GetConstructData(*state, ErrorsFound); // read construction data
+    EXPECT_FALSE(ErrorsFound);             // expect no errors
+
+    GetZoneData(*state, ErrorsFound); // read zone data
+    EXPECT_FALSE(ErrorsFound);        // expect no errors
+
+    // This is ill-named, but it will shut the "No Ground Temperature" warning when set to false
+    state->dataSurfaceGeometry->NoGroundTempObjWarning = false;
+
+    // I don't do ASSERT_NO_THROW because I want to see the err stream to show original defect. But I ASSERT there's no err_stream because we can't
+    // continue if it did throw
+    EXPECT_NO_THROW(SetupZoneGeometry(*state, ErrorsFound));
+    ASSERT_TRUE(compare_err_stream(
+        "   ** Warning ** CalculateZoneVolume: 1 zone is not fully enclosed. For more details use:  Output:Diagnostics,DisplayExtrawarnings; \n"));
+
+    EXPECT_FALSE(ErrorsFound); // expect no errors
+
+    EXPECT_EQ(state->dataViewFactor->NumOfRadiantEnclosures, 4);
+    EXPECT_EQ("SPACE1", state->dataViewFactor->EnclRadInfo(1).Name);
+    EXPECT_EQ("SPACE2", state->dataViewFactor->EnclRadInfo(2).Name);
+    EXPECT_EQ("SPACE3A", state->dataViewFactor->EnclRadInfo(3).Name);
+    EXPECT_EQ("SPACE3B", state->dataViewFactor->EnclRadInfo(4).Name);
+    EXPECT_EQ("SPACE1", state->dataViewFactor->EnclRadInfo(1).spaceNames[0]);
+    EXPECT_EQ("SPACE2", state->dataViewFactor->EnclRadInfo(2).spaceNames[0]);
+    EXPECT_EQ("SPACE3A", state->dataViewFactor->EnclRadInfo(3).spaceNames[0]);
+    EXPECT_EQ("SPACE3B", state->dataViewFactor->EnclRadInfo(4).spaceNames[0]);
+    EXPECT_EQ(state->dataHeatBal->space(1).radiantEnclosureNum, 1);
+    EXPECT_EQ(state->dataHeatBal->space(2).radiantEnclosureNum, 2);
+    EXPECT_EQ(state->dataHeatBal->space(3).radiantEnclosureNum, 3);
+    EXPECT_EQ(state->dataHeatBal->space(4).radiantEnclosureNum, 4);
+    EXPECT_EQ(state->dataHeatBal->space(1).surfaces.size(), 9);
+    EXPECT_EQ(state->dataHeatBal->space(2).surfaces.size(), 7);
+    EXPECT_EQ(state->dataHeatBal->space(3).surfaces.size(), 5);
+    EXPECT_EQ(state->dataHeatBal->space(4).surfaces.size(), 2);
+
+    int originalIntWallNum = Util::FindItemInList("SPACE1-INTERIORWALL", state->dataSurface->Surface);
+    int originalIntDoorNum = Util::FindItemInList("SPACE1-INTERIORDOOR", state->dataSurface->Surface);
+    int originalIntWall2Num = Util::FindItemInList("SPACE1-INTERIORWALL2", state->dataSurface->Surface);
+    int originalIntWinNum = Util::FindItemInList("SPACE1-INTERIORWINDOW", state->dataSurface->Surface);
+    int izIntWallNum = Util::FindItemInList("iz-SPACE1-INTERIORWALL", state->dataSurface->Surface);
+    int izIntDoorNum = Util::FindItemInList("iz-SPACE1-INTERIORDOOR", state->dataSurface->Surface);
+    int izIntWall2Num = Util::FindItemInList("iz-SPACE1-INTERIORWALL2", state->dataSurface->Surface);
+    int izIntWinNum = Util::FindItemInList("iz-SPACE1-INTERIORWINDOW", state->dataSurface->Surface);
+    auto &originalIntWall = state->dataSurface->Surface(originalIntWallNum);
+    auto &originalIntDoor = state->dataSurface->Surface(originalIntDoorNum);
+    auto &originalIntWall2 = state->dataSurface->Surface(originalIntWall2Num);
+    auto &originalIntWin = state->dataSurface->Surface(originalIntWinNum);
+    auto &izIntWall = state->dataSurface->Surface(izIntWallNum);
+    auto &izIntDoor = state->dataSurface->Surface(izIntDoorNum);
+    auto &izIntWall2 = state->dataSurface->Surface(izIntWall2Num);
+    auto &izIntWin = state->dataSurface->Surface(izIntWinNum);
+    // Original wall input with Zone outside boundary condition
+    // Now points to auto-generated wall in Zone2
+    EXPECT_EQ(originalIntWall.Zone, 1);
+    EXPECT_EQ(originalIntWall.spaceNum, 1);
+    EXPECT_EQ(originalIntWall.ExtBoundCond, izIntWallNum);
+    EXPECT_EQ(originalIntWall.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWall.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated wall in Zone2, points to original wall in Zone1
+    EXPECT_EQ(izIntWall.Zone, 2);
+    EXPECT_EQ(izIntWall.spaceNum, 2);
+    EXPECT_EQ(izIntWall.ExtBoundCond, originalIntWallNum);
+    EXPECT_EQ(izIntWall.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWall.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original wall input with Zone outside boundary condition
+    // Now points to auto-generated wall in Zone3, Space3B
+    EXPECT_EQ(originalIntWall2.Zone, 1);
+    EXPECT_EQ(originalIntWall2.spaceNum, 1);
+    EXPECT_EQ(originalIntWall2.ExtBoundCond, izIntWall2Num);
+    EXPECT_EQ(originalIntWall2.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWall2.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated wall in Zone3, Space3A, points to original wall in Zone1
+    EXPECT_EQ(izIntWall2.Zone, 3);
+    EXPECT_EQ(izIntWall2.spaceNum, 3);
+    EXPECT_EQ(izIntWall2.ExtBoundCond, originalIntWall2Num);
+    EXPECT_EQ(izIntWall2.Class, DataSurfaces::SurfaceClass::Wall);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWall2.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original Door input with blank outside boundary condition, inherits base surface boundary condition
+    // Now points to auto-generated door in Zone2
+    EXPECT_EQ(originalIntDoor.Zone, 1);
+    EXPECT_EQ(originalIntDoor.spaceNum, 1);
+    EXPECT_EQ(originalIntDoor.ExtBoundCond, izIntDoorNum);
+    EXPECT_EQ(originalIntDoor.Class, DataSurfaces::SurfaceClass::Door);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntDoor.Construction).Name, "REGULAR CONSTRUCTION");
+    // Auto-generated door in Zone2, points to original door in Zone1
+    EXPECT_EQ(izIntDoor.Zone, 2);
+    EXPECT_EQ(izIntDoor.spaceNum, 2);
+    EXPECT_EQ(izIntDoor.ExtBoundCond, originalIntDoorNum);
+    EXPECT_EQ(izIntDoor.Class, DataSurfaces::SurfaceClass::Door);
+    EXPECT_EQ(state->dataConstruction->Construct(izIntDoor.Construction).Name, "iz-REGULAR CONSTRUCTION");
+    // Original Window input with blank outside boundary condition, inherits base surface boundary condition
+    // Now points to auto-generated window in Zone3, Space3B
+    EXPECT_EQ(originalIntWin.Zone, 1);
+    EXPECT_EQ(originalIntWin.spaceNum, 1);
+    EXPECT_EQ(originalIntWin.ExtBoundCond, izIntWinNum);
+    EXPECT_EQ(originalIntWin.Class, DataSurfaces::SurfaceClass::Window);
+    EXPECT_EQ(state->dataConstruction->Construct(originalIntWin.Construction).Name, "SINGLE PANE HW WINDOW");
+    // Auto-generated window in Zone3, Space3a points to original window in Zone1
+    EXPECT_EQ(izIntWin.Zone, 3);
+    EXPECT_EQ(izIntWin.spaceNum, 3);
+    EXPECT_EQ(izIntWin.ExtBoundCond, originalIntWinNum);
+    EXPECT_EQ(izIntWin.Class, DataSurfaces::SurfaceClass::Window);
+    // SINGLE PANE HW WINDOW is a single-layer construction, so the same construction works for both sides
+    EXPECT_EQ(state->dataConstruction->Construct(izIntWin.Construction).Name, "SINGLE PANE HW WINDOW");
 }

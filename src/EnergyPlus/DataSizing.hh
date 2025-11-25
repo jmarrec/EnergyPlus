@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -117,10 +117,31 @@ namespace DataSizing {
         Num
     };
 
-    // parameters for sizing
-    constexpr int NonCoincident(1);
-    constexpr int Coincident(2);
-    constexpr int Combination(3);
+    // parameters for zone and system sizing concurrence method
+    enum class SizingConcurrence
+    {
+        Invalid = -1,
+        NonCoincident,
+        Coincident,
+        Num
+    };
+
+    constexpr std::array<std::string_view, static_cast<int>(SizingConcurrence::Num)> SizingConcurrenceNamesUC{"NONCOINCIDENT", "COINCIDENT"};
+    constexpr std::array<std::string_view, static_cast<int>(SizingConcurrence::Num)> SizingConcurrenceNames{"NonCoincident", "Coincident"};
+
+    // parameters for coil sizing concurrence method
+    enum class CoilSizingConcurrence
+    {
+        Invalid = -1,
+        NonCoincident,
+        Coincident,
+        Combination,
+        NA,
+        Num
+    };
+
+    constexpr std::array<std::string_view, static_cast<int>(CoilSizingConcurrence::Num)> CoilSizingConcurrenceNames{
+        "Non-Coincident", "Coincident", "Combination", "N/A"};
 
     // parameters for Cooling Peak Load Type
     enum class PeakLoad
@@ -184,10 +205,6 @@ namespace DataSizing {
     // parameter for (time-of-peak) sizing format
     static constexpr std::string_view PeakHrMinFmt("{:02}:{:02}:00");
 
-    // Zone Outdoor Air Method
-    constexpr int ZOAM_ProportionalControlDesOcc(9); // Use ASHRAE Standard 62.1-2004 or Trane Engineer's newsletter (volume 34-5)
-    // to calculate the zone level outdoor air flow rates based on design occupancy
-
     enum class SysOAMethod
     {
         Invalid = -1,
@@ -201,11 +218,22 @@ namespace DataSizing {
         ProportionalControlDesOcc, // Use ASHRAE Standard 62.1-2004 or Trane Engineer's newsletter (volume 34-5) to calculate the system level outdoor
                                    // air flow rates based on design occupancy
         ProportionalControlDesOARate, // Calculate the system level outdoor air flow rates based on design OA rate
-        SP,   // Use the ASHRAE Standard 62.1 Simplified Procedure to calculate the system level outdoor air flow rates considering the zone air
-              // distribution effectiveness and the system ventilation efficiency
+        SP, // Use the ASHRAE Standard 62.1 Simplified Procedure to calculate the system level outdoor air flow rates considering the zone air
+            // distribution effectiveness and the system ventilation efficiency
         VRPL, // Use ASHRAE Standard 62.1-2007 to calculate the system level outdoor air flow rates
         Num
     };
+
+    constexpr std::array<std::string_view, static_cast<int>(SysOAMethod::Num)> SysOAMethodNames{"Zone Sum",
+                                                                                                "Ventilation Rate Procedure",
+                                                                                                "IAQ Proc",
+                                                                                                "Proportional - Sch Occupancy",
+                                                                                                "IAQ Proc - Generic Contaminant",
+                                                                                                "IAQ Proc - Max Gen Cont or CO2.",
+                                                                                                "Proportional - Des Occupancy",
+                                                                                                "Proportional - Des OA Rate",
+                                                                                                "Simplified Procure",
+                                                                                                "Ventilation Rate Procedure Level"};
 
     // Zone HVAC Equipment Sizing Option
     enum class DesignSizingType
@@ -260,15 +288,6 @@ namespace DataSizing {
     constexpr int GlobalCoolingSizingFactorMode(103);
     constexpr int LoopComponentSizingFactorMode(104);
 
-    enum class ZoneFanPlacement
-    {
-        Invalid = -1,
-        NotSet,
-        BlowThru,
-        DrawThru,
-        Num
-    };
-
     enum class ZoneSizing
     {
         Invalid = -1,
@@ -280,6 +299,18 @@ namespace DataSizing {
     };
     constexpr std::array<std::string_view, static_cast<int>(ZoneSizing::Num)> ZoneSizingMethodNamesUC{
         "SENSIBLE LOAD", "LATENT LOAD", "SENSIBLE AND LATENT LOAD", "SENSIBLE LOAD ONLY NO LATENT LOAD"};
+
+    enum class HeatCoilSizMethod
+    {
+        Invalid = -1,
+        None,
+        CoolingCapacity,
+        HeatingCapacity,
+        GreaterOfHeatingOrCooling,
+        Num
+    };
+    constexpr std::array<std::string_view, static_cast<int>(HeatCoilSizMethod::Num)> HeatCoilSizMethodNamesUC{
+        "NONE", "COOLINGCAPACITY", "HEATINGCAPACITY", "GREATEROFHEATINGORCOOLING"};
 
     // Types
 
@@ -325,6 +356,7 @@ namespace DataSizing {
         DOASControl DOASControlStrategy = DOASControl::Invalid; // 0=neutral ventilation air; 1=neutral dehumidified ventilation air, 2 = cooled air;
         Real64 DOASLowSetpoint = 0.0;                           // Dedicated Outside Air Low Setpoint for Design [C]
         Real64 DOASHighSetpoint = 0.0;                          // Dedicated Outside Air High Setpoint for Design [C]
+        DataSizing::SizingConcurrence spaceConcurrence = DataSizing::SizingConcurrence::Coincident; // coincident or noncoincident space loads
 
         // zone latent sizing inputs
         bool zoneLatentSizing = false;
@@ -336,9 +368,11 @@ namespace DataSizing {
         Real64 HeatDesHumRatDiff = 0.005;                  // zone design heating supply air humidity ratio temperature difference [deltakgw/kga]
         int ZnLatCoolDgnSAMethod = 0;                      // choice of how to get zone latent cooling design air humidity ratio;
         int ZnLatHeatDgnSAMethod = 0;                      // choice of how to get zone latent heating design air humidity ratio;
-        int zoneRHDehumidifySchIndex = 0;                  // index to zone RH dehumidifying schedule used for zone sizing
-        int zoneRHHumidifySchIndex = 0;                    // index to zone RH humidifying schedule used for zone sizing
+        Sched::Schedule *zoneRHDehumidifySched = nullptr;  // zone RH dehumidifying schedule used for zone sizing
+        Sched::Schedule *zoneRHHumidifySched = nullptr;    // zone RH humidifying schedule used for zone sizing
         ZoneSizing zoneSizingMethod = ZoneSizing::Invalid; // load to sizing on: sensible, latent, sensibleandlatent, sensibleonlynolatent
+        HeatCoilSizMethod heatCoilSizingMethod = HeatCoilSizMethod::Invalid; // Used for sizing heat pumps
+        Real64 maxHeatCoilToCoolingLoadSizingRatio = 0.0; // Used for sizing heat pumps, max size of heating coil to cooling load sizing ratio
     };
 
     // based on ZoneSizingData but only member variables that are actually used by terminal unit sizing
@@ -450,9 +484,10 @@ namespace DataSizing {
         bool AccountForDOAS = false;           // False: do nothing; True: calculate the effect of a DOA system on the zone sizing arrays
         DOASControl DOASControlStrategy = DOASControl::Invalid; // 0=neutral ventilation air; 1=neutral dehumidified ventilation air, 2 = cooled air;
         // 3=supply cold ventilation air
-        Real64 DOASLowSetpoint = 0.0;          // Dedicated Outside Air Low Setpoint for Design [C]
-        Real64 DOASHighSetpoint = 0.0;         // Dedicated Outside Air High Setpoint for Design [C]
-        bool EMSOverrideDesHeatMassOn = false; // true if EMS is acting on this structure
+        Real64 DOASLowSetpoint = 0.0;  // Dedicated Outside Air Low Setpoint for Design [C]
+        Real64 DOASHighSetpoint = 0.0; // Dedicated Outside Air High Setpoint for Design [C]
+        DataSizing::SizingConcurrence spaceConcurrence = DataSizing::SizingConcurrence::Coincident; // coincident or noncoincident space loads
+        bool EMSOverrideDesHeatMassOn = false;                                                      // true if EMS is acting on this structure
         Real64 EMSValueDesHeatMassFlow = 0.0;  // Value EMS directing to use for Design Heating air mass flow [kg/s]
         bool EMSOverrideDesCoolMassOn = false; // true if EMS is acting on this structure
         Real64 EMSValueDesCoolMassFlow = 0.0;  // Value EMS directing to use for Design Cooling air mass flow [kg/s]
@@ -581,9 +616,9 @@ namespace DataSizing {
         Array1D<Real64> LatentHeatFlowSeq;                 // daily sequence of zone latent heating supply mass flow rate (zone time step) [Kg/s]
         bool zoneLatentSizing = false;                     // trigger to do RH control during zone sizing
         Real64 zoneRHDehumidifySetPoint = 50.0;            // RH dehumidifying set point used during sizing, default to 50%
-        int zoneRHDehumidifySchIndex = 0;                  // index to zone RH dehumidifying schedule used for zone sizing
+        Sched::Schedule *zoneRHDehumidifySched = nullptr;  // zone RH dehumidifying schedule used for zone sizing
         Real64 zoneRHHumidifySetPoint = 50.0;              // RH humidifying set point used during sizing, default to 50%
-        int zoneRHHumidifySchIndex = 0;                    // index to zone RH humidifying schedule used for zone sizing
+        Sched::Schedule *zoneRHHumidifySched = nullptr;    // zone RH humidifying schedule used for zone sizing
         Real64 LatentCoolDesHumRat = 0.0;                  // zone design dehumidification supply air humidity ratio [kgw/kga]
         Real64 CoolDesHumRatDiff = 0.005;                  // zone design cooling supply air humidity ratio difference [deltakgw/kga]
         Real64 LatentHeatDesHumRat = 0.0;                  // zone design humidification supply air humidity ratio [kgw/kga]
@@ -605,6 +640,8 @@ namespace DataSizing {
         std::string HeatPeakDateHrMin;                     // date:hr:min of heating peak
         std::string LatCoolPeakDateHrMin;                  // date:hr:min of latent cooling peak
         std::string LatHeatPeakDateHrMin;                  // date:hr:min of latent heating peak
+        HeatCoilSizMethod heatCoilSizingMethod = HeatCoilSizMethod::Invalid; // Used for sizing heat pumps
+        Real64 maxHeatCoilToCoolingLoadSizingRatio = 0.0;                    // Used for sizing heat pumps
 
         void zeroMemberData();
         void allocateMemberArrays(int numOfTimeStepInDay);
@@ -627,7 +664,7 @@ namespace DataSizing {
         Real64 MaxHWVolFlow;           // design Hot Water vol flow for single duct terminal unit [m3/s]
         Real64 MaxSTVolFlow;           // design Steam vol flow rate for single duct terminal unit [m3/s]
         Real64 MaxCWVolFlow;           // design Cold Water vol flow for single duct terminal unit [m3/s]
-        Real64 MinFlowFrac;            // design minimum flow fraction for a terminal unit
+        Real64 MinPriFlowFrac;         // design minimum primary flow fraction for a terminal unit
         Real64 InducRat;               // design induction ratio for a terminal unit
         bool InducesPlenumAir;         // True if secondary air comes from the plenum
         Real64 ReheatAirFlowMult;      // multiplier for air flow in reheat coil UA calculation
@@ -639,10 +676,11 @@ namespace DataSizing {
         Real64 SpecDesSensHeatingFrac; // Fraction of Design Sensible Heating Load from DesignSpecification:AirTerminal:Sizing
         Real64 SpecDesHeatSATRatio;    // Heating Design Supply Air Temperature Difference Ratio from DesignSpecification:AirTerminal:Sizing
         Real64 SpecMinOAFrac;          // Fraction of Minimum Outdoor Air Flow from DesignSpecification:AirTerminal:Sizing
+        int plenumIndex = 0;           // plenum index for PIU inlet conditions
 
         // Default Constructor
         TermUnitSizingData()
-            : CtrlZoneNum(0), AirVolFlow(0.0), MaxHWVolFlow(0.0), MaxSTVolFlow(0.0), MaxCWVolFlow(0.0), MinFlowFrac(0.0), InducRat(0.0),
+            : CtrlZoneNum(0), AirVolFlow(0.0), MaxHWVolFlow(0.0), MaxSTVolFlow(0.0), MaxCWVolFlow(0.0), MinPriFlowFrac(0.0), InducRat(0.0),
               InducesPlenumAir(false), ReheatAirFlowMult(1.0), ReheatLoadMult(1.0), DesCoolingLoad(0.0), DesHeatingLoad(0.0),
               SpecDesSensCoolingFrac(1.0), SpecDesCoolSATRatio(1.0), SpecDesSensHeatingFrac(1.0), SpecDesHeatSATRatio(1.0), SpecMinOAFrac(1.0)
         {
@@ -747,6 +785,8 @@ namespace DataSizing {
         Real64 ScaledCoolingCapacity;   // - scaled maximum cooling capacity of zone HVAC equipment, W
         Real64 ScaledHeatingCapacity;   // - scaled maximum heating capacity of zone HVAC equipment, W
         bool RequestAutoSize;           // - true if autosizing is requested
+        HeatCoilSizMethod heatCoilSizingMethod = HeatCoilSizMethod::Invalid; // Used for sizing heat pumps
+        Real64 maxHeatCoilToCoolingLoadSizingRatio = 0.0;                    // Used for sizing heat pumps
 
         // Default Constructor
         ZoneHVACSizingData()
@@ -779,20 +819,20 @@ namespace DataSizing {
         std::string AirPriLoopName;                      // name of an AirLoopHVAC object
         int AirLoopNum = 0;                              // index number of air loop
         LoadSizing loadSizingType = LoadSizing::Invalid; // type of load to size on sensible, latent, total, ventilation
-        int SizingOption = 0;                            // 1 = noncoincident, 2 = coincident
-        OAControl CoolOAOption = OAControl::Invalid;     // 1 = use 100% outside air; 2 = use min OA; for cooling sizing
-        OAControl HeatOAOption = OAControl::Invalid;     // 1 = use 100% outside air; 2 = use min OA; for heating sizing
-        Real64 DesOutAirVolFlow = 0.0;                   // design (minimum) outside air flow rate [m3/s]
-        Real64 SysAirMinFlowRat = 0.0;                   // minimum system air flow ratio for heating, Central Heating Maximum System Air Flow Ratio
-        bool SysAirMinFlowRatWasAutoSized = false;       // true if central heating maximum system air flow ratio was autosize on input
-        Real64 PreheatTemp = 0.0;                        // preheat design set temperature [C]
-        Real64 PrecoolTemp = 0.0;                        // precool design set temperature [C]
-        Real64 PreheatHumRat = 0.0;                      // preheat design humidity ratio [kg water/kg dry air]
-        Real64 PrecoolHumRat = 0.0;                      // precool design humidity ratio [kg water/kg dry air]
-        Real64 CoolSupTemp = 0.0;                        // cooling design supply air temperature [C]
-        Real64 HeatSupTemp = 0.0;                        // heating design supply air temperature [C]
-        Real64 CoolSupHumRat = 0.0;                      // cooling design supply air humidity ratio [kg water/kg dry air]
-        Real64 HeatSupHumRat = 0.0;                      // heating design supply air humidity ratio [kg water/kg dry air]
+        DataSizing::SizingConcurrence SizingOption = DataSizing::SizingConcurrence::NonCoincident; // noncoincident, coincident
+        OAControl CoolOAOption = OAControl::Invalid; // 1 = use 100% outside air; 2 = use min OA; for cooling sizing
+        OAControl HeatOAOption = OAControl::Invalid; // 1 = use 100% outside air; 2 = use min OA; for heating sizing
+        Real64 DesOutAirVolFlow = 0.0;               // design (minimum) outside air flow rate [m3/s]
+        Real64 SysAirMinFlowRat = 0.0;               // minimum system air flow ratio for heating, Central Heating Maximum System Air Flow Ratio
+        bool SysAirMinFlowRatWasAutoSized = false;   // true if central heating maximum system air flow ratio was autosize on input
+        Real64 PreheatTemp = 0.0;                    // preheat design set temperature [C]
+        Real64 PrecoolTemp = 0.0;                    // precool design set temperature [C]
+        Real64 PreheatHumRat = 0.0;                  // preheat design humidity ratio [kg water/kg dry air]
+        Real64 PrecoolHumRat = 0.0;                  // precool design humidity ratio [kg water/kg dry air]
+        Real64 CoolSupTemp = 0.0;                    // cooling design supply air temperature [C]
+        Real64 HeatSupTemp = 0.0;                    // heating design supply air temperature [C]
+        Real64 CoolSupHumRat = 0.0;                  // cooling design supply air humidity ratio [kg water/kg dry air]
+        Real64 HeatSupHumRat = 0.0;                  // heating design supply air humidity ratio [kg water/kg dry air]
         AirflowSizingMethod CoolAirDesMethod = AirflowSizingMethod::Invalid; // choice of how to get system cooling design air flow rates;
         //  1 = calc from des day simulation; 2=m3/s per system, user input
         Real64 DesCoolAirFlow = 0.0;                                         // design system supply air flow rate for cooling[m3/s]
@@ -823,6 +863,8 @@ namespace DataSizing {
         PeakLoad coolingPeakLoad = PeakLoad::Invalid;              // Type of peak to size cooling coils on SensibleCooling or TotalCooling
         CapacityControl CoolCapControl = CapacityControl::Invalid; // type of control of cooling coil  VAV, Bypass, VT, OnOff
         Real64 OccupantDiversity = 0.0;                            // occupant diversity
+        HeatCoilSizMethod heatCoilSizingMethod = HeatCoilSizMethod::Invalid; // Used for sizing heat pumps
+        Real64 maxHeatCoilToCoolingLoadSizingRatio = 0.0;                    // Used for sizing heat pumps
     };
 
     struct SystemSizingData // Contains data for system sizing
@@ -832,20 +874,20 @@ namespace DataSizing {
         std::string CoolDesDay;                          // name of a cooling design day
         std::string HeatDesDay;                          // name of a heating design day
         LoadSizing loadSizingType = LoadSizing::Invalid; // type of load to size on Sensible, Latent, Total, Ventilation
-        int SizingOption = 0;                            // 1 = noncoincident, 2 = coincident.
-        OAControl CoolOAOption = OAControl::Invalid;     // 1 = use 100% outside air; 2 = use min OA; for cooling sizing
-        OAControl HeatOAOption = OAControl::Invalid;     // 1 = use 100% outside air; 2 = use min OA; for heating sizing
-        Real64 DesOutAirVolFlow = 0.0;                   // design (minimum) outside air flow rate [m3/s]
-        Real64 SysAirMinFlowRat = 0.0;                   // minimum system air flow ratio for heating, Central Heating Maximum System Air Flow Ratio
-        bool SysAirMinFlowRatWasAutoSized = false;       // true if central heating maximum system air flow ratio was autosize on input
-        Real64 PreheatTemp = 0.0;                        // preheat design set temperature
-        Real64 PrecoolTemp = 0.0;                        // precool design set temperature [C]
-        Real64 PreheatHumRat = 0.0;                      // preheat design humidity ratio [kg water/kg dry air]
-        Real64 PrecoolHumRat = 0.0;                      // precool design humidity ratio [kg water/kg dry air]
-        Real64 CoolSupTemp = 0.0;                        // cooling design supply air temperature [C]
-        Real64 HeatSupTemp = 0.0;                        // heating design supply air temperature[C]
-        Real64 CoolSupHumRat = 0.0;                      // cooling design supply air humidity ratio [kg water/kg dry air]
-        Real64 HeatSupHumRat = 0.0;                      // heating design supply air humidity ratio [kg water/kg dry air]
+        DataSizing::SizingConcurrence SizingOption = DataSizing::SizingConcurrence::NonCoincident; // noncoincident, coincident.
+        OAControl CoolOAOption = OAControl::Invalid; // 1 = use 100% outside air; 2 = use min OA; for cooling sizing
+        OAControl HeatOAOption = OAControl::Invalid; // 1 = use 100% outside air; 2 = use min OA; for heating sizing
+        Real64 DesOutAirVolFlow = 0.0;               // design (minimum) outside air flow rate [m3/s]
+        Real64 SysAirMinFlowRat = 0.0;               // minimum system air flow ratio for heating, Central Heating Maximum System Air Flow Ratio
+        bool SysAirMinFlowRatWasAutoSized = false;   // true if central heating maximum system air flow ratio was autosize on input
+        Real64 PreheatTemp = 0.0;                    // preheat design set temperature
+        Real64 PrecoolTemp = 0.0;                    // precool design set temperature [C]
+        Real64 PreheatHumRat = 0.0;                  // preheat design humidity ratio [kg water/kg dry air]
+        Real64 PrecoolHumRat = 0.0;                  // precool design humidity ratio [kg water/kg dry air]
+        Real64 CoolSupTemp = 0.0;                    // cooling design supply air temperature [C]
+        Real64 HeatSupTemp = 0.0;                    // heating design supply air temperature[C]
+        Real64 CoolSupHumRat = 0.0;                  // cooling design supply air humidity ratio [kg water/kg dry air]
+        Real64 HeatSupHumRat = 0.0;                  // heating design supply air humidity ratio [kg water/kg dry air]
         AirflowSizingMethod CoolAirDesMethod = AirflowSizingMethod::Invalid; // choice of how to get system design cooling air flow rates;
         //  1 = calc from des day simulation; 2=m3/s per system, user input
         AirflowSizingMethod HeatAirDesMethod = AirflowSizingMethod::Invalid; // choice of how to get system design heating air flow rates;
@@ -972,12 +1014,14 @@ namespace DataSizing {
         int HeatDDNum = 0;             // index of design day for heating
         int CoolDDNum = 0;             // index of design day for cooling
 
-        Real64 SysCoolCoinSpaceSens = 0.0; // sum of zone space sensible cooling loads at coincident peak
-        Real64 SysHeatCoinSpaceSens = 0.0; //  sum of zone space sensible heating loads at coincident peak
-        Real64 SysDesCoolLoad = 0.0;       // system peak load with coincident
-        int SysCoolLoadTimeStepPk = 0;     // timestep in day of cooling load peak
-        Real64 SysDesHeatLoad = 0.0;       // system peak load with coincident
-        int SysHeatLoadTimeStepPk = 0;     // timestep in day of cooling load peak
+        Real64 SysCoolCoinSpaceSens = 0.0;                                   // sum of zone space sensible cooling loads at coincident peak
+        Real64 SysHeatCoinSpaceSens = 0.0;                                   //  sum of zone space sensible heating loads at coincident peak
+        Real64 SysDesCoolLoad = 0.0;                                         // system peak load with coincident
+        int SysCoolLoadTimeStepPk = 0;                                       // timestep in day of cooling load peak
+        Real64 SysDesHeatLoad = 0.0;                                         // system peak load with coincident
+        int SysHeatLoadTimeStepPk = 0;                                       // timestep in day of cooling load peak
+        HeatCoilSizMethod heatCoilSizingMethod = HeatCoilSizMethod::Invalid; // Used for sizing heat pumps
+        Real64 maxHeatCoilToCoolingLoadSizingRatio = 0.0;                    // Used for sizing heat pumps
     };
 
     struct SysSizPeakDDNumData
@@ -1009,14 +1053,15 @@ namespace DataSizing {
         TypeOfPlantLoop LoopType = TypeOfPlantLoop::Invalid; // type of loop: 1=heating, 2=cooling, 3=condenser
         Real64 ExitTemp = 0.0;                               // loop design exit (supply) temperature [C]
         Real64 DeltaT = 0.0;                                 // loop design temperature drop (or rise) [DelK]
-        int ConcurrenceOption = 0;                           // sizing option for coincident or noncoincident
-        int NumTimeStepsInAvg = 0;                           // number of zone timesteps in the averaging window for coincident plant flow
-        int SizingFactorOption = 0;                          // option for what sizing factor to apply
+        DataSizing::SizingConcurrence ConcurrenceOption =
+            DataSizing::SizingConcurrence::NonCoincident; // sizing option for coincident or noncoincident (default)
+        int NumTimeStepsInAvg = 1;                        // number of zone timesteps in the averaging window for coincident plant flow
+        int SizingFactorOption = 0;                       // option for what sizing factor to apply
         // Calculated
-        Real64 DesVolFlowRate = 0.0; // loop design flow rate in m3/s
-        bool VolFlowSizingDone = 0;  // flag to indicate when this loop has finished sizing flow rate
-        Real64 PlantSizFac = 0.0;    // hold the loop and pump sizing factor
-        Real64 DesCapacity = 0.0;    // final capacity in W
+        Real64 DesVolFlowRate = 0.0;    // loop design flow rate in m3/s
+        bool VolFlowSizingDone = false; // flag to indicate when this loop has finished sizing flow rate
+        Real64 PlantSizFac = 0.0;       // hold the loop and pump sizing factor
+        Real64 DesCapacity = 0.0;       // final capacity in W
     };
 
     // based on ZoneSizingData but only have member variables that are related to the CheckSum/
@@ -1086,53 +1131,74 @@ namespace DataSizing {
         EPVector<std::string> dsoaSpaceNames; // Names of spaces if this is a (if this is a DSOA:SpaceList object)
         EPVector<int> dsoaSpaceIndexes;       // Indexes to Spaces (if this is a DSOA:SpaceList object)
         OAFlowCalcMethod OAFlowMethod =
-            OAFlowCalcMethod::PerPerson; // - Method for OA flow calculation (Flow/Person, Flow/Zone, Flow/Area, FlowACH, Sum, Maximum)
-        Real64 OAFlowPerPerson = 0.0;    // - OA requirement per person
-        Real64 OAFlowPerArea = 0.0;      // - OA requirement per zone area
-        Real64 OAFlowPerZone = 0.0;      // - OA requirement per zone
-        Real64 OAFlowACH = 0.0;          // - OA requirement per zone per hour
-        int OAFlowFracSchPtr = ScheduleManager::ScheduleAlwaysOn; // - Fraction schedule applied to total OA requirement
-        int OAPropCtlMinRateSchPtr =
-            ScheduleManager::ScheduleAlwaysOn; // - Fraction schedule applied to Proportional Control Minimum Outdoor Air Flow Rate
-        int CO2MaxMinLimitErrorCount = 0;      // Counter when max CO2 concentration < min CO2 concentration for SOAM_ProportionalControlSchOcc
-        int CO2MaxMinLimitErrorIndex = 0;      // Index for max CO2 concentration < min CO2 concentration recurring error message for
-                                               // SOAM_ProportionalControlSchOcc
-        int CO2GainErrorCount = 0;             // Counter when CO2 generation from people is zero for SOAM_ProportionalControlSchOcc
+            OAFlowCalcMethod::PerPerson;            // - Method for OA flow calculation (Flow/Person, Flow/Zone, Flow/Area, FlowACH, Sum, Maximum)
+        Real64 OAFlowPerPerson = 0.0;               // - OA requirement per person
+        Real64 OAFlowPerArea = 0.0;                 // - OA requirement per zone area
+        Real64 OAFlowPerZone = 0.0;                 // - OA requirement per zone
+        Real64 OAFlowACH = 0.0;                     // - OA requirement per zone per hour
+        Sched::Schedule *oaFlowFracSched = nullptr; // - Fraction schedule applied to total OA requirement
+        Sched::Schedule *oaPropCtlMinRateSched = nullptr; // - Fraction schedule applied to Proportional Control Minimum Outdoor Air Flow Rate
+        int CO2MaxMinLimitErrorCount = 0; // Counter when max CO2 concentration < min CO2 concentration for SOAM_ProportionalControlSchOcc
+        int CO2MaxMinLimitErrorIndex = 0; // Index for max CO2 concentration < min CO2 concentration recurring error message for
+                                          // SOAM_ProportionalControlSchOcc
+        int CO2GainErrorCount = 0;        // Counter when CO2 generation from people is zero for SOAM_ProportionalControlSchOcc
         int CO2GainErrorIndex = 0; // Index for recurring error message when CO2 generation from people is zero for SOAM_ProportionalControlSchOcc
         bool myEnvrnFlag = true;
 
-        Real64 desFlowPerZoneArea(EnergyPlusData &state,
-                                  int const actualZoneNum // Zone index
-        );
+        Real64 oaFlowArea(EnergyPlusData &state,
+                          int const zoneNum,
+                          bool const useMinOASchFlag = true, // Use min OA schedule in DesignSpecification:OutdoorAir object
+                          int const spaceNum = 0);           // Space index (if applicable)
 
-        Real64 desFlowPerZonePerson(EnergyPlusData &state,
-                                    int const actualZoneNum // Zone index
-        );
+        Real64 floorArea(EnergyPlusData &state, int const zoneNum, int const spaceNum = 0);
+
+        Real64 desFlowPerZoneArea(EnergyPlusData &state, int const zoneNum, int const spaceNum = 0);
+
+        Real64 oaFlowPeople(EnergyPlusData &state,
+                            int const zoneNum,                 // Zone index
+                            bool const useOccSchFlag = true,   // Use occupancy schedule
+                            bool const useMinOASchFlag = true, // Use min OA schedule in DesignSpecification:OutdoorAir object
+                            int const spaceNum = 0);           // Space index (if applicable)
+
+        Real64 people(EnergyPlusData &state,
+                      int const zoneNum,               // Zone index
+                      bool const useOccSchFlag = true, // Use occupancy schedule
+                      int const spaceNum = 0);         // Space index (if applicable)
+
+        Real64 desFlowPerZonePerson(EnergyPlusData &state, int const zoneNum, int const spaceNum = 0);
+
+        Real64 desFlowPerZone(EnergyPlusData &state, int const spaceNum = 0);
+
+        Real64 desFlowPerACH(EnergyPlusData &state, int const spaceNum = 0);
 
         Real64 calcOAFlowRate(EnergyPlusData &state,
-                              int ActualZoneNum,           // Zone index
-                              bool UseOccSchFlag,          // Zone occupancy schedule will be used instead of using total zone occupancy
-                              bool UseMinOASchFlag,        // Use min OA schedule in DesignSpecification:OutdoorAir object
-                              bool const PerPersonNotSet,  // when calculation should not include occupants (e.g., dual duct)
-                              bool const MaxOAVolFlowFlag, // TRUE when calculation uses occupancy schedule  (e.g., dual duct)
-                              int const spaceNum = 0       // Space index (if applicable)
+                              int ActualZoneNum,               // Zone index
+                              bool UseOccSchFlag,              // Zone occupancy schedule will be used instead of using total zone occupancy
+                              bool UseMinOASchFlag,            // Use min OA schedule in DesignSpecification:OutdoorAir object
+                              bool const PerPersonNotSet,      // when calculation should not include occupants (e.g., dual duct)
+                              bool const MaxOAVolFlowFlag,     // TRUE when calculation uses occupancy schedule  (e.g., dual duct)
+                              int const spaceNum = 0,          // Space index (if applicable)
+                              bool const calcIAQMethods = true // For IAQProcedure, PCOccSch, and PCDesOcc, calculate if true, return zero if false
         );
+
+        Sched::Schedule *getZoneFlowFracSched(EnergyPlusData &state, bool notAllSame);
+
+        Sched::Schedule *getZonePropCtlMinRateSched(EnergyPlusData &state, bool notAllSame);
     };
 
     struct ZoneAirDistributionData
     {
         // Members
         std::string Name;
-        std::string ZoneADEffSchName;      // - Zone air distribution effectiveness schedule name
-        Real64 ZoneADEffCooling;           // - Zone air distribution effectiveness in cooling mode
-        Real64 ZoneADEffHeating;           // - Zone air distribution effectiveness in heating mode
-        Real64 ZoneSecondaryRecirculation; // - Zone air secondary recirculation ratio
-        int ZoneADEffSchPtr;               // - Zone air distribution effectiveness schedule index
-        Real64 ZoneVentilationEff;         // Zone ventilation effectiveness
+        std::string ZoneADEffSchName;              // - Zone air distribution effectiveness schedule name
+        Real64 ZoneADEffCooling;                   // - Zone air distribution effectiveness in cooling mode
+        Real64 ZoneADEffHeating;                   // - Zone air distribution effectiveness in heating mode
+        Real64 ZoneSecondaryRecirculation;         // - Zone air secondary recirculation ratio
+        Sched::Schedule *zoneADEffSched = nullptr; // - Zone air distribution effectiveness schedule index
+        Real64 ZoneVentilationEff;                 // Zone ventilation effectiveness
 
         // Default Constructor
-        ZoneAirDistributionData()
-            : ZoneADEffCooling(1.0), ZoneADEffHeating(1.0), ZoneSecondaryRecirculation(0.0), ZoneADEffSchPtr(0), ZoneVentilationEff(0.0)
+        ZoneAirDistributionData() : ZoneADEffCooling(1.0), ZoneADEffHeating(1.0), ZoneSecondaryRecirculation(0.0), ZoneVentilationEff(0.0)
         {
         }
 
@@ -1154,106 +1220,112 @@ namespace DataSizing {
                          Real64 &DesExitHumRat // returned design coil exit humidity ratio [kg/kg]
     );
 
-    Real64 calcDesignSpecificationOutdoorAir(EnergyPlusData &state,
-                                             int const DSOAPtr,          // Pointer to DesignSpecification:OutdoorAir object
-                                             int const ActualZoneNum,    // Zone index
-                                             bool const UseOccSchFlag,   // Zone occupancy schedule will be used instead of using total zone occupancy
-                                             bool const UseMinOASchFlag, // Use min OA schedule in DesignSpecification:OutdoorAir object
-                                             bool const PerPersonNotSet = false, // when calculation should not include occupants (e.g., dual duct)
-                                             bool const MaxOAVolFlowFlag = false // TRUE when calculation uses occupancy schedule  (e.g., dual duct)
-    );
+    Real64 calcDesignSpecificationOutdoorAir(
+        EnergyPlusData &state,
+        int const DSOAPtr,                   // Pointer to DesignSpecification:OutdoorAir object
+        int const ActualZoneNum,             // Zone index
+        bool const UseOccSchFlag,            // Zone occupancy schedule will be used instead of using total zone occupancy
+        bool const UseMinOASchFlag,          // Use min OA schedule in DesignSpecification:OutdoorAir object
+        bool const PerPersonNotSet = false,  // when calculation should not include occupants (e.g., dual duct)
+        bool const MaxOAVolFlowFlag = false, // TRUE when calculation uses occupancy schedule  (e.g., dual duct)
+        int const spaceNum = 0,              // Space index (if applicable)
+        bool const calcIAQMethods = true);   // For IAQProcedure, PCOccSch, and PCDesOcc, calculate if true, return zero if false
 
+    int getDefaultOAReq(EnergyPlusData &state); // get index to default OA requirements - used by Controller:MechanicalVentilation
+
+    void setHeatPumpSize(EnergyPlusData &state, Real64 &coolingCap, Real64 &heatingCap, Real64 const sizingRatio);
 } // namespace DataSizing
 
 struct SizingData : BaseGlobalStruct
 {
-    int NumOARequirements = 0;      // Number of OA Requirements objects
-    int NumZoneAirDistribution = 0; // Number of zone air distribution objects
-    int NumZoneSizingInput = 0;     // Number of Zone Sizing objects
-    int NumSysSizInput = 0;         // Number of System Sizing objects
-    int NumPltSizInput = 0;         // Number of Plant Sizing objects
-    int CurSysNum = 0;              // Current Air System index (0 if not in air loop)
-    int CurOASysNum = 0;            // Current outside air system index (0 if not in OA Sys)
-    int CurZoneEqNum = 0;           // Current Zone Equipment index (0 if not simulating ZoneEq)
-    int CurTermUnitSizingNum = 0;   // Current terminal unit sizing index for TermUnitSizing and TermUnitFinalZoneSizing
-    int CurBranchNum = 0;           // Index of branch being simulated (or 0 if not air loop)
-    DataHVACGlobals::AirDuctType CurDuctType = DataHVACGlobals::AirDuctType::Invalid; // Duct type of current branch
-    int CurLoopNum = 0;                                                               // the current plant loop index
-    int CurCondLoopNum = 0;                                                           // the current condenser loop number
-    int CurEnvirNumSimDay = 0;                                                        // current environment number for day simulated
-    int CurOverallSimDay = 0;                                                         // current day of simulation
-    int NumTimeStepsInAvg = 0;                            // number of time steps in the averaging window for the design flow and load sequences
-    int SaveNumPlantComps = 0;                            // Number of components using water as an energy source or sink (e.g. water coils)
-    int DataTotCapCurveIndex = 0;                         // index to total capacity as a function of temperature curve
-    Real64 DataTotCapCurveValue = 0;                      // value of total capacity as a function of temperature curve for CoilVRF_FluidTCtrl_*
-    int DataPltSizCoolNum = 0;                            // index to cooling plant sizing data
-    int DataPltSizHeatNum = 0;                            // index to heating plant sizing data
-    int DataWaterLoopNum = 0;                             // index to plant water loop
-    int DataCoilNum = 0;                                  // index to coil object
-    int DataFanOpMode = 0;                                // fan operating mode (ContFanCycCoil or CycFanCycCoil)
-    bool DataCoilIsSuppHeater = false;                    // TRUE if heating coil used as supplemental heater
-    bool DataIsDXCoil = false;                            // TRUE if direct-expansion coil
-    bool DataAutosizable = true;                          // TRUE if component is autosizable
-    bool DataEMSOverrideON = false;                       // boolean determines if user relies on EMS to override autosizing
-    bool DataScalableSizingON = false;                    // boolean determines scalable flow sizing is specified
-    bool DataScalableCapSizingON = false;                 // boolean determines scalable capacity sizing is specified
-    bool DataSysScalableFlowSizingON = false;             // boolean determines scalable system flow sizing is specified
-    bool DataSysScalableCapSizingON = false;              // boolean determines scalable system capacity sizing is specified
-    bool SysSizingRunDone = false;                        // True if a system sizing run is successfully completed.
-    bool TermUnitSingDuct = false;                        // TRUE if a non-induction single duct terminal unit
-    bool TermUnitPIU = false;                             // TRUE if a powered induction terminal unit
-    bool TermUnitIU = false;                              // TRUE if an unpowered induction terminal unit
-    bool ZoneEqFanCoil = false;                           // TRUE if a 4 pipe fan coil unit is being simulated
-    bool ZoneEqOutdoorAirUnit = false;                    // TRUE if an OutdoorAirUnit is being simulated
-    bool ZoneEqUnitHeater = false;                        // TRUE if a unit heater is being simulated
-    bool ZoneEqUnitVent = false;                          // TRUE if a unit ventilator unit is being simulated
-    bool ZoneEqVentedSlab = false;                        // TRUE if a ventilated slab is being simulated
-    bool ZoneEqDXCoil = false;                            // TRUE if a ZoneHVAC DX coil is being simulated
-    bool ZoneEqUnitarySys = false;                        // TRUE if a zone UnitarySystem is being simulated
-    bool ZoneCoolingOnlyFan = false;                      // TRUE if a ZoneHVAC DX cooling coil is only coil in parent
-    bool ZoneHeatingOnlyFan = false;                      // TRUE if zone unit only does heating and contains a fam (such as Unit Heater)
-    bool ZoneSizingRunDone = false;                       // True if a zone sizing run has been successfully completed.
-    bool DataErrorsFound = false;                         // used for simulation termination when errors are found
-    bool DataDXCoolsLowSpeedsAutozize = false;            // true allows reporting lower speed CoilCoolingCurveFits Autosize
-    Real64 AutoVsHardSizingThreshold = 0.1;               // criteria threshold used to determine if user hard size and autosize disagree 10%
-    Real64 AutoVsHardSizingDeltaTempThreshold = 1.5;      // temperature criteria threshold for autosize versus hard size [C]
-    Real64 DataCoilSizingAirInTemp = 0.0;                 // saves sizing data for use in coil object reporting
-    Real64 DataCoilSizingAirInHumRat = 0.0;               // saves sizing data for use in coil object reporting
-    Real64 DataCoilSizingAirOutTemp = 0.0;                // saves sizing data for use in coil object reporting
-    Real64 DataCoilSizingAirOutHumRat = 0.0;              // saves sizing data for use in coil object reporting
-    Real64 DataCoilSizingFanCoolLoad = 0.0;               // saves sizing data for use in coil object reporting
-    Real64 DataCoilSizingCapFT = 1.0;                     // saves sizing data for use in coil object reporting
-    bool DataDesAccountForFanHeat = true;                 // include fan heat when true
-    Real64 DataDesInletWaterTemp = 0.0;                   // coil inlet water temperature used for warning messages
-    Real64 DataDesInletAirHumRat = 0.0;                   // coil inlet air humidity ratio used for warning messages
-    Real64 DataDesInletAirTemp = 0.0;                     // coil inlet air temperature used for warning messages
-    Real64 DataDesOutletAirTemp = 0.0;                    // coil outlet air temperature used for sizing
-    Real64 DataDesOutletAirHumRat = 0.0;                  // coil air outlet humidity ratio used in sizing calculations [kg water / kg dry air]
-    Real64 DataCoolCoilCap = 0.0;                         // cooling coil capacity used for sizing with scalable inputs [W]
-    Real64 DataFlowUsedForSizing = 0.0;                   // air flow rate used for sizing with scalable inputs [m3/s]
-    Real64 DataAirFlowUsedForSizing = 0.0;                // air flow rate used for sizing with scalable inputs [m3/s]
-    Real64 DataWaterFlowUsedForSizing = 0.0;              // water flow rate used for sizing with scalable inputs [m3/s]
-    Real64 DataCapacityUsedForSizing = 0.0;               // capacity used for sizing with scalable inputs [W]
-    Real64 DataDesignCoilCapacity = 0.0;                  // calculated capacity of coil at end of UA calculation
-    Real64 DataHeatSizeRatio = 1.0;                       // heating coil size as a ratio of cooling coil capacity
-    Real64 DataEMSOverride = 0.0;                         // value of EMS variable used to override autosizing
-    Real64 DataBypassFrac = 0.0;                          // value of bypass fraction for Coil:Cooling:DX:TwoStageWithHumidityControlMode coils
-    Real64 DataFracOfAutosizedCoolingAirflow = 1.0;       // fraction of design cooling supply air flow rate
-    Real64 DataFracOfAutosizedHeatingAirflow = 1.0;       // fraction of design heating supply air flow rate
-    Real64 DataFlowPerCoolingCapacity = 0.0;              // cooling supply air flow per unit cooling capacity
-    Real64 DataFlowPerHeatingCapacity = 0.0;              // heating supply air flow per unit heating capacity
-    Real64 DataFracOfAutosizedCoolingCapacity = 1.0;      // fraction of autosized cooling capacity
-    Real64 DataFracOfAutosizedHeatingCapacity = 1.0;      // fraction of autosized heating capacit
-    Real64 DataAutosizedCoolingCapacity = 0.0;            // Autosized cooling capacity used for multiplying flow per capacity to get flow rate
-    Real64 DataAutosizedHeatingCapacity = 0.0;            // Autosized heating capacit used for multiplying flow per capacity to get flow rate
-    Real64 DataConstantUsedForSizing = 0.0;               // base value used for sizing inputs that are ratios of other inputs
+    int NumOARequirements = 0;                                  // Number of OA Requirements objects
+    int OARequirements_Default = 0;                             // Index to default DesignSpecification:OutdoorAir
+    int NumZoneAirDistribution = 0;                             // Number of zone air distribution objects
+    int NumZoneSizingInput = 0;                                 // Number of Zone Sizing objects
+    int NumSysSizInput = 0;                                     // Number of System Sizing objects
+    int NumPltSizInput = 0;                                     // Number of Plant Sizing objects
+    int CurSysNum = 0;                                          // Current Air System index (0 if not in air loop)
+    int CurOASysNum = 0;                                        // Current outside air system index (0 if not in OA Sys)
+    int CurZoneEqNum = 0;                                       // Current Zone Equipment index (0 if not simulating ZoneEq)
+    int CurTermUnitSizingNum = 0;                               // Current terminal unit sizing index for TermUnitSizing and TermUnitFinalZoneSizing
+    int CurBranchNum = 0;                                       // Index of branch being simulated (or 0 if not air loop)
+    HVAC::AirDuctType CurDuctType = HVAC::AirDuctType::Invalid; // Duct type of current branch
+    int CurLoopNum = 0;                                         // the current plant loop index
+    int CurCondLoopNum = 0;                                     // the current condenser loop number
+    int CurEnvirNumSimDay = 0;                                  // current environment number for day simulated
+    int CurOverallSimDay = 0;                                   // current day of simulation
+    int NumTimeStepsInAvg = 0;                                  // number of time steps in the averaging window for the design flow and load sequences
+    int SaveNumPlantComps = 0;                                  // Number of components using water as an energy source or sink (e.g. water coils)
+    int DataTotCapCurveIndex = 0;                               // index to total capacity as a function of temperature curve
+    Real64 DataTotCapCurveValue = 0;                            // value of total capacity as a function of temperature curve for CoilVRF_FluidTCtrl_*
+    int DataPltSizCoolNum = 0;                                  // index to cooling plant sizing data
+    int DataPltSizHeatNum = 0;                                  // index to heating plant sizing data
+    int DataWaterLoopNum = 0;                                   // index to plant water loop
+    int DataCoilNum = 0;                                        // index to coil object
+    HVAC::FanOp DataFanOp = HVAC::FanOp::Invalid;               // fan operating mode (FanOp::Continuous or FanOp::Cycling)
+    bool DataCoilIsSuppHeater = false;                          // TRUE if heating coil used as supplemental heater
+    bool DataIsDXCoil = false;                                  // TRUE if direct-expansion coil
+    bool DataAutosizable = true;                                // TRUE if component is autosizable
+    bool DataEMSOverrideON = false;                             // boolean determines if user relies on EMS to override autosizing
+    bool DataScalableSizingON = false;                          // boolean determines scalable flow sizing is specified
+    bool DataScalableCapSizingON = false;                       // boolean determines scalable capacity sizing is specified
+    bool DataSysScalableFlowSizingON = false;                   // boolean determines scalable system flow sizing is specified
+    bool DataSysScalableCapSizingON = false;                    // boolean determines scalable system capacity sizing is specified
+    bool SysSizingRunDone = false;                              // True if a system sizing run is successfully completed.
+    bool TermUnitSingDuct = false;                              // TRUE if a non-induction single duct terminal unit
+    bool TermUnitPIU = false;                                   // TRUE if a powered induction terminal unit
+    bool TermUnitIU = false;                                    // TRUE if an unpowered induction terminal unit
+    bool ZoneEqFanCoil = false;                                 // TRUE if a 4 pipe fan coil unit is being simulated
+    bool ZoneEqOutdoorAirUnit = false;                          // TRUE if an OutdoorAirUnit is being simulated
+    bool ZoneEqUnitHeater = false;                              // TRUE if a unit heater is being simulated
+    bool ZoneEqUnitVent = false;                                // TRUE if a unit ventilator unit is being simulated
+    bool ZoneEqVentedSlab = false;                              // TRUE if a ventilated slab is being simulated
+    bool ZoneEqDXCoil = false;                                  // TRUE if a ZoneHVAC DX coil is being simulated
+    bool ZoneEqUnitarySys = false;                              // TRUE if a zone UnitarySystem is being simulated
+    bool ZoneCoolingOnlyFan = false;                            // TRUE if a ZoneHVAC DX cooling coil is only coil in parent
+    bool ZoneHeatingOnlyFan = false;                            // TRUE if zone unit only does heating and contains a fam (such as Unit Heater)
+    bool ZoneSizingRunDone = false;                             // True if a zone sizing run has been successfully completed.
+    bool DataErrorsFound = false;                               // used for simulation termination when errors are found
+    bool DataDXCoolsLowSpeedsAutozize = false;                  // true allows reporting lower speed CoilCoolingCurveFits Autosize
+    Real64 AutoVsHardSizingThreshold = 0.1;                     // criteria threshold used to determine if user hard size and autosize disagree 10%
+    Real64 AutoVsHardSizingDeltaTempThreshold = 1.5;            // temperature criteria threshold for autosize versus hard size [C]
+    Real64 DataCoilSizingAirInTemp = 0.0;                       // saves sizing data for use in coil object reporting
+    Real64 DataCoilSizingAirInHumRat = 0.0;                     // saves sizing data for use in coil object reporting
+    Real64 DataCoilSizingAirOutTemp = 0.0;                      // saves sizing data for use in coil object reporting
+    Real64 DataCoilSizingAirOutHumRat = 0.0;                    // saves sizing data for use in coil object reporting
+    Real64 DataCoilSizingFanCoolLoad = 0.0;                     // saves sizing data for use in coil object reporting
+    Real64 DataCoilSizingCapFT = 1.0;                           // saves sizing data for use in coil object reporting
+    bool DataDesAccountForFanHeat = true;                       // include fan heat when true
+    Real64 DataDesInletWaterTemp = 0.0;                         // coil inlet water temperature used for warning messages
+    Real64 DataDesInletAirHumRat = 0.0;                         // coil inlet air humidity ratio used for warning messages
+    Real64 DataDesInletAirTemp = 0.0;                           // coil inlet air temperature used for warning messages
+    Real64 DataDesOutletAirTemp = 0.0;                          // coil outlet air temperature used for sizing
+    Real64 DataDesOutletAirHumRat = 0.0;                        // coil air outlet humidity ratio used in sizing calculations [kg water / kg dry air]
+    Real64 DataCoolCoilCap = 0.0;                               // cooling coil capacity used for sizing with scalable inputs [W]
+    Real64 DataFlowUsedForSizing = 0.0;                         // air flow rate used for sizing with scalable inputs [m3/s]
+    Real64 DataAirFlowUsedForSizing = 0.0;                      // air flow rate used for sizing with scalable inputs [m3/s]
+    Real64 DataWaterFlowUsedForSizing = 0.0;                    // water flow rate used for sizing with scalable inputs [m3/s]
+    Real64 DataCapacityUsedForSizing = 0.0;                     // capacity used for sizing with scalable inputs [W]
+    Real64 DataDesignCoilCapacity = 0.0;                        // calculated capacity of coil at end of UA calculation
+    Real64 DataHeatSizeRatio = 1.0;                             // heating coil size as a ratio of cooling coil capacity
+    Real64 DataEMSOverride = 0.0;                               // value of EMS variable used to override autosizing
+    Real64 DataBypassFrac = 0.0;                                // value of bypass fraction for Coil:Cooling:DX:TwoStageWithHumidityControlMode coils
+    Real64 DataFracOfAutosizedCoolingAirflow = 1.0;             // fraction of design cooling supply air flow rate
+    Real64 DataFracOfAutosizedHeatingAirflow = 1.0;             // fraction of design heating supply air flow rate
+    Real64 DataFlowPerCoolingCapacity = 0.0;                    // cooling supply air flow per unit cooling capacity
+    Real64 DataFlowPerHeatingCapacity = 0.0;                    // heating supply air flow per unit heating capacity
+    Real64 DataFracOfAutosizedCoolingCapacity = 1.0;            // fraction of autosized cooling capacity
+    Real64 DataFracOfAutosizedHeatingCapacity = 1.0;            // fraction of autosized heating capacit
+    Real64 DataAutosizedCoolingCapacity = 0.0;                  // Autosized cooling capacity used for multiplying flow per capacity to get flow rate
+    Real64 DataAutosizedHeatingCapacity = 0.0;                  // Autosized heating capacit used for multiplying flow per capacity to get flow rate
+    Real64 DataConstantUsedForSizing = 0.0;                     // base value used for sizing inputs that are ratios of other inputs
     Real64 DataFractionUsedForSizing = 0.0;               // fractional value of base value used for sizing inputs that are ratios of other inputs
     Real64 DataNonZoneNonAirloopValue = 0.0;              // used when equipment is not located in a zone or airloop
     Real64 DataSizingFraction = 1.0;                      // used when ratios of sizing is required
     int DataZoneUsedForSizing = 0;                        // pointer to control zone for air loop equipment
     int DataZoneNumber = 0;                               // a pointer to a served by zoneHVAC equipment
     int NumZoneHVACSizing = 0;                            // Number of design specification zone HVAC sizing objects
-    int NumAirTerminalSizingSpec = 0;                     // Number of design specfication air terminal sizing objects
+    int NumAirTerminalSizingSpec = 0;                     // Number of design specification air terminal sizing objects
     int NumAirTerminalUnits = 0;                          // Number of air terminal units (same as total number of zone inlet nodes)
     Real64 DXCoolCap = 0.0;                               // The rated cooling capacity of a DX unit.
     Real64 GlobalHeatSizingFactor = 0.0;                  // the global heating sizing ratio
@@ -1267,9 +1339,9 @@ struct SizingData : BaseGlobalStruct
     Real64 DataWaterCoilSizCoolDeltaT = 0.0;              // used for sizing cooling coil water design flow rate
     Real64 DataWaterCoilSizHeatDeltaT = 0.0;              // used for sizing heating coil water design flow rate
     bool DataNomCapInpMeth = false;                       // True if heating coil is sized by CoilPerfInpMeth == NomCa
-    int DataFanEnumType = -1;                             // Fan type used during sizing
+    HVAC::FanType DataFanType = HVAC::FanType::Invalid;   // Fan type used during sizing
     int DataFanIndex = -1;                                // Fan index used during sizing
-    DataSizing::ZoneFanPlacement DataFanPlacement = DataSizing::ZoneFanPlacement::NotSet; // identifies location of fan wrt coil
+    HVAC::FanPlace DataFanPlacement = HVAC::FanPlace::Invalid; // identifies location of fan wrt coil
     int DataDXSpeedNum = 0;
     int DataCoolCoilType = -1;
     int DataCoolCoilIndex = -1;
@@ -1345,6 +1417,14 @@ struct SizingData : BaseGlobalStruct
     Array1D<Real64> EvzMinBySysCool; // saved value of EvzMin used in 62.1 tabular report
     Array1D<Real64> FaByZoneCool;    // triggers allocation in UpdateSysSizing
     Array1D<Real64> SensCoolCapTemp; // triggers allocation in UpdateSysSizing
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

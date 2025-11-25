@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -71,7 +71,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GetInput)
         "Output:Table:Annual,",
         "Space Gains Annual Report, !- Name",
         "Filter1, !- Filter",
-        "Schedule2, !- Schedule Name",
+        "Constant-1.0, !- Schedule Name",
         "Zone People Total Heating Energy, !- Variable or Meter 1 Name",
         "SumOrAverage, !- Aggregation Type for Variable or Meter 1",
         "4, !- field Digits After Decimal 1",
@@ -82,6 +82,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GetInput)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->DoWeathSim = true;
 
@@ -97,7 +98,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GetInput)
 
     EXPECT_EQ(tableParams[0], "SPACE GAINS ANNUAL REPORT"); // m_name
     EXPECT_EQ(tableParams[1], "FILTER1");                   //  m_filter
-    EXPECT_EQ(tableParams[2], "SCHEDULE2");                 //  m_scheduleName
+    EXPECT_EQ(tableParams[2], "Constant-1.0");              //  m_scheduleName
 
     std::vector<std::string> fieldSetParams = firstTable->inspectTableFieldSets(0);
     EXPECT_EQ(fieldSetParams[0], "ZONE PEOPLE TOTAL HEATING ENERGY");
@@ -129,6 +130,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_SetupGathering)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 extLitPow;
     Real64 extLitUse;
@@ -137,52 +139,55 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_SetupGathering)
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite1",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite2",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite3",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite1");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite2");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite3");
 
     state->dataGlobal->DoWeathSim = true;
@@ -195,10 +200,10 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_SetupGathering)
 
     EXPECT_EQ(fieldSetParams[0], "EXTERIOR LIGHTS ELECTRIC ENERGY");
     EXPECT_EQ(fieldSetParams[2], "J"); // m_varUnits
-    EXPECT_EQ(fieldSetParams[4], "2"); // m_typeOfVar
+    EXPECT_EQ(fieldSetParams[4], "1"); // m_typeOfVar
     EXPECT_EQ(fieldSetParams[5], "3"); // m_keyCount
-    EXPECT_EQ(fieldSetParams[6], "2"); // m_varAvgSum
-    EXPECT_EQ(fieldSetParams[7], "1"); // m_varStepType
+    EXPECT_EQ(fieldSetParams[6], "1"); // m_varAvgSum
+    EXPECT_EQ(fieldSetParams[7], "0"); // m_varStepType
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults)
@@ -218,6 +223,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 extLitPow;
     Real64 extLitUse;
@@ -226,52 +232,55 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults)
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite1",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite2",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite3",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite1");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite2");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite3");
 
     state->dataGlobal->DoWeathSim = true;
@@ -286,7 +295,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults)
     // UpdateDataandReport( 1 ); not sure if this is needed
     GatherAnnualResultsForTimeStep(*state, OutputProcessor::TimeStepType::Zone);
 
-    // STOPPPED HERE. NOT SEEING THE POWER VARIABLE SHOWING UP
+    // STOPPED HERE. NOT SEEING THE POWER VARIABLE SHOWING UP
 
     std::vector<AnnualTable>::iterator firstTable = state->dataOutputReportTabularAnnual->annualTables.begin();
     std::vector<std::string> fieldSetParams = firstTable->inspectTableFieldSets(0);
@@ -297,7 +306,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults_MinMaxHrsShown
     using namespace OutputProcessor;
     state->dataGlobal->TimeStepZone = 1.0;
     state->dataHVACGlobal->TimeStepSys = 1.0;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
 
     Meter *meter1 = new Meter("HEATING:MYTH:VARIABLE");
     meter1->units = Constant::Units::None;
@@ -309,7 +318,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults_MinMaxHrsShown
     state->dataOutputProcessor->meterMap.insert_or_assign("ELECTRICITY:MYTH", state->dataOutputProcessor->meters.size() - 1);
 
     std::vector<AnnualTable> annualTables;
-    annualTables.push_back(AnnualTable(*state, "PEAK ELECTRICTY ANNUAL MYTH REPORT", "", ""));
+    annualTables.emplace_back(*state, "PEAK ELECTRICITY ANNUAL MYTH REPORT", "", "");
     annualTables.back().addFieldSet("HEATING:MYTH:VARIABLE", AnnualFieldSet::AggregationKind::hoursPositive, 2);
     annualTables.back().addFieldSet("ELECTRICITY:MYTH", AnnualFieldSet::AggregationKind::maximumDuringHoursShown, 2);
     annualTables.back().setupGathering(*state);
@@ -371,18 +380,20 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_columnHeadersToTitleCase)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 facilUse;
     SetupOutputVariable(*state,
                         "Misc Facility Electric Energy",
                         Constant::Units::J,
                         facilUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite1",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::InteriorLights, // Was "Facility"
-                        "General");                                    // create an electric meter
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::InteriorLights, // Was "Facility"
+                        "General");                                 // create an electric meter
 
     Meter *meter1 = new Meter("Electricity:Facility");
     meter1->units = Constant::Units::None;
@@ -405,15 +416,15 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_columnHeadersToTitleCase)
 
     std::vector<std::string> fieldSetParams = firstTable->inspectTableFieldSets(0);
     EXPECT_EQ(fieldSetParams[0], "ONPEAKTIME"); // m_colHead
-    EXPECT_EQ(fieldSetParams[4], "4");          // m_typeOfVar = OutputProcessor::VarType_Schedule
+    EXPECT_EQ(fieldSetParams[4], "3");          // m_typeOfVar = OutputProcessor::VarType_Schedule
 
     fieldSetParams = firstTable->inspectTableFieldSets(1);
     EXPECT_EQ(fieldSetParams[0], "Electricity:Facility"); // m_colHead
-    EXPECT_EQ(fieldSetParams[4], "3");                    // m_typeOfVar = OutputProcessor::VarType_Meter
+    EXPECT_EQ(fieldSetParams[4], "2");                    // m_typeOfVar = OutputProcessor::VarType_Meter
 
     fieldSetParams = firstTable->inspectTableFieldSets(2);
     EXPECT_EQ(fieldSetParams[0], "Misc Facility Electric Energy"); // m_colHead
-    EXPECT_EQ(fieldSetParams[4], "2");                             // m_typeOfVar = OutputProcessor::VarType_Real
+    EXPECT_EQ(fieldSetParams[4], "1");                             // m_typeOfVar = OutputProcessor::VarType_Real
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_invalidAggregationOrder)
@@ -434,18 +445,20 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_invalidAggregationOrder)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 facilUse;
     SetupOutputVariable(*state,
                         "Misc Facility Electric Energy",
                         Constant::Units::J,
                         facilUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite1",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::InteriorLights, // Was "Facility"
-                        "General");                                    // create an electric meter
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::InteriorLights, // Was "Facility"
+                        "General");                                 // create an electric meter
 
     Meter *meter1 = new Meter("ELECTRICITY:FACILITY");
     meter1->units = Constant::Units::None;
@@ -530,6 +543,7 @@ TEST_F(SQLiteFixture, OutputReportTabularAnnual_CurlyBraces)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Meter *meter1 = new Meter("ELECTRICITY:FACILITY");
     meter1->units = Constant::Units::None;
@@ -542,6 +556,7 @@ TEST_F(SQLiteFixture, OutputReportTabularAnnual_CurlyBraces)
 
     OutputReportTabularAnnual::GetInputTabularAnnual(*state);
     EXPECT_EQ(state->dataOutputReportTabularAnnual->annualTables.size(), 1u);
+    OutputReportTabular::setTabularReportStyles(*state);
 
     OutputReportTabularAnnual::WriteAnnualTables(*state);
 
@@ -573,7 +588,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_WarnBlankVariable)
         "Output:Table:Annual,",
         "Space Gains Annual Report, !- Name",
         "Filter1, !- Filter",
-        "Schedule2, !- Schedule Name",
+        "Constant-1.0, !- Schedule Name",
         "Zone People Total Heating Energy, !- Variable or Meter 1 Name",
         "SumOrAverage, !- Aggregation Type for Variable or Meter 1",
         "4, !- field Digits After Decimal 1",
@@ -584,6 +599,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_WarnBlankVariable)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->DoWeathSim = true;
 

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -92,7 +92,9 @@ public:
     template <typename T> T *objectFactory(EnergyPlusData &state, std::string const &objectName)
     {
         T *p = data->objectFactory<T>(objectName);
-        if (p != nullptr) return p;
+        if (p != nullptr) {
+            return p;
+        }
         auto const &fields = getFields(state, T::canonicalObjectType(), objectName);
         p = data->addObject<T>(objectName, fields);
         return p;
@@ -101,7 +103,9 @@ public:
     template <typename T> T *objectFactory(EnergyPlusData &state)
     {
         T *p = data->objectFactory<T>();
-        if (p != nullptr) return p;
+        if (p != nullptr) {
+            return p;
+        }
         auto const &fields = getFields(state, T::canonicalObjectType());
         p = data->addObject<T>(fields);
         return p;
@@ -127,7 +131,7 @@ public:
 
     bool getDefaultValue(EnergyPlusData &state, std::string const &objectWord, std::string const &fieldName, std::string &value);
 
-    std::string getAlphaFieldValue(json const &ep_object, json const &schema_obj_props, std::string const &fieldName);
+    std::string getAlphaFieldValue(json const &ep_object, json const &schema_obj_props, std::string const &fieldName, bool uc = true);
 
     Real64 getRealFieldValue(json const &ep_object, json const &schema_obj_props, std::string const &fieldName);
 
@@ -153,6 +157,8 @@ public:
                        ObjexxFCL::Optional<Array1D_string> NumericFieldNames = _);
 
     int getIDFObjNum(EnergyPlusData &state, std::string_view Object, int const Number);
+
+    std::vector<std::string> getIDFOrderedKeys(EnergyPlusData &state, std::string_view Object);
 
     int getJSONObjNum(EnergyPlusData &state, std::string const &Object, int const Number);
 
@@ -214,8 +220,8 @@ private:
             return cmp < 0;
         }
 
-        std::string objectType = "";
-        std::string objectName = "";
+        std::string objectType;
+        std::string objectName;
     };
 
     struct ObjectCache
@@ -321,6 +327,14 @@ private:
 struct DataInputProcessing : BaseGlobalStruct
 {
     std::unique_ptr<InputProcessor> inputProcessor = InputProcessor::factory();
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -70,6 +70,7 @@
 #include <EnergyPlus/GlobalNames.hh>
 #include <EnergyPlus/HeatRecovery.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
+#include <EnergyPlus/MixedAir.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
 #include <EnergyPlus/OutputReportPredefined.hh>
@@ -104,16 +105,33 @@ namespace HeatRecovery {
     // U.S. Environmental Protection Agency software "SAVES" -
     //  School Advanced Ventilation Engineering Software http://www.epa.gov/iaq/schooldesign/saves.html
 
+    enum class HXOperation
+    {
+        Invalid = -1,
+        WhenFansOn,
+        Scheduled,
+        WhenOutsideEconomizerLimits,
+        WhenMinOA,
+        Num
+    };
+
     Real64 constexpr KELVZERO = 273.16;
     Real64 constexpr SMALL = 1.e-10;
     constexpr std::array<std::string_view, static_cast<int>(FrostControlOption::Num)> frostControlNamesUC = {
         "NONE", "EXHAUSTONLY", "EXHAUSTAIRRECIRCULATION", "MINIMUMEXHAUSTTEMPERATURE"};
 
+    constexpr std::array<std::string_view, static_cast<int>(HXExchConfigType::Num)> hxExchConfigTypeNames = {"Plate", "Rotary"};
+
+    constexpr std::array<std::string_view, static_cast<int>(HXExchConfigType::Num)> hxExchConfigTypeNamesUC = {"PLATE", "ROTARY"};
+
+    constexpr std::array<std::string_view, static_cast<int>(HXOperation::Num)> hxOperationNames = {
+        "WhenFansOn", "Scheduled", "WhenOutsideEconomizerLimits", "WhenMinimumOutdoorAir"};
+
     void SimHeatRecovery(EnergyPlusData &state,
                          std::string_view CompName,                          // name of the heat exchanger unit
                          bool const FirstHVACIteration,                      // TRUE if 1st HVAC simulation of system timestep
                          int &CompIndex,                                     // Pointer to Component
-                         int const FanOpMode,                                // Supply air fan operating mode
+                         HVAC::FanOp const fanOp,                            // Supply air fan operating mode
                          ObjexxFCL::Optional<Real64 const> HXPartLoadRatio,  // Part load ratio requested of DX compressor
                          ObjexxFCL::Optional_bool_const HXUnitEnable,        // Flag to operate heat exchanger
                          ObjexxFCL::Optional_int_const CompanionCoilIndex,   // index of companion cooling coil
@@ -193,29 +211,33 @@ namespace HeatRecovery {
         thisExch.initialize(state, CompanionCoilNum, companionCoilType);
 
         // call the correct heat exchanger calculation routine
-        switch (state.dataHeatRecovery->ExchCond(HeatExchNum).ExchType) {
-        case DataHVACGlobals::HX_AIRTOAIR_FLATPLATE:
+        switch (state.dataHeatRecovery->ExchCond(HeatExchNum).type) {
+        case HVAC::HXType::AirToAir_FlatPlate: {
             thisExch.CalcAirToAirPlateHeatExch(state, HXUnitOn, EconomizerFlag, HighHumCtrlFlag);
-            break;
+        } break;
 
-        case DataHVACGlobals::HX_AIRTOAIR_GENERIC:
-            thisExch.CalcAirToAirGenericHeatExch(state, HXUnitOn, FirstHVACIteration, FanOpMode, EconomizerFlag, HighHumCtrlFlag, HXPartLoadRatio);
-            break;
+        case HVAC::HXType::AirToAir_SensAndLatent: {
+            thisExch.CalcAirToAirGenericHeatExch(state, HXUnitOn, FirstHVACIteration, fanOp, EconomizerFlag, HighHumCtrlFlag, HXPartLoadRatio);
+        } break;
 
-        case DataHVACGlobals::HX_DESICCANT_BALANCED:
+        case HVAC::HXType::Desiccant_Balanced: {
             Real64 PartLoadRatio = present(HXPartLoadRatio) ? Real64(HXPartLoadRatio) : 1.0; // Part load ratio requested of DX compressor
             bool RegInIsOANode = present(RegenInletIsOANode) && bool(RegenInletIsOANode);
             thisExch.CalcDesiccantBalancedHeatExch(state,
                                                    HXUnitOn,
                                                    FirstHVACIteration,
-                                                   FanOpMode,
+                                                   fanOp,
                                                    PartLoadRatio,
                                                    CompanionCoilNum,
                                                    companionCoilType,
                                                    RegInIsOANode,
                                                    EconomizerFlag,
                                                    HighHumCtrlFlag);
-            break;
+        } break;
+
+        default: {
+            assert(false);
+        } break;
         }
 
         thisExch.UpdateHeatRecovery(state);
@@ -245,6 +267,7 @@ namespace HeatRecovery {
         int IOStatus;                                                      // Used in GetObjectItem
         bool ErrorsFound(false);                                           // Set to true if errors in input, fatal at end of routine
         constexpr std::string_view RoutineName = "GetHeatRecoveryInput: "; // include trailing blank space
+        constexpr std::string_view routineName = "GetHeatRecoveryInput";
         auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
 
         int NumAirToAirPlateExchs = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "HeatExchanger:AirToAir:FlatPlate");
@@ -279,6 +302,8 @@ namespace HeatRecovery {
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
             int const ExchNum = ExchIndex;
             auto &thisExchanger = state.dataHeatRecovery->ExchCond(ExchNum);
             thisExchanger.NumericFieldNames.allocate(NumNumbers);
@@ -292,22 +317,13 @@ namespace HeatRecovery {
                                                      ErrorsFound);
 
             thisExchanger.Name = state.dataIPShortCut->cAlphaArgs(1);
-            thisExchanger.ExchType = DataHVACGlobals::HX_AIRTOAIR_FLATPLATE;
+            thisExchanger.type = HVAC::HXType::AirToAir_FlatPlate;
+            thisExchanger.ExchConfig = HXExchConfigType::Plate;
             if (state.dataIPShortCut->lAlphaFieldBlanks(2)) {
-                thisExchanger.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-            } else {
-                thisExchanger.SchedPtr = ScheduleManager::GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(2));
-                if (thisExchanger.SchedPtr == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}: invalid {} entered ={} for {}={}",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaFieldNames(2),
-                                           state.dataIPShortCut->cAlphaArgs(2),
-                                           state.dataIPShortCut->cAlphaFieldNames(1),
-                                           state.dataIPShortCut->cAlphaArgs(1)));
-                    ErrorsFound = true;
-                }
+                thisExchanger.availSched = Sched::GetScheduleAlwaysOn(state);
+            } else if ((thisExchanger.availSched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(2))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2));
+                ErrorsFound = true;
             }
 
             constexpr std::array<std::string_view, static_cast<int>(HXConfiguration::Num)> hxConfigurationNamesUC = {
@@ -373,7 +389,7 @@ namespace HeatRecovery {
                                                             DataLoopNode::ObjectIsNotParent);
 
             BranchNodeConnections::TestCompSet(state,
-                                               DataHVACGlobals::cHXTypes(thisExchanger.ExchType),
+                                               HVAC::hxTypeNames[(int)thisExchanger.type],
                                                thisExchanger.Name,
                                                state.dataIPShortCut->cAlphaArgs(5),
                                                state.dataIPShortCut->cAlphaArgs(6),
@@ -396,6 +412,8 @@ namespace HeatRecovery {
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
             int const ExchNum = ExchIndex + NumAirToAirPlateExchs;
             auto &thisExchanger = state.dataHeatRecovery->ExchCond(ExchNum);
             thisExchanger.NumericFieldNames.allocate(NumNumbers);
@@ -409,22 +427,12 @@ namespace HeatRecovery {
                                                      ErrorsFound);
 
             thisExchanger.Name = state.dataIPShortCut->cAlphaArgs(1);
-            thisExchanger.ExchType = DataHVACGlobals::HX_AIRTOAIR_GENERIC;
+            thisExchanger.type = HVAC::HXType::AirToAir_SensAndLatent;
             if (state.dataIPShortCut->lAlphaFieldBlanks(2)) {
-                thisExchanger.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-            } else {
-                thisExchanger.SchedPtr = ScheduleManager::GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(2));
-                if (thisExchanger.SchedPtr == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}: invalid {} entered ={} for {}={}",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaFieldNames(2),
-                                           state.dataIPShortCut->cAlphaArgs(2),
-                                           state.dataIPShortCut->cAlphaFieldNames(1),
-                                           thisExchanger.Name));
-                    ErrorsFound = true;
-                }
+                thisExchanger.availSched = Sched::GetScheduleAlwaysOn(state);
+            } else if ((thisExchanger.availSched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(2))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2));
+                ErrorsFound = true;
             }
             thisExchanger.NomSupAirVolFlow = state.dataIPShortCut->rNumericArgs(1);
             thisExchanger.HeatEffectSensible100 = state.dataIPShortCut->rNumericArgs(2);
@@ -480,24 +488,12 @@ namespace HeatRecovery {
                 }
             }
 
-            if (Util::SameString(state.dataIPShortCut->cAlphaArgs(8), "Plate")) {
-                thisExchanger.ExchConfig = HXConfigurationType::Plate;
-            } else if (Util::SameString(state.dataIPShortCut->cAlphaArgs(8), "Rotary")) {
-                thisExchanger.ExchConfig = HXConfigurationType::Rotary;
-            } else {
-                ShowSevereError(state, format("{} configuration not found= {}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(8)));
-                ShowContinueError(state, "HX configuration must be either Plate or Rotary");
-                ErrorsFound = true;
-            }
+            thisExchanger.ExchConfig = static_cast<HXExchConfigType>(getEnumValue(hxExchConfigTypeNamesUC, state.dataIPShortCut->cAlphaArgs(8)));
 
             // Added additional inputs for frost control
             thisExchanger.FrostControlType = static_cast<FrostControlOption>(getEnumValue(frostControlNamesUC, state.dataIPShortCut->cAlphaArgs(9)));
-            if (thisExchanger.FrostControlType == FrostControlOption::Invalid) {
-                ShowSevereError(state, format("Invalid Frost Control method for {} =  {}", thisExchanger.Name, state.dataIPShortCut->cAlphaArgs(9)));
-                ErrorsFound = true;
-            }
 
-            if (!Util::SameString(state.dataIPShortCut->cAlphaArgs(9), "None")) {
+            if (thisExchanger.FrostControlType != FrostControlOption::None) {
                 thisExchanger.ThresholdTemperature = state.dataIPShortCut->rNumericArgs(7);
                 thisExchanger.InitialDefrostTime = state.dataIPShortCut->rNumericArgs(8);
                 thisExchanger.RateofDefrostTimeIncrease = state.dataIPShortCut->rNumericArgs(9);
@@ -513,7 +509,7 @@ namespace HeatRecovery {
                 thisExchanger.EconoLockOut = static_cast<bool>(toggle);
             }
 
-            // yujie: read new curves here
+            // read new curves here
             thisExchanger.HeatEffectSensibleCurveIndex =
                 Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(11)); // convert curve name to number
             thisExchanger.HeatEffectLatentCurveIndex =
@@ -524,7 +520,7 @@ namespace HeatRecovery {
                 Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(14)); // convert curve name to number
 
             BranchNodeConnections::TestCompSet(state,
-                                               DataHVACGlobals::cHXTypes(thisExchanger.ExchType),
+                                               HVAC::hxTypeNames[(int)thisExchanger.type],
                                                thisExchanger.Name,
                                                state.dataIPShortCut->cAlphaArgs(3),
                                                state.dataIPShortCut->cAlphaArgs(4),
@@ -546,6 +542,9 @@ namespace HeatRecovery {
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
+
             int const ExchNum = ExchIndex + NumAirToAirPlateExchs + NumAirToAirGenericExchs;
             auto &thisExchanger = state.dataHeatRecovery->ExchCond(ExchNum);
             thisExchanger.NumericFieldNames.allocate(NumNumbers);
@@ -559,22 +558,13 @@ namespace HeatRecovery {
                                                      ErrorsFound);
 
             thisExchanger.Name = state.dataIPShortCut->cAlphaArgs(1);
-            thisExchanger.ExchType = DataHVACGlobals::HX_DESICCANT_BALANCED;
+            thisExchanger.type = HVAC::HXType::Desiccant_Balanced;
+            thisExchanger.ExchConfig = HXExchConfigType::Rotary;
             if (state.dataIPShortCut->lAlphaFieldBlanks(2)) {
-                thisExchanger.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-            } else {
-                thisExchanger.SchedPtr = ScheduleManager::GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(2));
-                if (thisExchanger.SchedPtr == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}: invalid {} entered ={} for {}={}",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaFieldNames(2),
-                                           state.dataIPShortCut->cAlphaArgs(2),
-                                           state.dataIPShortCut->cAlphaFieldNames(1),
-                                           thisExchanger.Name));
-                    ErrorsFound = true;
-                }
+                thisExchanger.availSched = Sched::GetScheduleAlwaysOn(state);
+            } else if ((thisExchanger.availSched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(2))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2));
+                ErrorsFound = true;
             }
             // desiccant HX's usually refer to process and regeneration air streams
             // In this module, Sup = Regeneration nodes and Sec = Process nodes
@@ -619,7 +609,7 @@ namespace HeatRecovery {
 
             // Set up the component set for the process side of the HX (Sec = Process)
             BranchNodeConnections::TestCompSet(state,
-                                               DataHVACGlobals::cHXTypes(thisExchanger.ExchType),
+                                               HVAC::hxTypeNames[(int)thisExchanger.type],
                                                thisExchanger.Name,
                                                state.dataLoopNodes->NodeID(thisExchanger.SecInletNode),
                                                state.dataLoopNodes->NodeID(thisExchanger.SecOutletNode),
@@ -695,8 +685,9 @@ namespace HeatRecovery {
             }
 
             // regen outlet temp variables
-            for (int i = 0; i < 8; ++i)
+            for (int i = 0; i < 8; ++i) {
                 thisPerfData.B[i] = state.dataIPShortCut->rNumericArgs(i + 4);
+            }
 
             //     Check that the minimum is not greater than or equal to the maximum for each of the following model boundaries
             thisPerfData.T_MinRegenAirInHumRat = state.dataIPShortCut->rNumericArgs(12);
@@ -844,8 +835,9 @@ namespace HeatRecovery {
             }
 
             // regen outlet humidity ratio variables
-            for (int i = 0; i < 8; ++i)
+            for (int i = 0; i < 8; ++i) {
                 thisPerfData.C[i] = state.dataIPShortCut->rNumericArgs(i + 28);
+            }
 
             //     Check that the minimum is not greater than or equal to the maximum for each of the following model boundaries
             thisPerfData.H_MinRegenAirInHumRat = state.dataIPShortCut->rNumericArgs(36);
@@ -1019,7 +1011,7 @@ namespace HeatRecovery {
                 }
             }
             if (thisExchanger.PerfDataIndex == 0) {
-                ShowSevereError(state, format("{} \"{}\"", DataHVACGlobals::cHXTypes(thisExchanger.ExchType), thisExchanger.Name));
+                ShowSevereError(state, format("{} \"{}\"", HVAC::hxTypeNames[(int)thisExchanger.type], thisExchanger.Name));
                 ShowContinueError(state, format("... Performance data set not found = {}", thisExchanger.HeatExchPerfName));
                 ErrorsFound = true;
             } else {
@@ -1040,113 +1032,110 @@ namespace HeatRecovery {
                                 "Heat Exchanger Sensible Heating Rate",
                                 Constant::Units::W,
                                 thisExchanger.SensHeatingRate,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Sensible Heating Energy",
                                 Constant::Units::J,
                                 thisExchanger.SensHeatingEnergy,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Latent Gain Rate",
                                 Constant::Units::W,
                                 thisExchanger.LatHeatingRate,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Latent Gain Energy",
                                 Constant::Units::J,
                                 thisExchanger.LatHeatingEnergy,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Total Heating Rate",
                                 Constant::Units::W,
                                 thisExchanger.TotHeatingRate,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Total Heating Energy",
                                 Constant::Units::J,
                                 thisExchanger.TotHeatingEnergy,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 thisExchanger.Name,
                                 Constant::eResource::EnergyTransfer,
-                                OutputProcessor::SOVEndUseCat::HeatRecoveryForHeating,
-                                {},
-                                OutputProcessor::SOVGroup::HVAC);
+                                OutputProcessor::Group::HVAC,
+                                OutputProcessor::EndUseCat::HeatRecoveryForHeating);
             SetupOutputVariable(state,
                                 "Heat Exchanger Sensible Cooling Rate",
                                 Constant::Units::W,
                                 thisExchanger.SensCoolingRate,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Sensible Cooling Energy",
                                 Constant::Units::J,
                                 thisExchanger.SensCoolingEnergy,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Latent Cooling Rate",
                                 Constant::Units::W,
                                 thisExchanger.LatCoolingRate,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Latent Cooling Energy",
                                 Constant::Units::J,
                                 thisExchanger.LatCoolingEnergy,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Total Cooling Rate",
                                 Constant::Units::W,
                                 thisExchanger.TotCoolingRate,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Total Cooling Energy",
                                 Constant::Units::J,
                                 thisExchanger.TotCoolingEnergy,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 thisExchanger.Name,
                                 Constant::eResource::EnergyTransfer,
-                                OutputProcessor::SOVEndUseCat::HeatRecoveryForCooling,
-                                {},
-                                OutputProcessor::SOVGroup::HVAC);
+                                OutputProcessor::Group::HVAC,
+                                OutputProcessor::EndUseCat::HeatRecoveryForCooling);
 
             SetupOutputVariable(state,
                                 "Heat Exchanger Electricity Rate",
                                 Constant::Units::W,
                                 thisExchanger.ElecUseRate,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Electricity Energy",
                                 Constant::Units::J,
                                 thisExchanger.ElecUseEnergy,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 thisExchanger.Name,
                                 Constant::eResource::Electricity,
-                                OutputProcessor::SOVEndUseCat::HeatRecovery,
-                                {},
-                                OutputProcessor::SOVGroup::HVAC);
+                                OutputProcessor::Group::HVAC,
+                                OutputProcessor::EndUseCat::HeatRecovery);
         }
 
         // setup additional report variables for generic heat exchangers
@@ -1159,36 +1148,36 @@ namespace HeatRecovery {
                                 "Heat Exchanger Sensible Effectiveness",
                                 Constant::Units::None,
                                 thisExchanger.SensEffectiveness,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Latent Effectiveness",
                                 Constant::Units::None,
                                 thisExchanger.LatEffectiveness,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Supply Air Bypass Mass Flow Rate",
                                 Constant::Units::kg_s,
                                 thisExchanger.SupBypassMassFlow,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Exhaust Air Bypass Mass Flow Rate",
                                 Constant::Units::kg_s,
                                 thisExchanger.SecBypassMassFlow,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
             SetupOutputVariable(state,
                                 "Heat Exchanger Defrost Time Fraction",
                                 Constant::Units::None,
                                 thisExchanger.DefrostFraction,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 thisExchanger.Name);
         }
 
@@ -1237,8 +1226,8 @@ namespace HeatRecovery {
             CpAir = Psychrometrics::PsyCpAirFnW(0.0);
 
             CalculateNTUBoundsErrors ErrStat = CalculateNTUBoundsErrors::NoError;
-            switch (this->ExchType) {
-            case DataHVACGlobals::HX_AIRTOAIR_FLATPLATE:
+            switch (this->type) {
+            case HVAC::HXType::AirToAir_FlatPlate:
                 this->NomSupAirMassFlow = RhoAir * this->NomSupAirVolFlow;
                 this->NomSecAirMassFlow = RhoAir * this->NomSecAirVolFlow;
                 // Note: the capacity stream is here simply the mass flow
@@ -1341,39 +1330,38 @@ namespace HeatRecovery {
                 this->mTSec0 = this->NomSecAirMassFlow * (this->NomSecAirInTemp + KELVZERO);
 
                 // check validity
-                if (this->NomSupAirMassFlow * this->NomSecAirMassFlow < DataHVACGlobals::SmallMassFlow * DataHVACGlobals::SmallMassFlow) {
+                if (this->NomSupAirMassFlow * this->NomSecAirMassFlow < HVAC::SmallMassFlow * HVAC::SmallMassFlow) {
                     ShowFatalError(state, "Mass flow in HeatExchanger:AirToAir:FlatPlate too small in initialization.");
                 }
 
-                if (this->mTSup0 < DataHVACGlobals::SmallMassFlow) {
+                if (this->mTSup0 < HVAC::SmallMassFlow) {
                     ShowFatalError(state, "(m*T)Sup,in in HeatExchanger:AirToAir:FlatPlate too small in initialization.");
                 }
 
-                if (this->mTSec0 < DataHVACGlobals::SmallMassFlow) {
+                if (this->mTSec0 < HVAC::SmallMassFlow) {
                     ShowFatalError(state, "(m*T)Sec,in in HeatExchanger:AirToAir:FlatPlate too small in initialization.");
                 }
 
-                if (CMin0 < DataHVACGlobals::SmallMassFlow) {
+                if (CMin0 < HVAC::SmallMassFlow) {
                     ShowFatalError(state, "CMin0 in HeatExchanger:AirToAir:FlatPlate too small in initialization.");
                 }
                 break;
 
-            case DataHVACGlobals::HX_AIRTOAIR_GENERIC:
+            case HVAC::HXType::AirToAir_SensAndLatent:
                 if (this->SupOutletNode > 0 && this->ControlToTemperatureSetPoint) {
                     if (state.dataLoopNodes->Node(this->SupOutletNode).TempSetPoint == DataLoopNode::SensedNodeFlagValue) {
                         if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
-                            ShowSevereError(
-                                state, format("Missing temperature setpoint for {} \"{}\" :", DataHVACGlobals::cHXTypes(this->ExchType), this->Name));
+                            ShowSevereError(state,
+                                            format("Missing temperature setpoint for {} \"{}\" :", HVAC::hxTypeNames[(int)this->type], this->Name));
                             ShowContinueError(
                                 state, "  use a Setpoint Manager to establish a setpoint at the supply air outlet node of the Heat Exchanger.");
                             ShowFatalError(state, " Previous condition causes program termination.");
                         } else {
                             // need call to EMS to check node
-                            CheckIfNodeSetPointManagedByEMS(state, this->SupOutletNode, EMSManager::SPControlType::TemperatureSetPoint, FatalError);
+                            EMSManager::CheckIfNodeSetPointManagedByEMS(state, this->SupOutletNode, HVAC::CtrlVarType::Temp, FatalError);
                             if (FatalError) {
                                 ShowSevereError(
-                                    state,
-                                    format("Missing temperature setpoint for {} \"{}\" :", DataHVACGlobals::cHXTypes(this->ExchType), this->Name));
+                                    state, format("Missing temperature setpoint for {} \"{}\" :", HVAC::hxTypeNames[(int)this->type], this->Name));
                                 ShowContinueError(
                                     state, "  use a Setpoint Manager to establish a setpoint at the supply air outlet node of the Heat Exchanger.");
                                 ShowContinueError(
@@ -1434,21 +1422,20 @@ namespace HeatRecovery {
 
         //  Initialize inlet conditions
 
-        switch (this->ExchType) {
-        case DataHVACGlobals::HX_AIRTOAIR_FLATPLATE:
-        case DataHVACGlobals::HX_AIRTOAIR_GENERIC:
+        switch (this->type) {
+        case HVAC::HXType::AirToAir_FlatPlate:
+        case HVAC::HXType::AirToAir_SensAndLatent:
             break;
 
-        case DataHVACGlobals::HX_DESICCANT_BALANCED:
+        case HVAC::HXType::Desiccant_Balanced:
             if (this->MySetPointTest) {
                 if (!state.dataGlobal->SysSizingCalc && state.dataHVACGlobal->DoSetPointTest) {
                     if (!state.dataHeatRecovery->CalledFromParentObject) {
                         if (state.dataLoopNodes->Node(this->SecOutletNode).HumRatMax == DataLoopNode::SensedNodeFlagValue) {
                             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
-                                ShowWarningError(state,
-                                                 format("Missing optional HumRatMax setpoint for {} \"{}\"",
-                                                        DataHVACGlobals::cHXTypes(this->ExchType),
-                                                        this->Name));
+                                ShowWarningError(
+                                    state,
+                                    format("Missing optional HumRatMax setpoint for {} \"{}\"", HVAC::hxTypeNames[(int)this->type], this->Name));
                                 ShowContinueError(state,
                                                   "...the simulation will continue without control of the desiccant heat exchanger to a maximum "
                                                   "humidity ratio setpoint.");
@@ -1458,14 +1445,13 @@ namespace HeatRecovery {
                             } else {
                                 bool LocalWarningError = false;
                                 // need call to EMS to check node
-                                CheckIfNodeSetPointManagedByEMS(
-                                    state, this->SecOutletNode, EMSManager::SPControlType::HumidityRatioMaxSetPoint, LocalWarningError);
+                                EMSManager::CheckIfNodeSetPointManagedByEMS(
+                                    state, this->SecOutletNode, HVAC::CtrlVarType::MaxHumRat, LocalWarningError);
                                 state.dataLoopNodes->NodeSetpointCheck(this->SecOutletNode).needsSetpointChecking = false;
                                 if (LocalWarningError) {
-                                    ShowWarningError(state,
-                                                     format("Missing optional HumRatMax setpoint for {} \"{}\"",
-                                                            DataHVACGlobals::cHXTypes(this->ExchType),
-                                                            this->Name));
+                                    ShowWarningError(
+                                        state,
+                                        format("Missing optional HumRatMax setpoint for {} \"{}\"", HVAC::hxTypeNames[(int)this->type], this->Name));
                                     ShowContinueError(state,
                                                       "...the simulation will continue without control of the desiccant heat exchanger to a "
                                                       "maximum humidity ratio setpoint.");
@@ -1483,12 +1469,11 @@ namespace HeatRecovery {
                 }
             }
 
-            if ((CompanionCoilIndex > -1) && ((CompanionCoilType_Num == DataHVACGlobals::CoilDX_CoolingSingleSpeed) ||
-                                              (CompanionCoilType_Num == DataHVACGlobals::Coil_CoolingAirToAirVariableSpeed) ||
-                                              (CompanionCoilType_Num == DataHVACGlobals::CoilDX_Cooling))) {
+            if ((CompanionCoilIndex > -1) &&
+                ((CompanionCoilType_Num == HVAC::CoilDX_CoolingSingleSpeed) || (CompanionCoilType_Num == HVAC::Coil_CoolingAirToAirVariableSpeed) ||
+                 (CompanionCoilType_Num == HVAC::CoilDX_Cooling))) {
 
-                if (CompanionCoilType_Num == DataHVACGlobals::CoilDX_CoolingSingleSpeed ||
-                    CompanionCoilType_Num == DataHVACGlobals::CoilDX_CoolingTwoStageWHumControl) {
+                if (CompanionCoilType_Num == HVAC::CoilDX_CoolingSingleSpeed || CompanionCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) {
                     if (state.dataDXCoils->DXCoilFullLoadOutAirTemp(CompanionCoilIndex) == 0.0 ||
                         state.dataDXCoils->DXCoilFullLoadOutAirHumRat(CompanionCoilIndex) == 0.0) {
                         //       DX Coil is OFF, read actual inlet conditions
@@ -1499,14 +1484,14 @@ namespace HeatRecovery {
                         state.dataHeatRecovery->FullLoadOutAirTemp = state.dataDXCoils->DXCoilFullLoadOutAirTemp(CompanionCoilIndex);
                         state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataDXCoils->DXCoilFullLoadOutAirHumRat(CompanionCoilIndex);
                     }
-                } else if (CompanionCoilType_Num == DataHVACGlobals::Coil_CoolingAirToAirVariableSpeed) {
+                } else if (CompanionCoilType_Num == HVAC::Coil_CoolingAirToAirVariableSpeed) {
                     // how to support VS dx coil here?
                     state.dataHeatRecovery->FullLoadOutAirTemp = state.dataVariableSpeedCoils->VarSpeedCoil(CompanionCoilIndex).OutletAirDBTemp;
                     state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataVariableSpeedCoils->VarSpeedCoil(CompanionCoilIndex).OutletAirHumRat;
-                } else if (CompanionCoilType_Num == DataHVACGlobals::CoilDX_Cooling) {
+                } else if (CompanionCoilType_Num == HVAC::CoilDX_Cooling) {
                     // Use the new coil option:
-                    state.dataHeatRecovery->FullLoadOutAirTemp = state.dataCoilCooingDX->coilCoolingDXs[CompanionCoilIndex].outletAirDryBulbTemp;
-                    state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataCoilCooingDX->coilCoolingDXs[CompanionCoilIndex].outletAirHumRat;
+                    state.dataHeatRecovery->FullLoadOutAirTemp = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].outletAirDryBulbTemp;
+                    state.dataHeatRecovery->FullLoadOutAirHumRat = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].outletAirHumRat;
                 } else {
                     //
                 }
@@ -1552,14 +1537,14 @@ namespace HeatRecovery {
         state.dataSize->HRFlowSizingFlag = true;
         bool PrintFlag = true; // true when sizing information is reported in the eio file
         int FieldNum = 0;      // IDD numeric field index where input field description is found
-        switch (this->ExchType) {
-        case DataHVACGlobals::HX_DESICCANT_BALANCED:
+        switch (this->type) {
+        case HVAC::HXType::Desiccant_Balanced:
             PrintFlag = false;
             break;
-        case DataHVACGlobals::HX_AIRTOAIR_GENERIC:
+        case HVAC::HXType::AirToAir_SensAndLatent:
             FieldNum = 1;
             break;
-        case DataHVACGlobals::HX_AIRTOAIR_FLATPLATE:
+        case HVAC::HXType::AirToAir_FlatPlate:
             FieldNum = 2;
             break;
         default:
@@ -1567,7 +1552,7 @@ namespace HeatRecovery {
         }
 
         std::string CompName = this->Name;
-        std::string CompType = DataHVACGlobals::cHXTypes(this->ExchType);
+        std::string CompType = std::string(HVAC::hxTypeNames[(int)this->type]);
         if (FieldNum > 0) {
             SizingString = this->NumericFieldNames(FieldNum) + " [m3/s]";
         } else {
@@ -1607,11 +1592,17 @@ namespace HeatRecovery {
         this->NomSupAirVolFlow = sizerSystemAirFlow.size(state, TempSize, errorsFound);
         state.dataSize->DataConstantUsedForSizing = 0.0;
         state.dataSize->DataFractionUsedForSizing = 0.0;
-        if (this->ExchType == DataHVACGlobals::HX_AIRTOAIR_FLATPLATE) {
+        switch (this->type) {
+        case HVAC::HXType::AirToAir_SensAndLatent: {
+            this->NomSecAirVolFlow = this->NomSupAirVolFlow;
+            state.dataSize->HRFlowSizingFlag = false;
+            break;
+        }
+        case HVAC::HXType::AirToAir_FlatPlate: {
             PrintFlag = true;
             FieldNum = 5;
             CompName = this->Name;
-            CompType = DataHVACGlobals::cHXTypes(this->ExchType);
+            CompType = HVAC::hxTypeNames[(int)this->type];
             SizingString = this->NumericFieldNames(FieldNum) + " [m3/s]";
             if (this->NomSecAirVolFlow == DataSizing::AutoSize) {
                 state.dataSize->DataConstantUsedForSizing = this->NomSupAirVolFlow;
@@ -1631,68 +1622,121 @@ namespace HeatRecovery {
             this->NomSecAirVolFlow = sizerSystemAirFlow2.size(state, TempSize, errorsFound2);
             state.dataSize->DataConstantUsedForSizing = 0.0;
             state.dataSize->DataFractionUsedForSizing = 0.0;
-        }
-        state.dataSize->HRFlowSizingFlag = false;
-        if (this->ExchType == DataHVACGlobals::HX_DESICCANT_BALANCED) {
+            state.dataSize->HRFlowSizingFlag = false;
 
+            // Calculate nominal effectiveness
+
+            break;
+        }
+        case HVAC::HXType::Desiccant_Balanced: {
+            state.dataSize->HRFlowSizingFlag = false;
             int const BalDesDehumPerfIndex = this->PerfDataIndex; // index of dehum performance data1 object
+            auto &thisBDDPerf = state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex);
 
             FieldNum = 1;
             PrintFlag = true;
-            CompName = state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex).Name;
-            CompType = state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex).PerfType;
-            SizingString = state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex).NumericFieldNames(FieldNum) + " [m3/s]";
-            TempSize = state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex).NomSupAirVolFlow;
+            CompName = thisBDDPerf.Name;
+            CompType = thisBDDPerf.PerfType;
+            SizingString = thisBDDPerf.NumericFieldNames(FieldNum) + " [m3/s]";
+            TempSize = thisBDDPerf.NomSupAirVolFlow;
             bool errorsFound2 = false;
             SystemAirFlowSizer sizerSystemAirFlow3;
             sizerSystemAirFlow3.overrideSizingString(SizingString);
             // sizerSystemAirFlow3.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
             sizerSystemAirFlow3.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
-            state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex).NomSupAirVolFlow =
-                sizerSystemAirFlow3.size(state, TempSize, errorsFound2);
+            thisBDDPerf.NomSupAirVolFlow = sizerSystemAirFlow3.size(state, TempSize, errorsFound2);
+            this->NomSupAirVolFlow = thisBDDPerf.NomSupAirVolFlow;
+            this->NomSecAirVolFlow = thisBDDPerf.NomSupAirVolFlow;
 
-            state.dataSize->DataAirFlowUsedForSizing = state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex).NomSupAirVolFlow;
-            TempSize = state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex).NomProcAirFaceVel;
+            state.dataSize->DataAirFlowUsedForSizing = thisBDDPerf.NomSupAirVolFlow;
+            TempSize = thisBDDPerf.NomProcAirFaceVel;
             bool errorsFound3 = false;
             DesiccantDehumidifierBFPerfDataFaceVelocitySizer sizerDesDehumBFFaceVel;
             sizerDesDehumBFFaceVel.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
-            state.dataHeatRecovery->BalDesDehumPerfData(BalDesDehumPerfIndex).NomProcAirFaceVel =
-                sizerDesDehumBFFaceVel.size(state, TempSize, errorsFound3);
+            thisBDDPerf.NomProcAirFaceVel = sizerDesDehumBFFaceVel.size(state, TempSize, errorsFound3);
 
             state.dataSize->DataAirFlowUsedForSizing = 0.0;
+            break;
+        }
+        default:
+            assert(0);
         }
 
         // std 229 new heat recovery table variables
-        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRInputObjName, this->Name, this->Name);
-        OutputReportPredefined::PreDefTableEntry(state,
-                                                 state.dataOutRptPredefined->pdchAirHRInputObjType,
-                                                 this->Name,
-                                                 this->ExchType == DataHVACGlobals::HX_AIRTOAIR_FLATPLATE
-                                                     ? "Flat Plate"
-                                                     : (this->ExchType == DataHVACGlobals::HX_DESICCANT_BALANCED ? "Dessicant Balanced" : "Generic"));
-        OutputReportPredefined::PreDefTableEntry(state,
-                                                 state.dataOutRptPredefined->pdchAirHRPlateOrRotary,
-                                                 this->Name,
-                                                 this->ExchType == DataHVACGlobals::HX_AIRTOAIR_FLATPLATE ? "FlatPlate" : " Rotary");
+        assert((this->type != HVAC::HXType::Invalid) && (this->ExchConfig != HXExchConfigType::Invalid));
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchAirHRInputObjType, this->Name, HVAC::hxTypeNames[(int)this->type]);
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchAirHRPlateOrRotary, this->Name, hxExchConfigTypeNames[(int)this->ExchConfig]);
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRSupplyAirflow, this->Name, this->NomSupAirVolFlow);
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRExhaustAirflow, this->Name, this->NomSecAirVolFlow);
 
-        OutputReportPredefined::PreDefTableEntry(
-            state, state.dataOutRptPredefined->pdchAirHRSenEffAt100PerHeatAirFlow, this->Name, this->HeatEffectSensible100);
-        OutputReportPredefined::PreDefTableEntry(
-            state, state.dataOutRptPredefined->pdchAirHRSenEffAt100PerCoolAirFlow, this->Name, this->CoolEffectSensible100);
-        OutputReportPredefined::PreDefTableEntry(
-            state, state.dataOutRptPredefined->pdchAirHRLatEffAt100PerHeatAirFlow, this->Name, this->HeatEffectLatent100);
-        OutputReportPredefined::PreDefTableEntry(
-            state, state.dataOutRptPredefined->pdchAirHRLatEffAt100PerCoolAirFlow, this->Name, this->CoolEffectLatent100);
+        if (this->type == HVAC::HXType::AirToAir_SensAndLatent) {
+            OutputReportPredefined::PreDefTableEntry(
+                state, state.dataOutRptPredefined->pdchAirHRSenEffAt100PerHeatAirFlow, this->Name, this->HeatEffectSensible100);
+            OutputReportPredefined::PreDefTableEntry(
+                state, state.dataOutRptPredefined->pdchAirHRSenEffAt100PerCoolAirFlow, this->Name, this->CoolEffectSensible100);
+            OutputReportPredefined::PreDefTableEntry(
+                state, state.dataOutRptPredefined->pdchAirHRLatEffAt100PerHeatAirFlow, this->Name, this->HeatEffectLatent100);
+            OutputReportPredefined::PreDefTableEntry(
+                state, state.dataOutRptPredefined->pdchAirHRLatEffAt100PerCoolAirFlow, this->Name, this->CoolEffectLatent100);
+        } else {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRSenEffAt100PerHeatAirFlow, this->Name, "N/A");
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRSenEffAt100PerCoolAirFlow, this->Name, "N/A");
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRLatEffAt100PerHeatAirFlow, this->Name, "N/A");
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRLatEffAt100PerCoolAirFlow, this->Name, "N/A");
+        }
 
-        OutputReportPredefined::PreDefTableEntry(
-            state, state.dataOutRptPredefined->pdchAirHRExhaustAirflow, this->Name, this->NomSecAirMassFlow); // ? Nomsec ==? exhaust?
-        OutputReportPredefined::PreDefTableEntry(
-            state, state.dataOutRptPredefined->pdchAirHROutdoorAirflow, this->Name, this->NomSupAirMassFlow); // ? NomSup ==? outdoor air?
+        std::string_view loopName;
+
+        if ((state.dataSize->CurSysNum > 0) && (state.dataSize->CurSysNum <= state.dataHVACGlobal->NumPrimaryAirSys)) {
+            loopName = state.dataAirSystemsData->PrimaryAirSystems(state.dataSize->CurSysNum).Name;
+        }
+
+        int hxBypassControlType = -1;
+        bool hasEconomizerControl = false;
+        if ((state.dataSize->CurOASysNum > 0) && (state.dataSize->CurOASysNum <= state.dataAirLoop->NumOASystems)) {
+            auto const &oaSys = state.dataAirLoop->OutsideAirSys(state.dataSize->CurOASysNum);
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHROASysName, this->Name, oaSys.Name);
+            if (oaSys.AirLoopDOASNum > -1) {
+                loopName = state.dataAirLoopHVACDOAS->airloopDOAS[oaSys.AirLoopDOASNum].Name;
+                // no OAcontroller is directly applicable to HX in airLoopDOAS system
+            } else {
+                if (oaSys.OAControllerIndex > 0) {
+                    auto &oaCntrlr = state.dataMixedAir->OAController(oaSys.OAControllerIndex);
+                    if (oaCntrlr.Econo != MixedAir::EconoOp::NoEconomizer) {
+                        hasEconomizerControl = true;
+                        hxBypassControlType = oaCntrlr.HeatRecoveryBypassControlType;
+                    }
+                }
+                OutputReportPredefined::PreDefTableEntry(
+                    state, state.dataOutRptPredefined->pdchAirHROAControllerName, this->Name, oaSys.OAControllerName);
+            }
+        }
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchAirHRAirloopName, this->Name, loopName);
+
+        // HX operation type
+        HXOperation operation = HXOperation::WhenFansOn;
+        if (!this->EconoLockOut || !hasEconomizerControl) {
+            if ((this->availSched != nullptr) && (!this->availSched->checkMinVal(state, Clusive::Ex, 0.0))) {
+                operation = HXOperation::Scheduled;
+            }
+        } else {
+            if (hxBypassControlType == HVAC::BypassWhenOAFlowGreaterThanMinimum) {
+                operation = HXOperation::WhenMinOA;
+            } else if ((hxBypassControlType == HVAC::BypassWhenWithinEconomizerLimits) || this->hasZoneERVController) {
+                operation = HXOperation::WhenOutsideEconomizerLimits;
+            }
+        }
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchAirHROperation,
+                                                 this->Name,
+                                                 (operation != HXOperation::Invalid) ? hxOperationNames[(int)operation] : "N/A");
     }
 
     void
     HeatExchCond::CalcAirToAirPlateHeatExch(EnergyPlusData &state,
-                                            bool const HXUnitOn,                           // flag to simulate heat exchager heat recovery
+                                            bool const HXUnitOn,                           // flag to simulate heat exchanger heat recovery
                                             ObjexxFCL::Optional_bool_const EconomizerFlag, // economizer flag pass by air loop or OA sys
                                             ObjexxFCL::Optional_bool_const HighHumCtrlFlag // high humidity control flag passed by airloop or OA sys
     )
@@ -1748,10 +1792,18 @@ namespace HeatRecovery {
             UnitSecMassFlow = min(this->NomSecAirMassFlow, this->SecInMassFlow);
         }
 
-        if (ScheduleManager::GetCurrentScheduleValue(state, this->SchedPtr) <= 0.0) UnitOn = false;
-        if (this->SupInMassFlow <= DataHVACGlobals::SmallMassFlow) UnitOn = false;
-        if (this->SecInMassFlow <= DataHVACGlobals::SmallMassFlow) UnitOn = false;
-        if (!HXUnitOn) UnitOn = false;
+        if (this->availSched->getCurrentVal() <= 0.0) {
+            UnitOn = false;
+        }
+        if (this->SupInMassFlow <= HVAC::SmallMassFlow) {
+            UnitOn = false;
+        }
+        if (this->SecInMassFlow <= HVAC::SmallMassFlow) {
+            UnitOn = false;
+        }
+        if (!HXUnitOn) {
+            UnitOn = false;
+        }
 
         if (UnitOn) {
             // unit is on
@@ -1873,7 +1925,7 @@ namespace HeatRecovery {
         EnergyPlusData &state,
         bool const HXUnitOn,                              // flag to simulate heat exchanger heat recovery
         bool const FirstHVACIteration,                    // first HVAC iteration flag
-        int const FanOpMode,                              // Supply air fan operating mode (1=cycling, 2=constant)
+        HVAC::FanOp const fanOp,                          // Supply air fan operating mode (1=cycling, 2=constant)
         ObjexxFCL::Optional_bool_const EconomizerFlag,    // economizer flag pass by air loop or OA sys
         ObjexxFCL::Optional_bool_const HighHumCtrlFlag,   // high humidity control flag passed by airloop or OA sys
         ObjexxFCL::Optional<Real64 const> HXPartLoadRatio //
@@ -1907,7 +1959,7 @@ namespace HeatRecovery {
         //   School Advanced Ventilation Engineering Software http://www.epa.gov/iaq/schooldesign/saves.html
 
         // SUBROUTINE PARAMETER DEFINITIONS:
-        Real64 constexpr ErrorTol(0.001); // error tolerence
+        Real64 constexpr ErrorTol(0.001); // error tolerance
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         int SupOutNode;
@@ -1963,7 +2015,7 @@ namespace HeatRecovery {
         bool HighHumCtrlActiveFlag = present(HighHumCtrlFlag) && bool(HighHumCtrlFlag); // local representing high humidity control when PRESENT
 
         // Determine mass flow through heat exchanger and mass flow being bypassed (only flat plate bypasses flow)
-        if (((EconomizerActiveFlag || HighHumCtrlActiveFlag) && this->EconoLockOut) && this->ExchConfig == HXConfigurationType::Plate) {
+        if (((EconomizerActiveFlag || HighHumCtrlActiveFlag) && this->EconoLockOut) && this->ExchConfig == HXExchConfigType::Plate) {
             this->SupBypassMassFlow = this->SupInMassFlow;
             this->SupOutMassFlow = this->SupInMassFlow;
             this->SecBypassMassFlow = this->SecInMassFlow;
@@ -1975,21 +2027,31 @@ namespace HeatRecovery {
             this->SecBypassMassFlow = 0.0;
         }
         // Unit is scheduled OFF, so bypass heat exchange calcs
-        if (ScheduleManager::GetCurrentScheduleValue(state, this->SchedPtr) <= 0.0) UnitOn = false;
+        if (this->availSched->getCurrentVal() <= 0.0) {
+            UnitOn = false;
+        }
         //! Economizer is active, so bypass heat exchange calcs. This applies to both flat plate and rotary HX's
         if ((EconomizerActiveFlag || HighHumCtrlActiveFlag) && this->EconoLockOut) {
             UnitOn = false;
         }
         // Determine if unit is ON or OFF based on air mass flow through the supply and secondary airstreams and operation flag
-        if (this->SupInMassFlow <= DataHVACGlobals::SmallMassFlow) UnitOn = false;
-        if (this->SecInMassFlow <= DataHVACGlobals::SmallMassFlow) UnitOn = false;
-        if (!HXUnitOn) UnitOn = false;
-        if (this->NomSupAirVolFlow == 0.0) UnitOn = false;
+        if (this->SupInMassFlow <= HVAC::SmallMassFlow) {
+            UnitOn = false;
+        }
+        if (this->SecInMassFlow <= HVAC::SmallMassFlow) {
+            UnitOn = false;
+        }
+        if (!HXUnitOn) {
+            UnitOn = false;
+        }
+        if (this->NomSupAirVolFlow == 0.0) {
+            UnitOn = false;
+        }
 
         if (UnitOn) {
             bool FrostControlFlag = false; // unit is in frost control mode when TRUE
             // Unit is on.
-            if (present(HXPartLoadRatio) && FanOpMode == DataHVACGlobals::CycFanCycCoil) {
+            if (present(HXPartLoadRatio) && fanOp == HVAC::FanOp::Cycling) {
                 if (HXPartLoadRatio > 0) {
                     AirSidePLR = HXPartLoadRatio;
                 } else {
@@ -1999,7 +2061,7 @@ namespace HeatRecovery {
                 AirSidePLR = 1.0;
             }
 
-            if (FanOpMode == DataHVACGlobals::CycFanCycCoil) {
+            if (fanOp == HVAC::FanOp::Cycling) {
                 this->SupInMassFlow /= AirSidePLR;
                 this->SupOutMassFlow /= AirSidePLR;
                 this->SecInMassFlow /= AirSidePLR;
@@ -2020,7 +2082,7 @@ namespace HeatRecovery {
                         if (this->UnBalancedErrCount <= 2) {
                             ShowSevereError(state,
                                             format("{}: \"{}\" unbalanced air volume flow ratio through the heat exchanger is greater than 2:1.",
-                                                   DataHVACGlobals::cHXTypes(this->ExchType),
+                                                   HVAC::hxTypeNames[(int)this->type],
                                                    this->Name));
                             ShowContinueErrorTimeStamp(
                                 state, format("...HX Supply air to Exhaust air flow ratio = {:.5R}.", HXSupAirVolFlowRate / HXSecAirVolFlowRate));
@@ -2028,7 +2090,7 @@ namespace HeatRecovery {
                             ShowRecurringWarningErrorAtEnd(
                                 state,
                                 format("{} \"{}\":  Unbalanced air volume flow ratio exceeds 2:1 warning continues. HX flow ratio statistics follow.",
-                                       DataHVACGlobals::cHXTypes(this->ExchType),
+                                       HVAC::hxTypeNames[(int)this->type],
                                        this->Name),
                                 this->UnBalancedErrIndex,
                                 HXSupAirVolFlowRate / HXSecAirVolFlowRate,
@@ -2045,7 +2107,7 @@ namespace HeatRecovery {
                 if (!state.dataGlobal->WarmupFlag && !FirstHVACIteration) {
                     ++this->LowFlowErrCount;
                     if (this->LowFlowErrCount == 1) {
-                        ShowWarningError(state, format("{} \"{}\"", DataHVACGlobals::cHXTypes(this->ExchType), this->Name));
+                        ShowWarningError(state, format("{} \"{}\"", HVAC::hxTypeNames[(int)this->type], this->Name));
                         ShowContinueError(state, "Average air volume flow rate is <50% or >130% of the nominal HX supply air volume flow rate.");
                         ShowContinueErrorTimeStamp(state, format("Air volume flow rate ratio = {:.3R}.", HXAirVolFlowRatio));
                     } else {
@@ -2053,7 +2115,7 @@ namespace HeatRecovery {
                             state,
                             format(
                                 "{} \"{}\":  Average air volume flow rate is <50% or >130% warning continues. Air flow rate ratio statistics follow.",
-                                DataHVACGlobals::cHXTypes(this->ExchType),
+                                HVAC::hxTypeNames[(int)this->type],
                                 this->Name),
                             this->LowFlowErrIndex,
                             HXAirVolFlowRatio,
@@ -2174,8 +2236,8 @@ namespace HeatRecovery {
                     //     ELSE fully bypass HX to maintain supply outlet temp as high as possible
                     ControlFraction = 0.0;
                 }
-                if (this->ExchConfig == HXConfigurationType::Rotary) {
-                    //       Rotory HX's never get bypassed, rotational speed is modulated
+                if (this->ExchConfig == HXExchConfigType::Rotary) {
+                    //       Rotary HX's never get bypassed, rotational speed is modulated
                     this->SensEffectiveness *= ControlFraction;
                     this->LatEffectiveness *= ControlFraction;
                 } else { // HX is a plate heat exchanger, bypass air to control SA temperature
@@ -2319,14 +2381,14 @@ namespace HeatRecovery {
 
             } // ENDIF for "IF(thisExch%ControlToTemperatureSetPoint .AND... THEN, ELSE"
 
-            if (FanOpMode == DataHVACGlobals::CycFanCycCoil) {
+            if (fanOp == HVAC::FanOp::Cycling) {
                 this->SupInMassFlow *= AirSidePLR;
                 this->SupOutMassFlow *= AirSidePLR;
                 this->SecInMassFlow *= AirSidePLR;
                 this->SecOutMassFlow *= AirSidePLR;
                 this->SupBypassMassFlow *= AirSidePLR;
                 this->SecBypassMassFlow *= AirSidePLR;
-            } else if (FanOpMode == DataHVACGlobals::ContFanCycCoil) {
+            } else if (fanOp == HVAC::FanOp::Continuous) {
                 this->SupOutTemp = this->SupOutTemp * AirSidePLR + this->SupInTemp * (1.0 - AirSidePLR);
                 this->SupOutHumRat = this->SupOutHumRat * AirSidePLR + this->SupInHumRat * (1.0 - AirSidePLR);
                 this->SupOutEnth = this->SupOutEnth * AirSidePLR + this->SupOutEnth * (1.0 - AirSidePLR);
@@ -2400,9 +2462,9 @@ namespace HeatRecovery {
 
     void HeatExchCond::CalcDesiccantBalancedHeatExch(
         EnergyPlusData &state,
-        bool const HXUnitOn,                           // flag to simulate heat exchager heat recovery
+        bool const HXUnitOn,                           // flag to simulate heat exchanger heat recovery
         bool const FirstHVACIteration,                 // First HVAC iteration flag
-        int const FanOpMode,                           // Supply air fan operating mode (1=cycling, 2=constant)
+        HVAC::FanOp const fanOp,                       // Supply air fan operating mode (1=cycling, 2=constant)
         Real64 const PartLoadRatio,                    // Part load ratio requested of DX compressor
         int const CompanionCoilIndex,                  // index of companion cooling coil
         int const CompanionCoilType,                   // type of cooling coil
@@ -2425,7 +2487,7 @@ namespace HeatRecovery {
 
         // METHODOLOGY EMPLOYED:
         //  This is an empirical heat exchanger model. The model uses heat exchanger performance data to
-        //  calculate the air temperature and humidity ratio of the leaving upply and secondary air streams.
+        //  calculate the air temperature and humidity ratio of the leaving supply and secondary air streams.
         //  Humidity control can enable/disable heat recovery through the use of the HXUnitOn Subroutine argument.
 
         // Using/Aliasing
@@ -2496,13 +2558,25 @@ namespace HeatRecovery {
         }
 
         // Unit is scheduled OFF, so bypass heat exchange calcs
-        if (ScheduleManager::GetCurrentScheduleValue(state, this->SchedPtr) <= 0.0) UnitOn = false;
+        if (this->availSched->getCurrentVal() <= 0.0) {
+            UnitOn = false;
+        }
         // Determine if unit is ON or OFF based on air mass flow through the supply and secondary airstreams and operation flag
-        if (this->SupInMassFlow <= DataHVACGlobals::SmallMassFlow) UnitOn = false;
-        if (this->SecInMassFlow <= DataHVACGlobals::SmallMassFlow) UnitOn = false;
-        if (HXPartLoadRatio == 0.0) UnitOn = false;
-        if (!HXUnitOn) UnitOn = false;
-        if ((EconomizerActiveFlag || HighHumCtrlActiveFlag) && this->EconoLockOut) UnitOn = false;
+        if (this->SupInMassFlow <= HVAC::SmallMassFlow) {
+            UnitOn = false;
+        }
+        if (this->SecInMassFlow <= HVAC::SmallMassFlow) {
+            UnitOn = false;
+        }
+        if (HXPartLoadRatio == 0.0) {
+            UnitOn = false;
+        }
+        if (!HXUnitOn) {
+            UnitOn = false;
+        }
+        if ((EconomizerActiveFlag || HighHumCtrlActiveFlag) && this->EconoLockOut) {
+            UnitOn = false;
+        }
 
         if (UnitOn) {
             constexpr std::string_view ThisSubTSat = "CalcDesiccantBalancedHeatExch:   TSat";
@@ -2518,11 +2592,11 @@ namespace HeatRecovery {
             // In constant fan mode, process air mass flow rate is full flow and supply (regen) air cycles based on PLR.
             // If supply (regen) inlet is OA node, regen mass flow rate is proportional to PLR.
             // If both of the above is true then boost local variable up to full flow
-            if ((FanOpMode == DataHVACGlobals::ContFanCycCoil) && RegenInletIsOANode) {
+            if ((fanOp == HVAC::FanOp::Continuous) && RegenInletIsOANode) {
                 local_SupInMassFlow /= HXPartLoadRatio;
             }
             // for cycling fan case, boost both local variables up to full flow
-            if (FanOpMode == DataHVACGlobals::CycFanCycCoil) {
+            if (fanOp == HVAC::FanOp::Cycling) {
                 local_SupInMassFlow /= HXPartLoadRatio; // supply = regen
                 local_SecInMassFlow /= HXPartLoadRatio; // secondary = process
             }
@@ -2633,9 +2707,9 @@ namespace HeatRecovery {
                 HXPartLoadRatio = min(1.0, HXPartLoadRatio);
 
             } else if (CompanionCoilType > 0 && CompanionCoilIndex > -1) {
-                if (CompanionCoilType == DataHVACGlobals::CoilDX_Cooling) {
-                    HXPartLoadRatio = state.dataCoilCooingDX->coilCoolingDXs[CompanionCoilIndex].partLoadRatioReport;
-                } else if (CompanionCoilType == DataHVACGlobals::Coil_CoolingAirToAirVariableSpeed) {
+                if (CompanionCoilType == HVAC::CoilDX_Cooling) {
+                    HXPartLoadRatio = state.dataCoilCoolingDX->coilCoolingDXs[CompanionCoilIndex].partLoadRatioReport;
+                } else if (CompanionCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) {
                     HXPartLoadRatio = state.dataVariableSpeedCoils->VarSpeedCoil(CompanionCoilIndex).PartLoadRatio;
                 } else {
                     HXPartLoadRatio = state.dataDXCoils->DXCoilPartLoadRatio(CompanionCoilIndex);
@@ -2643,7 +2717,7 @@ namespace HeatRecovery {
             }
 
             Real64 constexpr lowerLimit = 1.e-5;
-            if (FanOpMode == DataHVACGlobals::CycFanCycCoil || RegenInletIsOANode) {
+            if (fanOp == HVAC::FanOp::Cycling || RegenInletIsOANode) {
                 //       Supply (regen) air stream mass flow rate is cycling and proportional to PLR, outlet conditions are full load
                 //       conditions
                 this->SupOutTemp = this->SupInTemp + FullLoadDeltaT;
@@ -2819,7 +2893,7 @@ namespace HeatRecovery {
             //   sensible and latent effectiveness decrease proportionally with rotary HX speed.
 
             DFFraction = max(0.0, min(1.0, SafeDiv((TempThreshold - this->SecOutTemp), (this->SecInTemp - this->SecOutTemp))));
-            if (this->ExchConfig == HXConfigurationType::Rotary) {
+            if (this->ExchConfig == HXExchConfigType::Rotary) {
                 this->SensEffectiveness *= (1.0 - DFFraction);
                 this->LatEffectiveness *= (1.0 - DFFraction);
             } else { // HX is a plate heat exchanger, bypass air to eliminate frost
@@ -2862,13 +2936,13 @@ namespace HeatRecovery {
                             this->LatEffectiveness *= Curve::CurveValue(state, this->CoolEffectLatentCurveIndex, HXAirVolFlowRatio);
                         }
                     }
-                    //         calculation of local variable Csup can be 0, gaurd against divide by 0.
+                    //         calculation of local variable Csup can be 0, guard against divide by 0.
                     TempSupOut = TempSupIn + this->SensEffectiveness * SafeDiv(CMin, CSup) * (TempSecIn - TempSupIn);
                     QSensTrans = CSup * (TempSupIn - TempSupOut);
                     //         Csec cannot be 0 in this subroutine
                     TempSecOut = TempSecIn + QSensTrans / CSec;
                     Error = (TempSecOut - TempThreshold);
-                    //         recalculate DFFraction until convergence, gaurd against divide by 0 (unlikely).
+                    //         recalculate DFFraction until convergence, guard against divide by 0 (unlikely).
                     DFFraction = max(0.0, min(1.0, DFFraction * SafeDiv((TempSecIn - TempSecOut), (TempSecIn - TempThreshold))));
                     ++Iter;
                 }
@@ -3136,7 +3210,7 @@ namespace HeatRecovery {
             } break;
             case HXConfiguration::CrossFlowBothUnmixed: { // CROSS FLOW BOTH UNMIXED
                 Temp = Z * std::pow(NTU, -0.22);
-                Eps = 1.0 - std::exp((std::exp(-NTU * Temp) - 1.0) / Temp);
+                Eps = 1.0 - std::exp(std::expm1(-NTU * Temp) / Temp);
             } break;
             case HXConfiguration::CrossFlowOther: { // CROSS FLOW, Cmax MIXED, Cmin UNMIXED
                 Eps = (1.0 - std::exp(-Z * (1.0 - std::exp(-NTU)))) / Z;
@@ -3224,13 +3298,13 @@ namespace HeatRecovery {
                 }
             } break;
             case HXConfiguration::ParallelFlow: { // PARALLEL FLOW
-                NTU = -std::log(-Eps - Eps * Z + 1.0) / (Z + 1.0);
+                NTU = -std::log1p(-Eps - Eps * Z) / (Z + 1.0);
             } break;
             case HXConfiguration::CrossFlowBothUnmixed: { // CROSS FLOW BOTH UNMIXED
                 NTU = GetNTUforCrossFlowBothUnmixed(state, Eps, Z);
             } break;
             case HXConfiguration::CrossFlowOther: { // CROSS FLOW, Cmax MIXED, Cmin UNMIXED
-                NTU = -std::log(1.0 + std::log(1.0 - Eps * Z) / Z);
+                NTU = -std::log1p(std::log(1.0 - Eps * Z) / Z);
             } break;
             default: {
                 ShowFatalError(state, format("HeatRecovery: Illegal flow arrangement in CalculateNTUfromEpsAndZ, Value={}", FlowArr));
@@ -3276,7 +3350,7 @@ namespace HeatRecovery {
         int SolFla;                  // Flag of solver
         Real64 constexpr NTU0(0.0);  // lower bound for NTU
         Real64 constexpr NTU1(50.0); // upper bound for NTU
-        auto f = [Eps, Z](Real64 const NTU) { return 1.0 - std::exp((std::exp(-std::pow(NTU, 0.78) * Z) - 1.0) / Z * std::pow(NTU, 0.22)) - Eps; };
+        auto f = [Eps, Z](Real64 const NTU) { return 1.0 - std::exp(std::expm1(-std::pow(NTU, 0.78) * Z) / Z * std::pow(NTU, 0.22)) - Eps; };
         General::SolveRoot(state, Acc, MaxIte, SolFla, NTU, f, NTU0, NTU1);
 
         if (SolFla == -2) {
@@ -3306,7 +3380,7 @@ namespace HeatRecovery {
 
         // PURPOSE OF THIS SUBROUTINE:
         // To verify that the empirical model's independent variables are within the limits used during the
-        // developement of the empirical model.
+        // development of the empirical model.
 
         // METHODOLOGY EMPLOYED:
         // The empirical models used for simulating a desiccant enhanced cooling coil are based on a limited data set.
@@ -3407,7 +3481,7 @@ namespace HeatRecovery {
                     ShowContinueError(state, state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInHumRatError.buffer2);
                     ShowContinueError(state, state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInHumRatError.buffer3);
                     ShowContinueError(state,
-                                      "...Using process inlet air humidity ratios that are outside the regeneratoin outlet air temperature equation "
+                                      "...Using process inlet air humidity ratios that are outside the regeneration outlet air temperature equation "
                                       "model boundaries may adversely affect desiccant model performance.");
                 } else {
                     ShowRecurringWarningErrorAtEnd(state,
@@ -3447,7 +3521,7 @@ namespace HeatRecovery {
         thisError.TimeStepSysLast = TimeStepSys;
         thisError.CurrentEndTimeLast = thisError.CurrentEndTime;
 
-        //   If regen and procees inlet temperatures are the same the coil is off, do not print out of bounds warning for this case
+        //   If regen and process inlet temperatures are the same the coil is off, do not print out of bounds warning for this case
         if (std::abs(T_RegenInTemp - T_ProcInTemp) < SMALL) {
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_RegenInTempError.print = false;
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_RegenInHumRatError.print = false;
@@ -3550,8 +3624,9 @@ namespace HeatRecovery {
             if (!state.dataGlobal->WarmupFlag && !FirstHVACIteration) {
                 state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInTempError.print = true;
                 //       Suppress warning message when process inlet temperature = 0 (DX coil is off)
-                if (state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInTempError.last == 0.0)
+                if (state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInTempError.last == 0.0) {
                     state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInTempError.print = false;
+                }
                 state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInTempError.buffer1 = format(
                     "{} \"{}\" - Process inlet air temperature used in regen outlet air temperature equation is outside model boundaries at {}.",
                     state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).PerfType,
@@ -3589,8 +3664,9 @@ namespace HeatRecovery {
             if (!state.dataGlobal->WarmupFlag && !FirstHVACIteration) {
                 state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInHumRatError.print = true;
                 //       Suppress warning message when process inlet humrat = 0 (DX coil is off)
-                if (state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInHumRatError.last == 0.0)
+                if (state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInHumRatError.last == 0.0) {
                     state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInHumRatError.print = false;
+                }
                 state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).T_ProcInHumRatError.buffer1 = format(
                     "{} \"{}\" - Process inlet air humidity ratio used in regen outlet air temperature equation is outside model boundaries at {}.",
                     state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).PerfType,
@@ -3670,7 +3746,7 @@ namespace HeatRecovery {
 
         // PURPOSE OF THIS SUBROUTINE:
         // To verify that the empirical model's independent variables are within the limits used during the
-        // developement of the empirical model.
+        // development of the empirical model.
 
         // METHODOLOGY EMPLOYED:
         // The empirical models used for simulating a desiccant enhanced cooling coil are based on a limited data set.
@@ -3810,7 +3886,7 @@ namespace HeatRecovery {
         thisError.TimeStepSysLast = TimeStepSys;
         thisError.CurrentEndTimeLast = thisError.CurrentEndTime;
 
-        //   If regen and procees inlet temperatures are the same the coil is off, do not print out of bounds warning for this case
+        //   If regen and process inlet temperatures are the same the coil is off, do not print out of bounds warning for this case
         if (std::abs(H_RegenInTemp - H_ProcInTemp) < SMALL) {
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_RegenInTempError.print = false;
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_RegenInHumRatError.print = false;
@@ -3914,8 +3990,9 @@ namespace HeatRecovery {
             if (!state.dataGlobal->WarmupFlag && !FirstHVACIteration) {
                 state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInTempError.print = true;
                 //       Suppress warning message when process inlet temperature = 0 (DX coil is off)
-                if (state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInTempError.last == 0.0)
+                if (state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInTempError.last == 0.0) {
                     state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInTempError.print = false;
+                }
                 state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInTempError.buffer1 = format(
                     "{} \"{}\" - Process inlet air temperature used in regen outlet air humidity ratio equation is outside model boundaries at {}.",
                     state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).PerfType,
@@ -3954,8 +4031,9 @@ namespace HeatRecovery {
             if (!state.dataGlobal->WarmupFlag && !FirstHVACIteration) {
                 state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInHumRatError.print = true;
                 //       Suppress warning message when process inlet humrat = 0 (DX coil is off)
-                if (state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInHumRatError.last == 0.0)
+                if (state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInHumRatError.last == 0.0) {
                     state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInHumRatError.print = false;
+                }
                 state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).H_ProcInHumRatError.buffer1 =
                     format("{} \"{}\" - Process inlet air humidity ratio used in regen outlet air humidity ratio equation is outside model "
                            "boundaries at {}.",
@@ -4034,7 +4112,7 @@ namespace HeatRecovery {
 
         // PURPOSE OF THIS SUBROUTINE:
         // To verify that the empirical model's independent variables are within the limits used during the
-        // developement of the empirical model.
+        // development of the empirical model.
 
         // METHODOLOGY EMPLOYED:
         // The empirical models used for simulating a desiccant enhanced cooling coil are based on a limited data set.
@@ -4195,7 +4273,7 @@ namespace HeatRecovery {
 
         // PURPOSE OF THIS SUBROUTINE:
         // To verify that the empirical model's independent variables are within the limits used during the
-        // developement of the empirical model.
+        // development of the empirical model.
 
         // METHODOLOGY EMPLOYED:
         // The empirical models used for simulating a desiccant enhanced cooling coil are based on a limited data set.
@@ -4385,7 +4463,9 @@ namespace HeatRecovery {
         auto &thisError = state.dataHeatRecovery->error6;
         // current end time is compared with last to see if time step changed
 
-        if (state.dataGlobal->WarmupFlag || FirstHVACIteration) return;
+        if (state.dataGlobal->WarmupFlag || FirstHVACIteration) {
+            return;
+        }
 
         //   calculate end time of current time step
         thisError.CurrentEndTime = state.dataGlobal->CurrentTime + SysTimeElapsed;
@@ -4465,7 +4545,7 @@ namespace HeatRecovery {
             return;
         }
 
-        //     If regen and procees inlet temperatures are the same the coil is off, do not print out of bounds warning for this case
+        //     If regen and process inlet temperatures are the same the coil is off, do not print out of bounds warning for this case
         if (std::abs(T_RegenInTemp - T_ProcInTemp) < SMALL) {
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).regenInRelHumTempErr.print = false;
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).procInRelHumTempErr.print = false;
@@ -4560,7 +4640,9 @@ namespace HeatRecovery {
         auto &thisError = state.dataHeatRecovery->error5;
         // current end time is compared with last to see if time step changed
 
-        if (state.dataGlobal->WarmupFlag || FirstHVACIteration) return;
+        if (state.dataGlobal->WarmupFlag || FirstHVACIteration) {
+            return;
+        }
 
         //   calculate end time of current time step
         thisError.CurrentEndTime = state.dataGlobal->CurrentTime + SysTimeElapsed;
@@ -4641,7 +4723,7 @@ namespace HeatRecovery {
             return;
         }
 
-        //     If regen and procees inlet temperatures are the same the coil is off, do not print out of bounds warning for this case
+        //     If regen and process inlet temperatures are the same the coil is off, do not print out of bounds warning for this case
         if (std::abs(H_RegenInTemp - H_ProcInTemp) < SMALL) {
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).regenInRelHumHumRatErr.print = false;
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).procInRelHumHumRatErr.print = false;
@@ -4730,7 +4812,9 @@ namespace HeatRecovery {
         // current end time is compared with last to see if time step changed
         Real64 ABSImbalancedFlow; // absolute value of process and regeneration air flow imbalance fraction
 
-        if (state.dataGlobal->WarmupFlag || FirstHVACIteration) return;
+        if (state.dataGlobal->WarmupFlag || FirstHVACIteration) {
+            return;
+        }
 
         //   calculate end time of current time step
         thisError.CurrentEndTime = state.dataGlobal->CurrentTime + SysTimeElapsed;
@@ -4756,7 +4840,7 @@ namespace HeatRecovery {
                     ShowRecurringWarningErrorAtEnd(state,
                                                    format("{} \"{}\" - unbalanced air flow rate is limited to 2% error continues with the imbalanced "
                                                           "fraction statistics reported...",
-                                                          DataHVACGlobals::cHXTypes(this->ExchType),
+                                                          HVAC::hxTypeNames[(int)this->type],
                                                           this->Name),
                                                    state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).imbalancedFlowErr.index,
                                                    state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).imbalancedFlowErr.last,
@@ -4779,7 +4863,7 @@ namespace HeatRecovery {
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).imbalancedFlowErr.print = true;
 
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).imbalancedFlowErr.buffer1 =
-                format("{} \"{}\" - unbalanced air flow rate is limited to 2%.", DataHVACGlobals::cHXTypes(this->ExchType), this->Name);
+                format("{} \"{}\" - unbalanced air flow rate is limited to 2%.", HVAC::hxTypeNames[(int)this->type], this->Name);
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).imbalancedFlowErr.buffer2 = format(
                 "...Regeneration air mass flow rate is {} and process air mass flow rate is {}.", thisError.OutputCharLo, thisError.OutputCharHi);
             state.dataHeatRecovery->BalDesDehumPerfData(this->PerfDataIndex).imbalancedFlowErr.buffer3 = format(
@@ -4930,7 +5014,7 @@ namespace HeatRecovery {
         //       RE-ENGINEERED  na
 
         // PURPOSE OF THIS FUNCTION:
-        // This function looks up the given Generic HX and the voluetric air flow rate.
+        // This function looks up the given Generic HX and the volumetric air flow rate.
         // If incorrect HX name is given, ErrorsFound is returned as true and air flow rate as zero.
 
         // Obtains and Allocates heat exchanger related parameters from input file
@@ -4950,9 +5034,10 @@ namespace HeatRecovery {
         }
     }
 
-    int GetHeatExchangerObjectTypeNum(EnergyPlusData &state,
-                                      std::string const &HXName, // must match HX names for the state.dataHeatRecovery->ExchCond type
-                                      bool &ErrorsFound          // set to true if problem
+    HVAC::HXType GetHeatExchangerObjectTypeNum(EnergyPlusData &state,
+                                               std::string const &HXName, // must match HX names for the state.dataHeatRecovery->ExchCond type
+                                               int &WhichHX,
+                                               bool &ErrorsFound // set to true if problem
     )
     {
 
@@ -4963,7 +5048,7 @@ namespace HeatRecovery {
         //       RE-ENGINEERED  na
 
         // PURPOSE OF THIS FUNCTION:
-        // This function looks up the given Generic HX and the voluetric air flow rate.
+        // This function looks up the given Generic HX and the volumetric air flow rate.
         // If incorrect HX name is given, ErrorsFound is returned as true and air flow rate as zero.
 
         // Obtains and Allocates heat exchanger related parameters from input file
@@ -4972,13 +5057,13 @@ namespace HeatRecovery {
             state.dataHeatRecovery->GetInputFlag = false;
         }
 
-        int const WhichHX = Util::FindItemInList(HXName, state.dataHeatRecovery->ExchCond);
+        WhichHX = Util::FindItemInList(HXName, state.dataHeatRecovery->ExchCond);
         if (WhichHX != 0) {
-            return state.dataHeatRecovery->ExchCond(WhichHX).ExchType;
+            return state.dataHeatRecovery->ExchCond(WhichHX).type;
         } else {
             ShowSevereError(state, format("GetHeatExchangerObjectTypeNum: Could not find heat exchanger = \"{}\"", HXName));
             ErrorsFound = true;
-            return 0;
+            return HVAC::HXType::Invalid;
         }
     }
 

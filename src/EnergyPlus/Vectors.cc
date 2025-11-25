@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -48,9 +48,6 @@
 // C++ Headers
 #include <cmath>
 
-// ObjexxFCL Headers
-#include <ObjexxFCL/Fmath.hh>
-
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataGlobals.hh>
@@ -62,8 +59,6 @@ namespace EnergyPlus::Vectors {
 // MODULE INFORMATION:
 //       AUTHOR         Linda Lawrie
 //       DATE WRITTEN   April 2000
-//       MODIFIED       na
-//       RE-ENGINEERED  na
 
 // PURPOSE OF THIS MODULE:
 // This module uses a global "vector" data structure and defines
@@ -98,8 +93,6 @@ namespace EnergyPlus::Vectors {
 // vector_times_int, int_times_vector, vector_div_real,
 // vector_div_int, dot_product, and cross_product.
 
-// OTHER NOTES: none
-
 // Using/Aliasing
 using namespace DataVectorTypes;
 
@@ -110,60 +103,34 @@ Vector const XUnit(1.0, 0.0, 0.0);
 Vector const YUnit(0.0, 1.0, 0.0);
 Vector const ZUnit(0.0, 0.0, 1.0);
 
-// DERIVED TYPE DEFINITIONS
-// na
-
-// MODULE VARIABLE DECLARATIONS:
-// na
-
-// SUBROUTINE SPECIFICATIONS FOR MODULE <module_name>
-
-// Functions
-
 Real64 AreaPolygon(int const n, Array1D<Vector> &p)
 {
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine calculates the area of a polygon defined by the
-    // input vectors.
+    // This subroutine calculates the area of a polygon defined by the input vectors.
 
     // REFERENCE:
     // Graphic Gems.
 
-    // Return value
-    Real64 areap;
-
     // Argument array dimensioning
     EP_SIZE_CHECK(p, n);
 
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
+    Vector edge0 = p[1] - p[0];
+    Vector edge1 = p[2] - p[0];
 
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int i;
-
-    // Object Data
-    Vector edge0;
-    Vector edge1;
-    Vector nor;
-    Vector edgex;
-    Vector csum;
-
-    edge0 = p[1] - p[0];
-    edge1 = p[2] - p[0];
-
-    edgex = cross(edge0, edge1);
-    nor = VecNormalize(edgex);
+    Vector edgex = cross(edge0, edge1);
+    Vector nor = VecNormalize(edgex);
 
     //  Initialize csum
+    Vector csum;
     csum = 0.0;
 
-    for (i = 0; i <= n - 2; ++i) {
+    for (int i = 0; i <= n - 2; ++i) {
         csum += cross(p[i], p[i + 1]);
     }
     csum += cross(p[n - 1], p[0]);
 
-    areap = 0.5 * std::abs(dot(nor, csum));
+    Real64 areap = 0.5 * std::abs(dot(nor, csum));
 
     return areap;
 }
@@ -177,16 +144,7 @@ Real64 VecSquaredLength(Vector const &vec)
     // REFERENCE:
     // Graphic Gems.
 
-    // Return value
-    Real64 vecsqlen;
-
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    // na
-
-    vecsqlen = (vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+    Real64 vecsqlen = (vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 
     return vecsqlen;
 }
@@ -200,16 +158,7 @@ Real64 VecLength(Vector const &vec)
     // REFERENCE:
     // Graphic Gems.
 
-    // Return value
-    Real64 veclen;
-
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    // na
-
-    veclen = std::sqrt(VecSquaredLength(vec));
+    Real64 veclen = std::sqrt(VecSquaredLength(vec));
 
     return veclen;
 }
@@ -223,14 +172,7 @@ Vector VecNegate(Vector const &vec)
     // REFERENCE:
     // Graphic Gems.
 
-    // Return value
     Vector VecNegate;
-
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    // na
 
     VecNegate.x = -vec.x;
     VecNegate.y = -vec.y;
@@ -243,8 +185,7 @@ Vector VecNormalize(Vector const &vec)
 {
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine normalizes the input vector and returns the normalized
-    // vector
+    // This subroutine normalizes the input vector and returns the normalized vector
 
     // REFERENCE:
     // Graphic Gems.
@@ -252,13 +193,7 @@ Vector VecNormalize(Vector const &vec)
     // Return value
     Vector VecNormalize;
 
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    Real64 veclen;
-
-    veclen = VecLength(vec);
+    Real64 veclen = VecLength(vec);
     if (veclen != 0.0) {
         VecNormalize.x = vec.x / veclen;
         VecNormalize.y = vec.y / veclen;
@@ -281,12 +216,6 @@ void VecRound(Vector &vec, Real64 const roundto)
     // REFERENCE:
     // Graphic Gems.
 
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    // na
-
     vec.x = nint64(vec.x * roundto) / roundto;
     vec.y = nint64(vec.y * roundto) / roundto;
     vec.z = nint64(vec.z * roundto) / roundto;
@@ -308,22 +237,17 @@ void DetermineAzimuthAndTilt(Array1D<Vector> const &Surf, // Surface Definition
     // REFERENCE:
     // Discussions and examples from Bill Carroll, LBNL.
 
-    // LOCAL VARIABLE DECLARATIONS:
-    Real64 costheta;
-    Real64 rotang_0;
-
-    Real64 az;
-    Real64 tlt;
-
     lcsx = VecNormalize(Surf(3) - Surf(2));
     lcsz = NewellSurfaceNormalVector;
     lcsy = cross(lcsz, lcsx);
 
-    costheta = dot(lcsz, ZUnit);
+    Real64 costheta = dot(lcsz, ZUnit);
 
     //    if ( fabs(costheta) < 1.0d0) { // normal cases
-    if (std::abs(costheta) < 1.0 - 1.12e-16) { // Autodesk Added - 1.12e-16 to treat 1 bit from 1.0 as 1.0 to correct different behavior seen in
-                                               // release vs debug build due to slight precision differences: May want larger epsilon here
+    Real64 constexpr epsilon = 1.12e-16;
+    Real64 rotang_0 = 0.0;
+    if (std::abs(costheta) < 1.0 - epsilon) { // Autodesk Added - 1.12e-16 to treat 1 bit from 1.0 as 1.0 to correct different behavior seen in
+                                              // release vs debug build due to slight precision differences: May want larger epsilon here
         // azimuth
         Vector x2 = cross(ZUnit, lcsz);
         rotang_0 = std::atan2(dot(x2, YUnit), dot(x2, XUnit));
@@ -332,24 +256,27 @@ void DetermineAzimuthAndTilt(Array1D<Vector> const &Surf, // Surface Definition
         rotang_0 = std::atan2(dot(lcsx, YUnit), dot(lcsx, XUnit));
     }
 
-    tlt = std::acos(NewellSurfaceNormalVector.z);
-    tlt /= Constant::DegToRadians;
+    Real64 tlt = std::acos(NewellSurfaceNormalVector.z);
+    tlt /= Constant::DegToRad;
 
-    az = rotang_0;
+    Real64 az = rotang_0;
 
-    az /= Constant::DegToRadians;
+    az /= Constant::DegToRad;
     az = mod(450.0 - az, 360.0);
     az += 90.0;
-    if (az < 0.0) az += 360.0;
+    if (az < 0.0) {
+        az += 360.0;
+    }
     az = mod(az, 360.0);
 
     // Clean up angle precision
-    if (std::abs(az - 360.0) < 1.0e-3) { // Bring small angles to zero
+    if (std::abs(az - 360.0) < Constant::OneThousandth) { // Bring small angles to zero
         az = 0.0;
-    } else if (std::abs(az - 180.0) < 1.0e-6) { // Bring angles near 180 to 180 //Autodesk Added to clean up debug--release discrepancies
+    } else if (std::abs(az - 180.0) <
+               Constant::OneMillionth) { // Bring angles near 180 to 180 //Autodesk Added to clean up debug--release discrepancies
         az = 180.0;
     }
-    if (std::abs(tlt - 180.0) < 1.0e-6) { // Bring angles near 180 to 180 //Autodesk Added to clean up debug--release discrepancies
+    if (std::abs(tlt - 180.0) < Constant::OneMillionth) { // Bring angles near 180 to 180 //Autodesk Added to clean up debug--release discrepancies
         tlt = 180.0;
     }
 
@@ -365,8 +292,7 @@ void PlaneEquation(Array1D<Vector> &verts, // Structure of the surface
 {
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine calculates the plane equation for a given
-    // surface (which should be planar).
+    // This subroutine calculates the plane equation for a given surface (which should be planar).
 
     // REFERENCE:
     // Graphic Gems
@@ -374,21 +300,9 @@ void PlaneEquation(Array1D<Vector> &verts, // Structure of the surface
     // Argument array dimensioning
     EP_SIZE_CHECK(verts, nverts);
 
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int i;
-    Real64 lenvec;
-
-    // Object Data
-    Vector normal;
-    Vector refpt;
-
-    // - - - begin - - -
-    normal = Vector(0.0, 0.0, 0.0);
-    refpt = Vector(0.0, 0.0, 0.0);
-    for (i = 0; i <= nverts - 1; ++i) {
+    Vector normal = Vector(0.0, 0.0, 0.0);
+    Vector refpt = Vector(0.0, 0.0, 0.0);
+    for (int i = 0; i <= nverts - 1; ++i) {
         Vector const &u(verts[i]);
         Vector const &v(i < nverts - 1 ? verts[i + 1] : verts[0]);
         normal.x += (u.y - v.y) * (u.z + v.z);
@@ -398,7 +312,7 @@ void PlaneEquation(Array1D<Vector> &verts, // Structure of the surface
     }
     // normalize the polygon normal to obtain the first
     //  three coefficients of the plane equation
-    lenvec = VecLength(normal);
+    Real64 lenvec = VecLength(normal);
     error = false;
     if (lenvec != 0.0) { // should this be >0
         plane.x = normal.x / lenvec;
@@ -418,21 +332,12 @@ Real64 Pt2Plane(Vector const &pt,   // Point for determining the distance
 {
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine calculates the distance from a point
-    // to the plane (of a surface).  Used to determine the reveal
-    // of a heat transfer subsurface.
+    // This subroutine calculates the distance from a point to the plane (of a surface).  Used to determine the reveal of a heat transfer subsurface.
 
     // REFERENCE:
     // Graphic Gems
 
-    // Return value
     Real64 PtDist; // Distance of the point to the plane
-
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    // na
 
     PtDist = (pleq.x * pt.x) + (pleq.y * pt.y) + (pleq.z * pt.z) + pleq.w;
 
@@ -445,53 +350,21 @@ void CreateNewellAreaVector(Array1D<Vector> const &VList, int const NSides, Vect
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Linda Lawrie
     //       DATE WRITTEN   May 2004
-    //       MODIFIED       na
-    //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine creates a "Newell" vector from the vector list for a surface
-    // face.  Also the Newell Area vector.
-
-    // METHODOLOGY EMPLOYED:
-    // na
+    // This subroutine creates a "Newell" vector from the vector list for a surface face.  Also the Newell Area vector.
 
     // REFERENCES:
     // Collaboration with Bill Carroll, LBNL.
 
-    // USE STATEMENTS:
-    // na
-
-    // Argument array dimensioning
-
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE PARAMETER DEFINITIONS:
-    // na
-
-    // INTERFACE BLOCK SPECIFICATIONS
-    // na
-
-    // DERIVED TYPE DEFINITIONS
-    // na
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-
-    // Object Data
-    Vector V1;
-    Vector V2;
-
     OutNewellAreaVector = 0.0;
 
-    V1 = VList(2) - VList(1);
+    Vector V1 = VList(2) - VList(1);
     for (int Vert = 3; Vert <= NSides; ++Vert) {
-        V2 = VList(Vert) - VList(1);
+        Vector V2 = VList(Vert) - VList(1);
         OutNewellAreaVector += cross(V1, V2);
         V1 = V2;
     }
-    //     do vert=1,nsides
-    //       write(outputfiledebug,*) vlist(vert)
-    //     enddo
 
     OutNewellAreaVector /= 2.0;
 }
@@ -502,15 +375,9 @@ void CreateNewellSurfaceNormalVector(Array1D<Vector> const &VList, int const NSi
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Linda Lawrie
     //       DATE WRITTEN   Jan 2011
-    //       MODIFIED       na
-    //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine creates a "Newell" surface normal vector from the vector list
-    // for a surface face.
-
-    // METHODOLOGY EMPLOYED:
-    // na
+    // This subroutine creates a "Newell" surface normal vector from the vector list for a surface face.
 
     // REFERENCES:
     // September 2010: from OpenGL.org
@@ -526,54 +393,22 @@ void CreateNewellSurfaceNormalVector(Array1D<Vector> const &VList, int const NSi
     //    Returning Normalize(Normal)
     // End Function
 
-    // USE STATEMENTS:
-    // na
-
-    // Argument array dimensioning
-
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE PARAMETER DEFINITIONS:
-    // na
-
-    // INTERFACE BLOCK SPECIFICATIONS
-    // na
-
-    // DERIVED TYPE DEFINITIONS
-    // na
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    //     TYPE(Vector) :: U
-    //     TYPE(Vector) :: V
-    int Side;
-    int curVert;
-    int nextVert;
-    Real64 xvalue;
-    Real64 yvalue;
-    Real64 zvalue;
-
     OutNewellSurfaceNormalVector = 0.0;
-    xvalue = 0.0;
-    yvalue = 0.0;
-    zvalue = 0.0;
+    Real64 xvalue = 0.0;
+    Real64 yvalue = 0.0;
+    Real64 zvalue = 0.0;
 
     //     IF (NSides > 3) THEN
-    for (Side = 1; Side <= NSides; ++Side) {
-        curVert = Side;
-        nextVert = Side + 1;
-        if (nextVert > NSides) nextVert = 1;
+    for (int Side = 1; Side <= NSides; ++Side) {
+        int curVert = Side;
+        int nextVert = Side + 1;
+        if (nextVert > NSides) {
+            nextVert = 1;
+        }
         xvalue += (VList(curVert).y - VList(nextVert).y) * (VList(curVert).z + VList(nextVert).z);
         yvalue += (VList(curVert).z - VList(nextVert).z) * (VList(curVert).x + VList(nextVert).x);
         zvalue += (VList(curVert).x - VList(nextVert).x) * (VList(curVert).y + VList(nextVert).y);
     }
-    //     ELSE  ! Triangle
-    //       U=VList(2)-VList(1)
-    //       V=VList(3)-VList(1)
-    //       xvalue=(U%y*V%z)-(U%z*V%y)
-    //       yvalue=(U%z*V%x)-(U%x*V%z)
-    //       zvalue=(U%x*V%y)-(U%y*V%x)
-    //     ENDIF
 
     OutNewellSurfaceNormalVector.x = xvalue;
     OutNewellSurfaceNormalVector.y = yvalue;
@@ -591,40 +426,23 @@ void CompareTwoVectors(Vector const &vector1, // standard vector
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Linda Lawrie
     //       DATE WRITTEN   February 2012
-    //       MODIFIED       na
-    //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This routine will provide the ability to compare two vectors (e.g. surface normals)
-    // to be the same within a specified tolerance.
+    // This routine will provide the ability to compare two vectors (e.g. surface normals) to be the same within a specified tolerance.
 
     // METHODOLOGY EMPLOYED:
     // compare each element (x,y,z)
 
-    // REFERENCES:
-    // na
-
-    // USE STATEMENTS:
-    // na
-
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE PARAMETER DEFINITIONS:
-    // na
-
-    // INTERFACE BLOCK SPECIFICATIONS:
-    // na
-
-    // DERIVED TYPE DEFINITIONS:
-    // na
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    // na
     areSame = true;
-    if (std::abs(vector1.x - vector2.x) > tolerance) areSame = false;
-    if (std::abs(vector1.y - vector2.y) > tolerance) areSame = false;
-    if (std::abs(vector1.z - vector2.z) > tolerance) areSame = false;
+    if (std::abs(vector1.x - vector2.x) > tolerance) {
+        areSame = false;
+    }
+    if (std::abs(vector1.y - vector2.y) > tolerance) {
+        areSame = false;
+    }
+    if (std::abs(vector1.z - vector2.z) > tolerance) {
+        areSame = false;
+    }
 }
 
 void CalcCoPlanarNess(Array1D<Vector> &Surf, int const NSides, bool &IsCoPlanar, Real64 &MaxDist, int &ErrorVertex)
@@ -633,43 +451,18 @@ void CalcCoPlanarNess(Array1D<Vector> &Surf, int const NSides, bool &IsCoPlanar,
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Linda Lawrie
     //       DATE WRITTEN   June 2004
-    //       MODIFIED       na
-    //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine provides the calculation to determine if the
-    // surface is planar or not.
-
-    // METHODOLOGY EMPLOYED:
-    // na
+    // This subroutine provides the calculation to determine if the surface is planar or not.
 
     // REFERENCES:
     // Eric W. Weisstein. "Coplanar." From MathWorld--A Wolfram Web Resource.
     //   http://mathworld.wolfram.com/Coplanar.html
 
-    // USE STATEMENTS:
-    // na
-
     // Argument array dimensioning
     EP_SIZE_CHECK(Surf, NSides);
 
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-
-    // SUBROUTINE PARAMETER DEFINITIONS:
-    Real64 constexpr DistTooSmall(1.e-4);
-
-    // INTERFACE BLOCK SPECIFICATIONS
-    // na
-
-    // DERIVED TYPE DEFINITIONS
-    // na
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     bool plerror;
-    Real64 dist;
-
-    // Object Data
     PlaneEq NewellPlane;
 
     IsCoPlanar = true;
@@ -680,17 +473,20 @@ void CalcCoPlanarNess(Array1D<Vector> &Surf, int const NSides, bool &IsCoPlanar,
     PlaneEquation(Surf, NSides, NewellPlane, plerror);
 
     for (int vert = 1; vert <= NSides; ++vert) {
-        dist = Pt2Plane(Surf(vert), NewellPlane);
+        Real64 dist = Pt2Plane(Surf(vert), NewellPlane);
         if (std::abs(dist) > MaxDist) {
             MaxDist = std::abs(dist);
             ErrorVertex = vert;
         }
     }
 
-    if (std::abs(MaxDist) > DistTooSmall) IsCoPlanar = false;
+    if (std::abs(MaxDist) > Constant::SmallDistance) {
+        IsCoPlanar = false;
+    }
 }
 
-std::vector<int> PointsInPlane(Array1D<Vector> &BaseSurf, int const BaseSides, Array1D<Vector> &QuerySurf, int const QuerySides, bool &ErrorFound)
+std::vector<int>
+PointsInPlane(Array1D<Vector> &BaseSurf, int const BaseSides, Array1D<Vector> const &QuerySurf, int const QuerySides, bool &ErrorFound)
 {
     std::vector<int> pointIndices;
 
@@ -699,34 +495,25 @@ std::vector<int> PointsInPlane(Array1D<Vector> &BaseSurf, int const BaseSides, A
 
     for (int vert = 1; vert <= QuerySides; ++vert) {
         Real64 dist = Pt2Plane(QuerySurf(vert), NewellPlane);
-        if (std::abs(dist) < 1.e-4) { // point on query surface is co-planar with base surface
+        if (std::abs(dist) < Constant::SmallDistance) { // point on query surface is co-planar with base surface
             pointIndices.push_back(vert);
         }
     }
     return pointIndices;
 }
 
-Real64 CalcPolyhedronVolume(EnergyPlusData &state, Polyhedron const &Poly)
+Real64 CalcPolyhedronVolume(EnergyPlusData const &state, Polyhedron const &Poly)
 {
 
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Linda Lawrie
     //       DATE WRITTEN   June 2004
-    //       MODIFIED       na
-    //       RE-ENGINEERED  na
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine provides the volume calculation for a polyhedron
-    // (i.e. Zone).
-
-    // METHODOLOGY EMPLOYED:
-    // na
+    // This subroutine provides the volume calculation for a polyhedron (i.e. Zone).
 
     // REFERENCES:
     // Conversations with Bill Carroll, LBNL.
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    Real64 PyramidVolume;
 
     // Object Data
     Vector p3FaceOrigin;
@@ -735,7 +522,7 @@ Real64 CalcPolyhedronVolume(EnergyPlusData &state, Polyhedron const &Poly)
 
     for (int NFace = 1; NFace <= Poly.NumSurfaceFaces; ++NFace) {
         p3FaceOrigin = Poly.SurfaceFace(NFace).FacePoints(2);
-        PyramidVolume = dot(Poly.SurfaceFace(NFace).NewellAreaVector, (p3FaceOrigin - state.dataVectors->p0));
+        Real64 PyramidVolume = dot(Poly.SurfaceFace(NFace).NewellAreaVector, (p3FaceOrigin - state.dataVectors->p0));
         Volume += PyramidVolume / 3.0;
     }
     return Volume;

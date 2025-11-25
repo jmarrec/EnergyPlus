@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -59,11 +59,14 @@
 #include <EnergyPlus/HeatBalanceManager.hh>
 #include <EnergyPlus/IOFiles.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
+#include <EnergyPlus/SimulationManager.hh>
 #include <EnergyPlus/SurfaceGeometry.hh>
 
-#include <nlohmann/json_literals.hpp>
+#include <nlohmann/json.hpp>
 
 #include "Fixtures/EnergyPlusFixture.hh"
+
+using namespace nlohmann::literals;
 
 namespace EnergyPlus {
 
@@ -86,6 +89,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_RoomAirModelType_Test)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->NumOfZones = 2;
 
@@ -288,17 +292,20 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
             "Zone1Infiltration": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 1.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 1"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 1",
+                "density_basis": "Standard"
             },
             "Zone2Infiltration": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 2.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 2"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 2",
+                "density_basis": "Indoor"
             },
             "Space1aInfiltration": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 3.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Space 1a"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Space 1a",
+                "density_basis": "Outdoor"
             },
             "Space1bInfiltration": {
                 "design_flow_rate_calculation_method": "Flow/Area",
@@ -320,17 +327,20 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
             "Zone1Ventilation": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 1.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 1"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 1",
+                "density_basis": "Standard"
             },
             "Zone2Ventilation": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 2.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 2"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Zone 2",
+                "density_basis": "Indoor"
             },
             "Space1aVentilation": {
                 "design_flow_rate_calculation_method": "Flow/Area",
                 "flow_rate_per_floor_area": 3.0,
-                "zone_or_zonelist_or_space_or_spacelist_name": "Space 1a"
+                "zone_or_zonelist_or_space_or_spacelist_name": "Space 1a",
+                "density_basis": "Outdoor"
             },
             "Space1bVentilation": {
                 "design_flow_rate_calculation_method": "Flow/Area",
@@ -369,9 +379,14 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
     state->dataIPShortCut->lNumericFieldBlanks.dimension(MaxNumeric, false);
 
     bool ErrorsFound = false;
+
+    state->init_state(*state);
+
     HeatBalanceManager::GetHeatBalanceInput(*state);
     std::string const error_string = delimited_string(
-        {"   ** Warning ** GetSurfaceData: Entered Space Floor Area(s) differ more than 5% from calculated Space Floor Area(s).",
+        {format("   ** Warning ** Version: missing in IDF, processing for EnergyPlus version=\"{}\"", DataStringGlobals::MatchVersion),
+         "   ** Warning ** No Timestep object found.  Number of TimeSteps in Hour defaulted to 4.",
+         "   ** Warning ** GetSurfaceData: Entered Space Floor Area(s) differ more than 5% from calculated Space Floor Area(s).",
          "   **   ~~~   ** ...use Output:Diagnostics,DisplayExtraWarnings; to show more details on individual Spaces.",
          "   ** Warning ** CalculateZoneVolume: 1 zone is not fully enclosed. For more details use:  Output:Diagnostics,DisplayExtrawarnings; ",
          "   ** Warning ** CalcApproximateViewFactors: Zero area for all other zone surfaces.",
@@ -498,6 +513,18 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
                                                         Space1bFloorArea * Zone1FlowPerArea,
                                                         Zone2FloorArea * Zone2FlowPerArea};
 
+    // Same density basis for both infiltration and ventilation
+    constexpr std::array<DataHeatBalance::InfVentDensityBasis, numInstances> density = {DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Outdoor,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Standard,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Standard,
+                                                                                        DataHeatBalance::InfVentDensityBasis::Indoor};
+
     for (int itemNum = 0; itemNum <= numInstances - 1; ++itemNum) {
         auto &thisInfiltration = state->dataHeatBal->Infiltration[itemNum];
         auto &thisVentilation = state->dataHeatBal->Ventilation[itemNum];
@@ -509,6 +536,8 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetInfiltrationAndVentilation)
         EXPECT_EQ(thisVentilation.ZonePtr, zoneNums[itemNum]);
         EXPECT_EQ(thisInfiltration.spaceIndex, spaceNums[itemNum]);
         EXPECT_EQ(thisVentilation.spaceIndex, spaceNums[itemNum]);
+        EXPECT_EQ(thisInfiltration.densityBasis, density[itemNum]);
+        EXPECT_EQ(thisVentilation.densityBasis, density[itemNum]);
     }
 }
 TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
@@ -518,6 +547,48 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
 
     state->dataInputProcessing->inputProcessor->epJSON = R"(
     {
+    "SimulationControl": {
+        "SimulationControl 1": {
+            "do_plant_sizing_calculation": "No",
+            "do_system_sizing_calculation": "No",
+            "do_zone_sizing_calculation": "No",
+            "run_simulation_for_sizing_periods": "Yes",
+            "run_simulation_for_weather_file_run_periods": "No"
+        }
+    },
+    "ZoneAirHeatBalanceAlgorithm": {
+        "ZoneAirHeatBalanceAlgorithm 1": {
+            "algorithm": "AnalyticalSolution",
+            "do_space_heat_balance_for_simulation": "Yes"
+        }
+    },
+    "Site:Location": {
+        "USA IL-CHICAGO-OHARE": {
+            "elevation": 190,
+            "latitude": 41.77,
+            "longitude": -87.75,
+            "time_zone": -6.0
+        }
+    },
+        "SizingPeriod:DesignDay": {
+        "CHICAGO Ann Clg .4% Condns WB=>MDB": {
+            "barometric_pressure": 99063.0,
+            "daily_dry_bulb_temperature_range": 10.7,
+            "day_of_month": 21,
+            "day_type": "SummerDesignDay",
+            "daylight_saving_time_indicator": "No",
+            "humidity_condition_type": "WetBulb",
+            "maximum_dry_bulb_temperature": 31.2,
+            "month": 7,
+            "rain_indicator": "No",
+            "sky_clearness": 1.0,
+            "snow_indicator": "No",
+            "solar_model_indicator": "ASHRAEClearSky",
+            "wetbulb_or_dewpoint_at_maximum_dry_bulb": 25.5,
+            "wind_direction": 230,
+            "wind_speed": 5.3
+          }
+        },
         "Zone": {
             "Zone 1" : {
                 "volume": 100.0
@@ -755,10 +826,16 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
     state->dataIPShortCut->rNumericArgs.dimension(MaxNumeric, 0.0);
     state->dataIPShortCut->lNumericFieldBlanks.dimension(MaxNumeric, false);
 
-    bool ErrorsFound = false;
-    HeatBalanceManager::GetHeatBalanceInput(*state);
+    state->init_state(*state);
+
+    // HeatBalanceManager::GetHeatBalanceInput(*state);
     std::string const error_string = delimited_string(
-        {"   ** Warning ** GetSurfaceData: Entered Space Floor Area(s) differ more than 5% from calculated Space Floor Area(s).",
+        {format("   ** Warning ** Version: missing in IDF, processing for EnergyPlus version=\"{}\"", DataStringGlobals::MatchVersion),
+         "   ** Warning ** No Timestep object found.  Number of TimeSteps in Hour defaulted to 4.",
+         "   ** Warning ** No reporting elements have been requested. No simulation results produced.",
+         "   **   ~~~   ** ...Review requirements such as \"Output:Table:SummaryReports\", \"Output:Table:Monthly\", \"Output:Variable\", "
+         "\"Output:Meter\" and others.",
+         "   ** Warning ** GetSurfaceData: Entered Space Floor Area(s) differ more than 5% from calculated Space Floor Area(s).",
          "   **   ~~~   ** ...use Output:Diagnostics,DisplayExtraWarnings; to show more details on individual Spaces.",
          "   ** Warning ** CalculateZoneVolume: 1 zone is not fully enclosed. For more details use:  Output:Diagnostics,DisplayExtrawarnings; ",
          "   ** Warning ** CalcApproximateViewFactors: Zero area for all other zone surfaces.",
@@ -771,16 +848,34 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
          "   **   ~~~   ** Completeness means that all of the view factors between a surface and the other surfaces in a zone add up to unity.",
          "   **   ~~~   ** So, when there are three or less surfaces in a zone, EnergyPlus will make sure there are no losses of energy but",
          "   **   ~~~   ** it will not exchange the full amount of radiation with the rest of the zone as it would if there was a completed "
-         "enclosure."});
+         "enclosure.",
+         "   ** Warning ** CalcApproximateViewFactors: Zero area for all other zone surfaces.", // Why are these errors being reported twice, because
+                                                                                                // something is being calculated twice?
+         "   **   ~~~   ** Happens for Surface=\"DUMMY SPACE 1A FLOOR\" in Zone=ZONE 1",
+         "   ** Warning ** CalcApproximateViewFactors: Zero area for all other zone surfaces.",
+         "   **   ~~~   ** Happens for Surface=\"DUMMY SPACE 1B FLOOR\" in Zone=ZONE 1",
+         "   ** Warning ** Surfaces in Zone/Enclosure=\"ZONE 1\" do not define an enclosure.",
+         "   **   ~~~   ** Number of surfaces <= 3, view factors are set to force reciprocity but may not fulfill completeness.",
+         "   **   ~~~   ** Reciprocity means that radiant exchange between two surfaces will match and not lead to an energy loss.",
+         "   **   ~~~   ** Completeness means that all of the view factors between a surface and the other surfaces in a zone add up to unity.",
+         "   **   ~~~   ** So, when there are three or less surfaces in a zone, EnergyPlus will make sure there are no losses of energy but",
+         "   **   ~~~   ** it will not exchange the full amount of radiation with the rest of the zone as it would if there was a completed "
+         "enclosure.",
+         "   ************* Testing Individual Branch Integrity",
+         "   ************* All Branches passed integrity testing",
+         "   ************* Testing Individual Supply Air Path Integrity",
+         "   ************* All Supply Air Paths passed integrity testing",
+         "   ************* Testing Individual Return Air Path Integrity",
+         "   ************* All Return Air Paths passed integrity testing",
+         "   ************* No node connection errors were found.",
+         "   ************* Beginning Simulation"});
+
+    // HeatBalanceManager::GetProjectControlData(*state, ErrorsFound);
+    // EXPECT_FALSE(ErrorsFound);
+
+    SimulationManager::ManageSimulation(*state);
 
     compare_err_stream(error_string, true);
-    EXPECT_FALSE(ErrorsFound);
-
-    state->dataHeatBalFanSys->ZoneReOrder.allocate(state->dataGlobal->NumOfZones);
-    ErrorsFound = false;
-    HeatBalanceAirManager::GetSimpleAirModelInputs(*state, ErrorsFound);
-    compare_err_stream("", true);
-    EXPECT_FALSE(ErrorsFound);
 
     // Expected floor areas
     Real64 constexpr Space1aFloorArea = 10.0;
@@ -884,6 +979,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
 
 TEST_F(EnergyPlusFixture, HeatBalanceAirManager_InitSimpleMixingConvectiveHeatGains_Test)
 {
+    state->init_state(*state);
     Real64 expectedResult1;
     Real64 expectedResult2;
     Real64 constexpr allowedTolerance = 0.00001;
@@ -893,9 +989,9 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_InitSimpleMixingConvectiveHeatGa
     state->dataHeatBal->TotCrossMixing = 0;
     state->dataHeatBal->TotMixing = 3;
     state->dataHeatBal->Mixing.allocate(state->dataHeatBal->TotMixing);
-    state->dataHeatBal->Mixing(1).SchedPtr = -1; // this returns a value of one
-    state->dataHeatBal->Mixing(2).SchedPtr = -1; // this returns a value of one
-    state->dataHeatBal->Mixing(3).SchedPtr = -1; // this returns a value of one
+    state->dataHeatBal->Mixing(1).sched = Sched::GetScheduleAlwaysOn(*state);
+    state->dataHeatBal->Mixing(2).sched = Sched::GetScheduleAlwaysOn(*state);
+    state->dataHeatBal->Mixing(3).sched = Sched::GetScheduleAlwaysOn(*state);
     state->dataHeatBal->Mixing(1).EMSSimpleMixingOn = false;
     state->dataHeatBal->Mixing(2).EMSSimpleMixingOn = false;
     state->dataHeatBal->Mixing(3).EMSSimpleMixingOn = false;

@@ -1,4 +1,4 @@
-# EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University
+# EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
@@ -62,7 +62,7 @@ api = EnergyPlusAPI()
 state = api.state_manager.new_state()
 
 # GLYCOL TESTS
-glycol = api.functional.glycol(state, u"water")
+glycol = api.functional.glycol(state, "water")
 for t in [5.0, 15.0, 25.0]:
     cp = glycol.specific_heat(state, t)
     rho = glycol.density(state, t)

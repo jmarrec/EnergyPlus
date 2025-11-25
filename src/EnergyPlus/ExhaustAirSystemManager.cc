@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -65,7 +65,6 @@
 #include <EnergyPlus/ExhaustAirSystemManager.hh>
 #include <EnergyPlus/Fans.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
-#include <EnergyPlus/HVACFan.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/MixerComponent.hh>
 #include <EnergyPlus/NodeInputManager.hh>
@@ -100,14 +99,18 @@ namespace ExhaustAirSystemManager {
 
     void GetExhaustAirSystemInput(EnergyPlusData &state)
     {
-        if (!state.dataExhAirSystemMrg->GetInputFlag) return;
+        if (!state.dataExhAirSystemMrg->GetInputFlag) {
+            return;
+        }
         // state.dataExhAirSystemMrg->GetInputFlag = false;
 
         // Locals
         bool ErrorsFound = false;
 
         constexpr std::string_view RoutineName("GetExhaustAirSystemInput: ");
+        constexpr std::string_view routineName = "GetExhaustAirSystemInput";
         std::string const cCurrentModuleObject = "AirLoopHVAC:ExhaustSystem";
+
         auto &ip = state.dataInputProcessing->inputProcessor;
         auto const instances = ip->epJSON.find(cCurrentModuleObject);
         if (instances != ip->epJSON.end()) {
@@ -154,168 +157,76 @@ namespace ExhaustAirSystemManager {
                 thisExhSys.ZoneMixerName = zoneMixerName;
                 thisExhSys.ZoneMixerIndex = zoneMixerIndex;
 
-                std::string centralFanType = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "fan_object_type");
-                int centralFanTypeNum = 0;
-                // getEnumValue()?
-
-                if (Util::SameString(centralFanType, "Fan:SystemModel")) {
-                    centralFanTypeNum = DataHVACGlobals::FanType_SystemModelObject;
-                } else if (Util::SameString(centralFanType, "Fan:ComponentModel")) {
-                    centralFanTypeNum = DataHVACGlobals::FanType_ComponentModel;
-                } else {
+                thisExhSys.centralFanType = static_cast<HVAC::FanType>(
+                    getEnumValue(HVAC::fanTypeNamesUC, Util::makeUPPER(ip->getAlphaFieldValue(objectFields, objectSchemaProps, "fan_object_type"))));
+                if (thisExhSys.centralFanType != HVAC::FanType::SystemModel && thisExhSys.centralFanType != HVAC::FanType::ComponentModel) {
                     ShowSevereError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
-                    ShowContinueError(state, format("Fan Type ={} is not supported.", centralFanType));
+                    ShowContinueError(state, format("Fan Type ={} is not supported.", HVAC::fanTypeNames[(int)thisExhSys.centralFanType]));
                     ShowContinueError(state, "It needs to be either a Fan:SystemModel or a Fan:ComponentModel type.");
                     ErrorsFound = true;
                 }
-                thisExhSys.CentralFanTypeNum = centralFanTypeNum;
 
                 std::string centralFanName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "fan_name");
-                int centralFanIndex = -1; // zero based or 1 based
-                if (centralFanTypeNum == DataHVACGlobals::FanType_SystemModelObject) {
-                    // zero-based index
-                    state.dataHVACFan->fanObjs.emplace_back(new HVACFan::FanSystem(state, centralFanName));
 
-                    centralFanIndex = HVACFan::getFanObjectVectorIndex(state, centralFanName); // zero-based
-                    if (centralFanIndex >= 0) {
-                        thisExhSys.AvailScheduleNum = state.dataHVACFan->fanObjs[centralFanIndex]->availSchedIndex;
-                        // normal
-
-                        BranchNodeConnections::SetUpCompSets(state,
-                                                             cCurrentModuleObject,
-                                                             thisExhSys.Name,
-                                                             centralFanType,
-                                                             centralFanName,
-                                                             state.dataLoopNodes->NodeID(state.dataHVACFan->fanObjs[centralFanIndex]->inletNodeNum),
-                                                             state.dataLoopNodes->NodeID(state.dataHVACFan->fanObjs[centralFanIndex]->outletNodeNum));
-
-                        SetupOutputVariable(state,
-                                            "Central Exhaust Fan Mass Flow Rate",
-                                            Constant::Units::kg_s,
-                                            thisExhSys.centralFan_MassFlowRate,
-                                            OutputProcessor::SOVTimeStepType::System,
-                                            OutputProcessor::SOVStoreType::Average,
-                                            thisExhSys.Name);
-
-                        SetupOutputVariable(state,
-                                            "Central Exhaust Fan Volumetric Flow Rate Standard",
-                                            Constant::Units::m3_s,
-                                            thisExhSys.centralFan_VolumeFlowRate_Std,
-                                            OutputProcessor::SOVTimeStepType::System,
-                                            OutputProcessor::SOVStoreType::Average,
-                                            thisExhSys.Name);
-
-                        SetupOutputVariable(state,
-                                            "Central Exhaust Fan Volumetric Flow Rate Current",
-                                            Constant::Units::m3_s,
-                                            thisExhSys.centralFan_VolumeFlowRate_Cur,
-                                            OutputProcessor::SOVTimeStepType::System,
-                                            OutputProcessor::SOVStoreType::Average,
-                                            thisExhSys.Name);
-
-                        SetupOutputVariable(state,
-                                            "Central Exhaust Fan Power",
-                                            Constant::Units::W,
-                                            thisExhSys.centralFan_Power,
-                                            OutputProcessor::SOVTimeStepType::System,
-                                            OutputProcessor::SOVStoreType::Average,
-                                            thisExhSys.Name);
-
-                        SetupOutputVariable(state,
-                                            "Central Exhaust Fan Energy",
-                                            Constant::Units::J,
-                                            thisExhSys.centralFan_Energy,
-                                            OutputProcessor::SOVTimeStepType::System,
-                                            OutputProcessor::SOVStoreType::Summed,
-                                            thisExhSys.Name);
-
-                    } else {
-                        centralFanIndex = -1;
-                        ShowSevereError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
-                        ShowContinueError(state, format("Fan Name ={} not found.", centralFanName));
-                        ErrorsFound = true;
-                    }
-                } else if (centralFanTypeNum == DataHVACGlobals::FanType_ComponentModel) {
-                    // 1-based index.
-                    bool isNotOK(false);
-                    int fanType_Num_Check(0);
-                    Fans::GetFanType(state, centralFanName, fanType_Num_Check, isNotOK, cCurrentModuleObject, thisExhSys.Name);
-
-                    if (isNotOK) {
-                        ShowSevereError(state, format("Occurs in {} = {}.", cCurrentModuleObject, thisExhSys.Name));
-                        ErrorsFound = true;
-                    } else {
-                        isNotOK = false;
-                        ValidateComponent(state, centralFanType, centralFanName, isNotOK, cCurrentModuleObject);
-                        if (isNotOK) {
-                            ShowSevereError(state, format("Occurs in {} = {}.", cCurrentModuleObject, thisExhSys.Name));
-                            ErrorsFound = true;
-                        } else { // mine data from fan object
-                            bool errFlag(false);
-                            Fans::GetFanIndex(state, centralFanName, centralFanIndex, errFlag);
-
-                            thisExhSys.AvailScheduleNum = state.dataFans->Fan(centralFanIndex).AvailSchedPtrNum;
-
-                            BranchNodeConnections::SetUpCompSets(state,
-                                                                 cCurrentModuleObject,
-                                                                 thisExhSys.Name,
-                                                                 centralFanType,
-                                                                 centralFanName,
-                                                                 state.dataLoopNodes->NodeID(state.dataFans->Fan(centralFanIndex).InletNodeNum),
-                                                                 state.dataLoopNodes->NodeID(state.dataFans->Fan(centralFanIndex).OutletNodeNum));
-
-                            SetupOutputVariable(state,
-                                                "Central Exhaust Fan Mass Flow Rate",
-                                                Constant::Units::kg_s,
-                                                thisExhSys.centralFan_MassFlowRate,
-                                                OutputProcessor::SOVTimeStepType::System,
-                                                OutputProcessor::SOVStoreType::Average,
-                                                thisExhSys.Name);
-
-                            SetupOutputVariable(state,
-                                                "Central Exhaust Fan Volumetric Flow Rate Standard",
-                                                Constant::Units::m3_s,
-                                                thisExhSys.centralFan_VolumeFlowRate_Std,
-                                                OutputProcessor::SOVTimeStepType::System,
-                                                OutputProcessor::SOVStoreType::Average,
-                                                thisExhSys.Name);
-
-                            SetupOutputVariable(state,
-                                                "Central Exhaust Fan Volumetric Flow Rate Current",
-                                                Constant::Units::m3_s,
-                                                thisExhSys.centralFan_VolumeFlowRate_Cur,
-                                                OutputProcessor::SOVTimeStepType::System,
-                                                OutputProcessor::SOVStoreType::Average,
-                                                thisExhSys.Name);
-
-                            SetupOutputVariable(state,
-                                                "Central Exhaust Fan Power",
-                                                Constant::Units::W,
-                                                thisExhSys.centralFan_Power,
-                                                OutputProcessor::SOVTimeStepType::System,
-                                                OutputProcessor::SOVStoreType::Average,
-                                                thisExhSys.Name);
-
-                            SetupOutputVariable(state,
-                                                "Central Exhaust Fan Energy",
-                                                Constant::Units::J,
-                                                thisExhSys.centralFan_Energy,
-                                                OutputProcessor::SOVTimeStepType::System,
-                                                OutputProcessor::SOVStoreType::Summed,
-                                                thisExhSys.Name);
-
-                            if (errFlag) {
-                                ShowContinueError(state, format("Occurs in {} = {}.", cCurrentModuleObject, thisExhSys.Name));
-                                ErrorsFound = true;
-                            }
-                        }
-                    }
-                } else {
-                    ShowSevereError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
-                    ShowContinueError(state, format("Fan Type ={} is not supported.", centralFanType));
-                    ShowContinueError(state, "It needs to be either a Fan:SystemModel or a Fan:ComponentModel type.");
+                ErrorObjectHeader eoh{routineName, cCurrentModuleObject, thisExhSys.Name};
+                int centralFanIndex = Fans::GetFanIndex(state, centralFanName);
+                if (centralFanIndex == 0) {
+                    ShowSevereItemNotFound(state, eoh, "fan_name", centralFanName);
                     ErrorsFound = true;
+                } else {
+                    auto *fan = state.dataFans->fans(centralFanIndex);
+
+                    thisExhSys.availSched = fan->availSched;
+
+                    BranchNodeConnections::SetUpCompSets(state,
+                                                         cCurrentModuleObject,
+                                                         thisExhSys.Name,
+                                                         HVAC::fanTypeNames[(int)thisExhSys.centralFanType],
+                                                         centralFanName,
+                                                         state.dataLoopNodes->NodeID(fan->inletNodeNum),
+                                                         state.dataLoopNodes->NodeID(fan->outletNodeNum));
+
+                    SetupOutputVariable(state,
+                                        "Central Exhaust Fan Mass Flow Rate",
+                                        Constant::Units::kg_s,
+                                        thisExhSys.centralFan_MassFlowRate,
+                                        OutputProcessor::TimeStepType::System,
+                                        OutputProcessor::StoreType::Average,
+                                        thisExhSys.Name);
+
+                    SetupOutputVariable(state,
+                                        "Central Exhaust Fan Volumetric Flow Rate Standard",
+                                        Constant::Units::m3_s,
+                                        thisExhSys.centralFan_VolumeFlowRate_Std,
+                                        OutputProcessor::TimeStepType::System,
+                                        OutputProcessor::StoreType::Average,
+                                        thisExhSys.Name);
+
+                    SetupOutputVariable(state,
+                                        "Central Exhaust Fan Volumetric Flow Rate Current",
+                                        Constant::Units::m3_s,
+                                        thisExhSys.centralFan_VolumeFlowRate_Cur,
+                                        OutputProcessor::TimeStepType::System,
+                                        OutputProcessor::StoreType::Average,
+                                        thisExhSys.Name);
+
+                    SetupOutputVariable(state,
+                                        "Central Exhaust Fan Power",
+                                        Constant::Units::W,
+                                        thisExhSys.centralFan_Power,
+                                        OutputProcessor::TimeStepType::System,
+                                        OutputProcessor::StoreType::Average,
+                                        thisExhSys.Name);
+
+                    SetupOutputVariable(state,
+                                        "Central Exhaust Fan Energy",
+                                        Constant::Units::J,
+                                        thisExhSys.centralFan_Energy,
+                                        OutputProcessor::TimeStepType::System,
+                                        OutputProcessor::StoreType::Sum,
+                                        thisExhSys.Name);
                 }
+
                 thisExhSys.CentralFanName = centralFanName;
                 thisExhSys.CentralFanIndex = centralFanIndex;
 
@@ -364,12 +275,12 @@ namespace ExhaustAirSystemManager {
         int outletNode_Num = 0;
         Real64 RhoAirCurrent = state.dataEnvrn->StdRhoAir;
 
-        if (thisExhSys.CentralFanTypeNum == DataHVACGlobals::FanType_SystemModelObject) {
+        if (thisExhSys.centralFanType == HVAC::FanType::SystemModel) {
             state.dataHVACGlobal->OnOffFanPartLoadFraction = 1.0;
-            state.dataHVACFan->fanObjs[thisExhSys.CentralFanIndex]->simulate(state, _, _);
+            state.dataFans->fans(thisExhSys.CentralFanIndex)->simulate(state, false, _, _);
 
             // Update report variables
-            outletNode_Num = state.dataHVACFan->fanObjs[thisExhSys.CentralFanIndex]->outletNodeNum;
+            outletNode_Num = state.dataFans->fans(thisExhSys.CentralFanIndex)->outletNodeNum;
 
             thisExhSys.centralFan_MassFlowRate = state.dataLoopNodes->Node(outletNode_Num).MassFlowRate;
 
@@ -379,51 +290,53 @@ namespace ExhaustAirSystemManager {
                                                                           state.dataEnvrn->OutBaroPress,
                                                                           state.dataLoopNodes->Node(outletNode_Num).Temp,
                                                                           state.dataLoopNodes->Node(outletNode_Num).HumRat);
-            if (RhoAirCurrent <= 0.0) RhoAirCurrent = state.dataEnvrn->StdRhoAir;
+            if (RhoAirCurrent <= 0.0) {
+                RhoAirCurrent = state.dataEnvrn->StdRhoAir;
+            }
             thisExhSys.centralFan_VolumeFlowRate_Cur = state.dataLoopNodes->Node(outletNode_Num).MassFlowRate / RhoAirCurrent;
 
-            thisExhSys.centralFan_Power = state.dataHVACFan->fanObjs[thisExhSys.CentralFanIndex]->fanPower();
+            thisExhSys.centralFan_Power = state.dataFans->fans(thisExhSys.CentralFanIndex)->totalPower;
 
             thisExhSys.centralFan_Energy = thisExhSys.centralFan_Power * state.dataHVACGlobal->TimeStepSysSec;
 
-        } else if (thisExhSys.CentralFanTypeNum == DataHVACGlobals::FanType_ComponentModel) {
-            Fans::SimulateFanComponents(state, thisExhSys.CentralFanName, FirstHVACIteration,
-                                        thisExhSys.CentralFanIndex); //,
+        } else if (thisExhSys.centralFanType == HVAC::FanType::ComponentModel) {
+            auto *fan = state.dataFans->fans(thisExhSys.CentralFanIndex);
+            fan->simulate(state, FirstHVACIteration);
 
             // Update output variables
-            auto const &fancomp = state.dataFans->Fan(thisExhSys.CentralFanIndex);
 
-            outletNode_Num = fancomp.OutletNodeNum;
+            outletNode_Num = fan->outletNodeNum;
 
-            thisExhSys.centralFan_MassFlowRate = fancomp.OutletAirMassFlowRate;
+            thisExhSys.centralFan_MassFlowRate = fan->outletAirMassFlowRate;
 
-            thisExhSys.centralFan_VolumeFlowRate_Std = fancomp.OutletAirMassFlowRate / state.dataEnvrn->StdRhoAir;
+            thisExhSys.centralFan_VolumeFlowRate_Std = fan->outletAirMassFlowRate / state.dataEnvrn->StdRhoAir;
 
             RhoAirCurrent = EnergyPlus::Psychrometrics::PsyRhoAirFnPbTdbW(state,
                                                                           state.dataEnvrn->OutBaroPress,
                                                                           state.dataLoopNodes->Node(outletNode_Num).Temp,
                                                                           state.dataLoopNodes->Node(outletNode_Num).HumRat);
-            if (RhoAirCurrent <= 0.0) RhoAirCurrent = state.dataEnvrn->StdRhoAir;
-            thisExhSys.centralFan_VolumeFlowRate_Cur = fancomp.OutletAirMassFlowRate / RhoAirCurrent;
+            if (RhoAirCurrent <= 0.0) {
+                RhoAirCurrent = state.dataEnvrn->StdRhoAir;
+            }
+            thisExhSys.centralFan_VolumeFlowRate_Cur = fan->outletAirMassFlowRate / RhoAirCurrent;
 
-            thisExhSys.centralFan_Power = fancomp.FanPower * 1000.0;
+            thisExhSys.centralFan_Power = fan->totalPower * 1000.0;
 
-            thisExhSys.centralFan_Energy = fancomp.FanEnergy * 1000.0;
+            thisExhSys.centralFan_Energy = fan->totalEnergy * 1000.0;
         }
         thisExhSys.exhTotalHVACReliefHeatLoss = state.dataLoopNodes->Node(outletNode_Num).MassFlowRate *
                                                 (state.dataLoopNodes->Node(outletNode_Num).Enthalpy - state.dataEnvrn->OutEnthalpy);
 
         Real64 mixerFlow_Posterior = 0.0;
         mixerFlow_Posterior = state.dataLoopNodes->Node(outletNode_index).MassFlowRate;
-        if (mixerFlow_Posterior < DataHVACGlobals::SmallMassFlow) {
+        if (mixerFlow_Posterior < HVAC::SmallMassFlow) {
             // fan flow is nearly zero and should be considered off
             // but this still can use the ratio
         }
-        if (mixerFlow_Prior < DataHVACGlobals::SmallMassFlow) {
-            // this is the case where the fan flow should be resetted to zeros and not run the ratio
+        if (mixerFlow_Prior < HVAC::SmallMassFlow) {
+            // this is the case where the fan flow should be reset to zeros and not run the ratio
         }
-        if ((mixerFlow_Prior - mixerFlow_Posterior > DataHVACGlobals::SmallMassFlow) ||
-            (mixerFlow_Prior - mixerFlow_Posterior < -DataHVACGlobals::SmallMassFlow)) {
+        if ((mixerFlow_Prior - mixerFlow_Posterior > HVAC::SmallMassFlow) || (mixerFlow_Prior - mixerFlow_Posterior < -HVAC::SmallMassFlow)) {
             // calculate a ratio
             Real64 flowRatio = mixerFlow_Posterior / mixerFlow_Prior;
             if (flowRatio > 1.0) {
@@ -455,6 +368,8 @@ namespace ExhaustAirSystemManager {
 
         // Use the json helper to process input
         constexpr std::string_view RoutineName("GetZoneExhaustControlInput: ");
+        constexpr std::string_view routineName = "GetZoneExhaustControlInput";
+
         std::string const cCurrentModuleObject = "ZoneHVAC:ExhaustControl";
         auto &ip = state.dataInputProcessing->inputProcessor;
         auto const instances = ip->epJSON.find(cCurrentModuleObject);
@@ -474,22 +389,20 @@ namespace ExhaustAirSystemManager {
                 ++exhCtrlNum;
                 auto const &objectFields = instance.value();
                 auto &thisExhCtrl = state.dataZoneEquip->ZoneExhaustControlSystem(exhCtrlNum);
+
+                ErrorObjectHeader eoh{routineName, cCurrentModuleObject, instance.key()};
+
                 thisExhCtrl.Name = Util::makeUPPER(instance.key());
                 ip->markObjectAsUsed(cCurrentModuleObject, instance.key());
 
                 std::string availSchName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "availability_schedule_name");
-                if (availSchName == "") {
+                if (availSchName.empty()) {
                     // blank
-                    thisExhCtrl.AvailScheduleNum = ScheduleManager::ScheduleAlwaysOn;
-                } else {
-                    thisExhCtrl.AvailScheduleNum = ScheduleManager::GetScheduleIndex(state, availSchName);
-                    if (thisExhCtrl.AvailScheduleNum == 0) {
-                        // mismatch, reset to always on
-                        thisExhCtrl.AvailScheduleNum = ScheduleManager::ScheduleAlwaysOn;
-                        ShowWarningError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhCtrl.Name));
-                        ShowContinueError(state, format("Avaiability Schedule Name = {} not found.", availSchName));
-                        ShowContinueError(state, "Availability Schedule is reset to Always ON.");
-                    }
+                    thisExhCtrl.availSched = Sched::GetScheduleAlwaysOn(state);
+                } else if ((thisExhCtrl.availSched = Sched::GetSchedule(state, availSchName)) == nullptr) {
+                    // mismatch, reset to always on
+                    thisExhCtrl.availSched = Sched::GetScheduleAlwaysOn(state);
+                    ShowWarningItemNotFound(state, eoh, "Availability Schedule Name", availSchName, "Availability Schedule is reset to Always ON.");
                 }
 
                 std::string zoneName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "zone_name");
@@ -537,23 +450,15 @@ namespace ExhaustAirSystemManager {
                 thisExhCtrl.FlowControlOption =
                     static_cast<ZoneExhaustControl::FlowControlType>(getEnumValue(flowControlTypeNamesUC, flowControlTypeName));
 
-                std::string exhaustFlowFractionScheduleName =
+                std::string exhaustFlowFractionSchedName =
                     ip->getAlphaFieldValue(objectFields, objectSchemaProps, "exhaust_flow_fraction_schedule_name");
-                // Schedule matching
-                int exhaustFlowFractionScheduleNum = 0;
-                exhaustFlowFractionScheduleNum = ScheduleManager::GetScheduleIndex(state, exhaustFlowFractionScheduleName);
 
-                if (exhaustFlowFractionScheduleNum > 0) {
-                    // normal conditions
-                } else if (exhaustFlowFractionScheduleNum == 0) {
-                    // blank, treat as always available
-                } else {
-                    exhaustFlowFractionScheduleNum = 0;
-                    // a regular warning
-                    ShowWarningError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhCtrl.Name));
-                    ShowContinueError(state, format("Schedule Name = {} not found.", exhaustFlowFractionScheduleName));
+                if (exhaustFlowFractionSchedName.empty()) {
+                    thisExhCtrl.exhaustFlowFractionSched =
+                        Sched::GetScheduleAlwaysOn(state); // Not an availability schedule, but defaults to constant-1.0
+                } else if ((thisExhCtrl.exhaustFlowFractionSched = Sched::GetSchedule(state, exhaustFlowFractionSchedName)) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, "Exhaust Flow Fraction Schedule Name", exhaustFlowFractionSchedName);
                 }
-                thisExhCtrl.ExhaustFlowFractionScheduleNum = exhaustFlowFractionScheduleNum;
 
                 thisExhCtrl.SupplyNodeOrNodelistName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "supply_node_or_nodelist_name");
 
@@ -594,71 +499,38 @@ namespace ExhaustAirSystemManager {
                     SizeExhaustControlFlow(state, exhCtrlNum, thisExhCtrl.SuppNodeNums);
                 }
 
-                std::string minZoneTempLimitScheduleName =
+                std::string minZoneTempLimitSchedName =
                     ip->getAlphaFieldValue(objectFields, objectSchemaProps, "minimum_zone_temperature_limit_schedule_name");
-                int minZoneTempLimitScheduleNum = 0;
-                minZoneTempLimitScheduleNum = ScheduleManager::GetScheduleIndex(state, minZoneTempLimitScheduleName);
-
-                if (minZoneTempLimitScheduleNum > 0) {
-                    // normal conditions
-                } else if (minZoneTempLimitScheduleNum == 0) {
-                    // blank or anything like that, treat as no comparision
-                } else {
-                    minZoneTempLimitScheduleNum = 0;
-                    // a regular warning
-                    ShowWarningError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhCtrl.Name));
-                    ShowContinueError(state, format("Schedule Name ={} not found.", minZoneTempLimitScheduleName));
+                if (minZoneTempLimitSchedName.empty()) {
+                } else if ((thisExhCtrl.minZoneTempLimitSched = Sched::GetSchedule(state, minZoneTempLimitSchedName)) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, "Minimum Zone Temperature Limit Schedule Name", minZoneTempLimitSchedName);
                 }
-                thisExhCtrl.MinZoneTempLimitScheduleNum = minZoneTempLimitScheduleNum;
 
-                std::string minExhFlowFracScheduleName =
+                std::string minExhFlowFracSchedName =
                     ip->getAlphaFieldValue(objectFields, objectSchemaProps, "minimum_exhaust_flow_fraction_schedule_name");
                 // to do so schedule matching
-                int minExhFlowFracScheduleNum = 0;
-                minExhFlowFracScheduleNum = ScheduleManager::GetScheduleIndex(state, minExhFlowFracScheduleName);
-
-                if (minExhFlowFracScheduleNum > 0) {
-                    // normal conditions
-                } else if (minExhFlowFracScheduleNum == 0) {
-                    // blank, meaning minimum is zero
-                } else {
-                    minExhFlowFracScheduleNum = 0;
-                    // a regular warning
-                    ShowWarningError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhCtrl.Name));
-                    ShowContinueError(state, format("Schedule Name ={} not found.", minExhFlowFracScheduleName));
+                if (minExhFlowFracSchedName.empty()) {
+                } else if ((thisExhCtrl.minExhFlowFracSched = Sched::GetSchedule(state, minExhFlowFracSchedName)) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, "Minimum Exhaust Flow Fraction Schedule Name", minExhFlowFracSchedName);
                 }
-                thisExhCtrl.MinExhFlowFracScheduleNum = minExhFlowFracScheduleNum;
 
-                std::string balancedExhFracScheduleName =
+                std::string balancedExhFracSchedName =
                     ip->getAlphaFieldValue(objectFields, objectSchemaProps, "balanced_exhaust_fraction_schedule_name");
                 // to do so schedule matching
-                int balancedExhFracScheduleNum = 0;
-                balancedExhFracScheduleNum = ScheduleManager::GetScheduleIndex(state, balancedExhFracScheduleName);
-
-                if (balancedExhFracScheduleNum > 0) {
-                    // normal conditions
-                } else if (balancedExhFracScheduleNum == 0) {
-                    // blank, treated as not activated
-                } else {
-                    balancedExhFracScheduleNum = 0;
-                    // a regular warning
-                    ShowWarningError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhCtrl.Name));
-                    ShowContinueError(state, format("Schedule Name ={} not found.", balancedExhFracScheduleName));
+                if (balancedExhFracSchedName.empty()) {
+                } else if ((thisExhCtrl.balancedExhFracSched = Sched::GetSchedule(state, balancedExhFracSchedName)) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, "Balanced Exhaust Fraction Schedule Name", balancedExhFracSchedName);
                 }
 
                 // Maybe an additional check per IORef:
                 // This input field must be blank when the zone air flow balance is enforced. If user specifies a schedule and zone air flow balance
                 // is enforced, then EnergyPlus throws a warning error message, ignores the schedule and simulation continues.
-
-                thisExhCtrl.BalancedExhFracScheduleNum = balancedExhFracScheduleNum;
             }
 
             state.dataZoneEquip->NumZoneExhaustControls = numZoneExhaustControls; // or exhCtrlNum
 
             // Done with creating a map that contains a table of for each zone to exhasut controls
             state.dataExhAirSystemMrg->mappingDone = true;
-        } else {
-            // If no exhaust systems are defined, then do something <or nothing>:
         }
 
         if (ErrorsFound) {
@@ -692,7 +564,7 @@ namespace ExhaustAirSystemManager {
         auto &thisExhOutlet = state.dataLoopNodes->Node(OutletNode);
         Real64 MassFlow;
         Real64 Tin = state.dataZoneTempPredictorCorrector->zoneHeatBalance(thisExhCtrl.ZoneNum).ZT;
-        Real64 thisExhCtrlAvailScheVal = ScheduleManager::GetCurrentScheduleValue(state, thisExhCtrl.AvailScheduleNum);
+        Real64 thisExhCtrlAvailScheVal = thisExhCtrl.availSched->getCurrentVal();
 
         if (FlowRatio >= 0.0) {
             thisExhCtrl.BalancedFlow *= FlowRatio;
@@ -709,9 +581,9 @@ namespace ExhaustAirSystemManager {
             }
 
             Real64 DesignFlowRate = thisExhCtrl.DesignExhaustFlowRate;
-            Real64 FlowFrac = 0.0;
-            if (thisExhCtrl.MinExhFlowFracScheduleNum > 0) {
-                FlowFrac = ScheduleManager::GetCurrentScheduleValue(state, thisExhCtrl.ExhaustFlowFractionScheduleNum);
+            Real64 FlowFrac = 1.0;
+            if (thisExhCtrl.exhaustFlowFractionSched != nullptr) {
+                FlowFrac = thisExhCtrl.exhaustFlowFractionSched->getCurrentVal();
                 if (FlowFrac < 0.0) {
                     ShowWarningError(
                         state, format("Exhaust Flow Fraction Schedule value is negative for Zone Exhaust Control Named: {};", thisExhCtrl.Name));
@@ -721,8 +593,8 @@ namespace ExhaustAirSystemManager {
             }
 
             Real64 MinFlowFrac = 0.0;
-            if (thisExhCtrl.MinExhFlowFracScheduleNum > 0) {
-                MinFlowFrac = ScheduleManager::GetCurrentScheduleValue(state, thisExhCtrl.MinExhFlowFracScheduleNum);
+            if (thisExhCtrl.minExhFlowFracSched != nullptr) {
+                MinFlowFrac = thisExhCtrl.minExhFlowFracSched->getCurrentVal();
                 if (MinFlowFrac < 0.0) {
                     ShowWarningError(
                         state,
@@ -737,8 +609,8 @@ namespace ExhaustAirSystemManager {
             }
 
             if (thisExhCtrlAvailScheVal > 0.0) { // available
-                if (thisExhCtrl.MinZoneTempLimitScheduleNum > 0) {
-                    if (Tin >= ScheduleManager::GetCurrentScheduleValue(state, thisExhCtrl.MinZoneTempLimitScheduleNum)) {
+                if (thisExhCtrl.minZoneTempLimitSched != nullptr) {
+                    if (Tin >= thisExhCtrl.minZoneTempLimitSched->getCurrentVal()) {
                     } else {
                         FlowFrac = MinFlowFrac;
                     }
@@ -760,10 +632,10 @@ namespace ExhaustAirSystemManager {
                 MassFlow = DesignFlowRate * FlowFrac;
             }
 
-            if (thisExhCtrl.BalancedExhFracScheduleNum > 0) {
+            if (thisExhCtrl.balancedExhFracSched != nullptr) {
                 thisExhCtrl.BalancedFlow = // state.dataHVACGlobal->BalancedExhMassFlow =
                     MassFlow *             // state.dataHVACGlobal->UnbalExhMassFlow *
-                    ScheduleManager::GetCurrentScheduleValue(state, thisExhCtrl.BalancedExhFracScheduleNum);
+                    thisExhCtrl.balancedExhFracSched->getCurrentVal();
                 thisExhCtrl.UnbalancedFlow =  // state.dataHVACGlobal->UnbalExhMassFlow =
                     MassFlow -                // = state.dataHVACGlobal->UnbalExhMassFlow -
                     thisExhCtrl.BalancedFlow; // state.dataHVACGlobal->BalancedExhMassFlow;
@@ -818,31 +690,27 @@ namespace ExhaustAirSystemManager {
         int outletNode_index = state.dataMixerComponent->MixerCond(thisExhSys.ZoneMixerIndex).OutletNode;
         state.dataLoopNodes->Node(outletNode_index).MassFlowRateMaxAvail = outletFlowMaxAvail;
 
+        auto *fan = state.dataFans->fans(thisExhSys.CentralFanIndex);
         // then central exhasut fan sizing here:
-        if (thisExhSys.CentralFanTypeNum == DataHVACGlobals::FanType_SystemModelObject) {
-            if (state.dataHVACFan->fanObjs[thisExhSys.CentralFanIndex]->designAirVolFlowRate == DataSizing::AutoSize) {
-                state.dataHVACFan->fanObjs[thisExhSys.CentralFanIndex]->designAirVolFlowRate = outletFlowMaxAvail / state.dataEnvrn->StdRhoAir;
+        if (thisExhSys.centralFanType == HVAC::FanType::SystemModel) {
+            if (fan->maxAirFlowRate == DataSizing::AutoSize) {
+                fan->maxAirFlowRate = outletFlowMaxAvail / state.dataEnvrn->StdRhoAir;
+            }
+            BaseSizer::reportSizerOutput(state, "FAN:SYSTEMMODEL", fan->Name, "Design Fan Airflow [m3/s]", fan->maxAirFlowRate);
+        } else if (thisExhSys.centralFanType == HVAC::FanType::ComponentModel) {
+            if (fan->maxAirMassFlowRate == DataSizing::AutoSize) {
+                fan->maxAirMassFlowRate = outletFlowMaxAvail * dynamic_cast<Fans::FanComponent *>(fan)->sizingFactor;
             }
             BaseSizer::reportSizerOutput(state,
-                                         "FAN:SYSTEMMODEL",
-                                         state.dataHVACFan->fanObjs[thisExhSys.CentralFanIndex]->name,
+                                         HVAC::fanTypeNames[(int)fan->type],
+                                         fan->Name,
                                          "Design Fan Airflow [m3/s]",
-                                         state.dataHVACFan->fanObjs[thisExhSys.CentralFanIndex]->designAirVolFlowRate);
-        } else if (thisExhSys.CentralFanTypeNum == DataHVACGlobals::FanType_ComponentModel) {
-            if (state.dataFans->Fan(thisExhSys.CentralFanIndex).MaxAirMassFlowRate == DataSizing::AutoSize) {
-                state.dataFans->Fan(thisExhSys.CentralFanIndex).MaxAirMassFlowRate =
-                    outletFlowMaxAvail * state.dataFans->Fan(thisExhSys.CentralFanIndex).FanSizingFactor;
-            }
-            BaseSizer::reportSizerOutput(state,
-                                         state.dataFans->Fan(thisExhSys.CentralFanIndex).FanType,
-                                         state.dataFans->Fan(thisExhSys.CentralFanIndex).FanName,
-                                         "Design Fan Airflow [m3/s]",
-                                         state.dataFans->Fan(thisExhSys.CentralFanIndex).MaxAirMassFlowRate / state.dataEnvrn->StdRhoAir);
+                                         fan->maxAirMassFlowRate / state.dataEnvrn->StdRhoAir);
         } else {
             //
         }
 
-        // after evertyhing sized, set the sizing flag to be false
+        // after everything sized, set the sizing flag to be false
         thisExhSys.SizingFlag = false;
     }
 
@@ -877,7 +745,7 @@ namespace ExhaustAirSystemManager {
 
     void CheckForSupplyNode(EnergyPlusData &state, int const ExhCtrlNum, bool &NodeNotFound)
     {
-        // Trying to check a node to see if it is truely a supply node
+        // Trying to check a node to see if it is truly a supply node
         // for a nodelist, need a call loop to check each node in the list
 
         auto &thisExhCtrl = state.dataZoneEquip->ZoneExhaustControlSystem(ExhCtrlNum);

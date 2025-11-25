@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -76,13 +76,11 @@
 
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/ExhaustAirSystemManager.hh>
-#include <EnergyPlus/HVACFan.hh>
 #include <EnergyPlus/MixerComponent.hh>
 
 using namespace EnergyPlus;
 using namespace DataEnvironment;
 using namespace EnergyPlus::DataSizing;
-using namespace EnergyPlus::DataHVACGlobals;
 using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataAirSystems;
 using namespace EnergyPlus::Fans;
@@ -364,6 +362,9 @@ TEST_F(EnergyPlusFixture, ExhaustSystemInputTest)
         "    CONTINUOUS;              !- Numeric Type",
     });
 
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
     // Preset some elements
     state->dataHeatBal->Zone.allocate(4);
     state->dataHeatBal->Zone(1).Name = "ZONE1";
@@ -377,11 +378,8 @@ TEST_F(EnergyPlusFixture, ExhaustSystemInputTest)
     // state->dataMixerComponent->MixerCond.allocate(2);
     // state->dataMixerComponent->MixerCond(1).MixerName = "MIXER1";
     // state->dataMixerComponent->MixerCond(2).MixerName = "MIXER2";
-    // state->dataHVACFan->fanObjs.emplace_back(new HVACFan::FanSystem(*state, "CentralExhaustFan1"));
-    // state->dataHVACFan->fanObjs.emplace_back(new HVACFan::FanSystem(*state, "CentralExhaustFan2"));
-
-    ASSERT_TRUE(process_idf(idf_objects));
-    ScheduleManager::ProcessScheduleInput(*state);
+    // state->dataFans->fanObjs.emplace_back(new HVACFan::FanSystem(*state, "CentralExhaustFan1"));
+    // state->dataFans->fanObjs.emplace_back(new HVACFan::FanSystem(*state, "CentralExhaustFan2"));
 
     // Call the processing codes
     ExhaustAirSystemManager::GetZoneExhaustControlInput(*state);
@@ -434,6 +432,7 @@ TEST_F(EnergyPlusFixture, ExhaustSystemInputTest)
 
 TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
 {
+    state->init_state(*state);
     // Preset some elements
     state->dataGlobal->NumOfZones = 4;
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
@@ -580,7 +579,7 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
 
     EXPECT_TRUE(NodeNotFound);
 
-    EXPECT_EQ(state->dataErrTracking->TotalWarningErrors, 0);
+    EXPECT_EQ(state->dataErrTracking->TotalWarningErrors, 1);
     EXPECT_EQ(state->dataErrTracking->TotalSevereErrors, 1);
     EXPECT_EQ(state->dataErrTracking->LastSevereError, "GetExhaustControlInput: ZoneHVAC:ExhaustControl=");
 }
@@ -861,6 +860,9 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_Test_CalcZoneHVACExhaustControl_Call)
         "    CONTINUOUS;              !- Numeric Type",
     });
 
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
     // Preset some elements
     state->dataHeatBal->Zone.allocate(4);
     state->dataHeatBal->Zone(1).Name = "ZONE1";
@@ -870,9 +872,6 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_Test_CalcZoneHVACExhaustControl_Call)
 
     state->dataSize->FinalZoneSizing.allocate(4);
     state->dataSize->FinalZoneSizing(2).MinOA = 0.25;
-
-    ASSERT_TRUE(process_idf(idf_objects));
-    ScheduleManager::ProcessScheduleInput(*state);
 
     // Call the processing codes
     ExhaustAirSystemManager::GetZoneExhaustControlInput(*state);
@@ -900,4 +899,23 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_Test_CalcZoneHVACExhaustControl_Call)
     EXPECT_NEAR(thisExhOutlet.MassFlowRate, 0.0, 1e-5);
     EXPECT_NEAR(thisExhCtrl1.BalancedFlow, 0.0, 1e-5);
     EXPECT_NEAR(thisExhCtrl1.UnbalancedFlow, 0.0, 1e-5);
+
+    thisExhInlet.MassFlowRate = 0.25;
+    auto *schedAvail = Sched::GetSchedule(*state, "HVACOPERATIONSCHD1");
+    auto *schedFlow = Sched::GetSchedule(*state, "ZONE1EXH EXHAUST FLOW FRAC SCHED");
+    schedAvail->currentVal = 1.0;
+    schedFlow->currentVal = 1.0;
+    ExhaustAirSystemManager::CalcZoneHVACExhaustControl(*state, ExhaustControlNum);
+
+    EXPECT_NEAR(thisExhInlet.MassFlowRate, 0.1, 1e-5); // matches design flow rate for fan 1
+    EXPECT_NEAR(thisExhOutlet.MassFlowRate, 0.1, 1e-5);
+    EXPECT_NEAR(thisExhCtrl1.BalancedFlow, 0.0, 1e-5);
+    EXPECT_NEAR(thisExhCtrl1.UnbalancedFlow, 0.1, 1e-5);
+
+    state->dataZoneEquip->ZoneExhaustControlSystem(1).exhaustFlowFractionSched = NULL; // delete exhaust flow schedule
+    ExhaustAirSystemManager::CalcZoneHVACExhaustControl(*state, ExhaustControlNum);
+    EXPECT_NEAR(thisExhInlet.MassFlowRate, 0.1, 1e-5); // matches design flow rate for fan 1
+    EXPECT_NEAR(thisExhOutlet.MassFlowRate, 0.1, 1e-5);
+    EXPECT_NEAR(thisExhCtrl1.BalancedFlow, 0.0, 1e-5);
+    EXPECT_NEAR(thisExhCtrl1.UnbalancedFlow, 0.1, 1e-5);
 }

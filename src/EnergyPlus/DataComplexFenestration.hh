@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -59,21 +59,6 @@
 namespace EnergyPlus {
 
 namespace DataComplexFenestration {
-
-    struct GapSupportPillar
-    {
-        // Members
-        std::string Name;     // Name of support pillar
-        Real64 Spacing = 0.0; // Spacing between centers of support pillars (m)
-        Real64 Radius = 0.0;  // Support pillar radius (m)
-    };
-
-    struct GapDeflectionState
-    {
-        // Members
-        std::string Name; // Name of deflection state
-        Real64 DeflectedThickness = 0.0;
-    };
 
 } // namespace DataComplexFenestration
 

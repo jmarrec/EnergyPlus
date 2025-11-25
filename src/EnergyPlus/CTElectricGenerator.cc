@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -108,7 +108,9 @@ namespace CTElectricGenerator {
         auto myCTGen = std::find_if(state.dataCTElectricGenerator->CTGenerator.begin(),
                                     state.dataCTElectricGenerator->CTGenerator.end(),
                                     [&objectName](const CTGeneratorData &CTElecGen) { return CTElecGen.Name == objectName; });
-        if (myCTGen != state.dataCTElectricGenerator->CTGenerator.end()) return myCTGen;
+        if (myCTGen != state.dataCTElectricGenerator->CTGenerator.end()) {
+            return myCTGen;
+        }
         // If we didn't find it, fatal
         ShowFatalError(state,
                        format("LocalCombustionTurbineGeneratorFactory: Error getting inputs for combustion turbine generator named: {}",
@@ -145,6 +147,7 @@ namespace CTElectricGenerator {
         // PURPOSE OF THIS SUBROUTINE:
         // This routine will get the input
         // required by the CT Generator models.
+        static constexpr std::string_view routineName = "GetCTGeneratorInput";
 
         int NumAlphas;                // Number of elements in the alpha array
         int NumNums;                  // Number of elements in the numeric array
@@ -179,6 +182,8 @@ namespace CTElectricGenerator {
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
 
+            ErrorObjectHeader eoh{routineName, state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)};
+
             state.dataCTElectricGenerator->CTGenerator(genNum).Name = AlphArray(1);
 
             state.dataCTElectricGenerator->CTGenerator(genNum).RatedPowerOutput = NumArray(1);
@@ -206,51 +211,39 @@ namespace CTElectricGenerator {
 
             // Load Special CT Generator Input
 
-            state.dataCTElectricGenerator->CTGenerator(genNum).PLBasedFuelInputCurve =
-                Curve::GetCurveIndex(state, AlphArray(3)); // convert curve name to number
+            state.dataCTElectricGenerator->CTGenerator(genNum).PLBasedFuelInputCurve = Curve::GetCurve(state, AlphArray(3));
             if (state.dataCTElectricGenerator->CTGenerator(genNum).PLBasedFuelInputCurve == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(3), AlphArray(3)));
-                ShowContinueError(state, format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(3), AlphArray(3));
                 ErrorsFound = true;
             }
 
-            state.dataCTElectricGenerator->CTGenerator(genNum).TempBasedFuelInputCurve =
-                Curve::GetCurveIndex(state, AlphArray(4)); // convert curve name to number
-            if (state.dataCTElectricGenerator->CTGenerator(genNum).TempBasedFuelInputCurve == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(4), AlphArray(4)));
-                ShowContinueError(state, format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+            state.dataCTElectricGenerator->CTGenerator(genNum).TempBasedFuelInputCurve = Curve::GetCurve(state, AlphArray(4));
+            if (state.dataCTElectricGenerator->CTGenerator(genNum).TempBasedFuelInputCurve == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(4), AlphArray(4));
                 ErrorsFound = true;
             }
 
-            state.dataCTElectricGenerator->CTGenerator(genNum).ExhaustFlowCurve =
-                Curve::GetCurveIndex(state, AlphArray(5)); // convert curve name to number
-            if (state.dataCTElectricGenerator->CTGenerator(genNum).ExhaustFlowCurve == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(5), AlphArray(5)));
-                ShowContinueError(state, format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+            state.dataCTElectricGenerator->CTGenerator(genNum).ExhaustFlowCurve = Curve::GetCurve(state, AlphArray(5));
+            if (state.dataCTElectricGenerator->CTGenerator(genNum).ExhaustFlowCurve == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(5), AlphArray(5));
                 ErrorsFound = true;
             }
 
-            state.dataCTElectricGenerator->CTGenerator(genNum).PLBasedExhaustTempCurve =
-                Curve::GetCurveIndex(state, AlphArray(6)); // convert curve name to number
-            if (state.dataCTElectricGenerator->CTGenerator(genNum).PLBasedExhaustTempCurve == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(6), AlphArray(6)));
-                ShowContinueError(state, format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+            state.dataCTElectricGenerator->CTGenerator(genNum).PLBasedExhaustTempCurve = Curve::GetCurve(state, AlphArray(6));
+            if (state.dataCTElectricGenerator->CTGenerator(genNum).PLBasedExhaustTempCurve == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(6), AlphArray(6));
                 ErrorsFound = true;
             }
 
-            state.dataCTElectricGenerator->CTGenerator(genNum).TempBasedExhaustTempCurve =
-                Curve::GetCurveIndex(state, AlphArray(7)); // convert curve name to number
-            if (state.dataCTElectricGenerator->CTGenerator(genNum).TempBasedExhaustTempCurve == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(7), AlphArray(7)));
-                ShowContinueError(state, format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+            state.dataCTElectricGenerator->CTGenerator(genNum).TempBasedExhaustTempCurve = Curve::GetCurve(state, AlphArray(7));
+            if (state.dataCTElectricGenerator->CTGenerator(genNum).TempBasedExhaustTempCurve == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(7), AlphArray(7));
                 ErrorsFound = true;
             }
 
-            state.dataCTElectricGenerator->CTGenerator(genNum).QLubeOilRecoveredCurve =
-                Curve::GetCurveIndex(state, AlphArray(8)); // convert curve name to number
-            if (state.dataCTElectricGenerator->CTGenerator(genNum).QLubeOilRecoveredCurve == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(8), AlphArray(8)));
-                ShowContinueError(state, format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+            state.dataCTElectricGenerator->CTGenerator(genNum).QLubeOilRecoveredCurve = Curve::GetCurve(state, AlphArray(8));
+            if (state.dataCTElectricGenerator->CTGenerator(genNum).QLubeOilRecoveredCurve == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(8), AlphArray(8));
                 ErrorsFound = true;
             }
 
@@ -363,73 +356,71 @@ namespace CTElectricGenerator {
                             "Generator Produced AC Electricity Rate",
                             Constant::Units::W,
                             this->ElecPowerGenerated,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             this->Name);
 
         SetupOutputVariable(state,
                             "Generator Produced AC Electricity Energy",
                             Constant::Units::J,
                             this->ElecEnergyGenerated,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Summed,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Sum,
                             this->Name,
                             Constant::eResource::ElectricityProduced,
-                            OutputProcessor::SOVEndUseCat::Cogeneration,
-                            {},
-                            OutputProcessor::SOVGroup::Plant);
+                            OutputProcessor::Group::Plant,
+                            OutputProcessor::EndUseCat::Cogeneration);
 
         SetupOutputVariable(state,
                             format("Generator {} Rate", sFuelType),
                             Constant::Units::W,
                             this->FuelEnergyUseRate,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             this->Name);
 
         SetupOutputVariable(state,
                             format("Generator {} Energy", sFuelType),
                             Constant::Units::J,
                             this->FuelEnergy,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Summed,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Sum,
                             this->Name,
                             Constant::eFuel2eResource[(int)this->FuelType],
-                            OutputProcessor::SOVEndUseCat::Cogeneration,
-                            {},
-                            OutputProcessor::SOVGroup::Plant);
+                            OutputProcessor::Group::Plant,
+                            OutputProcessor::EndUseCat::Cogeneration);
 
         //    general fuel use report (to match other generators)
         SetupOutputVariable(state,
                             "Generator Fuel HHV Basis Rate",
                             Constant::Units::W,
                             this->FuelEnergyUseRate,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             this->Name);
 
         SetupOutputVariable(state,
                             "Generator Fuel HHV Basis Energy",
                             Constant::Units::J,
                             this->FuelEnergy,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Summed,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Sum,
                             this->Name);
 
         SetupOutputVariable(state,
                             format("Generator {} Mass Flow Rate", sFuelType),
                             Constant::Units::kg_s,
                             this->FuelMdot,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             this->Name);
 
         SetupOutputVariable(state,
                             "Generator Exhaust Air Temperature",
                             Constant::Units::C,
                             this->ExhaustStackTemp,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             this->Name);
 
         if (this->HeatRecActive) {
@@ -437,80 +428,78 @@ namespace CTElectricGenerator {
                                 "Generator Exhaust Heat Recovery Rate",
                                 Constant::Units::W,
                                 this->QExhaustRecovered,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 this->Name);
 
             SetupOutputVariable(state,
                                 "Generator Exhaust Heat Recovery Energy",
                                 Constant::Units::J,
                                 this->ExhaustEnergyRec,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 this->Name,
                                 Constant::eResource::EnergyTransfer,
-                                OutputProcessor::SOVEndUseCat::HeatRecovery,
-                                {},
-                                OutputProcessor::SOVGroup::Plant);
+                                OutputProcessor::Group::Plant,
+                                OutputProcessor::EndUseCat::HeatRecovery);
 
             SetupOutputVariable(state,
                                 "Generator Lube Heat Recovery Rate",
                                 Constant::Units::W,
                                 this->QLubeOilRecovered,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 this->Name);
 
             SetupOutputVariable(state,
                                 "Generator Lube Heat Recovery Energy",
                                 Constant::Units::J,
                                 this->LubeOilEnergyRec,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 this->Name,
                                 Constant::eResource::EnergyTransfer,
-                                OutputProcessor::SOVEndUseCat::HeatRecovery,
-                                {},
-                                OutputProcessor::SOVGroup::Plant);
+                                OutputProcessor::Group::Plant,
+                                OutputProcessor::EndUseCat::HeatRecovery);
 
             SetupOutputVariable(state,
                                 "Generator Produced Thermal Rate",
                                 Constant::Units::W,
                                 this->QTotalHeatRecovered,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 this->Name);
 
             SetupOutputVariable(state,
                                 "Generator Produced Thermal Energy",
                                 Constant::Units::J,
                                 this->TotalHeatEnergyRec,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Summed,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Sum,
                                 this->Name);
 
             SetupOutputVariable(state,
                                 "Generator Heat Recovery Inlet Temperature",
                                 Constant::Units::C,
                                 this->HeatRecInletTemp,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 this->Name);
 
             SetupOutputVariable(state,
                                 "Generator Heat Recovery Outlet Temperature",
                                 Constant::Units::C,
                                 this->HeatRecOutletTemp,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 this->Name);
 
             SetupOutputVariable(state,
                                 "Generator Heat Recovery Mass Flow Rate",
                                 Constant::Units::kg_s,
                                 this->HeatRecMdot,
-                                OutputProcessor::SOVTimeStepType::System,
-                                OutputProcessor::SOVStoreType::Average,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
                                 this->Name);
         }
     }
@@ -559,11 +548,7 @@ namespace CTElectricGenerator {
             int heatRecInNode = this->HeatRecInletNodeNum;
             heatRecInTemp = state.dataLoopNodes->Node(heatRecInNode).Temp;
 
-            heatRecCp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                               state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).FluidName,
-                                                               heatRecInTemp,
-                                                               state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).FluidIndex,
-                                                               RoutineName);
+            heatRecCp = state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).glycol->getSpecificHeat(state, heatRecInTemp, RoutineName);
             if (FirstHVACIteration && RunFlag) {
                 heatRecMdot = this->DesignHeatRecMassFlowRate;
             } else {
@@ -619,14 +604,14 @@ namespace CTElectricGenerator {
         // The TempBasedFuelInputCurve is a correction based on deviation from design inlet air temperature conditions.
         // The first coefficient of this fit should be 1.0 to ensure that no correction is made at design conditions.
         // (EFUEL) rate of Fuel Energy Required to run COMBUSTION turbine (W)
-        Real64 FuelUseRate = elecPowerGenerated * Curve::CurveValue(state, this->PLBasedFuelInputCurve, PLR) *
-                             Curve::CurveValue(state, this->TempBasedFuelInputCurve, ambientDeltaT);
+        Real64 FuelUseRate =
+            elecPowerGenerated * this->PLBasedFuelInputCurve->value(state, PLR) * this->TempBasedFuelInputCurve->value(state, ambientDeltaT);
 
         // Use Curve fit to determine Exhaust Flow.  This curve shows the ratio of exhaust gas flow (kg/s) to electric power
         // output (J/s).  The units on ExhaustFlowCurve are (kg/J).  When multiplied by the rated power of the unit,
         // it gives the exhaust flow rate in kg/s
         // (FEX) Exhaust Gas Flow Rate cubic meters per second???
-        Real64 exhaustFlow = ratedPowerOutput * Curve::CurveValue(state, this->ExhaustFlowCurve, ambientDeltaT);
+        Real64 exhaustFlow = ratedPowerOutput * this->ExhaustFlowCurve->value(state, ambientDeltaT);
 
         // Use Curve fit to determine Exhaust Temperature.  This curve calculates the exhaust temperature (C) by
         // multiplying the exhaust temperature (C) for a particular part load as given by PLBasedExhaustTempCurve
@@ -637,8 +622,7 @@ namespace CTElectricGenerator {
         if ((PLR > 0.0) && ((exhaustFlow > 0.0) || (maxExhaustperCTPower > 0.0))) {
 
             // (TEX) Exhaust Gas Temperature in C
-            Real64 exhaustTemp = Curve::CurveValue(state, this->PLBasedExhaustTempCurve, PLR) *
-                                 Curve::CurveValue(state, this->TempBasedExhaustTempCurve, ambientDeltaT);
+            Real64 exhaustTemp = this->PLBasedExhaustTempCurve->value(state, PLR) * this->TempBasedExhaustTempCurve->value(state, ambientDeltaT);
 
             // (UACGC) Heat Exchanger UA to Capacity
             Real64 UA_loc = this->UACoef[0] * std::pow(ratedPowerOutput, this->UACoef[1]);
@@ -659,7 +643,7 @@ namespace CTElectricGenerator {
         // multiplying the total power generated by the fraction of that power that could be recovered in the lube oil at that
         // particular part load.
         // recovered lube oil heat (W)
-        Real64 QLubeOilRec = elecPowerGenerated * Curve::CurveValue(state, this->QLubeOilRecoveredCurve, PLR);
+        Real64 QLubeOilRec = elecPowerGenerated * this->QLubeOilRecoveredCurve->value(state, PLR);
 
         // Check for divide by zero
         Real64 HeatRecOutTemp; // Heat Recovery Fluid Outlet Temperature (C)
@@ -681,7 +665,9 @@ namespace CTElectricGenerator {
         if (HeatRecOutTemp > this->HeatRecMaxTemp) {
             if (this->HeatRecMaxTemp != heatRecInTemp) {
                 MinHeatRecMdot = (QExhaustRec + QLubeOilRec) / (heatRecCp * (this->HeatRecMaxTemp - heatRecInTemp));
-                if (MinHeatRecMdot < 0.0) MinHeatRecMdot = 0.0;
+                if (MinHeatRecMdot < 0.0) {
+                    MinHeatRecMdot = 0.0;
+                }
             }
 
             // Recalculate Outlet Temperature, with adjusted flowrate
@@ -814,11 +800,7 @@ namespace CTElectricGenerator {
             int HeatRecOutletNode = this->HeatRecOutletNodeNum;
 
             // size mass flow rate
-            Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).FluidName,
-                                                           Constant::InitConvTemp,
-                                                           state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
+            Real64 rho = state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
 
             this->DesignHeatRecMassFlowRate = rho * this->DesignHeatRecVolFlowRate;
 

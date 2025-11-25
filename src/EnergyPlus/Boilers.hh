@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -68,6 +68,10 @@ namespace EnergyPlus {
 // Forward declarations
 struct EnergyPlusData;
 
+namespace Curve {
+    struct Curve;
+}
+
 namespace Boilers {
 
     // water temperature evaluation method
@@ -108,7 +112,7 @@ namespace Boilers {
         Real64 OptPartLoadRat = 0.0;                                 // Optimal operating part load ratio
         Real64 OperPartLoadRat = 0.0;                                // Actual operating part load ratio
         TempMode CurveTempMode = TempMode::NOTSET;                   // water temp to use in curve, switch between entering and leaving
-        int EfficiencyCurvePtr = 0;                                  // Index to efficiency curve
+        Curve::Curve *EfficiencyCurve = nullptr;                     // Efficiency curve
         Real64 TempUpLimitBoilerOut = 0.0;                           // C - Boiler outlet maximum temperature limit
         Real64 ParasiticElecLoad = 0.0;                              // W - Parasitic electric power (e.g. forced draft fan)
         Real64 ParasiticFuelConsumption = 0.0; // parasitic fuel consumption associated with the boiler (standing pilot light) [J]
@@ -189,9 +193,17 @@ struct BoilersData : BaseGlobalStruct
     bool getBoilerInputFlag = true;
     Array1D<Boilers::BoilerSpecs> Boiler;
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void clear_state() override
     {
-        *this = BoilersData();
+        new (this) BoilersData();
     }
 };
 

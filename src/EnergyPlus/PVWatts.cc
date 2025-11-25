@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -177,40 +177,39 @@ namespace PVWatts {
                             "Generator Produced DC Electricity Rate",
                             Constant::Units::W,
                             outputDCPower_,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             name_);
         SetupOutputVariable(state,
                             "Generator Produced DC Electricity Energy",
                             Constant::Units::J,
                             outputDCEnergy_,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Summed,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Sum,
                             name_,
                             Constant::eResource::ElectricityProduced,
-                            OutputProcessor::SOVEndUseCat::Photovoltaic,
-                            {},
-                            OutputProcessor::SOVGroup::Plant);
+                            OutputProcessor::Group::Plant,
+                            OutputProcessor::EndUseCat::Photovoltaic);
         SetupOutputVariable(state,
                             "Generator PV Cell Temperature",
                             Constant::Units::C,
                             cellTemperature_,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             name_);
         SetupOutputVariable(state,
                             "Plane of Array Irradiance",
                             Constant::Units::W_m2,
                             planeOfArrayIrradiance_,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             name_);
         SetupOutputVariable(state,
                             "Shaded Percent",
                             Constant::Units::Perc,
                             shadedPercent_,
-                            OutputProcessor::SOVTimeStepType::System,
-                            OutputProcessor::SOVStoreType::Average,
+                            OutputProcessor::TimeStepType::System,
+                            OutputProcessor::StoreType::Average,
                             name_);
     }
 
@@ -389,7 +388,7 @@ namespace PVWatts {
         Real64 TimeStepSysSec = state.dataHVACGlobal->TimeStepSysSec;
 
         // We only run this once for each zone time step.
-        const int NumTimeStepsToday_loc = state.dataGlobal->HourOfDay * state.dataGlobal->NumOfTimeStepInHour + state.dataGlobal->TimeStep;
+        const int NumTimeStepsToday_loc = state.dataGlobal->HourOfDay * state.dataGlobal->TimeStepsInHour + state.dataGlobal->TimeStep;
         if (NumTimeStepsToday_ != NumTimeStepsToday_loc) {
             NumTimeStepsToday_ = NumTimeStepsToday_loc;
         } else {
@@ -403,7 +402,7 @@ namespace PVWatts {
         ssc_data_set_number(pvwattsData_, "month", state.dataEnvrn->Month);
         ssc_data_set_number(pvwattsData_, "day", state.dataEnvrn->DayOfMonth);
         ssc_data_set_number(pvwattsData_, "hour", state.dataGlobal->HourOfDay - 1);
-        ssc_data_set_number(pvwattsData_, "minute", (state.dataGlobal->TimeStep - 0.5) * state.dataGlobal->MinutesPerTimeStep);
+        ssc_data_set_number(pvwattsData_, "minute", (state.dataGlobal->TimeStep - 0.5) * state.dataGlobal->MinutesInTimeStep);
 
         // Weather Conditions
         ssc_data_set_number(pvwattsData_, "beam", state.dataEnvrn->BeamSolarRad);
@@ -432,7 +431,7 @@ namespace PVWatts {
             int sscErrType;
             float time;
             int i = 0;
-            while ((errtext = ssc_module_log(pvwattsModule_, i++, &sscErrType, &time))) {
+            while ((errtext = ssc_module_log(pvwattsModule_, i++, &sscErrType, &time)) != nullptr) {
                 std::string err("PVWatts: ");
                 switch (sscErrType) {
                 case SSC_WARNING:

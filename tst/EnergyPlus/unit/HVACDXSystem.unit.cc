@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -97,6 +97,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_DOASDXCoilTest)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    VS DX Cooling Coil,              !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    DX Cooling Coil Air Inlet Node,  !- Air Inlet Node Name",
         "    Heating Coil Air Inlet Node,     !- Air Outlet Node Name",
         "    5,                       !- Number of Speeds {dimensionless}",
@@ -422,20 +423,21 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_DOASDXCoilTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
-    ScheduleManager::ProcessScheduleInput(*state);
 
     std::string compName = "DX COOLING COIL SYSTEM";
     bool zoneEquipment = false;
-    UnitarySystems::UnitarySys::factory(*state, DataHVACGlobals::UnitarySys_AnyCoilType, compName, zoneEquipment, 0);
+    UnitarySystems::UnitarySys::factory(*state, HVAC::UnitarySysType::Unitary_AnyCoilType, compName, zoneEquipment, 0);
     UnitarySystems::UnitarySys *thisSys = &state->dataUnitarySystems->unitarySys[0];
 
     EXPECT_EQ(thisSys->Name, "DX COOLING COIL SYSTEM");
     EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);
     EXPECT_EQ(thisSys->UnitType, "CoilSystem:Cooling:DX");
-    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, DataHVACGlobals::Coil_CoolingAirToAirVariableSpeed);
+    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, HVAC::Coil_CoolingAirToAirVariableSpeed);
 }
 
 TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
@@ -460,6 +462,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    VS DX Cooling Coil,              !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    DX Cooling Coil Air Inlet Node,  !- Air Inlet Node Name",
         "    Heating Coil Air Inlet Node,     !- Air Outlet Node Name",
         "    5,                       !- Number of Speeds {dimensionless}",
@@ -556,10 +559,11 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     std::string compName = "DX COOLING COIL SYSTEM";
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
     state->dataGlobal->NumOfZones = 1;
     state->dataZoneEquip->ZoneEquipConfig.allocate(1);
@@ -577,8 +581,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).Name = compName;
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).CompType_Num = SimAirServingZones::CompType::DXSystem;
     OutputReportPredefined::SetPredefinedTables(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
-    state->dataScheduleMgr->Schedule(1).CurrentValue = 1.0; // Enable schedule without calling schedule manager
+    Sched::GetSchedule(*state, "AVAILSCHED")->currentVal = 1.0; // Enable schedule without calling schedule manager
 
     bool FirstHVACIteration = true;
     bool HXUnitOn = false;
@@ -587,7 +590,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
     int airLoopNum = 1;
 
     bool zoneEquipment = true;
-    UnitarySystems::UnitarySys::factory(*state, DataHVACGlobals::UnitarySys_AnyCoilType, compName, zoneEquipment, 0);
+    UnitarySystems::UnitarySys::factory(*state, HVAC::UnitarySysType::Unitary_AnyCoilType, compName, zoneEquipment, 0);
     UnitarySystems::UnitarySys *thisSys = &state->dataUnitarySystems->unitarySys[0];
     // call again to get the rest of the input when sysNum > -1
     UnitarySystems::UnitarySys::getUnitarySystemInput(*state, compName, false, 0);
@@ -595,7 +598,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
     EXPECT_EQ(thisSys->Name, "DX COOLING COIL SYSTEM");
     EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);
     EXPECT_EQ(thisSys->UnitType, "CoilSystem:Cooling:DX");
-    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, DataHVACGlobals::Coil_CoolingAirToAirVariableSpeed);
+    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, HVAC::Coil_CoolingAirToAirVariableSpeed);
     EXPECT_EQ(2, thisSys->CoolCtrlNode);
 
     // set up outdoor environment
@@ -617,7 +620,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_RHControl)
     state->dataLoopNodes->Node(ControlNode).HumRatMax = RHControlHumRat;
 
     // test sensible control
-    DataHVACGlobals::CompressorOperation CompressorOn = DataHVACGlobals::CompressorOperation::On;
+    HVAC::CompressorOp CompressorOn = HVAC::CompressorOp::On;
     thisSys->controlCoolingSystemToSP(*state, airLoopNum, FirstHVACIteration, HXUnitOn, CompressorOn);
     // system meets temperature set point
     EXPECT_NEAR(thisSys->m_DesiredOutletTemp, state->dataLoopNodes->Node(ControlNode).Temp, 0.001);
@@ -659,6 +662,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_LatentDegradation_Test)
 
         "  Coil:Cooling:DX:VariableSpeed,",
         "    VS DX Cooling Coil,              !- Name",
+        "    ,                        !- Availability Schedule Name",
         "    DX Cooling Coil Air Inlet Node,  !- Air Inlet Node Name",
         "    Heating Coil Air Inlet Node,     !- Air Outlet Node Name",
         "    5,                       !- Number of Speeds {dimensionless}",
@@ -755,10 +759,11 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_LatentDegradation_Test)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     std::string compName = "DX COOLING COIL SYSTEM";
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
     state->dataGlobal->NumOfZones = 1;
     state->dataZoneEquip->ZoneEquipConfig.allocate(1);
@@ -776,8 +781,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_LatentDegradation_Test)
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).Name = compName;
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).CompType_Num = SimAirServingZones::CompType::DXSystem;
     OutputReportPredefined::SetPredefinedTables(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
-    state->dataScheduleMgr->Schedule(1).CurrentValue = 1.0; // Enable schedule without calling schedule manager
+    Sched::GetSchedule(*state, "AVAILSCHED")->currentVal = 1.0; // Enable schedule without calling schedule manager
 
     bool FirstHVACIteration = true;
     bool HXUnitOn = false;
@@ -786,7 +790,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_LatentDegradation_Test)
     int airLoopNum = 1;
 
     bool zoneEquipment = true;
-    UnitarySystems::UnitarySys::factory(*state, DataHVACGlobals::UnitarySys_AnyCoilType, compName, zoneEquipment, 0);
+    UnitarySystems::UnitarySys::factory(*state, HVAC::UnitarySysType::Unitary_AnyCoilType, compName, zoneEquipment, 0);
     UnitarySystems::UnitarySys *thisSys = &state->dataUnitarySystems->unitarySys[0];
     // call again to get the rest of the input when sysNum > -1
     UnitarySystems::UnitarySys::getUnitarySystemInput(*state, compName, false, 0);
@@ -808,7 +812,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedCoils_LatentDegradation_Test)
     state->dataLoopNodes->Node(ControlNode).TempSetPoint = thisSys->m_DesiredOutletTemp;
 
     // test sensible control
-    DataHVACGlobals::CompressorOperation CompressorOn = DataHVACGlobals::CompressorOperation::On;
+    HVAC::CompressorOp CompressorOn = HVAC::CompressorOp::On;
     thisSys->controlCoolingSystemToSP(*state, airLoopNum, FirstHVACIteration, HXUnitOn, CompressorOn);
     Real64 SHR = state->dataVariableSpeedCoils->VarSpeedCoil(1).QSensible / state->dataVariableSpeedCoils->VarSpeedCoil(1).QLoadTotal;
     EXPECT_NEAR(SHR, 0.49605, 0.0001);
@@ -1029,10 +1033,11 @@ TEST_F(EnergyPlusFixture, NewDXCoilModel_RHControl)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     std::string compName = "DX COOLING COIL SYSTEM";
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
     state->dataZoneEquip->ZoneEquipInputsFilled = true;
     state->dataGlobal->NumOfZones = 1;
     state->dataZoneEquip->ZoneEquipConfig.allocate(1);
@@ -1051,8 +1056,7 @@ TEST_F(EnergyPlusFixture, NewDXCoilModel_RHControl)
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).Name = compName;
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).CompType_Num = SimAirServingZones::CompType::DXSystem;
     OutputReportPredefined::SetPredefinedTables(*state);
-    ScheduleManager::ProcessScheduleInput(*state);
-    state->dataScheduleMgr->Schedule(1).CurrentValue = 1.0; // Enable schedule without calling schedule manager
+    Sched::GetSchedule(*state, "AVAILSCHED")->currentVal = 1.0; // Enable schedule without calling schedule manager
 
     bool FirstHVACIteration = true;
     bool HXUnitOn = false;
@@ -1062,7 +1066,7 @@ TEST_F(EnergyPlusFixture, NewDXCoilModel_RHControl)
     int airLoopNum = 1;
 
     bool zoneEquipment = true;
-    UnitarySystems::UnitarySys::factory(*state, DataHVACGlobals::UnitarySys_AnyCoilType, compName, zoneEquipment, 0);
+    UnitarySystems::UnitarySys::factory(*state, HVAC::UnitarySysType::Unitary_AnyCoilType, compName, zoneEquipment, 0);
     UnitarySystems::UnitarySys *thisSys = &state->dataUnitarySystems->unitarySys[0];
     // call again to get the rest of the input when sysNum > -1
     UnitarySystems::UnitarySys::getUnitarySystemInput(*state, compName, false, 0);
@@ -1070,7 +1074,7 @@ TEST_F(EnergyPlusFixture, NewDXCoilModel_RHControl)
     EXPECT_EQ(thisSys->Name, "DX COOLING COIL SYSTEM");
     EXPECT_FALSE(thisSys->m_ISHundredPercentDOASDXCoil);
     EXPECT_EQ(thisSys->UnitType, "CoilSystem:Cooling:DX");
-    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, DataHVACGlobals::CoilDX_Cooling);
+    EXPECT_EQ(thisSys->m_CoolingCoilType_Num, HVAC::CoilDX_Cooling);
     EXPECT_EQ(2, thisSys->CoolCtrlNode);
 
     // set up outdoor environment
@@ -1101,7 +1105,7 @@ TEST_F(EnergyPlusFixture, NewDXCoilModel_RHControl)
     state->dataSize->UnitarySysEqSizing.allocate(1);
     // run init to size system
     thisSys->initUnitarySystems(*state, 1, FirstHVACIteration, 0.0);
-    DataHVACGlobals::CompressorOperation CompOn = DataHVACGlobals::CompressorOperation::On;
+    HVAC::CompressorOp CompOn = HVAC::CompressorOp::On;
     thisSys->controlCoolingSystemToSP(*state, airLoopNum, FirstHVACIteration, HXUnitOn, CompOn);
     // system meets temperature set point
     Real64 outTemp1 = state->dataLoopNodes->Node(ControlNode).Temp;

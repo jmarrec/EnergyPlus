@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -50,10 +50,14 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
+#include <ObjexxFCL/Vector3.hh>
+
+using ObjexxFCL::Vector3;
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/ScheduleManager.hh>
 
 namespace EnergyPlus {
 
@@ -61,6 +65,16 @@ namespace EnergyPlus {
 struct EnergyPlusData;
 
 namespace DataEnvironment {
+
+    enum class GroundTempType
+    {
+        Invalid = -1,
+        BuildingSurface,
+        Shallow,
+        Deep,
+        FCFactorMethod,
+        Num
+    };
 
     Real64 constexpr EarthRadius(6356000.0);          // Radius of the Earth (m)
     Real64 constexpr AtmosphericTempGradient(0.0065); // Standard atmospheric air temperature gradient (K/m)
@@ -100,11 +114,9 @@ struct EnvironmentData : BaseGlobalStruct
     Real64 GndReflectanceForDayltg = 0.0;      // Ground visible reflectance for use in daylighting calc
     Real64 GndReflectance = 0.0;               // Ground visible reflectance from input
     Real64 GndSolarRad = 0.0;                  // Current ground reflected radiation
-    Real64 GroundTemp = 0.0;                   // Current ground temperature {C}
     Real64 GroundTempKelvin = 0.0;             // Current ground temperature {K}
-    Real64 GroundTempFC = 0.0;                 // Current ground temperature defined for F or C factor method {C}
-    Real64 GroundTemp_Surface = 0.0;           // Current surface ground temperature {C}
-    Real64 GroundTemp_Deep = 0.0;              // Current deep ground temperature
+    std::array<Real64, (int)DataEnvironment::GroundTempType::Num> GroundTemp = {0.0, 0.0, 0.0, 0.0};
+
     int HolidayIndex = 0; // Indicates whether current day is a holiday and if so what type - HolidayIndex=(0-no holiday, 1-holiday type 1, ...)
     int HolidayIndexTomorrow = 0;                 // Tomorrow's Holiday Index
     bool IsRain = false;                          // Surfaces are wet for this time interval
@@ -139,7 +151,7 @@ struct EnvironmentData : BaseGlobalStruct
     Real64 EMSWindDirOverrideValue = 0.0;                       // EMS override value for outdoor air wind direction
     Real64 WindSpeed = 0.0;                                     // Current outdoor air wind speed
     bool EMSWindSpeedOverrideOn = false;                        // EMS flag for outdoor air wind speed
-    Real64 EMSWindSpeedOverrideValue = false;                   // EMS override value for outdoor air wind speed
+    Real64 EMSWindSpeedOverrideValue = 0.0;                     // EMS override value for outdoor air wind speed
     Real64 WaterMainsTemp = 0.0;                                // Current water mains temperature
     int Year = 0;                                               // Current calendar year of the simulation from the weather file
     int YearTomorrow = 0;                                       // Tomorrow's calendar year of the simulation
@@ -182,10 +194,9 @@ struct EnvironmentData : BaseGlobalStruct
     Real64 SiteWindExp = 0.22;                                  // Exponent for the wind velocity profile at the site
     Real64 SiteWindBLHeight = 370.0;                            // Boundary layer height for the wind velocity profile at the site (m)
     Real64 SiteTempGradient = 0.0065;                           // Air temperature gradient coefficient (K/m)
-    bool GroundTempObjInput = false;                            // Ground temperature object input
-    bool GroundTemp_SurfaceObjInput = false;                    // Surface ground temperature object input
-    bool GroundTemp_DeepObjInput = false;                       // Deep ground temperature object input
-    bool FCGroundTemps = false;
+
+    std::array<bool, (int)DataEnvironment::GroundTempType::Num> GroundTempInputs = {false, false, false, false}; // Ground temperature object input
+
     bool DisplayWeatherMissingDataWarnings = false; // Display missing/out of range weather warnings
     bool IgnoreSolarRadiation = false;              // TRUE if all solar radiation is to be ignored
     bool IgnoreBeamRadiation = false;               // TRUE if beam (aka direct normal) radiation is to be ignored
@@ -198,11 +209,19 @@ struct EnvironmentData : BaseGlobalStruct
     std::string EnvironmentStartEnd;   // Start/End dates for Environment
     bool CurrentYearIsLeapYear =
         false; // true when current year is leap year (convoluted logic dealing with whether weather file allows leap years, runperiod inputs.
-    int varyingLocationSchedIndexLat = 0;
-    int varyingLocationSchedIndexLong = 0;
-    int varyingOrientationSchedIndex = 0;
+    Sched::Schedule *varyingLocationLatSched = nullptr;
+    Sched::Schedule *varyingLocationLongSched = nullptr;
+    Sched::Schedule *varyingOrientationSched = nullptr;
     bool forceBeginEnvResetSuppress = false; // for PerformancePrecisionTradeoffs
     bool oneTimeCompRptHeaderFlag = true;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

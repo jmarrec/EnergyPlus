@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -56,26 +56,19 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #ifndef __cppcheck__
-#if __has_include(<filesystem>)
-#include <filesystem>
+#    if __has_include(<filesystem>)
+#        include <filesystem>
 namespace fs = std::filesystem;
-#elif __has_include(<experimental/filesystem>)
-#include <experimental/filesystem>
+#    elif __has_include(<experimental/filesystem>)
+#        include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
-#else
+#    else
 // cppcheck-suppress preprocessorErrorDirective
-#error "no filesystem support"
-#endif
+#        error "no filesystem support"
+#    endif
 #endif
 
 #include <EnergyPlus/EnergyPlus.hh>
-
-// Add a custom formatter for fmt
-namespace fmt {
-template <> struct formatter<fs::path> : formatter<std::string>
-{
-};
-} // namespace fmt
 
 // If we want to allow this kind of stuff
 // fs::path p = "folder/eplus";
@@ -119,23 +112,23 @@ namespace FileSystem {
         Num
     };
 
-    inline constexpr bool is_all_json_type(FileTypes t)
+    constexpr bool is_all_json_type(FileTypes t)
     {
         return t > FileTypes::Invalid && t <= FileTypes::last_binary_json_type;
     }
-    inline constexpr bool is_json_type(FileTypes t)
+    constexpr bool is_json_type(FileTypes t)
     {
         return t > FileTypes::Invalid && t <= FileTypes::last_json_type;
     }
-    inline constexpr bool is_binary_json_type(FileTypes t)
+    constexpr bool is_binary_json_type(FileTypes t)
     {
         return t > FileTypes::last_json_type && t <= FileTypes::last_binary_json_type;
     }
-    inline constexpr bool is_idf_type(FileTypes t)
+    constexpr bool is_idf_type(FileTypes t)
     {
         return t == FileTypes::IDF || t == FileTypes::IMF;
     }
-    inline constexpr bool is_flat_file_type(FileTypes t)
+    constexpr bool is_flat_file_type(FileTypes t)
     {
         return t > FileTypes::last_binary_json_type && t <= FileTypes::last_flat_file_type;
     }
@@ -179,7 +172,7 @@ namespace FileSystem {
 
     bool fileExists(fs::path const &filePath);
 
-    // Checks that fileExists(filePath), if so tries to rename to destination, falling back on copy+remove if failed (if trying to do move accross
+    // Checks that fileExists(filePath), if so tries to rename to destination, falling back on copy+remove if failed (if trying to do move across
     // devices for eg)
     void moveFile(fs::path const &filePath, fs::path const &destinationPath);
 
@@ -229,8 +222,8 @@ namespace FileSystem {
         is_any<T, std::unique_ptr<fs::path>, std::unique_ptr<fmt::ostream>, std::unique_ptr<std::ostream>, std::unique_ptr<FILE *>>::value;
 
     template <class T, FileTypes fileType>
-    inline constexpr bool enable_json_v = is_all_json_type(fileType) && is_any<T, nlohmann::json>::value &&
-                                          !is_any<T, std::string_view, std::string, char *>::value;
+    inline constexpr bool enable_json_v =
+        is_all_json_type(fileType) && is_any<T, nlohmann::json>::value && !is_any<T, std::string_view, std::string, char *>::value;
 
     template <FileTypes fileType> void writeFile(fs::path const &filePath, const std::string_view data)
     {
@@ -320,6 +313,43 @@ namespace FileSystem {
         }
     }
 
+    std::string toString(fs::path const &p);
+
+    std::string toGenericString(fs::path const &p);
+
+    fs::path appendSuffixToPath(fs::path const &outputFilePrefixFullPath, const std::string &suffix);
+
 } // namespace FileSystem
 } // namespace EnergyPlus
+
+// Add a custom formatter for fmt
+template <> struct fmt::formatter<fs::path>
+{
+    // Presentation format: 's' - string, 'g' - generic_string.
+    char presentation = 's';
+
+    // Parses format specifications of the form ['s' | 'g'].
+    constexpr auto parse(format_parse_context &ctx) -> decltype(ctx.begin())
+    {
+        // Parse the presentation format and store it in the formatter:
+        auto it = ctx.begin(), end = ctx.end();
+        if (it != end && (*it == 's' || *it == 'g')) {
+            presentation = *it++;
+        }
+
+        // Check if reached the end of the range:
+        if (it != end && *it != '}') {
+            throw format_error("invalid format");
+        };
+
+        // Return an iterator past the end of the parsed range:
+        return it;
+    }
+
+    template <typename FormatContext> auto format(const fs::path &p, FormatContext &ctx) -> decltype(ctx.out())
+    {
+        return format_to(ctx.out(), "{}", presentation == 'g' ? EnergyPlus::FileSystem::toGenericString(p) : EnergyPlus::FileSystem::toString(p));
+    }
+};
+
 #endif

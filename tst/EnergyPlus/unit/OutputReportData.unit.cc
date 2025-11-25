@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -89,52 +89,55 @@ TEST_F(EnergyPlusFixture, OutputReportData_getVariableKeys)
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite1",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite2",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Energy",
                         Constant::Units::J,
                         extLitUse,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
                         "Lite3",
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::ExteriorLights,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
                         "General");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite1");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite2");
     SetupOutputVariable(*state,
                         "Exterior Lights Electric Power",
                         Constant::Units::W,
                         extLitPow,
-                        OutputProcessor::SOVTimeStepType::Zone,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Average,
                         "Lite3");
 
     int keyCount = 0;
@@ -201,7 +204,7 @@ TEST_F(EnergyPlusFixture, OutputReportData_Regex)
     ASSERT_TRUE(process_idf(idf_objects));
 
     EXPECT_EQ(state->dataOutput->NumConsideredOutputVariables, 10);
-    // FindItemInVariableList is case-insentive, so we also test that
+    // FindItemInVariableList is case-insensitive, so we also test that
     EXPECT_TRUE(FindItemInVariableList(*state, "Outside Air Inlet Node", "System Node Mass Flow Rate"));
     EXPECT_TRUE(FindItemInVariableList(*state, "OUTSIDE AIR INLET NODE", "System Node Mass Flow Rate"));
     EXPECT_TRUE(FindItemInVariableList(*state, "OutsIDE AiR InLEt NoDE", "System NoDE MaSS FLOw Rate"));

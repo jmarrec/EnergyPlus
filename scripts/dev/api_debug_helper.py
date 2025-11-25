@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University
+# EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
@@ -71,34 +71,38 @@
 #   Because this script starts with a make command, it will then build the updated code before trying to call the API
 #   This allows for rapid debugging iteration
 
-from os import cpu_count
+import os
 from pathlib import Path
 from subprocess import check_call
 from sys import exit, path
 from tempfile import mkdtemp
 
-repo_root = Path(__file__).resolve().parent.parent.parent
-build_dir = repo_root / 'builds' / 'r'
-products_dir = build_dir / 'Products'
-file_to_run = repo_root / 'testfiles' / 'PythonPluginCustomOutputVariable.idf'
+DO_BUILD = False
 
-# this will automatically build E+ each run, so you can quickly make changes and re-execute inside the debugger
-check_call(['make', '-j', str(cpu_count() - 2), 'energyplus'], cwd=str(build_dir))
+repo_root = Path(__file__).resolve().parent.parent.parent
+file_to_run = repo_root / "testfiles" / "PythonPluginCustomOutputVariable.idf"
+
+if DO_BUILD:
+    build_dir = repo_root / "cmake-build-debug"
+    products_dir = build_dir / "Products"
+    make_tool = "/snap/clion/current/bin/ninja/linux/x64/ninja"  # 'make'
+
+    # os.cpu_count() returns Optional[int]
+    cpu_count = max(1, (os.cpu_count() or 1) - 2)
+
+    # this will automatically build E+ each run, so you can quickly make changes and re-execute inside the debugger
+    check_call([make_tool, "-j", str(cpu_count), "energyplus"], cwd=str(build_dir))
+else:
+    products_dir = Path("/tmp/EnergyPlus-24.1.0-241fc81186-Linux-Ubuntu22.04-x86_64")
+
 
 path.insert(0, str(products_dir))
-from pyenergyplus.api import EnergyPlusAPI
+from pyenergyplus.api import EnergyPlusAPI  # type: ignore[import]
 
 api = EnergyPlusAPI()
 state = api.state_manager.new_state()
 run_dir = mkdtemp()
 print(f"EnergyPlus starting with outputs in directory: {run_dir}")
-return_value = api.runtime.run_energyplus(
-    state, [
-        '-d',
-        run_dir,
-        '-D',
-        str(file_to_run)
-    ]
-)
+return_value = api.runtime.run_energyplus(state, ["-d", run_dir, "-D", str(file_to_run)])
 print(f"EnergyPlus finished with outputs in directory: {run_dir}")
 exit(return_value)

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -52,6 +52,7 @@
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantComponent.hh>
 #include <EnergyPlus/PlantLoopHeatPumpEIR.hh>
+#include <EnergyPlus/ScheduleManager.hh>
 #include <ObjexxFCL/Array1D.hh>
 
 namespace EnergyPlus::DataPlant {
@@ -187,9 +188,9 @@ struct ReportData
     int DedicHR_OpMode = 0;                 // not dispatched = 0, heating led = 1, cooling led = 2
     int BoilerAux_OpMode = 0;               // not Dispatched = 0, Boiler(s) On = 1
     Real64 BuildingPolledHeatingLoad = 0.0; // current  building heating loads from predicted sensible zone loads, air system ventilation loads, and
-                                            // any plant load profile process laods
+                                            // any plant load profile process loads
     Real64 BuildingPolledCoolingLoad = 0.0; //  current building Cooling loads from predicted sensible zone loads, air system ventilation loads, and
-                                            //  any plant load profile process laods
+                                            //  any plant load profile process loads
     Real64 PrimaryPlantHeatingLoad = 0.0;   // current apparent plant load on primary hot water plant served by heatpumps
     Real64 PrimaryPlantCoolingLoad = 0.0;   // current apparent plant load on primary chilled water plant served by heatpumps
     Real64 SecondaryPlantHeatingLoad = 0.0; // current apparent plant load on secondary hot water plant served by heatpumps
@@ -227,7 +228,7 @@ struct ChillerHeaterSupervisoryOperationData
     Array1D<int> PlantLoopIndicesBeingSupervised;          // if non zero then points to index of a plant loop that has this supervisory scheme as its
                                                            // operation scheme
     Array1D<int> SecondaryPlantLoopIndicesBeingSupervised; // if not zero then points to index of a plant loop that is treated as being a
-                                                           // seconday loop, as in primary secondary distribution plant configurations.
+                                                           // secondary loop, as in primary secondary distribution plant configurations.
     Array1D<PlantLocation> PlantLoadProfileComps;          // LoadProfile:Plant objects that may be loading loop
     Array1D<PlantLocation> PlantBoilerComps;               // Boilers that may need to be managed.
     Array1D<PlantLocation>
@@ -258,31 +259,29 @@ struct ChillerHeaterSupervisoryOperationData
 struct OperationData
 {
     // Members
-    std::string Name;               // The name of each item in the list
-    std::string TypeOf;             // The 'keyWord' identifying each item in the list
-    DataPlant::OpScheme Type;       // Op scheme type (from keyword)
-    std::string Sched;              // The name of the schedule associated with the list
-    int SchedPtr;                   // ALLOCATABLE to the schedule (for valid schedules)
-    bool Available;                 // TRUE = designated component or operation scheme available
-    int NumEquipLists;              // number of equipment lists
-    int CurListPtr;                 // points to the current equipment list
-    Array1D<EquipOpList> EquipList; // Component type list
-    int EquipListNumForLastStage;   // points to the equipment list with the highest upper limit
-    std::string ReferenceNodeName;  // DELTA CTRL ONLY--for calculation of delta Temp
-    int ReferenceNodeNumber;        // DELTA CTRL ONLY--for calculation of delta Temp
-    int ErlSimProgramMngr;          // EMS:ProgramManager to always run when this model is called
-    int ErlInitProgramMngr;         // EMS:ProgramManager to run when this model is initialized and setup
-    int initPluginLocation;         // If Python Plugins are used to init this, this defines the location in the plugin structure
-    int simPluginLocation;          // If Python Plugins are used to simulate this, this defines the location in the plugin structure
-    Real64 EMSIntVarLoopDemandRate; // EMS internal variable for loop-level demand rate, neg cooling [W]
+    std::string Name;                 // The name of each item in the list
+    std::string TypeOf;               // The 'keyWord' identifying each item in the list
+    DataPlant::OpScheme Type;         // Op scheme type (from keyword)
+    Sched::Schedule *sched = nullptr; // schedule associated with the list
+    bool Available;                   // TRUE = designated component or operation scheme available
+    int NumEquipLists;                // number of equipment lists
+    int CurListPtr;                   // points to the current equipment list
+    Array1D<EquipOpList> EquipList;   // Component type list
+    int EquipListNumForLastStage;     // points to the equipment list with the highest upper limit
+    std::string ReferenceNodeName;    // DELTA CTRL ONLY--for calculation of delta Temp
+    int ReferenceNodeNumber;          // DELTA CTRL ONLY--for calculation of delta Temp
+    int ErlSimProgramMngr;            // EMS:ProgramManager to always run when this model is called
+    int ErlInitProgramMngr;           // EMS:ProgramManager to run when this model is initialized and setup
+    int initPluginLocation;           // If Python Plugins are used to init this, this defines the location in the plugin structure
+    int simPluginLocation;            // If Python Plugins are used to simulate this, this defines the location in the plugin structure
+    Real64 EMSIntVarLoopDemandRate;   // EMS internal variable for loop-level demand rate, neg cooling [W]
     bool MyEnvrnFlag;
     ChillerHeaterSupervisoryOperationData *ChillerHeaterSupervisoryOperation = nullptr;
 
     // Default Constructor
     OperationData()
-        : Type(DataPlant::OpScheme::Invalid), SchedPtr(0), Available(false), NumEquipLists(0), CurListPtr(0), EquipListNumForLastStage(0),
-          ReferenceNodeNumber(0), ErlSimProgramMngr(0), ErlInitProgramMngr(0), initPluginLocation(-1), simPluginLocation(-1),
-          EMSIntVarLoopDemandRate(0.0), MyEnvrnFlag(true)
+        : Type(DataPlant::OpScheme::Invalid), Available(false), NumEquipLists(0), CurListPtr(0), EquipListNumForLastStage(0), ReferenceNodeNumber(0),
+          ErlSimProgramMngr(0), ErlInitProgramMngr(0), initPluginLocation(-1), simPluginLocation(-1), EMSIntVarLoopDemandRate(0.0), MyEnvrnFlag(true)
     {
     }
 };

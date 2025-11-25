@@ -1,19 +1,5 @@
 include(CMakeParseArguments)
-
-# Add google tests macro
-macro(ADD_GOOGLE_TESTS executable)
-  foreach(source ${ARGN})
-    string(REGEX MATCH .*cpp|.*cc source "${source}")
-    if(source)
-      file(READ "${source}" contents)
-      string(REGEX MATCHALL "TEST_?F?\\(([A-Za-z_0-9 ,]+)\\)" found_tests ${contents})
-      foreach(hit ${found_tests})
-        string(REGEX REPLACE ".*\\(( )*([A-Za-z_0-9]+)( )*,( )*([A-Za-z_0-9]+)( )*\\).*" "\\2.\\5" test_name ${hit})
-        add_test(NAME ${test_name} COMMAND "${executable}" "--gtest_filter=${test_name}")
-      endforeach(hit)
-    endif()
-  endforeach()
-endmacro()
+include(GoogleTest)
 
 # Create source groups automatically based on file path
 macro(CREATE_SRC_GROUPS SRC)
@@ -62,7 +48,11 @@ macro(CREATE_TEST_TARGETS BASE_NAME SRC DEPENDENCIES USE_PCH)
 
     target_link_libraries(${BASE_NAME}_tests PRIVATE ${ALL_DEPENDENCIES} gtest)
 
-    add_google_tests(${BASE_NAME}_tests ${SRC})
+    gtest_discover_tests(${BASE_NAME}_tests
+            DISCOVERY_TIMEOUT 30
+            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+    )
+
   endif()
 endmacro()
 
@@ -112,10 +102,6 @@ function(ADD_SIMULATION_TEST)
     if(ADD_SIM_TEST_PERFORMANCE)
       # For performance testing, it's more problematic, because that'll cut on the ReadVarEso time
       message(WARNING "Will not be able to call ReadVarEso unless BUILD_FORTRAN=TRUE, skipping flag -r.")
-    elseif(DO_REGRESSION_TESTING)
-      # DO_REGRESSION_TESTING shouldn't really occur here since EnergyPlus/CMakeLists.txt will throw an error if BUILD_FORTRAN isn't enabled
-      # Not that bad, just a dev warning
-      message(AUTHOR_WARNING "Will not be able to call ReadVarEso unless BUILD_FORTRAN=TRUE, skipping flag -r.")
     endif()
   endif()
 
@@ -148,8 +134,8 @@ function(ADD_SIMULATION_TEST)
       ${CMAKE_COMMAND} -DSOURCE_DIR=${PROJECT_SOURCE_DIR} -DBINARY_DIR=${PROJECT_BINARY_DIR} -DENERGYPLUS_EXE=$<TARGET_FILE:energyplus>
       -DIDF_FILE=${ADD_SIM_TEST_IDF_FILE} -DEPW_FILE=${ADD_SIM_TEST_EPW_FILE} -DENERGYPLUS_FLAGS=${ENERGYPLUS_FLAGS} -DBUILD_FORTRAN=${BUILD_FORTRAN}
       -DTEST_FILE_FOLDER=${TEST_FILE_FOLDER} -DRUN_CALLGRIND:BOOL=${RUN_CALLGRIND} -DVALGRIND=${VALGRIND} -DRUN_PERF_STAT:BOOL=${RUN_PERF_STAT}
-      -DPERF=${PERF} -P
-      ${PROJECT_SOURCE_DIR}/cmake/RunSimulation.cmake)
+      -DPERF=${PERF} -DPython_EXECUTABLE=${Python_EXECUTABLE}
+      -P ${PROJECT_SOURCE_DIR}/cmake/RunSimulation.cmake)
 
   if(ADD_SIM_TEST_COST AND NOT ADD_SIM_TEST_COST STREQUAL "")
     set_tests_properties("${TEST_CATEGORY}.${IDF_NAME}" PROPERTIES COST ${ADD_SIM_TEST_COST})
@@ -162,21 +148,6 @@ function(ADD_SIMULATION_TEST)
   else()
     set_tests_properties("${TEST_CATEGORY}.${IDF_NAME}" PROPERTIES PASS_REGULAR_EXPRESSION "Test Passed")
     set_tests_properties("${TEST_CATEGORY}.${IDF_NAME}" PROPERTIES FAIL_REGULAR_EXPRESSION "ERROR;FAIL;Test Failed")
-  endif()
-
-  if(DO_REGRESSION_TESTING AND (NOT ADD_SIM_TEST_EXPECT_FATAL))
-    add_test(
-      NAME "regression.${IDF_NAME}"
-      COMMAND
-        ${CMAKE_COMMAND} -DBINARY_DIR=${PROJECT_BINARY_DIR} -DPYTHON_EXECUTABLE=${Python_EXECUTABLE} -DIDF_FILE=${ADD_SIM_TEST_IDF_FILE}
-        -DREGRESSION_SCRIPT_PATH=${REGRESSION_SCRIPT_PATH} -DREGRESSION_BASELINE_PATH=${REGRESSION_BASELINE_PATH}
-        -DREGRESSION_BASELINE_SHA=${REGRESSION_BASELINE_SHA} -DCOMMIT_SHA=${COMMIT_SHA} -DDEVICE_ID=${DEVICE_ID} -P
-        ${PROJECT_SOURCE_DIR}/cmake/RunRegression.cmake)
-    # Note, CMake / CTest doesn't seem to validate if this dependent name actually exists,
-    # but it does seem to honor the requirement
-    set_tests_properties("regression.${IDF_NAME}" PROPERTIES DEPENDS "${TEST_CATEGORY}.${IDF_NAME}")
-    set_tests_properties("regression.${IDF_NAME}" PROPERTIES PASS_REGULAR_EXPRESSION "Success")
-    set_tests_properties("regression.${IDF_NAME}" PROPERTIES FAIL_REGULAR_EXPRESSION "ERROR;FAIL;Test Failed")
   endif()
 
   if(ENABLE_REVERSE_DD_TESTING AND (NOT ADD_SIM_TEST_EXPECT_FATAL))

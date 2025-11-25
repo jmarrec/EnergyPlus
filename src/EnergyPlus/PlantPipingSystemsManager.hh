@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -63,7 +63,7 @@
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
-#include <EnergyPlus/GroundTemperatureModeling/GroundTemperatureModelManager.hh>
+#include <EnergyPlus/GroundTemperatureModeling/BaseGroundTemperatureModel.hh>
 #include <EnergyPlus/Plant/Enums.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantComponent.hh>
@@ -82,9 +82,6 @@ namespace PlantPipingSystemsManager {
     extern std::string const ObjName_HorizTrench;
     extern std::string const ObjName_ZoneCoupled_Slab;
     extern std::string const ObjName_ZoneCoupled_Basement;
-
-    // Using/Aliasing
-    using namespace GroundTemperatureManager;
 
     enum class SegmentFlow
     {
@@ -170,6 +167,23 @@ namespace PlantPipingSystemsManager {
         HorizInsulation,
         VertInsulation,
         ZoneGroundInterface,
+        Num
+    };
+
+    enum class SlabPosition
+    {
+        Invalid = -1,
+        InGrade,
+        OnGrade,
+        Num
+    };
+
+    enum class HorizInsulation
+    {
+        Invalid = -1,
+        None,
+        Perimeter,
+        Full,
         Num
     };
 
@@ -774,7 +788,7 @@ namespace PlantPipingSystemsManager {
         BaseThermalPropertySet HorizInsProperties;
         BaseThermalPropertySet VertInsProperties;
         SimulationControl SimControls;
-        std::shared_ptr<BaseGroundTempsModel> groundTempModel;
+        GroundTemp::BaseGroundTempsModel *groundTempModel; // non-owning pointer
         BasementZoneInfo BasementZone;
         MoistureInfo Moisture;
         // "Internal" data structure variables
@@ -785,7 +799,7 @@ namespace PlantPipingSystemsManager {
         std::vector<ZoneCoupledSurfaceData> ZoneCoupledSurfaces;
         int ZoneCoupledOSCMIndex;
         Real64 PerimeterOffset;
-        bool SlabInGradeFlag;
+        SlabPosition slabPosition = SlabPosition::Invalid;
         int SlabMaterialNum;
         Real64 SlabArea;
         Real64 SlabWidth;
@@ -797,7 +811,7 @@ namespace PlantPipingSystemsManager {
         int x_max_index;
         int y_max_index;
         int z_max_index;
-        bool HorizInsPresentFlag;
+        HorizInsulation HorizIns = HorizInsulation::Invalid;
         int HorizInsMaterialNum;
         Real64 HorizInsThickness;
         Real64 HorizInsWidth;
@@ -810,7 +824,6 @@ namespace PlantPipingSystemsManager {
         int NumHeatFlux;
         bool ResetHeatFluxFlag;
         Real64 ConvectionCoefficient;
-        bool FullHorizInsPresent;
         bool VertInsPresentFlag;
         int VertInsMaterialNum;
         Real64 VertInsThickness;
@@ -821,9 +834,12 @@ namespace PlantPipingSystemsManager {
         int InsulationXIndex;
         int InsulationYIndex;
         int InsulationZIndex;
-        bool SimTimeStepFlag;
-        bool SimHourlyFlag;
-        bool SimDailyFlag;
+#ifdef GET_OUT
+        // Don't seem to be used anywhere
+        bool SimTimeStepFlag = false;
+        bool SimHourlyFlag = false;
+        bool SimDailyFlag = false;
+#endif // GET_OUT
         Real64 ZoneCoupledSurfaceTemp;
         Real64 BasementWallTemp;
         Real64 BasementFloorTemp;
@@ -851,13 +867,12 @@ namespace PlantPipingSystemsManager {
         Domain()
             : MaxIterationsPerTS(10), OneTimeInit(true), BeginSimInit(true), BeginSimEnvironment(true), DomainNeedsSimulation(true),
               DomainNeedsToBeMeshed(true), IsActuallyPartOfAHorizontalTrench(false), HasAPipeCircuit(true), HasZoneCoupledSlab(false),
-              HasZoneCoupledBasement(false), HasBasement(false), ZoneCoupledOSCMIndex(0), PerimeterOffset(0.0), SlabInGradeFlag(false),
-              SlabMaterialNum(0), SlabArea(0.0), SlabWidth(0.0), SlabLength(0.0), SlabThickness(0.0), XIndex(0), YIndex(0), ZIndex(0), x_max_index(0),
-              y_max_index(0), z_max_index(0), HorizInsPresentFlag(false), HorizInsMaterialNum(0), HorizInsThickness(0.0254), HorizInsWidth(0.0),
-              HeatFlux(0.0), WallHeatFlux(0.0), FloorHeatFlux(0.0), AggregateHeatFlux(0.0), AggregateWallHeatFlux(0.0), AggregateFloorHeatFlux(0.0),
-              NumHeatFlux(0), ResetHeatFluxFlag(true), ConvectionCoefficient(0.0), FullHorizInsPresent(false), VertInsPresentFlag(false),
-              VertInsMaterialNum(0), VertInsThickness(0.0254), VertInsDepth(0.0), XWallIndex(0), YFloorIndex(0), ZWallIndex(0), InsulationXIndex(0),
-              InsulationYIndex(0), InsulationZIndex(0), SimTimeStepFlag(false), SimHourlyFlag(false), SimDailyFlag(false),
+              HasZoneCoupledBasement(false), HasBasement(false), ZoneCoupledOSCMIndex(0), PerimeterOffset(0.0), SlabMaterialNum(0), SlabArea(0.0),
+              SlabWidth(0.0), SlabLength(0.0), SlabThickness(0.0), XIndex(0), YIndex(0), ZIndex(0), x_max_index(0), y_max_index(0), z_max_index(0),
+              HorizInsMaterialNum(0), HorizInsThickness(0.0254), HorizInsWidth(0.0), HeatFlux(0.0), WallHeatFlux(0.0), FloorHeatFlux(0.0),
+              AggregateHeatFlux(0.0), AggregateWallHeatFlux(0.0), AggregateFloorHeatFlux(0.0), NumHeatFlux(0), ResetHeatFluxFlag(true),
+              ConvectionCoefficient(0.0), VertInsPresentFlag(false), VertInsMaterialNum(0), VertInsThickness(0.0254), VertInsDepth(0.0),
+              XWallIndex(0), YFloorIndex(0), ZWallIndex(0), InsulationXIndex(0), InsulationYIndex(0), InsulationZIndex(0),
               ZoneCoupledSurfaceTemp(0.0), BasementWallTemp(0.0), BasementFloorTemp(0.0), NumDomainCells(0), NumGroundSurfCells(0),
               NumInsulationCells(0), NumSlabCells(0)
         {
@@ -1062,11 +1077,11 @@ namespace PlantPipingSystemsManager {
 
     void SimulateRadialInsulationCell(CartesianCell &ThisCell);
 
-    void SimulateRadialPipeCell(Circuit *thisCircuit, CartesianCell &ThisCell);
+    void SimulateRadialPipeCell(Circuit const *thisCircuit, CartesianCell &ThisCell);
 
-    void SimulateFluidCell(Circuit *thisCircuit, CartesianCell &ThisCell, Real64 FlowRate, Real64 EnteringFluidTemp);
+    void SimulateFluidCell(Circuit const *thisCircuit, CartesianCell &ThisCell, Real64 FlowRate, Real64 EnteringFluidTemp);
 
-    bool IsConverged_PipeCurrentToPrevIteration(Circuit *thisCircuit, CartesianCell const &CellToCheck);
+    bool IsConverged_PipeCurrentToPrevIteration(Circuit const *thisCircuit, CartesianCell const &CellToCheck);
 
 } // namespace PlantPipingSystemsManager
 
@@ -1081,6 +1096,14 @@ struct PlantPipingSysMgrData : BaseGlobalStruct
     std::vector<PlantPipingSystemsManager::Circuit> circuits;
     std::vector<PlantPipingSystemsManager::Segment> segments;
     std::unordered_map<std::string, std::string> GroundDomainUniqueNames;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

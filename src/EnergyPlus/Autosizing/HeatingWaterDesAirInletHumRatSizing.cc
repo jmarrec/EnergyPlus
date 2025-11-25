@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -63,7 +63,7 @@ Real64 HeatingWaterDesAirInletHumRatSizer::size(EnergyPlusData &state, Real64 _o
             this->autoSizedValue = _originalValue;
         } else {
             if (this->termUnitPIU && (this->curTermUnitSizingNum > 0)) {
-                Real64 MinFlowFrac = this->termUnitSizing(this->curTermUnitSizingNum).MinFlowFrac;
+                Real64 MinFlowFrac = this->termUnitSizing(this->curTermUnitSizingNum).MinPriFlowFrac;
                 this->autoSizedValue = this->termUnitFinalZoneSizing(this->curTermUnitSizingNum).DesHeatCoilInHumRatTU * MinFlowFrac +
                                        this->finalZoneSizing(this->curZoneEqNum).ZoneHumRatAtHeatPeak * (1.0 - MinFlowFrac);
             } else if (this->termUnitIU && (this->curTermUnitSizingNum > 0)) {
@@ -111,11 +111,14 @@ Real64 HeatingWaterDesAirInletHumRatSizer::size(EnergyPlusData &state, Real64 _o
         }
     }
     if (this->overrideSizeString) {
-        if (this->isEpJSON) this->sizingString = "design_inlet_air_humidity_ratio [kgWater/kgDryAir]";
+        if (this->isEpJSON) {
+            this->sizingString = "design_inlet_air_humidity_ratio [kgWater/kgDryAir]";
+        }
     }
     this->selectSizerOutput(state, errorsFound);
-    if (this->isCoilReportObject)
+    if (this->isCoilReportObject) {
         state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirHumRat(state, this->compName, this->compType, this->autoSizedValue);
+    }
     return this->autoSizedValue;
 }
 

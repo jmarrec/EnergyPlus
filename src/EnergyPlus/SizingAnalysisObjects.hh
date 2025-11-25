@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -112,10 +112,10 @@ public:
     std::map<int, int> ztStepCountByEnvrnMap; // key is the seed original Environment number, or index in the Environment Structure
     std::map<int, int>
         envrnStartZtStepIndexMap; // key is the seed original Environment number, produces index in zone step vector where that period begins
-    std::map<int, int> newEnvrnToSeedEnvrnMap; // key is the new HVAC sim envrionment number, produces Seed environment number
+    std::map<int, int> newEnvrnToSeedEnvrnMap; // key is the new HVAC sim environment number, produces Seed environment number
     int NumOfStepsInLogSet;                    // sum of all zone timestep steps in log
     int timeStepsInAverage;                    // breadth back in time for running average, zone timesteps
-    Real64 &p_rVariable;                       // reference to variable being loggged
+    Real64 &p_rVariable;                       // reference to variable being logged
 
     std::vector<ZoneTimestepObject> ztStepObj; // will be sized to the sum of all steps, eg. timesteps in hour * 24 hours * 2 design days.
 
@@ -189,10 +189,10 @@ public:
     void ResolveDesignFlowRate(EnergyPlusData &state, int const HVACSizingIterCount);
 
 private:
-    std::string name = "";                // name of analysis object
+    std::string name;                     // name of analysis object
     Real64 newAdjustedMassFlowRate = 0.0; // with sizing factor included...
     Real64 newFoundMassFlowRate = 0.0;
-    Real64 significantNormalizedChange = 0.005; // criteria for if sizing algorithm yeild a change large enough worth making another pass.
+    Real64 significantNormalizedChange = 0.005; // criteria for if sizing algorithm yield a change large enough worth making another pass.
     Real64 densityForSizing = 0.0;
     Real64 specificHeatForSizing = 0.0;
     Real64 previousVolDesignFlowRate = 0.0;

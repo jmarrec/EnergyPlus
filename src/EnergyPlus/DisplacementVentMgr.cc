@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -176,7 +176,6 @@ namespace RoomAir {
         // Using/Aliasing
         using namespace DataEnvironment;
         using namespace DataHeatBalance;
-        using ScheduleManager::GetScheduleIndex;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         Real64 HLD;      // Convection coefficient for the lower area of surface
@@ -204,7 +203,9 @@ namespace RoomAir {
             // WALL Hc, HA and HAT calculation
             for (int Ctd = state.dataRoomAir->PosZ_Wall(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Wall(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Wall(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -257,7 +258,9 @@ namespace RoomAir {
             // WINDOW Hc, HA and HAT CALCULATION
             for (int Ctd = state.dataRoomAir->PosZ_Window(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Window(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Window(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -325,7 +328,9 @@ namespace RoomAir {
             // DOOR Hc, HA and HAT CALCULATION
             for (int Ctd = state.dataRoomAir->PosZ_Door(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Door(ZoneNum).end; ++Ctd) { // DOOR
                 int SurfNum = state.dataRoomAir->APos_Door(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -396,7 +401,9 @@ namespace RoomAir {
                     (state.dataRoomAir->ZoneCeilingHeight2(ZoneNum) - state.dataRoomAir->ZoneCeilingHeight1(ZoneNum)));
             for (int Ctd = state.dataRoomAir->PosZ_Internal(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Internal(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Internal(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -435,7 +442,9 @@ namespace RoomAir {
             // CEILING Hc, HA and HAT CALCULATION
             for (int Ctd = state.dataRoomAir->PosZ_Ceiling(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Ceiling(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Ceiling(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -451,7 +460,9 @@ namespace RoomAir {
             // FLOOR Hc, HA and HAT CALCULATION
             for (int Ctd = state.dataRoomAir->PosZ_Floor(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Floor(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Floor(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -501,7 +512,7 @@ namespace RoomAir {
 
         // REFERENCES:
         // Model developed by Paul Linden (UCSD), G. Carrilho da Graca (UCSD) and P. Haves (LBL).
-        // Work funded by the California Energy Comission. More information on the model can found in:
+        // Work funded by the California Energy Commission. More information on the model can found in:
         // "Simplified Models for Heat Transfer in Rooms" G. Carrilho da Graca, Ph.D. thesis UCSD. December 2003.
 
         // Using/Aliasing
@@ -511,12 +522,8 @@ namespace RoomAir {
         Real64 TimeStepSys = state.dataHVACGlobal->TimeStepSys;
         Real64 TimeStepSysSec = state.dataHVACGlobal->TimeStepSysSec;
 
-        using InternalHeatGains::SumInternalConvectionGainsByTypes;
-        using InternalHeatGains::SumReturnAirConvectionGainsByTypes;
         using Psychrometrics::PsyCpAirFnW;
         using Psychrometrics::PsyRhoAirFnPbTdbW;
-        using ScheduleManager::GetCurrentScheduleValue;
-        using ScheduleManager::GetScheduleIndex;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         Real64 const OneThird(1.0 / 3.0);
@@ -532,7 +539,6 @@ namespace RoomAir {
         Real64 ZTAveraged;
         Real64 TempDiffCritRep; // Minimum temperature difference between mixed and occupied subzones for reporting
         bool MIXFLAG;
-        int Ctd;
         Real64 MinFlow;
         Real64 NumPLPP; // Number of plumes per person
         Real64 MTGAUX;
@@ -595,7 +601,7 @@ namespace RoomAir {
         for (int Ctd = 1; Ctd <= state.dataRoomAir->TotDispVent3Node; ++Ctd) {
             auto &zoneDV3N = state.dataRoomAir->ZoneDispVent3Node(Ctd);
             if (ZoneNum == zoneDV3N.ZonePtr) {
-                GainsFrac = GetCurrentScheduleValue(state, zoneDV3N.SchedGainsPtr);
+                GainsFrac = zoneDV3N.gainsSched->getCurrentVal();
                 NumPLPP = zoneDV3N.NumPlumesPerOcc;
                 HeightThermostat = zoneDV3N.ThermostatHeight;
                 HeightComfort = zoneDV3N.ComfortHeight;
@@ -603,26 +609,30 @@ namespace RoomAir {
             }
         }
 
-        ConvGainsOccupiedSubzone = SumInternalConvectionGainsByTypes(state, ZoneNum, IntGainTypesOccupied);
+        ConvGainsOccupiedSubzone = InternalHeatGains::SumInternalConvectionGainsByTypes(state, ZoneNum, IntGainTypesOccupied);
 
         ConvGainsOccupiedSubzone += 0.5 * thisZoneHB.SysDepZoneLoadsLagged;
 
         // Add heat to return air if zonal system (no return air) or cycling system (return air frequently very
         // low or zero)
         if (zone.NoHeatToReturnAir) {
-            RetAirGain = SumReturnAirConvectionGainsByTypes(state, ZoneNum, IntGainTypesOccupied);
+            RetAirGain = InternalHeatGains::SumReturnAirConvectionGainsByTypes(state, ZoneNum, IntGainTypesOccupied);
             ConvGainsOccupiedSubzone += RetAirGain;
         }
 
-        ConvGainsMixedSubzone = SumInternalConvectionGainsByTypes(state, ZoneNum, IntGainTypesMixedSubzone);
+        ConvGainsMixedSubzone = InternalHeatGains::SumInternalConvectionGainsByTypes(state, ZoneNum, IntGainTypesMixedSubzone);
         ConvGainsMixedSubzone += state.dataHeatBalFanSys->SumConvHTRadSys(ZoneNum) + state.dataHeatBalFanSys->SumConvPool(ZoneNum) +
                                  0.5 * thisZoneHB.SysDepZoneLoadsLagged;
         if (zone.NoHeatToReturnAir) {
-            RetAirGain = SumReturnAirConvectionGainsByTypes(state, ZoneNum, IntGainTypesMixedSubzone);
+            RetAirGain = InternalHeatGains::SumReturnAirConvectionGainsByTypes(state, ZoneNum, IntGainTypesMixedSubzone);
             ConvGainsMixedSubzone += RetAirGain;
         }
 
         ConvGains = ConvGainsOccupiedSubzone + ConvGainsMixedSubzone;
+
+        // Make sure all types of internal gains have been gathered
+        assert((int)(size(IntGainTypesOccupied) + size(IntGainTypesMixedSubzone) + size(ExcludedIntGainTypes)) ==
+               (int)DataHeatBalance::IntGainType::Num);
 
         //=================== Entering air system temperature and flow====================
         SumSysMCp = 0.0;
@@ -654,7 +664,7 @@ namespace RoomAir {
         if (state.dataHeatBal->TotPeople > 0) {
             int NumberOfOccupants = 0;
             NumberOfPlumes = 0.0;
-            for (Ctd = 1; Ctd <= state.dataHeatBal->TotPeople; ++Ctd) {
+            for (int Ctd = 1; Ctd <= state.dataHeatBal->TotPeople; ++Ctd) {
                 if (state.dataHeatBal->People(Ctd).ZonePtr == ZoneNum) {
                     NumberOfOccupants +=
                         state.dataHeatBal->People(Ctd).NumberOfPeople; // *GetCurrentScheduleValue(state, People(Ctd)%NumberOfPeoplePtr)
@@ -725,7 +735,7 @@ namespace RoomAir {
         } else {
             Real64 const plume_fac(NumberOfPlumes * std::pow(PowerPerPlume, OneThird));
             HeightFrac = min(24.55 * std::pow(MCp_Total * 0.000833 / plume_fac, 0.6) / CeilingHeight, 1.0);
-            for (Ctd = 1; Ctd <= 4; ++Ctd) {
+            for (int Ctd = 1; Ctd <= 4; ++Ctd) {
                 HcDispVent3Node(state, ZoneNum, HeightFrac);
                 // HeightFrac = min( 24.55 * std::pow( MCp_Total * 0.000833 / ( NumberOfPlumes * std::pow( PowerPerPlume, OneThird ) ), 0.6 ) /
                 // CeilingHeight, 1.0 ); //Tuned This does not vary in loop  EPTeam-replaces above (cause diffs)      HeightFrac =
@@ -891,7 +901,7 @@ namespace RoomAir {
             Real64 AirCap = thisZoneHB.AirPowerCap;
             TempHistTerm = AirCap * (3.0 * thisZoneHB.ZTM[0] - (3.0 / 2.0) * thisZoneHB.ZTM[1] + OneThird * thisZoneHB.ZTM[2]);
 
-            for (Ctd = 1; Ctd <= 3; ++Ctd) {
+            for (int Ctd = 1; Ctd <= 3; ++Ctd) {
                 TempDepCoef = state.dataDispVentMgr->HA_MX + state.dataDispVentMgr->HA_OC + state.dataDispVentMgr->HA_FLOOR + MCp_Total;
                 TempIndCoef =
                     ConvGains + state.dataDispVentMgr->HAT_MX + state.dataDispVentMgr->HAT_OC + state.dataDispVentMgr->HAT_FLOOR + MCpT_Total;

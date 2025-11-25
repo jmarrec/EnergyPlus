@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -54,14 +54,11 @@
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
-#include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataGlobalConstants.hh>
-#include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/StandardRatings.hh>
-#include <EnergyPlus/UtilityRoutines.hh>
 
 namespace EnergyPlus {
 
@@ -71,8 +68,6 @@ struct EnergyPlusData;
 namespace DXCoils {
 
     // Using/Aliasing
-    using DataHVACGlobals::DryBulbIndicator;
-
     constexpr Real64 RatedInletAirTemp(26.6667);          // 26.6667C or 80F
     constexpr Real64 RatedInletWetBulbTemp(19.4444);      // 19.44 or 67F
     constexpr Real64 RatedInletAirHumRat(0.0111847);      // Humidity ratio corresponding to 80F dry bulb/67F wet bulb
@@ -112,22 +107,26 @@ namespace DXCoils {
         // Members
         //          Some variables in this type are arrays (dimension=MaxModes) to support coil type
         //          COIL:DX:MultiMode:CoolingEmpirical.  Other coil types only use the first element.
-        std::string Name;       // Name of the DX Coil
-        std::string DXCoilType; // type of coil
-        int DXCoilType_Num;     // Integer equivalent to DXCoilType
-        std::string Schedule;   // WaterCoil Operation Schedule
-        int SchedPtr;           // Pointer to the correct schedule
+        std::string Name;                      // Name of the DX Coil
+        std::string DXCoilType;                // type of coil
+        int DXCoilType_Num;                    // Integer equivalent to DXCoilType
+        Sched::Schedule *availSched = nullptr; // availability schedule
         //          RatedCoolCap, RatedSHR and RatedCOP do not include the thermal or electrical
         //          effects due to the supply air fan
-        Array1D<Real64> RatedTotCap;                 // Gross total cooling capacity at rated conditions [watts]
-        Real64 HeatSizeRatio;                        // heat pump heating to cooling sizing ratio when autosized
-        Array1D_bool RatedTotCapEMSOverrideOn;       // if true, then EMS is calling to override rated total capacity
-        Array1D<Real64> RatedTotCapEMSOverrideValue; // value to use for EMS override
-        Array1D<Real64> RatedSHR;                    // Sensible heat ratio (sens cap/total cap) at rated conditions
-        Array1D_bool RatedSHREMSOverrideOn;          // if true, then EMS is calling to override Sensible heat ratio
-        Array1D<Real64> RatedSHREMSOverrideValue;    // value to use for EMS override forSensible heat ratio
-        Array1D<Real64> RatedCOP;                    // Coefficient of performance at rated conditions
-        Array1D<Real64> RatedAirVolFlowRate;         // Air volume flow rate through coil at rated conditions [m3/s]
+        Array1D<Real64> RatedTotCap;                      // Gross total cooling capacity at rated conditions [watts]
+        Real64 HeatSizeRatio;                             // heat pump heating to cooling sizing ratio when autosized
+        Array1D_bool RatedTotCapEMSOverrideOn;            // if true, then EMS is calling to override rated total capacity
+        Array1D<Real64> RatedTotCapEMSOverrideValue;      // value to use for EMS override
+        bool FrostHeatingCapacityMultiplierEMSOverrideOn; // if true, then EMS is calling to override multiplier for heating capacity when system is
+                                                          // in defrost
+        Real64 FrostHeatingCapacityMultiplierEMSOverrideValue; // value to use for EMS override
+        bool FrostHeatingInputPowerMultiplierEMSOverrideOn; // if true, then EMS is calling to override multiplier for power when system is in defrost
+        Real64 FrostHeatingInputPowerMultiplierEMSOverrideValue; // value to use for EMS override
+        Array1D<Real64> RatedSHR;                                // Sensible heat ratio (sens cap/total cap) at rated conditions
+        Array1D_bool RatedSHREMSOverrideOn;                      // if true, then EMS is calling to override Sensible heat ratio
+        Array1D<Real64> RatedSHREMSOverrideValue;                // value to use for EMS override forSensible heat ratio
+        Array1D<Real64> RatedCOP;                                // Coefficient of performance at rated conditions
+        Array1D<Real64> RatedAirVolFlowRate;                     // Air volume flow rate through coil at rated conditions [m3/s]
         // This is adjusted for bypassed air if any (see BypassedFlowFrac)
         Array1D_bool RatedAirVolFlowRateEMSOverrideON;       // if true, then EMS is calling to override Air volume flow rate
         Array1D<Real64> RatedAirVolFlowRateEMSOverrideValue; // value to use for EMS override Air volume flow rate
@@ -164,16 +163,16 @@ namespace DXCoils {
         int CompanionUpstreamDXCoil;           // index number of the DX coil that is "upstream" of this DX coil. Currently used for
         // UnitarySystem:HeatPump:AirToAir for proper calculation of crankcase heater energy
         // consumption
-        bool FindCompanionUpStreamCoil;    // Flag to get the companion coil in Init.
-        Array1D_int CondenserInletNodeNum; // Node number of outdoor condenser(s) (actually an evaporator for heating coils)
-        int LowOutletTempIndex;            // used for low outlet temperature warnings
-        Real64 FullLoadOutAirTempLast;     // used for low outlet temperature warnings
-        Real64 FullLoadInletAirTempLast;   // used for low outlet temperature warnings
-        bool PrintLowOutTempMessage;       // used to print warning message for low outlet air dry-bulb conditions
-        std::string LowOutTempBuffer1;     // holds warning message until next iteration (only prints 1 message/iteration)
-        std::string LowOutTempBuffer2;     // holds warning message until next iteration (only prints 1 message/iteration)
-        int HeatingCoilPLFCurvePTR;        // PLF curve index to gas or electric heating coil (used in latent degradation model)
-        int BasinHeaterSchedulePtr;        // Pointer to basin heater schedule
+        bool FindCompanionUpStreamCoil;              // Flag to get the companion coil in Init.
+        Array1D_int CondenserInletNodeNum;           // Node number of outdoor condenser(s) (actually an evaporator for heating coils)
+        int LowOutletTempIndex;                      // used for low outlet temperature warnings
+        Real64 FullLoadOutAirTempLast;               // used for low outlet temperature warnings
+        Real64 FullLoadInletAirTempLast;             // used for low outlet temperature warnings
+        bool PrintLowOutTempMessage;                 // used to print warning message for low outlet air dry-bulb conditions
+        std::string LowOutTempBuffer1;               // holds warning message until next iteration (only prints 1 message/iteration)
+        std::string LowOutTempBuffer2;               // holds warning message until next iteration (only prints 1 message/iteration)
+        int HeatingCoilPLFCurvePTR;                  // PLF curve index to gas or electric heating coil (used in latent degradation model)
+        Sched::Schedule *basinHeaterSched = nullptr; // Pointer to basin heater schedule
         // start of multi-speed compressor variables
         Real64 RatedTotCap2; // Gross total cooling capacity at rated conditions, low speed [watts]
         // Note: For HPWHs, RatedTotCap2   = Water Heating Capacity for Coil:DX:HPWH and
@@ -194,9 +193,9 @@ namespace DXCoils {
         Real64 RatedEIR2;                  // rated energy input ratio (low speed, inverse of COP2)
         Real64 InternalStaticPressureDrop; // for rating VAV system
         bool RateWithInternalStaticAndFanObject;
-        int SupplyFanIndex;        // index of this fan in fan array or vector
-        int SupplyFan_TypeNum;     // type of fan, in DataHVACGlobals
-        std::string SupplyFanName; // name of fan associated with this dx coil
+        int SupplyFanIndex;          // index of this fan in fan array or vector
+        HVAC::FanType supplyFanType; // type of fan, in DataHVACGlobals
+        std::string SupplyFanName;   // name of fan associated with this dx coil
         std::string CoilSystemName;
         // end of multi-speed compressor variables
         Array1D<Real64> RatedEIR; // rated energy input ratio (inverse of COP)
@@ -232,19 +231,19 @@ namespace DXCoils {
         int DefrostEIRFT;                                 // index of defrost mode total cooling capacity for reverse cycle heat pump
         int RegionNum;                                    // Region number for calculating HSPF of single speed DX heating coil
         Real64 MinOATCompressor;                          // Minimum OAT for heat pump compressor operation
-        Real64 OATempCompressorOn;                        // The outdoor tempearture when the compressor is automatically turned back on,
+        Real64 OATempCompressorOn;                        // The outdoor temperature when the compressor is automatically turned back on,
         // if applicable, following automatic shut off. This field is used only for
         // HSPF calculation.
-        Real64 MaxOATCompressor;        // Maximum OAT for VRF heat pump compressor operation
-        Real64 MaxOATDefrost;           // Maximum OAT for defrost operation
-        Real64 DefrostTime;             // Defrost time period in hours
-        Real64 DefrostCapacity;         // Resistive defrost to nominal capacity (at 21.11C/8.33C) ratio
-        Real64 HPCompressorRuntime;     // keep track of compressor runtime
-        Real64 HPCompressorRuntimeLast; // keep track of last time step compressor runtime (if simulation downshifts)
-        Real64 TimeLeftToDefrost;       // keep track of time left to defrost heat pump
-        Real64 DefrostPower;            // power used during defrost
-        Real64 DefrostConsumption;      // energy used during defrost
-        int HeatingPerformanceOATType;  // Heating performance curve OAT type (1-wetbulb, 2-drybulb)
+        Real64 MaxOATCompressor;                 // Maximum OAT for VRF heat pump compressor operation
+        Real64 MaxOATDefrost;                    // Maximum OAT for defrost operation
+        Real64 DefrostTime;                      // Defrost time period in hours
+        Real64 DefrostCapacity;                  // Resistive defrost to nominal capacity (at 21.11C/8.33C) ratio
+        Real64 HPCompressorRuntime;              // keep track of compressor runtime
+        Real64 HPCompressorRuntimeLast;          // keep track of last time step compressor runtime (if simulation downshifts)
+        Real64 TimeLeftToDefrost;                // keep track of time left to defrost heat pump
+        Real64 DefrostPower;                     // power used during defrost
+        Real64 DefrostConsumption;               // energy used during defrost
+        HVAC::OATType HeatingPerformanceOATType; // Heating performance curve OAT type (1-wetbulb, 2-drybulb)
         bool HPCoilIsInCoilSystemHeatingDX;
         bool OATempCompressorOnOffBlank;
         // end of variables used in heat pump heating coils only
@@ -283,32 +282,32 @@ namespace DXCoils {
         // always 1 for other coils
         int NumDehumidModes; // number of enhanced dehumidification modes, up to MaxDehumidModes for Multimode DX coil,
         // always 0 for other coils)
-        Array1D_string CoilPerformanceType;  // Coil Performance object type
-        Array1D_int CoilPerformanceType_Num; // Coil Performance object type number
-        Array1D_string CoilPerformanceName;  // Coil Performance object names
-        Real64 CoolingCoilStg2RuntimeFrac;   // Run time fraction of stage 2
-        int DehumidificationMode;            // Dehumidification mode for multimode coil,
+        Array1D_string CoilPerformanceType;                            // Coil Performance object type
+        Array1D_int CoilPerformanceType_Num;                           // Coil Performance object type number
+        Array1D_string CoilPerformanceName;                            // Coil Performance object names
+        Real64 CoolingCoilStg2RuntimeFrac;                             // Run time fraction of stage 2
+        HVAC::CoilMode DehumidificationMode = HVAC::CoilMode::Invalid; // Dehumidification mode for multimode coil,
         // 0=normal, 1+=enhanced dehumidification mode
         // end of variables for Multimode DX cooling coil
         // start of variables for heat pump water heater DX coil
-        int WaterInNode;              // Condenser water inlet node number for HPWH DX coil
-        int WaterOutNode;             // Condenser water outlet node number for HPWH DX coil
-        int HCOPFTemp;                // COP as a function of temperature curve index
-        int HCOPFTempErrorIndex;      // Used for warning messages when output of HCOPFTemp is negative
-        int HCOPFAirFlow;             // COP as a function of air flow rate ratio curve index
-        int HCOPFAirFlowErrorIndex;   // Used for warning messages when output of HCOPFAirFlow is negative
-        int HCOPFWaterFlow;           // COP as a function of water flow rate ratio curve index
-        int HCOPFWaterFlowErrorIndex; // Used for warning messages when output of HCOPFWaterFlow is negative
-        int HCapFTemp;                // Heating capacity as a function of temperature curve index
-        int HCapFTempErrorIndex;      // Used for warning messages when output of HCapFTemp is negative
-        int HCapFAirFlow;             // Heating capacity as a function of air flow rate ratio curve index
-        int HCapFAirFlowErrorIndex;   // Used for warning messages when output of HCapFAirFlow is negative
-        int HCapFWaterFlow;           // Heating capacity as a function of water flow rate ratio curve index
-        int HCapFWaterFlowErrorIndex; // Used for warning messages when output of HCapFWaterFlow is negative
-        int InletAirTemperatureType;  // Specifies to use either air wet-bulb or dry-bulb temp for curve objects
-        Real64 RatedInletDBTemp;      // Rated inlet air dry-bulb temperature [C]
-        Real64 RatedInletWBTemp;      // Rated inlet air wet-bulb temperature [C]
-        Real64 RatedInletWaterTemp;   // Rated condenser water inlet temperature [C]
+        int WaterInNode;                                                // Condenser water inlet node number for HPWH DX coil
+        int WaterOutNode;                                               // Condenser water outlet node number for HPWH DX coil
+        int HCOPFTemp;                                                  // COP as a function of temperature curve index
+        int HCOPFTempErrorIndex;                                        // Used for warning messages when output of HCOPFTemp is negative
+        int HCOPFAirFlow;                                               // COP as a function of air flow rate ratio curve index
+        int HCOPFAirFlowErrorIndex;                                     // Used for warning messages when output of HCOPFAirFlow is negative
+        int HCOPFWaterFlow;                                             // COP as a function of water flow rate ratio curve index
+        int HCOPFWaterFlowErrorIndex;                                   // Used for warning messages when output of HCOPFWaterFlow is negative
+        int HCapFTemp;                                                  // Heating capacity as a function of temperature curve index
+        int HCapFTempErrorIndex;                                        // Used for warning messages when output of HCapFTemp is negative
+        int HCapFAirFlow;                                               // Heating capacity as a function of air flow rate ratio curve index
+        int HCapFAirFlowErrorIndex;                                     // Used for warning messages when output of HCapFAirFlow is negative
+        int HCapFWaterFlow;                                             // Heating capacity as a function of water flow rate ratio curve index
+        int HCapFWaterFlowErrorIndex;                                   // Used for warning messages when output of HCapFWaterFlow is negative
+        HVAC::OATType InletAirTemperatureType = HVAC::OATType::Invalid; // Specifies to use either air wet-bulb or dry-bulb temp for curve objects
+        Real64 RatedInletDBTemp;                                        // Rated inlet air dry-bulb temperature [C]
+        Real64 RatedInletWBTemp;                                        // Rated inlet air wet-bulb temperature [C]
+        Real64 RatedInletWaterTemp;                                     // Rated condenser water inlet temperature [C]
         //  REAL(r64) :: CondenserInletWaterTemp     = 0.0d0     ! Actual inlet water temperature to condenser of the HPWH DX coil [C]
         Real64 HPWHCondPumpElecNomPower;    // Nominal power input to the condenser water circulation pump [W]
         Real64 HPWHCondPumpFracToWater;     // Nominal power fraction to water for the condenser water circulation pump
@@ -457,8 +456,10 @@ namespace DXCoils {
 
         // Default Constructor
         DXCoilData()
-            : DXCoilType_Num(0), SchedPtr(0), RatedTotCap(MaxModes, 0.0), HeatSizeRatio(1.0), RatedTotCapEMSOverrideOn(MaxModes, false),
-              RatedTotCapEMSOverrideValue(MaxModes, 0.0), RatedSHR(MaxModes, 0.0), RatedSHREMSOverrideOn(MaxModes, false),
+            : DXCoilType_Num(0), RatedTotCap(MaxModes, 0.0), HeatSizeRatio(1.0), RatedTotCapEMSOverrideOn(MaxModes, false),
+              RatedTotCapEMSOverrideValue(MaxModes, 0.0), FrostHeatingCapacityMultiplierEMSOverrideOn(false),
+              FrostHeatingCapacityMultiplierEMSOverrideValue(0.0), FrostHeatingInputPowerMultiplierEMSOverrideOn(false),
+              FrostHeatingInputPowerMultiplierEMSOverrideValue(0.0), RatedSHR(MaxModes, 0.0), RatedSHREMSOverrideOn(MaxModes, false),
               RatedSHREMSOverrideValue(MaxModes, 0.0), RatedCOP(MaxModes, 0.0), RatedAirVolFlowRate(MaxModes, 0.0),
               RatedAirVolFlowRateEMSOverrideON(MaxModes, false), RatedAirVolFlowRateEMSOverrideValue(MaxModes, 0.0),
               FanPowerPerEvapAirFlowRate(MaxModes, 0.0), FanPowerPerEvapAirFlowRate_2023(MaxModes, 0.0), RatedAirMassFlowRate(MaxModes, 0.0),
@@ -468,10 +469,10 @@ namespace DXCoils {
               CrankcaseHeaterPower(0.0), MaxOATCrankcaseHeater(0.0), CrankcaseHeaterCapacityCurveIndex(0), CrankcaseHeaterConsumption(0.0),
               BasinHeaterPowerFTempDiff(0.0), BasinHeaterSetPointTemp(0.0), CompanionUpstreamDXCoil(0), FindCompanionUpStreamCoil(true),
               CondenserInletNodeNum(MaxModes, 0), LowOutletTempIndex(0), FullLoadOutAirTempLast(0.0), FullLoadInletAirTempLast(0.0),
-              PrintLowOutTempMessage(false), HeatingCoilPLFCurvePTR(0), BasinHeaterSchedulePtr(0), RatedTotCap2(0.0), RatedSHR2(0.0), RatedCOP2(0.0),
-              RatedAirVolFlowRate2(0.0), FanPowerPerEvapAirFlowRate_LowSpeed(MaxModes, 0.0), FanPowerPerEvapAirFlowRate_2023_LowSpeed(MaxModes, 0.0),
-              RatedAirMassFlowRate2(0.0), RatedCBF2(0.0), CCapFTemp2(0), EIRFTemp2(0), RatedEIR2(0.0), InternalStaticPressureDrop(0.0),
-              RateWithInternalStaticAndFanObject(false), SupplyFanIndex(-1), SupplyFan_TypeNum(0), RatedEIR(MaxModes, 0.0), InletAirMassFlowRate(0.0),
+              PrintLowOutTempMessage(false), HeatingCoilPLFCurvePTR(0), RatedTotCap2(0.0), RatedSHR2(0.0), RatedCOP2(0.0), RatedAirVolFlowRate2(0.0),
+              FanPowerPerEvapAirFlowRate_LowSpeed(MaxModes, 0.0), FanPowerPerEvapAirFlowRate_2023_LowSpeed(MaxModes, 0.0), RatedAirMassFlowRate2(0.0),
+              RatedCBF2(0.0), CCapFTemp2(0), EIRFTemp2(0), RatedEIR2(0.0), InternalStaticPressureDrop(0.0), RateWithInternalStaticAndFanObject(false),
+              SupplyFanIndex(0), supplyFanType(HVAC::FanType::Invalid), RatedEIR(MaxModes, 0.0), InletAirMassFlowRate(0.0),
               InletAirMassFlowRateMax(0.0), InletAirTemp(0.0), InletAirHumRat(0.0), InletAirEnthalpy(0.0), OutletAirTemp(0.0), OutletAirHumRat(0.0),
               OutletAirEnthalpy(0.0), PartLoadRatio(0.0), TotalCoolingEnergy(0.0), SensCoolingEnergy(0.0), LatCoolingEnergy(0.0),
               TotalCoolingEnergyRate(0.0), SensCoolingEnergyRate(0.0), LatCoolingEnergyRate(0.0), ElecCoolingConsumption(0.0), ElecCoolingPower(0.0),
@@ -480,32 +481,32 @@ namespace DXCoils {
               DefrostControl(StandardRatings::HPdefrostControl::Invalid), EIRFPLR(0), DefrostEIRFT(0), RegionNum(0), MinOATCompressor(0.0),
               OATempCompressorOn(0.0), MaxOATCompressor(0.0), MaxOATDefrost(0.0), DefrostTime(0.0), DefrostCapacity(0.0), HPCompressorRuntime(0.0),
               HPCompressorRuntimeLast(0.0), TimeLeftToDefrost(0.0), DefrostPower(0.0), DefrostConsumption(0.0),
-              HeatingPerformanceOATType(DryBulbIndicator), HPCoilIsInCoilSystemHeatingDX(false), OATempCompressorOnOffBlank(false),
+              HeatingPerformanceOATType(HVAC::OATType::DryBulb), HPCoilIsInCoilSystemHeatingDX(false), OATempCompressorOnOffBlank(false),
               Twet_Rated(MaxModes, 0.0), Gamma_Rated(MaxModes, 0.0), MaxONOFFCyclesperHour(MaxModes, 0.0), LatentCapacityTimeConstant(MaxModes, 0.0),
               CondenserType(MaxModes, DataHeatBalance::RefrigCondenserType::Air), ReportEvapCondVars(false), EvapCondEffect(MaxModes, 0.0),
               CondInletTemp(0.0), EvapCondAirFlow(MaxModes, 0.0), EvapCondPumpElecNomPower(MaxModes, 0.0), EvapCondPumpElecPower(0.0),
               EvapCondPumpElecConsumption(0.0), EvapWaterConsumpRate(0.0), EvapWaterConsump(0.0), EvapCondAirFlow2(0.0), EvapCondEffect2(0.0),
               EvapCondPumpElecNomPower2(0.0), BasinHeaterPower(0.0), BasinHeaterConsumption(0.0), NumCapacityStages(1), NumDehumidModes(0),
               CoilPerformanceType(MaxModes), CoilPerformanceType_Num(MaxModes, 0), CoilPerformanceName(MaxModes), CoolingCoilStg2RuntimeFrac(0.0),
-              DehumidificationMode(0), WaterInNode(0), WaterOutNode(0), HCOPFTemp(0), HCOPFTempErrorIndex(0), HCOPFAirFlow(0),
-              HCOPFAirFlowErrorIndex(0), HCOPFWaterFlow(0), HCOPFWaterFlowErrorIndex(0), HCapFTemp(0), HCapFTempErrorIndex(0), HCapFAirFlow(0),
-              HCapFAirFlowErrorIndex(0), HCapFWaterFlow(0), HCapFWaterFlowErrorIndex(0), InletAirTemperatureType(0), RatedInletDBTemp(0.0),
-              RatedInletWBTemp(0.0), RatedInletWaterTemp(0.0), HPWHCondPumpElecNomPower(0.0), HPWHCondPumpFracToWater(0.0),
-              RatedHPWHCondWaterFlow(0.0), ElecWaterHeatingPower(0.0), ElecWaterHeatingConsumption(0.0), FanPowerIncludedInCOP(true),
-              CondPumpHeatInCapacity(false), CondPumpPowerInCOP(false), LowTempLast(0.0), HighTempLast(0.0), ErrIndex1(0), ErrIndex2(0), ErrIndex3(0),
-              ErrIndex4(0), LowAmbErrIndex(0), HighAmbErrIndex(0), PLFErrIndex(0), PLRErrIndex(0), PrintLowAmbMessage(false),
-              PrintHighAmbMessage(false), EvapWaterSupplyMode(EvapWaterSupply::FromMains), EvapWaterSupTankID(0), EvapWaterTankDemandARRID(0),
-              CondensateCollectMode(CondensateCollectAction::Discard), CondensateTankID(0), CondensateTankSupplyARRID(0), CondensateVdot(0.0),
-              CondensateVol(0.0), CurrentEndTimeLast(0.0), TimeStepSysLast(0.0), FuelType(Constant::eFuel::Invalid), NumOfSpeeds(0), PLRImpact(false),
-              LatentImpact(false), MSFuelWasteHeat(0.0), MSHPHeatRecActive(false), MSHPDesignSpecIndex(0), CoolingCoilPresent(true),
-              HeatingCoilPresent(true), ISHundredPercentDOASDXCoil(false), SHRFTemp(MaxModes, 0), SHRFTempErrorIndex(0), SHRFFlow(MaxModes, 0),
-              SHRFFlowErrorIndex(0), SHRFTemp2(0), SHRFFlow2(0), UserSHRCurveExists(false), ASHRAE127StdRprt(false), SecZonePtr(0), SecCoilSHRFT(0),
-              SecCoilSHRFF(0), SecCoilAirFlow(0.0), SecCoilAirFlowScalingFactor(1.0), SecCoilRatedSHR(1.0), SecCoilSHR(1.0), EvapInletWetBulb(0.0),
-              SecCoilSensibleHeatGainRate(0.0), SecCoilTotalHeatRemovalRate(0.0), SecCoilSensibleHeatRemovalRate(0.0),
-              SecCoilLatentHeatRemovalRate(0.0), IsSecondaryDXCoilInZone(false), IsDXCoilInZone(false), CompressorPartLoadRatio(0.0), MSSpeedNumLS(1),
-              MSSpeedNumHS(2), MSSpeedRatio(0.0), MSCycRatio(0.0), VRFIUPtr(0), VRFOUPtr(0), EvaporatingTemp(4.0), CondensingTemp(40.0), C1Te(0.0),
-              C2Te(0.0), C3Te(0.0), C1Tc(0.0), C2Tc(0.0), C3Tc(0.0), SH(0.0), SC(0.0), ActualSH(0.0), ActualSC(0.0), RateBFVRFIUEvap(0.0592),
-              RateBFVRFIUCond(0.1360), CAPFTErrIndex(0), EIRFTErrIndex(0), reportCoilFinalSizes(true), capModFacTotal(0.0), AirLoopNum(0)
+              WaterInNode(0), WaterOutNode(0), HCOPFTemp(0), HCOPFTempErrorIndex(0), HCOPFAirFlow(0), HCOPFAirFlowErrorIndex(0), HCOPFWaterFlow(0),
+              HCOPFWaterFlowErrorIndex(0), HCapFTemp(0), HCapFTempErrorIndex(0), HCapFAirFlow(0), HCapFAirFlowErrorIndex(0), HCapFWaterFlow(0),
+              HCapFWaterFlowErrorIndex(0), RatedInletDBTemp(0.0), RatedInletWBTemp(0.0), RatedInletWaterTemp(0.0), HPWHCondPumpElecNomPower(0.0),
+              HPWHCondPumpFracToWater(0.0), RatedHPWHCondWaterFlow(0.0), ElecWaterHeatingPower(0.0), ElecWaterHeatingConsumption(0.0),
+              FanPowerIncludedInCOP(true), CondPumpHeatInCapacity(false), CondPumpPowerInCOP(false), LowTempLast(0.0), HighTempLast(0.0),
+              ErrIndex1(0), ErrIndex2(0), ErrIndex3(0), ErrIndex4(0), LowAmbErrIndex(0), HighAmbErrIndex(0), PLFErrIndex(0), PLRErrIndex(0),
+              PrintLowAmbMessage(false), PrintHighAmbMessage(false), EvapWaterSupplyMode(EvapWaterSupply::FromMains), EvapWaterSupTankID(0),
+              EvapWaterTankDemandARRID(0), CondensateCollectMode(CondensateCollectAction::Discard), CondensateTankID(0), CondensateTankSupplyARRID(0),
+              CondensateVdot(0.0), CondensateVol(0.0), CurrentEndTimeLast(0.0), TimeStepSysLast(0.0), FuelType(Constant::eFuel::Invalid),
+              NumOfSpeeds(0), PLRImpact(false), LatentImpact(false), MSFuelWasteHeat(0.0), MSHPHeatRecActive(false), MSHPDesignSpecIndex(0),
+              CoolingCoilPresent(true), HeatingCoilPresent(true), ISHundredPercentDOASDXCoil(false), SHRFTemp(MaxModes, 0), SHRFTempErrorIndex(0),
+              SHRFFlow(MaxModes, 0), SHRFFlowErrorIndex(0), SHRFTemp2(0), SHRFFlow2(0), UserSHRCurveExists(false), ASHRAE127StdRprt(false),
+              SecZonePtr(0), SecCoilSHRFT(0), SecCoilSHRFF(0), SecCoilAirFlow(0.0), SecCoilAirFlowScalingFactor(1.0), SecCoilRatedSHR(1.0),
+              SecCoilSHR(1.0), EvapInletWetBulb(0.0), SecCoilSensibleHeatGainRate(0.0), SecCoilTotalHeatRemovalRate(0.0),
+              SecCoilSensibleHeatRemovalRate(0.0), SecCoilLatentHeatRemovalRate(0.0), IsSecondaryDXCoilInZone(false), IsDXCoilInZone(false),
+              CompressorPartLoadRatio(0.0), MSSpeedNumLS(1), MSSpeedNumHS(2), MSSpeedRatio(0.0), MSCycRatio(0.0), VRFIUPtr(0), VRFOUPtr(0),
+              EvaporatingTemp(4.0), CondensingTemp(40.0), C1Te(0.0), C2Te(0.0), C3Te(0.0), C1Tc(0.0), C2Tc(0.0), C3Tc(0.0), SH(0.0), SC(0.0),
+              ActualSH(0.0), ActualSC(0.0), RateBFVRFIUEvap(0.0592), RateBFVRFIUCond(0.1360), CAPFTErrIndex(0), EIRFTErrIndex(0),
+              reportCoilFinalSizes(true), capModFacTotal(0.0), AirLoopNum(0)
         {
         }
     };
@@ -535,38 +536,37 @@ namespace DXCoils {
     // Functions
 
     void SimDXCoil(EnergyPlusData &state,
-                   std::string_view CompName,                               // name of the fan coil unit
-                   DataHVACGlobals::CompressorOperation const CompressorOp, // compressor operation; 1=on, 0=off
-                   bool const FirstHVACIteration,                           // True when first HVAC iteration
+                   std::string_view CompName,             // name of the fan coil unit
+                   HVAC::CompressorOp const compressorOp, // compressor operation; 1=on, 0=off
+                   bool const FirstHVACIteration,         // True when first HVAC iteration
                    int &CompIndex,
-                   int const FanOpMode,                                              // allows parent object to control fan mode
+                   HVAC::FanOp const fanOp,                                          // allows parent object to control fan mode
                    ObjexxFCL::Optional<Real64 const> PartLoadRatio = _,              // part load ratio (for single speed cycling unit)
                    ObjexxFCL::Optional<Real64 const> OnOffAFR = _,                   // ratio of compressor on airflow to compressor off airflow
                    ObjexxFCL::Optional<Real64 const> CoilCoolingHeatingPLRRatio = _, // used for cycling fan RH control
-                   ObjexxFCL::Optional<Real64 const> MaxCap = _,                     // maximum cooling capacity of VRF terminal units
+                   ObjexxFCL::Optional<Real64 const> MaxCap = Constant::MaxCap,      // maximum cooling capacity of VRF terminal units
                    ObjexxFCL::Optional<Real64 const> CompCyclingRatio = _            // cycling ratio of VRF condenser connected to this TU
     );
 
-    void SimDXCoilMultiSpeed(
-        EnergyPlusData &state,
-        std::string_view CompName, // name of the fan coil unit
-        Real64 const SpeedRatio,   // = (CompressorSpeed - CompressorSpeedMin) /
-        Real64 const CycRatio,     // cycling part load ratio for variable speed
-        int &CompIndex,
-        ObjexxFCL::Optional_int_const SpeedNum = _,  // Speed number for multispeed cooling coil onlyn
-        ObjexxFCL::Optional_int_const FanOpMode = _, // Fan operation mode
-        DataHVACGlobals::CompressorOperation CompressorOp = DataHVACGlobals::CompressorOperation::Off, // Compressor on/off; 1=on, 0=off
-        ObjexxFCL::Optional_int_const SingleMode = _                                                   // Single mode operation Yes/No; 1=Yes, 0=No
+    void SimDXCoilMultiSpeed(EnergyPlusData &state,
+                             std::string_view CompName, // name of the fan coil unit
+                             Real64 const SpeedRatio,   // = (CompressorSpeed - CompressorSpeedMin) /
+                             Real64 const CycRatio,     // cycling part load ratio for variable speed
+                             int &CompIndex,
+                             ObjexxFCL::Optional_int_const SpeedNum = _,                // Speed number for multispeed cooling coil onlyn
+                             ObjexxFCL::Optional<HVAC::FanOp const> fanOp = _,          // Fan operation mode
+                             HVAC::CompressorOp CompressorOp = HVAC::CompressorOp::Off, // Compressor on/off; 1=on, 0=off
+                             ObjexxFCL::Optional_int_const SingleMode = _               // Single mode operation Yes/No; 1=Yes, 0=No
     );
 
     void SimDXCoilMultiMode(EnergyPlusData &state,
-                            std::string_view CompName,                         // name of the fan coil unit
-                            DataHVACGlobals::CompressorOperation CompressorOp, // compressor operation; 1=on, 0=off !unused1208
-                            bool const FirstHVACIteration,                     // true if first hvac iteration
-                            Real64 const PartLoadRatio,                        // part load ratio
-                            int const DehumidMode,                             // dehumidification mode (0=normal, 1=enhanced)
+                            std::string_view CompName,        // name of the fan coil unit
+                            HVAC::CompressorOp compressorOp,  // compressor operation; 1=on, 0=off !unused1208
+                            bool const FirstHVACIteration,    // true if first hvac iteration
+                            Real64 const PartLoadRatio,       // part load ratio
+                            HVAC::CoilMode const DehumidMode, // dehumidification mode (0=normal, 1=enhanced)
                             int &CompIndex,
-                            int const FanOpMode // allows parent object to control fan mode
+                            HVAC::FanOp const fanOp // allows parent object to control fan mode
     );
 
     // TODO: Add New Property for AHRI 2023 Standard & Modify Numeric Fields (increment)
@@ -582,23 +582,23 @@ namespace DXCoils {
     );
 
     void CalcDoe2DXCoil(EnergyPlusData &state,
-                        int const DXCoilNum,                               // the number of the DX coil to be simulated
-                        DataHVACGlobals::CompressorOperation CompressorOp, // compressor operation; 1=on, 0=off
-                        bool const FirstHVACIteration,                     // true if this is the first iteration of HVAC
-                        Real64 const PartLoadRatio,                        // sensible cooling load / full load sensible cooling capacity
-                        int const FanOpMode,                               // Allows parent object to control fan operation
-                        ObjexxFCL::Optional_int_const PerfMode = _,        // Performance mode for MultiMode DX coil; Always 1 for other coil types
+                        int const DXCoilNum,                        // the number of the DX coil to be simulated
+                        HVAC::CompressorOp compressorOp,            // compressor operation; 1=on, 0=off
+                        bool const FirstHVACIteration,              // true if this is the first iteration of HVAC
+                        Real64 const PartLoadRatio,                 // sensible cooling load / full load sensible cooling capacity
+                        HVAC::FanOp const fanOp,                    // Allows parent object to control fan operation
+                        ObjexxFCL::Optional_int_const PerfMode = _, // Performance mode for MultiMode DX coil; Always 1 for other coil types
                         ObjexxFCL::Optional<Real64 const> OnOffAirFlowRatio = _, // ratio of compressor on airflow to compressor off airflow
                         ObjexxFCL::Optional<Real64 const> CoolingHeatingPLR = _  // used for cycling fan RH control
     );
 
     void CalcVRFCoolingCoil(EnergyPlusData &state,
-                            int const DXCoilNum,                               // the number of the DX coil to be simulated
-                            DataHVACGlobals::CompressorOperation CompressorOp, // compressor operation; 1=on, 0=off
-                            bool const FirstHVACIteration,                     // true if this is the first iteration of HVAC
-                            Real64 const PartLoadRatio,                        // sensible cooling load / full load sensible cooling capacity
-                            int const FanOpMode,                               // Allows parent object to control fan operation
-                            Real64 const CompCycRatio,                         // cycling ratio of VRF condenser
+                            int const DXCoilNum,                        // the number of the DX coil to be simulated
+                            HVAC::CompressorOp compressorOp,            // compressor operation; 1=on, 0=off
+                            bool const FirstHVACIteration,              // true if this is the first iteration of HVAC
+                            Real64 const PartLoadRatio,                 // sensible cooling load / full load sensible cooling capacity
+                            HVAC::FanOp const fanOp,                    // Allows parent object to control fan operation
+                            Real64 const CompCycRatio,                  // cycling ratio of VRF condenser
                             ObjexxFCL::Optional_int_const PerfMode = _, // Performance mode for MultiMode DX coil; Always 1 for other coil types
                             ObjexxFCL::Optional<Real64 const> OnOffAirFlowRatio = _, // ratio of compressor on airflow to compressor off airflow
                             ObjexxFCL::Optional<Real64 const> MaxCoolCap = _         // maximum capacity of DX coil
@@ -607,7 +607,7 @@ namespace DXCoils {
     void CalcDXHeatingCoil(EnergyPlusData &state,
                            int const DXCoilNum,                                     // the number of the DX heating coil to be simulated
                            Real64 const PartLoadRatio,                              // sensible cooling load / full load sensible cooling capacity
-                           int const FanOpMode,                                     // Allows parent object to control fan mode
+                           HVAC::FanOp const fanOp,                                 // Allows parent object to control fan mode
                            ObjexxFCL::Optional<Real64 const> OnOffAirFlowRatio = _, // ratio of compressor on airflow to compressor off airflow
                            ObjexxFCL::Optional<Real64 const> MaxHeatCap = _         // maximum allowed heating capacity
     );
@@ -619,8 +619,8 @@ namespace DXCoils {
                               ObjexxFCL::Optional_bool_const ForceOn = _);
 
     void CalcBasinHeaterPowerForMultiModeDXCoil(EnergyPlusData &state,
-                                                int const DXCoilNum,  // Index of coil being simulated
-                                                int const DehumidMode // Dehumidification mode (0=normal, 1=enhanced)
+                                                int const DXCoilNum,             // Index of coil being simulated
+                                                HVAC::CoilMode const DehumidMode // Dehumidification mode (0=normal, 1=enhanced)
     );
 
     Real64 AdjustCBF(Real64 const CBFNom,             // nominal coil bypass factor
@@ -685,9 +685,9 @@ namespace DXCoils {
                                      Real64 const SpeedRatio, // = (CompressorSpeed - CompressorSpeedMin) / (CompressorSpeedMax - CompressorSpeedMin)
                                      Real64 const CycRatio,   // cycling part load ratio
                                      int const SpeedNum,      // Speed number
-                                     int const FanOpMode,     // Sets fan control to CycFanCycCoil or ContFanCycCoil
-                                     DataHVACGlobals::CompressorOperation CompressorOp, // Compressor on/off; 1=on, 0=off
-                                     int const SingleMode                               // Single mode operation Yes/No; 1=Yes, 0=No
+                                     HVAC::FanOp const fanOp, // Sets fan control to FanOp::Cycling or FanOp::Continuous
+                                     HVAC::CompressorOp compressorOp, // Compressor on/off; 1=on, 0=off
+                                     int const SingleMode             // Single mode operation Yes/No; 1=Yes, 0=No
     );
 
     void CalcMultiSpeedDXCoilHeating(EnergyPlusData &state,
@@ -695,7 +695,7 @@ namespace DXCoils {
                                      Real64 const SpeedRatio, // = (CompressorSpeed - CompressorSpeedMin) / (CompressorSpeedMax - CompressorSpeedMin)
                                      Real64 const CycRatio,   // cycling part load ratio
                                      int const SpeedNum,      // Speed number
-                                     int const FanOpMode,     // Fan operation mode
+                                     HVAC::FanOp const fanOp, // Fan operation mode
                                      int const SingleMode     // Single mode operation Yes/No; 1=Yes, 0=No
     );
 
@@ -706,7 +706,7 @@ namespace DXCoils {
     void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum);
 
     void GetFanIndexForTwoSpeedCoil(
-        EnergyPlusData &state, int const CoolingCoilIndex, int &SupplyFanIndex, std::string &SupplyFanName, int &SupplyFan_TypeNum);
+        EnergyPlusData &state, int const CoolingCoilIndex, int &SupplyFanIndex, std::string &SupplyFanName, HVAC::FanType &supplyFanType);
 
     void GetDXCoilIndex(EnergyPlusData &state,
                         std::string const &DXCoilName,
@@ -788,11 +788,11 @@ namespace DXCoils {
                                 bool &ErrorsFound            // set to true if problem
     );
 
-    int GetDXCoilAvailSchPtr(EnergyPlusData &state,
-                             std::string const &CoilType,                // must match coil types in this module
-                             std::string const &CoilName,                // must match coil names for the coil type
-                             bool &ErrorsFound,                          // set to true if problem
-                             ObjexxFCL::Optional_int_const CoilIndex = _ // Coil index number
+    Sched::Schedule *GetDXCoilAvailSched(EnergyPlusData &state,
+                                         std::string const &CoilType,                // must match coil types in this module
+                                         std::string const &CoilName,                // must match coil names for the coil type
+                                         bool &ErrorsFound,                          // set to true if problem
+                                         ObjexxFCL::Optional_int_const CoilIndex = _ // Coil index number
     );
 
     Real64 GetDXCoilAirFlow(EnergyPlusData &state,
@@ -818,7 +818,7 @@ namespace DXCoils {
         ObjexxFCL::Optional<Real64> MaxOATCooling = _,         // Parameter equivalent of condenser Max OAT for compressor cooling operation
         ObjexxFCL::Optional<Real64> MinOATHeating = _,         // Parameter equivalent of condenser Min OAT for compressor heating operation
         ObjexxFCL::Optional<Real64> MaxOATHeating = _,         // Parameter equivalent of condenser Max OAT for compressor heating operation
-        ObjexxFCL::Optional_int HeatingPerformanceOATType = _, // Parameter equivalent to condenser entering air temp type (1-db, 2=wb)
+        ObjexxFCL::Optional<HVAC::OATType> HeatingPerformanceOATType = _, // Parameter equivalent to condenser entering air temp type (1-db, 2=wb)
         ObjexxFCL::Optional<StandardRatings::DefrostStrat> DefrostStrategy = _,
         ObjexxFCL::Optional<StandardRatings::HPdefrostControl> DefrostControl = _,
         ObjexxFCL::Optional_int DefrostEIRPtr = _,
@@ -831,7 +831,7 @@ namespace DXCoils {
         ObjexxFCL::Optional<Real64> TotCap = _,
         ObjexxFCL::Optional_int SupplyFanIndex = _,
         ObjexxFCL::Optional_string SupplyFanName = _,
-        ObjexxFCL::Optional_int SupplyFan_TypeNum = _);
+        ObjexxFCL::Optional<HVAC::FanType> supplyFanType = _);
 
     void SetCoilSystemHeatingDXFlag(EnergyPlusData &state,
                                     std::string const &CoilType, // must match coil types in this module
@@ -874,22 +874,23 @@ namespace DXCoils {
     //******************************************************************************
     void
     CalcVRFCoolingCoil_FluidTCtrl(EnergyPlusData &state,
-                                  int const DXCoilNum,                               // the number of the DX coil to be simulated
-                                  DataHVACGlobals::CompressorOperation CompressorOp, // compressor operation; 1=on, 0=off
-                                  bool const FirstHVACIteration,                     // true if this is the first iteration of HVAC
-                                  Real64 const PartLoadRatio,                        // sensible cooling load / full load sensible cooling capacity
-                                  int const FanOpMode,                               // Allows parent object to control fan operation
-                                  Real64 const CompCycRatio,                         // cycling ratio of VRF condenser
+                                  int const DXCoilNum,                    // the number of the DX coil to be simulated
+                                  HVAC::CompressorOp compressorOp,        // compressor operation; 1=on, 0=off
+                                  bool const FirstHVACIteration,          // true if this is the first iteration of HVAC
+                                  Real64 const PartLoadRatio,             // sensible cooling load / full load sensible cooling capacity
+                                  HVAC::FanOp const fanOp,                // Allows parent object to control fan operation
+                                  Real64 const CompCycRatio,              // cycling ratio of VRF condenser
                                   ObjexxFCL::Optional_int_const PerfMode, // Performance mode for MultiMode DX coil; Always 1 for other coil types
-                                  ObjexxFCL::Optional<Real64 const> OnOffAirFlowRatio // ratio of compressor on airflow to compressor off airflow
+                                  ObjexxFCL::Optional<Real64 const> OnOffAirFlowRatio, // ratio of compressor on airflow to compressor off airflow
+                                  Real64 MaxCoolCap = Constant::MaxCap                 // maximum allowed cooling capacity
     );
 
     void
     CalcVRFHeatingCoil_FluidTCtrl(EnergyPlusData &state,
-                                  DataHVACGlobals::CompressorOperation CompressorOp,   // compressor operation; 1=on, 0=off
+                                  HVAC::CompressorOp compressorOp,                     // compressor operation; 1=on, 0=off
                                   int const DXCoilNum,                                 // the number of the DX heating coil to be simulated
                                   Real64 const PartLoadRatio,                          // sensible cooling load / full load sensible cooling capacity
-                                  int const FanOpMode,                                 // Allows parent object to control fan mode
+                                  HVAC::FanOp const fanOp,                             // Allows parent object to control fan mode
                                   ObjexxFCL::Optional<Real64 const> OnOffAirFlowRatio, // ratio of compressor on airflow to compressor off airflow
                                   ObjexxFCL::Optional<Real64 const> MaxHeatCap         // maximum allowed heating capacity
     );
@@ -969,7 +970,7 @@ struct DXCoilsData : BaseGlobalStruct
     Array1D<Real64> DXCoilOutletTemp;           // DX coil outlet dry bulb temperature [C]
     Array1D<Real64> DXCoilOutletHumRat;         // DX coil outlet humidity ratio [kgWater/kgDryAir]
     Array1D<Real64> DXCoilPartLoadRatio;        // DX coil part-load ratio
-    Array1D_int DXCoilFanOpMode;                // supply air fan operating mode
+    Array1D<HVAC::FanOp> DXCoilFanOp;           // supply air fan operating mode
     Array1D<Real64> DXCoilFullLoadOutAirTemp;   // DX coil full load outlet dry bulb temperature [C]
     Array1D<Real64> DXCoilFullLoadOutAirHumRat; // DX coil full load outlet humidity ratio [kgWater/kgDryAir]
     Array1D<Real64> DXCoilTotalCooling;         // DX cooling coil total cooling output [W]
@@ -987,12 +988,20 @@ struct DXCoilsData : BaseGlobalStruct
     Real64 CalcVRFCoolingCoilCurrentEndTime = 0.0;
     Real64 NetCoolingCapRated = 0.0; // Net Cooling Coil capacity at Rated conditions, accounting for supply fan heat [W]
     Real64 EER = 0.0;                // Energy Efficiency Ratio in SI [W/W]
-    Real64 IEER = 0.0;               // Integerated Energy Efficiency Ratio in SI [W/W]
+    Real64 IEER = 0.0;               // Integrated Energy Efficiency Ratio in SI [W/W]
     Real64 TotCapTempModFac = 0.0;   // Total capacity modifier (function of entering wetbulb, outside drybulb) [-]
     Real64 TotCapFlowModFac = 0.0;   // Total capacity modifier (function of actual supply air flow vs rated flow) [-]
     Real64 EIRTempModFac = 0.0;      // EIR modifier (function of entering wetbulb, outside drybulb) [-]
     Real64 EIRFlowModFac = 0.0;      // EIR modifier (function of actual supply air flow vs rated flow) [-]
     Real64 TempDryBulb_Leaving_Apoint = 0.0;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

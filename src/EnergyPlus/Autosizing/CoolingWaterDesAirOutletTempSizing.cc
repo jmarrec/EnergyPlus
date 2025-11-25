@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -66,16 +66,10 @@ Real64 CoolingWaterDesAirOutletTempSizer::size(EnergyPlusData &state, Real64 _or
             this->autoSizedValue = _originalValue;
         } else {
             if (this->termUnitIU) {
-                Real64 Cp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                                   state.dataPlnt->PlantLoop(this->dataWaterLoopNum).FluidName,
-                                                                   Constant::CWInitConvTemp,
-                                                                   state.dataPlnt->PlantLoop(this->dataWaterLoopNum).FluidIndex,
-                                                                   this->callingRoutine);
-                Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                               state.dataPlnt->PlantLoop(this->dataWaterLoopNum).FluidName,
-                                                               Constant::CWInitConvTemp,
-                                                               state.dataPlnt->PlantLoop(this->dataWaterLoopNum).FluidIndex,
-                                                               this->callingRoutine);
+                Real64 Cp =
+                    state.dataPlnt->PlantLoop(this->dataWaterLoopNum).glycol->getSpecificHeat(state, Constant::CWInitConvTemp, this->callingRoutine);
+                Real64 rho =
+                    state.dataPlnt->PlantLoop(this->dataWaterLoopNum).glycol->getDensity(state, Constant::CWInitConvTemp, this->callingRoutine);
                 Real64 DesCoilLoad = this->dataWaterFlowUsedForSizing * this->dataWaterCoilSizCoolDeltaT * Cp * rho;
                 Real64 T1Out =
                     this->dataDesInletAirTemp - DesCoilLoad / (state.dataEnvrn->StdRhoAir * Psychrometrics::PsyCpAirFnW(this->dataDesInletAirHumRat) *
@@ -86,7 +80,7 @@ Real64 CoolingWaterDesAirOutletTempSizer::size(EnergyPlusData &state, Real64 _or
                 this->autoSizedValue = this->finalZoneSizing(this->curZoneEqNum).CoolDesTemp;
             }
             Real64 fanDeltaT = 0.0;
-            if (this->dataFanPlacement == DataSizing::ZoneFanPlacement::DrawThru) {
+            if (this->dataFanPlacement == HVAC::FanPlace::DrawThru) {
                 // calculate fan heat to get fan air-side delta T
                 Real64 FanCoolLoad = this->calcFanDesHeatGain(this->dataAirFlowUsedForSizing);
                 if (this->dataDesInletAirHumRat > 0.0 && this->dataAirFlowUsedForSizing > 0.0) {
@@ -130,7 +124,7 @@ Real64 CoolingWaterDesAirOutletTempSizer::size(EnergyPlusData &state, Real64 _or
             } else if (this->dataDesOutletAirTemp > 0.0) {
                 this->autoSizedValue = this->dataDesOutletAirTemp;
                 Real64 fanDeltaT = 0.0;
-                if (this->primaryAirSystem(this->curSysNum).supFanLocation == DataAirSystems::FanPlacement::DrawThru) {
+                if (this->primaryAirSystem(this->curSysNum).supFanPlace == HVAC::FanPlace::DrawThru) {
                     // calculate fan heat to get fan air-side delta T
                     Real64 FanCoolLoad = this->calcFanDesHeatGain(this->dataAirFlowUsedForSizing);
                     if (this->dataDesInletAirHumRat > 0.0 && this->dataAirFlowUsedForSizing > 0.0) {
@@ -144,7 +138,7 @@ Real64 CoolingWaterDesAirOutletTempSizer::size(EnergyPlusData &state, Real64 _or
             } else {
                 this->autoSizedValue = this->finalSysSizing(this->curSysNum).CoolSupTemp;
                 Real64 fanDeltaT = 0.0;
-                if (this->primaryAirSystem(this->curSysNum).supFanLocation == DataAirSystems::FanPlacement::DrawThru) {
+                if (this->primaryAirSystem(this->curSysNum).supFanPlace == HVAC::FanPlace::DrawThru) {
                     // calculate fan heat to get fan air-side delta T
                     Real64 FanCoolLoad = this->calcFanDesHeatGain(this->dataAirFlowUsedForSizing);
                     if (this->dataDesInletAirHumRat > 0.0 && this->dataAirFlowUsedForSizing > 0.0) {
@@ -175,7 +169,9 @@ Real64 CoolingWaterDesAirOutletTempSizer::size(EnergyPlusData &state, Real64 _or
     }
     // override sizing string
     if (this->overrideSizeString) {
-        if (this->isEpJSON) this->sizingString = "design_outlet_air_temperature [C]";
+        if (this->isEpJSON) {
+            this->sizingString = "design_outlet_air_temperature [C]";
+        }
     }
     this->selectSizerOutput(state, errorsFound);
     if (this->isCoilReportObject) {

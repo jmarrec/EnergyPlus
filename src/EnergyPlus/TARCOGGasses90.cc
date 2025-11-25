@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -51,7 +51,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array2D.hh>
-#include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
@@ -64,7 +63,7 @@ namespace EnergyPlus::TARCOGGasses90 {
 // MODULE INFORMATION:
 //       AUTHOR         D. Charlie Curcija
 //       DATE WRITTEN   June/2000
-//       MODIFIED       (see revision history bellow)
+//       MODIFIED       (see revision history below)
 //       RE-ENGINEERED  na
 //  Revision: 7.0.02  (November/8/2011), Simon Vidanovic
 //   - feature: Error message (string) return from gasses
@@ -195,7 +194,9 @@ void GASSES90(EnergyPlusData &state,
                     downer = two_sqrt_2 * std::sqrt(1.0 + (xwght_i / xwght_j));
 
                     // calculate the denominator of equation 60
-                    if (i != j) state.dataTARCOGGasses90->mukpdwn(i) += phimup / downer * frct(j) / frct(i);
+                    if (i != j) {
+                        state.dataTARCOGGasses90->mukpdwn(i) += phimup / downer * frct(j) / frct(i);
+                    }
 
                     // numerator of equation 64, psiterm is the multiplied term in brackets
                     psiup = pow_2(1.0 + std::sqrt(kprime_i / state.dataTARCOGGasses90->kprime(j)) / x_pow);
@@ -203,13 +204,17 @@ void GASSES90(EnergyPlusData &state,
                     psiterm = 1.0 + 2.41 * (xwght_i - xwght_j) * (xwght_i - 0.142 * xwght_j) / pow_2(xwght_i + xwght_j);
 
                     // using the common denominator downer calculate the denominator for equation 63
-                    if (i != j) state.dataTARCOGGasses90->kpdown(i) += psiup * psiterm / downer * frct(j) / frct(i);
+                    if (i != j) {
+                        state.dataTARCOGGasses90->kpdown(i) += psiup * psiterm / downer * frct(j) / frct(i);
+                    }
 
                     // calculate the numerator of equation 66
                     phikup = psiup; // Tuned Was pow_2( 1.0 + std::sqrt( kprime_i / kprime( j ) ) * std::pow( xwght_i / xwght_j, 0.25 ) );
 
                     // using the common denominator downer calculate the denominator for equation 65
-                    if (i != j) state.dataTARCOGGasses90->kdpdown(i) += phikup / downer * frct(j) / frct(i);
+                    if (i != j) {
+                        state.dataTARCOGGasses90->kdpdown(i) += phikup / downer * frct(j) / frct(i);
+                    }
                 }
                 mumix += state.dataTARCOGGasses90->fvis(i) / state.dataTARCOGGasses90->mukpdwn(i);     // equation 60
                 kpmix += state.dataTARCOGGasses90->kprime(i) / state.dataTARCOGGasses90->kpdown(i);    // equation 63

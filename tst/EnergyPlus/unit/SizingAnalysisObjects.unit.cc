@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -83,7 +83,7 @@ protected:
         midLogVal = 75.0;
         hiLogVal = 100.0;
 
-        state->dataGlobal->NumOfTimeStepInHour = 4; // in DataGlobals
+        state->dataGlobal->TimeStepsInHour = 4; // in DataGlobals
         state->dataGlobal->TimeStepZone = 0.25;
 
         // setup weather manager state needed
@@ -109,8 +109,8 @@ protected:
         state->dataWeather->Environment(4).DesignDayNum = 2;
         state->dataWeather->Environment(4).SeedEnvrnNum = 2;
 
-        OutputProcessor::SetupTimePointers(*state, OutputProcessor::SOVTimeStepType::Zone, state->dataGlobal->TimeStepZone);
-        OutputProcessor::SetupTimePointers(*state, OutputProcessor::SOVTimeStepType::HVAC, state->dataHVACGlobal->TimeStepSys);
+        OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::Zone, state->dataGlobal->TimeStepZone);
+        OutputProcessor::SetupTimePointers(*state, OutputProcessor::TimeStepType::System, state->dataHVACGlobal->TimeStepSys);
 
         state->dataSize->PlantSizData.allocate(1);
 
@@ -405,7 +405,7 @@ TEST_F(SizingAnalysisObjectsTest, PlantCoincidentAnalyObjTest)
     EXPECT_TRUE(TestAnalysisObj.anotherIterationDesired);
 }
 
-TEST_F(SizingAnalysisObjectsTest, DISABLED_LoggingSubStep4stepPerHour)
+TEST_F(SizingAnalysisObjectsTest, LoggingSubStep4stepPerHour)
 {
     ShowMessage(*state, "Begin Test: SizingAnalysisObjectsTest, LoggingSubStep4stepPerHour");
 
@@ -435,7 +435,7 @@ TEST_F(SizingAnalysisObjectsTest, DISABLED_LoggingSubStep4stepPerHour)
     state->dataGlobal->DayOfSim = 1;
     int HourofDay(0);
     state->dataHVACGlobal->TimeStepSys = 1.0 / (4.0 * 5.0); // fractional hours, duration
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
     Real64 zoneTimeStepDuration(0.25);
     int numTimeStepsInHour(4);
 
@@ -578,7 +578,7 @@ TEST_F(SizingAnalysisObjectsTest, PlantCoincidentAnalyObjTestNullMassFlowRateTim
 
     ZoneTimestepObject tmpNullztStep2; // call default constructor
 
-    TestAnalysisObj.newFoundMassFlowRateTimeStamp = tmpNullztStep2; // use null timestap and check to logic works with a valid max demand timestamp
+    TestAnalysisObj.newFoundMassFlowRateTimeStamp = tmpNullztStep2; // use null timestamp and check to logic works with a valid max demand timestamp
     TestAnalysisObj.peakMdotCoincidentDemand = 1000.0;
     TestAnalysisObj.peakMdotCoincidentReturnTemp = 10.0;
     TestAnalysisObj.NewFoundMaxDemandTimeStamp = tmpztStepStamp1;

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -69,7 +69,7 @@ namespace RoomAir {
     struct DefineLinearModelNode
     {
         // Members
-        std::string AirNodeName = "";                                   // Name of air nodes
+        std::string AirNodeName;                                        // Name of air nodes
         RoomAir::AirNodeType ClassType = RoomAir::AirNodeType::Invalid; // Type of air nodes
         Real64 Height = 0.0;                                            // Z coordinates [m] node's Control Vol. center
         Real64 Temp = 0.0;                                              // Surface temperature BC
@@ -167,6 +167,14 @@ struct MundtSimMgrData : BaseGlobalStruct
     Array2D<RoomAir::DefineLinearModelNode> LineNode;     // air nodes
     Array2D<RoomAir::DefineSurfaceSettings> MundtAirSurf; // surfaces
     Array1D<RoomAir::DefineSurfaceSettings> FloorSurf;    // floor
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

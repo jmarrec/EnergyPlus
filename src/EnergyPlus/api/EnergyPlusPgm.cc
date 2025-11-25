@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -173,7 +173,7 @@
 // from the SQLite project (http://www.sqlite.org/).
 
 #ifdef _WIN32
-#include <Windows.h>
+#    include <Windows.h>
 #endif
 
 // C++ Headers
@@ -182,10 +182,12 @@
 #include <string>
 #include <vector>
 
-#ifndef NDEBUG
-#ifdef __unix__
-#include <cfenv>
+#ifdef DEBUG_ARITHM_GCC_OR_CLANG
+#    include <EnergyPlus/fenv_missing.h>
 #endif
+
+#ifdef DEBUG_ARITHM_MSVC
+#    include <cfloat>
 #endif
 
 // ObjexxFCL Headers
@@ -216,10 +218,10 @@
 #include <EnergyPlus/api/EnergyPlusPgm.hh>
 
 #ifdef _WIN32
-#include <direct.h>
-#include <stdlib.h>
+#    include <direct.h>
+#    include <stdlib.h>
 #else // Mac or Linux
-#include <unistd.h>
+#    include <unistd.h>
 #endif
 
 int EnergyPlusPgm(const std::vector<std::string> &args, std::string const &filepath)
@@ -243,34 +245,39 @@ int EnergyPlusPgm(const std::vector<std::string> &args, std::string const &filep
 void commonInitialize(EnergyPlus::EnergyPlusData &state)
 {
     using namespace EnergyPlus;
-    // Disable C++ i/o synching with C methods for speed
+    // Disable C++ i/o syncing with C methods for speed
     // std::ios_base::sync_with_stdio(false);
     // std::cin.tie(nullptr); // Untie cin and cout: Could cause odd behavior for interactive prompts
 
 // Enable floating point exceptions
-#ifndef NDEBUG
-#ifdef __unix__
+#ifdef DEBUG_ARITHM_GCC_OR_CLANG
     feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW); // These exceptions are enabled (FE_INEXACT and FE_UNDERFLOW will not throw)
 #endif
-#endif
 
-#ifdef MSVC_DEBUG
-    // the following line enables NaN detection in Visual Studio debug builds. See
+#ifdef DEBUG_ARITHM_MSVC
+    // the following enables NaN detection in Visual Studio debug builds. See
     // https://github.com/NREL/EnergyPlus/wiki/Debugging-Tips
-    int fp_control_state =
-        _controlfp(_EM_INEXACT | _EM_UNDERFLOW, _MCW_EM); // These exceptions are disabled (_EM_INEXACT and _EM_UNDERFLOW will not throw)
+
+    // Note: what you need to pass to the _controlfp_s is actually the opposite
+    // By default all bits are 1, and the exceptions are turned off, so you need to turn off the bits for the exceptions you want to enable
+    // > For the _MCW_EM mask, clearing it sets the exception, which allows the hardware exception; setting it hides the exception.
+    unsigned int fpcntrl = 0;
+    _controlfp_s(&fpcntrl, 0, 0);
+    unsigned int new_exceptions = _EM_ZERODIVIDE | _EM_INVALID | _EM_OVERFLOW;
+    unsigned int new_control = fpcntrl & ~new_exceptions;
+    _controlfp_s(&fpcntrl, new_control, _MCW_EM);
 #endif
 
 #ifdef _MSC_VER
-#ifndef _DEBUG
+#    ifndef _DEBUG
     // If _MSC_VER and not debug then prevent dialogs on error
     SetErrorMode(SEM_NOGPFAULTERRORBOX);
     _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
     _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
-#endif
+#    endif
 #endif
 
-    state.dataSysVars->Time_Start = Util::epElapsedTime();
+    state.dataSysVars->runtimeTimer.tick();
 
     state.dataStrGlobals->CurrentDateTime = CreateCurrentDateTimeString();
 
@@ -287,7 +294,7 @@ int commonRun(EnergyPlus::EnergyPlusData &state)
     using namespace EnergyPlus;
 
     int errStatus = initErrorFile(state);
-    if (errStatus) {
+    if (errStatus != 0) {
         return errStatus;
     }
 
@@ -360,8 +367,10 @@ int wrapUpEnergyPlus(EnergyPlus::EnergyPlusData &state)
         Psychrometrics::ShowPsychrometricSummary(state, state.files.audit);
 
         state.dataInputProcessing->inputProcessor->reportOrphanRecordObjects(state);
-        FluidProperties::ReportOrphanFluids(state);
-        ScheduleManager::ReportOrphanSchedules(state);
+
+        Fluid::ReportOrphanFluids(state);
+        Sched::ReportOrphanSchedules(state);
+
         if (state.dataSQLiteProcedures->sqlite) {
             state.dataSQLiteProcedures->sqlite.reset();
         }
@@ -375,7 +384,7 @@ int wrapUpEnergyPlus(EnergyPlus::EnergyPlusData &state)
                 ShowWarningMessage(state, "This will overwrite the native CSV output.");
             }
             int status = CommandLineInterface::runReadVarsESO(state);
-            if (status) {
+            if (status != 0) {
                 return status;
             }
         }
@@ -405,17 +414,22 @@ int RunEnergyPlus(EnergyPlus::EnergyPlusData &state, std::string const &filepath
     // METHODOLOGY EMPLOYED:
     // The method used in EnergyPlus is to simplify the main program as much
     // as possible and contain all "simulation" code in other modules and files.
-
+    using namespace EnergyPlus;
     int status = initializeEnergyPlus(state, filepath);
-    if (status || state.dataGlobal->outputEpJSONConversionOnly) return status;
+    if ((status != 0) || state.dataGlobal->outputEpJSONConversionOnly) {
+        return status;
+    }
     try {
         EnergyPlus::SimulationManager::ManageSimulation(state);
     } catch (const EnergyPlus::FatalError &e) {
         return EnergyPlus::AbortEnergyPlus(state);
+#ifdef NDEBUG
     } catch (const std::exception &e) {
-        EnergyPlus::ShowSevereError(state, e.what());
+        ShowSevereError(state, e.what());
         return EnergyPlus::AbortEnergyPlus(state);
+#endif
     }
+
     return wrapUpEnergyPlus(state);
 }
 
@@ -434,13 +448,19 @@ int runEnergyPlusAsLibrary(EnergyPlus::EnergyPlusData &state, const std::vector<
     // METHODOLOGY EMPLOYED:
     // The method used in EnergyPlus is to simplify the main program as much
     // as possible and contain all "simulation" code in other modules and files.
-
+    using namespace EnergyPlus;
     state.dataGlobal->eplusRunningViaAPI = true;
 
     // clean out any stdin, stderr, stdout flags from a prior call
-    if (!std::cin.good()) std::cin.clear();
-    if (!std::cerr.good()) std::cerr.clear();
-    if (!std::cout.good()) std::cout.clear();
+    if (!std::cin.good()) {
+        std::cin.clear();
+    }
+    if (!std::cerr.good()) {
+        std::cerr.clear();
+    }
+    if (!std::cout.good()) {
+        std::cout.clear();
+    }
 
     int return_code = EnergyPlus::CommandLineInterface::ProcessArgs(state, args);
     if (return_code == static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCodes::Failure)) {
@@ -451,7 +471,7 @@ int runEnergyPlusAsLibrary(EnergyPlus::EnergyPlusData &state, const std::vector<
     }
 
     int status = initializeAsLibrary(state);
-    if (status || state.dataGlobal->outputEpJSONConversionOnly) {
+    if ((status != 0) || state.dataGlobal->outputEpJSONConversionOnly) {
         return status;
     }
     try {
@@ -459,7 +479,7 @@ int runEnergyPlusAsLibrary(EnergyPlus::EnergyPlusData &state, const std::vector<
     } catch (const EnergyPlus::FatalError &e) {
         return EnergyPlus::AbortEnergyPlus(state);
     } catch (const std::exception &e) {
-        EnergyPlus::ShowSevereError(state, e.what());
+        ShowSevereError(state, e.what());
         return EnergyPlus::AbortEnergyPlus(state);
     }
     return wrapUpEnergyPlus(state);

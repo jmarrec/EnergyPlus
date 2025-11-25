@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -52,7 +52,6 @@
 #include <ObjexxFCL/Array1A.hh>
 #include <ObjexxFCL/Array2A.hh>
 #include <ObjexxFCL/Array2S.hh>
-#include <ObjexxFCL/Array3D.hh>
 #include <ObjexxFCL/Vector3.fwd.hh>
 
 // EnergyPlus Headers
@@ -317,7 +316,7 @@ namespace Dayltg {
 
     void GetInputDayliteRefPt(EnergyPlusData &state, bool &ErrorsFound);
 
-    bool doesDayLightingUseDElight(EnergyPlusData &state);
+    bool doesDayLightingUseDElight(EnergyPlusData const &state);
 
     void CheckTDDsAndLightShelvesInDaylitZones(EnergyPlusData &state);
 
@@ -518,20 +517,19 @@ struct DaylightingData : BaseGlobalStruct
     int maxNumRefPtInAnyEncl = 0;     // The most number of reference points that any single enclosure has
 
     Dayltg::SunAngles sunAngles = Dayltg::SunAngles();
-    std::array<Dayltg::SunAngles, (int)Constant::HoursInDay + 1> sunAnglesHr = {Dayltg::SunAngles()};
+    std::array<Dayltg::SunAngles, (int)Constant::iHoursInDay + 1> sunAnglesHr = {Dayltg::SunAngles()};
 
     // In the following I,J,K arrays:
     // I = 1 for clear sky, 2 for clear turbid, 3 for intermediate, 4 for overcast;
     // J = 1 for bare window, 2 - 12 for shaded;
     // K = sun position index.
-    std::array<Dayltg::Illums, (int)Constant::HoursInDay + 1> horIllum = {
-        Dayltg::Illums()};             // Horizontal illuminance from sky, by sky type, for each hour of the day
-    Array2D<Dayltg::Illums> dirIllum;  // Sky-related component of direct illuminance
-    Array2D<Dayltg::Illums> reflIllum; // Sky-related portion of internally reflected illuminance
-    Array2D<Dayltg::Illums> winLum;    // Sky-related window luminance
+    std::array<Dayltg::Illums, (int)Constant::iHoursInDay + 1> horIllum = {
+        Dayltg::Illums()}; // Horizontal illuminance from sky, by sky type, for each hour of the day
+    Array1D<std::array<Dayltg::Illums, (int)DataSurfaces::WinCover::Num>> dirIllum;  // Sky-related component of direct illuminance
+    Array1D<std::array<Dayltg::Illums, (int)DataSurfaces::WinCover::Num>> reflIllum; // Sky-related portion of internally reflected illuminance
+    Array1D<std::array<Dayltg::Illums, (int)DataSurfaces::WinCover::Num>> winLum;    // Sky-related window luminance
 
-    Array2D<Dayltg::Illums> avgWinLum; // Sky-related average window luminance
-
+    Array1D<std::array<Dayltg::Illums, (int)DataSurfaces::WinCover::Num>> avgWinLum; // Sky-related average window luminance
     // Allocatable daylight factor arrays  -- are in the ZoneDaylight Structure
 
     Array2D<Real64> TDDTransVisBeam;
@@ -547,8 +545,8 @@ struct DaylightingData : BaseGlobalStruct
     std::array<Real64, DataSurfaces::AltAngStepsForSolReflCalc / 2 + 1> cos_Phi = {0.0}; // cos( Phi ) table
     std::array<Real64, DataSurfaces::AltAngStepsForSolReflCalc / 2 + 1> sin_Phi = {0.0}; // sin( Phi ) table
     int AzimSteps_last = 0;
-    std::array<Real64, 2 *DataSurfaces::AzimAngStepsForSolReflCalc + 1> cos_Theta = {0.0}; // cos( Theta ) table
-    std::array<Real64, 2 *DataSurfaces::AzimAngStepsForSolReflCalc + 1> sin_Theta = {0.0}; // sin( Theta ) table
+    std::array<Real64, 2 * DataSurfaces::AzimAngStepsForSolReflCalc + 1> cos_Theta = {0.0}; // cos( Theta ) table
+    std::array<Real64, 2 * DataSurfaces::AzimAngStepsForSolReflCalc + 1> sin_Theta = {0.0}; // sin( Theta ) table
 
     std::array<Real64, Dayltg::NPH + 1> PH; // Altitude of sky element (radians)
 
@@ -568,6 +566,14 @@ struct DaylightingData : BaseGlobalStruct
     Array1D<Real64> XValue;
     Array1D<Real64> YValue;
     Array2D<Real64> IllumValue;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

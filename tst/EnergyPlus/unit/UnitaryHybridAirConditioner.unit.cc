@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -91,7 +91,6 @@ using namespace EnergyPlus::DataAirLoop;
 using namespace EnergyPlus::DataAirSystems;
 using namespace EnergyPlus::DataSizing;
 using namespace EnergyPlus::DataHeatBalance;
-using namespace EnergyPlus::ScheduleManager;
 using namespace EnergyPlus::DataEnvironment;
 using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::DataLoopNode;
@@ -110,13 +109,12 @@ using namespace EnergyPlus::SizingManager;
 using EnergyPlus::Curve::CurveValue;
 using EnergyPlus::Curve::GetCurveName;
 using EnergyPlus::Curve::GetNormalPoint;
-using EnergyPlus::Psychrometrics::PsyHFnTdbRhPb;
-using EnergyPlus::Psychrometrics::PsyRhFnTdbWPb;
-using EnergyPlus::Psychrometrics::PsyWFnTdbRhPb;
-using namespace EnergyPlus::ScheduleManager;
 using EnergyPlus::HybridEvapCoolingModel::CMode;
 using EnergyPlus::HybridEvapCoolingModel::CSetting;
 using EnergyPlus::HybridEvapCoolingModel::Model;
+using EnergyPlus::Psychrometrics::PsyHFnTdbRhPb;
+using EnergyPlus::Psychrometrics::PsyRhFnTdbWPb;
+using EnergyPlus::Psychrometrics::PsyWFnTdbRhPb;
 using namespace EnergyPlus::HybridUnitaryAirConditioners;
 
 namespace EnergyPlus {
@@ -126,6 +124,10 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     ASSERT_TRUE(process_idf(
         delimited_string(read_lines_in_file(configured_source_directory() / "tst/EnergyPlus/unit/Resources/UnitaryHybridUnitTest_DOSA.idf"))));
 
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
     // setup environment
     bool ErrorsFound(false);
     GetZoneData(*state, ErrorsFound);
@@ -133,9 +135,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     // Initialize schedule values
     state->dataGlobal->TimeStep = 1;
     state->dataHVACGlobal->TimeStepSys = 1;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
     state->dataEnvrn->Month = 1;
     state->dataEnvrn->DayOfMonth = 21;
     state->dataGlobal->HourOfDay = 1;
@@ -144,7 +144,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     state->dataEnvrn->HolidayIndex = 0;
     state->dataGlobal->WarmupFlag = false;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Initialize zone areas and volumes - too many other things need to be set up to do these in the normal routines
     state->dataHeatBal->Zone(1).FloorArea = 232.26;
     state->dataEnvrn->StdRhoAir = 1.225;
@@ -157,8 +157,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     // Setup performance tables
     using namespace EnergyPlus::DataEnvironment;
     // process schedules
-    ProcessScheduleInput(*state); // read schedules
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Get Unitary system
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     EXPECT_EQ(1, state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner.size());
@@ -356,7 +355,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     thisUnitary.InitializeModelParams();
     thisUnitary.SecInletTemp = Tosa;
     thisUnitary.SecInletHumRat = Wosa;
-    thisUnitary.AvailStatus = 1;
+    thisUnitary.availStatus = Avail::Status::ForceOff;
     thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
@@ -390,9 +389,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
 
     // Setup performance tables
     using namespace EnergyPlus::DataEnvironment;
-    // process schedules
-    ProcessScheduleInput(*state); // read schedules
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Get Unitary system: no, we don't want to do it twice! Otherwise the Output Variables will be duplicated
     // GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     EXPECT_EQ(1, state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner.size());
@@ -431,30 +428,29 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
 
     // Check the meters associated with the ZoneHVAC:HybridUnitaryHVAC outputs
     EXPECT_EQ(14, NumFound);
-    EXPECT_TRUE(compare_enums(meteredVars(1).resource, Constant::eResource::EnergyTransfer)); // ENERGYTRANSFER - Cooling
-    EXPECT_TRUE(compare_enums(meteredVars(1).sovEndUseCat, OutputProcessor::SOVEndUseCat::CoolingCoils));
-    EXPECT_TRUE(compare_enums(meteredVars(1).sovGroup, OutputProcessor::SOVGroup::HVAC));
-    EXPECT_TRUE(compare_enums(meteredVars(2).resource, Constant::eResource::EnergyTransfer)); // ENERGYTRANSFER - Heating
-    EXPECT_TRUE(compare_enums(meteredVars(2).sovEndUseCat, OutputProcessor::SOVEndUseCat::HeatingCoils));
-    EXPECT_TRUE(compare_enums(meteredVars(2).sovGroup, OutputProcessor::SOVGroup::HVAC));
-    EXPECT_TRUE(compare_enums(meteredVars(3).resource, Constant::eResource::Electricity)); // ELECTRIC - Cooling Energy
-    EXPECT_TRUE(compare_enums(meteredVars(3).sovEndUseCat, OutputProcessor::SOVEndUseCat::Cooling));
-    EXPECT_TRUE(compare_enums(meteredVars(3).sovGroup, OutputProcessor::SOVGroup::HVAC));
-    EXPECT_TRUE(compare_enums(meteredVars(4).resource, Constant::eResource::Electricity)); // ELECTRIC - Fan Energy
-    EXPECT_TRUE(compare_enums(meteredVars(4).sovEndUseCat, OutputProcessor::SOVEndUseCat::Fans));
-    EXPECT_TRUE(compare_enums(meteredVars(4).sovGroup, OutputProcessor::SOVGroup::HVAC));
-    EXPECT_TRUE(compare_enums(meteredVars(5).resource,
-                              Constant::eResource::NaturalGas)); // NATURALGAS - Secondary Fuel Type - specified in UnitaryHybridUnitTest_DOSA.idf
-    EXPECT_TRUE(compare_enums(meteredVars(5).sovEndUseCat, OutputProcessor::SOVEndUseCat::Cooling));
-    EXPECT_TRUE(compare_enums(meteredVars(5).sovGroup, OutputProcessor::SOVGroup::HVAC));
-    EXPECT_TRUE(
-        compare_enums(meteredVars(6).resource,
-                      Constant::eResource::DistrictCooling)); // DISTRICTCOOLING - Third Fuel Type - specified in UnitaryHybridUnitTest_DOSA.idf
-    EXPECT_TRUE(compare_enums(meteredVars(6).sovEndUseCat, OutputProcessor::SOVEndUseCat::Cooling));
-    EXPECT_TRUE(compare_enums(meteredVars(6).sovGroup, OutputProcessor::SOVGroup::HVAC));
-    EXPECT_TRUE(compare_enums(meteredVars(7).resource, Constant::eResource::Water)); // WATER - Cooling Water Use
-    EXPECT_TRUE(compare_enums(meteredVars(7).sovEndUseCat, OutputProcessor::SOVEndUseCat::Cooling));
-    EXPECT_TRUE(compare_enums(meteredVars(7).sovGroup, OutputProcessor::SOVGroup::HVAC));
+    EXPECT_ENUM_EQ(meteredVars(1).resource, Constant::eResource::EnergyTransfer); // ENERGYTRANSFER - Cooling
+    EXPECT_ENUM_EQ(meteredVars(1).endUseCat, OutputProcessor::EndUseCat::CoolingCoils);
+    EXPECT_ENUM_EQ(meteredVars(1).group, OutputProcessor::Group::HVAC);
+    EXPECT_ENUM_EQ(meteredVars(2).resource, Constant::eResource::EnergyTransfer); // ENERGYTRANSFER - Heating
+    EXPECT_ENUM_EQ(meteredVars(2).endUseCat, OutputProcessor::EndUseCat::HeatingCoils);
+    EXPECT_ENUM_EQ(meteredVars(2).group, OutputProcessor::Group::HVAC);
+    EXPECT_ENUM_EQ(meteredVars(3).resource, Constant::eResource::Electricity); // ELECTRIC - Cooling Energy
+    EXPECT_ENUM_EQ(meteredVars(3).endUseCat, OutputProcessor::EndUseCat::Cooling);
+    EXPECT_ENUM_EQ(meteredVars(3).group, OutputProcessor::Group::HVAC);
+    EXPECT_ENUM_EQ(meteredVars(4).resource, Constant::eResource::Electricity); // ELECTRIC - Fan Energy
+    EXPECT_ENUM_EQ(meteredVars(4).endUseCat, OutputProcessor::EndUseCat::Fans);
+    EXPECT_ENUM_EQ(meteredVars(4).group, OutputProcessor::Group::HVAC);
+    EXPECT_ENUM_EQ(meteredVars(5).resource,
+                   Constant::eResource::NaturalGas); // NATURALGAS - Secondary Fuel Type - specified in UnitaryHybridUnitTest_DOSA.idf
+    EXPECT_ENUM_EQ(meteredVars(5).endUseCat, OutputProcessor::EndUseCat::Cooling);
+    EXPECT_ENUM_EQ(meteredVars(5).group, OutputProcessor::Group::HVAC);
+    EXPECT_ENUM_EQ(meteredVars(6).resource,
+                   Constant::eResource::DistrictCooling); // DISTRICTCOOLING - Third Fuel Type - specified in UnitaryHybridUnitTest_DOSA.idf
+    EXPECT_ENUM_EQ(meteredVars(6).endUseCat, OutputProcessor::EndUseCat::Cooling);
+    EXPECT_ENUM_EQ(meteredVars(6).group, OutputProcessor::Group::HVAC);
+    EXPECT_ENUM_EQ(meteredVars(7).resource, Constant::eResource::Water); // WATER - Cooling Water Use
+    EXPECT_ENUM_EQ(meteredVars(7).endUseCat, OutputProcessor::EndUseCat::Cooling);
+    EXPECT_ENUM_EQ(meteredVars(7).group, OutputProcessor::Group::HVAC);
 
     // Check that unit is included in Component Sizing Summary Report
     EXPECT_EQ("ZoneHVAC:HybridUnitaryHVAC", state->dataOutRptPredefined->CompSizeTableEntry(1).typeField);
@@ -847,10 +843,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_CalculateCurveVal)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
-    Curve::GetCurveInput(*state);
-    state->dataCurveManager->GetCurvesInputFlag = false;
-    EXPECT_EQ(4, state->dataCurveManager->NumCurves);
+    state->init_state(*state);
+    EXPECT_EQ(4, state->dataCurveManager->curves.size());
 
     bool ErrorsFound(false);
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
@@ -1256,10 +1250,9 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ModelOperatingSetting
         "3.25;                    !- Output Value 1",
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
-    Curve::GetCurveInput(*state);
-    state->dataCurveManager->GetCurvesInputFlag = false;
-    EXPECT_EQ(8, state->dataCurveManager->NumCurves);
+    EXPECT_EQ(8, state->dataCurveManager->curves.size());
 
     bool ErrorsFound(false);
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
@@ -1431,6 +1424,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateOptionalError
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
     bool ErrorsFound = false;
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     // Design Specification Outdoor Air Object Name 'SZ DSOA SPACE2-1' is not defined in this model, thus an error is thrown
@@ -1445,6 +1440,10 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
     ASSERT_TRUE(process_idf(
         delimited_string(read_lines_in_file(configured_source_directory() / "tst/EnergyPlus/unit/Resources/UnitaryHybridUnitTest_DOSA.idf"))));
 
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
     // setup environment
     bool ErrorsFound(false);
     GetZoneData(*state, ErrorsFound);
@@ -1452,9 +1451,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
     // Initialize schedule values
     state->dataGlobal->TimeStep = 1;
     state->dataHVACGlobal->TimeStepSys = 1;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
+
     state->dataEnvrn->Month = 1;
     state->dataEnvrn->DayOfMonth = 21;
     state->dataGlobal->HourOfDay = 1;
@@ -1463,7 +1461,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
     state->dataEnvrn->HolidayIndex = 0;
     state->dataGlobal->WarmupFlag = false;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Initialize zone areas and volumes - too many other things need to be set up to do these in the normal routines
     state->dataHeatBal->Zone(1).FloorArea = 232.26;
     state->dataEnvrn->StdRhoAir = 1.225;
@@ -1475,9 +1473,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
 
     // Setup performance tables
     using namespace EnergyPlus::DataEnvironment;
-    // process schedules
-    ProcessScheduleInput(*state); // read schedules
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Get Unitary system
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     // All to get OA requirements

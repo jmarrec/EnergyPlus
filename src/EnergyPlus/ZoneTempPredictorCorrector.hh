@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -71,26 +71,11 @@ struct EnergyPlusData;
 
 namespace ZoneTempPredictorCorrector {
 
-    struct ZoneTempControl
+    struct ZoneSetptScheds
     {
-        std::string Name;          // Name of the zone
-        std::string TempSchedName; // Name of the schedule which determines the zone temp setpoint
-        int TempSchedIndex = 0;
-        std::string HeatTempSetptSchedName;
-        int HeatTempSchedIndex = 0;
-        std::string CoolTempSetptSchedName;
-        int CoolTempSchedIndex = 0;
-    };
-
-    struct ZoneComfortFangerControl
-    {
-        std::string Name;                  // Name of the zone
-        std::string PMVSchedName;          // Name of the schedule which determines the zone temp setpoint
-        int PMVSchedIndex = 0;             // Index to PMV dual set point schedule
-        std::string HeatPMVSetptSchedName; // Name of PMV heating set point schedule
-        int HeatPMVSchedIndex = 0;         // Index to PMV heating set point schedule
-        std::string CoolPMVSetptSchedName; // Name of PMV cooling set point schedule
-        int CoolPMVSchedIndex = 0;         // INdex to PMV cooling set point schedule
+        std::string Name; // Name of the zone
+        Sched::Schedule *heatSched = nullptr;
+        Sched::Schedule *coolSched = nullptr;
     };
 
     struct AdaptiveComfortDailySetPointSchedule
@@ -221,6 +206,9 @@ namespace ZoneTempPredictorCorrector {
         Real64 tempDepLoad = 0.0;
         Real64 airRelHum = 0.0;   // Zone relative humidity in percent
         Real64 AirPowerCap = 0.0; // "air power capacity"  Vol*VolMult*rho*Cp/timestep [W/degK]
+        int hmThermalMassMultErrIndex = 0;
+
+        virtual ~ZoneSpaceHeatBalanceData() = default;
 
         void beginEnvironmentInit(EnergyPlusData &state);
 
@@ -336,6 +324,14 @@ namespace ZoneTempPredictorCorrector {
                                  Real64 AirCap                  // Formerly CoefAirrat, coef in zone temp eqn with dim of "air power capacity"rd
     );
 
+    void processInverseModelMultpHM(EnergyPlusData &state,
+                                    Real64 &multiplierHM, // Hybrid model thermal mass multiplier
+                                    Real64 &multSumHM,    // Sum of Hybrid model thermal mass multipliers
+                                    Real64 &countSumHM,   // Count of number of points in sum
+                                    Real64 &multAvgHM,    // Average of hybrid model mass multiplier
+                                    int zoneNum           // Zone number for the hybrid model
+    );
+
     void InverseModelHumidity(EnergyPlusData &state,
                               int ZoneNum,                   // Zone number
                               Real64 LatentGain,             // Zone sum of latent gain
@@ -379,6 +375,8 @@ namespace ZoneTempPredictorCorrector {
 
     void FillPredefinedTableOnThermostatSetpoints(EnergyPlusData &state);
 
+    void FillPredefinedTableOnThermostatSchedules(EnergyPlusData &state);
+
     std::tuple<Real64, int, std::string>
     temperatureAndCountInSch(EnergyPlusData &state, int scheduleIndex, bool isSummer, int dayOfWeek, int hourOfDay);
 
@@ -386,16 +384,8 @@ namespace ZoneTempPredictorCorrector {
 
 struct ZoneTempPredictorCorrectorData : BaseGlobalStruct
 {
-    int NumSingleTempHeatingControls = 0;
-    int NumSingleTempCoolingControls = 0;
-    int NumSingleTempHeatCoolControls = 0;
-    int NumDualTempHeatCoolControls = 0;
-
-    // Number of Thermal comfort control types
-    int NumSingleFangerHeatingControls = 0;
-    int NumSingleFangerCoolingControls = 0;
-    int NumSingleFangerHeatCoolControls = 0;
-    int NumDualFangerHeatCoolControls = 0;
+    std::array<int, (int)HVAC::SetptType::Num> NumTempControls = {0};
+    std::array<int, (int)HVAC::SetptType::Num> NumComfortControls = {0};
 
     // Number of zone with staged controlled objects
     int NumStageCtrZone = 0;
@@ -420,14 +410,8 @@ struct ZoneTempPredictorCorrectorData : BaseGlobalStruct
 
     // Object Data
     std::unordered_set<std::string> HumidityControlZoneUniqueNames;
-    EPVector<ZoneTempPredictorCorrector::ZoneTempControl> SetPointSingleHeating;
-    EPVector<ZoneTempPredictorCorrector::ZoneTempControl> SetPointSingleCooling;
-    EPVector<ZoneTempPredictorCorrector::ZoneTempControl> SetPointSingleHeatCool;
-    EPVector<ZoneTempPredictorCorrector::ZoneTempControl> SetPointDualHeatCool;
-    EPVector<ZoneTempPredictorCorrector::ZoneComfortFangerControl> SetPointSingleHeatingFanger;
-    EPVector<ZoneTempPredictorCorrector::ZoneComfortFangerControl> SetPointSingleCoolingFanger;
-    EPVector<ZoneTempPredictorCorrector::ZoneComfortFangerControl> SetPointSingleHeatCoolFanger;
-    EPVector<ZoneTempPredictorCorrector::ZoneComfortFangerControl> SetPointDualHeatCoolFanger;
+    std::array<Array1D<ZoneTempPredictorCorrector::ZoneSetptScheds>, (int)HVAC::SetptType::Num> tempSetptScheds;
+    std::array<Array1D<ZoneTempPredictorCorrector::ZoneSetptScheds>, (int)HVAC::SetptType::Num> comfortSetptScheds;
     ZoneTempPredictorCorrector::AdaptiveComfortDailySetPointSchedule AdapComfortDailySetPointSchedule;
 
     std::array<Real64, 7> AdapComfortSetPointSummerDesDay = {-1};
@@ -445,6 +429,14 @@ struct ZoneTempPredictorCorrectorData : BaseGlobalStruct
 
     EPVector<ZoneTempPredictorCorrector::ZoneHeatBalanceData> zoneHeatBalance;
     EPVector<ZoneTempPredictorCorrector::SpaceHeatBalanceData> spaceHeatBalance;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void clear_state() override
     {

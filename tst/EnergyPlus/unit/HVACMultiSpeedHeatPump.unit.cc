@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -78,14 +78,12 @@
 
 using namespace EnergyPlus::BranchInputManager;
 using namespace EnergyPlus::DataHeatBalance;
-using namespace EnergyPlus::DataHVACGlobals;
 using namespace EnergyPlus::DataZoneControls;
 using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::DataZoneEnergyDemands;
 using namespace EnergyPlus::HeatBalanceManager;
 using namespace EnergyPlus::HVACMultiSpeedHeatPump;
 using namespace EnergyPlus::MixedAir;
-using namespace EnergyPlus::ScheduleManager;
 using namespace EnergyPlus::SimAirServingZones;
 using namespace EnergyPlus::SingleDuct;
 using namespace EnergyPlus::SplitterComponent;
@@ -541,7 +539,7 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_ReportVariableInitTest)
         "    AC-24sched,              !- Supply Air Fan Operating Mode Schedule Name",
         "    Coil:Heating:DX:MultiSpeed,  !- Heating Coil Object Type",
         "    AC24Heating,             !- Heating Coil Name",
-        "    -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "    ,                        !- DX Heating Coil Sizing Ratio",
         "    Coil:Cooling:DX:MultiSpeed,  !- Cooling Coil Object Type",
         "    AC24_cooling,            !- Cooling Coil Name",
         "    Coil:Heating:Electric,   !- Supplemental Heating Coil Object Type",
@@ -576,7 +574,7 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_ReportVariableInitTest)
         "    AC-25 sched,             !- Supply Air Fan Operating Mode Schedule Name",
         "    Coil:Heating:DX:MultiSpeed,  !- Heating Coil Object Type",
         "    AC25Heating,             !- Heating Coil Name",
-        "    -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "    ,                        !- DX Heating Coil Sizing Ratio",
         "    Coil:Cooling:DX:MultiSpeed,  !- Cooling Coil Object Type",
         "    AC25_cooling,            !- Cooling Coil Name",
         "    Coil:Heating:Electric,   !- Supplemental Heating Coil Object Type",
@@ -1260,9 +1258,9 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_ReportVariableInitTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-    state->dataGlobal->NumOfTimeStepInHour = 1; // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60; // must initialize this to get schedules initialized
-    ProcessScheduleInput(*state);
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound); // read zone data
     EXPECT_FALSE(ErrorsFound);                            // zones are specified in the idf snippet
@@ -1326,14 +1324,15 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_ReportVariableInitTest)
     state->dataHVACMultiSpdHP->MSHeatPump(2).TotCoolEnergyRate = 1000.0;
     state->dataHVACMultiSpdHP->MSHeatPump(1).FlowFraction = 1.0;
     state->dataHVACMultiSpdHP->MSHeatPump(2).FlowFraction = 1.0;
-    // because sizing isn't occuring, we must set these
+    // because sizing isn't occurring, we must set these
     for (auto &dxCoil : state->dataDXCoils->DXCoil) {
         for (int i = 1; i <= dxCoil.NumOfSpeeds; ++i) {
             dxCoil.MSRatedAirMassFlowRate(i) = dxCoil.MSRatedAirVolFlowRate(i) * 1.2;
         }
     }
-    state->dataScheduleMgr->Schedule(17).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(9).CurrentValue = 1.0;
+
+    Sched::GetSchedule(*state, "AC-24SCHED")->currentVal = 1.0;
+    Sched::GetSchedule(*state, "AC-25 SCHED")->currentVal = 1.0;
     state->dataEnvrn->StdRhoAir = 1.2;
     state->dataEnvrn->OutDryBulbTemp = 35.0;
     state->dataEnvrn->OutHumRat = 0.012;
@@ -1363,8 +1362,8 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_ReportVariableInitTest)
     state->dataLoopNodes->Node(16).Enthalpy = Psychrometrics::PsyHFnTdbW(state->dataLoopNodes->Node(16).Temp, state->dataLoopNodes->Node(16).HumRat);
     state->dataLoopNodes->Node(24).MassFlowRateMax = state->dataLoopNodes->Node(16).MassFlowRateMaxAvail;
 
-    state->dataFans->Fan(2).MaxAirMassFlowRate = state->dataLoopNodes->Node(16).MassFlowRateMaxAvail;
-    state->dataFans->Fan(2).RhoAirStdInit = state->dataEnvrn->StdRhoAir;
+    state->dataFans->fans(2)->maxAirMassFlowRate = state->dataLoopNodes->Node(16).MassFlowRateMaxAvail;
+    state->dataFans->fans(2)->rhoAirStdInit = state->dataEnvrn->StdRhoAir;
     state->dataDXCoils->DXCoil(2).MSRatedAirMassFlowRate(1) = state->dataDXCoils->DXCoil(2).MSRatedAirVolFlowRate(1) * state->dataEnvrn->StdRhoAir;
     state->dataDXCoils->DXCoil(2).MSRatedAirMassFlowRate(2) = state->dataDXCoils->DXCoil(2).MSRatedAirVolFlowRate(2) * state->dataEnvrn->StdRhoAir;
     state->dataDXCoils->DXCoil(2).MSRatedCBF(1) = 0.2;
@@ -1459,7 +1458,7 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_ReportVariableInitTest)
 
 TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_HeatRecoveryTest)
 {
-
+    state->init_state(*state);
     state->dataLoopNodes->Node.allocate(2);
     state->dataHVACMultiSpdHP->MSHeatPump.allocate(1);
     int HeatRecInNode(1);
@@ -1473,7 +1472,7 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_HeatRecoveryTest)
 
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     state->dataLoopNodes->Node(HeatRecInNode).MassFlowRate = 0.0; // test heat recovery result with 0 water flow rate
     HVACMultiSpeedHeatPump::MSHPHeatRecovery(*state, 1);
@@ -1718,7 +1717,7 @@ TEST_F(EnergyPlusFixture, HVACMSHP_UnitarySystemElectricityRateTest)
         "    AC-24sched,              !- Supply Air Fan Operating Mode Schedule Name",
         "    Coil:Heating:DX:MultiSpeed,  !- Heating Coil Object Type",
         "    AC24Heating,             !- Heating Coil Name",
-        "    -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "    ,                        !- DX Heating Coil Sizing Ratio",
         "    Coil:Cooling:DX:MultiSpeed,  !- Cooling Coil Object Type",
         "    AC24_cooling,            !- Cooling Coil Name",
         "    Coil:Heating:Electric,   !- Supplemental Heating Coil Object Type",
@@ -2139,9 +2138,9 @@ TEST_F(EnergyPlusFixture, HVACMSHP_UnitarySystemElectricityRateTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-    state->dataGlobal->NumOfTimeStepInHour = 1; // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60; // must initialize this to get schedules initialized
-    ProcessScheduleInput(*state);
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound); // read zone data
     EXPECT_FALSE(ErrorsFound);                            // zones are specified in the idf snippet
@@ -2190,13 +2189,13 @@ TEST_F(EnergyPlusFixture, HVACMSHP_UnitarySystemElectricityRateTest)
     EXPECT_EQ(msHeatPump.MinOATCompressorCooling, -25.0);
     EXPECT_EQ(msHeatPump.MinOATCompressorHeating, -8.0);
     // set local variables for convenience
-    auto &supplyFan = state->dataFans->Fan(1);
+    auto *supplyFan = state->dataFans->fans(1);
     auto &dxClgCoilMain = state->dataDXCoils->DXCoil(1);
     auto &dxHtgCoilMain = state->dataDXCoils->DXCoil(2);
     auto &elecHtgCoilSupp = state->dataHeatingCoils->HeatingCoil(msHeatPump.SuppHeatCoilNum);
-    state->dataScheduleMgr->Schedule(11).CurrentValue = 1.0;
+    Sched::GetSchedule(*state, "AC-24SCHED")->currentVal = 1.0;
     state->dataEnvrn->StdRhoAir = 1.2;
-    supplyFan.RhoAirStdInit = state->dataEnvrn->StdRhoAir;
+    supplyFan->rhoAirStdInit = state->dataEnvrn->StdRhoAir;
     state->dataGlobal->DoCoilDirectSolutions = false;
     state->dataGlobal->BeginEnvrnFlag = true;
     state->dataGlobal->DoCoilDirectSolutions = false;
@@ -2205,13 +2204,21 @@ TEST_F(EnergyPlusFixture, HVACMSHP_UnitarySystemElectricityRateTest)
     state->dataEnvrn->OutHumRat = 0.005;
     state->dataEnvrn->StdBaroPress = 101325.0;
     state->dataEnvrn->OutBaroPress = 101325.0;
+
+    for (int Mode = 1; Mode <= dxClgCoilMain.NumOfSpeeds; ++Mode) {
+        dxClgCoilMain.MSRatedAirMassFlowRate(Mode) = dxClgCoilMain.MSRatedAirVolFlowRate(Mode) * state->dataEnvrn->StdRhoAir;
+    }
+    for (int Mode = 1; Mode <= dxHtgCoilMain.NumOfSpeeds; ++Mode) {
+        dxHtgCoilMain.MSRatedAirMassFlowRate(Mode) = dxHtgCoilMain.MSRatedAirVolFlowRate(Mode) * state->dataEnvrn->StdRhoAir;
+    }
+
     // set zone air conditions
     auto &zoneAirNode =
         state->dataLoopNodes->Node(Util::FindItemInList("Z401 AIR NODE", state->dataLoopNodes->NodeID, state->dataLoopNodes->NumOfNodes));
     zoneAirNode.Temp = 21.1;
     zoneAirNode.HumRat = 0.0035;
     zoneAirNode.Enthalpy = Psychrometrics::PsyHFnTdbW(zoneAirNode.Temp, zoneAirNode.HumRat);
-    // set maixed air node conditions
+    // set mixed air node conditions
     auto &mixedAirNode =
         state->dataLoopNodes->Node(Util::FindItemInList("AC-24 SF INLET AIR NODE", state->dataLoopNodes->NodeID, state->dataLoopNodes->NumOfNodes));
     mixedAirNode.Temp = 10.0;
@@ -2227,13 +2234,13 @@ TEST_F(EnergyPlusFixture, HVACMSHP_UnitarySystemElectricityRateTest)
     msHeatPump.HeatCoolMode = EnergyPlus::HVACMultiSpeedHeatPump::ModeOfOperation::HeatingMode;
     SimMSHP(*state, MSHeatPumpNum, FirstHVACIteration, AirLoopNum, QSensUnitOut, QZnReq, OnOffAirFlowRatio);
     // calculate the total electricity rate
-    Real64 result_msHeatPump_ElectricityRate = supplyFan.FanPower + state->dataHVACGlobal->DXElecCoolingPower +
+    Real64 result_msHeatPump_ElectricityRate = supplyFan->totalPower + state->dataHVACGlobal->DXElecCoolingPower +
                                                state->dataHVACGlobal->DXElecHeatingPower + state->dataHVACGlobal->ElecHeatingCoilPower +
                                                state->dataHVACGlobal->SuppHeatingCoilPower + msHeatPump.AuxElecPower;
     // test results
     EXPECT_NEAR(55366.46, msHeatPump.ElecPower, 0.01);
     EXPECT_NEAR(55366.46, result_msHeatPump_ElectricityRate, 0.01);
-    EXPECT_NEAR(3197.31, supplyFan.FanPower, 0.01);
+    EXPECT_NEAR(3197.31, supplyFan->totalPower, 0.01);
     EXPECT_NEAR(0.0, dxClgCoilMain.ElecCoolingPower, 0.01);
     EXPECT_NEAR(0.0, state->dataHVACGlobal->DXElecCoolingPower, 0.01);
     EXPECT_NEAR(16846.22, dxHtgCoilMain.ElecHeatingPower, 0.01);

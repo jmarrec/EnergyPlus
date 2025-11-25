@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -49,7 +49,7 @@
 #include <cmath>
 
 // ObjexxFCL Headers
-#include <ObjexxFCL/Fmath.hh>
+// #include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/EnergyPlusData.hh>
@@ -322,7 +322,7 @@ void InitializeRootFinder(EnergyPlusData &state,
         }
     }
 
-    // First save current candidate value before it is overriden in ResetRootFinder()
+    // First save current candidate value before it is overridden in ResetRootFinder()
     SavedXCandidate = RootFinderData.XCandidate;
 
     // Reset internal data for root finder with actual min and max values
@@ -1518,7 +1518,7 @@ bool BracketRoot(RootFinderDataType const &RootFinderData, // Data used by root 
     // using the secant formula to take advantage of the slope between the last 2
     // iterates.
     // Returns TRUE if successfully computed a new bracket in XNext.
-    // Else returns FASLE and does not update the XNext argument.
+    // Else returns FALSE and does not update the XNext argument.
     // Should only be used while in braketing mode (iMethodBracket).
     // When the lower and upper brackets are detected then the FUNCTION SecantMethod
     // should be used instead.

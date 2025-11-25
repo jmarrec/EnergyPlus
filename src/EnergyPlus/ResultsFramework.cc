@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -68,6 +68,7 @@
 #include <EnergyPlus/DataStringGlobals.hh>
 #include <EnergyPlus/GlobalNames.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
+#include <EnergyPlus/OutputReportTabular.hh>
 #include <EnergyPlus/ResultsFramework.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
@@ -475,7 +476,9 @@ namespace ResultsFramework {
             }
         }
 
-        if (cols.empty()) return root;
+        if (cols.empty()) {
+            return root;
+        }
 
         json vals = json::array();
 
@@ -618,8 +621,8 @@ namespace ResultsFramework {
         json cols = json::array();
         json rows;
 
-        for (size_t col = 0; col < ColHeaders.size(); ++col) {
-            cols.push_back(ColHeaders[col]);
+        for (const auto &ColHeader : ColHeaders) {
+            cols.push_back(ColHeader);
         }
 
         for (size_t row = 0; row < RowHeaders.size(); ++row) {
@@ -632,7 +635,9 @@ namespace ResultsFramework {
 
         root = {{"TableName", TableName}, {"Cols", cols}, {"Rows", rows}};
 
-        if (!FootnoteText.empty()) root["Footnote"] = FootnoteText;
+        if (!FootnoteText.empty()) {
+            root["Footnote"] = FootnoteText;
+        }
         return root;
     }
 
@@ -712,11 +717,11 @@ namespace ResultsFramework {
                                    std::vector<std::string> const &outputVariables,
                                    OutputProcessor::ReportFreq reportingFrequency)
     {
-        if (data.empty()) return;
+        if (data.empty()) {
+            return;
+        }
         updateReportFreq(reportingFrequency);
         std::vector<int> indices;
-        std::unordered_set<std::string> seen;
-        std::string search_string;
 
         std::string reportFrequency = data.at("ReportFrequency").get<std::string>();
         if (reportFrequency == "Detailed-HVAC" || reportFrequency == "Detailed-Zone") {
@@ -724,7 +729,7 @@ namespace ResultsFramework {
         }
         auto const &columns = data.at("Cols");
         for (auto const &column : columns) {
-            search_string =
+            std::string search_string =
                 fmt::format("{0} [{1}]({2})", column.at("Variable").get<std::string>(), column.at("Units").get<std::string>(), reportFrequency);
             auto found = std::find(outputVariables.begin(), outputVariables.end(), search_string);
             if (found == outputVariables.end()) {
@@ -819,9 +824,13 @@ namespace ResultsFramework {
         print<FormatSyntax::FMT>(outputFile, "{}", "Date/Time,");
         std::string sep;
         for (auto it = outputVariables.begin(); it != outputVariables.end(); ++it) {
-            if (!outputVariableIndices[std::distance(outputVariables.begin(), it)]) continue;
+            if (!outputVariableIndices[std::distance(outputVariables.begin(), it)]) {
+                continue;
+            }
             print<FormatSyntax::FMT>(outputFile, "{}{}", sep, *it);
-            if (sep.empty()) sep = ",";
+            if (sep.empty()) {
+                sep = ",";
+            }
         }
         print<FormatSyntax::FMT>(outputFile, "{}", '\n');
 
@@ -871,7 +880,7 @@ namespace ResultsFramework {
             return;
         }
 
-        Array1D_string alphas(5);
+        Array1D_string alphas(6);
         int numAlphas;
         Array1D<Real64> numbers(2);
         int numNumbers;
@@ -903,6 +912,13 @@ namespace ResultsFramework {
             if (numAlphas >= 4) {
                 outputMsgPack = Util::SameString(alphas(4), "Yes");
             }
+
+            auto const &ort = state.dataOutRptTab;
+            // Jan 2021 Note: Since here we do not know weather ort->unitsStyle_Tabular has been processed or not,
+            // the value "NotFound" is used for the option "UseOutputControlTableStyles" at this point;
+            // This will be updated again and got concretely assigned first thing in OutputReportTabular::WriteTabularReports().
+            ort->unitsStyle_JSON = OutputReportTabular::SetUnitsStyleFromString(alphas(5));
+            ort->formatReals_JSON = (getYesNoValue(alphas(6)) == BooleanSwitch::Yes);
         }
     }
 
@@ -1120,7 +1136,7 @@ namespace ResultsFramework {
 
         // Same issue here
         static std::array<std::string, (int)ReportFreq::Num> const freqStrings = {
-            "Detailed", "Timestep", "Hourly", "Daily", "Monthly", "RunPeriod", "Yearly"};
+            "Detailed", "TimeStep", "Hourly", "Daily", "Monthly", "RunPeriod", "Yearly"};
         for (ReportFreq freq :
              {ReportFreq::Year, ReportFreq::Simulation, ReportFreq::Month, ReportFreq::Day, ReportFreq::Hour, ReportFreq::TimeStep}) {
             if (hasFreqTSData(freq)) {

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -117,17 +117,19 @@ std::string IdfParser::encode(json const &root, json const &schema)
         for (auto obj_in = obj.value().begin(); obj_in != obj.value().end(); ++obj_in) {
             encoded += obj.key();
             size_t skipped_fields = 0;
-            for (size_t i = 0; i < legacy_idd_field.size(); i++) {
-                std::string const &entry = legacy_idd_field[i].get<std::string>();
+            for (const auto &i : legacy_idd_field) {
+                std::string const &entry = i.get<std::string>();
                 if (obj_in.value().find(entry) == obj_in.value().end()) {
-                    if (entry == "name")
+                    if (entry == "name") {
                         encoded += std::string{end_of_field} + obj_in.key();
-                    else
+                    } else {
                         skipped_fields++;
+                    }
                     continue;
                 }
-                for (size_t j = 0; j < skipped_fields; j++)
+                for (size_t j = 0; j < skipped_fields; j++) {
                     encoded += end_of_field;
+                }
                 skipped_fields = 0;
                 encoded += end_of_field;
                 auto const &val = obj_in.value()[entry];
@@ -147,17 +149,17 @@ std::string IdfParser::encode(json const &root, json const &schema)
             }
 
             auto &extensions = obj_in.value()[extension_key];
-            for (size_t extension_i = 0; extension_i < extensions.size(); extension_i++) {
-                auto const &cur_extension_obj = extensions[extension_i];
+            for (const auto &cur_extension_obj : extensions) {
                 auto const &extensible = schema["properties"][obj.key()]["legacy_idd"]["extensibles"];
-                for (size_t i = 0; i < extensible.size(); i++) {
-                    std::string const &tmp = extensible[i].get<std::string>();
+                for (const auto &i : extensible) {
+                    std::string const &tmp = i.get<std::string>();
                     if (cur_extension_obj.find(tmp) == cur_extension_obj.end()) {
                         skipped_fields++;
                         continue;
                     }
-                    for (size_t j = 0; j < skipped_fields; j++)
+                    for (size_t j = 0; j < skipped_fields; j++) {
                         encoded += end_of_field;
+                    }
                     skipped_fields = 0;
                     encoded += end_of_field;
                     if (cur_extension_obj[tmp].is_string()) {
@@ -176,7 +178,9 @@ std::string IdfParser::encode(json const &root, json const &schema)
 
 std::string IdfParser::normalizeObjectType(std::string const &objectType)
 {
-    if (objectType.empty()) return std::string{};
+    if (objectType.empty()) {
+        return std::string{};
+    }
     std::string key = convertToUpper(objectType);
     auto tmp_umit = objectTypeMap.find(key);
     if (tmp_umit != objectTypeMap.end()) {
@@ -244,8 +248,9 @@ json IdfParser::parse_idf(std::string_view idf, size_t &index, bool &success, js
             if (obj_name.empty()) {
                 errors_.emplace_back(
                     fmt::format("Line: {} Index: {} - \"{}\" is not a valid Object Type.", cur_line_num, index_into_cur_line, parsed_obj_name));
-                while (token != Token::SEMICOLON && token != Token::END)
+                while (token != Token::SEMICOLON && token != Token::END) {
                     token = next_token(idf, index);
+                }
                 continue;
             }
 
@@ -315,9 +320,9 @@ json IdfParser::parse_object(
     std::string patternProperty;
     int dot_star_present = schema_patternProperties.count(".*");
     int no_whitespace_present = schema_patternProperties.count(R"(^.*\S.*$)");
-    if (dot_star_present) {
+    if (dot_star_present != 0) {
         patternProperty = ".*";
-    } else if (no_whitespace_present) {
+    } else if (no_whitespace_present != 0) {
         patternProperty = R"(^.*\S.*$)";
     } else {
         throw std::runtime_error(R"(The patternProperties value is not a valid choice (".*", "^.*\S.*$"))");
@@ -364,7 +369,7 @@ json IdfParser::parse_object(
                     extensible_index++;
                     //                    extensible[ field_name ] = "";
                 }
-                if (ext_size && extensible_index % ext_size == 0) {
+                if ((ext_size != 0) && extensible_index % ext_size == 0) {
                     array_of_extensions.push_back(extensible);
                     extensible.clear();
                 }
@@ -411,11 +416,13 @@ json IdfParser::parse_object(
             size_t const size = legacy_idd_extensibles_array.size();
             std::string const &field_name = legacy_idd_extensibles_array[extensible_index % size].get<std::string>();
             json val = parse_value(idf, index, success, schema_obj_extensions->at(field_name));
-            if (!success) return root;
+            if (!success) {
+                return root;
+            }
             extensible[field_name] = std::move(val);
             was_value_parsed = true;
             extensible_index++;
-            if (extensible_index && extensible_index % size == 0) {
+            if ((extensible_index != 0u) && extensible_index % size == 0) {
                 array_of_extensions.push_back(extensible);
                 extensible.clear();
             }
@@ -432,10 +439,14 @@ json IdfParser::parse_object(
                 }
             } else {
                 json val = parse_value(idf, index, success, find_field_iter.value());
-                if (!success) return root;
+                if (!success) {
+                    return root;
+                }
                 root[field] = std::move(val);
             }
-            if (!success) return root;
+            if (!success) {
+                return root;
+            }
         }
     }
     if (!array_of_extensions.empty()) {
@@ -659,14 +670,13 @@ std::string IdfParser::parse_string(std::string_view idf, size_t &index)
     eat_whitespace(idf, index);
 
     std::string str;
-    char c;
 
     while (true) {
         if (index == idf_size) {
             break;
         }
 
-        c = idf[index];
+        char c = idf[index];
         increment_both_index(index, index_into_cur_line);
         if (c == ',' || c == ';' || c == '!') {
             decrement_both_index(index, index_into_cur_line);
@@ -714,7 +724,9 @@ void IdfParser::eat_whitespace(std::string_view idf, size_t &index)
 void IdfParser::eat_comment(std::string_view idf, size_t &index)
 {
     while (true) {
-        if (index == idf_size) break;
+        if (index == idf_size) {
+            break;
+        }
         if (idf[index] == '\n') {
             increment_both_index(index, cur_line_num);
             index_into_cur_line = 0;

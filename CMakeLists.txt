@@ -1,13 +1,15 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.19...4.0.3)  # policy_max is set, so that will impliclty invoke cmake_policy(VERSION <min>[...<max>])
 
 # Use ccache if available, has to be before "project()"
-find_program(CCACHE_PROGRAM ccache)
+find_program(CCACHE_PROGRAM NAMES ccache sccache)
 if(CCACHE_PROGRAM)
-  # Support both Unix Makefiles and Ninja
-  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+  # Support: Unix Makefiles and Ninja only
+  message(STATUS "Using CCACHE")
+  # RULE_LAUNCH_COMPILE is an internal variable and makes RC compilation fail on windows, hence why we use the C/CXX COMPILER_LAUNCHER instead
+  message(STATUS "${CCACHE_PROGRAM} found and enabled")
+  set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM} CACHE FILEPATH "CXX compiler cache used")
+  set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM} CACHE FILEPATH "C compiler cache used")
 endif()
-
-cmake_policy(SET CMP0048 NEW) # handling project_version_* variables
 
 project(EnergyPlus)
 
@@ -20,15 +22,10 @@ if (APPLE)
   endif()
 endif()
 
-if(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} VERSION_GREATER "3.0")
-  cmake_policy(SET CMP0054 NEW) # CMake 3.1 added this policy
-endif()
-
-cmake_policy(SET CMP0012 NEW) # if() recognizes boolean constants
-
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -157,6 +154,14 @@ option(ENABLE_GTEST_DEBUG_MODE "Enable options to help debug test failures" ON)
 option(ENABLE_GTEST_SHUFFLE "Enable shuffle to eliminate order dependency" ON)
 option(ENABLE_INSTALL_REMOTE "Enable install_remote and install_remote_plist commands to install files from remote resources on the internet" ON)
 
+if(APPLE AND BUILD_PACKAGE)
+  # Define the codesigning variables early, before any calls to add_subdirectory for something with a dedicated project() or cmake_add_fortran_subdirectory
+  # Otherwise, the register_install_codesign_target isn't added until you reconfigure cmake...
+  include(cmake/CodeSigning.cmake)
+
+  # Defines CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION and CPACK_CODESIGNING_NOTARY_PROFILE_NAME
+  setup_macos_codesigning_variables()
+endif()
 
 if(MSVC AND NOT ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   option(ENABLE_HARDENED_RUNTIME "Enable Control Flow Guard and Buffer Security Check" OFF)
@@ -178,6 +183,7 @@ endif()
 # If LINK_WITH_PYTHON, also request the Development (libs) at the same time, to ensure consistent version between interpreter and Development
 # and ask for at least 3.8 (for the PyConfig stuff).
 if(LINK_WITH_PYTHON)
+  option(PYTHON_CLI "Build the Auxiliary CLI to Call Python Utilities" OFF)
   # find_package(Python) has the problem that on github actions in particular it'll pick up the most recent python (eg 3.9) from the tool cache
   # even if you have used the setup-python action and set it to 3.8, so we make the exact version required
   set(Python_REQUIRED_VERSION "" CACHE STRING "The specific Python version you want to link to (Optional)")
@@ -187,7 +193,7 @@ if(LINK_WITH_PYTHON)
   if(Python_REQUIRED_VERSION)
     find_package(Python ${Python_REQUIRED_VERSION} EXACT COMPONENTS Interpreter Development REQUIRED)
   else()
-    find_package(Python 3.8 COMPONENTS Interpreter Development REQUIRED)
+    find_package(Python 3.12 COMPONENTS Interpreter Development REQUIRED)
   endif()
 else()
   find_package(Python 3.6 COMPONENTS Interpreter REQUIRED)
@@ -219,8 +225,23 @@ if(BUILD_TESTING)
         "${CMAKE_SYSTEM_NAME}-${CMAKE_CXX_COMPILER_ID}${ARCH_FLAG}"
         CACHE STRING "Identifier for this device configuration")
   endif()
-
+  set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)  # This avoids all the CTest Nightly, Continuous, etc. tests.
   enable_testing()
+
+  execute_process(COMMAND ${Python_EXECUTABLE} -m pytest --version
+    RESULT_VARIABLE _Pytest_STATUS
+        OUTPUT_VARIABLE Pytest_Version
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+  if(_Pytest_STATUS AND NOT _Pytest_STATUS EQUAL 0)
+    message(AUTHOR_WARNING "Pytest isn't installed on your system python, so some tests won't be run. Run `${Python_EXECUTABLE} -m pip install pytest`")
+    set(Pytest_AVAILABLE OFF)
+  else()
+    message(VERBOSE "Found Pytest: ${Pytest_Version}")
+    set(Pytest_AVAILABLE ON)
+  endif()
+
 endif()
 
 if(ENABLE_REGRESSION_TESTING)
@@ -296,9 +317,6 @@ endif()
 target_include_directories(project_options INTERFACE ${PROJECT_SOURCE_DIR}/third_party/kiva/src)
 target_include_directories(project_options INTERFACE "${kiva_BINARY_DIR}/src/libkiva")
 target_include_directories(project_options SYSTEM INTERFACE "${kiva_SOURCE_DIR}/vendor/boost-1.61.0/")
-
-target_include_directories(project_options INTERFACE ${PROJECT_SOURCE_DIR}/third_party/cpgfunctionEP)
-target_include_directories(project_options INTERFACE ${PROJECT_SOURCE_DIR}/third_party/cpgfunctionEP/include)
 
 if(OPENGL_FOUND)
   set(BUILD_PENUMBRA_TESTING
@@ -426,13 +444,13 @@ mark_as_advanced(ENABLE_GTEST_DEBUG_MODE)
 mark_as_advanced(ENABLE_GTEST_SHUFFLE)
 mark_as_advanced(ENABLE_MEMORY_SANITIZER)
 mark_as_advanced(ENABLE_OPENMP)
-mark_as_advanced(USE_OpenMP)
 mark_as_advanced(KIVA_3D)
 mark_as_advanced(KIVA_COVERAGE)
 mark_as_advanced(KIVA_EXE_BUILD)
 mark_as_advanced(KIVA_GROUND_PLOT)
 mark_as_advanced(KIVA_STATIC_LIB)
 mark_as_advanced(KIVA_TESTING)
+mark_as_advanced(KIVA_WERROR)
 mark_as_advanced(BTWXT_COVERAGE)
 mark_as_advanced(BUILD_BTWXT_TESTING)
 mark_as_advanced(BTWXT_STATIC_LIB)
@@ -484,3 +502,15 @@ mark_as_advanced(ENABLE_SANITIZER_LEAK)
 mark_as_advanced(ENABLE_SANITIZER_MEMORY)
 mark_as_advanced(ENABLE_SANITIZER_THREAD)
 mark_as_advanced(ENABLE_SANITIZER_UNDEFINED_BEHAVIOR)
+mark_as_advanced(X11_xcb_xkb_INCLUDE_PATH)
+mark_as_advanced(ENABLE_SANITIZER_UNDEFINED_BEHAVIOR)
+mark_as_advanced(JSONCPP_USE_SECURE_MEMORY)
+mark_as_advanced(JSONCPP_WITH_CMAKE_PACKAGE)
+mark_as_advanced(JSONCPP_WITH_PKGCONFIG_SUPPORT)
+mark_as_advanced(JSONCPP_WITH_POST_BUILD_UNITTE)
+mark_as_advanced(JSONCPP_WITH_STRICT_ISO)
+mark_as_advanced(JSONCPP_WITH_TESTS)
+mark_as_advanced(JSONCPP_WITH_WARNING_AS_ERROR)
+mark_as_advanced(CMAKE_CXX_COMPILER_LAUNCHER)
+mark_as_advanced(CMAKE_C_COMPILER_LAUNCHER)
+mark_as_advanced(DEBUG_LIBNAME_SUFFIX)

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -71,6 +71,7 @@
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/EnergyPlusLogger.hh>
 #include <EnergyPlus/FaultsManager.hh>
+#include <EnergyPlus/FileSystem.hh>
 #include <EnergyPlus/FluidProperties.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
@@ -102,15 +103,18 @@ std::map<std::string, Btwxt::InterpolationMethod> InterpMethods = // NOLINT(cert
 void getChillerASHRAE205Input(EnergyPlusData &state)
 {
     static constexpr std::string_view RoutineName("getChillerASHRAE205Input: "); // include trailing blank space
+    static constexpr std::string_view routineName = "getChillerASHRAE205Input";
 
     using namespace tk205;
     RSInstanceFactory::register_factory("RS0001", std::make_shared<RS0001Factory>());
 
     bool ErrorsFound{false};
 
+    auto &s_ip = state.dataInputProcessing->inputProcessor;
+    auto &s_ipsc = state.dataIPShortCut;
+
     state.dataIPShortCut->cCurrentModuleObject = ChillerElectricASHRAE205::ASHRAE205ChillerSpecs::ObjectType;
-    auto &ip = state.dataInputProcessing->inputProcessor;
-    int numElectric205Chillers = ip->getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
+    int numElectric205Chillers = s_ip->getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
 
     if (numElectric205Chillers <= 0) {
         ShowSevereError(state, format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
@@ -119,12 +123,16 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
 
     state.dataChillerElectricASHRAE205->Electric205Chiller.allocate(numElectric205Chillers);
 
-    auto const &ChillerInstances = ip->epJSON.find(state.dataIPShortCut->cCurrentModuleObject).value();
+    auto const &ChillerInstances = s_ip->epJSON.find(state.dataIPShortCut->cCurrentModuleObject).value();
     int ChillerNum{0};
-    auto const &objectSchemaProps = ip->getObjectSchemaProps(state, state.dataIPShortCut->cCurrentModuleObject);
+    auto const &objectSchemaProps = s_ip->getObjectSchemaProps(state, state.dataIPShortCut->cCurrentModuleObject);
+
     for (auto &instance : ChillerInstances.items()) {
         auto const &fields = instance.value();
         std::string const &thisObjectName = instance.key();
+
+        ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, thisObjectName};
+
         GlobalNames::VerifyUniqueChillerName(
             state, state.dataIPShortCut->cCurrentModuleObject, thisObjectName, ErrorsFound, state.dataIPShortCut->cCurrentModuleObject + " Name");
 
@@ -132,9 +140,9 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         auto &thisChiller = state.dataChillerElectricASHRAE205->Electric205Chiller(ChillerNum);
         thisChiller.Name = Util::makeUPPER(thisObjectName);
 
-        ip->markObjectAsUsed(state.dataIPShortCut->cCurrentModuleObject, thisObjectName);
+        s_ip->markObjectAsUsed(state.dataIPShortCut->cCurrentModuleObject, thisObjectName);
 
-        std::string const rep_file_name = ip->getAlphaFieldValue(fields, objectSchemaProps, "representation_file_name");
+        std::string const rep_file_name = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "representation_file_name");
         fs::path rep_file_path = DataSystemVariables::CheckForActualFilePath(state, fs::path(rep_file_name), std::string(RoutineName));
         if (rep_file_path.empty()) {
             ErrorsFound = true;
@@ -146,15 +154,15 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         // Since logger context must persist across all calls to libtk205/btwxt, it must be a member
         thisChiller.LoggerContext = {&state, format("{} \"{}\"", state.dataIPShortCut->cCurrentModuleObject, thisObjectName)};
         thisChiller.Representation = std::dynamic_pointer_cast<tk205::rs0001_ns::RS0001>(
-            RSInstanceFactory::create("RS0001", rep_file_path.string().c_str(), std::make_shared<EnergyPlusLogger>()));
+            RSInstanceFactory::create("RS0001", FileSystem::toString(rep_file_path).c_str(), std::make_shared<EnergyPlusLogger>()));
         if (nullptr == thisChiller.Representation) {
-            ShowSevereError(state, format("{} is not an instance of an ASHRAE205 Chiller.", rep_file_path.string()));
+            ShowSevereError(state, format("{} is not an instance of an ASHRAE205 Chiller.", rep_file_path));
             ErrorsFound = true;
         }
         thisChiller.Representation->performance.performance_map_cooling.get_logger()->set_message_context(&thisChiller.LoggerContext);
         thisChiller.Representation->performance.performance_map_standby.get_logger()->set_message_context(&thisChiller.LoggerContext);
         thisChiller.InterpolationType =
-            InterpMethods[Util::makeUPPER(ip->getAlphaFieldValue(fields, objectSchemaProps, "performance_interpolation_method"))];
+            InterpMethods[Util::makeUPPER(s_ip->getAlphaFieldValue(fields, objectSchemaProps, "performance_interpolation_method"))];
 
         const auto &compressorSequence = thisChiller.Representation->performance.performance_map_cooling.grid_variables.compressor_sequence_number;
         // minmax_element is sound but perhaps overkill; as sequence numbers are required by A205 to be in ascending order
@@ -162,7 +170,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         thisChiller.MinSequenceNumber = *(minmaxSequenceNum.first);
         thisChiller.MaxSequenceNumber = *(minmaxSequenceNum.second);
 
-        if (fields.count("rated_capacity")) {
+        if (fields.count("rated_capacity") != 0u) {
             ShowWarningError(state, format("{}{}=\"{}\"", std::string{RoutineName}, state.dataIPShortCut->cCurrentModuleObject, thisChiller.Name));
             ShowContinueError(state, "Rated Capacity field is not yet supported for ASHRAE 205 representations.");
         }
@@ -180,8 +188,8 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         //            ErrorsFound = true;
         //        }
 
-        std::string const evap_inlet_node_name = ip->getAlphaFieldValue(fields, objectSchemaProps, "chilled_water_inlet_node_name");
-        std::string const evap_outlet_node_name = ip->getAlphaFieldValue(fields, objectSchemaProps, "chilled_water_outlet_node_name");
+        std::string const evap_inlet_node_name = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "chilled_water_inlet_node_name");
+        std::string const evap_outlet_node_name = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "chilled_water_outlet_node_name");
         if (evap_inlet_node_name.empty() || evap_outlet_node_name.empty()) {
             ShowSevereError(state, format("{}{}=\"{}\"", std::string{RoutineName}, state.dataIPShortCut->cCurrentModuleObject, thisChiller.Name));
             ShowContinueError(state, "Evaporator Inlet or Outlet Node Name is blank.");
@@ -210,8 +218,8 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
 
         thisChiller.CondenserType = DataPlant::CondenserType::WaterCooled;
 
-        std::string const cond_inlet_node_name = ip->getAlphaFieldValue(fields, objectSchemaProps, "condenser_inlet_node_name");
-        std::string const cond_outlet_node_name = ip->getAlphaFieldValue(fields, objectSchemaProps, "condenser_outlet_node_name");
+        std::string const cond_inlet_node_name = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "condenser_inlet_node_name");
+        std::string const cond_outlet_node_name = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "condenser_outlet_node_name");
         if (cond_inlet_node_name.empty() || cond_outlet_node_name.empty()) {
             ShowSevereError(state, format("{}{}=\"{}\"", std::string{RoutineName}, state.dataIPShortCut->cCurrentModuleObject, thisChiller.Name));
             ShowContinueError(state, "Condenser Inlet or Outlet Node Name is blank.");
@@ -245,7 +253,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                            "Condenser Water Nodes");
 
         thisChiller.FlowMode = static_cast<DataPlant::FlowMode>(
-            getEnumValue(DataPlant::FlowModeNamesUC, ip->getAlphaFieldValue(fields, objectSchemaProps, "chiller_flow_mode")));
+            getEnumValue(DataPlant::FlowModeNamesUC, s_ip->getAlphaFieldValue(fields, objectSchemaProps, "chiller_flow_mode")));
 
         if (thisChiller.FlowMode == DataPlant::FlowMode::Invalid) {
             ShowSevereError(state, format("{}{}=\"{}\"", std::string{RoutineName}, state.dataIPShortCut->cCurrentModuleObject, thisObjectName));
@@ -280,24 +288,19 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         }
 
         thisChiller.AmbientTempType = static_cast<AmbientTempIndicator>(
-            getEnumValue(AmbientTempNamesUC, Util::makeUPPER(ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_indicator"))));
+            getEnumValue(AmbientTempNamesUC, Util::makeUPPER(s_ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_indicator"))));
         switch (thisChiller.AmbientTempType) {
         case AmbientTempIndicator::Schedule: {
-            std::string const ambient_temp_schedule = ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_schedule");
-            thisChiller.AmbientTempSchedule = ScheduleManager::GetScheduleIndex(state, ambient_temp_schedule);
-            if (thisChiller.AmbientTempSchedule == 0) {
-                ShowSevereError(state,
-                                format("{} = {}:  Ambient Temperature Schedule not found = {}",
-                                       state.dataIPShortCut->cCurrentModuleObject,
-                                       thisObjectName,
-                                       ambient_temp_schedule));
+            std::string const ambient_temp_schedule = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_schedule");
+            if ((thisChiller.ambientTempSched = Sched::GetSchedule(state, ambient_temp_schedule)) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, "Ambient Temperature Schedule", ambient_temp_schedule);
                 ErrorsFound = true;
             }
 
             break;
         }
         case AmbientTempIndicator::TempZone: {
-            std::string const ambient_temp_zone_name = ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_zone_name");
+            std::string const ambient_temp_zone_name = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_zone_name");
             thisChiller.AmbientTempZone = Util::FindItemInList(ambient_temp_zone_name, state.dataHeatBal->Zone);
             if (thisChiller.AmbientTempZone == 0) {
                 ShowSevereError(state,
@@ -317,7 +320,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         }
         case AmbientTempIndicator::OutsideAir: {
             std::string const ambient_temp_outdoor_node =
-                ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_outdoor_air_node_name");
+                s_ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_outdoor_air_node_name");
             thisChiller.AmbientTempOutsideAirNode = NodeInputManager::GetOnlySingleNode(state,
                                                                                         ambient_temp_outdoor_node,
                                                                                         ErrorsFound,
@@ -327,7 +330,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                                         DataLoopNode::ConnectionType::OutsideAirReference,
                                                                                         NodeInputManager::CompFluidStream::Primary,
                                                                                         DataLoopNode::ObjectIsNotParent);
-            if (fields.count("ambient_temperature_outdoor_air_node_name")) {
+            if (fields.count("ambient_temperature_outdoor_air_node_name") != 0u) {
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, thisChiller.AmbientTempOutsideAirNode)) {
                     ShowSevereError(state,
                                     format("{} = {}: Outdoor Air Node not on OutdoorAir:NodeList or OutdoorAir:Node",
@@ -349,15 +352,15 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                             format("{} = {}:  Invalid Ambient Temperature Indicator entered={}",
                                    state.dataIPShortCut->cCurrentModuleObject,
                                    thisObjectName,
-                                   ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_indicator")));
+                                   s_ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_indicator")));
             ShowContinueError(state, " Valid entries are SCHEDULE, ZONE, and OUTDOORS.");
             ErrorsFound = true;
             break;
         }
         }
         // end Ambient temperature
-        std::string const oil_cooler_inlet_node = ip->getAlphaFieldValue(fields, objectSchemaProps, "oil_cooler_inlet_node_name");
-        std::string const oil_cooler_outlet_node = ip->getAlphaFieldValue(fields, objectSchemaProps, "oil_cooler_outlet_node_name");
+        std::string const oil_cooler_inlet_node = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "oil_cooler_inlet_node_name");
+        std::string const oil_cooler_outlet_node = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "oil_cooler_outlet_node_name");
         if (!oil_cooler_inlet_node.empty() && !oil_cooler_outlet_node.empty()) {
             thisChiller.OilCoolerInletNode = NodeInputManager::GetOnlySingleNode(state,
                                                                                  oil_cooler_inlet_node,
@@ -384,8 +387,8 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                oil_cooler_outlet_node,
                                                "Oil Cooler Water Nodes");
         }
-        std::string const aux_heat_inlet_node = ip->getAlphaFieldValue(fields, objectSchemaProps, "auxiliary_inlet_node_name");
-        std::string const aux_heat_outlet_node = ip->getAlphaFieldValue(fields, objectSchemaProps, "auxiliary_outlet_node_name");
+        std::string const aux_heat_inlet_node = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "auxiliary_inlet_node_name");
+        std::string const aux_heat_outlet_node = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "auxiliary_outlet_node_name");
         if (!aux_heat_inlet_node.empty() && !aux_heat_outlet_node.empty()) {
 
             thisChiller.AuxiliaryHeatInletNode = NodeInputManager::GetOnlySingleNode(state,
@@ -415,15 +418,15 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         }
 
         // TODO: When implemented, add ...WasAutoSized variables
-        if (fields.count("oil_cooler_design_flow_rate")) {
+        if (fields.count("oil_cooler_design_flow_rate") != 0u) {
             thisChiller.OilCoolerVolFlowRate = fields.at("oil_cooler_design_flow_rate").get<Real64>();
         }
-        if (fields.count("auxiliary_equipment_design_flow_rate")) {
+        if (fields.count("auxiliary_equipment_design_flow_rate") != 0u) {
             thisChiller.AuxiliaryVolFlowRate = fields.at("auxiliary_equipment_design_flow_rate").get<Real64>();
         }
 
-        if (fields.count("end_use_subcategory")) {
-            thisChiller.EndUseSubcategory = ip->getAlphaFieldValue(fields, objectSchemaProps, "end_use_subcategory");
+        if (fields.count("end_use_subcategory") != 0u) {
+            thisChiller.EndUseSubcategory = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "end_use_subcategory");
         } else {
             thisChiller.EndUseSubcategory = "General";
         }
@@ -446,7 +449,9 @@ ASHRAE205ChillerSpecs *ASHRAE205ChillerSpecs::factory(EnergyPlusData &state, std
     auto thisObj = std::find_if(state.dataChillerElectricASHRAE205->Electric205Chiller.begin(),
                                 state.dataChillerElectricASHRAE205->Electric205Chiller.end(),
                                 [&objectName](const ASHRAE205ChillerSpecs &myObj) { return myObj.Name == objectName; });
-    if (thisObj != state.dataChillerElectricASHRAE205->Electric205Chiller.end()) return thisObj;
+    if (thisObj != state.dataChillerElectricASHRAE205->Electric205Chiller.end()) {
+        return thisObj;
+    }
     // If we didn't find it, fatal
     ShowFatalError(state, format("ASHRAE205ChillerSpecs::factory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
     return nullptr;                                                                                                         // LCOV_EXCL_LINE
@@ -473,7 +478,7 @@ void ASHRAE205ChillerSpecs::oneTimeInit_new(EnergyPlusData &state)
         PlantUtilities::InterConnectTwoPlantLoopSides(
             state, this->CWPlantLoc, this->CDPlantLoc, DataPlant::PlantEquipmentType::Chiller_ElectricASHRAE205, true);
     }
-    if (this->OilCoolerInletNode) {
+    if (this->OilCoolerInletNode != 0) {
         PlantUtilities::ScanPlantLoopsForObject(state,
                                                 this->Name,
                                                 DataPlant::PlantEquipmentType::Chiller_ElectricASHRAE205,
@@ -485,7 +490,7 @@ void ASHRAE205ChillerSpecs::oneTimeInit_new(EnergyPlusData &state)
                                                 this->OilCoolerInletNode,
                                                 _);
     }
-    if (this->AuxiliaryHeatInletNode) {
+    if (this->AuxiliaryHeatInletNode != 0) {
         PlantUtilities::ScanPlantLoopsForObject(state,
                                                 this->Name,
                                                 DataPlant::PlantEquipmentType::Chiller_ElectricASHRAE205,
@@ -526,12 +531,12 @@ void ASHRAE205ChillerSpecs::oneTimeInit_new(EnergyPlusData &state)
 
     if (this->FlowMode == DataPlant::FlowMode::Constant) {
         // reset flow priority
-        DataPlant::CompData::getPlantComponent(state, this->CWPlantLoc).FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
+        this->CWPlantLoc.comp->FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
     }
 
     else if (this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) {
         // reset flow priority
-        DataPlant::CompData::getPlantComponent(state, this->CWPlantLoc).FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
+        this->CWPlantLoc.comp->FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
         // check if setpoint on outlet node
         if ((state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint == DataLoopNode::SensedNodeFlagValue) &&
             (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi == DataLoopNode::SensedNodeFlagValue)) {
@@ -546,8 +551,7 @@ void ASHRAE205ChillerSpecs::oneTimeInit_new(EnergyPlusData &state)
             } else {
                 // need call to EMS to check node
                 bool fatalError = false; // but not really fatal yet, but should be.
-                EMSManager::CheckIfNodeSetPointManagedByEMS(
-                    state, this->EvapOutletNodeNum, EMSManager::SPControlType::TemperatureSetPoint, fatalError);
+                EMSManager::CheckIfNodeSetPointManagedByEMS(state, this->EvapOutletNodeNum, HVAC::CtrlVarType::Temp, fatalError);
                 state.dataLoopNodes->NodeSetpointCheck(this->EvapOutletNodeNum).needsSetpointChecking = false;
                 if (fatalError) {
                     if (!this->ModulatedFlowErrDone) {
@@ -564,9 +568,9 @@ void ASHRAE205ChillerSpecs::oneTimeInit_new(EnergyPlusData &state)
             }
             this->ModulatedFlowSetToLoop = true;
             state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint =
-                state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).TempSetPointNodeNum).TempSetPoint;
+                state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
             state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi =
-                state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).TempSetPointNodeNum).TempSetPointHi;
+                state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
         }
     }
 
@@ -579,7 +583,7 @@ void ASHRAE205ChillerSpecs::initialize(EnergyPlusData &state, bool const RunFlag
 
     switch (this->AmbientTempType) {
     case AmbientTempIndicator::Schedule: {
-        this->AmbientTemp = ScheduleManager::GetCurrentScheduleValue(state, this->AmbientTempSchedule);
+        this->AmbientTemp = this->ambientTempSched->getCurrentVal();
         break;
     }
     case AmbientTempIndicator::TempZone: {
@@ -594,44 +598,28 @@ void ASHRAE205ChillerSpecs::initialize(EnergyPlusData &state, bool const RunFlag
         break;
     }
 
-    this->EquipFlowCtrl = DataPlant::CompData::getPlantComponent(state, this->CWPlantLoc).FlowCtrl;
+    this->EquipFlowCtrl = this->CWPlantLoc.comp->FlowCtrl;
 
     if (this->MyEnvrnFlag && state.dataGlobal->BeginEnvrnFlag && (state.dataPlnt->PlantFirstSizesOkayToFinalize)) {
-        Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                       state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidName,
-                                                       Constant::CWInitConvTemp,
-                                                       state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidIndex,
-                                                       RoutineName);
+        Real64 rho = this->CWPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
 
         this->EvapMassFlowRateMax = rho * this->EvapVolFlowRate;
         PlantUtilities::InitComponentNodes(state, 0.0, this->EvapMassFlowRateMax, this->EvapInletNodeNum, this->EvapOutletNodeNum);
 
         if (this->CondenserType == DataPlant::CondenserType::WaterCooled) {
-            rho = FluidProperties::GetDensityGlycol(state,
-                                                    state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).FluidName,
-                                                    this->TempRefCondIn,
-                                                    state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).FluidIndex,
-                                                    RoutineName);
+            rho = this->CDPlantLoc.loop->glycol->getDensity(state, this->TempRefCondIn, RoutineName);
             this->CondMassFlowRateMax = rho * this->CondVolFlowRate;
             PlantUtilities::InitComponentNodes(state, 0.0, this->CondMassFlowRateMax, this->CondInletNodeNum, this->CondOutletNodeNum);
             state.dataLoopNodes->Node(this->CondInletNodeNum).Temp = this->TempRefCondIn;
         }
         // Set mass flow rates at Oil Cooler and Aux Equipment nodes
-        if (this->OilCoolerInletNode) {
-            Real64 rho_oil_cooler = FluidProperties::GetDensityGlycol(state,
-                                                                      state.dataPlnt->PlantLoop(this->OCPlantLoc.loopNum).FluidName,
-                                                                      Constant::InitConvTemp,
-                                                                      state.dataPlnt->PlantLoop(this->OCPlantLoc.loopNum).FluidIndex,
-                                                                      RoutineName);
+        if (this->OilCoolerInletNode != 0) {
+            Real64 rho_oil_cooler = this->OCPlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
             this->OilCoolerMassFlowRate = rho_oil_cooler * this->OilCoolerVolFlowRate;
             PlantUtilities::InitComponentNodes(state, 0.0, this->OilCoolerMassFlowRate, this->OilCoolerInletNode, this->OilCoolerOutletNode);
         }
-        if (this->AuxiliaryHeatInletNode) {
-            Real64 rho_aux = FluidProperties::GetDensityGlycol(state,
-                                                               state.dataPlnt->PlantLoop(this->AHPlantLoc.loopNum).FluidName,
-                                                               Constant::InitConvTemp,
-                                                               state.dataPlnt->PlantLoop(this->AHPlantLoc.loopNum).FluidIndex,
-                                                               RoutineName);
+        if (this->AuxiliaryHeatInletNode != 0) {
+            Real64 rho_aux = this->AHPlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
             this->AuxiliaryMassFlowRate = rho_aux * this->AuxiliaryVolFlowRate;
             PlantUtilities::InitComponentNodes(state, 0.0, this->AuxiliaryMassFlowRate, this->AuxiliaryHeatInletNode, this->AuxiliaryHeatOutletNode);
         }
@@ -643,9 +631,9 @@ void ASHRAE205ChillerSpecs::initialize(EnergyPlusData &state, bool const RunFlag
     if ((this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) && this->ModulatedFlowSetToLoop) {
         // see ReformulatedEIR or EIR Chiller for origin of the following
         state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint =
-            state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).TempSetPointNodeNum).TempSetPoint;
+            state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
         state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi =
-            state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).TempSetPointNodeNum).TempSetPointHi;
+            state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
     }
 
     Real64 mdot = ((std::abs(MyLoad) > 0.0) && RunFlag) ? this->EvapMassFlowRateMax : 0.0;
@@ -658,11 +646,11 @@ void ASHRAE205ChillerSpecs::initialize(EnergyPlusData &state, bool const RunFlag
     }
 
     // Set component flow rates for Oil Cooler and Aux equipment
-    if (this->OilCoolerInletNode) {
+    if (this->OilCoolerInletNode != 0) {
         PlantUtilities::SetComponentFlowRate(
             state, this->OilCoolerMassFlowRate, this->OilCoolerInletNode, this->OilCoolerOutletNode, this->OCPlantLoc);
     }
-    if (this->AuxiliaryHeatInletNode) {
+    if (this->AuxiliaryHeatInletNode != 0) {
         PlantUtilities::SetComponentFlowRate(
             state, this->AuxiliaryMassFlowRate, this->AuxiliaryHeatInletNode, this->AuxiliaryHeatOutletNode, this->AHPlantLoc);
     }
@@ -675,8 +663,8 @@ void ASHRAE205ChillerSpecs::initialize(EnergyPlusData &state, bool const RunFlag
 
             // check if inlet limit active and if exceeded.
             bool HeatRecRunFlag = RunFlag;
-            if (this->HeatRecInletLimitSchedNum > 0) {
-                Real64 HeatRecHighInletLimit = ScheduleManager::GetCurrentScheduleValue(state, this->HeatRecInletLimitSchedNum);
+            if (this->heatRecInletLimitSched != nullptr) {
+                Real64 HeatRecHighInletLimit = this->heatRecInletLimitSched->getCurrentVal();
                 if (state.dataLoopNodes->Node(this->HeatRecInletNodeNum).Temp > HeatRecHighInletLimit) { // shut down heat recovery
                     HeatRecRunFlag = false;
                 } else {
@@ -702,13 +690,15 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
 
     // Size evaporator flow rate
     // find the appropriate Plant Sizing object
-    int PltSizNum = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).PlantSizNum;
+    int PltSizNum = this->CWPlantLoc.loop->PlantSizNum;
 
     if (PltSizNum > 0) {
-        if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= DataHVACGlobals::SmallWaterVolFlow) {
+        if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
             tmpEvapVolFlowRate = state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate * this->SizFac;
         } else {
-            if (this->EvapVolFlowRateWasAutoSized) tmpEvapVolFlowRate = 0.0;
+            if (this->EvapVolFlowRateWasAutoSized) {
+                tmpEvapVolFlowRate = 0.0;
+            }
         }
         if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
             if (this->EvapVolFlowRateWasAutoSized) {
@@ -768,25 +758,19 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
     PlantUtilities::RegisterPlantCompDesignFlow(state, this->EvapInletNodeNum, tmpEvapVolFlowRate);
 
     // Size condenser flow rate
-    int PltSizCondNum = state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).PlantSizNum; // Change for air-cooled when it's supported
+    int PltSizCondNum = this->CDPlantLoc.loop->PlantSizNum; // Change for air-cooled when it's supported
     if (PltSizCondNum > 0 && PltSizNum > 0) {
-        if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= DataHVACGlobals::SmallWaterVolFlow && tmpNomCap > 0.0) {
+        if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow && tmpNomCap > 0.0) {
 
-            Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).FluidName,
-                                                           Constant::CWInitConvTemp,
-                                                           state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
-            Real64 Cp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                               state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).FluidName,
-                                                               this->TempRefCondIn,
-                                                               state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).FluidIndex,
-                                                               RoutineName);
+            Real64 rho = this->CDPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
+            Real64 Cp = this->CDPlantLoc.loop->glycol->getSpecificHeat(state, this->TempRefCondIn, RoutineName);
             tmpCondVolFlowRate = tmpNomCap * (1.0 + (1.0 / this->RefCOP) * this->CompPowerToCondenserFrac) /
                                  (state.dataSize->PlantSizData(PltSizCondNum).DeltaT * Cp * rho);
 
         } else {
-            if (this->CondVolFlowRateWasAutoSized) tmpCondVolFlowRate = 0.0;
+            if (this->CondVolFlowRateWasAutoSized) {
+                tmpCondVolFlowRate = 0.0;
+            }
         }
         if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
             if (this->CondVolFlowRateWasAutoSized) {
@@ -854,7 +838,9 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
                 bool bPRINT = true; // TRUE if sizing is reported to output (eio)
                 AutoCalculateSizer sizerCondAirFlow;
                 std::string stringOverride = "Condenser Maximum Requested Flow Rate  [m3/s]";
-                if (state.dataGlobal->isEpJSON) stringOverride = "condenser_maximum_requested_flow_rate [m3/s]";
+                if (state.dataGlobal->isEpJSON) {
+                    stringOverride = "condenser_maximum_requested_flow_rate [m3/s]";
+                }
                 sizerCondAirFlow.overrideSizingString(stringOverride);
                 sizerCondAirFlow.initializeWithinEP(state, CompType, this->Name, bPRINT, RoutineName);
                 this->CondVolFlowRate = sizerCondAirFlow.size(state, TempSize, ErrorsFound);
@@ -878,18 +864,10 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
                        .net_evaporator_capacity;
 
     if (PltSizNum > 0) {
-        if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= DataHVACGlobals::SmallWaterVolFlow) {
-            Real64 Cp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                               state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidName,
-                                                               Constant::CWInitConvTemp,
-                                                               state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidIndex,
-                                                               RoutineName);
+        if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
+            Real64 Cp = this->CWPlantLoc.loop->glycol->getSpecificHeat(state, Constant::CWInitConvTemp, RoutineName);
 
-            Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidName,
-                                                           Constant::CWInitConvTemp,
-                                                           state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
+            Real64 rho = this->CWPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
             tmpNomCap = Cp * rho * state.dataSize->PlantSizData(PltSizNum).DeltaT * tmpEvapVolFlowRate;
         } else {
             tmpNomCap = 0.0;
@@ -939,11 +917,11 @@ void ASHRAE205ChillerSpecs::size([[maybe_unused]] EnergyPlusData &state)
         }
     }
 
-    if (this->OilCoolerInletNode) {
+    if (this->OilCoolerInletNode != 0) {
         PlantUtilities::RegisterPlantCompDesignFlow(state, this->OilCoolerInletNode, this->OilCoolerVolFlowRate);
     }
 
-    if (this->AuxiliaryHeatInletNode) {
+    if (this->AuxiliaryHeatInletNode != 0) {
         PlantUtilities::RegisterPlantCompDesignFlow(state, this->AuxiliaryHeatInletNode, this->AuxiliaryVolFlowRate);
     }
 
@@ -965,212 +943,205 @@ void ASHRAE205ChillerSpecs::setOutputVariables(EnergyPlusData &state)
                         "Chiller Part Load Ratio",
                         Constant::Units::None,
                         this->ChillerPartLoadRatio,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Cycling Ratio",
                         Constant::Units::None,
                         this->ChillerCyclingRatio,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Minimum Part Load Ratio",
                         Constant::Units::None,
                         this->MinPartLoadRat,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Electricity Rate",
                         Constant::Units::W,
                         this->Power,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Electricity Energy",
                         Constant::Units::J,
                         this->Energy,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
                         this->Name,
                         Constant::eResource::Electricity,
-                        OutputProcessor::SOVEndUseCat::Cooling,
-                        this->EndUseSubcategory,
-                        OutputProcessor::SOVGroup::Plant);
+                        OutputProcessor::Group::Plant,
+                        OutputProcessor::EndUseCat::Cooling,
+                        this->EndUseSubcategory);
 
     SetupOutputVariable(state,
                         "Chiller Evaporator Cooling Rate",
                         Constant::Units::W,
                         this->QEvaporator,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Evaporator Cooling Energy",
                         Constant::Units::J,
                         this->EvapEnergy,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
                         this->Name,
                         Constant::eResource::EnergyTransfer,
-                        OutputProcessor::SOVEndUseCat::Chillers,
-                        {},
-                        OutputProcessor::SOVGroup::Plant);
+                        OutputProcessor::Group::Plant,
+                        OutputProcessor::EndUseCat::Chillers);
 
     SetupOutputVariable(state,
                         "Chiller Evaporator Inlet Temperature",
                         Constant::Units::C,
                         this->EvapInletTemp,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Evaporator Outlet Temperature",
                         Constant::Units::C,
                         this->EvapOutletTemp,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Evaporator Mass Flow Rate",
                         Constant::Units::kg_s,
                         this->EvapMassFlowRate,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Condenser Heat Transfer Rate",
                         Constant::Units::W,
                         this->QCondenser,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Condenser Heat Transfer Energy",
                         Constant::Units::J,
                         this->CondEnergy,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
                         this->Name,
                         Constant::eResource::EnergyTransfer,
-                        OutputProcessor::SOVEndUseCat::HeatRejection,
-                        {},
-                        OutputProcessor::SOVGroup::Plant);
+                        OutputProcessor::Group::Plant,
+                        OutputProcessor::EndUseCat::HeatRejection);
 
     SetupOutputVariable(state,
                         "Chiller COP",
                         Constant::Units::W_W,
                         this->ActualCOP,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Condenser Inlet Temperature",
                         Constant::Units::C,
                         this->CondInletTemp,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Condenser Outlet Temperature",
                         Constant::Units::C,
                         this->CondOutletTemp,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Condenser Mass Flow Rate",
                         Constant::Units::kg_s,
                         this->CondMassFlowRate,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Effective Heat Rejection Temperature",
                         Constant::Units::C,
                         this->ChillerCondAvgTemp,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Zone Heat Gain Rate",
                         Constant::Units::W,
                         this->AmbientZoneGain,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Chiller Zone Heat Gain Energy",
                         Constant::Units::J,
                         this->AmbientZoneGainEnergy,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Oil Cooler Heat Transfer Rate",
                         Constant::Units::W,
                         this->QOilCooler,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Oil Cooler Heat Transfer Energy",
                         Constant::Units::J,
                         this->OilCoolerEnergy,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Auxiliary Heat Transfer Rate",
                         Constant::Units::W,
                         this->QAuxiliary,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Average,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Average,
                         this->Name);
 
     SetupOutputVariable(state,
                         "Auxiliary Heat Transfer Energy",
                         Constant::Units::J,
                         this->AuxiliaryEnergy,
-                        OutputProcessor::SOVTimeStepType::System,
-                        OutputProcessor::SOVStoreType::Summed,
+                        OutputProcessor::TimeStepType::System,
+                        OutputProcessor::StoreType::Sum,
                         this->Name);
 }
 
 void ASHRAE205ChillerSpecs::findEvaporatorMassFlowRate(EnergyPlusData &state, Real64 &load, Real64 Cp)
 {
     static constexpr std::string_view RoutineName("ASHRAE205ChillerSpecs::findEvaporatorMassFlowRate");
-    const int PlantLoopNum = this->CWPlantLoc.loopNum;
-    const DataPlant::LoopSideLocation LoopSideNum = this->CWPlantLoc.loopSideNum;
-    const int BranchNum = this->CWPlantLoc.branchNum;
-    const int CompNum = this->CWPlantLoc.compNum;
 
     // If FlowLock is False (0), the chiller sets the plant loop mdot
     // If FlowLock is True (1),  the new resolved plant loop mdot is used
-    if (state.dataPlnt->PlantLoop(PlantLoopNum).LoopSide(LoopSideNum).FlowLock == DataPlant::FlowLock::Unlocked) {
-        this->PossibleSubcooling = !(state.dataPlnt->PlantLoop(PlantLoopNum).LoopSide(LoopSideNum).Branch(BranchNum).Comp(CompNum).CurOpSchemeType ==
-                                     DataPlant::OpScheme::CompSetPtBased);
+    if (this->CWPlantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
+        this->PossibleSubcooling = !(this->CWPlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased);
 
         Real64 evapDeltaTemp(0.0); // Evaporator temperature difference [C]
 
@@ -1188,7 +1159,7 @@ void ASHRAE205ChillerSpecs::findEvaporatorMassFlowRate(EnergyPlusData &state, Re
             }
             this->EvapOutletTemp = state.dataLoopNodes->Node(this->EvapInletNodeNum).Temp - evapDeltaTemp;
         } else if (this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) {
-            switch (state.dataPlnt->PlantLoop(PlantLoopNum).LoopDemandCalcScheme) {
+            switch (this->CWPlantLoc.loop->LoopDemandCalcScheme) {
             case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
                 // Calculate the Delta Temp from the inlet temp to the chiller outlet setpoint
                 evapDeltaTemp =
@@ -1205,14 +1176,16 @@ void ASHRAE205ChillerSpecs::findEvaporatorMassFlowRate(EnergyPlusData &state, Re
 
             if (evapDeltaTemp != 0) {
                 this->EvapMassFlowRate = max(0.0, (std::abs(load) / Cp / evapDeltaTemp));
-                if ((this->EvapMassFlowRate - this->EvapMassFlowRateMax) > DataBranchAirLoopPlant::MassFlowTolerance) this->PossibleSubcooling = true;
+                if ((this->EvapMassFlowRate - this->EvapMassFlowRateMax) > DataBranchAirLoopPlant::MassFlowTolerance) {
+                    this->PossibleSubcooling = true;
+                }
                 // Check to see if the Maximum is exceeded, if so set to maximum
                 this->EvapMassFlowRate = min(this->EvapMassFlowRateMax, this->EvapMassFlowRate);
                 // Use PlantUtilities::SetComponentFlowRate to decide actual flow
                 PlantUtilities::SetComponentFlowRate(
                     state, this->EvapMassFlowRate, this->EvapInletNodeNum, this->EvapOutletNodeNum, this->CWPlantLoc);
                 // Should we recalculate this with the corrected setpoint?
-                switch (state.dataPlnt->PlantLoop(PlantLoopNum).LoopDemandCalcScheme) {
+                switch (this->CWPlantLoc.loop->LoopDemandCalcScheme) {
                 case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
                     this->EvapOutletTemp = state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint;
                 } break;
@@ -1259,11 +1232,7 @@ void ASHRAE205ChillerSpecs::findEvaporatorMassFlowRate(EnergyPlusData &state, Re
         }
     } // This is the end of the FlowLock Block
 
-    const Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                         state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidName,
-                                                         Constant::CWInitConvTemp,
-                                                         state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidIndex,
-                                                         RoutineName);
+    const Real64 rho = this->CWPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
 
     this->EvapVolFlowRate = this->EvapMassFlowRate / rho;
 }
@@ -1281,10 +1250,10 @@ void ASHRAE205ChillerSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad, boo
     this->QEvaporator = 0.0;
     this->QOilCooler = 0.0;
     this->QAuxiliary = 0.0;
-    int PlantLoopNum = this->CWPlantLoc.loopNum;
-    DataPlant::LoopSideLocation LoopSideNum = this->CWPlantLoc.loopSideNum;
-    int BranchNum = this->CWPlantLoc.branchNum;
-    int CompNum = this->CWPlantLoc.compNum;
+    // int PlantLoopNum = this->CWPlantLoc.loopNum;
+    // DataPlant::LoopSideLocation LoopSideNum = this->CWPlantLoc.loopSideNum;
+    // int BranchNum = this->CWPlantLoc.branchNum;
+    // int CompNum = this->CWPlantLoc.compNum;
 
     // Set module-level chiller evaporator and condenser inlet temperature variables
     // using prior time step's temperature
@@ -1301,11 +1270,11 @@ void ASHRAE205ChillerSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad, boo
         this->Representation->performance.performance_map_standby.calculate_performance(this->AmbientTemp, this->InterpolationType).input_power;
     if (MyLoad >= 0 || !RunFlag) {
         if (this->EquipFlowCtrl == DataBranchAirLoopPlant::ControlType::SeriesActive ||
-            state.dataPlnt->PlantLoop(PlantLoopNum).LoopSide(LoopSideNum).FlowLock == DataPlant::FlowLock::Locked) {
+            this->CWPlantLoc.side->FlowLock == DataPlant::FlowLock::Locked) {
             this->EvapMassFlowRate = state.dataLoopNodes->Node(this->EvapInletNodeNum).MassFlowRate;
         }
         if (this->CondenserType == DataPlant::CondenserType::WaterCooled) {
-            if (DataPlant::CompData::getPlantComponent(state, this->CDPlantLoc).FlowCtrl == DataBranchAirLoopPlant::ControlType::SeriesActive) {
+            if (this->CDPlantLoc.comp->FlowCtrl == DataBranchAirLoopPlant::ControlType::SeriesActive) {
                 this->CondMassFlowRate = state.dataLoopNodes->Node(this->CondInletNodeNum).MassFlowRate;
             }
         }
@@ -1339,30 +1308,35 @@ void ASHRAE205ChillerSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad, boo
         PlantUtilities::PullCompInterconnectTrigger(
             state, this->CWPlantLoc, this->CondMassFlowIndex, this->CDPlantLoc, DataPlant::CriteriaType::MassFlowRate, this->CondMassFlowRate);
 
-        if (this->CondMassFlowRate < DataBranchAirLoopPlant::MassFlowTolerance) return;
+        if (this->CondMassFlowRate < DataBranchAirLoopPlant::MassFlowTolerance) {
+            MyLoad = 0.0;
+            this->Power = standbyPower;
+            this->AmbientZoneGain = standbyPower;
+            this->EvapMassFlowRate = 0.0;
+            PlantUtilities::SetComponentFlowRate(state, this->EvapMassFlowRate, this->EvapInletNodeNum, this->EvapOutletNodeNum, this->CWPlantLoc);
+            return;
+        }
     }
     Real64 EvapOutletTempSetPoint(0.0); // Evaporator outlet temperature setpoint [C]
-    switch (state.dataPlnt->PlantLoop(PlantLoopNum).LoopDemandCalcScheme) {
+    switch (this->CWPlantLoc.loop->LoopDemandCalcScheme) {
     case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
         if ((this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) ||
-            (state.dataPlnt->PlantLoop(PlantLoopNum).LoopSide(LoopSideNum).Branch(BranchNum).Comp(CompNum).CurOpSchemeType ==
-             DataPlant::OpScheme::CompSetPtBased) ||
+            (this->CWPlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) ||
             (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint != DataLoopNode::SensedNodeFlagValue)) {
             // there will be a valid setpoint on outlet
             EvapOutletTempSetPoint = state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint;
         } else { // use plant loop overall setpoint
-            EvapOutletTempSetPoint = state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(PlantLoopNum).TempSetPointNodeNum).TempSetPoint;
+            EvapOutletTempSetPoint = state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
         }
     } break;
     case DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand: {
         if ((this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) ||
-            (state.dataPlnt->PlantLoop(PlantLoopNum).LoopSide(LoopSideNum).Branch(BranchNum).Comp(CompNum).CurOpSchemeType ==
-             DataPlant::OpScheme::CompSetPtBased) ||
+            (this->CWPlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) ||
             (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi != DataLoopNode::SensedNodeFlagValue)) {
             // there will be a valid setpoint on outlet
             EvapOutletTempSetPoint = state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi;
         } else { // use plant loop overall setpoint
-            EvapOutletTempSetPoint = state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(PlantLoopNum).TempSetPointNodeNum).TempSetPointHi;
+            EvapOutletTempSetPoint = state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
         }
     } break;
     default: {
@@ -1394,11 +1368,7 @@ void ASHRAE205ChillerSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad, boo
         return;
     }
 
-    Real64 CpEvap = FluidProperties::GetSpecificHeatGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidName,
-                                                           state.dataLoopNodes->Node(this->EvapInletNodeNum).Temp,
-                                                           state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
+    Real64 CpEvap = this->CWPlantLoc.loop->glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->EvapInletNodeNum).Temp, RoutineName);
 
     // Calculate mass flow rate based on MyLoad (TODO: then adjust it after determining if chiller can meet the load)
     this->findEvaporatorMassFlowRate(state, MyLoad, CpEvap);
@@ -1502,33 +1472,26 @@ void ASHRAE205ChillerSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad, boo
     this->QOilCooler = lookupVariablesCooling.oil_cooler_heat;
     this->QAuxiliary = lookupVariablesCooling.auxiliary_heat;
     Real64 QExternallyCooled{0.0};
-    if (this->OilCoolerInletNode) {
+    if (this->OilCoolerInletNode != 0) {
         QExternallyCooled += this->QOilCooler;
     }
-    if (this->AuxiliaryHeatInletNode) {
+    if (this->AuxiliaryHeatInletNode != 0) {
         QExternallyCooled += this->QAuxiliary;
     }
     // Energy balance on the chiller system gives the amount of heat lost to the ambient zone
     this->AmbientZoneGain = this->QEvaporator + this->Power - (this->QCondenser + QExternallyCooled);
 
-    Real64 CpCond = FluidProperties::GetSpecificHeatGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).FluidName,
-                                                           condInletTemp,
-                                                           state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
+    Real64 CpCond = this->CDPlantLoc.loop->glycol->getSpecificHeat(state, condInletTemp, RoutineName);
     this->CondOutletTemp = this->QCondenser / this->CondMassFlowRate / CpCond + condInletTemp;
 
     // Oil cooler and Auxiliary Heat delta-T calculations
-    if (this->OilCoolerInletNode) {
+    if (this->OilCoolerInletNode != 0) {
         Real64 oilCoolerDeltaTemp = 0.0;
         PlantUtilities::SetComponentFlowRate(
             state, this->OilCoolerMassFlowRate, this->OilCoolerInletNode, this->OilCoolerOutletNode, this->OCPlantLoc);
 
-        Real64 CpOilCooler = FluidProperties::GetSpecificHeatGlycol(state,
-                                                                    state.dataPlnt->PlantLoop(this->OCPlantLoc.loopNum).FluidName,
-                                                                    state.dataLoopNodes->Node(this->OilCoolerInletNode).Temp,
-                                                                    state.dataPlnt->PlantLoop(this->OCPlantLoc.loopNum).FluidIndex,
-                                                                    RoutineName);
+        Real64 CpOilCooler =
+            this->OCPlantLoc.loop->glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->OilCoolerInletNode).Temp, RoutineName);
 
         if (this->OilCoolerMassFlowRate != 0.0) {
             oilCoolerDeltaTemp = this->QOilCooler / (this->OilCoolerMassFlowRate * CpOilCooler);
@@ -1537,16 +1500,13 @@ void ASHRAE205ChillerSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad, boo
         }
         state.dataLoopNodes->Node(this->OilCoolerOutletNode).Temp = state.dataLoopNodes->Node(this->OilCoolerInletNode).Temp - oilCoolerDeltaTemp;
     }
-    if (this->AuxiliaryHeatInletNode) {
+    if (this->AuxiliaryHeatInletNode != 0) {
         Real64 auxiliaryDeltaTemp = 0.0;
         PlantUtilities::SetComponentFlowRate(
             state, this->AuxiliaryMassFlowRate, this->AuxiliaryHeatInletNode, this->AuxiliaryHeatOutletNode, this->AHPlantLoc);
 
-        Real64 CpAux = FluidProperties::GetSpecificHeatGlycol(state,
-                                                              state.dataPlnt->PlantLoop(this->AHPlantLoc.loopNum).FluidName,
-                                                              state.dataLoopNodes->Node(this->AuxiliaryHeatInletNode).Temp,
-                                                              state.dataPlnt->PlantLoop(this->AHPlantLoc.loopNum).FluidIndex,
-                                                              RoutineName);
+        Real64 CpAux =
+            this->AHPlantLoc.loop->glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->AuxiliaryHeatInletNode).Temp, RoutineName);
 
         if (this->AuxiliaryMassFlowRate != 0.0) {
             auxiliaryDeltaTemp = this->QAuxiliary / (this->AuxiliaryMassFlowRate * CpAux);
@@ -1564,10 +1524,10 @@ void ASHRAE205ChillerSpecs::update(EnergyPlusData &state, Real64 const MyLoad, b
         // Set node temperatures
         state.dataLoopNodes->Node(this->EvapOutletNodeNum).Temp = state.dataLoopNodes->Node(this->EvapInletNodeNum).Temp;
         state.dataLoopNodes->Node(this->CondOutletNodeNum).Temp = state.dataLoopNodes->Node(this->CondInletNodeNum).Temp;
-        if (this->OilCoolerInletNode) {
+        if (this->OilCoolerInletNode != 0) {
             state.dataLoopNodes->Node(this->OilCoolerOutletNode).Temp = state.dataLoopNodes->Node(this->OilCoolerInletNode).Temp;
         }
-        if (this->AuxiliaryHeatInletNode) {
+        if (this->AuxiliaryHeatInletNode != 0) {
             state.dataLoopNodes->Node(this->AuxiliaryHeatOutletNode).Temp = state.dataLoopNodes->Node(this->AuxiliaryHeatInletNode).Temp;
         }
 

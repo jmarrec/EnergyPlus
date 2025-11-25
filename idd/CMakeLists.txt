@@ -59,6 +59,8 @@ install(FILES "versions/V22-1-0-Energy+.idd" DESTINATION "PreProcess/IDFVersionU
 install(FILES "versions/V22-2-0-Energy+.idd" DESTINATION "PreProcess/IDFVersionUpdater")
 install(FILES "versions/V23-1-0-Energy+.idd" DESTINATION "PreProcess/IDFVersionUpdater")
 install(FILES "versions/V23-2-0-Energy+.idd" DESTINATION "PreProcess/IDFVersionUpdater")
+install(FILES "versions/V24-1-0-Energy+.idd" DESTINATION "PreProcess/IDFVersionUpdater")
+install(FILES "versions/V24-2-0-Energy+.idd" DESTINATION "PreProcess/IDFVersionUpdater")
 
 # For fortran...
 set(PREVIOUS_IDD "${CMAKE_CURRENT_SOURCE_DIR}/versions/V${PREV_RELEASE_MAJOR}-${PREV_RELEASE_MINOR}-${PREV_RELEASE_PATCH}-Energy+.idd")
@@ -67,19 +69,6 @@ set(PREVIOUS_IDD ${PREVIOUS_IDD} PARENT_SCOPE)
 install(FILES "${PREVIOUS_IDD}" DESTINATION "PreProcess/IDFVersionUpdater")
 
 if (BUILD_TESTING)
-  execute_process(COMMAND ${Python_EXECUTABLE} -m pytest --version
-    RESULT_VARIABLE _Pytest_STATUS
-        OUTPUT_VARIABLE Pytest_Version
-        ERROR_QUIET
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  if(_Pytest_STATUS AND NOT _Pytest_STATUS EQUAL 0)
-    message(AUTHOR_WARNING "Pytest isn't installed on your system python, so some tests won't be run. Run `${Python_EXECUTABLE} -m pip install pytest`")
-    set(Pytest_AVAILABLE OFF)
-  else()
-    message(VERBOSE "Found Pytest: ${Pytest_Version}")
-    set(Pytest_AVAILABLE ON)
-  endif()
 
   if (Pytest_AVAILABLE)
     add_test(NAME idd_schema.test_idd_parser

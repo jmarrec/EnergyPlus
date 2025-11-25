@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -62,7 +62,6 @@ TEST_F(EnergyPlusFixture, OutputFiles_Expected_Formatting_Tests)
     EXPECT_EQ(format("{:#11.{}F}", 123.456, 0), "        123.");
     EXPECT_EQ(format("{:#12.{}F}", 0.85505055394102414, 3), "       0.855");
     EXPECT_EQ(format("{:#12.{}F}", 18229.761511696095, 2), "    18229.76");
-    EXPECT_EQ(format("{:12.{}Z}", 123456789.09999999, 3), "   0.123E+09");
     EXPECT_EQ(format("{:12}", 4), "           4");
 
     // R syntax, which replicates the "RoundSigDigits" function
@@ -160,23 +159,6 @@ TEST_F(EnergyPlusFixture, OutputFiles_Expected_Formatting_Tests)
     // this code should round up as well to match behavior of others
     // EXPECT_EQ(format("{:.5R}", 0.059576949999999996577), "5.95769E-002");
 
-    // N formatting simulates the 'G' from Fortran
-    // Always has a leading 0 if printing in fixed notation < 1
-    EXPECT_EQ(format("{:20.8N}", -0.23111252E-04), "     -0.23111252E-04");
-    EXPECT_EQ(format("{:20.8N}", -0.0), "      -0.0000000    ");
-    EXPECT_EQ(format("{:20.8N}", 0.0), "       0.0000000    ");
-    EXPECT_EQ(format("{:20.8N}", 2.13608134), "       2.1360813    ");
-    EXPECT_EQ(format("{:20.8N}", 213608134.0), "      213608134.    ");
-    EXPECT_EQ(format("{:20.8N}", 213608139.6), "      213608140.    ");
-    EXPECT_EQ(format("{:20.8N}", 0.213608134), "      0.21360813    ");
-    EXPECT_EQ(format("{:13.6N}", 0.803434E+09), " 0.803434E+09");
-    EXPECT_EQ(format("{:N}", 2.06944444444444), "2.06944444444444    ");
-    //    EXPECT_EQ(format("{:N}", 999.9), "           999.9    ");
-    EXPECT_EQ(format("{:N}", 61677162.0987027), "61677162.0987027    ");
-
-    //    EXPECT_EQ(format("{:20.8N}", -0.23111252), "     -0.23111252    ");
-    //    EXPECT_EQ(format("{:20.8N}", -0.23111252), "     -0.23111252    ");
-
     // T formatting is like R, but it trims instead of rounding
     EXPECT_EQ(format("{:.3T}", 7.63142731775999418747E-003), "7.631E-003");
     EXPECT_EQ(format("{:.3T}", 1.28349999999999948505E-004), "1.283E-004");
@@ -200,24 +182,6 @@ TEST_F(EnergyPlusFixture, OutputFiles_Expected_Formatting_Tests)
     // code is expected to round down with the old version, but clearly it should not
     // for the case of "Trim"
     // EXPECT_EQ(format("{:.4T}", 0.096970000000000000639), "9.6969E-002");
-
-    // Z formatting matches Fortran's 'E' format
-    // This is the output of running a test in Fortran by issuing `PRINT "(E12.1)", 100.0`
-    //                                     "123456789xyz"   // This is properly size 12
-    EXPECT_EQ(format("{:12.1Z}", 100.0), "     0.1E+03");
-    EXPECT_EQ(format("{:12.2Z}", 100.0), "    0.10E+03"); // Why not 1E02
-    EXPECT_EQ(format("{:12.3Z}", 100.0), "   0.100E+03");
-    EXPECT_EQ(format("{:12.4Z}", 100.0), "  0.1000E+03");
-
-    EXPECT_EQ(format("{:12.1Z}", 123.456), "     0.1E+03");
-    EXPECT_EQ(format("{:12.2Z}", 123.456), "    0.12E+03"); // Why not 12E
-    EXPECT_EQ(format("{:12.3Z}", 123.456), "   0.123E+03");
-    EXPECT_EQ(format("{:12.4Z}", 123.456), "  0.1235E+03");
-
-    EXPECT_EQ(format("{:12.1Z}", 0.0), "     0.0E+00");
-    EXPECT_EQ(format("{:12.2Z}", 0.0), "    0.00E+00"); // Why not 12E
-    EXPECT_EQ(format("{:12.3Z}", 0.0), "   0.000E+00");
-    EXPECT_EQ(format("{:12.4Z}", 0.0), "  0.0000E+00");
 }
 
 TEST_F(EnergyPlusFixture, OutputControlFiles)
@@ -276,8 +240,8 @@ TEST_F(EnergyPlusFixture, OutputControlFiles)
         "   **   ~~~   **  See InputOutputReference document for more details.",
         "   ************* Object=Building=Bldg",
         "   **   ~~~   ** Object=GlobalGeometryRules",
-        "   **   ~~~   ** Object=Version",
-    });
+        "   **   ~~~   ** Object=Timestep",
+        "   **   ~~~   ** Object=Version"});
 
     compare_err_stream(expected_error);
 }
@@ -294,6 +258,7 @@ OutputControl:Files,
   {sqlite},           !- Output SQLite
   {json},             !- Output JSON
   {audit},            !- Output AUDIT
+  {spsz},             !- Output Space Sizing
   {zsz},              !- Output Zone Sizing
   {ssz},              !- Output System Sizing
   {dxf},              !- Output DXF
@@ -330,29 +295,30 @@ OutputControl:Files,
         bool sqlite = (i == 5);
         bool json = (i == 6);
         bool audit = (i == 7);
-        bool zsz = (i == 8);
-        bool ssz = (i == 9);
-        bool dxf = (i == 10);
-        bool bnd = (i == 11);
-        bool rdd = (i == 12);
-        bool mdd = (i == 13);
-        bool mtd = (i == 14);
-        bool end = (i == 15);
-        bool shd = (i == 16);
-        bool dfs = (i == 17);
-        bool glhe = (i == 18);
-        bool delightin = (i == 19);
-        bool delighteldmp = (i == 20);
-        bool delightdfdmp = (i == 21);
-        bool edd = (i == 22);
-        bool dbg = (i == 23);
-        bool perflog = (i == 24);
-        bool sln = (i == 25);
-        bool sci = (i == 26);
-        bool wrl = (i == 27);
-        bool screen = (i == 28);
-        bool extshd = (i == 29);
-        bool tarcog = (i == 30);
+        bool spsz = (i == 8);
+        bool zsz = (i == 9);
+        bool ssz = (i == 10);
+        bool dxf = (i == 11);
+        bool bnd = (i == 12);
+        bool rdd = (i == 13);
+        bool mdd = (i == 14);
+        bool mtd = (i == 15);
+        bool end = (i == 16);
+        bool shd = (i == 17);
+        bool dfs = (i == 18);
+        bool glhe = (i == 19);
+        bool delightin = (i == 20);
+        bool delighteldmp = (i == 21);
+        bool delightdfdmp = (i == 22);
+        bool edd = (i == 23);
+        bool dbg = (i == 24);
+        bool perflog = (i == 25);
+        bool sln = (i == 26);
+        bool sci = (i == 27);
+        bool wrl = (i == 28);
+        bool screen = (i == 29);
+        bool extshd = (i == 30);
+        bool tarcog = (i == 31);
 
         std::string const idf_objects = fmt::format(idf_objects_fmt,
                                                     fmt::arg("csv", boolToString(csv)),
@@ -363,6 +329,7 @@ OutputControl:Files,
                                                     fmt::arg("sqlite", boolToString(sqlite)),
                                                     fmt::arg("json", boolToString(json)),
                                                     fmt::arg("audit", boolToString(audit)),
+                                                    fmt::arg("spsz", boolToString(spsz)),
                                                     fmt::arg("zsz", boolToString(zsz)),
                                                     fmt::arg("ssz", boolToString(ssz)),
                                                     fmt::arg("dxf", boolToString(dxf)),
@@ -399,6 +366,7 @@ OutputControl:Files,
         EXPECT_EQ(sqlite, state->files.outputControl.sqlite);
         EXPECT_EQ(json, state->files.outputControl.json);
         EXPECT_EQ(audit, state->files.outputControl.audit);
+        EXPECT_EQ(spsz, state->files.outputControl.spsz);
         EXPECT_EQ(zsz, state->files.outputControl.zsz);
         EXPECT_EQ(ssz, state->files.outputControl.ssz);
         EXPECT_EQ(dxf, state->files.outputControl.dxf);
@@ -409,7 +377,6 @@ OutputControl:Files,
         EXPECT_EQ(end, state->files.outputControl.end);
         EXPECT_EQ(shd, state->files.outputControl.shd);
         EXPECT_EQ(dfs, state->files.outputControl.dfs);
-        EXPECT_EQ(glhe, state->files.outputControl.glhe);
         EXPECT_EQ(delightin, state->files.outputControl.delightin);
         EXPECT_EQ(delighteldmp, state->files.outputControl.delighteldmp);
         EXPECT_EQ(delightdfdmp, state->files.outputControl.delightdfdmp);
@@ -433,6 +400,7 @@ OutputControl:Files,
         state->files.outputControl.sqlite = false;
         state->files.outputControl.json = false;
         state->files.outputControl.audit = false;
+        state->files.outputControl.spsz = false;
         state->files.outputControl.zsz = false;
         state->files.outputControl.ssz = false;
         state->files.outputControl.dxf = false;
@@ -443,7 +411,6 @@ OutputControl:Files,
         state->files.outputControl.end = false;
         state->files.outputControl.shd = false;
         state->files.outputControl.dfs = false;
-        state->files.outputControl.glhe = false;
         state->files.outputControl.delightin = false;
         state->files.outputControl.delighteldmp = false;
         state->files.outputControl.delightdfdmp = false;

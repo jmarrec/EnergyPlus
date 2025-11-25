@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -257,8 +257,8 @@ TEST_F(EnergyPlusFixture, EconomicLifeCycleCost_GetInput)
 
     GetInputForLifeCycleCost(*state);
 
-    EXPECT_TRUE(compare_enums(DiscConv::EndOfYear, state->dataEconLifeCycleCost->discountConvention));
-    EXPECT_TRUE(compare_enums(InflAppr::ConstantDollar, state->dataEconLifeCycleCost->inflationApproach));
+    EXPECT_ENUM_EQ(DiscConv::EndOfYear, state->dataEconLifeCycleCost->discountConvention);
+    EXPECT_ENUM_EQ(InflAppr::ConstantDollar, state->dataEconLifeCycleCost->inflationApproach);
     EXPECT_EQ(0.03, state->dataEconLifeCycleCost->realDiscountRate);
     EXPECT_EQ(0, state->dataEconLifeCycleCost->baseDateMonth);
     EXPECT_EQ(2012, state->dataEconLifeCycleCost->baseDateYear);
@@ -267,14 +267,14 @@ TEST_F(EnergyPlusFixture, EconomicLifeCycleCost_GetInput)
     EXPECT_EQ(5, state->dataEconLifeCycleCost->numNonrecurringCost);
     EXPECT_EQ("RESIDUALVALUE", state->dataEconLifeCycleCost->NonrecurringCost[4].name);
     EXPECT_EQ(CostCategory::Salvage, state->dataEconLifeCycleCost->NonrecurringCost[4].category);
-    EXPECT_TRUE(compare_enums(StartCosts::BasePeriod, state->dataEconLifeCycleCost->NonrecurringCost[4].startOfCosts));
+    EXPECT_ENUM_EQ(StartCosts::BasePeriod, state->dataEconLifeCycleCost->NonrecurringCost[4].startOfCosts);
     EXPECT_EQ(-20000., state->dataEconLifeCycleCost->NonrecurringCost[4].cost);
 
     EXPECT_EQ(1, state->dataEconLifeCycleCost->numRecurringCosts);
     EXPECT_EQ("ANNUALMAINT", state->dataEconLifeCycleCost->RecurringCosts[0].name);
     EXPECT_EQ(CostCategory::Maintenance, state->dataEconLifeCycleCost->RecurringCosts[0].category);
     EXPECT_EQ(7000., state->dataEconLifeCycleCost->RecurringCosts[0].cost);
-    EXPECT_TRUE(compare_enums(StartCosts::ServicePeriod, state->dataEconLifeCycleCost->RecurringCosts[0].startOfCosts));
+    EXPECT_ENUM_EQ(StartCosts::ServicePeriod, state->dataEconLifeCycleCost->RecurringCosts[0].startOfCosts);
     EXPECT_EQ(1, state->dataEconLifeCycleCost->RecurringCosts[0].repeatPeriodYears);
 
     EXPECT_EQ(3, state->dataEconLifeCycleCost->numUsePriceEscalation);
@@ -394,8 +394,8 @@ TEST_F(EnergyPlusFixture, EconomicLifeCycleCost_ProcessMaxInput)
 
     GetInputForLifeCycleCost(*state);
 
-    EXPECT_TRUE(compare_enums(DiscConv::EndOfYear, state->dataEconLifeCycleCost->discountConvention));
-    EXPECT_TRUE(compare_enums(InflAppr::ConstantDollar, state->dataEconLifeCycleCost->inflationApproach));
+    EXPECT_ENUM_EQ(DiscConv::EndOfYear, state->dataEconLifeCycleCost->discountConvention);
+    EXPECT_ENUM_EQ(InflAppr::ConstantDollar, state->dataEconLifeCycleCost->inflationApproach);
     EXPECT_EQ(0.03, state->dataEconLifeCycleCost->realDiscountRate);
     EXPECT_EQ(0, state->dataEconLifeCycleCost->baseDateMonth);
     EXPECT_EQ(2012, state->dataEconLifeCycleCost->baseDateYear);
@@ -517,7 +517,7 @@ TEST_F(EnergyPlusFixture, EconomicLifeCycleCost_ExpressAsCashFlows)
     state->dataEconTariff->tariff.allocate(1);
     state->dataEconTariff->tariff(1).isSelected = true;
     state->dataEconTariff->tariff(1).resource = Constant::eResource::Electricity;
-    state->dataEconTariff->tariff(1).ptTotal = 1;
+    state->dataEconTariff->tariff(1).cats[(int)Cat::Total] = 1;
     state->dataEconTariff->econVar.allocate(1);
     state->dataEconTariff->econVar(1).values.allocate(12);
     state->dataEconTariff->econVar(1).values(1) = 101.;
@@ -624,7 +624,7 @@ TEST_F(EnergyPlusFixture, EconomicLifeCycleCost_GetInput_EnsureFuelTypesAllRecog
 
         const auto resource = static_cast<Constant::eResource>(getEnumValue(Constant::eResourceNamesUC, enum_string));
         // WHY IS COMPARE ENUMS THIS WAY?
-        EXPECT_FALSE(compare_enums(Constant::eResource::Invalid, resource, false)) << "Failed for " << enum_string;
+        EXPECT_ENUM_NE(Constant::eResource::Invalid, resource);
 
         idf_objects += fmt::format(R"idf(
 LifeCycleCost:UsePriceEscalation,
@@ -651,10 +651,10 @@ LifeCycleCost:UseAdjustment,
 
     EXPECT_EQ(numResources, state->dataEconLifeCycleCost->numUsePriceEscalation);
     for (const auto &lcc : state->dataEconLifeCycleCost->UsePriceEscalation) {
-        EXPECT_FALSE(compare_enums(lcc.resource, Constant::eResource::Invalid, false)) << "Failed for " << lcc.name;
+        EXPECT_ENUM_NE(lcc.resource, Constant::eResource::Invalid);
     }
     EXPECT_EQ(numResources, state->dataEconLifeCycleCost->numUseAdjustment);
     for (const auto &lcc : state->dataEconLifeCycleCost->UseAdjustment) {
-        EXPECT_FALSE(compare_enums(lcc.resource, Constant::eResource::Invalid, false)) << "Failed for " << lcc.name;
+        EXPECT_ENUM_NE(lcc.resource, Constant::eResource::Invalid);
     }
 }

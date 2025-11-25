@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -98,17 +98,17 @@ void setEnergyPlusRootDirectory(EnergyPlusState state, const char *path)
 void issueWarning(EnergyPlusState state, const char *message)
 {
     auto *thisState = reinterpret_cast<EnergyPlus::EnergyPlusData *>(state); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
-    EnergyPlus::ShowWarningError(*thisState, message);
+    ShowWarningError(*thisState, message);
 }
 void issueSevere(EnergyPlusState state, const char *message)
 {
     auto *thisState = reinterpret_cast<EnergyPlus::EnergyPlusData *>(state); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
-    EnergyPlus::ShowSevereError(*thisState, message);
+    ShowSevereError(*thisState, message);
 }
 void issueText(EnergyPlusState state, const char *message)
 {
     auto *thisState = reinterpret_cast<EnergyPlus::EnergyPlusData *>(state); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
-    EnergyPlus::ShowContinueError(*thisState, message);
+    ShowContinueError(*thisState, message);
 }
 
 void registerProgressCallback([[maybe_unused]] EnergyPlusState state, std::function<void(int const)> f)

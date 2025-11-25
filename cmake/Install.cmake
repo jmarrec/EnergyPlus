@@ -418,20 +418,7 @@ if(WIN32)
   install(FILES "${PROJECT_SOURCE_DIR}/bin/WeatherConverter/TimeZoneCodes.txt" DESTINATION "PreProcess/WeatherConverter/")
   install(FILES "${PROJECT_SOURCE_DIR}/bin/WeatherConverter/WBANLocations.csv" DESTINATION "PreProcess/WeatherConverter/")
   install(FILES "${PROJECT_SOURCE_DIR}/bin/WeatherConverter/Weather.exe" DESTINATION "PreProcess/WeatherConverter/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Win/EP-Compare Libs/Appearance Pak.dll"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Win/EP-Compare Libs/EHInterfaces5001.dll"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Win/EP-Compare Libs/EHObjectArray5001.dll"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Win/EP-Compare Libs/EHObjectCollection5001.dll"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Win/EP-Compare Libs/EHTreeView4301.DLL"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Win/EP-Compare Libs/MBSChartDirector5Plugin16042.dll"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Win/EP-Compare.exe" DESTINATION "PostProcess/EP-Compare/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/GraphHints.csv" DESTINATION "PostProcess/EP-Compare/")
+  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/readme.txt" DESTINATION "PostProcess/EP-Compare/")
   install(FILES "${PROJECT_SOURCE_DIR}/bin/EPDraw/Run-Win/EPDrawGUI Libs/Appearance Pak.dll" DESTINATION "PreProcess/EPDraw/EPDrawGUI Libs/")
   install(FILES "${PROJECT_SOURCE_DIR}/bin/EPDraw/Run-Win/EPDrawGUI Libs/Shell.dll" DESTINATION "PreProcess/EPDraw/EPDrawGUI Libs/")
   install(FILES "${PROJECT_SOURCE_DIR}/bin/EPDraw/Run-Win/EPDrawGUI.exe" DESTINATION "PreProcess/EPDraw/")
@@ -512,8 +499,7 @@ if(APPLE)
 
   install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/EP-Launch-Lite/EP-Launch-Lite.app" DESTINATION "PreProcess")
   install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Mac/IDFVersionUpdater.app" DESTINATION "PreProcess/IDFVersionUpdater")
-  install(DIRECTORY "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Mac/EP-Compare.app" DESTINATION "PostProcess/EP-Compare")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/GraphHints.csv" DESTINATION "PostProcess/EP-Compare/")
+  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/readme.txt" DESTINATION "PostProcess/EP-Compare/")
   install(PROGRAMS "${PROJECT_SOURCE_DIR}/bin/EPMacro/Mac/EPMacro" DESTINATION "./")
 
   configure_file(scripts/runenergyplus.in "${PROJECT_BINARY_DIR}/scripts/runenergyplus" @ONLY)
@@ -549,40 +535,7 @@ elseif(UNIX)
   set(CPACK_IFW_TARGET_DIRECTORY
       "/usr/local/${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}-${CPACK_PACKAGE_VERSION_MINOR}-${CPACK_PACKAGE_VERSION_PATCH}")
 
-  install(PROGRAMS "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Linux/EP-Compare" DESTINATION "PostProcess/EP-Compare/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/GraphHints.csv" DESTINATION "PostProcess/EP-Compare/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Linux/EP-Compare Libs/EHInterfaces5001.so"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Linux/EP-Compare Libs/EHObjectArray5001.so"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Linux/EP-Compare Libs/EHObjectCollection5001.so"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Linux/EP-Compare Libs/EHTreeView4301.so"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Linux/EP-Compare Libs/libMBSChartDirector5Plugin16042.so"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/Run-Linux/EP-Compare Libs/libRBAppearancePak.so"
-          DESTINATION "PostProcess/EP-Compare/EP-Compare Libs/")
-
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Libs/libRBAppearancePak64.so"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Libs/libRBCrypto64.so"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Libs/libRBInternetEncodings64.so"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Libs/libRBShell64.so"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Libs/XojoGUIFramework64.so"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Libs/libc++.so.1"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Libs/libGZip64.so"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Libs/libRBRegEx64.so"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Libs/")
-  install(FILES "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater Resources/appicon_48.png"
-          DESTINATION "PreProcess/IDFVersionUpdater/IDFVersionUpdater Resources/")
-  install(PROGRAMS "${PROJECT_SOURCE_DIR}/bin/IDFVersionUpdater/Run-Linux/IDFVersionUpdater" DESTINATION "PreProcess/IDFVersionUpdater/")
+  install(FILES "${PROJECT_SOURCE_DIR}/bin/EP-Compare/readme.txt" DESTINATION "PostProcess/EP-Compare/")
 
   install(PROGRAMS "${PROJECT_SOURCE_DIR}/bin/EPMacro/Linux/EPMacro" DESTINATION "./")
 
@@ -595,10 +548,6 @@ elseif(UNIX)
   install(CODE "MESSAGE(\"Creating symlinks.\")" COMPONENT Symlinks)
   install(FILES "${PROJECT_SOURCE_DIR}/doc/man/energyplus.1" DESTINATION "./" COMPONENT Symlinks)
 endif()
-
-# TODO: Unused now
-configure_file("${PROJECT_SOURCE_DIR}/cmake/CMakeCPackOptions.cmake.in" "${PROJECT_BINARY_DIR}/CMakeCPackOptions.cmake" @ONLY)
-set(CPACK_PROJECT_CONFIG_FILE "${PROJECT_BINARY_DIR}/CMakeCPackOptions.cmake")
 
 ##########################################################   D O C U M E N T A T I O N   #############################################################
 
@@ -646,11 +595,7 @@ if(BUILD_DOCS)
             COMPONENT Documentation)
   endif()
 
-  install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/Acknowledgments.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
-  install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/AuxiliaryPrograms.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
-  install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/EMSApplicationGuide.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
   install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/EngineeringReference.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
-  install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/EnergyPlusEssentials.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
   install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/ExternalInterfacesApplicationGuide.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
   install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/GettingStarted.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
   install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/InputOutputReference.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
@@ -660,6 +605,12 @@ if(BUILD_DOCS)
   install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/PlantApplicationGuide.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
   install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/UsingEnergyPlusForCompliance.pdf" DESTINATION "./Documentation" COMPONENT Documentation)
   install(FILES "${PROJECT_BINARY_DIR}/doc/pdf/index.html" DESTINATION "./Documentation" COMPONENT Documentation)
+  if(WIN32)
+    install(FILES "${PROJECT_SOURCE_DIR}/doc/urls/Acknowledgments.url" DESTINATION "./Documentation" COMPONENT Documentation)
+    install(FILES "${PROJECT_SOURCE_DIR}/doc/urls/AuxiliaryPrograms.url" DESTINATION "./Documentation" COMPONENT Documentation)
+    install(FILES "${PROJECT_SOURCE_DIR}/doc/urls/EMSApplicationGuide.url" DESTINATION "./Documentation" COMPONENT Documentation)
+    install(FILES "${PROJECT_SOURCE_DIR}/doc/urls/EnergyPlusEssentials.url" DESTINATION "./Documentation" COMPONENT Documentation)
+  endif()
 else()
   message(AUTHOR_WARNING "BUILD_DOCS isn't enabled, so package won't include the PDFs")
 endif()
@@ -677,8 +628,8 @@ if(WIN32 AND NOT UNIX)
 
 
   # ConvertInputFormat is added via add_subdirectory, and in there we set CMAKE_INSTALL_OPENMP_LIBRARIES at parent scope already
-  # Otherwise, if either cpgfunctionEP (yes by default) or kiva (no by default) **actually** linked to OpenMP, we need to ship the libs
-  if (NOT ${CMAKE_INSTALL_OPENMP_LIBRARIES} AND (${USE_OpenMP} OR ${ENABLE_OPENMP}))
+  # Otherwise, if kiva (no by default) **actually** linked to OpenMP, we need to ship the libs
+  if ((NOT CMAKE_INSTALL_OPENMP_LIBRARIES) AND ENABLE_OPENMP)
     # Need to install vcomp140.dll or similar
     find_package(OpenMP COMPONENTS CXX)
     if(OpenMP_CXX_FOUND)
@@ -691,6 +642,41 @@ if(WIN32 AND NOT UNIX)
     install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS} DESTINATION "./" COMPONENT Libraries)
   endif()
 endif()
+
+if(APPLE AND CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION)
+
+  set(FILES_TO_SIGN
+    # Targets are signed already via register_install_codesign_target
+    #$<TARGET_FILE_NAME:ConvertInputFormat>
+    #$<TARGET_FILE_NAME:energyplus>
+    #$<TARGET_FILE_NAME:energyplusapi>
+
+    # Bash scripts, not sure if needed or not
+    "runenergyplus"
+    "runepmacro"
+    "runreadvars"
+    # Copied-verbatim apps: Already signed because just copied from bin to package
+    # "EPMacro"
+    # "PreProcess/EP-Launch-Lite.app"
+    # "PreProcess/IDFVersionUpdater/IDFVersionUpdater.app"
+  )
+
+  # Codesign inner binaries and libraries, in the CPack staging area for the EnergyPlus project, component Unspecified
+  # Define some required variables for the script in the scope of the install(SCRIPT) first
+  install(CODE "set(CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION \"${CPACK_CODESIGNING_DEVELOPPER_ID_APPLICATION}\")" COMPONENT Unspecified)
+  install(CODE "set(CPACK_CODESIGNING_MACOS_IDENTIFIER \"${CPACK_CODESIGNING_MACOS_IDENTIFIER}\")" COMPONENT Unspecified)
+  install(CODE "set(FILES_TO_SIGN \"${FILES_TO_SIGN}\")" COMPONENT Unspecified)
+  # call the script
+  install(SCRIPT "${CMAKE_CURRENT_LIST_DIR}/install_codesign_script.cmake" COMPONENT Unspecified)
+
+  # Register the CPACK_POST_BUILD_SCRIPTS
+  set(CPACK_POST_BUILD_SCRIPTS "${CMAKE_CURRENT_LIST_DIR}/CPackSignAndNotarizeDmg.cmake")
+
+endif()
+
+# TODO: Unused now
+configure_file("${PROJECT_SOURCE_DIR}/cmake/CMakeCPackOptions.cmake.in" "${PROJECT_BINARY_DIR}/CMakeCPackOptions.cmake" @ONLY)
+set(CPACK_PROJECT_CONFIG_FILE "${PROJECT_BINARY_DIR}/CMakeCPackOptions.cmake")
 
 ######################################################################################################################################################
 #                                                    P A C K A G I N G   &   C O M P O N E N T S                                                     #
@@ -760,6 +746,10 @@ cpack_ifw_configure_component(Unspecified SCRIPT cmake/qtifw/install_operations.
 cpack_ifw_configure_component(Symlinks SCRIPT cmake/qtifw/install_unix_createsymlinks.qs REQUIRES_ADMIN_RIGHTS)
 
 cpack_ifw_configure_component(CreateStartMenu SCRIPT cmake/qtifw/install_win_createstartmenu.qs)
+
+if (PYTHON_CLI)
+  cpack_ifw_configure_component(Unspecified SCRIPT cmake/qtifw/install_auxiliary_python_shortcuts.qs)
+endif()
 
 cpack_ifw_configure_component(RegisterFileType SCRIPT cmake/qtifw/install_registerfiletype.qs REQUIRES_ADMIN_RIGHTS)
 

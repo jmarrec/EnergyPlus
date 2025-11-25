@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -51,7 +51,6 @@
 #include <cstdlib>
 
 // ObjexxFCL Headers
-#include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/string.functions.hh>
 
 // EnergyPlus Headers
@@ -62,6 +61,7 @@
 #include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/SZVAVModel.hh>
+#include <EnergyPlus/SizingManager.hh>
 #include <EnergyPlus/UnitarySystem.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
@@ -70,9 +70,6 @@ namespace EnergyPlus {
 namespace SZVAVModel {
 
     // Module containing routines for general use
-
-    // Using/Aliasing
-    using DataHVACGlobals::Bisection;
 
     // Data
     // This module should not contain variables in the module sense as it is
@@ -94,7 +91,7 @@ namespace SZVAVModel {
                         [[maybe_unused]] bool const HXUnitOn,
                         [[maybe_unused]] int const AirLoopNum,
                         Real64 &PartLoadRatio,
-                        [[maybe_unused]] DataHVACGlobals::CompressorOperation const CompressorONFlag)
+                        [[maybe_unused]] HVAC::CompressorOp const CompressorONFlag)
     {
 
         int constexpr MaxIter(100); // maximum number of iterations
@@ -168,13 +165,13 @@ namespace SZVAVModel {
 
         // model attempts to control air flow rate and coil capacity in specific operating regions:
         // Region 1 (R1) - minimum air flow rate at modulated coil capacity (up to min/max temperature limits)
-        // Region 2 (R2) - modultated air flow rate and coil capacity (up to max air flow rate while maintaining min/max temperature limits)
+        // Region 2 (R2) - modulated air flow rate and coil capacity (up to max air flow rate while maintaining min/max temperature limits)
         // Region 3 (R3) - maximum air flow rate and modulated/increased coil capacity (allow increased capacity at full air flow rate to meet
         // remaining load)
         //
         //                |    |                   |    |    ^            ^ = supply air temperature
         //                |    |                   |    | ^               * = supply air flow rate
-        //                |    |                   |^^^^| <--- maximum supply air temperture
+        //                |    |                   |^^^^| <--- maximum supply air temperature
         //                |    |                ^  |    |
         //                |    |              ^    |    |
         //     ***********|    |            ^      |    |**************   <-- max unit air flow rate
@@ -206,7 +203,7 @@ namespace SZVAVModel {
         // Step 1: Determine boundary for region 1
         // calculate sensible load based on minimum air flow rate and specified supply air temperature limit
         if (SZVAVModel.ATMixerExists) {
-            if (SZVAVModel.ATMixerType == DataHVACGlobals::ATMixer_SupplySide) {
+            if (SZVAVModel.ATMixerType == HVAC::MixerType::SupplySide) {
                 // Air terminal supply side mixer
                 lowBoundaryLoad =
                     minAirMassFlow * (Psychrometrics::PsyHFnTdbW(state.dataLoopNodes->Node(SZVAVModel.ATMixerOutNode).Temp, ZoneHumRat) -
@@ -229,15 +226,19 @@ namespace SZVAVModel {
                 0.0; // minimum fan PLR, air flow = ( fanPartLoadRatio * maxAirMassFlow ) + ( ( 1.0 - fanPartLoadRatio ) * minAirMassFlow )
             state.dataLoopNodes->Node(InletNode).MassFlowRate = minAirMassFlow;
             // set max water flow rate and check to see if plant limits flow
-            if (coilPlantLoc.loopNum > 0)
+            if (coilPlantLoc.loopNum > 0) {
                 PlantUtilities::SetComponentFlowRate(state, maxCoilFluidFlow, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+            }
 
             if (HeatingLoad) { // Function UnitarySystems::calcUnitarySystemToLoad, 4th and 5th arguments are CoolPLR and HeatPLR
                 // set the water flow ratio so water coil gets proper flow
-                if (SZVAVModel.MaxHeatCoilFluidFlow > 0.0) SZVAVModel.HeatCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxHeatCoilFluidFlow;
+                if (SZVAVModel.MaxHeatCoilFluidFlow > 0.0) {
+                    SZVAVModel.HeatCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxHeatCoilFluidFlow;
+                }
             }
             FanCoilUnits::Calc4PipeFanCoil(state, SysIndex, SZVAVModel.ControlZoneNum, FirstHVACIteration, TempSensOutput, PartLoadRatio);
-            coilActive = state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp;
+
+            coilActive = std::abs(state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp) > 0;
 
             if (!coilActive) { // if the coil is schedule off or the plant cannot provide water
                 if (coilPlantLoc.loopNum > 0) {
@@ -268,14 +269,15 @@ namespace SZVAVModel {
                     MessagePrefix = "Step 1: ";
                 }
 
-                if (coilPlantLoc.loopNum > 0)
+                if (coilPlantLoc.loopNum > 0) {
                     PlantUtilities::SetComponentFlowRate(
                         state, state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+                }
             }
 
         } else {
 
-            // Step 2: Load is greater then allowed in region 1, determine boundary load for region 3
+            // Step 2: Load is greater than allowed in region 1, determine boundary load for region 3
             // only difference in this calculation is using maxAirMassFlow instead of minAirMassFlow, just use the ratio to adjust previous
             // calculation
             highBoundaryLoad = lowBoundaryLoad * maxAirMassFlow / minAirMassFlow;
@@ -284,7 +286,9 @@ namespace SZVAVModel {
 
                 outletTemp = state.dataLoopNodes->Node(OutletNode).Temp;
                 minHumRat = state.dataLoopNodes->Node(SZVAVModel.NodeNumOfControlledZone).HumRat;
-                if (outletTemp < ZoneTemp) minHumRat = state.dataLoopNodes->Node(OutletNode).HumRat;
+                if (outletTemp < ZoneTemp) {
+                    minHumRat = state.dataLoopNodes->Node(OutletNode).HumRat;
+                }
                 outletTemp = maxOutletTemp;
                 AirMassFlow = min(maxAirMassFlow,
                                   (ZoneLoad / (Psychrometrics::PsyHFnTdbW(outletTemp, minHumRat) - Psychrometrics::PsyHFnTdbW(ZoneTemp, minHumRat))));
@@ -293,16 +297,21 @@ namespace SZVAVModel {
 
                 state.dataLoopNodes->Node(InletNode).MassFlowRate = AirMassFlow;
                 // does unit have capacity less than load at this air flow rate
-                if (coilFluidInletNode > 0) state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate = lowWaterMdot;
+                if (coilFluidInletNode > 0) {
+                    state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate = lowWaterMdot;
+                }
                 FanCoilUnits::Calc4PipeFanCoil(state, SysIndex, SZVAVModel.ControlZoneNum, FirstHVACIteration, TempSensOutput, 0.0);
                 if ((CoolingLoad && (TempSensOutput > ZoneLoad)) || (HeatingLoad && (TempSensOutput < ZoneLoad))) {
                     // can unit get there with max water flow?
-                    if (coilFluidInletNode > 0) state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate = maxCoilFluidFlow;
+                    if (coilFluidInletNode > 0) {
+                        state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate = maxCoilFluidFlow;
+                    }
                     FanCoilUnits::Calc4PipeFanCoil(state, SysIndex, SZVAVModel.ControlZoneNum, FirstHVACIteration, TempSensOutput, 1.0);
 
                     // set max water flow rate and check to see if plant limits flow
-                    if (coilPlantLoc.loopNum > 0)
+                    if (coilPlantLoc.loopNum > 0) {
                         PlantUtilities::SetComponentFlowRate(state, maxCoilFluidFlow, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+                    }
 
                     if ((CoolingLoad && (TempSensOutput < ZoneLoad)) || (HeatingLoad && (TempSensOutput > ZoneLoad))) {
                         if (SZVAVModel.HCoilType_Num == FanCoilUnits::HCoil::Water || !HeatingLoad) {
@@ -336,7 +345,7 @@ namespace SZVAVModel {
                         }
                     } else { // not enough capacity at this air flow rate. Unit does have enough capacity a full water/air, otherwise wouldn't be here
                         // this is different from the PTUnit and UnitarySys routines in this module
-                        // find the water flow rate that meets the min load at region 1/2 bounday
+                        // find the water flow rate that meets the min load at region 1/2 boundary
                         if (SZVAVModel.HCoilType_Num == FanCoilUnits::HCoil::Water || !HeatingLoad) {
                             auto f = // (AUTO_OK_LAMBDA)
                                 [&state, SysIndex, FirstHVACIteration, &SZVAVModel, ZoneLoad, coilFluidInletNode, maxCoilFluidFlow, minAirMassFlow](
@@ -418,15 +427,18 @@ namespace SZVAVModel {
                     1.0; // minimum fan PLR, air flow = ( fanPartLoadRatio * maxAirMassFlow ) + ( ( 1.0 - fanPartLoadRatio ) * minAirMassFlow )
                 state.dataLoopNodes->Node(InletNode).MassFlowRate = maxAirMassFlow;
                 // set max water flow rate and check to see if plant limits flow
-                if (coilPlantLoc.loopNum > 0)
+                if (coilPlantLoc.loopNum > 0) {
                     PlantUtilities::SetComponentFlowRate(state, maxCoilFluidFlow, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+                }
 
                 if (HeatingLoad) { // Function UnitarySystems::calcUnitarySystemToLoad, 4th and 5th arguments are CoolPLR and HeatPLR
                     // set the water flow ratio so water coil gets proper flow
-                    if (SZVAVModel.MaxHeatCoilFluidFlow > 0.0) SZVAVModel.HeatCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxHeatCoilFluidFlow;
+                    if (SZVAVModel.MaxHeatCoilFluidFlow > 0.0) {
+                        SZVAVModel.HeatCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxHeatCoilFluidFlow;
+                    }
                 }
                 FanCoilUnits::Calc4PipeFanCoil(state, SysIndex, SZVAVModel.ControlZoneNum, FirstHVACIteration, TempSensOutput, PartLoadRatio);
-                coilActive = state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp;
+                coilActive = std::abs(state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp) > 0;
                 if (!coilActive) { // if the coil is schedule off or the plant cannot provide water
                     if (coilPlantLoc.loopNum > 0) {
                         state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate = 0.0;
@@ -436,8 +448,9 @@ namespace SZVAVModel {
                     return;
                 }
 
-                if ((CoolingLoad && ZoneLoad < TempSensOutput) || (HeatingLoad && ZoneLoad > TempSensOutput))
+                if ((CoolingLoad && ZoneLoad < TempSensOutput) || (HeatingLoad && ZoneLoad > TempSensOutput)) {
                     return; // system cannot meet load, leave at max capacity
+                }
 
                 // check if coil off is less than load
                 PartLoadRatio = 0.0; // no coil capacity at full air flow
@@ -501,9 +514,10 @@ namespace SZVAVModel {
                 }
             }
 
-            if (coilPlantLoc.loopNum > 0)
+            if (coilPlantLoc.loopNum > 0) {
                 PlantUtilities::SetComponentFlowRate(
                     state, state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+            }
         }
 
         if (SolFlag < 0) {
@@ -558,7 +572,7 @@ namespace SZVAVModel {
                         bool const HXUnitOn,
                         int const AirLoopNum,
                         Real64 &PartLoadRatio,
-                        DataHVACGlobals::CompressorOperation const CompressorONFlag)
+                        HVAC::CompressorOp const CompressorONFlag)
     {
 
         UnitarySystems::UnitarySys &thisSys = state.dataUnitarySystems->unitarySys[SysIndex];
@@ -630,16 +644,17 @@ namespace SZVAVModel {
         int OutletNode = SZVAVModel.AirOutNode;
         Real64 ZoneTemp = state.dataLoopNodes->Node(SZVAVModel.NodeNumOfControlledZone).Temp;
         Real64 ZoneHumRat = state.dataLoopNodes->Node(SZVAVModel.NodeNumOfControlledZone).HumRat;
+        SZVAVModel.m_SimASHRAEModelOn = true;
 
         // model attempts to control air flow rate and coil capacity in specific operating regions:
         // Region 1 (R1) - minimum air flow rate at modulated coil capacity (up to min/max temperature limits)
-        // Region 2 (R2) - modultated air flow rate and coil capacity (up to max air flow rate while maintaining min/max temperature limits)
+        // Region 2 (R2) - modulated air flow rate and coil capacity (up to max air flow rate while maintaining min/max temperature limits)
         // Region 3 (R3) - maximum air flow rate and modulated/increased coil capacity (allow increased capacity at full air flow rate to meet
         // remaining load)
         //
         //                |    |                   |    |    ^            ^ = supply air temperature
         //                |    |                   |    | ^               * = supply air flow rate
-        //                |    |                   |^^^^| <--- maximum supply air temperture
+        //                |    |                   |^^^^| <--- maximum supply air temperature
         //                |    |                ^  |    |
         //                |    |              ^    |    |
         //     ***********|    |            ^      |    |**************   <-- max unit air flow rate
@@ -671,7 +686,7 @@ namespace SZVAVModel {
         // Step 1: Determine boundary for region 1
         // calculate sensible load based on minimum air flow rate and specified supply air temperature limit
         if (SZVAVModel.ATMixerExists) {
-            if (SZVAVModel.ATMixerType == DataHVACGlobals::ATMixer_SupplySide) {
+            if (SZVAVModel.ATMixerType == HVAC::MixerType::SupplySide) {
                 // Air terminal supply side mixer
                 boundaryLoadMet =
                     minAirMassFlow * (Psychrometrics::PsyHFnTdbW(state.dataLoopNodes->Node(SZVAVModel.ATMixerOutNode).Temp, ZoneHumRat) -
@@ -694,12 +709,15 @@ namespace SZVAVModel {
                 0.0; // minimum fan PLR, air flow = ( fanPartLoadRatio * maxAirMassFlow ) + ( ( 1.0 - fanPartLoadRatio ) * minAirMassFlow )
             state.dataLoopNodes->Node(InletNode).MassFlowRate = minAirMassFlow;
             // set max water flow rate and check to see if plant limits flow
-            if (coilPlantLoc.loopNum > 0)
+            if (coilPlantLoc.loopNum > 0) {
                 PlantUtilities::SetComponentFlowRate(state, maxCoilFluidFlow, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+            }
 
             if (CoolingLoad) { // Function CalcUnitarySystemToLoad, 4th and 5th arguments are CoolPLR and HeatPLR
                 // set the water flow ratio so water coil gets proper flow
-                if (SZVAVModel.MaxCoolCoilFluidFlow > 0.0) SZVAVModel.CoolCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxCoolCoilFluidFlow;
+                if (SZVAVModel.MaxCoolCoilFluidFlow > 0.0) {
+                    SZVAVModel.CoolCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxCoolCoilFluidFlow;
+                }
                 thisSys.calcUnitarySystemToLoad(state,
                                                 AirLoopNum,
                                                 FirstHVACIteration,
@@ -713,7 +731,9 @@ namespace SZVAVModel {
                                                 SupHeaterLoad,
                                                 CompressorONFlag);
             } else {
-                if (SZVAVModel.MaxHeatCoilFluidFlow > 0.0) SZVAVModel.HeatCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxHeatCoilFluidFlow;
+                if (SZVAVModel.MaxHeatCoilFluidFlow > 0.0) {
+                    SZVAVModel.HeatCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxHeatCoilFluidFlow;
+                }
                 thisSys.calcUnitarySystemToLoad(state,
                                                 AirLoopNum,
                                                 FirstHVACIteration,
@@ -727,7 +747,8 @@ namespace SZVAVModel {
                                                 SupHeaterLoad,
                                                 CompressorONFlag);
             }
-            coilActive = state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp;
+
+            coilActive = std::abs(state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp) > 0;
 
             if (!coilActive) { // if the coil is schedule off or the plant cannot provide water
                 if (coilPlantLoc.loopNum > 0) {
@@ -774,9 +795,10 @@ namespace SZVAVModel {
                     MessagePrefix = "Step 1: ";
                 }
 
-                if (coilPlantLoc.loopNum > 0)
+                if (coilPlantLoc.loopNum > 0) {
                     PlantUtilities::SetComponentFlowRate(
                         state, state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+                }
             }
 
         } else {
@@ -790,7 +812,9 @@ namespace SZVAVModel {
 
                 outletTemp = state.dataLoopNodes->Node(OutletNode).Temp;
                 minHumRat = state.dataLoopNodes->Node(SZVAVModel.NodeNumOfControlledZone).HumRat;
-                if (outletTemp < ZoneTemp) minHumRat = state.dataLoopNodes->Node(OutletNode).HumRat;
+                if (outletTemp < ZoneTemp) {
+                    minHumRat = state.dataLoopNodes->Node(OutletNode).HumRat;
+                }
                 outletTemp = maxOutletTemp;
                 AirMassFlow = min(maxAirMassFlow,
                                   (ZoneLoad / (Psychrometrics::PsyHFnTdbW(outletTemp, minHumRat) - Psychrometrics::PsyHFnTdbW(ZoneTemp, minHumRat))));
@@ -828,8 +852,62 @@ namespace SZVAVModel {
                                                                                           1.0);
                 };
                 General::SolveRoot(state, 0.001, MaxIter, SolFlag, PartLoadRatio, f, 0.0, 1.0);
-                if (SolFlag < 0) {
-                    MessagePrefix = "Step 2: ";
+                if (SolFlag == -2 && ((CoolingLoad && SZVAVModel.m_CoolingSpeedNum < SZVAVModel.m_NumOfSpeedCooling) ||
+                                      (HeatingLoad && SZVAVModel.m_HeatingSpeedNum < SZVAVModel.m_NumOfSpeedHeating))) {
+                    // attempt to meet the load with the next speed
+                    int szVAVModelSpeed = 0;
+                    int szVAVModelSpeedMax = 0;
+                    if (CoolingLoad) {
+                        szVAVModelSpeed = SZVAVModel.m_CoolingSpeedNum + 1;
+                        szVAVModelSpeedMax = SZVAVModel.m_NumOfSpeedCooling;
+                    } else {
+                        szVAVModelSpeed = SZVAVModel.m_HeatingSpeedNum + 1;
+                        szVAVModelSpeedMax = SZVAVModel.m_NumOfSpeedHeating;
+                    }
+                    for (int szVAVSpeed = szVAVModelSpeed; szVAVSpeed <= szVAVModelSpeedMax; ++szVAVSpeed) {
+                        if (CoolingLoad) {
+                            SZVAVModel.m_CoolingSpeedNum = szVAVSpeed;
+                        } else {
+                            SZVAVModel.m_HeatingSpeedNum = szVAVSpeed;
+                        }
+                        auto f = [&state,
+                                  SysIndex,
+                                  FirstHVACIteration,
+                                  ZoneLoad,
+                                  &SZVAVModel,
+                                  OnOffAirFlowRatio,
+                                  AirLoopNum,
+                                  coilFluidInletNode,
+                                  lowSpeedFanRatio,
+                                  AirMassFlow,
+                                  maxAirMassFlow,
+                                  CoolingLoad,
+                                  maxCoilFluidFlow](Real64 const PartLoadRatio) {
+                            return UnitarySystems::UnitarySys::calcUnitarySystemWaterFlowResidual(state,
+                                                                                                  PartLoadRatio,
+                                                                                                  SysIndex,
+                                                                                                  FirstHVACIteration,
+                                                                                                  ZoneLoad,
+                                                                                                  SZVAVModel.AirInNode,
+                                                                                                  OnOffAirFlowRatio,
+                                                                                                  AirLoopNum,
+                                                                                                  coilFluidInletNode,
+                                                                                                  maxCoilFluidFlow,
+                                                                                                  lowSpeedFanRatio,
+                                                                                                  AirMassFlow,
+                                                                                                  0.0,
+                                                                                                  maxAirMassFlow,
+                                                                                                  CoolingLoad,
+                                                                                                  1.0);
+                        };
+                        General::SolveRoot(state, 0.001, MaxIter, SolFlag, PartLoadRatio, f, 0.0, 1.0);
+                        if (SolFlag > 0) {
+                            break;
+                        }
+                    }
+                    if (SolFlag < 0) {
+                        MessagePrefix = "Step 2: ";
+                    }
                 }
 
             } else { // in region 3 of figure
@@ -839,12 +917,15 @@ namespace SZVAVModel {
                     1.0; // minimum fan PLR, air flow = ( fanPartLoadRatio * maxAirMassFlow ) + ( ( 1.0 - fanPartLoadRatio ) * minAirMassFlow )
                 state.dataLoopNodes->Node(InletNode).MassFlowRate = maxAirMassFlow;
                 // set max water flow rate and check to see if plant limits flow
-                if (coilPlantLoc.loopNum > 0)
+                if (coilPlantLoc.loopNum > 0) {
                     PlantUtilities::SetComponentFlowRate(state, maxCoilFluidFlow, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+                }
 
                 if (CoolingLoad) { // Function CalcUnitarySystemToLoad, 4th and 5th arguments are CoolPLR and HeatPLR
                     // set the water flow ratio so water coil gets proper flow
-                    if (SZVAVModel.MaxCoolCoilFluidFlow > 0.0) SZVAVModel.CoolCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxCoolCoilFluidFlow;
+                    if (SZVAVModel.MaxCoolCoilFluidFlow > 0.0) {
+                        SZVAVModel.CoolCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxCoolCoilFluidFlow;
+                    }
                     thisSys.calcUnitarySystemToLoad(state,
                                                     AirLoopNum,
                                                     FirstHVACIteration,
@@ -858,7 +939,9 @@ namespace SZVAVModel {
                                                     SupHeaterLoad,
                                                     CompressorONFlag);
                 } else {
-                    if (SZVAVModel.MaxHeatCoilFluidFlow > 0.0) SZVAVModel.HeatCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxHeatCoilFluidFlow;
+                    if (SZVAVModel.MaxHeatCoilFluidFlow > 0.0) {
+                        SZVAVModel.HeatCoilWaterFlowRatio = maxCoilFluidFlow / SZVAVModel.MaxHeatCoilFluidFlow;
+                    }
                     thisSys.calcUnitarySystemToLoad(state,
                                                     AirLoopNum,
                                                     FirstHVACIteration,
@@ -872,7 +955,9 @@ namespace SZVAVModel {
                                                     SupHeaterLoad,
                                                     CompressorONFlag);
                 }
-                coilActive = state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp;
+
+                coilActive = std::abs(state.dataLoopNodes->Node(coilAirInletNode).Temp - state.dataLoopNodes->Node(coilAirOutletNode).Temp) > 0;
+
                 if (!coilActive) { // if the coil is schedule off or the plant cannot provide water
                     if (coilPlantLoc.loopNum > 0) {
                         state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate = 0.0;
@@ -882,8 +967,9 @@ namespace SZVAVModel {
                     return;
                 }
 
-                if ((CoolingLoad && ZoneLoad < TempSensOutput) || (HeatingLoad && ZoneLoad > TempSensOutput))
+                if ((CoolingLoad && ZoneLoad < TempSensOutput) || (HeatingLoad && ZoneLoad > TempSensOutput)) {
                     return; // system cannot meet load, leave at max capacity
+                }
 
                 // otherwise iterate on load
                 auto f = [&state,
@@ -927,9 +1013,10 @@ namespace SZVAVModel {
                 }
             }
 
-            if (coilPlantLoc.loopNum > 0)
+            if (coilPlantLoc.loopNum > 0) {
                 PlantUtilities::SetComponentFlowRate(
                     state, state.dataLoopNodes->Node(coilFluidInletNode).MassFlowRate, coilFluidInletNode, coilFluidOutletNode, coilPlantLoc);
+            }
         }
 
         if (SolFlag < 0) {
