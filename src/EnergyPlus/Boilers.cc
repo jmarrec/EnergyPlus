@@ -206,6 +206,7 @@ void GetBoilerInput(EnergyPlusData &state)
         // ErrorsFound will be set to True if problem was found, left untouched otherwise
         GlobalNames::VerifyUniqueBoilerName(
             state, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1), ErrorsFound, s_ipsc->cCurrentModuleObject + " Name");
+        state.dataBoilers->Boiler.emplace_back();
         auto &thisBoiler = state.dataBoilers->Boiler[BoilerNum - 1];
         thisBoiler.Name = s_ipsc->cAlphaArgs(1);
         thisBoiler.Type = DataPlant::PlantEquipmentType::Boiler_Simple;
