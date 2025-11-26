@@ -10995,7 +10995,7 @@ void WriteCompCostTable(EnergyPlusData &state)
         }
 
         int const NumRows = static_cast<int>(state.dataCostEstimateManager->CostLineItem.size()) + 1; // body will have the total and line items
-        int const NumCols = 6; // Line no., Line name, Qty, Units, ValperQty, Subtotal
+        int constexpr NumCols = 6; // Line no., Line name, Qty, Units, ValperQty, Subtotal
         rowHead.allocate(NumRows);
         columnHead.allocate(NumCols);
         columnWidth.dimension(NumCols, 14); // array assignment - same for all columns
@@ -11654,7 +11654,7 @@ void WriteVeriSumTable(EnergyPlusData &state)
         //---- Hybrid Model: Internal Thermal Mass Sub-Table
         if (state.dataHybridModel->FlagHybridModel_TM) {
             rowHead.allocate(state.dataGlobal->NumOfZones);
-            int const NumOfCol = 2;
+            int constexpr NumOfCol = 2;
             columnHead.allocate(NumOfCol);
             columnWidth.allocate(NumOfCol);
             columnWidth = 14; // array assignment - same for all columns
@@ -11732,7 +11732,7 @@ void WriteVeriSumTable(EnergyPlusData &state)
 
         rowHead.allocate(state.dataGlobal->NumOfZones + 4);
 
-        int const NumOfCol = 12;
+        int constexpr NumOfCol = 12;
         columnHead.allocate(NumOfCol);
         columnWidth.allocate(NumOfCol);
         columnWidth = 14; // array assignment - same for all columns
