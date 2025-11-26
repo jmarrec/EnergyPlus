@@ -243,15 +243,13 @@ public: // Methods
         Real const ab_mag_squared(ab.mag_squared());
         if (ab_mag_squared == 0.0) { // Segment is a point
             return ObjexxFCL::distance_squared(a, c_) <= r_;
-        } else { // Might pay to check if a or b in sphere first in some applications
-            Vertex const ac(c_ - a);
-            Real const projection_fac(((ac.x * ab.x) + (ac.y * ab.y) + (ac.z * ab.z)) / ab_mag_squared);
-            if ((0.0 <= projection_fac) && (projection_fac <= 1.0)) { // Projected (closest) point is on ab segment
-                return ObjexxFCL::distance_squared(ac, projection_fac * ab) <= r_;
-            } else { // Projection (closest) point is outside of ab segment: Intersects iff a or b are in sphere
-                return (ObjexxFCL::distance_squared(a, c_) <= r_) || (ObjexxFCL::distance_squared(b, c_) <= r_);
-            }
-        }
+        } // Might pay to check if a or b in sphere first in some applications
+        Vertex const ac(c_ - a);
+        Real const projection_fac(((ac.x * ab.x) + (ac.y * ab.y) + (ac.z * ab.z)) / ab_mag_squared);
+        if ((0.0 <= projection_fac) && (projection_fac <= 1.0)) { // Projected (closest) point is on ab segment
+            return ObjexxFCL::distance_squared(ac, projection_fac * ab) <= r_;
+        } // Projection (closest) point is outside of ab segment: Intersects iff a or b are in sphere
+        return (ObjexxFCL::distance_squared(a, c_) <= r_) || (ObjexxFCL::distance_squared(b, c_) <= r_);
     }
 
     // Ray Intersects Enclosing Sphere?
@@ -263,9 +261,8 @@ public: // Methods
         Real const projection_fac((ac.x * dir.x) + (ac.y * dir.y) + (ac.z * dir.z));
         if (0.0 <= projection_fac) { // Projected (closest) point is on ray
             return ObjexxFCL::distance_squared(ac, projection_fac * dir) <= r_;
-        } else { // Projection (closest) point is outside of ray: Intersects iff a is in sphere
-            return ObjexxFCL::distance_squared(a, c_) <= r_;
-        }
+        } // Projection (closest) point is outside of ray: Intersects iff a is in sphere
+        return ObjexxFCL::distance_squared(a, c_) <= r_;
     }
 
     // Line Intersects Enclosing Sphere?
@@ -382,9 +379,8 @@ public: // Methods
                 }
             }
             return true;
-        } else { // Entry point is on backwards projection of ray
-            return false;
-        }
+        } // Entry point is on backwards projection of ray
+        return false;
     }
 
     // Ray Intersects Cube?

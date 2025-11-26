@@ -755,9 +755,8 @@ bool CalcdoLoadComponentPulseNow(EnergyPlusData const &state,
     if ((isPulseZoneSizing) && (!WarmupFlag) && (HourOfDay == HourDayToPulse) && (TimeStep == TimeStepToPulse) &&
         ((KindOfSim == Constant::KindOfSim::RunPeriodDesign) || (state.dataGlobal->DayOfSim == 1))) {
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void ManageSystemSizingAdjustments(EnergyPlusData &state)

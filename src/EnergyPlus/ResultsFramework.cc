@@ -88,9 +88,8 @@ namespace ResultsFramework {
         auto const last = s.find_last_not_of(' ');
         if ((first == std::string::npos) || (last == std::string::npos)) {
             return std::string{};
-        } else {
-            return std::string{s.substr(first, last - first + 1)};
         }
+        return std::string{s.substr(first, last - first + 1)};
     }
 
     // Class SimInfo

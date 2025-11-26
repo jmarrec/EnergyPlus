@@ -192,9 +192,8 @@ namespace HybridEvapCoolingModel {
     {
         if (curve_pointer >= 0) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
     Real64 CMode::CalculateCurveVal(EnergyPlusData &state, Real64 Tosa, Real64 Wosa, Real64 Tra, Real64 Wra, Real64 Msa, Real64 OSAF, int curveType)
     {
@@ -709,9 +708,8 @@ namespace HybridEvapCoolingModel {
         }
         if (OATempConstraintmet && OAHRConstraintmet && OARHConstraintmet) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     bool Model::MeetsSupplyAirTOC([[maybe_unused]] EnergyPlusData &state, Real64 Tsupplyair)
@@ -1695,9 +1693,8 @@ namespace HybridEvapCoolingModel {
 
         if (!CurrentOperatingSettings.empty()) {
             return CurrentOperatingSettings[0].Mode;
-        } else {
-            return -1;
         }
+        return -1;
     }
     Real64 Model::CurrentPrimaryRuntimeFraction()
     {
@@ -1719,9 +1716,8 @@ namespace HybridEvapCoolingModel {
         // Using/Aliasing
         if (!CurrentOperatingSettings.empty()) {
             return CurrentOperatingSettings[0].Runtime_Fraction;
-        } else {
-            return -1;
         }
+        return -1;
     }
     void Model::DetermineCoolingVentilationOrHumidificationNeeds(CStepInputs &StepIns)
     {

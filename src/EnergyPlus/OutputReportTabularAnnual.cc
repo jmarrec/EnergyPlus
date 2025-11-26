@@ -499,7 +499,8 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                                 fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::minimum) {
                                 // end scanning since these might reset
                                 break; // for fldStRemainIt
-                            } else if (fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::valueWhenMaxMin) {
+                            }
+                            if (fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::valueWhenMaxMin) {
                                 // this case is when the value should be set
                                 OutputProcessor::VariableType scanTypeOfVar = fldStRemainIt->m_typeOfVar;
                                 // int scanStepType = fldStRemainIt->m_varStepType;
@@ -535,7 +536,8 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                                     fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::hoursNonNegative) {
                                     // end scanning since these might reset
                                     break; // for fldStRemainIt
-                                } else if (fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::sumOrAverageHoursShown) {
+                                }
+                                if (fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::sumOrAverageHoursShown) {
                                     if (fldStIt->m_varAvgSum == OutputProcessor::StoreType::Sum) { // if it is a summed variable
                                         fldStRemainIt->m_cell[row].result = oldScanValue + scanValue;
                                     } else {
