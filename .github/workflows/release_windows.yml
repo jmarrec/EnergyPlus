@@ -85,6 +85,10 @@ jobs:
         cd scripts/package_tests
         rm runner.py
         aria2c https://raw.githubusercontent.com/jmarrec/EnergyPlus/refs/heads/WoA/scripts/package_tests/runner.py
+        cd ../../
+        cd cmake/qtifw
+        rm install_win_copydll.qs
+        aria2c https://raw.githubusercontent.com/jmarrec/EnergyPlus/refs/heads/WoA/cmake/qtifw/install_win_copydll.qs
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
