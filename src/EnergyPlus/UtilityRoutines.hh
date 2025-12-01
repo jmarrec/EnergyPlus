@@ -51,20 +51,16 @@
 // C++ Headers
 #include <functional>
 #include <optional>
-#include <type_traits>
-#include <utility>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array1S.fwd.hh>
-#include <ObjexxFCL/MArray1.fwd.hh>
 #include <ObjexxFCL/string.functions.hh>
 
 #include <GSL/span.h>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
-#include <EnergyPlus/DataGlobalConstants.hh>
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 
