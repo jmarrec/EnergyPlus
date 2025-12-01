@@ -130,9 +130,8 @@ namespace Util {
         size_t const back_trim = String.find_last_not_of(' ');
         if (front_trim == std::string::npos || back_trim == std::string::npos) {
             return rProcessNumber;
-        } else {
-            String = String.substr(front_trim, back_trim - front_trim + 1);
         }
+        String = String.substr(front_trim, back_trim - front_trim + 1);
 
         auto result = fast_float::from_chars(String.data(), String.data() + String.size(), rProcessNumber); // (AUTO_OK_OBJ)
         size_t remaining_size = result.ptr - String.data();
@@ -154,7 +153,8 @@ namespace Util {
                 std::string str{String};
                 std::replace_if(str.begin(), str.end(), [](const char c) { return c == 'D' || c == 'd'; }, 'e');
                 return ProcessNumber(str, ErrorFlag);
-            } else if (*result.ptr == 'e' || *result.ptr == 'E') {
+            }
+            if (*result.ptr == 'e' || *result.ptr == 'E') {
                 ++result.ptr;
                 remaining_size = result.ptr - String.data();
                 for (size_t i = remaining_size; i < String.size(); ++i, ++result.ptr) {
@@ -246,7 +246,8 @@ namespace Util {
             if (equali(String, ListOfItems(Probe))) {
                 Found = true;
                 break;
-            } else if (lessthani(String, ListOfItems(Probe))) {
+            }
+            if (lessthani(String, ListOfItems(Probe))) {
                 UBnd = Probe;
             } else {
                 LBnd = Probe;

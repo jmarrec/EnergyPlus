@@ -624,17 +624,20 @@ bool BaseSizer::isValidFanType(std::string const &_compType)
     // if compType name is one of the fan objects, then return true
     if (Util::SameString(_compType, "Fan:SystemModel")) {
         return true;
-    } else if (Util::SameString(_compType, "Fan:ComponentModel")) {
-        return true;
-    } else if (Util::SameString(_compType, "Fan:OnOff")) {
-        return true;
-    } else if (Util::SameString(_compType, "Fan:ConstantVolume")) {
-        return true;
-    } else if (Util::SameString(_compType, "Fan:VariableVolume")) {
-        return true;
-    } else {
-        return false;
     }
+    if (Util::SameString(_compType, "Fan:ComponentModel")) {
+        return true;
+    }
+    if (Util::SameString(_compType, "Fan:OnOff")) {
+        return true;
+    }
+    if (Util::SameString(_compType, "Fan:ConstantVolume")) {
+        return true;
+    }
+    if (Util::SameString(_compType, "Fan:VariableVolume")) {
+        return true;
+    }
+    return false;
 }
 
 bool BaseSizer::checkInitialized(EnergyPlusData &state, bool &errorsFound)

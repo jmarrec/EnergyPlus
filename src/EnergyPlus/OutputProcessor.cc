@@ -1513,13 +1513,14 @@ namespace OutputProcessor {
     {
         if (!endUseSubName.empty()) {
             return std::string(endUseSubName);
-        } else if (endUseCat == EndUseCat::Invalid) {
-            return "";
-        } else if (endUseCat2endUse[(int)endUseCat] != Constant::EndUse::Invalid) {
-            return "General";
-        } else {
+        }
+        if (endUseCat == EndUseCat::Invalid) {
             return "";
         }
+        if (endUseCat2endUse[(int)endUseCat] != Constant::EndUse::Invalid) {
+            return "General";
+        }
+        return "";
     }
 
     OutputProcessor::RT_IPUnits GetResourceIPUnits(EnergyPlusData &state,
@@ -2855,35 +2856,45 @@ namespace OutputProcessor {
         // Facility indices are in the 100s
         if (has(meterName, "Electricity:Facility")) {
             return 100;
-        } else if (has(meterName, "NaturalGas:Facility")) {
+        }
+        if (has(meterName, "NaturalGas:Facility")) {
             return 101;
-        } else if (has(meterName, "DistricHeatingWater:Facility")) {
+        }
+        if (has(meterName, "DistricHeatingWater:Facility")) {
             return 102;
-        } else if (has(meterName, "DistricCooling:Facility")) {
+        }
+        if (has(meterName, "DistricCooling:Facility")) {
             return 103;
-        } else if (has(meterName, "ElectricityNet:Facility")) {
+        }
+        if (has(meterName, "ElectricityNet:Facility")) {
             return 104;
 
             // Building indices are in the 200s
-        } else if (has(meterName, "Electricity:Building")) {
+        }
+        if (has(meterName, "Electricity:Building")) {
             return 201;
-        } else if (has(meterName, "NaturalGas:Building")) {
+        }
+        if (has(meterName, "NaturalGas:Building")) {
             return 202;
 
             // HVAC indices are in the 300s
-        } else if (has(meterName, "Electricity:HVAC")) {
+        }
+        if (has(meterName, "Electricity:HVAC")) {
             return 301;
 
             // InteriorLights:Electricity:Zone indices are in the 500s
-        } else if (has(meterName, "InteriorLights:Electricity:Zone")) {
+        }
+        if (has(meterName, "InteriorLights:Electricity:Zone")) {
             return 501;
 
             // InteriorLights:Electricity indices are in the 400s
-        } else if (has(meterName, "InteriorLights:Electricity")) {
+        }
+        if (has(meterName, "InteriorLights:Electricity")) {
             return 401;
 
             // Unknown items have negative indices
-        } else {
+        }
+        {
             return -11;
         }
 
@@ -4837,40 +4848,40 @@ int AddDDOutVar(EnergyPlusData const &state,
             ddVar->unitNameCustomEMS = customUnitName;
         }
         return op->ddOutVars.size() - 1;
-
-    } else if (units == op->ddOutVars[found->second]->units) {
+    }
+    if (units == op->ddOutVars[found->second]->units) {
         return found->second;
 
-    } else {           // not the same as first units
-        int dup2 = -1; // for duplicate variable name
-        auto *ddVarDup = op->ddOutVars[found->second];
-        while (ddVarDup->Next != -1) {
-            if (units != op->ddOutVars[ddVarDup->Next]->units) {
-                ddVarDup = op->ddOutVars[ddVarDup->Next];
-                continue;
-            }
-            dup2 = ddVarDup->Next;
-            break;
+    } // not the same as first units
+    int dup2 = -1; // for duplicate variable name
+    auto *ddVarDup = op->ddOutVars[found->second];
+    while (ddVarDup->Next != -1) {
+        if (units != op->ddOutVars[ddVarDup->Next]->units) {
+            ddVarDup = op->ddOutVars[ddVarDup->Next];
+            continue;
         }
-        if (dup2 == -1) {
-            DDOutVar *ddVar2 = new DDOutVar();
-            op->ddOutVars.push_back(ddVar2);
-            // Don't add this one to the map.  Leave the map pointing to the first one
-            ddVar2->timeStepType = timeStepType;
-            ddVar2->storeType = storeType;
-            ddVar2->variableType = variableType;
-            ddVar2->name = name;
-            ddVar2->units = units;
-            if (!customUnitName.empty() && units == Constant::Units::customEMS) {
-                ddVar2->unitNameCustomEMS = customUnitName;
-            }
-            ddVarDup->Next = op->ddOutVars.size() - 1;
+        dup2 = ddVarDup->Next;
+        break;
+    }
+    if (dup2 == -1) {
+        DDOutVar *ddVar2 = new DDOutVar();
+        op->ddOutVars.push_back(ddVar2);
+        // Don't add this one to the map.  Leave the map pointing to the first one
+        ddVar2->timeStepType = timeStepType;
+        ddVar2->storeType = storeType;
+        ddVar2->variableType = variableType;
+        ddVar2->name = name;
+        ddVar2->units = units;
+        if (!customUnitName.empty() && units == Constant::Units::customEMS) {
+            ddVar2->unitNameCustomEMS = customUnitName;
+        }
+        ddVarDup->Next = op->ddOutVars.size() - 1;
 
-            return op->ddOutVars.size() - 1;
-        } else {
-            return dup2;
-        } // if (dup2 == 0)
-    } // if (unitsForVar)
+        return op->ddOutVars.size() - 1;
+    }
+    return dup2;
+    // if (dup2 == 0)
+    // if (unitsForVar)
 } // AddDDOutVar()
 
 int initErrorFile(EnergyPlusData &state)

@@ -161,31 +161,28 @@ Real64 EIRPlantLoopHeatPump::getLoadSideOutletSetPointTemp(EnergyPlusData &state
         if (this->loadSidePlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) {
             // there will be a valid set-point on outlet
             return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPoint;
-        } else { // use plant loop overall set-point
-            return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
-        }
-    } else if (this->loadSidePlantLoc.loop->LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand) {
+        } // use plant loop overall set-point
+        return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
+    }
+    if (this->loadSidePlantLoc.loop->LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand) {
         if (this->loadSidePlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) {
             // there will be a valid set-point on outlet
             if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
                 return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointHi;
-            } else {
-                return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointLo;
             }
-        } else { // use plant loop overall set-point
-            if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
-                return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
-            } else {
-                return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
-            }
+            return state.dataLoopNodes->Node(this->loadSideNodes.outlet).TempSetPointLo;
+
+        } // use plant loop overall set-point
+        if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpEIRCooling) {
+            return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
         }
-    } else {
-        // there's no other enums for loop demand calcs, so I don't have a reasonable unit test for these
-        // lines, they simply should not be able to get here.  But a fatal is here anyway just in case,
-        // and the lines are excluded from coverage.
-        ShowFatalError(state, "Unsupported loop demand calculation scheme in EIR heat pump"); // LCOV_EXCL_LINE
-        return -999; // not actually returned with Fatal Error call above  // LCOV_EXCL_LINE
-    }
+        return state.dataLoopNodes->Node(this->loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
+
+    } // there's no other enums for loop demand calcs, so I don't have a reasonable unit test for these
+    // lines, they simply should not be able to get here.  But a fatal is here anyway just in case,
+    // and the lines are excluded from coverage.
+    ShowFatalError(state, "Unsupported loop demand calculation scheme in EIR heat pump"); // LCOV_EXCL_LINE
+    return -999; // not actually returned with Fatal Error call above  // LCOV_EXCL_LINE
 }
 
 void EIRPlantLoopHeatPump::resetReportingVariables()
@@ -582,15 +579,12 @@ Real64 EIRPlantLoopHeatPump::heatingCapacityModifierASHP(EnergyPlusData &state) 
         if (state.dataEnvrn->OutRelHum <= RH60) {
             // dry heating capacity correction factor is a function of outdoor dry-bulb temperature
             return dryCorrectionFactor;
-        } else {
-            // interpolation of heating capacity between wet and dry is based on outdoor relative humidity over 60%-90% range
-            Real64 semiDryFactor = dryCorrectionFactor + (1.0 - dryCorrectionFactor) * (1.0 - ((RH90 - state.dataEnvrn->OutRelHum) / rangeRH));
-            return semiDryFactor;
-        }
-    } else {
-        // no correction needed, use full capacity
-        return 1.0;
-    }
+        } // interpolation of heating capacity between wet and dry is based on outdoor relative humidity over 60%-90% range
+        Real64 semiDryFactor = dryCorrectionFactor + (1.0 - dryCorrectionFactor) * (1.0 - ((RH90 - state.dataEnvrn->OutRelHum) / rangeRH));
+        return semiDryFactor;
+
+    } // no correction needed, use full capacity
+    return 1.0;
 }
 
 void EIRPlantLoopHeatPump::setPartLoadAndCyclingRatio([[maybe_unused]] EnergyPlusData &state, Real64 &partLoadRatio)
@@ -666,10 +660,9 @@ void HeatPumpAirToWater::calcPowerUsage(EnergyPlusData &state, Real64 availableC
         speedLevel = i;
         if (std::fabs(currentLoadNthUnit) <= capacityHigh) {
             break;
-        } else {
-            capacityLow = capacityHigh;
-            capacityModifierFuncTempLow = capacityModifierFuncTempHigh;
         }
+        capacityLow = capacityHigh;
+        capacityModifierFuncTempLow = capacityModifierFuncTempHigh;
     }
     // calculate power usage from EIR curves
     Real64 eirModifierFuncTempLow = 1.0;
@@ -2815,9 +2808,8 @@ bool EIRPlantLoopHeatPump::thermosiphonDisabled(EnergyPlusData &state)
             return false;
         }
         return true;
-    } else {
-        return true;
     }
+    return true;
 }
 
 Real64 EIRPlantLoopHeatPump::getDynamicMaxCapacity(EnergyPlusData &state)
@@ -3253,7 +3245,8 @@ PlantComponent *HeatPumpAirToWater::factory(
             // Match specific equipment type or match nodes to determine correct equipment type
             if (awhp.EIRHPType == hp_type) {
                 return &awhp;
-            } else if ((awhp.loadSideNodes.inlet == inletNodeNum) && (awhp.loadSideNodes.outlet == outletNodeNum)) {
+            }
+            if ((awhp.loadSideNodes.inlet == inletNodeNum) && (awhp.loadSideNodes.outlet == outletNodeNum)) {
                 hp_type = awhp.EIRHPType;
                 return &awhp;
             }

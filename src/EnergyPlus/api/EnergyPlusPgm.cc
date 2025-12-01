@@ -465,7 +465,8 @@ int runEnergyPlusAsLibrary(EnergyPlus::EnergyPlusData &state, const std::vector<
     int return_code = EnergyPlus::CommandLineInterface::ProcessArgs(state, args);
     if (return_code == static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCodes::Failure)) {
         return return_code;
-    } else if (return_code == static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCodes::SuccessButHelper)) {
+    }
+    if (return_code == static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCodes::SuccessButHelper)) {
         // If it was "--version" or "--help", you do not want to continue trying to run the simulation, but do not want to indicate failure either
         return static_cast<int>(EnergyPlus::CommandLineInterface::ReturnCodes::Success);
     }
@@ -524,7 +525,6 @@ std::string CreateCurrentDateTimeString()
     date_and_time(datestring, _, _, value);
     if (!datestring.empty()) {
         return EnergyPlus::format(" YMD={:4}.{:02}.{:02} {:02}:{:02}", value(1), value(2), value(3), value(5), value(6));
-    } else {
-        return " unknown date/time";
     }
+    return " unknown date/time";
 }

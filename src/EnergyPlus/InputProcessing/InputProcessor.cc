@@ -528,9 +528,8 @@ int InputProcessor::getNumObjectsFound(EnergyPlusData &state, std::string_view c
             return 0;
         }
         return static_cast<int>(epJSON[tmp_umit->second].size());
-    } else {
-        return static_cast<int>(find_obj.value().size());
     }
+    return static_cast<int>(find_obj.value().size());
 
     if (schema()["properties"].find(std::string(ObjectWord)) == schema()["properties"].end()) {
         auto tmp_umit = caseInsensitiveObjectMap.find(convertToUpper(ObjectWord));
@@ -659,7 +658,8 @@ Real64 InputProcessor::getRealFieldValue(json const &ep_object, json const &sche
         auto const &field_value = it.value();
         if (field_value.is_number()) {
             return (field_value.is_number_integer()) ? field_value.get<std::int64_t>() : field_value.get<double>();
-        } else if (!field_value.get<std::string>().empty()) {
+        }
+        if (!field_value.get<std::string>().empty()) {
             return Constant::AutoCalculate; // autosize and autocalculate
         }
     }
@@ -672,14 +672,13 @@ Real64 InputProcessor::getRealFieldValue(json const &ep_object, json const &sche
         auto const &default_val = find_default.value();
         if (default_val.is_string()) {
             return (!default_val.get<std::string>().empty()) ? Constant::AutoCalculate : 0.0;
-        } else if (default_val.is_number_integer()) {
-            return default_val.get<std::int64_t>();
-        } else {
-            return default_val.get<double>();
         }
-    } else {
-        return 0.0;
+        if (default_val.is_number_integer()) {
+            return default_val.get<std::int64_t>();
+        }
+        return default_val.get<double>();
     }
+    return 0.0;
 }
 
 int InputProcessor::getIntFieldValue(json const &ep_object, json const &schema_obj_props, std::string const &fieldName)
@@ -1713,9 +1712,8 @@ void InputProcessor::reportOrphanRecordObjects(EnergyPlusData &state)
             if (found_type != unused_object_types.end()) {
                 // only show first unused named object of an object class
                 continue;
-            } else {
-                unused_object_types.emplace(object_type);
             }
+            unused_object_types.emplace(object_type);
         }
 
         if (first_iteration) {
