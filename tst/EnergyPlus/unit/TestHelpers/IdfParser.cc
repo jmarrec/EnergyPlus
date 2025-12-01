@@ -89,10 +89,12 @@ std::vector<std::vector<std::string>> IdfParser::parse_idf(std::string const &id
         token = look_ahead(idf, index);
         if (token == Token::END) {
             break;
-        } else if (token == Token::NONE) {
+        }
+        if (token == Token::NONE) {
             success = false;
             return std::vector<std::vector<std::string>>();
-        } else if (token == Token::EXCLAMATION) {
+        }
+        if (token == Token::EXCLAMATION) {
             eat_comment(idf, index);
         } else {
 
@@ -117,7 +119,8 @@ std::vector<std::string> IdfParser::parse_object(std::string const &idf, size_t 
         if (token == Token::NONE) {
             success = false;
             return std::vector<std::string>();
-        } else if (token == Token::COMMA) {
+        }
+        if (token == Token::COMMA) {
             next_token(idf, index);
             token = look_ahead(idf, index);
             if (Token::EXCLAMATION == token) {
@@ -189,15 +192,18 @@ std::string IdfParser::parse_string(std::string const &idf, size_t &index, bool 
             complete = true;
             index--;
             break;
-        } else if (c == ';') {
+        }
+        if (c == ';') {
             complete = true;
             index--;
             break;
-        } else if (c == '!') {
+        }
+        if (c == '!') {
             complete = true;
             index--;
             break;
-        } else if (c == '\\') {
+        }
+        if (c == '\\') {
             if (index == idf_size) {
                 break;
             }

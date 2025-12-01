@@ -1231,9 +1231,8 @@ bool warningAboutKeyNotFound(EnergyPlusData &state, int foundIndex, int inObjInd
                                 state.dataOutRptTab->OutputTableBinned(inObjIndex).keyValue,
                                 state.dataOutRptTab->OutputTableBinned(inObjIndex).varOrMeter));
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 void GetInputTabularStyle(EnergyPlusData &state)
@@ -6610,9 +6609,8 @@ void FillRemainingPredefinedEntries(EnergyPlusData &state)
                 if (time > 0) {
                     return state.dataSysRpts->SysPreDefRep(sysNum).MechVentTotAtLimitOcc[static_cast<int>(limitingFactorType)] /
                            (time * Constant::rSecsInHour);
-                } else {
-                    return 0.0;
                 }
+                return 0.0;
             };
             PreDefTableEntry(
                 state, state.dataOutRptPredefined->pdchOaAvFctNoLimit, thisPrimaryAirSys.Name, avgFlowRate(iSys, MixedAir::OALimitFactor::None), 4);
@@ -10994,7 +10992,7 @@ void WriteCompCostTable(EnergyPlusData &state)
         }
 
         int const NumRows = static_cast<int>(state.dataCostEstimateManager->CostLineItem.size()) + 1; // body will have the total and line items
-        int const NumCols = 6; // Line no., Line name, Qty, Units, ValperQty, Subtotal
+        int constexpr NumCols = 6; // Line no., Line name, Qty, Units, ValperQty, Subtotal
         rowHead.allocate(NumRows);
         columnHead.allocate(NumCols);
         columnWidth.dimension(NumCols, 14); // array assignment - same for all columns
@@ -11653,7 +11651,7 @@ void WriteVeriSumTable(EnergyPlusData &state)
         //---- Hybrid Model: Internal Thermal Mass Sub-Table
         if (state.dataHybridModel->FlagHybridModel_TM) {
             rowHead.allocate(state.dataGlobal->NumOfZones);
-            int const NumOfCol = 2;
+            int constexpr NumOfCol = 2;
             columnHead.allocate(NumOfCol);
             columnWidth.allocate(NumOfCol);
             columnWidth = 14; // array assignment - same for all columns
@@ -11731,7 +11729,7 @@ void WriteVeriSumTable(EnergyPlusData &state)
 
         rowHead.allocate(state.dataGlobal->NumOfZones + 4);
 
-        int const NumOfCol = 12;
+        int constexpr NumOfCol = 12;
         columnHead.allocate(NumOfCol);
         columnWidth.allocate(NumOfCol);
         columnWidth = 14; // array assignment - same for all columns
@@ -12423,9 +12421,8 @@ std::string formatReportPeriodTimestamp(const int year, const int month, const i
 {
     if (year != 0) {
         return fmt::format("{}/{}/{} {}:00", year, month, day, hour);
-    } else {
-        return fmt::format("{}/{} {}:00", month, day, hour);
     }
+    return fmt::format("{}/{} {}:00", month, day, hour);
 }
 
 void WriteReportHeaderReportingPeriod(EnergyPlusData &state,
@@ -18593,9 +18590,9 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
 
     if (std::abs(RealIn) > maxvalDigitsA.at(nDigits)) {
         return format("{:12.6E}", RealIn);
-    } else {
-        return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
     }
+    return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
+
     //  WRITE(FMT=, UNIT=stringOut) RealIn
     // check if it did not fit
     //  IF (stringOut(1:1) .EQ. "*") THEN

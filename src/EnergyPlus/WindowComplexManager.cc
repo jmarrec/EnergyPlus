@@ -2350,7 +2350,8 @@ namespace WindowComplexManager {
             }
             RayIndex = Basis.BasisIndex(IPhi, ITheta);
             return RayIndex;
-        } else if (Basis.BasisSymmetryType == DataBSDFWindow::BasisSymmetry::Axisymmetric) {
+        }
+        if (Basis.BasisSymmetryType == DataBSDFWindow::BasisSymmetry::Axisymmetric) {
             // Search the basis thetas
             if (Theta <= 0.0) {
                 // Special case, Theta = 0.; this is always the first basis element
@@ -3529,7 +3530,8 @@ namespace WindowComplexManager {
         if (y < Yl) {
             SearchAscTable = 1;
             return SearchAscTable;
-        } else if (y > Yh) {
+        }
+        if (y > Yh) {
             SearchAscTable = n;
             return SearchAscTable;
         }

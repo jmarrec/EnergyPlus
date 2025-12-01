@@ -652,23 +652,21 @@ calcDesignSpecificationOutdoorAir(EnergyPlusData &state,
         // This is a simple DesignSpecification:OutdoorAir
         return thisDSOA.calcOAFlowRate(
             state, ActualZoneNum, UseOccSchFlag, UseMinOASchFlag, PerPersonNotSet, MaxOAVolFlowFlag, spaceNum, calcIAQMethods);
-    } else {
-        // This is a DesignSpecification:OutdoorAir:SpaceList
-        for (int dsoaCount = 1; dsoaCount <= thisDSOA.numDSOA; ++dsoaCount) {
-            if ((spaceNum == 0) || ((spaceNum > 0) && (spaceNum == thisDSOA.dsoaSpaceIndexes(dsoaCount)))) {
-                totOAFlowRate += state.dataSize->OARequirements(thisDSOA.dsoaIndexes(dsoaCount))
-                                     .calcOAFlowRate(state,
-                                                     ActualZoneNum,
-                                                     UseOccSchFlag,
-                                                     UseMinOASchFlag,
-                                                     PerPersonNotSet,
-                                                     MaxOAVolFlowFlag,
-                                                     thisDSOA.dsoaSpaceIndexes(dsoaCount),
-                                                     calcIAQMethods);
-            }
+    } // This is a DesignSpecification:OutdoorAir:SpaceList
+    for (int dsoaCount = 1; dsoaCount <= thisDSOA.numDSOA; ++dsoaCount) {
+        if ((spaceNum == 0) || ((spaceNum > 0) && (spaceNum == thisDSOA.dsoaSpaceIndexes(dsoaCount)))) {
+            totOAFlowRate += state.dataSize->OARequirements(thisDSOA.dsoaIndexes(dsoaCount))
+                                 .calcOAFlowRate(state,
+                                                 ActualZoneNum,
+                                                 UseOccSchFlag,
+                                                 UseMinOASchFlag,
+                                                 PerPersonNotSet,
+                                                 MaxOAVolFlowFlag,
+                                                 thisDSOA.dsoaSpaceIndexes(dsoaCount),
+                                                 calcIAQMethods);
         }
-        return totOAFlowRate;
     }
+    return totOAFlowRate;
 }
 
 void setHeatPumpSize(EnergyPlusData &state, Real64 &coolingCap, Real64 &heatingCap, Real64 const sizingRatio)

@@ -3095,9 +3095,8 @@ namespace Curve {
 
         if (CurveIndex > 0) {
             return state.dataCurveManager->curves(CurveIndex)->Name;
-        } else {
-            return "";
         }
+        return "";
     }
 
     int GetCurveIndex(EnergyPlusData &state, std::string const &CurveName) // name of the curve
@@ -3586,18 +3585,16 @@ namespace Curve {
         Real64 const Term3 = -1.8 * std::log10(Term1 + Term2);
         if (Term3 != 0.0) {
             return std::pow(Term3, -2.0);
-        } else {
-            if (!state.dataCurveManager->FrictionFactorErrorHasOccurred) {
-                ShowSevereError(state, "Plant Pressure System: Error in moody friction factor calculation");
-                ShowContinueError(state,
-                                  format("Current Conditions: Roughness Ratio={:.7R}; Reynolds Number={:.1R}", RoughnessRatio, ReynoldsNumber));
-                ShowContinueError(state, "These conditions resulted in an unhandled numeric issue.");
-                ShowContinueError(state, "Please contact EnergyPlus support/development team to raise an alert about this issue");
-                ShowContinueError(state, "This issue will occur only one time.  The friction factor has been reset to 0.04 for calculations");
-                state.dataCurveManager->FrictionFactorErrorHasOccurred = true;
-            }
-            return 0.04;
         }
+        if (!state.dataCurveManager->FrictionFactorErrorHasOccurred) {
+            ShowSevereError(state, "Plant Pressure System: Error in moody friction factor calculation");
+            ShowContinueError(state, format("Current Conditions: Roughness Ratio={:.7R}; Reynolds Number={:.1R}", RoughnessRatio, ReynoldsNumber));
+            ShowContinueError(state, "These conditions resulted in an unhandled numeric issue.");
+            ShowContinueError(state, "Please contact EnergyPlus support/development team to raise an alert about this issue");
+            ShowContinueError(state, "This issue will occur only one time.  The friction factor has been reset to 0.04 for calculations");
+            state.dataCurveManager->FrictionFactorErrorHasOccurred = true;
+        }
+        return 0.04;
     }
 
     void checkCurveIsNormalizedToOne(EnergyPlusData &state,

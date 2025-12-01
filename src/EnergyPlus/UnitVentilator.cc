@@ -2573,9 +2573,8 @@ namespace UnitVentilator {
                                     CalcUnitVentilatorComponents(state, UnitVentNum, FirstHVACIteration, QUnitOut, fanOp, PartLoadRatio);
                                     if (state.dataUnitVentilators->QZnReq != 0.0) {
                                         return (QUnitOut - state.dataUnitVentilators->QZnReq) / state.dataUnitVentilators->QZnReq;
-                                    } else {
-                                        return 0.0;
                                     }
+                                    return 0.0;
                                 };
                                 General::SolveRoot(state, 0.001, MaxIter, SolFlag, PartLoadFrac, f, 0.0, 1.0);
                             }

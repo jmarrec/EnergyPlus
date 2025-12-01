@@ -284,13 +284,11 @@ void ManagePlantLoadDistribution(EnergyPlusData &state,
                     // let this go thru, later AdjustChangeInLoadForLastStageUpperRangeLimit will cap dispatch to RangeHiLimit
                     CurListNum = ListNum;
                     break;
-                } else {
-                    continue;
                 }
-            } else {
-                CurListNum = ListNum;
-                break;
+                continue;
             }
+            CurListNum = ListNum;
+            break;
         }
 
         if (CurListNum > 0) {
@@ -360,9 +358,8 @@ void GetPlantOperationInput(EnergyPlusData &state, bool &GetInputOK)
     if (!allocated(state.dataPlnt->PlantLoop)) {
         GetInputOK = false;
         return;
-    } else {
-        GetInputOK = true;
     }
+    GetInputOK = true;
 
     // get number of operation schemes
     CurrentModuleObject = "PlantEquipmentOperationSchemes";
@@ -3295,16 +3292,16 @@ void DistributePlantLoad(EnergyPlusData &state,
                     break;
 
                     // if the capacity is greater than the demand, just store the latest values and continue
-                } else if (std::abs(RemLoopDemand) <
-                           (accrued_load_plr_values[i].largest_min_plr_to_this_point * accrued_load_plr_values[i].plant_capacity_to_this_point)) {
+                }
+                if (std::abs(RemLoopDemand) <
+                    (accrued_load_plr_values[i].largest_min_plr_to_this_point * accrued_load_plr_values[i].plant_capacity_to_this_point)) {
                     PlantCapacity = accrued_load_plr_values[i].plant_capacity_to_this_point;
                     LargestMinCompPLR = accrued_load_plr_values[i].largest_min_plr_to_this_point;
                     continue;
 
                     // if the capacity is less than the demand, accept the last values from the previous iteration and exit
-                } else {
-                    break;
                 }
+                break;
             }
 
             // Determine PLR for uniform PLR loading of all equipment
@@ -4288,9 +4285,9 @@ void ActivateEMSControls(EnergyPlusData &state, PlantLocation const &plantLoc, b
             LoopShutDownFlag = true;
             TurnOffLoopEquipment(state, plantLoc.loopNum);
             return;
-        } else {
-            LoopShutDownFlag = false;
         }
+        LoopShutDownFlag = false;
+
     } else {
         LoopShutDownFlag = false;
     }
@@ -4300,9 +4297,7 @@ void ActivateEMSControls(EnergyPlusData &state, PlantLocation const &plantLoc, b
         if (this_loopside.EMSValue <= 0.0) {
             TurnOffLoopSideEquipment(state, plantLoc.loopNum, plantLoc.loopSideNum);
             return;
-        } else {
-            // do nothing:  can't turn all LoopSide equip. ON with loop switch
-        }
+        } // do nothing:  can't turn all LoopSide equip. ON with loop switch
     }
 
     if (this_comp.EMSLoadOverrideOn) {
@@ -4312,42 +4307,41 @@ void ActivateEMSControls(EnergyPlusData &state, PlantLocation const &plantLoc, b
             this_comp.Available = false;
             this_comp.MyLoad = 0.0;
             return;
-        } else {
-            // EMSValue > 0 Set Component Load and Turn component ON
-            this_comp.ON = true;
-            this_comp.Available = false;
-            this_comp.MyLoad = min(this_comp.MaxLoad, (this_comp.MaxLoad * this_comp.EMSLoadOverrideValue));
+        } // EMSValue > 0 Set Component Load and Turn component ON
+        this_comp.ON = true;
+        this_comp.Available = false;
+        this_comp.MyLoad = min(this_comp.MaxLoad, (this_comp.MaxLoad * this_comp.EMSLoadOverrideValue));
 
-            // Check lower/upper temperature limit for chillers
-            switch (this_comp.Type) {
+        // Check lower/upper temperature limit for chillers
+        switch (this_comp.Type) {
 
-            case DataPlant::PlantEquipmentType::Chiller_ElectricEIR:
-            case DataPlant::PlantEquipmentType::Chiller_Electric:
-            case DataPlant::PlantEquipmentType::Chiller_ElectricReformEIR: {
+        case DataPlant::PlantEquipmentType::Chiller_ElectricEIR:
+        case DataPlant::PlantEquipmentType::Chiller_Electric:
+        case DataPlant::PlantEquipmentType::Chiller_ElectricReformEIR: {
 
-                //- Retrieve data from the plant loop data structure
-                CurMassFlowRate = state.dataLoopNodes->Node(this_comp.NodeNumIn).MassFlowRate;
-                ToutLowLimit = this_comp.MinOutletTemp;
-                Tinlet = state.dataLoopNodes->Node(this_comp.NodeNumIn).Temp;
-                CurSpecHeat = this_loop.glycol->getSpecificHeat(state, Tinlet, RoutineName);
-                QTemporary = CurMassFlowRate * CurSpecHeat * (Tinlet - ToutLowLimit);
+            //- Retrieve data from the plant loop data structure
+            CurMassFlowRate = state.dataLoopNodes->Node(this_comp.NodeNumIn).MassFlowRate;
+            ToutLowLimit = this_comp.MinOutletTemp;
+            Tinlet = state.dataLoopNodes->Node(this_comp.NodeNumIn).Temp;
+            CurSpecHeat = this_loop.glycol->getSpecificHeat(state, Tinlet, RoutineName);
+            QTemporary = CurMassFlowRate * CurSpecHeat * (Tinlet - ToutLowLimit);
 
-                //- Don't correct if Q is zero, as this could indicate a component which this hasn't been implemented
-                if (QTemporary > 0.0) {
-                    if (std::abs(this_comp.MyLoad) > this_comp.MaxLoad) {
-                        this_comp.MyLoad = sign(this_comp.MaxLoad, this_comp.MyLoad);
-                    }
-                    if (std::abs(this_comp.MyLoad) > QTemporary) {
-                        this_comp.MyLoad = sign(QTemporary, this_comp.MyLoad);
-                    }
+            //- Don't correct if Q is zero, as this could indicate a component which this hasn't been implemented
+            if (QTemporary > 0.0) {
+                if (std::abs(this_comp.MyLoad) > this_comp.MaxLoad) {
+                    this_comp.MyLoad = sign(this_comp.MaxLoad, this_comp.MyLoad);
                 }
-                break;
+                if (std::abs(this_comp.MyLoad) > QTemporary) {
+                    this_comp.MyLoad = sign(QTemporary, this_comp.MyLoad);
+                }
             }
-            default:
-                break; // Nothing Changes for now, could add in case statements for boilers, which would use upper limit temp check
-            }
-            return;
-        } // EMSValue <=> 0
+            break;
+        }
+        default:
+            break; // Nothing Changes for now, could add in case statements for boilers, which would use upper limit temp check
+        }
+        return;
+        // EMSValue <=> 0
     } // EMSFlag
 }
 
