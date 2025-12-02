@@ -12705,7 +12705,6 @@ void CalcInteriorWinTransDifSolInitialDistribution(EnergyPlusData &state,
                 state.dataHeatBalSurf->SurfWinInitialDifSolInTrans(HeatTransSurfNum) += (SolarTrans_ViewFactor - DifSolarReflW) / surf.Area;
 
             } else {
-                auto const &surfShade = s_surf->surfShades(HeatTransSurfNum);
                 // Interior, exterior or between-glass shade, screen or blind in place
 
                 // Init accumulator for transmittance calc below
