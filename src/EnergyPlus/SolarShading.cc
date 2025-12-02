@@ -12239,7 +12239,6 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
                             state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureNum) += DifSolarReflW; // [W]
 
                             // Now calc diffuse solar absorbed by shade/blind itself
-                            int BlNum = surfShade.blind.matNum; // Blind number
                             if (ANY_SHADE_SCREEN(ShadeFlag)) {
                                 // Calc diffuse solar absorbed by shade or screen [W]
                                 ShBlDifSolarAbsW = WinDifSolarTrans_Factor * constrSh.AbsDiffBackShade;
@@ -12763,7 +12762,6 @@ void CalcInteriorWinTransDifSolInitialDistribution(EnergyPlusData &state,
                 //                    ZoneDifSolarDistReflectedTotl += DifSolarReflW; // debug
 
                 // Now calc diffuse solar absorbed by shade/blind itself
-                int BlNum = surfShade.blind.matNum; // Blind number
                 if (ANY_SHADE_SCREEN(ShadeFlag)) {
                     // Calc diffuse solar absorbed by shade or screen [W]
                     ShBlDifSolarAbsW = SolarTrans_ViewFactor * constrSh.AbsDiffBackShade;
