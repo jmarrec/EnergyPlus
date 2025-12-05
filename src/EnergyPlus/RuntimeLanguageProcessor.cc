@@ -254,38 +254,11 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
     // PURPOSE OF THIS SUBROUTINE:
     // re initialize Erl for new simulation environment period
 
-    // METHODOLOGY EMPLOYED:
-    // na
-
-    // REFERENCES:
-    // na
-
     // Using/Aliasing
     using OutputProcessor::SetInternalVariableValue;
 
-    // Locals
-    // SUBROUTINE ARGUMENT DEFINITIONS:
-    // na
-
-    // SUBROUTINE PARAMETER DEFINITIONS:
-    // na
-
-    // INTERFACE BLOCK SPECIFICATIONS:
-    // na
-
-    // DERIVED TYPE DEFINITIONS:
-    // na
-
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int ActuatorUsedLoop;
-    int ErlVariableNum;
-    int TrendVarNum;
-    int SensorNum;
-    int loop;
-    bool CycleThisVariable;
-
     // reinitialize state of Erl variable values to zero, this gets sensors and internal variables used
-    for (ErlVariableNum = 1; ErlVariableNum <= state.dataRuntimeLang->NumErlVariables; ++ErlVariableNum) {
+    for (int ErlVariableNum = 1; ErlVariableNum <= state.dataRuntimeLang->NumErlVariables; ++ErlVariableNum) {
         // but skip constant built-in variables so don't overwrite them
         if (ErlVariableNum == state.dataRuntimeLangProcessor->NullVariableNum) {
             continue;
@@ -316,8 +289,8 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
         }
 
         // need to preserve curve index variables
-        CycleThisVariable = false;
-        for (loop = 1; loop <= state.dataRuntimeLang->NumEMSCurveIndices; ++loop) {
+        bool CycleThisVariable = false;
+        for (int loop = 1; loop <= state.dataRuntimeLang->NumEMSCurveIndices; ++loop) {
             if (ErlVariableNum == state.dataRuntimeLangProcessor->CurveIndexVariableNums(loop)) {
                 CycleThisVariable = true;
             }
@@ -326,7 +299,7 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
             continue;
         }
         CycleThisVariable = false;
-        for (loop = 1; loop <= state.dataRuntimeLang->NumEMSConstructionIndices; ++loop) {
+        for (int loop = 1; loop <= state.dataRuntimeLang->NumEMSConstructionIndices; ++loop) {
             if (ErlVariableNum == state.dataRuntimeLangProcessor->ConstructionIndexVariableNums(loop)) {
                 CycleThisVariable = true;
             }
@@ -340,11 +313,13 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
                 SetErlValueNumber(0.0, state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value);
         }
     }
-    int EMSActuatorVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ActuatorVariableNum;
+
     // reinitialize state of actuators
-    for (ActuatorUsedLoop = 1; ActuatorUsedLoop <= state.dataRuntimeLang->numActuatorsUsed + state.dataRuntimeLang->NumExternalInterfaceActuatorsUsed;
+    for (int ActuatorUsedLoop = 1;
+         ActuatorUsedLoop <= state.dataRuntimeLang->numActuatorsUsed + state.dataRuntimeLang->NumExternalInterfaceActuatorsUsed;
          ++ActuatorUsedLoop) {
-        ErlVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ErlVariableNum;
+        int EMSActuatorVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ActuatorVariableNum;
+        int ErlVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ErlVariableNum;
         state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.Type = Value::Null;
         *state.dataRuntimeLang->EMSActuatorAvailable(EMSActuatorVariableNum).Actuated = false;
         switch (state.dataRuntimeLang->EMSActuatorAvailable(EMSActuatorVariableNum).PntrVarTypeUsed) {
@@ -363,13 +338,13 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
     }
 
     // reinitialize trend variables so old data are purged
-    int TrendDepth = state.dataRuntimeLang->TrendVariable(TrendVarNum).LogDepth;
-    for (TrendVarNum = 1; TrendVarNum <= state.dataRuntimeLang->NumErlTrendVariables; ++TrendVarNum) {
+    for (int TrendVarNum = 1; TrendVarNum <= state.dataRuntimeLang->NumErlTrendVariables; ++TrendVarNum) {
+        int TrendDepth = state.dataRuntimeLang->TrendVariable(TrendVarNum).LogDepth;
         state.dataRuntimeLang->TrendVariable(TrendVarNum).TrendValARR({1, TrendDepth}) = 0.0;
     }
 
     // reinitialize sensors
-    for (SensorNum = 1; SensorNum <= state.dataRuntimeLang->NumSensors; ++SensorNum) {
+    for (int SensorNum = 1; SensorNum <= state.dataRuntimeLang->NumSensors; ++SensorNum) {
         SetInternalVariableValue(
             state, state.dataRuntimeLang->Sensor(SensorNum).VariableType, state.dataRuntimeLang->Sensor(SensorNum).Index, 0.0, 0);
     }
