@@ -860,10 +860,10 @@ int AssignReverseConstructionNumber(EnergyPlusData &state,
         // replace others...
         state.dataConstruction->Construct(state.dataHeatBal->TotConstructs).Name = "iz-" + state.dataConstruction->Construct(ConstrNum).Name;
         state.dataConstruction->Construct(state.dataHeatBal->TotConstructs).TotLayers = state.dataConstruction->Construct(ConstrNum).TotLayers;
+        auto &s_mat = state.dataMaterial;
         for (nLayer = 1; nLayer <= Construction::MaxLayersInConstruct; ++nLayer) {
             state.dataConstruction->Construct(state.dataHeatBal->TotConstructs).LayerPoint(nLayer) = state.dataConstruction->LayerPoint(nLayer);
             if (state.dataConstruction->LayerPoint(nLayer) != 0) {
-                auto &s_mat = state.dataMaterial;
                 state.dataHeatBal->NominalRforNominalUCalculation(state.dataHeatBal->TotConstructs) +=
                     s_mat->materials(state.dataConstruction->LayerPoint(nLayer))->NominalR;
             }

@@ -1388,6 +1388,7 @@ void GetDXCoils(EnergyPlusData &state)
 
     // Loop over the Multimode DX Coils and get & load the data
     CurrentModuleObject = "Coil:Cooling:DX:TwoStageWithHumidityControlMode";
+    int AlphaIndex; // Index for current alpha field
     for (DXCoilIndex = 1; DXCoilIndex <= state.dataDXCoils->NumDXMulModeCoils; ++DXCoilIndex) {
 
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
@@ -1494,7 +1495,7 @@ void GetDXCoils(EnergyPlusData &state)
 
         //  Set starting alpha index for coil performance inputs
 
-        int AlphaIndex = 6; // Index for current alpha field
+        AlphaIndex = 6;
         // allocate performance modes for numeric field strings used for sizing routine
         state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(
             thisDXCoil.NumDehumidModes * 2 + thisDXCoil.NumCapacityStages * 2); // not sure this math is correct, ask MW
@@ -3000,10 +3001,10 @@ void GetDXCoils(EnergyPlusData &state)
     if (instances_whPumped != s_ip->epJSON.end()) {
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
         auto &instancesValue = instances_whPumped.value();
+        std::string cFieldName;
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
             ++DXCoilNum;
-            std::string cFieldName;
             auto const &fields = instance.value();
             std::string const &thisObjectName = instance.key();
             s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
@@ -3527,10 +3528,10 @@ void GetDXCoils(EnergyPlusData &state)
     if (instances_whWrapped != s_ip->epJSON.end()) {
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
         auto &instancesValue = instances_whWrapped.value();
+        std::string cFieldName;
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
             ++DXCoilNum;
-            std::string cFieldName;
             auto const &fields = instance.value();
             std::string const &thisObjectName = instance.key();
             s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
@@ -6880,7 +6881,7 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
     // CR7308 - Wait for zone and air loop equipment to be simulated, then print out report variables
     if (state.dataDXCoils->CrankcaseHeaterReportVarFlag) {
         if (state.dataAirLoop->AirLoopInputsFilled) {
-            //     Set report variables for DX cooling coils that will have a crankcase heater (all DX coils not used in a HP AC unit)
+            // Set report variables for DX cooling coils that will have a crankcase heater (all DX coils not used in a HP AC unit)
             int DXCoilNumTemp; // Counter for crankcase heater report variable DO loop
             for (DXCoilNumTemp = 1; DXCoilNumTemp <= state.dataDXCoils->NumDXCoils; ++DXCoilNumTemp) {
                 auto &dXCoil_withCrankCase = state.dataDXCoils->DXCoil(DXCoilNumTemp);
@@ -7040,9 +7041,9 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
         }
 
         if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) {
-            int DehumidModeNum; // Loop index for 1,Number of enhanced dehumidification modes
+            int DehumidModeNum;   // Loop index for 1,Number of enhanced dehumidification modes
+            int CapacityStageNum; // Loop index for 1,Number of capacity stages
             for (DehumidModeNum = 0; DehumidModeNum <= thisDXCoil.NumDehumidModes; ++DehumidModeNum) {
-                int CapacityStageNum; // Loop index for 1,Number of capacity stages
                 for (CapacityStageNum = 1; CapacityStageNum <= thisDXCoil.NumCapacityStages; ++CapacityStageNum) {
                     Mode = DehumidModeNum * 2 + CapacityStageNum;
                     // Check for zero capacity or zero max flow rate
@@ -14660,7 +14661,8 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
 
         TotCapFlowModFac = CurveValue(state, thisDXCoil.CCapFFlow(1), AirMassFlowRatioRated);
         TotCapTempModFac = CurveValue(state, thisDXCoil.CCapFTemp(1), CoolingCoilInletAirWetBulbTempRated, OutdoorUnitInletAirDryBulbTempRated);
-        for (int Iter = 1; Iter <= 4; ++Iter) { // iterative solution in the event that net capacity is near a threshold for external static
+        int Iter;
+        for (Iter = 1; Iter <= 4; ++Iter) { // iterative solution in the event that net capacity is near a threshold for external static
             // Obtain external static pressure from Table 5 in ANSI/AHRI Std. 340/360-2007
             if (NetCoolingCapRated <= 21000.0) {
                 ExternalStatic = 50.0;
@@ -15077,7 +15079,8 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
 
         // determine footnote content
         int countStaticInputs = 0;
-        for (int index = 1; index <= state.dataDXCoils->NumDXCoils; ++index) {
+        int index;
+        for (index = 1; index <= state.dataDXCoils->NumDXCoils; ++index) {
             auto &dxCoil_temp = state.dataDXCoils->DXCoil(index);
             if (dxCoil_temp.RateWithInternalStaticAndFanObject && dxCoil_temp.DXCoilType_Num == HVAC::CoilDX_CoolingTwoSpeed) {
                 ++countStaticInputs;

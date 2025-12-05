@@ -188,8 +188,8 @@ namespace BaseboardElectric {
             int NumNums = 0;
             int IOStat = 0;
             int BaseboardNum = 0;
+            auto &s_ipsc = state.dataIPShortCut;
             for (int ConvElecBBNum = 1; ConvElecBBNum <= NumConvElecBaseboards; ++ConvElecBBNum) {
-                auto &s_ipsc = state.dataIPShortCut;
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          cCurrentModuleObject,
                                                                          ConvElecBBNum,

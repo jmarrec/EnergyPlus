@@ -325,13 +325,13 @@ void GetDemandManagerListInput(EnergyPlusData &state)
         int NumNums;   // Number of elements in the numeric array
         int IOStat;    // IO Status when calling get input subroutine
         bool ErrorsFound = false;
+        auto &s_ipsc = state.dataIPShortCut;
 
         state.dataDemandManager->DemandManagerList.allocate(state.dataDemandManager->NumDemandManagerList);
 
         for (int ListNum = 1; ListNum <= state.dataDemandManager->NumDemandManagerList; ++ListNum) {
 
             auto &thisDemandMgrList = state.dataDemandManager->DemandManagerList(ListNum);
-            auto &s_ipsc = state.dataIPShortCut;
             s_ip->getObjectItem(state,
                                 cCurrentModuleObject,
                                 ListNum,

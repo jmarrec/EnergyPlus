@@ -101,6 +101,7 @@ namespace HybridModel {
             int NumAlphas = 0;        // Number of Alphas for each GetobjectItem call
             int NumNumbers = 0;       // Number of Numbers for each GetobjectItem call
             int IOStatus = 0;
+            int ZonePtr = Util::FindItemInList(cAlphaArgs(2), state.dataHeatBal->Zone); // "Zone" is a 1D array, cAlphaArgs(2) is the zone name
             for (int HybridModelNum = 1; HybridModelNum <= state.dataHybridModel->NumOfHybridModelZones; ++HybridModelNum) {
 
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
@@ -116,7 +117,6 @@ namespace HybridModel {
                                                                          cAlphaFieldNames,
                                                                          cNumericFieldNames);
 
-                int ZonePtr = Util::FindItemInList(cAlphaArgs(2), state.dataHeatBal->Zone); // "Zone" is a 1D array, cAlphaArgs(2) is the zone name
                 if (ZonePtr > 0) {
                     auto &hmZone = state.dataHybridModel->hybridModelZones(ZonePtr);
                     hmZone.Name = cAlphaArgs(1);                                                        // Zone HybridModel name

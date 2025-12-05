@@ -255,12 +255,12 @@ void GetPurchasedAir(EnergyPlusData &state)
         int NumNums = 0;
         int NumAlphas = 0;
         int purchAirNum = 0;
+        std::string fieldValue;
+        std::string cAlphaFieldName;
         InitUniqueNodeCheck(state, s_ipsc->cCurrentModuleObject);
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, s_ipsc->cCurrentModuleObject);
         auto &instancesValue = instances_PurchAir.value();
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-            std::string fieldValue;
-            std::string cAlphaFieldName;
             ++purchAirNum;
             auto const &fields = instance.value();
             std::string thisObjectName = instance.key();

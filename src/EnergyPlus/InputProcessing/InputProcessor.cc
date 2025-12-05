@@ -1094,10 +1094,9 @@ void InputProcessor::getObjectItem(EnergyPlusData &state,
             auto const &legacy_idd_extensibles = legacy_idd_extensibles_iter.value();
             auto const &epJSON_extensions_array = epJSON_extensions_array_itr.value();
             auto const &schema_extension_fields = schema_obj_props[extension_key]["items"]["properties"];
-
+            size_t extensible_count = 0;
             for (auto it = epJSON_extensions_array.begin(); it != epJSON_extensions_array.end(); ++it) {
                 auto const &epJSON_extension_obj = it.value();
-                size_t extensible_count = 0;
                 for (size_t i = 0; i < legacy_idd_extensibles.size(); i++, extensible_count++) {
                     std::string const field_name = legacy_idd_extensibles[i].get<std::string>();
                     auto const field_info = legacy_idd_field_info.find(field_name);

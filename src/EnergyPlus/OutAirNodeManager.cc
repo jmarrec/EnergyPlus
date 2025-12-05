@@ -194,8 +194,7 @@ namespace OutAirNodeManager {
         if (NumOutAirInletNodeLists > 0) {
             // Loop over all outside air inlet nodes in the input and count them
             CurrentModuleObject = "OutdoorAir:NodeList";
-            int OutAirInletNodeListNum; // OUTSIDE AIR INLET NODE LIST index
-            for (OutAirInletNodeListNum = 1; OutAirInletNodeListNum <= NumOutAirInletNodeLists; ++OutAirInletNodeListNum) {
+            for (int OutAirInletNodeListNum = 1; OutAirInletNodeListNum <= NumOutAirInletNodeLists; ++OutAirInletNodeListNum) {
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          CurrentModuleObject,
                                                                          OutAirInletNodeListNum,
@@ -209,8 +208,7 @@ namespace OutAirNodeManager {
                                                                          cAlphaFields,
                                                                          cNumericFields);
 
-                int AlphaNum; // index into Alphas
-                for (AlphaNum = 1; AlphaNum <= NumAlphas; ++AlphaNum) {
+                for (int AlphaNum = 1; AlphaNum <= NumAlphas; ++AlphaNum) {
                     ErrInList = false;
                     //  To support HVAC diagram, every outside inlet node must have a unique fluid stream number
                     //  GetNodeNums will increment the value across a node list, the starting value must be incremented
@@ -233,9 +231,7 @@ namespace OutAirNodeManager {
                         ShowContinueError(state, format("Occurred in {}, {} = {}", CurrentModuleObject, cAlphaFields(AlphaNum), Alphas(AlphaNum)));
                         ErrorsFound = true;
                     }
-                    int NodeNum; // index into NodeNums
-                    //  INTEGER :: OutAirNodeNum ! index into OutAirInletNodeList
-                    for (NodeNum = 1; NodeNum <= NumNodes; ++NodeNum) {
+                    for (int NodeNum = 1; NodeNum <= NumNodes; ++NodeNum) {
                         // Duplicates here are not a problem, just ignore
                         if (!any_eq(TmpNums, NodeNums(NodeNum))) {
                             ++ListSize;
@@ -256,8 +252,7 @@ namespace OutAirNodeManager {
         if (NumOutsideAirNodeSingles > 0) {
             // Loop over all single outside air nodes in the input
             CurrentModuleObject = "OutdoorAir:Node";
-            int OutsideAirNodeSingleNum; // OUTSIDE AIR NODE index
-            for (OutsideAirNodeSingleNum = 1; OutsideAirNodeSingleNum <= NumOutsideAirNodeSingles; ++OutsideAirNodeSingleNum) {
+            for (int OutsideAirNodeSingleNum = 1; OutsideAirNodeSingleNum <= NumOutsideAirNodeSingles; ++OutsideAirNodeSingleNum) {
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          CurrentModuleObject,
                                                                          OutsideAirNodeSingleNum,
@@ -384,11 +379,8 @@ namespace OutAirNodeManager {
         // set the outside air nodes to the outside conditions at the
         // start of every heat balance time step.
 
-        // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int OutsideAirNodeNum;
-
         // Do the begin time step initialization
-        for (OutsideAirNodeNum = 1; OutsideAirNodeNum <= state.dataOutAirNodeMgr->NumOutsideAirNodes; ++OutsideAirNodeNum) {
+        for (int OutsideAirNodeNum = 1; OutsideAirNodeNum <= state.dataOutAirNodeMgr->NumOutsideAirNodes; ++OutsideAirNodeNum) {
             int NodeNum = state.dataOutAirNodeMgr->OutsideAirNodeList(OutsideAirNodeNum);
             SetOANodeValues(state, NodeNum, true);
         }

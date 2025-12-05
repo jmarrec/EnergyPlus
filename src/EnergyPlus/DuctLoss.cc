@@ -719,10 +719,10 @@ namespace DuctLoss {
     {
         if (state.dataDuctLoss->AirLoopConnectionFlag) {
             bool errorsFound(false);
+            std::string CurrentModuleObject;
 
             for (int DuctLossNum = 1; DuctLossNum <= state.dataDuctLoss->NumOfDuctLosses; DuctLossNum++) {
                 auto &thisDuctLoss(state.dataDuctLoss->ductloss(DuctLossNum));
-                std::string CurrentModuleObject;
                 thisDuctLoss.AirLoopNum = Util::FindItemInList(thisDuctLoss.AirLoopName, state.dataAirSystemsData->PrimaryAirSystems);
                 if (thisDuctLoss.LossType == DuctLossType::Conduction) {
                     CurrentModuleObject = cCMO_DuctLossConduction;

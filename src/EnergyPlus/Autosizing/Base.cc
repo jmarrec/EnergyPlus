@@ -778,8 +778,8 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
         int arrayIndex = -1;
         // check if component has been added to array
         if (!plntComps.empty()) {
+            auto &cmpType = state.dataPlnt->PlantLoop(loopNum).plantCoilObjectTypes;
             for (size_t i = 0; i < plntComps.size(); ++i) {
-                auto &cmpType = state.dataPlnt->PlantLoop(loopNum).plantCoilObjectTypes;
                 if (plntComps[i] == compName &&
                     cmpType[i] == static_cast<DataPlant::PlantEquipmentType>(getEnumValue(DataPlant::PlantEquipTypeNames, compType))) {
                     arrayIndex = i;

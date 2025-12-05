@@ -1901,8 +1901,8 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                          EIRPlantLoopHeatPumps::EIRPlantLoopHeatPump::subtract}};
 
     bool errorsFound = false;
+    std::string &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     for (auto const &classToInput : classesToInput) {
-        std::string &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
         cCurrentModuleObject = DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)];
         DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(
             getEnumValue(BranchNodeConnections::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
@@ -3345,8 +3345,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
     };
 
     bool errorsFound = false;
+    std::string &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     for (auto &classToInput : classesToInput) {
-        std::string &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
         cCurrentModuleObject = DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)];
 
         DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(
@@ -3765,14 +3765,15 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
     constexpr std::array<std::string_view, static_cast<int>(ControlType::Num)> AWHPControlTypeUC = {"FIXEDSPEED", "VARIABLESPEED"};
     if (instances != state.dataInputProcessing->inputProcessor->epJSON.end()) {
         auto &instancesValue = instances.value();
+        std::string &cCurrentModuleObjectSingleMode = state.dataIPShortCut->cCurrentModuleObject;
+        bool errorsFound = false;
+        std::string routineName = "HeatPumpAirToWater::processInputForEIRPLHP";
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
             auto const &fields = instance.value();
             auto const &thisObjectName = instance.key();
             state.dataInputProcessing->inputProcessor->markObjectAsUsed(cCurrentModuleObject, thisObjectName);
             for (auto &classToInput : classesToInput) {
-                std::string &cCurrentModuleObjectSingleMode = state.dataIPShortCut->cCurrentModuleObject;
                 cCurrentModuleObjectSingleMode = DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)];
-                bool errorsFound = false;
                 DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(
                     getEnumValue(BranchNodeConnections::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObjectSingleMode)));
 
@@ -3781,7 +3782,6 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                 thisAWHP.name = Util::makeUPPER(thisObjectName);
                 thisAWHP.airSource = true;
                 thisAWHP.waterSource = false;
-                std::string routineName = "HeatPumpAirToWater::processInputForEIRPLHP";
                 ErrorObjectHeader eoh{routineName, "HeatPump:AirToWater", thisAWHP.name};
                 thisAWHP.heatPumpMultiplier =
                     state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "heat_pump_multiplier");

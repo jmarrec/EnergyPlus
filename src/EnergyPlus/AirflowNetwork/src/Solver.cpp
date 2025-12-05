@@ -2029,7 +2029,7 @@ namespace AirflowNetwork {
 
         // Check the number of primary air loops
         if (!simulation_control.DuctLoss) {
-            int NumAPL;
+            int NumAPL = 0;
             if (distribution_simulated) {
                 NumAPL = m_state.dataInputProcessing->inputProcessor->getNumObjectsFound(m_state, "AirLoopHVAC");
                 if (NumAPL > 0) {
