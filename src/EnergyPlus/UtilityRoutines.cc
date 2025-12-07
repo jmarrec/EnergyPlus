@@ -63,21 +63,16 @@ extern "C" {
 // EnergyPlus Headers
 #include <EnergyPlus/BranchInputManager.hh>
 #include <EnergyPlus/BranchNodeConnections.hh>
-// #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataErrorTracking.hh>
-// #include <EnergyPlus/DataGlobalConstants.hh>
 #include <EnergyPlus/DataReportingFlags.hh>
 #include <EnergyPlus/DataStringGlobals.hh>
 #include <EnergyPlus/DataSystemVariables.hh>
-// #include <EnergyPlus/DataTimings.hh>
 #include <EnergyPlus/DaylightingManager.hh>
-// #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/ExternalInterface.hh>
 #include <EnergyPlus/FileSystem.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
-// #include <EnergyPlus/IOFiles.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputReports.hh>
 #include <EnergyPlus/Plant/PlantManager.hh>
@@ -88,6 +83,7 @@ extern "C" {
 #include <EnergyPlus/SystemReports.hh>
 #include <EnergyPlus/Timer.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
+
 // Third Party Headers
 #include <fast_float/fast_float.h>
 
@@ -322,7 +318,7 @@ namespace Util {
         //       DATE WRITTEN   February 2000
 
         // PURPOSE OF THIS SUBROUTINE:
-        // This subroutine verifys that a new name can be added to the
+        // This subroutine verifies that a new name can be added to the
         // list of names for this item (i.e., that there isn't one of that
         // name already and that this name is not blank).
 
@@ -358,7 +354,7 @@ namespace Util {
         //       DATE WRITTEN   February 2000
 
         // PURPOSE OF THIS SUBROUTINE:
-        // This subroutine verifys that a new name can be added to the
+        // This subroutine verifies that a new name can be added to the
         // list of names for this item (i.e., that there isn't one of that
         // name already and that this name is not blank).
 
