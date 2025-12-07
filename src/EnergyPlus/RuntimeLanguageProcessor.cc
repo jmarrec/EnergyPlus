@@ -340,10 +340,10 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
                 SetErlValueNumber(0.0, state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value);
         }
     }
-    int EMSActuatorVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ActuatorVariableNum;
     // reinitialize state of actuators
     for (ActuatorUsedLoop = 1; ActuatorUsedLoop <= state.dataRuntimeLang->numActuatorsUsed + state.dataRuntimeLang->NumExternalInterfaceActuatorsUsed;
          ++ActuatorUsedLoop) {
+        int EMSActuatorVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ActuatorVariableNum;
         ErlVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ErlVariableNum;
         state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.Type = Value::Null;
         *state.dataRuntimeLang->EMSActuatorAvailable(EMSActuatorVariableNum).Actuated = false;
@@ -363,8 +363,8 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
     }
 
     // reinitialize trend variables so old data are purged
-    int TrendDepth = state.dataRuntimeLang->TrendVariable(TrendVarNum).LogDepth;
     for (TrendVarNum = 1; TrendVarNum <= state.dataRuntimeLang->NumErlTrendVariables; ++TrendVarNum) {
+        int TrendDepth = state.dataRuntimeLang->TrendVariable(TrendVarNum).LogDepth;
         state.dataRuntimeLang->TrendVariable(TrendVarNum).TrendValARR({1, TrendDepth}) = 0.0;
     }
 

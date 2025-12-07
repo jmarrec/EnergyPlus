@@ -7041,10 +7041,8 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
         }
 
         if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_CoolingTwoStageWHumControl) {
-            int DehumidModeNum;   // Loop index for 1,Number of enhanced dehumidification modes
-            int CapacityStageNum; // Loop index for 1,Number of capacity stages
-            for (DehumidModeNum = 0; DehumidModeNum <= thisDXCoil.NumDehumidModes; ++DehumidModeNum) {
-                for (CapacityStageNum = 1; CapacityStageNum <= thisDXCoil.NumCapacityStages; ++CapacityStageNum) {
+            for (int DehumidModeNum = 0; DehumidModeNum <= thisDXCoil.NumDehumidModes; ++DehumidModeNum) {
+                for (int CapacityStageNum = 1; CapacityStageNum <= thisDXCoil.NumCapacityStages; ++CapacityStageNum) {
                     Mode = DehumidModeNum * 2 + CapacityStageNum;
                     // Check for zero capacity or zero max flow rate
                     if (thisDXCoil.RatedTotCap(Mode) <= 0.0) {
@@ -14661,8 +14659,7 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
 
         TotCapFlowModFac = CurveValue(state, thisDXCoil.CCapFFlow(1), AirMassFlowRatioRated);
         TotCapTempModFac = CurveValue(state, thisDXCoil.CCapFTemp(1), CoolingCoilInletAirWetBulbTempRated, OutdoorUnitInletAirDryBulbTempRated);
-        int Iter;
-        for (Iter = 1; Iter <= 4; ++Iter) { // iterative solution in the event that net capacity is near a threshold for external static
+        for (int Iter = 1; Iter <= 4; ++Iter) { // iterative solution in the event that net capacity is near a threshold for external static
             // Obtain external static pressure from Table 5 in ANSI/AHRI Std. 340/360-2007
             if (NetCoolingCapRated <= 21000.0) {
                 ExternalStatic = 50.0;
@@ -15079,8 +15076,7 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
 
         // determine footnote content
         int countStaticInputs = 0;
-        int index;
-        for (index = 1; index <= state.dataDXCoils->NumDXCoils; ++index) {
+        for (int index = 1; index <= state.dataDXCoils->NumDXCoils; ++index) {
             auto &dxCoil_temp = state.dataDXCoils->DXCoil(index);
             if (dxCoil_temp.RateWithInternalStaticAndFanObject && dxCoil_temp.DXCoilType_Num == HVAC::CoilDX_CoolingTwoSpeed) {
                 ++countStaticInputs;
