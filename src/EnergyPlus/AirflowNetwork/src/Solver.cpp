@@ -3050,17 +3050,17 @@ namespace AirflowNetwork {
                         //          AirflowNetworkNumOfZones+NumOfExtNodes
                     }
                     continue;
-                } else {
-                    if (n < ExternalEnvironment &&
-                        !(m_state.dataSurface->Surface(MultizoneSurfaceData(i).SurfNum).ExtBoundCond == OtherSideCoefNoCalcExt &&
-                          m_state.dataSurface->Surface(MultizoneSurfaceData(i).SurfNum).ExtWind)) {
-                        ShowSevereError(m_state,
-                                        format(RoutineName) + CurrentModuleObject + ": Invalid " + cAlphaFields(1) + " = " +
-                                            MultizoneSurfaceData(i).SurfName);
-                        ShowContinueError(m_state, "This type of surface (has ground, etc exposure) cannot be used in the AiflowNetwork model.");
-                        ErrorsFound = true;
-                    }
                 }
+                if (n < ExternalEnvironment &&
+                    !(m_state.dataSurface->Surface(MultizoneSurfaceData(i).SurfNum).ExtBoundCond == OtherSideCoefNoCalcExt &&
+                      m_state.dataSurface->Surface(MultizoneSurfaceData(i).SurfNum).ExtWind)) {
+                    ShowSevereError(m_state,
+                                    format(RoutineName) + CurrentModuleObject + ": Invalid " + cAlphaFields(1) + " = " +
+                                        MultizoneSurfaceData(i).SurfName);
+                    ShowContinueError(m_state, "This type of surface (has ground, etc exposure) cannot be used in the AiflowNetwork model.");
+                    ErrorsFound = true;
+                }
+
                 found = false;
                 for (j = 1; j <= AirflowNetworkNumOfZones; ++j) {
                     if (MultizoneZoneData(j).ZoneNum == m_state.dataSurface->Surface(n).Zone) {
@@ -3580,11 +3580,9 @@ namespace AirflowNetwork {
                 if (MultizoneExternalNodeData(j - 1).curve != MultizoneExternalNodeData(j).curve) {
                     found = true;
                     break;
-                } else {
-                    // If the curves are the same, then check to see if the azimuths are different
-                    if (MultizoneExternalNodeData(j - 1).azimuth != MultizoneExternalNodeData(j).azimuth) {
-                        differentAngle = MultizoneExternalNodeData(j - 1).symmetricCurve || MultizoneExternalNodeData(j).symmetricCurve;
-                    }
+                } // If the curves are the same, then check to see if the azimuths are different
+                if (MultizoneExternalNodeData(j - 1).azimuth != MultizoneExternalNodeData(j).azimuth) {
+                    differentAngle = MultizoneExternalNodeData(j - 1).symmetricCurve || MultizoneExternalNodeData(j).symmetricCurve;
                 }
             }
             if (!found && !differentAngle) {
@@ -7323,9 +7321,8 @@ namespace AirflowNetwork {
 
         if (hIn_final == 0) {
             return 0;
-        } else {
-            return 1 / hIn_final;
         }
+        return 1 / hIn_final;
     }
 
     Real64 Solver::duct_outside_convection_resistance(Real64 const Ts,   // Surface temperature
@@ -7412,9 +7409,8 @@ namespace AirflowNetwork {
 
         if (hOut_final == 0) {
             return 0;
-        } else {
-            return 1 / hOut_final;
         }
+        return 1 / hOut_final;
     }
 
     void Solver::calculate_heat_balance()
@@ -10607,16 +10603,16 @@ namespace AirflowNetwork {
                         if (i == GetOAMixerReliefNodeNumber(m_state, OAMixerNum)) {
                             NodeFound(i) = true;
                             break;
-                        } else if (i == GetOAMixerInletNodeNumber(m_state, OAMixerNum)) {
+                        }
+                        if (i == GetOAMixerInletNodeNumber(m_state, OAMixerNum)) {
                             NodeFound(i) = true;
                             break;
-                        } else {
-                            if (OAMixerNum == GetNumOAMixers(m_state)) {
-                                ShowSevereError(m_state,
-                                                format(RoutineName) + "'" + m_state.dataLoopNodes->NodeID(i) +
-                                                    "' is not defined as an AirflowNetwork:Distribution:Node object.");
-                                ErrorsFound = true;
-                            }
+                        }
+                        if (OAMixerNum == GetNumOAMixers(m_state)) {
+                            ShowSevereError(m_state,
+                                            format(RoutineName) + "'" + m_state.dataLoopNodes->NodeID(i) +
+                                                "' is not defined as an AirflowNetwork:Distribution:Node object.");
+                            ErrorsFound = true;
                         }
                     }
                 } else if (GetNumOAMixers(m_state) == 0) {
@@ -11366,9 +11362,8 @@ namespace AirflowNetwork {
                     if (NumOfFans > 1) {
                         FanNames += m_state.dataAirSystemsData->PrimaryAirSystems(1).Branch(BranchNum).Comp(CompNum).Name;
                         break;
-                    } else {
-                        FanNames += m_state.dataAirSystemsData->PrimaryAirSystems(1).Branch(BranchNum).Comp(CompNum).Name + ",";
                     }
+                    FanNames += m_state.dataAirSystemsData->PrimaryAirSystems(1).Branch(BranchNum).Comp(CompNum).Name + ",";
                 }
             }
             if (NumOfFans > 1) {
@@ -13319,15 +13314,13 @@ namespace AirflowNetwork {
 
         if (openingProbSched == nullptr) {
             return true;
-        } else {
-            SchValue = openingProbSched->getCurrentVal();
-            RandomValue = Real64(rand()) / RAND_MAX;
-            if (SchValue > RandomValue) {
-                return true;
-            } else {
-                return false;
-            }
         }
+        SchValue = openingProbSched->getCurrentVal();
+        RandomValue = Real64(rand()) / RAND_MAX;
+        if (SchValue > RandomValue) {
+            return true;
+        }
+        return false;
     }
 
     bool OccupantVentilationControlProp::closing_probability(EnergyPlusData &state,
@@ -13341,15 +13334,13 @@ namespace AirflowNetwork {
         }
         if (closingProbSched == nullptr) {
             return true;
-        } else {
-            SchValue = closingProbSched->getCurrentVal();
-            RandomValue = Real64(rand()) / RAND_MAX;
-            if (SchValue > RandomValue) {
-                return true;
-            } else {
-                return false;
-            }
         }
+        SchValue = closingProbSched->getCurrentVal();
+        RandomValue = Real64(rand()) / RAND_MAX;
+        if (SchValue > RandomValue) {
+            return true;
+        }
+        return false;
     }
 
     void Solver::allocate()

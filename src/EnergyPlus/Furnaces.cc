@@ -9071,16 +9071,13 @@ namespace Furnaces {
         if (par7_sensLatentFlag == 1.0) {
             if (LoadToBeMet == 0.0) {
                 return (SensibleLoadMet - LoadToBeMet) / 100.0;
-            } else {
-                return (SensibleLoadMet - LoadToBeMet) / LoadToBeMet;
             }
-        } else {
-            if (LoadToBeMet == 0.0) {
-                return (LatentLoadMet - LoadToBeMet) / 100.0;
-            } else {
-                return (LatentLoadMet - LoadToBeMet) / LoadToBeMet;
-            }
+            return (SensibleLoadMet - LoadToBeMet) / LoadToBeMet;
         }
+        if (LoadToBeMet == 0.0) {
+            return (LatentLoadMet - LoadToBeMet) / 100.0;
+        }
+        return (LatentLoadMet - LoadToBeMet) / LoadToBeMet;
     }
 
     Real64 CalcWaterToAirResidual(EnergyPlusData &state,
@@ -9210,9 +9207,8 @@ namespace Furnaces {
         // Calculate residual based on output calculation flag
         if (par7_latentOrSensible == 1.0) {
             return (ZoneSensLoadMet - LoadToBeMet) / LoadToBeMet;
-        } else {
-            return (ZoneLatLoadMet - LoadToBeMet) / LoadToBeMet;
         }
+        return (ZoneLatLoadMet - LoadToBeMet) / LoadToBeMet;
     }
 
     void SetAverageAirFlow(EnergyPlusData &state,
@@ -10793,9 +10789,8 @@ namespace Furnaces {
         // Calculate residual based on output calculation flag
         if (par9_SensLatFlag == 1.0) {
             return (ZoneSensLoadMet - LoadToBeMet) / ResScale;
-        } else {
-            return (ZoneLatLoadMet - LoadToBeMet) / ResScale;
         }
+        return (ZoneLatLoadMet - LoadToBeMet) / ResScale;
     }
 
     //******************************************************************************
@@ -10859,9 +10854,8 @@ namespace Furnaces {
         // Calculate residual based on output calculation flag
         if (par9_SensLatFlag == 1.0) {
             return (ZoneSensLoadMet - LoadToBeMet) / ResScale;
-        } else {
-            return (ZoneLatLoadMet - LoadToBeMet) / ResScale;
         }
+        return (ZoneLatLoadMet - LoadToBeMet) / ResScale;
     }
 
     void SetVSHPAirFlow(EnergyPlusData &state,

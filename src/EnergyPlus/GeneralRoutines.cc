@@ -572,7 +572,8 @@ void ControlCompOutput(EnergyPlusData &state,
                                            "%",
                                            "%");
             break; // It will not converge this time
-        } else if (Iter > MaxIter * 2) {
+        }
+        if (Iter > MaxIter * 2) {
             break;
         }
 
