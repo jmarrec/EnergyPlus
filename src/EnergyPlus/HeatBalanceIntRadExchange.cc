@@ -459,7 +459,6 @@ namespace HeatBalanceIntRadExchange {
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         static constexpr std::string_view RoutineName("InitInteriorRadExchange: ");
-        bool NoUserInputF; // Logical flag signifying no input F's for zone
         bool ErrorsFound(false);
         Real64 CheckValue1 = 0.0;
         Real64 CheckValue2 = 0.0;
@@ -599,27 +598,15 @@ namespace HeatBalanceIntRadExchange {
                 CalcFMRT(state, thisEnclosure.NumOfSurfaces, thisEnclosure.Area, thisEnclosure.FMRT);
                 CalcFp(thisEnclosure.NumOfSurfaces, thisEnclosure.Emissivity, thisEnclosure.FMRT, thisEnclosure.Fp);
             } else {
-                //  Get user supplied view factors if available in idf.
-
-                NoUserInputF = true;
+                // For radiant enclosures:
+                // If UseRepresentativeSurfaceCalculations is true and there are no user input view factors, then calc approx view factors
+                // (If User supplied view factors are present, then UseRepresentativeSurfaceCalculations is skipped in SufaceGeometry::GetSurfaceData)
+                // Otherwise, copy final view factors from the solar enclosure
 
                 constexpr std::string_view cCurrentModuleObject = "ZoneProperty:UserViewFactors:BySurfaceName";
                 int NumZonesWithUserFbyS = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
-                if (NumZonesWithUserFbyS > 0) {
 
-                    GetInputViewFactorsbyName(state,
-                                              thisEnclosure.Name,
-                                              thisEnclosure.NumOfSurfaces,
-                                              thisEnclosure.F,
-                                              thisEnclosure.SurfacePtr,
-                                              NoUserInputF,
-                                              ErrorsFound); // Obtains user input view factors from input file
-                }
-
-                // If there is user input, use that as the approximate view factors.
-                // If there is no user input, but UseRepresentativeSurfaceCalculations is true, then calc approximate view factors
-                // If no user input and not UseRepresentativeSurfaceCalculations, then copy final view factors from the solar enclosure
-                bool useSolarViewFactors = (NoUserInputF && !state.dataSurface->UseRepresentativeSurfaceCalculations &&
+                bool useSolarViewFactors = ((!state.dataSurface->UseRepresentativeSurfaceCalculations || NumZonesWithUserFbyS > 0) &&
                                             !state.dataViewFactor->EnclSolInfo(enclosureNum).F.empty());
 
                 if (useSolarViewFactors) {
