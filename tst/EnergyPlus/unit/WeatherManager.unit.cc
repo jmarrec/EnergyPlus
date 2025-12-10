@@ -1103,7 +1103,7 @@ TEST_F(EnergyPlusFixture, IRHoriz_InterpretWeatherCalculateMissingIRHoriz)
 
     state->files.inputWeatherFilePath.filePath = configured_source_directory() / "tst/EnergyPlus/unit/Resources/WeatherManagerIROutputTest.epw";
     std::string const idf_objects = delimited_string({
-        "  Version,9.3;",
+        "  Version," + DataStringGlobals::MatchVersion + ";",
 
         "  SizingPeriod:DesignDay,",
         "    Atlanta Jan 21 cooling,  !- Name",
