@@ -14130,6 +14130,7 @@ namespace UnitarySystems {
 
                         if (OutletHumRatLS > DesOutHumRat) {
                             CycRatio = 1.0;
+                            this->m_CoolingSpeedNum = std::max(1, this->m_CoolingSpeedNum);
 
                             for (int speedNum = this->m_CoolingSpeedNum; speedNum <= this->m_NumOfSpeedCooling; ++speedNum) {
                                 VariableSpeedCoils::SimVariableSpeedCoils(state,
