@@ -2233,7 +2233,8 @@ namespace BranchInputManager {
                 FoundPlantLoopNum = Num;
                 MatchedPlantLoop = true;
                 break;
-            } else if (Alphas(12) == BranchListName) {
+            }
+            if (Alphas(12) == BranchListName) {
                 FoundPlantLoopName = Alphas(1);
                 FoundSupplyDemand = "Demand";
                 FoundVolFlowRate = Numbers(3);
@@ -2291,7 +2292,8 @@ namespace BranchInputManager {
                 FoundCondLoopNum = Num;
                 MatchedCondLoop = true;
                 break;
-            } else if (Alphas(12) == BranchListName) {
+            }
+            if (Alphas(12) == BranchListName) {
                 FoundCondLoopName = Alphas(1);
                 FoundSupplyDemand = "Demand";
                 FoundVolFlowRate = Numbers(3);

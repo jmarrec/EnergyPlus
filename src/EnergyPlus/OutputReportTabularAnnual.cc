@@ -499,7 +499,8 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                                 fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::minimum) {
                                 // end scanning since these might reset
                                 break; // for fldStRemainIt
-                            } else if (fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::valueWhenMaxMin) {
+                            }
+                            if (fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::valueWhenMaxMin) {
                                 // this case is when the value should be set
                                 OutputProcessor::VariableType scanTypeOfVar = fldStRemainIt->m_typeOfVar;
                                 // int scanStepType = fldStRemainIt->m_varStepType;
@@ -535,7 +536,8 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                                     fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::hoursNonNegative) {
                                     // end scanning since these might reset
                                     break; // for fldStRemainIt
-                                } else if (fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::sumOrAverageHoursShown) {
+                                }
+                                if (fldStRemainIt->m_aggregate == AnnualFieldSet::AggregationKind::sumOrAverageHoursShown) {
                                     if (fldStIt->m_varAvgSum == OutputProcessor::StoreType::Sum) { // if it is a summed variable
                                         fldStRemainIt->m_cell[row].result = oldScanValue + scanValue;
                                     } else {
@@ -1429,9 +1431,10 @@ std::vector<std::string> AnnualTable::inspectTableFieldSets(int fldIndex)
 {
     // added function just to inspect the private field set members of AnnualTable because no other
     // interface to the AnnualTable class is output oriented except writeTable and that is very complex.
+    AnnualFieldSet const &fldSt = m_annualFields[fldIndex];
     std::vector<std::string> ret;
-    AnnualFieldSet fldSt;
-    fldSt = m_annualFields[fldIndex];
+    bool const hasCell = !fldSt.m_cell.empty();
+    ret.reserve(hasCell ? 14 : 13);
     ret.push_back(fldSt.m_colHead);
     ret.push_back(fldSt.m_variMeter);
     ret.emplace_back(Constant::unitNames[(int)fldSt.m_varUnits]);
@@ -1458,7 +1461,7 @@ std::vector<std::string> AnnualTable::inspectTableFieldSets(int fldIndex)
     outStr = std::to_string(fldSt.m_timeBelowBottomBinTotal);
     ret.push_back(outStr);
     // cell value
-    if (!fldSt.m_cell.empty()) {
+    if (hasCell) {
         outStr = std::to_string(fldSt.m_cell[0].result);
         ret.push_back(outStr);
     }

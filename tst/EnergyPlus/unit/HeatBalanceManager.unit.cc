@@ -1978,7 +1978,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTest)
     state->dataIPShortCut->lAlphaFieldBlanks = true;
 
     std::string const idf_objects = delimited_string({
-        "Version,9.3;",
+        "Version," + DataStringGlobals::MatchVersion + ";",
         "  SimulationControl,",
         "    No,                      !- Do Zone Sizing Calculation",
         "    No,                      !- Do System Sizing Calculation",
@@ -2184,8 +2184,7 @@ TEST_F(EnergyPlusFixture, HeatBalanceManager_EMSConstructionSwitchTestCondFD)
     state->dataIPShortCut->lAlphaFieldBlanks = true;
 
     std::string const idf_objects = delimited_string({
-        "Version,",
-        "  25.1;                                   !- Version Identifier",
+        "Version," + DataStringGlobals::MatchVersion + ";",
 
         "SimulationControl,",
         "  No,                                     !- Do Zone Sizing Calculation",

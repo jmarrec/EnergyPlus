@@ -663,10 +663,8 @@ namespace RoomAir {
             ShowContinueError(state, format("The OneNodeDisplacementVentilation model requires {} objects", ipsc->cCurrentModuleObject));
             ErrorsFound = true;
             return;
-        } else {
-            // air node objects are found so allocate airnode variable
-            state.dataRoomAir->AirNode.allocate(state.dataRoomAir->TotNumOfAirNodes);
-        }
+        } // air node objects are found so allocate airnode variable
+        state.dataRoomAir->AirNode.allocate(state.dataRoomAir->TotNumOfAirNodes);
 
         for (int AirNodeNum = 1; AirNodeNum <= state.dataRoomAir->TotNumOfAirNodes; ++AirNodeNum) {
 
