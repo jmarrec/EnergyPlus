@@ -257,8 +257,9 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
     // Using/Aliasing
     using OutputProcessor::SetInternalVariableValue;
 
+    int ErlVariableNum;
     // reinitialize state of Erl variable values to zero, this gets sensors and internal variables used
-    for (int ErlVariableNum = 1; ErlVariableNum <= state.dataRuntimeLang->NumErlVariables; ++ErlVariableNum) {
+    for (ErlVariableNum = 1; ErlVariableNum <= state.dataRuntimeLang->NumErlVariables; ++ErlVariableNum) {
         // but skip constant built-in variables so don't overwrite them
         if (ErlVariableNum == state.dataRuntimeLangProcessor->NullVariableNum) {
             continue;
@@ -314,12 +315,10 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
         }
     }
     // reinitialize state of actuators
-    int EMSActuatorVariableNum;
-    int ErlVariableNum;
     for (int ActuatorUsedLoop = 1;
          ActuatorUsedLoop <= state.dataRuntimeLang->numActuatorsUsed + state.dataRuntimeLang->NumExternalInterfaceActuatorsUsed;
          ++ActuatorUsedLoop) {
-        EMSActuatorVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ActuatorVariableNum;
+        int EMSActuatorVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ActuatorVariableNum;
         ErlVariableNum = state.dataRuntimeLang->EMSActuatorUsed(ActuatorUsedLoop).ErlVariableNum;
         state.dataRuntimeLang->ErlVariable(ErlVariableNum).Value.Type = Value::Null;
         *state.dataRuntimeLang->EMSActuatorAvailable(EMSActuatorVariableNum).Actuated = false;
@@ -339,9 +338,8 @@ void BeginEnvrnInitializeRuntimeLanguage(EnergyPlusData &state)
     }
 
     // reinitialize trend variables so old data are purged
-    int TrendDepth;
     for (int TrendVarNum = 1; TrendVarNum <= state.dataRuntimeLang->NumErlTrendVariables; ++TrendVarNum) {
-        TrendDepth = state.dataRuntimeLang->TrendVariable(TrendVarNum).LogDepth;
+        int TrendDepth = state.dataRuntimeLang->TrendVariable(TrendVarNum).LogDepth;
         state.dataRuntimeLang->TrendVariable(TrendVarNum).TrendValARR({1, TrendDepth}) = 0.0;
     }
 
@@ -1066,7 +1064,9 @@ void ParseExpression(EnergyPlusData &state,
     int NumErrors;
     std::string::size_type Pos;
     std::string StringToken;
+    char NextChar;
     bool PeriodFound;
+    bool PlusFound;
     bool MinusFound;
     bool MultFound;
     bool DivFound;
@@ -1100,8 +1100,6 @@ void ParseExpression(EnergyPlusData &state,
     MinusFound = false;
     MultFound = false;
     DivFound = false;
-    char NextChar = String[Pos];
-    bool PlusFound = false;
     while (Pos < LastPos) {
         ++CountDoLooping;
         if (CountDoLooping > MaxDoLoopCounts) {
@@ -1110,6 +1108,7 @@ void ParseExpression(EnergyPlusData &state,
             ShowContinueError(state, format("...Failed to process String=\"{}\".", String));
             ShowFatalError(state, "...program terminates due to preceding condition.");
         }
+        NextChar = String[Pos];
         if (NextChar == ' ') {
             ++Pos;
             continue;
@@ -1121,6 +1120,7 @@ void ParseExpression(EnergyPlusData &state,
         // Get the next token
         StringToken = "";
         PeriodFound = false;
+        PlusFound = false;
         ErrorFlag = false;
         LastED = false;
         if (is_any_of(NextChar, "0123456789.")) {
@@ -1473,6 +1473,7 @@ int ProcessTokens(
     int LastPos;
     int TokenNum;
     int NumTokens;
+    int Depth;
     int NumSubTokens;
     int NewNumTokens;
     int OperatorNum;
@@ -1496,10 +1497,10 @@ int ProcessTokens(
     }
 
     ParenthWhileCounter = 0;
-    int Depth = 0;
 
     while ((Pos > 0) && (ParenthWhileCounter < 50)) {
         ++ParenthWhileCounter;
+        Depth = 0;
         for (TokenNum = 1; TokenNum <= NumTokens; ++TokenNum) {
             if (Token(TokenNum).Type == Token::Parenthesis) {
                 if (Token(TokenNum).Parenthesis == Token::ParenthesisLeft) {
