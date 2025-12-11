@@ -213,6 +213,12 @@ namespace Furnaces {
             state.dataFurnaces->GetFurnaceInputFlag = false;
         }
 
+        // Save the current AFNLoopHeatingCoilMaxRTF for comparison with the one calculated below
+        Real64 refAFNLoopHeatingCoilMaxRTF(0.0);
+        if (state.afn->distribution_simulated) {
+            refAFNLoopHeatingCoilMaxRTF = state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF;
+        }
+
         // Find the correct Furnace
         if (CompIndex == 0) {
             FurnaceNum = Util::FindItemInList(FurnaceName, state.dataFurnaces->Furnace);
@@ -660,6 +666,22 @@ namespace Furnaces {
         // Report the current Furnace output
         ReportFurnace(state, FurnaceNum, AirLoopNum);
 
+        // Get the actual maximum RTF for AFN simulations
+        if (state.afn->distribution_simulated) {
+            int const heatingCoilIndex(thisFurnace.HeatingCoilIndex);
+            int const suppHeatingCoilIndex(thisFurnace.SuppHeatCoilIndex);
+            Real64 heatingCoilRTF = 0.0;
+            Real64 suppHeatingCoilRTF = 0.0;
+            if (heatingCoilIndex > 0) {
+                heatingCoilRTF = state.dataHeatingCoils->HeatingCoil(heatingCoilIndex).RTF;
+            }
+            if (suppHeatingCoilIndex > 0) {
+                suppHeatingCoilRTF = state.dataHeatingCoils->HeatingCoil(heatingCoilIndex).RTF;
+            }
+            state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF =
+                max(refAFNLoopHeatingCoilMaxRTF, heatingCoilRTF, suppHeatingCoilRTF);
+        }
+
         // Reset OnOffFanPartLoadFraction to 1 in case another on/off fan is called without a part-load curve
         state.dataHVACGlobal->OnOffFanPartLoadFraction = 1.0;
 
@@ -903,6 +925,7 @@ namespace Furnaces {
                 //             Determine if furnace is on air loop served by the thermostat location specified
                 for (int zoneInNode = 1; zoneInNode <= state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).NumInletNodes; ++zoneInNode) {
                     int AirLoopNumber = state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).InletNodeAirLoopNum(zoneInNode);
+                    thisFurnace.airloopNum = AirLoopNumber;
                     if (AirLoopNumber > 0) {
                         for (int BranchNum = 1; BranchNum <= state.dataAirSystemsData->PrimaryAirSystems(AirLoopNumber).NumBranches; ++BranchNum) {
                             for (int CompNum = 1;
@@ -1441,6 +1464,7 @@ namespace Furnaces {
                 //             Determine if system is on air loop served by the thermostat location specified
                 for (int zoneInNode = 1; zoneInNode <= state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).NumInletNodes; ++zoneInNode) {
                     int AirLoopNumber = state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).InletNodeAirLoopNum(zoneInNode);
+                    thisFurnace.airloopNum = AirLoopNumber;
                     if (AirLoopNumber > 0) {
                         for (int BranchNum = 1; BranchNum <= state.dataAirSystemsData->PrimaryAirSystems(AirLoopNumber).NumBranches; ++BranchNum) {
                             for (int CompNum = 1;
@@ -2736,6 +2760,7 @@ namespace Furnaces {
                 //             Determine if furnace is on air loop served by the thermostat location specified
                 for (int zoneInNode = 1; zoneInNode <= state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).NumInletNodes; ++zoneInNode) {
                     int AirLoopNumber = state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).InletNodeAirLoopNum(zoneInNode);
+                    thisFurnace.airloopNum = AirLoopNumber;
                     if (AirLoopNumber > 0) {
                         for (int BranchNum = 1; BranchNum <= state.dataAirSystemsData->PrimaryAirSystems(AirLoopNumber).NumBranches; ++BranchNum) {
                             for (int CompNum = 1;
@@ -3667,6 +3692,7 @@ namespace Furnaces {
                 //             Determine if furnace is on air loop served by the thermostat location specified
                 for (int zoneInNode = 1; zoneInNode <= state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).NumInletNodes; ++zoneInNode) {
                     int AirLoopNumber = state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).InletNodeAirLoopNum(zoneInNode);
+                    thisFurnace.airloopNum = AirLoopNumber;
                     if (AirLoopNumber > 0) {
                         for (int BranchNum = 1; BranchNum <= state.dataAirSystemsData->PrimaryAirSystems(AirLoopNumber).NumBranches; ++BranchNum) {
                             for (int CompNum = 1;
@@ -4761,7 +4787,7 @@ namespace Furnaces {
             // Pass the fan cycling schedule index up to the air loop. Set the air loop unitary system flag.
             state.dataAirLoop->AirLoopControlInfo(AirLoopNum).cycFanSched = thisFurnace.fanOpModeSched;
             state.dataAirLoop->AirLoopControlInfo(AirLoopNum).UnitarySys = true;
-            // RR this is wrong, Op mode needs to be updated each time atep
+            // RR this is wrong, Op mode needs to be updated each time step
             state.dataAirLoop->AirLoopControlInfo(AirLoopNum).fanOp = thisFurnace.fanOp;
 
             // Check that heat pump heating capacity is within 20% of cooling capacity
@@ -6273,6 +6299,12 @@ namespace Furnaces {
                     CheckSysSizing(state, HVAC::unitarySysTypeNames[(int)thisFurnace.type], thisFurnace.Name);
 
                     thisFurnace.DesignHeatingCapacity = state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).HeatCap;
+                    if (state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).FractionOfAutosizedHeatingCapacity > 0) {
+                        // apply sizing factor and reset it to 1.0 so it doesn't get apply again during heating coil sizing
+                        thisFurnace.DesignHeatingCapacity *=
+                            state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).FractionOfAutosizedHeatingCapacity;
+                        state.dataSize->FinalSysSizing(state.dataSize->CurSysNum).FractionOfAutosizedHeatingCapacity = 1.0;
+                    }
                 }
 
                 if (thisFurnace.DesignHeatingCapacity < HVAC::SmallLoad) {
