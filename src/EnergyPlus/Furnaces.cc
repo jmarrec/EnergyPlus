@@ -668,15 +668,35 @@ namespace Furnaces {
 
         // Get the actual maximum RTF for AFN simulations
         if (state.afn->distribution_simulated) {
-            int const heatingCoilIndex(thisFurnace.HeatingCoilIndex);
-            int const suppHeatingCoilIndex(thisFurnace.SuppHeatCoilIndex);
             Real64 heatingCoilRTF = 0.0;
             Real64 suppHeatingCoilRTF = 0.0;
-            if (heatingCoilIndex > 0) {
-                heatingCoilRTF = state.dataHeatingCoils->HeatingCoil(heatingCoilIndex).RTF;
+            bool errorFound(false);
+            if (thisFurnace.HeatingCoilType_Num == HVAC::Coil_HeatingGasOrOtherFuel ||
+                thisFurnace.HeatingCoilType_Num == HVAC::Coil_HeatingElectric || thisFurnace.HeatingCoilType_Num == HVAC::Coil_HeatingDesuperheater) {
+                int heatingCoilIndex;
+                HeatingCoils::GetCoilIndex(state, thisFurnace.HeatingCoilName, heatingCoilIndex, errorFound);
+                if (heatingCoilIndex > 0) {
+                    heatingCoilRTF = state.dataHeatingCoils->HeatingCoil(heatingCoilIndex).RTF;
+                }
             }
-            if (suppHeatingCoilIndex > 0) {
-                suppHeatingCoilRTF = state.dataHeatingCoils->HeatingCoil(suppHeatingCoilIndex).RTF;
+            if (errorFound) {
+                ShowSevereError(state, format("The index of \"{}\" is not found", thisFurnace.HeatingCoilName));
+                ShowContinueError(state, format("...occurs for {}", thisFurnace.Name));
+                errorFound = false;
+            }
+            if (thisFurnace.SuppHeatCoilType_Num == HVAC::Coil_HeatingGasOrOtherFuel ||
+                thisFurnace.SuppHeatCoilType_Num == HVAC::Coil_HeatingElectric ||
+                thisFurnace.SuppHeatCoilType_Num == HVAC::Coil_HeatingDesuperheater) {
+                int suppHeatingCoilIndex;
+                HeatingCoils::GetCoilIndex(state, thisFurnace.SuppHeatCoilName, suppHeatingCoilIndex, errorFound);
+                if (suppHeatingCoilIndex > 0) {
+                    suppHeatingCoilRTF = state.dataHeatingCoils->HeatingCoil(suppHeatingCoilIndex).RTF;
+                }
+            }
+            if (errorFound) {
+                ShowSevereError(state, format("The index of \"{}\" is not found", thisFurnace.SuppHeatCoilName));
+                ShowContinueError(state, format("...occurs for {}", thisFurnace.Name));
+                errorFound = false;
             }
             state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF =
                 max(refAFNLoopHeatingCoilMaxRTF, heatingCoilRTF, suppHeatingCoilRTF);

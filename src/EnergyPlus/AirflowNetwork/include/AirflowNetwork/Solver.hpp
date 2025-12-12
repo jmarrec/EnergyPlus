@@ -86,8 +86,9 @@ namespace AirflowNetwork {
     struct AirflowNetworkReportVars
     {
         // Members
-        Real64 InfilVolume;         // Volume of Air {m3} due to infiltration
-        Real64 InfilMass;           // Mass of Air {kg} due to infiltration
+        Real64 InfilVolume; // Volume of Air {m3} due to infiltration
+        Real64 InfilMass;   // Mass of Air {kg} due to infiltration
+        Real64 infilMassFlow;
         Real64 InfilAirChangeRate;  // Infiltration air change rate {ach}
         Real64 VentilHeatLoss;      // Heat Gain {W} due to ventilation
         Real64 VentilHeatGain;      // Heat Loss {W} due to ventilation
@@ -107,9 +108,9 @@ namespace AirflowNetwork {
 
         // Default Constructor
         AirflowNetworkReportVars()
-            : InfilVolume(0.0), InfilMass(0.0), InfilAirChangeRate(0.0), VentilHeatLoss(0.0), VentilHeatGain(0.0), VentilVolume(0.0), VentilMass(0.0),
-              VentilAirChangeRate(0.0), VentilFanElec(0.0), VentilAirTemp(0.0), MixVolume(0.0), MixMass(0.0), ExfilSensiLoss(0.0),
-              ExfilLatentLoss(0.0), ExfilTotalLoss(0.0), ExfilMass(0.0), InletMass(0.0), OutletMass(0.0)
+            : InfilVolume(0.0), InfilMass(0.0), infilMassFlow(0.0), InfilAirChangeRate(0.0), VentilHeatLoss(0.0), VentilHeatGain(0.0),
+              VentilVolume(0.0), VentilMass(0.0), VentilAirChangeRate(0.0), VentilFanElec(0.0), VentilAirTemp(0.0), MixVolume(0.0), MixMass(0.0),
+              ExfilSensiLoss(0.0), ExfilLatentLoss(0.0), ExfilTotalLoss(0.0), ExfilMass(0.0), InletMass(0.0), OutletMass(0.0)
         {
         }
     };
