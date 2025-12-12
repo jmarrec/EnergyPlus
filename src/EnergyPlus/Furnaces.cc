@@ -676,7 +676,7 @@ namespace Furnaces {
                 heatingCoilRTF = state.dataHeatingCoils->HeatingCoil(heatingCoilIndex).RTF;
             }
             if (suppHeatingCoilIndex > 0) {
-                suppHeatingCoilRTF = state.dataHeatingCoils->HeatingCoil(heatingCoilIndex).RTF;
+                suppHeatingCoilRTF = state.dataHeatingCoils->HeatingCoil(suppHeatingCoilIndex).RTF;
             }
             state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF =
                 max(refAFNLoopHeatingCoilMaxRTF, heatingCoilRTF, suppHeatingCoilRTF);
