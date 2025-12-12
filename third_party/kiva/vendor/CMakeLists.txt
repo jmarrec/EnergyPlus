@@ -5,7 +5,7 @@ if (NOT TARGET fmt)
     add_subdirectory(fmt)
 endif ()
 
-add_subdirectory(boost-1.77.0)
+add_subdirectory(boost-1.88.0) #set by update-boost.py
 
 if (KIVA_EXE_BUILD OR KIVA_GROUND_PLOT)
 
@@ -17,7 +17,7 @@ if (KIVA_EXE_BUILD OR KIVA_GROUND_PLOT)
         add_subdirectory(zlib-ng)
         set(ZLIB_LIBRARIES zlibstatic)
         set(ZLIB_INCLUDE_DIRS "${zlib_SOURCE_DIR}" "${zlib_BINARY_DIR}")
-        set(ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIRS})
+        set(ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIRS} CACHE PATH "ZLIB include dirs")
         set(ZLIB_LIBRARY ${ZLIB_LIBRARIES})
         if (MSVC)
             target_compile_options(zlibstatic PRIVATE /wd5105)
@@ -27,10 +27,12 @@ if (KIVA_EXE_BUILD OR KIVA_GROUND_PLOT)
     else ()
         set(ZLIB_LIBRARIES miniziplib)
         set(ZLIB_INCLUDE_DIRS "${miniziplib_SOURCE_DIR}" "${miniziplib_BINARY_DIR}")
-        set(ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIRS})
+        # ZLIB_INCLUDE_DIR must be cached if mathgl is to find ZLIB using ZLIB_ROOT
+        set(ZLIB_INCLUDE_DIR ${ZLIB_INCLUDE_DIRS} CACHE PATH "ZLIB include dirs")
         set(ZLIB_LIBRARY ${ZLIB_LIBRARIES})
     endif ()
-    set(PNG_BUILD_ZLIB ON CACHE BOOL "" FORCE)
+
+    set(ZLIB_ROOT "${ZLIB_INCLUDE_DIRS}")
 
     set(PNG_TESTS OFF CACHE BOOL "" FORCE)
     set(PNG_SHARED OFF CACHE BOOL "" FORCE)
@@ -38,10 +40,11 @@ if (KIVA_EXE_BUILD OR KIVA_GROUND_PLOT)
 
     set(enable-openmp OFF CACHE BOOL "" FORCE)
     set(PNG_LIBRARY png_static)
+
     set(PNG_INCLUDE_DIR "${libpng_SOURCE_DIR}" "${libpng_BINARY_DIR}")
     set(PNG_LIBRARIES ${PNG_LIBRARY})
     set(PNG_INCLUDE_DIRS ${PNG_INCLUDE_DIR})
-    add_subdirectory(mathgl-2.4.4)
+    add_subdirectory(mathgl-8.0.3)
 
     if (MSVC)
         target_compile_options(mgl PRIVATE /wd4477 /wd4334)
