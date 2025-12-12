@@ -397,7 +397,7 @@ namespace PlantPipingSystemsManager {
     {
         Real64 returnValue;
         Real64 constexpr tolerance = 1.0e-6;
-        if (abs(uniformHeatFlux) <= tolerance) {
+        if (std::abs(uniformHeatFlux) <= tolerance) {
             returnValue = 1.0;
         } else {
             returnValue = weightedHeatFlux / uniformHeatFlux;
