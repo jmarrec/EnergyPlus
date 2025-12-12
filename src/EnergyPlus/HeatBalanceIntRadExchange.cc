@@ -1253,13 +1253,12 @@ namespace HeatBalanceIntRadExchange {
                     }
                     if (anySpaceNotFound) {
                         continue; // On to the next enclosure
-                    } else {
-                        enclMatchFound = true;
-                        // If matching SpaceList or ZoneList or Zone found, set the radiant and solar enclosure names to match
-                        thisEnclosure.Name = thisSpaceOrSpaceListName;
-                        state.dataViewFactor->EnclSolInfo(enclosureNum).Name = thisSpaceOrSpaceListName;
-                        break; // We're done with radiant enclosures
                     }
+                    enclMatchFound = true;
+                    // If matching SpaceList or ZoneList or Zone found, set the radiant and solar enclosure names to match
+                    thisEnclosure.Name = thisSpaceOrSpaceListName;
+                    state.dataViewFactor->EnclSolInfo(enclosureNum).Name = thisSpaceOrSpaceListName;
+                    break; // We're done with radiant enclosures
                 }
             }
             if (!enclMatchFound) {

@@ -4090,13 +4090,14 @@ Real64 interpSetPoint(Real64 const LowVal, Real64 const HighVal, Real64 const Re
 {
     if (LowVal >= HighVal) {
         return 0.5 * (SetptAtLowVal + SetptAtHighVal);
-    } else if (RefVal <= LowVal) {
-        return SetptAtLowVal;
-    } else if (RefVal >= HighVal) {
-        return SetptAtHighVal;
-    } else {
-        return SetptAtLowVal - ((RefVal - LowVal) / (HighVal - LowVal)) * (SetptAtLowVal - SetptAtHighVal);
     }
+    if (RefVal <= LowVal) {
+        return SetptAtLowVal;
+    }
+    if (RefVal >= HighVal) {
+        return SetptAtHighVal;
+    }
+    return SetptAtLowVal - ((RefVal - LowVal) / (HighVal - LowVal)) * (SetptAtLowVal - SetptAtHighVal);
 }
 
 void UpdateSetPointManagers(EnergyPlusData &state)

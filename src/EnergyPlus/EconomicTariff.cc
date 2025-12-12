@@ -1507,10 +1507,9 @@ void GetLastWord(std::string const &lineOfText, std::string::size_type &endOfSca
                 if (isInWord) {
                     // found the space in front of the word
                     break;
-                } else {
-                    // still have not found the back of the word
-                    // do nothing
-                }
+                } // still have not found the back of the word
+                  // do nothing
+
             } else {
                 if (isInWord) {
                     // still have not found the space in front of the word

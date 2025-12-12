@@ -5873,16 +5873,15 @@ namespace VariableSpeedCoils {
             state.dataLoopNodes->Node(CondOutletNode) = state.dataLoopNodes->Node(CondInletNode);
             varSpeedCoil.SimFlag = false;
             return;
-        } else {
-            EvapInletNode = varSpeedCoil.AirInletNodeNum;
-            InletWaterTemp = state.dataLoopNodes->Node(CondInletNode).Temp;
-            CondInletMassFlowRate = state.dataLoopNodes->Node(CondInletNode).MassFlowRate;
-            EvapInletMassFlowRate = state.dataLoopNodes->Node(EvapInletNode).MassFlowRate;
-            CpWater = Psychrometrics::CPHW(InletWaterTemp);
-            CompressorPower = 0.0;
-            OperatingHeatingPower = 0.0;
-            TankHeatingCOP = 0.0;
         }
+        EvapInletNode = varSpeedCoil.AirInletNodeNum;
+        InletWaterTemp = state.dataLoopNodes->Node(CondInletNode).Temp;
+        CondInletMassFlowRate = state.dataLoopNodes->Node(CondInletNode).MassFlowRate;
+        EvapInletMassFlowRate = state.dataLoopNodes->Node(EvapInletNode).MassFlowRate;
+        CpWater = Psychrometrics::CPHW(InletWaterTemp);
+        CompressorPower = 0.0;
+        OperatingHeatingPower = 0.0;
+        TankHeatingCOP = 0.0;
 
         //  LOAD LOCAL VARIABLES FROM DATA STRUCTURE (for code readability)
         if (!(fanOp == HVAC::FanOp::Continuous) && PartLoadRatio > 0.0) {
@@ -5940,9 +5939,8 @@ namespace VariableSpeedCoils {
         if ((state.dataVariableSpeedCoils->SourceSideMassFlowRate <= 0.0) || (state.dataVariableSpeedCoils->LoadSideMassFlowRate <= 0.0)) {
             varSpeedCoil.SimFlag = false;
             return;
-        } else {
-            varSpeedCoil.SimFlag = true;
         }
+        varSpeedCoil.SimFlag = true;
 
         // part-load calculation
         state.dataHVACGlobal->OnOffFanPartLoadFraction = 1.0;
@@ -6446,9 +6444,8 @@ namespace VariableSpeedCoils {
         if ((state.dataVariableSpeedCoils->SourceSideMassFlowRate <= 0.0) || (state.dataVariableSpeedCoils->LoadSideMassFlowRate <= 0.0)) {
             varSpeedCoil.SimFlag = false;
             return;
-        } else {
-            varSpeedCoil.SimFlag = true;
         }
+        varSpeedCoil.SimFlag = true;
 
         if ((varSpeedCoil.VSCoilType == HVAC::Coil_HeatingAirToAirVariableSpeed) &&
             (state.dataVariableSpeedCoils->OutdoorDryBulb < varSpeedCoil.MinOATCompressor)) {
@@ -7174,9 +7171,8 @@ namespace VariableSpeedCoils {
             ShowContinueError(state, "... returning Min OAT as -1000.");
             ErrorsFound = true;
             return -1000.0;
-        } else {
-            return state.dataVariableSpeedCoils->VarSpeedCoil(CoilIndex).MinOATCompressor;
         }
+        return state.dataVariableSpeedCoils->VarSpeedCoil(CoilIndex).MinOATCompressor;
     }
 
     int GetVSCoilNumOfSpeeds(EnergyPlusData &state,

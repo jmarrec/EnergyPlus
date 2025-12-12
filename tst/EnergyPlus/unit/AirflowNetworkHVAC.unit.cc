@@ -12083,8 +12083,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestIntraZoneLinkageZoneIndex)
 
     std::string const idf_objects = delimited_string({
 
-        "Version,",
-        "    9.5;                     !- Version Identifier",
+        "Version," + DataStringGlobals::MatchVersion + ";",
 
         "SimulationControl,",
         "    Yes,                     !- Do Zone Sizing Calculation",
@@ -16957,7 +16956,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_ZoneOrderTest)
 
     // Unit test for #10238
     std::string const idf_objects = delimited_string({
-        "  Version,23.2;",
+        "  Version," + DataStringGlobals::MatchVersion + ";",
 
         "  GlobalGeometryRules,",
         "    LowerLeftCorner,         !- Starting Vertex Position",
