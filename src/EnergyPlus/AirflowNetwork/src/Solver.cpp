@@ -1657,6 +1657,7 @@ namespace AirflowNetwork {
         int count;
         bool NodeFound;
         bool found;
+        int NumAPL;
         Array1D_string CompName(2);
         std::string SimAirNetworkKey;
 
@@ -2029,7 +2030,6 @@ namespace AirflowNetwork {
 
         // Check the number of primary air loops
         if (!simulation_control.DuctLoss) {
-            int NumAPL = 0;
             if (distribution_simulated) {
                 NumAPL = m_state.dataInputProcessing->inputProcessor->getNumObjectsFound(m_state, "AirLoopHVAC");
                 if (NumAPL > 0) {
