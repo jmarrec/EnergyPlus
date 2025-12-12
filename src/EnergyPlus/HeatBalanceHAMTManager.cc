@@ -183,7 +183,9 @@ namespace HeatBalanceHAMTManager {
         int NumAlphas;
         int status;
         int Numid;
+
         int HAMTitems;
+        int vtcsid;
 
         bool ErrorsFound;
 
@@ -596,7 +598,6 @@ namespace HeatBalanceHAMTManager {
 
         // Vapor Transfer coefficients
         HAMTitems = s_ip->getNumObjectsFound(state, cHAMTObject7); // SurfaceProperties:VaporCoefficients
-        int vtcsid = Util::FindItemInList(AlphaArray(1), state.dataSurface->Surface);
         for (int item = 1; item <= HAMTitems; ++item) {
             s_ip->getObjectItem(state,
                                 cHAMTObject7,
@@ -612,6 +613,7 @@ namespace HeatBalanceHAMTManager {
                                 cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, cHAMTObject7, AlphaArray(1)};
+            vtcsid = Util::FindItemInList(AlphaArray(1), state.dataSurface->Surface);
             if (vtcsid == 0) {
                 ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(1), AlphaArray(1));
                 ShowContinueError(state, "The basic material must be defined in addition to specifying HeatAndMoistureTransfer properties.");
