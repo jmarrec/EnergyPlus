@@ -396,7 +396,8 @@ namespace PlantPipingSystemsManager {
     Real64 calcFluxWeightingFactor(const Real64 weightedHeatFlux, const Real64 uniformHeatFlux)
     {
         Real64 returnValue;
-        if (uniformHeatFlux == 0.0) {
+        Real64 constexpr tolerance = 1.0e-6;
+        if (abs(uniformHeatFlux) <= tolerance) {
             returnValue = 1.0;
         } else {
             returnValue = weightedHeatFlux / uniformHeatFlux;
