@@ -612,14 +612,49 @@ namespace Sched {
                         s_sched->UniqueProcessedExternalFiles.emplace(state.files.TempFullFilePath.filePath, std::move(schedule_data));
                     schedule_file_shading_result = it.first;
                 } else {
-                    ShowSevereError(state,
-                                    fmt::format(R"({}: {}="{}", {}="{}" has an unknown file extension and cannot be read by this program.)",
-                                                routineName,
-                                                CurrentModuleObject,
-                                                Alphas(1),
-                                                cAlphaFields(3),
-                                                Alphas(3)));
-                    ShowFatalError(state, "Program terminates due to previous condition.");
+                    // Unknown extension, try to parse csv
+                    bool isCSV = false;
+                    bool isJSON = false;
+                    try {
+                        auto const schedule_data = FileSystem::readFile(state.files.TempFullFilePath.filePath);
+                        CsvParser csvParser;
+                        skiprowCount = 1; // make sure to parse header row only for Schedule:File:Shading
+                        auto it = s_sched->UniqueProcessedExternalFiles.emplace(state.files.TempFullFilePath.filePath,
+                                                                                csvParser.decode(schedule_data, ColumnSep, skiprowCount));
+                        if (!csvParser.hasErrors()) {
+                            isCSV = true;
+                            ShowWarningMessage(state,
+                                               fmt::format("Extension of file {} is unrecogonized, but parsed as CSV successfully",
+                                                           state.files.TempFullFilePath.filePath));
+                        }
+                    } catch (...) {
+                        // We're testing to see if this is a csv, if any exception exists, then throw the standard error about an unknown
+                        // extension
+                        isCSV = false;
+                    }
+                    try {
+                        auto schedule_data = FileSystem::readJSON(state.files.TempFullFilePath.filePath);
+                        auto it = // (AUTO_OK_ITER)
+                            s_sched->UniqueProcessedExternalFiles.emplace(state.files.TempFullFilePath.filePath, std::move(schedule_data));
+                        schedule_file_shading_result = it.first;
+                        ShowWarningMessage(state,
+                                           fmt::format("Extension of file {} is unrecogonized, but parsed as JSON successfully",
+                                                       state.files.TempFullFilePath.filePath));
+                        isJSON = true;
+                    } catch (...) {
+                        // We're testing to see if this is json, if any exception exists, then throw the standard error about an unknown extension
+                        isJSON = false;
+                    }
+                    if (!isCSV && !isJSON) {
+                        ShowSevereError(state,
+                                        fmt::format(R"({}: {}="{}", {}="{}" has an unknown file extension and cannot be read by this program.)",
+                                                    routineName,
+                                                    CurrentModuleObject,
+                                                    Alphas(1),
+                                                    cAlphaFields(3),
+                                                    Alphas(3)));
+                        ShowFatalError(state, "Program terminates due to previous condition.");
+                    }
                 }
             }
 
@@ -1642,11 +1677,48 @@ namespace Sched {
                                                                                 FileSystem::readJSON(state.files.TempFullFilePath.filePath));
                         result = it.first;
                     } else {
-                        ShowSevereCustom(
-                            state,
-                            eoh,
-                            format("{} = {} has an unknown file extension and cannot be read by this program.", cAlphaFields(3), Alphas(3)));
-                        ShowFatalError(state, "Program terminates due to previous condition.");
+                        bool isCSV = false;
+                        bool isJSON = false;
+                        try {
+                            auto const schedule_data = FileSystem::readFile(state.files.TempFullFilePath.filePath);
+                            CsvParser csvParser;
+                            auto it = s_sched->UniqueProcessedExternalFiles.emplace(state.files.TempFullFilePath.filePath,
+                                                                                    csvParser.decode(schedule_data, ColumnSep, skiprowCount));
+                            if (!csvParser.hasErrors()) {
+                                isCSV = false;
+                                result = it.first;
+                                isCSV = true;
+                                ShowWarningMessage(state,
+                                                   fmt::format("Extension of file {} is unrecogonized, but parsed as CSV successfully",
+                                                               state.files.TempFullFilePath.filePath));
+                            }
+                        } catch (...) {
+                            // We're testing to see if this is a csv, if any exception exists, then throw the standard error about an unknown
+                            // extension
+                            isCSV = false;
+                        }
+                        if (!isCSV) {
+                            try {
+                                auto it = s_sched->UniqueProcessedExternalFiles.emplace(state.files.TempFullFilePath.filePath,
+                                                                                        FileSystem::readJSON(state.files.TempFullFilePath.filePath));
+                                result = it.first;
+                                ShowWarningMessage(state,
+                                                   fmt::format("Extension of file {} is unrecogonized, but parsed as JSON successfully",
+                                                               state.files.TempFullFilePath.filePath));
+                                isJSON = true;
+                            } catch (...) {
+                                // We're testing to see if this is json, if any exception exists, then throw the standard error about an unknown
+                                // extension
+                                isJSON = false;
+                            }
+                        }
+                        if (!isCSV && !isJSON) {
+                            ShowSevereCustom(
+                                state,
+                                eoh,
+                                format("{} = {} has an unknown file extension and cannot be read by this program.", cAlphaFields(3), Alphas(3)));
+                            ShowFatalError(state, "Program terminates due to previous condition.");
+                        }
                     }
                 }
 
