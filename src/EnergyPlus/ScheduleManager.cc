@@ -626,6 +626,7 @@ namespace Sched {
                             ShowWarningMessage(state,
                                                fmt::format("Extension of file {} is unrecogonized, but parsed as CSV successfully",
                                                            state.files.TempFullFilePath.filePath));
+                            schedule_file_shading_result = it.first;
                         }
                     } catch (...) {
                         // We're testing to see if this is a csv, if any exception exists, then throw the standard error about an unknown
@@ -1685,7 +1686,6 @@ namespace Sched {
                             auto it = s_sched->UniqueProcessedExternalFiles.emplace(state.files.TempFullFilePath.filePath,
                                                                                     csvParser.decode(schedule_data, ColumnSep, skiprowCount));
                             if (!csvParser.hasErrors()) {
-                                isCSV = false;
                                 result = it.first;
                                 isCSV = true;
                                 ShowWarningMessage(state,
