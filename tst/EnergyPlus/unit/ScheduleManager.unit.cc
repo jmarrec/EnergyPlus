@@ -1458,39 +1458,36 @@ TEST_F(EnergyPlusFixture, ScheduleFileDSTtoggleOptionTest)
     EXPECT_DOUBLE_EQ(sch4->getHrTsVal(*state, s_glob->HourOfDay, s_glob->TimeStep), 1.0);
 }
 
-
 TEST_F(EnergyPlusFixture, ScheduleFileUnknownExtensionTest)
 {
 
     fs::path scheduleFile1 = configured_source_directory() / "tst/EnergyPlus/unit/Resources/schedule_file1.csv";
     fs::path scheduleFile2 = configured_source_directory() / "tst/EnergyPlus/unit/Resources/schedule_file1.zzz";
 
-    std::string const idf_objects = delimited_string({
-        "Schedule:File,",
-        "  Test1,                   !- Name",
-        "  ,                        !- Schedule Type Limits Name",
-        "  " + scheduleFile1.string() + ",              !- File Name",
-        "  2,                       !- Column Number",
-        "  1,                       !- Rows to Skip at Top",
-        "  8760,                    !- Number of Hours of Data",
-        "  Comma,                   !- Column Separator",
-        "  No,                      !- Interpolate to Timestep",
-        "  60,                      !- Minutes per item",
-        "  Yes;                     !- Adjust Schedule for Daylight Savings",
-        " ",
-        "Schedule:File,",
-        "  Test2,                   !- Name",
-        "  ,                        !- Schedule Type Limits Name",
-        "  " + scheduleFile2.string() + ",              !- File Name",
-        "  2,                       !- Column Number",
-        "  1,                       !- Rows to Skip at Top",
-        "  8760,                    !- Number of Hours of Data",
-        "  Comma,                   !- Column Separator",
-        "  No,                      !- Interpolate to Timestep",
-        "  60,                      !- Minutes per item",
-        "  Yes;                     !- Adjust Schedule for Daylight Savings",
-        " "
-    });
+    std::string const idf_objects = delimited_string({"Schedule:File,",
+                                                      "  Test1,                   !- Name",
+                                                      "  ,                        !- Schedule Type Limits Name",
+                                                      "  " + scheduleFile1.string() + ",              !- File Name",
+                                                      "  2,                       !- Column Number",
+                                                      "  1,                       !- Rows to Skip at Top",
+                                                      "  8760,                    !- Number of Hours of Data",
+                                                      "  Comma,                   !- Column Separator",
+                                                      "  No,                      !- Interpolate to Timestep",
+                                                      "  60,                      !- Minutes per item",
+                                                      "  Yes;                     !- Adjust Schedule for Daylight Savings",
+                                                      " ",
+                                                      "Schedule:File,",
+                                                      "  Test2,                   !- Name",
+                                                      "  ,                        !- Schedule Type Limits Name",
+                                                      "  " + scheduleFile2.string() + ",              !- File Name",
+                                                      "  2,                       !- Column Number",
+                                                      "  1,                       !- Rows to Skip at Top",
+                                                      "  8760,                    !- Number of Hours of Data",
+                                                      "  Comma,                   !- Column Separator",
+                                                      "  No,                      !- Interpolate to Timestep",
+                                                      "  60,                      !- Minutes per item",
+                                                      "  Yes;                     !- Adjust Schedule for Daylight Savings",
+                                                      " "});
 
     // This will process the provided idf chunk within the test fixture (must pass this step in order to proceed)
     ASSERT_TRUE(process_idf(idf_objects));
