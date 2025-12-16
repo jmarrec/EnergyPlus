@@ -561,6 +561,9 @@ void GetRefrigerationInput(EnergyPlusData &state)
         state.dataRefrigCase->HaveChillers = false;
     }
 
+    if (state.dataRefrigCase->HaveCasesOrWalkins && !state.dataHeatBal->RefrigCaseCredit.allocated()) {
+        state.dataHeatBal->RefrigCaseCredit.allocate(state.dataGlobal->NumOfZones);
+    }
     if (state.dataRefrigCase->NumRefrigeratedRacks > 0) {
         RefrigRack.allocate(state.dataRefrigCase->NumRefrigeratedRacks);
         state.dataHeatBal->HeatReclaimRefrigeratedRack.allocate(state.dataRefrigCase->NumRefrigeratedRacks);
