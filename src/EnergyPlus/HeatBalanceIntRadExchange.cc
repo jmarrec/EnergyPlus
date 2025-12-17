@@ -613,14 +613,28 @@ namespace HeatBalanceIntRadExchange {
                 if (useSolarViewFactors) {
                     thisEnclosure.F = state.dataViewFactor->EnclSolInfo(enclosureNum).F;
                 } else {
-                    // Calculate the view factors and make sure they satisfy reciprocity
-                    CalcApproximateViewFactors(state,
-                                               thisEnclosure.NumOfSurfaces,
-                                               thisEnclosure.Area,
-                                               thisEnclosure.Azimuth,
-                                               thisEnclosure.Tilt,
-                                               thisEnclosure.F,
-                                               thisEnclosure.SurfacePtr);
+                    bool NoUserInputF = true;
+                    if (NumZonesWithUserFbyS > 0) {
+
+                        GetInputViewFactorsbyName(state,
+                                                  thisEnclosure.Name,
+                                                  thisEnclosure.NumOfSurfaces,
+                                                  thisEnclosure.F,
+                                                  thisEnclosure.SurfacePtr,
+                                                  NoUserInputF,
+                                                  ErrorsFound); // Obtains user input view factors from input file
+                    }
+
+                    if (NoUserInputF) {
+                        // Calculate the view factors and make sure they satisfy reciprocity
+                        CalcApproximateViewFactors(state,
+                                                   thisEnclosure.NumOfSurfaces,
+                                                   thisEnclosure.Area,
+                                                   thisEnclosure.Azimuth,
+                                                   thisEnclosure.Tilt,
+                                                   thisEnclosure.F,
+                                                   thisEnclosure.SurfacePtr);
+                    }
 
                     if (ViewFactorReport) { // Allocate and save user or approximate view factors for reporting.
                         SaveApproximateViewFactors.allocate(thisEnclosure.NumOfSurfaces, thisEnclosure.NumOfSurfaces);
