@@ -601,6 +601,7 @@ namespace HeatBalanceIntRadExchange {
                 // For radiant enclosures:
                 // If UseRepresentativeSurfaceCalculations is true and there are no user input view factors, then calc approx view factors
                 // (If User supplied view factors are present, then UseRepresentativeSurfaceCalculations is skipped in SufaceGeometry::GetSurfaceData)
+                // If there are any inside light shelfs then calc approx view factors (because the light shelf area is doubled for heat transfer)
                 // Otherwise, copy final view factors from the solar enclosure
 
                 constexpr std::string_view cCurrentModuleObject = "ZoneProperty:UserViewFactors:BySurfaceName";
