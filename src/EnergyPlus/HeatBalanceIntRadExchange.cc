@@ -607,7 +607,7 @@ namespace HeatBalanceIntRadExchange {
                 int NumZonesWithUserFbyS = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
 
                 bool useSolarViewFactors = ((!state.dataSurface->UseRepresentativeSurfaceCalculations || NumZonesWithUserFbyS > 0) &&
-                                            !state.dataViewFactor->EnclSolInfo(enclosureNum).F.empty());
+                                            !state.dataGlobal->AnyInsideShelf && !state.dataViewFactor->EnclSolInfo(enclosureNum).F.empty());
 
                 if (useSolarViewFactors) {
                     thisEnclosure.F = state.dataViewFactor->EnclSolInfo(enclosureNum).F;
