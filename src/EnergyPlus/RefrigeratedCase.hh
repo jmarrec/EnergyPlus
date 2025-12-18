@@ -1494,14 +1494,6 @@ namespace RefrigeratedCase {
 
     void SimulateDetailedTransRefrigSystems(EnergyPlusData &state);
 
-    void GetRefrigeratedRackIndex(EnergyPlusData &state,
-                                  std::string const &Name,
-                                  int &IndexPtr,
-                                  DataHeatBalance::RefrigSystemType SysType,
-                                  bool &ErrorsFound,
-                                  std::string_view const ThisObjectType = {},
-                                  bool const SuppressWarning = false);
-
     void ReportRefrigerationComponents(EnergyPlusData &state);
 
     void SumZoneImpacts(EnergyPlusData &state);

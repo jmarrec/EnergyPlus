@@ -304,8 +304,8 @@ void GetZoneEquipmentData(EnergyPlusData &state)
 
     // auto &Zone(state.dataHeatBal->Zone);
 
-    CurrentModuleObject = "ZoneHVAC:EquipmentConnections";
     for (int controlledZoneLoop = 1; controlledZoneLoop <= numControlledZones; ++controlledZoneLoop) {
+        CurrentModuleObject = "ZoneHVAC:EquipmentConnections";
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                  CurrentModuleObject,
                                                                  controlledZoneLoop,
@@ -339,51 +339,8 @@ void GetZoneEquipmentData(EnergyPlusData &state)
             continue;
         }
         thisZone.IsControlled = true;
-
-        auto &thisZoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(zoneNum);
-        thisZoneEquipConfig.IsControlled = true;
-        thisZoneEquipConfig.ZoneName = AlphArray(1);      // for x-referencing with the geometry data
-        thisZoneEquipConfig.EquipListName = AlphArray(2); // the name of the list containing all the zone eq.
-        thisZoneEquipConfig.ZoneNode = GetOnlySingleNode(state,
-                                                         AlphArray(5),
-                                                         state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
-                                                         DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections,
-                                                         AlphArray(1),
-                                                         DataLoopNode::NodeFluidType::Air,
-                                                         DataLoopNode::ConnectionType::ZoneNode,
-                                                         NodeInputManager::CompFluidStream::Primary,
-                                                         DataLoopNode::ObjectIsNotParent); // all zone air state variables are
-
-        if (thisZoneEquipConfig.ZoneNode == 0) {
-            ShowSevereError(state, format("{}{}: {}=\"{}\", invalid", RoutineName, CurrentModuleObject, cAlphaFields(1), AlphArray(1)));
-            ShowContinueError(state, format("{} must be present.", cAlphaFields(5)));
-            state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
-        } else {
-            bool UniqueNodeError = false;
-            NodeInputManager::CheckUniqueNodeNames(state, cAlphaFields(5), UniqueNodeError, AlphArray(5), AlphArray(1));
-            if (UniqueNodeError) {
-                // ShowContinueError(state, format("Occurs for {} = {}", trim( cAlphaFields( 1 ) ), trim( AlphArray( 1 ) )));
-                state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
-            }
-        }
-    } // end loop over controlled zones
-    for (int controlledZoneLoop = 1; controlledZoneLoop <= numControlledZones; ++controlledZoneLoop) {
-        state.dataInputProcessing->inputProcessor->getObjectItem(state,
-                                                                 CurrentModuleObject,
-                                                                 controlledZoneLoop,
-                                                                 AlphArray,
-                                                                 NumAlphas,
-                                                                 NumArray,
-                                                                 NumNums,
-                                                                 IOStat,
-                                                                 lNumericBlanks,
-                                                                 lAlphaBlanks,
-                                                                 cAlphaFields,
-                                                                 cNumericFields); // Get Equipment | data for one zone
-
-        int zoneNum = Util::FindItemInList(AlphArray(1), state.dataHeatBal->Zone);
-        auto &thisZoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(zoneNum);
         bool isSpace = false;
+        auto &thisZoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(zoneNum);
         processZoneEquipmentInput(state,
                                   CurrentModuleObject,
                                   zoneNum,
@@ -395,11 +352,10 @@ void GetZoneEquipmentData(EnergyPlusData &state)
                                   cAlphaFields,
                                   lAlphaBlanks,
                                   NodeNums);
-        state.dataHeatBal->Zone(zoneNum).SystemZoneNodeNumber = thisZoneEquipConfig.ZoneNode;
-    }
-
-    CurrentModuleObject = "SpaceHVAC:EquipmentConnections";
+        thisZone.SystemZoneNodeNumber = thisZoneEquipConfig.ZoneNode;
+    } // end loop over controlled zones
     for (int controlledSpaceLoop = 1; controlledSpaceLoop <= numControlledSpaces; ++controlledSpaceLoop) {
+        CurrentModuleObject = "SpaceHVAC:EquipmentConnections";
         if (!state.dataHeatBal->doSpaceHeatBalanceSimulation) {
             ShowWarningError(
                 state,
@@ -450,51 +406,8 @@ void GetZoneEquipmentData(EnergyPlusData &state)
             continue;
         }
         thisSpace.IsControlled = true;
-
-        auto &thisSpaceEquipConfig = state.dataZoneEquip->spaceEquipConfig(spaceNum);
-        thisSpaceEquipConfig.IsControlled = true;
-        thisSpaceEquipConfig.ZoneName = AlphArray(1);      // for x-referencing with the geometry data
-        thisSpaceEquipConfig.EquipListName = AlphArray(2); // the name of the list containing all the zone eq.
-        thisSpaceEquipConfig.ZoneNode = GetOnlySingleNode(state,
-                                                          AlphArray(4),
-                                                          state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
-                                                          DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections,
-                                                          AlphArray(1),
-                                                          DataLoopNode::NodeFluidType::Air,
-                                                          DataLoopNode::ConnectionType::ZoneNode,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          DataLoopNode::ObjectIsNotParent); // all zone air state variables are
-
-        if (thisSpaceEquipConfig.ZoneNode == 0) {
-            ShowSevereError(state, format("{}{}: {}=\"{}\", invalid", RoutineName, CurrentModuleObject, cAlphaFields(1), AlphArray(1)));
-            ShowContinueError(state, format("{} must be present.", cAlphaFields(4)));
-            state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
-        } else {
-            bool UniqueNodeError = false;
-            NodeInputManager::CheckUniqueNodeNames(state, cAlphaFields(4), UniqueNodeError, AlphArray(4), AlphArray(1));
-            if (UniqueNodeError) {
-                // ShowContinueError(state, format("Occurs for {} = {}", trim( cAlphaFields( 1 ) ), trim( AlphArray( 1 ) )));
-                state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
-            }
-        }
-    } // end loop over controlled spaces
-    for (int controlledSpaceLoop = 1; controlledSpaceLoop <= numControlledSpaces; ++controlledSpaceLoop) {
-        state.dataInputProcessing->inputProcessor->getObjectItem(state,
-                                                                 CurrentModuleObject,
-                                                                 controlledSpaceLoop,
-                                                                 AlphArray,
-                                                                 NumAlphas,
-                                                                 NumArray,
-                                                                 NumNums,
-                                                                 IOStat,
-                                                                 lNumericBlanks,
-                                                                 lAlphaBlanks,
-                                                                 cAlphaFields,
-                                                                 cNumericFields); // Get Equipment | data for one zone
-
-        int spaceNum = Util::FindItemInList(AlphArray(1), state.dataHeatBal->space);
-        auto &thisSpaceEquipConfig = state.dataZoneEquip->spaceEquipConfig(spaceNum);
         bool isSpace = true;
+        auto &thisSpaceEquipConfig = state.dataZoneEquip->spaceEquipConfig(spaceNum);
         processZoneEquipmentInput(state,
                                   CurrentModuleObject,
                                   spaceNum,
@@ -506,8 +419,8 @@ void GetZoneEquipmentData(EnergyPlusData &state)
                                   cAlphaFields,
                                   lAlphaBlanks,
                                   NodeNums);
-        state.dataHeatBal->space(spaceNum).SystemZoneNodeNumber = thisSpaceEquipConfig.ZoneNode;
-    }
+        thisSpace.SystemZoneNodeNumber = thisSpaceEquipConfig.ZoneNode;
+    } // end loop over controlled spaces
 
     if (state.dataHeatBal->doSpaceHeatBalanceSizing || state.dataHeatBal->doSpaceHeatBalanceSimulation) {
         // Auto-assign the system node name for spaces in controlled zones that do not have a SpaceHVAC:EquipmentConnections input
@@ -905,6 +818,9 @@ void processZoneEquipmentInput(EnergyPlusData &state,
 
     ErrorObjectHeader eoh{routineName, zoneEqModuleObject, AlphArray(1)};
 
+    thisEquipConfig.IsControlled = true;
+    thisEquipConfig.ZoneName = AlphArray(1); // for x-referencing with the geometry data
+
     bool IsNotOK = false;
     GlobalNames::IntraObjUniquenessCheck(
         state, AlphArray(2), zoneEqModuleObject, cAlphaFields(2), state.dataZoneEquip->UniqueZoneEquipListNames, IsNotOK);
@@ -912,8 +828,31 @@ void processZoneEquipmentInput(EnergyPlusData &state,
         ShowContinueError(state, format("..another Controlled Zone has been assigned that {}.", cAlphaFields(2)));
         state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
     }
+    thisEquipConfig.EquipListName = AlphArray(2); // the name of the list containing all the zone eq.
     std::string const InletNodeListName = AlphArray(3 + spaceFieldShift);
     std::string const ExhaustNodeListName = AlphArray(4 + spaceFieldShift);
+    thisEquipConfig.ZoneNode = GetOnlySingleNode(state,
+                                                 AlphArray(5 + spaceFieldShift),
+                                                 state.dataZoneEquip->GetZoneEquipmentDataErrorsFound,
+                                                 DataLoopNode::ConnectionObjectType::ZoneHVACEquipmentConnections,
+                                                 AlphArray(1),
+                                                 DataLoopNode::NodeFluidType::Air,
+                                                 DataLoopNode::ConnectionType::ZoneNode,
+                                                 NodeInputManager::CompFluidStream::Primary,
+                                                 DataLoopNode::ObjectIsNotParent); // all zone air state variables are
+    if (thisEquipConfig.ZoneNode == 0) {
+        ShowSevereError(state, format("{}{}: {}=\"{}\", invalid", RoutineName, zoneEqModuleObject, cAlphaFields(1), AlphArray(1)));
+        ShowContinueError(state, format("{} must be present.", cAlphaFields(5 + spaceFieldShift)));
+        state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
+    } else {
+        bool UniqueNodeError = false;
+        NodeInputManager::CheckUniqueNodeNames(
+            state, cAlphaFields(5 + spaceFieldShift), UniqueNodeError, AlphArray(5 + spaceFieldShift), AlphArray(1));
+        if (UniqueNodeError) {
+            // ShowContinueError(state, format("Occurs for {} = {}", trim( cAlphaFields( 1 ) ), trim( AlphArray( 1 ) )));
+            state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
+        }
+    }
 
     std::string ReturnNodeListName = AlphArray(6 + spaceFieldShift);
     if (lAlphaBlanks(7)) {

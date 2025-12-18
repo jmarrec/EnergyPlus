@@ -14012,69 +14012,6 @@ void RefrigSystemData::CalculateSubcoolers(EnergyPlusData &state)
     }
 }
 
-void GetRefrigeratedRackIndex(EnergyPlusData &state,
-                              std::string const &Name,
-                              int &IndexPtr,
-                              DataHeatBalance::RefrigSystemType const SysType,
-                              bool &ErrorsFound,
-                              std::string_view const ThisObjectType,
-                              bool const SuppressWarning)
-{
-
-    // SUBROUTINE INFORMATION:
-    //       AUTHOR         Richard Raustad
-    //       DATE WRITTEN   June 2007
-    //       MODIFIED       Therese Stovall May 2008
-    //       RE-ENGINEERED  na
-    // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine sets an index for a given refrigerated rack or refrigeration condenser
-    //  -- issues error message if the rack or condenser is not found.
-
-    auto &RefrigRack = state.dataRefrigCase->RefrigRack;
-    auto &Condenser = state.dataRefrigCase->Condenser;
-
-    CheckRefrigerationInput(state);
-
-    switch (SysType) {
-    case DataHeatBalance::RefrigSystemType::Rack: {
-        IndexPtr = Util::FindItemInList(Name, RefrigRack);
-        if (IndexPtr == 0) {
-            if (SuppressWarning) {
-                //     No warning printed if only searching for the existence of a refrigerated rack
-            } else {
-                if (!ThisObjectType.empty()) {
-                    ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Rack not found={}", ThisObjectType, Name));
-                } else {
-                    if (!ThisObjectType.empty()) {
-                        ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Rack not found={}", ThisObjectType, Name));
-                    } else {
-                        ShowSevereError(state, format("GetRefrigeratedRackIndex: Rack not found={}", Name));
-                    }
-                }
-            }
-            ErrorsFound = true;
-        }
-    } break;
-    case DataHeatBalance::RefrigSystemType::Detailed: {
-        IndexPtr = Util::FindItemInList(Name, Condenser);
-        if (IndexPtr == 0) {
-            if (SuppressWarning) {
-                //     No warning printed if only searching for the existence of a refrigeration Condenser
-            } else {
-                if (!ThisObjectType.empty()) {
-                    ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Condenser not found={}", ThisObjectType, Name));
-                } else {
-                    ShowSevereError(state, format("GetRefrigeratedRackIndex: Condenser not found={}", Name));
-                }
-            }
-        }
-        ErrorsFound = true;
-    } break;
-    default:
-        break;
-    }
-}
-
 void ReportRefrigerationComponents(EnergyPlusData &state)
 {
 
