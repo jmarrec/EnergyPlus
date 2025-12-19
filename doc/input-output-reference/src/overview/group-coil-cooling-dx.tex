@@ -6,7 +6,7 @@ This coil input structure is meant to supplant the coil objects from previous En
 \def\labelenumi{\arabic{enumi}.}
 \item Coil:Cooling:DX - Defines where the coil's evaporator and condenser sections are connected to the HVAC system through node connections to air loops or zones (if condenser section rejects heat to a zone), as well as the coil's availability.
 
-\item Coil:Cooling:DX:CurveFit:Performance or Coil:Cooling:DX:ASHRAE205:Performance - Defines how the coil operates over a range of operating conditions.
+\item Coil:Cooling:DX:CurveFit:Performance or Coil:DX:ASHRAE205:Performance - Defines how the coil operates over a range of operating conditions.
 
 \item Coil:Cooling:DX:CurveFit:OperatingMode (CurveFit only) - Defines the rated coil characteristics (capacity, evaporator section air flow rate, etc.) and capacity control method for a given operating mode. Operating modes are generally used to describe humidity control strategies for DX cooling coil arrangements that enable enhanced dehumidification.
 
@@ -54,7 +54,7 @@ The name of the HVAC system node to which the condenser of the DX cooling coil s
 
 \paragraph{Field: Performance Object Name}\label{field-performance-object-name-6-001}
 
-The name of the Coil:Cooling:DX:CurveFit:Performance or Coil:Cooling:DX:ASHRAE205:Performance object that defines this coil's performance specifications.
+The name of the Coil:Cooling:DX:CurveFit:Performance or Coil:DX:ASHRAE205:Performance object that defines this coil's performance specifications.
 
 \paragraph{Field: Condensate Collection Water Storage Tank Name}
 
@@ -64,7 +64,7 @@ This field is optional. It is used to describe where condensate from the coil is
 
 This field is optional. It is used to describe where the coil obtains water used for evaporative cooling of its condenser. If blank or omitted, then the unit will obtain water directly from the mains. If the name of a WaterUse:Storage object is used here, then the unit will obtain its water from that tank. If a tank is specified, the unit will attempt to obtain all the water it uses from the tank. However, if the tank cannot provide all the water the condenser needs, then the unit will still operate and obtain the rest of the water it needs from the mains (referred to as StarvedWater).
 
-\subsection{Coil:Cooling:DX:ASHRAE205:Performance}\label{coilcoolingdxashrae205performance}
+\subsection{Coil:DX:ASHRAE205:Performance}\label{coildxashrae205performance}
 
 This object defines basic unit control and ASHRAE205 representation file for one Coil:Cooling:DX object.
 
