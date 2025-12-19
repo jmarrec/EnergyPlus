@@ -137,15 +137,6 @@ namespace DataHeatBalance {
         Num
     };
 
-    // System type, detailed refrigeration or refrigerated case rack
-    enum class RefrigSystemType
-    {
-        Invalid = -1,
-        Detailed,
-        Rack,
-        Num
-    };
-
     // Refrigeration condenser type
     enum class RefrigCondenserType
     {
