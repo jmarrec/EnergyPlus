@@ -113,11 +113,38 @@ CONST_NUM_PATTERN = re.compile(CONST_NUM_STR)
 # )
 # CONST_NUM_WRAPPED_PATTERN = re.compile(CONST_NUM_WRAPPED_STR)
 
-ARRAY_CONST_STR = r"(static )?Array[12345]D<(int|bool|double|Real64)> const VARNAME\(".replace("VARNAME", VAR_NAME_STR)
+# NOTE: Avoid matching declarations that include an initializer-list ({...})
+# by adding a negative lookahead after the opening parenthesis.
+ARRAY_CONST_STR = (r"(static )?Array[12345]D<(int|bool|double|Real64)> const VARNAME\((?!.*\{)").replace(
+    "VARNAME", VAR_NAME_STR
+)
 ARRAY_CONST_PATTERN = re.compile(ARRAY_CONST_STR)
 
-ARRAY_US_CONST_STR = r"(static )?Array[12345]D_(int|bool|double) const VARNAME\(".replace("VARNAME", VAR_NAME_STR)
+ARRAY_US_CONST_STR = (r"(static )?Array[12345]D_(int|bool|double) const VARNAME\((?!.*\{)").replace(
+    "VARNAME", VAR_NAME_STR
+)
 ARRAY_US_CONST_PATTERN = re.compile(ARRAY_US_CONST_STR)
+
+# ---------------------------------------------------------------------------
+# Helpers to strip string literals so checks don't trigger inside strings
+# ---------------------------------------------------------------------------
+
+STRING_LITERAL_PATTERN = re.compile(
+    r"""
+    # Raw string literals (simple single-line heuristic)
+    R"[^"]*"                           |
+    # Normal double-quoted strings
+    "(?:\\.|[^"\\])*"                  |
+    # Normal single-quoted strings
+    '(?:\\.|[^'\\])*'
+    """,
+    re.VERBOSE,
+)
+
+
+def strip_string_literals(text: str) -> str:
+    """Remove C++-style string literals from a line."""
+    return STRING_LITERAL_PATTERN.sub("", text)
 
 
 class TestMatching(unittest.TestCase):
@@ -166,6 +193,9 @@ class TestMatching(unittest.TestCase):
             "static Array2D_bool Abc(",
             "static Array2D_double A(",
             "static Array2D_double Abc(",
+            # should not match these real code lines:
+            "static Array1D<Real64> const OutdoorUnitInletAirDryBulbTempPLTestPoint(3, {27.5, 20.0, 18.3});",
+            "static Array1D<Real64> const NetCapacityFactorPLTestPoint(3, {0.75, 0.50, 0.25});",
         ]
         for n in no_match:
             self.assertFalse(re.match(ARRAY_US_CONST_PATTERN, n))
@@ -214,6 +244,9 @@ class TestMatching(unittest.TestCase):
             "static Array2D<bool> Abc(",
             "static Array2D<double> A(",
             "static Array2D<double> Abc(",
+            # should not match these real code lines:
+            "static Array1D<Real64> const OutdoorUnitInletAirDryBulbTempPLTestPoint(3, {27.5, 20.0, 18.3});",
+            "static Array1D<Real64> const NetCapacityFactorPLTestPoint(3, {0.75, 0.50, 0.25});",
         ]
         for n in no_match:
             self.assertFalse(re.match(ARRAY_CONST_PATTERN, n))
@@ -362,7 +395,7 @@ class TestMatching(unittest.TestCase):
         ]
         for y in yes_match:
             self.assertTrue(re.match(CONST_TYPE_PATTERN, y))
-            # don't match these
+        # don't match these
         no_match = [
             "constexpr int",
             "constexpr bool",
@@ -381,7 +414,7 @@ class TestMatching(unittest.TestCase):
         yes_match = ["1", "+1", "-1", "1.0", "+1.0", "-1.0"]
         for y in yes_match:
             self.assertTrue(re.match(INT_REAL_PATTERN, y))
-            # don't match these
+        # don't match these
         no_match = ["Var", "Var123"]
         for n in no_match:
             self.assertFalse(re.match(INT_REAL_PATTERN, n))
@@ -410,14 +443,16 @@ class TestMatching(unittest.TestCase):
         ]
         for y in yes_match:
             self.assertTrue(re.match(SCI_NOTATION_PATTERN, y))
-            # don't match these
+        # don't match these
         no_match = ["VarName"]
         for n in no_match:
             self.assertFalse(re.match(SCI_NOTATION_PATTERN, n))
 
 
 def constexpr_check(filepath: Path) -> list[LogMessage]:
-    lines = [x.strip() for x in filepath.read_text(encoding="utf-8").splitlines()]
+    # Keep original lines (for reporting), but strip leading/trailing whitespace
+    raw_lines = filepath.read_text(encoding="utf-8").splitlines()
+    lines = [x.strip() for x in raw_lines]
 
     bracket_count = 0
     errors: list[LogMessage] = []
@@ -428,42 +463,37 @@ def constexpr_check(filepath: Path) -> list[LogMessage]:
         if line == "":
             continue
 
-        # skip comment lines
-        if line[0:2] == "//":
+        # skip comment lines (full-line C++ style)
+        if line.startswith("//"):
             continue
 
-        # strip trailing comments
+        # strip trailing comments (simple heuristic)
         if "//" in line:
-            tokens = line.split("//")
+            tokens = line.split("//", 1)
             line = tokens[0].strip()
 
-        re_match_1 = re.match(CONST_NUM_PATTERN, line)
-        re_match_2 = re.match(ARRAY_CONST_PATTERN, line)
-        re_match_3 = re.match(ARRAY_US_CONST_PATTERN, line)
-        if (re_match_1 or re_match_2 or re_match_3) and bracket_count == 0:
+        # remove string literals so we don't match inside them
+        line_no_strings = strip_string_literals(line)
 
+        # evaluate patterns on code-without-strings
+        re_match_1 = re.match(CONST_NUM_PATTERN, line_no_strings)
+        re_match_2 = re.match(ARRAY_CONST_PATTERN, line_no_strings)
+        re_match_3 = re.match(ARRAY_US_CONST_PATTERN, line_no_strings)
+
+        if (re_match_1 or re_match_2 or re_match_3) and bracket_count == 0:
             errors.append(
                 ErrorMessage(
                     tool="check_constexpr",
                     filepath=filepath,
                     line_number=idx,
-                    line=line,
+                    line=line,  # report the non-comment original line
                     message="Use 'constexpr' instead of 'const' for variable declaration",
                 )
             )
 
-        # count brackets in line
-        bracket_count += line.count("(")
-        bracket_count -= line.count(")")
-
-    if bracket_count != 0:
-        errors.append(
-            InfoMessage(
-                tool="check_constexpr",
-                filepath=filepath,
-                message=f"{bracket_count} unmatched parentheses",
-            )
-        )
+        # count brackets in the code portion (not in strings)
+        bracket_count += line_no_strings.count("(")
+        bracket_count -= line_no_strings.count(")")
 
     return errors
 

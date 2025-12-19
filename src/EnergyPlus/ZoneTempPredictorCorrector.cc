@@ -477,8 +477,9 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                         ShowSevereEmptyField(state, eoh, s_ipsc->cAlphaFieldNames(spIdx));
                         ErrorsFound = true;
                         continue;
-                    } else if ((setptType = static_cast<HVAC::SetptType>(getEnumValue(setptTypeNamesUC, s_ipsc->cAlphaArgs(spIdx)))) ==
-                               HVAC::SetptType::Invalid) {
+                    }
+                    if ((setptType = static_cast<HVAC::SetptType>(getEnumValue(setptTypeNamesUC, s_ipsc->cAlphaArgs(spIdx)))) ==
+                        HVAC::SetptType::Invalid) {
                         ShowSevereInvalidKey(state, eoh, s_ipsc->cAlphaFieldNames(spIdx), s_ipsc->cAlphaArgs(spIdx));
                         ErrorsFound = true;
                         continue;
@@ -1143,8 +1144,9 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                         ShowSevereEmptyField(state, eoh, s_ipsc->cAlphaFieldNames(ctIdx));
                         ErrorsFound = true;
                         continue;
-                    } else if ((setptType = static_cast<HVAC::SetptType>(getEnumValue(comfortSetptTypeNamesUC, s_ipsc->cAlphaArgs(ctIdx)))) ==
-                               HVAC::SetptType::Invalid) {
+                    }
+                    if ((setptType = static_cast<HVAC::SetptType>(getEnumValue(comfortSetptTypeNamesUC, s_ipsc->cAlphaArgs(ctIdx)))) ==
+                        HVAC::SetptType::Invalid) {
                         ShowSevereInvalidKey(state, eoh, s_ipsc->cAlphaFieldNames(ctIdx), s_ipsc->cAlphaFieldNames(ctIdx));
                         ErrorsFound = true;
                         continue;
@@ -5686,9 +5688,8 @@ bool VerifyThermostatInZone(EnergyPlusData &state, std::string const &ZoneName) 
     if (state.dataZoneCtrls->NumTempControlledZones > 0) {
         if (Util::FindItemInList(ZoneName, state.dataZoneCtrls->TempControlledZone, &DataZoneControls::ZoneTempControls::ZoneName) > 0) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
     return false;
 }

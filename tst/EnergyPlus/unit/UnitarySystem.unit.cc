@@ -24185,7 +24185,7 @@ TEST_F(EnergyPlusFixture, UnitarySystemModel_MultiSpeedFanWSHP_Test)
 
     std::string const idf_objects = delimited_string({
 
-        "  Version,23.1;",
+        "  Version," + DataStringGlobals::MatchVersion + ";",
 
         "  SimulationControl,",
         "    Yes,                     !- Do Zone Sizing Calculation",

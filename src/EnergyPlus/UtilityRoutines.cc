@@ -63,21 +63,16 @@ extern "C" {
 // EnergyPlus Headers
 #include <EnergyPlus/BranchInputManager.hh>
 #include <EnergyPlus/BranchNodeConnections.hh>
-// #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataErrorTracking.hh>
-// #include <EnergyPlus/DataGlobalConstants.hh>
 #include <EnergyPlus/DataReportingFlags.hh>
 #include <EnergyPlus/DataStringGlobals.hh>
 #include <EnergyPlus/DataSystemVariables.hh>
-// #include <EnergyPlus/DataTimings.hh>
 #include <EnergyPlus/DaylightingManager.hh>
-// #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/ExternalInterface.hh>
 #include <EnergyPlus/FileSystem.hh>
 #include <EnergyPlus/General.hh>
 #include <EnergyPlus/GeneralRoutines.hh>
-// #include <EnergyPlus/IOFiles.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutputReports.hh>
 #include <EnergyPlus/Plant/PlantManager.hh>
@@ -88,6 +83,7 @@ extern "C" {
 #include <EnergyPlus/SystemReports.hh>
 #include <EnergyPlus/Timer.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
+
 // Third Party Headers
 #include <fast_float/fast_float.h>
 
@@ -130,9 +126,8 @@ namespace Util {
         size_t const back_trim = String.find_last_not_of(' ');
         if (front_trim == std::string::npos || back_trim == std::string::npos) {
             return rProcessNumber;
-        } else {
-            String = String.substr(front_trim, back_trim - front_trim + 1);
         }
+        String = String.substr(front_trim, back_trim - front_trim + 1);
 
         auto result = fast_float::from_chars(String.data(), String.data() + String.size(), rProcessNumber); // (AUTO_OK_OBJ)
         size_t remaining_size = result.ptr - String.data();
@@ -154,7 +149,8 @@ namespace Util {
                 std::string str{String};
                 std::replace_if(str.begin(), str.end(), [](const char c) { return c == 'D' || c == 'd'; }, 'e');
                 return ProcessNumber(str, ErrorFlag);
-            } else if (*result.ptr == 'e' || *result.ptr == 'E') {
+            }
+            if (*result.ptr == 'e' || *result.ptr == 'E') {
                 ++result.ptr;
                 remaining_size = result.ptr - String.data();
                 for (size_t i = remaining_size; i < String.size(); ++i, ++result.ptr) {
@@ -246,7 +242,8 @@ namespace Util {
             if (equali(String, ListOfItems(Probe))) {
                 Found = true;
                 break;
-            } else if (lessthani(String, ListOfItems(Probe))) {
+            }
+            if (lessthani(String, ListOfItems(Probe))) {
                 UBnd = Probe;
             } else {
                 LBnd = Probe;
@@ -321,7 +318,7 @@ namespace Util {
         //       DATE WRITTEN   February 2000
 
         // PURPOSE OF THIS SUBROUTINE:
-        // This subroutine verifys that a new name can be added to the
+        // This subroutine verifies that a new name can be added to the
         // list of names for this item (i.e., that there isn't one of that
         // name already and that this name is not blank).
 
@@ -357,7 +354,7 @@ namespace Util {
         //       DATE WRITTEN   February 2000
 
         // PURPOSE OF THIS SUBROUTINE:
-        // This subroutine verifys that a new name can be added to the
+        // This subroutine verifies that a new name can be added to the
         // list of names for this item (i.e., that there isn't one of that
         // name already and that this name is not blank).
 

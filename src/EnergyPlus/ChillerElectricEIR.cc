@@ -2612,9 +2612,8 @@ bool ElectricEIRChillerSpecs::thermosiphonDisabled(EnergyPlusData &state)
             return false;
         }
         return true;
-    } else {
-        return true;
     }
+    return true;
 }
 
 } // namespace EnergyPlus::ChillerElectricEIR

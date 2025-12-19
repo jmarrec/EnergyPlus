@@ -341,7 +341,8 @@ namespace PlantPipingSystemsManager {
                         }
                     }
 
-                    thisDomain.HeatFluxWeightingFactor = thisDomain.TotalEnergyWeightedHeatFlux / thisDomain.TotalEnergyUniformHeatFlux;
+                    thisDomain.HeatFluxWeightingFactor =
+                        calcFluxWeightingFactor(thisDomain.TotalEnergyWeightedHeatFlux, thisDomain.TotalEnergyUniformHeatFlux);
                     thisDomain.TotalEnergyWeightedHeatFlux = 0.0;
 
                     // Finally, adjust the weighted heat flux so that energy balances
@@ -390,6 +391,18 @@ namespace PlantPipingSystemsManager {
             }
             state.dataPlantPipingSysMgr->WriteEIOFlag = false;
         }
+    }
+
+    Real64 calcFluxWeightingFactor(const Real64 weightedHeatFlux, const Real64 uniformHeatFlux)
+    {
+        Real64 returnValue;
+        Real64 constexpr tolerance = 1.0e-6;
+        if (std::abs(uniformHeatFlux) <= tolerance) {
+            returnValue = 1.0;
+        } else {
+            returnValue = weightedHeatFlux / uniformHeatFlux;
+        }
+        return returnValue;
     }
 
     void GetPipingSystemsAndGroundDomainsInput(EnergyPlusData &state)
@@ -1453,9 +1466,8 @@ namespace PlantPipingSystemsManager {
 
         if ((MaterialThickness <= 0.0) || (state.dataMaterial->materials(MaterialNum)->ROnly)) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     void SiteGroundDomainNoMassMatError(EnergyPlusData &state,
@@ -3939,13 +3951,15 @@ namespace PlantPipingSystemsManager {
 
         if (dir == RegionType::XDirection) {
             return this->Mesh.X.RegionMeshCount;
-        } else if (dir == RegionType::YDirection) {
-            return this->Mesh.Y.RegionMeshCount;
-        } else if (dir == RegionType::ZDirection) {
-            return this->Mesh.Z.RegionMeshCount;
-        } else {
-            return 1; // it's either a mesh region (X,Y,ZDirection), or it is some form of partition -- so 1
         }
+        if (dir == RegionType::YDirection) {
+            return this->Mesh.Y.RegionMeshCount;
+        }
+        if (dir == RegionType::ZDirection) {
+            return this->Mesh.Z.RegionMeshCount;
+        }
+        return 1; // it's either a mesh region (X,Y,ZDirection), or it is some form of partition -- so 1
+
         return 0;
     }
 

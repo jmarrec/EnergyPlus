@@ -4320,8 +4320,9 @@ namespace UnitarySystems {
         if (!AirLoopFound && !ZoneEquipmentFound && !OASysFound) {
             // Unsuccessful attempt to get all input data.
             return;
-        } else if (ZoneEquipmentFound || OASysFound ||
-                   (AirLoopFound && (this->m_ZoneInletNode > 0 || this->m_ControlType == UnitarySysCtrlType::Setpoint))) {
+        }
+        if (ZoneEquipmentFound || OASysFound ||
+            (AirLoopFound && (this->m_ZoneInletNode > 0 || this->m_ControlType == UnitarySysCtrlType::Setpoint))) {
             this->m_OKToPrintSizing = true;
             this->m_ThisSysInputShouldBeGotten = false;
         }
@@ -11874,38 +11875,36 @@ namespace UnitarySystems {
             this->m_SuppHeatingCycRatio = 1.0;
             this->m_SuppHeatingSpeedNum = this->m_NumOfSpeedSuppHeating;
             return;
+        }
+        if (this->m_SuppHeatingSpeedNum > 1.0) {
+            auto f = [&state, this, CycRatio, fanOp, SuppHeatLoad](Real64 const SpeedRatio) {
+                Real64 QActual;
+                int CoilIndex = this->m_SuppHeatCoilIndex;
+                int SpeedNum = this->m_SuppHeatingSpeedNum;
+                HeatingCoils::CalcMultiStageElectricHeatingCoil(state, CoilIndex, SpeedRatio, CycRatio, SpeedNum, fanOp, QActual, true);
+                return SuppHeatLoad - QActual;
+            };
+
+            General::SolveRoot(state, Acc, MaxIte, SolFla, SpeedRatio, f, 0.0, 1.0);
+            this->m_SuppHeatingCycRatio = CycRatio;
+            this->m_SuppHeatingSpeedRatio = SpeedRatio;
+            this->m_SuppHeatPartLoadFrac = SpeedRatio;
+            PartLoadFrac = SpeedRatio;
         } else {
+            SpeedRatio = 0.0;
+            this->m_SuppHeatingSpeedRatio = SpeedRatio;
+            auto f = [&state, this, SpeedRatio, fanOp, SuppHeatLoad](Real64 const CycRatio) {
+                Real64 QActual;
+                int CoilIndex = this->m_SuppHeatCoilIndex;
+                int SpeedNum = this->m_SuppHeatingSpeedNum;
+                HeatingCoils::CalcMultiStageElectricHeatingCoil(state, CoilIndex, SpeedRatio, CycRatio, SpeedNum, fanOp, QActual, true);
+                return SuppHeatLoad - QActual;
+            };
 
-            if (this->m_SuppHeatingSpeedNum > 1.0) {
-                auto f = [&state, this, CycRatio, fanOp, SuppHeatLoad](Real64 const SpeedRatio) {
-                    Real64 QActual;
-                    int CoilIndex = this->m_SuppHeatCoilIndex;
-                    int SpeedNum = this->m_SuppHeatingSpeedNum;
-                    HeatingCoils::CalcMultiStageElectricHeatingCoil(state, CoilIndex, SpeedRatio, CycRatio, SpeedNum, fanOp, QActual, true);
-                    return SuppHeatLoad - QActual;
-                };
-
-                General::SolveRoot(state, Acc, MaxIte, SolFla, SpeedRatio, f, 0.0, 1.0);
-                this->m_SuppHeatingCycRatio = CycRatio;
-                this->m_SuppHeatingSpeedRatio = SpeedRatio;
-                this->m_SuppHeatPartLoadFrac = SpeedRatio;
-                PartLoadFrac = SpeedRatio;
-            } else {
-                SpeedRatio = 0.0;
-                this->m_SuppHeatingSpeedRatio = SpeedRatio;
-                auto f = [&state, this, SpeedRatio, fanOp, SuppHeatLoad](Real64 const CycRatio) {
-                    Real64 QActual;
-                    int CoilIndex = this->m_SuppHeatCoilIndex;
-                    int SpeedNum = this->m_SuppHeatingSpeedNum;
-                    HeatingCoils::CalcMultiStageElectricHeatingCoil(state, CoilIndex, SpeedRatio, CycRatio, SpeedNum, fanOp, QActual, true);
-                    return SuppHeatLoad - QActual;
-                };
-
-                General::SolveRoot(state, Acc, MaxIte, SolFla, CycRatio, f, 0.0, 1.0);
-                this->m_SuppHeatingCycRatio = CycRatio;
-                this->m_SuppHeatPartLoadFrac = CycRatio;
-                PartLoadFrac = CycRatio;
-            }
+            General::SolveRoot(state, Acc, MaxIte, SolFla, CycRatio, f, 0.0, 1.0);
+            this->m_SuppHeatingCycRatio = CycRatio;
+            this->m_SuppHeatPartLoadFrac = CycRatio;
+            PartLoadFrac = CycRatio;
         }
     }
 
@@ -14131,6 +14130,7 @@ namespace UnitarySystems {
 
                         if (OutletHumRatLS > DesOutHumRat) {
                             CycRatio = 1.0;
+                            this->m_CoolingSpeedNum = std::max(1, this->m_CoolingSpeedNum);
 
                             for (int speedNum = this->m_CoolingSpeedNum; speedNum <= this->m_NumOfSpeedCooling; ++speedNum) {
                                 VariableSpeedCoils::SimVariableSpeedCoils(state,
@@ -14332,7 +14332,8 @@ namespace UnitarySystems {
                     ++this->warnIndex.m_SensPLRIter;
                     ShowWarningError(state,
                                      format("{} - Iteration limit exceeded calculating part-load ratio for unit = {}", this->UnitType, this->Name));
-                    ShowContinueError(state, format("Estimated part-load ratio  = {:.3R}", (ReqOutput / FullOutput)));
+                    ShowContinueError(state,
+                                      format("Estimated part-load ratio  = {:.3R}", (FullOutput != 0 ? (ReqOutput / FullOutput) : PartLoadFrac)));
                     ShowContinueError(state, format("Calculated part-load ratio = {:.3R}", PartLoadFrac));
                     ShowContinueErrorTimeStamp(state, "The calculated part-load ratio will be used and the simulation continues. Occurrence info:");
                 } else {
@@ -14346,7 +14347,9 @@ namespace UnitarySystems {
                 }
             }
         } else if (SolFla == -2) {
-            PartLoadFrac = ReqOutput / FullOutput;
+            if (FullOutput != 0) {
+                PartLoadFrac = ReqOutput / FullOutput;
+            }
             if (!state.dataGlobal->WarmupFlag) {
                 if (this->warnIndex.m_SensPLRFail < 1) {
                     ++this->warnIndex.m_SensPLRFail;
@@ -14374,7 +14377,8 @@ namespace UnitarySystems {
                     ++this->warnIndex.m_LatPLRIter;
                     ShowWarningError(
                         state, format("{} - Iteration limit exceeded calculating latent part-load ratio for unit = {}", this->UnitType, this->Name));
-                    ShowContinueError(state, format("Estimated part-load ratio   = {:.3R}", (ReqOutput / FullOutput)));
+                    ShowContinueError(state,
+                                      format("Estimated part-load ratio  = {:.3R}", (FullOutput != 0 ? (ReqOutput / FullOutput) : PartLoadFrac)));
                     ShowContinueError(state, format("Calculated part-load ratio = {:.3R}", PartLoadFrac));
                     ShowContinueErrorTimeStamp(state, "The calculated part-load ratio will be used and the simulation continues. Occurrence info:");
                 }
@@ -16738,11 +16742,10 @@ namespace UnitarySystems {
             HeatingCoils::SimulateHeatingCoilComponents(
                 state, thisSys.m_HeatingCoilName, FirstHVACIteration, HeatingLoad, thisSys.m_HeatingCoilIndex, _, _, fanOp, PartLoadFrac);
             return desTemp - state.dataLoopNodes->Node(thisSys.HeatCoilOutletNodeNum).Temp;
-        } else {
-            HeatingCoils::SimulateHeatingCoilComponents(
-                state, thisSys.m_SuppHeatCoilName, FirstHVACIteration, HeatingLoad, thisSys.m_SuppHeatCoilIndex, _, true, fanOp, PartLoadFrac);
-            return desTemp - state.dataLoopNodes->Node(thisSys.SuppCoilOutletNodeNum).Temp;
         }
+        HeatingCoils::SimulateHeatingCoilComponents(
+            state, thisSys.m_SuppHeatCoilName, FirstHVACIteration, HeatingLoad, thisSys.m_SuppHeatCoilIndex, _, true, fanOp, PartLoadFrac);
+        return desTemp - state.dataLoopNodes->Node(thisSys.SuppCoilOutletNodeNum).Temp;
     }
 
     Real64 UnitarySys::coolWatertoAirHPTempResidual(EnergyPlusData &state,
@@ -16909,13 +16912,11 @@ namespace UnitarySystems {
             // Calculate residual based on output magnitude
             if (std::abs(QZnReq) <= 100.0) {
                 return (SensOutput - QZnReq) / 100.0;
-            } else {
-                return (SensOutput - QZnReq) / QZnReq;
             }
-        } else {
-            // Calculate residual based on outlet temperature
-            return (state.dataLoopNodes->Node(thisSys.AirOutNode).Temp - SATempTarget) * 10.0;
-        }
+            return (SensOutput - QZnReq) / QZnReq;
+
+        } // Calculate residual based on outlet temperature
+        return (state.dataLoopNodes->Node(thisSys.AirOutNode).Temp - SATempTarget) * 10.0;
     }
 
     void UnitarySys::setSpeedVariables(EnergyPlusData &state,

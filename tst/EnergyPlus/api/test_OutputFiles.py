@@ -123,7 +123,7 @@ class TestAPIFlushOutput(unittest.TestCase):
         """
 
         idf_content = """
-  Version,9.0;
+  Version," + DataStringGlobals::MatchVersion + ";"
 
   Timestep,4;
 

@@ -1194,7 +1194,8 @@ namespace Sched {
                     ShowSevereCustomAudit(state, eoh, "has missing days in its schedule pointers");
                     ErrorsFound = true;
                     break;
-                } else if (daysInYear[iDay] > 1) {
+                }
+                if (daysInYear[iDay] > 1) {
                     ShowSevereCustomAudit(state, eoh, "has overlapping days in its schedule pointers");
                     ErrorsFound = true;
                     break;
@@ -2906,7 +2907,8 @@ namespace Sched {
             ShowContinueError(state, format("Occurred in Day Schedule={}", DayScheduleName));
             ErrorsFound = true;
             return;
-        } else if (Pos == 0) {
+        }
+        if (Pos == 0) {
             RetHH = 0;
         } else {
             bool error = false;
@@ -2974,9 +2976,8 @@ namespace Sched {
     {
         if (minute != 0) {
             return (minute % numMinutesPerTimestep == 0);
-        } else {
-            return true;
         }
+        return true;
     }
 
     void ProcessForDayTypes(EnergyPlusData &state,

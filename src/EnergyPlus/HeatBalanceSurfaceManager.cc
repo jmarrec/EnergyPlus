@@ -6816,7 +6816,7 @@ void ReportSurfaceHeatBalance(EnergyPlusData &state)
         }
     }
 
-    if (state.dataGlobal->ZoneSizingCalc && state.dataGlobal->CompLoadReportIsReq) {
+    if (state.dataGlobal->ZoneSizingCalc && state.dataGlobal->CompLoadReportIsReq && !state.dataGlobal->WarmupFlag) {
         // This is by surface, so it works for both space and zone component loads
         int TimeStepInDay = (state.dataGlobal->HourOfDay - 1) * state.dataGlobal->TimeStepsInHour + state.dataGlobal->TimeStep;
         auto &surfCLDayTS = state.dataOutRptTab->surfCompLoads[state.dataSize->CurOverallSimDay - 1].ts[TimeStepInDay - 1];
@@ -7716,15 +7716,13 @@ Real64 GetQdotConvOutPerArea(EnergyPlusData &state, int const SurfNum)
     int OPtr = surface.OSCMPtr;
     if (surface.OSCMPtr > 0) { // Optr is set above in this case, use OSCM boundary data
         return -state.dataSurface->OSCM(OPtr).HConv * (state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum) - state.dataSurface->OSCM(OPtr).TConv);
-    } else {
-        if (state.dataEnvrn->IsRain) {
-            return -state.dataHeatBalSurf->SurfHConvExt(SurfNum) *
-                   (state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum) - state.dataSurface->SurfOutWetBulbTemp(SurfNum));
-        } else {
-            return -state.dataHeatBalSurf->SurfHConvExt(SurfNum) *
-                   (state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum) - state.dataSurface->SurfOutDryBulbTemp(SurfNum));
-        }
     }
+    if (state.dataEnvrn->IsRain) {
+        return -state.dataHeatBalSurf->SurfHConvExt(SurfNum) *
+               (state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum) - state.dataSurface->SurfOutWetBulbTemp(SurfNum));
+    }
+    return -state.dataHeatBalSurf->SurfHConvExt(SurfNum) *
+           (state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum) - state.dataSurface->SurfOutDryBulbTemp(SurfNum));
 }
 
 void CalcHeatBalanceInsideSurf(EnergyPlusData &state,
@@ -9721,24 +9719,22 @@ void CalcOutsideSurfTemp(EnergyPlusData &state,
                               "This is not currently allowed because the heat balance equations do not currently accommodate this combination.");
             ErrorFlag = true;
             return;
-
-        } else {
-            Real64 const RadSysDiv(1.0 / (construct.CTFOutside[0] + state.dataHeatBalSurf->SurfHConvExt(SurfNum) +
-                                          state.dataHeatBalSurf->SurfHAirExt(SurfNum) + state.dataHeatBalSurf->SurfHSkyExt(SurfNum) +
-                                          state.dataHeatBalSurf->SurfHGrdExt(SurfNum) + state.dataHeatBalSurf->SurfHSrdSurfExt(SurfNum) +
-                                          state.dataHeatBalSurf->SurfHSrdSurfExt(SurfNum)));
-
-            state.dataHeatBalFanSys->RadSysToHBConstCoef(SurfNum) =
-                (-state.dataHeatBalSurf->SurfCTFConstOutPart(SurfNum) + state.dataHeatBalSurf->SurfOpaqQRadSWOutAbs(SurfNum) +
-                 state.dataHeatBalSurf->SurfHSrdSurfExt(SurfNum) * TSrdSurfs +
-                 (state.dataHeatBalSurf->SurfHConvExt(SurfNum) + state.dataHeatBalSurf->SurfHAirExt(SurfNum)) * TempExt +
-                 state.dataHeatBalSurf->SurfHSkyExt(SurfNum) * TSky + state.dataHeatBalSurf->SurfHGrdExt(SurfNum) * TGround) *
-                RadSysDiv; // ODB used to approx ground surface temp
-
-            state.dataHeatBalFanSys->RadSysToHBTinCoef(SurfNum) = construct.CTFCross[0] * RadSysDiv;
-
-            state.dataHeatBalFanSys->RadSysToHBQsrcCoef(SurfNum) = construct.CTFSourceOut[0] * RadSysDiv;
         }
+        Real64 const RadSysDiv(1.0 /
+                               (construct.CTFOutside[0] + state.dataHeatBalSurf->SurfHConvExt(SurfNum) + state.dataHeatBalSurf->SurfHAirExt(SurfNum) +
+                                state.dataHeatBalSurf->SurfHSkyExt(SurfNum) + state.dataHeatBalSurf->SurfHGrdExt(SurfNum) +
+                                state.dataHeatBalSurf->SurfHSrdSurfExt(SurfNum) + state.dataHeatBalSurf->SurfHSrdSurfExt(SurfNum)));
+
+        state.dataHeatBalFanSys->RadSysToHBConstCoef(SurfNum) =
+            (-state.dataHeatBalSurf->SurfCTFConstOutPart(SurfNum) + state.dataHeatBalSurf->SurfOpaqQRadSWOutAbs(SurfNum) +
+             state.dataHeatBalSurf->SurfHSrdSurfExt(SurfNum) * TSrdSurfs +
+             (state.dataHeatBalSurf->SurfHConvExt(SurfNum) + state.dataHeatBalSurf->SurfHAirExt(SurfNum)) * TempExt +
+             state.dataHeatBalSurf->SurfHSkyExt(SurfNum) * TSky + state.dataHeatBalSurf->SurfHGrdExt(SurfNum) * TGround) *
+            RadSysDiv; // ODB used to approx ground surface temp
+
+        state.dataHeatBalFanSys->RadSysToHBTinCoef(SurfNum) = construct.CTFCross[0] * RadSysDiv;
+
+        state.dataHeatBalFanSys->RadSysToHBQsrcCoef(SurfNum) = construct.CTFSourceOut[0] * RadSysDiv;
     }
 }
 
@@ -9863,11 +9859,11 @@ Real64 GetSurfIncidentSolarMultiplier(EnergyPlusData &state, int SurfNum)
 {
     if (!state.dataSurface->Surface(SurfNum).hasIncSolMultiplier) {
         return 1.0;
-    } else if (state.dataSurface->SurfIncSolMultiplier(SurfNum).sched != nullptr) {
-        return state.dataSurface->SurfIncSolMultiplier(SurfNum).sched->getCurrentVal() * state.dataSurface->SurfIncSolMultiplier(SurfNum).Scaler;
-    } else {
-        return state.dataSurface->SurfIncSolMultiplier(SurfNum).Scaler;
     }
+    if (state.dataSurface->SurfIncSolMultiplier(SurfNum).sched != nullptr) {
+        return state.dataSurface->SurfIncSolMultiplier(SurfNum).sched->getCurrentVal() * state.dataSurface->SurfIncSolMultiplier(SurfNum).Scaler;
+    }
+    return state.dataSurface->SurfIncSolMultiplier(SurfNum).Scaler;
 }
 
 void InitSurfacePropertyViewFactors(EnergyPlusData &state)

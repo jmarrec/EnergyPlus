@@ -2081,8 +2081,9 @@ void SetUpCompSets(EnergyPlusData &state,
             if (InletNode != state.dataBranchNodeConnections->CompSets(Count).InletNodeName) {
                 continue;
                 // If parent type is undefined then no error
-            } else if ((ParentTypeEnum == DataLoopNode::ConnectionObjectType::Undefined) ||
-                       (state.dataBranchNodeConnections->CompSets(Count).ParentObjectType == DataLoopNode::ConnectionObjectType::Undefined)) {
+            }
+            if ((ParentTypeEnum == DataLoopNode::ConnectionObjectType::Undefined) ||
+                (state.dataBranchNodeConnections->CompSets(Count).ParentObjectType == DataLoopNode::ConnectionObjectType::Undefined)) {
                 // If node name is undefined then no error
             } else if (InletNode != undefined) {
                 // If the matching node name does not belong to the parent or child object, then error
@@ -2132,8 +2133,9 @@ void SetUpCompSets(EnergyPlusData &state,
             if (OutletNode != state.dataBranchNodeConnections->CompSets(Count).OutletNodeName) {
                 continue;
                 // If parent type is undefined then no error
-            } else if ((ParentTypeEnum == DataLoopNode::ConnectionObjectType::Undefined) ||
-                       (state.dataBranchNodeConnections->CompSets(Count).ParentObjectType == DataLoopNode::ConnectionObjectType::Undefined)) {
+            }
+            if ((ParentTypeEnum == DataLoopNode::ConnectionObjectType::Undefined) ||
+                (state.dataBranchNodeConnections->CompSets(Count).ParentObjectType == DataLoopNode::ConnectionObjectType::Undefined)) {
                 // If node name is undefined then no error
             } else if (OutletNode != undefined) {
                 if ((ParentTypeEnum == state.dataBranchNodeConnections->CompSets(Count).ComponentObjectType) &&
