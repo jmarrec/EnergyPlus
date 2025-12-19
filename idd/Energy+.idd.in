@@ -48979,13 +48979,13 @@ AirTerminal:SingleDuct:ParallelPIU:Reheat,
        \default 37.7
        \note Only used if Heating Control Type is Modulated
        \note Used to determine end of third stage heating
-  A13, \field Backdraft Damper Leakage Fraction Curve Name
+  A12, \field Backdraft Damper Leakage Fraction Curve Name
        \type object-list
        \object-list UnivariateFunctions
        \note Backdraft damper leakage fraction is the ratio of mass leakage flow rate to primary air flow rate
        \note at a constant static pressure setpoint. This curve should describe the ratio as a function primary
        \note air flow fraction (ratio of primary flow fraction to maximum nominal primary air flow rate).
-  A14; \field Backdraft Damper Leakage Zone Name
+  A13; \field Backdraft Damper Leakage Zone Name
        \note Name of a zone that will be impacted by the backdraft damper leakage.
        \type object-list
        \object-list ZoneNames
