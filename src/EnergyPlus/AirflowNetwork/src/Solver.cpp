@@ -9049,7 +9049,7 @@ namespace AirflowNetwork {
         }
 
         for (AirLoopNum = 1; AirLoopNum <= NumPrimaryAirSys; ++AirLoopNum) {
-            if (DisSysNumOfCVFs == 0) {
+            if (DisSysNumOfCVFs == 0 || !distribution_simulated) {
                 continue;
             }
             for (FanNum = 1; FanNum <= DisSysNumOfCVFs; ++FanNum) {
@@ -9378,7 +9378,7 @@ namespace AirflowNetwork {
 
         // Rewrite AirflowNetwork airflow rate
         for (AirLoopNum = 1; AirLoopNum <= NumPrimaryAirSys; ++AirLoopNum) {
-            if (DisSysNumOfCVFs == 0) {
+            if (DisSysNumOfCVFs == 0 || !distribution_simulated) {
                 continue;
             }
             for (FanNum = 1; FanNum <= DisSysNumOfCVFs; ++FanNum) {
