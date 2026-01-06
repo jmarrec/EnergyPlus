@@ -478,9 +478,7 @@ namespace WindowComplexManager {
         // PURPOSE OF THIS SUBROUTINE:
         // Check if there are new states available for complex fenestration and performs proper initialization
 
-        int NumOfStates; // number of states for current surface
         bool StateFound; // variable to indicate if state has been found
-        int i;           // Local counter
         int CurrentCFSState;
 
         StateFound = false;
@@ -491,8 +489,8 @@ namespace WindowComplexManager {
 
             // If construction number changed then take new state
             // First search for existing states. Maybe state is already added in previous timestep
-            NumOfStates = state.dataSurface->SurfaceWindow(iSurf).ComplexFen.NumStates;
-            for (i = 1; i <= NumOfStates; ++i) {
+            int NumOfStates = state.dataSurface->SurfaceWindow(iSurf).ComplexFen.NumStates; // number of states for current surface
+            for (int i = 1; i <= NumOfStates; ++i) {
                 if (state.dataSurface->Surface(iSurf).Construction == state.dataSurface->SurfaceWindow(iSurf).ComplexFen.State(i).Konst) {
                     StateFound = true;
                     CurrentCFSState = i;
@@ -747,7 +745,6 @@ namespace WindowComplexManager {
         using namespace Vectors;
 
         int IConst; // State construction number
-        int I;      // general purpose index--Back surface
         int J;      // general purpose index--ray
         int JRay;   // ray index number
         Real64 Theta;
@@ -760,11 +757,9 @@ namespace WindowComplexManager {
         Real64 Sum1;             // general purpose sum
         Real64 Sum2;             // general purpose sum
         int IBm;                 // index of beam ray in incoming basis
-        int BkIncRay;            // index of sun dir in back incidence basis
         bool RegWindFnd;         // flag for regular exterior back surf window
         Array1D_int RegWinIndex; // bk surf nos of reg windows
         int NRegWin(0);          // no reg windows found as back surfaces
-        int KRegWin(0);          // index of reg window as back surface
         Real64 Refl;             // temporary reflectance
         Array1D<Real64> Absorb;  // temporary layer absorptance
 
@@ -783,7 +778,7 @@ namespace WindowComplexManager {
             State.WinDirSpecTrans(Hour, TS) = 0.0;
             State.WinBmFtAbs(Hour, TS, {1, State.NLayers}) = 0.0;
         } else {
-            for (I = 1; I <= Window.NBkSurf; ++I) { // Back surface loop
+            for (int I = 1; I <= Window.NBkSurf; ++I) { // Back surface loop
                 Sum1 = 0.0;
                 for (J = 1; J <= Geom.NSurfInt(I); ++J) { // Ray loop
                     Sum1 +=
@@ -873,14 +868,14 @@ namespace WindowComplexManager {
         if (RegWindFnd) {
             Absorb.allocate(State.NLayers);
             SunDir = state.dataBSDFWindow->SUNCOSTS(TS, Hour);
-            BkIncRay = FindInBasis(state,
-                                   SunDir,
-                                   RayIdentificationType::Back_Incident,
-                                   ISurf,
-                                   IState,
-                                   state.dataBSDFWindow->ComplexWind(ISurf).Geom(IState).Trn,
-                                   Theta,
-                                   Phi);
+            int BkIncRay = FindInBasis(state,
+                                       SunDir,
+                                       RayIdentificationType::Back_Incident,
+                                       ISurf,
+                                       IState,
+                                       state.dataBSDFWindow->ComplexWind(ISurf).Geom(IState).Trn,
+                                       Theta,
+                                       Phi); // index of sun dir in back incidence basis
             if (BkIncRay > 0) {
                 // Here calculate the back incidence properties for the solar ray
                 // this does not say whether or not the ray can pass through the
@@ -900,7 +895,7 @@ namespace WindowComplexManager {
                     Absorb(L) = 0.0;
                 }
             }
-            for (KRegWin = 1; KRegWin <= NRegWin; ++KRegWin) {
+            for (int KRegWin = 1; KRegWin <= NRegWin; ++KRegWin) { // index of reg window as back surface
                 KBkSurf = RegWinIndex(KRegWin);
                 State.BkSurf(KBkSurf).WinDHBkRefl(Hour, TS) = Refl;
                 for (L = 1; L <= State.NLayers; ++L) {
@@ -993,12 +988,7 @@ namespace WindowComplexManager {
         // PURPOSE OF THIS SUBROUTINE:
         // Set up a basis from the matrix information pointed to in Construction by ICons
 
-        int I(0);               // general purpose index
-        int J(0);               // general purpose index
         int NThetas(0);         // Current number of theta values
-        int NumElem(0);         // Number of elements in current basis
-        int ElemNo(0);          // Current basis element number
-        int MaxNPhis;           // Max no of NPhis for any theta
         Real64 Theta(0.0);      // Current theta value
         Real64 Phi(0.0);        // Current phi value
         Real64 DTheta(0.0);     // Increment for theta value (Window6 type input)
@@ -1028,6 +1018,9 @@ namespace WindowComplexManager {
         Basis.SolAng.allocate(state.dataConstruction->Construct(IConst).BSDFInput.NBasis);
         if (state.dataConstruction->Construct(IConst).BSDFInput.BasisType == DataBSDFWindow::Basis::WINDOW) {
             //   WINDOW6 Basis
+            int I(0);       // general purpose index
+            int NumElem(0); // Number of elements in current basis
+            int ElemNo(0);  // Current basis element number
             Basis.BasisType = DataBSDFWindow::Basis::WINDOW;
             if (state.dataConstruction->Construct(IConst).BSDFInput.BasisSymmetryType == DataBSDFWindow::BasisSymmetry::None) {
                 // No basis symmetry
@@ -1044,7 +1037,7 @@ namespace WindowComplexManager {
                     }
                     NumElem += NPhis(I);
                 }
-                MaxNPhis = maxval(NPhis({1, NThetas}));
+                int MaxNPhis = maxval(NPhis({1, NThetas}));     // Max no of NPhis for any theta
                 Basis.Phis.allocate(NThetas + 1, MaxNPhis + 1); // N+1st Phi point (not basis element) at 2Pi
                 Basis.BasisIndex.allocate(MaxNPhis, NThetas + 1);
                 Basis.Phis = 0.0;                                                            // Initialize so undefined elements will contain zero
@@ -1088,7 +1081,7 @@ namespace WindowComplexManager {
                     }
                     DTheta = UpperTheta - LowerTheta;
                     Basis.Phis(I, NPhis(I) + 1) = 2.0 * Constant::Pi; // Non-basis-element Phi point for table searching in Phi
-                    for (J = 1; J <= NPhis(I); ++J) {
+                    for (int J = 1; J <= NPhis(I); ++J) {
                         ++ElemNo;
                         Basis.BasisIndex(J, I) = ElemNo;
                         Phi = (J - 1) * DPhi;
@@ -2281,11 +2274,8 @@ namespace WindowComplexManager {
         // INTEGER, INTENT(IN)      ::  IWind  !window index in window list
 
         int ITheta;   // Table index of Theta
-        int IPhi;     // Table index of Phi, given ITheta
         int IThDn;    // Theta lower table index
         int IThUp;    // Theta upper table index
-        int IPhDn;    // Phi lower table index
-        int IPhUp;    // Phi upper table index
         Real64 Gamma; // Gamma (tilt) angle of window
         Real64 Alpha; // Alpha (azimuth) angle of window
         Real64 DotProd;
@@ -2312,6 +2302,9 @@ namespace WindowComplexManager {
         }
         if (Basis.BasisSymmetryType == DataBSDFWindow::BasisSymmetry::None) {
             // Search the basis thetas
+            int IPhi;  // Table index of Phi, given ITheta
+            int IPhDn; // Phi lower table index
+            int IPhUp; // Phi upper table index
             if (Theta <= 0.0) {
                 // Special case, Theta = 0.; this is always the first basis element
                 RayIndex = 1;

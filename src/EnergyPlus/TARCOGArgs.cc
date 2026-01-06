@@ -580,7 +580,6 @@ void PrepVariablesISO15099(int const nlayer,
     Real64 Fsky;
     Real64 Fground;
     Real64 e0;
-    std::string a;
 
     //! Scalars:
     ShadeEmisRatioOut = 1.0;

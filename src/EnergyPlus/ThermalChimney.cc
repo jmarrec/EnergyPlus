@@ -115,11 +115,9 @@ namespace ThermalChimney {
         // This driver manages the calls to all of
         // the other drivers and simulation algorithms.
 
-        // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        bool ErrorsFound(false);
-
         // Obtains and Allocates heat balance related parameters from input file
         if (state.dataThermalChimneys->ThermalChimneyGetInputFlag) {
+            bool ErrorsFound(false);
             GetThermalChimney(state, ErrorsFound);
             state.dataThermalChimneys->ThermalChimneyGetInputFlag = false;
         }
@@ -158,7 +156,6 @@ namespace ThermalChimney {
         int TCZoneNum1; // Thermal chimney zone counter
         int IOStat;
         int Loop;
-        int Loop1;
         auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
 
         // Following used for reporting
@@ -624,6 +621,7 @@ namespace ThermalChimney {
 
         // Check to make sure there is only one thermal chimney statement per zone
         if (state.dataThermalChimneys->TotThermalChimney > 1) {
+            int Loop1;
             for (Loop = 1; Loop <= state.dataThermalChimneys->TotThermalChimney; ++Loop) {
 
                 if (state.dataThermalChimneys->TotThermalChimney >= (Loop + 1)) {

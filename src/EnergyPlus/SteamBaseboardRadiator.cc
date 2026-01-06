@@ -1111,7 +1111,6 @@ namespace SteamBaseboardRadiator {
                     state.dataSize->DataZoneNumber = state.dataSteamBaseboardRadiator->SteamBaseboard(BaseboardNum).ZonePtr;
                     int SizingMethod = HeatingCapacitySizing; // Integer representation of sizing method name (HeatingCapacitySizing)
                     int FieldNum = 1;                         // IDD numeric field number where input field description is found
-                    bool PrintFlag = false;                   // TRUE when sizing information is reported in the eio file
                     std::string SizingString = state.dataSteamBaseboardRadiator->SteamBaseboardNumericFields(BaseboardNum).FieldNames(FieldNum) +
                                                " [W]"; // input field sizing description (e.g., Nominal Capacity)
                     int CapSizingMethod =
@@ -1146,6 +1145,7 @@ namespace SteamBaseboardRadiator {
                             TempSize = state.dataSteamBaseboardRadiator->SteamBaseboard(BaseboardNum).ScaledHeatingCapacity;
                         }
                         bool errorsFound = false;
+                        bool PrintFlag = false; // TRUE when sizing information is reported in the eio file
                         HeatingCapacitySizer sizerHeatingCapacity;
                         sizerHeatingCapacity.overrideSizingString(SizingString);
                         sizerHeatingCapacity.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);

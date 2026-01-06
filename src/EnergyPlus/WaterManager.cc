@@ -191,16 +191,7 @@ namespace WaterManager {
         static constexpr std::string_view routineName = "GetWaterManagerInput";
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int Item;                // Item to be "gotten"
-        int NumAlphas(0);        // Number of Alphas for each GetObjectItem call
-        int NumNumbers(0);       // Number of Numbers for each GetObjectItem call
-        int IOStatus(0);         // Used in GetObjectItem
-        bool ErrorsFound(false); // Set to true if errors in input, fatal at end of routine
-        int MaxNumAlphas(0);     // argument for call to GetObjectDefMaxArgs
-        int MaxNumNumbers(0);    // argument for call to GetObjectDefMaxArgs
-        int TotalArgs(0);        // argument for call to GetObjectDefMaxArgs
-        int alphaOffset(0);
-        std::string objNameMsg;
+
         Array1D_string cAlphaFieldNames;
         Array1D_string cNumericFieldNames;
         Array1D_bool lNumericFieldBlanks;
@@ -208,10 +199,22 @@ namespace WaterManager {
         Array1D_string cAlphaArgs;
         Array1D<Real64> rNumericArgs;
         std::string cCurrentModuleObject;
-        int NumIrrigation;
-        int Dummy;
 
         if ((state.dataWaterManager->MyOneTimeFlag) && (!(state.dataWaterData->WaterSystemGetInputCalled))) { // big block for entire subroutine
+
+            int Item;                // Item to be "gotten"
+            int NumAlphas(0);        // Number of Alphas for each GetObjectItem call
+            int NumNumbers(0);       // Number of Numbers for each GetObjectItem call
+            int IOStatus(0);         // Used in GetObjectItem
+            bool ErrorsFound(false); // Set to true if errors in input, fatal at end of routine
+            int MaxNumAlphas(0);     // argument for call to GetObjectDefMaxArgs
+            int MaxNumNumbers(0);    // argument for call to GetObjectDefMaxArgs
+            int TotalArgs(0);        // argument for call to GetObjectDefMaxArgs
+            int alphaOffset(0);
+            std::string objNameMsg;
+            int NumIrrigation;
+            int Dummy;
+
             // initialize rainfall model
             state.dataWaterData->RainFall.ModeID = RainfallMode::None;
 

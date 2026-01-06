@@ -331,10 +331,7 @@ void Calc_ISO15099(EnergyPlusData &state,
 
     // cbi...Variables for "unshaded" run:
 
-    bool NeedUnshadedRun;
-    int nlayer_NOSD;
     Real64 AchievedErrorTolerance_NOSD;
-    int NumOfIter_NOSD;
     Real64 hin_NOSD;
     Real64 flux_NOSD;
     Real64 hcin_NOSD;
@@ -356,9 +353,6 @@ void Calc_ISO15099(EnergyPlusData &state,
     Real64 ShadeHcModifiedOut_NOSD;
     Real64 ShadeHcModifiedIn_NOSD;
 
-    int FirstSpecularLayer;
-    int LastSpecularLayer;
-
     // cbi...Other variables:
     Real64 flux;
     Real64 hint;
@@ -366,9 +360,6 @@ void Calc_ISO15099(EnergyPlusData &state,
     Real64 ebsky;
     Real64 ebroom;
     int i;
-    int j;
-    int OriginalIndex;
-    int UnshadedDebug;
 
     // Autodesk:Uninit Initialize variables used uninitialized
     shgc_NOSD = 0.0;            // Autodesk:Uninit Force default initialization
@@ -745,10 +736,10 @@ void Calc_ISO15099(EnergyPlusData &state,
         // bi...do an Unshaded run if necessary (Uvalue/Winter conditions):
         // bi...Prepare variables for UNSHADED (NO SD) run:
 
-        NeedUnshadedRun = false;
-        FirstSpecularLayer = 1;
-        LastSpecularLayer = nlayer;
-        nlayer_NOSD = nlayer;
+        bool NeedUnshadedRun = false;
+        int FirstSpecularLayer = 1;
+        int LastSpecularLayer = nlayer;
+        int nlayer_NOSD = nlayer;
         if (IsShadingLayer(LayerType(1))) {
             --nlayer_NOSD;
             FirstSpecularLayer = 2;
@@ -766,6 +757,9 @@ void Calc_ISO15099(EnergyPlusData &state,
         NeedUnshadedRun = false;
         // bi...Set outdoor & indoor gas properties:
         if (NeedUnshadedRun) {
+            int NumOfIter_NOSD;
+            int j;
+            int OriginalIndex;
             state.dataThermalISO15099Calc->nmix_NOSD(1) = nmix(1);
             state.dataThermalISO15099Calc->presure_NOSD(1) = presure(1);
             state.dataThermalISO15099Calc->nmix_NOSD(nlayer_NOSD + 1) = nmix(nlayer + 1);
@@ -830,7 +824,7 @@ void Calc_ISO15099(EnergyPlusData &state,
             hout_NOSD = houtt;
 
             // Simon: Removed unshaded debug output for now
-            UnshadedDebug = 0;
+            int UnshadedDebug = 0;
             if (files.WriteDebugOutput && (UnshadedDebug == 1)) {
                 print(files.DebugOutputFile, "\n");
                 print(files.DebugOutputFile, "UNSHADED RUN:\n");
@@ -2519,7 +2513,6 @@ void filmi(EnergyPlusData &state,
     gcp.dim(3, maxgas);
 
     // Locals
-    int j;
     Real64 tiltr;
     Real64 tmean;
     Real64 delt;
@@ -2550,7 +2543,7 @@ void filmi(EnergyPlusData &state,
         tmean = tair + 0.25 * (t - tair);
         delt = std::abs(tair - t);
 
-        for (j = 1; j <= nmix(nlayer + 1); ++j) {
+        for (int j = 1; j <= nmix(nlayer + 1); ++j) {
             state.dataThermalISO15099Calc->ipropi(j) = iprop(j, nlayer + 1);
             state.dataThermalISO15099Calc->frcti(j) = frct(j, nlayer + 1);
         }
