@@ -226,7 +226,6 @@ namespace DuctLoss {
 
         auto instances = state.dataInputProcessing->inputProcessor->epJSON.find(CurrentModuleObject);
         if (instances != state.dataInputProcessing->inputProcessor->epJSON.end()) {
-            std::string cFieldName;
             int DuctLossCondNum = 0;
             auto &instancesValue = instances.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
@@ -291,7 +290,6 @@ namespace DuctLoss {
 
         instances = state.dataInputProcessing->inputProcessor->epJSON.find(CurrentModuleObject);
         if (instances != state.dataInputProcessing->inputProcessor->epJSON.end()) {
-            std::string cFieldName;
             int DuctLossLeakNum = 0;
             auto &instancesValue = instances.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
@@ -328,7 +326,6 @@ namespace DuctLoss {
 
         instances = state.dataInputProcessing->inputProcessor->epJSON.find(CurrentModuleObject);
         if (instances != state.dataInputProcessing->inputProcessor->epJSON.end()) {
-            std::string cFieldName;
             int DuctLossMakeNum = 0;
             auto &instancesValue = instances.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {

@@ -185,7 +185,6 @@ namespace HeatBalanceHAMTManager {
         int Numid;
 
         int HAMTitems;
-        int vtcsid;
 
         bool ErrorsFound;
 
@@ -598,6 +597,7 @@ namespace HeatBalanceHAMTManager {
 
         // Vapor Transfer coefficients
         HAMTitems = s_ip->getNumObjectsFound(state, cHAMTObject7); // SurfaceProperties:VaporCoefficients
+        int vtcsid;
         for (int item = 1; item <= HAMTitems; ++item) {
             s_ip->getObjectItem(state,
                                 cHAMTObject7,

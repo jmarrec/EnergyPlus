@@ -16429,8 +16429,6 @@ void CalcSecondaryDXCoils(EnergyPlusData &state, int const DXCoilNum)
         // Select the correct unit type
         int SecCoilSHRFT; // index of the SHR modifier curve for temperature of a secondary DX coil
         int SecCoilSHRFF; // index of the sHR modifier curve for flow fraction of a secondary DX coil
-        int MSSpeedNumLS; // current low speed number of multispeed HP
-        int MSSpeedNumHS; // current high speed number of multispeed HP
         switch (thisDXCoil.DXCoilType_Num) {
         case HVAC::CoilDX_CoolingSingleSpeed:
         case HVAC::CoilDX_CoolingTwoSpeed:
@@ -16516,8 +16514,8 @@ void CalcSecondaryDXCoils(EnergyPlusData &state, int const DXCoilNum)
             RhoAir = PsyRhoAirFnPbTdbW(state, state.dataEnvrn->OutBaroPress, EvapInletDryBulb, EvapInletHumRat);
             MSSpeedRatio = thisDXCoil.MSSpeedRatio;
             MSCycRatio = thisDXCoil.MSCycRatio;
-            MSSpeedNumHS = thisDXCoil.MSSpeedNumHS;
-            MSSpeedNumLS = thisDXCoil.MSSpeedNumLS;
+            int MSSpeedNumHS = thisDXCoil.MSSpeedNumHS; // current high speed number of multispeed HP
+            int MSSpeedNumLS = thisDXCoil.MSSpeedNumLS; // current low speed number of multispeed HP
             if (MSSpeedRatio > 0.0) {
                 EvapAirMassFlow = RhoAir * (thisDXCoil.MSSecCoilAirFlow(MSSpeedNumHS) * MSSpeedRatio +
                                             thisDXCoil.MSSecCoilAirFlow(MSSpeedNumLS) * (1.0 - MSSpeedRatio));
