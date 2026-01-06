@@ -304,8 +304,8 @@ void GetZoneEquipmentData(EnergyPlusData &state)
 
     // auto &Zone(state.dataHeatBal->Zone);
 
+    CurrentModuleObject = "ZoneHVAC:EquipmentConnections";
     for (int controlledZoneLoop = 1; controlledZoneLoop <= numControlledZones; ++controlledZoneLoop) {
-        CurrentModuleObject = "ZoneHVAC:EquipmentConnections";
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                  CurrentModuleObject,
                                                                  controlledZoneLoop,
@@ -354,8 +354,8 @@ void GetZoneEquipmentData(EnergyPlusData &state)
                                   NodeNums);
         thisZone.SystemZoneNodeNumber = thisZoneEquipConfig.ZoneNode;
     } // end loop over controlled zones
+    CurrentModuleObject = "SpaceHVAC:EquipmentConnections";
     for (int controlledSpaceLoop = 1; controlledSpaceLoop <= numControlledSpaces; ++controlledSpaceLoop) {
-        CurrentModuleObject = "SpaceHVAC:EquipmentConnections";
         if (!state.dataHeatBal->doSpaceHeatBalanceSimulation) {
             ShowWarningError(
                 state,
