@@ -1,4 +1,4 @@
-# EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University
+# EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
@@ -64,7 +64,7 @@ from base_hook import ErrorMessage, LogMessage, relative_path_from_root
 #
 # The previous year that is in the license. It should be a string
 #
-_previous_year = "2024"
+_previous_year = "2025"
 #
 # From file "EnergyPlus License DRAFT 112015 100 fixed.txt"
 #
