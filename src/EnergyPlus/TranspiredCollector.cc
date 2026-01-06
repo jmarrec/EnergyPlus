@@ -1471,7 +1471,6 @@ namespace TranspiredCollector {
         if (state.dataTranspiredCollector->UTSC(UTSCNum).IsOn) { // Active
             if (state.dataTranspiredCollector->UTSC(UTSCNum).NumOASysAttached == 1) {
                 int OutletNode = state.dataTranspiredCollector->UTSC(UTSCNum).OutletNode(1);
-                int InletNode = state.dataTranspiredCollector->UTSC(UTSCNum).InletNode(1);
                 state.dataLoopNodes->Node(OutletNode).MassFlowRate = state.dataTranspiredCollector->UTSC(UTSCNum).SupOutMassFlow;
                 state.dataLoopNodes->Node(OutletNode).Temp = state.dataTranspiredCollector->UTSC(UTSCNum).SupOutTemp;
                 state.dataLoopNodes->Node(OutletNode).HumRat = state.dataTranspiredCollector->UTSC(UTSCNum).SupOutHumRat;

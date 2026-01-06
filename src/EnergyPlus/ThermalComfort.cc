@@ -2763,7 +2763,6 @@ namespace ThermalComfort {
             const bool statFileExists = FileSystem::fileExists(state.files.inStatFilePath.filePath);
             const bool epwFileExists = FileSystem::fileExists(state.files.inputWeatherFilePath.filePath);
 
-            int readStat = 0;
             if (statFileExists) {
                 std::string lineAvg;
                 auto statFile = state.files.inStatFilePath.open(state, "CalcThermalComfortAdapctiveASH55");
@@ -3004,7 +3003,6 @@ namespace ThermalComfort {
 
         if (initiate && weathersimulation) {
             const bool epwFileExists = FileSystem::fileExists(state.files.inputWeatherFilePath.filePath);
-            int readStat = 0;
             if (epwFileExists) {
                 // determine number of days in year
                 int DaysInYear;
