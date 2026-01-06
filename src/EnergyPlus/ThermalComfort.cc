@@ -2318,7 +2318,6 @@ namespace ThermalComfort {
         bool isComfortableWithSummerClothes;
         bool isComfortableWithWinterClothes;
         Real64 allowedHours;
-        bool showWarning;
 
         state.dataThermalComforts->AnyZoneTimeNotSimpleASH55Summer = 0.0;
         state.dataThermalComforts->AnyZoneTimeNotSimpleASH55Winter = 0.0;
@@ -2420,7 +2419,7 @@ namespace ThermalComfort {
         if (state.dataGlobal->EndDesignDayEnvrnsFlag) {
             allowedHours = double(state.dataGlobal->NumOfDayInEnvrn) * 24.0 * 0.04;
             // first check if warning should be printed
-            showWarning = false;
+            bool showWarning = false;
             for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                 if (state.dataThermalComforts->ThermalComfortInASH55(iZone).Enable55Warning) {
                     if (state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotEither > allowedHours) {
@@ -2741,21 +2740,11 @@ namespace ThermalComfort {
         // SUBROUTINE PARAMETER DEFINITIONS:
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        std::string lineAvg;
-        std::string epwLine;
         Real64 dryBulb;
         Real64 tComf;
         Real64 numOccupants;
-        int readStat;
-        int jStartDay;
-        int calcStartDay;
-        int calcStartHr;
-        int calcEndDay;
-        int calcEndHr;
         std::string::size_type pos;
-        int ind;
         int i;
-        int j;
         bool weathersimulation;
         Real64 inavgdrybulb;
 
@@ -2774,8 +2763,9 @@ namespace ThermalComfort {
             const bool statFileExists = FileSystem::fileExists(state.files.inStatFilePath.filePath);
             const bool epwFileExists = FileSystem::fileExists(state.files.inputWeatherFilePath.filePath);
 
-            readStat = 0;
+            int readStat = 0;
             if (statFileExists) {
+                std::string lineAvg;
                 auto statFile = state.files.inStatFilePath.open(state, "CalcThermalComfortAdapctiveASH55");
                 while (statFile.good()) {
                     auto lineIn = statFile.readLine();
@@ -2802,12 +2792,16 @@ namespace ThermalComfort {
                 }
                 state.dataThermalComforts->DailyAveOutTemp = 0.0;
 
+                std::string epwLine;
                 auto epwFile = state.files.inputWeatherFilePath.open(state, "CalcThermalComfortAdaptiveASH55");
                 for (i = 1; i <= 8; ++i) { // Headers
                     epwLine = epwFile.readLine().data;
                 }
-                jStartDay = state.dataEnvrn->DayOfYear - 1;
-                calcStartDay = jStartDay - 30;
+                int jStartDay = state.dataEnvrn->DayOfYear - 1;
+                int calcStartDay = jStartDay - 30;
+                int calcStartHr;
+                int ind;
+                int j;
                 if (calcStartDay >= 0) {
                     calcStartHr = 24 * calcStartDay + 1;
                     for (i = 1; i <= calcStartHr - 1; ++i) {
@@ -2828,9 +2822,9 @@ namespace ThermalComfort {
                         state.dataThermalComforts->DailyAveOutTemp(i) = state.dataThermalComforts->avgDryBulbASH;
                     }
                 } else { // Do special things for wrapping the epw
-                    calcEndDay = jStartDay;
+                    int calcEndDay = jStartDay;
                     calcStartDay += DaysInYear;
-                    calcEndHr = 24 * calcEndDay;
+                    int calcEndHr = 24 * calcEndDay;
                     calcStartHr = 24 * calcStartDay + 1;
                     for (i = 1; i <= calcEndDay; ++i) {
                         state.dataThermalComforts->avgDryBulbASH = 0.0;
@@ -2989,21 +2983,11 @@ namespace ThermalComfort {
         static constexpr std::array<Real64, 7> alpha_pow = {0.262144, 0.32768, 0.4096, 0.512, 0.64, 0.8, 1.0}; // alpha^(6-0)
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        std::string epwLine;
         Real64 dryBulb;
         Real64 tComf;
         Real64 tComfLow;
         Real64 numOccupants;
-        int readStat;
-        int jStartDay;
-        int calcStartDay;
-        int calcStartHr;
-        int calcEndDay;
-        int calcEndHr;
         std::string::size_type pos;
-        int ind;
-        int i;
-        int j;
         bool weathersimulation;
         Real64 inavgdrybulb;
         int constexpr numHeaderRowsInEpw = 8;
@@ -3020,7 +3004,7 @@ namespace ThermalComfort {
 
         if (initiate && weathersimulation) {
             const bool epwFileExists = FileSystem::fileExists(state.files.inputWeatherFilePath.filePath);
-            readStat = 0;
+            int readStat = 0;
             if (epwFileExists) {
                 // determine number of days in year
                 int DaysInYear;
@@ -3030,12 +3014,17 @@ namespace ThermalComfort {
                     DaysInYear = 365;
                 }
 
+                int i;
+                int j;
+                std::string epwLine;
                 auto epwFile = state.files.inputWeatherFilePath.open(state, "CalcThermalComfortAdaptiveCEN15251");
                 for (i = 1; i <= numHeaderRowsInEpw; ++i) {
                     epwFile.readLine();
                 }
-                jStartDay = state.dataEnvrn->DayOfYear - 1;
-                calcStartDay = jStartDay - 7;
+                int jStartDay = state.dataEnvrn->DayOfYear - 1;
+                int calcStartDay = jStartDay - 7;
+                int calcStartHr;
+                int ind;
                 if (calcStartDay > 0) {
                     calcStartHr = 24 * calcStartDay + 1;
                     for (i = 1; i <= calcStartHr - 1; ++i) {
@@ -3057,9 +3046,9 @@ namespace ThermalComfort {
                         state.dataThermalComforts->runningAverageCEN += alpha_pow[i] * state.dataThermalComforts->avgDryBulbCEN;
                     }
                 } else { // Do special things for wrapping the epw
-                    calcEndDay = jStartDay;
+                    int calcEndDay = jStartDay;
                     calcStartDay += DaysInYear;
-                    calcEndHr = 24 * calcEndDay;
+                    int calcEndHr = 24 * calcEndDay;
                     calcStartHr = 24 * calcStartDay + 1;
                     for (i = 1; i <= calcEndDay; ++i) {
                         state.dataThermalComforts->avgDryBulbCEN = 0.0;

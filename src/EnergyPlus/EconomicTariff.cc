@@ -4085,7 +4085,6 @@ void WriteTabularTariffReports(EnergyPlusData &state)
 
     if (s_econ->numTariff > 0) {
         if (state.dataOutRptTab->displayEconomicResultSummary) {
-            auto &econVar = s_econ->econVar;
             DisplayString(state, "Writing Tariff Reports");
             showWarningsBasedOnTotal(state);
             //---------------------------------
@@ -4250,6 +4249,7 @@ void WriteTabularTariffReports(EnergyPlusData &state)
             // Tariff Report
             //---------------------------------
             if (state.dataOutRptTab->displayTariffReport) {
+                auto &econVar = s_econ->econVar;
                 for (auto &currentStyle : state.dataOutRptTab->tabularReportPasses) {
                     // Clear this for each style pass
                     for (auto &e : econVar) {

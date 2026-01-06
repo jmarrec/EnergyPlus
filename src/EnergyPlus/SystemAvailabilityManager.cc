@@ -1595,8 +1595,6 @@ namespace Avail {
                 auto &optimumStartMgr = state.dataAvail->OptimumStartData(SysAvailNum);
                 if (optimumStartMgr.optimumStartControlType == OptimumStartControlType::MaximumOfZoneList) {
                     int ZoneListNum;
-                    int ScanZoneListNum;
-                    int ZoneNum;
                     // a zone list
                     ZoneListNum = Util::FindItemInList(optimumStartMgr.ZoneListName, state.dataHeatBal->ZoneList);
                     if (ZoneListNum > 0) {
@@ -1604,6 +1602,8 @@ namespace Avail {
                         if (!allocated(optimumStartMgr.ZonePtrs)) {
                             optimumStartMgr.ZonePtrs.allocate({1, state.dataHeatBal->ZoneList(ZoneListNum).NumOfZones});
                         }
+                        int ScanZoneListNum;
+                        int ZoneNum;
                         for (ScanZoneListNum = 1; ScanZoneListNum <= state.dataHeatBal->ZoneList(ZoneListNum).NumOfZones; ++ScanZoneListNum) {
                             ZoneNum = state.dataHeatBal->ZoneList(ZoneListNum).Zone(ScanZoneListNum);
                             optimumStartMgr.ZonePtrs(ScanZoneListNum) = ZoneNum;

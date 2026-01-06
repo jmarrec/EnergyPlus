@@ -415,7 +415,6 @@ void GetAirPathData(EnergyPlusData &state)
     for (AirSysNum = 1; AirSysNum <= NumPrimaryAirSys; ++AirSysNum) {
         auto &primaryAirSystems = state.dataAirSystemsData->PrimaryAirSystems(AirSysNum);
         auto &airLoopZoneInfo = state.dataAirLoop->AirToZoneNodeInfo(AirSysNum);
-        int NumOASysControllers = 0;     // total number of controllers in the OA Sys
         int NumOASysSimpControllers = 0; // number of simple controllers in the OA Sys of an air primary system
         int OASysContListNum = 0;        // index of the controller list of the OA Sys
         PackagedUnit(AirSysNum) = false;
@@ -1076,7 +1075,7 @@ void GetAirPathData(EnergyPlusData &state)
             }
             // loop over the OA Sys controllers and move them up to the primary air system controller lists
             OASysControllerNum = 0;
-            NumOASysControllers = (NumAlphas - 1) / 2;
+            int NumOASysControllers = (NumAlphas - 1) / 2; // total number of controllers in the OA Sys
             for (ControllerNum = 1; ControllerNum <= NumOASysControllers; ++ControllerNum) {
                 ControllerName = Alphas(ControllerNum * 2 + 1);
                 ControllerType = Alphas(ControllerNum * 2);
@@ -4079,9 +4078,9 @@ void SizeAirLoopBranches(EnergyPlusData &state, int const AirLoopNum, int const 
     ErrorsFound = false;
 
     if (BranchNum == 1) {
-        std::string ScalableSM; // scalable sizing methods label for reporting
         auto &FinalSysSizing = state.dataSize->FinalSysSizing;
         if (PrimaryAirSystems(AirLoopNum).DesignVolFlowRate == AutoSize) {
+            std::string ScalableSM; // scalable sizing methods label for reporting
             CheckSysSizing(state, "AirLoopHVAC", PrimaryAirSystems(AirLoopNum).Name);
             PrimaryAirSystems(AirLoopNum).DesignVolFlowRate = FinalSysSizing(AirLoopNum).DesMainVolFlow;
             switch (FinalSysSizing(AirLoopNum).ScaleCoolSAFMethod) {
@@ -5154,8 +5153,6 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
     }
 
     switch (CallIndicator) {
-        int I; // write statement index
-        int J; // write statement index
     case Constant::CallIndicator::BeginDay: {
         // Correct the zone return temperature in ZoneSizing for the case of induction units. The calc in
         // ZoneEquipmentManager assumes all the air entering the zone goes into the return node.
@@ -7091,6 +7088,8 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
         // write out the sys design calc results
 
         print(state.files.ssz, "Time");
+        int I; // write statement index
+        int J; // write statement index
         for (I = 1; I <= state.dataHVACGlobal->NumPrimaryAirSys; ++I) {
             for (J = 1; J <= state.dataEnvrn->TotDesDays + state.dataEnvrn->TotRunDesPersDays; ++J) {
                 constexpr const char *SSizeFmt12("{}{}{}{:2}{}{}{}{}{:2}{}{}{}{}{:2}{}{}{}{}{:2}{}{}{}{}{:2}{}");

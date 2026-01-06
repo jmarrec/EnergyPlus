@@ -710,12 +710,10 @@ namespace SteamCoils {
                 if (state.dataSteamCoils->SteamCoil(CoilNum).MaxSteamVolFlowRate == AutoSize) {
                     CheckSysSizing(state, "Coil:Heating:Steam", state.dataSteamCoils->SteamCoil(CoilNum).Name);
 
-                    std::string CompName;     // component name
-                    std::string CompType;     // component type
-                    std::string SizingString; // input field sizing description (e.g., Nominal Capacity)
-                    bool bPRINT = false;      // TRUE if sizing is reported to output (eio)
+                    std::string CompName; // component name
+                    std::string CompType; // component type
+                    bool bPRINT = false;  // TRUE if sizing is reported to output (eio)
                     if (state.dataSteamCoils->SteamCoil(CoilNum).DesiccantRegenerationCoil) {
-                        auto &OASysEqSizing = state.dataSize->OASysEqSizing;
                         state.dataSize->DataDesicRegCoil = true;
                         state.dataSize->DataDesicDehumNum = state.dataSteamCoils->SteamCoil(CoilNum).DesiccantDehumNum;
                         CompType = state.dataSteamCoils->SteamCoil(CoilNum).SteamCoilType; // this is casting an int to a string
@@ -732,6 +730,7 @@ namespace SteamCoils {
                         state.dataSize->DataDesOutletAirTemp = sizerHeatingDesOutletTemp.size(state, DataSizing::AutoSize, ErrorsFound);
 
                         if (state.dataSize->CurOASysNum > 0) {
+                            auto &OASysEqSizing = state.dataSize->OASysEqSizing;
                             OASysEqSizing(state.dataSize->CurOASysNum).AirFlow = true;
                             OASysEqSizing(state.dataSize->CurOASysNum).AirVolFlow = finalSysSizing.DesOutAirVolFlow;
                         }
@@ -760,6 +759,7 @@ namespace SteamCoils {
                         TempSize = AutoSize;
                         bool errorsFound = false;
                         HeatingAirFlowSizer sizingHeatingAirFlow;
+                        std::string SizingString; // input field sizing description (e.g., Nominal Capacity)
                         sizingHeatingAirFlow.overrideSizingString(SizingString);
                         // sizingHeatingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                         sizingHeatingAirFlow.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);

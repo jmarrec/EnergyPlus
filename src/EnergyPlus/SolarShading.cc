@@ -775,9 +775,9 @@ void processShadowingInput(EnergyPlusData &state)
             }
 
             for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; SurfNum++) {
-                int SurfZoneGroup = 0;
-                int CurZoneGroup = 0;
                 if (state.dataSurface->Surface(SurfNum).ExtBoundCond == 0) { // Loop through all exterior surfaces
+                    int SurfZoneGroup = 0;
+                    int CurZoneGroup = 0;
                     // Check the shading zone group of each exterior surface
                     for (int ZoneGroupLoop = 1; ZoneGroupLoop <= NumOfShadingGroups; ZoneGroupLoop++) { // Loop through all defined shading groups
                         CurZoneGroup = DisableSelfShadingGroups(ZoneGroupLoop);
@@ -4780,7 +4780,6 @@ void DeterminePolygonOverlap(EnergyPlusData &state,
 
     if (!state.dataSysVars->SutherlandHodgman) {
         int NIN1 = 0;                                 // Number of vertices of NS1 within NS2
-        int NIN2 = 0;                                 // Number of vertices of NS2 within NS1
         INCLOS(state, NS1, NV1, NS2, NV2, NV3, NIN1); // Find vertices of NS1 within NS2.
 
         if (NIN1 >= NV1) {
@@ -4789,6 +4788,7 @@ void DeterminePolygonOverlap(EnergyPlusData &state,
 
         } else {
 
+            int NIN2 = 0;                                 // Number of vertices of NS2 within NS1
             INCLOS(state, NS2, NV2, NS1, NV1, NV3, NIN2); // Find vertices of NS2 within NS1.
 
             if (NIN2 >= NV2) {

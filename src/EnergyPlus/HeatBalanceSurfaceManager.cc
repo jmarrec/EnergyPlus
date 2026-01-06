@@ -3271,7 +3271,7 @@ void InitSolarHeatGains(EnergyPlusData &state)
                                         Real64 ACosTlt = std::abs(Surface(SurfNum).CosTilt); // Absolute value of cosine of surface tilt angle
 
                                         int slatIdxLo = surfShade.blind.slatAngIdxLo;
-                                        int slatIdxHi = surfShade.blind.slatAngIdxLo;
+                                        int slatIdxHi = surfShade.blind.slatAngIdxHi;
                                         Real64 interpFac = surfShade.blind.slatAngInterpFac;
                                         auto const &dfAbsSlatLo = constructionSh.layerSlatBlindDfAbs(Lay)[slatIdxLo];
                                         auto const &dfAbsSlatHi = constructionSh.layerSlatBlindDfAbs(Lay)[slatIdxHi];
@@ -6816,7 +6816,7 @@ void ReportSurfaceHeatBalance(EnergyPlusData &state)
         }
     }
 
-    if (state.dataGlobal->ZoneSizingCalc && state.dataGlobal->CompLoadReportIsReq) {
+    if (state.dataGlobal->ZoneSizingCalc && state.dataGlobal->CompLoadReportIsReq && !state.dataGlobal->WarmupFlag) {
         // This is by surface, so it works for both space and zone component loads
         int TimeStepInDay = (state.dataGlobal->HourOfDay - 1) * state.dataGlobal->TimeStepsInHour + state.dataGlobal->TimeStep;
         auto &surfCLDayTS = state.dataOutRptTab->surfCompLoads[state.dataSize->CurOverallSimDay - 1].ts[TimeStepInDay - 1];

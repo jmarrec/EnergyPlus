@@ -554,8 +554,6 @@ namespace ThermalEN673Calc {
         EP_SIZE_CHECK(absol, maxlay);
 
         // Locals
-        int i;
-        int j;
         Real64 fract;
         Real64 flowin;
 
@@ -565,6 +563,8 @@ namespace ThermalEN673Calc {
 
         // evaluate inward flowing fraction of absorbed radiation:
         if ((standard == TARCOGGassesParams::Stdrd::EN673) || (standard == TARCOGGassesParams::Stdrd::EN673Design)) {
+            int i;
+            int j;
             if (nlayer == 1) {
                 fract = dir * absol(1) * (rs(1) * rs(3)) / (rs(1) * (rs(1) + rs(3)));
             } else {
