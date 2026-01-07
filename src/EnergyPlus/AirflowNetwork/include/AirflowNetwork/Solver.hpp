@@ -86,9 +86,9 @@ namespace AirflowNetwork {
     struct AirflowNetworkReportVars
     {
         // Members
-        Real64 InfilVolume; // Volume of Air {m3} due to infiltration
-        Real64 InfilMass;   // Mass of Air {kg} due to infiltration
-        Real64 infilMassFlow;
+        Real64 InfilVolume;         // Volume of Air {m3} due to infiltration
+        Real64 InfilMass;           // Mass of Air {kg} due to infiltration
+        Real64 infilMassFlow;       // Mass flow rate of air {kg/s} due to infiltration
         Real64 InfilAirChangeRate;  // Infiltration air change rate {ach}
         Real64 VentilHeatLoss;      // Heat Gain {W} due to ventilation
         Real64 VentilHeatGain;      // Heat Loss {W} due to ventilation

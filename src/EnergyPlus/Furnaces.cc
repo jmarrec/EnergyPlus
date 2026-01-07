@@ -671,27 +671,34 @@ namespace Furnaces {
             Real64 heatingCoilRTF = 0.0;
             Real64 suppHeatingCoilRTF = 0.0;
             bool errorFound(false);
-            if (thisFurnace.HeatingCoilType_Num == HVAC::Coil_HeatingGasOrOtherFuel ||
-                thisFurnace.HeatingCoilType_Num == HVAC::Coil_HeatingElectric || thisFurnace.HeatingCoilType_Num == HVAC::Coil_HeatingDesuperheater) {
+            switch (thisFurnace.HeatingCoilType_Num) {
+            case HVAC::Coil_HeatingGasOrOtherFuel:
+            case HVAC::Coil_HeatingElectric:
+            case HVAC::Coil_HeatingDesuperheater: {
                 int heatingCoilIndex;
                 HeatingCoils::GetCoilIndex(state, thisFurnace.HeatingCoilName, heatingCoilIndex, errorFound);
                 if (heatingCoilIndex > 0) {
                     heatingCoilRTF = state.dataHeatingCoils->HeatingCoil(heatingCoilIndex).RTF;
                 }
+            } break;
+            default:;
             }
             if (errorFound) {
                 ShowSevereError(state, format("The index of \"{}\" is not found", thisFurnace.HeatingCoilName));
                 ShowContinueError(state, format("...occurs for {}", thisFurnace.Name));
                 errorFound = false;
             }
-            if (thisFurnace.SuppHeatCoilType_Num == HVAC::Coil_HeatingGasOrOtherFuel ||
-                thisFurnace.SuppHeatCoilType_Num == HVAC::Coil_HeatingElectric ||
-                thisFurnace.SuppHeatCoilType_Num == HVAC::Coil_HeatingDesuperheater) {
+            switch (thisFurnace.SuppHeatCoilType_Num) {
+            case HVAC::Coil_HeatingGasOrOtherFuel:
+            case HVAC::Coil_HeatingElectric:
+            case HVAC::Coil_HeatingDesuperheater: {
                 int suppHeatingCoilIndex;
                 HeatingCoils::GetCoilIndex(state, thisFurnace.SuppHeatCoilName, suppHeatingCoilIndex, errorFound);
                 if (suppHeatingCoilIndex > 0) {
                     suppHeatingCoilRTF = state.dataHeatingCoils->HeatingCoil(suppHeatingCoilIndex).RTF;
                 }
+            } break;
+            default:;
             }
             if (errorFound) {
                 ShowSevereError(state, format("The index of \"{}\" is not found", thisFurnace.SuppHeatCoilName));
@@ -4807,7 +4814,6 @@ namespace Furnaces {
             // Pass the fan cycling schedule index up to the air loop. Set the air loop unitary system flag.
             state.dataAirLoop->AirLoopControlInfo(AirLoopNum).cycFanSched = thisFurnace.fanOpModeSched;
             state.dataAirLoop->AirLoopControlInfo(AirLoopNum).UnitarySys = true;
-            // RR this is wrong, Op mode needs to be updated each time step
             state.dataAirLoop->AirLoopControlInfo(AirLoopNum).fanOp = thisFurnace.fanOp;
 
             // Check that heat pump heating capacity is within 20% of cooling capacity
