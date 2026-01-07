@@ -53,7 +53,6 @@
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array2D.hh>
 #include <ObjexxFCL/ArrayS.functions.hh>
-// #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/char.functions.hh>
 #include <ObjexxFCL/random.hh>
 #include <ObjexxFCL/string.functions.hh>
@@ -65,7 +64,6 @@
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
-#include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataSystemVariables.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/General.hh>
@@ -1066,7 +1064,6 @@ void ParseExpression(EnergyPlusData &state,
     std::string StringToken;
     char NextChar;
     bool PeriodFound;
-    bool PlusFound;
     bool MinusFound;
     bool MultFound;
     bool DivFound;
@@ -1120,7 +1117,6 @@ void ParseExpression(EnergyPlusData &state,
         // Get the next token
         StringToken = "";
         PeriodFound = false;
-        PlusFound = false;
         ErrorFlag = false;
         LastED = false;
         if (is_any_of(NextChar, "0123456789.")) {
@@ -1367,7 +1363,7 @@ void ParseExpression(EnergyPlusData &state,
                         state.dataRuntimeLangProcessor->PEToken(NumTokens).Operator = ErlFunc::Add;
                         OperatorProcessing = true;
                     } else {
-                        PlusFound = true;
+                        // PlusFound = true;
                         OperatorProcessing = false;
                     }
                 } else if (StringToken == "-") {

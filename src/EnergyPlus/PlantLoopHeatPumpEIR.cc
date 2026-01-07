@@ -1902,9 +1902,8 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                          EIRPlantLoopHeatPumps::EIRPlantLoopHeatPump::subtract}};
 
     bool errorsFound = false;
-    std::string &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     for (auto const &classToInput : classesToInput) {
-        cCurrentModuleObject = DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)];
+        auto cCurrentModuleObject = static_cast<std::string>(DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)]);
         DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(
             getEnumValue(BranchNodeConnections::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
         int numPLHP = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
@@ -3390,10 +3389,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
     };
 
     bool errorsFound = false;
-    std::string &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     for (auto &classToInput : classesToInput) {
-        cCurrentModuleObject = DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)];
-
+        auto cCurrentModuleObject = static_cast<std::string>(DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)]);
         DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(
             getEnumValue(BranchNodeConnections::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
 

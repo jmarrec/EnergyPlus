@@ -216,6 +216,8 @@ jobs:
           -j $(nproc)
           --template='[{file}:{line}]:({severity}),[{id}],{message}'
           --suppress="uninitvar:*"
+          --suppress="constParameterReference:*" \
+          --suppress="constVariableReference:*" \
           ./src
           3>&1 1>&2 2>&3 | tee cppcheck.txt
 

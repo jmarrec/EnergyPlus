@@ -12589,7 +12589,6 @@ void RefrigSystemData::CalculateCondensers(EnergyPlusData &state, int const SysN
     int CondCreditWarnIndex5; // Used to sum up warning count
     int CondCreditWarnIndex6; // Used to sum up warning count
     int CondCreditWarnIndex7; // Used to sum up warning count
-    int Sysloop;              // counter over number of systems attached to this condenser
     bool EvapAvail;           // Control for evap condenser availability
 
     Real64 AirVolRatio;                 // Ratio of air volume needed to remove load relative to design load
@@ -12650,9 +12649,9 @@ void RefrigSystemData::CalculateCondensers(EnergyPlusData &state, int const SysN
     //  The system values will match the last time that system was solved, so some of the values may be
     //  from the previous overall solution iteration.  However, solution goes through 3 iterations if
     //  there are any shared condensers, so that's ok.
-    int SystemID; // System number rejecting heat to this condenser
-    for (Sysloop = 1; Sysloop <= condenser.NumSysAttach; ++Sysloop) {
-        SystemID = condenser.SysNum(Sysloop);
+    for (int Sysloop = 1; Sysloop <= condenser.NumSysAttach; ++Sysloop) {
+        // System number rejecting heat to this condenser
+        int SystemID = condenser.SysNum(Sysloop);
         TotalCondDefCredfromSysID = System(SystemID).TotalCondDefrostCredit + System(SystemID).SumCascadeCondCredit;
         TotalCondDefrostCreditLocal += TotalCondDefCredfromSysID;
         // total heat rejection load from a single detailed system [W]
