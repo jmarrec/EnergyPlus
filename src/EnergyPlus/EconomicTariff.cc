@@ -4539,22 +4539,15 @@ void ReportEconomicVariable(EnergyPlusData &state,
     Array2D_string tableBody;
     Real64 sumVal;
     Real64 maximumVal;
-    Real64 curVal;
-    int curIndex;
-    int curCatPt;
-
-    int iVar;
-    int jMonth;
-    int cntOfVar;
-    int nCntOfVar;
+    int curCatPt = 0;
 
     auto const &s_econ = state.dataEconTariff;
     auto const &econVar = s_econ->econVar;
     auto const &chargeBlock = s_econ->chargeBlock;
     auto const &chargeSimple = s_econ->chargeSimple;
 
-    cntOfVar = 0;
-    for (iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
+    int cntOfVar = 0;
+    for (int iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
         if (econVar(iVar).activeNow) {
             ++cntOfVar;
         }
@@ -4588,9 +4581,9 @@ void ReportEconomicVariable(EnergyPlusData &state,
     if (includeCategory) {
         columnHead(15) = "Category";
     }
-    nCntOfVar = 0;
+    int nCntOfVar = 0;
     // row names
-    for (iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
+    for (int iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
         if (econVar(iVar).activeNow) {
             ++nCntOfVar;
             if (showCurrencySymbol) {
@@ -4602,11 +4595,12 @@ void ReportEconomicVariable(EnergyPlusData &state,
     }
     // fill the body
     nCntOfVar = 0;
-    for (iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
+    for (int iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
         if (econVar(iVar).activeNow) {
             ++nCntOfVar;
-            for (jMonth = 1; jMonth <= 12; ++jMonth) { // note not all months get printed out if more than 12 are used.- need to fix this later
-                curVal = econVar(iVar).values(jMonth);
+            for (int jMonth = 1; jMonth <= 12; ++jMonth) {
+                // note not all months get printed out if more than 12 are used.- need to fix this later
+                const Real64 curVal = econVar(iVar).values(jMonth);
                 if ((curVal > 0) && (curVal < 1)) {
                     tableBody(jMonth, nCntOfVar) = OutputReportTabular::RealToStr(style.formatReals, curVal, 4);
                 } else {
@@ -4618,8 +4612,7 @@ void ReportEconomicVariable(EnergyPlusData &state,
             tableBody(14, nCntOfVar) = OutputReportTabular::RealToStr(style.formatReals, maximumVal, 2);
             if (includeCategory) {
                 // first find category
-                int curCategory = 0;
-                curIndex = econVar(iVar).index;
+                const int curIndex = econVar(iVar).index;
 
                 switch (econVar(iVar).kindOfObj) {
                 case ObjType::ChargeSimple:
@@ -4634,10 +4627,6 @@ void ReportEconomicVariable(EnergyPlusData &state,
                     break;
                 default:
                     break;
-                }
-
-                if ((curCatPt >= 1) && (curCatPt <= s_econ->numEconVar)) {
-                    curCategory = econVar(curCatPt).specific;
                 }
 
                 // In this specific table, "NotIncluded" is written as "none" so need a special case for that

@@ -1388,7 +1388,6 @@ void GetDXCoils(EnergyPlusData &state)
 
     // Loop over the Multimode DX Coils and get & load the data
     CurrentModuleObject = "Coil:Cooling:DX:TwoStageWithHumidityControlMode";
-    int AlphaIndex; // Index for current alpha field
     for (DXCoilIndex = 1; DXCoilIndex <= state.dataDXCoils->NumDXMulModeCoils; ++DXCoilIndex) {
 
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
@@ -1495,7 +1494,7 @@ void GetDXCoils(EnergyPlusData &state)
 
         //  Set starting alpha index for coil performance inputs
 
-        AlphaIndex = 6;
+        int AlphaIndex = 6;
         // allocate performance modes for numeric field strings used for sizing routine
         state.dataDXCoils->DXCoilNumericFields(DXCoilNum).PerfMode.allocate(
             thisDXCoil.NumDehumidModes * 2 + thisDXCoil.NumCapacityStages * 2); // not sure this math is correct, ask MW
@@ -3001,7 +3000,6 @@ void GetDXCoils(EnergyPlusData &state)
     if (instances_whPumped != s_ip->epJSON.end()) {
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
         auto &instancesValue = instances_whPumped.value();
-        std::string cFieldName;
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
             ++DXCoilNum;
@@ -3040,7 +3038,7 @@ void GetDXCoils(EnergyPlusData &state)
                 ErrorsFound = true;
             }
 
-            cFieldName = "Rated COP";
+            std::string cFieldName = "Rated COP";
             thisDXCoil.RatedCOP(1) = s_ip->getRealFieldValue(fields, schemaProps, "rated_cop"); // Numbers(2);
             if (thisDXCoil.RatedCOP(1) <= 0.0) {
                 ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
@@ -3528,7 +3526,6 @@ void GetDXCoils(EnergyPlusData &state)
     if (instances_whWrapped != s_ip->epJSON.end()) {
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
         auto &instancesValue = instances_whWrapped.value();
-        std::string cFieldName;
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
 
             ++DXCoilNum;
@@ -3558,7 +3555,7 @@ void GetDXCoils(EnergyPlusData &state)
             // ErrorsFound will be set to True if problem was found, left untouched otherwise
             VerifyUniqueCoilName(state, CurrentModuleObject, thisDXCoil.Name, ErrorsFound, CurrentModuleObject + " Name");
 
-            cFieldName = "Rated Heating Capacity";
+            std::string cFieldName = "Rated Heating Capacity";
             thisDXCoil.RatedTotCap2 = s_ip->getRealFieldValue(fields, schemaProps, "rated_heating_capacity"); // Numbers(1);
             if (thisDXCoil.RatedTotCap2 <= 0.0) {
                 ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, thisDXCoil.Name));
@@ -14770,13 +14767,11 @@ void CalcTwoSpeedDXCoilStandardRating(EnergyPlusData &state, int const DXCoilNum
         int fanInNode = 0;
         int fanOutNode = 0;
         Real64 externalStatic = 0.0;
-        int fanIndex = 0;
         if (thisDXCoil.RateWithInternalStaticAndFanObject) {
             par7 = 0.0;
             fanInNode = FanInletNode;
             fanOutNode = FanOutletNode;
             externalStatic = ExternalStatic;
-            fanIndex = thisDXCoil.SupplyFanIndex;
         }
 
         LowerBoundMassFlowRate = 0.01 * thisDXCoil.RatedAirMassFlowRate(1);
