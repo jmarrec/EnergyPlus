@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -123,6 +123,8 @@ namespace EIRPlantLoopHeatPumps {
         ControlType sysControlType = ControlType::Invalid;
         DataPlant::FlowMode flowMode = DataPlant::FlowMode::Invalid;
 
+        bool SetpointSetToLoopErrDone = false; // True if the warning about setpoint is missing at the outlet node has been issued
+
         // sizing data
         Real64 heatSizingRatio = 1.0;
         HeatSizingType heatSizingMethod = HeatSizingType::Invalid;
@@ -196,6 +198,8 @@ namespace EIRPlantLoopHeatPumps {
         PlantLocation heatRecoveryPlantLoc;
         InOutNodePair heatRecoveryNodes;
         bool heatRecoveryHeatPump = false; // HP that transfers heat between plants and should not increase plant size
+
+        int setPointNodeNum = 0;
 
         // counters and indexes
         int condMassFlowRateTriggerIndex = 0;

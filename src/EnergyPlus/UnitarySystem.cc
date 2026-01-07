@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -14130,6 +14130,7 @@ namespace UnitarySystems {
 
                         if (OutletHumRatLS > DesOutHumRat) {
                             CycRatio = 1.0;
+                            this->m_CoolingSpeedNum = std::max(1, this->m_CoolingSpeedNum);
 
                             for (int speedNum = this->m_CoolingSpeedNum; speedNum <= this->m_NumOfSpeedCooling; ++speedNum) {
                                 VariableSpeedCoils::SimVariableSpeedCoils(state,
@@ -14331,7 +14332,8 @@ namespace UnitarySystems {
                     ++this->warnIndex.m_SensPLRIter;
                     ShowWarningError(state,
                                      format("{} - Iteration limit exceeded calculating part-load ratio for unit = {}", this->UnitType, this->Name));
-                    ShowContinueError(state, format("Estimated part-load ratio  = {:.3R}", (ReqOutput / FullOutput)));
+                    ShowContinueError(state,
+                                      format("Estimated part-load ratio  = {:.3R}", (FullOutput != 0 ? (ReqOutput / FullOutput) : PartLoadFrac)));
                     ShowContinueError(state, format("Calculated part-load ratio = {:.3R}", PartLoadFrac));
                     ShowContinueErrorTimeStamp(state, "The calculated part-load ratio will be used and the simulation continues. Occurrence info:");
                 } else {
@@ -14345,7 +14347,9 @@ namespace UnitarySystems {
                 }
             }
         } else if (SolFla == -2) {
-            PartLoadFrac = ReqOutput / FullOutput;
+            if (FullOutput != 0) {
+                PartLoadFrac = ReqOutput / FullOutput;
+            }
             if (!state.dataGlobal->WarmupFlag) {
                 if (this->warnIndex.m_SensPLRFail < 1) {
                     ++this->warnIndex.m_SensPLRFail;
@@ -14373,7 +14377,8 @@ namespace UnitarySystems {
                     ++this->warnIndex.m_LatPLRIter;
                     ShowWarningError(
                         state, format("{} - Iteration limit exceeded calculating latent part-load ratio for unit = {}", this->UnitType, this->Name));
-                    ShowContinueError(state, format("Estimated part-load ratio   = {:.3R}", (ReqOutput / FullOutput)));
+                    ShowContinueError(state,
+                                      format("Estimated part-load ratio  = {:.3R}", (FullOutput != 0 ? (ReqOutput / FullOutput) : PartLoadFrac)));
                     ShowContinueError(state, format("Calculated part-load ratio = {:.3R}", PartLoadFrac));
                     ShowContinueErrorTimeStamp(state, "The calculated part-load ratio will be used and the simulation continues. Occurrence info:");
                 }
