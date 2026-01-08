@@ -1279,11 +1279,11 @@ namespace Humidifiers {
         if (this->SuppliedByWaterSystem) {
             state.dataWaterData->WaterStorage(this->WaterTankID).VdotRequestDemand(this->WaterTankDemandARRID) = this->WaterConsRate;
 
-            AvailTankVdot =
-                state.dataWaterData->WaterStorage(this->WaterTankID).VdotAvailDemand(this->WaterTankDemandARRID); // check what tank can currently provide
+            AvailTankVdot = state.dataWaterData->WaterStorage(this->WaterTankID)
+                                .VdotAvailDemand(this->WaterTankDemandARRID); // check what tank can currently provide
 
             StarvedVdot = 0.0;
-            this->TankSupplyVdot = this->WaterConsRate;                                        // init
+            this->TankSupplyVdot = this->WaterConsRate;                                              // init
             if ((AvailTankVdot < this->WaterConsRate) && (!(state.dataGlobal->BeginTimeStepFlag))) { // calculate starved flow
                 StarvedVdot = this->WaterConsRate - AvailTankVdot;
                 this->TankSupplyVdot = AvailTankVdot;
