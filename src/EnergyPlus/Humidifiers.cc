@@ -1273,26 +1273,25 @@ namespace Humidifiers {
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         Real64 AvailTankVdot;
-        Real64 TankSupplyVdot;
         Real64 StarvedVdot;
 
         // set demand request in WaterStorage if needed.
-        if (SuppliedByWaterSystem) {
-            state.dataWaterData->WaterStorage(WaterTankID).VdotRequestDemand(WaterTankDemandARRID) = WaterConsRate;
+        if (this->SuppliedByWaterSystem) {
+            state.dataWaterData->WaterStorage(this->WaterTankID).VdotRequestDemand(this->WaterTankDemandARRID) = this->WaterConsRate;
 
-            AvailTankVdot =
-                state.dataWaterData->WaterStorage(WaterTankID).VdotAvailDemand(WaterTankDemandARRID); // check what tank can currently provide
+            AvailTankVdot = state.dataWaterData->WaterStorage(this->WaterTankID)
+                                .VdotAvailDemand(this->WaterTankDemandARRID); // check what tank can currently provide
 
             StarvedVdot = 0.0;
-            TankSupplyVdot = WaterConsRate;                                                    // init
-            if ((AvailTankVdot < WaterConsRate) && (!(state.dataGlobal->BeginTimeStepFlag))) { // calculate starved flow
-                StarvedVdot = WaterConsRate - AvailTankVdot;
-                TankSupplyVdot = AvailTankVdot;
+            this->TankSupplyVdot = this->WaterConsRate;                                              // init
+            if ((AvailTankVdot < this->WaterConsRate) && (!(state.dataGlobal->BeginTimeStepFlag))) { // calculate starved flow
+                StarvedVdot = this->WaterConsRate - AvailTankVdot;
+                this->TankSupplyVdot = AvailTankVdot;
             }
 
-            TankSupplyVol = TankSupplyVdot * TimeStepSysSec;
-            StarvedSupplyVdot = StarvedVdot;
-            StarvedSupplyVol = StarvedVdot * TimeStepSysSec;
+            this->TankSupplyVol = this->TankSupplyVdot * TimeStepSysSec;
+            this->StarvedSupplyVdot = StarvedVdot;
+            this->StarvedSupplyVol = StarvedVdot * TimeStepSysSec;
         }
     }
 
