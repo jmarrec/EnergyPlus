@@ -6270,6 +6270,13 @@ namespace AirflowNetwork {
                                 OutputProcessor::StoreType::Sum,
                                 Zone(i).Name);
             SetupOutputVariable(m_state,
+                                "AFN Zone Infiltration Mass Flow Rate",
+                                Constant::Units::kg_s,
+                                AirflowNetworkZnRpt(i).infilMassFlow,
+                                OutputProcessor::TimeStepType::System,
+                                OutputProcessor::StoreType::Average,
+                                Zone(i).Name);
+            SetupOutputVariable(m_state,
                                 "AFN Zone Infiltration Air Change Rate",
                                 Constant::Units::ach,
                                 AirflowNetworkZnRpt(i).InfilAirChangeRate,
@@ -9040,6 +9047,7 @@ namespace AirflowNetwork {
         for (auto &e : AirflowNetworkZnRpt) {
             e.InfilVolume = 0.0;
             e.InfilMass = 0.0;
+            e.infilMassFlow = 0.0;
             e.InfilAirChangeRate = 0.0;
             e.VentilVolume = 0.0;
             e.VentilMass = 0.0;
@@ -9049,7 +9057,7 @@ namespace AirflowNetwork {
         }
 
         for (AirLoopNum = 1; AirLoopNum <= NumPrimaryAirSys; ++AirLoopNum) {
-            if (DisSysNumOfCVFs == 0) {
+            if (DisSysNumOfCVFs == 0 || !distribution_simulated) {
                 continue;
             }
             for (FanNum = 1; FanNum <= DisSysNumOfCVFs; ++FanNum) {
@@ -9324,6 +9332,7 @@ namespace AirflowNetwork {
             AirDensity = PsyRhoAirFnPbTdbW(m_state, m_state.dataEnvrn->OutBaroPress, thisZoneHB.MAT, thisZoneHB.airHumRatAvg);
 
             AirflowNetworkZnRpt(i).InfilMass = (exchangeData(i).SumMCp / CpAir) * ReportingConstant;
+            AirflowNetworkZnRpt(i).infilMassFlow = (exchangeData(i).SumMCp / CpAir);
             AirflowNetworkZnRpt(i).InfilVolume = AirflowNetworkZnRpt(i).InfilMass / AirDensity;
             AirflowNetworkZnRpt(i).InfilAirChangeRate = AirflowNetworkZnRpt(i).InfilVolume / (TimeStepSys * Zone(i).Volume);
             AirflowNetworkZnRpt(i).VentilMass = (exchangeData(i).SumMVCp / CpAir) * ReportingConstant;
@@ -9378,7 +9387,7 @@ namespace AirflowNetwork {
 
         // Rewrite AirflowNetwork airflow rate
         for (AirLoopNum = 1; AirLoopNum <= NumPrimaryAirSys; ++AirLoopNum) {
-            if (DisSysNumOfCVFs == 0) {
+            if (DisSysNumOfCVFs == 0 || !distribution_simulated) {
                 continue;
             }
             for (FanNum = 1; FanNum <= DisSysNumOfCVFs; ++FanNum) {
