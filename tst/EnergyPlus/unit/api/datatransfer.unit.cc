@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -279,7 +279,7 @@ public:
 TEST_F(DataExchangeAPIUnitTestFixture, DataTransfer_TestListAllDataInCSV)
 {
 
-    std::string const idf_objects = delimited_string({"Version, 9.3.0;"});
+    std::string const idf_objects = delimited_string({"Version,", DataStringGlobals::MatchVersion + ";"});
     ASSERT_TRUE(process_idf(idf_objects, false)); // this had to be here or I was getting a strange segfault during a JSON string dtor
 
     // first off, the function should return, even if there isn't anything meaningful in it (it will have headers)

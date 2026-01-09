@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -255,8 +255,8 @@ void GetPurchasedAir(EnergyPlusData &state)
         int NumNums = 0;
         int NumAlphas = 0;
         int purchAirNum = 0;
-        std::string fieldValue = "";
-        std::string cAlphaFieldName = "";
+        std::string fieldValue;
+        std::string cAlphaFieldName;
         InitUniqueNodeCheck(state, s_ipsc->cCurrentModuleObject);
         auto const &schemaProps = s_ip->getObjectSchemaProps(state, s_ipsc->cCurrentModuleObject);
         auto &instancesValue = instances_PurchAir.value();

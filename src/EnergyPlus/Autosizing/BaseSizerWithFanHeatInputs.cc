@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -86,10 +86,9 @@ Real64 BaseSizerWithFanHeatInputs::calcFanDesHeatGain(Real64 const &airVolFlow)
     }
     if (this->fanCompModel) {
         return this->fanShaftPow + (this->motInPower - this->fanShaftPow) * this->motInAirFrac;
-    } else {
-        Real64 const fanPowerTot = (airVolFlow * this->deltaP) / this->totEff;
-        return this->motEff * fanPowerTot + (fanPowerTot - this->motEff * fanPowerTot) * this->motInAirFrac;
     }
+    Real64 const fanPowerTot = (airVolFlow * this->deltaP) / this->totEff;
+    return this->motEff * fanPowerTot + (fanPowerTot - this->motEff * fanPowerTot) * this->motInAirFrac;
 }
 
 void BaseSizerWithFanHeatInputs::getFanInputsForDesHeatGain(EnergyPlusData &state,

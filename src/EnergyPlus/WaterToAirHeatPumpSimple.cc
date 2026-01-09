@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -3085,9 +3085,8 @@ namespace WaterToAirHeatPumpSimple {
         if (state.dataWaterToAirHeatPumpSimple->SourceSideMassFlowRate <= 0.0 || LoadSideFullMassFlowRate <= 0.0) {
             simpleWatertoAirHP.SimFlag = false;
             return;
-        } else {
-            simpleWatertoAirHP.SimFlag = true;
         }
+        simpleWatertoAirHP.SimFlag = true;
 
         if (compressorOp == HVAC::CompressorOp::Off) {
             simpleWatertoAirHP.SimFlag = false;
@@ -3384,9 +3383,8 @@ namespace WaterToAirHeatPumpSimple {
         if (state.dataWaterToAirHeatPumpSimple->SourceSideMassFlowRate <= 0.0 || LoadSideFullMassFlowRate <= 0.0) {
             simpleWatertoAirHP.SimFlag = false;
             return;
-        } else {
-            simpleWatertoAirHP.SimFlag = true;
         }
+        simpleWatertoAirHP.SimFlag = true;
 
         if (compressorOp == HVAC::CompressorOp::Off) {
             simpleWatertoAirHP.SimFlag = false;

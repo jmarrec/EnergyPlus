@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -4151,7 +4151,8 @@ void CLIPRECT(EnergyPlusData &state, int const NS2, int const NV1, int &NV3)
                     incr++;
                 }
                 continue;
-            } else if (edgeCount > 1) { // On corner
+            }
+            if (edgeCount > 1) { // On corner
                 if (d_eq(currX, minX)) {
                     if (d_eq(currY, minY)) {
                         EdgeIndex = 3;
@@ -9657,9 +9658,7 @@ void WindowShadingManager(EnergyPlusData &state)
                 }
                 if (!s_surf->Surface(ISurf).HasShadeControl) {
                     continue;
-                } else {
-                    //
-                }
+                } //
 
                 // Initialize switching factor (applicable only to switchable glazing) to unswitched
                 s_surf->SurfWinSwitchingFactor(ISurf) = 0.0;
@@ -9706,8 +9705,8 @@ void WindowShadingManager(EnergyPlusData &state)
                     }
                 }
 
-                Real64 GlareControlIsActive = (state.dataDayltg->ZoneDaylight(IZone).totRefPts > 0 && state.dataEnvrn->SunIsUp &&
-                                               s_surf->WindowShadingControl(IShadingCtrl).GlareControlIsActive); // True if glare control is active
+                bool GlareControlIsActive = (state.dataDayltg->ZoneDaylight(IZone).totRefPts > 0 && state.dataEnvrn->SunIsUp &&
+                                             s_surf->WindowShadingControl(IShadingCtrl).GlareControlIsActive); // True if glare control is active
 
                 Real64 SolarOnWindow = 0.0;     // Direct plus diffuse solar intensity on window (W/m2)
                 Real64 BeamSolarOnWindow = 0.0; // Direct solar intensity on window (W/m2)

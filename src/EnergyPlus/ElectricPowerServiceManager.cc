@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -472,8 +472,8 @@ void ElectricPowerServiceManager::reinitAtBeginEnvironment()
 
 void ElectricPowerServiceManager::verifyCustomMetersElecPowerMgr(EnergyPlusData &state)
 {
-    for (std::size_t loop = 0; loop < elecLoadCenterObjs.size(); ++loop) {
-        elecLoadCenterObjs[loop]->setupLoadCenterMeterIndices(state);
+    for (const auto &elecLoadCenterObj : elecLoadCenterObjs) {
+        elecLoadCenterObj->setupLoadCenterMeterIndices(state);
     }
 }
 
@@ -3574,20 +3574,18 @@ Real64 checkUserEfficiencyInput(EnergyPlusData &state, Real64 userInputValue, bo
             ShowContinueError(state, "Please check your input value  for this electric storage unit and fix the charge efficiency.");
             errorsFound = true;
             return minChargeEfficiency;
-        } else {
-            return userInputValue;
         }
-    } else { // discharging
-        if (userInputValue < minDischargeEfficiency) {
-            ShowSevereError(
-                state, format("ElectricStorage discharge efficiency was too low.  This occurred for electric storage unit named {}", deviceName));
-            ShowContinueError(state, "Please check your input value  for this electric storage unit and fix the discharge efficiency.");
-            errorsFound = true;
-            return minDischargeEfficiency;
-        } else {
-            return userInputValue;
-        }
+        return userInputValue;
+
+    } // discharging
+    if (userInputValue < minDischargeEfficiency) {
+        ShowSevereError(state,
+                        format("ElectricStorage discharge efficiency was too low.  This occurred for electric storage unit named {}", deviceName));
+        ShowContinueError(state, "Please check your input value  for this electric storage unit and fix the discharge efficiency.");
+        errorsFound = true;
+        return minDischargeEfficiency;
     }
+    return userInputValue;
 }
 
 void checkChargeDischargeVoltageCurves(
