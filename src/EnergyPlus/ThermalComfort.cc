@@ -172,13 +172,12 @@ namespace ThermalComfort {
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         int Loop; // DO loop counter
-        std::string CurrentGroupName;
 
         state.dataThermalComforts->ThermalComfortData.allocate(state.dataHeatBal->TotPeople);
 
         for (Loop = 1; Loop <= state.dataHeatBal->TotPeople; ++Loop) {
 
-            CurrentGroupName = state.dataHeatBal->People(Loop).Name;
+            std::string CurrentGroupName = state.dataHeatBal->People(Loop).Name;
 
             // CurrentModuleObject='People'
             // MJW MRT ToDo: Rename most Zone Thermal Comfort output variables to People Thermal Comfort ('cause they're keyed by People name)
@@ -2542,8 +2541,6 @@ namespace ThermalComfort {
         Real64 SensibleLoadPredictedNoAdj;
         Real64 deltaT;
         int iZone;
-        bool testHeating;
-        bool testCooling;
 
         // Get the load predicted - the sign will indicate if heating or cooling
         // was called for
@@ -2561,8 +2558,8 @@ namespace ThermalComfort {
             state.dataThermalComforts->ThermalComfortSetPoint(iZone).notMetCoolingOccupied = 0.0;
             state.dataThermalComforts->ThermalComfortSetPoint(iZone).notMetHeatingOccupied = 0.0;
 
-            testHeating = (state.dataHeatBalFanSys->TempControlType(iZone) != HVAC::SetptType::SingleCool);
-            testCooling = (state.dataHeatBalFanSys->TempControlType(iZone) != HVAC::SetptType::SingleHeat);
+            bool testHeating = (state.dataHeatBalFanSys->TempControlType(iZone) != HVAC::SetptType::SingleCool);
+            bool testCooling = (state.dataHeatBalFanSys->TempControlType(iZone) != HVAC::SetptType::SingleHeat);
 
             if (testHeating && (SensibleLoadPredictedNoAdj > 0)) { // heating
                 if (state.dataRoomAir->AirModel(iZone).AirModel != RoomAir::RoomAirModel::Mixing) {

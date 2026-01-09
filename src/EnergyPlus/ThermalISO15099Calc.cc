@@ -759,7 +759,6 @@ void Calc_ISO15099(EnergyPlusData &state,
         if (NeedUnshadedRun) {
             int NumOfIter_NOSD;
             int j;
-            int OriginalIndex;
             state.dataThermalISO15099Calc->nmix_NOSD(1) = nmix(1);
             state.dataThermalISO15099Calc->presure_NOSD(1) = presure(1);
             state.dataThermalISO15099Calc->nmix_NOSD(nlayer_NOSD + 1) = nmix(nlayer + 1);
@@ -773,7 +772,7 @@ void Calc_ISO15099(EnergyPlusData &state,
                 state.dataThermalISO15099Calc->frct_NOSD(j, nlayer_NOSD + 1) = frct(j, nlayer + 1);
             }
             for (i = 1; i <= nlayer_NOSD; ++i) {
-                OriginalIndex = FirstSpecularLayer + i - 1;
+                int OriginalIndex = FirstSpecularLayer + i - 1;
                 state.dataThermalISO15099Calc->Atop_NOSD(i) = state.dataThermalISO15099Calc->Atop_eff(OriginalIndex);
                 state.dataThermalISO15099Calc->Abot_NOSD(i) = state.dataThermalISO15099Calc->Abot_eff(OriginalIndex);
                 state.dataThermalISO15099Calc->Al_NOSD(i) = state.dataThermalISO15099Calc->Al_eff(OriginalIndex);
@@ -2024,14 +2023,13 @@ void guess(Real64 const tout,
     Real64 delta;
     int i;
     int j;
-    int k;
 
     x(1) = 0.001;
     x(2) = x(1) + thick(1);
 
     for (i = 2; i <= nlayer; ++i) {
         j = 2 * i - 1;
-        k = 2 * i;
+        int k = 2 * i;
         x(j) = x(j - 1) + gap(i - 1);
         x(k) = x(k - 1) + thick(i);
     }
@@ -2084,8 +2082,6 @@ void solarISO15099(Real64 const totsol, Real64 const rtot, const Array1D<Real64>
     // Locals
     Real64 flowin;
     Real64 fract;
-    int i;
-    int j;
 
     fract = 0.0;
     flowin = 0.0;
@@ -2099,8 +2095,8 @@ void solarISO15099(Real64 const totsol, Real64 const rtot, const Array1D<Real64>
     flowin = (rs(1) + 0.5 * rs(2)) / rtot;
     fract = absol(1) * flowin;
 
-    for (i = 2; i <= nlayer; ++i) {
-        j = 2 * i;
+    for (int i = 2; i <= nlayer; ++i) {
+        int j = 2 * i;
         flowin += (0.5 * (rs(j - 2) + rs(j)) + rs(j - 1)) / rtot;
         fract += absol(i) * flowin;
     }
@@ -2270,8 +2266,6 @@ void hatter(EnergyPlusData &state,
     //   wa - window azimuth (degrees, clockwise from south)
 
     // Locals
-    int i;
-    int k;
     int nface;
 
     // evaluate convective/conductive components of gap grashof number, thermal conductivity and their derivatives:
@@ -2313,8 +2307,8 @@ void hatter(EnergyPlusData &state,
 
     // adjust radiation coefficients
     // hrgas = 0.0d0
-    for (i = 2; i <= nlayer; ++i) {
-        k = 2 * i - 1;
+    for (int i = 2; i <= nlayer; ++i) {
+        int k = 2 * i - 1;
         // if ((theta(k)-theta(k-1)) == 0) then
         //  theta(k-1) = theta(k-1) + tempCorrection
         // end if
@@ -2681,16 +2675,12 @@ void filmg(EnergyPlusData &state,
     Real64 ra;
     Real64 asp;
     Real64 gnu;
-    int i;
-    int j;
-    int k;
-    int l;
 
     hcgas = 0.0;
 
-    for (i = 1; i <= nlayer - 1; ++i) {
-        j = 2 * i;
-        k = j + 1;
+    for (int i = 1; i <= nlayer - 1; ++i) {
+        int j = 2 * i;
+        int k = j + 1;
         // determine the gas properties of each gap:
         // tmean = (theta(j)+theta(k))/2.0d0
         tmean = Tgap(i + 1); // Tgap(1) is exterior environment
@@ -2699,7 +2689,7 @@ void filmg(EnergyPlusData &state,
         if (delt == 0.0) {
             delt = 1.0e-6;
         }
-        for (l = 1; l <= nmix(i + 1); ++l) {
+        for (int l = 1; l <= nmix(i + 1); ++l) {
             state.dataThermalISO15099Calc->ipropg(l) = iprop(l, i + 1);
             state.dataThermalISO15099Calc->frctg(l) = frct(l, i + 1);
         }

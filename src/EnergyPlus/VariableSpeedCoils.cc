@@ -253,11 +253,10 @@ namespace VariableSpeedCoils {
 
         auto const instances_ccVSEqFit = s_ip->epJSON.find(CurrentModuleObject);
         if (instances_ccVSEqFit != s_ip->epJSON.end()) {
-            std::string cFieldName;
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
             auto &instancesValue = instances_ccVSEqFit.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-
+                std::string cFieldName;
                 ++DXCoilNum;
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
@@ -386,8 +385,8 @@ namespace VariableSpeedCoils {
                     }
                 }
 
-                std::string fieldName;
                 for (int I = 1; I <= varSpeedCoil.NumOfSpeeds; ++I) {
+                    std::string fieldName;
                     fieldName = format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_total_cooling_capacity");
                     varSpeedCoil.MSRatedTotCap(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
                     fieldName = format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_sensible_heat_ratio");
@@ -667,11 +666,10 @@ namespace VariableSpeedCoils {
         CurrentModuleObject = "Coil:Cooling:DX:VariableSpeed"; // for reporting
         auto const instances_ccVS = s_ip->epJSON.find(CurrentModuleObject);
         if (instances_ccVS != s_ip->epJSON.end()) {
-            std::string cFieldName;
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
             auto &instancesValue = instances_ccVS.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-
+                std::string cFieldName;
                 ++DXCoilNum;
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
@@ -933,8 +931,8 @@ namespace VariableSpeedCoils {
                         state, eoh, cFieldName, basinHeaterOperSch, "Basin heater will be available to operate throughout the simulation.");
                 }
 
-                std::string fieldName;
                 for (int I = 1; I <= varSpeedCoil.NumOfSpeeds; ++I) {
+                    std::string fieldName;
                     fieldName = format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_total_cooling_capacity");
                     varSpeedCoil.MSRatedTotCap(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
                     fieldName = format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_sensible_heat_ratio");
@@ -1136,11 +1134,10 @@ namespace VariableSpeedCoils {
         CurrentModuleObject = "Coil:Heating:WaterToAirHeatPump:VariableSpeedEquationFit";
         auto const instances_hcVSEqFit = s_ip->epJSON.find(CurrentModuleObject);
         if (instances_hcVSEqFit != s_ip->epJSON.end()) {
-            std::string cFieldName;
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
             auto &instancesValue = instances_hcVSEqFit.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-
+                std::string cFieldName;
                 ++DXCoilNum;
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
@@ -1262,10 +1259,10 @@ namespace VariableSpeedCoils {
                     }
                 }
 
-                std::string cFieldName;
-                std::string fieldName;
-                std::string fieldValue;
                 for (int I = 1; I <= varSpeedCoil.NumOfSpeeds; ++I) {
+                    std::string cFieldName;
+                    std::string fieldName;
+                    std::string fieldValue;
                     fieldName = format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_heating_capacity");
                     varSpeedCoil.MSRatedTotCap(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
                     fieldName = format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_heating_cop");
@@ -1534,11 +1531,10 @@ namespace VariableSpeedCoils {
         CurrentModuleObject = "Coil:Heating:DX:VariableSpeed";
         auto const instances_hcVS = s_ip->epJSON.find(CurrentModuleObject);
         if (instances_hcVS != s_ip->epJSON.end()) {
-            std::string cFieldName;
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
             auto &instancesValue = instances_hcVS.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-
+                std::string cFieldName;
                 ++DXCoilNum;
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
@@ -1747,10 +1743,10 @@ namespace VariableSpeedCoils {
                     ShowContinueError(state, format("...{} = 0.0 for defrost strategy = RESISTIVE.", cFieldName));
                 }
 
-                std::string cFieldName;
-                std::string fieldValue;
-                std::string fieldName;
                 for (int I = 1; I <= varSpeedCoil.NumOfSpeeds; ++I) {
+                    std::string cFieldName;
+                    std::string fieldValue;
+                    std::string fieldName;
                     fieldName = format("speed_{}{}", std::to_string(I), "_reference_unit_gross_rated_heating_capacity");
                     varSpeedCoil.MSRatedTotCap(I) = s_ip->getRealFieldValue(fields, schemaProps, fieldName);
                     if (varSpeedCoil.MSRatedTotCap(I) < 1.e-10) {
@@ -1941,11 +1937,10 @@ namespace VariableSpeedCoils {
         CurrentModuleObject = "Coil:WaterHeating:AirToWaterHeatPump:VariableSpeed"; // for reporting
         auto const instances_whcVS = s_ip->epJSON.find(CurrentModuleObject);
         if (instances_whcVS != s_ip->epJSON.end()) {
-            std::string cFieldName;
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
             auto &instancesValue = instances_whcVS.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-
+                std::string cFieldName;
                 ++DXCoilNum;
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
@@ -2024,7 +2019,7 @@ namespace VariableSpeedCoils {
                     }
                 }
 
-                std::string cFieldName = "Evaporator Fan Power Included in Rated COP";
+                cFieldName = "Evaporator Fan Power Included in Rated COP";
                 std::string fieldValue = s_ip->getAlphaFieldValue(fields, schemaProps, "evaporator_fan_power_included_in_rated_cop");
                 BooleanSwitch fanPowerIncluded = static_cast<BooleanSwitch>(getYesNoValue(Util::makeUPPER(fieldValue)));
                 if (fanPowerIncluded != BooleanSwitch::Invalid) {
@@ -2198,8 +2193,8 @@ namespace VariableSpeedCoils {
                     }
                 }
 
-                std::string jfieldName;
                 for (int I = 1; I <= varSpeedCoil.NumOfSpeeds; ++I) {
+                    std::string jfieldName;
                     jfieldName = format("speed_{}{}", std::to_string(I), "_rated_water_heating_capacity");
                     varSpeedCoil.MSRatedTotCap(I) = s_ip->getRealFieldValue(fields, schemaProps, jfieldName);
                     jfieldName = format("speed_{}{}", std::to_string(I), "_rated_water_heating_cop");

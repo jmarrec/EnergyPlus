@@ -1067,7 +1067,6 @@ namespace ThermalChimney {
         Real64 tempb;
         Real64 TCvalue;
         Real64 TCcoefficient;
-        int pivot;
         Real64 ThermalChimSum;
         int ThermChimLoop1;
         int ThermChimLoop2;
@@ -1076,7 +1075,7 @@ namespace ThermalChimney {
         for (ThermChimLoop1 = 1; ThermChimLoop1 <= NTC; ++ThermChimLoop1) {
 
             TCvalue = std::abs(EquaCoef(ThermChimLoop1, ThermChimLoop1));
-            pivot = ThermChimLoop1;
+            int pivot = ThermChimLoop1;
             for (ThermChimLoop2 = ThermChimLoop1 + 1; ThermChimLoop2 <= NTC; ++ThermChimLoop2) {
                 if (std::abs(EquaCoef(ThermChimLoop1, ThermChimLoop2)) > TCvalue) {
                     TCvalue = std::abs(EquaCoef(ThermChimLoop1, ThermChimLoop2));

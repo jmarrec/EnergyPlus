@@ -1148,8 +1148,6 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
 
     int const NumPumpedCondenser = state.dataInputProcessing->inputProcessor->getNumObjectsFound(
         state, cHPWHPumpedCondenser); // number of WaterHeater:HeatPump:PumpedCondenser objects
-    int nAlphaOffset;                 // the difference of array location between alpha items between pumped and wrapped condensers
-    int nNumericOffset;               // the difference of array location between numeric items between pumped and wrapped condensers
     int nNumPossibleNumericArgs;      // the number of possible numeric arguments in the idd
     int nNumPossibleAlphaArgs;        // the number of possible numeric arguments in the idd
 
@@ -1162,8 +1160,8 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
         HeatPumpWaterHeaterData &HPWH = state.dataWaterThermalTanks->HPWaterHeater(HPWaterHeaterNum);
 
         // Initialize the offsets to zero
-        nAlphaOffset = 0;
-        nNumericOffset = 0;
+        int nAlphaOffset = 0;   // the difference of array location between alpha items between pumped and wrapped condensers
+        int nNumericOffset = 0; // the difference of array location between numeric items between pumped and wrapped condensers
 
         DataLoopNode::ConnectionObjectType objType;
 

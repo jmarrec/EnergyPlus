@@ -1062,7 +1062,6 @@ void ParseExpression(EnergyPlusData &state,
     int NumErrors;
     std::string::size_type Pos;
     std::string StringToken;
-    char NextChar;
     bool PeriodFound;
     bool MinusFound;
     bool MultFound;
@@ -1098,6 +1097,7 @@ void ParseExpression(EnergyPlusData &state,
     MultFound = false;
     DivFound = false;
     while (Pos < LastPos) {
+        char NextChar;
         ++CountDoLooping;
         if (CountDoLooping > MaxDoLoopCounts) {
             ShowSevereError(state, format("EMS ParseExpression: Entity={}", state.dataRuntimeLang->ErlStack(StackNum).Name));
@@ -1469,7 +1469,6 @@ int ProcessTokens(
     int LastPos;
     int TokenNum;
     int NumTokens;
-    int Depth;
     int NumSubTokens;
     int NewNumTokens;
     int OperatorNum;
@@ -1496,7 +1495,7 @@ int ProcessTokens(
 
     while ((Pos > 0) && (ParenthWhileCounter < 50)) {
         ++ParenthWhileCounter;
-        Depth = 0;
+        int Depth = 0;
         for (TokenNum = 1; TokenNum <= NumTokens; ++TokenNum) {
             if (Token(TokenNum).Type == Token::Parenthesis) {
                 if (Token(TokenNum).Parenthesis == Token::ParenthesisLeft) {
@@ -2749,27 +2748,8 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
     constexpr std::string_view RoutineName = "GetRuntimeLanguageUserInput: ";
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int GlobalNum;
-    int StackNum;
-    int ErrorNum;
-    int NumAlphas; // Number of elements in the alpha array
-    int NumNums;   // Number of elements in the numeric array
-    int IOStat;    // IO Status when calling get input subroutine
-    bool ErrorsFound(false);
-    int VariableNum(0); // temporary
-    int RuntimeReportVarNum;
-    bool Found;
     OutputProcessor::TimeStepType sovTimeStepType; // temporary
     OutputProcessor::StoreType sovStoreType;       // temporary
-    std::string EndUseSubCatString;
-    int TrendNum;
-    int NumTrendSteps;
-    int loop;
-    int ErlVarLoop;
-    int CurveIndexNum;
-    int MaxNumAlphas(0);  // argument for call to GetObjectDefMaxArgs
-    int MaxNumNumbers(0); // argument for call to GetObjectDefMaxArgs
-    int TotalArgs(0);     // argument for call to GetObjectDefMaxArgs
 
     Array1D_string cAlphaFieldNames;
     Array1D_string cNumericFieldNames;
@@ -2777,17 +2757,30 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
     Array1D_bool lAlphaFieldBlanks;
     Array1D_string cAlphaArgs;
     Array1D<Real64> rNumericArgs;
-    std::string cCurrentModuleObject;
-    int ConstructNum;
-    bool errFlag;
     std::string::size_type lbracket;
-    std::string UnitsA;
-    std::string UnitsB;
     Constant::Units curUnit(Constant::Units::None);
     std::string::size_type ptr;
 
     if (state.dataRuntimeLangProcessor->GetInput) { // GetInput check is redundant with the InitializeRuntimeLanguage routine
         state.dataRuntimeLangProcessor->GetInput = false;
+
+        int StackNum;
+        int NumAlphas;      // Number of elements in the alpha array
+        int NumNums;        // Number of elements in the numeric array
+        int IOStat;         // IO Status when calling get input subroutine
+        int VariableNum(0); // temporary
+        int RuntimeReportVarNum;
+        int loop;
+        int MaxNumAlphas(0);  // argument for call to GetObjectDefMaxArgs
+        int MaxNumNumbers(0); // argument for call to GetObjectDefMaxArgs
+        int TotalArgs(0);     // argument for call to GetObjectDefMaxArgs
+        bool ErrorsFound(false);
+        bool Found;
+        bool errFlag;
+
+        std::string cCurrentModuleObject;
+        std::string UnitsA;
+        std::string UnitsB;
 
         cCurrentModuleObject = "EnergyManagementSystem:Sensor";
         state.dataInputProcessing->inputProcessor->getObjectDefMaxArgs(state, cCurrentModuleObject, TotalArgs, NumAlphas, NumNums);
@@ -2871,7 +2864,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 state.dataRuntimeLang->NumExternalInterfaceFunctionalMockupUnitImportGlobalVariables +
                 state.dataRuntimeLang->NumExternalInterfaceFunctionalMockupUnitExportGlobalVariables >
             0) {
-            for (GlobalNum = 1;
+            for (int GlobalNum = 1;
                  GlobalNum <= state.dataRuntimeLang->NumUserGlobalVariables + state.dataRuntimeLang->NumExternalInterfaceGlobalVariables +
                                   state.dataRuntimeLang->NumExternalInterfaceFunctionalMockupUnitImportGlobalVariables +
                                   state.dataRuntimeLang->NumExternalInterfaceFunctionalMockupUnitExportGlobalVariables;
@@ -2948,7 +2941,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 }
 
                 // loop over each alpha and register variable named as global Erl variable
-                for (ErlVarLoop = 1; ErlVarLoop <= NumAlphas; ++ErlVarLoop) {
+                for (int ErlVarLoop = 1; ErlVarLoop <= NumAlphas; ++ErlVarLoop) {
                     if ((cCurrentModuleObject.compare("ExternalInterface:FunctionalMockupUnitImport:To:Variable") == 0)) {
                         if (ErlVarLoop == 1) {
                             // Only validate first field of object ExternalInterface:FunctionalMockupUnitImport:To:Variable.
@@ -3026,7 +3019,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     }
                 }
 
-                CurveIndexNum = GetCurveIndex(state, cAlphaArgs(2)); // curve name
+                int CurveIndexNum = GetCurveIndex(state, cAlphaArgs(2)); // curve name
                 if (CurveIndexNum == 0) {
                     if (lAlphaFieldBlanks(2)) {
                         ShowSevereError(state, format("{}{}=\"{} blank field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
@@ -3088,7 +3081,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     continue;
                 }
 
-                ConstructNum = Util::FindItemInList(cAlphaArgs(2), state.dataConstruction->Construct);
+                int ConstructNum = Util::FindItemInList(cAlphaArgs(2), state.dataConstruction->Construct);
 
                 if (ConstructNum == 0) {
                     if (lAlphaFieldBlanks(2)) {
@@ -3188,7 +3181,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
         state.dataRuntimeLang->NumErlTrendVariables = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
         if (state.dataRuntimeLang->NumErlTrendVariables > 0) {
             state.dataRuntimeLang->TrendVariable.allocate(state.dataRuntimeLang->NumErlTrendVariables);
-            for (TrendNum = 1; TrendNum <= state.dataRuntimeLang->NumErlTrendVariables; ++TrendNum) {
+            for (int TrendNum = 1; TrendNum <= state.dataRuntimeLang->NumErlTrendVariables; ++TrendNum) {
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          cCurrentModuleObject,
                                                                          TrendNum,
@@ -3223,7 +3216,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     state.dataRuntimeLang->ErlVariable(VariableNum).Value.initialized = true; // Cannot figure out how to get around needing this,
                 }
 
-                NumTrendSteps = std::floor(rNumericArgs(1));
+                int NumTrendSteps = std::floor(rNumericArgs(1));
                 if (NumTrendSteps > 0) {
                     state.dataRuntimeLang->TrendVariable(TrendNum).LogDepth = NumTrendSteps;
                     // setup data arrays using NumTrendSteps
@@ -3266,7 +3259,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 ShowSevereError(
                     state,
                     format("Errors found parsing EMS Runtime Language program or subroutine = {}", state.dataRuntimeLang->ErlStack(StackNum).Name));
-                for (ErrorNum = 1; ErrorNum <= state.dataRuntimeLang->ErlStack(StackNum).NumErrors; ++ErrorNum) {
+                for (int ErrorNum = 1; ErrorNum <= state.dataRuntimeLang->ErlStack(StackNum).NumErrors; ++ErrorNum) {
                     ShowContinueError(state, state.dataRuntimeLang->ErlStack(StackNum).Error(ErrorNum));
                 }
                 ErrorsFound = true;
@@ -3676,7 +3669,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 }
 
                 if (!lAlphaFieldBlanks(8)) {
-                    EndUseSubCatString = cAlphaArgs(8);
+                    std::string EndUseSubCatString = cAlphaArgs(8);
                     SetupOutputVariable(state,
                                         cAlphaArgs(1),
                                         curUnit,
@@ -3733,14 +3726,11 @@ void ReportRuntimeLanguage(EnergyPlusData &state)
     // USE STATEMENTS:
 
     // Locals
-    // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int RuntimeReportVarNum;
-    int VariableNum;
 
-    for (RuntimeReportVarNum = 1;
+    for (int RuntimeReportVarNum = 1;
          RuntimeReportVarNum <= state.dataRuntimeLang->NumEMSOutputVariables + state.dataRuntimeLang->NumEMSMeteredOutputVariables;
          ++RuntimeReportVarNum) {
-        VariableNum = state.dataRuntimeLangProcessor->RuntimeReportVar(RuntimeReportVarNum).VariableNum;
+        int VariableNum = state.dataRuntimeLangProcessor->RuntimeReportVar(RuntimeReportVarNum).VariableNum;
         if (state.dataRuntimeLang->ErlVariable(VariableNum).Value.Type == Value::Number) {
             state.dataRuntimeLangProcessor->RuntimeReportVar(RuntimeReportVarNum).Value =
                 state.dataRuntimeLang->ErlVariable(VariableNum).Value.Number;

@@ -174,7 +174,6 @@ namespace TARCOGCommon {
         int k;
         int front;
         int back;
-        int vent;
 
         for (i = 1; i <= 4 * nlayer; ++i) {
             b(i) = 0.0;
@@ -245,7 +244,7 @@ namespace TARCOGCommon {
             k = 4 * i - 3;
             front = 2 * i - 1;
             back = 2 * i;
-            vent = i + 1;
+            int vent = i + 1;
 
             b(k) = 0.5 * asol(i) + 0.5 * qv(vent - 1);
             b(k + 3) = -0.5 * asol(i) - 0.5 * qv(vent);
@@ -380,12 +379,11 @@ namespace TARCOGCommon {
         int i;
         int ii;
         int j;
-        int ll;
         Real64 sum;
 
         ii = 0;
         for (i = 1; i <= n; ++i) {
-            ll = indx(i);
+            int ll = indx(i);
             sum = b(ll);
             b(ll) = b(i);
             if (ii != 0) {

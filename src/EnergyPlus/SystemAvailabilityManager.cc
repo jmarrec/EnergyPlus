@@ -1602,10 +1602,8 @@ namespace Avail {
                         if (!allocated(optimumStartMgr.ZonePtrs)) {
                             optimumStartMgr.ZonePtrs.allocate({1, state.dataHeatBal->ZoneList(ZoneListNum).NumOfZones});
                         }
-                        int ScanZoneListNum;
-                        int ZoneNum;
-                        for (ScanZoneListNum = 1; ScanZoneListNum <= state.dataHeatBal->ZoneList(ZoneListNum).NumOfZones; ++ScanZoneListNum) {
-                            ZoneNum = state.dataHeatBal->ZoneList(ZoneListNum).Zone(ScanZoneListNum);
+                        for (int ScanZoneListNum = 1; ScanZoneListNum <= state.dataHeatBal->ZoneList(ZoneListNum).NumOfZones; ++ScanZoneListNum) {
+                            int ZoneNum = state.dataHeatBal->ZoneList(ZoneListNum).Zone(ScanZoneListNum);
                             optimumStartMgr.ZonePtrs(ScanZoneListNum) = ZoneNum;
                         }
                     }

@@ -563,15 +563,13 @@ namespace ThermalEN673Calc {
 
         // evaluate inward flowing fraction of absorbed radiation:
         if ((standard == TARCOGGassesParams::Stdrd::EN673) || (standard == TARCOGGassesParams::Stdrd::EN673Design)) {
-            int i;
-            int j;
             if (nlayer == 1) {
                 fract = dir * absol(1) * (rs(1) * rs(3)) / (rs(1) * (rs(1) + rs(3)));
             } else {
                 flowin = (rs(1) + 0.5 * rs(2)) / rtot;
                 fract = dir * absol(1) * rs(10);
-                for (i = 2; i <= nlayer; ++i) {
-                    j = 2 * i;
+                for (int i = 2; i <= nlayer; ++i) {
+                    int j = 2 * i;
                     flowin += (0.5 * (rs(j - 2) + 0.5 * rs(j)) + rs(j - 1)) / rtot;
                     fract += absol(i) * flowin;
                 }

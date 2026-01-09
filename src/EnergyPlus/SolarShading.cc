@@ -4678,12 +4678,9 @@ void ORDER(EnergyPlusData &state,
     // Sequence the temporary arrays in order of decreasing slopes.(bubble sort)
 
     if (M != 1) {
-        int I;   // Sort index
-        int IM1; // Sort control
-        int J;   // Sort index
-        for (I = 2; I <= M; ++I) {
-            IM1 = I - 1;
-            for (J = 1; J <= IM1; ++J) {
+        for (int I = 2; I <= M; ++I) {
+            int IM1 = I - 1;
+            for (int J = 1; J <= IM1; ++J) {
                 if (state.dataSolarShading->SLOPE(I) <= state.dataSolarShading->SLOPE(J)) {
                     continue;
                 }

@@ -210,10 +210,8 @@ namespace WaterManager {
             int MaxNumAlphas(0);     // argument for call to GetObjectDefMaxArgs
             int MaxNumNumbers(0);    // argument for call to GetObjectDefMaxArgs
             int TotalArgs(0);        // argument for call to GetObjectDefMaxArgs
-            int alphaOffset(0);
             std::string objNameMsg;
             int NumIrrigation;
-            int Dummy;
 
             // initialize rainfall model
             state.dataWaterData->RainFall.ModeID = RainfallMode::None;
@@ -476,7 +474,7 @@ namespace WaterManager {
                     }
 
                     // number of surfaces is extensible and = NumAlphas - alphaOffset
-                    alphaOffset = 4; // update this if more alphas inserted ahead of extensible surface listing
+                    int alphaOffset = 4; // update this if more alphas inserted ahead of extensible surface listing
                     state.dataWaterData->RainCollector(Item).NumCollectSurfs = NumAlphas - alphaOffset;
                     state.dataWaterData->RainCollector(Item).SurfName.allocate(state.dataWaterData->RainCollector(Item).NumCollectSurfs);
                     state.dataWaterData->RainCollector(Item).SurfID.allocate(state.dataWaterData->RainCollector(Item).NumCollectSurfs);
@@ -606,6 +604,7 @@ namespace WaterManager {
                     // setup tanks whose level is controlled by supply from another tank
                     if ((state.dataWaterData->WaterStorage(Item).ControlSupply == ControlSupplyType::OtherTankFloatValve) ||
                         (state.dataWaterData->WaterStorage(Item).ControlSupply == ControlSupplyType::TankMainsBackup)) {
+                        int Dummy;
                         state.dataWaterData->WaterStorage(Item).SupplyTankID =
                             Util::FindItemInList(state.dataWaterData->WaterStorage(Item).SupplyTankName, state.dataWaterData->WaterStorage);
                         if (state.dataWaterData->WaterStorage(Item).SupplyTankID == 0) {

@@ -1053,10 +1053,8 @@ namespace TranspiredCollector {
         Real64 SolAbs;                        // solar absorptivity of collector
         Real64 AbsExt;                        // thermal emittance of collector
         Real64 TempExt;                       // collector temperature
-        int SurfPtr;                          // index of surface in main surface structure
         Real64 HMovInsul;                     // dummy for call to InitExteriorConvectionCoeff
         Real64 HExt;                          // dummy for call to InitExteriorConvectionCoeff
-        int ConstrNum;                        // index of construction in main construction structure
         Real64 AbsThermSurf;                  // thermal emittance of underlying wall.
         Real64 TsoK;                          // underlying surface temperature in Kelvin
         Real64 TscollK;                       // collector temperature in Kelvin  (lagged)
@@ -1176,7 +1174,7 @@ namespace TranspiredCollector {
         AbsExt = state.dataTranspiredCollector->UTSC(UTSCNum).LWEmitt;
         TempExt = state.dataTranspiredCollector->UTSC(UTSCNum).TcollLast;
         for (ThisSurf = 1; ThisSurf <= NumSurfs; ++ThisSurf) {
-            SurfPtr = state.dataTranspiredCollector->UTSC(UTSCNum).SurfPtrs(ThisSurf);
+            int SurfPtr = state.dataTranspiredCollector->UTSC(UTSCNum).SurfPtrs(ThisSurf); // index of surface in main surface structure
             // Initializations for this surface
             HMovInsul = 0.0;
             HExt = 0.0;
@@ -1192,7 +1190,7 @@ namespace TranspiredCollector {
                                       HGroundARR(ThisSurf),
                                       HAirARR(ThisSurf),
                                       HSrdSurfARR(ThisSurf));
-            ConstrNum = state.dataSurface->Surface(SurfPtr).Construction;
+            int ConstrNum = state.dataSurface->Surface(SurfPtr).Construction; // index of construction in main construction structure
             AbsThermSurf = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(1))->AbsorpThermal;
             TsoK = state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfPtr) + Constant::Kelvin;
             TscollK = state.dataTranspiredCollector->UTSC(UTSCNum).TcollLast + Constant::Kelvin;

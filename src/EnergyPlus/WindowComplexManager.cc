@@ -2698,7 +2698,6 @@ namespace WindowComplexManager {
         int TotLay; // Total number of layers in a construction
         //   (sum of solid layers and gap layers)
         int Lay;                  // Layer number
-        int LayPtr;               // Material number for a layer
         int IGlass;               // glass layer number (1,2,3,...)
         int IGap;                 // Gap layer number (1,2,...)
         int k;                    // Layer counter
@@ -2907,7 +2906,7 @@ namespace WindowComplexManager {
         IGlass = 0;
         IGap = 0;
         for (Lay = 1; Lay <= TotLay; ++Lay) {
-            LayPtr = state.dataConstruction->Construct(ConstrNum).LayerPoint(Lay);
+            int LayPtr = state.dataConstruction->Construct(ConstrNum).LayerPoint(Lay); // Material number for a layer
             auto const *mat = s_mat->materials(LayPtr);
 
             if ((mat->group == Material::Group::Glass) || (mat->group == Material::Group::GlassSimple)) {
