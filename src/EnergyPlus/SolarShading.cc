@@ -6402,9 +6402,9 @@ void CalcInteriorSolarOverlaps(EnergyPlusData &state,
 
         if (!UseSimpleDistribution) { // Compute overlaps
 
+#ifndef EP_NO_OPENGL
             std::unordered_map<unsigned, float> pssas;
 
-#ifndef EP_NO_OPENGL
             if (state.dataSolarShading->penumbra) {
                 // Add back surfaces to array
                 std::vector<unsigned> pbBackSurfaces;

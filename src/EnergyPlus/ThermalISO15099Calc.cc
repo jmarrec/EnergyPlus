@@ -345,7 +345,6 @@ void Calc_ISO15099(EnergyPlusData &state,
     Real64 hflux_NOSD;
     Real64 shgc_NOSD;
     Real64 hout_NOSD;
-    // REAL(r64) ::  rs_NOSD(maxlay3)!,sol(maxlay)
     Real64 ShadeEmisRatioOut_NOSD;
     Real64 ShadeEmisRatioIn_NOSD;
     Real64 ShadeHcRatioOut_NOSD;
@@ -359,7 +358,6 @@ void Calc_ISO15099(EnergyPlusData &state,
     Real64 houtt;
     Real64 ebsky;
     Real64 ebroom;
-    int i;
 
     // Autodesk:Uninit Initialize variables used uninitialized
     shgc_NOSD = 0.0;            // Autodesk:Uninit Force default initialization
@@ -572,7 +570,7 @@ void Calc_ISO15099(EnergyPlusData &state,
         // exit on error:
 
         if (nlayer > 1) {
-            for (i = 1; i <= nlayer - 1; ++i) {
+            for (int i = 1; i <= nlayer - 1; ++i) {
                 Keff(i) = gap(i) * q(2 * i + 1) / (theta(2 * i + 1) - theta(2 * i));
                 if (IsShadingLayer(LayerType(i))) {
                     Keff(i) = gap(i) * q(2 * i + 1) / (theta(2 * i + 1) - theta(2 * i));
@@ -601,7 +599,7 @@ void Calc_ISO15099(EnergyPlusData &state,
             state.dataThermalISO15099Calc->houts = hout;
             state.dataThermalISO15099Calc->ufactors = ufactor;
             state.dataThermalISO15099Calc->fluxs = flux;
-            for (i = 1; i <= nlayer; ++i) {
+            for (int i = 1; i <= nlayer; ++i) {
                 state.dataThermalISO15099Calc->thetas(2 * i - 1) = theta(2 * i - 1);
                 state.dataThermalISO15099Calc->thetas(2 * i) = theta(2 * i);
                 state.dataThermalISO15099Calc->Ebbs(i) = state.dataThermalISO15099Calc->Ebb(i);
@@ -738,7 +736,6 @@ void Calc_ISO15099(EnergyPlusData &state,
 
         bool NeedUnshadedRun = false;
         int FirstSpecularLayer = 1;
-        int LastSpecularLayer = nlayer;
         int nlayer_NOSD = nlayer;
         if (IsShadingLayer(LayerType(1))) {
             --nlayer_NOSD;
@@ -746,10 +743,8 @@ void Calc_ISO15099(EnergyPlusData &state,
             NeedUnshadedRun = true;
         }
 
-        //  if (LayerType(nlayer).eq.VENETBLIND) then
         if (IsShadingLayer(LayerType(nlayer))) {
             --nlayer_NOSD;
-            LastSpecularLayer = nlayer - 1;
             NeedUnshadedRun = true;
         }
 
@@ -758,20 +753,19 @@ void Calc_ISO15099(EnergyPlusData &state,
         // bi...Set outdoor & indoor gas properties:
         if (NeedUnshadedRun) {
             int NumOfIter_NOSD;
-            int j;
             state.dataThermalISO15099Calc->nmix_NOSD(1) = nmix(1);
             state.dataThermalISO15099Calc->presure_NOSD(1) = presure(1);
             state.dataThermalISO15099Calc->nmix_NOSD(nlayer_NOSD + 1) = nmix(nlayer + 1);
             state.dataThermalISO15099Calc->presure_NOSD(nlayer_NOSD + 1) = presure(nlayer + 1);
-            for (j = 1; j <= nmix(1); ++j) {
+            for (int j = 1; j <= nmix(1); ++j) {
                 state.dataThermalISO15099Calc->iprop_NOSD(j, 1) = iprop(j, 1);
                 state.dataThermalISO15099Calc->frct_NOSD(j, 1) = frct(j, 1);
             }
-            for (j = 1; j <= nmix(nlayer_NOSD + 1); ++j) {
+            for (int j = 1; j <= nmix(nlayer_NOSD + 1); ++j) {
                 state.dataThermalISO15099Calc->iprop_NOSD(j, nlayer_NOSD + 1) = iprop(j, nlayer + 1);
                 state.dataThermalISO15099Calc->frct_NOSD(j, nlayer_NOSD + 1) = frct(j, nlayer + 1);
             }
-            for (i = 1; i <= nlayer_NOSD; ++i) {
+            for (int i = 1; i <= nlayer_NOSD; ++i) {
                 int OriginalIndex = FirstSpecularLayer + i - 1;
                 state.dataThermalISO15099Calc->Atop_NOSD(i) = state.dataThermalISO15099Calc->Atop_eff(OriginalIndex);
                 state.dataThermalISO15099Calc->Abot_NOSD(i) = state.dataThermalISO15099Calc->Abot_eff(OriginalIndex);
@@ -805,7 +799,7 @@ void Calc_ISO15099(EnergyPlusData &state,
                 if (i < nlayer_NOSD) {
                     state.dataThermalISO15099Calc->nmix_NOSD(i + 1) = nmix(OriginalIndex + 1);
                     state.dataThermalISO15099Calc->presure_NOSD(i + 1) = presure(OriginalIndex + 1);
-                    for (j = 1; j <= state.dataThermalISO15099Calc->nmix_NOSD(i + 1); ++j) {
+                    for (int j = 1; j <= state.dataThermalISO15099Calc->nmix_NOSD(i + 1); ++j) {
                         state.dataThermalISO15099Calc->iprop_NOSD(j, i + 1) = iprop(j, OriginalIndex + 1);
                         state.dataThermalISO15099Calc->frct_NOSD(j, i + 1) = frct(j, OriginalIndex + 1);
                     }
@@ -1049,7 +1043,7 @@ void Calc_ISO15099(EnergyPlusData &state,
 
         // bi Set T6-related quantities keff, keffc: (using non-solar pass results)
         if (nlayer > 1) {
-            for (i = 1; i <= nlayer - 1; ++i) {
+            for (int i = 1; i <= nlayer - 1; ++i) {
                 Keff(i) = gap(i) * q(2 * i + 1) / (theta(2 * i + 1) - theta(2 * i));
                 if (IsShadingLayer(LayerType(i))) {
                     Keff(i) = gap(i) * q(2 * i + 1) / (theta(2 * i + 1) - theta(2 * i));
@@ -1086,7 +1080,7 @@ void Calc_ISO15099(EnergyPlusData &state,
         hrout = state.dataThermalISO15099Calc->hrouts;
         hout = state.dataThermalISO15099Calc->houts;
         flux = state.dataThermalISO15099Calc->fluxs; // <--- ???
-        for (i = 1; i <= nlayer; ++i) {
+        for (int i = 1; i <= nlayer; ++i) {
             theta(2 * i - 1) = state.dataThermalISO15099Calc->thetas(2 * i - 1);
             theta(2 * i) = state.dataThermalISO15099Calc->thetas(2 * i);
             state.dataThermalISO15099Calc->Ebb(i) = state.dataThermalISO15099Calc->Ebbs(i);
@@ -1319,9 +1313,7 @@ void therm1d(EnergyPlusData &state,
 
     Array2D<Real64> a(4 * nlayer, 4 * nlayer);
     Array1D<Real64> b(4 * nlayer);
-    // REAL(r64) :: hhatv(maxlay3),hcv(maxlay3), Ebgap(maxlay3), Tgap(maxlay1)
 
-    // REAL(r64) ::  alpha
     int maxiter;
 
     Real64 qr_gap_out;
@@ -1332,7 +1324,6 @@ void therm1d(EnergyPlusData &state,
     // Simon: parameters used in case of JCFN iteration method
     Array1D<Real64> FRes({1, 4 * nlayer});      // store function results from current iteration
     Array1D<Real64> FResOld({1, 4 * nlayer});   // store function results from previous iteration
-    Array1D<Real64> FResDiff({1, 4 * nlayer});  // save difference in results between iterations
     Array1D<Real64> Radiation({1, 2 * nlayer}); // radiation on layer surfaces.  used as temporary storage during iterations
 
     Array1D<Real64> x({1, 4 * nlayer});       // temporary vector for storing results (theta and Radiation).  used for easier handling
@@ -1346,19 +1337,16 @@ void therm1d(EnergyPlusData &state,
     Array1D<Real64> RightHandSide({1, 4 * nlayer});
 
     // Simon: Keep best achieved convergence
-    Real64 prevDifference;
     Real64 Relaxation;
     Array1D<Real64> RadiationSave({1, 2 * nlayer});
     Array1D<Real64> thetaSave({1, 2 * nlayer});
     int currentTry;
 
-    int CSMFlag;
     int i;
     int j;
     int k;
     Real64 curDifference;
     int index;
-    int curTempCorrection;
 
     Real64 qc_gap_in;
     Real64 hc_modified_in;
@@ -1376,9 +1364,7 @@ void therm1d(EnergyPlusData &state,
 
     // Simon: This is set to zero until it is resolved what to do with modifier
     ShadeHcModifiedOut = 0.0;
-    CSMFlag = 0;
     CalcOutcome = CalculationOutcome::Invalid;
-    curTempCorrection = 0;
     AchievedErrorTolerance = 0.0;
     curDifference = 0.0;
     currentTry = 0;
@@ -1395,7 +1381,6 @@ void therm1d(EnergyPlusData &state,
 
     FRes = 0.0;
     FResOld = 0.0;
-    FResDiff = 0.0;
     Radiation = 0.0;
     Relaxation = RelaxationStart;
 
@@ -1671,7 +1656,7 @@ void therm1d(EnergyPlusData &state,
 
         CalculateFuncResults(nlayer, a, b, x, FRes);
 
-        FResDiff = FRes - FResOld;
+        // FResDiff = FRes - FResOld;
 
         LeftHandSide = a;
         RightHandSide = b;
@@ -1771,7 +1756,7 @@ void therm1d(EnergyPlusData &state,
             return;
         }
 
-        prevDifference = curDifference;
+        // prevDifference = curDifference;
 
         if ((index == 0) || (curDifference < AchievedErrorTolerance)) {
             AchievedErrorTolerance = curDifference;

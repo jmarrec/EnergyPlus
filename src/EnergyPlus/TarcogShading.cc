@@ -207,7 +207,7 @@ namespace TarcogShading {
 
         // main loop:
         for (int i = 1; i <= nlayer; ++i) {
-            int k = 2 * i + 1;
+            // int k = 2 * i + 1;
             // if (LayerType(i).eq.VENETBLIND) then
             if (IsShadingLayer(LayerType(i))) {
                 // dr.........set Shading device geometry
