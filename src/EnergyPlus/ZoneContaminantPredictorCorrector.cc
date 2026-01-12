@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -2101,9 +2101,9 @@ void InverseModelCO2(EnergyPlusData &state,
         // Hybrid Model calculate people count
         if (hmZone.PeopleCountCalc_C && state.dataHVACGlobal->UseZoneTimeStepHistory) {
             state.dataHeatBal->Zone(ZoneNum).ZonePeopleActivityLevel =
-                hmZone.peopleActivityLevelSched ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
-            Real64 ActivityLevel = hmZone.peopleActivityLevelSched ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
-            Real64 CO2GenRate = hmZone.peopleCO2GenRateSched ? hmZone.peopleCO2GenRateSched->getCurrentVal() : 0.0;
+                (hmZone.peopleActivityLevelSched != nullptr) ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
+            Real64 ActivityLevel = (hmZone.peopleActivityLevelSched != nullptr) ? hmZone.peopleActivityLevelSched->getCurrentVal() : 0.0;
+            Real64 CO2GenRate = (hmZone.peopleCO2GenRateSched != nullptr) ? hmZone.peopleCO2GenRateSched->getCurrentVal() : 0.0;
             if (ActivityLevel <= 0.0) {
                 ActivityLevel = 130.0; // 130.0 is the default people activity level [W]
             }

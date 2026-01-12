@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -189,7 +189,7 @@ public:
     void ResolveDesignFlowRate(EnergyPlusData &state, int const HVACSizingIterCount);
 
 private:
-    std::string name = "";                // name of analysis object
+    std::string name;                     // name of analysis object
     Real64 newAdjustedMassFlowRate = 0.0; // with sizing factor included...
     Real64 newFoundMassFlowRate = 0.0;
     Real64 significantNormalizedChange = 0.005; // criteria for if sizing algorithm yield a change large enough worth making another pass.

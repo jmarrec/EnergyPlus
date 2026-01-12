@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -2350,7 +2350,8 @@ namespace WindowComplexManager {
             }
             RayIndex = Basis.BasisIndex(IPhi, ITheta);
             return RayIndex;
-        } else if (Basis.BasisSymmetryType == DataBSDFWindow::BasisSymmetry::Axisymmetric) {
+        }
+        if (Basis.BasisSymmetryType == DataBSDFWindow::BasisSymmetry::Axisymmetric) {
             // Search the basis thetas
             if (Theta <= 0.0) {
                 // Special case, Theta = 0.; this is always the first basis element
@@ -2972,7 +2973,7 @@ namespace WindowComplexManager {
 
                 PillarSpacing(IGap) = matGap->pillarSpacing;
                 PillarRadius(IGap) = matGap->pillarRadius;
-                SupportPlr(IGap) = matGap->pillarSpacing != 0.0 && matGap->pillarRadius != 0.0;
+                SupportPlr(IGap) = static_cast<int>(matGap->pillarSpacing != 0.0 && matGap->pillarRadius != 0.0);
 
                 nmix(IGap + 1) = matGap->numGases;
                 for (IMix = 1; IMix <= nmix(IGap + 1); ++IMix) {
@@ -3529,7 +3530,8 @@ namespace WindowComplexManager {
         if (y < Yl) {
             SearchAscTable = 1;
             return SearchAscTable;
-        } else if (y > Yh) {
+        }
+        if (y > Yh) {
             SearchAscTable = n;
             return SearchAscTable;
         }

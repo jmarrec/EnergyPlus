@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -314,10 +314,10 @@ void GetZonePlenumInput(EnergyPlusData &state)
             ShowSevereError(state, format("For {} = {}, {} = {} not found.", CurrentModuleObject, AlphArray(1), cAlphaFields(2), AlphArray(2)));
             ErrorsFound = true;
             continue;
-        } else {
-            state.dataHeatBal->Zone(thisRetPlenum.ActualZoneNum).IsReturnPlenum = true;
-            state.dataHeatBal->Zone(thisRetPlenum.ActualZoneNum).PlenumCondNum = ZonePlenumNum;
         }
+        state.dataHeatBal->Zone(thisRetPlenum.ActualZoneNum).IsReturnPlenum = true;
+        state.dataHeatBal->Zone(thisRetPlenum.ActualZoneNum).PlenumCondNum = ZonePlenumNum;
+
         //  Check if this zone is used as a controlled zone
         ZoneEquipConfigLoop = Util::FindItemInList(AlphArray(2), state.dataZoneEquip->ZoneEquipConfig, &EquipConfiguration::ZoneName);
         if (ZoneEquipConfigLoop != 0) {
@@ -514,10 +514,10 @@ void GetZonePlenumInput(EnergyPlusData &state)
             ShowSevereError(state, format("For {} = {}, {} = {} not found.", CurrentModuleObject, AlphArray(1), cAlphaFields(2), AlphArray(2)));
             ErrorsFound = true;
             continue;
-        } else {
-            state.dataHeatBal->Zone(thisSupPlenum.ActualZoneNum).IsSupplyPlenum = true;
-            state.dataHeatBal->Zone(thisSupPlenum.ActualZoneNum).PlenumCondNum = ZonePlenumNum;
         }
+        state.dataHeatBal->Zone(thisSupPlenum.ActualZoneNum).IsSupplyPlenum = true;
+        state.dataHeatBal->Zone(thisSupPlenum.ActualZoneNum).PlenumCondNum = ZonePlenumNum;
+
         //  Check if this zone is used as a controlled zone
         if (std::any_of(state.dataZoneEquip->ZoneEquipConfig.begin(), state.dataZoneEquip->ZoneEquipConfig.end(), [](EquipConfiguration const &e) {
                 return e.IsControlled;

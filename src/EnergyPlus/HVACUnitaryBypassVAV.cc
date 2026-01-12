@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -3858,9 +3858,8 @@ namespace HVACUnitaryBypassVAV {
                             state, thiscBVAV.HeatCoilName, FirstHVACIteration, thiscBVAV.HeatCoilIndex, QCoilActual, thiscBVAV.fanOp);
                         if (HeatCoilLoad != 0.0) {
                             return (QCoilActual - HeatCoilLoad) / HeatCoilLoad;
-                        } else { // Autodesk:Return Condition added to assure return value is set
-                            return 0.0;
-                        }
+                        } // Autodesk:Return Condition added to assure return value is set
+                        return 0.0;
                     };
                     General::SolveRoot(state, ErrTolerance, SolveMaxIter, SolFlag, HotWaterMdot, f, MinWaterFlow, MaxHotWaterFlow);
                     if (SolFlag == -1) {
