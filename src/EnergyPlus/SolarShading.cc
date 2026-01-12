@@ -10287,7 +10287,7 @@ void CheckGlazingShadingStatusChange(EnergyPlusData &state)
     for (int enclosureNum = 1; enclosureNum <= state.dataViewFactor->NumOfRadiantEnclosures; ++enclosureNum) {
         state.dataViewFactor->EnclRadInfo(enclosureNum).radReCalc = false;
     }
-    if (!state.dataGlobal->AndShadingControlInModel) {
+    if (!state.dataGlobal->AnyShadingControlInModel) {
         return;
     }
     for (int enclosureNum = 1; enclosureNum <= state.dataViewFactor->NumOfSolarEnclosures; ++enclosureNum) {
