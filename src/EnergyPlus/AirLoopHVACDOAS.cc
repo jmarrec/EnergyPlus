@@ -1021,12 +1021,12 @@ namespace AirLoopHVACDOAS {
             if (supplyFanVolFlow != DataSizing::AutoSize) {
                 if (std::abs((supplyFanVolFlow - sizingVolumeFlow) / sizingVolumeFlow) > 0.01) {
                     ShowWarningError(state, format("AirLoopHVAC:DedicatedOutdoorAirSystem = {}.", this->Name));
-                    ShowContinueError(
-                        state,
-                        format("The supply fan = {} has a volumetric air flow rate = {} m3/s.", state.dataFans->fans(this->m_FanIndex)->Name,
-                        supplyFanVolFlow));
                     ShowContinueError(state,
-                                               format("The AirLoopHVAC:DedicatedOutdoorAirSystem Design Volume Flow Rate = {} m3/s.", sizingVolumeFlow));
+                                      format("The supply fan = {} has a volumetric air flow rate = {} m3/s.",
+                                             state.dataFans->fans(this->m_FanIndex)->Name,
+                                             supplyFanVolFlow));
+                    ShowContinueError(state,
+                                      format("The AirLoopHVAC:DedicatedOutdoorAirSystem Design Volume Flow Rate = {} m3/s.", sizingVolumeFlow));
                     ShowContinueError(state, "Consider autosizing the supply fan Maximum Air Flow Rate.");
                 }
             } else {
