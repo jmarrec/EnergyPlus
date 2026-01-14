@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -222,65 +222,65 @@ Real64 constexpr CapFac60Percent(0.60);          // = 60%, load served by half p
 static constexpr std::array<Real64, 5> EuropeanWetCoilFactor = {1.35, 1.15, 1.05, 1.01, 1.0};
 static constexpr std::array<Real64, 5> EuropeanAirInletTemp = {10.0, 0.0, -18.0, -25.0, -34.0};
 
-constexpr std::array<std::string_view, (int)WIStockDoor::Num> wiStockDoorNames = {"None", "AirCurtain", "StripCurtain"};
+// constexpr std::array<std::string_view, (int)WIStockDoor::Num> wiStockDoorNames = {"None", "AirCurtain", "StripCurtain"};
 constexpr std::array<std::string_view, (int)WIStockDoor::Num> wiStockDoorNamesUC = {"NONE", "AIRCURTAIN", "STRIPCURTAIN"};
 
-constexpr std::array<std::string_view, (int)CompressorSuctionPressureCtrl::Num> compressorSuctionPressureCtrlNames = {"FloatSuctionTemperature",
-                                                                                                                      "ConstantSuctionTemperature"};
+// constexpr std::array<std::string_view, (int)CompressorSuctionPressureCtrl::Num> compressorSuctionPressureCtrlNames = {"FloatSuctionTemperature",
+//                                                                                                                      "ConstantSuctionTemperature"};
 constexpr std::array<std::string_view, (int)CompressorSuctionPressureCtrl::Num> compressorSuctionPressureCtrlNamesUC = {"FLOATSUCTIONTEMPERATURE",
                                                                                                                         "CONSTANTSUCTIONTEMPERATURE"};
 
-constexpr std::array<std::string_view, (int)SubcoolerType::Num> subcoolerTypeNames = {"LiquidSuction", "Mechanical"};
+// constexpr std::array<std::string_view, (int)SubcoolerType::Num> subcoolerTypeNames = {"LiquidSuction", "Mechanical"};
 constexpr std::array<std::string_view, (int)SubcoolerType::Num> subcoolerTypeNamesUC = {"LIQUIDSUCTION", "MECHANICAL"};
 
-constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNames = {"TimeSchedule", "TemperatureTermination"};
+// constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNames = {"TimeSchedule", "TemperatureTermination"};
 constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNamesUC = {"TIMESCHEDULE", "TEMPERATURETERMINATION"};
 
-constexpr std::array<std::string_view, (int)SecFluidType::Num> secFluidTypeNames = {"FluidAlwaysLiquid", "FluidPhaseChange"};
+// constexpr std::array<std::string_view, (int)SecFluidType::Num> secFluidTypeNames = {"FluidAlwaysLiquid", "FluidPhaseChange"};
 constexpr std::array<std::string_view, (int)SecFluidType::Num> secFluidTypeNamesUC = {"FLUIDALWAYSLIQUID", "FLUIDPHASECHANGE"};
 
-constexpr std::array<std::string_view, (int)SecPumpCtrl::Num> secPumpCtrlNames = {"Constant", "Variable"};
+// constexpr std::array<std::string_view, (int)SecPumpCtrl::Num> secPumpCtrlNames = {"Constant", "Variable"};
 constexpr std::array<std::string_view, (int)SecPumpCtrl::Num> secPumpCtrlNamesUC = {"CONSTANT", "VARIABLE"};
 
-constexpr std::array<std::string_view, (int)EnergyEqnForm::Num> energyEqnFormNames = {
-    "None", "CaseTemperatureMethod", "RelativeHumidityMethod", "DewpointMethod"};
+// constexpr std::array<std::string_view, (int)EnergyEqnForm::Num> energyEqnFormNames = {
+//     "None", "CaseTemperatureMethod", "RelativeHumidityMethod", "DewpointMethod"};
 constexpr std::array<std::string_view, (int)EnergyEqnForm::Num> energyEqnFormNamesUC = {
     "NONE", "CASETEMPERATUREMETHOD", "RELATIVEHUMIDITYMETHOD", "DEWPOINTMETHOD"};
 
-constexpr std::array<std::string_view, (int)CascadeCndsrTempCtrlType::Num> cascaseCndsrTempCtrlTypeNames = {"Fixed", "Float"};
+// constexpr std::array<std::string_view, (int)CascadeCndsrTempCtrlType::Num> cascaseCndsrTempCtrlTypeNames = {"Fixed", "Float"};
 constexpr std::array<std::string_view, (int)CascadeCndsrTempCtrlType::Num> cascaseCndsrTempCtrlTypeNamesUC = {"FIXED", "FLOAT"};
 
-constexpr std::array<std::string_view, (int)CndsrFlowType::Num> cndsrFlowTypeNames = {"VariableFlow", "ConstantFlow"};
+// constexpr std::array<std::string_view, (int)CndsrFlowType::Num> cndsrFlowTypeNames = {"VariableFlow", "ConstantFlow"};
 constexpr std::array<std::string_view, (int)CndsrFlowType::Num> cndsrFlowTypeNamesUC = {"VARIABLEFLOW", "CONSTANTFLOW"};
 
-constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> fanSpeedCtrlTypeNames = {"VariableSpeed", "FixedLinear", "TwoSpeed", "Fixed"};
+// constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> fanSpeedCtrlTypeNames = {"VariableSpeed", "FixedLinear", "TwoSpeed", "Fixed"};
 constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> fanSpeedCtrlTypeNamesUC = {"VARIABLESPEED", "FIXEDLINEAR", "TWOSPEED", "FIXED"};
 
-constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> heatRejLocationNames = {"Outdoors", "Zone"};
+// constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> heatRejLocationNames = {"Outdoors", "Zone"};
 constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> heatRejLocationNamesUC = {"OUTDOORS", "ZONE"};
 
-constexpr std::array<std::string_view, (int)RefCaseDefrostType::Num> refCaseDefrostTypeNames = {
-    "None", "OffCycle", "HotFluid", "HotFluidWithTemperatureTermination", "Electric", "ElectricOnDemand", "ElectricWithTemperatureTermination"};
+// constexpr std::array<std::string_view, (int)RefCaseDefrostType::Num> refCaseDefrostTypeNames = {
+//     "None", "OffCycle", "HotFluid", "HotFluidWithTemperatureTermination", "Electric", "ElectricOnDemand", "ElectricWithTemperatureTermination"};
 constexpr std::array<std::string_view, (int)RefCaseDefrostType::Num> refCaseDefrostTypeNamesUC = {
     "NONE", "OFFCYCLE", "HOTFLUID", "HOTFLUIDWITHTEMPERATURETERMINATION", "ELECTRIC", "ELECTRICONDEMAND", "ELECTRICWITHTEMPERATURETERMINATION"};
 
-constexpr std::array<std::string_view, (int)ASHtrCtrlType::Num> asHtrCtrlTypeNames = {
-    "None", "Constant", "Linear", "DewpointMethod", "HeatBalanceMethod"};
+// constexpr std::array<std::string_view, (int)ASHtrCtrlType::Num> asHtrCtrlTypeNames = {
+//    "None", "Constant", "Linear", "DewpointMethod", "HeatBalanceMethod"};
 constexpr std::array<std::string_view, (int)ASHtrCtrlType::Num> asHtrCtrlTypeNamesUC = {
     "NONE", "CONSTANT", "LINEAR", "DEWPOINTMETHOD", "HEATBALANCEMETHOD"};
 
-constexpr std::array<std::string_view, (int)RatingType::Num> ratingTypeNames = {"CapacityTotalSpecificConditions",
-                                                                                "EuropeanSC1Standard",
-                                                                                "EuropeanSC1NominalWet",
-                                                                                "EuropeanSC2Standard",
-                                                                                "EuropeanSC2NominalWet",
-                                                                                "EuropeanSC3Standard",
-                                                                                "EuropeanSC3NominalWet",
-                                                                                "EuropeanSC4Standard",
-                                                                                "EuropeanSC4NominalWet",
-                                                                                "EuropeanSC5Standard",
-                                                                                "EuropeanSC5NominalWet",
-                                                                                "UnitLoadFactorSensibleOnly"};
+// constexpr std::array<std::string_view, (int)RatingType::Num> ratingTypeNames = {"CapacityTotalSpecificConditions",
+//                                                                                 "EuropeanSC1Standard",
+//                                                                                 "EuropeanSC1NominalWet",
+//                                                                                 "EuropeanSC2Standard",
+//                                                                                 "EuropeanSC2NominalWet",
+//                                                                                 "EuropeanSC3Standard",
+//                                                                                 "EuropeanSC3NominalWet",
+//                                                                                 "EuropeanSC4Standard",
+//                                                                                 "EuropeanSC4NominalWet",
+//                                                                                 "EuropeanSC5Standard",
+//                                                                                 "EuropeanSC5NominalWet",
+//                                                                                 "UnitLoadFactorSensibleOnly"};
 constexpr std::array<std::string_view, (int)RatingType::Num> ratingTypeNamesUC = {"CAPACITYTOTALSPECIFICCONDITIONS",
                                                                                   "EUROPEANSC1STANDARD",
                                                                                   "EUROPEANSC1NOMINALWET",
@@ -294,25 +294,26 @@ constexpr std::array<std::string_view, (int)RatingType::Num> ratingTypeNamesUC =
                                                                                   "EUROPEANSC5NOMINALWET",
                                                                                   "UNITLOADFACTORSENSIBLEONLY"};
 
-constexpr std::array<std::string_view, (int)SHRCorrectionType::Num> shrCorrectionTypeNames = {
-    "LinearSHR60", "QuadraticSHR", "European", "TabularRHxDT1xTRoom"};
+//  constexpr std::array<std::string_view, (int)SHRCorrectionType::Num> shrCorrectionTypeNames = {
+//     "LinearSHR60", "QuadraticSHR", "European", "TabularRHxDT1xTRoom"};
 constexpr std::array<std::string_view, (int)SHRCorrectionType::Num> shrCorrectionTypeNamesUC = {
     "LINEARSHR60", "QUADRATICSHR", "EUROPEAN", "TABULARRHXDT1XTROOM"};
 
-constexpr std::array<std::string_view, (int)VerticalLoc::Num> verticalLocNames = {"Ceiling", "Middle", "Floor"};
+// constexpr std::array<std::string_view, (int)VerticalLoc::Num> verticalLocNames = {"Ceiling", "Middle", "Floor"};
 constexpr std::array<std::string_view, (int)VerticalLoc::Num> verticalLocNamesUC = {"CEILING", "MIDDLE", "FLOOR"};
 
-constexpr std::array<std::string_view, (int)DefrostType::Num> defrostTypeNames = {"HotFluid", "Electric", "None", "OffCycle"};
+// constexpr std::array<std::string_view, (int)DefrostType::Num> defrostTypeNames = {"HotFluid", "Electric", "None", "OffCycle"};
 constexpr std::array<std::string_view, (int)DefrostType::Num> defrostTypeNamesUC = {"HOTFLUID", "ELECTRIC", "NONE", "OFFCYCLE"};
 
-constexpr std::array<std::string_view, (int)CriticalType::Num> criticalTypeNames = {"Subcritical", "Transcritical"};
+// constexpr std::array<std::string_view, (int)CriticalType::Num> criticalTypeNames = {"Subcritical", "Transcritical"};
 constexpr std::array<std::string_view, (int)CriticalType::Num> criticalTypeNamesUC = {"SUBCRITICAL", "TRANSCRITICAL"};
 
-constexpr std::array<std::string_view, (int)IntercoolerType::Num> intercoolerTypeNames = {"None", "Flash Intercooler", "Shell-and-Coil Intercooler"};
+// constexpr std::array<std::string_view, (int)IntercoolerType::Num> intercoolerTypeNames = {"None", "Flash Intercooler", "Shell-and-Coil
+// Intercooler"};
 constexpr std::array<std::string_view, (int)IntercoolerType::Num> intercoolerTypeNamesUC = {
     "NONE", "FLASH INTERCOOLER", "SHELL-AND-COIL INTERCOOLER"};
 
-constexpr std::array<std::string_view, (int)IntercoolerType::Num> transSysTypeNames = {"SingleStage", "TwoStage"};
+// constexpr std::array<std::string_view, (int)IntercoolerType::Num> transSysTypeNames = {"SingleStage", "TwoStage"};
 constexpr std::array<std::string_view, (int)IntercoolerType::Num> transSysTypeNamesUC = {"SINGLESTAGE", "TWOSTAGE"};
 
 void ManageRefrigeratedCaseRacks(EnergyPlusData &state)
@@ -482,7 +483,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
     int NumDisplayCases(0);                // Counter for refrigerated cases in GetInput do loop
     int NumWalkIns(0);                     // Number of walk ins
     int RefrigSysNum(0);
-    int RefrigIndex(0);                // Index used in fluid property routines
     Real64 DeltaHPhaseChange(0.0);     // Secondary loop enthalpy change in condenser w overfeed system (J/g)
     Real64 DelTempMin(0.0);            // min temperature for heat rej curve for air cooled condenser (C)
     Real64 DelTempMax(0.0);            // max temperature for heat rej curve for air cooled condenser (C)
@@ -11064,7 +11064,7 @@ void RefrigCaseData::CalculateCase(EnergyPlusData &state) // Absolute pointer to
         Real64 DeltaStockingEnergy = (StockingLoad * state.dataGlobal->TimeStepZoneSec);
         this->StockingEnergy += DeltaStockingEnergy;
     } // warm up
-    // CALCULTE ALL LOADS INFLUENCED BY ZONE TEMPERATURE AND RH
+    // CALCULATE ALL LOADS INFLUENCED BY ZONE TEMPERATURE AND RH
     // Anti-sweat heater capacity
     switch (this->AntiSweatControlType) {
     case ASHtrCtrlType::None: {
@@ -12706,7 +12706,7 @@ void RefrigSystemData::CalculateCondensers(EnergyPlusData &state, int const SysN
                 "time step and heat recovery at the system time step. In that case, and ONLY if it occurs a large number of times",
                 CondCreditWarnIndex5);
             ShowRecurringContinueErrorAtEnd(
-                state, "(relative to the number of time steps in the simulation), there may be a mis-match between the", CondCreditWarnIndex6);
+                state, "(relative to the number of time steps in the simulation), there may be a mismatch between the", CondCreditWarnIndex6);
             ShowRecurringContinueErrorAtEnd(
                 state, "operating schedules of the refrigeration system and the heat recovery load.", CondCreditWarnIndex7);
         } // not warmup
@@ -13425,11 +13425,11 @@ void RefrigSystemData::CalculateCompressors(EnergyPlusData &state)
                     compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
                     compressor.LoadFactor = LFLastComp;
                     break; // numcomps do
-                } else {   //>= needed capacity
-                    this->TotCompCapacity += compressor.Capacity;
-                    this->RefMassFlowComps += compressor.MassFlow;
-                    this->TotCompPower += compressor.Power;
                 } //>= needed capacity
+                this->TotCompCapacity += compressor.Capacity;
+                this->RefMassFlowComps += compressor.MassFlow;
+                this->TotCompPower += compressor.Power;
+                //>= needed capacity
             } else { // high-stage compressors (for two-stage systems only)
                 if ((this->TotHiStageCompCapacity + compressor.Capacity) >= NeededCapacity) {
                     LFLastComp = (NeededCapacity - this->TotHiStageCompCapacity) / compressor.Capacity;
@@ -13444,11 +13444,11 @@ void RefrigSystemData::CalculateCompressors(EnergyPlusData &state)
                     compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
                     compressor.LoadFactor = LFLastComp;
                     break; // numcomps do
-                } else {   //>= needed capacity
-                    this->TotHiStageCompCapacity += compressor.Capacity;
-                    this->RefMassFlowHiStageComps += compressor.MassFlow;
-                    this->TotHiStageCompPower += compressor.Power;
                 } //>= needed capacity
+                this->TotHiStageCompCapacity += compressor.Capacity;
+                this->RefMassFlowHiStageComps += compressor.MassFlow;
+                this->TotHiStageCompPower += compressor.Power;
+                //>= needed capacity
             } // StageIndex
             compressor.ElecConsumption = compressor.Power * localTimeStepSec;
             compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
@@ -13684,11 +13684,11 @@ void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
                 compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
                 compressor.LoadFactor = LFLastComp;
                 break;
-            } else {
-                this->TotCompCapacityLP += compressor.Capacity;
-                this->RefMassFlowCompsLP += compressor.MassFlow;
-                this->TotCompPowerLP += compressor.Power;
             }
+            this->TotCompCapacityLP += compressor.Capacity;
+            this->RefMassFlowCompsLP += compressor.MassFlow;
+            this->TotCompPowerLP += compressor.Power;
+
         } // NumCompressorsLP
         this->HCompOutLP = this->HCompInLP + this->TotCompPowerLP / this->RefMassFlowCompsLP;
     } // (TransSystem(SysNum)%TransSysType == 2)
@@ -13882,11 +13882,10 @@ void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
             compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
             compressor.LoadFactor = LFLastComp;
             break;
-        } else {
-            this->TotCompCapacityHP += compressor.Capacity;
-            this->RefMassFlowCompsHP += compressor.MassFlow;
-            this->TotCompPowerHP += compressor.Power;
         }
+        this->TotCompCapacityHP += compressor.Capacity;
+        this->RefMassFlowCompsHP += compressor.MassFlow;
+        this->TotCompPowerHP += compressor.Power;
 
     } // NumCompressorsHP
 

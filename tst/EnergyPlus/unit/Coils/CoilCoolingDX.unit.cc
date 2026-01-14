@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -58,6 +58,7 @@
 #include "../Coils/CoilCoolingDXFixture.hh"
 
 // For tests of new coil vs old coil
+#include <EnergyPlus/Coils/CoilCoolingDXCurveFitPerformance.hh>
 #include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/DXCoils.hh>
 #include <EnergyPlus/DataAirSystems.hh>
@@ -173,7 +174,6 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXAlternateModePerformance)
     // set some values to run at rated conditions and call to run normal mode speed 1
     evapInletNode.MassFlowRate = thisCoil.performance->ratedAirMassFlowRateMinSpeed(*state);
     HVAC::CoilMode coilMode = HVAC::CoilMode::Normal;
-    Real64 PLR = 1.0;
     int speedNum = 1;
     Real64 speedRatio = 1.0;
     HVAC::FanOp fanOp = HVAC::FanOp::Cycling;
@@ -312,7 +312,6 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXAlternateModePerformanceHitsSaturation)
     // set some values to run at rated conditions and call to run normal mode speed 1
     evapInletNode.MassFlowRate = thisCoil.performance->ratedAirMassFlowRateMinSpeed(*state);
     HVAC::CoilMode coilMode = HVAC::CoilMode::Normal;
-    Real64 PLR = 1.0;
     int speedNum = 1;
     Real64 speedRatio = 1.0;
     HVAC::FanOp fanOp = HVAC::FanOp::Cycling;
@@ -325,6 +324,13 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXAlternateModePerformanceHitsSaturation)
         EXPECT_NEAR(10.238, evapOutletNode.Temp, 0.01);
         EXPECT_NEAR(0.007748, evapOutletNode.HumRat, 0.0001);
     }
+    EXPECT_EQ(thisCoil.availSched->currentVal, 1.0);
+    EXPECT_EQ(thisCoil.performance->coilCoolingDXAvailSched->currentVal, 1.0);
+    auto coilPerformance{dynamic_cast<EnergyPlus::CoilCoolingDXCurveFitPerformance *>(thisCoil.performance.get())};
+    EXPECT_EQ(coilPerformance->normalMode.coilCoolingDXAvailSched->currentVal, 1.0);
+    EXPECT_EQ(coilPerformance->alternateMode.coilCoolingDXAvailSched->currentVal, 1.0);
+    EXPECT_EQ(coilPerformance->alternateMode2.coilCoolingDXAvailSched->currentVal, 1.0);
+
     // alter values and run at rated conditions normal mode speed 2
     evapInletNode.MassFlowRate = thisCoil.performance->ratedAirMassFlowRateMaxSpeed(*state);
     speedNum = 2;
@@ -460,7 +466,7 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXAlternateModePerformanceHitsSaturation)
 //     constantcurve2->outputLimits.max = 1.0;
 //     // set coil parameter
 //     Coil.MSRatedTotCap(1) = 10710.0; // 60 % of full capacity
-//     Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capcity
+//     Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capacity
 //     Coil.MSRatedAirMassFlowRate(1) = state->dataHVACGlobal->MSHPMassFlowRateLow;
 //     Coil.MSRatedAirMassFlowRate(2) = state->dataHVACGlobal->MSHPMassFlowRateHigh;
 //     // Match RatedCBF from new coil
@@ -877,7 +883,7 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXAlternateModePerformanceHitsSaturation)
 //     constantcurve2->outputLimits.max = 1.0;
 //     // set coil parameter
 //     Coil.MSRatedTotCap(1) = 10710.0; // 60 % of full capacity
-//     Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capcity
+//     Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capacity
 //     Coil.MSRatedAirMassFlowRate(1) = state->dataHVACGlobal->MSHPMassFlowRateLow;
 //     Coil.MSRatedAirMassFlowRate(2) = state->dataHVACGlobal->MSHPMassFlowRateHigh;
 //     // Match RatedCBF from new coil
@@ -1294,7 +1300,7 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXAlternateModePerformanceHitsSaturation)
 //     constantcurve2->outputLimits.max = 1.0;
 //     // set coil parameter
 //     Coil.MSRatedTotCap(1) = 10710.0; // 60 % of full capacity
-//     Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capcity
+//     Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capacity
 //     Coil.MSRatedAirMassFlowRate(1) = 0.6;
 //     Coil.MSRatedAirMassFlowRate(2) = 1.0;
 //     // Match RatedCBF from new coil
@@ -1525,7 +1531,7 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXAlternateModePerformanceHitsSaturation)
 //     constantcurve2->outputLimits.max = 1.0;
 //     // set coil parameter
 //     Coil.MSRatedTotCap(1) = 10710.0; // 60 % of full capacity
-//     Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capcity
+//     Coil.MSRatedTotCap(2) = 17850.0; // 5 ton capacity
 //     Coil.MSRatedAirMassFlowRate(1) = 0.6;
 //     Coil.MSRatedAirMassFlowRate(2) = 1.0;
 //     // Match RatedCBF from new coil

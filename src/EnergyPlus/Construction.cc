@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -448,7 +448,7 @@ void ConstructionProps::calculateTransferFunction(EnergyPlusData &state, bool &E
                     RevConst = false;
                 }
 
-                if (RevConst) { // Curent construction is a reverse of
+                if (RevConst) { // Current construction is a reverse of
                     // construction Constr.  Thus, CTFs do not need to be re-
                     // calculated.  Copy CTF info for construction Constr to
                     // construction ConstrNum.
@@ -1122,7 +1122,7 @@ void ConstructionProps::calculateExponentialMatrix()
     // precision variables has been added.  The main loop for higher powers
     // of AMat is now stopped whenever these powers of AMat will no longer
     // add to the summation (AExp) instead ofstopping potentially at the
-    // artifical limit of AMat**100.
+    // artificial limit of AMat**100.
 
     // REFERENCES:
     // Seem, J.E.  "Modeling of Heat Transfer in Buildings",
@@ -1351,7 +1351,7 @@ void ConstructionProps::calculateExponentialMatrix()
                 }
             }
         }
-        // Backup is true when every item of AExp didnt pass the TinyLimit test
+        // Backup is true when every item of AExp didn't pass the TinyLimit test
         if (Backup) {
             this->AExp = AMato;
             break;
@@ -1814,7 +1814,7 @@ void ConstructionProps::calculateFinalCoefficients()
             if (rat < ConvrgLim) {
 
                 // If the ratio is less than the convergence limit, then any other
-                // terms would have a neglible impact on the CTF-based energy balances.
+                // terms would have a negligible impact on the CTF-based energy balances.
                 this->NumCTFTerms = inum;
                 CTFConvrg = true; // CTF calculations have converged--set logical.
             }
@@ -1900,7 +1900,7 @@ void ConstructionProps::calculateFinalCoefficients()
 void ConstructionProps::reportTransferFunction(EnergyPlusData &state, int const cCounter)
 {
 
-    static constexpr std::string_view Format_700{" Construction CTF,{},{:4},{:4},{:4},{:8.3F},{:15.4N},{:8.3F},{:8.3F},{:8.3F},{:8.3F},{}\n"};
+    static constexpr std::string_view Format_700{" Construction CTF,{},{:4},{:4},{:4},{:8.3F},{:15.4G},{:8.3F},{:8.3F},{:8.3F},{:8.3F},{}\n"};
     print(state.files.eio,
           Format_700,
           this->Name,
@@ -1920,11 +1920,11 @@ void ConstructionProps::reportTransferFunction(EnergyPlusData &state, int const 
         auto const *thisMaterial = state.dataMaterial->materials(Layer);
         switch (thisMaterial->group) {
         case Material::Group::AirGap: {
-            static constexpr std::string_view Format_702(" Material:Air CTF Summary,{},{:12.4N}\n");
+            static constexpr std::string_view Format_702(" Material:Air CTF Summary,{},{:12.4G}\n");
             print(state.files.eio, Format_702, thisMaterial->Name, thisMaterial->Resistance);
         } break;
         default: {
-            static constexpr std::string_view Format_701(" Material CTF Summary,{},{:8.4F},{:14.3F},{:11.3F},{:13.3F},{:12.4N}\n");
+            static constexpr std::string_view Format_701(" Material CTF Summary,{},{:8.4F},{:14.3F},{:11.3F},{:13.3F},{:12.4G}\n");
             Material::MaterialBase const *mp = thisMaterial;
             print(state.files.eio, Format_701, mp->Name, mp->Thickness, mp->Conductivity, mp->Density, mp->SpecHeat, mp->Resistance);
         } break;
@@ -1933,10 +1933,10 @@ void ConstructionProps::reportTransferFunction(EnergyPlusData &state, int const 
 
     for (int I = this->NumCTFTerms; I >= 0; --I) {
         if (I != 0) {
-            static constexpr std::string_view Format_703(" CTF,{:4},{:20.8N},{:20.8N},{:20.8N},{:20.8N}\n");
+            static constexpr std::string_view Format_703(" CTF,{:4},{:20.8G},{:20.8G},{:20.8G},{:20.8G}\n");
             print(state.files.eio, Format_703, I, this->CTFOutside[I], this->CTFCross[I], this->CTFInside[I], this->CTFFlux[I]);
         } else {
-            static constexpr std::string_view Format_704(" CTF,{:4},{:20.8N},{:20.8N},{:20.8N}\n");
+            static constexpr std::string_view Format_704(" CTF,{:4},{:20.8G},{:20.8G},{:20.8G}\n");
             print(state.files.eio, Format_704, I, this->CTFOutside[I], this->CTFCross[I], this->CTFInside[I]);
         }
     }
@@ -1944,18 +1944,18 @@ void ConstructionProps::reportTransferFunction(EnergyPlusData &state, int const 
     if (this->SourceSinkPresent) {
         // QTFs...
         for (int I = this->NumCTFTerms; I >= 0; --I) {
-            static constexpr std::string_view Format_705(" QTF,{:4},{:20.8N},{:20.8N}\n");
+            static constexpr std::string_view Format_705(" QTF,{:4},{:20.8G},{:20.8G}\n");
             print(state.files.eio, Format_705, I, this->CTFSourceOut[I], this->CTFSourceIn[I]);
         }
         // QTFs for source/sink location temperature calculation...
         for (int I = this->NumCTFTerms; I >= 0; --I) {
-            static constexpr std::string_view Format_706(" Source/Sink Loc Internal Temp QTF,{:4},{:20.8N},{:20.8N},{:20.8N}\n");
+            static constexpr std::string_view Format_706(" Source/Sink Loc Internal Temp QTF,{:4},{:20.8G},{:20.8G},{:20.8G}\n");
             print(state.files.eio, Format_706, I, this->CTFTSourceOut[I], this->CTFTSourceIn[I], this->CTFTSourceQ[I]);
         }
         if (this->TempAfterLayer != 0) {
             // QTFs for user specified interior temperature calculation...
             for (int I = this->NumCTFTerms; I >= 0; --I) {
-                static constexpr std::string_view Format_707(" User Loc Internal Temp QTF,{:4},{:20.8N},{:20.8N},{:20.8N}\n");
+                static constexpr std::string_view Format_707(" User Loc Internal Temp QTF,{:4},{:20.8G},{:20.8G},{:20.8G}\n");
                 print(state.files.eio, Format_707, I, this->CTFTUserOut[I], this->CTFTUserIn[I], this->CTFTUserSource[I]);
             }
         }
@@ -1966,7 +1966,7 @@ void ConstructionProps::reportLayers(EnergyPlusData &state)
 {
     // Report the layers for each opaque construction in predefined tabular report
     // J. Glazer March 2024
-    if (state.dataOutRptPredefined->pdchOpqConsLayCol.size() > 0) {
+    if (!state.dataOutRptPredefined->pdchOpqConsLayCol.empty()) {
         for (int i = 1; i <= this->TotLayers; ++i) {
             int layerIndex = this->LayerPoint(i);
             auto const *mat = state.dataMaterial->materials(layerIndex);
@@ -2021,14 +2021,14 @@ Real64 ConstructionProps::setUserTemperatureLocationPerpendicular(EnergyPlusData
         ShowWarningError(state, "ConstructionProperty:InternalHeatSource has a perpendicular temperature location parameter that is less than zero.");
         ShowContinueError(state, format("Construction={} has this error.  The parameter has been reset to 0.", this->Name));
         return 0.0;
-    } else if (userValue > 1.0) {
+    }
+    if (userValue > 1.0) {
         ShowWarningError(state,
                          "ConstructionProperty:InternalHeatSource has a perpendicular temperature location parameter that is greater than one.");
         ShowContinueError(state, format("Construction={} has this error.  The parameter has been reset to 1.", this->Name));
         return 1.0;
-    } else { // Valid value between 0 and 1
-        return userValue;
-    }
+    } // Valid value between 0 and 1
+    return userValue;
 }
 
 void ConstructionProps::setNodeSourceAndUserTemp(Array1D_int &Nodes)

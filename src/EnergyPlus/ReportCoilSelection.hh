@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -210,7 +210,7 @@ public:                                  // data
     Real64 plantDesMaxMassFlowRate; // this coil's plant loop overall design flow rate [kg/s]
     Real64 plantDesRetTemp;         // this coil's plant loop design return temperature
     Real64 plantDesSupTemp;         // this coil's plant loop design supply temperature
-    Real64 plantDesDeltaTemp;       // this coil's plant loop design temperature diference (delta C)
+    Real64 plantDesDeltaTemp;       // this coil's plant loop design temperature difference (delta C)
     Real64 plantDesCapacity;        // this coil's plant loop capacity [W]
     Real64 coilCapPrcntPlantCap;    // this coil's capacity as a percentage of the overall loop's capacity
     Real64 coilFlowPrcntPlantFlow;  // this coil's design flow rate as a percentage the overall loop's design flow rate

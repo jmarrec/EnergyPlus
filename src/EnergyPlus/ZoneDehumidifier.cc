@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -126,7 +126,7 @@ namespace ZoneDehumidifier {
         // Simulate a zone dehumidifier.
 
         // METHODOLOGY EMPLOYED:
-        // Call appropriate subroutines to get input values, initialize variables, model performanc
+        // Call appropriate subroutines to get input values, initialize variables, model performance
         // update node information, report model outputs.
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -216,7 +216,6 @@ namespace ZoneDehumidifier {
         Array1D_bool lAlphaBlanks;     // Logical array, alpha field input BLANK = .TRUE.
         Array1D_bool lNumericBlanks;   // Logical array, numeric field input BLANK = .TRUE.
         int TotalArgs(0);              // Total number of alpha and numeric arguments (max)
-        Real64 CurveVal;               // Output from curve object (water removal or energy factor curves)
 
         int NumDehumidifiers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, CurrentModuleObject);
 

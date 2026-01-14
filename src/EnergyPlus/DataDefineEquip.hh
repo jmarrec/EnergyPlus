@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -102,7 +102,7 @@ namespace DataDefineEquip {
         std::shared_ptr<AirTerminalUnit> airTerminalPtr = nullptr;
         Array1D_string EquipName; // name of subcomponent
         Array1D_int EquipIndex;
-        int AirTerminalSizingSpecIndex = 0; // index to DesignSpecification:AirTerminal:Sizing obect
+        int AirTerminalSizingSpecIndex = 0; // index to DesignSpecification:AirTerminal:Sizing object
         int TermUnitSizingNum = 0;          // index to TermUnitSizing and TermUnitFinalZoneSizing for this air distribution unit
         Real64 UpStreamLeakFrac = 0.0;      // upstream nominal leakage fraction
         Real64 DownStreamLeakFrac = 0.0;    // downstream constant leakage fraction

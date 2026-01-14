@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -224,7 +224,8 @@ namespace SimulationManager {
         // read object information early in simulation
         isInputObjectUsed(state);
 
-        BranchInputManager::ManageBranchInput(state); // just gets input and returns.
+        BranchInputManager::ManageBranchInput(state);    // just gets input and returns.
+        BranchInputManager::ManageConnectorInput(state); // just gets input and returns.
 
         // Create a new plugin manager which starts up the Python interpreter
         state.dataPluginManager->pluginManager = std::make_unique<EnergyPlus::PluginManagement::PluginManager>(state);
@@ -454,6 +455,9 @@ namespace SimulationManager {
                     state.dataReportFlag->cWarmupDay = fmt::to_string(state.dataReportFlag->NumOfWarmupDays);
                     DisplayString(state, "Warming up {" + state.dataReportFlag->cWarmupDay + '}');
                 } else if (state.dataGlobal->DayOfSim == 1) {
+                    if (state.dataSysVars->ReportDuringWarmup) {
+                        OutputProcessor::ResetAccumulationWhenWarmupComplete(state);
+                    }
                     if (state.dataGlobal->KindOfSim == Constant::KindOfSim::RunPeriodWeather) {
                         DisplayString(state, "Starting Simulation at " + state.dataEnvrn->CurMnDyYr + " for " + state.dataEnvrn->EnvironmentName);
                     } else {
@@ -1131,6 +1135,32 @@ namespace SimulationManager {
             if (NumAlpha > 5) {
                 if (Alphas(6) == "YES") {
                     state.dataGlobal->DoHVACSizingSimulation = true;
+                    if (!state.dataGlobal->DoPlantSizing) { // if not doing plant sizing, cannot do HVAC sizing simulation
+                        state.dataGlobal->DoHVACSizingSimulation = false;
+
+                        ShowWarningError(
+                            state, "GetProjectData: Mismatch in the Sizing Flags Do HVAC Sizing and Do Plant Sizing in SimulationControl object");
+                        ShowContinueError(state, "...The Do HVAC Sizing Simulation for Sizing Periods flag is YES, but the Do Plant Sizing");
+                        ShowContinueError(state, "...Calculation flag is NO.  This is not allowed.  Either set the Do HVAC Sizing Simulation");
+                        ShowContinueError(state, "...for Sizing Periods flag to NO or set the Do Plant Sizing Calculation to YES and add the");
+                        ShowContinueError(state, "...appropriate Sizing:Plant object(s) to the input file.  The simulation continues with");
+                        ShowContinueError(state, "...the Do HVAC Sizing flag reset to NO.");
+                    } else {
+                        std::string spObject = "Sizing:Plant";
+                        int NumPltSizInput = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, spObject);
+                        if (NumPltSizInput == 0 && state.dataGlobal->DoHVACSizingSimulation && state.dataGlobal->DoPlantSizing) {
+                            ShowSevereError(
+                                state,
+                                format(
+                                    "GetProjectData: No {} object entered when the Do HVAC Sizing Simulation and Do Plant Sizing are both YES in the "
+                                    "SimulationControl object.",
+                                    spObject));
+                            ShowContinueError(state, format("...When these input flags are both yes, a {} object is required.", spObject));
+                            ShowContinueError(state, format("...Either add one or more appropriate {} objects to the input file", spObject));
+                            ShowContinueError(state, "...or change both the Do HVAC Sizing Simulation and Do Plant Sizing are both YES. ");
+                            ErrorsFound = true;
+                        }
+                    }
                 }
             }
         }
@@ -1206,7 +1236,7 @@ namespace SimulationManager {
                         overrideMinNumWarmupDays = true;
                         overrideBeginEnvResetSuppress = true;
                     } else if (overrideModeValue == "MODE05") {
-                        // Mode04 plus Minimun System Timestep will be set to 1hr
+                        // Mode04 plus Minimum System Timestep will be set to 1hr
                         overrideTimestep = true;
                         overrideZoneAirHeatBalAlg = true;
                         overrideMinNumWarmupDays = true;
@@ -1491,9 +1521,8 @@ namespace SimulationManager {
     {
         if (logical) {
             return ("True");
-        } else {
-            return ("False");
         }
+        return ("False");
     }
 
     void CheckForMisMatchedEnvironmentSpecifications(EnergyPlusData &state)
@@ -2484,11 +2513,11 @@ namespace SimulationManager {
                 const auto LoopString = [&]() {
                     if (LoopSideNum == DataPlant::LoopSideLocation::Demand) {
                         return "Demand";
-                    } else if (LoopSideNum == DataPlant::LoopSideLocation::Supply) {
-                        return "Supply";
-                    } else {
-                        return "";
                     }
+                    if (LoopSideNum == DataPlant::LoopSideLocation::Supply) {
+                        return "Supply";
+                    }
+                    return "";
                 }();
 
                 print(state.files.bnd,

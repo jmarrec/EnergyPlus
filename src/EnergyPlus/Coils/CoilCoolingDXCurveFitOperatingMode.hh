@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -81,6 +81,7 @@ struct CoilCoolingDXCurveFitOperatingMode
 {
     std::string object_name = "Coil:Cooling:DX:CurveFit:OperatingMode";
     std::string parentName;
+    Sched::Schedule *coilCoolingDXAvailSched = nullptr;
 
     void instantiateFromInputSpec(EnergyPlusData &state, CoilCoolingDXCurveFitOperatingModeInputSpecification input_data);
     void size(EnergyPlusData &state);
@@ -131,6 +132,7 @@ struct CoilCoolingDXCurveFitOperatingMode
     Real64 ratedAirVolFlowEMSOverrideValue = 0.0;
     bool ratedTotCapFlowEMSOverrideON = false;
     Real64 ratedTotCapFlowEMSOverrideValue = 0.0;
+    Real64 minOutdoorDrybulb = -25.0;
 
     enum class CondenserType
     {

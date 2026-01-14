@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -187,7 +187,15 @@ namespace PlantUtilities {
                                   std::string_view const CallerName, // really used for error messages
                                   int NodeNum,                       // index in Node structure of node to be scanned
                                   PlantLocation &pLantLoc,           // return value for location
-                                  ObjexxFCL::Optional_int CompNum = _);
+                                  int &CompNum,                      // return value for component number
+                                  bool reportError = true);          // optional parameter for reporting
+
+    // overloaded without CompNum
+    void ScanPlantLoopsForNodeNum(EnergyPlusData &state,
+                                  std::string_view const CallerName, // really used for error messages
+                                  int NodeNum,                       // index in Node structure of node to be scanned
+                                  PlantLocation &pLantLoc,           // return value for location
+                                  bool reportError = true);          // optional parameter for reporting
 
     bool AnyPlantLoopSidesNeedSim(EnergyPlusData &state);
 

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -107,7 +107,7 @@ namespace PhotovoltaicThermalCollectors {
         std::string Name;
         std::string OSCMName;                  // OtherSideConditionsModel
         int OSCMPtr = 0;                       // OtherSideConditionsModel index
-        Sched::Schedule *availSched = nullptr; // Availablity schedule
+        Sched::Schedule *availSched = nullptr; // Availability schedule
         Real64 PVEffGapWidth = 0.0;            // Effective Gap Plenum Behind PV modules (m)
         Real64 PVCellTransAbsProduct = 0.0;    // PV cell Transmittance-Absorptance prodiuct
         Real64 BackMatTranAbsProduct = 0.0;    // Backing Material Normal Transmittance-Absorptance Product

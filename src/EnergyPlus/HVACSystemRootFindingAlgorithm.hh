@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -69,7 +69,7 @@ static constexpr std::array<std::string_view, static_cast<int>(HVACSystemRootSol
 struct HVACSystemRootFindingAlgorithm
 {
     std::string Algorithm = {}; // Choice of algorithm
-    int NumOfIter = 5;          // Number of Iteration Before Algorith Switch
+    int NumOfIter = 5;          // Number of Iteration Before Algorithm Switch
     HVACSystemRootSolverAlgorithm HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
 };
 struct RootFindingData : BaseGlobalStruct

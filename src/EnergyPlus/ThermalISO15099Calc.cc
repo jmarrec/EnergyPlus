@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -2261,7 +2261,7 @@ void hatter(EnergyPlusData &state,
     //   hin   Indoor Indoor combined film coefficient (if non-zero)
     //   hout  Outdoor combined film coefficient (if non-zero)
     //   nmix  vector of number of gasses in a mixture for each gap
-    // Ouputs
+    // Outputs
     //   hhat     vector of all film coefficients (maxlay3)
     //   hgas     vector of gap 'film' coeff.
     //   hcin  Indoor convective surface heat transfer coefficient

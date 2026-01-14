@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -97,7 +97,7 @@ namespace WindowAC {
         int DXCoilNumOfSpeeds;                    // number of speed levels for variable speed DX coil
         int CoilOutletNodeNum;                    // Outlet node number of DX cooling coil
         HVAC::FanOp fanOp = HVAC::FanOp::Invalid; // mode of operation; 1=cycling fan, cycling compressor,
-        // 2=continuous fan, cycling compresor
+        // 2=continuous fan, cycling compressor
         HVAC::FanPlace fanPlace; // fan placement; 1=blow through, 2=draw through
         int MaxIterIndex1;
         int MaxIterIndex2;

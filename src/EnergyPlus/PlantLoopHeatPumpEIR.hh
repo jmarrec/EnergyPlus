@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -57,6 +57,7 @@
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantComponent.hh>
+#include <EnergyPlus/ScheduleManager.hh>
 
 namespace EnergyPlus {
 
@@ -122,6 +123,8 @@ namespace EIRPlantLoopHeatPumps {
         ControlType sysControlType = ControlType::Invalid;
         DataPlant::FlowMode flowMode = DataPlant::FlowMode::Invalid;
 
+        bool SetpointSetToLoopErrDone = false; // True if the warning about setpoint is missing at the outlet node has been issued
+
         // sizing data
         Real64 heatSizingRatio = 1.0;
         HeatSizingType heatSizingMethod = HeatSizingType::Invalid;
@@ -147,6 +150,7 @@ namespace EIRPlantLoopHeatPumps {
         int maxSupplyWaterTempCurveIndex = 0;
         int heatRecoveryCapFTempCurveIndex = 0;
         int heatRecoveryEIRFTempCurveIndex = 0;
+        bool waterTempExceeded = false; // flag to indicate if water temperature exceeded the limits
 
         // flow rate terms
         Real64 loadSideDesignVolFlowRate = 0.0;
@@ -194,6 +198,8 @@ namespace EIRPlantLoopHeatPumps {
         PlantLocation heatRecoveryPlantLoc;
         InOutNodePair heatRecoveryNodes;
         bool heatRecoveryHeatPump = false; // HP that transfers heat between plants and should not increase plant size
+
+        int setPointNodeNum = 0;
 
         // counters and indexes
         int condMassFlowRateTriggerIndex = 0;
@@ -256,11 +262,13 @@ namespace EIRPlantLoopHeatPumps {
 
         virtual void doPhysics(EnergyPlusData &state, Real64 currentLoad);
 
+        virtual void setUpEMS(EnergyPlusData &state);
+
         void doPhysicsWSHP(EnergyPlusData &state, Real64 currentLoad);
 
         void doPhysicsASHP(EnergyPlusData &state, Real64 currentLoad);
 
-        void calcAvailableCapacity(EnergyPlusData &state, Real64 const currentLoad, Real64 &availableCapacity, Real64 &partLoadRatio);
+        void calcAvailableCapacity(EnergyPlusData &state, Real64 const currentLoad, int curveIndex, Real64 &availableCapacity, Real64 &partLoadRatio);
 
         Real64 heatingCapacityModifierASHP(EnergyPlusData &state) const;
 
@@ -285,6 +293,8 @@ namespace EIRPlantLoopHeatPumps {
         void sizeSrcSideWSHP(EnergyPlusData &state);
 
         void sizeSrcSideASHP(EnergyPlusData &state);
+
+        virtual void reportEquipmentSummary(EnergyPlusData &state);
 
         void sizeHeatRecoveryASHP(EnergyPlusData &state);
 
@@ -376,7 +386,7 @@ namespace EIRPlantLoopHeatPumps {
 
         // New additions for GAHP only
         Constant::eFuel fuelType = Constant::eFuel::Invalid; // Fuel type assignment
-        std::string endUseSubcat = "";
+        std::string endUseSubcat;
         DataPlant::FlowMode flowMode = DataPlant::FlowMode::Invalid;
         Real64 desSupplyTemp = 60.0;
         Real64 desTempLift = 11.1;
@@ -429,6 +439,115 @@ namespace EIRPlantLoopHeatPumps {
         virtual ~EIRFuelFiredHeatPump() = default;
         EIRFuelFiredHeatPump() = default;
     };
+
+    struct HeatPumpAirToWater : public EIRPlantLoopHeatPump
+    {
+
+        enum class OperatingModeControlMethod
+        {
+            Invalid = -1,
+            ScheduledModes,
+            EMSControlled,
+            Load,
+            Num
+        };
+        enum class OperatingModeControlOptionMultipleUnit
+        {
+            Invalid = -1,
+            SingleMode,
+            CoolingPriority,
+            HeatingPriority,
+            Balanced,
+            Num
+        };
+
+        // additional variables
+        HeatPumpAirToWater *companionHeatPumpCoil = nullptr;
+        std::string availSchedName;            // availability schedule
+        Sched::Schedule *availSched = nullptr; // availability schedule
+        OperatingModeControlMethod operatingModeControlMethod = OperatingModeControlMethod::Load;
+        OperatingModeControlOptionMultipleUnit operatingModeControlOptionMultipleUnit = OperatingModeControlOptionMultipleUnit::SingleMode;
+        std::string operationModeControlScheName;
+        Sched::Schedule *operationModeControlSche = nullptr; // availability schedule
+        int heatPumpMultiplier = 1;
+        int numUnitUsed = 1;
+        Real64 minOutdoorAirTempLimit = 0.0;
+        Real64 maxOutdoorAirTempLimit = 0.0;
+        Real64 CrankcaseHeaterCapacity = 0.0;      // total crankcase heater capacity [W]
+        Real64 MaxOATCrankcaseHeater = 10.0;       // maximum OAT for crankcase heater operation [C]
+        int CrankcaseHeaterCapacityCurveIndex = 0; // Crankcase heater power-temperature curve or table index
+        Real64 defrostResistiveHeaterCap = 0.0;
+        Real64 referenceCapacityOneUnit = 0.0;
+        bool boosterOn = false;
+        Real64 boosterMultCap = 1.0;
+        Real64 boosterMultCOP = 1.0;
+
+        int static constexpr maxNumSpeeds = 5;
+        int numSpeeds = 1;
+        //        adding 1 to account for booster mode curves
+        std::array<Real64, maxNumSpeeds + 1> ratedCapacity = {};
+        std::array<Real64, maxNumSpeeds + 1> ratedCOP = {};
+        std::array<int, maxNumSpeeds + 1> capFuncTempCurveIndex = {};
+        std::array<int, maxNumSpeeds + 1> powerRatioFuncTempCurveIndex = {};
+        std::array<int, maxNumSpeeds + 1> powerRatioFuncPLRCurveIndex = {};
+        // 0-indexing, if it's fixed speed, it's integer; if it's variable speed, it's continuous
+        Real64 speedLevel = 0.0; // 1-indexing
+        Real64 speedRatio = 0.0;
+        // for reporting curve values
+        Real64 capFuncTempCurveValue = 0.0;
+        Real64 eirFuncTempCurveValue = 0.0;
+        Real64 eirFuncPLRModifierValue = 0.0;
+
+        // EMS variables
+        bool OperationModeEMSOverrideOn = false;
+        int OperationModeEMSOverrideValue = 0;
+        bool DefrosstFlagEMSOverrideOn = false;
+        bool DefrosstFlagEMSOverrideValue = false;
+        bool EnteringTempEMSOverrideOn = false; // entering water temperature
+        Real64 EnteringTempEMSOverrideValue = 0.0;
+        bool LeavingTempEMSOverrideOn = false; // leaving water temperature
+        Real64 LeavingTempEMSOverrideValue = 0.0;
+
+        bool oneTimeInitFlagAWHP = true;
+
+        // new output in AWHP
+        Real64 CrankcaseHeaterPower = 0.0;
+        Real64 CrankcaseHeaterEnergy = 0.0;
+        Real64 heatingCOP = 0.0;
+        Real64 coolingCOP = 0.0;
+        // this can be 0, 1, ..., number of HP unit (specified in Compressor Multiplier)
+        int operatingMode = 0;
+        Real64 sourceSideDesignInletTemp = 0.0;     // Rated Inlet Air Temperature in xx Mode
+        Real64 ratedLeavingWaterTemperature = 0.0;  // rated_leaving_water_temperature_in_xx_mode
+        Real64 ratedEnteringWaterTemperature = 0.0; // rated_leaving_water_temperature_in_xx_mode
+        enum class CompressorControlType
+        {
+            Invalid = -1,
+            FixedSpeed,
+            VariableSpeed,
+            Num
+        };
+        CompressorControlType controlType = CompressorControlType::FixedSpeed;
+
+        void doPhysics(EnergyPlusData &state, Real64 currentLoad) override;
+        void oneTimeInit(EnergyPlusData &state) override;
+        void calcLoadSideHeatTransfer(EnergyPlusData &state, Real64 availableCapacity, Real64 currentLoad);
+        void calcPowerUsage(EnergyPlusData &state, Real64 availableCapacityBeforeMultiplier);
+        void calcOpMode(EnergyPlusData &state, Real64 currentLoad, OperatingModeControlOptionMultipleUnit modeCalcMethod);
+        void reportEquipmentSummary(EnergyPlusData &state) override;
+        void report(EnergyPlusData &state) override;
+        static void pairUpCompanionCoils(EnergyPlusData &state);
+        void resetReportingVariables() override;
+        Real64 calcCrankcaseHeaterPower(EnergyPlusData &state) const;
+        void setUpEMS(EnergyPlusData &state) override;
+        static PlantComponent *factory(EnergyPlusData &state,
+                                       DataPlant::PlantEquipmentType &hp_type,
+                                       const std::string &hp_name,
+                                       int const inletNodeNum = 0,
+                                       int const outletNodeNum = 0);
+        static void processInputForEIRPLHP(EnergyPlusData &state);
+        void sizeLoadSide(EnergyPlusData &state);
+    }; // HeatPumpAirToWater
 } // namespace EIRPlantLoopHeatPumps
 
 struct EIRPlantLoopHeatPumpsData : BaseGlobalStruct
@@ -469,6 +588,24 @@ struct EIRFuelFiredHeatPumpsData : BaseGlobalStruct
     }
 };
 
+struct HeatPumpAirToWatersData : BaseGlobalStruct
+{
+    std::vector<EIRPlantLoopHeatPumps::HeatPumpAirToWater> heatPumps;
+    bool getInputsAWHP = true;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void init_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
+    void clear_state() override
+    {
+        new (this) HeatPumpAirToWatersData();
+    }
+};
 } // namespace EnergyPlus
 
 #endif // ENERGYPLUS_PLANTLOOPHEATPUMPEIR_HH

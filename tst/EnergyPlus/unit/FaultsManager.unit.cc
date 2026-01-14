@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -338,7 +338,6 @@ TEST_F(EnergyPlusFixture, FaultsManager_FaultFoulingAirFilters_CalFaultyFanAirFl
     //     Calculate the decrease of the fan air flow rate, given the fan curve
     //     and the increase of fan pressure rise due to fouling air filters
 
-    int FanNum;
     double FanDesignFlowRateDec;
     double FanFaultyDeltaPressInc = 0.10; // Increase by 10%
 
@@ -775,7 +774,7 @@ TEST_F(EnergyPlusFixture, FaultsManager_FoulingCoil_AssignmentAndCalc)
         "  0.000010,                !- Maximum Water Flow Rate {m3/s}",
         "  AHU HW Heating Coil Water Inlet Node,  !- Water Inlet Node Name",
         "  AHU HW Heating Coil Water Outlet Node,  !- Water Outlet Node Name",
-        "  Air Loop Referenz AHU Cooling Coil Air Outlet Node,  !- Air Inlet Node Name",
+        "  Air Loop Reference AHU Cooling Coil Air Outlet Node,  !- Air Inlet Node Name",
         "  AHU HW Heating Coil Air Outlet Node,  !- Air Outlet Node Name",
         "  UFactorTimesAreaAndDesignWaterFlowRate,  !- Performance Input Method",
         "  438.32,                  !- Rated Capacity {W}",

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -434,6 +434,1105 @@ TEST_F(EnergyPlusFixture, CatchErrorsOnBadCurves)
     EXPECT_THROW(EIRPlantLoopHeatPump::factory(*state, DataPlant::PlantEquipmentType::HeatPumpEIRCooling, "HP COOLING SIDE"), std::runtime_error);
 }
 
+TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource_AWHP)
+{
+    std::string const idf_objects = delimited_string({"HeatPump:AirToWater,",
+                                                      "test_AWHP, !- Name",
+                                                      ", !- Availability Schedule Name Heating",
+                                                      ", !- Availability Schedule Name Cooling",
+                                                      "Load , !- Operating Mode Control Method",
+                                                      "SingleMode, !- Operating Mode Control Option for Multiple Unit",
+                                                      ", !- Operating Mode Control Schedule Name",
+                                                      ",    !- Minimum Part Load Ratio",
+                                                      "20 , !-  Rated Inlet Air Temperature in Heating Mode",
+                                                      "1.0, !-  Rated Air Flow Rate in Heating Mode",
+                                                      "50 , !-  Rated Leaving Water Temperature in Heating Mode",
+                                                      "0.0001, !-  Rated Water Flow Rate in Heating Mode",
+                                                      ", !-  Minimum Outdoor Air Temperature in Heating Mode",
+                                                      ", !-  Maximum Outdoor Air Temperature in Heating Mode",
+                                                      ",    !- Minimum Leaving Water Temperature Curve Name in Heating Mode",
+                                                      ",    !- Maximum Leaving Water Temperature Curve Name in Heating Mode",
+                                                      "1.0, !-  Sizing Factor for Heating",
+                                                      "25, !-  Rated Inlet Air Temperature in Cooling Mode",
+                                                      "0.002, !-  Rated Air Flow Rate in Cooling Mode",
+                                                      "22 , !-  Rated Leaving Water Temperature in Cooling Mode",
+                                                      "0.005, !-  Rated Water Flow Rate in Cooling Mode",
+                                                      ", !-  Minimum Outdoor Air Temperature in Cooling Mode",
+                                                      ", !-  Maximum Outdoor Air Temperature in Cooling Mode",
+                                                      ",    !- Minimum Leaving Water Temperature Curve Name in Cooling Mode",
+                                                      ",    !- Maximum Leaving Water Temperature Curve Name in Cooling Mode",
+                                                      "0.9, !-  Sizing Factor for Cooling",
+                                                      "Outdoor Air Inlet Node , !-  Air Inlet Node Name",
+                                                      "Outdoor Air Outlet Node, !-  Air Outlet Node Name",
+                                                      "Heating Coil Load Loop Intermediate Node, !-  Hot Water Inlet Node Name",
+                                                      "Heating Coil Load Loop Supply Outlet Node, !-  Hot Water Outlet Node Name",
+                                                      "Cooling Coil Load Loop Intermediate Node , !-  Chilled Water Inlet Node Name",
+                                                      "Cooling Coil Load Loop Supply Outlet Node , !-  Chilled Water Outlet Node Name",
+                                                      ", !- Maximum Outdoor Dry Bulb Temperature For Defrost Operation",
+                                                      ", !-  Heat Pump Defrost Control",
+                                                      ", !-  Defrost Time Period Fraction",
+                                                      ", !-  Resistive Defrost Heater Capacity",
+                                                      ", !-  Defrost Energy Input Ratio Function of Temperature Curve Name",
+                                                      "1 , !- Compressor Multiplier",
+                                                      "FixedSpeed , !- Control Type",
+                                                      "100 , !- Crankcase Heater Capacity",
+                                                      "EIRCurveFuncPLR, !- Crankcase Heater Capacity Function of Temperature Curve Name",
+                                                      "20 , !- Maximum Ambient Temperature for Crankcase Heater Operation",
+                                                      "1 , !- Number of Speeds for Heating",
+                                                      "1000, !-  Rated Heating Capacity at Speed 1",
+                                                      "3.14, !-  Rated COP for Heating at Speed 1",
+                                                      "dummyCurve, !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 1",
+                                                      "dummyCurve, !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 1",
+                                                      "dummyCurve, !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 1",
+                                                      ", !-  Rated Heating Capacity at Speed 2",
+                                                      ", !-  Rated COP for Heating at Speed 2",
+                                                      ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 2",
+                                                      ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 2",
+                                                      ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 2",
+                                                      ", !-  Rated Heating Capacity at Speed 3",
+                                                      ", !-  Rated COP for Heating at Speed 3",
+                                                      ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 3",
+                                                      ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 3",
+                                                      ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 3",
+                                                      ", !-  Rated Heating Capacity at Speed 4",
+                                                      ", !-  Rated COP for Heating at Speed 4",
+                                                      ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 4",
+                                                      ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 4",
+                                                      ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 4",
+                                                      ", !-  Rated Heating Capacity at Speed 5",
+                                                      ", !-  Rated COP for Heating at Speed 5",
+                                                      ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 5",
+                                                      ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 5",
+                                                      ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 5",
+                                                      ", !-  Booster Mode On Heating",
+                                                      ", !-  Rated Heating Capacity in Booster Mode",
+                                                      ", !-  Rated Heating COP in Booster Mode",
+                                                      ", !-  Normalized Heating Capacity Function of Temperature Curve Name in Booster Mode",
+                                                      ", !-  Heating Energy Input Ratio Function of Temperature Curve Name in Booster Mode",
+                                                      ", !-  Heating Energy Input Ratio Function of PLR Curve Name in Booster Mode",
+                                                      "1, !-  Number of Speeds for Cooling",
+                                                      "20000, !-  Rated Cooling Capacity at Speed 1",
+                                                      "3, !-  Rated COP for Cooling at Speed 1",
+                                                      "dummyCurve, !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 1",
+                                                      "dummyCurve, !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 1",
+                                                      "dummyCurve, !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 1",
+                                                      ", !-  Rated Cooling Capacity at Speed 2",
+                                                      ", !-  Rated COP for Cooling at Speed 2",
+                                                      ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 2",
+                                                      ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 2",
+                                                      ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 2",
+                                                      ", !-  Rated Cooling Capacity at Speed 3",
+                                                      ", !-  Rated COP for Cooling at Speed 3",
+                                                      ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 3",
+                                                      ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 3",
+                                                      ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 3",
+                                                      ", !-  Rated Cooling Capacity at Speed 4",
+                                                      ", !-  Rated COP for Cooling at Speed 4",
+                                                      ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 4",
+                                                      ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 4",
+                                                      ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 4",
+                                                      ", !-  Rated Cooling Capacity at Speed 5",
+                                                      ", !-  Rated COP for Cooling at Speed 5",
+                                                      ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 5",
+                                                      ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 5",
+                                                      ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 5",
+                                                      ", !-  Booster Mode On Cooling",
+                                                      ", !-  Rated Cooling Capacity in Booster Mode",
+                                                      ", !-  Rated Cooling COP in Booster Mode",
+                                                      ", !-  Normalized Cooling Capacity Function of Temperature Curve Name in Booster Mode",
+                                                      ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name in Booster Mode",
+                                                      "; !-  Cooling Energy Input Ratio Function of PLR Curve Name in Booster Mode",
+
+                                                      "Curve:Linear,",
+                                                      "  dummyCurve,",
+                                                      "  0.95,",
+                                                      "  0,",
+                                                      "  1,",
+                                                      "  1;"});
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    // set up the plant loops
+    // first the load side
+    state->dataPlnt->TotNumLoops = 2;
+    state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
+
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(1).LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &PLHPPlantLoadSideCompHeating = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    PLHPPlantLoadSideCompHeating.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+    PLHPPlantLoadSideCompHeating.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
+
+    state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(2).LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &PLHPPlantLoadSideCompCooling = state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    PLHPPlantLoadSideCompCooling.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    PLHPPlantLoadSideCompCooling.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
+    // the init call expects a "from" calling point
+    PlantLocation myLoadLocation = PlantLocation(1, DataPlant::LoopSideLocation::Supply, 1, 1);
+
+    // call the factory with a valid name to trigger reading inputs
+    DataPlant::PlantEquipmentType equipType = DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+    HeatPumpAirToWater::factory(*state, equipType, "TEST_AWHP");
+
+    // verify the size of the vector and the processed condition
+    EXPECT_EQ(2u, state->dataHeatPumpAirToWater->heatPumps.size());
+
+    // for now we know the order is maintained, so get each heat pump object
+    HeatPumpAirToWater *thisAWHPHeating = &state->dataHeatPumpAirToWater->heatPumps[1];
+    HeatPumpAirToWater *thisAWHPCooling = &state->dataHeatPumpAirToWater->heatPumps[0];
+
+    // do a bit of extra wiring up to the plant
+    PLHPPlantLoadSideCompHeating.Name = thisAWHPHeating->name;
+    PLHPPlantLoadSideCompHeating.NodeNumIn = thisAWHPHeating->loadSideNodes.inlet;
+    PLHPPlantLoadSideCompCooling.Name = thisAWHPCooling->name;
+    PLHPPlantLoadSideCompCooling.NodeNumIn = thisAWHPCooling->loadSideNodes.inlet;
+
+    // call for all initialization
+    state->dataGlobal->BeginEnvrnFlag = true;
+    state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
+    thisAWHPHeating->onInitLoopEquip(*state, myLoadLocation);
+    thisAWHPHeating->loadSidePlantLoc.loopNum = 1;
+    thisAWHPHeating->loadSidePlantLoc.loopSideNum = EnergyPlus::DataPlant::LoopSideLocation::Supply;
+    thisAWHPHeating->loadSidePlantLoc.branchNum = 1;
+    thisAWHPHeating->loadSidePlantLoc.compNum = 1;
+    thisAWHPCooling->loadSidePlantLoc.loopNum = 2;
+    thisAWHPCooling->loadSidePlantLoc.loopSideNum = EnergyPlus::DataPlant::LoopSideLocation::Supply;
+    thisAWHPCooling->loadSidePlantLoc.branchNum = 1;
+    thisAWHPCooling->loadSidePlantLoc.compNum = 1;
+
+    thisAWHPHeating->setPointNodeNum = thisAWHPHeating->loadSideNodes.outlet;
+
+    // call it from the load side, but this time there is a negative (cooling) load - shouldn't try to run
+    {
+        bool firstHVAC = true;
+        Real64 curLoad = -900;
+        bool runFlag = true; // plant actually shouldn't do this but the component can be smart enough to handle it
+        Real64 constexpr specifiedLoadSetpoint = 45;
+        Real64 constexpr loadInletTemp = 46;
+        state->dataLoopNodes->Node(thisAWHPHeating->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisAWHPHeating->loadSideNodes.inlet).Temp = loadInletTemp;
+        state->dataLoopNodes->Node(thisAWHPHeating->sourceSideNodes.inlet).Temp = 30;
+        thisAWHPHeating->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
+        // expect it to meet setpoint and have some pre-evaluated conditions
+        EXPECT_NEAR(loadInletTemp, thisAWHPHeating->loadSideOutletTemp, 0.001);
+        EXPECT_NEAR(0.0, thisAWHPHeating->loadSideHeatTransfer, 0.001);
+    }
+
+    // call it from the load side, but this time there is load (still firsthvac, unit can meet load)
+    {
+        bool firstHVAC = true;
+        Real64 curLoad = 800;
+        bool runFlag = true;
+        Real64 constexpr expectedLoadMassFlowRate = 0.09999;
+        Real64 constexpr expectedCp = 4180;
+        Real64 constexpr specifiedLoadSetpoint = 45;
+        Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
+        state->dataLoopNodes->Node(thisAWHPHeating->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisAWHPHeating->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
+        state->dataLoopNodes->Node(thisAWHPHeating->sourceSideNodes.inlet).Temp = 30;
+        // if need to test defrost, uncomment this
+        // state->dataEnvrn->OutBaroPress = 98934;
+        thisAWHPHeating->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
+        // expect it to meet setpoint and have some pre-evaluated conditions
+        EXPECT_NEAR(specifiedLoadSetpoint, thisAWHPHeating->loadSideOutletTemp, 0.001);
+        EXPECT_NEAR(curLoad, thisAWHPHeating->loadSideHeatTransfer, 0.001);
+    }
+
+    // now we can call it again from the load side, but this time there is load (still firsthvac, unit cannot meet load)
+    {
+        bool firstHVAC = true;
+        Real64 curLoad = 1200;
+        Real64 availableCapacity = 950.0;
+        bool runFlag = true;
+        Real64 constexpr expectedLoadMassFlowRate = 0.09999;
+        Real64 constexpr expectedCp = 4180;
+        Real64 constexpr specifiedLoadSetpoint = 45;
+        Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
+        state->dataLoopNodes->Node(thisAWHPHeating->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisAWHPHeating->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
+        state->dataLoopNodes->Node(thisAWHPHeating->sourceSideNodes.inlet).Temp = 30;
+        thisAWHPHeating->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
+        // expect it to miss setpoint and be at max capacity
+        EXPECT_NEAR(44.402, thisAWHPHeating->loadSideOutletTemp, 0.001);
+        EXPECT_NEAR(availableCapacity, thisAWHPHeating->loadSideHeatTransfer, 0.001);
+    }
+
+    // now we can call it again from the load side, but this time there is no load (still firsthvac)
+    {
+        bool firstHVAC = true;
+        Real64 curLoad = 0.0;
+        bool runFlag = true;
+        Real64 constexpr expectedLoadMassFlowRate = 0.09999;
+        Real64 constexpr expectedCp = 4180;
+        Real64 constexpr specifiedLoadSetpoint = 45;
+        Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
+        state->dataLoopNodes->Node(thisAWHPHeating->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisAWHPHeating->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
+        state->dataLoopNodes->Node(thisAWHPHeating->sourceSideNodes.inlet).Temp = 30;
+        thisAWHPHeating->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
+        // expect it to miss setpoint and be at max capacity
+        EXPECT_NEAR(45.0, thisAWHPHeating->loadSideOutletTemp, 0.001);
+        EXPECT_NEAR(30.0, thisAWHPHeating->sourceSideOutletTemp, 0.001);
+    }
+}
+
+TEST_F(EnergyPlusFixture, processInputForEIRPLHP_AWHP)
+{
+    std::string const idf_objects = delimited_string({
+        "HeatPump:AirToWater,",
+        "test_AWHP, !- Name",
+        ", !- Availability Schedule Name Heating",
+        ", !- Availability Schedule Name Cooling",
+        "Load , !- Operating Mode Control Method",
+        "SingleMode, !- Operating Mode Control Option for Multiple Unit",
+        ", !- Operating Mode Control Schedule Name",
+        ",    !- Minimum Part Load Ratio",
+        "20 , !-  Rated Inlet Air Temperature in Heating Mode",
+        "0.1 , !-  Rated Air Flow Rate in Heating Mode",
+        "50 , !-  Rated Leaving Water Temperature in Heating Mode",
+        "0.02 , !-  Rated Water Flow Rate in Heating Mode",
+        "-20, !-  Minimum Outdoor Air Temperature in Heating Mode",
+        "25, !-  Maximum Outdoor Air Temperature in Heating Mode",
+        "MinLWTvsOAT,    !- Minimum Leaving Water Temperature Curve Name in Heating Mode",
+        "MaxLWTvsOAT,    !- Maximum Leaving Water Temperature Curve Name in Heating Mode",
+        "1.0, !-  Sizing Factor for Heating",
+        "25, !-  Rated Inlet Air Temperature in Cooling Mode",
+        "0.1 , !-  Rated Air Flow Rate in Cooling Mode",
+        "22 , !-  Rated Leaving Water Temperature in Cooling Mode",
+        "0.05 , !-  Rated Water Flow Rate in Cooling Mode",
+        "18 , !-  Minimum Outdoor Air Temperature in Cooling Mode",
+        "40, !-  Maximum Outdoor Air Temperature in Cooling Mode",
+        "MinLWTvsOAT,    !- Minimum Leaving Water Temperature Curve Name in Cooling Mode",
+        "MaxLWTvsOAT,    !- Maximum Leaving Water Temperature Curve Name in Cooling Mode",
+        "0.9, !-  Sizing Factor for Cooling",
+        "Outdoor Air Inlet Node , !-  Air Inlet Node Name",
+        "Outdoor Air Outlet Node, !-  Air Outlet Node Name",
+        "Heating Coil Load Loop Intermediate Node, !-  Hot Water Inlet Node Name",
+        "Heating Coil Load Loop Supply Outlet Node, !-  Hot Water Outlet Node Name",
+        "Cooling Coil Load Loop Intermediate Node , !-  Chilled Water Inlet Node Name",
+        "Cooling Coil Load Loop Supply Outlet Node , !-  Chilled Water Outlet Node Name",
+        "10, !- Maximum Outdoor Dry Bulb Temperature For Defrost Operation",
+        "Timed, !-  Heat Pump Defrost Control",
+        "0.2, !-  Defrost Time Period Fraction",
+        "150, !-  Resistive Defrost Heater Capacity",
+        ", !-  Defrost Energy Input Ratio Function of Temperature Curve Name",
+        "1 , !- Compressor Multiplier",
+        "FixedSpeed , !- Control Type",
+        "100 , !- Crankcase Heater Capacity",
+        "EIRCurveFuncPLR, !- Crankcase Heater Capacity Function of Temperature Curve Name",
+        "20 , !- Maximum Ambient Temperature for Crankcase Heater Operation",
+        "2 , !- Number of Speeds for Heating",
+        "100 , !-  Rated Heating Capacity at Speed 1",
+        "3, !-  Rated COP for Heating at Speed 1",
+        "CapCurveFuncTemp, !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 1",
+        "EIRCurveFuncTemp, !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 1",
+        "EIRCurveFuncPLR, !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 1",
+        "200, !-  Rated Heating Capacity at Speed 2",
+        "3.5, !-  Rated COP for Heating at Speed 2",
+        "CapCurveFuncTemp, !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 2",
+        "EIRCurveFuncTemp, !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 2",
+        "EIRCurveFuncPLR, !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 2",
+        ", !-  Rated Heating Capacity at Speed 3",
+        ", !-  Rated COP for Heating at Speed 3",
+        ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 3",
+        ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 3",
+        ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 3",
+        ", !-  Rated Heating Capacity at Speed 4",
+        ", !-  Rated COP for Heating at Speed 4",
+        ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 4",
+        ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 4",
+        ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 4",
+        ", !-  Rated Heating Capacity at Speed 5",
+        ", !-  Rated COP for Heating at Speed 5",
+        ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 5",
+        ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 5",
+        ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 5",
+        "Yes, !-  Booster Mode On Heating",
+        "50000, !-  Rated Heating Capacity in Booster Mode",
+        "2.5, !-  Rated Heating COP in Booster Mode",
+        "CapCurveFuncTemp, !-  Normalized Heating Capacity Function of Temperature Curve Name in Booster Mode",
+        "EIRCurveFuncTemp, !-  Heating Energy Input Ratio Function of Temperature Curve Name in Booster Mode",
+        "EIRCurveFuncPLR,  !-  Heating Energy Input Ratio Function of PLR Curve Name in Booster Mode",
+        "2, !-  Number of Speeds for Cooling",
+        "120 , !-  Rated Cooling Capacity at Speed 1",
+        "4, !-  Rated COP for Cooling at Speed 1",
+        "CapCurveFuncTemp, !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 1",
+        "EIRCurveFuncTemp, !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 1",
+        "EIRCurveFuncPLR, !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 1",
+        "240, !-  Rated Cooling Capacity at Speed 2",
+        "3.5, !-  Rated COP for Cooling at Speed 2",
+        "CapCurveFuncTemp, !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 2",
+        "EIRCurveFuncTemp, !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 2",
+        "EIRCurveFuncPLR, !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 2",
+        ", !-  Rated Cooling Capacity at Speed 3",
+        ", !-  Rated COP for Cooling at Speed 3",
+        ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 3",
+        ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 3",
+        ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 3",
+        ", !-  Rated Cooling Capacity at Speed 4",
+        ", !-  Rated COP for Cooling at Speed 4",
+        ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 4",
+        ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 4",
+        ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 4",
+        ", !-  Rated Cooling Capacity at Speed 5",
+        ", !-  Rated COP for Cooling at Speed 5",
+        ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 5",
+        ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 5",
+        ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 5",
+        "Yes, !-  Booster Mode On Cooling",
+        "500, !-  Rated Cooling Capacity in Booster Mode",
+        "2.0, !-  Rated Cooling COP in Booster Mode",
+        "CapCurveFuncTemp, !-  Normalized Cooling Capacity Function of Temperature Curve Name in Booster Mode",
+        "EIRCurveFuncTemp, !-  Cooling Energy Input Ratio Function of Temperature Curve Name in Booster Mode",
+        "EIRCurveFuncPLR; !-  Cooling Energy Input Ratio Function of PLR Curve Name in Booster Mode",
+
+        "HeatPump:AirToWater,",
+        "test_AWHP_defaults, !- Name",
+        ", !- Availability Schedule Name Heating",
+        ", !- Availability Schedule Name Cooling",
+        ", !- Operating Mode Control Method",
+        ", !- Operating Mode Control Option for Multiple Unit",
+        ", !- Operating Mode Control Schedule Name",
+        ",    !- Minimum Part Load Ratio",
+        ", !-  Rated Inlet Air Temperature in Heating Mode",
+        ", !-  Rated Air Flow Rate in Heating Mode",
+        ", !-  Rated Leaving Water Temperature in Heating Mode",
+        ", !-  Rated Water Flow Rate in Heating Mode",
+        ", !-  Minimum Outdoor Air Temperature in Heating Mode",
+        ", !-  Maximum Outdoor Air Temperature in Heating Mode",
+        ",    !- Minimum Leaving Water Temperature Curve Name in Heating Mode",
+        ",    !- Maximum Leaving Water Temperature Curve Name in Heating Mode",
+        ", !-  Sizing Factor for Heating",
+        ", !-  Rated Inlet Air Temperature in Cooling Mode",
+        ", !-  Rated Air Flow Rate in Cooling Mode",
+        ", !-  Rated Leaving Water Temperature in Cooling Mode",
+        ", !-  Rated Water Flow Rate in Cooling Mode",
+        ", !-  Minimum Outdoor Air Temperature in Cooling Mode",
+        ", !-  Maximum Outdoor Air Temperature in Cooling Mode",
+        ",    !- Minimum Leaving Water Temperature Curve Name in Cooling Mode",
+        ",    !- Maximum Leaving Water Temperature Curve Name in Cooling Mode",
+        ", !-  Sizing Factor for Cooling",
+        "Outdoor Air Inlet Node , !-  Air Inlet Node Name",
+        "Outdoor Air Outlet Node, !-  Air Outlet Node Name",
+        "Heating Coil Load Loop Intermediate Node, !-  Hot Water Inlet Node Name",
+        "Heating Coil Load Loop Supply Outlet Node, !-  Hot Water Outlet Node Name",
+        "Cooling Coil Load Loop Intermediate Node , !-  Chilled Water Inlet Node Name",
+        "Cooling Coil Load Loop Supply Outlet Node , !-  Chilled Water Outlet Node Name",
+        ", !- Maximum Outdoor Dry Bulb Temperature For Defrost Operation",
+        ", !-  Heat Pump Defrost Control",
+        ", !-  Defrost Time Period Fraction",
+        ", !-  Resistive Defrost Heater Capacity",
+        ", !-  Defrost Energy Input Ratio Function of Temperature Curve Name",
+        ", !- Compressor Multiplier",
+        ", !- Control Type",
+        ", !- Crankcase Heater Capacity",
+        ", !- Crankcase Heater Capacity Function of Temperature Curve Name",
+        ", !- Maximum Ambient Temperature for Crankcase Heater Operation",
+        ", !- Number of Speeds for Heating",
+        ", !-  Rated Heating Capacity at Speed 1",
+        ", !-  Rated COP for Heating at Speed 1",
+        "CapCurveFuncTemp, !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 1",
+        "EIRCurveFuncTemp, !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 1",
+        "EIRCurveFuncPLR, !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 1",
+        ", !-  Rated Heating Capacity at Speed 2",
+        ", !-  Rated COP for Heating at Speed 2",
+        ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 2",
+        ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 2",
+        ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 2",
+        ", !-  Rated Heating Capacity at Speed 3",
+        ", !-  Rated COP for Heating at Speed 3",
+        ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 3",
+        ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 3",
+        ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 3",
+        ", !-  Rated Heating Capacity at Speed 4",
+        ", !-  Rated COP for Heating at Speed 4",
+        ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 4",
+        ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 4",
+        ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 4",
+        ", !-  Rated Heating Capacity at Speed 5",
+        ", !-  Rated COP for Heating at Speed 5",
+        ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 5",
+        ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 5",
+        ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 5",
+        ", !-  Booster Mode On Heating",
+        ", !-  Rated Heating Capacity in Booster Mode",
+        ", !-  Rated Heating COP in Booster Mode",
+        ", !-  Normalized Heating Capacity Function of Temperature Curve Name in Booster Mode",
+        ", !-  Heating Energy Input Ratio Function of Temperature Curve Name in Booster Mode",
+        ", !-  Heating Energy Input Ratio Function of PLR Curve Name in Booster Mode",
+        ", !-  Number of Speeds for Cooling",
+        ", !-  Rated Cooling Capacity at Speed 1",
+        ", !-  Rated COP for Cooling at Speed 1",
+        "CapCurveFuncTemp, !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 1",
+        "EIRCurveFuncTemp, !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 1",
+        "EIRCurveFuncPLR,  !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 1",
+        ", !-  Rated Cooling Capacity at Speed 2",
+        ", !-  Rated COP for Cooling at Speed 2",
+        ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 2",
+        ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 2",
+        ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 2",
+        ", !-  Rated Cooling Capacity at Speed 3",
+        ", !-  Rated COP for Cooling at Speed 3",
+        ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 3",
+        ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 3",
+        ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 3",
+        ", !-  Rated Cooling Capacity at Speed 4",
+        ", !-  Rated COP for Cooling at Speed 4",
+        ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 4",
+        ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 4",
+        ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 4",
+        ", !-  Rated Cooling Capacity at Speed 5",
+        ", !-  Rated COP for Cooling at Speed 5",
+        ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 5",
+        ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 5",
+        ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 5",
+        ", !-  Booster Mode On Cooling",
+        ", !-  Rated Cooling Capacity in Booster Mode",
+        ", !-  Rated Cooling COP in Booster Mode",
+        ", !-  Normalized Cooling Capacity Function of Temperature Curve Name in Booster Mode",
+        ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name in Booster Mode",
+        "; !-  Cooling Energy Input Ratio Function of PLR Curve Name in Booster Mode",
+
+        "Curve:Quadratic,",
+        "  MinLWTvsOAT,             !- Name",
+        "  0.0,                     !- Coefficient1 Constant",
+        "  1.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  -17.77778,               !- Minimum Value of x",
+        "  35.0,                    !- Maximum Value of x",
+        "  20.0,                    !- Minimum Curve Output",
+        "  35.0,                    !- Maximum Curve Output",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature;             !- Output Unit Type",
+
+        "Curve:Quadratic,",
+        "  MaxLWTvsOAT,             !- Name",
+        "  53.1666666666667,        !- Coefficient1 Constant",
+        "  0.85,                    !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  -17.777778,              !- Minimum Value of x",
+        "  35.0,                    !- Maximum Value of x",
+        "  20.0,                    !- Minimum Curve Output",
+        "  60.0,                    !- Maximum Curve Output",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature;             !- Output Unit Type",
+
+        "Curve:Biquadratic,",
+        "CapCurveFuncTemp,        !- Name",
+        "1.0,                     !- Coefficient1 Constant",
+        "0.0,                     !- Coefficient2 x",
+        "0.0,                     !- Coefficient3 x**2",
+        "0.0,                     !- Coefficient4 y",
+        "0.0,                     !- Coefficient5 y**2",
+        "0.0,                     !- Coefficient6 x*y",
+        "5.0,                     !- Minimum Value of x",
+        "10.0,                    !- Maximum Value of x",
+        "24.0,                    !- Minimum Value of y",
+        "35.0,                    !- Maximum Value of y",
+        ",                        !- Minimum Curve Output",
+        ",                        !- Maximum Curve Output",
+        "Temperature,             !- Input Unit Type for X",
+        "Temperature,             !- Input Unit Type for Y",
+        "Dimensionless;           !- Output Unit Type",
+
+        "Curve:Biquadratic,",
+        "EIRCurveFuncTemp,        !- Name",
+        "1.0,                     !- Coefficient1 Constant",
+        "0.0,                     !- Coefficient2 x",
+        "0.0,                     !- Coefficient3 x**2",
+        "0.0,                     !- Coefficient4 y",
+        "0.0,                     !- Coefficient5 y**2",
+        "0.0,                     !- Coefficient6 x*y",
+        "5.0,                     !- Minimum Value of x",
+        "10.0,                    !- Maximum Value of x",
+        "24.0,                    !- Minimum Value of y",
+        "35.0,                    !- Maximum Value of y",
+        ",                        !- Minimum Curve Output",
+        ",                        !- Maximum Curve Output",
+        "Temperature,             !- Input Unit Type for X",
+        "Temperature,             !- Input Unit Type for Y",
+        "Dimensionless;           !- Output Unit Type",
+
+        "Curve:Quadratic,",
+        "EIRCurveFuncPLR,         !- Name",
+        "1.0,                     !- Coefficient1 Constant",
+        "0.0,                     !- Coefficient2 x",
+        "0.0,                     !- Coefficient3 x**2",
+        "0.0,                     !- Minimum Value of x",
+        "1.0;                     !- Maximum Value of x",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    DataPlant::PlantEquipmentType equipType = DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+    HeatPumpAirToWater::factory(*state, equipType, "test_AWHP_defaults");
+    equipType = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    HeatPumpAirToWater::factory(*state, equipType, "test_AWHP_defaults");
+    // cooling component in the AWHP
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[0].EIRHPType, DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].availSchedName, "");
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].availSched, Sched::GetScheduleAlwaysOn(*state));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].operationModeControlSche, nullptr);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].sourceSideDesignInletTemp, 25);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].sourceSideDesignVolFlowRate, 0.1);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].ratedLeavingWaterTemperature, 22);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].loadSideDesignVolFlowRate, 0.05);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].minSourceTempLimit, 18);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].maxSourceTempLimit, 40);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].minSupplyWaterTempCurveIndex, 3);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].maxSupplyWaterTempCurveIndex, 4);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].sizingFactor, 0.9);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].loadSideNodes.inlet, 1);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].loadSideNodes.outlet, 2);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].sourceSideNodes.inlet, 3);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].sourceSideNodes.outlet, 4);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].heatPumpMultiplier, 1);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].controlType, HeatPumpAirToWater::CompressorControlType::FixedSpeed);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].boosterOn, true);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].numSpeeds, 3);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].referenceCapacity, 500);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].ratedCapacity[0], 120);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].ratedCOP[0], 4);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].capFuncTempCurveIndex[0], Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].powerRatioFuncTempCurveIndex[0], Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].powerRatioFuncPLRCurveIndex[0], Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].ratedCapacity[1], 240);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].ratedCOP[1], 3.5);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].capFuncTempCurveIndex[1], Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].powerRatioFuncTempCurveIndex[1], Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].powerRatioFuncPLRCurveIndex[1], Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].ratedCapacity[2], 500);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].ratedCOP[2], 2.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].capFuncTempCurveIndex[2], Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].powerRatioFuncTempCurveIndex[2], Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[0].powerRatioFuncPLRCurveIndex[2], Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[0].operatingModeControlMethod, HeatPumpAirToWater::OperatingModeControlMethod::Load);
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[0].operatingModeControlOptionMultipleUnit,
+                   HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::SingleMode);
+
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[1].EIRHPType, DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].name, "TEST_AWHP");
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[1].operatingModeControlMethod, HeatPumpAirToWater::OperatingModeControlMethod::Load);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].availSchedName, "");
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].availSched, Sched::GetScheduleAlwaysOn(*state));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].operationModeControlSche, nullptr);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].sourceSideDesignInletTemp, 20);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].sourceSideDesignVolFlowRate, 0.1);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].ratedLeavingWaterTemperature, 50);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].loadSideDesignVolFlowRate, 0.02);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].minSourceTempLimit, -20);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].maxSourceTempLimit, 25);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].minSupplyWaterTempCurveIndex, 3);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].maxSupplyWaterTempCurveIndex, 4);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].sizingFactor, 1.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].loadSideNodes.inlet, 5);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].loadSideNodes.outlet, 6);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].sourceSideNodes.inlet, 3);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].sourceSideNodes.outlet, 4);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].maxOutdoorTemperatureDefrost, 10);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].defrostStrategy, DefrostControl::Timed);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].defrostTime, 0.2);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].defrostResistiveHeaterCap, 150);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].defrostEIRFTIndex, 0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].heatPumpMultiplier, 1);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].controlType, HeatPumpAirToWater::CompressorControlType::FixedSpeed);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].CrankcaseHeaterCapacity, 100);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].CrankcaseHeaterCapacityCurveIndex, Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].MaxOATCrankcaseHeater, 20);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].boosterOn, true);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].numSpeeds, 3); // with booster mode, one more speed level
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].referenceCapacity, 50000);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].ratedCapacity[0], 100);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].ratedCOP[0], 3);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].capFuncTempCurveIndex[0], Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].powerRatioFuncTempCurveIndex[0], Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].powerRatioFuncPLRCurveIndex[0], Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].ratedCapacity[1], 200);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].ratedCOP[1], 3.5);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].capFuncTempCurveIndex[1], Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].powerRatioFuncTempCurveIndex[1], Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].powerRatioFuncPLRCurveIndex[1], Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].ratedCapacity[2], 50000);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].ratedCOP[2], 2.5);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].capFuncTempCurveIndex[2], Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].powerRatioFuncTempCurveIndex[2], Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[1].powerRatioFuncPLRCurveIndex[2], Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[1].operatingModeControlMethod, HeatPumpAirToWater::OperatingModeControlMethod::Load);
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[1].operatingModeControlOptionMultipleUnit,
+                   HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::SingleMode);
+
+    equipType = DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+    HeatPumpAirToWater::factory(*state, equipType, "test_AWHP_defaults");
+    equipType = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    HeatPumpAirToWater::factory(*state, equipType, "test_AWHP_defaults");
+
+    // cooling component in the AWHP
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[2].EIRHPType, DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].name, "TEST_AWHP_DEFAULTS");
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].availSchedName, "");
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].availSched, Sched::GetScheduleAlwaysOn(*state));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].operationModeControlSche, nullptr);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].sourceSideDesignInletTemp, 8);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].sourceSideDesignVolFlowRate, -99999);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].ratedLeavingWaterTemperature, 40);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].loadSideDesignVolFlowRate, -99999);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].minSourceTempLimit, -30);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].maxSourceTempLimit, 100);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].minSupplyWaterTempCurveIndex, 0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].maxSupplyWaterTempCurveIndex, 0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].sizingFactor, 1.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].heatPumpMultiplier, 1);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].controlType, HeatPumpAirToWater::CompressorControlType::VariableSpeed);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].boosterOn, false);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].boosterMultCap, 1.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].boosterMultCOP, 1.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].numSpeeds, 1);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].referenceCapacity, -99999);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].ratedCapacity[0], -99999);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].ratedCOP[0], 3.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].capFuncTempCurveIndex[0], Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].powerRatioFuncTempCurveIndex[0], Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].powerRatioFuncPLRCurveIndex[0], Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[2].operatingModeControlMethod, HeatPumpAirToWater::OperatingModeControlMethod::Load);
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[2].operatingModeControlOptionMultipleUnit,
+                   HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::SingleMode);
+
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[3].EIRHPType, DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].name, "TEST_AWHP_DEFAULTS");
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[3].operatingModeControlMethod, HeatPumpAirToWater::OperatingModeControlMethod::Load);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].availSchedName, "");
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].availSched, Sched::GetScheduleAlwaysOn(*state));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].operationModeControlSche, nullptr);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].sourceSideDesignInletTemp, 8);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].sourceSideDesignVolFlowRate, -99999);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].ratedLeavingWaterTemperature, 40);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].loadSideDesignVolFlowRate, -99999);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].minSourceTempLimit, -30);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].maxSourceTempLimit, 100);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].minSupplyWaterTempCurveIndex, 0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[2].maxSupplyWaterTempCurveIndex, 0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].sizingFactor, 1.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].maxOutdoorTemperatureDefrost, 10);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].defrostStrategy, DefrostControl::None);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].defrostTime, 0.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].defrostResistiveHeaterCap, 0.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].defrostEIRFTIndex, 0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].heatPumpMultiplier, 1.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].controlType, HeatPumpAirToWater::CompressorControlType::VariableSpeed);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].CrankcaseHeaterCapacity, 0.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].CrankcaseHeaterCapacityCurveIndex, 0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].MaxOATCrankcaseHeater, 10.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].boosterOn, false);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].boosterMultCap, 1.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].boosterMultCOP, 1.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].numSpeeds, 1);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].referenceCapacity, -99999);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].ratedCapacity[0], -99999);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].ratedCOP[0], 3.0);
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].capFuncTempCurveIndex[0], Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].powerRatioFuncTempCurveIndex[0], Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP"));
+    EXPECT_EQ(state->dataHeatPumpAirToWater->heatPumps[3].powerRatioFuncPLRCurveIndex[0], Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR"));
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[3].operatingModeControlMethod, HeatPumpAirToWater::OperatingModeControlMethod::Load);
+    EXPECT_ENUM_EQ(state->dataHeatPumpAirToWater->heatPumps[3].operatingModeControlOptionMultipleUnit,
+                   HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::SingleMode);
+}
+
+TEST_F(EnergyPlusFixture, calcLoadSideHeatTransfer_AWHP)
+{
+    auto thisAWHP = HeatPumpAirToWater();
+
+    state->dataPlnt->PlantLoop.allocate(1);
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &PLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    PLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    state->dataLoopNodes->Node.allocate(2);
+    thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    thisAWHP.loadSidePlantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
+    thisAWHP.loadSidePlantLoc.branchNum = 1;
+    thisAWHP.loadSidePlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, thisAWHP.loadSidePlantLoc);
+    thisAWHP.loadSideNodes.outlet = 2;
+    thisAWHP.loadSideNodes.inlet = 1;
+    thisAWHP.loadSideMassFlowRate = 2;
+    thisAWHP.loadSideInletTemp = 20;
+    thisAWHP.loadSidePlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    state->dataLoopNodes->Node(thisAWHP.loadSideNodes.inlet).Temp = thisAWHP.loadSideInletTemp;
+    Real64 CpLoad = thisAWHP.loadSidePlantLoc.loop->glycol->getSpecificHeat(
+        *state, state->dataLoopNodes->Node(thisAWHP.loadSideNodes.inlet).Temp, "HeatPumpAirToWater::calcLoadSideHeatTransfer()");
+    // if capacity is less than load, heat transfer is just capacity
+    Real64 capacity = 100;
+    Real64 load = 120;
+    thisAWHP.calcLoadOutletTemp = EIRPlantLoopHeatPumps::HeatPumpAirToWater::subtract;
+    thisAWHP.calcLoadSideHeatTransfer(*state, capacity, load);
+    EXPECT_EQ(thisAWHP.loadSideHeatTransfer, capacity);
+    EXPECT_NEAR(
+        CpLoad * (thisAWHP.loadSideOutletTemp - thisAWHP.loadSideInletTemp) * thisAWHP.loadSideMassFlowRate, -thisAWHP.loadSideHeatTransfer, 1e-6);
+
+    thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+    thisAWHP.calcLoadOutletTemp = EIRPlantLoopHeatPumps::HeatPumpAirToWater::add;
+    thisAWHP.calcLoadSideHeatTransfer(*state, capacity, load);
+    EXPECT_EQ(thisAWHP.loadSideHeatTransfer, capacity);
+    EXPECT_NEAR(
+        CpLoad * (thisAWHP.loadSideOutletTemp - thisAWHP.loadSideInletTemp) * thisAWHP.loadSideMassFlowRate, thisAWHP.loadSideHeatTransfer, 1e-6);
+
+    // if capacity is less than load, heat transfer is load
+    capacity = 120;
+    load = 100;
+    thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    thisAWHP.calcLoadOutletTemp = EIRPlantLoopHeatPumps::HeatPumpAirToWater::subtract;
+    thisAWHP.calcLoadSideHeatTransfer(*state, capacity, load);
+    EXPECT_EQ(thisAWHP.loadSideHeatTransfer, load);
+    EXPECT_NEAR(
+        CpLoad * (thisAWHP.loadSideOutletTemp - thisAWHP.loadSideInletTemp) * thisAWHP.loadSideMassFlowRate, -thisAWHP.loadSideHeatTransfer, 1e-6);
+
+    thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+    thisAWHP.calcLoadOutletTemp = EIRPlantLoopHeatPumps::HeatPumpAirToWater::add;
+    thisAWHP.calcLoadSideHeatTransfer(*state, capacity, load);
+    EXPECT_EQ(thisAWHP.loadSideHeatTransfer, load);
+    EXPECT_NEAR(
+        CpLoad * (thisAWHP.loadSideOutletTemp - thisAWHP.loadSideInletTemp) * thisAWHP.loadSideMassFlowRate, thisAWHP.loadSideHeatTransfer, 1e-6);
+
+    // if load is smaller than minimum load (minimumPLR * availableCapacity), heat transfer is minimum load
+    capacity = 120;
+    load = 10;
+    thisAWHP.minimumPLR = 0.1;
+    thisAWHP.referenceCapacity = capacity;
+    thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    thisAWHP.calcLoadOutletTemp = EIRPlantLoopHeatPumps::HeatPumpAirToWater::subtract;
+    thisAWHP.calcLoadSideHeatTransfer(*state, capacity, load);
+    EXPECT_EQ(thisAWHP.loadSideHeatTransfer, capacity * thisAWHP.minimumPLR);
+}
+
+TEST_F(EnergyPlusFixture, calcPowerUsage_AWHP)
+{
+
+    std::string const idf_objects = delimited_string({
+        "Curve:Biquadratic,",
+        "CapCurveFuncTemp,        !- Name",
+        "1.0,                     !- Coefficient1 Constant",
+        "0.0,                     !- Coefficient2 x",
+        "0.0,                     !- Coefficient3 x**2",
+        "0.0,                     !- Coefficient4 y",
+        "0.0,                     !- Coefficient5 y**2",
+        "0.0,                     !- Coefficient6 x*y",
+        "5.0,                     !- Minimum Value of x",
+        "10.0,                    !- Maximum Value of x",
+        "24.0,                    !- Minimum Value of y",
+        "35.0,                    !- Maximum Value of y",
+        ",                        !- Minimum Curve Output",
+        ",                        !- Maximum Curve Output",
+        "Temperature,             !- Input Unit Type for X",
+        "Temperature,             !- Input Unit Type for Y",
+        "Dimensionless;           !- Output Unit Type",
+
+        "Curve:Biquadratic,",
+        "EIRCurveFuncTemp,        !- Name",
+        "1.0,                     !- Coefficient1 Constant",
+        "0.0,                     !- Coefficient2 x",
+        "0.0,                     !- Coefficient3 x**2",
+        "0.0,                     !- Coefficient4 y",
+        "0.0,                     !- Coefficient5 y**2",
+        "0.0,                     !- Coefficient6 x*y",
+        "5.0,                     !- Minimum Value of x",
+        "10.0,                    !- Maximum Value of x",
+        "24.0,                    !- Minimum Value of y",
+        "35.0,                    !- Maximum Value of y",
+        ",                        !- Minimum Curve Output",
+        ",                        !- Maximum Curve Output",
+        "Temperature,             !- Input Unit Type for X",
+        "Temperature,             !- Input Unit Type for Y",
+        "Dimensionless;           !- Output Unit Type",
+
+        "Curve:Quadratic,",
+        "EIRCurveFuncPLR,         !- Name",
+        "1.0,                     !- Coefficient1 Constant",
+        "0.0,                     !- Coefficient2 x",
+        "0.0,                     !- Coefficient3 x**2",
+        "0.0,                     !- Minimum Value of x",
+        "1.0;                     !- Maximum Value of x",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    auto thisAWHP = HeatPumpAirToWater();
+    state->dataPlnt->PlantLoop.allocate(1);
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(1).LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &PLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    PLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    thisAWHP.loadSidePlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    thisAWHP.loadSidePlantLoc.comp = &PLHPPlantLoadSideComp;
+    thisAWHP.loadSidePlantLoc.comp->CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
+    thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+
+    thisAWHP.loadSideNodes.inlet = 1;
+    thisAWHP.loadSideNodes.outlet = 2;
+    thisAWHP.setPointNodeNum = thisAWHP.loadSideNodes.outlet;
+    state->dataLoopNodes->Node.allocate(2);
+    state->dataLoopNodes->Node(thisAWHP.setPointNodeNum).TempSetPoint = 20;
+    thisAWHP.sourceSideHeatTransfer = 100;
+    thisAWHP.loadSideHeatTransfer = 90;
+    thisAWHP.numSpeeds = 2;
+    thisAWHP.ratedCapacity[0] = 600;
+    thisAWHP.ratedCOP[0] = 1;
+    thisAWHP.capFuncTempCurveIndex[0] = Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP");
+    thisAWHP.powerRatioFuncTempCurveIndex[0] = Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP");
+    thisAWHP.powerRatioFuncPLRCurveIndex[0] = Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR");
+    thisAWHP.ratedCapacity[1] = 1200;
+    thisAWHP.ratedCOP[1] = 1;
+    thisAWHP.capFuncTempCurveIndex[1] = Curve::GetCurveIndex(*state, "CAPCURVEFUNCTEMP");
+    thisAWHP.powerRatioFuncTempCurveIndex[1] = Curve::GetCurveIndex(*state, "EIRCURVEFUNCTEMP");
+    thisAWHP.powerRatioFuncPLRCurveIndex[1] = Curve::GetCurveIndex(*state, "EIRCURVEFUNCPLR");
+    thisAWHP.heatPumpMultiplier = 2;
+    thisAWHP.cyclingRatio = 1.0;
+    Real64 availableCapacityBeforeMultiplier = thisAWHP.ratedCapacity[1];
+    // when COP = 1, power usage should equal heat transfer
+    thisAWHP.loadSideHeatTransfer = 500;
+    thisAWHP.calcPowerUsage(*state, availableCapacityBeforeMultiplier);
+    EXPECT_EQ(thisAWHP.speedLevel, 1);
+    EXPECT_EQ(thisAWHP.powerUsage, 500);
+    EXPECT_EQ(thisAWHP.cyclingRatio, 500.0 / 600.0);
+    EXPECT_EQ(thisAWHP.numUnitUsed, 1);
+    thisAWHP.loadSideHeatTransfer = 1000;
+    thisAWHP.cyclingRatio = 1.0; // reset cycling ratio back to 1
+    thisAWHP.calcPowerUsage(*state, availableCapacityBeforeMultiplier);
+    EXPECT_EQ(thisAWHP.speedLevel, 2);
+    EXPECT_EQ(thisAWHP.powerUsage, 1000);
+    EXPECT_EQ(thisAWHP.cyclingRatio, 1.0);
+    EXPECT_EQ(thisAWHP.numUnitUsed, 1);
+    thisAWHP.loadSideHeatTransfer = 1500;
+    thisAWHP.cyclingRatio = 1.0; // reset cycling ratio back to 1
+    thisAWHP.calcPowerUsage(*state, availableCapacityBeforeMultiplier);
+    EXPECT_EQ(thisAWHP.speedLevel, 1);
+    EXPECT_EQ(thisAWHP.powerUsage, 1500);
+    EXPECT_EQ(thisAWHP.numUnitUsed, 2);
+    EXPECT_EQ(thisAWHP.cyclingRatio, 300.0 / 600.0);
+    thisAWHP.loadSideHeatTransfer = 2000;
+    thisAWHP.cyclingRatio = 1.0; // reset cycling ratio back to 1
+    thisAWHP.calcPowerUsage(*state, availableCapacityBeforeMultiplier);
+    EXPECT_EQ(thisAWHP.speedLevel, 2);
+    EXPECT_EQ(thisAWHP.powerUsage, 2000);
+    EXPECT_EQ(thisAWHP.numUnitUsed, 2);
+    EXPECT_EQ(thisAWHP.cyclingRatio, 1.0);
+}
+
+TEST_F(EnergyPlusFixture, crankcaseHeater_AWHP)
+{
+    std::string const idf_objects = delimited_string({
+        "Curve:Linear,",
+        "heaterCapCurve,          !- Name",
+        "10.0,                    !- Coefficient1 Constant",
+        "2.,                      !- Coefficient2 x",
+        "-10.0,                    !- Minimum Value of x",
+        "70;                      !- Maximum Value of x",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    auto thisAWHP = HeatPumpAirToWater();
+    thisAWHP.CrankcaseHeaterCapacity = 100;
+    thisAWHP.CrankcaseHeaterCapacityCurveIndex = Curve::GetCurveIndex(*state, "HEATERCAPCURVE");
+    // when outdoor temperature is higher than temperature threshold, crankcase heater is off
+    state->dataEnvrn->OutDryBulbTemp = 15;
+    thisAWHP.MaxOATCrankcaseHeater = 10;
+    thisAWHP.CrankcaseHeaterPower = thisAWHP.calcCrankcaseHeaterPower(*state);
+    ASSERT_EQ(thisAWHP.CrankcaseHeaterPower, 0.0);
+    state->dataEnvrn->OutDryBulbTemp = 9;
+    thisAWHP.CrankcaseHeaterPower = thisAWHP.calcCrankcaseHeaterPower(*state);
+    ASSERT_EQ(thisAWHP.CrankcaseHeaterPower, 100 * (10 + 2 * 9));
+}
+
+TEST_F(EnergyPlusFixture, calcOpMode_AWHP)
+{
+    std::string const idf_objects = delimited_string({
+        "Curve:Biquadratic,"
+        "CapCurveFuncTemp,        !- Name",
+        "1.0,                     !- Coefficient1 Constant",
+        "0.0,                     !- Coefficient2 x",
+        "0.0,                     !- Coefficient3 x**2",
+        "0.0,                     !- Coefficient4 y",
+        "0.0,                     !- Coefficient5 y**2",
+        "0.0,                     !- Coefficient6 x*y",
+        "5.0,                     !- Minimum Value of x",
+        "10.0,                    !- Maximum Value of x",
+        "24.0,                    !- Minimum Value of y",
+        "35.0,                    !- Maximum Value of y",
+        ",                        !- Minimum Curve Output",
+        ",                        !- Maximum Curve Output",
+        "Temperature,             !- Input Unit Type for X",
+        "Temperature,             !- Input Unit Type for Y",
+        "Dimensionless;           !- Output Unit Type",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+    auto thisAWHP = HeatPumpAirToWater();
+    auto companionAWHP = HeatPumpAirToWater();
+    thisAWHP.companionHeatPumpCoil = &companionAWHP;
+    companionAWHP.companionHeatPumpCoil = &thisAWHP;
+    thisAWHP.heatPumpMultiplier = 6;
+    companionAWHP.heatPumpMultiplier = 6;
+    thisAWHP.referenceCapacityOneUnit = 100;
+    companionAWHP.referenceCapacityOneUnit = 150;
+    thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    companionAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+
+    state->dataPlnt->PlantLoop.allocate(2);
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &PLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    PLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    thisAWHP.loadSidePlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    thisAWHP.loadSidePlantLoc.comp = &PLHPPlantLoadSideComp;
+    thisAWHP.loadSidePlantLoc.loopNum = 1;
+    thisAWHP.loadSidePlantLoc.loopSideNum = EnergyPlus::DataPlant::LoopSideLocation::Supply;
+    thisAWHP.loadSidePlantLoc.branchNum = 1;
+    thisAWHP.loadSidePlantLoc.compNum = 1;
+    thisAWHP.OperationModeEMSOverrideOn = false;
+
+    state->dataPlnt->PlantLoop(2).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &companionPLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    companionPLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+    companionAWHP.loadSidePlantLoc.loop = &state->dataPlnt->PlantLoop(2);
+    companionAWHP.loadSidePlantLoc.comp = &companionPLHPPlantLoadSideComp;
+    companionAWHP.loadSidePlantLoc.loopNum = 2;
+    companionAWHP.loadSidePlantLoc.loopSideNum = EnergyPlus::DataPlant::LoopSideLocation::Supply;
+    companionAWHP.loadSidePlantLoc.branchNum = 1;
+    companionAWHP.loadSidePlantLoc.compNum = 1;
+    companionAWHP.OperationModeEMSOverrideOn = false;
+
+    thisAWHP.capFuncTempCurveIndex[0] = 1;
+    thisAWHP.loadSideOutletTemp = 65;
+    thisAWHP.sourceSideInletTemp = 20;
+    companionAWHP.capFuncTempCurveIndex[0] = 1;
+    companionAWHP.loadSideOutletTemp = 65;
+    companionAWHP.sourceSideInletTemp = 20;
+
+    Real64 currentLoad = -300;
+    companionPLHPPlantLoadSideComp.MyLoad = 400;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::SingleMode);
+    EXPECT_EQ(thisAWHP.operatingMode, 0);
+    EXPECT_EQ(companionAWHP.operatingMode, 3);
+
+    currentLoad = -500;
+    companionPLHPPlantLoadSideComp.MyLoad = 300;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::SingleMode);
+    EXPECT_EQ(thisAWHP.operatingMode, 5);
+    EXPECT_EQ(companionAWHP.operatingMode, 0);
+
+    currentLoad = -300;
+    companionPLHPPlantLoadSideComp.MyLoad = 400;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::CoolingPriority);
+    EXPECT_EQ(thisAWHP.operatingMode, 3);
+    EXPECT_EQ(companionAWHP.operatingMode, 3);
+
+    currentLoad = -500;
+    companionPLHPPlantLoadSideComp.MyLoad = 300;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::CoolingPriority);
+    EXPECT_EQ(thisAWHP.operatingMode, 5);
+    EXPECT_EQ(companionAWHP.operatingMode, 1);
+
+    currentLoad = -250;
+    companionPLHPPlantLoadSideComp.MyLoad = 250;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::CoolingPriority);
+    EXPECT_EQ(thisAWHP.operatingMode, 3);
+    EXPECT_EQ(companionAWHP.operatingMode, 2);
+
+    currentLoad = -300;
+    companionPLHPPlantLoadSideComp.MyLoad = 400;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::HeatingPriority);
+    EXPECT_EQ(thisAWHP.operatingMode, 3);
+    EXPECT_EQ(companionAWHP.operatingMode, 3);
+
+    currentLoad = -500;
+    companionPLHPPlantLoadSideComp.MyLoad = 300;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::HeatingPriority);
+    EXPECT_EQ(thisAWHP.operatingMode, 4);
+    EXPECT_EQ(companionAWHP.operatingMode, 2);
+
+    currentLoad = -250;
+    companionPLHPPlantLoadSideComp.MyLoad = 250;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::HeatingPriority);
+    EXPECT_EQ(thisAWHP.operatingMode, 3);
+    EXPECT_EQ(companionAWHP.operatingMode, 2);
+
+    currentLoad = -200;
+    companionPLHPPlantLoadSideComp.MyLoad = 1000;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::HeatingPriority);
+    EXPECT_EQ(thisAWHP.operatingMode, 0);
+    EXPECT_EQ(companionAWHP.operatingMode, 6);
+
+    currentLoad = 0;
+    companionPLHPPlantLoadSideComp.MyLoad = 400;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::Balanced);
+    EXPECT_EQ(thisAWHP.operatingMode, 0);
+    EXPECT_EQ(companionAWHP.operatingMode, 3);
+
+    currentLoad = 0;
+    companionPLHPPlantLoadSideComp.MyLoad = 4000;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::Balanced);
+    EXPECT_EQ(thisAWHP.operatingMode, 0);
+    EXPECT_EQ(companionAWHP.operatingMode, 6);
+
+    currentLoad = -400;
+    companionPLHPPlantLoadSideComp.MyLoad = 0;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::Balanced);
+    EXPECT_EQ(thisAWHP.operatingMode, 4);
+    EXPECT_EQ(companionAWHP.operatingMode, 0);
+
+    currentLoad = -4000;
+    companionPLHPPlantLoadSideComp.MyLoad = 0;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::Balanced);
+    EXPECT_EQ(thisAWHP.operatingMode, 6);
+    EXPECT_EQ(companionAWHP.operatingMode, 0);
+
+    currentLoad = -300;
+    companionPLHPPlantLoadSideComp.MyLoad = 400;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::Balanced);
+    EXPECT_EQ(thisAWHP.operatingMode, 3);
+    EXPECT_EQ(companionAWHP.operatingMode, 3);
+
+    currentLoad = -500;
+    companionPLHPPlantLoadSideComp.MyLoad = 300;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::Balanced);
+    EXPECT_EQ(thisAWHP.operatingMode, 4);
+    EXPECT_EQ(companionAWHP.operatingMode, 2);
+
+    currentLoad = -1000;
+    companionPLHPPlantLoadSideComp.MyLoad = 1500;
+    thisAWHP.calcOpMode(*state, currentLoad, HeatPumpAirToWater::OperatingModeControlOptionMultipleUnit::Balanced);
+    EXPECT_EQ(thisAWHP.operatingMode, 3);
+    EXPECT_EQ(companionAWHP.operatingMode, 3);
+}
+
 TEST_F(EnergyPlusFixture, processInputForEIRPLHP_TestAirSourceDuplicateNodes)
 {
     std::string const idf_objects = delimited_string({"HeatPump:PlantLoop:EIR:Cooling,",
@@ -753,6 +1852,212 @@ TEST_F(EnergyPlusFixture, Initialization)
     EXPECT_NEAR(0.0, state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).MassFlowRateMinAvail, flowTol);
     EXPECT_NEAR(expectedSourceSideMassFlow, state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).MassFlowRateMax, flowTol);
     EXPECT_NEAR(expectedSourceSideMassFlow, state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).MassFlowRateMaxAvail, flowTol);
+}
+
+TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
+{
+    std::string const idf_objects = delimited_string({
+        "HeatPump:PlantLoop:EIR:Heating,",
+        "  Heating Coil,            !- Name",
+        "  Heating Coil Load Loop Intermediate Node,  !- Load Side Inlet Node Name",
+        "  Heating Coil Load Loop Supply Side Heating Coil Outlet Node,  !- Load Side Outlet Node Name",
+        "  AirSource,               !- Condenser Type",
+        "  Outdoor Air Inlet Node,  !- Source Side Inlet Node Name",
+        "  Outdoor Air Outlet Node, !- Source Side Outlet Node Name",
+        "  ,                        !- Heat Recovery Inlet Node Name",
+        "  ,                        !- Heat Recovery Outlet Node Name",
+        "  ,                        !- Companion Heat Pump Name",
+        "  0.005,                   !- Load Side Reference Flow Rate {m3/s}",
+        "  2,                       !- Source Side Reference Flow Rate {m3/s}",
+        "  autosize,                !- Heat Recovery Reference Flow Rate {m3/s}",
+        "  80000,                   !- Reference Capacity {W}",
+        "  3.5,                     !- Reference Coefficient of Performance {W/W}",
+        "  1.0,                     !- Sizing Factor",
+        "  CapCurveFuncTemp,        !- Capacity Modifier Function of Temperature Curve Name",
+        "  EIRCurveFuncTemp,        !- Electric Input to Output Ratio Modifier Function of Temperature Curve Name",
+        "  EIRCurveFuncPLR,         !- Electric Input to Output Ratio Modifier Function of Part Load Ratio Curve Name",
+        "  1.0,                     !- Heating To Cooling Capacity Sizing Ratio",
+        "  CoolingCapacity,         !- Heat Pump Sizing Method",
+        "  Setpoint,                !- Control Type",
+        "  ConstantFlow,            !- Flow Mode",
+        "  0.0,                     !- Minimum Part Load Ratio",
+        "  -100.0,                  !- Minimum Source Inlet Temperature {C}",
+        "  100.0,                   !- Maximum Source Inlet Temperature {C}",
+        "  ,                        !- Minimum Supply Water Temperature Curve Name",
+        "  ,                        !- Maximum Supply Water Temperature Curve Name",
+        "  ,                        !- Dry Outdoor Correction Factor Curve Name",
+        "  10.0,                    !- Maximum Outdoor Dry Bulb Temperature For Defrost Operation",
+        "  ,                        !- Heat Pump Defrost Control",
+        "  0.058333,                !- Heat Pump Defrost Time Period Fraction",
+        "  ,                        !- Defrost Energy Input Ratio Function of Temperature Curve Name",
+        "  ,                        !- Timed Empirical Defrost Frequency Curve Name",
+        "  ,                        !- Timed Empirical Defrost Heat Load Penalty Curve Name",
+        "  ,                        !- Timed Empirical Defrost Heat Input Energy Fraction Curve Name",
+        "  4.5,                     !- Minimum Heat Recovery Outlet Temperature {C}",
+        "  ,                        !- Heat Recovery Capacity Modifier Function of Temperature Curve Name",
+        "  ;                        !- Heat Recovery Electric Input to Output Ratio Modifier Function of Temperature Curve Name",
+
+        "Curve:Biquadratic,",
+        "  CapCurveFuncTemp,        !- Name",
+        "  1.0,                     !- Coefficient1 Constant",
+        "  0.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  5.0,                     !- Minimum Value of x",
+        "  10.0,                    !- Maximum Value of x",
+        "  24.0,                    !- Minimum Value of y",
+        "  35.0,                    !- Maximum Value of y",
+        "  ,                        !- Minimum Curve Output",
+        "  ,                        !- Maximum Curve Output",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Biquadratic,",
+        "  EIRCurveFuncTemp,        !- Name",
+        "  1.0,                     !- Coefficient1 Constant",
+        "  0.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Coefficient4 y",
+        "  0.0,                     !- Coefficient5 y**2",
+        "  0.0,                     !- Coefficient6 x*y",
+        "  5.0,                     !- Minimum Value of x",
+        "  10.0,                    !- Maximum Value of x",
+        "  24.0,                    !- Minimum Value of y",
+        "  35.0,                    !- Maximum Value of y",
+        "  ,                        !- Minimum Curve Output",
+        "  ,                        !- Maximum Curve Output",
+        "  Temperature,             !- Input Unit Type for X",
+        "  Temperature,             !- Input Unit Type for Y",
+        "  Dimensionless;           !- Output Unit Type",
+
+        "Curve:Quadratic,",
+        "  EIRCurveFuncPLR,         !- Name",
+        "  1.0,                     !- Coefficient1 Constant",
+        "  0.0,                     !- Coefficient2 x",
+        "  0.0,                     !- Coefficient3 x**2",
+        "  0.0,                     !- Minimum Value of x",
+        "  1.0;                     !- Maximum Value of x",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    // call the factory with a valid name to trigger reading inputs
+    EIRPlantLoopHeatPump *thisHeatingPLHP =
+        static_cast<EIRPlantLoopHeatPump *>(EIRPlantLoopHeatPump::factory(*state, DataPlant::PlantEquipmentType::HeatPumpEIRHeating, "HEATING COIL"));
+
+    // the factory would've called GetOnlySingleNode for the in/out pairs on the PLHP, add another one for the loop
+    // outlet setpoint node
+    EXPECT_EQ(4, state->dataLoopNodes->NumOfNodes);
+    EXPECT_EQ(4, state->dataLoopNodes->Node.size());
+    state->dataLoopNodes->Node.redimension(5);
+    state->dataLoopNodes->NodeID.redimension(5);
+    int constexpr loadSidePlantOutletNodeIndex = 5;
+    state->dataLoopNodes->NodeID(loadSidePlantOutletNodeIndex) = "HEATING LOOP SUPPLY OUTLET NODE";
+
+    // set up the plant loops
+    // first the load side
+    state->dataPlnt->TotNumLoops = 1;
+    state->dataPlnt->PlantLoop.allocate(1);
+
+    int constexpr loadSidePlantIndex = 1;
+
+    auto &loadSideLoop = state->dataPlnt->PlantLoop(loadSidePlantIndex);
+    loadSideLoop.FluidName = "WATER";
+    loadSideLoop.glycol = Fluid::GetWater(*state);
+    loadSideLoop.LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    loadSideLoop.LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    loadSideLoop.LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    loadSideLoop.LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    loadSideLoop.TempSetPointNodeNum = loadSidePlantOutletNodeIndex;
+
+    auto &loadSideLoopComp = loadSideLoop.LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    loadSideLoopComp.Name = thisHeatingPLHP->name;
+    loadSideLoopComp.NodeNumIn = thisHeatingPLHP->loadSideNodes.inlet;
+    loadSideLoopComp.Type = DataPlant::PlantEquipmentType::HeatPumpEIRHeating;
+    loadSideLoopComp.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
+
+    // do a little setup here
+    thisHeatingPLHP->loadSidePlantLoc.loopNum = loadSidePlantIndex;
+    thisHeatingPLHP->loadSidePlantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
+    thisHeatingPLHP->loadSidePlantLoc.branchNum = 1;
+    thisHeatingPLHP->loadSidePlantLoc.compNum = 1;
+
+    // This sets the loop, side,branch and comp on the PlantLoc
+    PlantUtilities::SetPlantLocationLinks(*state, thisHeatingPLHP->loadSidePlantLoc);
+
+    // Test SingleSetPoint operation first
+    loadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPoint = 30.0;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointHi = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointLo = DataLoopNode::SensedNodeFlagValue;
+    // This is already the case, but I'm being explicit
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo = DataLoopNode::SensedNodeFlagValue;
+
+    // the init call expects a "from" calling point
+    PlantLocation myLocation = PlantLocation(loadSidePlantIndex, DataPlant::LoopSideLocation::Supply, 1, 1);
+
+    // call for initialization, oneTimeInit only first
+    state->dataGlobal->BeginEnvrnFlag = false;
+    thisHeatingPLHP->onInitLoopEquip(*state, myLocation);
+
+    compare_err_stream(delimited_string({
+        "   ** Warning ** EIRPlantLoopHeatPump : oneTimeInit: Missing temperature setpoint for Setpoint Controlled HeatPump:PlantLoop:EIR:Heating "
+        "name = \"HEATING COIL\"",
+        "   **   ~~~   **   A temperature setpoint is needed at the load side outlet node, use a SetpointManager",
+        "   **   ~~~   **   The overall loop setpoint will be assumed for the Heat Pump. The simulation continues ... ",
+    }));
+    EXPECT_TRUE(thisHeatingPLHP->SetpointSetToLoopErrDone);
+    EXPECT_EQ(loadSidePlantOutletNodeIndex, thisHeatingPLHP->setPointNodeNum);
+
+    EXPECT_NEAR(30.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
+    EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint, 0.001);
+    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointHi, 0.001);
+    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointLo, 0.001);
+
+    // test for dual setpoint operation
+    loadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPoint = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointHi = 30.0;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointLo = 10.0;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo = DataLoopNode::SensedNodeFlagValue;
+
+    // reset the flag to force re-running oneTimeInit
+    thisHeatingPLHP->oneTimeInitFlag = true;
+    thisHeatingPLHP->SetpointSetToLoopErrDone = false;
+    thisHeatingPLHP->onInitLoopEquip(*state, myLocation);
+
+    compare_err_stream(delimited_string({
+        "   ** Warning ** EIRPlantLoopHeatPump : oneTimeInit: Missing temperature setpoint for Setpoint Controlled HeatPump:PlantLoop:EIR:Heating "
+        "name = \"HEATING COIL\"",
+        "   **   ~~~   **   A temperature setpoint is needed at the load side outlet node, use a SetpointManager",
+        "   **   ~~~   **   The overall loop setpoint will be assumed for the Heat Pump. The simulation continues ... ",
+    }));
+    EXPECT_TRUE(thisHeatingPLHP->SetpointSetToLoopErrDone);
+    EXPECT_EQ(loadSidePlantOutletNodeIndex, thisHeatingPLHP->setPointNodeNum);
+
+    EXPECT_NEAR(10.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
+    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint, 0.001);
+    EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointHi, 0.001);
+    EXPECT_NEAR(10.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointLo, 0.001);
+
+    // validate that location work got done correctly
+    EXPECT_EQ(1, thisHeatingPLHP->loadSidePlantLoc.loopNum);
+    EXPECT_ENUM_EQ(DataPlant::LoopSideLocation::Supply, thisHeatingPLHP->loadSidePlantLoc.loopSideNum);
+    EXPECT_EQ(1, thisHeatingPLHP->loadSidePlantLoc.branchNum);
+    EXPECT_EQ(1, thisHeatingPLHP->loadSidePlantLoc.compNum);
+
+    // now call for initialization again, for begin environment
+    state->dataGlobal->BeginEnvrnFlag = true;
+    state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
+    thisHeatingPLHP->onInitLoopEquip(*state, myLocation);
 }
 
 TEST_F(EnergyPlusFixture, TestSizing_FullyAutosizedCoolingWithCompanion_WaterSource)
@@ -1509,7 +2814,9 @@ TEST_F(EnergyPlusFixture, CoolingOutletSetpointWorker)
     // set up the plant setpoint conditions and test for single setpoint operation
     PLHPPlantLoadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
     PLHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
-    state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.outlet).TempSetPoint = 3.141;
+    // Normally done by oneTimeInit
+    thisCoolingPLHP->setPointNodeNum = thisCoolingPLHP->loadSideNodes.outlet;
+    state->dataLoopNodes->Node(thisCoolingPLHP->setPointNodeNum).TempSetPoint = 3.141;
     state->dataLoopNodes->Node(5).TempSetPoint = 2.718;
     EXPECT_NEAR(3.141, thisCoolingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
     PLHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CoolingRB;
@@ -1593,8 +2900,10 @@ TEST_F(EnergyPlusFixture, HeatingOutletSetpointWorker)
     // test for dual setpoint operation
     PLHPPlantLoadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand;
     PLHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
-    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi = 30.0;
-    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo = 10.0;
+    // Normally done by oneTimeInit
+    thisHeatingPLHP->setPointNodeNum = thisHeatingPLHP->loadSideNodes.outlet;
+    state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointHi = 30.0;
+    state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointLo = 10.0;
     state->dataLoopNodes->Node(5).TempSetPointHi = 30.0;
     state->dataLoopNodes->Node(5).TempSetPointLo = 12.0;
     EXPECT_NEAR(10.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
@@ -1973,6 +3282,8 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_WaterSource)
     thisCoolingPLHP->simulate(*state, mySourceLocation, firstHVAC, curLoad, runFlag);
     EXPECT_TRUE(state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).SimLoopSideNeeded);
 
+    thisCoolingPLHP->setPointNodeNum = thisCoolingPLHP->loadSideNodes.outlet;
+
     // now we can call it again from the load side, but this time there is load (still firsthvac, unit can meet load)
     {
         firstHVAC = true;
@@ -1982,7 +3293,7 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_WaterSource)
         Real64 constexpr expectedCp = 4183;
         Real64 constexpr specifiedLoadSetpoint = 15;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisCoolingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisCoolingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2001,7 +3312,7 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_WaterSource)
         Real64 constexpr expectedCp = 4183;
         Real64 constexpr specifiedLoadSetpoint = 15;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisCoolingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisCoolingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2090,6 +3401,8 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_WaterSource)
     state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
     thisHeatingPLHP->onInitLoopEquip(*state, myLoadLocation);
 
+    thisHeatingPLHP->setPointNodeNum = thisHeatingPLHP->loadSideNodes.outlet;
+
     // call it from the load side, but this time there is a negative (cooling) load - shouldn't try to run
     {
         bool firstHVAC = true;
@@ -2097,7 +3410,7 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_WaterSource)
         bool runFlag = true; // plant actually shouldn't do this but the component can be smart enough to handle it
         Real64 constexpr specifiedLoadSetpoint = 45;
         Real64 constexpr loadInletTemp = 46;
-        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = loadInletTemp;
         state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2115,7 +3428,7 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_WaterSource)
         Real64 constexpr expectedCp = 4180;
         Real64 constexpr specifiedLoadSetpoint = 45;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2134,7 +3447,7 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_WaterSource)
         Real64 constexpr expectedCp = 4180;
         Real64 constexpr specifiedLoadSetpoint = 45;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2321,6 +3634,7 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_AirSource)
     state->dataGlobal->BeginEnvrnFlag = true;
     state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
     thisCoolingPLHP->onInitLoopEquip(*state, myLoadLocation);
+    thisCoolingPLHP->setPointNodeNum = thisCoolingPLHP->loadSideNodes.outlet;
 
     // call from load side location, firsthvac, no load, not running, verify the unit doesn't have any values lingering
     thisCoolingPLHP->loadSideHeatTransfer = 1000;
@@ -2349,7 +3663,7 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_AirSource)
         Real64 constexpr expectedCp = 4183;
         Real64 constexpr specifiedLoadSetpoint = 15;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisCoolingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisCoolingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2368,7 +3682,7 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_AirSource)
         Real64 constexpr expectedCp = 4183;
         Real64 constexpr specifiedLoadSetpoint = 15;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisCoolingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisCoolingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2398,7 +3712,12 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource)
                                                       "  ,",
                                                       "  dummyCurve,",
                                                       "  dummyCurve,",
-                                                      "  dummyCurve;",
+                                                      "  dummyCurve,",
+                                                      "  1.0,",
+                                                      "  HeatingCapacity,",
+                                                      "  Load,",
+                                                      "  ConstantFlow,",
+                                                      "  0.5;",
                                                       "Curve:Linear,",
                                                       "  dummyCurve,",
                                                       "  0.95,",
@@ -2444,6 +3763,7 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource)
     state->dataGlobal->BeginEnvrnFlag = true;
     state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
     thisHeatingPLHP->onInitLoopEquip(*state, myLoadLocation);
+    thisHeatingPLHP->setPointNodeNum = thisHeatingPLHP->loadSideNodes.outlet;
 
     // call it from the load side, but this time there is a negative (cooling) load - shouldn't try to run
     {
@@ -2452,7 +3772,7 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource)
         bool runFlag = true; // plant actually shouldn't do this but the component can be smart enough to handle it
         Real64 constexpr specifiedLoadSetpoint = 45;
         Real64 constexpr loadInletTemp = 46;
-        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = loadInletTemp;
         state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2470,7 +3790,7 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource)
         Real64 constexpr expectedCp = 4180;
         Real64 constexpr specifiedLoadSetpoint = 45;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2489,7 +3809,7 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource)
         Real64 constexpr expectedCp = 4180;
         Real64 constexpr specifiedLoadSetpoint = 45;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
@@ -2507,13 +3827,30 @@ TEST_F(EnergyPlusFixture, HeatingSimulate_AirSource)
         Real64 constexpr expectedCp = 4180;
         Real64 constexpr specifiedLoadSetpoint = 45;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
         thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
         // expect it to miss setpoint and be at max capacity
         EXPECT_NEAR(45.0, thisHeatingPLHP->loadSideOutletTemp, 0.001);
         EXPECT_NEAR(30.0, thisHeatingPLHP->sourceSideOutletTemp, 0.001);
+    }
+
+    // now we can call it again from the load side, but this time there is a very low load (still firsthvac)
+    {
+        bool firstHVAC = true;
+        Real64 curLoad = 100.0;
+        bool runFlag = true;
+        Real64 constexpr expectedLoadMassFlowRate = 0.09999;
+        Real64 constexpr expectedCp = 4180;
+        Real64 constexpr specifiedLoadSetpoint = 45;
+        Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
+        state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
+        state->dataLoopNodes->Node(thisHeatingPLHP->sourceSideNodes.inlet).Temp = 30;
+        thisHeatingPLHP->simulate(*state, myLoadLocation, firstHVAC, curLoad, runFlag);
+        // expect it to miss setpoint and be at max capacity
+        EXPECT_NEAR((curLoad / thisHeatingPLHP->referenceCOP) * 0.95 * 0.95, thisHeatingPLHP->powerUsage, 0.001);
     }
 }
 
@@ -3315,6 +4652,352 @@ TEST_F(EnergyPlusFixture, Test_DoPhysics)
 
     EXPECT_NEAR(thisCoolingPLHP->loadSideOutletTemp, 12.00, 0.1);
     EXPECT_NEAR(thisCoolingPLHP->sourceSideOutletTemp, 47.90, 0.1);
+}
+
+TEST_F(EnergyPlusFixture, Test_DoPhysics_AWHP)
+{
+
+    std::string const idf_objects =
+        delimited_string({"HeatPump:PlantLoop:EIR:Cooling,",
+                          "  hp cooling side,",
+                          "  node 1,",
+                          "  node 2,",
+                          "  AirSource,",
+                          "  node 3,",
+                          "  node 4,",
+                          "  ,",
+                          "  ,",
+                          "  hp heating side,",
+                          "  0.005,",
+                          "  0.002,",
+                          "  ,",
+                          "  20000,",
+                          "  3.0,",
+                          "  1,",
+                          "  CapCurveFuncTemp,",
+                          "  EIRCurveFuncTemp,",
+                          "  EIRCurveFuncPLR;",
+
+                          "HeatPump:PlantLoop:EIR:Heating,",
+                          "  hp heating side,",
+                          "  node 5,",
+                          "  node 6,",
+                          "  AirSource,",
+                          "  node 7,",
+                          "  node 8,",
+                          "  ,",
+                          "  ,",
+                          "  hp cooling side,",
+                          "  0.005,",
+                          "  0.002,",
+                          "  ,",
+                          "  20000,",
+                          "  3.0,",
+                          "  1,",
+                          "  CapCurveFuncTemp,",
+                          "  EIRCurveFuncTemp,",
+                          "  EIRCurveFuncPLR;",
+
+                          "HeatPump:AirToWater,",
+                          "test_AWHP, !- Name",
+                          ", !- Availability Schedule Name Heating",
+                          ", !- Availability Schedule Name Cooling",
+                          "Load , !- Operating Mode Control Method",
+                          "SingleMode, !- Operating Mode Control Option for Multiple Unit",
+                          ", !- Operating Mode Control Schedule Name",
+                          ",    !- Minimum Part Load Ratio",
+                          "20 , !-  Rated Inlet Air Temperature in Heating Mode",
+                          "0.002, !-  Rated Air Flow Rate in Heating Mode",
+                          "50 , !-  Rated Leaving Water Temperature in Heating Mode",
+                          "0.005, !-  Rated Water Flow Rate in Heating Mode",
+                          "-20, !-  Minimum Outdoor Air Temperature in Heating Mode",
+                          "25, !-  Maximum Outdoor Air Temperature in Heating Mode",
+                          ",    !- Minimum Leaving Water Temperature Curve Name in Heating Mode",
+                          ",    !- Maximum Leaving Water Temperature Curve Name in Heating Mode",
+                          "1.0, !-  Sizing Factor for Heating",
+                          "25, !-  Rated Inlet Air Temperature in Cooling Mode",
+                          "0.002, !-  Rated Air Flow Rate in Cooling Mode",
+                          "22 , !-  Rated Leaving Water Temperature in Cooling Mode",
+                          "0.005, !-  Rated Water Flow Rate in Cooling Mode",
+                          "18 , !-  Minimum Outdoor Air Temperature in Cooling Mode",
+                          "40, !-  Maximum Outdoor Air Temperature in Cooling Mode",
+                          ",    !- Minimum Leaving Water Temperature Curve Name in Cooling Mode",
+                          ",    !- Maximum Leaving Water Temperature Curve Name in Cooling Mode",
+                          "0.9, !-  Sizing Factor for Cooling",
+                          "Outdoor Air Inlet Node , !-  Air Inlet Node Name",
+                          "Outdoor Air Outlet Node, !-  Air Outlet Node Name",
+                          "Heating Coil Load Loop Intermediate Node, !-  Hot Water Inlet Node Name",
+                          "Heating Coil Load Loop Supply Outlet Node, !-  Hot Water Outlet Node Name",
+                          "Cooling Coil Load Loop Intermediate Node , !-  Chilled Water Inlet Node Name",
+                          "Cooling Coil Load Loop Supply Outlet Node , !-  Chilled Water Outlet Node Name",
+                          "10, !- Maximum Outdoor Dry Bulb Temperature For Defrost Operation",
+                          "Timed, !-  Heat Pump Defrost Control",
+                          "0.2, !-  Defrost Time Period Fraction",
+                          "150, !-  Resistive Defrost Heater Capacity",
+                          ", !-  Defrost Energy Input Ratio Function of Temperature Curve Name",
+                          "1 , !- Compressor Multiplier",
+                          "FixedSpeed , !- Control Type",
+                          "100 , !- Crankcase Heater Capacity",
+                          "EIRCurveFuncPLR, !- Crankcase Heater Capacity Function of Temperature Curve Name",
+                          "20 , !- Maximum Ambient Temperature for Crankcase Heater Operation",
+                          "1 , !- Number of Speeds for Heating",
+                          "20000, !-  Rated Heating Capacity at Speed 1",
+                          "3, !-  Rated COP for Heating at Speed 1",
+                          "CapCurveFuncTemp, !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 1",
+                          "EIRCurveFuncTemp, !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 1",
+                          "EIRCurveFuncPLR, !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 1",
+                          ", !-  Rated Heating Capacity at Speed 2",
+                          ", !-  Rated COP for Heating at Speed 2",
+                          ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 2",
+                          ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 2",
+                          ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 2",
+                          ", !-  Rated Heating Capacity at Speed 3",
+                          ", !-  Rated COP for Heating at Speed 3",
+                          ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 3",
+                          ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 3",
+                          ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 3",
+                          ", !-  Rated Heating Capacity at Speed 4",
+                          ", !-  Rated COP for Heating at Speed 4",
+                          ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 4",
+                          ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 4",
+                          ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 4",
+                          ", !-  Rated Heating Capacity at Speed 5",
+                          ", !-  Rated COP for Heating at Speed 5",
+                          ", !-  Normalized Heating Capacity Function of Temperature Curve Name at Speed 5",
+                          ", !-  Heating Energy Input Ratio Function of Temperature Curve Name at Speed 5",
+                          ", !-  Heating Energy Input Ratio Function of PLR Curve Name at Speed 5",
+                          ", !-  Booster Mode On Heating",
+                          ", !-  Rated Heating Capacity in Booster Mode",
+                          ", !-  Rated Heating COP in Booster Mode",
+                          ", !-  Normalized Heating Capacity Function of Temperature Curve Name in Booster Mode",
+                          ", !-  Heating Energy Input Ratio Function of Temperature Curve Name in Booster Mode",
+                          ", !-  Heating Energy Input Ratio Function of PLR Curve Name in Booster Mode",
+                          "1, !-  Number of Speeds for Cooling",
+                          "20000, !-  Rated Cooling Capacity at Speed 1",
+                          "3, !-  Rated COP for Cooling at Speed 1",
+                          "CapCurveFuncTemp, !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 1",
+                          "EIRCurveFuncTemp, !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 1",
+                          "EIRCurveFuncPLR, !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 1",
+                          ", !-  Rated Cooling Capacity at Speed 2",
+                          ", !-  Rated COP for Cooling at Speed 2",
+                          ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 2",
+                          ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 2",
+                          ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 2",
+                          ", !-  Rated Cooling Capacity at Speed 3",
+                          ", !-  Rated COP for Cooling at Speed 3",
+                          ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 3",
+                          ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 3",
+                          ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 3",
+                          ", !-  Rated Cooling Capacity at Speed 4",
+                          ", !-  Rated COP for Cooling at Speed 4",
+                          ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 4",
+                          ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 4",
+                          ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 4",
+                          ", !-  Rated Cooling Capacity at Speed 5",
+                          ", !-  Rated COP for Cooling at Speed 5",
+                          ", !-  Normalized Cooling Capacity Function of Temperature Curve Name at Speed 5",
+                          ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name at Speed 5",
+                          ", !-  Cooling Energy Input Ratio Function of PLR Curve Name at Speed 5",
+                          ", !-  Booster Mode On Cooling",
+                          ", !-  Rated Cooling Capacity in Booster Mode",
+                          ", !-  Rated Cooling COP in Booster Mode",
+                          ", !-  Normalized Cooling Capacity Function of Temperature Curve Name in Booster Mode",
+                          ", !-  Cooling Energy Input Ratio Function of Temperature Curve Name in Booster Mode",
+                          "; !-  Cooling Energy Input Ratio Function of PLR Curve Name in Booster Mode",
+
+                          "Curve:Biquadratic,",
+                          "  CapCurveFuncTemp,",
+                          "  1.0,",
+                          "  0.0,",
+                          "  0.0,",
+                          "  0.0,",
+                          "  0.0,",
+                          "  0.0,",
+                          "  5.0,",
+                          "  10.0,",
+                          "  24.0,",
+                          "  35.0,",
+                          "  ,",
+                          "  ,",
+                          "  Temperature,",
+                          "  Temperature,",
+                          "  Dimensionless;",
+                          "Curve:Biquadratic,",
+                          "  EIRCurveFuncTemp,",
+                          "  1.0,",
+                          "  0.0,",
+                          "  0.0,",
+                          "  1.0,",
+                          "  0.0,",
+                          "  0.0,",
+                          "  5.0,",
+                          "  10.0,",
+                          "  24.0,",
+                          "  35.0,",
+                          "  ,",
+                          "  ,",
+                          "  Temperature,",
+                          "  Temperature,",
+                          "  Dimensionless;",
+                          "Curve:Quadratic,",
+                          "  EIRCurveFuncPLR,",
+                          "  1.0,",
+                          "  0.0,",
+                          "  0.0,",
+                          "  0.0,",
+                          "  1.0;"});
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    // set up the plant loops
+    // first the load side
+    state->dataPlnt->TotNumLoops = 5;
+    state->dataPlnt->PlantLoop.allocate(5);
+
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &AWHPPlantLoadSideLoop = state->dataPlnt->PlantLoop(1);
+    auto &AWHPPlantLoadSideComp = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    AWHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    // then the source side
+
+    state->dataPlnt->PlantLoop(2).FluidName = "Air";
+    state->dataPlnt->PlantLoop(2).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp.allocate(1);
+
+    // call the factory with a valid name to trigger reading inputs
+    DataPlant::PlantEquipmentType equipType = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    HeatPumpAirToWater::factory(*state, equipType, "test_AWHP");
+
+    state->dataPlnt->PlantLoop(3).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(3).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(3).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(3).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(3).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(3).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &PLHPPlantLoadSideLoop = state->dataPlnt->PlantLoop(1);
+    auto &PLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    PLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
+    // then the source side
+
+    state->dataPlnt->PlantLoop(4).FluidName = "Air";
+    state->dataPlnt->PlantLoop(4).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(4).LoopSide(DataPlant::LoopSideLocation::Demand).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(4).LoopSide(DataPlant::LoopSideLocation::Demand).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(4).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(4).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp.allocate(1);
+
+    auto &PLHPPlantLoadSourceComp = state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1);
+    PLHPPlantLoadSourceComp.Type = DataPlant::PlantEquipmentType::HeatPumpEIRCooling;
+
+    state->dataPlnt->PlantLoop(5).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(5).glycol = Fluid::GetWater(*state);
+    state->dataPlnt->PlantLoop(5).LoopSide(DataPlant::LoopSideLocation::Supply).TotalBranches = 1;
+    state->dataPlnt->PlantLoop(5).LoopSide(DataPlant::LoopSideLocation::Supply).Branch.allocate(1);
+    state->dataPlnt->PlantLoop(5).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).TotalComponents = 1;
+    state->dataPlnt->PlantLoop(5).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
+    auto &AWHPHeatPlantLoadSideComp = state->dataPlnt->PlantLoop(5).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
+    AWHPHeatPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
+
+    // call the factory with a valid name to trigger reading inputs
+    EIRPlantLoopHeatPump::factory(*state, DataPlant::PlantEquipmentType::HeatPumpEIRCooling, "hp cooling side");
+
+    // verify the size of the vector and the processed condition
+    EXPECT_EQ(2u, state->dataHeatPumpAirToWater->heatPumps.size());
+    EXPECT_EQ(2u, state->dataEIRPlantLoopHeatPump->heatPumps.size());
+
+    // for now we know the order is maintained, so get each heat pump object
+    HeatPumpAirToWater *thisCoolingAWHP = &state->dataHeatPumpAirToWater->heatPumps[0];
+    EIRPlantLoopHeatPump *thisCoolingPLHP = &state->dataEIRPlantLoopHeatPump->heatPumps[0];
+    HeatPumpAirToWater *thisHeatingAWHP = &state->dataHeatPumpAirToWater->heatPumps[1];
+    thisCoolingAWHP->companionHeatPumpCoil = thisHeatingAWHP;
+    thisHeatingAWHP->companionHeatPumpCoil = thisCoolingAWHP;
+
+    // do a little setup here
+    thisCoolingAWHP->loadSidePlantLoc.loopNum = 1;
+    thisCoolingAWHP->loadSidePlantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
+    thisCoolingAWHP->loadSidePlantLoc.branchNum = 1;
+    thisCoolingAWHP->loadSidePlantLoc.compNum = 1;
+    thisHeatingAWHP->loadSidePlantLoc.loopNum = 5;
+    thisHeatingAWHP->loadSidePlantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
+    thisHeatingAWHP->loadSidePlantLoc.branchNum = 1;
+    thisHeatingAWHP->loadSidePlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, thisCoolingAWHP->loadSidePlantLoc);
+    thisCoolingAWHP->loadSideNodes.outlet = 1;
+    thisCoolingAWHP->sourceSidePlantLoc.loopNum = 2;
+    PlantUtilities::SetPlantLocationLinks(*state, thisCoolingAWHP->sourceSidePlantLoc);
+
+    thisCoolingPLHP->loadSidePlantLoc.loopNum = 1;
+    thisCoolingPLHP->loadSidePlantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
+    thisCoolingPLHP->loadSidePlantLoc.branchNum = 1;
+    thisCoolingPLHP->loadSidePlantLoc.compNum = 1;
+    PlantUtilities::SetPlantLocationLinks(*state, thisCoolingPLHP->loadSidePlantLoc);
+    thisCoolingPLHP->loadSideNodes.outlet = 1;
+    thisCoolingPLHP->sourceSidePlantLoc.loopNum = 2;
+    PlantUtilities::SetPlantLocationLinks(*state, thisCoolingPLHP->sourceSidePlantLoc);
+
+    // the factory would've called GetOnlySingleNode for the in/out pairs on the PLHP, add another one for the loop
+    // outlet setpoint node
+    state->dataLoopNodes->Node.allocate(10);
+    AWHPPlantLoadSideLoop.TempSetPointNodeNum = 5;
+    PLHPPlantLoadSideLoop.TempSetPointNodeNum = 10;
+
+    // set up the plant setpoint conditions and test for single setpoint operation
+    AWHPPlantLoadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
+    AWHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
+    state->dataLoopNodes->Node(thisCoolingAWHP->loadSideNodes.outlet).TempSetPoint = 3.141;
+    state->dataLoopNodes->Node(5).TempSetPoint = 2.718;
+    AWHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CoolingRB;
+
+    // test for dual setpoint operation
+    AWHPPlantLoadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand;
+    AWHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
+    state->dataLoopNodes->Node(thisCoolingAWHP->loadSideNodes.outlet).TempSetPointHi = 6.282;
+    state->dataLoopNodes->Node(5).TempSetPointHi = 5.436;
+    AWHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CoolingRB;
+
+    // set up the plant setpoint conditions and test for single setpoint operation
+    PLHPPlantLoadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
+    PLHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
+    state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.outlet).TempSetPoint = 3.141;
+    state->dataLoopNodes->Node(10).TempSetPoint = 2.718;
+    PLHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CoolingRB;
+
+    // test for dual setpoint operation
+    PLHPPlantLoadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand;
+    PLHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
+    state->dataLoopNodes->Node(thisCoolingAWHP->loadSideNodes.outlet).TempSetPointHi = 6.282;
+    state->dataLoopNodes->Node(10).TempSetPointHi = 5.436;
+    PLHPPlantLoadSideComp.CurOpSchemeType = DataPlant::OpScheme::CoolingRB;
+
+    state->dataHVACGlobal->TimeStepSys = 60;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
+
+    Real64 curLoad = -10000;
+
+    thisCoolingAWHP->loadSideMassFlowRate = 0.3;
+    thisCoolingAWHP->sourceSideMassFlowRate = 0.8;
+    thisCoolingAWHP->loadSideInletTemp = 20;
+    thisCoolingAWHP->sourceSideInletTemp = 20;
+    thisCoolingAWHP->doPhysics(*state, curLoad);
+
+    thisCoolingPLHP->loadSideMassFlowRate = 0.3;
+    thisCoolingPLHP->sourceSideMassFlowRate = 0.8;
+    thisCoolingPLHP->loadSideInletTemp = 20;
+    thisCoolingPLHP->sourceSideInletTemp = 20;
+    thisCoolingPLHP->doPhysics(*state, curLoad);
+
+    EXPECT_NEAR(thisCoolingAWHP->loadSideOutletTemp, thisCoolingPLHP->loadSideOutletTemp, 0.1);
+    // this value is from the Test_DoPhysics with WaterSource changed to AirSource
+    EXPECT_NEAR(thisCoolingAWHP->sourceSideOutletTemp, thisCoolingPLHP->sourceSideOutletTemp, 0.1);
+    // fixme: add cases with 2 or more speed levels
 }
 
 TEST_F(EnergyPlusFixture, CoolingMetering)
@@ -5140,6 +6823,9 @@ TEST_F(EnergyPlusFixture, CoolingwithHeatRecoverySimulate_AirSource)
     thisCoolingPLHP->onInitLoopEquip(*state, myCoolingLoadLocation);
     thisHeatingPLHP->onInitLoopEquip(*state, myHeatingLoadLocation);
 
+    thisCoolingPLHP->setPointNodeNum = thisCoolingPLHP->loadSideNodes.outlet;
+    thisHeatingPLHP->setPointNodeNum = thisHeatingPLHP->loadSideNodes.outlet;
+
     // call from load side location, firsthvac, no load, not running, verify the unit doesn't have any values lingering
     thisCoolingPLHP->loadSideHeatTransfer = 2000;
     thisCoolingPLHP->loadSideInletTemp = 23.0;
@@ -5368,6 +7054,9 @@ TEST_F(EnergyPlusFixture, HeatingwithHeatRecoverySimulate_AirSource)
     thisCoolingPLHP->onInitLoopEquip(*state, myCoolingLoadLocation);
     thisHeatingPLHP->onInitLoopEquip(*state, myHeatingLoadLocation);
 
+    thisCoolingPLHP->setPointNodeNum = thisCoolingPLHP->loadSideNodes.outlet;
+    thisHeatingPLHP->setPointNodeNum = thisHeatingPLHP->loadSideNodes.outlet;
+
     // call from load side location, firsthvac, no load, not running, verify the unit doesn't have any values lingering
     thisHeatingPLHP->loadSideHeatTransfer = 5000;
     thisHeatingPLHP->loadSideInletTemp = 43.0;
@@ -5559,6 +7248,8 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_WSHP_SourceSideOutletTemp)
     thisCoolingPLHP->simulate(*state, mySourceLocation, firstHVAC, curLoad, runFlag);
     EXPECT_TRUE(state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).SimLoopSideNeeded);
 
+    thisCoolingPLHP->setPointNodeNum = thisCoolingPLHP->loadSideNodes.outlet;
+
     // now we can call it again from the load side, but this time there is load (still firsthvac, unit can meet load)
     {
         firstHVAC = true;
@@ -5570,7 +7261,7 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_WSHP_SourceSideOutletTemp)
         Real64 constexpr expectedCp = 4183;
         Real64 constexpr specifiedLoadSetpoint = 15;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisCoolingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).Temp = 45;
         thisCoolingPLHP->maxSourceTempLimit = 50.0;
@@ -5594,7 +7285,7 @@ TEST_F(EnergyPlusFixture, CoolingSimulate_WSHP_SourceSideOutletTemp)
         Real64 constexpr expectedCp = 4183;
         Real64 constexpr specifiedLoadSetpoint = 15;
         Real64 const calculatedLoadInletTemp = specifiedLoadSetpoint - curLoad / (expectedLoadMassFlowRate * expectedCp);
-        state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.outlet).TempSetPoint = specifiedLoadSetpoint;
+        state->dataLoopNodes->Node(thisCoolingPLHP->setPointNodeNum).TempSetPoint = specifiedLoadSetpoint;
         state->dataLoopNodes->Node(thisCoolingPLHP->loadSideNodes.inlet).Temp = calculatedLoadInletTemp;
         state->dataLoopNodes->Node(thisCoolingPLHP->sourceSideNodes.inlet).Temp = 48;
         thisCoolingPLHP->maxSourceTempLimit = 50.0;
@@ -5829,7 +7520,7 @@ TEST_F(EnergyPlusFixture, GAHP_AirSource_CurveEval)
 
     // I am picking a temperature that is:
     // * Below the 'Maximum Outdoor Dry-bulb Temperature for Defrost Operation' I entered (5.0C)
-    // * Between the harcoded min/max defrost temperatures of 16F/-8.88C | 38F/3.33C
+    // * Between the hardcoded min/max defrost temperatures of 16F/-8.88C | 38F/3.33C
     double constexpr oaTemp = 3.0;
     state->dataEnvrn->OutDryBulbTemp = oaTemp;
 

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -46,6 +46,7 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 // C++ Headers
+#include <limits>
 #include <map>
 
 // ObjexxFCL Headers
@@ -251,7 +252,7 @@ namespace Sched {
         sched->tsVals.assign(Constant::iHoursInDay * max(1, s_glob->TimeStepsInHour), value);
 
         s_sched->schedules.push_back(sched);
-        s_sched->scheduleMap.insert_or_assign(std::move(Util::makeUPPER(sched->Name)), sched->Num);
+        s_sched->scheduleMap.insert_or_assign(Util::makeUPPER(sched->Name), sched->Num);
 
         return sched;
     } // AddScheduleConstant()
@@ -265,7 +266,7 @@ namespace Sched {
 
         sched->Num = (int)s_sched->schedules.size();
         s_sched->schedules.push_back(sched);
-        s_sched->scheduleMap.insert_or_assign(std::move(Util::makeUPPER(sched->Name)), sched->Num);
+        s_sched->scheduleMap.insert_or_assign(Util::makeUPPER(sched->Name), sched->Num);
 
         sched->type = SchedType::Year;
         return sched;
@@ -281,9 +282,10 @@ namespace Sched {
 
         daySched->Num = (int)s_sched->daySchedules.size();
         s_sched->daySchedules.push_back(daySched);
-        s_sched->dayScheduleMap.insert_or_assign(std::move(Util::makeUPPER(daySched->Name)), daySched->Num);
+        s_sched->dayScheduleMap.insert_or_assign(Util::makeUPPER(daySched->Name), daySched->Num);
 
-        daySched->tsVals.resize(Constant::iHoursInDay * s_glob->TimeStepsInHour);
+        // When InitConstantScheduleData is called, TimeStepsInHour is 0, so we ensure 24
+        daySched->tsVals.assign(Constant::iHoursInDay * max(1, s_glob->TimeStepsInHour), 0.0);
 
         return daySched;
     } // AddDaySchedule()
@@ -295,9 +297,14 @@ namespace Sched {
         auto *weekSched = new WeekSchedule;
         weekSched->Name = name;
 
+        // Fill the dayScheds with the Missing Day Schedule (Always Off)
+        for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
+            weekSched->dayScheds[iDayType] = s_sched->daySchedules[SchedNum_AlwaysOff];
+        }
+
         weekSched->Num = (int)s_sched->weekSchedules.size();
         s_sched->weekSchedules.push_back(weekSched);
-        s_sched->weekScheduleMap.insert_or_assign(std::move(Util::makeUPPER(weekSched->Name)), weekSched->Num);
+        s_sched->weekScheduleMap.insert_or_assign(Util::makeUPPER(weekSched->Name), weekSched->Num);
 
         return weekSched;
     } // AddWeekSchedule()
@@ -313,6 +320,10 @@ namespace Sched {
         auto *schedOn = AddScheduleConstant(state, "Constant-1.0", 1.0);
         assert(schedOn->Num == SchedNum_AlwaysOn);
         schedOn->isUsed = true; // Suppress unused warnings
+
+        auto *missingDaySchedule = AddDaySchedule(state, "MissingDaySchedule-0.0");
+        assert(missingDaySchedule->Num == SchedNum_AlwaysOff);
+        missingDaySchedule->isUsed = true;
     }
 
     void ProcessScheduleInput(EnergyPlusData &state)
@@ -394,7 +405,6 @@ namespace Sched {
         std::string subString;
         int MaxNums1;
         char ColumnSep;
-        bool FileIntervalInterpolated;
         int rowLimitCount;
         int skiprowCount;
         int curcolCount;
@@ -604,6 +614,13 @@ namespace Sched {
                         }
                         ShowContinueError(state, fmt::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
                         ShowFatalError(state, "Program terminates due to previous condition.");
+                    }
+                    for (const auto &[warning, isContinued] : csvParser.warnings()) {
+                        if (isContinued) {
+                            ShowContinueError(state, warning);
+                        } else {
+                            ShowWarningError(state, warning);
+                        }
                     }
                     schedule_file_shading_result = it.first;
                 } else if (FileSystem::is_all_json_type(ext)) {
@@ -1213,7 +1230,8 @@ namespace Sched {
                     ShowSevereCustomAudit(state, eoh, "has missing days in its schedule pointers");
                     ErrorsFound = true;
                     break;
-                } else if (daysInYear[iDay] > 1) {
+                }
+                if (daysInYear[iDay] > 1) {
                     ShowSevereCustomAudit(state, eoh, "has overlapping days in its schedule pointers");
                     ErrorsFound = true;
                     break;
@@ -1245,6 +1263,9 @@ namespace Sched {
         //  A3 , \field Complex Field #1
         //  A4 , \field Complex Field #2
         //  A5 , \field Complex Field #3
+
+        // When InitConstantScheduleData is called, TimeStepsInHour is 0, so we delay it here
+        static_cast<DaySchedule *>(s_sched->daySchedules[SchedNum_AlwaysOff])->tsVals.assign(Constant::iHoursInDay * s_glob->TimeStepsInHour, 0.0);
 
         SchNum = NumRegSchedules;
         CurrentModuleObject = "Schedule:Compact";
@@ -1666,11 +1687,18 @@ namespace Sched {
                                 if (isContinued) {
                                     ShowContinueError(state, error);
                                 } else {
-                                    ShowSevereError(state, error);
+                                    ShowSevereCustom(state, eoh, error);
                                 }
                             }
                             ShowContinueError(state, fmt::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
                             ShowFatalError(state, "Program terminates due to previous condition.");
+                        }
+                        for (const auto &[warning, isContinued] : csvParser.warnings()) {
+                            if (isContinued) {
+                                ShowContinueError(state, warning);
+                            } else {
+                                ShowWarningCustom(state, eoh, warning);
+                            }
                         }
                         result = it.first;
                     } else if (FileSystem::is_all_json_type(ext)) {
@@ -1722,9 +1750,25 @@ namespace Sched {
                     }
                 }
 
+                // curcolCount is 1-indexed here
+                if (static_cast<size_t>(curcolCount) > result->second["values"].size()) {
+                    ShowSevereCustom(
+                        state, eoh, format("Requested column number {}, but found only {} columns.", curcolCount, result->second["values"].size()));
+                    ShowContinueError(state, fmt::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
+                    ShowFatalError(state, "Program terminates due to previous condition.");
+                }
                 auto const &column_json = result->second["values"][curcolCount - 1];
                 rowCnt = column_json.size();
-                auto const column_values = column_json.get<std::vector<Real64>>(); // (AUTO_OK_OBJ)
+
+                std::vector<Real64> column_values;
+                try {
+                    column_values = column_json.get<std::vector<Real64>>();
+                } catch (nlohmann::json::type_error &e) {
+                    ShowSevereCustom(state, eoh, format("Column number {} has non-numeric data.", curcolCount));
+                    ShowContinueError(state, e.what());
+                    ShowContinueError(state, fmt::format("Error Occurred in {}", state.files.TempFullFilePath.filePath));
+                    ShowFatalError(state, "Program terminates due to previous condition.");
+                }
 
                 // schedule values have been filled into the hourlyFileValues array.
 
@@ -1820,6 +1864,9 @@ namespace Sched {
             auto const headers = schedule_file_shading_result->second["header"].get<std::vector<std::string>>();  // (AUTO_OK_OBJ)
             auto const headers_set = schedule_file_shading_result->second["header"].get<std::set<std::string>>(); // (AUTO_OK_OBJ)
 
+            std::string const shadingFileName = schedule_file_shading_result->first.filename().string();
+            ErrorObjectHeader eoh{routineName, "Schedule:File:Shading", shadingFileName};
+
             for (auto const &header : headers_set) {
                 size_t column = 0;
                 auto column_it = std::find(headers.begin(), headers.end(), header);
@@ -1829,7 +1876,26 @@ namespace Sched {
                 if (column == 0) {
                     continue; // Skip timestamp column and any duplicate column, which will be 0 as well since it won't be found.
                 }
-                auto const column_values = values_json.at(column).get<std::vector<Real64>>(); // (AUTO_OK_OBJ)
+
+                if (column >= values_json.size()) {
+                    ShowSevereCustom(
+                        state,
+                        eoh,
+                        fmt::format(
+                            "For header '{}', Requested column number {}, but found only {} columns.", header, column + 1, values_json.size()));
+                    ShowContinueError(state, fmt::format("Error Occurred in {}", schedule_file_shading_result->first));
+                    ShowFatalError(state, "Program terminates due to previous condition.");
+                }
+
+                std::vector<Real64> column_values;
+                try {
+                    column_values = values_json.at(column).get<std::vector<Real64>>();
+                } catch (nlohmann::json::type_error &e) {
+                    ShowSevereCustom(state, eoh, fmt::format("Column number {} has non-numeric data.", column + 1));
+                    ShowContinueError(state, e.what());
+                    ShowContinueError(state, fmt::format("Error Occurred in {}", schedule_file_shading_result->first));
+                    ShowFatalError(state, "Program terminates due to previous condition.");
+                }
 
                 std::string curName = format("{}_shading", header);
                 std::string curNameUC = Util::makeUPPER(curName);
@@ -2271,7 +2337,7 @@ namespace Sched {
             }
             times.emplace_back(fmt::format("{}:00", HrField[hr + 1]));
         }
-        assert(times.size() == NumTimesInDay);
+        assert(static_cast<int>(times.size()) == NumTimesInDay);
 
         std::string_view const &reportLevelName = reportLevelNames[(int)LevelOfDetail];
         std::string const dayScheduleTableName = format("DaySchedule - {}", reportLevelName);
@@ -2297,8 +2363,13 @@ namespace Sched {
             }
             print(state.files.eio, "\n");
 
-            // ! <Schedule_Hourly>,Name,ScheduleType,{Until Date,WeekSchedule}** Repeated until Dec 31
-            print(state.files.eio, "! <{}>,Name,ScheduleType,{{Until Date,WeekSchedule}}** Repeated until Dec 31\n", scheduleTableName);
+            print(state.files.eio,
+                  "! <{}>,Name,ScheduleType,"
+                  "Until Date 1,WeekSchedule 1,Until Date 2,WeekSchedule 2,Until Date 3,WeekSchedule 3,"
+                  "Until Date 4,WeekSchedule 4,Until Date 5,WeekSchedule 5,Until Date 6,WeekSchedule 6,"
+                  "Until Date 7,WeekSchedule 7,Until Date 8,WeekSchedule 8,Until Date 9,WeekSchedule 9,"
+                  "\n",
+                  scheduleTableName);
         }
 
         for (auto *daySched : s_sched->daySchedules) {
@@ -2431,7 +2502,7 @@ namespace Sched {
             ShowFatalError(state, format("LookUpScheduleValue called with thisHour={}", hr));
         }
 
-        int thisHr = hr + state.dataEnvrn->DSTIndicator * this->UseDaylightSaving;
+        int thisHr = hr + state.dataEnvrn->DSTIndicator * static_cast<int>(this->UseDaylightSaving);
 
         int thisDayOfYear = state.dataEnvrn->DayOfYear_Schedule;
         int thisDayOfWeek = state.dataEnvrn->DayOfWeek;
@@ -2444,17 +2515,13 @@ namespace Sched {
         }
 
         // In the case where DST is applied on 12/31 at 24:00, which is the case for a Southern Hemisphere location for eg
-        // (DayOfYear_Schedule is a bit weird, ScheduleManager always assumes LeapYear)
+        // (DayOfYear_Schedule is a bit weird, ScheduleManager always assumes leap year)
         if (thisDayOfYear == 367) {
             thisDayOfYear = 1;
         }
 
         auto const *weekSched = this->weekScheds[thisDayOfYear];
         auto const *daySched = (thisHolidayNum > 0) ? weekSched->dayScheds[thisHolidayNum] : weekSched->dayScheds[thisDayOfWeek];
-        if (daySched == nullptr) {
-            // We already warned in ProcessScheduleInput that there were missing days: Missing day types will have 0.0 as Schedule Values
-            return 0.0;
-        }
 
         // If Unspecified or equal to zero, use NumOfTimeStepInHour, otherwise use supplied
         if (ts <= 0) {
@@ -2549,9 +2616,6 @@ namespace Sched {
             weekSched->isUsed = true;
             for (int iDayType = 1; iDayType < (int)DayType::Num; ++iDayType) {
                 auto *daySched = weekSched->dayScheds[iDayType];
-                if (daySched == nullptr) {
-                    continue;
-                }
                 daySched->isUsed = true;
             }
         }
@@ -2601,7 +2665,8 @@ namespace Sched {
         isMinMaxSet = true;
     }
 
-    std::vector<Real64> const &ScheduleConstant::getDayVals(EnergyPlusData &state, [[maybe_unused]] int jDay, [[maybe_unused]] int dayofWeek)
+    std::vector<Real64> const &
+    ScheduleConstant::getDayVals([[maybe_unused]] EnergyPlusData &state, [[maybe_unused]] int jDay, [[maybe_unused]] int dayofWeek)
     {
         assert((int)tsVals.size() == Constant::iHoursInDay * state.dataGlobal->TimeStepsInHour);
         return this->tsVals;
@@ -2899,7 +2964,6 @@ namespace Sched {
         // representation.
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        Real64 rRetHH; // real Returned "hour"
         std::string hHour;
         std::string mMinute;
 
@@ -2915,7 +2979,8 @@ namespace Sched {
             ShowContinueError(state, format("Occurred in Day Schedule={}", DayScheduleName));
             ErrorsFound = true;
             return;
-        } else if (Pos == 0) {
+        }
+        if (Pos == 0) {
             RetHH = 0;
         } else {
             bool error = false;
@@ -2983,9 +3048,8 @@ namespace Sched {
     {
         if (minute != 0) {
             return (minute % numMinutesPerTimestep == 0);
-        } else {
-            return true;
         }
+        return true;
     }
 
     void ProcessForDayTypes(EnergyPlusData &state,
@@ -3188,6 +3252,9 @@ namespace Sched {
         assert(!this->isMinMaxSet);
 
         auto *daySched1 = this->dayScheds[1];
+        if (daySched1 == nullptr) {
+            return;
+        }
         if (!daySched1->isMinMaxSet) {
             daySched1->setMinMaxVals(state);
         }
@@ -3222,6 +3289,9 @@ namespace Sched {
         assert(!this->isMinMaxSet);
 
         auto *weekSched1 = this->weekScheds[1];
+        if (weekSched1 == nullptr) {
+            return;
+        }
         if (!weekSched1->isMinMaxSet) {
             weekSched1->setMinMaxVals(state);
         }

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -297,8 +297,8 @@ void CoilCoolingDXCurveFitOperatingMode::CalcOperatingMode(EnergyPlus::EnergyPlu
     static constexpr std::string_view RoutineName = "CoilCoolingDXCurveFitOperatingMode::calcOperatingMode";
     // Currently speedNum is 1-based, while this->speeds are zero-based
     auto &thisspeed(this->speeds[max(speedNum - 1, 0)]);
-
-    if ((speedNum == 0) || ((speedNum == 1) && (speedRatio == 0.0)) || (inletNode.MassFlowRate == 0.0)) {
+    if ((speedNum == 0) || ((speedNum == 1) && (speedRatio == 0.0)) || (inletNode.MassFlowRate == 0.0) ||
+        (this->coilCoolingDXAvailSched->getCurrentVal() <= 0.0) || (state.dataEnvrn->OutDryBulbTemp < this->minOutdoorDrybulb)) {
         outletNode.Temp = inletNode.Temp;
         outletNode.HumRat = inletNode.HumRat;
         outletNode.Enthalpy = inletNode.Enthalpy;

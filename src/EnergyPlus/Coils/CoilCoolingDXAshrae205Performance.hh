@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -79,21 +79,21 @@ struct CoilCoolingDX205Performance : public CoilCoolingDXPerformanceBase
         return representation->performance.performance_map_cooling.grid_variables.compressor_sequence_number.size();
     }
 
-    Real64 ratedCBF(EnergyPlusData &state) override
+    Real64 ratedCBF([[maybe_unused]] EnergyPlusData &state) override
     {
         return 0.001;
     };
 
     Real64 grossRatedSHR(EnergyPlusData &state) override;
 
-    Real64 evapAirFlowRateAtSpeedIndex(EnergyPlusData &state, int index) override // Volumetric
+    Real64 evapAirFlowRateAtSpeedIndex([[maybe_unused]] EnergyPlusData &state, int index) override // Volumetric
     {
         return speeds[index].evaporator_air_volumetric_flow;
     }
 
     Real64 ratedTotalCapacityAtSpeedIndex(EnergyPlusData &, int) override;
 
-    Real64 ratedEvapAirMassFlowRate(EnergyPlusData &state) override
+    Real64 ratedEvapAirMassFlowRate([[maybe_unused]] EnergyPlusData &state) override
     {
         return speeds[nominal_speed_index].evaporator_air_mass_flow;
     }

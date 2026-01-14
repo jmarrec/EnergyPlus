@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -78,22 +78,23 @@ namespace ExtendedHI {
         constexpr Real64 ptrip = 611.65; // Pa
         constexpr Real64 E0v = 2.3740e6; // J/kg
         constexpr Real64 E0s = 0.3337e6; // J/kg
-        constexpr Real64 rgasa = 287.04; // J/kg/K
-        constexpr Real64 rgasv = 461.;   // J/kg/K
-        constexpr Real64 cva = 719.;     // J/kg/K
-        constexpr Real64 cvv = 1418.;    // J/kg/K
-        constexpr Real64 cvl = 4119.;    // J/kg/K
-        constexpr Real64 cvs = 1861.;    // J/kg/K
-        constexpr Real64 cpa = cva + rgasa;
+        // constexpr Real64 rgasa = 287.04; // J/kg/K
+        constexpr Real64 rgasv = 461.; // J/kg/K
+        // constexpr Real64 cva = 719.;     // J/kg/K
+        constexpr Real64 cvv = 1418.; // J/kg/K
+        constexpr Real64 cvl = 4119.; // J/kg/K
+        constexpr Real64 cvs = 1861.; // J/kg/K
+        // constexpr Real64 cpa = cva + rgasa;
         constexpr Real64 cpv = cvv + rgasv;
 
         if (T == 0.0) {
             return 0.0;
-        } else if (T < Ttrip) {
-            return ptrip * pow((T / Ttrip), ((cpv - cvs) / rgasv)) * exp((E0v + E0s - (cvv - cvs) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
-        } else {
-            return ptrip * pow((T / Ttrip), ((cpv - cvl) / rgasv)) * exp((E0v - (cvv - cvl) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
         }
+        if (T < Ttrip) {
+            return ptrip * pow((T / Ttrip), ((cpv - cvs) / rgasv)) * exp((E0v + E0s - (cvv - cvs) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
+        }
+        return ptrip * pow((T / Ttrip), ((cpv - cvl) / rgasv)) * exp((E0v - (cvv - cvl) * Ttrip) / rgasv * (1. / Ttrip - 1. / T));
+
         return 0.0;
     }
 
@@ -116,16 +117,16 @@ namespace ExtendedHI {
         constexpr Real64 phi_salt = 0.9;   //           , vapor saturation pressure level of saline solution, steadman1979
         constexpr Real64 Tc = 310.;        // K         , core temperature, steadman1979
         Real64 Pc = phi_salt * pvstar(Tc); //           , core vapor pressure
-        constexpr Real64 r = 124.;         // Pa/K      , Zf/Rf, steadman1979
-        constexpr Real64 eta = 1.43e-6;    // kg/J      , "inhaled mass" / "metabolic rate", steadman1979
-        Real64 L = Le(310.);               //           , latent heat of vaporization at 310 K
-        constexpr Real64 p = 1.013e5;      // Pa        , atmospheric pressure
-        constexpr Real64 rgasa = 287.04;   // J/kg/K
-        constexpr Real64 rgasv = 461.;     // J/kg/K
-        constexpr Real64 cva = 719.;       // J/kg/K
-        constexpr Real64 cvv = 1418.;      // J/kg/K
+        // constexpr Real64 r = 124.;         // Pa/K      , Zf/Rf, steadman1979
+        constexpr Real64 eta = 1.43e-6;  // kg/J      , "inhaled mass" / "metabolic rate", steadman1979
+        Real64 L = Le(310.);             //           , latent heat of vaporization at 310 K
+        constexpr Real64 p = 1.013e5;    // Pa        , atmospheric pressure
+        constexpr Real64 rgasa = 287.04; // J/kg/K
+        constexpr Real64 rgasv = 461.;   // J/kg/K
+        constexpr Real64 cva = 719.;     // J/kg/K
+        // constexpr Real64 cvv = 1418.;      // J/kg/K
         constexpr Real64 cpa = cva + rgasa;
-        constexpr Real64 cpv = cvv + rgasv;
+        // constexpr Real64 cpv = cvv + rgasv;
 
         return eta * Q * (cpa * (Tc - Ta) + L * rgasa / (p * rgasv) * (Pc - Pa));
     }
@@ -267,18 +268,18 @@ namespace ExtendedHI {
 
     Real64 find_eqvar_rs(EnergyPlusData &state, Real64 const Ta, Real64 const RH)
     {
-        constexpr Real64 M = 83.6;                        // kg        , mass of average US adults, fryar2018
-        constexpr Real64 H = 1.69;                        // m         , height of average US adults, fryar2018
-        Real64 A = 0.202 * pow(M, 0.425) * pow(H, 0.725); // m^2       , DuBois formula, parson2014
-        constexpr Real64 cpc = 3492.;                     // J/kg/K    , specific heat capacity of core, gagge1972
-        Real64 C = M * cpc / A;                           //           , heat capacity of core
-        constexpr Real64 Q = 180.;                        // W/m^2     , metabolic rate per skin area, steadman1979
-        constexpr Real64 phi_salt = 0.9;                  //           , vapor saturation pressure level of saline solution, steadman1979
-        constexpr Real64 Tc = 310.;                       // K         , core temperature, steadman1979
-        Real64 Pc = phi_salt * pvstar(Tc);                //           , core vapor pressure
-        constexpr Real64 Za = 60.6 / 17.4;                // Pa m^2/W, mass transfer resistance through air, exposed part of skin
-        constexpr Real64 Za_bar = 60.6 / 11.6;            // Pa m^2/W, mass transfer resistance through air, clothed part of skin
-        constexpr Real64 Za_un = 60.6 / 12.3;             // Pa m^2/W, mass transfer resistance through air, when being naked
+        // constexpr Real64 M = 83.6;                        // kg        , mass of average US adults, fryar2018
+        // constexpr Real64 H = 1.69;                        // m         , height of average US adults, fryar2018
+        // Real64 A = 0.202 * pow(M, 0.425) * pow(H, 0.725); // m^2       , DuBois formula, parson2014
+        // constexpr Real64 cpc = 3492.;                     // J/kg/K    , specific heat capacity of core, gagge1972
+        // Real64 C = M * cpc / A;                           //           , heat capacity of core
+        constexpr Real64 Q = 180.;             // W/m^2     , metabolic rate per skin area, steadman1979
+        constexpr Real64 phi_salt = 0.9;       //           , vapor saturation pressure level of saline solution, steadman1979
+        constexpr Real64 Tc = 310.;            // K         , core temperature, steadman1979
+        Real64 Pc = phi_salt * pvstar(Tc);     //           , core vapor pressure
+        constexpr Real64 Za = 60.6 / 17.4;     // Pa m^2/W, mass transfer resistance through air, exposed part of skin
+        constexpr Real64 Za_bar = 60.6 / 11.6; // Pa m^2/W, mass transfer resistance through air, clothed part of skin
+        constexpr Real64 Za_un = 60.6 / 12.3;  // Pa m^2/W, mass transfer resistance through air, when being naked
 
         Real64 Pa = RH * pvstar(Ta);
         constexpr Real64 phi = 0.84;
@@ -450,7 +451,8 @@ namespace ExtendedHI {
             varname = EqvarName::Phi;
             phi = 1.0 - (Q - Qv(Ta, Pa)) * Rs / (Tc - Ts);
             return phi;
-        } else if (flux2 <= 0.0) {
+        }
+        if (flux2 <= 0.0) {
             varname = EqvarName::Rf;
             Real64 const Ts_bar = Tc - (Q - Qv(Ta, Pa)) * Rs / phi + (1.0 / phi - 1.0) * (Tc - Ts);
             General::SolveRoot(
@@ -467,42 +469,40 @@ namespace ExtendedHI {
                 Ts_bar);
             Rf = Ra_bar(Tf, Ta) * (Ts_bar - Tf) / (Tf - Ta);
             return Rf;
-        } else {
-            Real64 const flux3 = Q - Qv(Ta, Pa) - (Tc - Ta) / Ra_un(Tc, Ta) - (phi_salt * pvstar(Tc) - Pa) / Za_un;
-            if (flux3 < 0.0) {
-                varname = EqvarName::Rs;
+        }
+        Real64 const flux3 = Q - Qv(Ta, Pa) - (Tc - Ta) / Ra_un(Tc, Ta) - (phi_salt * pvstar(Tc) - Pa) / Za_un;
+        if (flux3 < 0.0) {
+            varname = EqvarName::Rs;
+            General::SolveRoot(
+                state,
+                tol,
+                maxIter,
+                SolFla,
+                Ts,
+                [&](Real64 Ts) { return (Ts - Ta) / Ra_un(Ts, Ta) + (Pc - Pa) / (Zs((Tc - Ts) / (Q - Qv(Ta, Pa))) + Za_un) - (Q - Qv(Ta, Pa)); },
+                0.0,
+                Tc);
+            Rs = (Tc - Ts) / (Q - Qv(Ta, Pa));
+            ZsRs = Zs(Rs);
+            Real64 const Ps = Pc - (Pc - Pa) * ZsRs / (ZsRs + Za_un);
+            if (Ps > phi_salt * pvstar(Ts)) {
                 General::SolveRoot(
                     state,
                     tol,
                     maxIter,
                     SolFla,
                     Ts,
-                    [&](Real64 Ts) { return (Ts - Ta) / Ra_un(Ts, Ta) + (Pc - Pa) / (Zs((Tc - Ts) / (Q - Qv(Ta, Pa))) + Za_un) - (Q - Qv(Ta, Pa)); },
+                    [&](Real64 Ts) { return (Ts - Ta) / Ra_un(Ts, Ta) + (phi_salt * pvstar(Ts) - Pa) / Za_un - (Q - Qv(Ta, Pa)); },
                     0.0,
                     Tc);
                 Rs = (Tc - Ts) / (Q - Qv(Ta, Pa));
-                ZsRs = Zs(Rs);
-                Real64 const Ps = Pc - (Pc - Pa) * ZsRs / (ZsRs + Za_un);
-                if (Ps > phi_salt * pvstar(Ts)) {
-                    General::SolveRoot(
-                        state,
-                        tol,
-                        maxIter,
-                        SolFla,
-                        Ts,
-                        [&](Real64 Ts) { return (Ts - Ta) / Ra_un(Ts, Ta) + (phi_salt * pvstar(Ts) - Pa) / Za_un - (Q - Qv(Ta, Pa)); },
-                        0.0,
-                        Tc);
-                    Rs = (Tc - Ts) / (Q - Qv(Ta, Pa));
-                }
-                return Rs;
-            } else {
-                varname = EqvarName::DTcdt;
-                Rs = 0.0;
-                dTcdt = (1.0 / C) * flux3;
-                return dTcdt;
             }
+            return Rs;
         }
+        varname = EqvarName::DTcdt;
+        Rs = 0.0;
+        dTcdt = (1.0 / C) * flux3;
+        return dTcdt;
     }
 
     // Convert the find_T function

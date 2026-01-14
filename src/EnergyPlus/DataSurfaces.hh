@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -1174,7 +1174,7 @@ namespace DataSurfaces {
         SlatAngleControl slatAngleControl{
             SlatAngleControl::Invalid}; // Takes one of the following values that specifies
                                         //  CHARACTER(len=32) :: slatAngleControlForBlinds = ' ' ! Takes one of the following values that specifies
-                                        //  how slat angle is controled in a blind when ShadingType =
+                                        //  how slat angle is controlled in a blind when ShadingType =
                                         //  InteriorBlind, ExteriorBlind or BetweenGlassBlind.
                                         //  FixedSlatAngle: the slat angle is fixed at the constant value given in the
                                         //    associated Material:WindowBlind
@@ -1208,7 +1208,7 @@ namespace DataSurfaces {
         bool SinusoidalConstTempCoef;              // If true then ConstTempCoef varies by sine wave
         Real64 SinusoidPeriod;                     // period of sine wave variation  (hr)
         Real64 TPreviousCoef;                      // Coefficient modifying the OSC temp from the previous timestep (dimensionless)
-        Real64 TOutsideSurfPast;                   // Ouside surface temperature from previous timestep {C}
+        Real64 TOutsideSurfPast;                   // Outside surface temperature from previous timestep {C}
         Real64 MinTempLimit;                       // Minimum limit on OSC temp {deg C}
         Real64 MaxTempLimit;                       // Maximum limit on OSC temp {deg C}
         bool MinLimitPresent;                      // If TRUE then apply minimum limit on calculated OSC temp
@@ -1254,7 +1254,7 @@ namespace DataSurfaces {
     {
         // Members
         int WhichSurface = 0;                // Which surface number this is applied to
-        std::string SurfaceName = "";        // Which surface (name)
+        std::string SurfaceName;             // Which surface (name)
         Convect::OverrideType overrideType = // Override type, 1=value, 2=schedule, 3=model, 4=user curve
             Convect::OverrideType::Invalid;
         Real64 OverrideValue = 0.0;                            // User specified value
@@ -1373,7 +1373,7 @@ namespace DataSurfaces {
         std::string ZoneOrZoneListName;   // zone or zone list name
         int ZoneOrZoneListPtr;            // pointer to a zone list
         int NumOfZones;                   // number of zones in a zone list
-        int Construction;                 // pointer to contruction object
+        int Construction;                 // pointer to construction object
         Real64 GrossArea;                 // internal surface area, [m2]
         bool ZoneListActive;              // flag to a list
         std::string spaceOrSpaceListName; // Space or Space list name

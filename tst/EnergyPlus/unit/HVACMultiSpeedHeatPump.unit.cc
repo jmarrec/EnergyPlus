@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -539,7 +539,7 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_ReportVariableInitTest)
         "    AC-24sched,              !- Supply Air Fan Operating Mode Schedule Name",
         "    Coil:Heating:DX:MultiSpeed,  !- Heating Coil Object Type",
         "    AC24Heating,             !- Heating Coil Name",
-        "    -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "    ,                        !- DX Heating Coil Sizing Ratio",
         "    Coil:Cooling:DX:MultiSpeed,  !- Cooling Coil Object Type",
         "    AC24_cooling,            !- Cooling Coil Name",
         "    Coil:Heating:Electric,   !- Supplemental Heating Coil Object Type",
@@ -574,7 +574,7 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_ReportVariableInitTest)
         "    AC-25 sched,             !- Supply Air Fan Operating Mode Schedule Name",
         "    Coil:Heating:DX:MultiSpeed,  !- Heating Coil Object Type",
         "    AC25Heating,             !- Heating Coil Name",
-        "    -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "    ,                        !- DX Heating Coil Sizing Ratio",
         "    Coil:Cooling:DX:MultiSpeed,  !- Cooling Coil Object Type",
         "    AC25_cooling,            !- Cooling Coil Name",
         "    Coil:Heating:Electric,   !- Supplemental Heating Coil Object Type",
@@ -1717,7 +1717,7 @@ TEST_F(EnergyPlusFixture, HVACMSHP_UnitarySystemElectricityRateTest)
         "    AC-24sched,              !- Supply Air Fan Operating Mode Schedule Name",
         "    Coil:Heating:DX:MultiSpeed,  !- Heating Coil Object Type",
         "    AC24Heating,             !- Heating Coil Name",
-        "    -8,                      !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}",
+        "    ,                        !- DX Heating Coil Sizing Ratio",
         "    Coil:Cooling:DX:MultiSpeed,  !- Cooling Coil Object Type",
         "    AC24_cooling,            !- Cooling Coil Name",
         "    Coil:Heating:Electric,   !- Supplemental Heating Coil Object Type",

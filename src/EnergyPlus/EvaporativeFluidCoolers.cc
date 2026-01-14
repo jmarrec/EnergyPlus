@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -243,6 +243,9 @@ namespace EvaporativeFluidCoolers {
             }
             thisEFC.HighSpeedUserSpecifiedDesignCapacity = NumArray(8);
             thisEFC.DesignEnteringWaterTemp = NumArray(9);
+            if (thisEFC.DesignEnteringWaterTemp == DataSizing::AutoSize) {
+                thisEFC.DesignEnteringWaterTempWasAutoSized = true;
+            }
             thisEFC.DesignEnteringAirTemp = NumArray(10);
             thisEFC.DesignEnteringAirWetBulbTemp = NumArray(11);
 
@@ -452,16 +455,6 @@ namespace EvaporativeFluidCoolers {
                                            AlphArray(4)));
                     ErrorsFound = true;
                 }
-                if (thisEFC.DesignEnteringWaterTemp <= 0.0) {
-                    ShowSevereError(state,
-                                    format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be >0 for {} = \"{}\".",
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           AlphArray(1),
-                                           state.dataIPShortCut->cNumericFieldNames(9),
-                                           state.dataIPShortCut->cAlphaFieldNames(4),
-                                           AlphArray(4)));
-                    ErrorsFound = true;
-                }
                 if (thisEFC.DesignEnteringAirTemp <= 0.0) {
                     ShowSevereError(state,
                                     format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be >0 for {} = \"{}\".",
@@ -482,15 +475,19 @@ namespace EvaporativeFluidCoolers {
                                            AlphArray(4)));
                     ErrorsFound = true;
                 }
-                if (thisEFC.DesignEnteringWaterTemp <= thisEFC.DesignEnteringAirWetBulbTemp) {
-                    ShowSevereError(state,
-                                    format("{} = \"{}\", {} must be greater than {}.",
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           AlphArray(1),
-                                           state.dataIPShortCut->cNumericFieldNames(9),
-                                           state.dataIPShortCut->cNumericFieldNames(11)));
-                    ErrorsFound = true;
+
+                if (thisEFC.DesignEnteringWaterTemp != DataSizing::AutoSize) {
+                    if (thisEFC.DesignEnteringWaterTemp <= thisEFC.DesignEnteringAirWetBulbTemp) {
+                        ShowSevereError(state,
+                                        format("{} = \"{}\", {} must be greater than {}.",
+                                               state.dataIPShortCut->cCurrentModuleObject,
+                                               AlphArray(1),
+                                               state.dataIPShortCut->cNumericFieldNames(9),
+                                               state.dataIPShortCut->cNumericFieldNames(11)));
+                        ErrorsFound = true;
+                    }
                 }
+
                 if (thisEFC.DesignEnteringAirTemp <= thisEFC.DesignEnteringAirWetBulbTemp) {
                     ShowSevereError(state,
                                     format("{} = \"{}\", {} must be greater than {}.",
@@ -601,7 +598,11 @@ namespace EvaporativeFluidCoolers {
             }
             thisEFC.HighSpeedUserSpecifiedDesignCapacity = NumArray(16);
             thisEFC.LowSpeedUserSpecifiedDesignCapacity = NumArray(17);
+
             thisEFC.DesignEnteringWaterTemp = NumArray(19);
+            if (thisEFC.DesignEnteringWaterTemp == DataSizing::AutoSize) {
+                thisEFC.DesignEnteringWaterTempWasAutoSized = true;
+            }
             thisEFC.DesignEnteringAirTemp = NumArray(20);
             thisEFC.DesignEnteringAirWetBulbTemp = NumArray(21);
 
@@ -867,6 +868,9 @@ namespace EvaporativeFluidCoolers {
                                            AlphArray(4)));
                     ErrorsFound = true;
                 }
+                if (thisEFC.LowSpeedUserSpecifiedDesignCapacity == Constant::AutoCalculate) {
+                    thisEFC.LowSpeedUserSpecifiedDesignCapacity = thisEFC.HighSpeedUserSpecifiedDesignCapacity * NumArray(18);
+                }
                 if (thisEFC.LowSpeedUserSpecifiedDesignCapacity <= 0.0) {
                     ShowSevereError(state,
                                     format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be > 0 for {} = \"{}\".",
@@ -924,16 +928,7 @@ namespace EvaporativeFluidCoolers {
                             thisEFC.Name));
                     ErrorsFound = true;
                 }
-                if (thisEFC.DesignEnteringWaterTemp <= 0.0) {
-                    ShowSevereError(state,
-                                    format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, but must be >0 for {} = \"{}\".",
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           AlphArray(1),
-                                           state.dataIPShortCut->cNumericFieldNames(19),
-                                           state.dataIPShortCut->cAlphaFieldNames(4),
-                                           AlphArray(4)));
-                    ErrorsFound = true;
-                }
+
                 if (thisEFC.DesignEnteringAirTemp <= 0.0) {
                     ShowSevereError(state,
                                     format("{} = \"{}\", invalid data for \"{}\", entered value <= 0.0, buy must be >0 for {} = \"{}\".",
@@ -954,15 +949,19 @@ namespace EvaporativeFluidCoolers {
                                            AlphArray(4)));
                     ErrorsFound = true;
                 }
-                if (thisEFC.DesignEnteringWaterTemp <= thisEFC.DesignEnteringAirWetBulbTemp) {
-                    ShowSevereError(state,
-                                    format("{} = \"{}\", {} must be greater than {}.",
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           AlphArray(1),
-                                           state.dataIPShortCut->cNumericFieldNames(19),
-                                           state.dataIPShortCut->cNumericFieldNames(15)));
-                    ErrorsFound = true;
+
+                if (thisEFC.DesignEnteringWaterTemp != DataSizing::AutoSize) {
+                    if (thisEFC.DesignEnteringWaterTemp <= thisEFC.DesignEnteringAirWetBulbTemp) {
+                        ShowSevereError(state,
+                                        format("{} = \"{}\", {} must be greater than {}.",
+                                               state.dataIPShortCut->cCurrentModuleObject,
+                                               AlphArray(1),
+                                               state.dataIPShortCut->cNumericFieldNames(19),
+                                               state.dataIPShortCut->cNumericFieldNames(15)));
+                        ErrorsFound = true;
+                    }
                 }
+
                 if (thisEFC.DesignEnteringAirTemp <= thisEFC.DesignEnteringAirWetBulbTemp) {
                     ShowSevereError(state,
                                     format("{} = \"{}\", {} must be greater than {}.",
@@ -1348,10 +1347,10 @@ namespace EvaporativeFluidCoolers {
         Real64 constexpr Acc(0.0001); // Accuracy of result
         std::string const CalledFrom("SizeEvapFluidCooler");
 
-        int SolFla;               // Flag of solver
-        Real64 UA;                // Calculated UA value [W/C]
-        Real64 OutWaterTempAtUA0; // Water outlet temperature at UA0
-        Real64 OutWaterTempAtUA1; // Water outlet temperature at UA1
+        int SolFla = 0;                    // Flag of solver
+        Real64 UA = 0.0;                   // Calculated UA value [W/C]
+        Real64 OutWaterTempAtUA0 = -999.0; // Water outlet temperature at UA0
+        Real64 OutWaterTempAtUA1 = -999.0; // Water outlet temperature at UA1
 
         Real64 DesEvapFluidCoolerLoad = 0.0; // Design evaporative fluid cooler load [W]
         Real64 tmpDesignWaterFlowRate = this->DesignWaterFlowRate;
@@ -1359,6 +1358,45 @@ namespace EvaporativeFluidCoolers {
         Real64 tmpHighSpeedAirFlowRate = this->HighSpeedAirFlowRate;
 
         int PltSizCondNum = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).PlantSizNum;
+        if (PltSizCondNum > 0) {
+            this->DesignExitWaterTemp = state.dataSize->PlantSizData(PltSizCondNum).ExitTemp;
+            // We still grab it here, because it's used in reporting the Range [C] in table "Cooling Towers and Fluid Coolers"
+            if (this->DesignEnteringWaterTemp == DataSizing::AutoSize && this->PerformanceInputMethod_Num != PIM::UserSpecifiedDesignCapacity) {
+                this->DesignEnteringWaterTemp =
+                    state.dataSize->PlantSizData(PltSizCondNum).ExitTemp + state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
+            }
+        }
+
+        if (this->DesignEnteringWaterTempWasAutoSized && this->PerformanceInputMethod_Num == PIM::UserSpecifiedDesignCapacity) {
+            if (PltSizCondNum > 0) {
+                this->DesignEnteringWaterTemp =
+                    state.dataSize->PlantSizData(PltSizCondNum).ExitTemp + state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
+
+                if (this->DesignEnteringWaterTemp <= this->DesignEnteringAirWetBulbTemp) {
+                    ShowSevereError(
+                        state, format("Error when autosizing the Design Entering Water Temperature for Evaporative Fluid Cooler = {}.", this->Name));
+                    ShowContinueError(
+                        state,
+                        format("Design Entering Water Temperature ({:.2R} C) must be greater than design entering air wet-bulb temperature "
+                               "({:.2R} C).",
+                               this->DesignEnteringWaterTemp,
+                               this->DesignEnteringAirWetBulbTemp));
+                    ShowContinueError(
+                        state,
+                        "Check the Sizing:Plant object and the Design Entering Air Wet-bulb Temp input field for the Evaporative Fluid Cooler.");
+                    ShowFatalError(state, "Review and revise design input values as appropriate.");
+                }
+
+                if (state.dataPlnt->PlantFinalSizesOkayToReport) {
+                    BaseSizer::reportSizerOutput(
+                        state, this->EvapFluidCoolerType, this->Name, "Design Entering Water Temperature [C]", this->DesignEnteringWaterTemp);
+                }
+            } else if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
+                ShowSevereError(state, format("Autosizing error for evaporative fluid cooler object = {}", this->Name));
+                ShowFatalError(state,
+                               "Autosizing of evaporative fluid cooler Design Entering Water Temperature requires a loop Sizing:Plant object.");
+            }
+        }
 
         if (this->DesignWaterFlowRateWasAutoSized && this->PerformanceInputMethod_Num != PIM::StandardDesignCapacity) {
             if (PltSizCondNum > 0) {
@@ -1371,12 +1409,12 @@ namespace EvaporativeFluidCoolers {
                 } else {
                     DesignEnteringAirWetBulb = this->DesignEnteringAirWetBulbTemp;
                 }
-                if (state.dataSize->PlantSizData(PltSizCondNum).ExitTemp <= DesignEnteringAirWetBulb) {
+                if (this->DesignExitWaterTemp <= DesignEnteringAirWetBulb) {
                     ShowSevereError(state, format("Error when autosizing the UA value for Evaporative Fluid Cooler = {}.", this->Name));
                     ShowContinueError(state,
                                       format("Design Loop Exit Temperature ({:.2R} C) must be greater than design entering air wet-bulb temperature "
                                              "({:.2R} C) when autosizing the Evaporative Fluid Cooler UA.",
-                                             state.dataSize->PlantSizData(PltSizCondNum).ExitTemp,
+                                             this->DesignExitWaterTemp,
                                              DesignEnteringAirWetBulb));
                     ShowContinueError(
                         state,
@@ -1422,8 +1460,7 @@ namespace EvaporativeFluidCoolers {
         if (this->PerformanceInputMethod_Num == PIM::UFactor && !this->HighSpeedEvapFluidCoolerUAWasAutoSized) {
             if (PltSizCondNum > 0) {
                 Real64 rho = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, CalledFrom);
-                Real64 Cp = state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                                .glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, CalledFrom);
+                Real64 Cp = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getSpecificHeat(state, this->DesignExitWaterTemp, CalledFrom);
                 DesEvapFluidCoolerLoad = rho * Cp * tmpDesignWaterFlowRate * state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
                 this->HighSpeedStandardDesignCapacity = DesEvapFluidCoolerLoad / this->HeatRejectCapNomCapSizingRatio;
             } else {
@@ -1496,8 +1533,8 @@ namespace EvaporativeFluidCoolers {
                 } else if (PltSizCondNum > 0) {
                     if (state.dataSize->PlantSizData(PltSizCondNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
                         Real64 rho = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, CalledFrom);
-                        Real64 Cp = state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                                        .glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, CalledFrom);
+                        Real64 Cp =
+                            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getSpecificHeat(state, this->DesignExitWaterTemp, CalledFrom);
                         DesEvapFluidCoolerLoad = rho * Cp * tmpDesignWaterFlowRate * state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
                         tmpHighSpeedFanPower = 0.0105 * DesEvapFluidCoolerLoad;
                         if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
@@ -1580,12 +1617,12 @@ namespace EvaporativeFluidCoolers {
                 if (state.dataSize->PlantSizData(PltSizCondNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
                     // This conditional statement is to trap when the user specified Condenser/Evaporative Fluid Cooler water design setpoint
                     // temperature is less than design inlet air wet bulb temperature of 25.6 C
-                    if (state.dataSize->PlantSizData(PltSizCondNum).ExitTemp <= 25.6) {
+                    if (this->DesignExitWaterTemp <= 25.6) {
                         ShowSevereError(state, format("Error when autosizing the UA value for Evaporative Fluid Cooler = {}.", this->Name));
                         ShowContinueError(state,
                                           format("Design Loop Exit Temperature ({:.2R} C) must be greater than 25.6 C when autosizing the "
                                                  "Evaporative Fluid Cooler UA.",
-                                                 state.dataSize->PlantSizData(PltSizCondNum).ExitTemp));
+                                                 this->DesignExitWaterTemp));
                         ShowContinueError(state,
                                           format("The Design Loop Exit Temperature specified in Sizing:Plant object = {}",
                                                  state.dataSize->PlantSizData(PltSizCondNum).PlantLoopName));
@@ -1598,25 +1635,23 @@ namespace EvaporativeFluidCoolers {
                         ShowFatalError(state, "Review and revise design input values as appropriate.");
                     }
                     Real64 rho = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, CalledFrom);
-                    Real64 Cp = state.dataPlnt->PlantLoop(this->plantLoc.loopNum)
-                                    .glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, CalledFrom);
+                    Real64 Cp =
+                        state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getSpecificHeat(state, this->DesignExitWaterTemp, CalledFrom);
                     DesEvapFluidCoolerLoad = rho * Cp * tmpDesignWaterFlowRate * state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
                     Real64 const par1 = rho * tmpDesignWaterFlowRate; // Design water mass flow rate
                     Real64 const par2 = tmpHighSpeedAirFlowRate;      // Design air volume flow rate
                     // Lower bound for UA [W/C]
                     Real64 UA0 = 0.0001 * DesEvapFluidCoolerLoad; // Assume deltaT = 10000K (limit)
                     Real64 UA1 = DesEvapFluidCoolerLoad;          // Assume deltaT = 1K
-                    this->inletConds.WaterTemp =
-                        state.dataSize->PlantSizData(PltSizCondNum).ExitTemp + state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
+                    this->inletConds.WaterTemp = this->DesignExitWaterTemp + state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
                     this->inletConds.AirTemp = 35.0;
                     this->inletConds.AirWetBulb = 25.6;
                     this->inletConds.AirPress = state.dataEnvrn->StdBaroPress;
                     this->inletConds.AirHumRat =
                         Psychrometrics::PsyWFnTdbTwbPb(state, this->inletConds.AirTemp, this->inletConds.AirWetBulb, this->inletConds.AirPress);
                     auto f = [&state, this, DesEvapFluidCoolerLoad, par1, par2, Cp](Real64 UA) {
-                        Real64 OutWaterTemp; // outlet water temperature [C]
-                        this->SimSimpleEvapFluidCooler(state, par1, par2, UA, OutWaterTemp);
-                        Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - OutWaterTemp);
+                        this->SimSimpleEvapFluidCooler(state, par1, par2, UA, this->DesignExitWaterTemp);
+                        Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - this->DesignExitWaterTemp);
                         return (DesEvapFluidCoolerLoad - CoolingOutput) / DesEvapFluidCoolerLoad;
                     };
                     General::SolveRoot(state, Acc, MaxIte, SolFla, UA, f, UA0, UA1);
@@ -1653,9 +1688,8 @@ namespace EvaporativeFluidCoolers {
                         ShowContinueError(
                             state, format("Design Evaporative Fluid Cooler Water Inlet Temp [C]          = {:.2R}", this->inletConds.WaterTemp));
                         ShowContinueError(state, "Inputs to the plant sizing object:");
-                        ShowContinueError(state,
-                                          format("Design Exit Water Temp [C]                                    = {:.2R}",
-                                                 state.dataSize->PlantSizData(PltSizCondNum).ExitTemp));
+                        ShowContinueError(
+                            state, format("Design Exit Water Temp [C]                                    = {:.2R}", this->DesignExitWaterTemp));
                         ShowContinueError(state,
                                           format("Loop Design Temperature Difference [C]                        = {:.2R}",
                                                  state.dataSize->PlantSizData(PltSizCondNum).DeltaT));
@@ -1730,15 +1764,16 @@ namespace EvaporativeFluidCoolers {
                 Real64 UA0 = 0.0001 * DesEvapFluidCoolerLoad;        // Assume deltaT = 10000K (limit)
                 Real64 UA1 = DesEvapFluidCoolerLoad;                 // Assume deltaT = 1K
                 this->inletConds.WaterTemp = 35.0;                   // 95F design inlet water temperature
-                this->inletConds.AirTemp = 35.0;                     // 95F design inlet air dry-bulb temp
-                this->inletConds.AirWetBulb = 25.6;                  // 78F design inlet air wet-bulb temp
+                this->DesignEnteringWaterTemp = this->inletConds.WaterTemp;
+                this->inletConds.AirTemp = 35.0;    // 95F design inlet air dry-bulb temp
+                this->inletConds.AirWetBulb = 25.6; // 78F design inlet air wet-bulb temp
+                this->DesignEnteringAirWetBulbTemp = this->inletConds.AirWetBulb;
                 this->inletConds.AirPress = state.dataEnvrn->StdBaroPress;
                 this->inletConds.AirHumRat =
                     Psychrometrics::PsyWFnTdbTwbPb(state, this->inletConds.AirTemp, this->inletConds.AirWetBulb, this->inletConds.AirPress);
                 auto f = [&state, this, DesEvapFluidCoolerLoad, par1, par2, Cp](Real64 UA) {
-                    Real64 OutWaterTemp; // outlet water temperature [C]
-                    this->SimSimpleEvapFluidCooler(state, par1, par2, UA, OutWaterTemp);
-                    Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - OutWaterTemp);
+                    this->SimSimpleEvapFluidCooler(state, par1, par2, UA, this->DesignExitWaterTemp);
+                    Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - this->DesignExitWaterTemp);
                     return (DesEvapFluidCoolerLoad - CoolingOutput) / DesEvapFluidCoolerLoad;
                 };
                 General::SolveRoot(state, Acc, MaxIte, SolFla, UA, f, UA0, UA1);
@@ -1808,9 +1843,8 @@ namespace EvaporativeFluidCoolers {
                 this->inletConds.AirHumRat =
                     Psychrometrics::PsyWFnTdbTwbPb(state, this->inletConds.AirTemp, this->inletConds.AirWetBulb, this->inletConds.AirPress);
                 auto f = [&state, this, DesEvapFluidCoolerLoad, par1, par2, Cp](Real64 UA) {
-                    Real64 OutWaterTemp; // outlet water temperature [C]
-                    this->SimSimpleEvapFluidCooler(state, par1, par2, UA, OutWaterTemp);
-                    Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - OutWaterTemp);
+                    this->SimSimpleEvapFluidCooler(state, par1, par2, UA, this->DesignExitWaterTemp);
+                    Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - this->DesignExitWaterTemp);
                     return (DesEvapFluidCoolerLoad - CoolingOutput) / DesEvapFluidCoolerLoad;
                 };
                 General::SolveRoot(state, Acc, MaxIte, SolFla, UA, f, UA0, UA1);
@@ -1848,11 +1882,12 @@ namespace EvaporativeFluidCoolers {
                                       format("Design Evaporative Fluid Cooler Water Inlet Temp [C]          = {:.2R}", this->inletConds.WaterTemp));
                     ShowContinueError(state, "Inputs to the plant sizing object:");
                     ShowContinueError(state,
-                                      format("Design Exit Water Temp [C]                                    = {:.2R}",
-                                             state.dataSize->PlantSizData(PltSizCondNum).ExitTemp));
-                    ShowContinueError(state,
-                                      format("Loop Design Temperature Difference [C]                        = {:.2R}",
-                                             state.dataSize->PlantSizData(PltSizCondNum).DeltaT));
+                                      format("Design Exit Water Temp [C]                                    = {:.2R}", this->DesignExitWaterTemp));
+                    if (PltSizCondNum > 0) {
+                        ShowContinueError(state,
+                                          format("Loop Design Temperature Difference [C]                        = {:.2R}",
+                                                 state.dataSize->PlantSizData(PltSizCondNum).DeltaT));
+                    }
                     ShowContinueError(state,
                                       format("Design Evaporative Fluid Cooler Water Inlet Temp [C]          = {:.2R}", this->inletConds.WaterTemp));
                     ShowContinueError(state,
@@ -1960,9 +1995,8 @@ namespace EvaporativeFluidCoolers {
                 this->inletConds.AirHumRat =
                     Psychrometrics::PsyWFnTdbTwbPb(state, this->inletConds.AirTemp, this->inletConds.AirWetBulb, this->inletConds.AirPress);
                 auto f = [&state, this, DesEvapFluidCoolerLoad, par1, par2, Cp](Real64 UA) {
-                    Real64 OutWaterTemp; // outlet water temperature [C]
-                    this->SimSimpleEvapFluidCooler(state, par1, par2, UA, OutWaterTemp);
-                    Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - OutWaterTemp);
+                    this->SimSimpleEvapFluidCooler(state, par1, par2, UA, this->DesignExitWaterTemp);
+                    Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - this->DesignExitWaterTemp);
                     return (DesEvapFluidCoolerLoad - CoolingOutput) / DesEvapFluidCoolerLoad;
                 };
                 General::SolveRoot(state, Acc, MaxIte, SolFla, UA, f, UA0, UA1);
@@ -2015,9 +2049,8 @@ namespace EvaporativeFluidCoolers {
                 this->inletConds.AirHumRat =
                     Psychrometrics::PsyWFnTdbTwbPb(state, this->inletConds.AirTemp, this->inletConds.AirWetBulb, this->inletConds.AirPress);
                 auto f = [&state, this, DesEvapFluidCoolerLoad, par1, par2, Cp](Real64 UA) {
-                    Real64 OutWaterTemp; // outlet water temperature [C]
-                    this->SimSimpleEvapFluidCooler(state, par1, par2, UA, OutWaterTemp);
-                    Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - OutWaterTemp);
+                    this->SimSimpleEvapFluidCooler(state, par1, par2, UA, this->DesignExitWaterTemp);
+                    Real64 const CoolingOutput = Cp * par1 * (this->inletConds.WaterTemp - this->DesignExitWaterTemp);
                     return (DesEvapFluidCoolerLoad - CoolingOutput) / DesEvapFluidCoolerLoad;
                 };
                 General::SolveRoot(state, Acc, MaxIte, SolFla, UA, f, UA0, UA1);
@@ -2043,9 +2076,7 @@ namespace EvaporativeFluidCoolers {
                     ShowContinueError(state, format("Design Evaporative Fluid Cooler Air Volume Flow Rate    = {:.2R}", par2));
                     ShowContinueError(state, format("Design Evaporative Fluid Cooler Air Inlet Wet-bulb Temp = {:.2R}", this->inletConds.AirWetBulb));
                     ShowContinueError(state, format("Design Evaporative Fluid Cooler Water Inlet Temp        = {:.2R}", this->inletConds.WaterTemp));
-                    ShowContinueError(state,
-                                      format("Design Exit Water Temp                                  = {:.2R}",
-                                             state.dataSize->PlantSizData(PltSizCondNum).ExitTemp));
+                    ShowContinueError(state, format("Design Exit Water Temp                                  = {:.2R}", this->DesignExitWaterTemp));
                     ShowContinueError(state, format("Design Evaporative Fluid Cooler Water Inlet Temp [C]    = {:.2R}", this->inletConds.WaterTemp));
                     ShowContinueError(state, format("Calculated water outlet temperature at low UA({:.2R})  = {:.2R}", UA0, OutWaterTempAtUA0));
                     ShowContinueError(state, format("Calculated water outlet temperature at high UA({:.2R})  = {:.2R}", UA1, OutWaterTempAtUA1));
@@ -2077,9 +2108,60 @@ namespace EvaporativeFluidCoolers {
             // create predefined report
             std::string equipName = this->Name;
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchMechType, equipName, this->EvapFluidCoolerType);
-            OutputReportPredefined::PreDefTableEntry(
-                state, state.dataOutRptPredefined->pdchMechNomCap, equipName, this->HighSpeedStandardDesignCapacity);
+            OutputReportPredefined::PreDefTableEntry(state,
+                                                     state.dataOutRptPredefined->pdchMechNomCap,
+                                                     equipName,
+                                                     max(this->HighSpeedStandardDesignCapacity, this->HighSpeedUserSpecifiedDesignCapacity));
         }
+
+        // create std 229 new table for cooling towers and fluid coolers
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchCTFCType, this->Name, DataPlant::PlantEquipTypeNames[static_cast<int>(this->Type)]);
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchCTFCCondLoopName,
+                                                 this->Name,
+                                                 this->plantLoc.loopNum > 0 ? state.dataPlnt->PlantLoop(this->plantLoc.loopNum).Name : "N/A");
+        OutputReportPredefined::PreDefTableEntry(
+            state,
+            state.dataOutRptPredefined->pdchCTFCCondLoopBranchName,
+            this->Name,
+            this->plantLoc.loopNum > 0 ? state.dataPlnt->PlantLoop(plantLoc.loopNum).LoopSide(plantLoc.loopSideNum).Branch(plantLoc.branchNum).Name
+                                       : "N/A");
+        OutputReportPredefined::PreDefTableEntry(
+            state,
+            state.dataOutRptPredefined->pdchCTFCFluidType,
+            this->Name,
+            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName); // Fluid Name more reasonable than FluidType
+        if ((this->DesignExitWaterTemp > -999.0) && (this->DesignEnteringWaterTemp > 0)) {
+            OutputReportPredefined::PreDefTableEntry(
+                state, state.dataOutRptPredefined->pdchCTFCRange, this->Name, this->DesignEnteringWaterTemp - this->DesignExitWaterTemp);
+        } else {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCTFCRange, this->Name, "N/A");
+        }
+        if ((this->DesignExitWaterTemp > -999.0) && (this->DesignEnteringAirWetBulbTemp > 0)) {
+            OutputReportPredefined::PreDefTableEntry(
+                state, state.dataOutRptPredefined->pdchCTFCApproach, this->Name, this->DesignExitWaterTemp - this->DesignEnteringAirWetBulbTemp);
+        } else {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCTFCApproach, this->Name, "N/A");
+        }
+        if (this->DesignExitWaterTemp > -999.0) {
+            OutputReportPredefined::PreDefTableEntry(
+                state, state.dataOutRptPredefined->pdchCTFCLevWaterSPTemp, this->Name, this->DesignExitWaterTemp);
+        } else {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCTFCLevWaterSPTemp, this->Name, "N/A");
+        }
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchCTFCDesFanPwr,
+                                                 this->Name,
+                                                 this->HighSpeedFanPower); // equivalent to Design Fan Power?
+        if (this->DesignEnteringAirWetBulbTemp > 0) {
+            OutputReportPredefined::PreDefTableEntry(
+                state, state.dataOutRptPredefined->pdchCTFCDesInletAirWBT, this->Name, this->DesignEnteringAirWetBulbTemp);
+        } else {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchCTFCDesInletAirWBT, this->Name, "N/A");
+        }
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchCTFCDesWaterFlowRate, this->Name, this->DesignWaterFlowRate, 6);
     }
 
     void EvapFluidCoolerSpecs::CalcSingleSpeedEvapFluidCooler(EnergyPlusData &state)
@@ -2227,7 +2309,8 @@ namespace EvaporativeFluidCoolers {
                     if (std::abs(this->OutletWaterTemp - OWTLowerLimit) <= 0.01) {
                         BypassFraction2 = bypassFraction;
                         break;
-                    } else if (this->OutletWaterTemp < OWTLowerLimit) {
+                    }
+                    if (this->OutletWaterTemp < OWTLowerLimit) {
                         // Set OutletWaterTemp = OWTLowerLimit, and use linear interpolation to calculate the bypassFraction
                         BypassFraction2 = BypassFractionPrev - (BypassFractionPrev - bypassFraction) * (OutletWaterTempPrev - OWTLowerLimit) /
                                                                    (OutletWaterTempPrev - this->OutletWaterTemp);
@@ -2239,9 +2322,9 @@ namespace EvaporativeFluidCoolers {
                             this->OutletWaterTemp = OutletWaterTempPrev;
                         }
                         break;
-                    } else {
-                        BypassFraction2 = (TempSetPoint - this->OutletWaterTemp) / (inletWaterTemp - this->OutletWaterTemp);
                     }
+                    BypassFraction2 = (TempSetPoint - this->OutletWaterTemp) / (inletWaterTemp - this->OutletWaterTemp);
+
                     // Compare two bypassFraction to determine when to stop
                     if (std::abs(BypassFraction2 - bypassFraction) <= BypassFractionThreshold) {
                         break;

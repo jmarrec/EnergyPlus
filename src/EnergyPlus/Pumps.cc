@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -241,7 +241,6 @@ void GetPumpInput(EnergyPlusData &state)
     int NumPumpBankSimpleConst = 0;
     Real64 SteamDensity;
     Real64 TempWaterDensity;
-    int DummyWaterIndex(1);
     Real64 constexpr minToMaxRatioMax = 0.99;
 
     ErrorsFound = false;
@@ -358,7 +357,7 @@ void GetPumpInput(EnergyPlusData &state)
                                      thisPump.NomVolFlowRate));
             ShowContinueError(
                 state,
-                format("Reseting value of '{}' to the value of 99% of '{}'.", thisInput->cNumericFieldNames(10), thisInput->cNumericFieldNames(1)));
+                format("Resetting value of '{}' to the value of 99% of '{}'.", thisInput->cNumericFieldNames(10), thisInput->cNumericFieldNames(1)));
             // Set min to roughly max, but not quite, otherwise it can't turn on, ever
             thisPump.MinVolFlowRate = minToMaxRatioMax * thisPump.NomVolFlowRate;
         }
@@ -1724,7 +1723,7 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
 
     // PURPOSE OF THIS SUBROUTINE:
     // This subroutines simulates a pump following
-    // the methodology oulined in ASHRAE's secondary toolkit.
+    // the methodology outlined in ASHRAE's secondary toolkit.
 
     // METHODOLOGY EMPLOYED:
     // Calculates power and updates other pump things.
@@ -1805,8 +1804,8 @@ void CalcPumps(EnergyPlusData &state, int const PumpNum, Real64 const FlowReques
     // Get RPM value for reporting as output
     // RPM is calculated using pump affinity laws for rotation speed
     if (thisPumpPlant.UsePressureForPumpCalcs && thisPump.HasVFD) {
-        RotSpeed_Min = thisPump.VFD.minRPMSched ? thisPump.VFD.minRPMSched->getCurrentVal() : 0.0;
-        RotSpeed_Max = thisPump.VFD.maxRPMSched ? thisPump.VFD.maxRPMSched->getCurrentVal() : 0.0;
+        RotSpeed_Min = (thisPump.VFD.minRPMSched != nullptr) ? thisPump.VFD.minRPMSched->getCurrentVal() : 0.0;
+        RotSpeed_Max = (thisPump.VFD.maxRPMSched != nullptr) ? thisPump.VFD.maxRPMSched->getCurrentVal() : 0.0;
         if (thisPump.PumpMassFlowRateMaxRPM < DataBranchAirLoopPlant::MassFlowTolerance ||
             thisPump.PumpMassFlowRateMinRPM < DataBranchAirLoopPlant::MassFlowTolerance) {
             thisPump.VFD.PumpActualRPM = 0.0;
@@ -2003,7 +2002,6 @@ void SizePump(EnergyPlusData &state, int const PumpNum)
     Real64 PumpSizFac;       // pump sizing factor
     Real64 SteamDensity;
     Real64 TempWaterDensity;
-    int DummyWaterIndex(1);
     Real64 DesVolFlowRatePerBranch; // local temporary for split of branch pumps
 
     auto &thisPump = state.dataPumps->PumpEquip(PumpNum);
@@ -2312,7 +2310,7 @@ void GetRequiredMassFlowRate(EnergyPlusData &state,
     MinPress = thisPump.VFD.lowerPsetSched->getCurrentVal();
     MaxPress = thisPump.VFD.upperPsetSched->getCurrentVal();
 
-    // Calculate maximum and minimum mass flow rate associated with maximun and minimum RPM
+    // Calculate maximum and minimum mass flow rate associated with maximum and minimum RPM
     if (thisPump.plantLoc.loopNum > 0) {
         auto const &thisPlantLoop = state.dataPlnt->PlantLoop(thisPump.plantLoc.loopNum);
         if (thisPlantLoop.UsePressureForPumpCalcs && thisPlantLoop.PressureSimType == DataPlant::PressSimType::FlowCorrection &&

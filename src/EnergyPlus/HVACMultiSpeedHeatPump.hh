@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -64,15 +64,6 @@ struct EnergyPlusData;
 
 namespace HVACMultiSpeedHeatPump {
 
-    // Heating coil types
-    int constexpr MultiSpeedHeatingCoil(1); // COIL:DX:MultiSpeed:Heating
-    // Cooling coil types
-    int constexpr MultiSpeedCoolingCoil(2); // COIL:DX:MultiSpeed:Cooling
-    // Supplymental heating coil types
-    int constexpr SuppHeatingCoilGas(1);  // Supplymental heating coil type: COIL:GAS:HEATING
-    int constexpr SuppHeatingCoilElec(2); // Supplymental heating coil type: COIL:ELECTRIC:HEATING
-    int constexpr SuppHeatingCoilRec(3);  // Supplymental heating coil type: COIL:ENGINEHEATRECOVERY:HEATING
-
     // Mode of operation
     enum class ModeOfOperation
     {
@@ -117,7 +108,7 @@ namespace HVACMultiSpeedHeatPump {
         int FanOutletNode;                         // Fan Outlet node
         Real64 FanVolFlow;                         // Supply fan volumetric flow rate
         Sched::Schedule *fanOpModeSched = nullptr; // Supply air fan operating mode schedule
-        HVAC::FanOp fanOp = HVAC::FanOp::Invalid;  // mode of operation; 1=cycling fan, cycling compressor; 2=continuous fan, cycling compresor
+        HVAC::FanOp fanOp = HVAC::FanOp::Invalid;  // mode of operation; 1=cycling fan, cycling compressor; 2=continuous fan, cycling compressor
         std::string DXHeatCoilName;                // COIL:DX:MultiSpeed:Heating name
         int HeatCoilType;                          // Heating coil type: 1 COIL:DX:MultiSpeed:Heating only
         int HeatCoilNum;                           // Heating coil number
@@ -218,6 +209,9 @@ namespace HVACMultiSpeedHeatPump {
         bool EMSOverrideCoilSpeedNumOn;
         Real64 EMSOverrideCoilSpeedNumValue;
         int CoilSpeedErrIndex;
+        Real64 HeatingSizingRatio = 1.0;
+        bool isHeatPump = false;
+        bool reportACCAManualS = true;
 
         // Default Constructor
         MSHeatPumpData()
@@ -246,7 +240,7 @@ namespace HVACMultiSpeedHeatPump {
     struct MSHeatPumpReportData
     {
         // Members
-        Real64 ElecPowerConsumption;   // Electricity Rate comsumption: CondenserFan+CrankcaseHeater+Defroster+aux
+        Real64 ElecPowerConsumption;   // Electricity Rate consumption: CondenserFan+CrankcaseHeater+Defroster+aux
         Real64 HeatRecoveryEnergy;     // Heat recovery rate [J]
         Real64 CycRatio;               // Cycle ratio
         Real64 SpeedRatio;             // Speed ratio between two stages

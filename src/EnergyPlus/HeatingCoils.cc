@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -979,7 +979,7 @@ namespace HeatingCoils {
 
             // HeatingCoil(CoilNum)%Efficiency       = Numbers(1)
             //(Numbers(1)) error limits checked and defaults applied on efficiency after
-            //       identifying souce type.
+            //       identifying source type.
 
             errFlag = false;
             heatingCoil.AirInletNodeNum = GetOnlySingleNode(state,
@@ -1356,7 +1356,7 @@ namespace HeatingCoils {
         heatingCoil.ElecUseLoad = 0.0;
         heatingCoil.RTF = 0.0;
 
-        // If a temperature setpoint controlled coil must set the desired outlet temp everytime
+        // If a temperature setpoint controlled coil must set the desired outlet temp every time
         if (ControlNodeNum == 0) {
             heatingCoil.DesiredOutletTemp = 0.0;
         } else {
@@ -1586,7 +1586,7 @@ namespace HeatingCoils {
         //       RE-ENGINEERED  Mar 2014 FSEC, moved calculations to common routine in BaseSizer
 
         // PURPOSE OF THIS SUBROUTINE:
-        // This subroutine is for sizing Heating Coil Components for which nominal capcities have not been
+        // This subroutine is for sizing Heating Coil Components for which nominal capacities have not been
         // specified in the input.
 
         // METHODOLOGY EMPLOYED:
@@ -1866,7 +1866,7 @@ namespace HeatingCoils {
                    (QCoilReq == DataLoopNode::SensedLoadFlagValue) && (std::abs(TempSetPoint - TempAirIn) > HVAC::TempControlTol)) {
 
             QCoilCap = CapacitanceAir * (TempSetPoint - TempAirIn);
-            // check to see if setpoint above enetering temperature. If not, set
+            // check to see if setpoint above entering temperature. If not, set
             // output to zero.
             if (QCoilCap <= 0.0) {
                 QCoilCap = 0.0;
@@ -3361,14 +3361,12 @@ namespace HeatingCoils {
             int WhichCoil = Util::FindItem(CoilName, state.dataHeatingCoils->HeatingCoil);
             if (WhichCoil != 0) {
                 return state.dataHeatingCoils->HeatingCoil(WhichCoil).PLFCurveIndex;
-            } else {
-                ShowSevereError(state, format("GetHeatingCoilPLFCurveIndex: Could not find Coil, Type=\"{}\" Name=\"{}\"", CoilType, CoilName));
-                ErrorsFound = true;
-                return 0;
             }
-        } else {
+            ShowSevereError(state, format("GetHeatingCoilPLFCurveIndex: Could not find Coil, Type=\"{}\" Name=\"{}\"", CoilType, CoilName));
+            ErrorsFound = true;
             return 0;
         }
+        return 0;
     }
 
     int GetHeatingCoilNumberOfStages(EnergyPlusData &state,
@@ -3395,11 +3393,10 @@ namespace HeatingCoils {
         int WhichCoil = Util::FindItemInList(CoilName, state.dataHeatingCoils->HeatingCoil);
         if (WhichCoil != 0) {
             return state.dataHeatingCoils->HeatingCoil(WhichCoil).NumOfStages;
-        } else {
-            ShowSevereError(state, format("GetHeatingCoilNumberOfSpeeds: Invalid Heating Coil Type=\"{}\" Name=\"{}\"", CoilType, CoilName));
-            ErrorsFound = true;
-            return 0;
         }
+        ShowSevereError(state, format("GetHeatingCoilNumberOfSpeeds: Invalid Heating Coil Type=\"{}\" Name=\"{}\"", CoilType, CoilName));
+        ErrorsFound = true;
+        return 0;
     }
 
     void SetHeatingCoilData(EnergyPlusData &state,

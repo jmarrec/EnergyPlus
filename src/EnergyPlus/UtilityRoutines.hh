@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -55,14 +55,12 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array1S.fwd.hh>
-#include <ObjexxFCL/MArray1.fwd.hh>
 #include <ObjexxFCL/string.functions.hh>
 
 #include <GSL/span.h>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
-#include <EnergyPlus/DataGlobalConstants.hh>
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 
@@ -165,7 +163,8 @@ void emitWarningMessages(EnergyPlusData &state,
                          std::initializer_list<std::string> const &msgs,
                          bool countAsError = false);
 
-void ShowFatalError(EnergyPlusData &state, std::string const &ErrorMessage, OptionalOutputFileRef OutUnit1 = {}, OptionalOutputFileRef OutUnit2 = {});
+[[noreturn]] void
+ShowFatalError(EnergyPlusData &state, std::string const &ErrorMessage, OptionalOutputFileRef OutUnit1 = {}, OptionalOutputFileRef OutUnit2 = {});
 
 void ShowSevereError(EnergyPlusData &state,
                      std::string const &ErrorMessage,
@@ -286,6 +285,15 @@ void ShowSevereEmptyField(EnergyPlusData &state,
                           std::string_view depFieldName = {},
                           std::string_view depFieldValue = {});
 void ShowSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
+/// <summary>
+/// Similar to ShowSevereItemNotFound, except for the severe error added to the list contains the information about
+/// what item is missing.
+/// </summary>
+/// <param name="state">EnergyPus state, used for tracking the severe error</param>
+/// <param name="eoh">Error object header, used to get the routineName</param>
+/// <param name="fieldName">Name of the unmatched field</param>
+/// <param name="fieldValue">Value of the unmatched field</param>
+void ShowDetailedSevereItemNotFound(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
 void ShowSevereItemNotFoundAudit(EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, std::string_view fieldValue);
 
 void ShowSevereDuplicateAssignment(
@@ -404,9 +412,8 @@ namespace Util {
         auto it = std::find(first, last, str);
         if (it != last) {
             return std::distance(first, it) + 1;
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     inline int FindItemInList(std::string_view const String, Array1S_string const ListOfItems)
@@ -491,7 +498,8 @@ namespace Util {
             if (equali(String, ListOfItems(Probe))) {
                 Found = true;
                 break;
-            } else if (lessthani(String, ListOfItems(Probe))) {
+            }
+            if (lessthani(String, ListOfItems(Probe))) {
                 UBnd = Probe;
             } else {
                 LBnd = Probe;
@@ -801,7 +809,7 @@ namespace Util {
                                        bool &errorFound);                // set to true if an error is found
 
     // Two structs for case insensitive containers.
-    // Eg: for unordered_map, we need to have a case insenstive hasher and a case insensitive comparator
+    // Eg: for unordered_map, we need to have a case insensitive hasher and a case insensitive comparator
     // (The default allocator for unordered_map is fine)
     // For map, you'd only need the comparator
     struct case_insensitive_hasher

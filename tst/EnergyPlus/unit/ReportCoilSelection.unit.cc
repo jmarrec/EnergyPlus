@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -954,8 +954,6 @@ TEST_F(EnergyPlusFixture, ReportCoilSelection_4PipeFCU_ElecHeatingCoil)
 TEST_F(EnergyPlusFixture, Test_finishCoilSummaryReportTable)
 {
     Real64 constexpr mult = 1.0;
-    int curSysNum = 0;
-    int curOASysNum = 0;
     int curZoneEqNum = 1;
     std::string coil1Name = "ElecHeatCoil";          // user-defined name of the coil
     std::string coil1Type = "Coil:Heating:Electric"; // idf input object class name of coil
