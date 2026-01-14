@@ -641,7 +641,7 @@ namespace Sched {
                         if (!csvParser.hasErrors()) {
                             isCSV = true;
                             ShowWarningMessage(state,
-                                               fmt::format("Extension of file {} is unrecogonized, but parsed as CSV successfully",
+                                               fmt::format("Extension of file {} is unrecognized, but parsed as CSV successfully",
                                                            state.files.TempFullFilePath.filePath));
                             schedule_file_shading_result = it.first;
                         }
@@ -656,7 +656,7 @@ namespace Sched {
                             s_sched->UniqueProcessedExternalFiles.emplace(state.files.TempFullFilePath.filePath, std::move(schedule_data));
                         schedule_file_shading_result = it.first;
                         ShowWarningMessage(state,
-                                           fmt::format("Extension of file {} is unrecogonized, but parsed as JSON successfully",
+                                           fmt::format("Extension of file {} is unrecognized, but parsed as JSON successfully",
                                                        state.files.TempFullFilePath.filePath));
                         isJSON = true;
                     } catch (...) {
@@ -1717,7 +1717,7 @@ namespace Sched {
                                 result = it.first;
                                 isCSV = true;
                                 ShowWarningMessage(state,
-                                                   fmt::format("Extension of file {} is unrecogonized, but parsed as CSV successfully",
+                                                   fmt::format("Extension of file {} is unrecognized, but parsed as CSV successfully",
                                                                state.files.TempFullFilePath.filePath));
                             }
                         } catch (...) {
@@ -1731,7 +1731,7 @@ namespace Sched {
                                                                                         FileSystem::readJSON(state.files.TempFullFilePath.filePath));
                                 result = it.first;
                                 ShowWarningMessage(state,
-                                                   fmt::format("Extension of file {} is unrecogonized, but parsed as JSON successfully",
+                                                   fmt::format("Extension of file {} is unrecognized, but parsed as JSON successfully",
                                                                state.files.TempFullFilePath.filePath));
                                 isJSON = true;
                             } catch (...) {
