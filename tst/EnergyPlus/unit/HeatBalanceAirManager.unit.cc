@@ -849,18 +849,6 @@ TEST_F(EnergyPlusFixture, HeatBalanceAirManager_GetMixingAndCrossMixing)
          "   **   ~~~   ** So, when there are three or less surfaces in a zone, EnergyPlus will make sure there are no losses of energy but",
          "   **   ~~~   ** it will not exchange the full amount of radiation with the rest of the zone as it would if there was a completed "
          "enclosure.",
-         "   ** Warning ** CalcApproximateViewFactors: Zero area for all other zone surfaces.", // Why are these errors being reported twice, because
-                                                                                                // something is being calculated twice?
-         "   **   ~~~   ** Happens for Surface=\"DUMMY SPACE 1A FLOOR\" in Zone=ZONE 1",
-         "   ** Warning ** CalcApproximateViewFactors: Zero area for all other zone surfaces.",
-         "   **   ~~~   ** Happens for Surface=\"DUMMY SPACE 1B FLOOR\" in Zone=ZONE 1",
-         "   ** Warning ** Surfaces in Zone/Enclosure=\"ZONE 1\" do not define an enclosure.",
-         "   **   ~~~   ** Number of surfaces <= 3, view factors are set to force reciprocity but may not fulfill completeness.",
-         "   **   ~~~   ** Reciprocity means that radiant exchange between two surfaces will match and not lead to an energy loss.",
-         "   **   ~~~   ** Completeness means that all of the view factors between a surface and the other surfaces in a zone add up to unity.",
-         "   **   ~~~   ** So, when there are three or less surfaces in a zone, EnergyPlus will make sure there are no losses of energy but",
-         "   **   ~~~   ** it will not exchange the full amount of radiation with the rest of the zone as it would if there was a completed "
-         "enclosure.",
          "   ************* Testing Individual Branch Integrity",
          "   ************* All Branches passed integrity testing",
          "   ************* Testing Individual Supply Air Path Integrity",

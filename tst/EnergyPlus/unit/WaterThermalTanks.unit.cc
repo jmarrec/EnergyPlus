@@ -6721,6 +6721,43 @@ TEST_F(EnergyPlusFixture, MixedTank_PVT_Per_VolumeSizing_PerSolarCollectorArea)
     EXPECT_DOUBLE_EQ(0.0, Tank.AmbientZoneGain); // Didn't define on/off cycle losses
 }
 
+TEST_F(EnergyPlusFixture, WaterThermalTankData_AdjustTankLossMultipliers)
+{
+    constexpr int ZONES = 1;
+    constexpr int SPACES = 5;
+    constexpr int FLOOR_AREA = 1000;
+    constexpr int MULTIPLIER = 10;
+
+    state->dataHeatBal->Zone.allocate(ZONES);
+    state->dataHeatBal->Zone(ZONES).numSpaces = SPACES;
+    state->dataHeatBal->Zone(ZONES).FloorArea = FLOOR_AREA;
+    state->dataHeatBal->Zone(ZONES).ListMultiplier = MULTIPLIER;
+    state->dataHeatBal->Zone(ZONES).Multiplier = MULTIPLIER;
+    state->dataHeatBal->Zone(ZONES).spaceIndexes.allocate(SPACES);
+
+    state->dataHeatBal->space.allocate(SPACES);
+    state->dataHeatBal->spaceIntGainDevices.allocate(SPACES);
+
+    for (int spaceNum = 1; spaceNum <= SPACES; spaceNum++) {
+        state->dataHeatBal->Zone(ZONES).spaceIndexes(spaceNum) = spaceNum;
+        state->dataHeatBal->space(spaceNum).FloorArea = static_cast<Real64>(FLOOR_AREA) / SPACES;
+        state->dataHeatBal->space(spaceNum).zoneNum = ZONES;
+    }
+
+    WaterThermalTanks::WaterThermalTankData tank;
+    tank.Name = "Water Heater";
+    tank.WaterThermalTankType = DataPlant::PlantEquipmentType::WtrHeaterMixed;
+    tank.AmbientTempZone = ZONES;
+    tank.setupZoneInternalGains(*state);
+
+    Real64 spaceGainFracTotal(0);
+    for (int spaceNum = 1; spaceNum <= SPACES; spaceNum++) {
+        spaceGainFracTotal += state->dataHeatBal->spaceIntGainDevices(spaceNum).device(1).spaceGainFrac * state->dataHeatBal->Zone(ZONES).Multiplier *
+                              state->dataHeatBal->Zone(ZONES).ListMultiplier;
+    }
+    EXPECT_NEAR(spaceGainFracTotal, 1, 0.001);
+}
+
 TEST_F(EnergyPlusFixture, thermalStorageTankInputReading_Autocalculate)
 {
     // Test for #11282

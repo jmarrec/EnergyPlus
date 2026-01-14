@@ -10089,7 +10089,7 @@ namespace SurfaceGeometry {
             int curShadedConstruction = state.dataSurface->WindowShadingControl(iShadeCtrl).getInputShadedConstruction;
             for (int jFeneRef = 1; jFeneRef <= state.dataSurface->WindowShadingControl(iShadeCtrl).FenestrationCount; ++jFeneRef) {
                 if (Util::SameString(state.dataSurface->WindowShadingControl(iShadeCtrl).FenestrationName(jFeneRef), surfTemp.Name)) {
-                    state.dataGlobal->AndShadingControlInModel = true;
+                    state.dataGlobal->AnyShadingControlInModel = true;
                     surfTemp.HasShadeControl = true;
                     surfTemp.windowShadingControlList.push_back(iShadeCtrl);
                     surfTemp.activeWindowShadingControl = iShadeCtrl;

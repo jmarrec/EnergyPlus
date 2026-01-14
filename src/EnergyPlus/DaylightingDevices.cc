@@ -377,6 +377,7 @@ namespace Dayltg {
             if (ShelfSurf > 0) {
                 // Double surface area so that both sides of the shelf are treated as internal mass
                 state.dataSurface->Surface(ShelfSurf).Area *= 2.0;
+                state.dataGlobal->AnyInsideShelf = true; // Set this to force recalc for radiant view factors due to area change
             }
 
             ShelfSurf = state.dataDaylightingDevicesData->Shelf(ShelfNum).OutSurf;
