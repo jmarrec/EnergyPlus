@@ -125,6 +125,11 @@ namespace AirLoopHVACDOAS {
         int m_FanInletNodeNum = 0;
         int m_FanOutletNodeNum = 0;
         SimAirServingZones::CompType m_FanTypeNum = SimAirServingZones::CompType::Invalid;
+        bool m_exhaustFanUsed = false;
+        int m_exhaustFanIndex = -1;
+        int m_exhaustFanInletNodeNum = 0;
+        int m_exhaustFanOutletNodeNum = 0;
+        SimAirServingZones::CompType m_exhaustFanTypeNum = SimAirServingZones::CompType::Invalid;
         int m_HeatCoilNum = 0;
         int m_CoolCoilNum = 0;
         int ConveCount = 0;
