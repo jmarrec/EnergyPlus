@@ -374,9 +374,8 @@ void ManageRefrigeratedCaseRacks(EnergyPlusData &state)
 
     if (state.dataRefrigCase->HaveRefrigRacks) {
         for (int RackNum = 1; RackNum <= state.dataRefrigCase->NumRefrigeratedRacks; ++RackNum) {
-            auto &RefrigRack = state.dataRefrigCase->RefrigRack;
-            RefrigRack(RackNum).CalcRackSystem(state);
-            RefrigRack(RackNum).ReportRackSystem(state, RackNum);
+            state.dataRefrigCase->RefrigRack(RackNum).CalcRackSystem(state);
+            state.dataRefrigCase->RefrigRack(RackNum).ReportRackSystem(state, RackNum);
         }
     }
 

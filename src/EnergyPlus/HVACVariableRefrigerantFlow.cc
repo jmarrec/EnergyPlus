@@ -12359,8 +12359,7 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
         this->CrankCaseHeaterPower = this->CCHeaterPower * (1.0 - VRFRTF);
         if (this->NumCompressors > 1) {
             UpperStageCompressorRatio = (1.0 - this->CompressorSizeRatio) / (this->NumCompressors - 1);
-            int Stage; // used for crankcase heater power calculation
-            for (Stage = 1; Stage <= this->NumCompressors - 2; ++Stage) {
+            for (int Stage = 1; Stage <= this->NumCompressors - 2; ++Stage) {
                 if (this->VRFCondPLR < (this->CompressorSizeRatio + Stage * UpperStageCompressorRatio)) {
                     this->CrankCaseHeaterPower += this->CCHeaterPower;
                 }
