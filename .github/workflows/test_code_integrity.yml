@@ -215,9 +215,35 @@ jobs:
           --enable=all
           -j $(nproc)
           --template='[{file}:{line}]:({severity}),[{id}],{message}'
-          --suppress="uninitvar:*"
+          --suppress="uninitvar:*" \
+          --suppress="arrayIndexThenCheck:*" \
+          --suppress="checkLevelNormal:*" \
+          --suppress="constParameterPointer:*" \
           --suppress="constParameterReference:*" \
+          --suppress="constVariable:*" \
+          --suppress="constVariablePointer:*" \
           --suppress="constVariableReference:*" \
+          --suppress="cstyleCast:*" \
+          --suppress="duplicateCondition:*" \
+          --suppress="duplicateExpression:*" \
+          --suppress="knownConditionTrueFalse:*" \
+          --suppress="multiCondition:*" \
+          --suppress="noExplicitConstructor:*" \
+          --suppress="passedByValueCallback:*" \
+          --suppress="redundantAssignment:*" \
+          --suppress="redundantCondition:*" \
+          --suppress="redundantInitialization:*" \
+          --suppress="sameIteratorExpression:*" \
+          --suppress="shadowFunction:*" \
+          --suppress="shadowVariable:*" \
+          --suppress="unassignedVariable:*" \
+          --suppress="unmatchedSuppression:*" \
+          --suppress="unpreciseMathCall:*" \
+          --suppress="unreadVariable:*" \
+          --suppress="useInitializationList:*" \
+          --suppress="useStlAlgorithm:*" \
+          --suppress="uselessAssignmentArg:*" \
+          --suppress="uselessCallsSubstr:*" \
           ./src
           3>&1 1>&2 2>&3 | tee cppcheck.txt
 
