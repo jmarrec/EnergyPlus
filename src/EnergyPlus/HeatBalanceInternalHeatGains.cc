@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -154,6 +154,15 @@ void SetupSpaceInternalGain(EnergyPlusData &state,
 
     thisIntGain.device(thisIntGain.numberOfDevices).CompObjectName = UpperCaseObjectName;
     thisIntGain.device(thisIntGain.numberOfDevices).CompType = IntGainCompType;
+
+    // Tank losses should be distributed across multiplied zones/spaces - adjust the space gain fraction to account for this
+    if (std::find(AdjustTankLossMultipliers.begin(), AdjustTankLossMultipliers.end(), IntGainCompType) != AdjustTankLossMultipliers.end()) {
+        const int zoneNum = state.dataHeatBal->space(spaceNum).zoneNum;
+        const int multiplier = state.dataHeatBal->Zone(zoneNum).Multiplier * state.dataHeatBal->Zone(zoneNum).ListMultiplier;
+        if (multiplier > 1) {
+            spaceGainFraction /= multiplier;
+        }
+    }
     thisIntGain.device(thisIntGain.numberOfDevices).spaceGainFrac = spaceGainFraction;
 
     // note pointer assignments in code below!

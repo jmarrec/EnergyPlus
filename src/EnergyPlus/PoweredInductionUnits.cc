@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -381,29 +381,47 @@ void GetPIUs(EnergyPlusData &state)
                                                        ObjectIsParent,
                                                        "Outlet Node Name");
 
-                thisPIU.HCoilInAirNode = GetOnlySingleNode(state,
-                                                           ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_air_inlet_node_name"),
-                                                           ErrorsFound,
-                                                           connectionType,
-                                                           thisPIU.Name,
-                                                           DataLoopNode::NodeFluidType::Air,
-                                                           DataLoopNode::ConnectionType::Internal,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           ObjectIsParent,
-                                                           "Reheat Coil Air Inlet Node Name");
-                // The reheat coil control node is necessary for hot water reheat, but not necessary for
-                // electric or gas reheat.
-                if (thisPIU.HCoilType == HtgCoilType::SimpleHeating) {
+                // The reheat coil control node is necessary for hot water reheat, but not necessary for electric or gas reheat.
+                switch (thisPIU.HCoilType) {
+                case HtgCoilType::SimpleHeating: {
+                    thisPIU.HCoilInAirNode =
+                        WaterCoils::GetCoilInletNode(state,
+                                                     ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_object_type"),
+                                                     ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_name"),
+                                                     ErrorsFound);
+
                     thisPIU.HotControlNode = GetCoilWaterInletNode(state,
                                                                    ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_object_type"),
                                                                    ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_name"),
                                                                    ErrorsFound);
+                    break;
                 }
-                if (thisPIU.HCoilType == HtgCoilType::SteamAirHeating) {
+                case HtgCoilType::SteamAirHeating: {
+                    int SteamCoilIndex = SteamCoils::GetSteamCoilIndex(state,
+                                                                       ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_object_type"),
+                                                                       ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_name"),
+                                                                       ErrorsFound);
+                    thisPIU.HCoilInAirNode = SteamCoils::GetCoilAirInletNode(
+                        state, SteamCoilIndex, ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_name"), ErrorsFound);
+
                     thisPIU.HotControlNode = GetCoilSteamInletNode(state,
                                                                    ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_object_type"),
                                                                    ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_name"),
                                                                    ErrorsFound);
+                    break;
+                }
+                case HtgCoilType::Electric:
+                case HtgCoilType::Gas: {
+                    thisPIU.HCoilInAirNode =
+                        HeatingCoils::GetCoilInletNode(state,
+                                                       ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_object_type"),
+                                                       ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_name"),
+                                                       ErrorsFound);
+                    break;
+                }
+                default: {
+                    break;
+                }
                 }
                 thisPIU.MixerName = ip->getAlphaFieldValue(fields, objectSchemaProps, "zone_mixer_name");
                 thisPIU.FanName = ip->getAlphaFieldValue(fields, objectSchemaProps, "fan_name");
@@ -474,7 +492,7 @@ void GetPIUs(EnergyPlusData &state)
                                   "UNDEFINED",
                                   thisPIU.FanName,
                                   "UNDEFINED",
-                                  ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_air_inlet_node_name"));
+                                  state.dataLoopNodes->NodeID(thisPIU.HCoilInAirNode));
                 } else if (cCurrentModuleObject == "AirTerminal:SingleDuct:ParallelPIU:Reheat") {
                     SetUpCompSets(state,
                                   thisPIU.UnitType,
@@ -491,7 +509,7 @@ void GetPIUs(EnergyPlusData &state)
                               thisPIU.Name,
                               ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_object_type"),
                               ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_name"),
-                              ip->getAlphaFieldValue(fields, objectSchemaProps, "reheat_coil_air_inlet_node_name"),
+                              state.dataLoopNodes->NodeID(thisPIU.HCoilInAirNode),
                               ip->getAlphaFieldValue(fields, objectSchemaProps, "outlet_node_name"));
 
                 // Register component set data
