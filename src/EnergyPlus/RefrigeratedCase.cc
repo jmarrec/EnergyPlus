@@ -10640,7 +10640,6 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     Real64 OutDbTemp;               // Outdoor dry bulb temp at condenser air inlet node [C]
     Real64 EffectTemp;              // Effective outdoor temp when using evap condenser cooling [C]
     Real64 HumRatIn;                // Humidity ratio of inlet air to condenser [kg/kg]
-    Real64 HumRatOut;               // Humidity ratio of outlet air from condenser (assumed saturated) [kg/kg]
     Real64 BPress;                  // Barometric pressure at condenser air inlet node [Pa]
     bool EvapAvail;                 // Control for evap condenser availability
 
@@ -10831,7 +10830,8 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     // assumes pump runs whenever evap cooling is available to minimize scaling
     if (this->CondenserType == DataHeatBalance::RefrigCondenserType::Evap && EvapAvail) {
         state.dataRefrigCase->TotalCondenserPumpPower = this->EvapPumpPower;
-        HumRatOut = Psychrometrics::PsyWFnTdbTwbPb(state, EffectTemp, OutWbTemp, BPress);
+        // Humidity ratio of outlet air from condenser (assumed saturated) [kg/kg]
+        const Real64 HumRatOut = Psychrometrics::PsyWFnTdbTwbPb(state, EffectTemp, OutWbTemp, BPress);
         state.dataRefrigCase->TotalEvapWaterUseRate = this->CondenserAirFlowRate * CondenserFrac *
                                                       Psychrometrics::PsyRhoAirFnPbTdbW(state, BPress, OutDbTemp, HumRatIn) * (HumRatOut - HumRatIn) /
                                                       Psychrometrics::RhoH2O(EffectTemp);
