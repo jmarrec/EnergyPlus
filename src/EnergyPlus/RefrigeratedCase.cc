@@ -52,7 +52,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array2D.hh>
-// #include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/BranchNodeConnections.hh>
@@ -62,7 +61,6 @@
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataHeatBalFanSys.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
-#include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataWater.hh>
 #include <EnergyPlus/DataZoneEnergyDemands.hh>
@@ -142,7 +140,7 @@ namespace EnergyPlus::RefrigeratedCase {
 // the calculated refrigerant mass flow through the compressors.  The solution usually requires less than 5 iterations.
 // The refrigerant state exiting the compressor group is known so the amount of heat available for
 // desuperheat reclaim is explicitly known.
-// The detailed refrigeration model allows the use of subcoolers,secondary loops, and cascade condensers
+// The detailed refrigeration model allows the use of subcoolers, secondary loops, and cascade condensers
 // to transfer load from one suction group to another. This introduces the need for further iterations among
 // the systems.  Three loops through the
 // systems are adequate to model these interactions.  The detailed model will also calculate a variable suction
