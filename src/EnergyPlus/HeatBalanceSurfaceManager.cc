@@ -3632,7 +3632,6 @@ void InitSolarHeatGains(EnergyPlusData &state)
                                     auto const *screen = dynamic_cast<Material::MaterialScreen const *>(s_mat->materials(screenNum));
                                     assert(screen != nullptr);
 
-                                    // auto &surf = state.dataSurface->Surface(SurfNum);
                                     Real64 phi, theta;
                                     Material::GetRelativePhiTheta(
                                         surf.Tilt * Constant::DegToRad, surf.Azimuth * Constant::DegToRad, state.dataEnvrn->SOLCOS, phi, theta);

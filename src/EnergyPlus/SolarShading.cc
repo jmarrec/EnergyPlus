@@ -6845,8 +6845,6 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                                 auto const *screen = dynamic_cast<Material::MaterialScreen const *>(s_mat->materials(ScNum));
                                 assert(screen != nullptr);
 
-                                // auto &surf = s_surf->Surface(SurfNum);
-
                                 Real64 solPhi = std::acos(state.dataEnvrn->SOLCOS.z);
                                 Real64 solTheta = std::atan2(state.dataEnvrn->SOLCOS.x, state.dataEnvrn->SOLCOS.y);
                                 Real64 winPhi = surf.Tilt * Constant::DegToRad;
@@ -7286,7 +7284,6 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                                 auto const *screen = dynamic_cast<Material::MaterialScreen const *>(s_mat->materials(ScNum));
                                 assert(screen != nullptr);
 
-                                // auto &surf = s_surf->Surface(SurfNum);
                                 Real64 solPhi = std::acos(state.dataEnvrn->SOLCOS.z);
                                 Real64 solTheta = std::atan2(state.dataEnvrn->SOLCOS.x, state.dataEnvrn->SOLCOS.y);
                                 Real64 winPhi = surf.Tilt * Constant::DegToRad;
