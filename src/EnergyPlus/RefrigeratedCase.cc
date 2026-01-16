@@ -10631,17 +10631,17 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     // "Impact of ASHRAE Standard 62-1989 on Florida Supermarkets",
     //  Florida Solar Energy Center, FSEC-CR-910-96, Final Report, Oct. 1996
 
-    Real64 COPFTempOutput;          // Curve value for COPFTemp curve object
-    Real64 CondenserFrac;           // Fraction of condenser power as a function of outdoor temperature
-    Real64 TotalHeatRejectedToZone; // Total compressor and condenser fan heat rejected to zone (based on CaseRAFactor)
-    int HeatRejectZoneNum;          // Index to zone where heat is rejected
-    int HeatRejectZoneNodeNum;      // Index to zone where heat is rejected
-    Real64 OutWbTemp;               // Outdoor wet bulb temp at condenser air inlet node [C]
-    Real64 OutDbTemp;               // Outdoor dry bulb temp at condenser air inlet node [C]
-    Real64 EffectTemp;              // Effective outdoor temp when using evap condenser cooling [C]
-    Real64 HumRatIn;                // Humidity ratio of inlet air to condenser [kg/kg]
-    Real64 BPress;                  // Barometric pressure at condenser air inlet node [Pa]
-    bool EvapAvail;                 // Control for evap condenser availability
+    Real64 COPFTempOutput;                // Curve value for COPFTemp curve object
+    Real64 OutWbTemp;                     // Outdoor wet bulb temp at condenser air inlet node [C]
+    Real64 OutDbTemp;                     // Outdoor dry bulb temp at condenser air inlet node [C]
+    Real64 EffectTemp;                    // Effective outdoor temp when using evap condenser cooling [C]
+    Real64 HumRatIn;                      // Humidity ratio of inlet air to condenser [kg/kg]
+    Real64 BPress;                        // Barometric pressure at condenser air inlet node [Pa]
+    Real64 TotalHeatRejectedToZone = 0.0; // Total compressor and condenser fan heat rejected to zone (based on CaseRAFactor)
+    Real64 CondenserFrac = 0.0;           // Fraction of condenser power as a function of outdoor temperature
+    bool EvapAvail = true;                // Control for evap condenser availability
+    int HeatRejectZoneNum = 0;            // Index to zone where heat is rejected
+    int HeatRejectZoneNodeNum = 0;        // Index to zone where heat is rejected
 
     auto &RefrigCase = state.dataRefrigCase->RefrigCase;
     auto &WalkIn = state.dataRefrigCase->WalkIn;
@@ -10655,14 +10655,9 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     state.dataRefrigCase->TotalCondenserPumpPower = 0.0;
     state.dataRefrigCase->TotalBasinHeatPower = 0.0;
     state.dataRefrigCase->TotalCondenserHeat = 0.0;
-    TotalHeatRejectedToZone = 0.0;
     state.dataRefrigCase->TotalEvapWaterUseRate = 0.0;
     state.dataRefrigCase->RackSenCreditToZone = 0.0;
     state.dataRefrigCase->RackSenCreditToHVAC = 0.0;
-    CondenserFrac = 0.0;
-    EvapAvail = true;
-    HeatRejectZoneNum = 0;
-    HeatRejectZoneNodeNum = 0;
 
     // Loads for chiller sets are set in call to zone equipment element "SimAirChillerSet"
     // (all chiller coils within a set are located in the same zone)
