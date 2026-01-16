@@ -13929,11 +13929,12 @@ void VRFCondenserEquipment::VRFOU_CompSpd(
                 CompSpdUB = CounterCompSpdTemp;
                 Real64 deltaCAP = CompEvaporatingCAPSpd(CompSpdUB) - CompEvaporatingCAPSpd(CompSpdLB);
                 Real64 deltaPWR = CompEvaporatingPWRSpd(CompSpdUB) - CompEvaporatingPWRSpd(CompSpdLB);
-                Real64 r = ((Q_cond_req - CompEvaporatingPWRSpd(CompSpdLB)) * C_cap_operation - CompEvaporatingCAPSpd(CompSpdLB)) /
-                           (deltaCAP + deltaPWR * C_cap_operation);
-                if (r < 1.0) {
-                    CompSpdActual = this->CompressorSpeed(CompSpdLB) + (this->CompressorSpeed(CompSpdUB) - this->CompressorSpeed(CompSpdLB)) * r;
-                    Q_evap_req = Q_cond_req - deltaPWR * r - CompEvaporatingPWRSpd(CompSpdLB);
+                Real64 interpRatio = ((Q_cond_req - CompEvaporatingPWRSpd(CompSpdLB)) * C_cap_operation - CompEvaporatingCAPSpd(CompSpdLB)) /
+                                     (deltaCAP + deltaPWR * C_cap_operation);
+                if (interpRatio < 1.0) {
+                    CompSpdActual =
+                        this->CompressorSpeed(CompSpdLB) + (this->CompressorSpeed(CompSpdUB) - this->CompressorSpeed(CompSpdLB)) * interpRatio;
+                    Q_evap_req = Q_cond_req - deltaPWR * interpRatio - CompEvaporatingPWRSpd(CompSpdLB);
                     break;
                 }
             }

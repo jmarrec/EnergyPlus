@@ -2086,7 +2086,7 @@ namespace HeatBalFiniteDiffManager {
                 }
 
                 // update report variables
-                auto &surfFD = s_hbfd->SurfaceFD(SurfNum);
+                // auto &surfFD = s_hbfd->SurfaceFD(SurfNum);
 
                 // only includes internal heat source
                 surfFD.heatSourceInternalFluxLayerReport(Lay) = QSSFlux * surface.Area;

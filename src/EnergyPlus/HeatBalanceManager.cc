@@ -1698,7 +1698,7 @@ namespace HeatBalanceManager {
                     if (ConstructNumAlpha <= 2) {
 
                     } else {
-                        auto const *mat = s_mat->materials(state.dataConstruction->Construct(TotRegConstructs + ConstrNum).LayerPoint(Layer));
+                        // auto const *mat = s_mat->materials(state.dataConstruction->Construct(TotRegConstructs + ConstrNum).LayerPoint(Layer));
                         state.dataHeatBal->NominalRforNominalUCalculation(TotRegConstructs + ConstrNum) += mat->NominalR;
                     }
                 }
@@ -1774,15 +1774,15 @@ namespace HeatBalanceManager {
         WConstructNames.deallocate();
 
         // set some (default) properties of the Construction Derived Type
-        for (int ConstrNum = 1; ConstrNum <= state.dataHeatBal->TotConstructs; ++ConstrNum) {
+        for (int ConstrIndex = 1; ConstrIndex <= state.dataHeatBal->TotConstructs; ++ConstrIndex) {
 
-            auto &thisConstruct = state.dataConstruction->Construct(ConstrNum);
+            auto &thisConstruct = state.dataConstruction->Construct(ConstrIndex);
             // For air boundaries, skip TypeIsAirBoundary
             if (thisConstruct.TypeIsAirBoundary) {
                 continue;
             }
-            if (state.dataHeatBal->NominalRforNominalUCalculation(ConstrNum) != 0.0) {
-                state.dataHeatBal->NominalU(ConstrNum) = 1.0 / state.dataHeatBal->NominalRforNominalUCalculation(ConstrNum);
+            if (state.dataHeatBal->NominalRforNominalUCalculation(ConstrIndex) != 0.0) {
+                state.dataHeatBal->NominalU(ConstrIndex) = 1.0 / state.dataHeatBal->NominalRforNominalUCalculation(ConstrIndex);
             } else {
                 if (!thisConstruct.WindowTypeEQL) {
                     ShowSevereError(state, format("Nominal U is zero, for construction={}", thisConstruct.Name));
@@ -1790,7 +1790,7 @@ namespace HeatBalanceManager {
                 }
             }
 
-            DataHeatBalance::CheckAndSetConstructionProperties(state, ConstrNum, ErrorsFound);
+            DataHeatBalance::CheckAndSetConstructionProperties(state, ConstrIndex, ErrorsFound);
 
         } // End of ConstrNum DO loop
     }
