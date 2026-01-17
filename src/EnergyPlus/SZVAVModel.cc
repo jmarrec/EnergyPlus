@@ -761,18 +761,18 @@ namespace SZVAVModel {
 
             if ((CoolingLoad && TempSensOutput < ZoneLoad) || (HeatingLoad && TempSensOutput > ZoneLoad)) { // low speed fan can meet load
                 auto fR1 = [&state,
-                          SysIndex,
-                          FirstHVACIteration,
-                          ZoneLoad,
-                          &SZVAVModel,
-                          OnOffAirFlowRatio,
-                          AirLoopNum,
-                          coilFluidInletNode,
-                          lowSpeedFanRatio,
-                          maxCoilFluidFlow,
-                          minAirMassFlow,
-                          maxAirMassFlow,
-                          CoolingLoad](Real64 const PartLoadRatio) {
+                            SysIndex,
+                            FirstHVACIteration,
+                            ZoneLoad,
+                            &SZVAVModel,
+                            OnOffAirFlowRatio,
+                            AirLoopNum,
+                            coilFluidInletNode,
+                            lowSpeedFanRatio,
+                            maxCoilFluidFlow,
+                            minAirMassFlow,
+                            maxAirMassFlow,
+                            CoolingLoad](Real64 const PartLoadRatio) {
                     return UnitarySystems::UnitarySys::calcUnitarySystemWaterFlowResidual(state,
                                                                                           PartLoadRatio, // coil part load ratio
                                                                                           SysIndex,
@@ -822,18 +822,18 @@ namespace SZVAVModel {
                 SZVAVModel.FanPartLoadRatio = ((AirMassFlow - (maxAirMassFlow * lowSpeedFanRatio)) / ((1.0 - lowSpeedFanRatio) * maxAirMassFlow));
 
                 auto fR2 = [&state,
-                          SysIndex,
-                          FirstHVACIteration,
-                          ZoneLoad,
-                          &SZVAVModel,
-                          OnOffAirFlowRatio,
-                          AirLoopNum,
-                          coilFluidInletNode,
-                          lowSpeedFanRatio,
-                          AirMassFlow,
-                          maxAirMassFlow,
-                          CoolingLoad,
-                          maxCoilFluidFlow](Real64 const PartLoadRatio) {
+                            SysIndex,
+                            FirstHVACIteration,
+                            ZoneLoad,
+                            &SZVAVModel,
+                            OnOffAirFlowRatio,
+                            AirLoopNum,
+                            coilFluidInletNode,
+                            lowSpeedFanRatio,
+                            AirMassFlow,
+                            maxAirMassFlow,
+                            CoolingLoad,
+                            maxCoilFluidFlow](Real64 const PartLoadRatio) {
                     return UnitarySystems::UnitarySys::calcUnitarySystemWaterFlowResidual(state,
                                                                                           PartLoadRatio, // coil part load ratio
                                                                                           SysIndex,
@@ -973,17 +973,17 @@ namespace SZVAVModel {
 
                 // otherwise iterate on load
                 auto fR3 = [&state,
-                          SysIndex,
-                          FirstHVACIteration,
-                          ZoneLoad,
-                          &SZVAVModel,
-                          OnOffAirFlowRatio,
-                          AirLoopNum,
-                          coilFluidInletNode,
-                          lowSpeedFanRatio,
-                          maxCoilFluidFlow,
-                          maxAirMassFlow,
-                          CoolingLoad](Real64 const PartLoadRatio) {
+                            SysIndex,
+                            FirstHVACIteration,
+                            ZoneLoad,
+                            &SZVAVModel,
+                            OnOffAirFlowRatio,
+                            AirLoopNum,
+                            coilFluidInletNode,
+                            lowSpeedFanRatio,
+                            maxCoilFluidFlow,
+                            maxAirMassFlow,
+                            CoolingLoad](Real64 const PartLoadRatio) {
                     return UnitarySystems::UnitarySys::calcUnitarySystemWaterFlowResidual(state,
                                                                                           PartLoadRatio, // coil part load ratio
                                                                                           SysIndex,
