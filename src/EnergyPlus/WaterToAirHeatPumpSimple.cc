@@ -686,8 +686,8 @@ namespace WaterToAirHeatPumpSimple {
             ShowFatalError(state, format("{} Errors found getting input. Program terminates.", RoutineName));
         }
 
-        for (int HPNum = 1; HPNum <= state.dataWaterToAirHeatPumpSimple->NumWatertoAirHPs; ++HPNum) {
-            auto &simpleWAHP = state.dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum);
+        for (int HPNumIdx = 1; HPNumIdx <= state.dataWaterToAirHeatPumpSimple->NumWatertoAirHPs; ++HPNumIdx) {
+            auto &simpleWAHP = state.dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNumIdx);
             if (simpleWAHP.WAHPPlantType == DataPlant::PlantEquipmentType::CoilWAHPCoolingEquationFit) {
                 // COOLING COIL  Setup Report variables for the Heat Pump
                 SetupOutputVariable(state,

@@ -12018,11 +12018,11 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
                 // View factor from current (sending) window DifTransSurfNum to current (receiving) surface
                 // HeatTransSurfNum
                 int const HTenclosureSurfNum = surf.SolarEnclSurfIndex; // HT surface index for EnclSolInfo.SurfacePtr and F arrays
-                int const enclosureNum = surf.SolarEnclIndex;           // index for EnclSolInfo
+                int const enclosureIndex = surf.SolarEnclIndex;         // index for EnclSolInfo
                 int const DTenclSurfNum =
                     s_surf->Surface(DifTransSurfNum).SolarEnclSurfIndex; // Window surface index for EnclSolInfo.SurfacePtr and F arrays
 
-                ViewFactor = state.dataViewFactor->EnclSolInfo(enclosureNum).F(HTenclosureSurfNum, DTenclSurfNum);
+                ViewFactor = state.dataViewFactor->EnclSolInfo(enclosureIndex).F(HTenclosureSurfNum, DTenclSurfNum);
                 // debug ViewFactorTotal
                 //                    ViewFactorTotal += ViewFactor; // debug
 
@@ -12068,7 +12068,7 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
 
                     // Accumulate total reflected distributed diffuse solar for each zone for subsequent
                     // interreflection calcs
-                    state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureNum) += DifSolarReflW; // [W]
+                    state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureIndex) += DifSolarReflW; // [W]
 
                     // Accumulate Window and Zone total distributed diffuse solar to check for conservation of
                     // energy For opaque surfaces all incident diffuse is either absorbed or reflected
@@ -12113,7 +12113,7 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
 
                             // Accumulate total reflected distributed diffuse solar for each zone for subsequent
                             // interreflection calcs
-                            state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureNum) += DifSolarReflW; // [W]
+                            state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureIndex) += DifSolarReflW; // [W]
 
                             //------------------------------------------------------------------------------
                             // DISTRIBUTE TRANSMITTED DIFFUSE SOLAR THROUGH INTERIOR WINDOW TO ADJACENT ZONE
@@ -12196,7 +12196,7 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
 
                             // Accumulate total reflected distributed diffuse solar for each zone for subsequent
                             // interreflection calcs
-                            state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureNum) += DifSolarReflW; // [W]
+                            state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureIndex) += DifSolarReflW; // [W]
 
                             // Accumulate transmitted Window and Zone total distributed diffuse solar to check for
                             // conservation of energy This is not very effective since it assigns whatever
@@ -12246,10 +12246,10 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
                             InsideDifReflectance = state.dataConstruction->Construct(ConstrNum).ReflectSolDiffBack;
                             if ((ShadeFlag == WinShadingType::IntBlind) || (ShadeFlag == WinShadingType::ExtBlind)) {
                                 auto const &constr = state.dataConstruction->Construct(ConstrNum);
-                                auto const &surfShade = state.dataSurface->surfShades(HeatTransSurfNum);
+                                // auto const &surfShade = state.dataSurface->surfShades(HeatTransSurfNum);
                                 auto const &btarSlatLo = constr.blindTARs[surfShade.blind.slatAngIdxLo];
                                 auto const &btarSlatHi = constr.blindTARs[surfShade.blind.slatAngIdxHi];
-                                Real64 slatInterpFac = surfShade.blind.slatAngInterpFac;
+                                slatInterpFac = surfShade.blind.slatAngInterpFac;
                                 // Diffuse back solar reflectance, blind present, vs. slat angle
                                 InsideDifReflectance = Interp(btarSlatLo.Sol.Bk.Df.Ref, btarSlatHi.Sol.Bk.Df.Ref, slatInterpFac);
                             }
@@ -12257,7 +12257,7 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
 
                             // Accumulate total reflected distributed diffuse solar for each zone for subsequent
                             // interreflection calcs
-                            state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureNum) += DifSolarReflW; // [W]
+                            state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureIndex) += DifSolarReflW; // [W]
 
                             // Now calc diffuse solar absorbed by shade/blind itself
                             BlNum = surfShade.blind.matNum;
@@ -12265,10 +12265,10 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
                                 // Calc diffuse solar absorbed by shade or screen [W]
                                 ShBlDifSolarAbsW = WinDifSolarTrans_Factor * constrSh.AbsDiffBackShade;
                             } else if (ANY_BLIND(ShadeFlag)) {
-                                auto const &surfShade = state.dataSurface->surfShades(HeatTransSurfNum);
+                                // auto const &surfShade = state.dataSurface->surfShades(HeatTransSurfNum);
                                 auto const &btarSlatLo = constrSh.blindTARs[surfShade.blind.slatAngIdxLo];
                                 auto const &btarSlatHi = constrSh.blindTARs[surfShade.blind.slatAngIdxHi];
-                                Real64 slatInterpFac = surfShade.blind.slatAngInterpFac;
+                                slatInterpFac = surfShade.blind.slatAngInterpFac;
                                 AbsDiffBkBl = Interp(btarSlatLo.Sol.Bk.Df.Abs, btarSlatHi.Sol.Bk.Df.Abs, slatInterpFac);
                                 ShBlDifSolarAbsW = WinDifSolarTrans_Factor * AbsDiffBkBl;
                             }
@@ -12333,7 +12333,7 @@ void CalcWinTransDifSolInitialDistribution(EnergyPlusData &state)
 
                         // Accumulate total reflected distributed diffuse solar for each zone for subsequent
                         // interreflection calcs
-                        state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureNum) += DifSolarReflW; // [W]
+                        state.dataHeatBal->EnclSolInitialDifSolReflW(enclosureIndex) += DifSolarReflW; // [W]
 
                         //------------------------------------------------------------------------------
                         // DISTRIBUTE TRANSMITTED DIFFUSE SOLAR THROUGH INTERIOR WINDOW TO ADJACENT ZONE
