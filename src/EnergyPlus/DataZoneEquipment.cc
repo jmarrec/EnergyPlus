@@ -265,6 +265,10 @@ void GetZoneEquipmentData(EnergyPlusData &state)
         state.dataZoneEquip->ReturnAirPath.allocate(state.dataZoneEquip->NumReturnAirPaths);
     }
 
+    if (!state.dataHeatBal->ZoneIntGain.allocated()) {
+        DataHeatBalance::AllocateIntGains(state);
+    }
+
     state.dataZoneEquip->ZoneEquipConfig.allocate(state.dataGlobal->NumOfZones); // Allocate the array containing the configuration data for each zone
     if (state.dataHeatBal->doSpaceHeatBalanceSizing || state.dataHeatBal->doSpaceHeatBalanceSimulation) {
         state.dataZoneEquip->spaceEquipConfig.allocate(
@@ -300,8 +304,8 @@ void GetZoneEquipmentData(EnergyPlusData &state)
 
     // auto &Zone(state.dataHeatBal->Zone);
 
+    CurrentModuleObject = "ZoneHVAC:EquipmentConnections";
     for (int controlledZoneLoop = 1; controlledZoneLoop <= numControlledZones; ++controlledZoneLoop) {
-        CurrentModuleObject = "ZoneHVAC:EquipmentConnections";
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                  CurrentModuleObject,
                                                                  controlledZoneLoop,
@@ -350,8 +354,8 @@ void GetZoneEquipmentData(EnergyPlusData &state)
                                   NodeNums);
         thisZone.SystemZoneNodeNumber = thisZoneEquipConfig.ZoneNode;
     } // end loop over controlled zones
+    CurrentModuleObject = "SpaceHVAC:EquipmentConnections";
     for (int controlledSpaceLoop = 1; controlledSpaceLoop <= numControlledSpaces; ++controlledSpaceLoop) {
-        CurrentModuleObject = "SpaceHVAC:EquipmentConnections";
         if (!state.dataHeatBal->doSpaceHeatBalanceSimulation) {
             ShowWarningError(
                 state,

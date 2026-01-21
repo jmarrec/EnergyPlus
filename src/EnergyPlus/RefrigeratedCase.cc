@@ -52,7 +52,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array2D.hh>
-// #include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/BranchNodeConnections.hh>
@@ -62,7 +61,6 @@
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataHeatBalFanSys.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
-#include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataWater.hh>
 #include <EnergyPlus/DataZoneEnergyDemands.hh>
@@ -142,7 +140,7 @@ namespace EnergyPlus::RefrigeratedCase {
 // the calculated refrigerant mass flow through the compressors.  The solution usually requires less than 5 iterations.
 // The refrigerant state exiting the compressor group is known so the amount of heat available for
 // desuperheat reclaim is explicitly known.
-// The detailed refrigeration model allows the use of subcoolers,secondary loops, and cascade condensers
+// The detailed refrigeration model allows the use of subcoolers, secondary loops, and cascade condensers
 // to transfer load from one suction group to another. This introduces the need for further iterations among
 // the systems.  Three loops through the
 // systems are adequate to model these interactions.  The detailed model will also calculate a variable suction
@@ -556,6 +554,9 @@ void GetRefrigerationInput(EnergyPlusData &state)
         state.dataRefrigCase->HaveChillers = false;
     }
 
+    if (state.dataRefrigCase->HaveCasesOrWalkins && !state.dataHeatBal->RefrigCaseCredit.allocated()) {
+        state.dataHeatBal->RefrigCaseCredit.allocate(state.dataGlobal->NumOfZones);
+    }
     if (state.dataRefrigCase->NumRefrigeratedRacks > 0) {
         RefrigRack.allocate(state.dataRefrigCase->NumRefrigeratedRacks);
         state.dataHeatBal->HeatReclaimRefrigeratedRack.allocate(state.dataRefrigCase->NumRefrigeratedRacks);
@@ -10623,18 +10624,17 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     // "Impact of ASHRAE Standard 62-1989 on Florida Supermarkets",
     //  Florida Solar Energy Center, FSEC-CR-910-96, Final Report, Oct. 1996
 
-    Real64 COPFTempOutput;          // Curve value for COPFTemp curve object
-    Real64 CondenserFrac;           // Fraction of condenser power as a function of outdoor temperature
-    Real64 TotalHeatRejectedToZone; // Total compressor and condenser fan heat rejected to zone (based on CaseRAFactor)
-    int HeatRejectZoneNum;          // Index to zone where heat is rejected
-    int HeatRejectZoneNodeNum;      // Index to zone where heat is rejected
-    Real64 OutWbTemp;               // Outdoor wet bulb temp at condenser air inlet node [C]
-    Real64 OutDbTemp;               // Outdoor dry bulb temp at condenser air inlet node [C]
-    Real64 EffectTemp;              // Effective outdoor temp when using evap condenser cooling [C]
-    Real64 HumRatIn;                // Humidity ratio of inlet air to condenser [kg/kg]
-    Real64 HumRatOut;               // Humidity ratio of outlet air from condenser (assumed saturated) [kg/kg]
-    Real64 BPress;                  // Barometric pressure at condenser air inlet node [Pa]
-    bool EvapAvail;                 // Control for evap condenser availability
+    Real64 COPFTempOutput;                // Curve value for COPFTemp curve object
+    Real64 OutWbTemp;                     // Outdoor wet bulb temp at condenser air inlet node [C]
+    Real64 OutDbTemp;                     // Outdoor dry bulb temp at condenser air inlet node [C]
+    Real64 EffectTemp;                    // Effective outdoor temp when using evap condenser cooling [C]
+    Real64 HumRatIn;                      // Humidity ratio of inlet air to condenser [kg/kg]
+    Real64 BPress;                        // Barometric pressure at condenser air inlet node [Pa]
+    Real64 TotalHeatRejectedToZone = 0.0; // Total compressor and condenser fan heat rejected to zone (based on CaseRAFactor)
+    Real64 CondenserFrac = 0.0;           // Fraction of condenser power as a function of outdoor temperature
+    bool EvapAvail = true;                // Control for evap condenser availability
+    int HeatRejectZoneNum = 0;            // Index to zone where heat is rejected
+    int HeatRejectZoneNodeNum = 0;        // Index to zone where heat is rejected
 
     state.dataRefrigCase->TotalRackDeliveredCapacity = 0.0;
     state.dataRefrigCase->CompressorCOPactual = 0.0;
@@ -10643,14 +10643,9 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     state.dataRefrigCase->TotalCondenserPumpPower = 0.0;
     state.dataRefrigCase->TotalBasinHeatPower = 0.0;
     state.dataRefrigCase->TotalCondenserHeat = 0.0;
-    TotalHeatRejectedToZone = 0.0;
     state.dataRefrigCase->TotalEvapWaterUseRate = 0.0;
     state.dataRefrigCase->RackSenCreditToZone = 0.0;
     state.dataRefrigCase->RackSenCreditToHVAC = 0.0;
-    CondenserFrac = 0.0;
-    EvapAvail = true;
-    HeatRejectZoneNum = 0;
-    HeatRejectZoneNodeNum = 0;
 
     // Loads for chiller sets are set in call to zone equipment element "SimAirChillerSet"
     // (all chiller coils within a set are located in the same zone)
@@ -10822,7 +10817,8 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     // assumes pump runs whenever evap cooling is available to minimize scaling
     if (this->CondenserType == DataHeatBalance::RefrigCondenserType::Evap && EvapAvail) {
         state.dataRefrigCase->TotalCondenserPumpPower = this->EvapPumpPower;
-        HumRatOut = Psychrometrics::PsyWFnTdbTwbPb(state, EffectTemp, OutWbTemp, BPress);
+        // Humidity ratio of outlet air from condenser (assumed saturated) [kg/kg]
+        const Real64 HumRatOut = Psychrometrics::PsyWFnTdbTwbPb(state, EffectTemp, OutWbTemp, BPress);
         state.dataRefrigCase->TotalEvapWaterUseRate = this->CondenserAirFlowRate * CondenserFrac *
                                                       Psychrometrics::PsyRhoAirFnPbTdbW(state, BPress, OutDbTemp, HumRatIn) * (HumRatOut - HumRatIn) /
                                                       Psychrometrics::RhoH2O(EffectTemp);
@@ -13997,68 +13993,6 @@ void RefrigSystemData::CalculateSubcoolers(EnergyPlusData &state)
         }
 
         this->TLiqInActual = TLiqInActualLocal;
-    }
-}
-
-void GetRefrigeratedRackIndex(EnergyPlusData &state,
-                              std::string const &Name,
-                              int &IndexPtr,
-                              DataHeatBalance::RefrigSystemType const SysType,
-                              bool &ErrorsFound,
-                              std::string_view const ThisObjectType,
-                              bool const SuppressWarning)
-{
-
-    // SUBROUTINE INFORMATION:
-    //       AUTHOR         Richard Raustad
-    //       DATE WRITTEN   June 2007
-    //       MODIFIED       Therese Stovall May 2008
-    //       RE-ENGINEERED  na
-    // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine sets an index for a given refrigerated rack or refrigeration condenser
-    //  -- issues error message if the rack or condenser is not found.
-
-    CheckRefrigerationInput(state);
-
-    switch (SysType) {
-    case DataHeatBalance::RefrigSystemType::Rack: {
-        auto &RefrigRack = state.dataRefrigCase->RefrigRack;
-        IndexPtr = Util::FindItemInList(Name, RefrigRack);
-        if (IndexPtr == 0) {
-            if (SuppressWarning) {
-                //     No warning printed if only searching for the existence of a refrigerated rack
-            } else {
-                if (!ThisObjectType.empty()) {
-                    ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Rack not found={}", ThisObjectType, Name));
-                } else {
-                    if (!ThisObjectType.empty()) {
-                        ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Rack not found={}", ThisObjectType, Name));
-                    } else {
-                        ShowSevereError(state, format("GetRefrigeratedRackIndex: Rack not found={}", Name));
-                    }
-                }
-            }
-            ErrorsFound = true;
-        }
-    } break;
-    case DataHeatBalance::RefrigSystemType::Detailed: {
-        auto &Condenser = state.dataRefrigCase->Condenser;
-        IndexPtr = Util::FindItemInList(Name, Condenser);
-        if (IndexPtr == 0) {
-            if (SuppressWarning) {
-                //     No warning printed if only searching for the existence of a refrigeration Condenser
-            } else {
-                if (!ThisObjectType.empty()) {
-                    ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Condenser not found={}", ThisObjectType, Name));
-                } else {
-                    ShowSevereError(state, format("GetRefrigeratedRackIndex: Condenser not found={}", Name));
-                }
-            }
-        }
-        ErrorsFound = true;
-    } break;
-    default:
-        break;
     }
 }
 
