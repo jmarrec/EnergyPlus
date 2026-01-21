@@ -3271,7 +3271,7 @@ void InitSolarHeatGains(EnergyPlusData &state)
                                         Real64 ACosTlt = std::abs(Surface(SurfNum).CosTilt); // Absolute value of cosine of surface tilt angle
 
                                         int slatIdxLo = surfShade.blind.slatAngIdxLo;
-                                        int slatIdxHi = surfShade.blind.slatAngIdxHi;
+                                        int slatIdxHi = surfShade.blind.slatAngIdxLo;
                                         Real64 interpFac = surfShade.blind.slatAngInterpFac;
                                         auto const &dfAbsSlatLo = constructionSh.layerSlatBlindDfAbs(Lay)[slatIdxLo];
                                         auto const &dfAbsSlatHi = constructionSh.layerSlatBlindDfAbs(Lay)[slatIdxHi];
