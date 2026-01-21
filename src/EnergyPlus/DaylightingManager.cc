@@ -5171,9 +5171,7 @@ Real64 DayltgGlare(EnergyPlusData &state,
     // REFERENCES:
     // Based on DOE-2.1E subroutine DGLARE.
 
-    // Glare constant
-    // set tiny to avoid log(0) below
-    Real64 GTOT = 1e-12;
+    Real64 GTOT = 0.0; // Glare constant
 
     auto &dl = state.dataDayltg;
 
@@ -5192,8 +5190,8 @@ Real64 DayltgGlare(EnergyPlusData &state,
         GTOT += GTOT1 / (GTOT2 + 0.000001);
     }
 
-    // Glare index
-    return max(0.0, 10.0 * std::log10(GTOT));
+    // Glare index (adding 0.000001 prevents LOG10 (0))
+    return max(0.0, 10.0 * std::log10(GTOT + 0.000001));
 }
 
 void DayltgGlareWithIntWins(EnergyPlusData &state,
