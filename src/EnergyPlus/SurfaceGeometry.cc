@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -10089,7 +10089,7 @@ namespace SurfaceGeometry {
             int curShadedConstruction = state.dataSurface->WindowShadingControl(iShadeCtrl).getInputShadedConstruction;
             for (int jFeneRef = 1; jFeneRef <= state.dataSurface->WindowShadingControl(iShadeCtrl).FenestrationCount; ++jFeneRef) {
                 if (Util::SameString(state.dataSurface->WindowShadingControl(iShadeCtrl).FenestrationName(jFeneRef), surfTemp.Name)) {
-                    state.dataGlobal->AndShadingControlInModel = true;
+                    state.dataGlobal->AnyShadingControlInModel = true;
                     surfTemp.HasShadeControl = true;
                     surfTemp.windowShadingControlList.push_back(iShadeCtrl);
                     surfTemp.activeWindowShadingControl = iShadeCtrl;

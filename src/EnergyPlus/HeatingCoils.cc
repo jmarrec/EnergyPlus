@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -1039,58 +1039,12 @@ namespace HeatingCoils {
             // (when zone equipment heating coils are included in the input, the air loop DX equipment has not yet been read in)
             if (Util::SameString(Alphas(5), "Refrigeration:CompressorRack")) {
                 heatingCoil.ReclaimHeatingSource = HeatObjTypes::COMPRESSORRACK_REFRIGERATEDCASE;
-                RefrigeratedCase::GetRefrigeratedRackIndex(
-                    state, Alphas(6), heatingCoil.ReclaimHeatingSourceIndexNum, DataHeatBalance::RefrigSystemType::Rack, DXCoilErrFlag, Alphas(5));
-                if (heatingCoil.ReclaimHeatingSourceIndexNum > 0) {
-                    if (allocated(state.dataHeatBal->HeatReclaimRefrigeratedRack)) {
-                        DataHeatBalance::HeatReclaimDataBase &HeatReclaim =
-                            state.dataHeatBal->HeatReclaimRefrigeratedRack(heatingCoil.ReclaimHeatingSourceIndexNum);
-                        if (!allocated(HeatReclaim.HVACDesuperheaterReclaimedHeat)) {
-                            HeatReclaim.HVACDesuperheaterReclaimedHeat.allocate(state.dataHeatingCoils->NumDesuperheaterCoil);
-                            std::fill(HeatReclaim.HVACDesuperheaterReclaimedHeat.begin(), HeatReclaim.HVACDesuperheaterReclaimedHeat.end(), 0.0);
-                        }
-                        HeatReclaim.ReclaimEfficiencyTotal += heatingCoil.Efficiency;
-                        if (HeatReclaim.ReclaimEfficiencyTotal > 0.3) {
-                            ShowSevereError(
-                                state,
-                                format("{}, \"{}\" sum of heat reclaim recovery efficiencies from the same source coil: \"{} \" cannot be over 0.3",
-                                       HVAC::cAllCoilTypes(heatingCoil.HCoilType_Num),
-                                       heatingCoil.Name,
-                                       heatingCoil.ReclaimHeatingCoilName));
-                        }
-                        state.dataHeatingCoils->ValidSourceType(CoilNum) = true;
-                    }
-                }
+                // Refrigeration equipment hasn't been loaded yet, so handle this in InitHeatingCoil
             } else if ((Util::SameString(Alphas(5), "Refrigeration:Condenser:AirCooled")) ||
                        (Util::SameString(Alphas(5), "Refrigeration:Condenser:EvaporativeCooled")) ||
                        (Util::SameString(Alphas(5), "Refrigeration:Condenser:WaterCooled"))) {
                 heatingCoil.ReclaimHeatingSource = HeatObjTypes::CONDENSER_REFRIGERATION;
-                RefrigeratedCase::GetRefrigeratedRackIndex(state,
-                                                           Alphas(6),
-                                                           heatingCoil.ReclaimHeatingSourceIndexNum,
-                                                           DataHeatBalance::RefrigSystemType::Detailed,
-                                                           DXCoilErrFlag,
-                                                           Alphas(5));
-                if (heatingCoil.ReclaimHeatingSourceIndexNum > 0) {
-                    if (allocated(state.dataHeatBal->HeatReclaimRefrigCondenser)) {
-                        DataHeatBalance::HeatReclaimDataBase &HeatReclaim =
-                            state.dataHeatBal->HeatReclaimRefrigCondenser(heatingCoil.ReclaimHeatingSourceIndexNum);
-                        if (!allocated(HeatReclaim.HVACDesuperheaterReclaimedHeat)) {
-                            HeatReclaim.HVACDesuperheaterReclaimedHeat.allocate(state.dataHeatingCoils->NumDesuperheaterCoil);
-                            std::fill(HeatReclaim.HVACDesuperheaterReclaimedHeat.begin(), HeatReclaim.HVACDesuperheaterReclaimedHeat.end(), 0.0);
-                        }
-                        HeatReclaim.ReclaimEfficiencyTotal += heatingCoil.Efficiency;
-                        if (HeatReclaim.ReclaimEfficiencyTotal > 0.9) {
-                            ShowSevereError(
-                                state,
-                                format("{}, \"{}\" sum of heat reclaim recovery efficiencies from the same source coil: \"{} \" cannot be over 0.9",
-                                       HVAC::cAllCoilTypes(heatingCoil.HCoilType_Num),
-                                       heatingCoil.Name,
-                                       heatingCoil.ReclaimHeatingCoilName));
-                        }
-                        state.dataHeatingCoils->ValidSourceType(CoilNum) = true;
-                    }
-                }
+                // Refrigeration equipment hasn't been loaded yet, so handle this in InitHeatingCoil
             } else if (Util::SameString(Alphas(5), "Coil:Cooling:DX:SingleSpeed")) {
                 heatingCoil.ReclaimHeatingSource = HeatObjTypes::COIL_DX_COOLING;
                 DXCoils::GetDXCoilIndex(state, Alphas(6), heatingCoil.ReclaimHeatingSourceIndexNum, DXCoilErrFlag, Alphas(5));

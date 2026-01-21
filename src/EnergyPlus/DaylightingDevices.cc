@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -377,6 +377,7 @@ namespace Dayltg {
             if (ShelfSurf > 0) {
                 // Double surface area so that both sides of the shelf are treated as internal mass
                 state.dataSurface->Surface(ShelfSurf).Area *= 2.0;
+                state.dataGlobal->AnyInsideShelf = true; // Set this to force recalc for radiant view factors due to area change
             }
 
             ShelfSurf = state.dataDaylightingDevicesData->Shelf(ShelfNum).OutSurf;
