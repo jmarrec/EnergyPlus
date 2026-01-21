@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -464,7 +464,7 @@ namespace SetPointManager {
 
     void ManageSetPoints(EnergyPlusData &state);
 
-    void GetSetPointManagerInputs(EnergyPlusData &state); // wrapper for GetInput to accomodate unit testing
+    void GetSetPointManagerInputs(EnergyPlusData &state); // wrapper for GetInput to accommodate unit testing
 
     void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound);
 
@@ -505,6 +505,8 @@ namespace SetPointManager {
     int GetMixedAirNumWithCoilFreezingCheck(EnergyPlusData &state, int MixedAirNode);
 
     Real64 interpSetPoint(Real64 LowVal, Real64 HighVal, Real64 RefVal, Real64 SetptAtLowVal, Real64 SetptAtHighVal);
+
+    void FillPredefinedTablesForSetPointManagers(EnergyPlusData &state);
 } // namespace SetPointManager
 
 struct SetPointManagerData : BaseGlobalStruct

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -267,7 +267,7 @@ namespace CoolTower {
                 ShowContinueError(state, format("...Minimum Allowable=[{:.2R}].", MinimumWaterFlowRate));
             }
 
-            state.dataCoolTower->CoolTowerSys(CoolTowerNum).TowerHeight = s_ipsc->rNumericArgs(2); // Get effctive tower height
+            state.dataCoolTower->CoolTowerSys(CoolTowerNum).TowerHeight = s_ipsc->rNumericArgs(2); // Get effective tower height
             if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).TowerHeight > MaxHeight) {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).TowerHeight = MaxHeight;
                 ShowWarningError(

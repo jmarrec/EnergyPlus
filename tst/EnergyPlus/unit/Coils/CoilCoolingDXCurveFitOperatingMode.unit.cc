@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -51,6 +51,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Coils/CoilCoolingDX.hh>
 #include <EnergyPlus/Coils/CoilCoolingDXCurveFitOperatingMode.hh>
+#include <EnergyPlus/Coils/CoilCoolingDXCurveFitPerformance.hh>
 #include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataSizing.hh>
@@ -274,7 +275,6 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXCurveFitCrankcaseHeaterCurve)
     EXPECT_EQ("COIL COOLING DX CURVE FIT PERFORMANCE 1", thisCoil.performance->name);
 
     HVAC::CoilMode coilMode = HVAC::CoilMode::Normal;
-    Real64 PLR = 1.0;
     int speedNum = 1;
     Real64 speedRatio = 1.0;
     HVAC::FanOp fanOp = HVAC::FanOp::Cycling;
@@ -289,4 +289,20 @@ TEST_F(CoilCoolingDXTest, CoilCoolingDXCurveFitCrankcaseHeaterCurve)
     thisCoil.performance->simulate(
         *state, evapInletNode, evapOutletNode, coilMode, speedNum, speedRatio, fanOp, condInletNode, condOutletNode, singleMode, LoadSHR);
     EXPECT_EQ(thisCoil.performance->crankcaseHeaterPower, 120.0);
+    EXPECT_EQ(thisCoil.performance->minOutdoorDrybulb, -25.0);
+    auto performance{dynamic_cast<CoilCoolingDXCurveFitPerformance *>(thisCoil.performance.get())};
+    EXPECT_EQ(performance->normalMode.minOutdoorDrybulb, -25.0);
+    EXPECT_EQ(performance->alternateMode.minOutdoorDrybulb, -25.0);
+    EXPECT_EQ(performance->alternateMode2.minOutdoorDrybulb, -25.0);
+    EXPECT_EQ(thisCoil.totalCoolingEnergyRate, 0.0);
+    // change the minimum OA temp for compressor operation to 5.0C
+    thisCoil.performance->minOutdoorDrybulb = 5.0;
+    performance->myOneTimeMinOATFlag = true;
+    thisCoil.size(*state); // run size() to reset the min OA temp
+    thisCoil.performance->simulate(
+        *state, evapInletNode, evapOutletNode, coilMode, speedNum, speedRatio, fanOp, condInletNode, condOutletNode, singleMode, LoadSHR);
+    EXPECT_EQ(performance->normalMode.minOutdoorDrybulb, 5.0);
+    EXPECT_EQ(performance->alternateMode.minOutdoorDrybulb, 5.0);
+    EXPECT_EQ(performance->alternateMode2.minOutdoorDrybulb, 5.0);
+    EXPECT_EQ(thisCoil.totalCoolingEnergyRate, 0.0);
 }

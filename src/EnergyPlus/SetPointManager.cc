@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -74,6 +74,8 @@
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/OutAirNodeManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
+#include <EnergyPlus/OutputReportPredefined.hh>
+#include <EnergyPlus/OutputReportTabular.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
@@ -242,6 +244,7 @@ constexpr std::array<std::string_view, (int)DataEnvironment::GroundTempType::Num
     "SITE:GROUNDTEMPERATURE:DEEP",
     "SITE:GROUNDTEMPERATURE:FCFACTORMETHOD"};
 
+constexpr std::array<std::string_view, (int)ReturnTempType::Num> returnTempTypeNames = {"Scheduled", "Constant", "ReturnTemperatureSetpoint"};
 constexpr std::array<std::string_view, (int)ReturnTempType::Num> returnTempTypeNamesUC = {"SCHEDULED", "CONSTANT", "RETURNTEMPERATURESETPOINT"};
 
 void ManageSetPoints(EnergyPlusData &state)
@@ -353,6 +356,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
 
     using NodeInputManager::GetNodeNums;
     using NodeInputManager::GetOnlySingleNode;
+
     // Locals
     // SUBROUTINE PARAMETER DEFINITIONS:
     static constexpr std::string_view routineName = "GetSetPointManagerInputs";
@@ -1455,11 +1459,79 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
             default:
                 break;
             } // switch (spm->type)
-
         } // for (instance)
     } // for (iSPM)
 
 } // GetSetPointManagerInputData()
+
+void FillPredefinedTablesForSetPointManagers(EnergyPlusData &state)
+{
+    static constexpr std::string_view routineName = "FillPredefinedTablesForSetPointManagers";
+    auto &orp = state.dataOutRptPredefined;
+    for (auto *spm : state.dataSetPointManager->spms) {
+        switch (spm->type) {
+            // SetpointManager:OutdoorAirReset
+        case SPMType::OutsideAir: {
+            auto *spmOA = dynamic_cast<SPMOutsideAir *>(spm);
+            assert(spmOA != nullptr);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArType, spmOA->Name, ctrlVarTypeNames[(int)spm->ctrlVar]);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArStLo1, spmOA->Name, spmOA->lowSetPt1);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArStHi1, spmOA->Name, spmOA->highSetPt1);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArOutLo1, spmOA->Name, spmOA->low1);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArOutHi1, spmOA->Name, spmOA->high1);
+            if (spmOA->sched != nullptr) {
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArSchNm, spmOA->Name, spmOA->sched->Name);
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArStLo2, spmOA->Name, spmOA->lowSetPt2);
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArStHi2, spmOA->Name, spmOA->highSetPt2);
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArOutLo2, spmOA->Name, spmOA->low2);
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArOutHi2, spmOA->Name, spmOA->high2);
+            }
+            std::vector<std::string> namesOfNodes;
+            std::vector<std::string> namesOfLoops;
+            PlantLocation plantLoc;
+            for (int ctrlNodeNum : spm->ctrlNodeNums) {
+                namesOfNodes.push_back(state.dataLoopNodes->NodeID(ctrlNodeNum));
+                int dummy = 0;
+                PlantUtilities::ScanPlantLoopsForNodeNum(state, routineName, ctrlNodeNum, plantLoc, dummy, false);
+                if (plantLoc.loopNum > 0) {
+                    namesOfLoops.push_back(plantLoc.loop->Name);
+                }
+                OutputReportPredefined::PreDefTableEntry(
+                    state, orp->pdchSPMOArStPtNd, spmOA->Name, OutputReportTabular::stringJoinDelimiter(namesOfNodes, "; "));
+                OutputReportPredefined::PreDefTableEntry(
+                    state, orp->pdchSPMOArStPtLp, spmOA->Name, OutputReportTabular::stringJoinDelimiter(namesOfLoops, "; "));
+            }
+        } break;
+        // SetpointManager:ReturnTemperature:ChilledWater
+        // SetpointManager:ReturnTemperature:HotWater
+        case SPMType::ChilledWaterReturnTemp:
+        case SPMType::HotWaterReturnTemp: {
+            auto *spmRWT = dynamic_cast<SPMReturnWaterTemp *>(spm);
+            assert(spmRWT != nullptr);
+            if (spm->type == SPMType::ChilledWaterReturnTemp) {
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMRetType, spmRWT->Name, "Chilled Water");
+            } else {
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMRetType, spmRWT->Name, "Hot Water");
+            }
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMRetMinT, spmRWT->Name, spmRWT->minSetTemp);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMRetMaxT, spmRWT->Name, spmRWT->maxSetTemp);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMRetRetT, spmRWT->Name, spmRWT->returnTempConstantTarget);
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMRetRetType, spmRWT->Name, returnTempTypeNames[(int)spmRWT->returnTempType]);
+            if (spmRWT->returnTempSched != nullptr) {
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMOArSchNm, spmRWT->Name, spmRWT->returnTempSched->Name);
+            }
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMRetOutNd, spmRWT->Name, state.dataLoopNodes->NodeID(spmRWT->supplyNodeNum));
+            OutputReportPredefined::PreDefTableEntry(state, orp->pdchSPMRetInNd, spmRWT->Name, state.dataLoopNodes->NodeID(spmRWT->returnNodeNum));
+            if (spmRWT->plantLoopNum != 0) {
+                OutputReportPredefined::PreDefTableEntry(
+                    state, orp->pdchSPMRetPltLp, spmRWT->Name, state.dataPlnt->PlantLoop(spmRWT->plantLoopNum).Name);
+            }
+        } break;
+        default:
+            break;
+        }
+    }
+}
 
 void VerifySetPointManagers(EnergyPlusData &state, [[maybe_unused]] bool &ErrorsFound) // flag to denote node conflicts in input. !unused1208
 {
@@ -1781,8 +1853,10 @@ void InitSetPointManagers(EnergyPlusData &state)
                                     LookForFan = true;
                                 }
                                 if (LookForFan) {
-                                    if (Util::SameString(comp.TypeOf, "Fan:ConstantVolume") || Util::SameString(comp.TypeOf, "Fan:VariableVolume") ||
-                                        Util::SameString(comp.TypeOf, "Fan:OnOff") || Util::SameString(comp.TypeOf, "Fan:ComponentModel")) {
+                                    if (comp.CompType_Num == SimAirServingZones::CompType::Fan_ComponentModel ||
+                                        comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_CV ||
+                                        comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_VAV ||
+                                        comp.CompType_Num == SimAirServingZones::CompType::Fan_System_Object) {
                                         FanNodeIn = comp.NodeNumIn;
                                         FanNodeOut = comp.NodeNumOut;
                                         break;
@@ -1793,8 +1867,10 @@ void InitSetPointManagers(EnergyPlusData &state)
                     } else {
                         for (auto const &branch : primaryAirSystem.Branch) {
                             for (auto const &comp : branch.Comp) {
-                                if (Util::SameString(comp.TypeOf, "Fan:ConstantVolume") || Util::SameString(comp.TypeOf, "Fan:VariableVolume") ||
-                                    Util::SameString(comp.TypeOf, "Fan:OnOff") || Util::SameString(comp.TypeOf, "Fan:ComponentModel")) {
+                                if (comp.CompType_Num == SimAirServingZones::CompType::Fan_ComponentModel ||
+                                    comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_CV ||
+                                    comp.CompType_Num == SimAirServingZones::CompType::Fan_Simple_VAV ||
+                                    comp.CompType_Num == SimAirServingZones::CompType::Fan_System_Object) {
                                     FanNodeIn = comp.NodeNumIn;
                                     FanNodeOut = comp.NodeNumOut;
                                 }
@@ -4014,13 +4090,14 @@ Real64 interpSetPoint(Real64 const LowVal, Real64 const HighVal, Real64 const Re
 {
     if (LowVal >= HighVal) {
         return 0.5 * (SetptAtLowVal + SetptAtHighVal);
-    } else if (RefVal <= LowVal) {
-        return SetptAtLowVal;
-    } else if (RefVal >= HighVal) {
-        return SetptAtHighVal;
-    } else {
-        return SetptAtLowVal - ((RefVal - LowVal) / (HighVal - LowVal)) * (SetptAtLowVal - SetptAtHighVal);
     }
+    if (RefVal <= LowVal) {
+        return SetptAtLowVal;
+    }
+    if (RefVal >= HighVal) {
+        return SetptAtHighVal;
+    }
+    return SetptAtLowVal - ((RefVal - LowVal) / (HighVal - LowVal)) * (SetptAtLowVal - SetptAtHighVal);
 }
 
 void UpdateSetPointManagers(EnergyPlusData &state)

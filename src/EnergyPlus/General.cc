@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -654,18 +654,16 @@ int OrdinalDay(int const Month,        // Month, 1..12
     if (Month == 1) {
         //                                       CASE 1: JANUARY
         return Day;
-
-    } else if (Month == 2) {
+    }
+    if (Month == 2) {
         //                                       CASE 2: FEBRUARY
         return Day + EndDayofMonth[0];
-
-    } else if ((Month >= 3) && (Month <= 12)) {
+    }
+    if ((Month >= 3) && (Month <= 12)) {
         //                                       CASE 3: REMAINING MONTHS
         return Day + EndDayofMonth[Month - 2] + LeapYearValue;
-
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 void InvOrdinalDay(int const Number, int &PMonth, int &PDay, int const LeapYr)
@@ -719,9 +717,8 @@ bool BetweenDateHoursLeftInclusive(
 
     if (StartDate + StartRatioOfDay <= EndDate + EndRatioOfDay) { // Start Date <= End Date
         return (StartDate + StartRatioOfDay <= TestDate + TestRatioOfDay) && (TestDate + TestRatioOfDay <= EndDate + EndRatioOfDay);
-    } else { // EndDate < StartDate
-        return (EndDate + EndRatioOfDay <= TestDate + TestRatioOfDay) && (TestDate + TestRatioOfDay <= StartDate + StartRatioOfDay);
-    }
+    } // EndDate < StartDate
+    return (EndDate + EndRatioOfDay <= TestDate + TestRatioOfDay) && (TestDate + TestRatioOfDay <= StartDate + StartRatioOfDay);
 }
 
 bool BetweenDates(int const TestDate,  // Date to test
@@ -780,8 +777,25 @@ std::string CreateSysTimeIntervalString(EnergyPlusData &state)
     //  ActualTimeS=INT(CurrentTime)+(SysTimeElapsed+(CurrentTime - INT(CurrentTime)))
     // CR6902  ActualTimeS=INT(CurrentTime-TimeStepZone)+SysTimeElapsed
     // [DC] TODO: Improve display accuracy up to fractional seconds using hh:mm:ss.0 format
-    Real64 ActualTimeS = state.dataGlobal->CurrentTime - state.dataGlobal->TimeStepZone + SysTimeElapsed;
-    Real64 ActualTimeE = ActualTimeS + TimeStepSys;
+
+    // NOTE: SysTimeElapsed is updated at the END of the HVAC time step (loop), so it's current value is
+    //       the end of the last HVAC time step not the end of the current HVAC time step.  The other
+    //       conditions below are for when we are in the zone heat balance (SysTimeElapsed = 0) or after
+    //       we have finished the last HVAC time step.
+
+    Real64 ActualTimeS;
+    Real64 ActualTimeE;
+    Real64 constexpr toleranceTime = 0.0001; // less than 1 second (to avoid comparisons that are not exactly identical but are essentially the same
+    if (SysTimeElapsed == 0.0) {
+        ActualTimeE = state.dataGlobal->CurrentTime;
+        ActualTimeS = ActualTimeE - state.dataGlobal->TimeStepZone;
+    } else if (std::abs(state.dataGlobal->TimeStepZone - SysTimeElapsed) <= toleranceTime) {
+        ActualTimeE = state.dataGlobal->CurrentTime;
+        ActualTimeS = ActualTimeE - TimeStepSys;
+    } else {
+        ActualTimeS = state.dataGlobal->CurrentTime - state.dataGlobal->TimeStepZone + SysTimeElapsed;
+        ActualTimeE = ActualTimeS + TimeStepSys;
+    }
     int ActualTimeHrS = int(ActualTimeS);
     //  ActualTimeHrE=INT(ActualTimeE)
     int ActualTimeMinS = nint((ActualTimeS - ActualTimeHrS) * FracToMin);
@@ -809,13 +823,12 @@ int nthDayOfWeekOfMonth(const EnergyPlusData &state,
 )
 {
     // J. Glazer - August 2017
-    int firstDayOfMonth = OrdinalDay(monthNumber, 1, state.dataEnvrn->CurrentYearIsLeapYear);
+    int firstDayOfMonth = OrdinalDay(monthNumber, 1, static_cast<int>(state.dataEnvrn->CurrentYearIsLeapYear));
     int dayOfWeekForFirstDay = (state.dataEnvrn->RunPeriodStartDayOfWeek + firstDayOfMonth - 1) % 7;
     if (dayOfWeek >= dayOfWeekForFirstDay) {
         return firstDayOfMonth + (dayOfWeek - dayOfWeekForFirstDay) + 7 * (nthTime - 1);
-    } else {
-        return firstDayOfMonth + ((dayOfWeek + 7) - dayOfWeekForFirstDay) + 7 * (nthTime - 1);
     }
+    return firstDayOfMonth + ((dayOfWeek + 7) - dayOfWeekForFirstDay) + 7 * (nthTime - 1);
 }
 
 Real64 SafeDivide(Real64 const a, Real64 const b)
@@ -828,9 +841,8 @@ Real64 SafeDivide(Real64 const a, Real64 const b)
 
     if (std::abs(b) >= SMALL) {
         return a / b;
-    } else {
-        return a / sign(SMALL, b);
     }
+    return a / sign(SMALL, b);
 }
 
 void Iterate(Real64 &ResultX,  // ResultX is the final Iteration result passed back to the calling routine

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -206,7 +206,6 @@ TEST_F(EnergyPlusFixture, IndoorGreen_CheckGetInputDataFunction)
 }
 TEST_F(EnergyPlusFixture, IndoorGreen_CheckETFunction)
 {
-    bool ErrorsFound(false);
     int IndoorGreenNum(1);
     Real64 ZonePreTemp = 0.0; // C
     Real64 ZonePreHum = 0.001;

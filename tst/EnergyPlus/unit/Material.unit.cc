@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -131,8 +131,8 @@ TEST_F(EnergyPlusFixture, GetMaterialDataReadVarAbsorptance)
     mat3->Num = s_mat->materials.isize();
     s_mat->materialMap.insert_or_assign(mat3->Name, mat3->Num);
 
-    auto *curve1 = Curve::AddCurve(*state, "THERMAL_ABSORPTANCE_TABLE");
-    auto *curve2 = Curve::AddCurve(*state, "SOLAR_ABSORPTANCE_CURVE");
+    [[maybe_unused]] auto *curve1 = Curve::AddCurve(*state, "THERMAL_ABSORPTANCE_TABLE");
+    [[maybe_unused]] auto *curve2 = Curve::AddCurve(*state, "SOLAR_ABSORPTANCE_CURVE");
 
     bool errors_found(false);
     Material::GetVariableAbsorptanceInput(*state, errors_found);

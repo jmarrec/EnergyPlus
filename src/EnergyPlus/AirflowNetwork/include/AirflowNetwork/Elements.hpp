@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -201,6 +201,7 @@ namespace AirflowNetwork {
         DOU = 12, // Damper Outlet Node
         SPI = 13, // Splitter inlet Node
         SPO = 14, // Splitter Outlet Node
+        ZON = 15, // Zone node
         Num
     };
 
@@ -883,12 +884,13 @@ namespace AirflowNetwork {
     struct DisSysNodeProp // CP Value
     {
         // Members
-        std::string Name;      // Name of node
-        std::string EPlusName; // EnergyPlus node name
-        std::string EPlusType; // EnergyPlus node type
-        Real64 Height;         // Nodal height
-        int EPlusNodeNum;      // EPlus node number
-        int AirLoopNum;        // AirLoop number
+        std::string Name;          // Name of node
+        std::string EPlusName;     // EnergyPlus node name
+        std::string EPlusType;     // EnergyPlus node type
+        Real64 Height;             // Nodal height
+        int EPlusNodeNum;          // EPlus node number
+        int AirLoopNum;            // AirLoop number
+        int EPlusZoneInletNodeNum; // Air terminal outlet
 
         // Default Constructor
         DisSysNodeProp() : Height(0.0), EPlusNodeNum(0), AirLoopNum(0)

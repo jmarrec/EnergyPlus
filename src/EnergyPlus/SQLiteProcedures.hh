@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -233,6 +233,12 @@ public:
                                         std::string_view CompName, // the name of the component
                                         std::string_view VarDesc,  // the description of the input variable
                                         Real64 const VarValue      // the value from the sizing calculation
+    );
+
+    void addSQLiteComponentSizingStrRecord(std::string_view CompType, // the type of the component
+                                           std::string_view CompName, // the name of the component
+                                           std::string_view VarDesc,  // the description of the input variable
+                                           std::string_view VarValue  // the sizing option or result
     );
 
     void createSQLiteDaylightMapTitle(

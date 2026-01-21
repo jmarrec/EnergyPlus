@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -112,23 +112,23 @@ namespace FileSystem {
         Num
     };
 
-    inline constexpr bool is_all_json_type(FileTypes t)
+    constexpr bool is_all_json_type(FileTypes t)
     {
         return t > FileTypes::Invalid && t <= FileTypes::last_binary_json_type;
     }
-    inline constexpr bool is_json_type(FileTypes t)
+    constexpr bool is_json_type(FileTypes t)
     {
         return t > FileTypes::Invalid && t <= FileTypes::last_json_type;
     }
-    inline constexpr bool is_binary_json_type(FileTypes t)
+    constexpr bool is_binary_json_type(FileTypes t)
     {
         return t > FileTypes::last_json_type && t <= FileTypes::last_binary_json_type;
     }
-    inline constexpr bool is_idf_type(FileTypes t)
+    constexpr bool is_idf_type(FileTypes t)
     {
         return t == FileTypes::IDF || t == FileTypes::IMF;
     }
-    inline constexpr bool is_flat_file_type(FileTypes t)
+    constexpr bool is_flat_file_type(FileTypes t)
     {
         return t > FileTypes::last_binary_json_type && t <= FileTypes::last_flat_file_type;
     }
@@ -172,7 +172,7 @@ namespace FileSystem {
 
     bool fileExists(fs::path const &filePath);
 
-    // Checks that fileExists(filePath), if so tries to rename to destination, falling back on copy+remove if failed (if trying to do move accross
+    // Checks that fileExists(filePath), if so tries to rename to destination, falling back on copy+remove if failed (if trying to do move across
     // devices for eg)
     void moveFile(fs::path const &filePath, fs::path const &destinationPath);
 

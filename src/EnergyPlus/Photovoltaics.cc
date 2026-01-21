@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -118,12 +118,12 @@ namespace Photovoltaics {
     constexpr std::array<std::string_view, (int)PVModel::Num> pvModelNamesUC = {
         "PHOTOVOLTAICPERFORMANCE:SIMPLE", "PHOTOVOLTAICPERFORMANCE:EQUIVALENTONE-DIODE", "PHOTOVOLTAICPERFORMANCE:SANDIA"};
 
-    constexpr std::array<std::string_view, (int)CellIntegration::Num> cellIntegrationNames = {"Decoupled",
-                                                                                              "DecoupledUllebergDynamic",
-                                                                                              "IntegratedSurfaceOutsideFace",
-                                                                                              "IntegratedTranspiredCollector",
-                                                                                              "IntegratedExteriorVentedCavity",
-                                                                                              "PhotovoltaicThermalSolarCollector"};
+    [[maybe_unused]] constexpr std::array<std::string_view, (int)CellIntegration::Num> cellIntegrationNames = {"Decoupled",
+                                                                                                               "DecoupledUllebergDynamic",
+                                                                                                               "IntegratedSurfaceOutsideFace",
+                                                                                                               "IntegratedTranspiredCollector",
+                                                                                                               "IntegratedExteriorVentedCavity",
+                                                                                                               "PhotovoltaicThermalSolarCollector"};
     constexpr std::array<std::string_view, (int)CellIntegration::Num> cellIntegrationNamesUC = {"DECOUPLED",
                                                                                                 "DECOUPLEDULLEBERGDYNAMIC",
                                                                                                 "INTEGRATEDSURFACEOUTSIDEFACE",
@@ -131,10 +131,10 @@ namespace Photovoltaics {
                                                                                                 "INTEGRATEDEXTERIORVENTEDCAVITY",
                                                                                                 "PHOTOVOLTAICTHERMALSOLARCOLLECTOR"};
 
-    constexpr std::array<std::string_view, (int)Efficiency::Num> efficiencyNames = {"Fixed", "Scheduled"};
+    [[maybe_unused]] constexpr std::array<std::string_view, (int)Efficiency::Num> efficiencyNames = {"Fixed", "Scheduled"};
     constexpr std::array<std::string_view, (int)Efficiency::Num> efficiencyNamesUC = {"FIXED", "SCHEDULED"};
 
-    constexpr std::array<std::string_view, (int)SiPVCells::Num> siPVCellsNames = {"CrystallineSilicon", "AmorphousSilicon"};
+    [[maybe_unused]] constexpr std::array<std::string_view, (int)SiPVCells::Num> siPVCellsNames = {"CrystallineSilicon", "AmorphousSilicon"};
     constexpr std::array<std::string_view, (int)SiPVCells::Num> siPVCellsNamesUC = {"CRYSTALLINESILICON", "AMORPHOUSSILICON"};
 
     void SimPVGenerator(EnergyPlusData &state,
@@ -1603,9 +1603,8 @@ namespace Photovoltaics {
                 YP = YB;
             }
             return;
-        } else {
-            return;
         }
+        return;
     }
 
     Real64 FUN(EnergyPlusData &state, Real64 const II, Real64 const VV, Real64 const IL, Real64 const IO, Real64 const RSER, Real64 const AA)

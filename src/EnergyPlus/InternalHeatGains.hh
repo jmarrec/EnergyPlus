@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -65,6 +65,21 @@ struct EnergyPlusData;
 
 namespace InternalHeatGains {
 
+    enum class DesignLevelMethod
+    {
+        Invalid = -1,
+        People,
+        PeoplePerArea,
+        AreaPerPerson,
+        LightingLevel,
+        EquipmentLevel,
+        WattsPerArea,
+        WattsPerPerson,
+        PowerPerArea,
+        PowerPerPerson,
+        Num
+    };
+
     struct GlobalInternalGainMiscObject
     {
         // Members
@@ -90,6 +105,17 @@ namespace InternalHeatGains {
                                 int &numGainInstances,
                                 bool &errors,
                                 const bool zoneListNotAllowed = false);
+
+    Real64 setDesignLevel(EnergyPlusData &state,
+                          bool &ErrorsFound,
+                          std::string_view const objectType,
+                          InternalHeatGains::GlobalInternalGainMiscObject const &inputObject,
+                          DesignLevelMethod const method,
+                          int const zoneNum,
+                          int const spaceNum,
+                          Real64 const inputValue,
+                          bool const inputBlank,
+                          std::string_view const fieldName);
 
     void setupIHGOutputs(EnergyPlusData &state);
 

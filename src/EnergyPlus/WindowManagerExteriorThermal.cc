@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -272,7 +272,7 @@ namespace Window {
         auto aFactory = CWCEHeatTransferFactory(state, surface, surfNum, constrNum); // (AUTO_OK)
 
         const auto summerGlassUnit = aFactory.getTarcogSystemForReporting(state, true, windowWidth, windowHeight, tilt); // (AUTO_OK_SPTR)
-        return summerGlassUnit->getSHGC(state.dataConstruction->Construct(surface.Construction).SolTransNorm);
+        return summerGlassUnit->getSHGC(state.dataConstruction->Construct(constrNum).SolTransNorm);
     }
 
     void GetWindowAssemblyNfrcForReport(EnergyPlusData &state,
@@ -539,7 +539,7 @@ namespace Window {
         Real64 transThermalBack = 0.0;
         Real64 thickness = 0.0;
         Real64 conductivity = 0.0;
-        Real64 createOpenness = false;
+        bool createOpenness = false;
         Real64 Atop = 0.0;
         Real64 Abot = 0.0;
         Real64 Aleft = 0.0;

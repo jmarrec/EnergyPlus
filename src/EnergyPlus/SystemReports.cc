@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -4424,7 +4424,9 @@ void ReportVentilationLoads(EnergyPlusData &state)
     for (int sysNum = 1; sysNum <= state.dataHVACGlobal->NumPrimaryAirSys; ++sysNum) {
         auto &thisSysVentRepVars = state.dataSysRpts->SysVentRepVars(sysNum);
         auto &thisSysPreDefRep = state.dataSysRpts->SysPreDefRep(sysNum);
-        Real64 mechVentFlow = state.dataAirLoop->AirLoopFlow(sysNum).OAFlow / state.dataEnvrn->StdRhoAir;
+        auto &sysCtrlInfo = state.dataAirLoop->AirLoopControlInfo(sysNum);
+        auto &sysFlow = state.dataAirLoop->AirLoopFlow(sysNum);
+        Real64 mechVentFlow = sysFlow.OAFlow / state.dataEnvrn->StdRhoAir; // [m3/s]
         thisSysVentRepVars.MechVentFlow = mechVentFlow;
         thisSysPreDefRep.MechVentTotal += mechVentFlow * TimeStepSysSec;
         thisSysPreDefRep.NatVentTotal += thisSysVentRepVars.NatVentFlow * TimeStepSysSec;
@@ -4454,9 +4456,30 @@ void ReportVentilationLoads(EnergyPlusData &state)
             thisSysPreDefRep.TimeBelowVozDynTotalOcc += thisSysVentRepVars.TimeBelowVozDyn;
             thisSysPreDefRep.TimeAboveVozDynTotalOcc += thisSysVentRepVars.TimeAboveVozDyn;
             thisSysPreDefRep.TimeAtVozDynTotalOcc += thisSysVentRepVars.TimeAtVozDyn;
-        } else if (totMechNatVentVolFlowStdRho > HVAC::SmallAirVolFlow) {
-            thisSysVentRepVars.TimeVentUnocc = TimeStepSys;
-            thisSysPreDefRep.TimeVentUnoccTotal += TimeStepSys;
+            if (sysFlow.SupFlow > HVAC::SmallMassFlow) {
+                if (sysCtrlInfo.fanOp == HVAC::FanOp::Continuous) {
+                    thisSysPreDefRep.TimeFanContTotalOcc += TimeStepSys;
+                } else {
+                    thisSysPreDefRep.TimeFanCycTotalOcc += TimeStepSys;
+                }
+            } else {
+                thisSysPreDefRep.TimeFanOffTotalOcc += TimeStepSys;
+            }
+        } else {
+            if (totMechNatVentVolFlowStdRho > HVAC::SmallAirVolFlow) {
+                thisSysVentRepVars.TimeVentUnocc = TimeStepSys;
+                thisSysPreDefRep.TimeVentUnoccTotal += TimeStepSys;
+            }
+            thisSysPreDefRep.TimeUnoccupiedTotal += TimeStepSys;
+            if (sysFlow.SupFlow > HVAC::SmallMassFlow) {
+                if (sysCtrlInfo.fanOp == HVAC::FanOp::Continuous) {
+                    thisSysPreDefRep.TimeFanContTotalUnocc += TimeStepSys;
+                } else {
+                    thisSysPreDefRep.TimeFanCycTotalUnocc += TimeStepSys;
+                }
+            } else {
+                thisSysPreDefRep.TimeFanOffTotalUnocc += TimeStepSys;
+            }
         }
 
         // set time at OA limiting factors
@@ -4756,9 +4779,8 @@ void ReportAirLoopConnections(EnergyPlusData &state)
         const auto oaSysExists = [&]() {
             if (state.dataAirLoop->AirToOANodeInfo(Count).OASysExists) {
                 return "Yes";
-            } else {
-                return "No";
             }
+            return "No";
         }();
 
         print(state.files.bnd,

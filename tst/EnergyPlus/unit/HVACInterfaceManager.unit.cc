@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -125,7 +125,6 @@ TEST_F(EnergyPlusFixture, UpdateHVACInterface_Test)
     state->dataHVACInterfaceMgr->TmpRealARR.allocate(10);
     state->dataConvergeParams->AirLoopConvergence.allocate(AirLoopNum);
     state->dataLoopNodes->Node.allocate(2);
-    DataConvergParams::CalledFrom CalledFrom = DataConvergParams::CalledFrom::AirSystemDemandSide;
 
     state->dataLoopNodes->Node(InletNode).MassFlowRate = 0.01;
     state->dataLoopNodes->Node(OutletNode).MassFlowRate = 0.01;

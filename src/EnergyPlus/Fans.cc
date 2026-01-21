@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -106,7 +106,7 @@ void FanBase::simulate(EnergyPlusData &state,
                        ObjexxFCL::Optional<Real64 const> _massFlowRate1,    // Mass flow rate in operating mode 1 [kg/s]
                        ObjexxFCL::Optional<Real64 const> _runTimeFraction1, // Run time fraction in operating mode 1
                        ObjexxFCL::Optional<Real64 const> _massFlowRate2,    // Mass flow rate in operating mode 2 [kg/s]
-                       ObjexxFCL::Optional<Real64 const> _runTimeFraction2, // Run time fraction in opearating mode 2
+                       ObjexxFCL::Optional<Real64 const> _runTimeFraction2, // Run time fraction in operating mode 2
                        ObjexxFCL::Optional<Real64 const> _pressureRise2     // Pressure difference for operating mode 2
 )
 {
@@ -1350,7 +1350,9 @@ void FanComponent::set_size(EnergyPlusData &state)
     state.dataSize->DataAutosizable = maxAirFlowRateIsAutosized;
     state.dataSize->DataEMSOverrideON = EMSMaxAirFlowRateOverrideOn;
     state.dataSize->DataEMSOverride = EMSMaxAirFlowRateValue;
-    airLoopNum = state.dataSize->CurSysNum;
+    if (state.dataSize->CurSysNum > 0) {
+        airLoopNum = state.dataSize->CurSysNum;
+    }
 
     bool errorsFound = false;
     SystemAirFlowSizer sizerSystemAirFlow;
@@ -1577,6 +1579,15 @@ void FanComponent::set_size(EnergyPlusData &state)
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanMotorEff, Name, motorEff);
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanMotorHeatToZoneFrac, Name, 0.0);
     OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanMotorHeatZone, Name, "N/A");
+    if ((type == HVAC::FanType::VAV) || (type == HVAC::FanType::ComponentModel)) {
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchFanSpeedCtrlMethod, Name, speedControlNames[(int)SpeedControl::Continuous]);
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanNumSpeeds, Name, "N/A");
+    } else {
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchFanSpeedCtrlMethod, Name, speedControlNames[(int)SpeedControl::Discrete]);
+        OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanNumSpeeds, Name, 1);
+    }
     if (airLoopNum == 0) {
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanAirLoopName, Name, "N/A");
     } else if (airLoopNum <= state.dataHVACGlobal->NumPrimaryAirSys) {
@@ -2491,13 +2502,13 @@ Real64 FanComponent::getDesignHeatGain(EnergyPlusData &state,
         Real64 _motorInAirFrac = motorInAirFrac;
         Real64 _powerTot = (_volFlow * _deltaP) / _totalEff;
         return _motorEff * _powerTot + (_powerTot - _motorEff * _powerTot) * _motorInAirFrac;
-    } else {
-        if (!state.dataGlobal->SysSizingCalc && sizingFlag) {
-            set_size(state);
-            sizingFlag = false;
-        }
-        return shaftPower + (motorInputPower - shaftPower) * motorInAirFrac;
     }
+    if (!state.dataGlobal->SysSizingCalc && sizingFlag) {
+        set_size(state);
+        sizingFlag = false;
+    }
+    return shaftPower + (motorInputPower - shaftPower) * motorInAirFrac;
+
 } // FanComponent::getDesignHeatGain()
 
 void FanComponent::getInputsForDesignHeatGain(EnergyPlusData &state,
@@ -2591,7 +2602,9 @@ void FanSystem::set_size(EnergyPlusData &state)
     state.dataSize->DataAutosizable = true;
     state.dataSize->DataEMSOverrideON = EMSMaxAirFlowRateOverrideOn;
     state.dataSize->DataEMSOverride = EMSMaxAirFlowRateValue;
-    airLoopNum = state.dataSize->CurSysNum;
+    if (state.dataSize->CurSysNum > 0) {
+        airLoopNum = state.dataSize->CurSysNum;
+    }
 
     bool ErrorsFound = false;
     SystemAirFlowSizer sizerSystemAirFlow;
@@ -2679,6 +2692,16 @@ void FanSystem::set_size(EnergyPlusData &state)
                                              state.dataOutRptPredefined->pdchFanMotorHeatZone,
                                              Name,
                                              heatLossDest == HeatLossDest::Zone ? state.dataHeatBal->Zone(zoneNum).Name : "N/A");
+    if (speedControl != SpeedControl::Invalid) {
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchFanSpeedCtrlMethod, Name, speedControlNames[(int)speedControl]);
+        if (speedControl == SpeedControl::Discrete) {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanNumSpeeds, Name, numSpeeds);
+        } else {
+            OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanNumSpeeds, Name, "N/A");
+        }
+    }
+
     if (airLoopNum == 0) {
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchFanAirLoopName, Name, "N/A");
     } else if (airLoopNum <= state.dataHVACGlobal->NumPrimaryAirSys) {
@@ -3130,11 +3153,9 @@ Real64 FanSystem::getDesignTemperatureRise(EnergyPlusData &state) const
     if (!sizingFlag) {
         Real64 _cpAir = Psychrometrics::PsyCpAirFnW(DataPrecisionGlobals::constant_zero);
         return (deltaPress / (rhoAirStdInit * _cpAir * totalEff)) * (motorEff + motorInAirFrac * (1.0 - motorEff));
-    } else {
-        // TODO throw warning, exception, call sizing?
-        ShowWarningError(state, "FanSystem::getDesignTemperatureRise called before fan sizing completed ");
-        return 0.0;
-    }
+    } // TODO throw warning, exception, call sizing?
+    ShowWarningError(state, "FanSystem::getDesignTemperatureRise called before fan sizing completed ");
+    return 0.0;
 }
 
 Real64 FanSystem::getDesignHeatGain(EnergyPlusData &state, Real64 const _volFlow // fan volume flow rate [m3/s]

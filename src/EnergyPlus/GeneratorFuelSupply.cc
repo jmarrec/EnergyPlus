@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -667,7 +667,7 @@ namespace GeneratorFuelSupply {
                   "! <Fuel Supply>, Fuel Supply Name, Lower Heating Value [J/kmol], Lower Heating Value [kJ/kg], Higher "
                   "Heating Value [KJ/kg],  Molecular Weight [g/mol] \n");
         }
-        static constexpr std::string_view Format_501(" Fuel Supply, {},{:13.6N},{:13.6N},{:13.6N},{:13.6N}\n");
+        static constexpr std::string_view Format_501(" Fuel Supply, {},{:13.6G},{:13.6G},{:13.6G},{:13.6G}\n");
         print(state.files.eio,
               Format_501,
               state.dataGenerator->FuelSupply(FuelSupplyNum).Name,

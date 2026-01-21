@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -575,8 +575,8 @@ namespace ZoneAirLoopEquipmentManager {
             MassFlowRateMaxAvail = 0.0;
             MassFlowRateMinAvail = 0.0;
             // check for no plenum
-            // set the max and min avail flow rates taking into acount the upstream leak
-            if (airDistUnit.UpStreamLeak) {
+            // set the max and min avail flow rates taking into account the upstream leak
+            if (airDistUnit.UpStreamLeak || airDistUnit.DownStreamLeak) {
                 if (InNodeNum > 0) {
                     MassFlowRateMaxAvail = state.dataLoopNodes->Node(InNodeNum).MassFlowRateMaxAvail;
                     MassFlowRateMinAvail = state.dataLoopNodes->Node(InNodeNum).MassFlowRateMinAvail;

@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -67,7 +67,7 @@ TEST_F(EnergyPlusFixture, Timer_ticktock)
     // I still want it exercised regularly, so I am going to let CI
     // just wrap it up early and pass.  This test has spent most of its
     // life DISABLE_d anyway, so this is a net improvement.
-    if (std::getenv("CI")) {
+    if (std::getenv("CI") != nullptr) {
         return;
     }
 
@@ -89,7 +89,6 @@ TEST_F(EnergyPlusFixture, Timer_ticktock)
     t.tick();
     std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time_ms));
     t.tock();
-    auto count = t.duration().count();
     EXPECT_GE(t.duration().count(), sleep_time_ms * 2);
     EXPECT_LT(t.duration().count(), sleep_time_ms * 3);
     EXPECT_GE(t.elapsedSeconds(), sleep_time_s * 2);

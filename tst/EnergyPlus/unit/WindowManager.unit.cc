@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -2541,7 +2541,6 @@ TEST_F(EnergyPlusFixture, SpectralAngularPropertyTest)
     Window::InitGlassOpticalCalculations(*state);
 
     int NumAngles = 10; // Number of incident angles
-    Real64 sum;
     // total transmittance
     Array1D<Real64> correctT(
         NumAngles, {0.529017128, 0.472866571, 0.414862350, 0.355230972, 0.294204731, 0.232087506, 0.169331950, 0.10672958, 0.04626078, 0.0});

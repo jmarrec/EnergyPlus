@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -273,6 +273,28 @@ main_gui(True)
             engine.exec(cmd);
             exit(0);
         });
+
+        auto *gheDesignerSubCommand = auxiliaryToolsSubcommand->add_subcommand("ghedesigner", "GHEDesigner Operation");
+        gheDesignerSubCommand->add_option("args", python_fwd_args, "Extra Arguments forwarded to GHEDesigner")->option_text("ARG ...");
+        gheDesignerSubCommand->positionals_at_end(true);
+        gheDesignerSubCommand->footer(
+            "You can pass extra arguments after the ghedesigner keyword, they should be the input file and output directory.");
+
+        gheDesignerSubCommand->callback([&state, &python_fwd_args] {
+            EnergyPlus::Python::PythonEngine engine(state);
+            // There's probably better to be done, like instantiating the pythonEngine with the argc/argv then calling PyRun_SimpleFile but whatever
+            std::string cmd = Python::PythonEngine::getTclPreppedPreamble(python_fwd_args);
+            cmd += R"python(
+from ghedesigner.main import run_manager_from_cli
+run_manager_from_cli()
+)python";
+            try {
+                engine.exec(cmd);
+                exit(0);
+            } catch (std::runtime_error &) {
+                exit(1);
+            }
+        });
 #    endif
 #endif
 
@@ -290,16 +312,15 @@ main_gui(True)
             int const return_code = app.exit(e);
             if (eplusRunningViaAPI) {
                 return static_cast<int>(ReturnCodes::SuccessButHelper);
-            } else {
-                exit(return_code);
             }
+            exit(return_code);
+
         } catch (const CLI::ParseError &e) {
             int const return_code = app.exit(e);
             if (eplusRunningViaAPI) {
                 return static_cast<int>(ReturnCodes::Failure);
-            } else {
-                exit(return_code);
             }
+            exit(return_code);
         }
 
         if (debugCLI) {
@@ -378,9 +399,8 @@ state.dataStrGlobals->inputFilePath='{:g}',
                               fmt::format("ERROR: Input file must have IDF, IMF, or epJSON extension: {:g}", state.dataStrGlobals->inputFilePath));
                 if (eplusRunningViaAPI) {
                     return static_cast<int>(ReturnCodes::Failure);
-                } else {
-                    exit(EXIT_FAILURE);
                 }
+                exit(EXIT_FAILURE);
             }
         }
 
@@ -404,6 +424,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
         std::string zszSuffix;
         std::string spszSuffix;
         std::string sszSuffix;
+        std::string pszSuffix;
         std::string meterSuffix;
         std::string sqliteSuffix;
         std::string adsSuffix;
@@ -422,6 +443,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 zszSuffix = "zsz";
                 spszSuffix = "spsz";
                 sszSuffix = "ssz";
+                pszSuffix = "psz";
                 meterSuffix = "mtr";
                 sqliteSuffix = "sqlite";
                 adsSuffix = "ADS";
@@ -436,6 +458,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 zszSuffix = "-zsz";
                 spszSuffix = "-spsz";
                 sszSuffix = "-ssz";
+                pszSuffix = "-psz";
                 meterSuffix = "-meter";
                 sqliteSuffix = "-sqlite";
                 adsSuffix = "-ads";
@@ -450,6 +473,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 zszSuffix = "Zsz";
                 spszSuffix = "Spsz";
                 sszSuffix = "Ssz";
+                pszSuffix = "Psz";
                 meterSuffix = "Meter";
                 sqliteSuffix = "Sqlite";
                 adsSuffix = "Ads";
@@ -533,6 +557,9 @@ state.dataStrGlobals->inputFilePath='{:g}',
         state.files.outputSszCsvFilePath = composePath(sszSuffix + ".csv");
         state.files.outputSszTabFilePath = composePath(sszSuffix + ".tab");
         state.files.outputSszTxtFilePath = composePath(sszSuffix + ".txt");
+        state.files.outputPszCsvFilePath = composePath(pszSuffix + ".csv");
+        state.files.outputPszTabFilePath = composePath(pszSuffix + ".tab");
+        state.files.outputPszTxtFilePath = composePath(pszSuffix + ".txt");
         state.dataStrGlobals->outputAdsFilePath = composePath(adsSuffix + ".out");
         state.files.shade.filePath = composePath(shdSuffix + ".csv");
         if (suffixType == "L") {
@@ -582,9 +609,8 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 DisplayString(state, fmt::format("ERROR: Could not open file {} for input (read).", iniFile.filePath));
                 if (eplusRunningViaAPI) {
                     return static_cast<int>(ReturnCodes::Failure);
-                } else {
-                    exit(EXIT_FAILURE);
                 }
+                exit(EXIT_FAILURE);
             }
             state.dataStrGlobals->CurrentWorkingFolder = iniFile.filePath;
             // Relying on compiler to supply full path name here
@@ -610,9 +636,8 @@ state.dataStrGlobals->inputFilePath='{:g}',
             DisplayString(state, errorFollowUp);
             if (eplusRunningViaAPI) {
                 return static_cast<int>(ReturnCodes::Failure);
-            } else {
-                exit(EXIT_FAILURE);
             }
+            exit(EXIT_FAILURE);
         }
 
         if ((weatherPathOpt->count() > 0) && !state.dataGlobal->DDOnlySimulation) {
@@ -623,9 +648,8 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 DisplayString(state, errorFollowUp);
                 if (eplusRunningViaAPI) {
                     return static_cast<int>(ReturnCodes::Failure);
-                } else {
-                    exit(EXIT_FAILURE);
                 }
+                exit(EXIT_FAILURE);
             }
         }
 
@@ -638,9 +662,8 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 DisplayString(state, fmt::format("ERROR: Could not find EPMacro executable: {}.", FileSystem::getAbsolutePath(epMacroPath)));
                 if (eplusRunningViaAPI) {
                     return static_cast<int>(ReturnCodes::Failure);
-                } else {
-                    exit(EXIT_FAILURE);
                 }
+                exit(EXIT_FAILURE);
             }
             std::string epMacroCommand = "\"" + FileSystem::toString(epMacroPath) + "\"";
             bool inputFilePathdIn = (FileSystem::getAbsolutePath(state.dataStrGlobals->inputFilePath) == FileSystem::getAbsolutePath("in.imf"));
@@ -666,9 +689,8 @@ state.dataStrGlobals->inputFilePath='{:g}',
                               fmt::format("ERROR: Could not find ExpandObjects executable: {}.", FileSystem::getAbsolutePath(expandObjectsPath)));
                 if (eplusRunningViaAPI) {
                     return static_cast<int>(ReturnCodes::Failure);
-                } else {
-                    exit(EXIT_FAILURE);
                 }
+                exit(EXIT_FAILURE);
             }
             std::string expandObjectsCommand = "\"" + FileSystem::toString(expandObjectsPath) + "\"";
             bool inputFilePathdIn = (FileSystem::getAbsolutePath(state.dataStrGlobals->inputFilePath) == FileSystem::getAbsolutePath("in.idf"));
@@ -681,9 +703,8 @@ state.dataStrGlobals->inputFilePath='{:g}',
                 DisplayString(state, errorFollowUp);
                 if (eplusRunningViaAPI) {
                     return static_cast<int>(ReturnCodes::Failure);
-                } else {
-                    exit(EXIT_FAILURE);
                 }
+                exit(EXIT_FAILURE);
             }
 
             bool iddFilePathdEnergy =

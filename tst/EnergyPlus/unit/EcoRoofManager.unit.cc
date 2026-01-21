@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -328,8 +328,6 @@ TEST_F(EnergyPlusFixture, EcoRoofManager_initEcoRoofFirstTimeErrorTest)
     state->init_state(*state);
     int surfNum = 1;
     int constrNum = 1;
-    Real64 expectedAnswer;
-    Real64 allowableTolerance = 0.000001;
 
     state->dataConstruction->Construct.allocate(constrNum);
     auto *mat = new Material::MaterialEcoRoof;

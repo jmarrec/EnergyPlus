@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -52,7 +52,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array2D.hh>
-// #include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/BranchNodeConnections.hh>
@@ -62,7 +61,6 @@
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataHeatBalFanSys.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
-#include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
 #include <EnergyPlus/DataWater.hh>
 #include <EnergyPlus/DataZoneEnergyDemands.hh>
@@ -142,7 +140,7 @@ namespace EnergyPlus::RefrigeratedCase {
 // the calculated refrigerant mass flow through the compressors.  The solution usually requires less than 5 iterations.
 // The refrigerant state exiting the compressor group is known so the amount of heat available for
 // desuperheat reclaim is explicitly known.
-// The detailed refrigeration model allows the use of subcoolers,secondary loops, and cascade condensers
+// The detailed refrigeration model allows the use of subcoolers, secondary loops, and cascade condensers
 // to transfer load from one suction group to another. This introduces the need for further iterations among
 // the systems.  Three loops through the
 // systems are adequate to model these interactions.  The detailed model will also calculate a variable suction
@@ -222,65 +220,65 @@ Real64 constexpr CapFac60Percent(0.60);          // = 60%, load served by half p
 static constexpr std::array<Real64, 5> EuropeanWetCoilFactor = {1.35, 1.15, 1.05, 1.01, 1.0};
 static constexpr std::array<Real64, 5> EuropeanAirInletTemp = {10.0, 0.0, -18.0, -25.0, -34.0};
 
-constexpr std::array<std::string_view, (int)WIStockDoor::Num> wiStockDoorNames = {"None", "AirCurtain", "StripCurtain"};
+// constexpr std::array<std::string_view, (int)WIStockDoor::Num> wiStockDoorNames = {"None", "AirCurtain", "StripCurtain"};
 constexpr std::array<std::string_view, (int)WIStockDoor::Num> wiStockDoorNamesUC = {"NONE", "AIRCURTAIN", "STRIPCURTAIN"};
 
-constexpr std::array<std::string_view, (int)CompressorSuctionPressureCtrl::Num> compressorSuctionPressureCtrlNames = {"FloatSuctionTemperature",
-                                                                                                                      "ConstantSuctionTemperature"};
+// constexpr std::array<std::string_view, (int)CompressorSuctionPressureCtrl::Num> compressorSuctionPressureCtrlNames = {"FloatSuctionTemperature",
+//                                                                                                                      "ConstantSuctionTemperature"};
 constexpr std::array<std::string_view, (int)CompressorSuctionPressureCtrl::Num> compressorSuctionPressureCtrlNamesUC = {"FLOATSUCTIONTEMPERATURE",
                                                                                                                         "CONSTANTSUCTIONTEMPERATURE"};
 
-constexpr std::array<std::string_view, (int)SubcoolerType::Num> subcoolerTypeNames = {"LiquidSuction", "Mechanical"};
+// constexpr std::array<std::string_view, (int)SubcoolerType::Num> subcoolerTypeNames = {"LiquidSuction", "Mechanical"};
 constexpr std::array<std::string_view, (int)SubcoolerType::Num> subcoolerTypeNamesUC = {"LIQUIDSUCTION", "MECHANICAL"};
 
-constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNames = {"TimeSchedule", "TemperatureTermination"};
+// constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNames = {"TimeSchedule", "TemperatureTermination"};
 constexpr std::array<std::string_view, (int)DefrostCtrlType::Num> defrostCtrlTypeNamesUC = {"TIMESCHEDULE", "TEMPERATURETERMINATION"};
 
-constexpr std::array<std::string_view, (int)SecFluidType::Num> secFluidTypeNames = {"FluidAlwaysLiquid", "FluidPhaseChange"};
+// constexpr std::array<std::string_view, (int)SecFluidType::Num> secFluidTypeNames = {"FluidAlwaysLiquid", "FluidPhaseChange"};
 constexpr std::array<std::string_view, (int)SecFluidType::Num> secFluidTypeNamesUC = {"FLUIDALWAYSLIQUID", "FLUIDPHASECHANGE"};
 
-constexpr std::array<std::string_view, (int)SecPumpCtrl::Num> secPumpCtrlNames = {"Constant", "Variable"};
+// constexpr std::array<std::string_view, (int)SecPumpCtrl::Num> secPumpCtrlNames = {"Constant", "Variable"};
 constexpr std::array<std::string_view, (int)SecPumpCtrl::Num> secPumpCtrlNamesUC = {"CONSTANT", "VARIABLE"};
 
-constexpr std::array<std::string_view, (int)EnergyEqnForm::Num> energyEqnFormNames = {
-    "None", "CaseTemperatureMethod", "RelativeHumidityMethod", "DewpointMethod"};
+// constexpr std::array<std::string_view, (int)EnergyEqnForm::Num> energyEqnFormNames = {
+//     "None", "CaseTemperatureMethod", "RelativeHumidityMethod", "DewpointMethod"};
 constexpr std::array<std::string_view, (int)EnergyEqnForm::Num> energyEqnFormNamesUC = {
     "NONE", "CASETEMPERATUREMETHOD", "RELATIVEHUMIDITYMETHOD", "DEWPOINTMETHOD"};
 
-constexpr std::array<std::string_view, (int)CascadeCndsrTempCtrlType::Num> cascaseCndsrTempCtrlTypeNames = {"Fixed", "Float"};
+// constexpr std::array<std::string_view, (int)CascadeCndsrTempCtrlType::Num> cascaseCndsrTempCtrlTypeNames = {"Fixed", "Float"};
 constexpr std::array<std::string_view, (int)CascadeCndsrTempCtrlType::Num> cascaseCndsrTempCtrlTypeNamesUC = {"FIXED", "FLOAT"};
 
-constexpr std::array<std::string_view, (int)CndsrFlowType::Num> cndsrFlowTypeNames = {"VariableFlow", "ConstantFlow"};
+// constexpr std::array<std::string_view, (int)CndsrFlowType::Num> cndsrFlowTypeNames = {"VariableFlow", "ConstantFlow"};
 constexpr std::array<std::string_view, (int)CndsrFlowType::Num> cndsrFlowTypeNamesUC = {"VARIABLEFLOW", "CONSTANTFLOW"};
 
-constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> fanSpeedCtrlTypeNames = {"VariableSpeed", "FixedLinear", "TwoSpeed", "Fixed"};
+// constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> fanSpeedCtrlTypeNames = {"VariableSpeed", "FixedLinear", "TwoSpeed", "Fixed"};
 constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> fanSpeedCtrlTypeNamesUC = {"VARIABLESPEED", "FIXEDLINEAR", "TWOSPEED", "FIXED"};
 
-constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> heatRejLocationNames = {"Outdoors", "Zone"};
+// constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> heatRejLocationNames = {"Outdoors", "Zone"};
 constexpr std::array<std::string_view, (int)FanSpeedCtrlType::Num> heatRejLocationNamesUC = {"OUTDOORS", "ZONE"};
 
-constexpr std::array<std::string_view, (int)RefCaseDefrostType::Num> refCaseDefrostTypeNames = {
-    "None", "OffCycle", "HotFluid", "HotFluidWithTemperatureTermination", "Electric", "ElectricOnDemand", "ElectricWithTemperatureTermination"};
+// constexpr std::array<std::string_view, (int)RefCaseDefrostType::Num> refCaseDefrostTypeNames = {
+//     "None", "OffCycle", "HotFluid", "HotFluidWithTemperatureTermination", "Electric", "ElectricOnDemand", "ElectricWithTemperatureTermination"};
 constexpr std::array<std::string_view, (int)RefCaseDefrostType::Num> refCaseDefrostTypeNamesUC = {
     "NONE", "OFFCYCLE", "HOTFLUID", "HOTFLUIDWITHTEMPERATURETERMINATION", "ELECTRIC", "ELECTRICONDEMAND", "ELECTRICWITHTEMPERATURETERMINATION"};
 
-constexpr std::array<std::string_view, (int)ASHtrCtrlType::Num> asHtrCtrlTypeNames = {
-    "None", "Constant", "Linear", "DewpointMethod", "HeatBalanceMethod"};
+// constexpr std::array<std::string_view, (int)ASHtrCtrlType::Num> asHtrCtrlTypeNames = {
+//    "None", "Constant", "Linear", "DewpointMethod", "HeatBalanceMethod"};
 constexpr std::array<std::string_view, (int)ASHtrCtrlType::Num> asHtrCtrlTypeNamesUC = {
     "NONE", "CONSTANT", "LINEAR", "DEWPOINTMETHOD", "HEATBALANCEMETHOD"};
 
-constexpr std::array<std::string_view, (int)RatingType::Num> ratingTypeNames = {"CapacityTotalSpecificConditions",
-                                                                                "EuropeanSC1Standard",
-                                                                                "EuropeanSC1NominalWet",
-                                                                                "EuropeanSC2Standard",
-                                                                                "EuropeanSC2NominalWet",
-                                                                                "EuropeanSC3Standard",
-                                                                                "EuropeanSC3NominalWet",
-                                                                                "EuropeanSC4Standard",
-                                                                                "EuropeanSC4NominalWet",
-                                                                                "EuropeanSC5Standard",
-                                                                                "EuropeanSC5NominalWet",
-                                                                                "UnitLoadFactorSensibleOnly"};
+// constexpr std::array<std::string_view, (int)RatingType::Num> ratingTypeNames = {"CapacityTotalSpecificConditions",
+//                                                                                 "EuropeanSC1Standard",
+//                                                                                 "EuropeanSC1NominalWet",
+//                                                                                 "EuropeanSC2Standard",
+//                                                                                 "EuropeanSC2NominalWet",
+//                                                                                 "EuropeanSC3Standard",
+//                                                                                 "EuropeanSC3NominalWet",
+//                                                                                 "EuropeanSC4Standard",
+//                                                                                 "EuropeanSC4NominalWet",
+//                                                                                 "EuropeanSC5Standard",
+//                                                                                 "EuropeanSC5NominalWet",
+//                                                                                 "UnitLoadFactorSensibleOnly"};
 constexpr std::array<std::string_view, (int)RatingType::Num> ratingTypeNamesUC = {"CAPACITYTOTALSPECIFICCONDITIONS",
                                                                                   "EUROPEANSC1STANDARD",
                                                                                   "EUROPEANSC1NOMINALWET",
@@ -294,25 +292,26 @@ constexpr std::array<std::string_view, (int)RatingType::Num> ratingTypeNamesUC =
                                                                                   "EUROPEANSC5NOMINALWET",
                                                                                   "UNITLOADFACTORSENSIBLEONLY"};
 
-constexpr std::array<std::string_view, (int)SHRCorrectionType::Num> shrCorrectionTypeNames = {
-    "LinearSHR60", "QuadraticSHR", "European", "TabularRHxDT1xTRoom"};
+//  constexpr std::array<std::string_view, (int)SHRCorrectionType::Num> shrCorrectionTypeNames = {
+//     "LinearSHR60", "QuadraticSHR", "European", "TabularRHxDT1xTRoom"};
 constexpr std::array<std::string_view, (int)SHRCorrectionType::Num> shrCorrectionTypeNamesUC = {
     "LINEARSHR60", "QUADRATICSHR", "EUROPEAN", "TABULARRHXDT1XTROOM"};
 
-constexpr std::array<std::string_view, (int)VerticalLoc::Num> verticalLocNames = {"Ceiling", "Middle", "Floor"};
+// constexpr std::array<std::string_view, (int)VerticalLoc::Num> verticalLocNames = {"Ceiling", "Middle", "Floor"};
 constexpr std::array<std::string_view, (int)VerticalLoc::Num> verticalLocNamesUC = {"CEILING", "MIDDLE", "FLOOR"};
 
-constexpr std::array<std::string_view, (int)DefrostType::Num> defrostTypeNames = {"HotFluid", "Electric", "None", "OffCycle"};
+// constexpr std::array<std::string_view, (int)DefrostType::Num> defrostTypeNames = {"HotFluid", "Electric", "None", "OffCycle"};
 constexpr std::array<std::string_view, (int)DefrostType::Num> defrostTypeNamesUC = {"HOTFLUID", "ELECTRIC", "NONE", "OFFCYCLE"};
 
-constexpr std::array<std::string_view, (int)CriticalType::Num> criticalTypeNames = {"Subcritical", "Transcritical"};
+// constexpr std::array<std::string_view, (int)CriticalType::Num> criticalTypeNames = {"Subcritical", "Transcritical"};
 constexpr std::array<std::string_view, (int)CriticalType::Num> criticalTypeNamesUC = {"SUBCRITICAL", "TRANSCRITICAL"};
 
-constexpr std::array<std::string_view, (int)IntercoolerType::Num> intercoolerTypeNames = {"None", "Flash Intercooler", "Shell-and-Coil Intercooler"};
+// constexpr std::array<std::string_view, (int)IntercoolerType::Num> intercoolerTypeNames = {"None", "Flash Intercooler", "Shell-and-Coil
+// Intercooler"};
 constexpr std::array<std::string_view, (int)IntercoolerType::Num> intercoolerTypeNamesUC = {
     "NONE", "FLASH INTERCOOLER", "SHELL-AND-COIL INTERCOOLER"};
 
-constexpr std::array<std::string_view, (int)IntercoolerType::Num> transSysTypeNames = {"SingleStage", "TwoStage"};
+// constexpr std::array<std::string_view, (int)IntercoolerType::Num> transSysTypeNames = {"SingleStage", "TwoStage"};
 constexpr std::array<std::string_view, (int)IntercoolerType::Num> transSysTypeNamesUC = {"SINGLESTAGE", "TWOSTAGE"};
 
 void ManageRefrigeratedCaseRacks(EnergyPlusData &state)
@@ -482,7 +481,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
     int NumDisplayCases(0);                // Counter for refrigerated cases in GetInput do loop
     int NumWalkIns(0);                     // Number of walk ins
     int RefrigSysNum(0);
-    int RefrigIndex(0);                // Index used in fluid property routines
     Real64 DeltaHPhaseChange(0.0);     // Secondary loop enthalpy change in condenser w overfeed system (J/g)
     Real64 DelTempMin(0.0);            // min temperature for heat rej curve for air cooled condenser (C)
     Real64 DelTempMax(0.0);            // max temperature for heat rej curve for air cooled condenser (C)
@@ -561,6 +559,9 @@ void GetRefrigerationInput(EnergyPlusData &state)
         state.dataRefrigCase->HaveChillers = false;
     }
 
+    if (state.dataRefrigCase->HaveCasesOrWalkins && !state.dataHeatBal->RefrigCaseCredit.allocated()) {
+        state.dataHeatBal->RefrigCaseCredit.allocate(state.dataGlobal->NumOfZones);
+    }
     if (state.dataRefrigCase->NumRefrigeratedRacks > 0) {
         RefrigRack.allocate(state.dataRefrigCase->NumRefrigeratedRacks);
         state.dataHeatBal->HeatReclaimRefrigeratedRack.allocate(state.dataRefrigCase->NumRefrigeratedRacks);
@@ -10628,18 +10629,17 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     // "Impact of ASHRAE Standard 62-1989 on Florida Supermarkets",
     //  Florida Solar Energy Center, FSEC-CR-910-96, Final Report, Oct. 1996
 
-    Real64 COPFTempOutput;          // Curve value for COPFTemp curve object
-    Real64 CondenserFrac;           // Fraction of condenser power as a function of outdoor temperature
-    Real64 TotalHeatRejectedToZone; // Total compressor and condenser fan heat rejected to zone (based on CaseRAFactor)
-    int HeatRejectZoneNum;          // Index to zone where heat is rejected
-    int HeatRejectZoneNodeNum;      // Index to zone where heat is rejected
-    Real64 OutWbTemp;               // Outdoor wet bulb temp at condenser air inlet node [C]
-    Real64 OutDbTemp;               // Outdoor dry bulb temp at condenser air inlet node [C]
-    Real64 EffectTemp;              // Effective outdoor temp when using evap condenser cooling [C]
-    Real64 HumRatIn;                // Humidity ratio of inlet air to condenser [kg/kg]
-    Real64 HumRatOut;               // Humidity ratio of outlet air from condenser (assumed saturated) [kg/kg]
-    Real64 BPress;                  // Barometric pressure at condenser air inlet node [Pa]
-    bool EvapAvail;                 // Control for evap condenser availability
+    Real64 COPFTempOutput;                // Curve value for COPFTemp curve object
+    Real64 OutWbTemp;                     // Outdoor wet bulb temp at condenser air inlet node [C]
+    Real64 OutDbTemp;                     // Outdoor dry bulb temp at condenser air inlet node [C]
+    Real64 EffectTemp;                    // Effective outdoor temp when using evap condenser cooling [C]
+    Real64 HumRatIn;                      // Humidity ratio of inlet air to condenser [kg/kg]
+    Real64 BPress;                        // Barometric pressure at condenser air inlet node [Pa]
+    Real64 TotalHeatRejectedToZone = 0.0; // Total compressor and condenser fan heat rejected to zone (based on CaseRAFactor)
+    Real64 CondenserFrac = 0.0;           // Fraction of condenser power as a function of outdoor temperature
+    bool EvapAvail = true;                // Control for evap condenser availability
+    int HeatRejectZoneNum = 0;            // Index to zone where heat is rejected
+    int HeatRejectZoneNodeNum = 0;        // Index to zone where heat is rejected
 
     auto &RefrigCase = state.dataRefrigCase->RefrigCase;
     auto &WalkIn = state.dataRefrigCase->WalkIn;
@@ -10653,14 +10653,9 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     state.dataRefrigCase->TotalCondenserPumpPower = 0.0;
     state.dataRefrigCase->TotalBasinHeatPower = 0.0;
     state.dataRefrigCase->TotalCondenserHeat = 0.0;
-    TotalHeatRejectedToZone = 0.0;
     state.dataRefrigCase->TotalEvapWaterUseRate = 0.0;
     state.dataRefrigCase->RackSenCreditToZone = 0.0;
     state.dataRefrigCase->RackSenCreditToHVAC = 0.0;
-    CondenserFrac = 0.0;
-    EvapAvail = true;
-    HeatRejectZoneNum = 0;
-    HeatRejectZoneNodeNum = 0;
 
     // Loads for chiller sets are set in call to zone equipment element "SimAirChillerSet"
     // (all chiller coils within a set are located in the same zone)
@@ -10828,7 +10823,8 @@ void RefrigRackData::CalcRackSystem(EnergyPlusData &state)
     // assumes pump runs whenever evap cooling is available to minimize scaling
     if (this->CondenserType == DataHeatBalance::RefrigCondenserType::Evap && EvapAvail) {
         state.dataRefrigCase->TotalCondenserPumpPower = this->EvapPumpPower;
-        HumRatOut = Psychrometrics::PsyWFnTdbTwbPb(state, EffectTemp, OutWbTemp, BPress);
+        // Humidity ratio of outlet air from condenser (assumed saturated) [kg/kg]
+        const Real64 HumRatOut = Psychrometrics::PsyWFnTdbTwbPb(state, EffectTemp, OutWbTemp, BPress);
         state.dataRefrigCase->TotalEvapWaterUseRate = this->CondenserAirFlowRate * CondenserFrac *
                                                       Psychrometrics::PsyRhoAirFnPbTdbW(state, BPress, OutDbTemp, HumRatIn) * (HumRatOut - HumRatIn) /
                                                       Psychrometrics::RhoH2O(EffectTemp);
@@ -11064,7 +11060,7 @@ void RefrigCaseData::CalculateCase(EnergyPlusData &state) // Absolute pointer to
         Real64 DeltaStockingEnergy = (StockingLoad * state.dataGlobal->TimeStepZoneSec);
         this->StockingEnergy += DeltaStockingEnergy;
     } // warm up
-    // CALCULTE ALL LOADS INFLUENCED BY ZONE TEMPERATURE AND RH
+    // CALCULATE ALL LOADS INFLUENCED BY ZONE TEMPERATURE AND RH
     // Anti-sweat heater capacity
     switch (this->AntiSweatControlType) {
     case ASHtrCtrlType::None: {
@@ -12706,7 +12702,7 @@ void RefrigSystemData::CalculateCondensers(EnergyPlusData &state, int const SysN
                 "time step and heat recovery at the system time step. In that case, and ONLY if it occurs a large number of times",
                 CondCreditWarnIndex5);
             ShowRecurringContinueErrorAtEnd(
-                state, "(relative to the number of time steps in the simulation), there may be a mis-match between the", CondCreditWarnIndex6);
+                state, "(relative to the number of time steps in the simulation), there may be a mismatch between the", CondCreditWarnIndex6);
             ShowRecurringContinueErrorAtEnd(
                 state, "operating schedules of the refrigeration system and the heat recovery load.", CondCreditWarnIndex7);
         } // not warmup
@@ -13425,11 +13421,11 @@ void RefrigSystemData::CalculateCompressors(EnergyPlusData &state)
                     compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
                     compressor.LoadFactor = LFLastComp;
                     break; // numcomps do
-                } else {   //>= needed capacity
-                    this->TotCompCapacity += compressor.Capacity;
-                    this->RefMassFlowComps += compressor.MassFlow;
-                    this->TotCompPower += compressor.Power;
                 } //>= needed capacity
+                this->TotCompCapacity += compressor.Capacity;
+                this->RefMassFlowComps += compressor.MassFlow;
+                this->TotCompPower += compressor.Power;
+                //>= needed capacity
             } else { // high-stage compressors (for two-stage systems only)
                 if ((this->TotHiStageCompCapacity + compressor.Capacity) >= NeededCapacity) {
                     LFLastComp = (NeededCapacity - this->TotHiStageCompCapacity) / compressor.Capacity;
@@ -13444,11 +13440,11 @@ void RefrigSystemData::CalculateCompressors(EnergyPlusData &state)
                     compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
                     compressor.LoadFactor = LFLastComp;
                     break; // numcomps do
-                } else {   //>= needed capacity
-                    this->TotHiStageCompCapacity += compressor.Capacity;
-                    this->RefMassFlowHiStageComps += compressor.MassFlow;
-                    this->TotHiStageCompPower += compressor.Power;
                 } //>= needed capacity
+                this->TotHiStageCompCapacity += compressor.Capacity;
+                this->RefMassFlowHiStageComps += compressor.MassFlow;
+                this->TotHiStageCompPower += compressor.Power;
+                //>= needed capacity
             } // StageIndex
             compressor.ElecConsumption = compressor.Power * localTimeStepSec;
             compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
@@ -13684,11 +13680,11 @@ void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
                 compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
                 compressor.LoadFactor = LFLastComp;
                 break;
-            } else {
-                this->TotCompCapacityLP += compressor.Capacity;
-                this->RefMassFlowCompsLP += compressor.MassFlow;
-                this->TotCompPowerLP += compressor.Power;
             }
+            this->TotCompCapacityLP += compressor.Capacity;
+            this->RefMassFlowCompsLP += compressor.MassFlow;
+            this->TotCompPowerLP += compressor.Power;
+
         } // NumCompressorsLP
         this->HCompOutLP = this->HCompInLP + this->TotCompPowerLP / this->RefMassFlowCompsLP;
     } // (TransSystem(SysNum)%TransSysType == 2)
@@ -13882,11 +13878,10 @@ void TransRefrigSystemData::CalculateTransCompressors(EnergyPlusData &state)
             compressor.CoolingEnergy = compressor.Capacity * localTimeStepSec;
             compressor.LoadFactor = LFLastComp;
             break;
-        } else {
-            this->TotCompCapacityHP += compressor.Capacity;
-            this->RefMassFlowCompsHP += compressor.MassFlow;
-            this->TotCompPowerHP += compressor.Power;
         }
+        this->TotCompCapacityHP += compressor.Capacity;
+        this->RefMassFlowCompsHP += compressor.MassFlow;
+        this->TotCompPowerHP += compressor.Power;
 
     } // NumCompressorsHP
 
@@ -14007,69 +14002,6 @@ void RefrigSystemData::CalculateSubcoolers(EnergyPlusData &state)
         }
 
         this->TLiqInActual = TLiqInActualLocal;
-    }
-}
-
-void GetRefrigeratedRackIndex(EnergyPlusData &state,
-                              std::string const &Name,
-                              int &IndexPtr,
-                              DataHeatBalance::RefrigSystemType const SysType,
-                              bool &ErrorsFound,
-                              std::string_view const ThisObjectType,
-                              bool const SuppressWarning)
-{
-
-    // SUBROUTINE INFORMATION:
-    //       AUTHOR         Richard Raustad
-    //       DATE WRITTEN   June 2007
-    //       MODIFIED       Therese Stovall May 2008
-    //       RE-ENGINEERED  na
-    // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine sets an index for a given refrigerated rack or refrigeration condenser
-    //  -- issues error message if the rack or condenser is not found.
-
-    auto &RefrigRack = state.dataRefrigCase->RefrigRack;
-    auto &Condenser = state.dataRefrigCase->Condenser;
-
-    CheckRefrigerationInput(state);
-
-    switch (SysType) {
-    case DataHeatBalance::RefrigSystemType::Rack: {
-        IndexPtr = Util::FindItemInList(Name, RefrigRack);
-        if (IndexPtr == 0) {
-            if (SuppressWarning) {
-                //     No warning printed if only searching for the existence of a refrigerated rack
-            } else {
-                if (!ThisObjectType.empty()) {
-                    ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Rack not found={}", ThisObjectType, Name));
-                } else {
-                    if (!ThisObjectType.empty()) {
-                        ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Rack not found={}", ThisObjectType, Name));
-                    } else {
-                        ShowSevereError(state, format("GetRefrigeratedRackIndex: Rack not found={}", Name));
-                    }
-                }
-            }
-            ErrorsFound = true;
-        }
-    } break;
-    case DataHeatBalance::RefrigSystemType::Detailed: {
-        IndexPtr = Util::FindItemInList(Name, Condenser);
-        if (IndexPtr == 0) {
-            if (SuppressWarning) {
-                //     No warning printed if only searching for the existence of a refrigeration Condenser
-            } else {
-                if (!ThisObjectType.empty()) {
-                    ShowSevereError(state, fmt::format("{}, GetRefrigeratedRackIndex: Condenser not found={}", ThisObjectType, Name));
-                } else {
-                    ShowSevereError(state, format("GetRefrigeratedRackIndex: Condenser not found={}", Name));
-                }
-            }
-        }
-        ErrorsFound = true;
-    } break;
-    default:
-        break;
     }
 }
 

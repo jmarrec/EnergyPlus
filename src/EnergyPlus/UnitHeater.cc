@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -550,7 +550,7 @@ namespace UnitHeater {
             SetupOutputVariable(state,
                                 "Zone Unit Heater Fan Availability Status",
                                 Constant::Units::None,
-                                (int &)unitHeat.availStatus,
+                                unitHeat.availStatus,
                                 OutputProcessor::TimeStepType::System,
                                 OutputProcessor::StoreType::Average,
                                 unitHeat.Name);
@@ -821,8 +821,6 @@ namespace UnitHeater {
         int &CurZoneEqNum = state.dataSize->CurZoneEqNum;
 
         bool ErrorsFound = false;
-        Real64 MaxAirVolFlowDes = 0.0;
-        Real64 MaxAirVolFlowUser = 0.0;
         Real64 MaxVolHotWaterFlowDes = 0.0;
         Real64 MaxVolHotWaterFlowUser = 0.0;
         Real64 MaxVolHotSteamFlowDes = 0.0;
@@ -1449,9 +1447,8 @@ namespace UnitHeater {
                             // Calculate residual based on output calculation flag
                             if (state.dataUnitHeaters->QZnReq != 0.0) {
                                 return (QUnitOut - state.dataUnitHeaters->QZnReq) / state.dataUnitHeaters->QZnReq;
-                            } else {
-                                return 0.0;
                             }
+                            return 0.0;
                         };
 
                         // Tolerance is in fraction of load, MaxIter = 30, SolFalg = # of iterations or error as appropriate

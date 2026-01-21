@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -876,7 +876,7 @@ void GetAirPathData(EnergyPlusData &state)
         SplitterExists = false;
         MixerExists = false;
 
-        if (ConnectorListName != std::string()) {
+        if (!ConnectorListName.empty()) {
             ConListNum = state.dataInputProcessing->inputProcessor->getObjectItemNum(state, "ConnectorList", ConnectorListName);
             if (ConListNum > 0) {
                 state.dataInputProcessing->inputProcessor->getObjectItem(
@@ -1021,7 +1021,7 @@ void GetAirPathData(EnergyPlusData &state)
         }
 
         NumControllers = 0;
-        if (ControllerListName != std::string()) { // If not blank, then must be there and valid
+        if (!ControllerListName.empty()) { // If not blank, then must be there and valid
             // Loop through the controller lists until you find the one attached to this primary air system
             ControllerListNum = state.dataInputProcessing->inputProcessor->getObjectItemNum(state, "AirLoopHVAC:ControllerList", ControllerListName);
             if (ControllerListNum > 0) {
@@ -1385,7 +1385,7 @@ void GetAirPathData(EnergyPlusData &state)
         SetupOutputVariable(state,
                             "Air System Simulation Cycle On Off Status",
                             Constant::Units::None,
-                            (int &)state.dataAirLoop->PriAirSysAvailMgr(AirSysNum).availStatus,
+                            state.dataAirLoop->PriAirSysAvailMgr(AirSysNum).availStatus,
                             OutputProcessor::TimeStepType::System,
                             OutputProcessor::StoreType::Average,
                             state.dataAirSystemsData->PrimaryAirSystems(AirSysNum).Name);
@@ -1645,7 +1645,7 @@ void InitAirLoops(EnergyPlusData &state, bool const FirstHVACIteration) // TRUE 
                 // unit on that zone is connected to that supply air path.
 
                 for (int SupAirPathOutNodeNum = 1; SupAirPathOutNodeNum <= NumSupAirPathOutNodes; ++SupAirPathOutNodeNum) {
-                    int FoundSupPathZoneConnect = false;
+                    bool FoundSupPathZoneConnect = false;
                     // loop over all controlled zones.
                     for (int CtrlZoneNum = 1; CtrlZoneNum <= state.dataGlobal->NumOfZones; ++CtrlZoneNum) {
                         if (!state.dataZoneEquip->ZoneEquipConfig(CtrlZoneNum).IsControlled) {
@@ -2697,7 +2697,7 @@ void SimAirLoop(EnergyPlusData &state,
     // controllers on the air loop in the order they are specified.
 
     // METHODOLOGY EMPLOYED:
-    // To speed up the simulation, we introduced the possiblity to perform the controller
+    // To speed up the simulation, we introduced the possibility to perform the controller
     // simulation on each air loop using a warm restart from the solution obtained
     // at the previous HVAC step iteration. This is only attempted if the air mass flow
     // rate(s) for the air system have not changed since the last iteration.
@@ -2835,7 +2835,7 @@ void SolveAirLoopControllers(
     //      RE-ENGINEERED:  This is reengineered code that used to be in SimAirLoops()
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine solves for the controllers on the specfied air loop assuming a cold start.
+    // This subroutine solves for the controllers on the specified air loop assuming a cold start.
 
     // METHODOLOGY EMPLOYED:
     // For the specified primary air system:
@@ -2883,7 +2883,7 @@ void SolveAirLoopControllers(
     IterTot = 0;
 
     AirLoopConvergedFlag = true;
-    state.dataSimAirServingZones->BypassOAControllerSALC = true; // don't simulate OA contollers at this time (see SolveWaterCoilController)
+    state.dataSimAirServingZones->BypassOAControllerSALC = true; // don't simulate OA controllers at this time (see SolveWaterCoilController)
     IsUpToDateFlag = false;
     PrimaryAirSystems(AirLoopNum).ControlConverged = false;
 
@@ -2892,7 +2892,7 @@ void SolveAirLoopControllers(
 
     if (PrimaryAirSystems(AirLoopNum).SizeAirloopCoil) { // one time flag to initialize controller index and size coils if needed
         // Loop through the controllers first to set the controller index in the PrimaryAirSystem array.
-        // Need to actaully simulate controller to get controller index.
+        // Need to actually simulate controller to get controller index.
         for (int AirLoopControlNum = 1; AirLoopControlNum <= PrimaryAirSystems(AirLoopNum).NumControllers; ++AirLoopControlNum) {
             PrimaryAirSystems(AirLoopNum).ControllerIndex(AirLoopControlNum) =
                 HVACControllers::GetControllerIndex(state, PrimaryAirSystems(AirLoopNum).ControllerName(AirLoopControlNum));
@@ -3071,7 +3071,7 @@ void SolveWaterCoilController(EnergyPlusData &state,
     //       DATE WRITTEN:  July 2017
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine solves for the controllers in the specfied air loop OA system.
+    // This subroutine solves for the controllers in the specified air loop OA system.
 
     // METHODOLOGY EMPLOYED:
     // For the specified primary air system:
@@ -3276,7 +3276,7 @@ void ReSolveAirLoopControllers(
     //      RE-ENGINEERED:  This is new code
 
     // PURPOSE OF THIS SUBROUTINE:
-    // This subroutine solves for the controllers on the specfied air loop by reusing
+    // This subroutine solves for the controllers on the specified air loop by reusing
     // the solution from the previous HVAC iteration.
     // It is used in the context of the optimization technique referred to as
     // speculative warm restart.
@@ -4241,6 +4241,8 @@ void SetUpSysSizingArrays(EnergyPlusData &state)
             sysSizing.loadSizingType = sysSizInput.loadSizingType;
             sysSizing.coolingPeakLoad = sysSizInput.coolingPeakLoad;
             sysSizing.CoolCapControl = sysSizInput.CoolCapControl;
+            sysSizing.heatCoilSizingMethod = sysSizInput.heatCoilSizingMethod;
+            sysSizing.maxHeatCoilToCoolingLoadSizingRatio = sysSizInput.maxHeatCoilToCoolingLoadSizingRatio;
             sysSizing.DesOutAirVolFlow = sysSizInput.DesOutAirVolFlow;
             sysSizing.SysAirMinFlowRat = sysSizInput.SysAirMinFlowRat;
             sysSizing.SysAirMinFlowRatWasAutoSized = sysSizInput.SysAirMinFlowRatWasAutoSized;
@@ -4302,6 +4304,8 @@ void SetUpSysSizingArrays(EnergyPlusData &state)
         finalSysSizing.loadSizingType = sysSizInput.loadSizingType;
         finalSysSizing.coolingPeakLoad = sysSizInput.coolingPeakLoad;
         finalSysSizing.CoolCapControl = sysSizInput.CoolCapControl;
+        finalSysSizing.heatCoilSizingMethod = sysSizInput.heatCoilSizingMethod;
+        finalSysSizing.maxHeatCoilToCoolingLoadSizingRatio = sysSizInput.maxHeatCoilToCoolingLoadSizingRatio;
         finalSysSizing.DesOutAirVolFlow = sysSizInput.DesOutAirVolFlow;
         finalSysSizing.SysAirMinFlowRat = sysSizInput.SysAirMinFlowRat;
         finalSysSizing.SysAirMinFlowRatWasAutoSized = sysSizInput.SysAirMinFlowRatWasAutoSized;
@@ -4349,6 +4353,8 @@ void SetUpSysSizingArrays(EnergyPlusData &state)
         calcSysSizing.loadSizingType = sysSizInput.loadSizingType;
         calcSysSizing.coolingPeakLoad = sysSizInput.coolingPeakLoad;
         calcSysSizing.CoolCapControl = sysSizInput.CoolCapControl;
+        calcSysSizing.heatCoilSizingMethod = sysSizInput.heatCoilSizingMethod;
+        calcSysSizing.maxHeatCoilToCoolingLoadSizingRatio = sysSizInput.maxHeatCoilToCoolingLoadSizingRatio;
         calcSysSizing.DesOutAirVolFlow = sysSizInput.DesOutAirVolFlow;
         calcSysSizing.SysAirMinFlowRat = sysSizInput.SysAirMinFlowRat;
         calcSysSizing.SysAirMinFlowRatWasAutoSized = sysSizInput.SysAirMinFlowRatWasAutoSized;
@@ -4733,7 +4739,7 @@ void SizeSysOutdoorAir(EnergyPlusData &state)
                     ZoneSA = max(termUnitSizing.AirVolFlow, ZonePA);
 
                     // For re-circulation systems, Vpz used to determine Zpz is the design terminal airflow
-                    // Std 62.1-2010, section 6.2.5.1: "Vpz (used to determin Zpz) is the primary airflow rate
+                    // Std 62.1-2010, section 6.2.5.1: "Vpz (used to determine Zpz) is the primary airflow rate
                     // rate to the ventilation zone from the air handler, including outdoor air and recirculated air.
                     // MJW - Not sure this is correct, seems like it should be ZonePA - above comments contradict each other
                     state.dataSize->VpzMinClgByZone(TermUnitSizingIndex) = ZoneSA;
@@ -4909,7 +4915,7 @@ void SizeSysOutdoorAir(EnergyPlusData &state)
                         ZoneSA = max(termUnitSizing.AirVolFlow, ZonePA);
 
                         // For re-circulation systems, Vpz used to determine Zpz is the design terminal airflow
-                        // Std 62.1-2010, section 6.2.5.1: "Vpz (used to determin Zpz) is the primary airflow rate
+                        // Std 62.1-2010, section 6.2.5.1: "Vpz (used to determine Zpz) is the primary airflow rate
                         // rate to the ventilation zone from the air handler, including outdoor air and recirculated air.
                         state.dataSize->VpzMinHtgByZone(TermUnitSizingIndex) = ZoneSA;
 
@@ -5230,7 +5236,8 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
                                                 state.dataSize->FinalZoneSizing(CtrlZoneNum).ZoneName));
                     }
                 } else if (!state.dataSize->FinalZoneSizing.empty()) { // not latent sizing for air loop
-                    if (state.dataSize->FinalZoneSizing(CtrlZoneNum).zoneLatentSizing && state.dataSize->CurOverallSimDay == 1) {
+                    if (state.dataSize->FinalZoneSizing(CtrlZoneNum).zoneLatentSizing && state.dataSize->CurOverallSimDay == 1 &&
+                        state.dataSize->FinalZoneSizing(CtrlZoneNum).heatCoilSizingMethod == DataSizing::HeatCoilSizMethod::None) {
                         ShowWarningError(state,
                                          format("Sizing for AirLoop = {} includes latent sizing in Sizing:Zone object for Zone = {}",
                                                 airToZoneNodeInfo.AirLoopName,
@@ -5471,7 +5478,7 @@ void UpdateSysSizing(EnergyPlusData &state, Constant::CallIndicator const CallIn
                     SysHeatZoneAvgTemp += zoneSizing.HeatZoneTempSeq(TimeStepInDay) * adjustedFlow;
                 } // end heated zones loop
                 // Get peak system heating load with coincident
-                if (abs(sysSizing.SysDesHeatLoad) > abs(sysSizing.SumZoneHeatLoadSeq(TimeStepInDay))) {
+                if (std::abs(sysSizing.SysDesHeatLoad) > std::abs(sysSizing.SumZoneHeatLoadSeq(TimeStepInDay))) {
                     sysSizing.SysDesHeatLoad = sysSizing.SumZoneHeatLoadSeq(TimeStepInDay);
                     sysSizing.SysHeatLoadTimeStepPk = TimeStepInDay;
                 }
@@ -7484,7 +7491,7 @@ Real64 GetHeatingSATempForSizing(EnergyPlusData &state, int const IndexAirLoop /
 
         ReheatCoilInTempForSizing = CalcSysSizing(IndexAirLoop).HeatSupTemp;
 
-    } else if ((PrimaryAirSystems(IndexAirLoop).NumOAHeatCoils > 0) || (PrimaryAirSystems(IndexAirLoop).NumOAHXs)) {
+    } else if ((PrimaryAirSystems(IndexAirLoop).NumOAHeatCoils > 0) || ((PrimaryAirSystems(IndexAirLoop).NumOAHXs) != 0)) {
         // Case: No central heating coils, but preheating coils or OA heat-exchangers exist
 
         if (FinalSysSizing(IndexAirLoop).DesHeatVolFlow > 0) {
@@ -7547,7 +7554,7 @@ Real64 GetHeatingSATempHumRatForSizing(EnergyPlusData &state, int const IndexAir
 
         ReheatCoilInHumRatForSizing = state.dataSize->CalcSysSizing(IndexAirLoop).HeatSupHumRat;
 
-    } else if ((PrimaryAirSystems(IndexAirLoop).NumOAHeatCoils > 0) || (PrimaryAirSystems(IndexAirLoop).NumOAHXs)) {
+    } else if ((PrimaryAirSystems(IndexAirLoop).NumOAHeatCoils > 0) || ((PrimaryAirSystems(IndexAirLoop).NumOAHXs) != 0)) {
         // Case: No central heating coils, but preheating coils or OA heat-exchangers exist
 
         if (FinalSysSizing(IndexAirLoop).DesHeatVolFlow > 0) {

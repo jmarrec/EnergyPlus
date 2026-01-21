@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -99,14 +99,14 @@ namespace HVAC {
     int constexpr NumOfSizingTypes(35); // request sizing for cooling air flow rate
 
     // Sizing types
-    int constexpr CoolingAirflowSizing(1);                // request sizing for cooling air flow rate
-    int constexpr CoolingWaterDesWaterInletTempSizing(6); // request sizing for cooling water coil inlet water temp
-    int constexpr HeatingAirflowSizing(14);               // request sizing for heating air flow rate
-    int constexpr SystemAirflowSizing(16);                // request sizing for system air flow rate
-    int constexpr CoolingCapacitySizing(17);              // request sizing for cooling capacity
-    int constexpr HeatingCapacitySizing(18);              // request sizing for heating capacity
-    int constexpr SystemCapacitySizing(21);               // request sizing for system capacity
-    int constexpr AutoCalculateSizing(25);                // identifies an autocalulate input
+    int constexpr CoolingAirflowSizing(1);                  // request sizing for cooling air flow rate
+    int constexpr CoolingWaterDesWaterInletTempSizing(6);   // request sizing for cooling water coil inlet water temp
+    int constexpr HeatingAirflowSizing(14);                 // request sizing for heating air flow rate
+    int constexpr SystemAirflowSizing(16);                  // request sizing for system air flow rate
+    int constexpr CoolingCapacitySizing(17);                // request sizing for cooling capacity
+    int constexpr HeatingCapacitySizing(18);                // request sizing for heating capacity
+    int constexpr SystemCapacitySizing(21);                 // request sizing for system capacity
+    [[maybe_unused]] int constexpr AutoCalculateSizing(25); // identifies an autocalulate input
 
     // The following parameters describe the setpoint types in TempControlType(ActualZoneNum)
     enum class SetptType
@@ -518,7 +518,7 @@ struct HVACGlobalsData : BaseGlobalStruct
     Real64 BalancedExhMassFlow = 0.0;   // balanced zone exhaust (declared as so by user)  [kg/s]
     Real64 PlenumInducedMassFlow = 0.0; // secondary air mass flow rate induced from a return plenum [kg/s]
     bool TurnFansOn = false;            // If true overrides fan schedule and cycles fans on
-    bool TurnFansOff = false;           // If True overides fan schedule and TurnFansOn and forces fans off
+    bool TurnFansOff = false;           // If True overrides fan schedule and TurnFansOn and forces fans off
     bool SetPointErrorFlag = false;     // True if any needed setpoints not set; if true, program terminates
     bool DoSetPointTest = false;        // True one time only for sensed node setpoint test
     bool NightVentOn = false;           // set TRUE in SimAirServingZone if night ventilation is happening

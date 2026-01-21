@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -327,10 +327,10 @@ int getVariableHandle(EnergyPlusState state, const char *type, const char *key)
     const auto *thisState = static_cast<EnergyPlus::EnergyPlusData *>(state);
     std::string const typeUC = EnergyPlus::Util::makeUPPER(type);
     std::string const keyUC = EnergyPlus::Util::makeUPPER(key);
-    for (int i = 0; i < thisState->dataOutputProcessor->outVars.size(); i++) {
+    for (size_t i = 0; i < thisState->dataOutputProcessor->outVars.size(); i++) {
         auto const *var = thisState->dataOutputProcessor->outVars[i];
         if (typeUC == var->nameUC && keyUC == var->keyUC) {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1; // return -1 if it wasn't found
@@ -346,7 +346,7 @@ Real64 getVariableValue(EnergyPlusState state, const int handle)
     //  - index N+M being the highest integer variable handle
     // note that this function will return -1 if it cannot
     auto *thisState = static_cast<EnergyPlus::EnergyPlusData *>(state);
-    if (handle >= 0 && handle < thisState->dataOutputProcessor->outVars.size()) {
+    if (handle >= 0 && handle < static_cast<int>(thisState->dataOutputProcessor->outVars.size())) {
         auto const *thisOutputVar = thisState->dataOutputProcessor->outVars[handle];
         if (thisOutputVar->varType == EnergyPlus::OutputProcessor::VariableType::Real) {
             return *(dynamic_cast<EnergyPlus::OutputProcessor::OutVarReal const *>(thisOutputVar))->Which;
@@ -396,7 +396,7 @@ int getMeterHandle(EnergyPlusState state, const char *meterName)
 Real64 getMeterValue(EnergyPlusState state, int handle)
 {
     auto *thisState = static_cast<EnergyPlus::EnergyPlusData *>(state);
-    if (handle >= 0 && handle < thisState->dataOutputProcessor->meters.size()) {
+    if (handle >= 0 && handle < static_cast<int>(thisState->dataOutputProcessor->meters.size())) {
         return EnergyPlus::GetCurrentMeterValue(*thisState, handle);
     }
     if (thisState->dataGlobal->errorCallback) {
@@ -438,7 +438,7 @@ int getActuatorHandle(EnergyPlusState state, const char *componentType, const ch
                             *thisState, fmt::format("Occurred for componentType='{}', controlType='{}', uniqueKey='{}'.", typeUC, controlUC, keyUC));
                         ShowContinueError(*thisState,
                                           fmt::format("The getActuatorHandle function will still return the handle (= {}) but caller "
-                                                      "should take note that there is a risk of overwritting.",
+                                                      "should take note that there is a risk of overwriting.",
                                                       handle));
                         foundActuator = true;
                         break;
@@ -450,7 +450,7 @@ int getActuatorHandle(EnergyPlusState state, const char *componentType, const ch
                                       fmt::format("Occurred for componentType='{}', controlType='{}', uniqueKey='{}'.", typeUC, controlUC, keyUC));
                     ShowContinueError(*thisState,
                                       fmt::format("The getActuatorHandle function will still return the handle (= {}) but caller should "
-                                                  "take note that there is a risk of overwritting.",
+                                                  "take note that there is a risk of overwriting.",
                                                   handle));
                 }
             }
@@ -487,9 +487,9 @@ void setActuatorValue(EnergyPlusState state, const int handle, const Real64 valu
     auto *thisState = static_cast<EnergyPlus::EnergyPlusData *>(state);
     if (handle >= 1 && handle <= thisState->dataRuntimeLang->numEMSActuatorsAvailable) {
         auto &theActuator(thisState->dataRuntimeLang->EMSActuatorAvailable(handle));
-        if (theActuator.RealValue) {
+        if (theActuator.RealValue != nullptr) {
             *theActuator.RealValue = value;
-        } else if (theActuator.IntValue) {
+        } else if (theActuator.IntValue != nullptr) {
             *theActuator.IntValue = static_cast<int>(std::lround(value));
         } else {
             // follow protocol from EMS manager, where 1.0 is true, 0.0 is false, and anything else is also false
@@ -516,10 +516,10 @@ Real64 getActuatorValue(EnergyPlusState state, const int handle)
     auto *thisState = static_cast<EnergyPlus::EnergyPlusData *>(state);
     if (handle >= 1 && handle <= thisState->dataRuntimeLang->numEMSActuatorsAvailable) {
         const auto &theActuator(thisState->dataRuntimeLang->EMSActuatorAvailable(handle));
-        if (theActuator.RealValue) {
+        if (theActuator.RealValue != nullptr) {
             return *theActuator.RealValue;
         }
-        if (theActuator.IntValue) {
+        if (theActuator.IntValue != nullptr) {
             return static_cast<float>(*theActuator.IntValue);
         }
         // follow protocol from EMS manager, where 1.0 is true, 0.0 is false, and anything else is also false
@@ -699,7 +699,7 @@ Real64 getPluginTrendVariableValue(EnergyPlusState state, int handle, int timeIn
         thisState->dataPluginManager->apiErrorFlag = true;
         return 0;
     }
-    if (timeIndex < 1 || timeIndex > EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle)) {
+    if (timeIndex < 1 || timeIndex > static_cast<int>(EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle))) {
         // need to fatal out once the plugin is done
         // throw an error, set the fatal flag, and then return
         ShowSevereError(
@@ -727,7 +727,7 @@ Real64 getPluginTrendVariableAverage(EnergyPlusState state, int handle, int coun
         thisState->dataPluginManager->apiErrorFlag = true;
         return 0;
     }
-    if (count < 2 || count > EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle)) {
+    if (count < 2 || count > static_cast<int>(EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle))) {
         // need to fatal out once the plugin is done
         // throw an error, set the fatal flag, and then return
         ShowSevereError(
@@ -756,7 +756,7 @@ Real64 getPluginTrendVariableMin(EnergyPlusState state, int handle, int count)
         thisState->dataPluginManager->apiErrorFlag = true;
         return 0;
     }
-    if (count < 2 || count > EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle)) {
+    if (count < 2 || count > static_cast<int>(EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle))) {
         // need to fatal out once the plugin is done
         // throw an error, set the fatal flag, and then return
         ShowSevereError(
@@ -784,7 +784,7 @@ Real64 getPluginTrendVariableMax(EnergyPlusState state, int handle, int count)
         thisState->dataPluginManager->apiErrorFlag = true;
         return 0;
     }
-    if (count < 2 || count > EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle)) {
+    if (count < 2 || count > static_cast<int>(EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle))) {
         // need to fatal out once the plugin is done
         // throw an error, set the fatal flag, and then return
         ShowSevereError(
@@ -812,7 +812,7 @@ Real64 getPluginTrendVariableSum(EnergyPlusState state, int handle, int count)
         thisState->dataPluginManager->apiErrorFlag = true;
         return 0;
     }
-    if (count < 2 || count > EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle)) {
+    if (count < 2 || count > static_cast<int>(EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle))) {
         // need to fatal out once the plugin is done
         // throw an error, set the fatal flag, and then return
         ShowSevereError(
@@ -840,7 +840,7 @@ Real64 getPluginTrendVariableDirection(EnergyPlusState state, int handle, int co
         thisState->dataPluginManager->apiErrorFlag = true;
         return 0;
     }
-    if (count < 2 || count > EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle)) {
+    if (count < 2 || count > static_cast<int>(EnergyPlus::PluginManagement::PluginManager::getTrendVariableHistorySize(*thisState, handle))) {
         // need to fatal out once the plugin is done
         // throw an error, set the fatal flag, and then return
         ShowSevereError(

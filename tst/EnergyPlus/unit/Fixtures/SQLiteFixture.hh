@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -198,7 +198,7 @@ protected:
         return queryVector;
     }
 
-    // Helper method that will return the first double it finds, or -10000.0 if not found (abritrarily chosen value)
+    // Helper method that will return the first double it finds, or -10000.0 if not found (arbitrarily chosen value)
     Real64 execAndReturnFirstDouble(const std::string &statement)
     {
 

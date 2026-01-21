@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -1043,14 +1043,14 @@ namespace HeatBalFiniteDiffManager {
                 SetupOutputVariable(state,
                                     format("CondFD Phase Change State {}", node),
                                     Constant::Units::None,
-                                    (int &)SurfaceFD(SurfNum).PhaseChangeStateRep(node),
+                                    SurfaceFD(SurfNum).PhaseChangeStateRep(node),
                                     OutputProcessor::TimeStepType::Zone,
                                     OutputProcessor::StoreType::Average,
                                     state.dataSurface->Surface(SurfNum).Name);
                 SetupOutputVariable(state,
                                     format("CondFD Phase Change Previous State {}", node),
                                     Constant::Units::None,
-                                    (int &)SurfaceFD(SurfNum).PhaseChangeStateOldRep(node),
+                                    SurfaceFD(SurfNum).PhaseChangeStateOldRep(node),
                                     OutputProcessor::TimeStepType::Zone,
                                     OutputProcessor::StoreType::Average,
                                     state.dataSurface->Surface(SurfNum).Name);
@@ -1511,7 +1511,7 @@ namespace HeatBalFiniteDiffManager {
 
         int const first(a.l2());
 
-        assert(a.size() > 0u);
+        assert(!a.empty());
         Array2<Real64>::size_type l(1);
         Real64 r(a[0]);
         int last(first);
@@ -1526,26 +1526,26 @@ namespace HeatBalFiniteDiffManager {
         Array2<Real64>::size_type ldep(a.index(ndep, 0));
         if ((a.size2() == 1u) || (x1 <= a[lind + first])) { // [ lind + first ] == ( nind, first )
             return a[ldep + first];                         // [ ldep + first ] == ( ndep, first )
-        } else if (x1 >= a[lind + last]) {                  // [ lind + last ] == ( nind, last )
-            return a[ldep + last];                          // [ ldep + last ] == ( ndep, last )
-        } else {
-            int i;
-            int i1(first);
-            int i2(last);
-            while ((i2 - i1) > 1) {
-                i = i1 + ((i2 - i1) >> 1); // Tuned bit shift replaces / 2
-                if (x1 < a[lind + i]) {    // [ lind + i ] == ( nind, i )
-                    i2 = i;
-                } else {
-                    i1 = i;
-                }
-            }
-            i = i2;
-            lind += i;
-            ldep += i;
-            Real64 const fract((x1 - a[lind - 1]) / (a[lind] - a[lind - 1])); // [ lind ] == ( nind, i ), [ lind - 1 ] == ( nind, i - 1 )
-            return a[ldep - 1] + fract * (a[ldep] - a[ldep - 1]);             // [ ldep ] == ( ndep, i ), [ ldep - 1 ] == ( ndep, i - 1 )
         }
+        if (x1 >= a[lind + last]) { // [ lind + last ] == ( nind, last )
+            return a[ldep + last];  // [ ldep + last ] == ( ndep, last )
+        }
+        int i;
+        int i1(first);
+        int i2(last);
+        while ((i2 - i1) > 1) {
+            i = i1 + ((i2 - i1) >> 1); // Tuned bit shift replaces / 2
+            if (x1 < a[lind + i]) {    // [ lind + i ] == ( nind, i )
+                i2 = i;
+            } else {
+                i1 = i;
+            }
+        }
+        i = i2;
+        lind += i;
+        ldep += i;
+        Real64 const fract((x1 - a[lind - 1]) / (a[lind] - a[lind - 1])); // [ lind ] == ( nind, i ), [ lind - 1 ] == ( nind, i - 1 )
+        return a[ldep - 1] + fract * (a[ldep] - a[ldep - 1]);             // [ ldep ] == ( ndep, i ), [ ldep - 1 ] == ( ndep, i - 1 )
     }
 
     void ExteriorBCEqns(EnergyPlusData &state,
@@ -2764,6 +2764,9 @@ namespace HeatBalFiniteDiffManager {
 
     bool findAnySurfacesUsingConstructionAndCondFD(EnergyPlusData const &state, int const constructionNum)
     {
+        if (state.dataConstruction->Construct(constructionNum).IsCondFD) {
+            return true;
+        }
         for (auto const &thisSurface : state.dataSurface->Surface) {
             if (thisSurface.Construction == constructionNum) {
                 if (thisSurface.HeatTransferAlgorithm == DataSurfaces::HeatTransferModel::CondFD) {

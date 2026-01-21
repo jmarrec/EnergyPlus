@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -71,6 +71,22 @@ namespace DataPlant {
 
     constexpr std::array<std::string_view, (int)LoopType::Num> loopTypeNames = {"PlantLoop", "CondenserLoop", "Both"};
 
+    enum class WaterLoopType
+    {
+        Invalid = -1,
+        HotWater,
+        ChilledWater,
+        None,
+        Num
+    };
+
+    constexpr std::array<std::string_view, (int)LoopType::Num> waterLoopTypeNames = {"HotWater", "ChilledWater", "None"};
+
+    static constexpr std::array<std::string_view, static_cast<int>(PressSimType::Num)> waterLoopTypeNamesUC{
+        "HOTWATER",
+        "CHILLEDWATER",
+        "NONE",
+    };
     // This needs to go, it's not helping
 
     struct HalfLoopContainer : std::array<HalfLoopData, static_cast<int>(DataPlant::LoopSideLocation::Num)>
@@ -84,6 +100,10 @@ namespace DataPlant {
     constexpr std::array<DataPlant::LoopSideLocation, static_cast<int>(DataPlant::LoopSideLocation::Num)> LoopSideKeys = {
         DataPlant::LoopSideLocation::Demand, DataPlant::LoopSideLocation::Supply};
 
+    struct PlantCoilData
+    {
+        std::vector<Real64> tsDesWaterFlowRate;
+    };
     struct PlantLoopData
     {
         // Members
@@ -135,6 +155,7 @@ namespace DataPlant {
         Real64 EconControlTempDiff;
         bool LoopHasConnectionComp;
         LoopType TypeOfLoop;
+        WaterLoopType TypeOfWaterLoop;
         DataPlant::PressSimType PressureSimType;
         bool HasPressureComponents;
         Real64 PressureDrop;
@@ -151,6 +172,10 @@ namespace DataPlant {
         Real64 OutletNodeFlowrate;
         Real64 OutletNodeTemperature;
         int LastLoopSideSimulated;
+        std::vector<Real64> plantDesWaterFlowRate;
+        std::vector<std::string> plantCoilObjectNames;
+        std::vector<PlantCoilData> compDesWaterFlowRate;
+        std::vector<PlantEquipmentType> plantCoilObjectTypes;
 
         // Default Constructor
         PlantLoopData()

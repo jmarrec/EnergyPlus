@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -84,7 +84,7 @@ template <> struct formatter<PyStatus>
         if (PyStatus_IsError(status) != 0) {
             auto it = ctx.out();
             it = fmt::format_to(it, "Fatal Python error: ");
-            if (status.func) {
+            if (status.func != nullptr) {
                 it = fmt::format_to(it, "{}: ", status.func);
             }
             it = fmt::format_to(it, "{}", status.err_msg);
@@ -135,12 +135,12 @@ namespace Python {
         PyObject *pyth_func = PyObject_GetAttrString(pyth_module, "format_exception");
         Py_DECREF(pyth_module); // PyImport_Import returns a new reference, decrement it
 
-        if (pyth_func || PyCallable_Check(pyth_func)) {
+        if ((pyth_func != nullptr) || (PyCallable_Check(pyth_func) != 0)) {
 
             PyObject *pyth_val = PyObject_CallFunction(pyth_func, "OOO", exc_type, exc_value, exc_tb);
 
             // traceback.format_exception returns a list, so iterate on that
-            if (!pyth_val || !PyList_Check(pyth_val)) { // NOLINT(hicpp-signed-bitwise)
+            if ((pyth_val == nullptr) || !PyList_Check(pyth_val)) { // NOLINT(hicpp-signed-bitwise)
                 EnergyPlus::ShowContinueError(state, "In reportPythonError(), traceback.format_exception did not return a list.");
                 return;
             }
@@ -202,7 +202,7 @@ namespace Python {
         Py_DECREF(unicodeIncludePath);
 
         if (ret != 0) {
-            if (PyErr_Occurred()) {
+            if (PyErr_Occurred() != nullptr) {
                 reportPythonError(state);
             }
             EnergyPlus::ShowFatalError(state, format("ERROR adding \"{}\" to the sys.path in Python", includePath.generic_string()));
@@ -361,6 +361,20 @@ namespace Python {
         }
     }
 
+    std::string PythonEngine::getBasicPreamble()
+    {
+        std::string cmd = R"python(import sys
+sys.argv.clear()
+sys.argv.append("energyplus")
+)python";
+        fs::path programDir = FileSystem::getParentDirectoryPath(FileSystem::getAbsolutePath(FileSystem::getProgramPath()));
+        fs::path const pathToPythonPackages = programDir / "python_lib";
+        std::string sPathToPythonPackages = std::string(pathToPythonPackages.string());
+        std::replace(sPathToPythonPackages.begin(), sPathToPythonPackages.end(), '\\', '/');
+        cmd += fmt::format("sys.path.insert(0, \"{}\")\n", sPathToPythonPackages);
+        return cmd;
+    }
+
     std::string PythonEngine::getTclPreppedPreamble(std::vector<std::string> const &python_fwd_args)
     {
         std::string cmd = R"python(import sys
@@ -407,7 +421,7 @@ sys.argv.append("energyplus")
     {
     }
 
-    void PythonEngine::exec(std::string_view sv)
+    void PythonEngine::exec(std::string_view)
     {
     }
 

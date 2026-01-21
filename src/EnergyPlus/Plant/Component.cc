@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -72,7 +72,7 @@ namespace DataPlant {
         //       MODIFIED       June 2000  -Brandon Anderson
         //                             Changed to Group Similar Components.  Components will
         //                         be defined by ComponentType:SpecificComponent.
-        //                         The colon will act as the type delimeter, So all
+        //                         The colon will act as the type delimiter, So all
         //                         components of one type will be grouped. ex.(Boilers,Chillers)
         //                       May 2003 - Simon Rees
         //                         Added initial loop to force free cooling chiller etc to be

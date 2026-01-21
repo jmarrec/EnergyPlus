@@ -1,4 +1,4 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
 // National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
@@ -735,7 +735,7 @@ namespace RoomAir {
             zoneRetPlenumNum = iPlenum;
             break;
         }
-        bool zoneSupPlenumNum = false;
+        int zoneSupPlenumNum = 0;
         for (int iPlenum = 1; iPlenum <= state.dataZonePlenum->NumZoneSupplyPlenums; ++iPlenum) {
             if (state.dataZonePlenum->ZoneSupPlenCond(iPlenum).ActualZoneNum != zoneNum) {
                 continue;
@@ -750,7 +750,7 @@ namespace RoomAir {
             auto &zoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(zoneNum);
             for (int iNode = 1; iNode <= zoneEquipConfig.NumInletNodes; ++iNode) {
                 // Get node conditions
-                // this next block is of interest to irratic system loads... maybe nodes are not accurate at time of call ?
+                // this next block is of interest to erratic system loads... maybe nodes are not accurate at time of call ?
                 // how can we tell ? predict step must be lagged ? correct step, systems have run.
                 auto const &inletNode = state.dataLoopNodes->Node(zoneEquipConfig.InletNode(iNode));
                 for (auto const &afnHVAC : afnNode.HVAC) {
