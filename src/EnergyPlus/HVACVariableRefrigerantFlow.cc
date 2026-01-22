@@ -14206,8 +14206,6 @@ void VRFCondenserEquipment::VRFOU_CalcCompC(EnergyPlusData &state,
                     return CompResidual_FluidTCtrl(state, T_discharge_new, CondHeat, CAPFT, T_suc);
                 };
 
-                // General::SolveRoot(state, 1.0e-3, MaxIter, SolFla, SmallLoadTe, f, MinOutdoorUnitTe,
-                //                    T_suction); // SmallLoadTe is the updated Te'
                 Real64 f_xmin = f(MinOutdoorUnitTe);
                 Real64 f_xmax = f(T_suction);
                 if (f_xmin < 0 && f_xmax < 0) {
@@ -14289,23 +14287,6 @@ void VRFCondenserEquipment::VRFOU_CalcCompC(EnergyPlusData &state,
                                     SmallLoadTe);
                             }
                         }
-                        // ShowRecurringWarningErrorAtEnd(state,
-                        //                                "Low load calculation Te solution not found as end points have the same sign",
-                        //                                this->LowLoadTeErrorIndex,
-                        //                                SolFla,
-                        //                                SolFla);
-                        // if (f(T_suction) < 0) {
-                        //     // demand < capacity at both endpoints of the Te range, assuming f(x) is roughly monotonic than this is the low load
-                        //     // case TeTol is added to prevent the final updated Te to go out of bounds
-                        //     SmallLoadTe = MinOutdoorUnitTe + TeTol; // MinOutdoorUnitTe; //SmallLoadTe( Te'_new ) is constant during iterations
-                        // } else {
-                        //     // demand > capacity at both endpoints of the Te range, take the end point x where f(x) is closer to zero
-                        //     if (f(MinOutdoorUnitTe) > f(T_suction)) { // f(T_suction > 0, not equal as SolFla will not be -2
-                        //         SmallLoadTe = T_suction;
-                        //     } else {
-                        //         SmallLoadTe = MinOutdoorUnitTe;
-                        //     }
-                        // }
                     }
                 }
 
