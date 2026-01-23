@@ -1,10 +1,10 @@
 #!/bin/bash
 
 APP_NAME=EP-Launch-Lite
-IDENTIFIER="org.nrel.EnergyPlus.$APP_NAME"
+IDENTIFIER="org.nlr.EnergyPlus.$APP_NAME"
 
 function ep_codesign() {
-  codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+  codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --force --timestamp \
     --identifier "$IDENTIFIER" \
     --options runtime \
@@ -18,21 +18,21 @@ function ep_notarize() {
 
 echo "Dealing wiht Python.framework"
 
-find EP-Launch-Lite.app/Contents/Resources/ -name "*.so" | xargs codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+find EP-Launch-Lite.app/Contents/Resources/ -name "*.so" | xargs codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --force --timestamp \
     --identifier "$IDENTIFIER" \
     --options runtime \
     --entitlements entitlements.xml
 
 
-codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --force --timestamp \
     --identifier "$IDENTIFIER" \
     --options runtime \
     --entitlements entitlements.xml \
     EP-Launch-Lite.app/Contents/Frameworks/Python.framework/Versions/2.7/Python
 
-codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --deep \
     --force --timestamp \
     --identifier "$IDENTIFIER" \
@@ -42,7 +42,7 @@ codesign -vvvv -s "Developer ID Application: National Renewable Energy Laborator
 
 echo "DYlibs"
 
-find EP-Launch-Lite.app/Contents/ -name "*.dylib" | xargs codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+find EP-Launch-Lite.app/Contents/ -name "*.dylib" | xargs codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --force --timestamp \
     --identifier "$IDENTIFIER" \
     --options runtime \
@@ -62,7 +62,7 @@ echo "Dealing with EP-Launch-Lite itself"
 ep_codesign EP-Launch-Lite.app/Contents/MacOS/EP-Launch-Lite
 
 # Docs say deep should not be used, but whatever
-codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --deep \
     --force --timestamp \
     --identifier "$IDENTIFIER" \

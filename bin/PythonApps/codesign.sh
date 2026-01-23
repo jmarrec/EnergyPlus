@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function ep_codesign() {
-  codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+  codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --force --timestamp \
     --identifier "$IDENTIFIER" \
     --entitlements entitlements.xml \

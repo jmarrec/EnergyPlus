@@ -3,8 +3,8 @@
 !***** Input File produced by the EnergyPlus Model Example File Generator *****
 !***** Disclaimer & Notice: *****
 !***** The EnergyPlus Example File Generator ("EEFG") is provided by the *****
-!***** National Renewable Energy Laboratory ("NREL") operated by Midwest *****
-!***** Research Institute for the U.S. Department of Energy ("DOE"). *****
+!***** National Laboratory of the Rockies ("NREL") operated by Alliance for*****
+!***** Energy Innovation for the U.S. Department of Energy ("DOE"). *****
 !***** Access to and use of the EEFG shall impose the following obligations *****
 !***** on the user.  The user agrees to credit NREL/MRI in any publication(s) *****
 !***** that result from the use of EEFG.  The names NREL/MRI/DOE, however, may *****
@@ -15502,7 +15502,7 @@
 
 ! Deru and Torcellini 2007
 ! Source Energy and Emission Factors for Energy Use in Buildings
-! NREL/TP-550-38617
+! NLR/TP-550-38617
 ! source factor and Higher Heating Values from Table 5
 ! post-combustion emission factors for boiler from Table 9 (with factor of 1000 correction for natural gas)
 

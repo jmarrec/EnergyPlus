@@ -314,7 +314,7 @@ namespace Photovoltaics {
 
     //     EnergyPlus V1.2 and beyond include models for photovoltaic calculations called
     //     Generator:Photovoltaic:Simple and Generator:PV:Sandia implemented by the Center for
-    //     Buildings and Thermal Systems, National Renewable Energy Laboratory, 1617 Cole Blvd
+    //     Buildings and Thermal Systems, National Laboratory of the Rockies, 1617 Cole Blvd
     //     MS 2722, Golden, CO, 80401
 
     //     EnergyPlus v1.1.1 and beyond includes model for Photovoltaic calculations, now

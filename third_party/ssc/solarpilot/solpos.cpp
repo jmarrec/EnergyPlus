@@ -97,7 +97,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *                   decoder.)
 *
 *    Martin Rymes
-*    National Renewable Energy Laboratory
+*    National Laboratory of the Rockies
 *    25 March 1998
 *
 *    27 April 1999 REVISION:  Corrected leap year in S_date.

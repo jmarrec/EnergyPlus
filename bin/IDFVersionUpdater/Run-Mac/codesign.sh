@@ -4,7 +4,7 @@ APP_NAME=IDFVersionUpdater
 IDENTIFIER="org.nrel.EnergyPlus.$APP_NAME"
 
 function ep_codesign() {
-  codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+  codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --force --timestamp \
     --identifier "$IDENTIFIER" \
     --options runtime "$1"
@@ -33,7 +33,7 @@ ep_codesign ./IDFVersionUpdater.app/Contents/Frameworks/libGzip.dylib
 
 ep_codesign IDFVersionUpdater.app/Contents/MacOS/IDFVersionUpdater
 
-codesign -vvvv -s "Developer ID Application: National Renewable Energy Laboratory (K7JYVQJL7R)" \
+codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --force --timestamp \
     --identifier "$IDENTIFIER" \
     --options runtime \

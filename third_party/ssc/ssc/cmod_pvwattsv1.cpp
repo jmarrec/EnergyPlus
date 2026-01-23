@@ -208,7 +208,7 @@ public:
         // check system size
         if (dcrate < 0.1) dcrate = 0.1;
 
-        // bounds of (0,09999, 0.99001) are consistent with online PVWatts http://rredc.nrel.gov/solar/codes_algs/PVWATTS/version1/US/code/pvwattsv1.cgi
+        // bounds of (0,09999, 0.99001) are consistent with online PVWatts http://rredc.nlr.gov/solar/codes_algs/PVWATTS/version1/US/code/pvwattsv1.cgi
         //    if ( derate < 0.09999 || derate > 0.99001 ) // Use if default ac to dc derate factor out of range
         if (derate < 0.0 || derate > 1.0) // Use if default ac to dc derate factor out of range
             derate = 0.77;

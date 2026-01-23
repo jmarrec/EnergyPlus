@@ -54,7 +54,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *              #include "solpos.h"
 *
 *    Martin Rymes
-*    National Renewable Energy Laboratory
+*    National Laboratory of the Rockies
 *    25 March 1998
 *----------------------------------------------------------------------------*/
 

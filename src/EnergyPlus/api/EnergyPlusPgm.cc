@@ -82,7 +82,7 @@
 // water heaters were developed by University of Central Florida, Florida Solar Energy Center (FSEC),
 // 1679 Clearlake Road, Cocoa, FL  32922, www.fsec.ucf.edu/.
 
-// Portions of EnergyPlus were developed by the National Renewable Energy Laboratory (NREL), 1617 Cole
+// Portions of EnergyPlus were developed by the National Laboratory of the Rockies (NREL), 1617 Cole
 // Blvd, Golden, CO 80401.
 
 // EnergyPlus v1.0.1, v1.0.2, v1.0.3, v1.1, v1.1.1 (Wintel platform) includes a link to TRNSYS (The Transient

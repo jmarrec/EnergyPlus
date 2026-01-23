@@ -36,7 +36,7 @@ The [calculation methodology](#pvwattsmanual) will strive to match the version o
 
 ## Testing/Validation/Data Sources ##
 
-The EnergyPlus implementation of PVWatts will be validated against the [PVWatts API](https://developer.nrel.gov/docs/solar/pvwatts-v5/), which was validated against measured PV performance data (see section 15 in the [PVWatts Manual](#pvwattsmanual)).
+The EnergyPlus implementation of PVWatts will be validated against the [PVWatts API](https://developer.nlr.gov/docs/solar/pvwatts-v5/), which was validated against measured PV performance data (see section 15 in the [PVWatts Manual](#pvwattsmanual)).
 
 ## Input Output Reference Documentation ##
 
@@ -167,5 +167,5 @@ An example file will be created. No others will be modified No transition change
 
 ## References ##
 
- - <a name="pvwattsmanual" href="https://www.nrel.gov/docs/fy14osti/62641.pdf">PVWatts Version 5 Manual</a>
+ - <a name="pvwattsmanual" href="https://www.nlr.gov/docs/fy14osti/62641.pdf">PVWatts Version 5 Manual</a>
  - <a name="ssc" href="https://github.com/NREL/ssc">SAM Simulation Core GitHub repository</a>
