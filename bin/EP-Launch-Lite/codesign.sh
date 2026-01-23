@@ -16,7 +16,7 @@ function ep_notarize() {
 }
 
 
-echo "Dealing wiht Python.framework"
+echo "Dealing with Python.framework"
 
 find EP-Launch-Lite.app/Contents/Resources/ -name "*.so" | xargs codesign -vvvv -s "Developer ID Application: National Laboratory of the Rockies (K7JYVQJL7R)" \
     --force --timestamp \

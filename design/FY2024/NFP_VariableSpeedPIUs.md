@@ -13,11 +13,11 @@ Certain building energy codes require fan powered VAV boxes to use variable spee
 
     All fan powered VAV terminal units (series or parallel) shall be provided with electronically commutated motors. The DDC system shall be configured to vary the speed of the motor as a function of the heating and cooling load in the space. Minimum speed shall not be greater than 66 percent of design airflow required for the greater of heating or cooling operation. Minimum speed shall be used during periods of low heating and cooling operation and ventilation-only operation.
 
-There is also a user request for it, see [here](https://github.com/NREL/EnergyPlus/issues/7311).
+There is also a user request for it, see [here](https://github.com/NatLabRockies/EnergyPlus/issues/7311).
 
 ## E-mail and  Conference Call Conclusions ##
 
-TRANE has agreed to share their variable speed series fan powered terminal units hence this NFP will focus on the implementation of parallel fan powered terminal units. See this [PR](https://github.com/NREL/EnergyPlus/pull/10336) for reference.
+TRANE has agreed to share their variable speed series fan powered terminal units hence this NFP will focus on the implementation of parallel fan powered terminal units. See this [PR](https://github.com/NatLabRockies/EnergyPlus/pull/10336) for reference.
 
 ## Overview ##
 
@@ -47,7 +47,7 @@ PIU terminals currently don't have a maximum reheat air temperature input but is
 
 Currently, both the `CalcSeriesPIU` and `CalcParallelPIU` routine follow a similar approach which is to 1. determine the primary/secondary airflow rates, 2. simulate the fan, 3. simulate the heating coil. The new implementation will use a "two-step" approach when the terminal sees a heating load: First, the `Calc` methods will force the terminal to run at its minimum flow rate, if the maximum reheat temperature is reached and the load is not met, then flow rate will be increased so the load can be met (at that maximum reheat temperature). The "Deadband" and "Cooling" sequences of operations specified above can be implemented using the current structure of the routines (see 1.).
 
-TRANE has shared some documentation that describe how their product operate. This document is the bases for [PR #10336](https://github.com/NREL/EnergyPlus/pull/10336). The following figures shows how staged and modulated heating elements can be controlled along with variable speed fans in parallel fan powered terminals to meet space loads.
+TRANE has shared some documentation that describe how their product operate. This document is the bases for [PR #10336](https://github.com/NatLabRockies/EnergyPlus/pull/10336). The following figures shows how staged and modulated heating elements can be controlled along with variable speed fans in parallel fan powered terminals to meet space loads.
 
 ![Sequence of Operation of a VAV parallel FPB with staged heating](vav_parallel_fpb_trane_staged.png)
 
@@ -63,7 +63,7 @@ During heating operations and during the first stage of heating, the terminal fa
 
 ## Approach ##
 
-After presenting to the development team, feedback was that the Guideline 36 are specific to high performance building system. Hence, the TRANE sequences will be implemented in EnergyPlus to align with [PR #10336](https://github.com/NREL/EnergyPlus/pull/10336).
+After presenting to the development team, feedback was that the Guideline 36 are specific to high performance building system. Hence, the TRANE sequences will be implemented in EnergyPlus to align with [PR #10336](https://github.com/NatLabRockies/EnergyPlus/pull/10336).
 
 The following new inputs will be added to the `AirTerminal:SingleDuct:ParallelPIU:Reheat`:
 - `Fan Control Type`

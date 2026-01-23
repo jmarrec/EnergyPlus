@@ -8,10 +8,10 @@
 
 ## Background ##
 
-Excerpts lifted from [issue #8209](https://github.com/NREL/EnergyPlus/issues/8209)
+Excerpts lifted from [issue #8209](https://github.com/NatLabRockies/EnergyPlus/issues/8209)
 
  - There can be one infiltration object serving multiple zones, and there can be multiple infiltration objects serving the same zone. Currently the output variables only report at zone level, which is good for the first case. However, for the second case, there's no way to obtain, e.g., Sensible Heat Gain Energy specific to each object.
- - Some related discussion in [Add Space PR](https://github.com/NREL/EnergyPlus/pull/8394#discussion_r530585696):
+ - Some related discussion in [Add Space PR](https://github.com/NatLabRockies/EnergyPlus/pull/8394#discussion_r530585696):
 	 - Dan Macumber: Is it possible to make infiltration or ventilation at the space level? That would simplify input for cases where ventilation requirements are a function of space type.
 	 - Jason Degraw: I think it is possible, I think we probably just want to avoid having both (e.g. SpaceInfiltration _and_ ZoneInfiltration). Moving everything to the space level will probably be more work, but if that's the right solution then we should do that.
 	 - Scott Horowitz: Whether it's SpaceInfiltration or ZoneInfiltration, it'd be nice to be able to get individual outputs for each object. With current EnergyPlus, you can have multiple ZoneInfiltration objects in a zone, but can only get aggregate outputs (i.e., the key for Zone Infiltration Sensible Heat Gain Energy is a zone object, not an infiltration object).

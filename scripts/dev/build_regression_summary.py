@@ -81,7 +81,7 @@ fixed_up_contents = f"""
 
 {md_contents}
 
- - [View Results](https://github.com/NREL/EnergyPlus/actions/runs/{github_run_id})
+ - [View Results](https://github.com/NatLabRockies/EnergyPlus/actions/runs/{github_run_id})
  - [Download Regressions]({artifact_url})
 """
 

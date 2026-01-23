@@ -160,7 +160,7 @@ On Monday, March 25, 2019, 9:23:03 AM MDT, Lixing Gu <gu@fsec.ucf.edu> wrote:
 
 Larry:
 
-As you may know, I will implement a new feature to Model DOAS Supplying Air to Inlets of Multiple AHUs. The NFP was uploaded in https://github.com/NREL/EnergyPlus/blob/Model-DOAS-to-Multiple-Air-Handling-Units/design/FY2019/NFP-DOAS_MultiAHUs.md. The approach I proposed is a slight modification Fred proposed before. My guess (not sure) is that the Fred’s proposal was discussed in the sizing meeting before. I also know you are interested in this topic. Is it possible to discuss the NFP in the sizing meeting as an agenda item this Wed.?
+As you may know, I will implement a new feature to Model DOAS Supplying Air to Inlets of Multiple AHUs. The NFP was uploaded in https://github.com/NatLabRockies/EnergyPlus/blob/Model-DOAS-to-Multiple-Air-Handling-Units/design/FY2019/NFP-DOAS_MultiAHUs.md. The approach I proposed is a slight modification Fred proposed before. My guess (not sure) is that the Fred’s proposal was discussed in the sizing meeting before. I also know you are interested in this topic. Is it possible to discuss the NFP in the sizing meeting as an agenda item this Wed.?
 
 Thanks.
 
@@ -368,7 +368,7 @@ Team:
 
 An NFP to Model DOAS Supplying Air to Inlets of Multiple AHUs.
 
-https://github.com/NREL/EnergyPlus/blob/Model-DOAS-to-Multiple-Air-Handling-Units/design/FY2019/NFP-DOAS_MultiAHUs.md.
+https://github.com/NatLabRockies/EnergyPlus/blob/Model-DOAS-to-Multiple-Air-Handling-Units/design/FY2019/NFP-DOAS_MultiAHUs.md.
 
 Comments are welcome via e-mail or github.  Please let me know if you wish to be a reviewer for this task.
 

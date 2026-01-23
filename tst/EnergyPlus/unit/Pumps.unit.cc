@@ -627,7 +627,7 @@ TEST_F(EnergyPlusFixture, CondensatePumpSizingPowerTest)
     EXPECT_NEAR(state->dataPumps->PumpEquip(1).NomPowerUse, 97.5, 0.1);
 }
 
-// Test for https://github.com/NREL/EnergyPlus/issues/6164
+// Test for https://github.com/NatLabRockies/EnergyPlus/issues/6164
 // The 'Design Minimum Flow Rate' is over the 'Design Maximum Flow Rate'
 TEST_F(EnergyPlusFixture, VariableSpeedPump_MinFlowGreaterThanMax)
 {
@@ -679,7 +679,7 @@ TEST_F(EnergyPlusFixture, VariableSpeedPump_MinFlowGreaterThanMax)
     EXPECT_NEAR(state->dataPumps->PumpEquip(1).MinVolFlowRate, 0.001 * 0.99, 0.00001);
 }
 
-// Test for https://github.com/NREL/EnergyPlus/issues/9427
+// Test for https://github.com/NatLabRockies/EnergyPlus/issues/9427
 // The 'Design Minimum Flow Rate' is equal to the 'Design Maximum Flow Rate' or greater than 99% of max
 TEST_F(EnergyPlusFixture, VariableSpeedPump_MinFlowEqualToMax)
 {

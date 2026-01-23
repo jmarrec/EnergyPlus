@@ -833,7 +833,7 @@ TEST_F(EnergyPlusFixture, WeatherManager_NoLocation)
     EXPECT_ENUM_EQ(state->dataWeather->Environment(1).KindOfEnvrn, Constant::KindOfSim::DesignDay);
 }
 
-// Test for https://github.com/NREL/EnergyPlus/issues/7550
+// Test for https://github.com/NatLabRockies/EnergyPlus/issues/7550
 TEST_F(SQLiteFixture, DesignDay_EnthalpyAtMaxDB)
 {
     state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");

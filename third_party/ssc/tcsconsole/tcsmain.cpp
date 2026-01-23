@@ -896,7 +896,7 @@ bool tcApp::OnInit() {
 	wxInitAllImageHandlers();
 
 	SetAppName( "TCS Console" );
-	SetVendorName( "NREL" );
+	SetVendorName( "NLR" );
 
 	tcFrame *f = new tcFrame;
 	f->Show();

@@ -61,7 +61,7 @@ Test ConvertInputFormat.
 This script aims to check that the ConvertInputFormat exe correctly
 handles periods in the name of the IDF.
 
-cf: https://github.com/NREL/EnergyPlus/issues/9419
+cf: https://github.com/NatLabRockies/EnergyPlus/issues/9419
 """
 
 import argparse

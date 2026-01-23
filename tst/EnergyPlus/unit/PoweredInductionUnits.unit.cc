@@ -553,7 +553,7 @@ TEST_F(EnergyPlusFixture, SeriesPIUTest1)
     state->dataZoneEnergyDemand->CurDeadBandOrSetback.deallocate();
 }
 
-// cf: https://github.com/NREL/EnergyPlus/issues/7183
+// cf: https://github.com/NatLabRockies/EnergyPlus/issues/7183
 TEST_F(EnergyPlusFixture, PIUArrayOutOfBounds)
 {
 

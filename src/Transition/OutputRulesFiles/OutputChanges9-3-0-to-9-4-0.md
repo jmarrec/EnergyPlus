@@ -10,7 +10,7 @@ This will eventually become a more structured file, but currently it isn't clear
 
 ### Daylight Factors output in EIO and DFS now supports more than two reference points
 
-[PR#8017](https://github.com/NREL/EnergyPlus/pull/8017) changed the output format in both EIO and DFS (when using `Output:DaylightFactors`)
+[PR#8017](https://github.com/NatLabRockies/EnergyPlus/pull/8017) changed the output format in both EIO and DFS (when using `Output:DaylightFactors`)
 to support more than two `Daylighting:ReferencePoint`.
 
 #### EIO
@@ -89,7 +89,7 @@ The internal ordering of surfaces has changed. Previously subsurfaces (doors and
 Now subsurfaces are at the end of each group of zone surfaces.Many reports preserve the old order, but some outputs do not.
 Changed outputs include the rdd, edd, eso (and resulting csv), shd, and sci output files.
 
-See [PR#7847](https://github.com/NREL/EnergyPlus/pull/7847)
+See [PR#7847](https://github.com/NatLabRockies/EnergyPlus/pull/7847)
 
 ### Report zero values with zero Zone Cooling and Heating Loads in Report: HVAC Sizing Summary
 
@@ -111,7 +111,7 @@ LIVING SPACE 	0.0 	0.0 	0.0 	0.0 	0.0 	N/A 	N/A 	0.0 	0.0 	0.0 	0.0 	0.0 	0.0 	0
 
 The fix is applied both both tables of Zone Sensible Cooling abd Zone Sensible Heating.
 
-See [PR#8145](https://github.com/NREL/EnergyPlus/pull/8145)
+See [PR#8145](https://github.com/NatLabRockies/EnergyPlus/pull/8145)
 
 ### New reporting items added to the _perflog.csv log file for PerformancePrecisionTradeoffs
 
@@ -141,7 +141,7 @@ In the log file with _perflog.csv suffix, each simulation will add a line that c
 - Number of Warnings
 - Number of Severe
 
-See [8121](https://github.com/NREL/EnergyPlus/pull/8121)
+See [8121](https://github.com/NatLabRockies/EnergyPlus/pull/8121)
 
 ### EIO reporting items added for PerformancePrecisionTradeoffs
 
@@ -151,7 +151,7 @@ In the PerformancePrecisionTradeoffs section of .eio file, a line of header of p
 ! <Performance Precision Tradeoffs>, Use Coil Direct Simulation, Zone Radiant Exchange Algorithm, Override Mode, Number of Timestep In Hour, Force Euler Method, Minimum Number of Warmup Days, Force Suppress All Begin Environment Resets, Minimum System Timestep, MaxZoneTempDiff, MaxAllowedDelTemp
  Performance Precision Tradeoffs, No, ScriptF, MODE07, 1, Yes, 1, Yes, 60.0, 1.000, 0.1000
 
-See [8121](https://github.com/NREL/EnergyPlus/pull/8121)
+See [8121](https://github.com/NatLabRockies/EnergyPlus/pull/8121)
 
 ### Output:Variables, Output:Meter, Output:Meter:MeterFileOnly, Output:Table:Monthly
 
@@ -166,4 +166,4 @@ See [8121](https://github.com/NREL/EnergyPlus/pull/8121)
  (a) "Fuel Oil #1" in 9.3 to "Fuel Oil No 1" in 9.4
  (b) "Fuel Oil #2" in 9.3 to "Fuel Oil No 2" in 9.4
 
-See [8301](https://github.com/NREL/EnergyPlus/pull/8304)
+See [8301](https://github.com/NatLabRockies/EnergyPlus/pull/8304)

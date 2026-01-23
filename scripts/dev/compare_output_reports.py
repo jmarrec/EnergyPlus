@@ -62,7 +62,7 @@ HTML, SQL, and JSON outputs.
 5ZoneCAV_MaxTemp_JSON_Outputs.idf has all the required
 objects (Output:SQLite, Output:JSON) with 'AllSummary' enabled.
 
-cf: https://github.com/NREL/EnergyPlus/issues/9419
+cf: https://github.com/NatLabRockies/EnergyPlus/issues/9419
 """
 
 __author__ = "Julien Marrec, EffiBEM"

@@ -908,7 +908,7 @@ TEST_F(EnergyPlusFixture, BaseSizer_setZoneCoilInletConditions)
 }
 
 // This tests checks that the Design Day + Peak Time is filled up for Fans
-// https://github.com/NREL/EnergyPlus/issues/6899
+// https://github.com/NatLabRockies/EnergyPlus/issues/6899
 TEST_F(EnergyPlusFixture, BaseSizer_FanPeak)
 {
 

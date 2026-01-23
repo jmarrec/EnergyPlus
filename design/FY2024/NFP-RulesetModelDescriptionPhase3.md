@@ -88,9 +88,9 @@ all the data elements used by the PNNL Ruleset Checking Tool.
 Since this NFP builds on the efforts described in previous NFPs, some details are skipped that are already described in those
 ealier NFPs:
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2022/NFP-InitialRulesetModelDescription.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2022/NFP-InitialRulesetModelDescription.md
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2023/NFP-RulesetModelDescriptionPhase2.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2023/NFP-RulesetModelDescriptionPhase2.md
 
 Some lessons learned from the initial effort in initial 2022 are described here:
 
@@ -387,7 +387,7 @@ of input and related outputs should provide the final check if the reporting is 
 While no specific changes for input are expected, we are considering allowing compliance parameters in the IDF/epJSON file by
 following the generic tag/properties described in this issue:
 
-https://github.com/NREL/EnergyPlus/issues/8775
+https://github.com/NatLabRockies/EnergyPlus/issues/8775
 
 Additional tabular outputs will be described in the IOref.
 
@@ -609,7 +609,7 @@ them out
 3. Add new Compliance input objects like existing Compliance:Building and report them in tabular reports
 4. Add new Compliance input objects like existing Compliance:Building and parse the epJSON to get them (essentially
 ignore these inputs by EnergyPlus like HVACTemplate objects are ignored). A preprocessor would need to delete them.
-5. Add new generic tag object (https://github.com/NREL/EnergyPlus/issues/8775) to associate new key-value pairs for
+5. Add new generic tag object (https://github.com/NatLabRockies/EnergyPlus/issues/8775) to associate new key-value pairs for
 compliance parameters and create a tabular report that echos them out
 6. Create a JSON file that contains the compliance parameters but the layout would need to match the layout of the
 RMD file so that it could be merged. Use createRMD to make an empty file to make it easier for user to populate
@@ -690,11 +690,11 @@ as the 2022 adn 2023 work and will continue to include unit tests. This includes
 
 The original NFP is here:
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2022/NFP-InitialRulesetModelDescription.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2022/NFP-InitialRulesetModelDescription.md
 
 The 2023 NFP is here:
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2023/NFP-RulesetModelDescriptionPhase2.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2023/NFP-RulesetModelDescriptionPhase2.md
 
 The repo for the script development is here:
 

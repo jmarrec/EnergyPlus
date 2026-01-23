@@ -104,7 +104,7 @@ void solarpos(int year, int month, int day, int hour, double minute, double lat,
 /** @defgroup solarpos_spa Solar Position Algorithm group/
 *   The functions in this group are used to calculate the sun's position at any given timestep
 *   based on the Solar Position Algorithm reported by Reda and Andreas in NLR/TP-560-34302, 2008.
-*   The functions used in this implementation were taken from a C code implementation provided at https://midcdmz.nlr.gov/spa/
+*   The functions used in this implementation were taken from a C code implementation provided at https://midcdmz.nrel.gov/spa/
 *   @{
 */
 /**

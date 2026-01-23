@@ -90,9 +90,9 @@ Subject: Re: FW: NFP to allow multiple solvers to find a root in HVAC system sim
 I've made changes when RegulaFalsi can't find the solution for various reasons.
 
 In FanCoils here:
-https://github.com/NREL/EnergyPlus/blob/develop/src/EnergyPlus/FanCoilUnits.cc#L2154
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/src/EnergyPlus/FanCoilUnits.cc#L2154
 when very low water flow rates were needed, and in UnitarySystem (and other places) like this:
-https://github.com/NREL/EnergyPlus/blob/develop/src/EnergyPlus/HVACUnitarySystem.cc#L7458-L7531
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/src/EnergyPlus/HVACUnitarySystem.cc#L7458-L7531
 
 I don't like doing this and think this new approach would eliminate any need for special cases.
 
@@ -180,7 +180,7 @@ On 5/3/2017 1:39 PM, Michael J Witte wrote:
 >>>
 >>> The revised NFP based on conversation with Rich was uploaded a while
 >>> ago for further review and comments:
->>> https://github.com/NREL/EnergyPlus/blob/AllowMultipleSolversToFindARoot/design/FY2017/NFP-AllowMultipleSolvers.md.
+>>> https://github.com/NatLabRockies/EnergyPlus/blob/AllowMultipleSolversToFindARoot/design/FY2017/NFP-AllowMultipleSolvers.md.
 >>> I also added design document.
 >>>
 >>> Thanks.
@@ -362,7 +362,7 @@ No transition is needed.
 
 ## References ##
 
-[Multiple solvers to find a root](https://github.com/NREL/EnergyPlusDevSupport/blob/master/DesignDocuments/EnhancementList/HVAC_General_2013_04.doc)
+[Multiple solvers to find a root](https://github.com/NatLabRockies/EnergyPlusDevSupport/blob/master/DesignDocuments/EnhancementList/HVAC_General_2013_04.doc)
 
 ## Design Document
 

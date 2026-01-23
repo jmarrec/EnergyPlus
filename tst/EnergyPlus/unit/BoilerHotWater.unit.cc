@@ -157,7 +157,7 @@ TEST_F(EnergyPlusFixture, Boiler_HotWaterAutoSizeTempTest)
     EXPECT_DOUBLE_EQ(state->dataBoilers->Boiler[0].NomCap, NomCapBoilerExpected);
 }
 
-// Cf: https://github.com/NREL/EnergyPlus/issues/6164
+// Cf: https://github.com/NatLabRockies/EnergyPlus/issues/6164
 // This boiler has empty field for "Design Water Flow Rate", IDD now should make default='Autosize'
 TEST_F(EnergyPlusFixture, Boiler_HotWater_BlankDesignWaterFlowRate)
 {

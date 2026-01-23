@@ -25,7 +25,7 @@ Currently, VRF systems in EnergyPlus only allow ZoneHVAC terminals to be connect
 
 This task will expand the capabilities of the VRF model to allow terminal devices such as split DX DOAS AHUs and split DX AHUs for space conditioning and ventilation to be connected to VRF refrigerant loops. The following figure is excerpt from the Eng. Ref. (Figure 16.51, pg 1163, V9.2) and modified to include VRF air loop and outdoor air equipment (red circle).
 
-Figure 1: ![Figure 1](https://github.com/NREL/EnergyPlus/blob/NFP---Connect-split-DX-to-VRF-refrigerant-loop/design/FY2019/VRFTU%20Allowed%20in%20Airloop-OASys.png) Variable Refrigerant Flow Heat Pump (draw through fan placement)
+Figure 1: ![Figure 1](https://github.com/NatLabRockies/EnergyPlus/blob/NFP---Connect-split-DX-to-VRF-refrigerant-loop/design/FY2019/VRFTU%20Allowed%20in%20Airloop-OASys.png) Variable Refrigerant Flow Heat Pump (draw through fan placement)
 
 ## Approach ##
 

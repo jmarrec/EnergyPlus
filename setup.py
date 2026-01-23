@@ -218,7 +218,7 @@ setup(
     license="Modified BSD",
     author="United States Department of Energy",
     author_email="",
-    url="https://github.com/NREL/EnergyPlus",
+    url="https://github.com/NatLabRockies/EnergyPlus",
     description="EnergyPlus is a building simulation program for modeling energy and water use in buildings.",
     long_description=(repo_root_directory / "README.md").read_text(),
     long_description_content_type="text/markdown",

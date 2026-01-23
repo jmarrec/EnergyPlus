@@ -4066,7 +4066,7 @@ TEST_F(InputProcessorFixture, getObjectItem_curve_biquadratic2)
     EXPECT_EQ(1, IOStatus);
 }
 
-// https://github.com/NREL/EnergyPlus/issues/6720
+// https://github.com/NatLabRockies/EnergyPlus/issues/6720
 TEST_F(InputProcessorFixture, FalseDuplicates)
 {
     std::string const idf(delimited_string({

@@ -195,7 +195,7 @@ void rate_data::init_energy_rates(bool gen_only) {
 			// 4. assumption is that all periods in same month have same tier breakdown
 			// 5. assumption is that tier numbering is correct for the kWh/kW breakdown
 			// That is, first tier must be kWh/kW
-            // See example at: https://github.com/NREL/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/block_step/GPC_PLL_Tiered_Bill_Calc_Example_v3_btm_tests.xlsx
+            // See example at: https://github.com/NatLabRockies/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/block_step/GPC_PLL_Tiered_Bill_Calc_Example_v3_btm_tests.xlsx
 			if ((m_month[m].ec_tou_units.ncols() > 0 && m_month[m].ec_tou_units.nrows() > 0)
 				&& check_for_kwh_per_kw_rate(m_month[m].ec_tou_units.at(0, 0)))
 			{

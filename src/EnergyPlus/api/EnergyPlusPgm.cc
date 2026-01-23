@@ -256,7 +256,7 @@ void commonInitialize(EnergyPlus::EnergyPlusData &state)
 
 #ifdef DEBUG_ARITHM_MSVC
     // the following enables NaN detection in Visual Studio debug builds. See
-    // https://github.com/NREL/EnergyPlus/wiki/Debugging-Tips
+    // https://github.com/NatLabRockies/EnergyPlus/wiki/Debugging-Tips
 
     // Note: what you need to pass to the _controlfp_s is actually the opposite
     // By default all bits are 1, and the exceptions are turned off, so you need to turn off the bits for the exceptions you want to enable

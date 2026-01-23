@@ -86,7 +86,7 @@ $$Q_{max} = min(Q_{max}^{Li}, Q_{max}^{neg})$$
 ### Programming Approach
 The System Advisor Model (SAM) already has a battery module based on the models described in the previous section. In order to incorporate this  module in EnergyPlus, the battery model in SAM and all its dependencies can be imported into the third party library in EnergyPlus. The battery model and its dependencies are contained in two folders of the SAM repository, the 'ssc' folder and the 'shared' folder. The link to the github repository of the SAM model is below.
 
-https://github.com/nrel/ssc
+https://github.com/NatLabRockies/ssc
 
 The following libraries from the SAM repository would be imported into EnergyPlus.
 1.	cmod_battery.h

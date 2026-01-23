@@ -12537,7 +12537,7 @@ arguments. The arguments may be listed by typing ``energyplus --help``
 (on any operating system) and ``man energyplus`` (on Unix-based
 operating systems, Mac OS X and Linux). For more information about the
 command line interface, see
-https://github.com/NREL/EnergyPlus/blob/develop/doc/running-energyplus-from-command-line.md.
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/doc/running-energyplus-from-command-line.md.
 The remainder of this section describes running EnergyPlus in legacy
 mode (i.e. no command-line arguments) on Windows OS.
 
