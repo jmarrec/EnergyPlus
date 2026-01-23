@@ -371,9 +371,6 @@ namespace Sched {
         bool ErrorsFound(false);
         bool NumErrorFlag;
 
-        std::string CFld; // Character field for error message
-        //  CHARACTER(len=20) CFld1        ! Character field for error message
-
         std::array<Real64, Constant::iMinutesInDay> minuteVals;
         std::array<bool, Constant::iMinutesInDay> setMinuteVals;
 
@@ -398,11 +395,8 @@ namespace Sched {
         //  REAL(r64) tempval
         std::string CurrentThrough;
         std::string LastFor;
-        std::string errmsg;
-        // for SCHEDULE:FILE
         int rowCnt;
 
-        std::string subString;
         int MaxNums1;
         char ColumnSep;
         int rowLimitCount;
@@ -2964,9 +2958,6 @@ namespace Sched {
         // representation.
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        std::string hHour;
-        std::string mMinute;
-
         std::string String = stripped(FieldValue);
         std::string::size_type const Pos = index(String, ':');
         bool nonIntegral = false;

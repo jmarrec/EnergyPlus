@@ -88,9 +88,9 @@ namespace IndoorGreen {
         auto const &lw = state.dataIndoorGreen;
         if (lw->getInputFlag) {
             bool ErrorsFound(false);
-            const char *RoutineName("IndoorLivingWall: "); // include trailing blank space
             GetIndoorGreenInput(state, ErrorsFound);
             if (ErrorsFound) {
+                const char *RoutineName("IndoorLivingWall: "); // include trailing blank space
                 ShowFatalError(state, format("{}Errors found in input.  Program terminates.", RoutineName));
             }
             SetIndoorGreenOutput(state);

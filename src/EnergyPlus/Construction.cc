@@ -1190,7 +1190,9 @@ void ConstructionProps::calculateExponentialMatrix()
 
     // Note With change to row-major arrays "row" here now means "column"
 
-    AMatRowNormMax = 0.0; // Start of Step 1 ...
+    // Start of Step 1 ...
+    // set to tiny value to avoid log(0) below
+    AMatRowNormMax = 1e-12;
 
     for (i = 1; i <= this->rcmax; ++i) {
 
