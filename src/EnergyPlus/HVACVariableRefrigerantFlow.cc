@@ -14205,41 +14205,86 @@ void VRFCondenserEquipment::VRFOU_CalcCompC(EnergyPlusData &state,
                     return CompResidual_FluidTCtrl(state, T_discharge_new, CondHeat, CAPFT, T_suc);
                 };
 
-                General::SolveRoot(state, 1.0e-3, MaxIter, SolFla, SmallLoadTe, f, MinOutdoorUnitTe,
-                                   T_suction); // SmallLoadTe is the updated Te'
-                if (SolFla == -1) {
-                    // show error not converging
-                    ShowWarningMessage(state, format("{}: low load Te adjustment failed for {}", RoutineName, this->Name));
-                    ShowContinueErrorTimeStamp(state, "");
-                    ShowContinueError(state, format("  Iteration limit [{}] exceeded in calculating OU evaporating temperature", MaxIter));
-                } else if (SolFla == -2) {
-                    this->LowLoadTeError++;
-                    if (LowLoadTeError < 5) {
-                        ShowWarningMessage(state,
-                                           format("{}: no Te solution was found for {} f({})={} and f({})={} are the same sign",
-                                                  RoutineName,
-                                                  this->Name,
-                                                  MinOutdoorUnitTe,
-                                                  f(MinOutdoorUnitTe),
-                                                  T_suction,
-                                                  f(T_suction)));
-                        ShowContinueErrorTimeStamp(state, "");
-                    }
-                    ShowRecurringWarningErrorAtEnd(state,
-                                                   "Low load calculation Te solution not found as end points have the same sign",
-                                                   this->LowLoadTeErrorIndex,
-                                                   SolFla,
-                                                   SolFla);
-                    if (f(T_suction) < 0) {
-                        // demand < capacity at both endpoints of the Te range, assuming f(x) is roughly monotonic than this is the low load case
-                        // TeTol is added to prevent the final updated Te to go out of bounds
-                        SmallLoadTe = MinOutdoorUnitTe + TeTol; // MinOutdoorUnitTe; //SmallLoadTe( Te'_new ) is constant during iterations
+                Real64 f_xmin = f(MinOutdoorUnitTe);
+                Real64 f_xmax = f(T_suction);
+                if (f_xmin < 0 && f_xmax < 0) {
+                    SmallLoadTe = MinOutdoorUnitTe;
+                } else if (f_xmin > 0 && f_xmax > 0) {
+                    if (f_xmin > f_xmax) {
+                        SmallLoadTe = T_suction;
                     } else {
-                        // demand > capacity at both endpoints of the Te range, take the end point x where f(x) is closer to zero
-                        if (f(MinOutdoorUnitTe) > f(T_suction)) { // f(T_suction > 0, not equal as SolFla will not be -2
-                            SmallLoadTe = T_suction;
-                        } else {
+                        SmallLoadTe = MinOutdoorUnitTe;
+                    }
+                } else {
+                    General::SolveRoot(state, 1.0e-3, MaxIter, SolFla, SmallLoadTe, f, MinOutdoorUnitTe, T_suction); // SmallLoadTe is the updated Te'
+                    if (SolFla == -1) {
+                        // show error not converging
+                        if (LowLoadTeIterError == 0) {
+                            ShowWarningMessage(state, format("{}: low load Te adjustment failed for {}", RoutineName, this->Name));
+                            ShowContinueErrorTimeStamp(state, "");
+                            ShowContinueError(state, format("  Iteration limit [{}] exceeded in calculating OU evaporating temperature", MaxIter));
+                        }
+                        ShowRecurringWarningErrorAtEnd(state,
+                                                       "Low load calculation Te solution iteration limit exceeded error continues.",
+                                                       this->LowLoadTeIterError,
+                                                       SmallLoadTe,
+                                                       SmallLoadTe);
+                    } else if (SolFla == -2) {
+                        if (f_xmax < 0) {
+                            // demand < capacity at both endpoints of the Te range, assuming f(x) is roughly monotonic then this is the low load
+                            // case TeTol is added to prevent the final updated Te to go out of bounds
                             SmallLoadTe = MinOutdoorUnitTe;
+                            this->LowLoadTeError2Neg++;
+                            if (LowLoadTeError2Neg < 5) {
+                                ShowWarningMessage(state,
+                                                   format("{}: no Te solution was found for {}, as load < capacity for the whole range of Te",
+                                                          RoutineName,
+                                                          this->Name));
+                                ShowContinueErrorTimeStamp(state, "");
+                            }
+                            ShowRecurringWarningErrorAtEnd(
+                                state,
+                                "Low load calculation Te solution not found as load is smaller than min-speed capacity for the whole range",
+                                this->LowLoadTeError2NegIndex,
+                                SmallLoadTe,
+                                SmallLoadTe);
+                        } else {
+                            // demand > capacity at both endpoints of the Te range, take the end point x where f(x) is closer to zero
+                            if (f_xmin > f_xmax) { // f(T_suction > 0, not equal as SolFla would not have been -2
+                                SmallLoadTe = T_suction;
+                                this->LowLoadTeError2PosTsuc++;
+                                if (LowLoadTeError2PosTsuc < 5) {
+                                    ShowWarningMessage(state,
+                                                       format("{}: no Te solution was found for {}, as load > capacity for the full range of Te",
+                                                              RoutineName,
+                                                              this->Name));
+                                    ShowContinueErrorTimeStamp(state, "");
+                                }
+                                ShowRecurringWarningErrorAtEnd(
+                                    state,
+                                    "Low load calculation Te solution not found as load is larger than min-speed capacity for "
+                                    "the whole range\nTake T_suction as the updated Te",
+                                    this->LowLoadTeError2PosTsucIndex,
+                                    SmallLoadTe,
+                                    SmallLoadTe);
+                            } else {
+                                SmallLoadTe = MinOutdoorUnitTe;
+                                this->LowLoadTeError2PosOUTe++;
+                                if (LowLoadTeError2PosOUTe < 5) {
+                                    ShowWarningMessage(state,
+                                                       format("{}: no Te solution was found for {}, as load > capacity for the full range of Te",
+                                                              RoutineName,
+                                                              this->Name));
+                                    ShowContinueErrorTimeStamp(state, "");
+                                }
+                                ShowRecurringWarningErrorAtEnd(
+                                    state,
+                                    "Low load calculation Te solution not found as load is larger than min-speed capacity for "
+                                    "the whole range\nTake MinOutdoorUnitTe as the updated Te",
+                                    this->LowLoadTeError2PosOUTeIndex,
+                                    SmallLoadTe,
+                                    SmallLoadTe);
+                            }
                         }
                     }
                 }
@@ -14250,7 +14295,7 @@ void VRFCondenserEquipment::VRFOU_CalcCompC(EnergyPlusData &state,
                 {
                     // Initialization of Iteration_Te (Label11)
                     // i.e., find a new Te (Pipe_Te_assumed) that can generate a new T_suction equaling to SmallLoadTe.
-                    // This requires the re-calculate of piping loss.
+                    // This requires the re-calculation of piping loss.
                     NumIteTe = 1;
                     MaxNumIteTe = (this->EvaporatingTemp - SmallLoadTe) / 0.1 + 1; // upper bound and lower bound of Te iterations
                     Pipe_Te_assumed = this->EvaporatingTemp - 0.1;
