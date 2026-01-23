@@ -175,8 +175,6 @@ namespace BaseboardElectric {
         int constexpr iHeatFracOfAutosizedCapacityNumericNum(
             3); //  get input index to baseboard heating capacity sizing as fraction of autosized heating capacity
 
-        auto &s_ipsc = state.dataIPShortCut;
-
         auto &baseboard = state.dataBaseboardElectric;
         std::string_view cCurrentModuleObject = cCMO_BBRadiator_Electric;
 
@@ -190,8 +188,8 @@ namespace BaseboardElectric {
             int NumNums = 0;
             int IOStat = 0;
             int BaseboardNum = 0;
+            auto &s_ipsc = state.dataIPShortCut;
             for (int ConvElecBBNum = 1; ConvElecBBNum <= NumConvElecBaseboards; ++ConvElecBBNum) {
-
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          cCurrentModuleObject,
                                                                          ConvElecBBNum,

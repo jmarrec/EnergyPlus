@@ -3508,9 +3508,6 @@ namespace Weather {
         static constexpr std::string_view WeatherManager("WeatherManager");
         static constexpr std::string_view RoutineNameLong("WeatherManager.cc subroutine SetUpDesignDay");
 
-        std::string StringOut;
-        //     For reporting purposes, set year to current system year
-
         struct HourlyWeatherData
         {
             // Members

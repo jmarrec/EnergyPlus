@@ -1153,9 +1153,9 @@ void HeatPumpAirToWater::reportEquipmentSummary(EnergyPlusData &state)
     if (state.dataPlnt->PlantFinalSizesOkayToReport) {
         std::string_view const typeName = DataPlant::PlantEquipTypeNames[static_cast<int>(this->EIRHPType)];
         std::string objectName = this->name;
-        std::string modeKeyWord;
         if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating ||
             this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
+            std::string modeKeyWord;
             if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
                 modeKeyWord = "Heating";
             } else if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
@@ -1237,7 +1237,6 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
 
     std::string capacityKW = "Nominal Capacity";
     std::string flowRateKW = "Load Side Volume Flow Rate";
-    std::string flowRateKW_no_v = "Load Side Flow Rate";
     if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
         capacityKW = "Rated Cooling Capacity";
         flowRateKW = "Rated Water Volume Flow Rate in Cooling Mode";
@@ -1479,6 +1478,7 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
             }
         }
         if (!this->loadSideDesignVolFlowRateWasAutoSized && state.dataPlnt->PlantFinalSizesOkayToReport) {
+            std::string flowRateKW_no_v = "Load Side Flow Rate";
             BaseSizer::reportSizerOutput(
                 state, typeName, this->name, fmt::format("User-Specified {} [m3/s]", flowRateKW_no_v), this->loadSideDesignVolFlowRate);
         }
@@ -1902,9 +1902,8 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                          EIRPlantLoopHeatPumps::EIRPlantLoopHeatPump::subtract}};
 
     bool errorsFound = false;
-    std::string &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     for (auto const &classToInput : classesToInput) {
-        cCurrentModuleObject = DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)];
+        auto cCurrentModuleObject = static_cast<std::string>(DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)]);
         DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(
             getEnumValue(BranchNodeConnections::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
         int numPLHP = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
@@ -3390,10 +3389,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
     };
 
     bool errorsFound = false;
-    std::string &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     for (auto &classToInput : classesToInput) {
-        cCurrentModuleObject = DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)];
-
+        auto cCurrentModuleObject = static_cast<std::string>(DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)]);
         DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(
             getEnumValue(BranchNodeConnections::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
 
@@ -3768,7 +3765,6 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
 
 void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
 {
-    std::string routineName = "HeatPumpAirToWater::processInputForEIRPLHP";
     struct ClassType
     {
         DataPlant::PlantEquipmentType thisType;
@@ -3800,7 +3796,6 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                   EIRPlantLoopHeatPumps::HeatPumpAirToWater::subtract},
     };
 
-    bool errorsFound = false;
     std::string cCurrentModuleObject = "HeatPump:AirToWater";
     auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(cCurrentModuleObject);
     auto const &schemaProps = state.dataInputProcessing->inputProcessor->getObjectSchemaProps(state, cCurrentModuleObject);
@@ -3812,12 +3807,13 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
     constexpr std::array<std::string_view, static_cast<int>(ControlType::Num)> AWHPControlTypeUC = {"FIXEDSPEED", "VARIABLESPEED"};
     if (instances != state.dataInputProcessing->inputProcessor->epJSON.end()) {
         auto &instancesValue = instances.value();
+        std::string &cCurrentModuleObjectSingleMode = state.dataIPShortCut->cCurrentModuleObject;
+        bool errorsFound = false;
+        std::string routineName = "HeatPumpAirToWater::processInputForEIRPLHP";
         for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
             auto const &fields = instance.value();
             auto const &thisObjectName = instance.key();
             state.dataInputProcessing->inputProcessor->markObjectAsUsed(cCurrentModuleObject, thisObjectName);
-
-            std::string &cCurrentModuleObjectSingleMode = state.dataIPShortCut->cCurrentModuleObject;
             for (auto &classToInput : classesToInput) {
                 cCurrentModuleObjectSingleMode = DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)];
                 DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(

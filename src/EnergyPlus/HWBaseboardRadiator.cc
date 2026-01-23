@@ -990,8 +990,6 @@ namespace HWBaseboardRadiator {
         auto &hWBaseboard = state.dataHWBaseboardRad->HWBaseboard(BaseboardNum);
         if (state.dataSize->CurZoneEqNum > 0) {
             auto &zoneEqSizing = state.dataSize->ZoneEqSizing(state.dataSize->CurZoneEqNum);
-
-            std::string CompType = cCMO_BBRadiator_Water;
             std::string CompName = hWBaseboard.Name;
             state.dataSize->DataHeatSizeRatio = 1.0;
             state.dataSize->DataFracOfAutosizedHeatingCapacity = 1.0;
@@ -1003,6 +1001,7 @@ namespace HWBaseboardRadiator {
             zoneEqSizing.SizingMethod(SizingMethod) = CapSizingMethod;
             if (CapSizingMethod == DataSizing::HeatingDesignCapacity || CapSizingMethod == DataSizing::CapacityPerFloorArea ||
                 CapSizingMethod == DataSizing::FractionOfAutosizedHeatingCapacity) {
+                std::string CompType = cCMO_BBRadiator_Water;
                 if (CapSizingMethod == DataSizing::HeatingDesignCapacity) {
                     if (hWBaseboard.ScaledHeatingCapacity == DataSizing::AutoSize) {
                         CheckZoneSizing(state, CompType, CompName);

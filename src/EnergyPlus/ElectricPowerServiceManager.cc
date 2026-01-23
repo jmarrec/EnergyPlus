@@ -209,8 +209,6 @@ void ElectricPowerServiceManager::getPowerManagerInput(EnergyPlusData &state)
 {
     static constexpr std::string_view routineName = "ElectricPowerServiceManager::getPowerManagerInput ";
 
-    auto &s_ipsc = state.dataIPShortCut;
-
     numLoadCenters_ = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "ElectricLoadCenter:Distribution");
 
     if (numLoadCenters_ > 0) {
@@ -272,6 +270,7 @@ void ElectricPowerServiceManager::getPowerManagerInput(EnergyPlusData &state)
         int numNums;   // Number of elements in the numeric array
         int iOStat;    // IO Status when calling get input subroutine
         bool foundInFromGridTransformer = false;
+        auto &s_ipsc = state.dataIPShortCut;
 
         s_ipsc->cCurrentModuleObject = "ElectricLoadCenter:Transformer";
         for (int loopTransformer = 1; loopTransformer <= numTransformers_; ++loopTransformer) {
@@ -2072,8 +2071,6 @@ GeneratorController::GeneratorController(EnergyPlusData &state,
 
     static constexpr std::string_view routineName = "GeneratorController constructor ";
 
-    auto &s_ipsc = state.dataIPShortCut;
-
     ErrorObjectHeader eoh{routineName, objectType, objectName};
 
     name = objectName;
@@ -2131,6 +2128,7 @@ GeneratorController::GeneratorController(EnergyPlusData &state,
         break;
     }
     default: {
+        auto &s_ipsc = state.dataIPShortCut;
         ShowSevereError(state, format("{}{} invalid entry.", routineName, s_ipsc->cCurrentModuleObject));
         ShowContinueError(state, format("Invalid {} associated with generator = {}", objectType, objectName));
         break;
@@ -2830,8 +2828,6 @@ ACtoDCConverter::ACtoDCConverter(EnergyPlusData &state, std::string const &objec
 
     static constexpr std::string_view routineName = "ACtoDCConverter constructor ";
 
-    auto &s_ipsc = state.dataIPShortCut;
-
     bool errorsFound = false;
     // if/when add object class name to input object this can be simplified. for now search all possible types
 
@@ -2841,6 +2837,7 @@ ACtoDCConverter::ACtoDCConverter(EnergyPlusData &state, std::string const &objec
         int NumAlphas; // Number of elements in the alpha array
         int NumNums;   // Number of elements in the numeric array
         int IOStat;    // IO Status when calling get input subroutine
+        auto &s_ipsc = state.dataIPShortCut;
         s_ipsc->cCurrentModuleObject = "ElectricLoadCenter:Storage:Converter";
 
         state.dataInputProcessing->inputProcessor->getObjectItem(state,
