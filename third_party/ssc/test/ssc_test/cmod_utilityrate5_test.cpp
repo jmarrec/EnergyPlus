@@ -608,7 +608,7 @@ TEST(cmod_utilityrate5_eqns, Test_Residential_TOU_Rates_net_billing_subhourly_ge
     EXPECT_NEAR(-156.95, cost_with_system, 0.1); // Subhourly data allows for increased sales - consistent with net metering
 }
 
-// If these results change, validate with https://github.com/NatLabRockies/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/SAM%202020.11.29%20Rollover%20Month%20Tests/2020.11.29_net_billing_carryover.xlsx
+// If these results change, validate with https://github.com/NREL/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/SAM%202020.11.29%20Rollover%20Month%20Tests/2020.11.29_net_billing_carryover.xlsx
 TEST(cmod_utilityrate5_eqns, Test_Residential_TOU_Rates_net_billing_carryover) {
     ssc_data_t data = new var_table;
 
@@ -663,7 +663,7 @@ TEST(cmod_utilityrate5_eqns, Test_Residential_TOU_Rates_net_billing_carryover) {
     EXPECT_NEAR(0, jan_year_2_credits, 0.1);
 }
 
-// If these results change, validate with https://github.com/NatLabRockies/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/SAM%202020.11.29%20Rollover%20Month%20Tests/2020.11.29_net_billing_carryover.xlsx
+// If these results change, validate with https://github.com/NREL/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/SAM%202020.11.29%20Rollover%20Month%20Tests/2020.11.29_net_billing_carryover.xlsx
 TEST(cmod_utilityrate5_eqns, Test_Residential_TOU_Rates_net_billing_carryover_april_reset) {
     ssc_data_t data = new var_table;
 
@@ -725,7 +725,7 @@ TEST(cmod_utilityrate5_eqns, Test_Residential_TOU_Rates_net_billing_carryover_ap
     EXPECT_NEAR(122.19, apr_year_1_credits, 0.1);
 }
 
-// If these results change, validate with https://github.com/NatLabRockies/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/SAM%202020.11.29%20Rollover%20Month%20Tests/2020.11.29_net_billing_carryover.xlsx
+// If these results change, validate with https://github.com/NREL/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/SAM%202020.11.29%20Rollover%20Month%20Tests/2020.11.29_net_billing_carryover.xlsx
 TEST(cmod_utilityrate5_eqns, Test_Residential_TOU_Rates_net_billing_carryover_jan_reset) {
     ssc_data_t data = new var_table;
 
@@ -785,7 +785,7 @@ TEST(cmod_utilityrate5_eqns, Test_Residential_TOU_Rates_net_billing_carryover_ja
     EXPECT_NEAR(175.92, jan_year_2_credits, 0.1);
 }
 
-// If these results change, validate with https://github.com/NatLabRockies/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/SAM%202020.11.29%20Rollover%20Month%20Tests/2020.11.29_net_billing_carryover.xlsx
+// If these results change, validate with https://github.com/NREL/SAM-documentation/blob/master/Unit%20Testing/Utility%20Rates/SAM%202020.11.29%20Rollover%20Month%20Tests/2020.11.29_net_billing_carryover.xlsx
 TEST(cmod_utilityrate5_eqns, Test_Residential_TOU_Rates_net_billing_carryover_lower_sell_rate) {
     ssc_data_t data = new var_table;
 

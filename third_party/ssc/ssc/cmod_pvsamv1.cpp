@@ -1,6 +1,6 @@
 /**
 BSD-3-Clause
-Copyright 2019 Alliance for Energy Innovation, LLC
+Copyright 2019 Alliance for Sustainable Energy, LLC
 Redistribution and use in source and binary forms, with or without modification, are permitted provided
 that the following conditions are met :
 1.	Redistributions of source code must retain the above copyright notice, this list of conditions
@@ -2407,7 +2407,7 @@ void cm_pvsamv1::exec()
 
         // calculate system performance factor
         // reference: (http://files.sma.de/dl/7680/Perfratio-UEN100810.pdf)
-        // additional reference: (http://www.nlr.gov/docs/fy05osti/37358.pdf)
+        // additional reference: (http://www.nrel.gov/docs/fy05osti/37358.pdf)
         // PR = net_ac (kWh) / ( total input radiation (kWh) * stc efficiency (%) )
         // bug fix 6/15/15 jmf: total input radiation for PR should NOT including shading or soiling, hence use Nominal value.
         assign("performance_ratio", var_data((ssc_number_t)(ac_net / (nom_rad * mod_eff / 100.0))));

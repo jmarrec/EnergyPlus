@@ -38,9 +38,9 @@ WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS.
 //	agreement.  No part of this software may be reproduced or transmitted
 //	in any form or by any means, electronic or mechanical, including
 //	photocopying and recording, for any purpose without the express written
-//	permission of National Laboratory of the Rockies
+//	permission of National Renewable Energy Laboratory
 //	
-//	(C) Copyright 1993 National Laboratory of the Rockies  All rights reserved.
+//	(C) Copyright 1993 National Renewable Energy Laboratory  All rights reserved.
 //****************************************************************************
 //
 //	Module:		Const.h

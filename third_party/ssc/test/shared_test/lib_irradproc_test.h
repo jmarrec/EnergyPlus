@@ -155,7 +155,7 @@ protected:
     }
 };
 /**
-*    Test which uses the example in bifacialvf.py within github.com/NatLabRockies/bifacialvf
+*    Test which uses the example in bifacialvf.py within github.com/NREL/bifacialvf
 */
 
 class BifacialIrradTest : public ::testing::Test {
@@ -245,7 +245,7 @@ protected:
         int nb3 = sprintf(device_matrix, "%s/test/input_cases/mhk/wave_power_matrix.csv", SSCDIR);
         */
         std::string sscdir(SSCDIR);
-        // Truth datasets for github.com/NatLabRockies/bifacialvf test case
+        // Truth datasets for github.com/NREL/bifacialvf test case
         frontSkyConfigFactorsFile = sscdir + "/test/input_cases/bifacialvf_data/expectedFrontSkyConfigFactors.txt";
         rearSkyConfigFactorsFile = sscdir + "/test/input_cases/bifacialvf_data/expectedRearSkyConfigFactors.txt";
         pvFrontSHFile = sscdir + "/test/input_cases/bifacialvf_data/expectedPVFrontSH.txt";

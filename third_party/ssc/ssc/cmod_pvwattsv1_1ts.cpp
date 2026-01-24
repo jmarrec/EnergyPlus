@@ -1,6 +1,6 @@
 /**
 BSD-3-Clause
-Copyright 2019 Alliance for Energy Innovation, LLC
+Copyright 2019 Alliance for Sustainable Energy, LLC
 Redistribution and use in source and binary forms, with or without modification, are permitted provided
 that the following conditions are met :
 1.	Redistributions of source code must retain the above copyright notice, this list of conditions
@@ -150,7 +150,7 @@ public:
         // check system size
         if (dcrate < 0.1) dcrate = 0.1;
 
-        // bounds of (0,09999, 0.99001) are consistent with online PVWatts http://rredc.nlr.gov/solar/codes_algs/PVWATTS/version1/US/code/pvwattsv1.cgi
+        // bounds of (0,09999, 0.99001) are consistent with online PVWatts http://rredc.nrel.gov/solar/codes_algs/PVWATTS/version1/US/code/pvwattsv1.cgi
         //    if ( derate < 0.09999 || derate > 0.99001 ) // Use if default ac to dc derate factor out of range
         if (derate < 0.0 || derate > 1.0) // Use if default ac to dc derate factor out of range
             derate = 0.77;

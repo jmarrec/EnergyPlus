@@ -1,6 +1,6 @@
 /**
 BSD-3-Clause
-Copyright 2019 Alliance for Energy Innovation, LLC
+Copyright 2019 Alliance for Sustainable Energy, LLC
 Redistribution and use in source and binary forms, with or without modification, are permitted provided
 that the following conditions are met :
 1.	Redistributions of source code must retain the above copyright notice, this list of conditions
@@ -59,7 +59,7 @@ struct ssoutputs	// self-shading outputs
 };
 
 // look up table for calculating the diffuse reduction due to gcr and tilt of the panels for self-shading
-// added to removing duplicate computations for speed up (https://github.com/NatLabRockies/ssc/issues/384)
+// added to removing duplicate computations for speed up (https://github.com/NREL/ssc/issues/384)
 class sssky_diffuse_table
 {
     std::unordered_map<std::string, double> derates_table;      // stores pairs of surface tilts and derates

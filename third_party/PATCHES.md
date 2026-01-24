@@ -12,11 +12,11 @@ Each library should have a heading here, and the content of each section could b
 
 The Eigen library causes some build warnings when brought in as-is.
 A couple minor changes clean these build warnings up.
-This was most recently applied here: https://github.com/NatLabRockies/EnergyPlus/commit/cd8f41aeab471832824c9c7ac9f1d4acabebd8ae#diff-a6f7a8949616a88e6a39813eef96c9ca
+This was most recently applied here: https://github.com/NREL/EnergyPlus/commit/cd8f41aeab471832824c9c7ac9f1d4acabebd8ae#diff-a6f7a8949616a88e6a39813eef96c9ca
 
 ## doj
 
-The doj library had an issue with ordering numerics, so this was patched here: https://github.com/NatLabRockies/EnergyPlus/pull/7036
+The doj library had an issue with ordering numerics, so this was patched here: https://github.com/NREL/EnergyPlus/pull/7036
 
 ## json
 
@@ -31,7 +31,7 @@ The `validation_visitor.hpp` was modified to include better error messages and u
 
 ## SSC (SAM Simulation Core)
 
-The SSC library is brought in as a git subtree from https://github.com/NatLabRockies/ssc. Generally we bring in a release tag instead of their `develop` branch. Then I have commented out many parts of SSC in the CMakeLists.txt and a few other files that are not used in EnergyPlus to minimize the size of the binary.
+The SSC library is brought in as a git subtree from https://github.com/NREL/ssc. Generally we bring in a release tag instead of their `develop` branch. Then I have commented out many parts of SSC in the CMakeLists.txt and a few other files that are not used in EnergyPlus to minimize the size of the binary.
 
 The first step to updating SSC is to add that repo as a remote in your local clone of EnergyPlus.
 
