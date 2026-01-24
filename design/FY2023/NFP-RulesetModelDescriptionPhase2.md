@@ -287,17 +287,17 @@ such as specific new columns and data elements that are most important.
 The feedback on prioritization was to first support the selection of baseline HVAC system in Appendix G which includes
 changes to or new EnergyPlus reports:
 
-- Equipment Summary � Fans
+- Equipment Summary - Fans
 - HVAC Topology
 - Equipment Summary - PlantLoop or CondenserLoop
-- Equipment Summary � AirTerminals
+- Equipment Summary - AirTerminals
 
 After that supporting additional central plant reports in EnergyPlus enhancements:
 
-- Equipment Summary � Pumps
-- Component Sizing Summary � PlantLoop
-- Equipment Summary � Chiller
-- Equipment Summary � Boiler
+- Equipment Summary - Pumps
+- Component Sizing Summary - PlantLoop
+- Equipment Summary - Chiller
+- Equipment Summary - Boiler
 - Equipment Summary - cooling towers and fluid coolers
 
 While the EnergyPlus enhancements are underway, data elements that can be supported by current outputs should be
@@ -426,7 +426,7 @@ For each Plant loop and AirLoopHVAC a table is created that has:
 - Loop side (supply side/demand side)
 - Order (2nd of 5 items on branch, items in parallel after split would have same number)
 - Branch Name
-- Split (either y/n or �split 3 of 5�)
+- Split (either y/n or split 3 of 5)
 - node name in (multiple names for mixer)
 - node name out (multiple names for splitter)
 - other control objects that reference node in as sensor (or node out?)

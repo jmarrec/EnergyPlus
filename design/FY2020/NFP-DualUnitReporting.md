@@ -105,11 +105,11 @@ conversion that appears in the OutputControl:Table:Style object. Five different 
 are available:
 
 - UseOutputControlTableStyle - use the same unit conversion as in OutputControl:Table:Style
-- None � no conversions performed
-- JtoKWH � Joules converted into kWh (1 / 3,600,000)
-- JtoMJ � Joules converted into Megajoules (1 / 1,000,000)
-- JtoGJ � Joules converted into Gigajoules (1 / 1,000,000,000)
-- InchPound � convert all annual, monthly, economics and timebins tabular values to common InchPound
+- None - no conversions performed
+- JtoKWH - Joules converted into kWh (1 / 3,600,000)
+- JtoMJ - Joules converted into Megajoules (1 / 1,000,000)
+- JtoGJ - Joules converted into Gigajoules (1 / 1,000,000,000)
+- InchPound - convert all annual, monthly, economics and timebins tabular values to common InchPound
 equivalent
 
 When no unit conversions is selected the energy is reported in the form of Joules but since the magnitude of those numbers

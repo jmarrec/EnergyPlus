@@ -49,7 +49,7 @@ for a match. In `CalcHeatBalanceInsideSurf`, these are looking for uses of CondF
 or do other calculations specific to a certain algorithm. It is a small list (only CTF by default), but lots of gymnastics to find a result
  that could be done once and stored in a bool. The same function used elsewhere in the code for other things.
 
-4. Loop through all surfaces looking for InsideHeatSourceTermSchedule and set QAdditionalHeatSourceInside to a schedule value -
+4. Loop through all surfaces looking for InsideHeatSourceTermSchedule and set QAdditionalHeatSourceInside to a schedule value -
 even if there are none in the simulation. Could add a new bool to skip this if there are no inside sources used.
 
 5. Check if windows have an internal source - why are windows even in this list - they're solved elsewhere?
