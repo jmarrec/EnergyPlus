@@ -554,8 +554,6 @@ namespace ThermalEN673Calc {
         EP_SIZE_CHECK(absol, maxlay);
 
         // Locals
-        int i;
-        int j;
         Real64 fract;
         Real64 flowin;
 
@@ -570,8 +568,8 @@ namespace ThermalEN673Calc {
             } else {
                 flowin = (rs(1) + 0.5 * rs(2)) / rtot;
                 fract = dir * absol(1) * rs(10);
-                for (i = 2; i <= nlayer; ++i) {
-                    j = 2 * i;
+                for (int i = 2; i <= nlayer; ++i) {
+                    int j = 2 * i;
                     flowin += (0.5 * (rs(j - 2) + 0.5 * rs(j)) + rs(j - 1)) / rtot;
                     fract += absol(i) * flowin;
                 }

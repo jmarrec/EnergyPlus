@@ -813,8 +813,8 @@ void SwimmingPoolData::initSwimmingPoolPlantLoopIndex(EnergyPlusData &state)
     static constexpr std::string_view RoutineName("InitSwimmingPoolPlantLoopIndex");
 
     if (this->MyPlantScanFlagPool && allocated(state.dataPlnt->PlantLoop)) {
-        bool errFlag = false;
         if (this->WaterInletNode > 0) {
+            bool errFlag = false;
             PlantUtilities::ScanPlantLoopsForObject(
                 state, this->Name, DataPlant::PlantEquipmentType::SwimmingPool_Indoor, this->HWplantLoc, errFlag, _, _, _, this->WaterInletNode, _);
             if (errFlag) {

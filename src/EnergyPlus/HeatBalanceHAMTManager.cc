@@ -185,7 +185,6 @@ namespace HeatBalanceHAMTManager {
         int Numid;
 
         int HAMTitems;
-        int vtcsid;
 
         bool ErrorsFound;
 
@@ -613,7 +612,7 @@ namespace HeatBalanceHAMTManager {
                                 cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, cHAMTObject7, AlphaArray(1)};
-            vtcsid = Util::FindItemInList(AlphaArray(1), state.dataSurface->Surface);
+            int vtcsid = Util::FindItemInList(AlphaArray(1), state.dataSurface->Surface);
             if (vtcsid == 0) {
                 ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(1), AlphaArray(1));
                 ShowContinueError(state, "The basic material must be defined in addition to specifying HeatAndMoistureTransfer properties.");
