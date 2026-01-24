@@ -22,7 +22,7 @@
 !  Improved Modeling of Residential Air Conditioners and Heat Pumps for Energy Calculations
 !
 !  Technical Report
-!  NLR/TP-5500-56354
+!  NREL/TP-5500-56354
 !  January 2013
 !
 !
@@ -111,7 +111,7 @@
     Dimensionless;           !- Output Unit Type
 
 ! Part Load Fraction curve as a function of Part Load Ratio is default from
-! Table 6. BEopt AC Rated Value Inputs of NREL report NLR/TP-5500-56354
+! Table 6. BEopt AC Rated Value Inputs of NREL report NREL/TP-5500-56354
 
   Curve:Quadratic,
     ACCoolingPLFFPLR,        !- Name
@@ -309,7 +309,7 @@
     Dimensionless;           !- Output Unit Type
 
 ! Part Load Fraction curve as a function of Part Load Ratio is default from
-! Table 6. BEopt AC Rated Value Inputs of NREL report NLR/TP-5500-56354
+! Table 6. BEopt AC Rated Value Inputs of NREL report NREL/TP-5500-56354
 
   Curve:Quadratic,
     AC2StageCoolingPLFFPLR,  !- Name
@@ -341,7 +341,7 @@
 !  Improved Modeling of Residential Air Conditioners and Heat Pumps for Energy Calculations
 !
 !  Technical Report
-!  NLR/TP-5500-56354
+!  NREL/TP-5500-56354
 !  January 2013
 !
 !  Heat Pump Performance Curves were taken from: Tables 14, 15, 18 and 19:
@@ -428,7 +428,7 @@
     Dimensionless;           !- Output Unit Type
 
 ! Part Load Fraction curve as a function of Part Load Ratio is default curve
-! from Table 6. BEopt AC Rated Value Inputs of NREL report NLR/TP-5500-56354
+! from Table 6. BEopt AC Rated Value Inputs of NREL report NREL/TP-5500-56354
 
   Curve:Quadratic,
     HPCOOLPLFFPLR,           !- Name
@@ -525,7 +525,7 @@
     Dimensionless;           !- Output Unit Type
 
 ! Part Load Fraction curve as a function of Part Load Ratio is default curve
-! from Table 6. BEopt AC Rated Value Inputs of NREL report NLR/TP-5500-56354
+! from Table 6. BEopt AC Rated Value Inputs of NREL report NREL/TP-5500-56354
 
   Curve:Quadratic,
     HPHeatPLFFPLR,           !- Name
@@ -725,7 +725,7 @@
     Dimensionless;           !- Output Unit Type
 
 ! Part Load Fraction curve as a function of Part Load Ratio is default curve
-! from Table 6. BEopt AC Rated Value Inputs of NREL report NLR/TP-5500-56354
+! from Table 6. BEopt AC Rated Value Inputs of NREL report NREL/TP-5500-56354
 
   Curve:Quadratic,
     HP2StageCoolingPLFFPLR,  !- Name
@@ -902,7 +902,7 @@
     Dimensionless;           !- Output Unit Type
 
 ! Part Load Fraction curve as a function of Part Load Ratio is default curve
-! from Table 6. BEopt AC Rated Value Inputs of NREL report NLR/TP-5500-56354
+! from Table 6. BEopt AC Rated Value Inputs of NREL report NREL/TP-5500-56354
 
   Curve:Quadratic,
     HP2StageHeatingPLFFPLR,  !- Name

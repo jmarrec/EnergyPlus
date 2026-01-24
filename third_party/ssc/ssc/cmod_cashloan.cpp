@@ -878,7 +878,7 @@ public:
 				+ cf.at(CF_sta_and_fed_tax_savings,i);
 
 			/*
-			Calculate discounted payback period from March 1995 NLR/TP-462-5173 p.58
+			Calculate discounted payback period from March 1995 NREL/TP-462-5173 p.58
 			CF_discounted_costs,
 			CF_discounted_savings,
 			CF_discounted_payback,

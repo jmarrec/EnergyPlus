@@ -103,7 +103,7 @@ void solarpos(int year, int month, int day, int hour, double minute, double lat,
 
 /** @defgroup solarpos_spa Solar Position Algorithm group/
 *   The functions in this group are used to calculate the sun's position at any given timestep
-*   based on the Solar Position Algorithm reported by Reda and Andreas in NLR/TP-560-34302, 2008.
+*   based on the Solar Position Algorithm reported by Reda and Andreas in NREL/TP-560-34302, 2008.
 *   The functions used in this implementation were taken from a C code implementation provided at https://midcdmz.nrel.gov/spa/
 *   @{
 */
@@ -423,7 +423,7 @@ double observer_hour_angle(double nu, double longitude, double alpha_deg);
 /**
 *   sun_equatorial_horizontal_parallax function calculates the equatorial horizontal parallax to the sun (zeta) in degrees
 *   This function is based on the C code implementation of the Solar Position Algorithm
-*   based on a paper by Reda and Andreas published in NLR/TP-
+*   based on a paper by Reda and Andreas published in NREL/TP-
 *	560-34302, 2008.
 *
 * \param[in] r earth radius vector in degrees

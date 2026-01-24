@@ -5,7 +5,7 @@
 !
 !
 ! Reference: Bonnema, E., D. Studer, A. Parker, S. Pless and P. Torcellini. 2010. Large Hospital 50% Energy Savings: Technical Support Document.
-!            NLR/TP-550-47867, National Laboratory of the Rockies.  available at http://www.nlr.gov/docs/fy10osti/47867.pdf
+!            NREL/TP-550-47867, National Laboratory of the Rockies.  available at http://www.nlr.gov/docs/fy10osti/47867.pdf
 !            This example file was originally developed using Version 5.0.0.035 and was transitioned to Version 6.0 using the transition utility
 !
 ! Basic file description: 130 zones, low energy version of a 7 story hospital and a 5 story medical office
@@ -85708,7 +85708,7 @@
 
 ! Deru and Torcellini 2007
 ! Source Energy and Emission Factors for Energy Use in Buildings
-! NLR/TP-550-38617
+! NREL/TP-550-38617
 ! source factor and Higher Heating Values from Table 5
 ! post-combustion emission factors for boiler from Table 9 (with factor of 1000 correction for natural gas)
 
