@@ -2797,7 +2797,6 @@ namespace PlantPipingSystemsManager {
         Real64 InterfaceCellWidth(0.008);
 
         // Object Data
-        std::vector<MeshPartition> PreviousEntries;
         Segment ThisSegment;
 
         //'NOTE: pipe location y values have already been corrected to be measured from the bottom surface

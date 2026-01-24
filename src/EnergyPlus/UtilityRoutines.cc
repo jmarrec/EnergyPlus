@@ -390,10 +390,10 @@ namespace Util {
     void setDesignObjectNameAndPointer(EnergyPlusData &state,
                                        std::string &nameToBeSet,
                                        int &ptrToBeSet,
-                                       std::string const userName,
-                                       Array1S_string const listOfNames,
-                                       std::string const itemType,
-                                       std::string const itemName,
+                                       std::string const &userName,
+                                       Array1S_string const &listOfNames,
+                                       std::string const &itemType,
+                                       std::string const &itemName,
                                        bool &errorFound)
     {
         nameToBeSet = userName;

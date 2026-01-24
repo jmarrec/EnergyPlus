@@ -182,13 +182,13 @@ namespace TranspiredCollector {
 
         // Control point of deciding if transpired collector is active or not.
         auto &UTSC_CI = state.dataTranspiredCollector->UTSC(CompIndex);
-        auto &InletNode = UTSC_CI.InletNode;
-        auto &ControlNode = UTSC_CI.ControlNode;
         UTSC_CI.IsOn = false;
         if ((UTSC_CI.availSched->getCurrentVal() > 0.0) && (UTSC_CI.InletMDot > 0.0)) { // availability Schedule | OA system is setting mass flow
             bool ControlLTSet(false);
             bool ControlLTSchedule(false);
             bool ZoneLTSchedule(false);
+            auto &InletNode = UTSC_CI.InletNode;
+            auto &ControlNode = UTSC_CI.ControlNode;
             assert(equal_dimensions(InletNode, ControlNode));
             assert(equal_dimensions(InletNode, UTSC_CI.ZoneNode));
             for (int i = InletNode.l(), e = InletNode.u(); i <= e; ++i) {
@@ -882,13 +882,10 @@ namespace TranspiredCollector {
         using DataSurfaces::SurfaceData;
         using EMSManager::CheckIfNodeSetPointManagedByEMS;
 
-        int UTSCUnitNum;
-        int ControlNode;
-        int SplitBranch;
-        int thisUTSC;
         Real64 Tamb;
 
         if (state.dataTranspiredCollector->MyOneTimeFlag) {
+            int thisUTSC;
             // do various one time setups and pitch adjustments across all UTSC
             for (thisUTSC = 1; thisUTSC <= state.dataTranspiredCollector->NumUTSC; ++thisUTSC) {
                 if (state.dataTranspiredCollector->UTSC(thisUTSC).Layout == Layout_Triangle) {
@@ -923,6 +920,9 @@ namespace TranspiredCollector {
 
         // Check that setpoint is active (from test by RJL in HVACEvapComponent)
         if (!state.dataGlobal->SysSizingCalc && state.dataTranspiredCollector->MySetPointCheckFlag && DoSetPointTest) {
+            int UTSCUnitNum;
+            int ControlNode;
+            int SplitBranch;
             for (UTSCUnitNum = 1; UTSCUnitNum <= state.dataTranspiredCollector->NumUTSC; ++UTSCUnitNum) {
                 for (SplitBranch = 1; SplitBranch <= state.dataTranspiredCollector->UTSC(UTSCUnitNum).NumOASysAttached; ++SplitBranch) {
                     ControlNode = state.dataTranspiredCollector->UTSC(UTSCUnitNum).ControlNode(SplitBranch);
@@ -1053,10 +1053,8 @@ namespace TranspiredCollector {
         Real64 SolAbs;                        // solar absorptivity of collector
         Real64 AbsExt;                        // thermal emittance of collector
         Real64 TempExt;                       // collector temperature
-        int SurfPtr;                          // index of surface in main surface structure
         Real64 HMovInsul;                     // dummy for call to InitExteriorConvectionCoeff
         Real64 HExt;                          // dummy for call to InitExteriorConvectionCoeff
-        int ConstrNum;                        // index of construction in main construction structure
         Real64 AbsThermSurf;                  // thermal emittance of underlying wall.
         Real64 TsoK;                          // underlying surface temperature in Kelvin
         Real64 TscollK;                       // collector temperature in Kelvin  (lagged)
@@ -1176,7 +1174,7 @@ namespace TranspiredCollector {
         AbsExt = state.dataTranspiredCollector->UTSC(UTSCNum).LWEmitt;
         TempExt = state.dataTranspiredCollector->UTSC(UTSCNum).TcollLast;
         for (ThisSurf = 1; ThisSurf <= NumSurfs; ++ThisSurf) {
-            SurfPtr = state.dataTranspiredCollector->UTSC(UTSCNum).SurfPtrs(ThisSurf);
+            int SurfPtr = state.dataTranspiredCollector->UTSC(UTSCNum).SurfPtrs(ThisSurf); // index of surface in main surface structure
             // Initializations for this surface
             HMovInsul = 0.0;
             HExt = 0.0;
@@ -1192,7 +1190,7 @@ namespace TranspiredCollector {
                                       HGroundARR(ThisSurf),
                                       HAirARR(ThisSurf),
                                       HSrdSurfARR(ThisSurf));
-            ConstrNum = state.dataSurface->Surface(SurfPtr).Construction;
+            int ConstrNum = state.dataSurface->Surface(SurfPtr).Construction; // index of construction in main construction structure
             AbsThermSurf = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(1))->AbsorpThermal;
             TsoK = state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfPtr) + Constant::Kelvin;
             TscollK = state.dataTranspiredCollector->UTSC(UTSCNum).TcollLast + Constant::Kelvin;
@@ -1462,11 +1460,6 @@ namespace TranspiredCollector {
         //       MODIFIED       na
         //       RE-ENGINEERED  na
 
-        int OutletNode;
-        int InletNode;
-        int thisOSCM;
-        int thisOASys;
-
         // update "last" values in Derived type
         state.dataTranspiredCollector->UTSC(UTSCNum).TplenLast = state.dataTranspiredCollector->UTSC(UTSCNum).Tplen;
         state.dataTranspiredCollector->UTSC(UTSCNum).TcollLast = state.dataTranspiredCollector->UTSC(UTSCNum).Tcoll;
@@ -1475,14 +1468,13 @@ namespace TranspiredCollector {
 
         if (state.dataTranspiredCollector->UTSC(UTSCNum).IsOn) { // Active
             if (state.dataTranspiredCollector->UTSC(UTSCNum).NumOASysAttached == 1) {
-                OutletNode = state.dataTranspiredCollector->UTSC(UTSCNum).OutletNode(1);
-                InletNode = state.dataTranspiredCollector->UTSC(UTSCNum).InletNode(1);
+                int OutletNode = state.dataTranspiredCollector->UTSC(UTSCNum).OutletNode(1);
                 state.dataLoopNodes->Node(OutletNode).MassFlowRate = state.dataTranspiredCollector->UTSC(UTSCNum).SupOutMassFlow;
                 state.dataLoopNodes->Node(OutletNode).Temp = state.dataTranspiredCollector->UTSC(UTSCNum).SupOutTemp;
                 state.dataLoopNodes->Node(OutletNode).HumRat = state.dataTranspiredCollector->UTSC(UTSCNum).SupOutHumRat;
                 state.dataLoopNodes->Node(OutletNode).Enthalpy = state.dataTranspiredCollector->UTSC(UTSCNum).SupOutEnth;
             } else if (state.dataTranspiredCollector->UTSC(UTSCNum).NumOASysAttached > 1) {
-                for (thisOASys = 1; thisOASys <= state.dataTranspiredCollector->UTSC(UTSCNum).NumOASysAttached; ++thisOASys) {
+                for (int thisOASys = 1; thisOASys <= state.dataTranspiredCollector->UTSC(UTSCNum).NumOASysAttached; ++thisOASys) {
                     state.dataLoopNodes->Node(state.dataTranspiredCollector->UTSC(UTSCNum).OutletNode(thisOASys)).MassFlowRate =
                         state.dataLoopNodes->Node(state.dataTranspiredCollector->UTSC(UTSCNum).InletNode(thisOASys))
                             .MassFlowRate; // system gets what it asked for at inlet
@@ -1514,7 +1506,7 @@ namespace TranspiredCollector {
         }
 
         // update the OtherSideConditionsModel coefficients.
-        thisOSCM = state.dataTranspiredCollector->UTSC(UTSCNum).OSCMPtr;
+        int thisOSCM = state.dataTranspiredCollector->UTSC(UTSCNum).OSCMPtr;
 
         state.dataSurface->OSCM(thisOSCM).TConv = state.dataTranspiredCollector->UTSC(UTSCNum).Tplen;
         state.dataSurface->OSCM(thisOSCM).HConv = state.dataTranspiredCollector->UTSC(UTSCNum).HcPlen;

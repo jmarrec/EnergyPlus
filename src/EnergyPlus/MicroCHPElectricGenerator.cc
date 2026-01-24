@@ -139,13 +139,12 @@ void GetMicroCHPGeneratorInput(EnergyPlusData &state)
     Array1D_string AlphArray(25);  // character string data
     Array1D<Real64> NumArray(200); // numeric data TODO deal with allocatable for extensible
 
-    auto &s_ipsc = state.dataIPShortCut;
-
     if (state.dataCHPElectGen->MyOneTimeFlag) {
         int NumAlphas = 0;        // Number of elements in the alpha array
         int NumNums = 0;          // Number of elements in the numeric array
         int IOStat = 0;           // IO Status when calling get input subroutine
         bool ErrorsFound = false; // error flag
+        auto &s_ipsc = state.dataIPShortCut;
 
         // call to Fuel supply module to set up data there.
         GeneratorFuelSupply::GetGeneratorFuelSupplyInput(state);
