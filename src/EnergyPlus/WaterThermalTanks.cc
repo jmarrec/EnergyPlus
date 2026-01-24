@@ -7485,10 +7485,10 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
                 TimeNeeded = TimeRemaining;
 
                 // Calculate the steady-state venting rate needed to maintain the tank at maximum temperature
-                Real64 Qloss_loc = LossCoeff_loc * (AmbientTemp_loc - MaxTemp);
+                Qloss = LossCoeff_loc * (AmbientTemp_loc - MaxTemp);
                 Quse = UseMassFlowRate_loc * Cp * (UseInletTemp_loc - MaxTemp);
                 Qsource = SourceMassFlowRate_loc * Cp * (SourceInletTemp_loc - MaxTemp);
-                Qvent = -Quse - Qsource - Qloss_loc - Qoffcycheat;
+                Qvent = -Quse - Qsource - Qloss - Qoffcycheat;
 
                 NewTankTemp = MaxTemp;
 

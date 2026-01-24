@@ -357,10 +357,10 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
             TStatObjects(Item).ZoneListActive = false;
             TStatObjects(Item).ZoneOrZoneListPtr = Item1;
         } else if (ZLItem > 0) {
-            auto const &ZnList = state.dataHeatBal->ZoneList(ZLItem);
+            auto const &ZnItem = state.dataHeatBal->ZoneList(ZLItem);
             TStatObjects(Item).TempControlledZoneStartPtr = state.dataZoneCtrls->NumTempControlledZones + 1;
-            state.dataZoneCtrls->NumTempControlledZones += ZnList.NumOfZones;
-            TStatObjects(Item).NumOfZones = ZnList.NumOfZones;
+            state.dataZoneCtrls->NumTempControlledZones += ZnItem.NumOfZones;
+            TStatObjects(Item).NumOfZones = ZnItem.NumOfZones;
             TStatObjects(Item).ZoneListActive = true;
             TStatObjects(Item).ZoneOrZoneListPtr = ZLItem;
         } else {
@@ -1458,11 +1458,11 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
     int NumZoneCapaMultiplier = s_ip->getNumObjectsFound(state, s_ipsc->cCurrentModuleObject); // Number of ZonesCapacityMultiplier object
     if (NumZoneCapaMultiplier == 0) {
         // Assign default multiplier values to all zones
-        for (int ZoneNum = 1; ZoneNum <= NumOfZones; ZoneNum++) {
-            Zone(ZoneNum).ZoneVolCapMultpSens = ZoneVolCapMultpSens;
-            Zone(ZoneNum).ZoneVolCapMultpMoist = ZoneVolCapMultpMoist;
-            Zone(ZoneNum).ZoneVolCapMultpCO2 = ZoneVolCapMultpCO2;
-            Zone(ZoneNum).ZoneVolCapMultpGenContam = ZoneVolCapMultpGenContam;
+        for (auto &zn : state.dataHeatBal->Zone) {
+            zn.ZoneVolCapMultpSens = ZoneVolCapMultpSens;
+            zn.ZoneVolCapMultpMoist = ZoneVolCapMultpMoist;
+            zn.ZoneVolCapMultpCO2 = ZoneVolCapMultpCO2;
+            zn.ZoneVolCapMultpGenContam = ZoneVolCapMultpGenContam;
         }
 
     } else {

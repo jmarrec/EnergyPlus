@@ -906,7 +906,7 @@ void BaseSizer::calcCoilWaterFlowRates(EnergyPlusData &state,
         }
         auto &plntCoilData = state.dataPlnt->PlantLoop(loopNum).compDesWaterFlowRate;
         if (arrayIndex == -1) {
-            size_t arrayIndex = plntCoilData.size() + 1;
+            arrayIndex = plntCoilData.size() + 1;
             plntCoilData.resize(arrayIndex);
             plntCoilData[arrayIndex - 1].tsDesWaterFlowRate.resize(size_t(timeStepInDay));
             plntCoilData[arrayIndex - 1].tsDesWaterFlowRate = tmpFlowData;

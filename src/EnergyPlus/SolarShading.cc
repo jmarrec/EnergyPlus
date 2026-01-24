@@ -79,7 +79,6 @@
 #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/EnergyPlusLogger.hh>
-// #include <EnergyPlus/General.hh>
 #include <EnergyPlus/HeatBalanceSurfaceManager.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/OutputProcessor.hh>
