@@ -44,7 +44,7 @@ Any functions here would belong in the data exchange API group, as it relies on 
 The inputs, whether EpJSON or IDF (or CBOR, or...), are already interpreted into a JSON object in the EnergyPlus C++ at runtime.
 The new endpoints would provide methods to access a list of names for object types, for example:
 
-I already completed this as a small side task in https://github.com/NREL/EnergyPlus/pull/9973, so this is done.
+I already completed this as a small side task in https://github.com/NatLabRockies/EnergyPlus/pull/9973, so this is done.
 
 ## Design of EMS Magic Number Solution
 

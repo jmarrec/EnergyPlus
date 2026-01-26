@@ -9,11 +9,11 @@ Other Fuel Heating Coils
 
 ## Justification for New Feature ##
 
-Similar to [#5746](https://github.com/NREL/EnergyPlus/issues/5746) , furnaces currently only support gas or electric heating coils. Propane and fuel oil are commonly used fuel types, especially for residential models. This is similar to [#5656](https://github.com/NREL/EnergyPlus/issues/5656) / [#5746](https://github.com/NREL/EnergyPlus/issues/5746) which added a fuel type field to `OtherEquipment`.
+Similar to [#5746](https://github.com/NatLabRockies/EnergyPlus/issues/5746) , furnaces currently only support gas or electric heating coils. Propane and fuel oil are commonly used fuel types, especially for residential models. This is similar to [#5656](https://github.com/NatLabRockies/EnergyPlus/issues/5656) / [#5746](https://github.com/NatLabRockies/EnergyPlus/issues/5746) which added a fuel type field to `OtherEquipment`.
 
 ## E-mail and  Conference Call Conclusions ##
 
-See GitHub issue [#5752](https://github.com/NREL/EnergyPlus/issues/5752).
+See GitHub issue [#5752](https://github.com/NatLabRockies/EnergyPlus/issues/5752).
 
 ## Overview ##
 

@@ -88,4 +88,4 @@ Existing test file `WindowTests.idf` is updated with shading of two window surfa
 
 - ASHRAE. 2019. ANSI/ASHRAE/IES 90.1-2019, Energy Standard for Buildings Except Low-Rise
   Residential Buildings. ASHRAE, Atlanta, GA
-- [Add additional option for shading control for WindowProperty:ShadingControl object #7081](https://github.com/NREL/EnergyPlus/issues/7081)
+- [Add additional option for shading control for WindowProperty:ShadingControl object #7081](https://github.com/NatLabRockies/EnergyPlus/issues/7081)

@@ -278,12 +278,12 @@ Open Source
 
 `EnergyPlus <https://energyplus.net/>`__ is an `Open
 Source <https://opensource.org/>`__ program so all the `source
-code <https://github.com/NREL/EnergyPlus>`__ is available to inspect and
+code <https://github.com/NatLabRockies/EnergyPlus>`__ is available to inspect and
 modify. If you are interested in how calculations are performed and the
 `Engineering Reference <https://energyplus.net/documentation>`__ does
 not provide enough details to you, you can review the source code
 itself. `Instructions to build the
-code <https://github.com/NREL/EnergyPlus/wiki/BuildingEnergyPlus>`__
+code <https://github.com/NatLabRockies/EnergyPlus/wiki/BuildingEnergyPlus>`__
 (compile the source code into an executable application) are available
 in the source code repository wiki if you see something that needs to be
 enhanced or fixed, please also see the `contribution
@@ -727,7 +727,7 @@ In 2018, EP-Launch 3 was developed, and its main screen is shown below:
 
 EP-Launch 3 is not part of the EnergyPlus installation package and needs
 to be installed separately. It is also open source and is available from
-`GitHub <https://github.com/NREL/EP-Launch>`__, and it is documented on
+`GitHub <https://github.com/NatLabRockies/EP-Launch>`__, and it is documented on
 `readthedocs <https://ep-launch.readthedocs.io/en/latest/>`__ or in the
 docs folder on GitHub. EP-Launch 3 works on Windows, MacOS, and Linux
 systems and is written in Python.

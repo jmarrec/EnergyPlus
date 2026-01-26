@@ -25,7 +25,7 @@ Another application for such exhaust systems is health care. ANSI/ASHRAE/ASHE St
 
 - A few email exchanges with the original requester prior to and during the development of the NFP to clarify the development needs;
 
-- Comment in [pull request #9925](https://github.com/NREL/EnergyPlus/pull/8925#issuecomment-891994628) regarding application for health care spaces with requirement that "All Room Air Exhausted Directly to Outdoors."
+- Comment in [pull request #9925](https://github.com/NatLabRockies/EnergyPlus/pull/8925#issuecomment-891994628) regarding application for health care spaces with requirement that "All Room Air Exhausted Directly to Outdoors."
 
 ### Conference Call Communications ###
 

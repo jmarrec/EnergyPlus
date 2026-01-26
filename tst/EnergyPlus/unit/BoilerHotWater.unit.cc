@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -157,7 +157,7 @@ TEST_F(EnergyPlusFixture, Boiler_HotWaterAutoSizeTempTest)
     EXPECT_DOUBLE_EQ(state->dataBoilers->Boiler[0].NomCap, NomCapBoilerExpected);
 }
 
-// Cf: https://github.com/NREL/EnergyPlus/issues/6164
+// Cf: https://github.com/NatLabRockies/EnergyPlus/issues/6164
 // This boiler has empty field for "Design Water Flow Rate", IDD now should make default='Autosize'
 TEST_F(EnergyPlusFixture, Boiler_HotWater_BlankDesignWaterFlowRate)
 {

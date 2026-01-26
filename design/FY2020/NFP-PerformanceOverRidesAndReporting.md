@@ -30,10 +30,10 @@ Add a single field to the PerformancePrecisionTradeoffs object to override:
 
 Add reporting of the PerformancePrecisionTradeoffs object into the EIO file and Tabular Initialization
 Summary. Also include in the EIO report other performance oriented options that exist such as the
-recent sizing speed up work from TRANE [#7567](https://github.com/NREL/EnergyPlus/pull/7567) and
-the CarrollMRT method [#7534](https://github.com/NREL/EnergyPlus/pull/7567).
+recent sizing speed up work from TRANE [#7567](https://github.com/NatLabRockies/EnergyPlus/pull/7567) and
+the CarrollMRT method [#7534](https://github.com/NatLabRockies/EnergyPlus/pull/7567).
 
-When using the PerformancePrecisionTradeoffs, issue a warning message [#7646](https://github.com/NREL/EnergyPlus/issues/7646)
+When using the PerformancePrecisionTradeoffs, issue a warning message [#7646](https://github.com/NatLabRockies/EnergyPlus/issues/7646)
 
 Add new output variables for:
 
@@ -207,8 +207,8 @@ Output:Variable,*,Site Energy When Any Zone Oscillating Temperatures,hourly; !- 
 
 The EIO file and Tabular Initialization Summary would be modified to show the values of the PerformancePrecisionTradeoffs
 object. It could also include other performance oriented options that exist such as the
-recent sizing speed up work from TRANE [#7567](https://github.com/NREL/EnergyPlus/pull/7567) and
-the CarrollMRT method [#7534](https://github.com/NREL/EnergyPlus/pull/7567).
+recent sizing speed up work from TRANE [#7567](https://github.com/NatLabRockies/EnergyPlus/pull/7567) and
+the CarrollMRT method [#7534](https://github.com/NatLabRockies/EnergyPlus/pull/7567).
 
 A new output file with the extension .perflog would be created whenever the PerformancePrecisionTradeoffs
 object is present. This log file would consist of the new EIO
