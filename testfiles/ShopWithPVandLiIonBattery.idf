@@ -5375,10 +5375,8 @@
 !***** WITH THE ACCESS, USE OR PERFORMANCE OF THE EEFG. *****
 !***** Please help us to improve this service.  If you have suggestions for *****
 !***** improving this input file, please contact us at ewi_support@nrel.gov. *****
-! Start SimMetaData
 ! WeatherFileName=USA_OK_Oklahoma.City_TMY2.epw
 ! CodeStandard=ASHRAE 90.1-2004
 ! Std62Version=2004
 ! RoofConstruction=Insulation Entirely Above Deck
 ! ExtWallConstruction=Steel-Framed
-! End SimMetaData

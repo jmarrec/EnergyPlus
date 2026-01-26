@@ -11,9 +11,7 @@
 ! Internal gains description: None.
 !
 ! HVAC: None.
-!
-
-  Version,26.1;
+!  Version,26.1;
 
   Timestep,4;
 
