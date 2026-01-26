@@ -3,11 +3,11 @@
 **Michael J. Witte, GARD Analytics, Inc.**
 
  - Original August 7, 2015
- - Add highlights from [NFP-LinkInfiltrationToHVAC.doc](https://github.com/NREL/EnergyPlusDevSupport/blob/master/DesignDocuments/Proposals/NFP-LinkInfiltrationToHVAC.doc)
+ - Add highlights from [NFP-LinkInfiltrationToHVAC.doc](https://github.com/NatLabRockies/EnergyPlusDevSupport/blob/master/DesignDocuments/Proposals/NFP-LinkInfiltrationToHVAC.doc)
 
 
 ## Background
-ZoneAirMassFlowConservation was added in v8.2.0 via pull request [#4245](https://github.com/NREL/EnergyPlus/pull/4245). This PR touched 21 source files. Highlights:
+ZoneAirMassFlowConservation was added in v8.2.0 via pull request [#4245](https://github.com/NatLabRockies/EnergyPlus/pull/4245). This PR touched 21 source files. Highlights:
 
    - Added ZoneMixingFlow to DataAirLoop structure
    - Added ZoneMassBalanceHVACReSim to DataHVACGlobales to signal re-simulation when needed
@@ -231,7 +231,7 @@ Infiltration(j).VolumeFlowRate = Infiltration(j).MassFlowRate / AirDensity;
 						FlowResolutionNeeded = false;
 					}
 ```
-This is within the IterAir loop in SimSelectedEquipment and it fires every time IterAir == 1, because FlowMaxAvailAlreadyReset is being set to false within the IterAir loop - seems like thst line should be *out*side the IterAir loop.  No, in fact it should be outside this routine. This code was added for CR7781 [#2561](https://github.com/NREL/EnergyPlus/issues/2561) on Feb 27, 2010 which stemmed from problems with some terminal units scheduled off for part of the year.
-https://github.com/NREL/EnergyPlusArchive/commit/c8c4ecb752714b44b8b15de074fad81d9139d685
+This is within the IterAir loop in SimSelectedEquipment and it fires every time IterAir == 1, because FlowMaxAvailAlreadyReset is being set to false within the IterAir loop - seems like thst line should be *out*side the IterAir loop.  No, in fact it should be outside this routine. This code was added for CR7781 [#2561](https://github.com/NatLabRockies/EnergyPlus/issues/2561) on Feb 27, 2010 which stemmed from problems with some terminal units scheduled off for part of the year.
+https://github.com/NatLabRockies/EnergyPlusArchive/commit/c8c4ecb752714b44b8b15de074fad81d9139d685
 
-[ResetTerminalUnitFlowLimits](https://github.com/NREL/EnergyPlus/blame/develop/src/EnergyPlus/HVACManager.cc#L1613) resets all the terminal unit inlet node MassFlowRateMaxAvail (and Min) to the hard design flow rates without any regard to schedules or other things that may be varying.  This is find during FirstHVACIteration, but looks suspicious here.  This probably explains why I couldn't get the VAV terminal unit schedule to stick.  Note that IterAir is repeated up to six times (hardwired iteration limit) and then goes back up to the main HVAC iteration loop (HVACManagerIteration whcih is the one that has a user-controlled max that defaults to 20).
+[ResetTerminalUnitFlowLimits](https://github.com/NatLabRockies/EnergyPlus/blame/develop/src/EnergyPlus/HVACManager.cc#L1613) resets all the terminal unit inlet node MassFlowRateMaxAvail (and Min) to the hard design flow rates without any regard to schedules or other things that may be varying.  This is find during FirstHVACIteration, but looks suspicious here.  This probably explains why I couldn't get the VAV terminal unit schedule to stick.  Note that IterAir is repeated up to six times (hardwired iteration limit) and then goes back up to the main HVAC iteration loop (HVACManagerIteration whcih is the one that has a user-controlled max that defaults to 20).

@@ -30,7 +30,7 @@ The current combination of Controller:OutdoorAir plus Controller:MechanicalVenti
 
 
 1. Trying to set the OA flow to zero at night when using Controller:MechanicalVentilation
-[Issue #4633](https://github.com/NREL/EnergyPlus/issues/4633) requires that the Controller:MechanicalVentilation schedule be set to zero as well as the Controller:OutdoorAir Minimum Outdoor Air Schedule (*if* the Controller:OutdoorAir Minimum Outdoor Air Flow Rate is > 0).
+[Issue #4633](https://github.com/NatLabRockies/EnergyPlus/issues/4633) requires that the Controller:MechanicalVentilation schedule be set to zero as well as the Controller:OutdoorAir Minimum Outdoor Air Schedule (*if* the Controller:OutdoorAir Minimum Outdoor Air Flow Rate is > 0).
 
 2. Specifying a schedule in DesignSpecification:OutdoorAir only to find that it is ignored by Controller:MechanicalVentilation.
 

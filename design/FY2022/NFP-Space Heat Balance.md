@@ -115,7 +115,7 @@ Key aspects of the surface and air heat balances are listed below with italics i
 * Zone airflows for infiltration and mixing are currently by zone (ZoneInfiltration, ZoneMixing, ZoneCrossMixing).
   * *Modify inputs to specify by zone or space (similar to internal gains, but allocated by volume or floor area depending on the input method).*
 * Air volume is currently by zone.
-  * *Add input and calculations for Space volume. See [Issue #9362](https://github.com/NREL/EnergyPlus/issues/9362).*
+  * *Add input and calculations for Space volume. See [Issue #9362](https://github.com/NatLabRockies/EnergyPlus/issues/9362).*
 * AirflowNetwork inputs and simulation will remain at the zone level.
   * *Allocate the impact on the air heat balance by space. For this phase AFN zones may need to use a lumped air heat balance.*
 * ZoneAirBalance:OutdoorAir will remain a zone-level input, and the same method will be applied to all spaces in the zone.

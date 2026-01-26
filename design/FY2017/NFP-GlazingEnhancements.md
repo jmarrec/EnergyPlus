@@ -332,7 +332,7 @@ It should be pointed out that four choices are available:
 
   	enum class BSDFBasis { Small, Quarter, Half, Full };
 
-The current setting in the #2520943-WindowsCalc-Engine_Intergration branch in https://github.com/NREL/EnergyPlus is **BSDFBasis::Small**.
+The current setting in the #2520943-WindowsCalc-Engine_Intergration branch in https://github.com/NatLabRockies/EnergyPlus is **BSDFBasis::Small**.
 
 If BSDFBasis::Full is used in CWCEBSDFLayerFactory::init(), the execution speed is expected to be very slow, so that it is not practical to use this setup to perform simple straight forward simulations.
 

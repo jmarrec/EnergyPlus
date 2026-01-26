@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -1349,7 +1349,7 @@ namespace HVACUnitaryBypassVAV {
 
             state.dataHVACUnitaryBypassVAV->MyOneTimeFlag = false;
             // speed up test based on code from 16 years ago to correct cycling fan economizer defect
-            // see https://github.com/NREL/EnergyPlusArchive/commit/a2202f8a168fd0330bf3a45392833405e8bd08f2
+            // see https://github.com/NatLabRockies/EnergyPlusArchive/commit/a2202f8a168fd0330bf3a45392833405e8bd08f2
             // This test sets simple flag so air loop doesn't iterate twice each pass (reverts above change)
             // AirLoopControlInfo(AirplantLoc.loopNum).Simple = true;
         }

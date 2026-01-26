@@ -94,11 +94,11 @@ borrowed.
 Since this NFP builds on the efforts described in previous NFPs, some details are skipped that are already described in
 those earlier NFPs:
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2022/NFP-InitialRulesetModelDescription.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2022/NFP-InitialRulesetModelDescription.md
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2023/NFP-RulesetModelDescriptionPhase2.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2023/NFP-RulesetModelDescriptionPhase2.md
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2024/NFP-RulesetModelDescriptionPhase3.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2024/NFP-RulesetModelDescriptionPhase3.md
 
 Some lessons learned from the initial effort in 2022 are described here:
 
@@ -889,7 +889,7 @@ This new input echo report may not be necessary if reading the epJSON is done in
 
 Add a switch to disable rounding or truncating digits for tabular reports.
 
-https://github.com/NREL/EnergyPlus/issues/10896
+https://github.com/NatLabRockies/EnergyPlus/issues/10896
 
 The Equipment Summary - Air Heat Recovery table does not show the input object type and should instead just shows
 "generic" for each one, and the outdoor and exhaust airflow columns show zeros for some example files (not yet posted).
@@ -959,15 +959,15 @@ previous work and will continue to include unit tests. This includes:
 
 The original NFP is here:
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2022/NFP-InitialRulesetModelDescription.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2022/NFP-InitialRulesetModelDescription.md
 
 The 2023 NFP is here:
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2023/NFP-RulesetModelDescriptionPhase2.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2023/NFP-RulesetModelDescriptionPhase2.md
 
 The 2023 NFP is here:
 
-https://github.com/NREL/EnergyPlus/blob/develop/design/FY2024/NFP-RulesetModelDescriptionPhase3.md
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2024/NFP-RulesetModelDescriptionPhase3.md
 
 The repo for the script development is here:
 
