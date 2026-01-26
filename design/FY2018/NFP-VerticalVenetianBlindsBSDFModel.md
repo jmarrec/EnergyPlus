@@ -7,7 +7,7 @@ Lawrence Berkeley National Laboratory
 ## Overview
 
 In last couple of years LBNL has been working extensively on generating new procedure for window attachment ratings. In that process, WINDOW 7 and EnergyPlus calculation engines are used extensively to produce and analyze results.
-Last year new airflow algorithm was implemented for horizontal venetians (https://github.com/NREL/EnergyPlus/blob/issue-6790-VRP-D-term/design/FY2017/AERC_Improvements.md).
+Last year new airflow algorithm was implemented for horizontal venetians (https://github.com/NatLabRockies/EnergyPlus/blob/issue-6790-VRP-D-term/design/FY2017/AERC_Improvements.md).
 Also in a process of testing new airflow algorithm, some bugs are discovered and fixed and will be part of this release.
 
 ## Justification for New Feature

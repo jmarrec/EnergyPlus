@@ -352,7 +352,7 @@ through all of the surfaces.
 
 ### Grouped Zones for Radiant Exchange ###
 
-In [PR #7267](https://github.com/NREL/EnergyPlus/pull/7267/files) "Streamline ManageSurfaceHeatBalance - Part 1,"
+In [PR #7267](https://github.com/NatLabRockies/EnergyPlus/pull/7267/files) "Streamline ManageSurfaceHeatBalance - Part 1,"
 new lists of surfaces have been added to streamline loops in `HeatBalanceSurfaceManager::CalcHeatBalanceInsideSurf`:
 
     DataSurfaces::AllHTSurfaceList // List of all heat transfer surface

@@ -9,9 +9,9 @@ Standardize Fuel Types and Resources (Issue #5941)
 
 ## Background ##
 
-Excerpts lifted from [issue #5941](https://github.com/NREL/EnergyPlus/issues/5941)
+Excerpts lifted from [issue #5941](https://github.com/NatLabRockies/EnergyPlus/issues/5941)
 
- - This issue was prompted by the discussion of Propane vs PropaneGas as a fuel type in [#5940](https://github.com/NREL/EnergyPlus/pull/5940),
+ - This issue was prompted by the discussion of Propane vs PropaneGas as a fuel type in [#5940](https://github.com/NatLabRockies/EnergyPlus/pull/5940),
 which change Coil:Heating:Gas to Coil:Heating:Fuel.
 
  - At that time, the concensus was that Propane is preferred over PropaneGas.
@@ -42,7 +42,7 @@ searches of the code and IDD show that there are some variations in the list of 
 ## Proposed Standard List of Fuel/Resource Types ##
 Electricity
 NaturalGas
-Propane (preferred over PropaneGas per discussions in [#5940](https://github.com/NREL/EnergyPlus/pull/5940)
+Propane (preferred over PropaneGas per discussions in [#5940](https://github.com/NatLabRockies/EnergyPlus/pull/5940)
 Diesel
 Gasoline
 FuelOil#1 (or FuelOil1)
@@ -91,7 +91,7 @@ Once the above decisions are made:
  - The list of fuel types and corresponding strings will be build with enums similar to the way output units
  are currently.
 
- - Remove the special JSON schema modifications section in [modify_schema.py](https://github.com/NREL/EnergyPlus/blob/60ed7207c2f3058fe8dc400a1aa741149094bebe/scripts/dev/generate_epJSON_schema/modify_schema.py#L267-L297)
+ - Remove the special JSON schema modifications section in [modify_schema.py](https://github.com/NatLabRockies/EnergyPlus/blob/60ed7207c2f3058fe8dc400a1aa741149094bebe/scripts/dev/generate_epJSON_schema/modify_schema.py#L267-L297)
  which allows any old fuel type synonyms to pass through and be valid.
 
 

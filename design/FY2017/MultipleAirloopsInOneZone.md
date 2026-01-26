@@ -273,7 +273,7 @@ Recirculation terminal unit flow rate = Max(0.06375, 0.0) = 0.06375 [m3/s]
 
 ### Modified Objects: `ZoneHVAC:AirDistributionUnit` and `AirTerminal:SingleDuct:Uncontrolled` ###
 
-In the `ZoneHVAC:AirDistributionUnit` and `AirTerminal:SingleDuct:Uncontrolled` objects, add the following field at the end of the object. (At some point in the future, plan to address [#4988](https://github.com/NREL/EnergyPlus/issues/4988) which would create a new AirTerminal:SingleDuct:ConstantVolume:NoReheat that sits inside an ADU just like all the other terminal units.)
+In the `ZoneHVAC:AirDistributionUnit` and `AirTerminal:SingleDuct:Uncontrolled` objects, add the following field at the end of the object. (At some point in the future, plan to address [#4988](https://github.com/NatLabRockies/EnergyPlus/issues/4988) which would create a new AirTerminal:SingleDuct:ConstantVolume:NoReheat that sits inside an ADU just like all the other terminal units.)
 
 *New field:  Design Specification Air Terminal Sizing Name*
 
@@ -488,14 +488,14 @@ In struct `SurfaceWindowCalc` (WindowProperty:AirflowControl object)
 In struct `EquipConfiguration`
 *2/20/2017 - done*
 
- - Add `bool ZoneHasAirFlowWindowReturn` to avoid [looping over every zone surface](https://github.com/NREL/EnergyPlus/blob/2592ba992c6cba84395eef038be8d3a049304067/src/EnergyPlus/ZoneEquipmentManager.cc#L4178-L4183) every iteration in `ZoneEquipmentManager::CalcZoneLeavingConditions`
+ - Add `bool ZoneHasAirFlowWindowReturn` to avoid [looping over every zone surface](https://github.com/NatLabRockies/EnergyPlus/blob/2592ba992c6cba84395eef038be8d3a049304067/src/EnergyPlus/ZoneEquipmentManager.cc#L4178-L4183) every iteration in `ZoneEquipmentManager::CalcZoneLeavingConditions`
  - ~Possibly add an array of just the airflow window surface numbers to avoid looping over all the surfaces in the zone even when there *is* an airflow window~
 
 #### ZoneEquipmentManager::CalcZoneLeavingConditions ####
 
  - **NOT DONE** Do some minor reorganization
  - *Done* Add a for loop over all the return nodes in the zone
- - *Done* Add an if on `ZoneHasAirFlowWindow` to skip the for [loop over all the surfaces](https://github.com/NREL/EnergyPlus/blob/2592ba992c6cba84395eef038be8d3a049304067/src/EnergyPlus/ZoneEquipmentManager.cc#L4178-L4183) just to look for an airflow window
+ - *Done* Add an if on `ZoneHasAirFlowWindow` to skip the for [loop over all the surfaces](https://github.com/NatLabRockies/EnergyPlus/blob/2592ba992c6cba84395eef038be8d3a049304067/src/EnergyPlus/ZoneEquipmentManager.cc#L4178-L4183) just to look for an airflow window
  - *Done* Add a new argument `ReturnNodeNum` to `InternalHeatGains::SumAllReturnAirConvectionGains` to allocate gains for a specific return air node
  - *Done* Also add `ReturnAirNodeNum` optional argument to `HeatBalanceInternalHeatGains::SetupZoneInternalGain` - this only applies to Lights, because refrigerated case and airflow windows don't use this system for internal gains?
  - *Done* Add a new field for `ReturnNodeName` to struct `GenericComponentZoneIntGainStruct` in `DataHeatBalance`.

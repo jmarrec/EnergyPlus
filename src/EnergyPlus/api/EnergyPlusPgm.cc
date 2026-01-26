@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -82,7 +82,7 @@
 // water heaters were developed by University of Central Florida, Florida Solar Energy Center (FSEC),
 // 1679 Clearlake Road, Cocoa, FL  32922, www.fsec.ucf.edu/.
 
-// Portions of EnergyPlus were developed by the National Renewable Energy Laboratory (NREL), 1617 Cole
+// Portions of EnergyPlus were developed by the National Laboratory of the Rockies (NREL), 1617 Cole
 // Blvd, Golden, CO 80401.
 
 // EnergyPlus v1.0.1, v1.0.2, v1.0.3, v1.1, v1.1.1 (Wintel platform) includes a link to TRNSYS (The Transient
@@ -256,7 +256,7 @@ void commonInitialize(EnergyPlus::EnergyPlusData &state)
 
 #ifdef DEBUG_ARITHM_MSVC
     // the following enables NaN detection in Visual Studio debug builds. See
-    // https://github.com/NREL/EnergyPlus/wiki/Debugging-Tips
+    // https://github.com/NatLabRockies/EnergyPlus/wiki/Debugging-Tips
 
     // Note: what you need to pass to the _controlfp_s is actually the opposite
     // By default all bits are 1, and the exceptions are turned off, so you need to turn off the bits for the exceptions you want to enable

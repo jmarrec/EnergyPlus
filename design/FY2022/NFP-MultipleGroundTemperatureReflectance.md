@@ -447,7 +447,7 @@ This is average surface reflectance of multiple ground surfaces viewed by an ext
 ## References ##
 
 Bill Marion. 2018. Ground Albedo Measurements and Modeling. Bifacial PV Workshop Lakewood, Colorado. September 11, 2018
-https://www.nrel.gov/docs/fy20osti/72589.pdf
+https://www.nlr.gov/docs/fy20osti/72589.pdf
 
 
 

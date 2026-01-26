@@ -105,7 +105,7 @@ All:
 
 Happy New Year! I came back to the US after Christmas. I started to work from today after a China trip.
 
-The new feature proposal was discussed on Nov. 30, 2022. The main topic is if we use either Fan:SystemModel or UnitarySystemPerformance:Multispeed. I submited my response to show differences between two objects in https://github.com/NREL/EnergyPlus/pull/9746:
+The new feature proposal was discussed on Nov. 30, 2022. The main topic is if we use either Fan:SystemModel or UnitarySystemPerformance:Multispeed. I submited my response to show differences between two objects in https://github.com/NatLabRockies/EnergyPlus/pull/9746:
 
 Based on discussion in the conference call today, I revised the NFP by adding a section to show differences between between UnitarySystemPerformance:Multispeed and Fan:SystemModel for review.
 The Fan:SystemModel does not have No Load Supply Air Flow Rate Ratio, and different fan flow ratios between heating and cooling.

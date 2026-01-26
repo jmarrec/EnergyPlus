@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -726,7 +726,7 @@ namespace HeatBalanceIntRadExchange {
                         // TODO Both "original" and "final" print the same output. This is likely a bug
                         // (discovered while updating output to {fmt}
                         // see:
-                        // https://github.com/NREL/EnergyPlusArchive/commit/1c08247853c297dce59f3f53cde47ccfa67720c0#diff-124964a7e9b73ce494c1952ab1acdeeb
+                        // https://github.com/NatLabRockies/EnergyPlusArchive/commit/1c08247853c297dce59f3f53cde47ccfa67720c0#diff-124964a7e9b73ce494c1952ab1acdeeb
                         print(state.files.debug, "{}\n", "!======== original input factors ===========================");
                         print(state.files.debug, "ZoneProperty:UserViewFactors:BySurfaceName,{},\n", thisEnclosure.Name);
                         for (int SurfNum : thisEnclosure.SurfaceReportNums) {
@@ -1037,7 +1037,7 @@ namespace HeatBalanceIntRadExchange {
                 if (Option1 == "IDF") {
                     // TODO Both "original" and "final" print the same output. This is likely a bug
                     // see:
-                    // https://github.com/NREL/EnergyPlusArchive/commit/1c08247853c297dce59f3f53cde47ccfa67720c0#diff-124964a7e9b73ce494c1952ab1acdeeb
+                    // https://github.com/NatLabRockies/EnergyPlusArchive/commit/1c08247853c297dce59f3f53cde47ccfa67720c0#diff-124964a7e9b73ce494c1952ab1acdeeb
                     print(state.files.debug, "{}\n", "!======== original input factors ===========================");
                     print(state.files.debug, "ZoneProperty:UserViewFactors:BySurfaceName,{},\n", thisEnclosure.Name);
                     for (int SurfNum : thisEnclosure.SurfaceReportNums) {

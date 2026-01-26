@@ -58,7 +58,7 @@ The first step will be to implement the code changes described above without per
 
 The general approach for refactoring plant components:
 
-[https://github.com/NREL/EnergyPlus/wiki/RefactoringPlantComponentApproach](https://github.com/NREL/EnergyPlus/wiki/RefactoringPlantComponentApproach)
+[https://github.com/NatLabRockies/EnergyPlus/wiki/RefactoringPlantComponentApproach](https://github.com/NatLabRockies/EnergyPlus/wiki/RefactoringPlantComponentApproach)
 
 will be adapted for the portions of the daylighting code that is touched. No class hierarchy is expected at this point.
 
