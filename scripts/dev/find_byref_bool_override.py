@@ -4,7 +4,7 @@
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
-# Battelle, Alliance for Sustainable Energy, LLC, and other contributors. All
+# Battelle, Alliance for Energy Innovation, LLC, and other contributors. All
 # rights reserved.
 #
 # NOTICE: This Software was developed under funding from the U.S. Department of
@@ -70,7 +70,7 @@ Eg:
 if functionB forces ErrorsFound to 'false' at the beginning and does pass, it
 would override the output of functionA which may have found errors!
 
-cf: https://github.com/NREL/EnergyPlus/issues/7147
+cf: https://github.com/NatLabRockies/EnergyPlus/issues/7147
 Written in Winter 2019.
 """
 

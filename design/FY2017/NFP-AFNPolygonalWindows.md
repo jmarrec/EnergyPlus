@@ -87,7 +87,7 @@ lgu1234  an hour ago   National Renewable Energy Laboratory member
 
 ###More communications
 
-More communications are available in GitHub: https://github.com/NREL/EnergyPlus/pull/5924
+More communications are available in GitHub: https://github.com/NatLabRockies/EnergyPlus/pull/5924
 
 ## Overview ##
 

@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -2369,7 +2369,6 @@ void InitZoneAirSetPoints(EnergyPlusData &state)
     static constexpr std::string_view RoutineName("InitZoneAirSetpoints: ");
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    int TRefFlag; // Flag for Reference Temperature process in Zones
 
     auto &s_ztpc = state.dataZoneTempPredictorCorrector;
     auto &s_hbfs = state.dataHeatBalFanSys;
@@ -2419,6 +2418,7 @@ void InitZoneAirSetPoints(EnergyPlusData &state)
             state.dataZoneEnergyDemand->spaceSysMoistureDemand.allocate(state.dataGlobal->numSpaces);
         }
 
+        int TRefFlag; // Flag for Reference Temperature process in Zones
         for (int zoneNum = 1; zoneNum <= NumOfZones; ++zoneNum) {
             bool FirstSurfFlag = true;
             for (int spaceNum : state.dataHeatBal->Zone(zoneNum).spaceIndexes) {
@@ -6339,8 +6339,6 @@ void GetComfortSetPoints(EnergyPlusData &state,
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     Real64 PMVResult = 0.0; // Calculated PMV value
 
-    auto &s_ztpc = state.dataZoneTempPredictorCorrector;
-
     auto &comfortControlledZone = state.dataZoneCtrls->ComfortControlledZone(ComfortControlNum);
     Real64 Tmin = comfortControlledZone.TdbMinSetPoint;
     Real64 Tmax = comfortControlledZone.TdbMaxSetPoint;
@@ -6359,6 +6357,7 @@ void GetComfortSetPoints(EnergyPlusData &state,
 
         int SolFla = 0; // feed back flag from SolveRoot
         General::SolveRoot(state, Acc, MaxIter, SolFla, Tset, f, Tmin, Tmax);
+        auto &s_ztpc = state.dataZoneTempPredictorCorrector;
         if (SolFla == -1) {
             if (!state.dataGlobal->WarmupFlag) {
                 ++s_ztpc->IterLimitExceededNum1;

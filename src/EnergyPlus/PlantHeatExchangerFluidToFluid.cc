@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -224,7 +224,6 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
     bool ErrorsFound(false);
     int NumAlphas;        // Number of elements in the alpha array
     int NumNums;          // Number of elements in the numeric array
-    int IOStat;           // IO Status when calling get input subroutine
     int MaxNumAlphas(0);  // argument for call to GetObjectDefMaxArgs
     int MaxNumNumbers(0); // argument for call to GetObjectDefMaxArgs
     int TotalArgs(0);     // argument for call to GetObjectDefMaxArgs
@@ -256,6 +255,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
 
     if (state.dataPlantHXFluidToFluid->NumberOfPlantFluidHXs > 0) {
         state.dataPlantHXFluidToFluid->FluidHX.allocate(state.dataPlantHXFluidToFluid->NumberOfPlantFluidHXs);
+        int IOStat; // IO Status when calling get input subroutine
         for (int CompLoop = 1; CompLoop <= state.dataPlantHXFluidToFluid->NumberOfPlantFluidHXs; ++CompLoop) {
             state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                      cCurrentModuleObject,

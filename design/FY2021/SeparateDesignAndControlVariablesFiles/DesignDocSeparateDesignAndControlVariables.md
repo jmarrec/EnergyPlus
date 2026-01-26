@@ -80,15 +80,15 @@ Project to end by April 2021 since Jermy's internship ends by May 2021.
 
 The proposed approach is to identify the design variables in the LowTemperatureRadiant and Baseboard objects and create separate design objects for the LowTemperatureRadiant and Baseboard objects.
 
-<span style="display:block;text-align:center">![How the objects will be split](https://github.com/NREL/EnergyPlus/blob/Separate-Design-and-Control-Variables/design/FY2021/SeparateDesignAndControlVariablesFiles/BigSplit.jpg)
+<span style="display:block;text-align:center">![How the objects will be split](https://github.com/NatLabRockies/EnergyPlus/blob/Separate-Design-and-Control-Variables/design/FY2021/SeparateDesignAndControlVariablesFiles/BigSplit.jpg)
 
 <span style="display:block;text-align:center">**Figure: How the objects will be split**
 
-<span style="display:block;text-align:center">![How the design objects will be brokendown](https://github.com/NREL/EnergyPlus/blob/Separate-Design-and-Control-Variables/design/FY2021/SeparateDesignAndControlVariablesFiles/BKDwn1.jpg)
+<span style="display:block;text-align:center">![How the design objects will be brokendown](https://github.com/NatLabRockies/EnergyPlus/blob/Separate-Design-and-Control-Variables/design/FY2021/SeparateDesignAndControlVariablesFiles/BKDwn1.jpg)
 
-<span style="display:block;text-align:center">![How the design objects will be brokendown](https://github.com/NREL/EnergyPlus/blob/Separate-Design-and-Control-Variables/design/FY2021/SeparateDesignAndControlVariablesFiles/BKDwn2.jpg)
+<span style="display:block;text-align:center">![How the design objects will be brokendown](https://github.com/NatLabRockies/EnergyPlus/blob/Separate-Design-and-Control-Variables/design/FY2021/SeparateDesignAndControlVariablesFiles/BKDwn2.jpg)
 
-<span style="display:block;text-align:center">![How the design objects will be brokendown](https://github.com/NREL/EnergyPlus/blob/Separate-Design-and-Control-Variables/design/FY2021/SeparateDesignAndControlVariablesFiles/BKDwn3.jpg)
+<span style="display:block;text-align:center">![How the design objects will be brokendown](https://github.com/NatLabRockies/EnergyPlus/blob/Separate-Design-and-Control-Variables/design/FY2021/SeparateDesignAndControlVariablesFiles/BKDwn3.jpg)
 
 <span style="display:block;text-align:center">**Figure: How the design objects will be brokendown**
 

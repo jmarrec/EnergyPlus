@@ -878,6 +878,6 @@ The major revisions will be performed in 3 modules, UnitarySystem, MultispeedHea
 
 ## References ##
 
-NFP-DuctHeatTransfer.md: https://github.com/NREL/EnergyPlus/blob/develop/design/FY2024/NFP-DuctHeatTransfer.md
+NFP-DuctHeatTransfer.md: https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2024/NFP-DuctHeatTransfer.md
 
-DuctModelRoadMap.md: https://github.com/NREL/EnergyPlus/blob/develop/design/FY2024/DuctModelRoadMap.md
+DuctModelRoadMap.md: https://github.com/NatLabRockies/EnergyPlus/blob/develop/design/FY2024/DuctModelRoadMap.md

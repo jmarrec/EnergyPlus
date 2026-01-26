@@ -4,7 +4,7 @@
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
-# Battelle, Alliance for Sustainable Energy, LLC, and other contributors. All
+# Battelle, Alliance for Energy Innovation, LLC, and other contributors. All
 # rights reserved.
 #
 # NOTICE: This Software was developed under funding from the U.S. Department of
@@ -62,7 +62,7 @@ HTML, SQL, and JSON outputs.
 5ZoneCAV_MaxTemp_JSON_Outputs.idf has all the required
 objects (Output:SQLite, Output:JSON) with 'AllSummary' enabled.
 
-cf: https://github.com/NREL/EnergyPlus/issues/9419
+cf: https://github.com/NatLabRockies/EnergyPlus/issues/9419
 """
 
 __author__ = "Julien Marrec, EffiBEM"

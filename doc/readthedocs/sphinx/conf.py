@@ -18,8 +18,8 @@ autodoc_mock_imports = ["pyenergyplus"]
 
 # -- Project information -----------------------------------------------------
 project = "EnergyPlus"
-copyright = "2023, National Renewable Energy Laboratory for the United States Department of Energy"
-author = "National Renewable Energy Laboratory for the United States Department of Energy"
+copyright = "2023, National Laboratory of the Rockies for the United States Department of Energy"
+author = "National Laboratory of the Rockies for the United States Department of Energy"
 version = "23.1"  # The short X.Y version
 release = "23.1"  # The full version, including alpha/beta/rc tags
 
@@ -261,7 +261,7 @@ latex_documents = [
         master_doc,
         "EnergyPlusPythonAPIDocumentation.tex",
         "EnergyPlus Python API Documentation Documentation",
-        "National Renewable Energy Laboratory for the United States Department of Energy",
+        "National Laboratory of the Rockies for the United States Department of Energy",
         "manual",
     ),
 ]

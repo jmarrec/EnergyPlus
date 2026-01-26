@@ -12,7 +12,7 @@ Field 1 remains the same.
 Fields 2 and 3 are deleted.
 Fields 4-6 remain the same, shifting up to new fields 2-4.
 
-See [8370](https://github.com/NREL/EnergyPlus/pull/8370)
+See [8370](https://github.com/NatLabRockies/EnergyPlus/pull/8370)
 
 # Object Change: Construction:InternalSource to ConstructionProperty:InternalHeatSource and Construction
 
@@ -34,7 +34,7 @@ Fields 2:m (new A2:Am) are the old Fields 7:n (old A2:An)
 
 *If the incoming object has n fields, then the new Construction object will have n-5 fields.*
 
-See [8442](https://github.com/NREL/EnergyPlus/pull/8442)
+See [8442](https://github.com/NatLabRockies/EnergyPlus/pull/8442)
 
 # Object Change: Coil:Heating:WaterToAirHeatPump:EquationFit
 
@@ -48,7 +48,7 @@ Fields 15-19 are replaced by a new field 11 where a curve name is specified. A n
 
 Other fields remain the same.
 
-See [8464](https://github.com/NREL/EnergyPlus/pull/8464)
+See [8464](https://github.com/NatLabRockies/EnergyPlus/pull/8464)
 
 # Object Change: Coil:Cooling:WaterToAirHeatPump:EquationFit
 
@@ -65,7 +65,7 @@ Fields 22-26 are replaced by a new field 13 where a curve name is specified. A n
 
 Other fields remain the same.
 
-See [8464](https://github.com/NREL/EnergyPlus/pull/8464)
+See [8464](https://github.com/NatLabRockies/EnergyPlus/pull/8464)
 
 # Object Change: HeatPump:WaterToWater:EquationFit:Heating
 
@@ -79,7 +79,7 @@ Fields 15-19 are replaced by a new field 11 where a curve name is specified. A n
 
 Other fields remain the same.
 
-See [8464](https://github.com/NREL/EnergyPlus/pull/8464)
+See [8464](https://github.com/NatLabRockies/EnergyPlus/pull/8464)
 
 # Object Change: HeatPump:WaterToWater:EquationFit:Cooling
 
@@ -93,7 +93,7 @@ Fields 15-19 are replaced by a new field 11 where a curve name is specified. A n
 
 Other fields remain the same.
 
-See [8464](https://github.com/NREL/EnergyPlus/pull/8464)
+See [8464](https://github.com/NatLabRockies/EnergyPlus/pull/8464)
 
 # Split Object: ‘ZoneHVAC:LowTemperatureRadiant:VariableFlow’
 
@@ -245,4 +245,4 @@ Field 1 renamed from *Adjust Zone Mixing For Zone Air Mass Flow Balance* to *Adj
       - Now there are five choice keys.
 Fields 2-3 remain the same.
 
-See [pull request 8460] (https://github.com/NREL/EnergyPlus/pull/8460)
+See [pull request 8460] (https://github.com/NatLabRockies/EnergyPlus/pull/8460)

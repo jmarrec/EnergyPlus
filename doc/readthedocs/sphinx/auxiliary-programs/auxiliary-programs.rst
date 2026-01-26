@@ -4212,8 +4212,8 @@ SAMSON Data Set/Format
 
 A highly reliable source of historical data for U.S. locations is the
 Solar and Meteorological Surface Observational Network (SAMSON) data set
-assembled by the National Renewable Energy Laboratory (NREL) in Golden,
-CO: http://www.nrel.gov/. The SAMSON data set contains a 30 year (1961
+assembled by the National Laboratory of the Rockies (NLR) in Golden,
+CO: http://www.nlr.gov/. The SAMSON data set contains a 30 year (1961
 to 1990) period of record for 239 locations and are available from the
 NCDC.
 
@@ -5262,7 +5262,7 @@ Typical Meteorological Years Derived from the 1961-1990 National Solar
 Radiation Data Base*, June 1995, CD-ROM. Golden, Colorado: National
 Renewable Energy Laboratory.
 
-http://rredc.nrel.gov/solar/pubs/tmy2/
+http://rredc.nlr.gov/solar/pubs/tmy2/
 
 Numerical Logics. 1999. Canadian Weather for Energy Calculations, Users
 Manual and CD-ROM. Downsview, Ontario: Environment Canada.
@@ -12537,7 +12537,7 @@ arguments. The arguments may be listed by typing ``energyplus --help``
 (on any operating system) and ``man energyplus`` (on Unix-based
 operating systems, Mac OS X and Linux). For more information about the
 command line interface, see
-https://github.com/NREL/EnergyPlus/blob/develop/doc/running-energyplus-from-command-line.md.
+https://github.com/NatLabRockies/EnergyPlus/blob/develop/doc/running-energyplus-from-command-line.md.
 The remainder of this section describes running EnergyPlus in legacy
 mode (i.e. no command-line arguments) on Windows OS.
 

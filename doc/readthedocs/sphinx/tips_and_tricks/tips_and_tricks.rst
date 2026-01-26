@@ -119,7 +119,7 @@ current EnergyPlus capabilities).
 The feature highlights from EnergyPlus releases can be seen here:
 
 https://energyplus.net/features
-https://github.com/NREL/EnergyPlus/releases
+https://github.com/NatLabRockies/EnergyPlus/releases
 
 In addition you can see how EnergyPlus compares to other programs (which
 have submitted their models) in our testing reports:

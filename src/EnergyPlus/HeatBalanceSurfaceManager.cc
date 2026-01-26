@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -9491,7 +9491,6 @@ void CalcOutsideSurfTemp(EnergyPlusData &state,
     // requires the inside heat balance to be accounted for in the heat balance
     // while a "slow" surface can used the last time step's value for inside
     // surface temperature.
-    auto &s_mat = state.dataMaterial;
 
     auto &surface = state.dataSurface->Surface(SurfNum);
     auto const &construct = state.dataConstruction->Construct(ConstrNum);
@@ -9709,6 +9708,7 @@ void CalcOutsideSurfTemp(EnergyPlusData &state,
     if (construct.SourceSinkPresent) {
 
         if (MovInsulPresent) {
+            auto &s_mat = state.dataMaterial;
             // Note: if movable insulation is ever added back in correctly, the heat balance equations above must be fixed
             ShowSevereError(state, "Exterior movable insulation is not valid with embedded sources/sinks");
             ShowContinueError(state, format("Construction {} contains an internal source or sink but also uses", construct.Name));

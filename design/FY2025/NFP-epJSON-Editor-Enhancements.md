@@ -56,7 +56,7 @@ https://github.com/ORNL-BTRIC/epJSON-Editor/issues/15
 
 The origin for editor came from this issue:
 
-https://github.com/NREL/EnergyPlus/issues/7418
+https://github.com/NatLabRockies/EnergyPlus/issues/7418
 
 That issue also includes a summary of a meeting with users of IDF Editor and what features they found most important.
 
@@ -64,11 +64,11 @@ Two issues related to convertInputFormat are planned to be addressed as part of 
 
 Populate comments (!-) from IDD/schema when converting from epJSON to IDF
 
-https://github.com/NREL/EnergyPlus/issues/8987
+https://github.com/NatLabRockies/EnergyPlus/issues/8987
 
 Add ConvertInputFormat options to preserve object order and comments to facilitate round-tripping
 
-https://github.com/NREL/EnergyPlus/issues/8969
+https://github.com/NatLabRockies/EnergyPlus/issues/8969
 
 One widget that is not included in Tkinter that will be used is Tksheet
 

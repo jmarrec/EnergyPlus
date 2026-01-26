@@ -27,7 +27,7 @@ This feature request is based on study of commercial building HVAC design drawin
 
 Note:
 
-The above description is mainly from GitHub Issue #8190 at https://github.com/NREL/EnergyPlus/issues/8190
+The above description is mainly from GitHub Issue #8190 at https://github.com/NatLabRockies/EnergyPlus/issues/8190
 
 ## E-mail and  Conference Call Conclusions ##
 

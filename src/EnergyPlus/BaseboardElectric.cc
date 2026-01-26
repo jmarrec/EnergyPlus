@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -175,8 +175,6 @@ namespace BaseboardElectric {
         int constexpr iHeatFracOfAutosizedCapacityNumericNum(
             3); //  get input index to baseboard heating capacity sizing as fraction of autosized heating capacity
 
-        auto &s_ipsc = state.dataIPShortCut;
-
         auto &baseboard = state.dataBaseboardElectric;
         std::string_view cCurrentModuleObject = cCMO_BBRadiator_Electric;
 
@@ -190,8 +188,8 @@ namespace BaseboardElectric {
             int NumNums = 0;
             int IOStat = 0;
             int BaseboardNum = 0;
+            auto &s_ipsc = state.dataIPShortCut;
             for (int ConvElecBBNum = 1; ConvElecBBNum <= NumConvElecBaseboards; ++ConvElecBBNum) {
-
                 state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                          cCurrentModuleObject,
                                                                          ConvElecBBNum,

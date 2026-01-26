@@ -10,7 +10,7 @@ Change EquationFit coils to reference curve objects (Issue #8352)
 
 ## Background ##
 
-Excerpts lifted from [issue #8352](https://github.com/NREL/EnergyPlus/issues/8352)
+Excerpts lifted from [issue #8352](https://github.com/NatLabRockies/EnergyPlus/issues/8352)
 
  - The EquationFit coil objects (like `Coil:Cooling:WaterToAirHeatPump:EquationFit` and `Coil:Heating:WaterToAirHeatPump:EquationFit`) have curve coefficients embedded in them.
 
@@ -18,7 +18,7 @@ Excerpts lifted from [issue #8352](https://github.com/NREL/EnergyPlus/issues/835
 
  - Embedded coefficients limit the flexibility of using EMS to model coil performance impact when needed.
 
- - Changing EquationFit coils to reference curve objects also allows the user to use different equation forms and to use lookup tables. (From [Mike Witte](https://github.com/NREL/EnergyPlus/issues/8352#issuecomment-724140062))
+ - Changing EquationFit coils to reference curve objects also allows the user to use different equation forms and to use lookup tables. (From [Mike Witte](https://github.com/NatLabRockies/EnergyPlus/issues/8352#issuecomment-724140062))
 
 ## E-mail and  Conference Call Conclusions ##
 

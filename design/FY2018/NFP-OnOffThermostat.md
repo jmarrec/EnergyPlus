@@ -89,7 +89,7 @@ Team:
 
 An NFP to allow OnOff Thermostat.
 
-https://github.com/NREL/EnergyPlus/blob/OnOffThermostat/design/FY2018/NFP-OnOffThermostat.md
+https://github.com/NatLabRockies/EnergyPlus/blob/OnOffThermostat/design/FY2018/NFP-OnOffThermostat.md
 
 Comments are welcome via e-mail or github.  Please let me know if you wish to be a reviewer for this task.
 
@@ -368,7 +368,7 @@ No transition is needed, since an optional field is added as the last one.
 
 A link to the enhancement item is provided below.
 
-https://github.com/NREL/EnergyPlusDevSupport/blob/master/DesignDocuments/EnhancementList/HVAC_General_2013_05.doc
+https://github.com/NatLabRockies/EnergyPlusDevSupport/blob/master/DesignDocuments/EnhancementList/HVAC_General_2013_05.doc
 
 # Design Document #
 

@@ -8,7 +8,7 @@ Design Document - Provide Additional LEED Related Features
 
 ## New Feature Proposal
 
-See the file [NFP-ProvideAdditionalLEEDrelatedFeatures.md](https://github.com/NREL/EnergyPlus/blob/Update_LEED_Reporting/design/FY2017/NFP-ProvideAdditionalLEEDrelatedFeatures.md) file for details on the justification, overview, and output description.
+See the file [NFP-ProvideAdditionalLEEDrelatedFeatures.md](https://github.com/NatLabRockies/EnergyPlus/blob/Update_LEED_Reporting/design/FY2017/NFP-ProvideAdditionalLEEDrelatedFeatures.md) file for details on the justification, overview, and output description.
 
 ## Adding Support for End-Use Subcategory in More Objects
 

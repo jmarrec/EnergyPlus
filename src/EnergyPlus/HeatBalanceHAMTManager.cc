@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -185,7 +185,6 @@ namespace HeatBalanceHAMTManager {
         int Numid;
 
         int HAMTitems;
-        int vtcsid;
 
         bool ErrorsFound;
 
@@ -613,7 +612,7 @@ namespace HeatBalanceHAMTManager {
                                 cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, cHAMTObject7, AlphaArray(1)};
-            vtcsid = Util::FindItemInList(AlphaArray(1), state.dataSurface->Surface);
+            int vtcsid = Util::FindItemInList(AlphaArray(1), state.dataSurface->Surface);
             if (vtcsid == 0) {
                 ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(1), AlphaArray(1));
                 ShowContinueError(state, "The basic material must be defined in addition to specifying HeatAndMoistureTransfer properties.");

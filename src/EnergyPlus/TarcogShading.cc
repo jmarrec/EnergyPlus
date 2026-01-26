@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -195,9 +195,6 @@ namespace TarcogShading {
         Real64 qv1;
         Real64 qv2;
 
-        int i;
-        int j;
-        int k;
         int nmix1;
         int nmix2;
 
@@ -209,8 +206,8 @@ namespace TarcogShading {
         // hcv = 0.0d0
 
         // main loop:
-        for (i = 1; i <= nlayer; ++i) {
-            k = 2 * i + 1;
+        for (int i = 1; i <= nlayer; ++i) {
+            // int k = 2 * i + 1;
             // if (LayerType(i).eq.VENETBLIND) then
             if (IsShadingLayer(LayerType(i))) {
                 // dr.........set Shading device geometry
@@ -225,7 +222,7 @@ namespace TarcogShading {
                 nmix2 = nmix(i + 1);
                 press1 = pressure(i);
                 press2 = pressure(i + 1);
-                for (j = 1; j <= maxgas; ++j) {
+                for (int j = 1; j <= maxgas; ++j) {
                     state.dataTarcogShading->iprop1(j) = iprop(j, i);
                     state.dataTarcogShading->iprop2(j) = iprop(j, i + 1);
                     state.dataTarcogShading->frct1(j) = frct(j, i);

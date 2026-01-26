@@ -36,4 +36,4 @@ A new example file built upon the existing file, `UnitarySystem_MultiStageSupple
 
 ## Email Discussion
 
-The feature and implementation details were based on [issue 9357](https://github.com/NREL/EnergyPlus/issues/9357)
+The feature and implementation details were based on [issue 9357](https://github.com/NatLabRockies/EnergyPlus/issues/9357)

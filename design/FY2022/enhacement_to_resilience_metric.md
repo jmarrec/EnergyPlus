@@ -34,7 +34,7 @@ The concept of UDH is analogous to that of temperature-weighted exceedance hours
 
 UDH is calculated as follows:
 
-![UDH_calc](https://github.com/NREL/EnergyPlus/blob/enhanceResilienceMetrics/design/FY2022/UDH_eq.png)
+![UDH_calc](https://github.com/NatLabRockies/EnergyPlus/blob/enhanceResilienceMetrics/design/FY2022/UDH_eq.png)
 
 where T is the indoor air temperature [°C]; t is time [h]; and x<sub>+</sub> = x if x > 0, or 0 otherwise. T<sub>threshold</sub> is the indoor cooling or heating setpoint [°C] in both the grid-on and grid-off scenarios. A similar metric, the Exceedance Degree-Hour, is recently developed by Salimi et al [4]. Instead of thresholding, this metric weights each hour by the distance from the current SET to the comfort zone [4].
 

@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -554,8 +554,6 @@ namespace ThermalEN673Calc {
         EP_SIZE_CHECK(absol, maxlay);
 
         // Locals
-        int i;
-        int j;
         Real64 fract;
         Real64 flowin;
 
@@ -570,8 +568,8 @@ namespace ThermalEN673Calc {
             } else {
                 flowin = (rs(1) + 0.5 * rs(2)) / rtot;
                 fract = dir * absol(1) * rs(10);
-                for (i = 2; i <= nlayer; ++i) {
-                    j = 2 * i;
+                for (int i = 2; i <= nlayer; ++i) {
+                    int j = 2 * i;
                     flowin += (0.5 * (rs(j - 2) + 0.5 * rs(j)) + rs(j - 1)) / rtot;
                     fract += absol(i) * flowin;
                 }
