@@ -3,7 +3,7 @@
 !-NOTE: All comments with '!-' are ignored by the IDFEditor and are generated automatically.
 !-      Use '!' comments if they need to be retained when using the IDFEditor.
 ! CarrollMRT-RefBldgLargeOfficeNew2004_Chicago.idf
-!! DOE Commercial Reference Building
+! DOE Commercial Reference Building
 ! Large office, new construction 90.1-2004
 ! ASHRAE Standards 90.1-2004 and 62-1999
 !
