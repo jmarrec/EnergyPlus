@@ -4395,7 +4395,7 @@ TEST_F(EnergyPlusFixture, AirLoopHVACDOAS_TestOACompOutletNodeIndex)
 
     EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).ComponentType(2), "HUMIDIFIER:STEAM:ELECTRIC");
     EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).InletNodeNum(2), 2);
-    EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).OutletNodeNum(2), 23);
+    EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).OutletNodeNum(2), 24);
 }
 
 TEST_F(EnergyPlusFixture, AirLoopHVACDOAS_TestGetDesignDayConditions)
@@ -8874,7 +8874,7 @@ TEST_F(EnergyPlusFixture, AirLoopHVACDOAS_TestOACompFanNoDrawAndBlow)
     EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).OutletNodeNum(2), 3);
     EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).ComponentType(3), "HUMIDIFIER:STEAM:ELECTRIC");
     EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).InletNodeNum(3), 3);
-    EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).OutletNodeNum(3), 24);
+    EXPECT_EQ(state->dataAirLoop->OutsideAirSys(1).OutletNodeNum(3), 25);
 }
 
 TEST_F(EnergyPlusFixture, AirLoopHVACDOAS_TestFanHeatAddeToCoolingCoilSize)
