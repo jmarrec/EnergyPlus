@@ -79,6 +79,7 @@
 #include <EnergyPlus/InternalHeatGains.hh>
 #include <EnergyPlus/MoistureBalanceEMPDManager.hh>
 #include <EnergyPlus/OutputProcessor.hh>
+#include <EnergyPlus/PoweredInductionUnits.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/RefrigeratedCase.hh>
 #include <EnergyPlus/RoomAirModelAirflowNetwork.hh>
@@ -795,6 +796,17 @@ namespace RoomAir {
             Real64 CpAir = PsyCpAirFnW(zoneHB.airHumRat);
             SumSysMCp += inletNode.MassFlowRate * CpAir;
             SumSysMCpT += inletNode.MassFlowRate * CpAir * inletNode.Temp;
+        }
+
+        if (!zone.leakageParallelPIUNums.empty()) {
+            Real64 CpAir = PsyCpAirFnW(zoneHB.airHumRat);
+            for (int piuNum = 1; piuNum <= static_cast<int>(state.dataHeatBal->Zone(zoneNum).leakageParallelPIUNums.size()); ++piuNum) {
+                const auto &thisPIU = state.dataPowerInductionUnits->PIU(piuNum + 1);
+                if (thisPIU.leakFlow > 0) {
+                    SumSysMCp += thisPIU.leakFlow * CpAir;
+                    SumSysMCpT += thisPIU.leakFlow * CpAir * state.dataLoopNodes->Node(thisPIU.PriAirInNode).Temp;
+                }
+            }
         }
 
         int ZoneMult = zone.Multiplier * zone.ListMultiplier;

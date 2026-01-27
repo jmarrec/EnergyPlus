@@ -1385,7 +1385,7 @@ namespace RoomAir {
                 }
                 HeightFrac = min(1.0, HeightFrac);
                 state.dataRoomAir->HeightTransition(ZoneNum) = HeightFrac * CeilingHeight;
-                Real64 GainsFrac = zoneU.A_Kc * std::pow(Gamma, zoneU.B_Kc) + zoneU.C_Kc + zoneU.D_Kc * Gamma + zoneU.E_Kc * pow_2(Gamma);
+                GainsFrac = zoneU.A_Kc * std::pow(Gamma, zoneU.B_Kc) + zoneU.C_Kc + zoneU.D_Kc * Gamma + zoneU.E_Kc * pow_2(Gamma);
                 GainsFrac = max(0.7, min(GainsFrac, 1.0));
                 if (zoneU.ShadeDown) {
                     GainsFrac -= 0.2;

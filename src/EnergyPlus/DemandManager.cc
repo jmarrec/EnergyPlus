@@ -1524,9 +1524,9 @@ void LoadInterface(EnergyPlusData &state, DemandAction const Action, int const M
         if (state.dataZoneCtrls->NumComfortControlledZones > 0) {
             auto &comfortZone = state.dataZoneCtrls->ComfortControlledZone(LoadPtr);
             if (state.dataHeatBalFanSys->ComfortControlType(comfortZone.ActualZoneNum) != HVAC::SetptType::Uncontrolled) {
-                auto &zoneTstatSetpt = s_dhbf->zoneTstatSetpts(comfortZone.ActualZoneNum);
+                auto &cmftzoneTstatSetpt = s_dhbf->zoneTstatSetpts(comfortZone.ActualZoneNum);
                 if (Action == DemandAction::CheckCanReduce) {
-                    if (zoneTstatSetpt.setptLo > demandMgr.LowerLimit || zoneTstatSetpt.setptHi < demandMgr.UpperLimit) {
+                    if (cmftzoneTstatSetpt.setptLo > demandMgr.LowerLimit || cmftzoneTstatSetpt.setptHi < demandMgr.UpperLimit) {
                         CanReduceDemand = true; // Heating
                     }
                 } else if (Action == DemandAction::SetLimit) {
