@@ -751,7 +751,7 @@ namespace Weather {
                         RoutineName));
             }
 
-            // Throw a Fatal now that we have said it'll terminalte
+            // Throw a Fatal now that we have said it'll terminate
             if (ErrorsFound) {
                 CloseWeatherFile(state); // will only close if opened.
                 ShowFatalError(state, format("{}Errors found in Weather Data Input. Program terminates.", RoutineName));
@@ -5372,6 +5372,8 @@ namespace Weather {
             if (runPerInput1.dayOfWeek != 0 && !ErrorsFound) {
                 SetupWeekDaysByMonth(state, runPerInput1.startMonth, runPerInput1.startDay, runPerInput1.dayOfWeek, runPerInput1.monWeekDay);
             }
+        } else {
+            nRunPeriods = 1;
         }
     }
 
