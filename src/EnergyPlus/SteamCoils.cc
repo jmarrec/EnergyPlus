@@ -720,14 +720,14 @@ namespace SteamCoils {
                         CompName = state.dataSteamCoils->SteamCoil(CoilNum).Name;
                         bPRINT = false;
                         HeatingCoilDesAirInletTempSizer sizerHeatingDesInletTemp;
-                        bool ErrorsFound = false;
+                        bool localErrorsFound = false;
                         sizerHeatingDesInletTemp.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
-                        state.dataSize->DataDesInletAirTemp = sizerHeatingDesInletTemp.size(state, DataSizing::AutoSize, ErrorsFound);
+                        state.dataSize->DataDesInletAirTemp = sizerHeatingDesInletTemp.size(state, DataSizing::AutoSize, localErrorsFound);
 
                         HeatingCoilDesAirOutletTempSizer sizerHeatingDesOutletTemp;
-                        ErrorsFound = false;
+                        localErrorsFound = false;
                         sizerHeatingDesOutletTemp.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
-                        state.dataSize->DataDesOutletAirTemp = sizerHeatingDesOutletTemp.size(state, DataSizing::AutoSize, ErrorsFound);
+                        state.dataSize->DataDesOutletAirTemp = sizerHeatingDesOutletTemp.size(state, DataSizing::AutoSize, localErrorsFound);
 
                         if (state.dataSize->CurOASysNum > 0) {
                             auto &OASysEqSizing = state.dataSize->OASysEqSizing;

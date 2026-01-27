@@ -660,7 +660,6 @@ namespace HeatBalanceHAMTManager {
         static constexpr std::string_view RoutineName("InitCombinedHeatAndMoistureFiniteElement: ");
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int sid;
         int conid;
         int errorCount;
 
@@ -946,9 +945,9 @@ namespace HeatBalanceHAMTManager {
                     cell1.adjsl(adj1) = adj2;
                     cell2.adjsl(adj2) = adj1;
 
-                    sid = cell1.sid;
-                    cell1.overlap(adj1) = state.dataSurface->Surface(sid).Area;
-                    cell2.overlap(adj2) = state.dataSurface->Surface(sid).Area;
+                    int const surfNum = cell1.sid;
+                    cell1.overlap(adj1) = state.dataSurface->Surface(surfNum).Area;
+                    cell2.overlap(adj2) = state.dataSurface->Surface(surfNum).Area;
                     cell1.dist(adj1) = cell1.length(1) / 2.0;
                     cell2.dist(adj2) = cell2.length(1) / 2.0;
                 }

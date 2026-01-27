@@ -6737,19 +6737,21 @@ namespace SurfaceGeometry {
                     //        \units m
 
                     ++SurfNum;
-                    auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
-                    surfTemp.Name = s_ipsc->cAlphaArgs(1) + " Right"; // Set the Surface Name in the Derived Type
-                    surfTemp.Class = SurfaceClass::Shading;
-                    surfTemp.HeatTransSurf = false;
+                    auto &surfTemp_Rfin = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
+                    surfTemp_Rfin.Name = s_ipsc->cAlphaArgs(1) + " Right"; // Set the Surface Name in the Derived Type
+                    surfTemp_Rfin.Class = SurfaceClass::Shading;
+                    surfTemp_Rfin.HeatTransSurf = false;
                     BaseSurfNum = state.dataSurfaceGeometry->SurfaceTmp(Found).BaseSurf;
-                    surfTemp.BaseSurfName = state.dataSurfaceGeometry->SurfaceTmp(Found).BaseSurfName;
-                    surfTemp.ExtBoundCond = state.dataSurfaceGeometry->SurfaceTmp(Found).ExtBoundCond;
-                    surfTemp.ExtSolar = state.dataSurfaceGeometry->SurfaceTmp(Found).ExtSolar;
-                    surfTemp.ExtWind = state.dataSurfaceGeometry->SurfaceTmp(Found).ExtWind;
-                    surfTemp.Zone = state.dataSurfaceGeometry->SurfaceTmp(Found).Zone; // Necessary to do relative coordinates in GetVertices below
-                    surfTemp.ZoneName = state.dataSurfaceGeometry->SurfaceTmp(Found).ZoneName; // Necessary to have surface drawn in OutputReports
+                    surfTemp_Rfin.BaseSurfName = state.dataSurfaceGeometry->SurfaceTmp(Found).BaseSurfName;
+                    surfTemp_Rfin.ExtBoundCond = state.dataSurfaceGeometry->SurfaceTmp(Found).ExtBoundCond;
+                    surfTemp_Rfin.ExtSolar = state.dataSurfaceGeometry->SurfaceTmp(Found).ExtSolar;
+                    surfTemp_Rfin.ExtWind = state.dataSurfaceGeometry->SurfaceTmp(Found).ExtWind;
+                    surfTemp_Rfin.Zone =
+                        state.dataSurfaceGeometry->SurfaceTmp(Found).Zone; // Necessary to do relative coordinates in GetVertices below
+                    surfTemp_Rfin.ZoneName =
+                        state.dataSurfaceGeometry->SurfaceTmp(Found).ZoneName; // Necessary to have surface drawn in OutputReports
 
-                    surfTemp.shadowSurfSched = nullptr;
+                    surfTemp_Rfin.shadowSurfSched = nullptr;
                     Length = s_ipsc->rNumericArgs(7) + s_ipsc->rNumericArgs(8) + state.dataSurfaceGeometry->SurfaceTmp(Found).Height;
                     if (Item == 3) {
                         Depth = s_ipsc->rNumericArgs(10);
@@ -6787,16 +6789,16 @@ namespace SurfaceGeometry {
                                Zp * state.dataSurfaceGeometry->SurfaceTmp(BaseSurfNum).SinTilt;
 
                         TiltAngle = state.dataSurfaceGeometry->SurfaceTmp(Found).Tilt;
-                        surfTemp.Tilt = TiltAngle;
-                        surfTemp.convOrientation = Convect::GetSurfConvOrientation(surfTemp.Tilt);
-                        surfTemp.Azimuth = state.dataSurfaceGeometry->SurfaceTmp(Found).Azimuth - (180.0 - s_ipsc->rNumericArgs(9));
-                        surfTemp.CosAzim = std::cos(surfTemp.Azimuth * Constant::DegToRad);
-                        surfTemp.SinAzim = std::sin(surfTemp.Azimuth * Constant::DegToRad);
-                        surfTemp.CosTilt = std::cos(surfTemp.Tilt * Constant::DegToRad);
-                        surfTemp.SinTilt = std::sin(surfTemp.Tilt * Constant::DegToRad);
+                        surfTemp_Rfin.Tilt = TiltAngle;
+                        surfTemp_Rfin.convOrientation = Convect::GetSurfConvOrientation(surfTemp_Rfin.Tilt);
+                        surfTemp_Rfin.Azimuth = state.dataSurfaceGeometry->SurfaceTmp(Found).Azimuth - (180.0 - s_ipsc->rNumericArgs(9));
+                        surfTemp_Rfin.CosAzim = std::cos(surfTemp_Rfin.Azimuth * Constant::DegToRad);
+                        surfTemp_Rfin.SinAzim = std::sin(surfTemp_Rfin.Azimuth * Constant::DegToRad);
+                        surfTemp_Rfin.CosTilt = std::cos(surfTemp_Rfin.Tilt * Constant::DegToRad);
+                        surfTemp_Rfin.SinTilt = std::sin(surfTemp_Rfin.Tilt * Constant::DegToRad);
 
-                        surfTemp.Sides = 4;
-                        surfTemp.Vertex.allocate(surfTemp.Sides);
+                        surfTemp_Rfin.Sides = 4;
+                        surfTemp_Rfin.Vertex.allocate(surfTemp_Rfin.Sides);
 
                         MakeRelativeRectangularVertices(state,
                                                         BaseSurfNum,
@@ -6810,8 +6812,8 @@ namespace SurfaceGeometry {
                         //    SurfaceTmp(SurfNum)%BaseSurfName='  '
                         //    SurfaceTmp(SurfNum)%ZoneName='  '
 
-                        surfTemp.BaseSurf = 0;
-                        surfTemp.Zone = 0;
+                        surfTemp_Rfin.BaseSurf = 0;
+                        surfTemp_Rfin.Zone = 0;
 
                         // and mirror
                         if (state.dataReportFlag->MakeMirroredAttachedShading) {
