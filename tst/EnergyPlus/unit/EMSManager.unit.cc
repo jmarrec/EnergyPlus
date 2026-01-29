@@ -971,7 +971,7 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable3)
         "    1,                                      !- Begin Day of Month",
         "    2007,                                   !- Begin Year",
         "    1,                                      !- End Month",
-        "    1,                                     !- End Day of Month",
+        "    1,                                      !- End Day of Month",
         "    2007,                                   !- End Year",
         "    Monday,                                 !- Day of Week for Start Day",
         "    No,                                     !- Use Weather File Holidays and Special Days",
@@ -1038,20 +1038,20 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable3)
 
         "EnergyManagementSystem:Actuator,",
         "    battery_discharge_power_act,  !- Name",
-        "    Wall,     !- Actuated Component Unique Name",
-        "    Surface,                 !- Actuated Component Type",
-        "    View Factor To Ground;   !- Actuated Component Control Type",
+        "    Wall,                         !- Actuated Component Unique Name",
+        "    Surface,                      !- Actuated Component Type",
+        "    View Factor To Ground;        !- Actuated Component Control Type",
 
         "EnergyManagementSystem:Program,",
-        "    ev_discharge_program,  !- Name",
-        "    Set power_mult = site_temp_adj,  !- Program Line 1",
-        "    Set site_temp_adj = 0.1,  !- Program Line 2",
+        "    ev_discharge_program,                          !- Name",
+        "    Set power_mult = site_temp_adj,                !- Program Line 1",
+        "    Set site_temp_adj = 0.1,                       !- Program Line 2",
         "    Set battery_discharge_power_act = power_mult;  !- Program Line 3",
 
         "EnergyManagementSystem:ProgramCallingManager,",
-        "    ev_discharge_pcm,  !- Name",
+        "    ev_discharge_pcm,              !- Name",
         "    BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
-        "    ev_discharge_program;  !- Program Name 1",
+        "    ev_discharge_program;          !- Program Name 1",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
