@@ -52,6 +52,7 @@
 
 // EnergyPlus Headers
 #include "Fixtures/EnergyPlusFixture.hh"
+#include <EnergyPlus/ConfiguredFunctions.hh>
 #include <EnergyPlus/Construction.hh>
 #include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
@@ -936,7 +937,7 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable2)
     state->dataEMSMgr->FinishProcessingUserInput = true;
     bool anyRan;
     EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::SetupSimulation, anyRan, ObjexxFCL::Optional_int_const());
-    // Expect the variable to not yet be initialized, call EvaluateExpresssion and check argument
+    // Expect the variable to not yet be initialized, call EvaluateExpression and check argument
 
     ErlValueType ReturnValue;
     bool seriousErrorFound = false;
@@ -956,6 +957,124 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable2)
         state->dataRuntimeLang->ErlStack(Util::FindItemInList("SETNODESETPOINTTEST", state->dataRuntimeLang->ErlStack)).Instruction(1).Argument2,
         seriousErrorFound);
     EXPECT_FALSE(seriousErrorFound);
+}
+
+TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable3)
+{
+    // this tests the variable is initialized before it is referenced, for issue #11360
+    std::string const idf_objects = delimited_string({
+        "Version," + DataStringGlobals::MatchVersion + ";",
+
+        "RunPeriod,",
+        "    Run Period 1,                           !- Name",
+        "    1,                                      !- Begin Month",
+        "    1,                                      !- Begin Day of Month",
+        "    2007,                                   !- Begin Year",
+        "    1,                                      !- End Month",
+        "    1,                                     !- End Day of Month",
+        "    2007,                                   !- End Year",
+        "    Monday,                                 !- Day of Week for Start Day",
+        "    No,                                     !- Use Weather File Holidays and Special Days",
+        "    No,                                     !- Use Weather File Daylight Saving Period",
+        "    No,                                     !- Apply Weekend Holiday Rule",
+        "    Yes,                                    !- Use Weather File Rain Indicators",
+        "    Yes;                                    !- Use Weather File Snow Indicators",
+
+        "SimulationControl,",
+        "    No,                      !- Do Zone Sizing Calculation",
+        "    No,                      !- Do System Sizing Calculation",
+        "    No,                      !- Do Plant Sizing Calculation",
+        "    No,                      !- Run Simulation for Sizing Periods",
+        "    Yes,                     !- Run Simulation for Weather File Run Periods",
+        "    ,                        !- Do HVAC Sizing Simulation for Sizing Periods",
+        "    ;                        !- Maximum Number of HVAC Sizing Simulation Passes",
+
+        "Site:Location,",
+        "    Denver Stapleton Intl Arpt CO USA WMO=724690,  !- Name",
+        "    39.77,                   !- Latitude {deg}",
+        "    -104.87,                 !- Longitude {deg}",
+        "    -7.00,                   !- Time Zone {hr}",
+        "    1611.00;                 !- Elevation {m}",
+
+        "Material,",
+        "    Concrete Block,          !- Name",
+        "    MediumRough,             !- Roughness",
+        "    0.1014984,               !- Thickness {m}",
+        "    0.3805070,               !- Conductivity {W/m-K}",
+        "    608.7016,                !- Density {kg/m3}",
+        "    836.8000;                !- Specific Heat {J/kg-K}",
+
+        "Construction,",
+        "    ConcConstruction,        !- Name",
+        "    Concrete Block;          !- Outside Layer",
+
+        "BuildingSurface:Detailed,"
+        "    Wall,                    !- Name",
+        "    Wall,                    !- Surface Type",
+        "    ConcConstruction,        !- Construction Name",
+        "    Zone,                    !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.5000000,               !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}",
+        "    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}",
+
+        "Zone,"
+        "    Zone,                    !- Name",
+        "    0,                       !- Direction of Relative North {deg}",
+        "    6.000000,                !- X Origin {m}",
+        "    6.000000,                !- Y Origin {m}",
+        "    0,                       !- Z Origin {m}",
+        "    1,                       !- Type",
+        "    1,                       !- Multiplier",
+        "    autocalculate,           !- Ceiling Height {m}",
+        "    autocalculate;           !- Volume {m3}",
+
+        "EnergyManagementSystem:Actuator,",
+        "    battery_discharge_power_act,  !- Name",
+        "    Wall,     !- Actuated Component Unique Name",
+        "    Surface,                 !- Actuated Component Type",
+        "    View Factor To Ground;   !- Actuated Component Control Type",
+
+        "EnergyManagementSystem:Program,",
+        "    ev_discharge_program,  !- Name",
+        "    Set power_mult = site_temp_adj,  !- Program Line 1",
+        "    Set site_temp_adj = 0.1,  !- Program Line 2",
+        "    Set battery_discharge_power_act = power_mult;  !- Program Line 3",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "    ev_discharge_pcm,  !- Name",
+        "    BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "    ev_discharge_program;  !- Program Name 1",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    state->dataWeather->WeatherFileExists = true;
+    state->files.inputWeatherFilePath.filePath = configured_source_directory() / "weather/USA_CO_Golden-NREL.724666_TMY3.epw";
+
+    SimulationManager::ManageSimulation(*state);
+
+    int wallSurfNum = Util::FindItemInList("WALL", state->dataSurface->Surface);
+    bool anyRan;
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginTimestepBeforePredictor, anyRan, ObjexxFCL::Optional_int_const());
+    // EXPECT_EQ(state->dataSurface->Surface(wallSurfNum).ViewFactorGround, 0.1);
+
+    // Expect the variable to not yet be initialized, call EvaluateExpression and check argument
+    ErlValueType ReturnValue;
+    bool seriousErrorFound = false;
+    ReturnValue = RuntimeLanguageProcessor::EvaluateExpression(
+        *state,
+        state->dataRuntimeLang->ErlStack(Util::FindItemInList("EV_DISCHARGE_PROGRAM", state->dataRuntimeLang->ErlStack)).Instruction(1).Argument2,
+        seriousErrorFound);
+    EXPECT_TRUE(seriousErrorFound);
 }
 
 TEST_F(EnergyPlusFixture, EMSManager_CheckIfAnyEMS_OutEMS)
