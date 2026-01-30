@@ -966,19 +966,19 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable3)
         "Version," + DataStringGlobals::MatchVersion + ";",
 
         "RunPeriod,",
-        "    Run Period 1,                           !- Name",
-        "    1,                                      !- Begin Month",
-        "    1,                                      !- Begin Day of Month",
-        "    2007,                                   !- Begin Year",
-        "    1,                                      !- End Month",
-        "    1,                                      !- End Day of Month",
-        "    2007,                                   !- End Year",
-        "    Monday,                                 !- Day of Week for Start Day",
-        "    No,                                     !- Use Weather File Holidays and Special Days",
-        "    No,                                     !- Use Weather File Daylight Saving Period",
-        "    No,                                     !- Apply Weekend Holiday Rule",
-        "    Yes,                                    !- Use Weather File Rain Indicators",
-        "    Yes;                                    !- Use Weather File Snow Indicators",
+        "    Run Period 1,            !- Name",
+        "    1,                       !- Begin Month",
+        "    1,                       !- Begin Day of Month",
+        "    2007,                    !- Begin Year",
+        "    1,                       !- End Month",
+        "    1,                       !- End Day of Month",
+        "    2007,                    !- End Year",
+        "    Monday,                  !- Day of Week for Start Day",
+        "    No,                      !- Use Weather File Holidays and Special Days",
+        "    No,                      !- Use Weather File Daylight Saving Period",
+        "    No,                      !- Apply Weekend Holiday Rule",
+        "    Yes,                     !- Use Weather File Rain Indicators",
+        "    Yes;                     !- Use Weather File Snow Indicators",
 
         "SimulationControl,",
         "    No,                      !- Do Zone Sizing Calculation",
@@ -1065,12 +1065,11 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable3)
     int wallSurfNum = Util::FindItemInList("WALL", state->dataSurface->Surface);
     bool anyRan;
     EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginTimestepBeforePredictor, anyRan, ObjexxFCL::Optional_int_const());
-    // EXPECT_EQ(state->dataSurface->Surface(wallSurfNum).ViewFactorGround, 0.1);
+    EXPECT_EQ(state->dataSurface->Surface(wallSurfNum).ViewFactorGround, 0.1);
 
     // Expect the variable to not yet be initialized, call EvaluateExpression and check argument
-    ErlValueType ReturnValue;
     bool seriousErrorFound = false;
-    ReturnValue = RuntimeLanguageProcessor::EvaluateExpression(
+    ErlValueType ReturnValue = RuntimeLanguageProcessor::EvaluateExpression(
         *state,
         state->dataRuntimeLang->ErlStack(Util::FindItemInList("EV_DISCHARGE_PROGRAM", state->dataRuntimeLang->ErlStack)).Instruction(1).Argument2,
         seriousErrorFound);
