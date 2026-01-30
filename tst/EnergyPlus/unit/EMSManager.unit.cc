@@ -963,6 +963,74 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable3)
 {
     // this tests the variable is initialized before it is referenced, for issue #11360
     std::string const idf_objects = delimited_string({
+
+        "EnergyManagementSystem:Program,",
+        "    ev_discharge_program,                          !- Name",
+        "    Set power_mult = site_temp_adj,                !- Program Line 1",
+        "    Set site_temp_adj = 0.1;                       !- Program Line 2",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "    ev_discharge_pcm,              !- Name",
+        "    BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "    ev_discharge_program;          !- Program Name 1",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    int internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    EXPECT_EQ(internalVarNum, 0);
+
+    bool anyRan;
+    EXPECT_TRUE(state->dataEMSMgr->GetEMSUserInput);
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::SetupSimulation, anyRan, ObjexxFCL::Optional_int_const());
+
+    internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_FALSE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
+
+    EXPECT_FALSE(state->dataEMSMgr->GetEMSUserInput);
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginNewEnvironment, anyRan, ObjexxFCL::Optional_int_const());
+
+    internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_FALSE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
+
+    EXPECT_FALSE(state->dataEMSMgr->GetEMSUserInput);
+    ASSERT_THROW(EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginTimestepBeforePredictor, anyRan, ObjexxFCL::Optional_int_const()), EnergyPlus::FatalError);
+
+    internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_FALSE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
+
+    // Expect the variable to not yet be initialized, call EvaluateExpression and check argument
+    bool seriousErrorFound = false;
+    ErlValueType ReturnValue = RuntimeLanguageProcessor::EvaluateExpression(
+        *state,
+        state->dataRuntimeLang->ErlStack(Util::FindItemInList("EV_DISCHARGE_PROGRAM", state->dataRuntimeLang->ErlStack)).Instruction(1).Argument2,
+        seriousErrorFound);
+    EXPECT_TRUE(seriousErrorFound);
+
+    const std::string expected_error = delimited_string({
+        "   ** Severe  ** Problem found in EMS EnergyPlus Runtime Language.",
+        "   **   ~~~   ** Erl program name: EV_DISCHARGE_PROGRAM",
+        "   **   ~~~   ** Erl program line number: 1",
+        "   **   ~~~   ** Erl program line text: SET POWER_MULT = SITE_TEMP_ADJ",
+        "   **   ~~~   ** Error message:  *** Error: EvaluateExpression: Variable = 'SITE_TEMP_ADJ' used in expression has not been initialized! *** ",
+        "   **   ~~~   **  Environment=, at Simulation time= 00:-15 - 00:00",
+        "   **  Fatal  ** Previous EMS error caused program termination.",
+        "   ...Summary of Errors that led to program termination:",
+        "   ..... Reference severe error count=1",
+        "   ..... Last severe error=Problem found in EMS EnergyPlus Runtime Language.",
+    });
+
+    compare_err_stream(expected_error);
+}
+
+TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable4)
+{
+    // this tests the variable is initialized before it is referenced, for issue #11360
+    std::string const idf_objects = delimited_string({
         "Version," + DataStringGlobals::MatchVersion + ";",
 
         "RunPeriod,",
@@ -1036,17 +1104,10 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable3)
         "    autocalculate,           !- Ceiling Height {m}",
         "    autocalculate;           !- Volume {m3}",
 
-        "EnergyManagementSystem:Actuator,",
-        "    battery_discharge_power_act,  !- Name",
-        "    Wall,                         !- Actuated Component Unique Name",
-        "    Surface,                      !- Actuated Component Type",
-        "    View Factor To Ground;        !- Actuated Component Control Type",
-
         "EnergyManagementSystem:Program,",
         "    ev_discharge_program,                          !- Name",
         "    Set power_mult = site_temp_adj,                !- Program Line 1",
-        "    Set site_temp_adj = 0.1,                       !- Program Line 2",
-        "    Set battery_discharge_power_act = power_mult;  !- Program Line 3",
+        "    Set site_temp_adj = 0.1;                       !- Program Line 2",
 
         "EnergyManagementSystem:ProgramCallingManager,",
         "    ev_discharge_pcm,              !- Name",
@@ -1060,12 +1121,23 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable3)
     state->dataWeather->WeatherFileExists = true;
     state->files.inputWeatherFilePath.filePath = configured_source_directory() / "weather/USA_CO_Golden-NREL.724666_TMY3.epw";
 
-    SimulationManager::ManageSimulation(*state);
+    int internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    EXPECT_EQ(internalVarNum, 0);
 
-    int wallSurfNum = Util::FindItemInList("WALL", state->dataSurface->Surface);
+    EXPECT_TRUE(state->dataEMSMgr->GetEMSUserInput);
+    EXPECT_EQ(0, state->dataRuntimeLang->NumSensors);
+    SimulationManager::ManageSimulation(*state);
+    EXPECT_GT(state->dataRuntimeLang->NumSensors, 0);
+
+    internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_TRUE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
+
     bool anyRan;
     EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginTimestepBeforePredictor, anyRan, ObjexxFCL::Optional_int_const());
-    EXPECT_EQ(state->dataSurface->Surface(wallSurfNum).ViewFactorGround, 0.1);
+
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_TRUE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
 
     // Expect the variable to not yet be initialized, call EvaluateExpression and check argument
     bool seriousErrorFound = false;
