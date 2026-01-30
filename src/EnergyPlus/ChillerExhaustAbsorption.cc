@@ -337,7 +337,6 @@ void GetExhaustAbsorberInput(EnergyPlusData &state)
 
         auto &thisChiller = state.dataChillerExhaustAbsorption->ExhaustAbsorber(AbsorberNum);
         thisChiller.Name = s_ipsc->cAlphaArgs(1);
-        std::string ChillerName = fmt::format("{} Named {}", cCurrentModuleObject, thisChiller.Name);
 
         // Assign capacities
         thisChiller.NomCoolingCap = s_ipsc->rNumericArgs(1);

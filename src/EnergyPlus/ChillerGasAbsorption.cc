@@ -321,7 +321,6 @@ void GetGasAbsorberInput(EnergyPlusData &state)
 
         auto &thisChiller = state.dataChillerGasAbsorption->GasAbsorber(AbsorberNum);
         thisChiller.Name = s_ipsc->cAlphaArgs(1);
-        std::string ChillerName = s_ipsc->cCurrentModuleObject + " Named " + thisChiller.Name;
 
         // Assign capacities
         thisChiller.NomCoolingCap = s_ipsc->rNumericArgs(1);

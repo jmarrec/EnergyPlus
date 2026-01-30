@@ -16295,8 +16295,6 @@ void ZeroHVACValues(EnergyPlusData &state)
     // to zero when called on zone timestep. Otherwise, values may be held over when
     // no HVAC load calls module during that zone time step.
 
-    int DemandARRID = 0; // Index to water tank Demand used for evap condenser
-
     if (state.dataRefrigCase->HaveRefrigRacks) {
         // HaveRefrigRacks is TRUE when NumRefrigeratedRAcks > 0
         // RefrigRack ALLOCATED to NumRefrigeratedRacks
@@ -16309,7 +16307,7 @@ void ZeroHVACValues(EnergyPlusData &state)
             }
             if (RefrigRack(RackNum).CondenserType == DataHeatBalance::RefrigCondenserType::Evap) {
                 if (RefrigRack(RackNum).EvapWaterSupplyMode == WaterSupply::FromTank) {
-                    DemandARRID = RefrigRack(RackNum).EvapWaterTankDemandARRID;
+                    int DemandARRID = RefrigRack(RackNum).EvapWaterTankDemandARRID;
                     int TankID = RefrigRack(RackNum).EvapWaterSupTankID;
                     state.dataWaterData->WaterStorage(TankID).VdotRequestDemand(DemandARRID) = 0.0;
                 }
@@ -16328,7 +16326,7 @@ void ZeroHVACValues(EnergyPlusData &state)
             }
             if (Condenser(CondID).CondenserType == DataHeatBalance::RefrigCondenserType::Evap) {
                 if (Condenser(CondID).EvapWaterSupplyMode == WaterSupply::FromTank) {
-                    DemandARRID = Condenser(CondID).EvapWaterTankDemandARRID;
+                    int DemandARRID = Condenser(CondID).EvapWaterTankDemandARRID;
                     int TankID = Condenser(CondID).EvapWaterSupTankID;
                     state.dataWaterData->WaterStorage(TankID).VdotRequestDemand(DemandARRID) = 0.0;
                 }

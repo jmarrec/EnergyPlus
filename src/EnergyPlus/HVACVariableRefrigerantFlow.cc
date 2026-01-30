@@ -11299,8 +11299,6 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
     NumTUInCoolingMode = 0;
     NumTUInHeatingMode = 0;
     Tolerance = 0.05;
-    Counter = 1;
-    NumIteHIUIn = 1;
     this->ElecCoolingPower = 0.0;
     this->ElecHeatingPower = 0.0;
     this->CrankCaseHeaterPower = 0.0;

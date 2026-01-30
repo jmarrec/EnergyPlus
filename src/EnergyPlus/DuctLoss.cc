@@ -374,6 +374,9 @@ namespace DuctLoss {
         if (!airLoopFound) {
             ShowSevereError(state, "Multiple AirLoopHVAC names are found. A single AirLoopHVAC is required");
             errorsFound = true;
+            if (errorsFound) {
+                ShowFatalError(state, "GetDuctLossMakeupAirInput: Previous errors cause termination.");
+            }
         }
         state.dataDuctLoss->SplitterNum = 1;
         state.dataDuctLoss->MixerNum = 1;
@@ -833,9 +836,6 @@ namespace DuctLoss {
                             thisDuctLoss.LossSubType = DuctLossSubType::SupLeakTrunk;
                             state.dataDuctLoss->SubTypeSimuFlag(int(DuctLossSubType::SupLeakTrunk) + 1) = true;
                         }
-                    } else {
-                        // DO we need nodenum=0?
-                        NodeNum1 = 0;
                     }
                     if (Util::SameString(state.afn->DisSysNodeData(AFNNodeNum1).EPlusType, "Zone") ||
                         Util::SameString(state.afn->DisSysNodeData(AFNNodeNum1).EPlusType, "OutdoorAir:NodeList") ||

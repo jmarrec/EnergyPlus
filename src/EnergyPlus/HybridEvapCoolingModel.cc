@@ -1911,7 +1911,6 @@ namespace HybridEvapCoolingModel {
             if (OutletMassFlowRate > 0) {
                 averageOSAF = SupplyVentilationAir / OutletMassFlowRate;
             } else {
-                std::string ObjectID = Name.c_str();
                 if (CoolingRequested || HeatingRequested) {
                     ShowSevereError(
                         state,
