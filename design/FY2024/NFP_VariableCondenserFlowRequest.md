@@ -6,7 +6,7 @@ Variable Condenser Flow Request
 
 ## Justification for New Feature ##
 
-Issue [#7111](https://github.com/NREL/EnergyPlus/issues/7111)
+Issue [#7111](https://github.com/NatLabRockies/EnergyPlus/issues/7111)
 - "User file with Chiller:Electric:EIR always requests full condenser flow rate"
 - "This is a problem not only when using cooling towers, but also when using seawater cooling by PlantComponent:TemperatureSource. Unlike cooling towers, it is not possible to make a compromise of variable tower fans instead of variable condenser water."
 

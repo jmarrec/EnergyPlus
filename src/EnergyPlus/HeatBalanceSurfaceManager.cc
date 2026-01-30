@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -3271,7 +3271,7 @@ void InitSolarHeatGains(EnergyPlusData &state)
                                         Real64 ACosTlt = std::abs(Surface(SurfNum).CosTilt); // Absolute value of cosine of surface tilt angle
 
                                         int slatIdxLo = surfShade.blind.slatAngIdxLo;
-                                        int slatIdxHi = surfShade.blind.slatAngIdxLo;
+                                        int slatIdxHi = surfShade.blind.slatAngIdxHi;
                                         Real64 interpFac = surfShade.blind.slatAngInterpFac;
                                         auto const &dfAbsSlatLo = constructionSh.layerSlatBlindDfAbs(Lay)[slatIdxLo];
                                         auto const &dfAbsSlatHi = constructionSh.layerSlatBlindDfAbs(Lay)[slatIdxHi];
@@ -3632,7 +3632,6 @@ void InitSolarHeatGains(EnergyPlusData &state)
                                     auto const *screen = dynamic_cast<Material::MaterialScreen const *>(s_mat->materials(screenNum));
                                     assert(screen != nullptr);
 
-                                    auto &surf = state.dataSurface->Surface(SurfNum);
                                     Real64 phi, theta;
                                     Material::GetRelativePhiTheta(
                                         surf.Tilt * Constant::DegToRad, surf.Azimuth * Constant::DegToRad, state.dataEnvrn->SOLCOS, phi, theta);

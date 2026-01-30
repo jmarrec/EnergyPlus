@@ -13,7 +13,7 @@ U-factors for glazing systems. This task will enhance EnergyPlus output
 reporting and allow reporting for assembly U-factors for glazing systems. The
 glazing systems shall include windows and frames.
 
-In addition, [Issue #6530](https://github.com/NREL/EnergyPlus/issues/6530) says:
+In addition, [Issue #6530](https://github.com/NatLabRockies/EnergyPlus/issues/6530) says:
 
 > Problem: EnergyPlus only reports U-factor, SHGC, and VT for center-of-glass. It
 > does not report those values for the whole window.

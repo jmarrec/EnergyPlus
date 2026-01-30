@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -751,7 +751,7 @@ namespace Weather {
                         RoutineName));
             }
 
-            // Throw a Fatal now that we have said it'll terminalte
+            // Throw a Fatal now that we have said it'll terminate
             if (ErrorsFound) {
                 CloseWeatherFile(state); // will only close if opened.
                 ShowFatalError(state, format("{}Errors found in Weather Data Input. Program terminates.", RoutineName));
@@ -3964,10 +3964,10 @@ namespace Weather {
             switch (state.dataWeather->WPSkyTemperature(envCurr.WP_Type1).skyTempModel) {
             case SkyTempModel::ScheduleValue: {
                 std::vector<Real64> const &dayVals = state.dataWeather->WPSkyTemperature(envCurr.WP_Type1).sched->getDayVals(state);
-                auto &desDayModsEnvrn = state.dataWeather->desDayMods(EnvrnNum);
+                auto &desDayModsEnv = state.dataWeather->desDayMods(EnvrnNum);
                 for (int hr = 0; hr < Constant::iHoursInDay; ++hr) {
                     for (int ts = 0; ts < state.dataGlobal->TimeStepsInHour; ++ts) {
-                        state.dataWeather->wvarsHrTsTomorrow(ts + 1, hr + 1).SkyTemp = desDayModsEnvrn(ts + 1, hr + 1).SkyTemp =
+                        state.dataWeather->wvarsHrTsTomorrow(ts + 1, hr + 1).SkyTemp = desDayModsEnv(ts + 1, hr + 1).SkyTemp =
                             dayVals[hr * state.dataGlobal->TimeStepsInHour];
                     }
                 }
@@ -3975,11 +3975,11 @@ namespace Weather {
 
             case SkyTempModel::DryBulbDelta: {
                 std::vector<Real64> const &dayVals = state.dataWeather->WPSkyTemperature(envCurr.WP_Type1).sched->getDayVals(state);
-                auto &desDayModsEnvrn = state.dataWeather->desDayMods(EnvrnNum);
+                auto &desDayModsEnv = state.dataWeather->desDayMods(EnvrnNum);
                 for (int hr = 0; hr < Constant::iHoursInDay; ++hr) {
                     for (int ts = 0; ts < state.dataGlobal->TimeStepsInHour; ++ts) {
                         auto &tomorrowTS = state.dataWeather->wvarsHrTsTomorrow(ts + 1, hr + 1);
-                        desDayModsEnvrn(ts + 1, hr + 1).SkyTemp = dayVals[hr * state.dataGlobal->TimeStepsInHour + ts];
+                        desDayModsEnv(ts + 1, hr + 1).SkyTemp = dayVals[hr * state.dataGlobal->TimeStepsInHour + ts];
                         tomorrowTS.SkyTemp = tomorrowTS.OutDryBulbTemp - dayVals[hr * state.dataGlobal->TimeStepsInHour + ts];
                     }
                 }
@@ -3987,11 +3987,11 @@ namespace Weather {
 
             case SkyTempModel::DewPointDelta: {
                 std::vector<Real64> const &dayVals = state.dataWeather->WPSkyTemperature(envCurr.WP_Type1).sched->getDayVals(state);
-                auto &desDayModsEnvrn = state.dataWeather->desDayMods(EnvrnNum);
+                auto &desDayModsEnv = state.dataWeather->desDayMods(EnvrnNum);
                 for (int hr = 0; hr < Constant::iHoursInDay; ++hr) {
                     for (int ts = 0; ts < state.dataGlobal->TimeStepsInHour; ++ts) {
                         auto &tomorrowTS = state.dataWeather->wvarsHrTsTomorrow(ts + 1, hr + 1);
-                        desDayModsEnvrn(ts + 1, hr + 1).SkyTemp = dayVals[hr * state.dataGlobal->TimeStepsInHour + ts];
+                        desDayModsEnv(ts + 1, hr + 1).SkyTemp = dayVals[hr * state.dataGlobal->TimeStepsInHour + ts];
                         tomorrowTS.SkyTemp = tomorrowTS.OutDewPointTemp - dayVals[hr * state.dataGlobal->TimeStepsInHour + ts];
                     }
                 }
@@ -5372,7 +5372,7 @@ namespace Weather {
             if (runPerInput1.dayOfWeek != 0 && !ErrorsFound) {
                 SetupWeekDaysByMonth(state, runPerInput1.startMonth, runPerInput1.startDay, runPerInput1.dayOfWeek, runPerInput1.monWeekDay);
             }
-        } else if (nRunPeriods > 1 && state.dataSysVars->FullAnnualRun) {
+        } else {
             nRunPeriods = 1;
         }
     }

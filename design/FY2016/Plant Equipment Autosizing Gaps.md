@@ -89,7 +89,7 @@ sizing factor is used when the component design inputs are autosized: the autosi
 are performed as usual and the results are multiplied by the sizing factor. For this component
 the inputs that would be altered by the sizing factor are: Reference Load Side Flow Rate, Reference
 Source Side Flow Rate, Reference Cooling Capacity, and Reference Cooling Power Consumption. The
-Sizing Factor allows the user to size a component to meet part of the plant loop’s design load while
+Sizing Factor allows the user to size a component to meet part of the plant loop's design load while
 continuing to use the autosizing feature. For example if there are two heat pumps on the supply
 side, each one could be sized to be half of the design load.
 
@@ -130,7 +130,7 @@ sizing factor is used when the component design inputs are autosized: the autosi
 are performed as usual and the results are multiplied by the sizing factor. For this component
 the inputs that would be altered by the sizing factor are: Reference Load Side Flow Rate, Reference
 Source Side Flow Rate, Reference Heating Capacity, and Reference Heating Power Consumption. The
-Sizing Factor allows the user to size a component to meet part of the plant loop’s design load while
+Sizing Factor allows the user to size a component to meet part of the plant loop's design load while
 continuing to use the autosizing feature. For example if there are two heat pumps on the supply
 side, each one could be sized to be half of the design load.
 

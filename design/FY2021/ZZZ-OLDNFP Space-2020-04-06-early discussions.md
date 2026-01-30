@@ -420,7 +420,7 @@ parent is easier in terms of sanity and invariant checking and 1-to-1 relationsh
 decision should be made to simplify model development and editing and if there is no clear favorite there then it should be made to preserve the current
 structure as much as possible.
 
-Amir - Maybe/probably because I am the least informed person on this thread, this doesn�t make sense to me. In my mind, the current definition
+Amir - Maybe/probably because I am the least informed person on this thread, this doesn't make sense to me. In my mind, the current definition
 of Zone is not broken. What is broken (or at least not clean) is the relationship between Zone and Enclosure. The use of Space as an atom that
 can tie Zones and Enclosures together cleanly and flexibly (and also serve as an anchor for internal loads) fixes that.
 

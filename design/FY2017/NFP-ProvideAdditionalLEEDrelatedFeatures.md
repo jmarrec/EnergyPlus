@@ -12,7 +12,7 @@ The current Leadership in Energy and Environmental Design (LEED) Summary Report 
 
 ## E-mail and  Conference Call Conclusions ##
 
-Based on the feedback from the [NFP to Update the LEED Summary Report](https://github.com/NREL/EnergyPlus/blob/Update_LEED_Reporting/design/FY2017/NFP-UpdateLEEDSummaryReport.md) we have decided to limit the changes to EnergyPlus to those that need to be in the calculation engine and use OpenStudio measure to create the output report. This NFP has a narrower scope and the original NFP file was left in place for reference.
+Based on the feedback from the [NFP to Update the LEED Summary Report](https://github.com/NatLabRockies/EnergyPlus/blob/Update_LEED_Reporting/design/FY2017/NFP-UpdateLEEDSummaryReport.md) we have decided to limit the changes to EnergyPlus to those that need to be in the calculation engine and use OpenStudio measure to create the output report. This NFP has a narrower scope and the original NFP file was left in place for reference.
 
 Other feedback received was not have an explicit list of end-uses but just continue to allow any string to differentiate them.
 
@@ -37,16 +37,16 @@ The NFP was based on reviewing the following file which is submitted when using 
 
 - v4_Minimum Energy Performance Calculator_v04.xlsm
 
-as well as reaching out to stakeholders. More details are available at  [NFP to Update the LEED Summary Report](https://github.com/NREL/EnergyPlus/blob/Update_LEED_Reporting/design/FY2017/NFP-UpdateLEEDSummaryReport.md).
+as well as reaching out to stakeholders. More details are available at  [NFP to Update the LEED Summary Report](https://github.com/NatLabRockies/EnergyPlus/blob/Update_LEED_Reporting/design/FY2017/NFP-UpdateLEEDSummaryReport.md).
 
 Several issues related to the LEED reporting may be separately addressed, including:
 
-- https://github.com/NREL/EnergyPlus/issues/5672 EAp2-4/5. Demand data taken from Design Days instead of from Annual Peak
-- https://github.com/NREL/EnergyPlus/issues/5559 Add LEED reporting of peak end use and EFLH
-- https://github.com/NREL/EnergyPlus/issues/5895 LEED Summary EAp2-4/5 Report Problems
-- https://github.com/NREL/EnergyPlus/issues/5613 LEED Tables service water heating doesn't appear
-- https://github.com/NREL/EnergyPlus/issues/5956 Report VAV minimum volume setpoint
-- https://github.com/NREL/EnergyPlus/issues/5298 Outdoor Air Summary report improvements
+- https://github.com/NatLabRockies/EnergyPlus/issues/5672 EAp2-4/5. Demand data taken from Design Days instead of from Annual Peak
+- https://github.com/NatLabRockies/EnergyPlus/issues/5559 Add LEED reporting of peak end use and EFLH
+- https://github.com/NatLabRockies/EnergyPlus/issues/5895 LEED Summary EAp2-4/5 Report Problems
+- https://github.com/NatLabRockies/EnergyPlus/issues/5613 LEED Tables service water heating doesn't appear
+- https://github.com/NatLabRockies/EnergyPlus/issues/5956 Report VAV minimum volume setpoint
+- https://github.com/NatLabRockies/EnergyPlus/issues/5298 Outdoor Air Summary report improvements
 
 
 ## Testing/Validation/Data Sources ##

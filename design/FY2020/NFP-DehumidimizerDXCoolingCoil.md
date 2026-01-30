@@ -139,7 +139,7 @@ Thanks for your comments. Here are my answers to your questions.
 
 1.	Coil:Heating:Desuperheater
 
-Luis raised the same question in August. Tiejun made a reply, available in https://github.com/NREL/EnergyPlus/issues/7421. Since the reply has figures, it is better for you to take a look over there, if you have not read it.
+Luis raised the same question in August. Tiejun made a reply, available in https://github.com/NatLabRockies/EnergyPlus/issues/7421. Since the reply has figures, it is better for you to take a look over there, if you have not read it.
 
 The NFP was written later. I assume the reply justified new object needs already, so that I did not want to repeat it again in the NFP.
 

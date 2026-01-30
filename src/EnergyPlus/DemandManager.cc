@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -1524,9 +1524,9 @@ void LoadInterface(EnergyPlusData &state, DemandAction const Action, int const M
         if (state.dataZoneCtrls->NumComfortControlledZones > 0) {
             auto &comfortZone = state.dataZoneCtrls->ComfortControlledZone(LoadPtr);
             if (state.dataHeatBalFanSys->ComfortControlType(comfortZone.ActualZoneNum) != HVAC::SetptType::Uncontrolled) {
-                auto &zoneTstatSetpt = s_dhbf->zoneTstatSetpts(comfortZone.ActualZoneNum);
+                auto &cmftzoneTstatSetpt = s_dhbf->zoneTstatSetpts(comfortZone.ActualZoneNum);
                 if (Action == DemandAction::CheckCanReduce) {
-                    if (zoneTstatSetpt.setptLo > demandMgr.LowerLimit || zoneTstatSetpt.setptHi < demandMgr.UpperLimit) {
+                    if (cmftzoneTstatSetpt.setptLo > demandMgr.LowerLimit || cmftzoneTstatSetpt.setptHi < demandMgr.UpperLimit) {
                         CanReduceDemand = true; // Heating
                     }
                 } else if (Action == DemandAction::SetLimit) {

@@ -8,7 +8,7 @@ epJSON helper functions to get field values
 
 
 ## Objective ##
-From issue [#7632](https://github.com/NREL/EnergyPlus/issues/7632)
+From issue [#7632](https://github.com/NatLabRockies/EnergyPlus/issues/7632)
 
 It would be useful to have an input processor function that
 

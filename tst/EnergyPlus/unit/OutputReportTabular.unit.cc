@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -7025,7 +7025,7 @@ TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoo
     EXPECT_EQ("AirLoop Component Load Summary", strings[0][2]); // just make sure that the output table was generated and did not crash
 }
 
-// Test for https://github.com/NREL/EnergyPlus/issues/7346
+// Test for https://github.com/NatLabRockies/EnergyPlus/issues/7346
 // We ensure that if the Airloop peak matches the zone peak, we don't do the IP conversion twice
 TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoop_IPConversion)
 {
@@ -7214,7 +7214,7 @@ TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoo
         EXPECT_EQ(std::get<2>(v), oa_db) << "Failed for TableName=" << tableName << "; ReportName=" << reportName;
     }
 
-    // https://github.com/NREL/EnergyPlus/pull/7741
+    // https://github.com/NatLabRockies/EnergyPlus/pull/7741
     std::string query_2("SELECT Value From TabularDataWithStrings"
                         "  WHERE TableName = 'Engineering Checks for Cooling'"
                         "  AND RowName = 'Outside Air Fraction';");
@@ -7320,7 +7320,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_hasSizingPeriodsDays_Sizing
 
 // This tests aims to ensure that the needed Output:Variables for the Predefined Monthly table
 // are indeeed set up, and that as a result the numTables is good.
-// https://github.com/NREL/EnergyPlus/issues/7019
+// https://github.com/NatLabRockies/EnergyPlus/issues/7019
 TEST_F(EnergyPlusFixture, OutputReportTabularMonthlyPredefined_FindNeededOutputVars)
 {
 
@@ -7414,7 +7414,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthlyPredefined_FindNeededOutputV
     // and so the numTables was zero
     EXPECT_EQ(state->dataOutRptTab->MonthlyInput(1).numTables, 2);
 }
-// https://github.com/NREL/EnergyPlus/issues/6442
+// https://github.com/NatLabRockies/EnergyPlus/issues/6442
 TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableDXConversion)
 {
     state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");
@@ -7471,7 +7471,7 @@ TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableDXConversion)
 
     EXPECT_EQ("2.8", s);
 }
-// https://github.com/NREL/EnergyPlus/issues/7565
+// https://github.com/NatLabRockies/EnergyPlus/issues/7565
 TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableCoilHumRat)
 {
     state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");

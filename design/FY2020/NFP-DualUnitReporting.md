@@ -16,11 +16,11 @@ requested by user interface developers.
 
 See:
 
-https://github.com/NREL/EnergyPlus/issues/5435
+https://github.com/NatLabRockies/EnergyPlus/issues/5435
 
 and
 
-https://github.com/NREL/OpenStudio/issues/2039
+https://github.com/NatLabRockies/OpenStudio/issues/2039
 
 
 ## E-mail and  Conference Call Conclusions ##
@@ -44,7 +44,7 @@ Many different input objects control the production of tabular reports in Energy
 And additional input objects control the production of timeseries data. A current effort is underway
 to directly provide timeseries data in CSV format instead of ESO/MTR format:
 
-https://github.com/NREL/EnergyPlus/pull/7904
+https://github.com/NatLabRockies/EnergyPlus/pull/7904
 
 While some refactoring of the input objects that control reporting have been considered and perhaps
 should be considered in the future, no specific plan is recommended at this point.
@@ -105,11 +105,11 @@ conversion that appears in the OutputControl:Table:Style object. Five different 
 are available:
 
 - UseOutputControlTableStyle - use the same unit conversion as in OutputControl:Table:Style
-- None – no conversions performed
-- JtoKWH – Joules converted into kWh (1 / 3,600,000)
-- JtoMJ – Joules converted into Megajoules (1 / 1,000,000)
-- JtoGJ – Joules converted into Gigajoules (1 / 1,000,000,000)
-- InchPound – convert all annual, monthly, economics and timebins tabular values to common InchPound
+- None - no conversions performed
+- JtoKWH - Joules converted into kWh (1 / 3,600,000)
+- JtoMJ - Joules converted into Megajoules (1 / 1,000,000)
+- JtoGJ - Joules converted into Gigajoules (1 / 1,000,000,000)
+- InchPound - convert all annual, monthly, economics and timebins tabular values to common InchPound
 equivalent
 
 When no unit conversions is selected the energy is reported in the form of Joules but since the magnitude of those numbers

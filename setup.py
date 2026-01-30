@@ -2,7 +2,7 @@
 # of Illinois, The Regents of the University of California, through Lawrence
 # Berkeley National Laboratory (subject to receipt of any required approvals
 # from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
-# Battelle, Alliance for Sustainable Energy, LLC, and other contributors. All
+# Battelle, Alliance for Energy Innovation, LLC, and other contributors. All
 # rights reserved.
 #
 # NOTICE: This Software was developed under funding from the U.S. Department of
@@ -218,7 +218,7 @@ setup(
     license="Modified BSD",
     author="United States Department of Energy",
     author_email="",
-    url="https://github.com/NREL/EnergyPlus",
+    url="https://github.com/NatLabRockies/EnergyPlus",
     description="EnergyPlus is a building simulation program for modeling energy and water use in buildings.",
     long_description=(repo_root_directory / "README.md").read_text(),
     long_description_content_type="text/markdown",
