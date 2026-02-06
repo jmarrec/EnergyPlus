@@ -1345,6 +1345,7 @@ namespace Psychrometrics {
             return state.dataPsychrometrics->tSat_Save;
         }
         state.dataPsychrometrics->Press_Save = Press;
+        iter = 0;
         if (state.dataPsychrometrics->useInterpolationPsychTsatFnPb) {
             int n_sample = 1651; // sample bin size = 64 Pa; continuous sample size = 1651
             // CSpline interpolation
