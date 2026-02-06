@@ -8235,7 +8235,6 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
 
                             int ConstrNumBack = s_surf->Surface(BackSurfNum).Construction;
                             auto const &constrBack = state.dataConstruction->Construct(ConstrNumBack);
-                            int NBackGlass = constrBack.TotGlassLayers;
                             // Irradiated (overlap) area for this back surface, projected onto window plane
                             // (includes effect of shadowing on exterior window)
 
@@ -8292,7 +8291,7 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                                 }
 
                                 // determine the number of glass layers
-                                NBackGlass = 0;
+                                int NBackGlass = 0;
                                 for (int Lay = 1; Lay <= CFS(EQLNum).NL; ++Lay) {
                                     if (CFS(EQLNum).L(Lay).LTYPE != LayerType::GLAZE) {
                                         continue;

@@ -2983,7 +2983,7 @@ void SetHeatToReturnAirFlag(EnergyPlusData &state)
 void UpdateZoneInletConvergenceLog(EnergyPlusData &state)
 {
 
-    std::array<Real64, DataConvergParams::ConvergLogStackDepth> tmpRealARR = {};
+    std::array<Real64, DataConvergParams::ConvergLogStackDepth> tmpRealARR;
 
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
 
