@@ -268,7 +268,10 @@ namespace SimulationManager {
         state.dataGlobal->KickOffSimulation = true;
 
         Weather::ResetEnvironmentCounter(state);
+
+        state.dataEMSMgr->AlwaysFindSeriousError = true;
         SetupSimulation(state, ErrorsFound);
+        state.dataEMSMgr->AlwaysFindSeriousError = false;
 
         FaultsManager::CheckAndReadFaults(state);
 
@@ -330,6 +333,7 @@ namespace SimulationManager {
                 ReportNodeConnections(state);
             }
             SystemReports::CreateEnergyReportStructure(state);
+
             bool anyEMSRan;
             // point to finish setup processing EMS, sensor ready now
             EMSManager::ManageEMS(state, EMSManager::EMSCallFrom::SetupSimulation, anyEMSRan, ObjexxFCL::Optional_int_const());
