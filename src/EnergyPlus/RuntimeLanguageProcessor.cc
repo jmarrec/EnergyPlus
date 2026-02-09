@@ -816,7 +816,6 @@ ErlValueType EvaluateStack(EnergyPlusData &state, int const StackNum)
     ReturnValue.Number = 0.0;
 
     auto const &thisErlStack = state.dataRuntimeLang->ErlStack(StackNum);
-
     InstructionNum = 1;
     while (InstructionNum <= thisErlStack.NumInstructions) {
 
@@ -1801,7 +1800,8 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 } else { // value has never been set
                     ReturnValue.Type = Value::Error;
                     ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
-                    if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
+
+                    if ((!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) || (state.dataEMSMgr->AlwaysFindSeriousError)) {
 
                         // check if this is an arg in CurveValue,
                         if (thisErlExpression.Operator !=
