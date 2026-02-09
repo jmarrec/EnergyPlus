@@ -198,6 +198,7 @@ struct EMSManagerData : BaseGlobalStruct
     bool GetEMSUserInput = true; // Flag to prevent input from being read multiple times
     bool ZoneThermostatActuatorsHaveBeenSetup = false;
     bool FinishProcessingUserInput = true; // Flag to indicate still need to process input
+    bool AlwaysFindSeriousError = false;
     bool lDummy = false;                   // dummy pointer location
     bool lDummy2 = false;                  // dummy pointer location
 
@@ -215,6 +216,7 @@ struct EMSManagerData : BaseGlobalStruct
         GetEMSUserInput = true;
         ZoneThermostatActuatorsHaveBeenSetup = false;
         FinishProcessingUserInput = true;
+        AlwaysFindSeriousError = false;
         this->lDummy = false;
         this->lDummy2 = false;
     }
