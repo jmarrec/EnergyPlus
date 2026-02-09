@@ -1801,7 +1801,7 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                     ReturnValue.Type = Value::Error;
                     ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
 
-                    if ((!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) || (state.dataEMSMgr->AlwaysFindSeriousError)) {
+                    if ((!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) || (!thisErlVar.SetByGlobalVariable)) {
 
                         // check if this is an arg in CurveValue,
                         if (thisErlExpression.Operator !=
@@ -2972,6 +2972,8 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                                 // Initialize variables for the ExternalInterface variables.
                                 // This object requires an initial value.
                                 ExternalInterfaceInitializeErlVariable(state, VariableNum, SetErlValueNumber(rNumericArgs(1)), false);
+                            } else {
+                                state.dataRuntimeLang->ErlVariable(VariableNum).SetByGlobalVariable = true;
                             }
                         }
                     }

@@ -269,9 +269,7 @@ namespace SimulationManager {
 
         Weather::ResetEnvironmentCounter(state);
 
-        state.dataEMSMgr->AlwaysFindSeriousError = true;
         SetupSimulation(state, ErrorsFound);
-        state.dataEMSMgr->AlwaysFindSeriousError = false;
 
         FaultsManager::CheckAndReadFaults(state);
 

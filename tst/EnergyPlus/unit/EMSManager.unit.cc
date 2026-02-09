@@ -1125,9 +1125,7 @@ TEST_F(EnergyPlusFixture, TestEMSVariableInitAfterRef2)
     EXPECT_EQ(internalVarNum, 0);
 
     EXPECT_TRUE(state->dataEMSMgr->GetEMSUserInput);
-    EXPECT_FALSE(state->dataEMSMgr->AlwaysFindSeriousError);
     ASSERT_THROW(SimulationManager::ManageSimulation(*state), EnergyPlus::FatalError);
-    EXPECT_TRUE(state->dataEMSMgr->AlwaysFindSeriousError);
 
     internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
     ASSERT_GT(internalVarNum, 0);
