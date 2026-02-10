@@ -8114,8 +8114,7 @@
     Run SumIntakeMassFlowHeatCap,  !- <none>
     Run SumReliefAirMCTterm, !- <none>
     Run CalcWindTerms,       !- <none>
-    Run CalcBouyancyTerms,   !- <none>
-    SEt Numerator = WindMCT + NatBouyMCT + SumHATroof + QdotCond + SumReliefMCT,  !- <none>
+    Set Numerator = WindMCT + NatBouyMCT + SumHATroof + QdotCond + SumReliefMCT,  !- <none>
     Set Denominator = WindMC + NatBouyMC + SumHAroof + SumIntakeMdotCp,  !- <none>
     Set Troof = Numerator / Denominator,  !- <none>
     IF Ta < 2.0,             !- <none>
@@ -8123,7 +8122,8 @@
     ENDIF,                   !- <none>
     IF Troof < Twb,          !- <none>
     Set Twb = Troof - 0.2,   !- <none>
-    ENDIF;                   !- <none>
+    ENDIF,                   !- <none>
+    Run CalcBouyancyTerms;   !- <none>
 
   EnergyManagementSystem:Program,
     ApplyMicroClimeActuators,!- Name
