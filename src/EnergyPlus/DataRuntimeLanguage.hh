@@ -395,9 +395,10 @@ namespace DataRuntimeLanguage {
         bool ReadOnly;               // true if Erl variable is read-only
         bool SetByExternalInterface; // set to true if value is set by ExternalInterface
         bool SetByGlobalVariable;
+        bool SetByInternalVariable;
 
         // Default Constructor
-        ErlVariableType() : StackNum(0), ReadOnly(false), SetByExternalInterface(false), SetByGlobalVariable(false)
+        ErlVariableType() : StackNum(0), ReadOnly(false), SetByExternalInterface(false), SetByGlobalVariable(false), SetByInternalVariable(false)
         {
         }
     };
