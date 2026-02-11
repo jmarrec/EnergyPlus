@@ -53,11 +53,6 @@
 #include <string>
 #include <vector>
 
-// ObjexxFCL Headers
-#include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Array2D.hh>
-#include <ObjexxFCL/Array2S.hh>
-
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/EnergyPlus.hh>
@@ -71,15 +66,18 @@ struct EnergyPlusData;
 
 namespace OutputReportTabularAnnual {
 
+    constexpr Real64 veryLarge = 1.0E280;
+    constexpr Real64 verySmall = -1.0E280;
+
     // these functions are not in the class and act as an interface between procedural code and object oriented
 
     void GetInputTabularAnnual(EnergyPlusData &state);
 
     void checkAggregationOrderForAnnual(EnergyPlusData &state);
 
-    void GatherAnnualResultsForTimeStep(EnergyPlusData &state, OutputProcessor::TimeStepType kindOfTypeStep);
+    void GatherAnnualResultsForTimeStep(EnergyPlusData &state, OutputProcessor::TimeStepType kindOfTimeStep);
 
-    void ResetAnnualGathering(EnergyPlusData &state);
+    void ResetAnnualGathering(const EnergyPlusData &state);
 
     void WriteAnnualTables(EnergyPlusData &state);
 
@@ -111,7 +109,7 @@ namespace OutputReportTabularAnnual {
 
         bool invalidAggregationOrder(EnergyPlusData &state);
 
-        void gatherForTimestep(EnergyPlusData &state, OutputProcessor::TimeStepType kindOfTypeStep);
+        void gatherForTimestep(EnergyPlusData &state, OutputProcessor::TimeStepType kindOfTimeStep);
 
         void resetGathering();
 
@@ -137,9 +135,9 @@ namespace OutputReportTabularAnnual {
         std::vector<std::string> m_objectNames;     // for each row of annual table
         std::vector<AnnualFieldSet> m_annualFields; // for each column
 
-        Real64 getElapsedTime(EnergyPlusData &state, OutputProcessor::TimeStepType kindOfTimeStep);
+        static Real64 getElapsedTime(const EnergyPlusData &state, OutputProcessor::TimeStepType kindOfTimeStep);
 
-        Real64 getSecondsInTimeStep(EnergyPlusData &state, OutputProcessor::TimeStepType kindOfTimeStep);
+        static Real64 getSecondsInTimeStep(const EnergyPlusData &state, OutputProcessor::TimeStepType kindOfTimeStep);
 
         void computeBinColumns(EnergyPlusData &state, OutputReportTabular::UnitsStyle unitsStyle_para);
 
@@ -153,7 +151,7 @@ namespace OutputReportTabularAnnual {
 
         void fixUnitsPerSecond(std::string &unitString, Real64 &conversionFactor);
 
-        bool allRowsSameSizeDefferedVectors(std::vector<AnnualFieldSet>::iterator fldStIt);
+        bool allRowsSameSizeDeferredVectors(std::vector<AnnualFieldSet>::iterator fldStIt);
 
         void convertUnitForDeferredResults(EnergyPlusData &state,
                                            std::vector<AnnualFieldSet>::iterator fldStIt,
