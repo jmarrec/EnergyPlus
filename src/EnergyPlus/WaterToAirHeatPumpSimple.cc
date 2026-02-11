@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -248,10 +248,10 @@ namespace WaterToAirHeatPumpSimple {
 
         int HPNum = 0;
         if (instances != s_ip->epJSON.end()) {
-            std::string cFieldName;
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
             auto &instancesValue = instances.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
+                std::string cFieldName;
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
                 s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
@@ -485,11 +485,10 @@ namespace WaterToAirHeatPumpSimple {
         auto const instances_heat = s_ip->epJSON.find(CurrentModuleObject);
 
         if (instances_heat != s_ip->epJSON.end()) {
-            std::string cFieldName;
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
             auto &instancesValue = instances_heat.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-
+                std::string cFieldName;
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
                 s_ip->markObjectAsUsed(CurrentModuleObject, thisObjectName);
@@ -686,8 +685,8 @@ namespace WaterToAirHeatPumpSimple {
             ShowFatalError(state, format("{} Errors found getting input. Program terminates.", RoutineName));
         }
 
-        for (int HPNum = 1; HPNum <= state.dataWaterToAirHeatPumpSimple->NumWatertoAirHPs; ++HPNum) {
-            auto &simpleWAHP = state.dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNum);
+        for (int HPNumIdx = 1; HPNumIdx <= state.dataWaterToAirHeatPumpSimple->NumWatertoAirHPs; ++HPNumIdx) {
+            auto &simpleWAHP = state.dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(HPNumIdx);
             if (simpleWAHP.WAHPPlantType == DataPlant::PlantEquipmentType::CoilWAHPCoolingEquationFit) {
                 // COOLING COIL  Setup Report variables for the Heat Pump
                 SetupOutputVariable(state,
@@ -3085,9 +3084,8 @@ namespace WaterToAirHeatPumpSimple {
         if (state.dataWaterToAirHeatPumpSimple->SourceSideMassFlowRate <= 0.0 || LoadSideFullMassFlowRate <= 0.0) {
             simpleWatertoAirHP.SimFlag = false;
             return;
-        } else {
-            simpleWatertoAirHP.SimFlag = true;
         }
+        simpleWatertoAirHP.SimFlag = true;
 
         if (compressorOp == HVAC::CompressorOp::Off) {
             simpleWatertoAirHP.SimFlag = false;
@@ -3384,9 +3382,8 @@ namespace WaterToAirHeatPumpSimple {
         if (state.dataWaterToAirHeatPumpSimple->SourceSideMassFlowRate <= 0.0 || LoadSideFullMassFlowRate <= 0.0) {
             simpleWatertoAirHP.SimFlag = false;
             return;
-        } else {
-            simpleWatertoAirHP.SimFlag = true;
         }
+        simpleWatertoAirHP.SimFlag = true;
 
         if (compressorOp == HVAC::CompressorOp::Off) {
             simpleWatertoAirHP.SimFlag = false;

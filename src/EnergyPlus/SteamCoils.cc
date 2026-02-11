@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2025, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -481,7 +481,6 @@ namespace SteamCoils {
         int AirOutletNode;
         Real64 SteamDensity;
         Real64 StartEnthSteam;
-        bool errFlag;
 
         if (state.dataSteamCoils->MyOneTimeFlag) {
             // initialize the environment and sizing flags
@@ -493,7 +492,7 @@ namespace SteamCoils {
         }
 
         if (state.dataSteamCoils->MyPlantScanFlag(CoilNum) && allocated(state.dataPlnt->PlantLoop)) {
-            errFlag = false;
+            bool errFlag = false;
             ScanPlantLoopsForObject(state,
                                     state.dataSteamCoils->SteamCoil(CoilNum).Name,
                                     state.dataSteamCoils->SteamCoil(CoilNum).CoilType,
@@ -671,12 +670,7 @@ namespace SteamCoils {
         Real64 RhoAirStd; // density of air at standard conditions
         Real64 CpAirStd;  // specific heat of air at std conditions
         Real64 CpWater;   // specific heat of water (condensed steam)
-
-        std::string CompName;     // component name
-        std::string CompType;     // component type
-        std::string SizingString; // input field sizing description (e.g., Nominal Capacity)
-        bool bPRINT = false;      // TRUE if sizing is reported to output (eio)
-        Real64 TempSize;          // autosized value
+        Real64 TempSize;  // autosized value
 
         ErrorsFound = false;
         PltSizSteamNum = 0;
@@ -693,7 +687,6 @@ namespace SteamCoils {
         CpAirStd = PsyCpAirFnW(0.0);
         bool coilWasAutosized(false); // coil report
 
-        auto &OASysEqSizing = state.dataSize->OASysEqSizing;
         auto &TermUnitSizing = state.dataSize->TermUnitSizing;
 
         // If this is a steam coil
@@ -717,24 +710,27 @@ namespace SteamCoils {
                 if (state.dataSteamCoils->SteamCoil(CoilNum).MaxSteamVolFlowRate == AutoSize) {
                     CheckSysSizing(state, "Coil:Heating:Steam", state.dataSteamCoils->SteamCoil(CoilNum).Name);
 
+                    std::string CompName; // component name
+                    std::string CompType; // component type
+                    bool bPRINT = false;  // TRUE if sizing is reported to output (eio)
                     if (state.dataSteamCoils->SteamCoil(CoilNum).DesiccantRegenerationCoil) {
-
                         state.dataSize->DataDesicRegCoil = true;
                         state.dataSize->DataDesicDehumNum = state.dataSteamCoils->SteamCoil(CoilNum).DesiccantDehumNum;
                         CompType = state.dataSteamCoils->SteamCoil(CoilNum).SteamCoilType; // this is casting an int to a string
                         CompName = state.dataSteamCoils->SteamCoil(CoilNum).Name;
                         bPRINT = false;
                         HeatingCoilDesAirInletTempSizer sizerHeatingDesInletTemp;
-                        bool ErrorsFound = false;
+                        bool localErrorsFound = false;
                         sizerHeatingDesInletTemp.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
-                        state.dataSize->DataDesInletAirTemp = sizerHeatingDesInletTemp.size(state, DataSizing::AutoSize, ErrorsFound);
+                        state.dataSize->DataDesInletAirTemp = sizerHeatingDesInletTemp.size(state, DataSizing::AutoSize, localErrorsFound);
 
                         HeatingCoilDesAirOutletTempSizer sizerHeatingDesOutletTemp;
-                        ErrorsFound = false;
+                        localErrorsFound = false;
                         sizerHeatingDesOutletTemp.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
-                        state.dataSize->DataDesOutletAirTemp = sizerHeatingDesOutletTemp.size(state, DataSizing::AutoSize, ErrorsFound);
+                        state.dataSize->DataDesOutletAirTemp = sizerHeatingDesOutletTemp.size(state, DataSizing::AutoSize, localErrorsFound);
 
                         if (state.dataSize->CurOASysNum > 0) {
+                            auto &OASysEqSizing = state.dataSize->OASysEqSizing;
                             OASysEqSizing(state.dataSize->CurOASysNum).AirFlow = true;
                             OASysEqSizing(state.dataSize->CurOASysNum).AirVolFlow = finalSysSizing.DesOutAirVolFlow;
                         }
@@ -763,6 +759,7 @@ namespace SteamCoils {
                         TempSize = AutoSize;
                         bool errorsFound = false;
                         HeatingAirFlowSizer sizingHeatingAirFlow;
+                        std::string SizingString; // input field sizing description (e.g., Nominal Capacity)
                         sizingHeatingAirFlow.overrideSizingString(SizingString);
                         // sizingHeatingAirFlow.setHVACSizingIndexData(FanCoil(FanCoilNum).HVACSizingIndex);
                         sizingHeatingAirFlow.initializeWithinEP(state, CompType, CompName, bPRINT, RoutineName);
@@ -2052,9 +2049,8 @@ namespace SteamCoils {
             ShowSevereError(state, format("GetCoilSteamInletNode: Could not find CoilType = \"Coil:Heating:Steam\" with Name = {}", CoilName));
             ErrorsFound = true;
             return CoilControlType::Invalid;
-        } else {
-            return state.dataSteamCoils->SteamCoil(CoilIndex).TypeOfCoil;
         }
+        return state.dataSteamCoils->SteamCoil(CoilIndex).TypeOfCoil;
     }
 
     int GetSteamCoilControlNodeNum(EnergyPlusData &state,
