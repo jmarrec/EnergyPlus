@@ -58,7 +58,6 @@
 #include <ObjexxFCL/Array2S.hh>
 
 // EnergyPlus Headers
-#include <EnergyPlus/CostEstimateManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
@@ -87,16 +86,13 @@ void GetInputTabularAnnual(EnergyPlusData &state)
 
     static std::string const currentModuleObject("Output:Table:Annual");
 
-    int jAlpha;
     int numParams;            // Number of elements combined
     int numAlphas;            // Number of elements in the alpha array
     int numNums;              // Number of elements in the numeric array
     Array1D_string alphArray; // character string data
     Array1D<Real64> numArray; // numeric data
     int IOStat;               // IO Status when calling get input subroutine
-    // static bool ErrorsFound( false );
     int objCount(0);
-    int curNumDgts;
     AnnualFieldSet::AggregationKind curAgg(AnnualFieldSet::AggregationKind::sumOrAvg);
 
     auto &annualTables = state.dataOutputReportTabularAnnual->annualTables;
@@ -124,7 +120,7 @@ void GetInputTabularAnnual(EnergyPlusData &state)
         if (numAlphas >= 5) {
             annualTables.emplace_back(state, alphArray(1), alphArray(2), alphArray(3));
             // the remaining fields are repeating in groups of three and need to be added to the data structure
-            for (jAlpha = 4; jAlpha <= numAlphas; jAlpha += 2) {
+            for (int jAlpha = 4; jAlpha <= numAlphas; jAlpha += 2) {
                 std::string curVarMtr = alphArray(jAlpha);
                 if (curVarMtr.empty()) {
                     ShowWarningError(state,
@@ -133,12 +129,13 @@ void GetInputTabularAnnual(EnergyPlusData &state)
                                             alphArray(1)));
                 }
                 if (jAlpha <= numAlphas) {
-                    std::string aggregationString = alphArray(jAlpha + 1);
+                    const std::string aggregationString = alphArray(jAlpha + 1);
                     curAgg = stringToAggKind(state, aggregationString);
                 } else {
                     curAgg = AnnualFieldSet::AggregationKind::sumOrAvg; // if missing aggregation type use SumOrAverage
                 }
-                int indexNums = 1 + (jAlpha - 3) / 2; // compute the corresponding field index in the numArray
+                const int indexNums = 1 + (jAlpha - 3) / 2; // compute the corresponding field index in the numArray
+                int curNumDgts;
                 if (indexNums <= numNums) {
                     curNumDgts = numArray(indexNums);
                 } else {
@@ -164,7 +161,7 @@ void AnnualTable::addFieldSet(std::string varName, AnnualFieldSet::AggregationKi
     m_annualFields.back().m_colHead = varName; // use the variable name for the column heading
 }
 
-void AnnualTable::addFieldSet(std::string varName, std::string colName, AnnualFieldSet::AggregationKind aggKind, int dgts)
+void AnnualTable::addFieldSet(std::string varName, const std::string &colName, AnnualFieldSet::AggregationKind aggKind, int dgts)
 // Jason Glazer, August 2015
 // This overloaded method allows for a specific column name to be different than the output variable or meter name
 {
@@ -181,81 +178,76 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
     OutputProcessor::StoreType avgSumVar;
     OutputProcessor::TimeStepType stepTypeVar;
     Constant::Units unitsVar = Constant::Units::None;
-    Array1D_string namesOfKeys;   // keyNames
-    Array1D_int indexesForKeyVar; // keyVarIndexes
     std::list<std::string> allKeys;
 
     std::string filterFieldUpper = m_filter;
     std::transform(filterFieldUpper.begin(), filterFieldUpper.end(), filterFieldUpper.begin(), ::toupper);
-    bool useFilter = (!m_filter.empty());
+    const bool useFilter = (!m_filter.empty());
 
-    std::vector<AnnualFieldSet>::iterator fldStIt;
-    for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
-        int keyCount = fldStIt->getVariableKeyCountandTypeFromFldSt(state, typeVar, avgSumVar, stepTypeVar, unitsVar);
-        fldStIt->getVariableKeysFromFldSt(state, typeVar, keyCount, fldStIt->m_namesOfKeys, fldStIt->m_indexesForKeyVar);
-        for (std::string nm : fldStIt->m_namesOfKeys) {
+    for (auto &fldSt : m_annualFields) {
+        const int keyCount = fldSt.getVariableKeyCountandTypeFromFldSt(state, typeVar, avgSumVar, stepTypeVar, unitsVar);
+        fldSt.getVariableKeysFromFldSt(state, typeVar, keyCount, fldSt.m_namesOfKeys, fldSt.m_indexesForKeyVar);
+        for (std::string nm : fldSt.m_namesOfKeys) {
             std::string nmUpper = nm;
             std::transform(nmUpper.begin(), nmUpper.end(), nmUpper.begin(), ::toupper);
             if (!useFilter || nmUpper.find(filterFieldUpper) != std::string::npos) {
                 allKeys.push_back(nm); // create list of all items
             }
         }
-        fldStIt->m_typeOfVar = typeVar;
-        fldStIt->m_varAvgSum = avgSumVar;
-        fldStIt->m_varStepType = stepTypeVar;
-        fldStIt->m_varUnits = unitsVar;
-        fldStIt->m_keyCount = keyCount;
+        fldSt.m_typeOfVar = typeVar;
+        fldSt.m_varAvgSum = avgSumVar;
+        fldSt.m_varStepType = stepTypeVar;
+        fldSt.m_varUnits = unitsVar;
+        fldSt.m_keyCount = keyCount;
     }
     allKeys.sort();
     allKeys.unique();                                                        // will now just have a list of the unique keys that is sorted
     std::copy(allKeys.begin(), allKeys.end(), back_inserter(m_objectNames)); // copy list to the object names
     // size all columns list of cells to be the size of the
-    for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
-        fldStIt->m_cell.resize(m_objectNames.size());
+    for (auto &fldStIt : m_annualFields) {
+        fldStIt.m_cell.resize(m_objectNames.size());
     }
     // for each column (field set) set the rows cell to the output variable index (for variables)
-    int foundKeyIndex;
     int tableRowIndex = 0;
-    for (std::vector<std::string>::iterator objNmIt = m_objectNames.begin(); objNmIt != m_objectNames.end(); ++objNmIt) {
-        for (fldStIt = m_annualFields.begin(); fldStIt != m_annualFields.end(); ++fldStIt) {
-            foundKeyIndex = -1;
-            for (std::string::size_type i = 0; i < fldStIt->m_namesOfKeys.size(); i++) {
-                if (fldStIt->m_namesOfKeys[i] == *objNmIt) {
-                    foundKeyIndex = i;
+    for (auto &objNm : m_objectNames) {
+        for (auto &fldSt : m_annualFields) {
+            int foundKeyIndex = -1;
+            for (auto &key : fldSt.m_namesOfKeys) {
+                ++foundKeyIndex;
+                if (key == objNm) {
                     break;
                 }
             }
             if (foundKeyIndex > -1) {
-                fldStIt->m_cell[tableRowIndex].indexesForKeyVar = fldStIt->m_indexesForKeyVar[foundKeyIndex];
+                fldSt.m_cell[tableRowIndex].indexesForKeyVar = fldSt.m_indexesForKeyVar[foundKeyIndex];
             } else {
-                fldStIt->m_cell[tableRowIndex].indexesForKeyVar = -1; // flag value that cell is not gathered
+                fldSt.m_cell[tableRowIndex].indexesForKeyVar = -1; // flag value that cell is not gathered
             }
-            if (fldStIt->m_aggregate == AnnualFieldSet::AggregationKind::maximum ||
-                fldStIt->m_aggregate == AnnualFieldSet::AggregationKind::maximumDuringHoursShown) {
-                fldStIt->m_cell[tableRowIndex].result = -9.9e99;
-            } else if (fldStIt->m_aggregate == AnnualFieldSet::AggregationKind::minimum ||
-                       fldStIt->m_aggregate == AnnualFieldSet::AggregationKind::minimumDuringHoursShown) {
-                fldStIt->m_cell[tableRowIndex].result = 9.9e99;
+            if (fldSt.m_aggregate == AnnualFieldSet::AggregationKind::maximum ||
+                fldSt.m_aggregate == AnnualFieldSet::AggregationKind::maximumDuringHoursShown) {
+                fldSt.m_cell[tableRowIndex].result = -9.9e99;
+            } else if (fldSt.m_aggregate == AnnualFieldSet::AggregationKind::minimum ||
+                       fldSt.m_aggregate == AnnualFieldSet::AggregationKind::minimumDuringHoursShown) {
+                fldSt.m_cell[tableRowIndex].result = 9.9e99;
             } else {
-                fldStIt->m_cell[tableRowIndex].result = 0.0;
+                fldSt.m_cell[tableRowIndex].result = 0.0;
             }
-            fldStIt->m_cell[tableRowIndex].duration = 0.0;
-            fldStIt->m_cell[tableRowIndex].timeStamp = 0;
+            fldSt.m_cell[tableRowIndex].duration = 0.0;
+            fldSt.m_cell[tableRowIndex].timeStamp = 0;
         }
-        tableRowIndex++;
+        ++tableRowIndex;
     }
 }
 
 void checkAggregationOrderForAnnual(EnergyPlusData &state)
 {
-    std::vector<AnnualTable>::iterator annualTableIt;
     bool invalidAggregationOrderFound = false;
     auto &annualTables = state.dataOutputReportTabularAnnual->annualTables;
     if (!state.dataGlobal->DoWeathSim) { // if no weather simulation than no reading of MonthlyInput array
         return;
     }
-    for (annualTableIt = annualTables.begin(); annualTableIt != annualTables.end(); ++annualTableIt) {
-        if (annualTableIt->invalidAggregationOrder(state)) {
+    for (auto &annualTable : annualTables) {
+        if (annualTable.invalidAggregationOrder(state)) {
             invalidAggregationOrderFound = true;
         }
     }

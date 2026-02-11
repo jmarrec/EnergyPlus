@@ -105,7 +105,7 @@ namespace OutputReportTabularAnnual {
 
         void addFieldSet(std::string, AnnualFieldSet::AggregationKind, int);
 
-        void addFieldSet(std::string, std::string, AnnualFieldSet::AggregationKind, int);
+        void addFieldSet(std::string, const std::string &, AnnualFieldSet::AggregationKind, int);
 
         void setupGathering(EnergyPlusData &state);
 
