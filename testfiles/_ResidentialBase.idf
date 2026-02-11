@@ -7296,7 +7296,7 @@
 
   EnergyManagementSystem:ProgramCallingManager,
     central_ac_and_furnace_airloop_0_duct_program calling manager,  !- Name
-    EndOfSystemTimestepAfterHVACReporting,  !- EnergyPlus Model Calling Point
+    BeginZoneTimestepBeforeInitHeatBalance,  !- EnergyPlus Model Calling Point
     central_ac_and_furnace_airloop_0_duct_program;  !- Program Name 1
 
   EnergyManagementSystem:ProgramCallingManager,
@@ -8146,7 +8146,7 @@
   Output:EnergyManagementSystem,
     Verbose,                    !- Actuator Availability Dictionary Reporting
     Verbose,                    !- Internal Variable Availability Dictionary Reporting
-    Verbose;              !- EMS Runtime Language Debug Output Level
+    Verbose;                    !- EMS Runtime Language Debug Output Level
 
 !-   ===========  ALL OBJECTS IN CLASS: OUTPUT:JSON ===========
 

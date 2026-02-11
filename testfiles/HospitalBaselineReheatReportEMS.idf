@@ -74050,18 +74050,23 @@
 
   EnergyManagementSystem:ProgramCallingManager,
     Reheat_Sum_Call,         !- Name
-    EndofZoneTimestepAfterZoneReporting,  !- EnergyPlus Model Calling Point
+    BeginNewEnvironment,  !- EnergyPlus Model Calling Point
     Reheat_Sum_Program;      !- Program Name 1
 
   EnergyManagementSystem:ProgramCallingManager,
     Heat_Sum_Call,           !- Name
-    EndofZoneTimestepAfterZoneReporting,  !- EnergyPlus Model Calling Point
+    BeginNewEnvironment,  !- EnergyPlus Model Calling Point
     Heat_Sum_Program;        !- Program Name 1
 
   EnergyManagementSystem:ProgramCallingManager,
     AHU_Heat_Sum_Call,       !- Name
-    EndofZoneTimestepAfterZoneReporting,  !- EnergyPlus Model Calling Point
+    BeginNewEnvironment,  !- EnergyPlus Model Calling Point
     AHU_Heat_Energy_Program; !- Program Name 1
+
+  Output:EnergyManagementSystem,
+    Verbose,                    !- Actuator Availability Dictionary Reporting
+    Verbose,                    !- Internal Variable Availability Dictionary Reporting
+    Verbose;                    !- EMS Runtime Language Debug Output Level
 
 !-   ===========  ALL OBJECTS IN CLASS: ENERGYMANAGEMENTSYSTEM:PROGRAM ===========
 

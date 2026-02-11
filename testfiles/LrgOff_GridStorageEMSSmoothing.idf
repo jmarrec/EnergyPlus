@@ -9887,7 +9887,7 @@
   Output:EnergyManagementSystem,
     Verbose,                 !- Actuator Availability Dictionary Reporting
     Verbose,                 !- Internal Variable Availability Dictionary Reporting
-    Verbose;              !- EMS Runtime Language Debug Output Level
+    ErrorsOnly;              !- EMS Runtime Language Debug Output Level
 
   EnergyManagementSystem:Sensor,
     CurntFacilityElectDemand,!- Name
