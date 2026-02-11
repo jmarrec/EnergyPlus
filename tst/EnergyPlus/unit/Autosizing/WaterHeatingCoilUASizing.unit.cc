@@ -181,7 +181,7 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     EXPECT_TRUE(sizer.dataErrorsFound);
     EXPECT_ENUM_EQ(AutoSizingResultType::ErrorType1, sizer.errorType);
     EXPECT_TRUE(sizer.wasAutoSized);
-    EXPECT_NEAR(3.0, sizedValue, 0.1); // 0.01% of 3000 W capacity
+    EXPECT_NEAR(3.0, sizedValue, 0.01); // 0.1% of 3000 W capacity
     state->dataWaterCoils->WaterCoil(1).InletAirTemp = 21.0;
     state->dataSize->DataErrorsFound = false;
     sizer.dataErrorsFound = false;
