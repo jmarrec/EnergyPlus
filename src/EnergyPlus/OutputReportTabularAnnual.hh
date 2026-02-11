@@ -81,7 +81,7 @@ namespace OutputReportTabularAnnual {
 
     void WriteAnnualTables(EnergyPlusData &state);
 
-    void AddAnnualTableOfContents(EnergyPlusData &state, std::ostream &);
+    void AddAnnualTableOfContents(const EnergyPlusData &state, std::ostream &);
 
     AnnualFieldSet::AggregationKind stringToAggKind(EnergyPlusData &state, std::string inString);
 
@@ -92,7 +92,8 @@ namespace OutputReportTabularAnnual {
         AnnualTable() = default;
 
         // Member Constructor
-        AnnualTable(EnergyPlusData &state, std::string name, std::string filter, std::string schedName) : m_name(name), m_filter(filter)
+        AnnualTable(EnergyPlusData &state, const std::string &name, const std::string &filter, const std::string &schedName)
+            : m_name(name), m_filter(filter)
         {
             if (!schedName.empty()) {
                 m_sched = Sched::GetSchedule(state, schedName); // index to the period schedule
@@ -115,16 +116,16 @@ namespace OutputReportTabularAnnual {
 
         void writeTable(EnergyPlusData &state, OutputReportTabular::tabularReportStyle const style);
 
-        void addTableOfContents(std::ostream &);
+        void addTableOfContents(std::ostream &) const;
 
-        std::vector<std::string> inspectTable();
+        std::vector<std::string> inspectTable() const;
 
-        std::vector<std::string> inspectTableFieldSets(int);
+        std::vector<std::string> inspectTableFieldSets(int) const;
 
         void clearTable();
 
         // this could be private but was made public for unit testing only
-        void columnHeadersToTitleCase(EnergyPlusData &state);
+        void columnHeadersToTitleCase(EnergyPlusData const &state);
 
     private:
         // Members
@@ -141,29 +142,27 @@ namespace OutputReportTabularAnnual {
 
         void computeBinColumns(EnergyPlusData &state, OutputReportTabular::UnitsStyle unitsStyle_para);
 
-        std::vector<std::string> setupAggString();
+        static std::vector<std::string> setupAggString();
 
-        Real64 setEnergyUnitStringAndFactor(OutputReportTabular::UnitsStyle const unitsStyle, std::string &unitString);
+        static Real64 setEnergyUnitStringAndFactor(OutputReportTabular::UnitsStyle unitsStyle, std::string &unitString);
 
-        int columnCountForAggregation(AnnualFieldSet::AggregationKind curAgg);
+        static int columnCountForAggregation(AnnualFieldSet::AggregationKind curAgg);
 
-        std::string trim(const std::string &str);
+        static std::string trim(const std::string &str);
 
-        void fixUnitsPerSecond(std::string &unitString, Real64 &conversionFactor);
+        static void fixUnitsPerSecond(std::string &unitString, Real64 &conversionFactor);
 
-        bool allRowsSameSizeDeferredVectors(std::vector<AnnualFieldSet>::iterator fldStIt);
+        bool allRowsSameSizeDeferredVectors(const AnnualFieldSet &fldSt) const;
 
-        void convertUnitForDeferredResults(EnergyPlusData &state,
-                                           std::vector<AnnualFieldSet>::iterator fldStIt,
-                                           OutputReportTabular::UnitsStyle const unitsStyle);
+        void convertUnitForDeferredResults(EnergyPlusData &state, AnnualFieldSet &fldSt, OutputReportTabular::UnitsStyle unitsStyle) const;
 
-        std::vector<Real64> calculateBins(int const numberOfBins,
-                                          std::vector<Real64> const valuesToBin,
-                                          std::vector<Real64> const corrElapsedTime,
-                                          Real64 const topOfBins,
-                                          Real64 const bottomOfBins,
-                                          Real64 &timeAboveTopBin,
-                                          Real64 &timeBelowBottomBin);
+        static std::vector<Real64> calculateBins(int const numberOfBins,
+                                                 std::vector<Real64> const valuesToBin,
+                                                 std::vector<Real64> const corrElapsedTime,
+                                                 Real64 const topOfBins,
+                                                 Real64 const bottomOfBins,
+                                                 Real64 &timeAboveTopBin,
+                                                 Real64 &timeBelowBottomBin);
 
     }; // class AnnualTable
 
