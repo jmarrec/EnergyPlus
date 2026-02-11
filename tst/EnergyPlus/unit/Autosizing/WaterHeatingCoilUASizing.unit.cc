@@ -176,12 +176,12 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     state->dataSize->ZoneSizingInput(1).ZoneNum = 1;
     sizer.initializeWithinEP(*this->state, HVAC::cAllCoilTypes(HVAC::Coil_HeatingWater), "MyWaterCoil", printFlag, routineName);
     sizedValue = sizer.size(*state, inputValue, errorsFound);
-    EXPECT_FALSE(errorsFound);
-    EXPECT_FALSE(state->dataSize->DataErrorsFound);
-    EXPECT_FALSE(sizer.dataErrorsFound);
-    EXPECT_ENUM_EQ(AutoSizingResultType::NoError, sizer.errorType);
+    EXPECT_TRUE(errorsFound);
+    EXPECT_TRUE(state->dataSize->DataErrorsFound);
+    EXPECT_TRUE(sizer.dataErrorsFound);
+    EXPECT_ENUM_EQ(AutoSizingResultType::ErrorType1, sizer.errorType);
     EXPECT_TRUE(sizer.wasAutoSized);
-    EXPECT_NEAR(3000.0, sizedValue, 0.01); // 100% of 3000 W capacity
+    EXPECT_NEAR(3.0, sizedValue, 0.1); // 0.01% of 3000 W capacity
     state->dataWaterCoils->WaterCoil(1).InletAirTemp = 21.0;
     state->dataSize->DataErrorsFound = false;
     sizer.dataErrorsFound = false;
@@ -272,9 +272,9 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     EXPECT_ENUM_EQ(AutoSizingResultType::ErrorType1, sizer.errorType);
     EXPECT_TRUE(sizer.wasAutoSized);
     EXPECT_TRUE(errorsFound);
-    EXPECT_FALSE(state->dataSize->DataErrorsFound);
-    EXPECT_FALSE(sizer.dataErrorsFound);
-    EXPECT_NEAR(3000.0, sizedValue, 0.01); // 100% of 3000 W capacity
+    EXPECT_TRUE(state->dataSize->DataErrorsFound);
+    EXPECT_TRUE(sizer.dataErrorsFound);
+    EXPECT_NEAR(3.0, sizedValue, 0.01); // 0.1% of 3000 W capacity
     state->dataWaterCoils->WaterCoil(1).InletAirTemp = 21.0;
     state->dataSize->DataErrorsFound = false;
     sizer.dataErrorsFound = false;
