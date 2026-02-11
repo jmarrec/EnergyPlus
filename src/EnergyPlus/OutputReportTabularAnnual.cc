@@ -463,8 +463,9 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                     case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusTwoStdDev:
                     case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusThreeStdDev:
                         //  for all of the binning options add the value to the deferred
-                        if (fldStIt->m_varAvgSum == OutputProcessor::StoreType::Sum) {                     // if it is a summed variable
-                            fldStIt->m_cell[row].deferredResults.push_back(curValue /= secondsInTimeStep); // divide by time just like max and min
+                        if (fldStIt->m_varAvgSum == OutputProcessor::StoreType::Sum) { // if it is a summed variable
+                            const Real64 curValueRate = curValue / secondsInTimeStep;  // divide by time just like max and min
+                            fldStIt->m_cell[row].deferredResults.push_back(curValueRate);
                         } else {
                             fldStIt->m_cell[row].deferredResults.push_back(curValue);
                         }
@@ -613,9 +614,9 @@ Real64 AnnualTable::getElapsedTime(EnergyPlusData &state, OutputProcessor::TimeS
 {
     Real64 elapsedTime;
     if (kindOfTimeStep == OutputProcessor::TimeStepType::Zone) {
-        elapsedTime = state.dataHVACGlobal->TimeStepSys;
-    } else {
         elapsedTime = state.dataGlobal->TimeStepZone;
+    } else {
+        elapsedTime = state.dataHVACGlobal->TimeStepSys;
     }
     return elapsedTime;
 }
@@ -624,9 +625,9 @@ Real64 AnnualTable::getSecondsInTimeStep(EnergyPlusData &state, OutputProcessor:
 {
     Real64 secondsInTimeStep;
     if (kindOfTimeStep == OutputProcessor::TimeStepType::Zone) {
-        secondsInTimeStep = state.dataHVACGlobal->TimeStepSysSec;
-    } else {
         secondsInTimeStep = state.dataGlobal->TimeStepZoneSec;
+    } else {
+        secondsInTimeStep = state.dataHVACGlobal->TimeStepSysSec;
     }
     return secondsInTimeStep;
 }
