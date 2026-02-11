@@ -158,9 +158,15 @@ def report_status(opt_base_msg: LogMessage | None, verbose: bool = False):
 
 if __name__ == "__main__":
     parser = get_base_parser(description="License checker")
-    parser.add_argument("--original", dest="original", action="store_true", default=False, help="write out the original license")
-    parser.add_argument("--previous", dest="previous", action="store_true", default=False, help="write out the previous license")
-    parser.add_argument("--current", dest="current", action="store_true", default=False, help="write out the current license")
+    parser.add_argument(
+        "--original", dest="original", action="store_true", default=False, help="write out the original license"
+    )
+    parser.add_argument(
+        "--previous", dest="previous", action="store_true", default=False, help="write out the previous license"
+    )
+    parser.add_argument(
+        "--current", dest="current", action="store_true", default=False, help="write out the current license"
+    )
 
     opt_base_msg = check_root_license_txt()
 

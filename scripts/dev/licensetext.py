@@ -238,7 +238,9 @@ def original():
     return _original
 
 
-def check_license(filepath: Path, possible: str, correct: str, offset: int = 0, toolname: str = "unspecified") -> LogMessage | None:
+def check_license(
+    filepath: Path, possible: str, correct: str, offset: int = 0, toolname: str = "unspecified"
+) -> LogMessage | None:
     """Check for a few of the usual issues with the license"""
     if possible == correct:
         return None
@@ -337,8 +339,15 @@ class FileVisitor(ABC):
 
 
 class Checker(FileVisitor):
-    def __init__(self, boilerplate: str, offset: int = 3, toolname: str = "unspecified",
-                 extensions: list[str] | None = None, shebang: bool = False, empty_passes: bool = False):
+    def __init__(
+        self,
+        boilerplate: str,
+        offset: int = 3,
+        toolname: str = "unspecified",
+        extensions: list[str] | None = None,
+        shebang: bool = False,
+        empty_passes: bool = False,
+    ):
         super().__init__(toolname=toolname, extensions=extensions)
         lines = boilerplate.splitlines()
         self.n = len(lines)
