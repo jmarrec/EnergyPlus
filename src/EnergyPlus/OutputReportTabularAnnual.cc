@@ -170,10 +170,10 @@ void AnnualTable::addFieldSet(std::string varName, const std::string &colName, A
 }
 
 void AnnualTable::setupGathering(EnergyPlusData &state)
-// Jason Glazer, August 2015
-// This method is used after GetInput for REPORT:TABLE:ANNUAL to set up how output variables, meters,
-// input fields, and ems variables are gathered.
 {
+    // Used after GetInput for REPORT:TABLE:ANNUAL to set up how output variables, meters,
+    // input fields, and ems variables are gathered.
+
     OutputProcessor::VariableType typeVar = OutputProcessor::VariableType::Invalid;
     OutputProcessor::StoreType avgSumVar;
     OutputProcessor::TimeStepType stepTypeVar;
@@ -182,16 +182,17 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
 
     std::string filterFieldUpper = m_filter;
     std::transform(filterFieldUpper.begin(), filterFieldUpper.end(), filterFieldUpper.begin(), ::toupper);
-    const bool useFilter = (!m_filter.empty());
+    const bool useFilter = !m_filter.empty();
 
+    // Gather key lists for each field set and build the union of all keys (optionally filtered)
     for (auto &fldSt : m_annualFields) {
         const int keyCount = fldSt.getVariableKeyCountandTypeFromFldSt(state, typeVar, avgSumVar, stepTypeVar, unitsVar);
         fldSt.getVariableKeysFromFldSt(state, typeVar, keyCount, fldSt.m_namesOfKeys, fldSt.m_indexesForKeyVar);
-        for (std::string nm : fldSt.m_namesOfKeys) {
+        for (const auto &nm : fldSt.m_namesOfKeys) {
             std::string nmUpper = nm;
             std::transform(nmUpper.begin(), nmUpper.end(), nmUpper.begin(), ::toupper);
             if (!useFilter || nmUpper.find(filterFieldUpper) != std::string::npos) {
-                allKeys.push_back(nm); // create list of all items
+                allKeys.push_back(nm);
             }
         }
         fldSt.m_typeOfVar = typeVar;
@@ -201,40 +202,37 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
         fldSt.m_keyCount = keyCount;
     }
     allKeys.sort();
-    allKeys.unique();                                                        // will now just have a list of the unique keys that is sorted
-    std::copy(allKeys.begin(), allKeys.end(), back_inserter(m_objectNames)); // copy list to the object names
-    // size all columns list of cells to be the size of the
-    for (auto &fldStIt : m_annualFields) {
-        fldStIt.m_cell.resize(m_objectNames.size());
+    allKeys.unique();
+    m_objectNames.clear();
+    std::copy(allKeys.begin(), allKeys.end(), std::back_inserter(m_objectNames));
+    // Size each field set's cell array for the number of object names (rows)
+    for (auto &fldSt : m_annualFields) {
+        fldSt.m_cell.resize(m_objectNames.size());
     }
-    // for each column (field set) set the rows cell to the output variable index (for variables)
+    // Populate per-row/per-field cell metadata
     int tableRowIndex = 0;
-    for (auto &objNm : m_objectNames) {
+    for (const auto &objName : m_objectNames) {
         for (auto &fldSt : m_annualFields) {
             int foundKeyIndex = -1;
-            for (auto &key : fldSt.m_namesOfKeys) {
-                ++foundKeyIndex;
-                if (key == objNm) {
+            for (std::size_t i = 0; i < fldSt.m_namesOfKeys.size(); ++i) {
+                if (fldSt.m_namesOfKeys[i] == objName) {
+                    foundKeyIndex = static_cast<int>(i);
                     break;
                 }
             }
-            if (foundKeyIndex > -1) {
-                fldSt.m_cell[tableRowIndex].indexesForKeyVar = fldSt.m_indexesForKeyVar[foundKeyIndex];
-            } else {
-                fldSt.m_cell[tableRowIndex].indexesForKeyVar = -1; // flag value that cell is not gathered
-            }
-            auto &result = fldSt.m_cell[tableRowIndex].result;
+            fldSt.m_cell[tableRowIndex].indexesForKeyVar = (foundKeyIndex >= 0) ? fldSt.m_indexesForKeyVar[foundKeyIndex] : -1;
+            // Initialize result based on aggregation kind
             switch (fldSt.m_aggregate) {
             case AnnualFieldSet::AggregationKind::maximum:
             case AnnualFieldSet::AggregationKind::maximumDuringHoursShown:
-                result = -9.9e99;
+                fldSt.m_cell[tableRowIndex].result = -9.9e99;
                 break;
             case AnnualFieldSet::AggregationKind::minimum:
             case AnnualFieldSet::AggregationKind::minimumDuringHoursShown:
-                result = 9.9e99;
+                fldSt.m_cell[tableRowIndex].result = 9.9e99;
                 break;
             default:
-                result = 0.0;
+                fldSt.m_cell[tableRowIndex].result = 0.0;
                 break;
             }
             fldSt.m_cell[tableRowIndex].duration = 0.0;
