@@ -102,9 +102,9 @@ namespace OutputReportTabularAnnual {
             }
         };
 
-        void addFieldSet(std::string, AnnualFieldSet::AggregationKind, int);
+        void addFieldSet(const std::string &, AnnualFieldSet::AggregationKind, int);
 
-        void addFieldSet(std::string, const std::string &, AnnualFieldSet::AggregationKind, int);
+        void addFieldSet(const std::string &, const std::string &, AnnualFieldSet::AggregationKind, int);
 
         void setupGathering(EnergyPlusData &state);
 
@@ -156,8 +156,8 @@ namespace OutputReportTabularAnnual {
 
         void convertUnitForDeferredResults(EnergyPlusData &state, AnnualFieldSet &fldSt, OutputReportTabular::UnitsStyle unitsStyle) const;
 
-        static std::vector<Real64> calculateBins(int const numberOfBins,
-                                                 std::vector<Real64> const valuesToBin,
+        static std::vector<Real64> calculateBins(int numberOfBins,
+                                                 std::vector<Real64> const &valuesToBin,
                                                  std::vector<Real64> const corrElapsedTime,
                                                  Real64 const topOfBins,
                                                  Real64 const bottomOfBins,

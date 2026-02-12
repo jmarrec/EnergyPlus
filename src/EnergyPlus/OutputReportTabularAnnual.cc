@@ -129,7 +129,7 @@ void GetInputTabularAnnual(EnergyPlusData &state)
                                             alphArray(1)));
                 }
                 if (jAlpha <= numAlphas) {
-                    const std::string aggregationString = alphArray(jAlpha + 1);
+                    const std::string &aggregationString = alphArray(jAlpha + 1);
                     curAgg = stringToAggKind(state, aggregationString);
                 } else {
                     curAgg = AnnualFieldSet::AggregationKind::sumOrAvg; // if missing aggregation type use SumOrAverage
@@ -152,7 +152,7 @@ void GetInputTabularAnnual(EnergyPlusData &state)
     }
 }
 
-void AnnualTable::addFieldSet(std::string varName, AnnualFieldSet::AggregationKind aggKind, int dgts)
+void AnnualTable::addFieldSet(const std::string &varName, AnnualFieldSet::AggregationKind aggKind, int dgts)
 // Jason Glazer, August 2015
 // This method is used along with the constructor to convert the GetInput for REPORT:TABLE:ANNUAL
 // into the class data.
@@ -161,7 +161,7 @@ void AnnualTable::addFieldSet(std::string varName, AnnualFieldSet::AggregationKi
     m_annualFields.back().m_colHead = varName; // use the variable name for the column heading
 }
 
-void AnnualTable::addFieldSet(std::string varName, const std::string &colName, AnnualFieldSet::AggregationKind aggKind, int dgts)
+void AnnualTable::addFieldSet(const std::string &varName, const std::string &colName, AnnualFieldSet::AggregationKind aggKind, int dgts)
 // Jason Glazer, August 2015
 // This overloaded method allows for a specific column name to be different than the output variable or meter name
 {
@@ -350,7 +350,6 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                     Real64 curValue = GetInternalVariableValue(state, curTypeOfVar, curVarNum);
                     // Get the value from the result array
                     Real64 oldResultValue = fldStIt->m_cell[row].result;
-                    // int oldTimeStamp = fldStIt->m_cell[row].timeStamp;
                     Real64 oldDuration = fldStIt->m_cell[row].duration;
                     // Zero the revised values (as default if not set later)
                     Real64 newResultValue = 0.0;
@@ -469,7 +468,7 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                             fldStIt->m_cell[row].deferredResults.push_back(curValue);
                         }
                         fldStIt->m_cell[row].deferredElapsed.push_back(elapsedTime); // save the amount of time for this particular value
-                        newDuration = oldDuration + elapsedTime;
+                        // newDuration = oldDuration + elapsedTime;
                         break;
                     case AnnualFieldSet::AggregationKind::noAggregation:
                     case AnnualFieldSet::AggregationKind::valueWhenMaxMin:
@@ -564,7 +563,7 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                                     // do nothing
                                 }
                             }
-                            activeHoursShown = false; // fixed CR8317
+                            activeHoursShown = false;
                         }
                     }
                 }
@@ -586,22 +585,28 @@ void ResetAnnualGathering(const EnergyPlusData &state)
 
 void AnnualTable::resetGathering()
 {
-    for (unsigned int row = 0; row != m_objectNames.size(); row++) { // loop through by row.
+    for (std::size_t row = 0; row < m_objectNames.size(); ++row) {
         for (auto &fldSt : m_annualFields) {
-            if (fldSt.m_aggregate == AnnualFieldSet::AggregationKind::maximum ||
-                fldSt.m_aggregate == AnnualFieldSet::AggregationKind::maximumDuringHoursShown) {
-                fldSt.m_cell[row].result = -9.9e99;
-            } else if (fldSt.m_aggregate == AnnualFieldSet::AggregationKind::minimum ||
-                       fldSt.m_aggregate == AnnualFieldSet::AggregationKind::minimumDuringHoursShown) {
-                fldSt.m_cell[row].result = 9.9e99;
-            } else {
-                fldSt.m_cell[row].result = 0.0;
+            auto &cell = fldSt.m_cell[row];
+            switch (fldSt.m_aggregate) {
+            case AnnualFieldSet::AggregationKind::maximum:
+            case AnnualFieldSet::AggregationKind::maximumDuringHoursShown:
+                cell.result = -9.9e99;
+                break;
+            case AnnualFieldSet::AggregationKind::minimum:
+            case AnnualFieldSet::AggregationKind::minimumDuringHoursShown:
+                cell.result = 9.9e99;
+                break;
+            default:
+                cell.result = 0.0;
+                break;
             }
-            fldSt.m_cell[row].duration = 0.0;
-            fldSt.m_cell[row].timeStamp = 0;
-            // if any deferred results
-            fldSt.m_cell[row].deferredResults.clear();
-            fldSt.m_cell[row].deferredElapsed.clear();
+            cell.duration = 0.0;
+            cell.timeStamp = 0;
+
+            // Clear deferred results
+            cell.deferredResults.clear();
+            cell.deferredElapsed.clear();
         }
     }
 }
@@ -1406,7 +1411,7 @@ void AnnualTable::convertUnitForDeferredResults(EnergyPlusData &state, AnnualFie
 }
 
 std::vector<Real64> AnnualTable::calculateBins(int const numberOfBins,
-                                               std::vector<Real64> valuesToBin,
+                                               const std::vector<Real64> &valuesToBin,
                                                std::vector<Real64> corrElapsedTime,
                                                Real64 const topOfBins,
                                                Real64 const bottomOfBins,
