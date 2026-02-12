@@ -1247,69 +1247,92 @@ void AnnualTable::addTableOfContents(std::ostream &nameOfStream) const
 void AnnualTable::computeBinColumns(EnergyPlusData &state, OutputReportTabular::UnitsStyle const unitsStyle_para)
 {
     for (auto &fldStIt : m_annualFields) {
-        int curAgg = fldStIt.m_aggregate;
         // for columns with binning aggregation types compute the statistics
-        if (curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsMinToMax || curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsZeroToMax ||
-            curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsMinToZero || curAgg == AnnualFieldSet::AggregationKind::hoursInTenPercentBins ||
-            curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusTwoStdDev ||
-            curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusThreeStdDev) {
+        switch (fldStIt.m_aggregate) {
+        case AnnualFieldSet::AggregationKind::hoursInTenBinsMinToMax:
+        case AnnualFieldSet::AggregationKind::hoursInTenBinsZeroToMax:
+        case AnnualFieldSet::AggregationKind::hoursInTenBinsMinToZero:
+        case AnnualFieldSet::AggregationKind::hoursInTenPercentBins:
+        case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusTwoStdDev:
+        case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusThreeStdDev: {
             // the size the deferred vectors should be same for all rows
-            if (allRowsSameSizeDeferredVectors(fldStIt)) {
-                convertUnitForDeferredResults(state, fldStIt, unitsStyle_para);
-                std::vector<Real64> deferredTotalForColumn;
-                Real64 minVal = veryLarge;
-                Real64 maxVal = verySmall;
-                Real64 sum = 0;
-                Real64 curVal = 0.0;
-                for (unsigned int jDefRes = 0; jDefRes != fldStIt.m_cell[0].deferredResults.size(); jDefRes++) {
-                    sum = 0;
-                    for (unsigned int row = 0; row != m_objectNames.size(); row++) { // loop through by row.
-                        curVal = fldStIt.m_cell[row].deferredResults[jDefRes];
-                        sum += curVal;
-                        if (curVal > maxVal) {
-                            maxVal = curVal;
-                        }
-                        if (curVal < minVal) {
-                            minVal = curVal;
-                        }
-                    }
-                    deferredTotalForColumn.push_back(sum / static_cast<float>(m_objectNames.size())); // put average value into the total row
-                }
-                if (curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsMinToMax) {
-                    fldStIt.m_topBinValue = maxVal;
-                    fldStIt.m_bottomBinValue = minVal;
-                } else if (curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsZeroToMax) {
-                    fldStIt.m_topBinValue = maxVal;
-                    fldStIt.m_bottomBinValue = 0.0;
-                } else if (curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsMinToZero) {
-                    fldStIt.m_topBinValue = 0.0;
-                    fldStIt.m_bottomBinValue = minVal;
-                } else if (curAgg == AnnualFieldSet::AggregationKind::hoursInTenPercentBins) {
-                    fldStIt.m_topBinValue = 1.0;
-                    fldStIt.m_bottomBinValue = 0.0;
-                } else if (curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusTwoStdDev) {
-                } else if (curAgg == AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusThreeStdDev) {
-                    // TODO: check this. already inside of an hoursInTenBinsPlusMinusThreeStdDev block
-                }
-                // compute the actual amount of time spent in each bin and above and below
-                for (unsigned int row = 0; row != m_objectNames.size(); row++) { // loop through by row.
-                    fldStIt.m_cell[row].m_timeInBin = calculateBins(10,
-                                                                    fldStIt.m_cell[row].deferredResults,
-                                                                    fldStIt.m_cell[row].deferredElapsed,
-                                                                    fldStIt.m_topBinValue,
-                                                                    fldStIt.m_bottomBinValue,
-                                                                    fldStIt.m_cell[row].m_timeAboveTopBin,
-                                                                    fldStIt.m_cell[row].m_timeBelowBottomBin);
-                }
-                // do the total row binning
-                fldStIt.m_timeInBinTotal = calculateBins(10,
-                                                         deferredTotalForColumn,
-                                                         fldStIt.m_cell[0].deferredElapsed,
-                                                         fldStIt.m_topBinValue,
-                                                         fldStIt.m_bottomBinValue,
-                                                         fldStIt.m_timeAboveTopBinTotal,
-                                                         fldStIt.m_timeBelowBottomBinTotal);
+            if (!allRowsSameSizeDeferredVectors(fldStIt)) {
+                break;
             }
+
+            convertUnitForDeferredResults(state, fldStIt, unitsStyle_para);
+
+            std::vector<Real64> deferredTotalForColumn;
+            Real64 minVal = veryLarge;
+            Real64 maxVal = verySmall;
+            Real64 sum = 0;
+            Real64 curVal = 0.0;
+
+            for (unsigned int jDefRes = 0; jDefRes != fldStIt.m_cell[0].deferredResults.size(); jDefRes++) {
+                sum = 0;
+                for (unsigned int row = 0; row != m_objectNames.size(); row++) { // loop through by row.
+                    curVal = fldStIt.m_cell[row].deferredResults[jDefRes];
+                    sum += curVal;
+                    if (curVal > maxVal) {
+                        maxVal = curVal;
+                    }
+                    if (curVal < minVal) {
+                        minVal = curVal;
+                    }
+                }
+                deferredTotalForColumn.push_back(sum / static_cast<float>(m_objectNames.size())); // put average value into the total row
+            }
+
+            // Decide bin range endpoints based on aggregation kind
+            switch (fldStIt.m_aggregate) {
+            case AnnualFieldSet::AggregationKind::hoursInTenBinsMinToMax:
+                fldStIt.m_topBinValue = maxVal;
+                fldStIt.m_bottomBinValue = minVal;
+                break;
+            case AnnualFieldSet::AggregationKind::hoursInTenBinsZeroToMax:
+                fldStIt.m_topBinValue = maxVal;
+                fldStIt.m_bottomBinValue = 0.0;
+                break;
+            case AnnualFieldSet::AggregationKind::hoursInTenBinsMinToZero:
+                fldStIt.m_topBinValue = 0.0;
+                fldStIt.m_bottomBinValue = minVal;
+                break;
+            case AnnualFieldSet::AggregationKind::hoursInTenPercentBins:
+                fldStIt.m_topBinValue = 1.0;
+                fldStIt.m_bottomBinValue = 0.0;
+                break;
+            case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusTwoStdDev:
+                // (existing behavior: no explicit top/bottom assignment here)
+                break;
+            case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusThreeStdDev:
+                // (existing behavior: no explicit top/bottom assignment here)
+                break;
+            default:
+                break;
+            }
+
+            // compute the actual amount of time spent in each bin and above and below
+            for (unsigned int row = 0; row != m_objectNames.size(); row++) { // loop through by row.
+                fldStIt.m_cell[row].m_timeInBin = calculateBins(10,
+                                                                fldStIt.m_cell[row].deferredResults,
+                                                                fldStIt.m_cell[row].deferredElapsed,
+                                                                fldStIt.m_topBinValue,
+                                                                fldStIt.m_bottomBinValue,
+                                                                fldStIt.m_cell[row].m_timeAboveTopBin,
+                                                                fldStIt.m_cell[row].m_timeBelowBottomBin);
+            }
+            // do the total row binning
+            fldStIt.m_timeInBinTotal = calculateBins(10,
+                                                     deferredTotalForColumn,
+                                                     fldStIt.m_cell[0].deferredElapsed,
+                                                     fldStIt.m_topBinValue,
+                                                     fldStIt.m_bottomBinValue,
+                                                     fldStIt.m_timeAboveTopBinTotal,
+                                                     fldStIt.m_timeBelowBottomBinTotal);
+            break;
+        }
+        default:
+            break;
         }
     }
 }
@@ -1338,28 +1361,39 @@ void AnnualTable::convertUnitForDeferredResults(EnergyPlusData &state, AnnualFie
     std::string curUnits;
     std::string energyUnitsString;
     const Real64 energyUnitsConversionFactor = AnnualTable::setEnergyUnitStringAndFactor(unitsStyle, energyUnitsString);
+
     // do the unit conversions
-    if (unitsStyle == OutputReportTabular::UnitsStyle::InchPound || unitsStyle == OutputReportTabular::UnitsStyle::InchPoundExceptElectricity) {
+    switch (unitsStyle) {
+    case OutputReportTabular::UnitsStyle::InchPound:
+    case OutputReportTabular::UnitsStyle::InchPoundExceptElectricity: {
         int indexUnitConv;
         const std::string varNameWithUnits = format("{} [{}]", fldSt.m_variMeter, Constant::unitNames[static_cast<int>(fldSt.m_varUnits)]);
         OutputReportTabular::LookupSItoIP(state, varNameWithUnits, indexUnitConv, curUnits);
         OutputReportTabular::GetUnitConversion(state, indexUnitConv, curConversionFactor, curConversionOffset, curUnits);
-    } else { // just do the Joule conversion
-        // if units is in Joules, convert if specified
-        if (fldSt.m_varUnits == Constant::Units::J) {
+        break;
+    }
+    default: { // SI (and "Jto*" styles): just do the Joule conversion if needed
+        switch (fldSt.m_varUnits) {
+        case Constant::Units::J:
             curUnits = energyUnitsString;
             curConversionFactor = energyUnitsConversionFactor;
             curConversionOffset = 0.0;
-        } else { // if not joules don't perform conversion
+            break;
+        default:
             curUnits = Constant::unitNames[static_cast<int>(fldSt.m_varUnits)];
             curConversionFactor = 1.0;
             curConversionOffset = 0.0;
+            break;
         }
+        break;
     }
+    }
+
     if (fldSt.m_varAvgSum == OutputProcessor::StoreType::Sum) {
         curUnits += "/s";
     }
     fixUnitsPerSecond(curUnits, curConversionFactor);
+
     if (curConversionFactor != 1.0 || curConversionOffset != 0.0) {
         for (unsigned int row = 0; row != m_objectNames.size(); row++) { // loop through by row.
             for (unsigned int jDefRes = 0; jDefRes != fldSt.m_cell[0].deferredResults.size(); jDefRes++) {
