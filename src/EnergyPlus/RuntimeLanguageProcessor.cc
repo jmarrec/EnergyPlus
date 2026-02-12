@@ -1798,6 +1798,9 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 if (thisErlVar.Value.initialized) { // check that value has been initialized
                     thisOperand = thisErlVar.Value;
                 } else { // value has never been set
+                    // during setup (before simulation), we want to avoid initializing variables to zero without throwing an error
+                    // throw the error, and write it to edd file, if variable is uninitialized and is *not* a global or internal variable
+                    // assumption is that if we made it here for a global variable, it is initialized in another program
                     if ((!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) ||
                         (!(thisErlVar.SetByGlobalVariable || thisErlVar.SetByInternalVariable))) {
 
