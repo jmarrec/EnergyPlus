@@ -311,10 +311,10 @@ void PlantProfileData::InitPlantProfile(EnergyPlusData &state)
                 }
             }
             auto &plntCoilData = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).compDesWaterFlowRate;
-            size_t arrayIndex = plntCoilData.size() + 1;
-            plntCoilData.resize(arrayIndex);
-            plntCoilData[arrayIndex - 1].tsDesWaterFlowRate.resize(size_t(24 * state.dataGlobal->TimeStepsInHour));
-            plntCoilData[arrayIndex - 1].tsDesWaterFlowRate = tmpFlowData;
+            size_t newEntryIndex = plntCoilData.size() + 1;
+            plntCoilData.resize(newEntryIndex);
+            plntCoilData[newEntryIndex - 1].tsDesWaterFlowRate.resize(size_t(24 * state.dataGlobal->TimeStepsInHour));
+            plntCoilData[newEntryIndex - 1].tsDesWaterFlowRate = tmpFlowData;
         } // if PeakVolFlowRate is ever autosized this will need the else
         this->InitSizing = false; // if PeakVolFlowRate is ever autosized this will need to repeat
     }

@@ -1062,7 +1062,6 @@ void FindFirstLastPtr(EnergyPlusData &state, int &LoopType, int &LoopNum, int &A
     int DemandSideLoopNum;
     int DemandSideBranchNum;
     int DemandSideCompNum;
-    int SupplySideCompNum;
     int DemandSideLoopType;
     bool found;
 
@@ -1146,7 +1145,7 @@ void FindFirstLastPtr(EnergyPlusData &state, int &LoopType, int &LoopNum, int &A
         } else if (LoopType == 2) {
             for (int BranchNum = 1; BranchNum <= state.dataPlnt->VentRepCond[static_cast<int>(LoopSideLocation::Supply)](LoopNum).TotalBranches;
                  ++BranchNum) {
-                for (SupplySideCompNum = 1;
+                for (int SupplySideCompNum = 1;
                      SupplySideCompNum <=
                      state.dataPlnt->VentRepCond[static_cast<int>(LoopSideLocation::Supply)](LoopNum).Branch(BranchNum).TotalComponents;
                      ++SupplySideCompNum) {

@@ -367,7 +367,6 @@ namespace Sched {
         int EndDay;
         int StartPointer;
         int EndPointer;
-        int NumPointer;
         bool ErrorsFound(false);
         bool NumErrorFlag;
 
@@ -1010,9 +1009,9 @@ namespace Sched {
             int hr = 0;
             int begMin = 0;
             int endMin = MinutesPerItem - 1;
-            for (int NumFields = 2; NumFields <= NumNumbers; ++NumFields) {
+            for (int fieldNum = 2; fieldNum <= NumNumbers; ++fieldNum) {
                 for (int iMin = begMin; iMin <= endMin; ++iMin) {
-                    minuteVals[hr * Constant::iMinutesInHour + iMin] = Numbers(NumFields);
+                    minuteVals[hr * Constant::iMinutesInHour + iMin] = Numbers(fieldNum);
                 }
                 begMin = endMin + 1;
                 endMin += MinutesPerItem;
@@ -1190,24 +1189,24 @@ namespace Sched {
                 // Process for month, day
                 int StartMonth = int(Numbers(NumPointer + 1));
                 int StartDay = int(Numbers(NumPointer + 2));
-                int EndMonth = int(Numbers(NumPointer + 3));
-                int EndDay = int(Numbers(NumPointer + 4));
+                int endMonth = int(Numbers(NumPointer + 3));
+                int endDay = int(Numbers(NumPointer + 4));
                 NumPointer += 4;
-                int StartPointer = General::OrdinalDay(StartMonth, StartDay, 1);
-                int EndPointer = General::OrdinalDay(EndMonth, EndDay, 1);
-                if (StartPointer <= EndPointer) {
-                    for (int Count = StartPointer; Count <= EndPointer; ++Count) {
-                        ++daysInYear[Count];
-                        sched->weekScheds[Count] = weekSched;
+                int startPointer = General::OrdinalDay(StartMonth, StartDay, 1);
+                int endPointer = General::OrdinalDay(endMonth, endDay, 1);
+                if (startPointer <= endPointer) {
+                    for (int day = startPointer; day <= endPointer; ++day) {
+                        ++daysInYear[day];
+                        sched->weekScheds[day] = weekSched;
                     }
                 } else {
-                    for (int Count = StartPointer; Count <= 366; ++Count) {
-                        ++daysInYear[Count];
-                        sched->weekScheds[Count] = weekSched;
+                    for (int day = startPointer; day <= 366; ++day) {
+                        ++daysInYear[day];
+                        sched->weekScheds[day] = weekSched;
                     }
-                    for (int Count = 1; Count <= EndPointer; ++Count) {
-                        ++daysInYear[Count];
-                        sched->weekScheds[Count] = weekSched;
+                    for (int day = 1; day <= endPointer; ++day) {
+                        ++daysInYear[day];
+                        sched->weekScheds[day] = weekSched;
                     }
                 }
             }
@@ -1296,8 +1295,6 @@ namespace Sched {
                 ShowWarningItemNotFound(state, eoh, cAlphaFields(2), Alphas(2));
                 ShowContinueError(state, "Schedule will not be validated.");
             }
-
-            NumPointer = 0;
 
             std::array<int, 367> daysInYear;
             std::fill(daysInYear.begin() + 1, daysInYear.end(), 0);
@@ -1645,21 +1642,21 @@ namespace Sched {
             }
 
             // is it a sub-hourly schedule or not?
-            int MinutesPerItem = Constant::iMinutesInHour;
+            int minutesPerItem = Constant::iMinutesInHour;
             if (NumNumbers > 3) {
-                MinutesPerItem = int(Numbers(4));
+                minutesPerItem = int(Numbers(4));
                 // int NumExpectedItems = 1440 / MinutesPerItem;
-                if (mod(Constant::iMinutesInHour, MinutesPerItem) != 0) {
+                if (mod(Constant::iMinutesInHour, minutesPerItem) != 0) {
                     ShowSevereCustom(
-                        state, eoh, format("Requested {} field value ({}) not evenly divisible into 60", cNumericFields(4), MinutesPerItem));
+                        state, eoh, format("Requested {} field value ({}) not evenly divisible into 60", cNumericFields(4), minutesPerItem));
                     ErrorsFound = true;
                     continue;
                 }
             }
 
             int numHourlyValues = Numbers(3);
-            int rowLimitCount = (Numbers(3) * Constant::rMinutesInHour) / MinutesPerItem;
-            int hrLimitCount = Constant::iMinutesInHour / MinutesPerItem;
+            int rowLimitCnt = (Numbers(3) * Constant::rMinutesInHour) / minutesPerItem;
+            int hrLimitCount = Constant::iMinutesInHour / minutesPerItem;
 
             std::string contextString = format("{}=\"{}\", {}: ", CurrentModuleObject, Alphas(1), cAlphaFields(3));
 
@@ -1774,13 +1771,13 @@ namespace Sched {
                                              numerrors));
                 }
 
-                if (rowCnt < rowLimitCount) {
+                if (rowCnt < rowLimitCnt) {
                     ShowWarningCustom(state,
                                       eoh,
                                       format("less than {} hourly values read from file."
                                              "..Number read={}.",
                                              numHourlyValues,
-                                             (rowCnt * Constant::iMinutesInHour) / MinutesPerItem));
+                                             (rowCnt * Constant::iMinutesInHour) / minutesPerItem));
                 }
 
                 // process the data into the normal schedule data structures
@@ -1813,7 +1810,7 @@ namespace Sched {
                     // schedule is pointing to the week schedule
                     sched->weekScheds[iDay] = weekSched;
 
-                    if (MinutesPerItem == Constant::iMinutesInHour) {
+                    if (minutesPerItem == Constant::iMinutesInHour) {
                         for (int hr = 0; hr < Constant::iHoursInDay; ++hr) {
                             Real64 curHrVal = column_values[ifld]; // hourlyFileValues((hDay - 1) * 24 + jHour)
                             ++ifld;
@@ -1824,16 +1821,16 @@ namespace Sched {
                         }
                     } else { // Minutes Per Item < 60
                         for (int hr = 0; hr < Constant::iHoursInDay; ++hr) {
-                            int endMin = MinutesPerItem - 1;
+                            int endMin = minutesPerItem - 1;
                             int begMin = 0;
-                            for (int NumFields = 1; NumFields <= hrLimitCount; ++NumFields) {
+                            for (int fieldIdx = 1; fieldIdx <= hrLimitCount; ++fieldIdx) {
                                 for (int iMin = begMin; iMin <= endMin; ++iMin) {
                                     minuteVals[hr * Constant::iMinutesInHour + iMin] = column_values[ifld];
                                 }
 
                                 ++ifld;
                                 begMin = endMin + 1;
-                                endMin += MinutesPerItem;
+                                endMin += minutesPerItem;
                             }
                         }
 
@@ -2214,8 +2211,8 @@ namespace Sched {
 
             std::set<ReportLevel> reportLevelSet;
             //    RptSchedule=.FALSE.
-            for (int Count = 1; Count <= NumFields; ++Count) {
-                s_ip->getObjectItem(state, CurrentModuleObject, Count, Alphas, NumAlphas, Numbers, NumNumbers, Status);
+            for (int count = 1; count <= NumFields; ++count) {
+                s_ip->getObjectItem(state, CurrentModuleObject, count, Alphas, NumAlphas, Numbers, NumNumbers, Status);
 
                 ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
