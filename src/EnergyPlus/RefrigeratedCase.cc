@@ -15225,7 +15225,6 @@ void SecondaryLoopData::CalculateSecondary(EnergyPlusData &state, int const Seco
     RefrigerationLoad = 0.0;
     TotalHotDefrostCondCredit = 0.0;
     FlowVolNeeded = 0.0;
-    DeRate = false;
 
     // SCE page 28 gives a delta T for pipe heat gains
     //         (.25F each for supply and discharge) for use with mdot*cp.
@@ -15302,9 +15301,6 @@ void SecondaryLoopData::CalculateSecondary(EnergyPlusData &state, int const Seco
             TotalPumpPower = this->PumpTotRatedPower;
             TotalLoad += TotalPumpPower * this->PumpPowerToHeat;
             AtPartLoad = false;
-            if (this->NumCoils > 0) {
-                DeRate = true;
-            }
         } // flowvolneeded >= maxvolflow
     } else { // have SecFluidTypePhaseChange !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         if (TotalLoad >= this->MaxLoad) {
@@ -15312,9 +15308,6 @@ void SecondaryLoopData::CalculateSecondary(EnergyPlusData &state, int const Seco
             TotalLoad += TotalPumpPower * this->PumpPowerToHeat;
             VolFlowRate = this->MaxVolFlow;
             AtPartLoad = false;
-            if (this->NumCoils > 0) {
-                DeRate = true;
-            }
         }
     } // fluid type check for max load or max flow       >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 

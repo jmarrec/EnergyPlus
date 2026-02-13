@@ -4347,7 +4347,6 @@ void CLIPPOLY(EnergyPlusData &state,
     NVOUT = NV1; // First point-loop is the length of the subject polygon.
     INTFLAG = false;
     NVTEMP = 0;
-    KK = 0;
 
     // Check if clipping polygon is rectangle
     if (state.dataSysVars->SlaterBarsky) {

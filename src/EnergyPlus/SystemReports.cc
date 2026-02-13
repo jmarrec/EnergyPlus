@@ -1066,10 +1066,10 @@ void FindFirstLastPtr(EnergyPlusData &state, int &LoopType, int &LoopNum, int &A
     bool found;
 
     // Object Data
-    auto &LoopStack = state.dataSysRpts->LoopStack;
 
     return; // Autodesk:? Is this routine now an intentional NOOP?
 
+    auto &LoopStack = state.dataSysRpts->LoopStack;
     if (state.dataSysRpts->OneTimeFlag_FindFirstLastPtr) {
         LoopStack.allocate(state.dataSysRpts->MaxLoopArraySize);
         state.dataAirSystemsData->DemandSideConnect.allocate(state.dataSysRpts->MaxCompArraySize);
