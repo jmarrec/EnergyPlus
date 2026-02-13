@@ -66,9 +66,6 @@ struct EnergyPlusData;
 
 namespace OutputReportTabularAnnual {
 
-    constexpr Real64 veryLarge = 1.0E280;
-    constexpr Real64 verySmall = -1.0E280;
-
     // these functions are not in the class and act as an interface between procedural code and object oriented
 
     void GetInputTabularAnnual(EnergyPlusData &state);

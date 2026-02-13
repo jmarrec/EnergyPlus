@@ -74,6 +74,9 @@
 
 namespace EnergyPlus::OutputReportTabularAnnual {
 
+constexpr Real64 veryLarge = std::numeric_limits<Real64>::max();
+constexpr Real64 verySmall = std::numeric_limits<Real64>::min();
+
 void GetInputTabularAnnual(EnergyPlusData &state)
 {
     // Jason Glazer, August 2015
@@ -667,9 +670,6 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
     Real64 sumDuration;
     bool createBinRangeTable = false;
 
-    static constexpr Real64 storedMaxVal(std::numeric_limits<Real64>::max());
-    static constexpr Real64 storedMinVal(std::numeric_limits<Real64>::lowest());
-
     aggString = setupAggString();
     Real64 energyUnitsConversionFactor = AnnualTable::setEnergyUnitStringAndFactor(style.unitsStyle, energyUnitsString);
 
@@ -744,8 +744,8 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
             columnHead(columnRecount) = fldSt.m_colHead + curAggString + " [" + curUnits + ']';
             sumVal = 0.0;
             sumDuration = 0.0;
-            minVal = storedMaxVal;
-            maxVal = storedMinVal;
+            minVal = veryLarge;
+            maxVal = verySmall;
             for (unsigned int row = 0; row != m_objectNames.size(); ++row) {
                 if (fldSt.m_cell[row].indexesForKeyVar >= 0) {
                     if (fldSt.m_varAvgSum == OutputProcessor::StoreType::Average) {
@@ -780,10 +780,10 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
             } else {
                 tableBody(columnRecount, rowSumAvg) = OutputReportTabular::RealToStr(style.formatReals, sumVal, fldSt.m_showDigits);
             }
-            if (minVal != storedMaxVal) {
+            if (minVal != veryLarge) {
                 tableBody(columnRecount, rowMax) = OutputReportTabular::RealToStr(style.formatReals, minVal, fldSt.m_showDigits);
             }
-            if (maxVal != storedMinVal) {
+            if (maxVal != verySmall) {
                 tableBody(columnRecount, rowMin) = OutputReportTabular::RealToStr(style.formatReals, maxVal, fldSt.m_showDigits);
             }
             break;
@@ -796,8 +796,8 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
         case AnnualFieldSet::AggregationKind::hoursNonNegative: {
             columnHead(columnRecount) = fldSt.m_colHead + curAggString + " [HOURS]";
             sumVal = 0.0;
-            minVal = storedMaxVal;
-            maxVal = storedMinVal;
+            minVal = veryLarge;
+            maxVal = verySmall;
             for (unsigned int row = 0; row != m_objectNames.size(); ++row) {
                 curVal = fldSt.m_cell[row].result;
                 curVal = curVal * curConversionFactor + curConversionOffset;
@@ -811,10 +811,10 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
                 }
             }
             tableBody(columnRecount, rowSumAvg) = OutputReportTabular::RealToStr(style.formatReals, sumVal, fldSt.m_showDigits);
-            if (minVal != storedMaxVal) {
+            if (minVal != veryLarge) {
                 tableBody(columnRecount, rowMax) = OutputReportTabular::RealToStr(style.formatReals, minVal, fldSt.m_showDigits);
             }
-            if (maxVal != storedMinVal) {
+            if (maxVal != verySmall) {
                 tableBody(columnRecount, rowMin) = OutputReportTabular::RealToStr(style.formatReals, maxVal, fldSt.m_showDigits);
             }
             break;
@@ -825,8 +825,8 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
             }
             fixUnitsPerSecond(curUnits, curConversionFactor);
             columnHead(columnRecount) = fldSt.m_colHead + curAggString + " [" + curUnits + ']';
-            minVal = storedMaxVal;
-            maxVal = storedMinVal;
+            minVal = veryLarge;
+            maxVal = verySmall;
             for (unsigned int row = 0; row != m_objectNames.size(); ++row) {
                 curVal = fldSt.m_cell[row].result;
                 curVal = curVal * curConversionFactor + curConversionOffset;
@@ -838,10 +838,10 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
                     minVal = curVal;
                 }
             }
-            if (minVal != storedMaxVal) {
+            if (minVal != veryLarge) {
                 tableBody(columnRecount, rowMin) = OutputReportTabular::RealToStr(style.formatReals, minVal, fldSt.m_showDigits);
             }
-            if (maxVal != storedMinVal) {
+            if (maxVal != verySmall) {
                 tableBody(columnRecount, rowMax) = OutputReportTabular::RealToStr(style.formatReals, maxVal, fldSt.m_showDigits);
             }
             break;
@@ -856,8 +856,8 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
             fixUnitsPerSecond(curUnits, curConversionFactor);
             columnHead(columnRecount - 1) = fldSt.m_colHead + curAggString + " [" + curUnits + ']';
             columnHead(columnRecount) = fldSt.m_colHead + " {TIMESTAMP}";
-            minVal = storedMaxVal;
-            maxVal = storedMinVal;
+            minVal = veryLarge;
+            maxVal = verySmall;
             for (unsigned int row = 0; row != m_objectNames.size(); ++row) {
                 curVal = fldSt.m_cell[row].result;
                 if ((curVal < veryLarge) && (curVal > verySmall)) {
@@ -1004,9 +1004,6 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
             case AnnualFieldSet::AggregationKind::hoursInTenBinsMinToMax:
             case AnnualFieldSet::AggregationKind::hoursInTenBinsZeroToMax:
             case AnnualFieldSet::AggregationKind::hoursInTenBinsMinToZero: {
-                // Clear/fill defaults (adjust to your table type’s API if needed).
-                // If tableBodyRange supports scalar fill with string, keep it; otherwise loop-fill.
-                // tableBodyRange = ""; // <-- often unsafe/unsupported; prefer explicit fill if available.
                 const Real64 binBottom = fldStIt.m_bottomBinValue;
                 const Real64 binTop = fldStIt.m_topBinValue;
                 constexpr int numBins = 10;
@@ -1014,7 +1011,7 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
                 // Column headers
                 for (int iBin = 0; iBin < numBins; ++iBin) {
                     const char binLetter = static_cast<char>('A' + iBin);
-                    colHeadRange(iBin + 1) = std::string("BIN ") + binLetter; // FIXED
+                    colHeadRange(iBin + 1) = std::string("BIN ") + binLetter;
                 }
                 // Bin bounds
                 for (int iBin = 0; iBin < numBins; ++iBin) {
@@ -1307,10 +1304,7 @@ void AnnualTable::computeBinColumns(EnergyPlusData &state, OutputReportTabular::
                 fldStIt.m_bottomBinValue = 0.0;
                 break;
             case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusTwoStdDev:
-                // (existing behavior: no explicit top/bottom assignment here)
-                break;
             case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusThreeStdDev:
-                // (existing behavior: no explicit top/bottom assignment here)
                 break;
             default:
                 break;
