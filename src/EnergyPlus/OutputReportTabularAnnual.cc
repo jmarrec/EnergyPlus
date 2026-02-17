@@ -75,7 +75,7 @@
 namespace EnergyPlus::OutputReportTabularAnnual {
 
 constexpr Real64 veryLarge = std::numeric_limits<Real64>::max();
-constexpr Real64 verySmall = std::numeric_limits<Real64>::min();
+constexpr Real64 verySmall = std::numeric_limits<Real64>::lowest();
 
 void GetInputTabularAnnual(EnergyPlusData &state)
 {
@@ -187,7 +187,6 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
     std::transform(filterFieldUpper.begin(), filterFieldUpper.end(), filterFieldUpper.begin(), ::toupper);
     const bool useFilter = !m_filter.empty();
 
-    // Gather key lists for each field set and build the union of all keys (optionally filtered)
     for (auto &fldSt : m_annualFields) {
         const int keyCount = fldSt.getVariableKeyCountandTypeFromFldSt(state, typeVar, avgSumVar, stepTypeVar, unitsVar);
         fldSt.getVariableKeysFromFldSt(state, typeVar, keyCount, fldSt.m_namesOfKeys, fldSt.m_indexesForKeyVar);
@@ -228,11 +227,11 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
             switch (fldSt.m_aggregate) {
             case AnnualFieldSet::AggregationKind::maximum:
             case AnnualFieldSet::AggregationKind::maximumDuringHoursShown:
-                fldSt.m_cell[tableRowIndex].result = -9.9e99;
+                fldSt.m_cell[tableRowIndex].result = verySmall;
                 break;
             case AnnualFieldSet::AggregationKind::minimum:
             case AnnualFieldSet::AggregationKind::minimumDuringHoursShown:
-                fldSt.m_cell[tableRowIndex].result = 9.9e99;
+                fldSt.m_cell[tableRowIndex].result = veryLarge;
                 break;
             default:
                 fldSt.m_cell[tableRowIndex].result = 0.0;
@@ -594,11 +593,11 @@ void AnnualTable::resetGathering()
             switch (fldSt.m_aggregate) {
             case AnnualFieldSet::AggregationKind::maximum:
             case AnnualFieldSet::AggregationKind::maximumDuringHoursShown:
-                cell.result = -9.9e99;
+                cell.result = verySmall;
                 break;
             case AnnualFieldSet::AggregationKind::minimum:
             case AnnualFieldSet::AggregationKind::minimumDuringHoursShown:
-                cell.result = 9.9e99;
+                cell.result = veryLarge;
                 break;
             default:
                 cell.result = 0.0;

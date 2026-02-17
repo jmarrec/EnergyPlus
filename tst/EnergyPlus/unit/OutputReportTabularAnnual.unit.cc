@@ -332,8 +332,9 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults_MinMaxHrsShown
     EXPECT_EQ(fieldSetParams[13], "0.000000");             // m_cell[0].result
 
     fieldSetParams = annualTables.back().inspectTableFieldSets(1);
-    EXPECT_EQ(fieldSetParams[0], "ELECTRICITY:MYTH");                  // m_colHead
-    EXPECT_EQ(fieldSetParams[13].std::string::substr(0, 6), "-99000"); // m_cell[0].result
+    EXPECT_EQ(fieldSetParams[0], "ELECTRICITY:MYTH"); // m_colHead
+    std::string const limit = std::to_string(std::numeric_limits<Real64>::lowest());
+    EXPECT_EQ(fieldSetParams[13].std::string::substr(0, 6), limit.substr(0, 6)); // m_cell[0].result
 
     meter1->CurTSValue = 15.;
     meter2->CurTSValue = 55.;
