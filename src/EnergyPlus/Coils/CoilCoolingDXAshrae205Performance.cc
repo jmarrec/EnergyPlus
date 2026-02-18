@@ -104,7 +104,7 @@ CoilCoolingDX205Performance::CoilCoolingDX205Performance(EnergyPlus::EnergyPlusD
             ShowFatalError(state, "Program terminates due to the missing ASHRAE 205 RS0004 representation file.");
         }
         std::shared_ptr<EnergyPlusLogger> coil_logger = std::make_shared<EnergyPlusLogger>();
-        logger_context = {&state, EnergyPlus::format("{} \"{}\"", state.dataIPShortCut->cCurrentModuleObject, name)};
+        logger_context = std::make_pair(&state, EnergyPlus::format("{} \"{}\"", state.dataIPShortCut->cCurrentModuleObject, name));
         coil_logger->set_message_context(&logger_context);
         representation =
             std::dynamic_pointer_cast<rs0004_ns::RS0004>(RSInstanceFactory::create("RS0004", rep_file_path.string().c_str(), coil_logger));

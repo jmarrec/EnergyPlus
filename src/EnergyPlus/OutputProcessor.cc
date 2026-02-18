@@ -4777,10 +4777,10 @@ void ProduceRDDMDD(EnergyPlusData &state)
                 (ddVar->units == Constant::Units::customEMS) ? ddVar->unitNameCustomEMS : Constant::unitNames[(int)ddVar->units];
             if (op->ProduceReportVDD == ReportVDD::Yes) {
                 print(state.files.rdd, "{},{},{} [{}]\n", timeStepName, storeTypeName, varName, unitName);
-                rf->RDD.push_back(format("{},{},{} [{}]", timeStepName, storeTypeName, varName, unitName));
+                rf->RDD.push_back(EnergyPlus::format("{},{},{} [{}]", timeStepName, storeTypeName, varName, unitName));
             } else {
                 print(state.files.rdd, "Output:Variable,*,{},hourly; !- {} {} [{}]\n", varName, timeStepName, storeTypeName, unitName);
-                rf->RDD.push_back(format("{},{},{} [{}]", timeStepName, storeTypeName, varName, unitName));
+                rf->RDD.push_back(EnergyPlus::format("{},{},{} [{}]", timeStepName, storeTypeName, varName, unitName));
             }
 
             ddVar->ReportedOnDDFile = true;
@@ -4794,10 +4794,10 @@ void ProduceRDDMDD(EnergyPlusData &state)
 
                     if (op->ProduceReportVDD == ReportVDD::Yes) {
                         print(state.files.rdd, "{},{},{} [{}]\n", timeStepName, storeTypeName, varName, unitName);
-                        rf->RDD.push_back(format("{},{},{} [{}]", timeStepName, storeTypeName, varName, unitName));
+                        rf->RDD.push_back(EnergyPlus::format("{},{},{} [{}]", timeStepName, storeTypeName, varName, unitName));
                     } else {
                         print(state.files.rdd, "Output:Variable,*,{},hourly; !- {} {} [{}]\n", varName, timeStepName, storeTypeName, unitName);
-                        rf->RDD.push_back(format("{},{},{} [{}]", timeStepName, storeTypeName, varName, unitName));
+                        rf->RDD.push_back(EnergyPlus::format("{},{},{} [{}]", timeStepName, storeTypeName, varName, unitName));
                     }
                     ddVar->ReportedOnDDFile = true;
                 } // while (ddVar->Next != 0)
@@ -4813,12 +4813,12 @@ void ProduceRDDMDD(EnergyPlusData &state)
         std::string_view unitName = Constant::unitNames[(int)meter->units];
         if (op->ProduceReportVDD == ReportVDD::Yes) {
             print(state.files.mdd, "Zone,Meter,{} [{}]\n", meter->Name, unitName);
-            rf->MDD.push_back(format("Zone,Meter,{} [{}]", meter->Name, unitName));
+            rf->MDD.push_back(EnergyPlus::format("Zone,Meter,{} [{}]", meter->Name, unitName));
         } else if (op->ProduceReportVDD == ReportVDD::IDF) {
             print(state.files.mdd, "Output:Meter,{},hourly; !- [{}]\n", meter->Name, unitName);
-            rf->MDD.push_back(format("Output:Meter,{} [{}]", meter->Name, unitName));
+            rf->MDD.push_back(EnergyPlus::format("Output:Meter,{} [{}]", meter->Name, unitName));
             print(state.files.mdd, "Output:Meter:Cumulative,{},hourly; !- [{}]\n", meter->Name, unitName);
-            rf->MDD.push_back(format("Output:Meter:Cumulative,{} [{}]", meter->Name, unitName));
+            rf->MDD.push_back(EnergyPlus::format("Output:Meter:Cumulative,{} [{}]", meter->Name, unitName));
         }
     }
     state.files.mdd.close();

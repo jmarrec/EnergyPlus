@@ -729,8 +729,10 @@ void GetElectricEIRChillerInput(EnergyPlusData &state)
                 ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "Energy input ratio as a function of part-load ratio curve shows negative values.");
                 ShowContinueError(state, "EIR as a function of PLR curve output at various part-load ratios shown below:");
-                ShowContinueError(state, fmt::format("PLR          = {:7." + std::to_string(DecimalPrecision) + "F}", fmt::join(PLRArray, ",")));
-                ShowContinueError(state, fmt::format("Curve Output = {:7." + std::to_string(DecimalPrecision) + "F}", fmt::join(CurveValArray, ",")));
+                ShowContinueError(
+                    state, fmt::format(fmt::runtime("PLR          = {:7." + std::to_string(DecimalPrecision) + "F}"), fmt::join(PLRArray, ",")));
+                ShowContinueError(
+                    state, fmt::format(fmt::runtime("Curve Output = {:7." + std::to_string(DecimalPrecision) + "F}"), fmt::join(CurveValArray, ",")));
                 ErrorsFound = true;
             }
         }

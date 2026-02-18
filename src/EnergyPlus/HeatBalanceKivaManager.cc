@@ -80,7 +80,7 @@ namespace EnergyPlus::HeatBalanceKivaManager {
 void kivaErrorCallback(const int messageType, const std::string message, void *contextPtr)
 {
     if (contextPtr == nullptr) {
-        throw FatalError(format("Unhandled Kiva Error: {}", message));
+        throw FatalError(EnergyPlus::format("Unhandled Kiva Error: {}", message));
     }
     std::string fullMessage;
     std::pair<EnergyPlusData *, std::string> contextPair = *(std::pair<EnergyPlusData *, std::string> *)contextPtr;

@@ -1391,13 +1391,8 @@ void EIRPlantLoopHeatPump::sizeLoadSide(EnergyPlusData &state)
                     Real64 hardSizedCapacity = this->referenceCapacity;
                     if (state.dataPlnt->PlantFinalSizesOkayToReport) {
                         if (state.dataGlobal->DoPlantSizing) {
-                            BaseSizer::reportSizerOutput(state,
-                                                         typeName,
-                                                         this->name,
-                                                         fmt::format(designCapacityKW),
-                                                         tmpCapacity,
-                                                         fmt::format(userCapacityKW),
-                                                         hardSizedCapacity);
+                            BaseSizer::reportSizerOutput(
+                                state, typeName, this->name, designCapacityKW, tmpCapacity, userCapacityKW, hardSizedCapacity);
                         } else {
                             BaseSizer::reportSizerOutput(state, typeName, this->name, userCapacityKW, hardSizedCapacity);
                         }

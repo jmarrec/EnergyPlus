@@ -770,7 +770,7 @@ InputProcessor::MaxFields InputProcessor::findMaxFields(
                 continue;
             }
             for (std::size_t i = maxFields.max_fields; i < legacy_idd_fields.size(); ++i) {
-                if (field_key == legacy_idd_fields[i]) {
+                if (field_key == legacy_idd_fields[i].get<std::string>()) {
                     maxFields.max_fields = (i + 1);
                 }
             }
@@ -788,7 +788,7 @@ InputProcessor::MaxFields InputProcessor::findMaxFields(
                     for (auto const &ext : exts.value().items()) {
                         auto const &ext_key = ext.key();
                         for (std::size_t i = max_extensible_field; i < legacy_idd_extensibles.size(); ++i) {
-                            if (ext_key == legacy_idd_extensibles[i]) {
+                            if (ext_key == legacy_idd_extensibles[i].get<std::string>()) {
                                 max_extensible_field = (i + 1);
                             }
                         }
