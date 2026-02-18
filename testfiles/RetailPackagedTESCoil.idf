@@ -7949,7 +7949,8 @@
     SET SumReliefMCT = SumReliefMCT + (h_Relief_4 * mdotRelief_4 );  !- <none>
 
   EnergyManagementSystem:Program,
-    IntializeParameters,     !- Name
+    InitializeParameters,    !- Name
+    Set Troof = 0.0,         !- <none>
     Set CV_Height = 1.0,     !- Program Line 1
     Set CV_effWidth = 40.0,  !- Program Line 2
     Set CV_crossSectArea = CV_Height * CV_effWidth,  !- <none>
@@ -8101,7 +8102,7 @@
   EnergyManagementSystem:ProgramCallingManager,
     Model Flat Roof Microclimate,  !- Name
     BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point
-    IntializeParameters,     !- Program Name 1
+    InitializeParameters,    !- Program Name 1
     ModelFlatRoofMicroClime, !- Program Name 2
     ApplyMicroClimeActuators;!- Program Name 3
 
@@ -8114,13 +8115,13 @@
     Run SumIntakeMassFlowHeatCap,  !- <none>
     Run SumReliefAirMCTterm, !- <none>
     Run CalcWindTerms,       !- <none>
-    IF Ta < 2.0,             !- <none>
-    Set Troof = Ta,          !- <none>
-    ENDIF,                   !- <none>
     Run CalcBouyancyTerms,   !- <none>
     Set Numerator = WindMCT + NatBouyMCT + SumHATroof + QdotCond + SumReliefMCT,  !- <none>
     Set Denominator = WindMC + NatBouyMC + SumHAroof + SumIntakeMdotCp,  !- <none>
     Set Troof = Numerator / Denominator,  !- <none>
+    IF Ta < 2.0,             !- <none>
+    Set Troof = Ta,          !- <none>
+    ENDIF,                   !- <none>
     IF Troof < Twb,          !- <none>
     Set Twb = Troof - 0.2,   !- <none>
     ENDIF;                   !- <none>
