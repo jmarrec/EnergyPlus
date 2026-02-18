@@ -190,8 +190,9 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
             if (Util::SameString(thisEarthTubePars.nameParameters, state.dataEarthTube->EarthTubePars(otherParams).nameParameters)) {
                 ShowSevereError(
                     state,
-                    format("{}: {} = {} is not a unique name.", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaFieldNames(1), s_ipsc->cAlphaArgs(1)));
-                ShowContinueError(state, format("Check the other {} names for a duplicate.", s_ipsc->cCurrentModuleObject));
+                    EnergyPlus::format(
+                        "{}: {} = {} is not a unique name.", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaFieldNames(1), s_ipsc->cAlphaArgs(1)));
+                ShowContinueError(state, EnergyPlus::format("Check the other {} names for a duplicate.", s_ipsc->cCurrentModuleObject));
                 ErrorsFound = true;
             }
         }
@@ -228,7 +229,8 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
         // First Alpha is Zone Name
         thisEarthTube.ZonePtr = Util::FindItemInList(s_ipsc->cAlphaArgs(1), state.dataHeatBal->Zone);
         if (thisEarthTube.ZonePtr == 0) {
-            ShowSevereError(state, format("{}: {} not found={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaFieldNames(1), s_ipsc->cAlphaArgs(1)));
+            ShowSevereError(
+                state, EnergyPlus::format("{}: {} not found={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaFieldNames(1), s_ipsc->cAlphaArgs(1)));
             ErrorsFound = true;
         }
 
@@ -247,26 +249,26 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
         thisEarthTube.MinTemperature = s_ipsc->rNumericArgs(2);
         if ((thisEarthTube.MinTemperature < -EarthTubeTempLimit) || (thisEarthTube.MinTemperature > EarthTubeTempLimit)) {
             ShowSevereError(state,
-                            format("{}: {}={} must have a minimum temperature between -{:.0R}C and {:.0R}C",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   EarthTubeTempLimit,
-                                   EarthTubeTempLimit));
-            ShowContinueError(state, format("Entered value={:.0R}", thisEarthTube.MinTemperature));
+                            EnergyPlus::format("{}: {}={} must have a minimum temperature between -{:.0R}C and {:.0R}C",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               EarthTubeTempLimit,
+                                               EarthTubeTempLimit));
+            ShowContinueError(state, EnergyPlus::format("Entered value={:.0R}", thisEarthTube.MinTemperature));
             ErrorsFound = true;
         }
 
         thisEarthTube.MaxTemperature = s_ipsc->rNumericArgs(3);
         if ((thisEarthTube.MaxTemperature < -EarthTubeTempLimit) || (thisEarthTube.MaxTemperature > EarthTubeTempLimit)) {
             ShowSevereError(state,
-                            format("{}: {}={} must have a maximum temperature between -{:.0R}C and {:.0R}C",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   EarthTubeTempLimit,
-                                   EarthTubeTempLimit));
-            ShowContinueError(state, format("Entered value={:.0R}", thisEarthTube.MaxTemperature));
+                            EnergyPlus::format("{}: {}={} must have a maximum temperature between -{:.0R}C and {:.0R}C",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               EarthTubeTempLimit,
+                                               EarthTubeTempLimit));
+            ShowContinueError(state, EnergyPlus::format("Entered value={:.0R}", thisEarthTube.MaxTemperature));
             ErrorsFound = true;
         }
 
@@ -286,48 +288,48 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
         thisEarthTube.FanPressure = s_ipsc->rNumericArgs(5);
         if (thisEarthTube.FanPressure < 0.0) {
             ShowSevereError(state,
-                            format("{}: {}={}, {} must be positive, entered value={:.2R}",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   s_ipsc->cNumericFieldNames(5),
-                                   thisEarthTube.FanPressure));
+                            EnergyPlus::format("{}: {}={}, {} must be positive, entered value={:.2R}",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               s_ipsc->cNumericFieldNames(5),
+                                               thisEarthTube.FanPressure));
             ErrorsFound = true;
         }
 
         thisEarthTube.FanEfficiency = s_ipsc->rNumericArgs(6);
         if ((thisEarthTube.FanEfficiency <= 0.0) || (thisEarthTube.FanEfficiency > 1.0)) {
             ShowSevereError(state,
-                            format("{}: {}={}, {} must be greater than zero and less than or equal to one, entered value={:.2R}",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   s_ipsc->cNumericFieldNames(6),
-                                   thisEarthTube.FanEfficiency));
+                            EnergyPlus::format("{}: {}={}, {} must be greater than zero and less than or equal to one, entered value={:.2R}",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               s_ipsc->cNumericFieldNames(6),
+                                               thisEarthTube.FanEfficiency));
             ErrorsFound = true;
         }
 
         thisEarthTube.r1 = s_ipsc->rNumericArgs(7);
         if (thisEarthTube.r1 <= 0.0) {
             ShowSevereError(state,
-                            format("{}: {}={}, {} must be positive, entered value={:.2R}",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   s_ipsc->cNumericFieldNames(7),
-                                   thisEarthTube.r1));
+                            EnergyPlus::format("{}: {}={}, {} must be positive, entered value={:.2R}",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               s_ipsc->cNumericFieldNames(7),
+                                               thisEarthTube.r1));
             ErrorsFound = true;
         }
 
         thisEarthTube.r2 = s_ipsc->rNumericArgs(8);
         if (thisEarthTube.r2 <= 0.0) {
             ShowSevereError(state,
-                            format("{}: {}={}, {} must be positive, entered value={:.2R}",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   s_ipsc->cNumericFieldNames(8),
-                                   thisEarthTube.r2));
+                            EnergyPlus::format("{}: {}={}, {} must be positive, entered value={:.2R}",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               s_ipsc->cNumericFieldNames(8),
+                                               thisEarthTube.r2));
             ErrorsFound = true;
         }
 
@@ -336,51 +338,51 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
         thisEarthTube.PipeLength = s_ipsc->rNumericArgs(9);
         if (thisEarthTube.PipeLength <= 0.0) {
             ShowSevereError(state,
-                            format("{}: {}={}, {} must be positive, entered value={:.2R}",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   s_ipsc->cNumericFieldNames(9),
-                                   thisEarthTube.PipeLength));
+                            EnergyPlus::format("{}: {}={}, {} must be positive, entered value={:.2R}",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               s_ipsc->cNumericFieldNames(9),
+                                               thisEarthTube.PipeLength));
             ErrorsFound = true;
         }
 
         thisEarthTube.PipeThermCond = s_ipsc->rNumericArgs(10);
         if (thisEarthTube.PipeThermCond <= 0.0) {
             ShowSevereError(state,
-                            format("{}: {}={}, {} must be positive, entered value={:.2R}",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   s_ipsc->cNumericFieldNames(10),
-                                   thisEarthTube.PipeThermCond));
+                            EnergyPlus::format("{}: {}={}, {} must be positive, entered value={:.2R}",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               s_ipsc->cNumericFieldNames(10),
+                                               thisEarthTube.PipeThermCond));
             ErrorsFound = true;
         }
 
         thisEarthTube.z = s_ipsc->rNumericArgs(11);
         if (thisEarthTube.z <= 0.0) {
             ShowSevereError(state,
-                            format("{}: {}={}, {} must be positive, entered value={:.2R}",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   s_ipsc->cNumericFieldNames(11),
-                                   thisEarthTube.z));
+                            EnergyPlus::format("{}: {}={}, {} must be positive, entered value={:.2R}",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               s_ipsc->cNumericFieldNames(11),
+                                               thisEarthTube.z));
             ErrorsFound = true;
         }
         if (thisEarthTube.z <= (thisEarthTube.r1 + thisEarthTube.r2 + thisEarthTube.r3)) {
             // Note that code in initEarthTubeVertical assumes that this check remains in place--if this ever gets changed,
             // code in initEarthTubeVertical must be modified
             ShowSevereError(state,
-                            format("{}: {}={}, {} must be greater than 3*{} + {} entered value={:.2R} ref sum={:.2R}",
-                                   s_ipsc->cCurrentModuleObject,
-                                   s_ipsc->cAlphaFieldNames(1),
-                                   s_ipsc->cAlphaArgs(1),
-                                   s_ipsc->cNumericFieldNames(11),
-                                   s_ipsc->cNumericFieldNames(7),
-                                   s_ipsc->cNumericFieldNames(8),
-                                   thisEarthTube.z,
-                                   thisEarthTube.r1 + thisEarthTube.r2 + thisEarthTube.r3));
+                            EnergyPlus::format("{}: {}={}, {} must be greater than 3*{} + {} entered value={:.2R} ref sum={:.2R}",
+                                               s_ipsc->cCurrentModuleObject,
+                                               s_ipsc->cAlphaFieldNames(1),
+                                               s_ipsc->cAlphaArgs(1),
+                                               s_ipsc->cNumericFieldNames(11),
+                                               s_ipsc->cNumericFieldNames(7),
+                                               s_ipsc->cNumericFieldNames(8),
+                                               thisEarthTube.z,
+                                               thisEarthTube.r1 + thisEarthTube.r2 + thisEarthTube.r3));
             ErrorsFound = true;
         }
 
@@ -572,7 +574,7 @@ void GetEarthTube(EnergyPlusData &state, bool &ErrorsFound) // If errors found i
     CheckEarthTubesInZones(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
 
     if (ErrorsFound) {
-        ShowFatalError(state, format("{}: Errors getting input.  Program terminates.", s_ipsc->cCurrentModuleObject));
+        ShowFatalError(state, EnergyPlus::format("{}: Errors getting input.  Program terminates.", s_ipsc->cCurrentModuleObject));
     }
 }
 
@@ -587,8 +589,8 @@ void CheckEarthTubesInZones(EnergyPlusData &state,
     for (int Loop = 1; Loop <= numEarthTubes - 1; ++Loop) {
         for (int Loop1 = Loop + 1; Loop1 <= numEarthTubes; ++Loop1) {
             if (state.dataEarthTube->EarthTubeSys(Loop).ZonePtr == state.dataEarthTube->EarthTubeSys(Loop1).ZonePtr) {
-                ShowSevereError(state, format("{} has more than one {} associated with it.", ZoneName, FieldName));
-                ShowContinueError(state, format("Only one {} is allowed per zone.  Check the definitions of {}", FieldName, FieldName));
+                ShowSevereError(state, EnergyPlus::format("{} has more than one {} associated with it.", ZoneName, FieldName));
+                ShowContinueError(state, EnergyPlus::format("Only one {} is allowed per zone.  Check the definitions of {}", FieldName, FieldName));
                 ShowContinueError(state, "in your input file and make sure that there is only one defined for each zone.");
                 ErrorsFound = true;
             }
@@ -705,14 +707,14 @@ void initEarthTubeVertical(EnergyPlusData &state)
             auto &zone = state.dataHeatBal->Zone(thisEarthTube.ZonePtr);
             for (int nodeNum = 1; nodeNum <= thisEarthTube.totNodes; ++nodeNum) {
                 SetupOutputVariable(state,
-                                    format("Earth Tube Node Temperature {}", nodeNum),
+                                    EnergyPlus::format("Earth Tube Node Temperature {}", nodeNum),
                                     Constant::Units::C,
                                     thisEarthTube.tCurrent[nodeNum - 1],
                                     OutputProcessor::TimeStepType::Zone,
                                     OutputProcessor::StoreType::Average,
                                     zone.Name);
                 SetupOutputVariable(state,
-                                    format("Earth Tube Undisturbed Ground Temperature {}", nodeNum),
+                                    EnergyPlus::format("Earth Tube Undisturbed Ground Temperature {}", nodeNum),
                                     Constant::Units::C,
                                     thisEarthTube.tUndist[nodeNum - 1],
                                     OutputProcessor::TimeStepType::Zone,

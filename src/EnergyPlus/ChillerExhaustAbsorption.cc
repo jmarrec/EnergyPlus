@@ -125,7 +125,7 @@ ExhaustAbsorberSpecs *ExhaustAbsorberSpecs::factory(EnergyPlusData &state, std::
         return thisObj;
     }
     // If we didn't find it, fatal
-    ShowFatalError(state, format("LocalExhaustAbsorberFactory: Error getting inputs for comp named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state, EnergyPlus::format("LocalExhaustAbsorberFactory: Error getting inputs for comp named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -190,7 +190,7 @@ void ExhaustAbsorberSpecs::simulate(
         }
     } else {
         // Error, nodes do not match
-        ShowSevereError(state, format("Invalid call to Exhaust Absorber Chiller {}", this->Name));
+        ShowSevereError(state, EnergyPlus::format("Invalid call to Exhaust Absorber Chiller {}", this->Name));
         ShowContinueError(state, "Node connections in branch are not consistent with object nodes.");
         ShowFatalError(state, "Preceding conditions cause termination.");
     }
@@ -242,7 +242,7 @@ void ExhaustAbsorberSpecs::getDesignCapacities(
 
     if (!matchfound) {
         // Error, nodes do not match
-        ShowSevereError(state, format("SimExhaustAbsorber: Invalid call to Exhaust Absorption Chiller-Heater {}", this->Name));
+        ShowSevereError(state, EnergyPlus::format("SimExhaustAbsorber: Invalid call to Exhaust Absorption Chiller-Heater {}", this->Name));
         ShowContinueError(state, "Node connections in branch are not consistent with object nodes.");
         ShowFatalError(state, "Preceding conditions cause termination.");
     } // Operate as Chiller or Heater
@@ -302,7 +302,7 @@ void GetExhaustAbsorberInput(EnergyPlusData &state)
     int NumExhaustAbsorbers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
 
     if (NumExhaustAbsorbers <= 0) {
-        ShowSevereError(state, format("No {} equipment found in input file", cCurrentModuleObject));
+        ShowSevereError(state, EnergyPlus::format("No {} equipment found in input file", cCurrentModuleObject));
         Get_ErrorsFound = true;
     }
 
@@ -394,7 +394,7 @@ void GetExhaustAbsorberInput(EnergyPlusData &state)
         BranchNodeConnections::TestCompSet(
             state, cCurrentModuleObject, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(6), s_ipsc->cAlphaArgs(7), "Hot Water Nodes");
         if (Get_ErrorsFound) {
-            ShowFatalError(state, format("Errors found in processing node input for {}={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowFatalError(state, EnergyPlus::format("Errors found in processing node input for {}={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             Get_ErrorsFound = false;
         }
 
@@ -479,7 +479,8 @@ void GetExhaustAbsorberInput(EnergyPlusData &state)
         }
 
         if (Get_ErrorsFound) {
-            ShowFatalError(state, format("Errors found in processing curve input for {}={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowFatalError(state,
+                           EnergyPlus::format("Errors found in processing curve input for {}={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             Get_ErrorsFound = false;
         }
         if (Util::SameString(s_ipsc->cAlphaArgs(15), "LeavingCondenser")) {
@@ -488,8 +489,8 @@ void GetExhaustAbsorberInput(EnergyPlusData &state)
             thisChiller.isEnterCondensTemp = true;
         } else {
             thisChiller.isEnterCondensTemp = true;
-            ShowWarningError(state, format("Invalid {}={}", s_ipsc->cAlphaFieldNames(15), s_ipsc->cAlphaArgs(15)));
-            ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowWarningError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(15), s_ipsc->cAlphaArgs(15)));
+            ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             ShowContinueError(state, "resetting to ENTERING-CONDENSER, simulation continues");
         }
         // Assign Other Parameters
@@ -499,19 +500,19 @@ void GetExhaustAbsorberInput(EnergyPlusData &state)
             thisChiller.isWaterCooled = true;
         } else {
             thisChiller.isWaterCooled = true;
-            ShowWarningError(state, format("Invalid {}={}", s_ipsc->cAlphaFieldNames(16), s_ipsc->cAlphaArgs(16)));
-            ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowWarningError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(16), s_ipsc->cAlphaArgs(16)));
+            ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             ShowContinueError(state, "resetting to WATER-COOLED, simulation continues");
         }
         if (!thisChiller.isEnterCondensTemp && !thisChiller.isWaterCooled) {
             thisChiller.isEnterCondensTemp = true;
-            ShowWarningError(state, format("{}=\"{}\", invalid value", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+            ShowWarningError(state, EnergyPlus::format("{}=\"{}\", invalid value", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
             ShowContinueError(state, "Invalid to have both LeavingCondenser and AirCooled.");
             ShowContinueError(state, "resetting to EnteringCondenser, simulation continues");
         }
         if (thisChiller.isWaterCooled) {
             if (s_ipsc->lAlphaFieldBlanks(5)) {
-                ShowSevereError(state, format("{}=\"{}\", invalid value", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
+                ShowSevereError(state, EnergyPlus::format("{}=\"{}\", invalid value", cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ShowContinueError(state, "For WaterCooled chiller the condenser outlet node is required.");
                 Get_ErrorsFound = true;
             }
@@ -552,7 +553,7 @@ void GetExhaustAbsorberInput(EnergyPlusData &state)
             // Connection not required for air or evap cooled condenser so no call to TestCompSet here
             OutAirNodeManager::CheckAndAddAirNodeNumber(state, thisChiller.CondReturnNodeNum, Okay);
             if (!Okay) {
-                ShowWarningError(state, format("{}, Adding OutdoorAir:Node={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(4)));
+                ShowWarningError(state, EnergyPlus::format("{}, Adding OutdoorAir:Node={}", cCurrentModuleObject, s_ipsc->cAlphaArgs(4)));
             }
         }
 
@@ -570,7 +571,7 @@ void GetExhaustAbsorberInput(EnergyPlusData &state)
     }
 
     if (Get_ErrorsFound) {
-        ShowFatalError(state, format("Errors found in processing input for {}", cCurrentModuleObject));
+        ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", cCurrentModuleObject));
     }
 }
 
@@ -904,7 +905,7 @@ void ExhaustAbsorberSpecs::oneTimeInit_new(EnergyPlusData &state)
         (state.dataLoopNodes->Node(this->ChillSupplyNodeNum).TempSetPointHi == DataLoopNode::SensedNodeFlagValue)) {
         if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
             if (!this->ChillSetPointErrDone) {
-                ShowWarningError(state, format("Missing temperature setpoint on cool side for chiller heater named {}", this->Name));
+                ShowWarningError(state, EnergyPlus::format("Missing temperature setpoint on cool side for chiller heater named {}", this->Name));
                 ShowContinueError(state, "  A temperature setpoint is needed at the outlet node of this chiller, use a SetpointManager");
                 ShowContinueError(state, "  The overall loop setpoint will be assumed for chiller. The simulation continues ... ");
                 this->ChillSetPointErrDone = true;
@@ -916,7 +917,7 @@ void ExhaustAbsorberSpecs::oneTimeInit_new(EnergyPlusData &state)
             state.dataLoopNodes->NodeSetpointCheck(this->ChillSupplyNodeNum).needsSetpointChecking = false;
             if (errFlag) {
                 if (!this->ChillSetPointErrDone) {
-                    ShowWarningError(state, format("Missing temperature setpoint on cool side for chiller heater named {}", this->Name));
+                    ShowWarningError(state, EnergyPlus::format("Missing temperature setpoint on cool side for chiller heater named {}", this->Name));
                     ShowContinueError(state, "  A temperature setpoint is needed at the outlet node of this chiller evaporator ");
                     ShowContinueError(state, "  use a Setpoint Manager to establish a setpoint at the chiller evaporator outlet node ");
                     ShowContinueError(state, "  or use an EMS actuator to establish a setpoint at the outlet node ");
@@ -936,7 +937,7 @@ void ExhaustAbsorberSpecs::oneTimeInit_new(EnergyPlusData &state)
         (state.dataLoopNodes->Node(this->HeatSupplyNodeNum).TempSetPointLo == DataLoopNode::SensedNodeFlagValue)) {
         if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
             if (!this->HeatSetPointErrDone) {
-                ShowWarningError(state, format("Missing temperature setpoint on heat side for chiller heater named {}", this->Name));
+                ShowWarningError(state, EnergyPlus::format("Missing temperature setpoint on heat side for chiller heater named {}", this->Name));
                 ShowContinueError(state, "  A temperature setpoint is needed at the outlet node of this chiller, use a SetpointManager");
                 ShowContinueError(state, "  The overall loop setpoint will be assumed for chiller. The simulation continues ... ");
                 this->HeatSetPointErrDone = true;
@@ -948,7 +949,7 @@ void ExhaustAbsorberSpecs::oneTimeInit_new(EnergyPlusData &state)
             state.dataLoopNodes->NodeSetpointCheck(this->HeatSupplyNodeNum).needsSetpointChecking = false;
             if (errFlag) {
                 if (!this->HeatSetPointErrDone) {
-                    ShowWarningError(state, format("Missing temperature setpoint on heat side for chiller heater named {}", this->Name));
+                    ShowWarningError(state, EnergyPlus::format("Missing temperature setpoint on heat side for chiller heater named {}", this->Name));
                     ShowContinueError(state, "  A temperature setpoint is needed at the outlet node of this chiller heater ");
                     ShowContinueError(state, "  use a Setpoint Manager to establish a setpoint at the heater side outlet node ");
                     ShowContinueError(state, "  or use an EMS actuator to establish a setpoint at the outlet node ");
@@ -1138,11 +1139,11 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
                                                      NomCapUser);
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpNomCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                                ShowMessage(
-                                    state,
-                                    format("SizeChillerHeaterAbsorptionDoubleEffect: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state, format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
-                                ShowContinueError(state, format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
+                                ShowMessage(state,
+                                            EnergyPlus::format(
+                                                "SizeChillerHeaterAbsorptionDoubleEffect: Potential issue with equipment sizing for {}", this->Name));
+                                ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
+                                ShowContinueError(state, EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1155,7 +1156,8 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
     } else {
         if (this->NomCoolingCapWasAutoSized) {
             if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
-                ShowSevereError(state, format("SizeExhaustAbsorber: ChillerHeater:Absorption:DoubleEffect=\"{}\", autosize error.", this->Name));
+                ShowSevereError(state,
+                                EnergyPlus::format("SizeExhaustAbsorber: ChillerHeater:Absorption:DoubleEffect=\"{}\", autosize error.", this->Name));
                 ShowContinueError(state, "Autosizing of Exhaust Fired Absorption Chiller nominal cooling capacity requires");
                 ShowContinueError(state, "a cooling loop Sizing:Plant object.");
                 ErrorsFound = true;
@@ -1214,11 +1216,13 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
                             if ((std::abs(tmpEvapVolFlowRate - EvapVolFlowRateUser) / EvapVolFlowRateUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state,
-                                            format("SizeChillerAbsorptionDoubleEffect: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state,
-                                                  format("User-Specified Design Chilled Water Flow Rate of {:.5R} [m3/s]", EvapVolFlowRateUser));
+                                            EnergyPlus::format("SizeChillerAbsorptionDoubleEffect: Potential issue with equipment sizing for {}",
+                                                               this->Name));
                                 ShowContinueError(
-                                    state, format("differs from Design Size Design Chilled Water Flow Rate of {:.5R} [m3/s]", tmpEvapVolFlowRate));
+                                    state, EnergyPlus::format("User-Specified Design Chilled Water Flow Rate of {:.5R} [m3/s]", EvapVolFlowRateUser));
+                                ShowContinueError(state,
+                                                  EnergyPlus::format("differs from Design Size Design Chilled Water Flow Rate of {:.5R} [m3/s]",
+                                                                     tmpEvapVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1231,7 +1235,8 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
     } else {
         if (this->EvapVolFlowRateWasAutoSized) {
             if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
-                ShowSevereError(state, format("SizeExhaustAbsorber: ChillerHeater:Absorption:DoubleEffect=\"{}\", autosize error.", this->Name));
+                ShowSevereError(state,
+                                EnergyPlus::format("SizeExhaustAbsorber: ChillerHeater:Absorption:DoubleEffect=\"{}\", autosize error.", this->Name));
                 ShowContinueError(state, "Autosizing of Exhaust Fired Absorption Chiller evap flow rate requires");
                 ShowContinueError(state, "a cooling loop Sizing:Plant object.");
                 ErrorsFound = true;
@@ -1294,13 +1299,14 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpHeatRecVolFlowRate - HeatRecVolFlowRateUser) / HeatRecVolFlowRateUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
-                                ShowMessage(
-                                    state,
-                                    format("SizeChillerHeaterAbsorptionDoubleEffect: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state,
-                                                  format("User-Specified Design Hot Water Flow Rate of {:.5R} [m3/s]", HeatRecVolFlowRateUser));
+                                ShowMessage(state,
+                                            EnergyPlus::format(
+                                                "SizeChillerHeaterAbsorptionDoubleEffect: Potential issue with equipment sizing for {}", this->Name));
                                 ShowContinueError(
-                                    state, format("differs from Design Size Design Hot Water Flow Rate of {:.5R} [m3/s]", tmpHeatRecVolFlowRate));
+                                    state, EnergyPlus::format("User-Specified Design Hot Water Flow Rate of {:.5R} [m3/s]", HeatRecVolFlowRateUser));
+                                ShowContinueError(state,
+                                                  EnergyPlus::format("differs from Design Size Design Hot Water Flow Rate of {:.5R} [m3/s]",
+                                                                     tmpHeatRecVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1313,7 +1319,8 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
     } else {
         if (this->HeatVolFlowRateWasAutoSized) {
             if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
-                ShowSevereError(state, format("SizeExhaustAbsorber: ChillerHeater:Absorption:DoubleEffect=\"{}\", autosize error.", this->Name));
+                ShowSevereError(state,
+                                EnergyPlus::format("SizeExhaustAbsorber: ChillerHeater:Absorption:DoubleEffect=\"{}\", autosize error.", this->Name));
                 ShowContinueError(state, "Autosizing of Exhaust Fired Absorption Chiller hot water flow rate requires");
                 ShowContinueError(state, "a heating loop Sizing:Plant object.");
                 ErrorsFound = true;
@@ -1380,11 +1387,14 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
                             if ((std::abs(tmpCondVolFlowRate - CondVolFlowRateUser) / CondVolFlowRateUser) >
                                 state.dataSize->AutoVsHardSizingThreshold) {
                                 ShowMessage(state,
-                                            format("SizeChillerAbsorptionDoubleEffect: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state,
-                                                  format("User-Specified Design Condenser Water Flow Rate of {:.5R} [m3/s]", CondVolFlowRateUser));
+                                            EnergyPlus::format("SizeChillerAbsorptionDoubleEffect: Potential issue with equipment sizing for {}",
+                                                               this->Name));
                                 ShowContinueError(
-                                    state, format("differs from Design Size Design Condenser Water Flow Rate of {:.5R} [m3/s]", tmpCondVolFlowRate));
+                                    state,
+                                    EnergyPlus::format("User-Specified Design Condenser Water Flow Rate of {:.5R} [m3/s]", CondVolFlowRateUser));
+                                ShowContinueError(state,
+                                                  EnergyPlus::format("differs from Design Size Design Condenser Water Flow Rate of {:.5R} [m3/s]",
+                                                                     tmpCondVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -1397,7 +1407,8 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
     } else {
         if (this->CondVolFlowRateWasAutoSized) {
             if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
-                ShowSevereError(state, format("SizeExhaustAbsorber: ChillerHeater:Absorption:DoubleEffect=\"{}\", autosize error.", this->Name));
+                ShowSevereError(state,
+                                EnergyPlus::format("SizeExhaustAbsorber: ChillerHeater:Absorption:DoubleEffect=\"{}\", autosize error.", this->Name));
                 ShowContinueError(state, "Autosizing of Exhaust Fired Absorption Chiller condenser flow rate requires a condenser");
                 ShowContinueError(state, "loop Sizing:Plant object.");
                 ErrorsFound = true;
@@ -1763,12 +1774,12 @@ void ExhaustAbsorberSpecs::calcChiller(EnergyPlusData &state, Real64 &MyLoad)
 
         if (lExhHeatRecPotentialCool < lCoolThermalEnergyUseRate) {
             if (this->ExhTempLTAbsLeavingTempIndex == 0) {
-                ShowWarningError(state, format("ChillerHeater:Absorption:DoubleEffect \"{}\"", this->Name));
+                ShowWarningError(state, EnergyPlus::format("ChillerHeater:Absorption:DoubleEffect \"{}\"", this->Name));
                 ShowContinueError(state,
                                   "...Exhaust temperature and flow input from Micro Turbine is not sufficient during cooling to run the chiller ");
-                ShowContinueError(state, format("...Value of Exhaust air inlet temp ={:.4T} C.", lExhaustInTemp));
-                ShowContinueError(state, format("... and Exhaust air flow rate of {:.2T} kg/s.", lExhaustInFlow));
-                ShowContinueError(state, format("...Value of minimum absorber leaving temp ={:.4T} C.", AbsLeavingTemp));
+                ShowContinueError(state, EnergyPlus::format("...Value of Exhaust air inlet temp ={:.4T} C.", lExhaustInTemp));
+                ShowContinueError(state, EnergyPlus::format("... and Exhaust air flow rate of {:.2T} kg/s.", lExhaustInFlow));
+                ShowContinueError(state, EnergyPlus::format("...Value of minimum absorber leaving temp ={:.4T} C.", AbsLeavingTemp));
                 ShowContinueError(state,
                                   "...Either increase the Exhaust temperature (min required = 350 C )  or flow or both of Micro Turbine to meet "
                                   "the min available potential criteria.");
@@ -1796,16 +1807,18 @@ void ExhaustAbsorberSpecs::calcChiller(EnergyPlusData &state, Real64 &MyLoad)
                 lCondSupplyTemp = lCondReturnTemp + lTowerLoad / (lCondWaterMassFlowRate * Cp_CD);
             } else {
                 if (this->lCondWaterMassFlowRate_Index == 0) {
-                    ShowSevereError(state,
-                                    format("CalcExhaustAbsorberChillerModel: Condenser flow = 0, for Exhaust Absorber Chiller={}", this->Name));
+                    ShowSevereError(
+                        state,
+                        EnergyPlus::format("CalcExhaustAbsorberChillerModel: Condenser flow = 0, for Exhaust Absorber Chiller={}", this->Name));
                     ShowContinueErrorTimeStamp(state, "");
                     // ShowFatalError(state, "Program Terminates due to previous error condition.");
                 }
-                ShowRecurringSevereErrorAtEnd(state,
-                                              format("CalcExhaustAbsorberChillerModel: Condenser flow = 0, for Exhaust Absorber Chiller={}: "
-                                                     "Condenser flow rate = 0 severe error warning continues...",
-                                                     this->Name),                // Message automatically written to "error file" at end of simulation
-                                              this->lCondWaterMassFlowRate_Index // Recurring message index, if zero, next available index is assigned
+                ShowRecurringSevereErrorAtEnd(
+                    state,
+                    EnergyPlus::format("CalcExhaustAbsorberChillerModel: Condenser flow = 0, for Exhaust Absorber Chiller={}: "
+                                       "Condenser flow rate = 0 severe error warning continues...",
+                                       this->Name),    // Message automatically written to "error file" at end of simulation
+                    this->lCondWaterMassFlowRate_Index // Recurring message index, if zero, next available index is assigned
                 );
             }
         } else {
@@ -1960,7 +1973,7 @@ void ExhaustAbsorberSpecs::calcHeater(EnergyPlusData &state, Real64 &MyLoad, boo
                 lHotWaterMassFlowRate = 0.0;
                 ShowRecurringWarningErrorAtEnd(
                     state,
-                    format("ExhaustAbsorberChillerModel:Heating\"{}\", DeltaTemp = 0 in mass flow calculation", this->Name),
+                    EnergyPlus::format("ExhaustAbsorberChillerModel:Heating\"{}\", DeltaTemp = 0 in mass flow calculation", this->Name),
                     this->DeltaTempHeatErrCount);
             }
             lHotWaterSupplyTemp = HeatSupplySetPointTemp;
@@ -2005,24 +2018,25 @@ void ExhaustAbsorberSpecs::calcHeater(EnergyPlusData &state, Real64 &MyLoad, boo
         lExhHeatRecPotentialHeat = lExhaustInFlow * CpAir * (lExhaustInTemp - AbsLeavingTemp);
         if (lExhHeatRecPotentialHeat < lHeatThermalEnergyUseRate) {
             if (this->ExhTempLTAbsLeavingHeatingTempIndex == 0) {
-                ShowWarningError(state, format("ChillerHeater:Absorption:DoubleEffect \"{}\"", this->Name));
+                ShowWarningError(state, EnergyPlus::format("ChillerHeater:Absorption:DoubleEffect \"{}\"", this->Name));
                 ShowContinueError(state,
                                   "...Exhaust temperature and flow input from Micro Turbine is not sufficient to run the chiller during heating .");
-                ShowContinueError(state, format("...Value of Exhaust air inlet temp ={:.4T} C.", lExhaustInTemp));
-                ShowContinueError(state, format("... and Exhaust air flow rate of {:.2T} kg/s.", lExhaustInFlow));
-                ShowContinueError(state, format("...Value of minimum absorber leaving temp ={:.4T} C.", AbsLeavingTemp));
+                ShowContinueError(state, EnergyPlus::format("...Value of Exhaust air inlet temp ={:.4T} C.", lExhaustInTemp));
+                ShowContinueError(state, EnergyPlus::format("... and Exhaust air flow rate of {:.2T} kg/s.", lExhaustInFlow));
+                ShowContinueError(state, EnergyPlus::format("...Value of minimum absorber leaving temp ={:.4T} C.", AbsLeavingTemp));
                 ShowContinueError(state,
                                   "...Either increase the Exhaust temperature (min required = 350 C) or flow or both of Micro Turbine to meet "
                                   "the min available potential criteria.");
                 ShowContinueErrorTimeStamp(state, "... Simulation will continue.");
             }
-            ShowRecurringWarningErrorAtEnd(state,
-                                           format("ChillerHeater:Absorption:DoubleEffect \"{}\": Exhaust temperature from Micro Turbine is not "
-                                                  "sufficient to run the chiller during heating warning continues...",
-                                                  this->Name),
-                                           this->ExhTempLTAbsLeavingHeatingTempIndex,
-                                           lExhaustInTemp,
-                                           AbsLeavingTemp);
+            ShowRecurringWarningErrorAtEnd(
+                state,
+                EnergyPlus::format("ChillerHeater:Absorption:DoubleEffect \"{}\": Exhaust temperature from Micro Turbine is not "
+                                   "sufficient to run the chiller during heating warning continues...",
+                                   this->Name),
+                this->ExhTempLTAbsLeavingHeatingTempIndex,
+                lExhaustInTemp,
+                AbsLeavingTemp);
             // If exhaust is not available, it means the available thermal energy is 0.0 and Chiller is not available
             lHeatThermalEnergyUseRate = 0.0;
             lHeatElectricPower = 0.0;

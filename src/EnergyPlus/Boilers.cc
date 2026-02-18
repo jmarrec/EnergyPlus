@@ -107,7 +107,7 @@ BoilerSpecs *BoilerSpecs::factory(EnergyPlusData &state, std::string const &obje
     }
 
     // If we didn't find it, fatal
-    ShowFatalError(state, format("LocalBoilerFactory: Error getting inputs for boiler named: {}", objectName)); // LCOV_EXCL_LINE
+    ShowFatalError(state, EnergyPlus::format("LocalBoilerFactory: Error getting inputs for boiler named: {}", objectName)); // LCOV_EXCL_LINE
     // Shut up the compiler
     return nullptr; // LCOV_EXCL_LINE
 }
@@ -173,7 +173,7 @@ void GetBoilerInput(EnergyPlusData &state)
     int numBoilers = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, s_ipsc->cCurrentModuleObject);
 
     if (numBoilers <= 0) {
-        ShowSevereError(state, format("No {} Equipment specified in input file", s_ipsc->cCurrentModuleObject));
+        ShowSevereError(state, EnergyPlus::format("No {} Equipment specified in input file", s_ipsc->cCurrentModuleObject));
         ErrorsFound = true;
     }
 
@@ -217,8 +217,8 @@ void GetBoilerInput(EnergyPlusData &state)
         thisBoiler.NomCap = s_ipsc->rNumericArgs(1);
         if (s_ipsc->rNumericArgs(1) == 0.0) {
             ShowSevereError(state, fmt::format("{}{}=\"{}\",", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, format("Invalid {}={:.2R}", s_ipsc->cNumericFieldNames(1), s_ipsc->rNumericArgs(1)));
-            ShowContinueError(state, format("...{} must be greater than 0.0", s_ipsc->cNumericFieldNames(1)));
+            ShowContinueError(state, EnergyPlus::format("Invalid {}={:.2R}", s_ipsc->cNumericFieldNames(1), s_ipsc->rNumericArgs(1)));
+            ShowContinueError(state, EnergyPlus::format("...{} must be greater than 0.0", s_ipsc->cNumericFieldNames(1)));
             ErrorsFound = true;
         }
         if (thisBoiler.NomCap == DataSizing::AutoSize) {
@@ -228,8 +228,8 @@ void GetBoilerInput(EnergyPlusData &state)
         thisBoiler.NomEffic = s_ipsc->rNumericArgs(2);
         if (s_ipsc->rNumericArgs(2) == 0.0) {
             ShowSevereError(state, fmt::format("{}{}=\"{}\",", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, format("Invalid {}={:.3R}", s_ipsc->cNumericFieldNames(2), s_ipsc->rNumericArgs(2)));
-            ShowContinueError(state, format("...{} must be greater than 0.0", s_ipsc->cNumericFieldNames(2)));
+            ShowContinueError(state, EnergyPlus::format("Invalid {}={:.3R}", s_ipsc->cNumericFieldNames(2), s_ipsc->rNumericArgs(2)));
+            ShowContinueError(state, EnergyPlus::format("...{} must be greater than 0.0", s_ipsc->cNumericFieldNames(2)));
             ErrorsFound = true;
         } else if (s_ipsc->rNumericArgs(2) > 1.0) {
             ShowWarningError(state,
@@ -262,18 +262,19 @@ void GetBoilerInput(EnergyPlusData &state)
                 if (thisBoiler.CurveTempMode == TempMode::NOTSET) { // throw error
                     if (!s_ipsc->lAlphaFieldBlanks(3)) {
                         ShowSevereError(state, fmt::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-                        ShowContinueError(state, format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
+                        ShowContinueError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3)));
                         ShowContinueError(state,
-                                          format("boilers.Boiler using curve type of {} must specify {}",
-                                                 Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType],
-                                                 s_ipsc->cAlphaFieldNames(3)));
+                                          EnergyPlus::format("boilers.Boiler using curve type of {} must specify {}",
+                                                             Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType],
+                                                             s_ipsc->cAlphaFieldNames(3)));
                         ShowContinueError(state, "Available choices are EnteringBoiler or LeavingBoiler");
                     } else {
                         ShowSevereError(state, fmt::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-                        ShowContinueError(state, format("Field {} is blank", s_ipsc->cAlphaFieldNames(3)));
-                        ShowContinueError(state,
-                                          format("boilers.Boiler using curve type of {} must specify either EnteringBoiler or LeavingBoiler",
-                                                 Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType]));
+                        ShowContinueError(state, EnergyPlus::format("Field {} is blank", s_ipsc->cAlphaFieldNames(3)));
+                        ShowContinueError(
+                            state,
+                            EnergyPlus::format("boilers.Boiler using curve type of {} must specify either EnteringBoiler or LeavingBoiler",
+                                               Curve::objectNames[(int)thisBoiler.EfficiencyCurve->curveType]));
                     }
                     ErrorsFound = true;
                 }
@@ -297,7 +298,7 @@ void GetBoilerInput(EnergyPlusData &state)
         thisBoiler.ParasiticFuelCapacity = s_ipsc->rNumericArgs(10);
         if (thisBoiler.FuelType == Constant::eFuel::Electricity && thisBoiler.ParasiticFuelCapacity > 0) {
             ShowWarningError(state, fmt::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, format("{} should be zero when the fuel type is electricity.", s_ipsc->cNumericFieldNames(10)));
+            ShowContinueError(state, EnergyPlus::format("{} should be zero when the fuel type is electricity.", s_ipsc->cNumericFieldNames(10)));
             ShowContinueError(state, "It will be ignored and the simulation continues.");
             thisBoiler.ParasiticFuelCapacity = 0.0;
         }
@@ -336,7 +337,7 @@ void GetBoilerInput(EnergyPlusData &state)
             thisBoiler.FlowMode = DataPlant::FlowMode::NotModulated;
         } else {
             ShowSevereError(state, fmt::format("{}{}=\"{}\"", RoutineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
-            ShowContinueError(state, format("Invalid {}={}", s_ipsc->cAlphaFieldNames(7), s_ipsc->cAlphaArgs(7)));
+            ShowContinueError(state, EnergyPlus::format("Invalid {}={}", s_ipsc->cAlphaFieldNames(7), s_ipsc->cAlphaArgs(7)));
             ShowContinueError(state, "Available choices are ConstantFlow, NotModulated, or LeavingSetpointModulated");
             ShowContinueError(state, "Flow mode NotModulated is assumed and the simulation continues.");
             // We will assume variable flow if not specified
@@ -352,7 +353,7 @@ void GetBoilerInput(EnergyPlusData &state)
     }
 
     if (ErrorsFound) {
-        ShowFatalError(state, format("{}{}", RoutineName, "Errors found in processing " + s_ipsc->cCurrentModuleObject + " input."));
+        ShowFatalError(state, EnergyPlus::format("{}{}", RoutineName, "Errors found in processing " + s_ipsc->cCurrentModuleObject + " input."));
     }
 }
 
@@ -377,14 +378,14 @@ void BoilerSpecs::SetupOutputVars(EnergyPlusData &state)
                         OutputProcessor::Group::Plant,
                         OutputProcessor::EndUseCat::Boilers);
     SetupOutputVariable(state,
-                        format("Boiler {} Rate", sFuelType),
+                        EnergyPlus::format("Boiler {} Rate", sFuelType),
                         Constant::Units::W,
                         this->FuelUsed,
                         OutputProcessor::TimeStepType::System,
                         OutputProcessor::StoreType::Average,
                         this->Name);
     SetupOutputVariable(state,
-                        format("Boiler {} Energy", sFuelType),
+                        EnergyPlus::format("Boiler {} Energy", sFuelType),
                         Constant::Units::J,
                         this->FuelConsumed,
                         OutputProcessor::TimeStepType::System,
@@ -435,14 +436,14 @@ void BoilerSpecs::SetupOutputVars(EnergyPlusData &state)
                         "Boiler Parasitic");
     if (this->FuelType != Constant::eFuel::Electricity) {
         SetupOutputVariable(state,
-                            format("Boiler Ancillary {} Rate", sFuelType),
+                            EnergyPlus::format("Boiler Ancillary {} Rate", sFuelType),
                             Constant::Units::W,
                             this->ParasiticFuelRate,
                             OutputProcessor::TimeStepType::System,
                             OutputProcessor::StoreType::Average,
                             this->Name);
         SetupOutputVariable(state,
-                            format("Boiler Ancillary {} Energy", sFuelType),
+                            EnergyPlus::format("Boiler Ancillary {} Energy", sFuelType),
                             Constant::Units::J,
                             this->ParasiticFuelConsumption,
                             OutputProcessor::TimeStepType::System,
@@ -501,7 +502,8 @@ void BoilerSpecs::initEachEnvironment(EnergyPlusData &state)
             (state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPointLo == DataLoopNode::SensedNodeFlagValue)) {
             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 if (!this->ModulatedFlowErrDone) {
-                    ShowWarningError(state, format("Missing temperature setpoint for LeavingSetpointModulated mode Boiler named {}", this->Name));
+                    ShowWarningError(
+                        state, EnergyPlus::format("Missing temperature setpoint for LeavingSetpointModulated mode Boiler named {}", this->Name));
                     ShowContinueError(
                         state, "  A temperature setpoint is needed at the outlet node of a boiler in variable flow mode, use a SetpointManager");
                     ShowContinueError(state, "  The overall loop setpoint will be assumed for Boiler. The simulation continues ... ");
@@ -514,7 +516,8 @@ void BoilerSpecs::initEachEnvironment(EnergyPlusData &state)
                 state.dataLoopNodes->NodeSetpointCheck(this->BoilerOutletNodeNum).needsSetpointChecking = false;
                 if (FatalError) {
                     if (!this->ModulatedFlowErrDone) {
-                        ShowWarningError(state, format("Missing temperature setpoint for LeavingSetpointModulated mode Boiler named {}", this->Name));
+                        ShowWarningError(
+                            state, EnergyPlus::format("Missing temperature setpoint for LeavingSetpointModulated mode Boiler named {}", this->Name));
                         ShowContinueError(state, "  A temperature setpoint is needed at the outlet node of a boiler in variable flow mode");
                         ShowContinueError(state, "  use a Setpoint Manager to establish a setpoint at the boiler outlet node ");
                         ShowContinueError(state, "  or use an EMS actuator to establish a setpoint at the boiler outlet node ");
@@ -635,9 +638,10 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
                                                      NomCapUser);
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpNomCap - NomCapUser) / NomCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                                ShowMessage(state, format("SizeBoilerHotWater: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state, format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
-                                ShowContinueError(state, format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
+                                ShowMessage(state,
+                                            EnergyPlus::format("SizeBoilerHotWater: Potential issue with equipment sizing for {}", this->Name));
+                                ShowContinueError(state, EnergyPlus::format("User-Specified Nominal Capacity of {:.2R} [W]", NomCapUser));
+                                ShowContinueError(state, EnergyPlus::format("differs from Design Size Nominal Capacity of {:.2R} [W]", tmpNomCap));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -649,7 +653,7 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
     } else {
         if (this->NomCapWasAutoSized && state.dataPlnt->PlantFirstSizesOkayToFinalize) {
             ShowSevereError(state, "Autosizing of Boiler nominal capacity requires a loop Sizing:Plant object");
-            ShowContinueError(state, format("Occurs in Boiler object={}", this->Name));
+            ShowContinueError(state, EnergyPlus::format("Occurs in Boiler object={}", this->Name));
             ErrorsFound = true;
         }
         if (!this->NomCapWasAutoSized && state.dataPlnt->PlantFinalSizesOkayToReport && (this->NomCap > 0.0)) { // Hard-sized with no sizing data
@@ -689,10 +693,13 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
                                                      VolFlowRateUser);
                         if (state.dataGlobal->DisplayExtraWarnings) {
                             if ((std::abs(tmpBoilerVolFlowRate - VolFlowRateUser) / VolFlowRateUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                                ShowMessage(state, format("SizeBoilerHotWater: Potential issue with equipment sizing for {}", this->Name));
-                                ShowContinueError(state, format("User-Specified Design Water Flow Rate of {:.2R} [m3/s]", VolFlowRateUser));
+                                ShowMessage(state,
+                                            EnergyPlus::format("SizeBoilerHotWater: Potential issue with equipment sizing for {}", this->Name));
                                 ShowContinueError(state,
-                                                  format("differs from Design Size Design Water Flow Rate of {:.2R} [m3/s]", tmpBoilerVolFlowRate));
+                                                  EnergyPlus::format("User-Specified Design Water Flow Rate of {:.2R} [m3/s]", VolFlowRateUser));
+                                ShowContinueError(
+                                    state,
+                                    EnergyPlus::format("differs from Design Size Design Water Flow Rate of {:.2R} [m3/s]", tmpBoilerVolFlowRate));
                                 ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                                 ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                             }
@@ -705,7 +712,7 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
     } else {
         if (this->VolFlowRateWasAutoSized && state.dataPlnt->PlantFirstSizesOkayToFinalize) {
             ShowSevereError(state, "Autosizing of Boiler design flow rate requires a loop Sizing:Plant object");
-            ShowContinueError(state, format("Occurs in Boiler object={}", this->Name));
+            ShowContinueError(state, EnergyPlus::format("Occurs in Boiler object={}", this->Name));
             ErrorsFound = true;
         }
         if (!this->VolFlowRateWasAutoSized && state.dataPlnt->PlantFinalSizesOkayToReport &&
@@ -912,21 +919,23 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
         if (this->BoilerLoad > 0.0) {
             if (this->EffCurveOutputError < 1) {
                 ++this->EffCurveOutputError;
-                ShowWarningError(state, format("Boiler:HotWater \"{}\"", this->Name));
+                ShowWarningError(state, EnergyPlus::format("Boiler:HotWater \"{}\"", this->Name));
                 ShowContinueError(state, "...Normalized Boiler Efficiency Curve output is less than or equal to 0.");
-                ShowContinueError(state, format("...Curve input x value (PLR)     = {:.5T}", this->BoilerPLR));
+                ShowContinueError(state, EnergyPlus::format("...Curve input x value (PLR)     = {:.5T}", this->BoilerPLR));
                 if (this->EfficiencyCurve->numDims == 2) {
                     if (this->CurveTempMode == TempMode::ENTERINGBOILERTEMP) {
-                        ShowContinueError(state, format("...Curve input y value (Tinlet) = {:.2T}", state.dataLoopNodes->Node(BoilerInletNode).Temp));
+                        ShowContinueError(
+                            state, EnergyPlus::format("...Curve input y value (Tinlet) = {:.2T}", state.dataLoopNodes->Node(BoilerInletNode).Temp));
                     } else if (this->CurveTempMode == TempMode::LEAVINGBOILERTEMP) {
-                        ShowContinueError(state, format("...Curve input y value (Toutlet) = {:.2T}", this->BoilerOutletTemp));
+                        ShowContinueError(state, EnergyPlus::format("...Curve input y value (Toutlet) = {:.2T}", this->BoilerOutletTemp));
                     }
                 }
-                ShowContinueError(state, format("...Curve output (normalized eff) = {:.5T}", EffCurveOutput));
-                ShowContinueError(state,
-                                  format("...Calculated Boiler efficiency  = {:.5T} (Boiler efficiency = Nominal Thermal Efficiency * Normalized "
-                                         "Boiler Efficiency Curve output)",
-                                         BoilerEff));
+                ShowContinueError(state, EnergyPlus::format("...Curve output (normalized eff) = {:.5T}", EffCurveOutput));
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format("...Calculated Boiler efficiency  = {:.5T} (Boiler efficiency = Nominal Thermal Efficiency * Normalized "
+                                       "Boiler Efficiency Curve output)",
+                                       BoilerEff));
                 ShowContinueErrorTimeStamp(state, "...Curve output reset to 0.01 and simulation continues.");
             } else {
                 ShowRecurringWarningErrorAtEnd(state,
@@ -946,22 +955,24 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
             NomEffic <= 1.0) { // NomEffic > 1 warning occurs elsewhere; avoid cascading warnings
             if (this->CalculatedEffError < 1) {
                 ++this->CalculatedEffError;
-                ShowWarningError(state, format("Boiler:HotWater \"{}\"", this->Name));
+                ShowWarningError(state, EnergyPlus::format("Boiler:HotWater \"{}\"", this->Name));
                 ShowContinueError(state, "...Calculated Boiler Efficiency is greater than 1.1.");
                 ShowContinueError(state, "...Boiler Efficiency calculations shown below.");
-                ShowContinueError(state, format("...Curve input x value (PLR)     = {:.5T}", this->BoilerPLR));
+                ShowContinueError(state, EnergyPlus::format("...Curve input x value (PLR)     = {:.5T}", this->BoilerPLR));
                 if (this->EfficiencyCurve->numDims == 2) {
                     if (this->CurveTempMode == TempMode::ENTERINGBOILERTEMP) {
-                        ShowContinueError(state, format("...Curve input y value (Tinlet) = {:.2T}", state.dataLoopNodes->Node(BoilerInletNode).Temp));
+                        ShowContinueError(
+                            state, EnergyPlus::format("...Curve input y value (Tinlet) = {:.2T}", state.dataLoopNodes->Node(BoilerInletNode).Temp));
                     } else if (this->CurveTempMode == TempMode::LEAVINGBOILERTEMP) {
-                        ShowContinueError(state, format("...Curve input y value (Toutlet) = {:.2T}", this->BoilerOutletTemp));
+                        ShowContinueError(state, EnergyPlus::format("...Curve input y value (Toutlet) = {:.2T}", this->BoilerOutletTemp));
                     }
                 }
-                ShowContinueError(state, format("...Curve output (normalized eff) = {:.5T}", EffCurveOutput));
-                ShowContinueError(state,
-                                  format("...Calculated Boiler efficiency  = {:.5T} (Boiler efficiency = Nominal Thermal Efficiency * Normalized "
-                                         "Boiler Efficiency Curve output)",
-                                         BoilerEff));
+                ShowContinueError(state, EnergyPlus::format("...Curve output (normalized eff) = {:.5T}", EffCurveOutput));
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format("...Calculated Boiler efficiency  = {:.5T} (Boiler efficiency = Nominal Thermal Efficiency * Normalized "
+                                       "Boiler Efficiency Curve output)",
+                                       BoilerEff));
                 ShowContinueErrorTimeStamp(state, "...Curve output reset to 1.1 and simulation continues.");
             } else {
                 ShowRecurringWarningErrorAtEnd(state,

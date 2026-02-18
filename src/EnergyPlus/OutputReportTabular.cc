@@ -201,7 +201,7 @@ std::ofstream &open_tbl_stream(EnergyPlusData &state, int const iStyle, fs::path
     if (output_to_file) {
         tbl_stream.open(filePath);
         if (!tbl_stream) {
-            ShowFatalError(state, format("OpenOutputTabularFile: Could not open file \"{}\" for output (write).", filePath));
+            ShowFatalError(state, EnergyPlus::format("OpenOutputTabularFile: Could not open file \"{}\" for output (write).", filePath));
         }
     } else {
         tbl_stream.setstate(std::ios_base::badbit);
@@ -357,9 +357,10 @@ void GetInputTabularMonthly(EnergyPlusData &state)
         if (!state.dataGlobal->DoWeathSim) {
             ShowWarningError(
                 state,
-                format("{} requested with SimulationControl Run Simulation for Weather File Run Periods set to No so {} will not be generated",
-                       CurrentModuleObject,
-                       CurrentModuleObject));
+                EnergyPlus::format(
+                    "{} requested with SimulationControl Run Simulation for Weather File Run Periods set to No so {} will not be generated",
+                    CurrentModuleObject,
+                    CurrentModuleObject));
             return;
         }
     }
@@ -382,16 +383,16 @@ void GetInputTabularMonthly(EnergyPlusData &state)
             Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
         }
         if (NumAlphas < 2) {
-            ShowSevereError(state, format("{}: No fields specified.", CurrentModuleObject));
+            ShowSevereError(state, EnergyPlus::format("{}: No fields specified.", CurrentModuleObject));
         }
         // add to the data structure
         int const curTable = AddMonthlyReport(state, AlphArray(1), int(NumArray(1)));
         for (int jField = 2; jField <= NumAlphas; jField += 2) {
             if (AlphArray(jField).empty()) {
                 ShowWarningError(state,
-                                 format("{}: Blank column specified in '{}', need to provide a variable or meter name ",
-                                        CurrentModuleObject,
-                                        ort->MonthlyInput(TabNum).name));
+                                 EnergyPlus::format("{}: Blank column specified in '{}', need to provide a variable or meter name ",
+                                                    CurrentModuleObject,
+                                                    ort->MonthlyInput(TabNum).name));
                 continue;
             }
             std::string const curAggString = AlphArray(jField + 1);
@@ -399,8 +400,9 @@ void GetInputTabularMonthly(EnergyPlusData &state)
             AggType curAggType = static_cast<AggType>(getEnumValue(AggTypeNamesUC, Util::makeUPPER(curAggString)));
             // set accumulator values to default as appropriate for aggregation type
             if (curAggType == AggType::Invalid) {
-                ShowWarningError(state, format("{}={}, Variable name={}", CurrentModuleObject, ort->MonthlyInput(TabNum).name, AlphArray(jField)));
-                ShowContinueError(state, format("Invalid aggregation type=\"{}\"  Defaulting to SumOrAverage.", curAggString));
+                ShowWarningError(
+                    state, EnergyPlus::format("{}={}, Variable name={}", CurrentModuleObject, ort->MonthlyInput(TabNum).name, AlphArray(jField)));
+                ShowContinueError(state, EnergyPlus::format("Invalid aggregation type=\"{}\"  Defaulting to SumOrAverage.", curAggString));
                 curAggType = AggType::SumOrAvg;
             }
             AddMonthlyFieldSetInput(state, curTable, AlphArray(jField), "", curAggType);
@@ -762,8 +764,10 @@ void InitializeTabularMonthly(EnergyPlusData &state)
             UnitsVar = ort->MonthlyFieldSetInput(FirstColumn + colNum - 1).varUnits;
 
             if (KeyCount == 0 && issueWarnings && !ort->MonthlyInput(TabNum).isNamedMonthly) {
-                ShowWarningError(
-                    state, format("In Output:Table:Monthly '{}' invalid Variable or Meter Name '{}'", ort->MonthlyInput(TabNum).name, curVariMeter));
+                ShowWarningError(state,
+                                 EnergyPlus::format("In Output:Table:Monthly '{}' invalid Variable or Meter Name '{}'",
+                                                    ort->MonthlyInput(TabNum).name,
+                                                    curVariMeter));
             }
             for (int iKey = 1; iKey <= KeyCount; ++iKey) {
                 found = 0;
@@ -921,11 +925,14 @@ void InitializeTabularMonthly(EnergyPlusData &state)
                 } else { // if no key corresponds to this instance of the report
                     // fixing CR5878 removed the showing of the warning once about a specific variable.
                     if (issueWarnings && !ort->MonthlyInput(TabNum).isNamedMonthly) {
-                        ShowWarningError(
-                            state,
-                            format("In Output:Table:Monthly '{}' invalid Variable or Meter Name '{}'", ort->MonthlyInput(TabNum).name, curVariMeter));
-                        ShowContinueError(
-                            state, format("..i.e., Variable name={}:{} not valid for this simulation.", UniqueKeyNames(kUniqueKey), curVariMeter));
+                        ShowWarningError(state,
+                                         EnergyPlus::format("In Output:Table:Monthly '{}' invalid Variable or Meter Name '{}'",
+                                                            ort->MonthlyInput(TabNum).name,
+                                                            curVariMeter));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("..i.e., Variable name={}:{} not valid for this simulation.",
+                                                             UniqueKeyNames(kUniqueKey),
+                                                             curVariMeter));
                     }
                     ort->MonthlyColumns(mColumn).varName = curVariMeter;
                     ort->MonthlyColumns(mColumn).varNum = 0;
@@ -990,15 +997,17 @@ bool isInvalidAggregationOrder(EnergyPlusData &state)
             }
         }
         if (missingMaxOrMinError) {
-            ShowSevereError(state,
-                            format("The Output:Table:Monthly report named=\"{}\" has a valueWhenMaxMin aggregation type for a column without a "
+            ShowSevereError(
+                state,
+                EnergyPlus::format("The Output:Table:Monthly report named=\"{}\" has a valueWhenMaxMin aggregation type for a column without a "
                                    "previous column that uses either the minimum or maximum aggregation types. The report will not be generated.",
                                    ort->MonthlyInput(iInput).name));
             foundError = true;
         }
         if (missingHourAggError) {
-            ShowSevereError(state,
-                            format("The Output:Table:Monthly report named=\"{}\" has a --DuringHoursShown aggregation type for a column without a "
+            ShowSevereError(
+                state,
+                EnergyPlus::format("The Output:Table:Monthly report named=\"{}\" has a --DuringHoursShown aggregation type for a column without a "
                                    "previous field that uses one of the Hour-- aggregation types. The report will not be generated.",
                                    ort->MonthlyInput(iInput).name));
             foundError = true;
@@ -1074,9 +1083,10 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
         if (!state.dataGlobal->DoWeathSim) {
             ShowWarningError(
                 state,
-                format("{} requested with SimulationControl Run Simulation for Weather File Run Periods set to No so {} will not be generated",
-                       CurrentModuleObject,
-                       CurrentModuleObject));
+                EnergyPlus::format(
+                    "{} requested with SimulationControl Run Simulation for Weather File Run Periods set to No so {} will not be generated",
+                    CurrentModuleObject,
+                    CurrentModuleObject));
             return;
         }
     }
@@ -1111,9 +1121,10 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
         if (len(AlphArray(4)) > 0) {
             if (!(Util::SameString(AlphArray(4), "ENERGY") || Util::SameString(AlphArray(4), "DEMAND") ||
                   Util::SameString(AlphArray(4), "TEMPERATURE") || Util::SameString(AlphArray(4), "FLOWRATE"))) {
-                ShowWarningError(
-                    state,
-                    format("In {} named {} the Variable Type was not energy, demand, temperature, or flowrate.", CurrentModuleObject, AlphArray(1)));
+                ShowWarningError(state,
+                                 EnergyPlus::format("In {} named {} the Variable Type was not energy, demand, temperature, or flowrate.",
+                                                    CurrentModuleObject,
+                                                    AlphArray(1)));
             }
         }
         ort->OutputTableBinned(iInObj).intervalStart = NumArray(1);
@@ -1142,8 +1153,10 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
                                    ort->OutputTableBinned(iInObj).stepType,
                                    ort->OutputTableBinned(iInObj).units);
         if (ort->OutputTableBinned(iInObj).typeOfVar == OutputProcessor::VariableType::Invalid) {
-            ShowWarningError(
-                state, format("{}: User specified meter or variable not found: {}", CurrentModuleObject, ort->OutputTableBinned(iInObj).varOrMeter));
+            ShowWarningError(state,
+                             EnergyPlus::format("{}: User specified meter or variable not found: {}",
+                                                CurrentModuleObject,
+                                                ort->OutputTableBinned(iInObj).varOrMeter));
         }
         // If only a single table key is requested than only one should be counted
         // later will reset the numTables array pointer but for now use it to know
@@ -1177,7 +1190,8 @@ void GetInputTabularTimeBins(EnergyPlusData &state)
                 // check if valid meter or number
                 // Why is this here?
                 if (objVarIDs(iTable) == -1) {
-                    ShowWarningError(state, format("{}: Specified variable or meter not found: {}", CurrentModuleObject, objNames(iTable)));
+                    ShowWarningError(state,
+                                     EnergyPlus::format("{}: Specified variable or meter not found: {}", CurrentModuleObject, objNames(iTable)));
                 }
             }
         } else {
@@ -1226,10 +1240,10 @@ bool warningAboutKeyNotFound(EnergyPlusData &state, int foundIndex, int inObjInd
 {
     if (foundIndex == 0) {
         ShowWarningError(state,
-                         format("{}: Specified key not found: {} for variable: {}",
-                                moduleName,
-                                state.dataOutRptTab->OutputTableBinned(inObjIndex).keyValue,
-                                state.dataOutRptTab->OutputTableBinned(inObjIndex).varOrMeter));
+                         EnergyPlus::format("{}: Specified key not found: {} for variable: {}",
+                                            moduleName,
+                                            state.dataOutRptTab->OutputTableBinned(inObjIndex).keyValue,
+                                            state.dataOutRptTab->OutputTableBinned(inObjIndex).varOrMeter));
         return true;
     }
     return false;
@@ -1345,7 +1359,8 @@ void GetInputTabularStyle(EnergyPlusData &state)
         } else {
             ShowWarningError(
                 state,
-                format("{}: Invalid {}=\"{}\". Commas will be used.", CurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(1), AlphArray(1)));
+                EnergyPlus::format(
+                    "{}: Invalid {}=\"{}\". Commas will be used.", CurrentModuleObject, state.dataIPShortCut->cAlphaFieldNames(1), AlphArray(1)));
             ort->numStyles = 1;
             ort->TableStyle(1) = TableStyle::Comma;
             ort->del(1) = DataStringGlobals::CharComma; // comma
@@ -1356,17 +1371,17 @@ void GetInputTabularStyle(EnergyPlusData &state)
             ort->unitsStyle_Tabular = SetUnitsStyleFromString(AlphArray(2));
             if (ort->unitsStyle_Tabular == UnitsStyle::NotFound) {
                 ShowWarningError(state,
-                                 format("{}: Invalid {}=\"{}\". No unit conversion will be performed. Normal SI units will be shown.",
-                                        CurrentModuleObject,
-                                        state.dataIPShortCut->cAlphaFieldNames(2),
-                                        AlphArray(2)));
+                                 EnergyPlus::format("{}: Invalid {}=\"{}\". No unit conversion will be performed. Normal SI units will be shown.",
+                                                    CurrentModuleObject,
+                                                    state.dataIPShortCut->cAlphaFieldNames(2),
+                                                    AlphArray(2)));
             }
         } else {
             ort->unitsStyle_Tabular = UnitsStyle::None;
             AlphArray(2) = "None";
         }
     } else if (NumTabularStyle > 1) {
-        ShowWarningError(state, format("{}: Only one instance of this object is allowed. Commas will be used.", CurrentModuleObject));
+        ShowWarningError(state, EnergyPlus::format("{}: Only one instance of this object is allowed. Commas will be used.", CurrentModuleObject));
         ort->TableStyle = TableStyle::Comma;
         ort->del = std::string(1, DataStringGlobals::CharComma); // comma
         AlphArray(1) = "COMMA";
@@ -1678,13 +1693,14 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
             }
             if (!nameFound) {
                 if (Util::SameString(AlphArray(iReport), "Standard62.1Summary")) {
-                    ShowWarningError(state, format("{} Field[{}]=\"Standard62.1Summary\", Report is not enabled.", CurrentModuleObject, iReport));
+                    ShowWarningError(
+                        state, EnergyPlus::format("{} Field[{}]=\"Standard62.1Summary\", Report is not enabled.", CurrentModuleObject, iReport));
                     ShowContinueError(state, "Do Zone Sizing or Do System Sizing must be enabled in SimulationControl.");
 
                 } else {
                     ShowSevereError(
                         state,
-                        format(
+                        EnergyPlus::format(
                             "{} Field[{}]=\"{}\", invalid report name -- will not be reported.", CurrentModuleObject, iReport, AlphArray(iReport)));
                     //      ErrorsFound=.TRUE.
                 }
@@ -1692,11 +1708,11 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
         }
         CreatePredefinedMonthlyReports(state);
     } else if (NumTabularPredefined > 1) {
-        ShowSevereError(state, format("{}: Only one instance of this object is allowed.", CurrentModuleObject));
+        ShowSevereError(state, EnergyPlus::format("{}: Only one instance of this object is allowed.", CurrentModuleObject));
         ErrorsFound = true;
     }
     if (ErrorsFound) {
-        ShowFatalError(state, format("{}: Preceding errors cause termination.", CurrentModuleObject));
+        ShowFatalError(state, EnergyPlus::format("{}: Preceding errors cause termination.", CurrentModuleObject));
     }
     // if the BEPS report has been called for than initialize its arrays
     if (ort->displayTabularBEPS || ort->displayDemandEndUse || ort->displaySourceEnergyEndUseSummary || ort->displayLEEDSummary) {
@@ -1762,28 +1778,28 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
 
         // loop through all of the resources and end uses and sub end uses for the entire facility
         for (int iResource = 1; iResource <= numResourceTypes; ++iResource) {
-            std::string meterName = format("{}:FACILITY", ort->resourceTypeNames(iResource));
+            std::string meterName = EnergyPlus::format("{}:FACILITY", ort->resourceTypeNames(iResource));
             int meterNumber = GetMeterIndex(state, Util::makeUPPER(meterName));
             ort->meterNumTotalsBEPS(iResource) = meterNumber;
 
             for (int jEndUse = 1; jEndUse <= static_cast<int>(Constant::EndUse::Num); ++jEndUse) {
-                meterName = format("{}:{}", ort->endUseNames(jEndUse), ort->resourceTypeNames(iResource)); //// ':FACILITY'
+                meterName = EnergyPlus::format("{}:{}", ort->endUseNames(jEndUse), ort->resourceTypeNames(iResource)); //// ':FACILITY'
                 meterNumber = GetMeterIndex(state, Util::makeUPPER(meterName));
                 ort->meterNumEndUseBEPS(iResource, jEndUse) = meterNumber;
 
                 for (int kEndUseSub = 1; kEndUseSub <= op->EndUseCategory(jEndUse).NumSubcategories; ++kEndUseSub) {
-                    meterName = format("{}:{}:{}",
-                                       op->EndUseCategory(jEndUse).SubcategoryName(kEndUseSub),
-                                       ort->endUseNames(jEndUse),
-                                       ort->resourceTypeNames(iResource));
+                    meterName = EnergyPlus::format("{}:{}:{}",
+                                                   op->EndUseCategory(jEndUse).SubcategoryName(kEndUseSub),
+                                                   ort->endUseNames(jEndUse),
+                                                   ort->resourceTypeNames(iResource));
                     meterNumber = GetMeterIndex(state, Util::makeUPPER(meterName));
                     ort->meterNumEndUseSubBEPS(kEndUseSub, jEndUse, iResource) = meterNumber;
                 }
                 for (int kEndUseSpType = 1; kEndUseSpType <= op->EndUseCategory(jEndUse).numSpaceTypes; ++kEndUseSpType) {
-                    meterName = format("{}:{}:SpaceType:{}",
-                                       ort->endUseNames(jEndUse),
-                                       ort->resourceTypeNames(iResource),
-                                       op->EndUseCategory(jEndUse).spaceTypeName(kEndUseSpType));
+                    meterName = EnergyPlus::format("{}:{}:SpaceType:{}",
+                                                   ort->endUseNames(jEndUse),
+                                                   ort->resourceTypeNames(iResource),
+                                                   op->EndUseCategory(jEndUse).spaceTypeName(kEndUseSpType));
                     meterNumber = GetMeterIndex(state, Util::makeUPPER(meterName));
                     ort->meterNumEndUseSpTypeBEPS(kEndUseSpType, jEndUse, iResource) = meterNumber;
                 }
@@ -2060,18 +2076,19 @@ void InitializePredefinedMonthlyTitles(EnergyPlusData &state)
     ort->namedMonthly(63).title = "HeatEmissionsReportMonthly";
 
     if (numNamedMonthly != NumMonthlyReports) {
-        ShowFatalError(state,
-                       format("InitializePredefinedMonthlyTitles: Number of Monthly Reports in OutputReportTabular=[{}] does not match number in "
-                              "DataOutputs=[{}].",
-                              numNamedMonthly,
-                              NumMonthlyReports));
+        ShowFatalError(
+            state,
+            EnergyPlus::format("InitializePredefinedMonthlyTitles: Number of Monthly Reports in OutputReportTabular=[{}] does not match number in "
+                               "DataOutputs=[{}].",
+                               numNamedMonthly,
+                               NumMonthlyReports));
     } else {
         for (int xcount = 1; xcount <= numNamedMonthly; ++xcount) {
             if (!Util::SameString(MonthlyNamedReports(xcount), ort->namedMonthly(xcount).title)) {
                 ShowSevereError(state,
                                 "InitializePredefinedMonthlyTitles: Monthly Report Titles in OutputReportTabular do not match titles in DataOutput.");
-                ShowContinueError(state, format("first mismatch at ORT [{}] =\"{}\".", numNamedMonthly, ort->namedMonthly(xcount).title));
-                ShowContinueError(state, format("same location in DO =\"{}\".", MonthlyNamedReports(xcount)));
+                ShowContinueError(state, EnergyPlus::format("first mismatch at ORT [{}] =\"{}\".", numNamedMonthly, ort->namedMonthly(xcount).title));
+                ShowContinueError(state, EnergyPlus::format("same location in DO =\"{}\".", MonthlyNamedReports(xcount)));
                 ShowFatalError(state, "Preceding condition causes termination.");
             }
         }
@@ -3322,15 +3339,15 @@ void WriteTableOfContents(EnergyPlusData &state)
                             int const curTable = ort->OutputTableBinned(iInput).resIndex + (jTable - 1);
                             std::string curName;
                             if (ort->ip()) {
-                                std::string origName = format("{} [{}]",
-                                                              ort->OutputTableBinned(iInput).varOrMeter,
-                                                              Constant::unitNames[(int)ort->OutputTableBinned(iInput).units]);
+                                std::string origName = EnergyPlus::format("{} [{}]",
+                                                                          ort->OutputTableBinned(iInput).varOrMeter,
+                                                                          Constant::unitNames[(int)ort->OutputTableBinned(iInput).units]);
                                 [[maybe_unused]] int indexUnitConv = -1;
                                 LookupSItoIP(state, origName, indexUnitConv, curName);
                             } else {
-                                curName = format("{}[{}]",
-                                                 ort->OutputTableBinned(iInput).varOrMeter,
-                                                 Constant::unitNames[(int)ort->OutputTableBinned(iInput).units]);
+                                curName = EnergyPlus::format("{}[{}]",
+                                                             ort->OutputTableBinned(iInput).varOrMeter,
+                                                             Constant::unitNames[(int)ort->OutputTableBinned(iInput).units]);
                             }
                             if (ort->OutputTableBinned(iInput).sched == nullptr) {
                                 tbl_stream << "<a href=\"#" << MakeAnchorName(curName, ort->BinObjVarID(curTable).namesOfObj) << "\">"
@@ -7197,8 +7214,8 @@ void WriteMonthlyTables(EnergyPlusData &state)
                     // do the unit conversions
                     if (currentStyle.unitsStyle == OutputReportTabular::UnitsStyle::InchPound ||
                         currentStyle.unitsStyle == OutputReportTabular::UnitsStyle::InchPoundExceptElectricity) {
-                        varNameWithUnits =
-                            format("{} [{}]", ort->MonthlyColumns(curCol).varName, Constant::unitNames[(int)ort->MonthlyColumns(curCol).units]);
+                        varNameWithUnits = EnergyPlus::format(
+                            "{} [{}]", ort->MonthlyColumns(curCol).varName, Constant::unitNames[(int)ort->MonthlyColumns(curCol).units]);
                         LookupSItoIP(state, varNameWithUnits, indexUnitConv, curUnits);
                         GetUnitConversion(state, indexUnitConv, curConversionFactor, state.dataOutRptTab->curConversionOffset, curUnits);
                     } else if (Util::SameString(Constant::unitNames[(int)ort->MonthlyColumns(curCol).units], "J")) {
@@ -7562,8 +7579,8 @@ void WriteTimeBinTables(EnergyPlusData &state)
 
         for (int iInObj = 1; iInObj <= ort->OutputTableBinnedCount; ++iInObj) {
             int const firstReport = ort->OutputTableBinned(iInObj).resIndex;
-            curNameWithSIUnits =
-                format("{} [{}]", ort->OutputTableBinned(iInObj).varOrMeter, Constant::unitNames[(int)ort->OutputTableBinned(iInObj).units]);
+            curNameWithSIUnits = EnergyPlus::format(
+                "{} [{}]", ort->OutputTableBinned(iInObj).varOrMeter, Constant::unitNames[(int)ort->OutputTableBinned(iInObj).units]);
             Real64 curIntervalStart;
             Real64 curIntervalSize;
             int indexUnitConv = -1;
@@ -7877,30 +7894,30 @@ void WriteBEPSTable(EnergyPlusData &state)
 
         if (currentStyle.produceTabular) {
             if (state.dataGlobal->createPerfLog) {
-                Util::appendPerfLog(state, "Electricity ABUPS Total [J]", format("{:.3R}", collapsedTotal(1)));
-                Util::appendPerfLog(state, "Natural Gas ABUPS Total [J]", format("{:.3R}", collapsedTotal(2)));
-                Util::appendPerfLog(state, "Gasoline ABUPS Total [J]", format("{:.3R}", collapsedTotal(3)));
-                Util::appendPerfLog(state, "Diesel ABUPS Total [J]", format("{:.3R}", collapsedTotal(4)));
-                Util::appendPerfLog(state, "Coal ABUPS Total [J]", format("{:.3R}", collapsedTotal(5)));
-                Util::appendPerfLog(state, "Fuel Oil No 1 ABUPS Total [J]", format("{:.3R}", collapsedTotal(6)));
-                Util::appendPerfLog(state, "Fuel Oil No 2 ABUPS Total [J]", format("{:.3R}", collapsedTotal(7)));
-                Util::appendPerfLog(state, "Propane ABUPS Total [J]", format("{:.3R}", collapsedTotal(8)));
-                Util::appendPerfLog(state, "Other Fuel 1 ABUPS Total [J]", format("{:.3R}", collapsedTotal(9)));
-                Util::appendPerfLog(state, "Other Fuel 2 ABUPS Total [J]", format("{:.3R}", collapsedTotal(10)));
-                Util::appendPerfLog(state, "District Cooling ABUPS Total [J]", format("{:.3R}", collapsedTotal(11)));
-                Util::appendPerfLog(state, "District Heating Water ABUPS Total [J]", format("{:.3R}", collapsedTotal(12)));
-                Util::appendPerfLog(state, "District Heating Steam ABUPS Total [J]", format("{:.3R}", collapsedTotal(13)));
-                Util::appendPerfLog(state, "Water ABUPS Total [m3]", format("{:.3R}", collapsedTotal(14)));
-                Util::appendPerfLog(state, "Values Gathered Over [hours]", format("{:.2R}", ort->gatherElapsedTimeBEPS));
+                Util::appendPerfLog(state, "Electricity ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(1)));
+                Util::appendPerfLog(state, "Natural Gas ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(2)));
+                Util::appendPerfLog(state, "Gasoline ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(3)));
+                Util::appendPerfLog(state, "Diesel ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(4)));
+                Util::appendPerfLog(state, "Coal ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(5)));
+                Util::appendPerfLog(state, "Fuel Oil No 1 ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(6)));
+                Util::appendPerfLog(state, "Fuel Oil No 2 ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(7)));
+                Util::appendPerfLog(state, "Propane ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(8)));
+                Util::appendPerfLog(state, "Other Fuel 1 ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(9)));
+                Util::appendPerfLog(state, "Other Fuel 2 ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(10)));
+                Util::appendPerfLog(state, "District Cooling ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(11)));
+                Util::appendPerfLog(state, "District Heating Water ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(12)));
+                Util::appendPerfLog(state, "District Heating Steam ABUPS Total [J]", EnergyPlus::format("{:.3R}", collapsedTotal(13)));
+                Util::appendPerfLog(state, "Water ABUPS Total [m3]", EnergyPlus::format("{:.3R}", collapsedTotal(14)));
+                Util::appendPerfLog(state, "Values Gathered Over [hours]", EnergyPlus::format("{:.2R}", ort->gatherElapsedTimeBEPS));
                 Util::appendPerfLog(state,
                                     "Facility Any Zone Oscillating Temperatures Time [hours]",
-                                    format("{:.2R}", state.dataZoneTempPredictorCorrector->AnnualAnyZoneTempOscillate));
+                                    EnergyPlus::format("{:.2R}", state.dataZoneTempPredictorCorrector->AnnualAnyZoneTempOscillate));
                 Util::appendPerfLog(state,
                                     "Facility Any Zone Oscillating Temperatures During Occupancy Time [hours]",
-                                    format("{:.2R}", state.dataZoneTempPredictorCorrector->AnnualAnyZoneTempOscillateDuringOccupancy));
+                                    EnergyPlus::format("{:.2R}", state.dataZoneTempPredictorCorrector->AnnualAnyZoneTempOscillateDuringOccupancy));
                 Util::appendPerfLog(state,
                                     "Facility Any Zone Oscillating Temperatures in Deadband Time [hours]",
-                                    format("{:.2R}", state.dataZoneTempPredictorCorrector->AnnualAnyZoneTempOscillateInDeadband));
+                                    EnergyPlus::format("{:.2R}", state.dataZoneTempPredictorCorrector->AnnualAnyZoneTempOscillateInDeadband));
             }
         }
         for (int jEndUse = 1; jEndUse <= static_cast<int>(Constant::EndUse::Num); ++jEndUse) {
@@ -11706,23 +11723,24 @@ void WriteVeriSumTable(EnergyPlusData &state)
                     ShowWarningError(
                         state, "WriteVeriSumTable: InputVerificationsAndResultsSummary: Wall area based on [>=60,<=120] degrees (tilt) as walls");
                     ShowContinueError(state,
-                                      format("differs ~{:.1R}% from user entered Wall class surfaces. Degree calculation based on ASHRAE "
-                                             "90.1 wall definitions.",
-                                             pdiff * 100.0));
+                                      EnergyPlus::format("differs ~{:.1R}% from user entered Wall class surfaces. Degree calculation based on ASHRAE "
+                                                         "90.1 wall definitions.",
+                                                         pdiff * 100.0));
                     //      CALL ShowContinueError(state, format("Calculated based on degrees=[{}{}{}{}{}{}] m2, Calculated from user entered Wall
                     //      class surfaces=[{}{}{}{}{}{}", //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS +
                     //      wallAreaE + wallAreaW),3)))//, &, //, //, &, //, TRIM(ADJUSTL(RealToStr(currentStyle.formatReals,
                     //      SUM(Zone(1:NumOfZones)%ExtGrossWallArea_Multiplied),3)))//', m2.'), ShowContinueError(state, "Check classes of surfaces
                     //      and tilts for discrepancies."));
+                    ShowContinueError(
+                        state,
+                        EnergyPlus::format("Total wall area by ASHRAE 90.1 definition={} m2.",
+                                           stripped(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS + wallAreaE + wallAreaW), 3))));
                     ShowContinueError(state,
-                                      format("Total wall area by ASHRAE 90.1 definition={} m2.",
-                                             stripped(RealToStr(currentStyle.formatReals, (wallAreaN + wallAreaS + wallAreaE + wallAreaW), 3))));
+                                      EnergyPlus::format("Total exterior wall area from user entered classes={} m2.",
+                                                         stripped(RealToStr(currentStyle.formatReals, totExtGrossWallArea_Multiplied, 3))));
                     ShowContinueError(state,
-                                      format("Total exterior wall area from user entered classes={} m2.",
-                                             stripped(RealToStr(currentStyle.formatReals, totExtGrossWallArea_Multiplied, 3))));
-                    ShowContinueError(state,
-                                      format("Total ground contact wall area from user entered classes={} m2.",
-                                             stripped(RealToStr(currentStyle.formatReals, totExtGrossGroundWallArea_Multiplied, 3))));
+                                      EnergyPlus::format("Total ground contact wall area from user entered classes={} m2.",
+                                                         stripped(RealToStr(currentStyle.formatReals, totExtGrossGroundWallArea_Multiplied, 3))));
                 }
             }
         }
@@ -12441,16 +12459,16 @@ void WriteReportHeaderReportingPeriod(EnergyPlusData &state,
         OutputProcessor::StoreType::Average);
 
     WriteSubtitle(state,
-                  format("Reporting period: {} -- {}, Total Electricity Usage: {:.2R} kWh",
-                         formatReportPeriodTimestamp(ReportPeriodInputData(periodIdx).startYear,
-                                                     ReportPeriodInputData(periodIdx).startMonth,
-                                                     ReportPeriodInputData(periodIdx).startDay,
-                                                     ReportPeriodInputData(periodIdx).startHour),
-                         formatReportPeriodTimestamp(ReportPeriodInputData(periodIdx).endYear,
-                                                     ReportPeriodInputData(periodIdx).endMonth,
-                                                     ReportPeriodInputData(periodIdx).endDay,
-                                                     ReportPeriodInputData(periodIdx).endHour),
-                         ReportPeriodInputData(periodIdx).totalElectricityUse / 3600000.0));
+                  EnergyPlus::format("Reporting period: {} -- {}, Total Electricity Usage: {:.2R} kWh",
+                                     formatReportPeriodTimestamp(ReportPeriodInputData(periodIdx).startYear,
+                                                                 ReportPeriodInputData(periodIdx).startMonth,
+                                                                 ReportPeriodInputData(periodIdx).startDay,
+                                                                 ReportPeriodInputData(periodIdx).startHour),
+                                     formatReportPeriodTimestamp(ReportPeriodInputData(periodIdx).endYear,
+                                                                 ReportPeriodInputData(periodIdx).endMonth,
+                                                                 ReportPeriodInputData(periodIdx).endDay,
+                                                                 ReportPeriodInputData(periodIdx).endHour),
+                                     ReportPeriodInputData(periodIdx).totalElectricityUse / 3600000.0));
 }
 
 void WriteReportPeriodTimeConsumption(EnergyPlusData &state)
@@ -12664,10 +12682,11 @@ void WriteThermalResilienceTablesRepPeriod(EnergyPlusData &state, int const peri
             if (!state.dataHeatBal->People(iPeople).Pierce) {
                 hasPierceSET = false;
                 if (ort->displayThermalResilienceSummaryExplicitly) {
-                    ShowWarningError(state,
-                                     format("Writing Reporting Period Thermal Resilience Summary - SET Degree-Hours reports: Zone Thermal Comfort "
-                                            "Pierce Model Standard Effective Temperature is required, but no Pierce model is defined in {} object.",
-                                            state.dataHeatBal->People(iPeople).Name));
+                    ShowWarningError(
+                        state,
+                        EnergyPlus::format("Writing Reporting Period Thermal Resilience Summary - SET Degree-Hours reports: Zone Thermal Comfort "
+                                           "Pierce Model Standard Effective Temperature is required, but no Pierce model is defined in {} object.",
+                                           state.dataHeatBal->People(iPeople).Name));
                 }
             }
         }
@@ -13494,10 +13513,11 @@ void WriteThermalResilienceTables(EnergyPlusData &state)
             if (!state.dataHeatBal->People(iPeople).Pierce) {
                 hasPierceSET = false;
                 if (ort->displayThermalResilienceSummaryExplicitly) {
-                    ShowWarningError(state,
-                                     format("Writing Annual Thermal Resilience Summary - SET Degree-Hours reports: Zone Thermal Comfort Pierce Model "
-                                            "Standard Effective Temperature is required, but no Pierce model is defined in {} object.",
-                                            state.dataHeatBal->People(iPeople).Name));
+                    ShowWarningError(
+                        state,
+                        EnergyPlus::format("Writing Annual Thermal Resilience Summary - SET Degree-Hours reports: Zone Thermal Comfort Pierce Model "
+                                           "Standard Effective Temperature is required, but no Pierce model is defined in {} object.",
+                                           state.dataHeatBal->People(iPeople).Name));
                 }
             }
         }
@@ -13740,10 +13760,11 @@ void WriteVisualResilienceTables(EnergyPlusData &state)
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
         if (state.dataDayltg->ZoneDaylight(ZoneNum).totRefPts == 0) {
             if (state.dataOutRptTab->displayVisualResilienceSummaryExplicitly) {
-                ShowWarningError(state,
-                                 format("Writing Annual Visual Resilience Summary - Lighting Level Hours reports: Zone Average Daylighting Reference "
-                                        "Point Illuminance output is required, but no Daylighting Controls are defined in Zone:{}",
-                                        state.dataHeatBal->Zone(ZoneNum).Name));
+                ShowWarningError(
+                    state,
+                    EnergyPlus::format("Writing Annual Visual Resilience Summary - Lighting Level Hours reports: Zone Average Daylighting Reference "
+                                       "Point Illuminance output is required, but no Daylighting Controls are defined in Zone:{}",
+                                       state.dataHeatBal->Zone(ZoneNum).Name));
             }
         }
     }
@@ -14133,7 +14154,7 @@ void WritePredefinedTables(EnergyPlusData &state)
                                                           value,
                                                           state.dataOutRptPredefined->tableEntry(lTableEntry).significantDigits);
                                         } else {
-                                            tableBody(colCurrent, rowCurrent) = format("{}", value);
+                                            tableBody(colCurrent, rowCurrent) = EnergyPlus::format("{}", value);
                                         }
                                     } else {
                                         tableBody(colCurrent, rowCurrent) = state.dataOutRptPredefined->tableEntry(lTableEntry).charEntry;
@@ -16412,10 +16433,10 @@ void CollectPeakZoneConditions(EnergyPlusData &state,
         if (isCooling) {
             // Time of Peak Load
             if ((desDaySelected > 0) && ((size_t)desDaySelected <= state.dataWeather->DesDayInput.size())) {
-                compLoad.peakDateHrMin = format("{}/{} {}",
-                                                state.dataWeather->DesDayInput(desDaySelected).Month,
-                                                state.dataWeather->DesDayInput(desDaySelected).DayOfMonth,
-                                                state.dataRptCoilSelection->coilSelectionReportObj->getTimeText(state, timeOfMax));
+                compLoad.peakDateHrMin = EnergyPlus::format("{}/{} {}",
+                                                            state.dataWeather->DesDayInput(desDaySelected).Month,
+                                                            state.dataWeather->DesDayInput(desDaySelected).DayOfMonth,
+                                                            state.dataRptCoilSelection->coilSelectionReportObj->getTimeText(state, timeOfMax));
             } else {
                 compLoad.peakDateHrMin = szCalcFinalSizing.CoolPeakDateHrMin;
             }
@@ -16464,10 +16485,10 @@ void CollectPeakZoneConditions(EnergyPlusData &state,
         } else {
             // Time of Peak Load
             if ((size_t)desDaySelected <= state.dataWeather->DesDayInput.size()) {
-                compLoad.peakDateHrMin = format("{}/{} {}",
-                                                state.dataWeather->DesDayInput(desDaySelected).Month,
-                                                state.dataWeather->DesDayInput(desDaySelected).DayOfMonth,
-                                                state.dataRptCoilSelection->coilSelectionReportObj->getTimeText(state, timeOfMax));
+                compLoad.peakDateHrMin = EnergyPlus::format("{}/{} {}",
+                                                            state.dataWeather->DesDayInput(desDaySelected).Month,
+                                                            state.dataWeather->DesDayInput(desDaySelected).DayOfMonth,
+                                                            state.dataRptCoilSelection->coilSelectionReportObj->getTimeText(state, timeOfMax));
             } else {
                 compLoad.peakDateHrMin = szCalcFinalSizing.HeatPeakDateHrMin;
             }
@@ -18579,7 +18600,7 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
 
     if (!formatReals) {
         // No rounding
-        return format("{}", RealIn);
+        return EnergyPlus::format("{}", RealIn);
     }
     int nDigits = numDigits;
     if (RealIn < 0.0) {
@@ -18593,7 +18614,7 @@ std::string RealToStr(bool const formatReals, Real64 const RealIn, int const num
     }
 
     if (std::abs(RealIn) > maxvalDigitsA.at(nDigits)) {
-        return format("{:12.6E}", RealIn);
+        return EnergyPlus::format("{:12.6E}", RealIn);
     }
     return format<FormatSyntax::FMT>(formDigitsA.at(nDigits), RealIn);
 
@@ -19390,7 +19411,7 @@ void LookupSItoIP(EnergyPlusData &state, std::string const &stringInWithSI, int 
 
     // Add warning if units not found.
     if (unitConvIndex == 0 && !noBrackets) {
-        ShowWarningError(state, format("Unable to find a unit conversion from {} into IP units", stringInWithSI));
+        ShowWarningError(state, EnergyPlus::format("Unable to find a unit conversion from {} into IP units", stringInWithSI));
         ShowContinueError(state, "Applying default conversion factor of 1.0");
     }
 }
@@ -19627,7 +19648,7 @@ Real64 getSpecificUnitMultiplier(EnergyPlusData &state, std::string const &SIuni
     if (state.dataOutRptTab->foundGsum != 0) {
         getSpecificUnitMultiplier = ort->UnitConv(state.dataOutRptTab->foundGsum).mult;
     } else {
-        ShowWarningError(state, format("Unable to find a unit conversion from {} to {}", SIunit, IPunit));
+        ShowWarningError(state, EnergyPlus::format("Unable to find a unit conversion from {} to {}", SIunit, IPunit));
         ShowContinueError(state, "Applying default conversion factor of 1.0");
         getSpecificUnitMultiplier = 1.0;
     }
@@ -19682,7 +19703,7 @@ Real64 getSpecificUnitDivider(EnergyPlusData &state, std::string const &SIunit, 
     if (mult != 0) {
         getSpecificUnitDivider = 1 / mult;
     } else {
-        ShowWarningError(state, format("Unable to find a unit conversion from {} to {}", SIunit, IPunit));
+        ShowWarningError(state, EnergyPlus::format("Unable to find a unit conversion from {} to {}", SIunit, IPunit));
         ShowContinueError(state, "Applying default conversion factor of 1.0");
         getSpecificUnitDivider = 1.0;
     }

@@ -135,9 +135,10 @@ void SetupSpaceInternalGain(EnergyPlusData &state,
 
     if (FoundDuplicate) {
         ShowSevereError(state, "SetupZoneInternalGain: developer error, trapped duplicate internal gains sent to SetupZoneInternalGain");
-        ShowContinueError(state, format("The duplicate object user name ={}", format(cComponentName)));
+        ShowContinueError(state, EnergyPlus::format("The duplicate object user name ={}", EnergyPlus::format(cComponentName)));
         ShowContinueError(state,
-                          format("The duplicate object type = {}", format(DataHeatBalance::IntGainTypeNamesCC[static_cast<int>(IntGainCompType)])));
+                          EnergyPlus::format("The duplicate object type = {}",
+                                             EnergyPlus::format(DataHeatBalance::IntGainTypeNamesCC[static_cast<int>(IntGainCompType)])));
         ShowContinueError(state, "This internal gain will not be modeled, and the simulation continues");
         return;
     }

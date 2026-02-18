@@ -3219,9 +3219,9 @@ namespace WindowComplexManager {
             tarcogErrorMessage = "message = \"" + tarcogErrorMessage + "\"";
             ShowContinueErrorTimeStamp(state, tarcogErrorMessage);
             if (CalcCondition == DataBSDFWindow::Condition::Invalid) {
-                ShowContinueError(state, format("surface name = {}", state.dataSurface->Surface(SurfNum).Name));
+                ShowContinueError(state, EnergyPlus::format("surface name = {}", state.dataSurface->Surface(SurfNum).Name));
             }
-            ShowContinueError(state, format("construction name = {}", state.dataConstruction->Construct(ConstrNum).Name));
+            ShowContinueError(state, EnergyPlus::format("construction name = {}", state.dataConstruction->Construct(ConstrNum).Name));
             ShowFatalError(state, "halting because of error in tarcog");
         }
 

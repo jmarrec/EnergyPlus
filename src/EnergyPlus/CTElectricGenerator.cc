@@ -113,8 +113,8 @@ namespace CTElectricGenerator {
         }
         // If we didn't find it, fatal
         ShowFatalError(state,
-                       format("LocalCombustionTurbineGeneratorFactory: Error getting inputs for combustion turbine generator named: {}",
-                              objectName)); // LCOV_EXCL_LINE
+                       EnergyPlus::format("LocalCombustionTurbineGeneratorFactory: Error getting inputs for combustion turbine generator named: {}",
+                                          objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -160,7 +160,7 @@ namespace CTElectricGenerator {
         int NumCTGenerators = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, state.dataIPShortCut->cCurrentModuleObject);
 
         if (NumCTGenerators <= 0) {
-            ShowSevereError(state, format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
+            ShowSevereError(state, EnergyPlus::format("No {} equipment specified in input file", state.dataIPShortCut->cCurrentModuleObject));
             ErrorsFound = true;
         }
 
@@ -188,8 +188,8 @@ namespace CTElectricGenerator {
 
             state.dataCTElectricGenerator->CTGenerator(genNum).RatedPowerOutput = NumArray(1);
             if (NumArray(1) == 0.0) {
-                ShowSevereError(state, format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(1), NumArray(1)));
-                ShowContinueError(state, format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(1), NumArray(1)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
 
@@ -269,8 +269,10 @@ namespace CTElectricGenerator {
                                                         NodeInputManager::CompFluidStream::Primary,
                                                         DataLoopNode::ObjectIsNotParent);
                 if (state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecInletNodeNum == 0) {
-                    ShowSevereError(
-                        state, format("Missing Node Name, Heat Recovery Inlet, for {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("Missing Node Name, Heat Recovery Inlet, for {}={}",
+                                                       state.dataIPShortCut->cCurrentModuleObject,
+                                                       AlphArray(1)));
                     ErrorsFound = true;
                 }
                 state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecOutletNodeNum =
@@ -284,9 +286,10 @@ namespace CTElectricGenerator {
                                                         NodeInputManager::CompFluidStream::Primary,
                                                         DataLoopNode::ObjectIsNotParent);
                 if (state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecOutletNodeNum == 0) {
-                    ShowSevereError(
-                        state,
-                        format("Missing Node Name, Heat Recovery Outlet, for {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+                    ShowSevereError(state,
+                                    EnergyPlus::format("Missing Node Name, Heat Recovery Outlet, for {}={}",
+                                                       state.dataIPShortCut->cCurrentModuleObject,
+                                                       AlphArray(1)));
                     ErrorsFound = true;
                 }
                 BranchNodeConnections::TestCompSet(
@@ -300,9 +303,9 @@ namespace CTElectricGenerator {
                 state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecOutletNodeNum = 0;
                 if (!state.dataIPShortCut->lAlphaFieldBlanks(9) || !state.dataIPShortCut->lAlphaFieldBlanks(10)) {
                     ShowWarningError(state,
-                                     format("Since Design Heat Flow Rate = 0.0, Heat Recovery inactive for {}={}",
-                                            state.dataIPShortCut->cCurrentModuleObject,
-                                            AlphArray(1)));
+                                     EnergyPlus::format("Since Design Heat Flow Rate = 0.0, Heat Recovery inactive for {}={}",
+                                                        state.dataIPShortCut->cCurrentModuleObject,
+                                                        AlphArray(1)));
                     ShowContinueError(state, "However, Node names were specified for Heat Recovery inlet or outlet nodes");
                 }
             }
@@ -311,8 +314,8 @@ namespace CTElectricGenerator {
             state.dataCTElectricGenerator->CTGenerator(genNum).FuelType =
                 static_cast<Constant::eFuel>(getEnumValue(Constant::eFuelNamesUC, AlphArray(11)));
             if (state.dataCTElectricGenerator->CTGenerator(genNum).FuelType == Constant::eFuel::Invalid) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(11), AlphArray(11)));
-                ShowContinueError(state, format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
+                ShowSevereError(state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(11), AlphArray(11)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", state.dataIPShortCut->cCurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
 
@@ -334,10 +337,10 @@ namespace CTElectricGenerator {
                                                         DataLoopNode::ObjectIsNotParent);
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, state.dataCTElectricGenerator->CTGenerator(genNum).OAInletNode)) {
                     ShowSevereError(state,
-                                    format("{}, \"{}\" Outdoor Air Inlet Node Name not valid Outdoor Air Node= {}",
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           state.dataCTElectricGenerator->CTGenerator(genNum).Name,
-                                           AlphArray(12)));
+                                    EnergyPlus::format("{}, \"{}\" Outdoor Air Inlet Node Name not valid Outdoor Air Node= {}",
+                                                       state.dataIPShortCut->cCurrentModuleObject,
+                                                       state.dataCTElectricGenerator->CTGenerator(genNum).Name,
+                                                       AlphArray(12)));
                     ShowContinueError(state, "...does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.");
                     ErrorsFound = true;
                 }
@@ -345,7 +348,7 @@ namespace CTElectricGenerator {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
         }
     }
 
@@ -372,7 +375,7 @@ namespace CTElectricGenerator {
                             OutputProcessor::EndUseCat::Cogeneration);
 
         SetupOutputVariable(state,
-                            format("Generator {} Rate", sFuelType),
+                            EnergyPlus::format("Generator {} Rate", sFuelType),
                             Constant::Units::W,
                             this->FuelEnergyUseRate,
                             OutputProcessor::TimeStepType::System,
@@ -380,7 +383,7 @@ namespace CTElectricGenerator {
                             this->Name);
 
         SetupOutputVariable(state,
-                            format("Generator {} Energy", sFuelType),
+                            EnergyPlus::format("Generator {} Energy", sFuelType),
                             Constant::Units::J,
                             this->FuelEnergy,
                             OutputProcessor::TimeStepType::System,
@@ -408,7 +411,7 @@ namespace CTElectricGenerator {
                             this->Name);
 
         SetupOutputVariable(state,
-                            format("Generator {} Mass Flow Rate", sFuelType),
+                            EnergyPlus::format("Generator {} Mass Flow Rate", sFuelType),
                             Constant::Units::kg_s,
                             this->FuelMdot,
                             OutputProcessor::TimeStepType::System,

@@ -613,11 +613,13 @@ namespace ThermalComfort {
                 } else {
                     state.dataThermalComforts->CloUnit = people.clothingSched->getCurrentVal();
                     ShowWarningError(
-                        state, format("PEOPLE=\"{}\", Scheduled clothing value will be used rather than clothing calculation method.", people.Name));
+                        state,
+                        EnergyPlus::format("PEOPLE=\"{}\", Scheduled clothing value will be used rather than clothing calculation method.",
+                                           people.Name));
                 }
                 break;
             default:
-                ShowSevereError(state, format("PEOPLE=\"{}\", Incorrect Clothing Type", people.Name));
+                ShowSevereError(state, EnergyPlus::format("PEOPLE=\"{}\", Incorrect Clothing Type", people.Name));
             }
 
             if (state.dataRoomAir->anyNonMixingRoomAirModel && state.dataRoomAir->IsZoneCrossVent(state.dataThermalComforts->ZoneNum)) {
@@ -635,7 +637,8 @@ namespace ThermalComfort {
                     if (people.AirVelErrIndex == 0) {
                         ShowWarningMessage(
                             state,
-                            format("PEOPLE=\"{}\", Air velocity is beyond the reasonable range (0.1,0.5) for thermal comfort control.", people.Name));
+                            EnergyPlus::format("PEOPLE=\"{}\", Air velocity is beyond the reasonable range (0.1,0.5) for thermal comfort control.",
+                                               people.Name));
                         ShowContinueErrorTimeStamp(state, "");
                     }
                     ShowRecurringWarningErrorAtEnd(state,
@@ -1528,11 +1531,13 @@ namespace ThermalComfort {
                 } else {
                     state.dataThermalComforts->CloUnit = people.clothingSched->getCurrentVal();
                     ShowWarningError(
-                        state, format("PEOPLE=\"{}\", Scheduled clothing value will be used rather than clothing calculation method.", people.Name));
+                        state,
+                        EnergyPlus::format("PEOPLE=\"{}\", Scheduled clothing value will be used rather than clothing calculation method.",
+                                           people.Name));
                 }
             } break;
             default:
-                ShowSevereError(state, format("PEOPLE=\"{}\", Incorrect Clothing Type", people.Name));
+                ShowSevereError(state, EnergyPlus::format("PEOPLE=\"{}\", Incorrect Clothing Type", people.Name));
             }
 
             state.dataThermalComforts->AirVel = people.airVelocitySched->getCurrentVal();
@@ -1984,16 +1989,16 @@ namespace ThermalComfort {
                 // Error trap for surfaces that do not exist or surfaces not in the zone
                 if (thisAngFacList.SurfacePtr(SurfNum) == 0) {
                     ShowSevereError(state,
-                                    format("{}: invalid {}, entered value={}",
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaFieldNames(SurfNum + 1),
-                                           state.dataIPShortCut->cAlphaArgs(SurfNum + 1)));
+                                    EnergyPlus::format("{}: invalid {}, entered value={}",
+                                                       cCurrentModuleObject,
+                                                       state.dataIPShortCut->cAlphaFieldNames(SurfNum + 1),
+                                                       state.dataIPShortCut->cAlphaArgs(SurfNum + 1)));
                     ShowContinueError(state,
-                                      format("ref {}={} not found in {}={}",
-                                             state.dataIPShortCut->cAlphaFieldNames(1),
-                                             state.dataIPShortCut->cAlphaArgs(1),
-                                             state.dataIPShortCut->cAlphaFieldNames(2),
-                                             state.dataIPShortCut->cAlphaArgs(2)));
+                                      EnergyPlus::format("ref {}={} not found in {}={}",
+                                                         state.dataIPShortCut->cAlphaFieldNames(1),
+                                                         state.dataIPShortCut->cAlphaArgs(1),
+                                                         state.dataIPShortCut->cAlphaFieldNames(2),
+                                                         state.dataIPShortCut->cAlphaArgs(2)));
                     ErrorsFound = true;
                 } else {
                     // Found Surface, is it in same enclosure?
@@ -2003,18 +2008,18 @@ namespace ThermalComfort {
                     }
                     if (thisAngFacList.EnclosurePtr != thisSurf.RadEnclIndex) {
                         ShowWarningError(state,
-                                         format("{}: For {}=\"{}\", surfaces are not all in the same radiant enclosure.",
-                                                routineName,
-                                                cCurrentModuleObject,
-                                                thisAngFacList.Name));
+                                         EnergyPlus::format("{}: For {}=\"{}\", surfaces are not all in the same radiant enclosure.",
+                                                            routineName,
+                                                            cCurrentModuleObject,
+                                                            thisAngFacList.Name));
                         ShowContinueError(state,
-                                          format("... Surface=\"{}\" is in enclosure=\"{}\"",
-                                                 state.dataSurface->Surface(thisAngFacList.SurfacePtr(1)).Name,
-                                                 state.dataViewFactor->EnclRadInfo(thisAngFacList.EnclosurePtr).Name));
+                                          EnergyPlus::format("... Surface=\"{}\" is in enclosure=\"{}\"",
+                                                             state.dataSurface->Surface(thisAngFacList.SurfacePtr(1)).Name,
+                                                             state.dataViewFactor->EnclRadInfo(thisAngFacList.EnclosurePtr).Name));
                         ShowContinueError(state,
-                                          format("... Surface=\"{}\" is in enclosure=\"{}\"",
-                                                 thisSurf.Name,
-                                                 state.dataViewFactor->EnclRadInfo(thisSurf.RadEnclIndex).Name));
+                                          EnergyPlus::format("... Surface=\"{}\" is in enclosure=\"{}\"",
+                                                             thisSurf.Name,
+                                                             state.dataViewFactor->EnclRadInfo(thisSurf.RadEnclIndex).Name));
                     }
                 }
 
@@ -2022,11 +2027,13 @@ namespace ThermalComfort {
             }
 
             if (std::abs(AllAngleFacSummed - 1.0) > AngleFacLimit) {
-                ShowSevereError(state, format("{}=\"{}\", invalid - Sum[AngleFactors]", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                ShowContinueError(state,
-                                  format("...Sum of Angle Factors [{:.3R}] should not deviate from expected sum [1.0] by more than limit [{:.3R}].",
-                                         AllAngleFacSummed,
-                                         AngleFacLimit));
+                ShowSevereError(
+                    state, EnergyPlus::format("{}=\"{}\", invalid - Sum[AngleFactors]", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format("...Sum of Angle Factors [{:.3R}] should not deviate from expected sum [1.0] by more than limit [{:.3R}].",
+                                       AllAngleFacSummed,
+                                       AngleFacLimit));
                 ErrorsFound = true;
             }
         }
@@ -2043,21 +2050,22 @@ namespace ThermalComfort {
             thisPeople.AngleFactorListPtr = Util::FindItemInList(thisPeople.AngleFactorListName, state.dataThermalComforts->AngleFactorList);
             int WhichAFList = thisPeople.AngleFactorListPtr;
             if (WhichAFList == 0 && (thisPeople.Fanger || thisPeople.Pierce || thisPeople.KSU)) {
-                ShowSevereError(state, format("{}{}=\"{}\", invalid", routineName, cCurrentModuleObject, thisPeople.AngleFactorListName));
-                ShowContinueError(state, format("... Angle Factor List Name not found for PEOPLE=\"{}\"", thisPeople.Name));
+                ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", routineName, cCurrentModuleObject, thisPeople.AngleFactorListName));
+                ShowContinueError(state, EnergyPlus::format("... Angle Factor List Name not found for PEOPLE=\"{}\"", thisPeople.Name));
                 ErrorsFound = true;
             } else {
                 auto &thisAngFacList = state.dataThermalComforts->AngleFactorList(WhichAFList);
                 if (state.dataHeatBal->space(thisPeople.spaceIndex).radiantEnclosureNum != thisAngFacList.EnclosurePtr &&
                     (thisPeople.Fanger || thisPeople.Pierce || thisPeople.KSU)) {
-                    ShowWarningError(state,
-                                     format("{}{}=\"{}\", radiant enclosure mismatch.", routineName, cCurrentModuleObject, thisAngFacList.Name));
-                    ShowContinueError(
+                    ShowWarningError(
                         state,
-                        format("...Enclosure=\"{}\" doe not match enclosure=\"{}\" for PEOPLE=\"{}\"",
-                               state.dataViewFactor->EnclRadInfo(thisAngFacList.EnclosurePtr).Name,
-                               state.dataViewFactor->EnclRadInfo(state.dataHeatBal->space(thisPeople.spaceIndex).radiantEnclosureNum).Name,
-                               thisPeople.Name));
+                        EnergyPlus::format("{}{}=\"{}\", radiant enclosure mismatch.", routineName, cCurrentModuleObject, thisAngFacList.Name));
+                    ShowContinueError(state,
+                                      EnergyPlus::format(
+                                          "...Enclosure=\"{}\" doe not match enclosure=\"{}\" for PEOPLE=\"{}\"",
+                                          state.dataViewFactor->EnclRadInfo(thisAngFacList.EnclosurePtr).Name,
+                                          state.dataViewFactor->EnclRadInfo(state.dataHeatBal->space(thisPeople.spaceIndex).radiantEnclosureNum).Name,
+                                          thisPeople.Name));
                 }
             }
         }
@@ -2173,13 +2181,15 @@ namespace ThermalComfort {
         } else {
             if (state.dataThermalComforts->FirstTimeError) {
                 int spaceNum = thisSurface.spaceNum;
-                ShowWarningError(state,
-                                 format("CalcSurfaceWeightedMRT: Areas*Inside surface emissivities are summing to zero for Enclosure=\"{}\"",
-                                        thisRadEnclosure.Name));
-                ShowContinueError(state,
-                                  format("As a result, the MAT for Space={} will be used for MRT when calculating the surface weighted MRT.",
-                                         state.dataHeatBal->space(spaceNum).Name));
-                ShowContinueError(state, format("for Surface={}", thisSurface.Name));
+                ShowWarningError(
+                    state,
+                    EnergyPlus::format("CalcSurfaceWeightedMRT: Areas*Inside surface emissivities are summing to zero for Enclosure=\"{}\"",
+                                       thisRadEnclosure.Name));
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format("As a result, the MAT for Space={} will be used for MRT when calculating the surface weighted MRT.",
+                                       state.dataHeatBal->space(spaceNum).Name));
+                ShowContinueError(state, EnergyPlus::format("for Surface={}", thisSurface.Name));
                 state.dataThermalComforts->FirstTimeError = false;
                 CalcSurfaceWeightedMRT = state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNum).MAT;
                 if (AverageWithSurface) {
@@ -2428,23 +2438,25 @@ namespace ThermalComfort {
             }
             // if any zones should be warning print it out
             if (showWarning) {
-                ShowWarningError(state, format("More than 4% of time ({:.1R} hours) uncomfortable in one or more zones ", allowedHours));
+                ShowWarningError(state, EnergyPlus::format("More than 4% of time ({:.1R} hours) uncomfortable in one or more zones ", allowedHours));
                 ShowContinueError(state, "Based on ASHRAE 55-2004 graph (Section 5.2.1.1)");
                 if (state.dataEnvrn->RunPeriodEnvironment) {
-                    ShowContinueError(state,
-                                      format("During Environment [{}]: {}", state.dataEnvrn->EnvironmentStartEnd, state.dataEnvrn->EnvironmentName));
-                } else {
                     ShowContinueError(
                         state,
-                        format("During SizingPeriod Environment [{}]: {}", state.dataEnvrn->EnvironmentStartEnd, state.dataEnvrn->EnvironmentName));
+                        EnergyPlus::format("During Environment [{}]: {}", state.dataEnvrn->EnvironmentStartEnd, state.dataEnvrn->EnvironmentName));
+                } else {
+                    ShowContinueError(state,
+                                      EnergyPlus::format("During SizingPeriod Environment [{}]: {}",
+                                                         state.dataEnvrn->EnvironmentStartEnd,
+                                                         state.dataEnvrn->EnvironmentName));
                 }
                 for (int iZone = 1; iZone <= state.dataGlobal->NumOfZones; ++iZone) {
                     if (state.dataThermalComforts->ThermalComfortInASH55(iZone).Enable55Warning) {
                         if (state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotEither > allowedHours) {
                             ShowContinueError(state,
-                                              format("{:.1R} hours were uncomfortable in zone: {}",
-                                                     state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotEither,
-                                                     state.dataHeatBal->Zone(iZone).Name));
+                                              EnergyPlus::format("{:.1R} hours were uncomfortable in zone: {}",
+                                                                 state.dataThermalComforts->ThermalComfortInASH55(iZone).totalTimeNotEither,
+                                                                 state.dataHeatBal->Zone(iZone).Name));
                         }
                     }
                 }

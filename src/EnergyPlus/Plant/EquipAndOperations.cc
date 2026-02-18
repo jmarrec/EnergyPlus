@@ -331,15 +331,17 @@ namespace DataPlant {
                             }
                         }
                         if (!foundit) {
-                            ShowSevereError(state,
-                                            format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
+                            ShowSevereError(
+                                state,
+                                EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
                                                    "component \"{}\" was not found on a cooling plant loop.",
                                                    this->Name,
                                                    this_equip.Name));
                         }
                     } else if (NumSearchResults == 0) {
-                        ShowSevereError(state,
-                                        format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
+                        ShowSevereError(
+                            state,
+                            EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
                                                "component \"{}\" was not found on a plant loop.",
                                                this->Name,
                                                this_equip.Name));
@@ -419,15 +421,17 @@ namespace DataPlant {
                             }
                         }
                         if (!foundit) {
-                            ShowSevereError(state,
-                                            format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
+                            ShowSevereError(
+                                state,
+                                EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
                                                    "component \"{}\" was not found on a heating plant loop.",
                                                    this->Name,
                                                    this_equip.Name));
                         }
                     } else if (NumSearchResults == 0) {
-                        ShowSevereError(state,
-                                        format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
+                        ShowSevereError(
+                            state,
+                            EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
                                                "component \"{}\" was not found on a plant loop.",
                                                this->Name,
                                                this_equip.Name));
@@ -507,15 +511,17 @@ namespace DataPlant {
                             }
                         }
                         if (!foundit) {
-                            ShowSevereError(state,
-                                            format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
+                            ShowSevereError(
+                                state,
+                                EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
                                                    "component \"{}\" was not found on a cooling plant loop.",
                                                    this->Name,
                                                    this_equip.Name));
                         }
                     } else if (NumSearchResults == 0) {
-                        ShowSevereError(state,
-                                        format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
+                        ShowSevereError(
+                            state,
+                            EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
                                                "component \"{}\" was not found on a plant loop.",
                                                this->Name,
                                                this_equip.Name));
@@ -595,15 +601,17 @@ namespace DataPlant {
                             }
                         }
                         if (!foundit) {
-                            ShowSevereError(state,
-                                            format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
+                            ShowSevereError(
+                                state,
+                                EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
                                                    "component \"{}\" was not found on a heating plant loop.",
                                                    this->Name,
                                                    this_equip.Name));
                         }
                     } else if (NumSearchResults == 0) {
-                        ShowSevereError(state,
-                                        format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
+                        ShowSevereError(
+                            state,
+                            EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" "
                                                "component \"{}\" was not found on a plant loop.",
                                                this->Name,
                                                this_equip.Name));
@@ -771,15 +779,17 @@ namespace DataPlant {
             }
 
             if (!founditCooling) {
-                ShowSevereError(state,
-                                format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" component "
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" component "
                                        "\"{}\" was not found on a cooling plant loop.",
                                        this->Name,
                                        this->DedicatedHR_ChWRetControl_Name));
             }
             if (!founditHeating) {
-                ShowSevereError(state,
-                                format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" component "
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme problem=\"{}\" component "
                                        "\"{}\" was not found on a heating plant loop.",
                                        this->Name,
                                        this->DedicatedHR_ChWRetControl_Name));
