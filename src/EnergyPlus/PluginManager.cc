@@ -86,15 +86,15 @@ template <> struct fmt::formatter<PyStatus>
             return ctx.out();
         }
         if (PyStatus_IsExit(status) != 0) {
-            return format_to(ctx.out(), "Exited with code {}", status.exitcode);
+            return fmt::format_to(ctx.out(), "Exited with code {}", status.exitcode);
         }
         if (PyStatus_IsError(status) != 0) {
             auto it = ctx.out();
-            it = format_to(it, "Fatal Python error: ");
+            it = fmt::format_to(it, "Fatal Python error: ");
             if (status.func != nullptr) {
-                it = format_to(it, "{}: ", status.func);
+                it = fmt::format_to(it, "{}: ", status.func);
             }
-            it = format_to(it, "{}", status.err_msg);
+            it = fmt::format_to(it, "{}", status.err_msg);
             return it;
         }
         return ctx.out();
