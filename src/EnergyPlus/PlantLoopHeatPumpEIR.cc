@@ -3933,22 +3933,23 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     modeKeyWord = "cooling";
                 }
                 // if there's no inlet node for the corresponding component, don't create this object
-                if (fields.find(format("{}_water_inlet_node_name", waterNodePrefix)) == fields.end()) {
+                if (fields.find(EnergyPlus::format("{}_water_inlet_node_name", waterNodePrefix)) == fields.end()) {
                     continue;
                 }
-                auto availSchedFound = fields.find(format("availability_schedule_name_{}", modeKeyWord));
+                auto availSchedFound = fields.find(EnergyPlus::format("availability_schedule_name_{}", modeKeyWord));
                 if (availSchedFound == fields.end()) {
                     thisAWHP.availSchedName = "";
                     thisAWHP.availSched = Sched::GetScheduleAlwaysOn(state);
                 } else {
-                    thisAWHP.availSchedName = Util::makeUPPER(fields.at(format("availability_schedule_name_{}", modeKeyWord)).get<std::string>());
+                    thisAWHP.availSchedName =
+                        Util::makeUPPER(fields.at(EnergyPlus::format("availability_schedule_name_{}", modeKeyWord)).get<std::string>());
                     if ((thisAWHP.availSched = Sched::GetSchedule(state, thisAWHP.availSchedName)) == nullptr) {
                         ShowSevereItemNotFound(state, eoh, EnergyPlus::format("availability_schedule_name_{}", modeKeyWord), thisAWHP.availSchedName);
                         errorsFound = true;
                     }
                 }
 
-                auto boosterOnFound = fields.find(format("booster_mode_on_{}", modeKeyWord));
+                auto boosterOnFound = fields.find(EnergyPlus::format("booster_mode_on_{}", modeKeyWord));
                 thisAWHP.boosterOn = false;
                 if (boosterOnFound != fields.end()) {
                     auto boosterOnStr = boosterOnFound.value().get<std::string>();
@@ -3957,19 +3958,19 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                     }
                 }
 
-                auto const boosterMultCap = fields.find(format("booster_mode_{}_capacity_multiplier", modeKeyWord));
+                auto const boosterMultCap = fields.find(EnergyPlus::format("booster_mode_{}_capacity_multiplier", modeKeyWord));
                 if (boosterMultCap != fields.end()) {
                     thisAWHP.boosterMultCap = boosterMultCap.value().get<Real64>();
                 } else {
                     thisAWHP.boosterMultCap = 1.0;
                 }
-                auto const boosterMultCOP = fields.find(format("booster_mode_{}_cop_multiplier", modeKeyWord));
+                auto const boosterMultCOP = fields.find(EnergyPlus::format("booster_mode_{}_cop_multiplier", modeKeyWord));
                 if (boosterMultCOP != fields.end()) {
                     thisAWHP.boosterMultCOP = boosterMultCOP.value().get<Real64>();
                 } else {
                     thisAWHP.boosterMultCOP = 1.0;
                 }
-                auto sourceSideDesignInletTemp = fields.find(format("rated_inlet_air_temperature_in_{}_mode", modeKeyWord));
+                auto sourceSideDesignInletTemp = fields.find(EnergyPlus::format("rated_inlet_air_temperature_in_{}_mode", modeKeyWord));
                 if (sourceSideDesignInletTemp != fields.end()) {
                     thisAWHP.sourceSideDesignInletTemp = sourceSideDesignInletTemp.value().get<Real64>();
                 } else {
@@ -3980,7 +3981,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                 if (thisAWHP.sourceSideDesignVolFlowRate == DataSizing::AutoSize) {
                     thisAWHP.sourceSideDesignVolFlowRateWasAutoSized = true;
                 }
-                auto ratedLeavingWaterTemperature = fields.find(format("rated_leaving_water_temperature_in_{}_mode", modeKeyWord));
+                auto ratedLeavingWaterTemperature = fields.find(EnergyPlus::format("rated_leaving_water_temperature_in_{}_mode", modeKeyWord));
                 if (ratedLeavingWaterTemperature != fields.end()) {
                     thisAWHP.ratedLeavingWaterTemperature = state.dataInputProcessing->inputProcessor->getRealFieldValue(
                         fields, schemaProps, EnergyPlus::format("rated_leaving_water_temperature_in_{}_mode", modeKeyWord));
@@ -3992,20 +3993,21 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                 if (thisAWHP.loadSideDesignVolFlowRate == DataSizing::AutoSize) {
                     thisAWHP.loadSideDesignVolFlowRateWasAutoSized = true;
                 }
-                auto minSourceTempLimit = fields.find(format("minimum_outdoor_air_temperature_in_{}_mode", modeKeyWord));
+                auto minSourceTempLimit = fields.find(EnergyPlus::format("minimum_outdoor_air_temperature_in_{}_mode", modeKeyWord));
                 if (minSourceTempLimit == fields.end()) {
                     thisAWHP.minSourceTempLimit = -30.0; // default value
                 } else {
                     thisAWHP.minSourceTempLimit = state.dataInputProcessing->inputProcessor->getRealFieldValue(
                         fields, schemaProps, EnergyPlus::format("minimum_outdoor_air_temperature_in_{}_mode", modeKeyWord));
                 }
-                auto maxSourceTempLimit = fields.find(format("maximum_outdoor_air_temperature_in_{}_mode", modeKeyWord));
+                auto maxSourceTempLimit = fields.find(EnergyPlus::format("maximum_outdoor_air_temperature_in_{}_mode", modeKeyWord));
                 if (maxSourceTempLimit != fields.end()) {
                     thisAWHP.maxSourceTempLimit = maxSourceTempLimit.value().get<Real64>();
                 } else {
                     thisAWHP.maxSourceTempLimit = 100.0; // default value
                 }
-                auto minLeavingWaterTempCurveName = fields.find(format("minimum_leaving_water_temperature_curve_name_in_{}_mode", modeKeyWord));
+                auto minLeavingWaterTempCurveName =
+                    fields.find(EnergyPlus::format("minimum_leaving_water_temperature_curve_name_in_{}_mode", modeKeyWord));
                 if (minLeavingWaterTempCurveName != fields.end()) {
                     thisAWHP.minSupplyWaterTempCurveIndex =
                         Curve::GetCurveIndex(state, Util::makeUPPER(minLeavingWaterTempCurveName.value().get<std::string>()));
@@ -4017,7 +4019,8 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                         errorsFound = true;
                     }
                 }
-                auto maxLeavingWaterTempCurveName = fields.find(format("maximum_leaving_water_temperature_curve_name_in_{}_mode", modeKeyWord));
+                auto maxLeavingWaterTempCurveName =
+                    fields.find(EnergyPlus::format("maximum_leaving_water_temperature_curve_name_in_{}_mode", modeKeyWord));
                 if (maxLeavingWaterTempCurveName != fields.end()) {
                     thisAWHP.maxSupplyWaterTempCurveIndex =
                         Curve::GetCurveIndex(state, Util::makeUPPER(maxLeavingWaterTempCurveName.value().get<std::string>()));
@@ -4106,9 +4109,9 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                 }
 
                 std::string loadSideInletNodeName =
-                    Util::makeUPPER(fields.at(format("{}_water_inlet_node_name", waterNodePrefix)).get<std::string>());
+                    Util::makeUPPER(fields.at(EnergyPlus::format("{}_water_inlet_node_name", waterNodePrefix)).get<std::string>());
                 std::string loadSideOutletNodeName =
-                    Util::makeUPPER(fields.at(format("{}_water_outlet_node_name", waterNodePrefix)).get<std::string>());
+                    Util::makeUPPER(fields.at(EnergyPlus::format("{}_water_outlet_node_name", waterNodePrefix)).get<std::string>());
 
                 bool nodeErrorsFound = false;
                 thisAWHP.loadSideNodes.inlet = NodeInputManager::GetOnlySingleNode(state,

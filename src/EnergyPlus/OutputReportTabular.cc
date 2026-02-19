@@ -1807,7 +1807,7 @@ void GetInputOutputTableSummaryReports(EnergyPlusData &state)
         }
 
         for (int iResource = 1; iResource <= numSourceTypes; ++iResource) {
-            int const meterNumber = GetMeterIndex(state, Util::makeUPPER(format("{}Emissions:Source", ort->sourceTypeNames(iResource))));
+            int const meterNumber = GetMeterIndex(state, Util::makeUPPER(EnergyPlus::format("{}Emissions:Source", ort->sourceTypeNames(iResource))));
             ort->meterNumTotalsSource(iResource) = meterNumber;
         }
 
