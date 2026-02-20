@@ -75,7 +75,7 @@
 namespace EnergyPlus::OutputReportTabularAnnual {
 
 constexpr Real64 veryLarge = std::numeric_limits<Real64>::max();
-constexpr Real64 verySmall = std::numeric_limits<Real64>::min();
+constexpr Real64 verySmall = std::numeric_limits<Real64>::lowest();
 
 void GetInputTabularAnnual(EnergyPlusData &state)
 {
@@ -187,7 +187,6 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
     std::transform(filterFieldUpper.begin(), filterFieldUpper.end(), filterFieldUpper.begin(), ::toupper);
     const bool useFilter = !m_filter.empty();
 
-    // Gather key lists for each field set and build the union of all keys (optionally filtered)
     for (auto &fldSt : m_annualFields) {
         const int keyCount = fldSt.getVariableKeyCountandTypeFromFldSt(state, typeVar, avgSumVar, stepTypeVar, unitsVar);
         fldSt.getVariableKeysFromFldSt(state, typeVar, keyCount, fldSt.m_namesOfKeys, fldSt.m_indexesForKeyVar);
@@ -228,11 +227,11 @@ void AnnualTable::setupGathering(EnergyPlusData &state)
             switch (fldSt.m_aggregate) {
             case AnnualFieldSet::AggregationKind::maximum:
             case AnnualFieldSet::AggregationKind::maximumDuringHoursShown:
-                fldSt.m_cell[tableRowIndex].result = -9.9e99;
+                fldSt.m_cell[tableRowIndex].result = verySmall;
                 break;
             case AnnualFieldSet::AggregationKind::minimum:
             case AnnualFieldSet::AggregationKind::minimumDuringHoursShown:
-                fldSt.m_cell[tableRowIndex].result = 9.9e99;
+                fldSt.m_cell[tableRowIndex].result = veryLarge;
                 break;
             default:
                 fldSt.m_cell[tableRowIndex].result = 0.0;
@@ -465,8 +464,9 @@ void AnnualTable::gatherForTimestep(EnergyPlusData &state, OutputProcessor::Time
                     case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusTwoStdDev:
                     case AnnualFieldSet::AggregationKind::hoursInTenBinsPlusMinusThreeStdDev:
                         //  for all of the binning options add the value to the deferred
-                        if (fldStIt->m_varAvgSum == OutputProcessor::StoreType::Sum) {                     // if it is a summed variable
-                            fldStIt->m_cell[row].deferredResults.push_back(curValue /= secondsInTimeStep); // divide by time just like max and min
+                        if (fldStIt->m_varAvgSum == OutputProcessor::StoreType::Sum) { // if it is a summed variable
+                            const Real64 curValueRate = curValue / secondsInTimeStep;  // divide by time just like max and min
+                            fldStIt->m_cell[row].deferredResults.push_back(curValueRate);
                         } else {
                             fldStIt->m_cell[row].deferredResults.push_back(curValue);
                         }
@@ -594,11 +594,11 @@ void AnnualTable::resetGathering()
             switch (fldSt.m_aggregate) {
             case AnnualFieldSet::AggregationKind::maximum:
             case AnnualFieldSet::AggregationKind::maximumDuringHoursShown:
-                cell.result = -9.9e99;
+                cell.result = verySmall;
                 break;
             case AnnualFieldSet::AggregationKind::minimum:
             case AnnualFieldSet::AggregationKind::minimumDuringHoursShown:
-                cell.result = 9.9e99;
+                cell.result = veryLarge;
                 break;
             default:
                 cell.result = 0.0;
@@ -618,9 +618,9 @@ Real64 AnnualTable::getElapsedTime(const EnergyPlusData &state, const OutputProc
 {
     Real64 elapsedTime;
     if (kindOfTimeStep == OutputProcessor::TimeStepType::Zone) {
-        elapsedTime = state.dataHVACGlobal->TimeStepSys;
-    } else {
         elapsedTime = state.dataGlobal->TimeStepZone;
+    } else {
+        elapsedTime = state.dataHVACGlobal->TimeStepSys;
     }
     return elapsedTime;
 }
@@ -629,9 +629,9 @@ Real64 AnnualTable::getSecondsInTimeStep(const EnergyPlusData &state, const Outp
 {
     Real64 secondsInTimeStep;
     if (kindOfTimeStep == OutputProcessor::TimeStepType::Zone) {
-        secondsInTimeStep = state.dataHVACGlobal->TimeStepSysSec;
-    } else {
         secondsInTimeStep = state.dataGlobal->TimeStepZoneSec;
+    } else {
+        secondsInTimeStep = state.dataHVACGlobal->TimeStepSysSec;
     }
     return secondsInTimeStep;
 }
