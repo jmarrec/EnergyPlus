@@ -58,6 +58,7 @@
 #include <EnergyPlus/EPVector.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/General.hh>
 #include <EnergyPlus/Plant/Enums.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/SystemAvailabilityManager.hh>
@@ -198,6 +199,8 @@ namespace UnitVentilator {
         int ATMixerSecNode = 0;                                 // secondary air inlet node number for the mixer
         int ATMixerOutNode = 0;                                 // outlet air node number for the mixer
         bool FirstPass = true;                                  // detects first time through for resetting sizing data
+
+        General::SolveRootStats solveRootStats{};
 
         UnitVentilatorData() = default;
         ~UnitVentilatorData()

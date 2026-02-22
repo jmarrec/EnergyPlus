@@ -9160,11 +9160,9 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                             return PLRResidualWaterThermalTank;
                         };
 
-                        // Shared by all instances of this call to learn fastest algorithm
-                        static General::SolveRootStats solveRootStats;
                         int SolFla;
                         
-                        partLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, DesupHtr.DXSysPLR, solveRootStats);
+                        partLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, DesupHtr.DXSysPLR, this->solveRootStats);
                         if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                             if (!state.dataGlobal->WarmupFlag) {
                                 ++DesupHtr.IterLimitExceededNum1;
@@ -9295,10 +9293,9 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                             // exist within state?  Within each thermal tank object?  That's probably excessive.
 
                             // TODO: move to state
-                            static General::SolveRootStats solveRootStats;
                             int SolFla;
                             
-                            partLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, DesupHtr.DXSysPLR, solveRootStats);
+                            partLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, DesupHtr.DXSysPLR, this->solveRootStats);
                             if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                                 if (!state.dataGlobal->WarmupFlag) {
                                     ++DesupHtr.IterLimitExceededNum2;
@@ -9988,10 +9985,10 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
             if (zeroResidual > 0.0) { // then iteration
 
                 // Shared by all calls to learn fastest algorithm
-                static General::SolveRootStats solveRootStats;
                 int SolFla;
               
-                state.dataWaterThermalTanks->hpPartLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, 1.0, solveRootStats);
+                state.dataWaterThermalTanks->hpPartLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, 1.0,
+                                                                                   this->solveRootStats);
                 if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                     if (!state.dataGlobal->WarmupFlag) {
                         ++HeatPump.IterLimitExceededNum2;
@@ -10164,9 +10161,8 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                                           FirstHVACIteration);
                     };
 
-                    static General::SolveRootStats solveRootStats;
                     int SolFla;
-                    SpeedRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 1.0e-10, 1.0, solveRootStats);
+                    SpeedRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 1.0e-10, 1.0, this->solveRootStats);
 
                     if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                         if (!state.dataGlobal->WarmupFlag) {

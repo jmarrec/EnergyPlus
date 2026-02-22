@@ -57,6 +57,7 @@
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/General.hh>
 
 namespace EnergyPlus {
 
@@ -135,6 +136,8 @@ namespace UnitHeater {
         int HVACSizingIndex;     // index of a HVACSizing object for a unit heater
         bool FirstPass;          // detects first time through for resetting sizing data
 
+        General::SolveRootStats solveRootStats;
+      
         // Default Constructor
         UnitHeaterData()
             : AirInNode(0), AirOutNode(0), fanType(HVAC::FanType::Invalid), Fan_Index(0), ControlCompTypeNum(0), CompErrIndex(0), MaxAirVolFlow(0.0),

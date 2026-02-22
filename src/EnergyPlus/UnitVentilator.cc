@@ -2576,8 +2576,8 @@ namespace UnitVentilator {
                                     }
                                     return 0.0;
                                 };
-                                static General::SolveRootStats solveRootStats;
-                                PartLoadFrac = General::SolveRoot2(state, 0.001, MaxIter, SolFlag, f, 0.0, 1.0, solveRootStats);
+                                PartLoadFrac = General::SolveRoot2(state, 0.001, MaxIter, SolFlag, f, 0.0, 1.0,
+                                                                   state.dataUnitVentilators->UnitVent(UnitVentNum).solveRootStats);
                             }
                         }
 
@@ -2811,8 +2811,9 @@ namespace UnitVentilator {
                                     }
                                     return 0.0;
                                 };
-                                static General::SolveRootStats solveRootStats;
-                                PartLoadFrac = General::SolveRoot2(state, 0.001, MaxIter, SolFlag, f, 0.0, 1.0, solveRootStats);
+
+                                PartLoadFrac = General::SolveRoot2(state, 0.001, MaxIter, SolFlag, f, 0.0, 1.0, 
+                                                                   state.dataUnitVentilators->UnitVent(UnitVentNum).solveRootStats);
                             }
                         }
                         CalcUnitVentilatorComponents(state, UnitVentNum, FirstHVACIteration, QUnitOut, fanOp, PartLoadFrac);

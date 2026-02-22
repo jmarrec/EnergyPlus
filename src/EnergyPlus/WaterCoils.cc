@@ -1471,8 +1471,6 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
             UA0 = 0.1 * waterCoil.UACoilExternal;
             UA1 = 10.0 * waterCoil.UACoilExternal;
 
-            static General::SolveRootStats solveRootStats; 
-            
             // Invert the simple cooling coil model: given the design inlet conditions and the design load, find the design UA
             auto f = [&state, CoilNum](Real64 const UA) {
                 HVAC::FanOp fanOp = HVAC::FanOp::Continuous;
@@ -1491,8 +1489,10 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
                 return (waterCoil.DesTotWaterCoilLoad - waterCoil.TotWaterCoolingCoilRate) / waterCoil.DesTotWaterCoilLoad;
             };
 
-            int SolFlag; 
-            UA = General::SolveRoot2(state, 0.001, 500, SolFlag, f, UA0, UA1, solveRootStats);
+            int SolFlag;
+            
+            UA = General::SolveRoot2(state, 0.001, 500, SolFlag, f, UA0, UA1,
+                                     state.dataWaterCoils->WaterCoil(CoilNum).solveRootStats);
 
             // if the numerical inversion failed, issue error messages.
             if (SolFlag == General::SOLVEROOT_ERROR_ITER) {

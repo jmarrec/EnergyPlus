@@ -1416,8 +1416,8 @@ namespace WaterToAirHeatPump {
                         return (compSuctionEnth - SuperHeatEnth) / SuperHeatEnth;
                     };
 
-                    static General::SolveRootStats solveRootStats;
-                    state.dataWaterToAirHeatPump->CompSuctionTemp = General::SolveRoot2(state, ERR, STOP1, SolFlag, f, CompSuctionTemp1, CompSuctionTemp2, solveRootStats);
+                    state.dataWaterToAirHeatPump->CompSuctionTemp = General::SolveRoot2(state, ERR, STOP1, SolFlag, f, CompSuctionTemp1, CompSuctionTemp2,
+                                                                                        heatPump.solveRootStats);
                     if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                         heatPump.SimFlag = false;
                         return;
@@ -1830,8 +1830,7 @@ namespace WaterToAirHeatPump {
                     return (compSuctionEnth - SuperHeatEnth) / SuperHeatEnth;
                 };
 
-                static General::SolveRootStats solveRootStats;
-                CompSuctionTemp = General::SolveRoot2(state, ERR, STOP1, SolFlag, f, CompSuctionTemp1, CompSuctionTemp2, solveRootStats);
+                CompSuctionTemp = General::SolveRoot2(state, ERR, STOP1, SolFlag, f, CompSuctionTemp1, CompSuctionTemp2, heatPump.solveRootStats);
                 if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                     heatPump.SimFlag = false;
                     return;

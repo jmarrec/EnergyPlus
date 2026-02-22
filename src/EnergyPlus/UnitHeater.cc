@@ -1453,8 +1453,8 @@ namespace UnitHeater {
 
                         // Tolerance is in fraction of load, MaxIter = 30, SolFalg = # of iterations or error as appropriate
                         int SolFlag = 0; // # of iterations IF positive, -1 means failed to converge, -2 means bounds are incorrect
-                        static General::SolveRootStats solveRootStats;
-                        PartLoadFrac = General::SolveRoot2(state, 0.001, MaxIter, SolFlag, f, 0.0, 1.0, solveRootStats);
+                        PartLoadFrac = General::SolveRoot2(state, 0.001, MaxIter, SolFlag, f, 0.0, 1.0,
+                                                           state.dataUnitHeaters->UnitHeat(UnitHeatNum).solveRootStats);
                     }
                 }
 
