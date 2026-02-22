@@ -3418,8 +3418,8 @@ namespace VariableSpeedCoils {
                 if (varSpeedCoil.VSCoilType == HVAC::Coil_CoolingWaterToAirHPVSEquationFit) { // need to set water info for WSHP
                     varSpeedCoil.WaterMassFlowRate = varSpeedCoil.MSRatedWaterMassFlowRate(varSpeedCoil.NumOfSpeeds);
                     varSpeedCoil.InletWaterTemp = RatedInletWaterTemp; // 85 F cooling mode
-                    Real64 CpSource = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum)
-                                          .glycol->getSpecificHeat(state, state.dataVariableSpeedCoils->SourceSideInletTemp, RoutineName);
+                    Real64 CpSource = varSpeedCoil.plantLoc.loop->
+                                          glycol->getSpecificHeat(state, state.dataVariableSpeedCoils->SourceSideInletTemp, RoutineName);
                     varSpeedCoil.InletWaterEnthalpy = varSpeedCoil.InletWaterTemp * CpSource;
                 }
 
@@ -3505,8 +3505,8 @@ namespace VariableSpeedCoils {
                 if (varSpeedCoil.VSCoilType == HVAC::Coil_HeatingWaterToAirHPVSEquationFit) { // need to set water info for WSHP
                     varSpeedCoil.WaterMassFlowRate = varSpeedCoil.MSRatedWaterMassFlowRate(varSpeedCoil.NumOfSpeeds);
                     varSpeedCoil.InletWaterTemp = RatedInletWaterTempHeat; // 21.11C or 70F, heating mode
-                    Real64 CpSource = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum)
-                                          .glycol->getSpecificHeat(state, state.dataVariableSpeedCoils->SourceSideInletTemp, RoutineName);
+                    Real64 CpSource = varSpeedCoil.plantLoc.loop->
+                                          glycol->getSpecificHeat(state, state.dataVariableSpeedCoils->SourceSideInletTemp, RoutineName);
                     varSpeedCoil.InletWaterEnthalpy = varSpeedCoil.InletWaterTemp * CpSource;
                 }
 
@@ -3616,10 +3616,8 @@ namespace VariableSpeedCoils {
                 (varSpeedCoil.VSCoilType == HVAC::Coil_CoolingWaterToAirHPVSEquationFit)) {
                 WaterInletNode = varSpeedCoil.WaterInletNodeNum;
 
-                rho = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum)
-                          .glycol->getDensity(state, Constant::CWInitConvTemp, RoutineNameSimpleWatertoAirHP);
-                Cp = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum)
-                         .glycol->getSpecificHeat(state, Constant::CWInitConvTemp, RoutineNameSimpleWatertoAirHP);
+                rho = varSpeedCoil.plantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineNameSimpleWatertoAirHP);
+                Cp = varSpeedCoil.plantLoc.loop->glycol->getSpecificHeat(state, Constant::CWInitConvTemp, RoutineNameSimpleWatertoAirHP);
 
                 //    VarSpeedCoil(DXCoilNum)%DesignWaterMassFlowRate= &
                 //                             rho * VarSpeedCoil(DXCoilNum)%RatedWaterVolFlowRate
@@ -4545,10 +4543,8 @@ namespace VariableSpeedCoils {
             }
 
             if (PltSizNum > 0) {
-                rho = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum)
-                          .glycol->getDensity(state, state.dataSize->PlantSizData(PltSizNum).ExitTemp, RoutineNameAlt);
-                cp = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum)
-                         .glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizNum).ExitTemp, RoutineNameAlt);
+                rho = varSpeedCoil.plantLoc.loop->glycol->getDensity(state, state.dataSize->PlantSizData(PltSizNum).ExitTemp, RoutineNameAlt);
+                cp = varSpeedCoil.plantLoc.loop->glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizNum).ExitTemp, RoutineNameAlt);
 
                 if (varSpeedCoil.VSCoilType == HVAC::Coil_HeatingWaterToAirHPVSEquationFit ||
                     varSpeedCoil.VSCoilType == HVAC::Coil_HeatingAirToAirVariableSpeed) {
@@ -4680,7 +4676,7 @@ namespace VariableSpeedCoils {
             if (PltSizNum > 0) {
                 rhoW = rho;
             } else {
-                rhoW = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum).glycol->getDensity(state, RatedSourceTempCool, RoutineName);
+                rhoW = varSpeedCoil.plantLoc.loop->glycol->getDensity(state, RatedSourceTempCool, RoutineName);
             }
 
             varSpeedCoil.RatedWaterMassFlowRate = varSpeedCoil.RatedWaterVolFlowRate * rhoW;
@@ -5291,8 +5287,8 @@ namespace VariableSpeedCoils {
             state.dataVariableSpeedCoils->SourceSideMassFlowRate = varSpeedCoil.WaterMassFlowRate;
             state.dataVariableSpeedCoils->SourceSideInletTemp = varSpeedCoil.InletWaterTemp;
             state.dataVariableSpeedCoils->SourceSideInletEnth = varSpeedCoil.InletWaterEnthalpy;
-            CpSource = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum)
-                           .glycol->getSpecificHeat(state, state.dataVariableSpeedCoils->SourceSideInletTemp, RoutineNameSourceSideInletTemp);
+            CpSource = varSpeedCoil.plantLoc.loop->
+                           glycol->getSpecificHeat(state, state.dataVariableSpeedCoils->SourceSideInletTemp, RoutineNameSourceSideInletTemp);
         }
 
         // Check for flows, do not perform simulation if no flow in load side or source side.
@@ -6442,8 +6438,8 @@ namespace VariableSpeedCoils {
             state.dataVariableSpeedCoils->SourceSideMassFlowRate = varSpeedCoil.WaterMassFlowRate;
             state.dataVariableSpeedCoils->SourceSideInletTemp = varSpeedCoil.InletWaterTemp;
             state.dataVariableSpeedCoils->SourceSideInletEnth = varSpeedCoil.InletWaterEnthalpy;
-            CpSource = state.dataPlnt->PlantLoop(varSpeedCoil.plantLoc.loopNum)
-                           .glycol->getSpecificHeat(state, state.dataVariableSpeedCoils->SourceSideInletTemp, RoutineNameSourceSideInletTemp);
+            CpSource = varSpeedCoil.plantLoc.loop->
+                           glycol->getSpecificHeat(state, state.dataVariableSpeedCoils->SourceSideInletTemp, RoutineNameSourceSideInletTemp);
         }
 
         // Check for flows, do not perform simulation if no flow in load side or source side.

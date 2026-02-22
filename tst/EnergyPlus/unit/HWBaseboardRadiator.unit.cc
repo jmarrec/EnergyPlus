@@ -109,6 +109,9 @@ TEST_F(EnergyPlusFixture, HWBaseboardRadiator_CalcHWBaseboard)
     state->dataPlnt->PlantLoop(1).FluidType = DataLoopNode::NodeFluidType::Water;
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
+    HWBaseboard(1).plantLoc.loopNum = 1;
+    HWBaseboard(1).plantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    
     CalcHWBaseboard(*state, BBNum, LoadMet);
 
     EXPECT_NEAR(14746.226690452937, HWBaseboard(1).TotPower, 0.000001);

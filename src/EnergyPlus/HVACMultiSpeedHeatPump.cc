@@ -1855,8 +1855,7 @@ namespace HVACMultiSpeedHeatPump {
                     WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", MSHeatPump(MSHeatPumpNum).HeatCoilName, ErrorsFound);
 
                 if (MSHeatPump(MSHeatPumpNum).MaxCoilFluidFlow > 0.0) {
-                    rho = state.dataPlnt->PlantLoop(MSHeatPump(MSHeatPumpNum).plantLoc.loopNum)
-                              .glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                    rho = MSHeatPump(MSHeatPumpNum).plantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
                     MSHeatPump(MSHeatPumpNum).MaxCoilFluidFlow =
                         WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", MSHeatPump(MSHeatPumpNum).HeatCoilName, ErrorsFound) * rho;
                 }
@@ -1911,8 +1910,7 @@ namespace HVACMultiSpeedHeatPump {
                     WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", MSHeatPump(MSHeatPumpNum).SuppHeatCoilName, ErrorsFound);
 
                 if (MSHeatPump(MSHeatPumpNum).MaxSuppCoilFluidFlow > 0.0) {
-                    rho = state.dataPlnt->PlantLoop(MSHeatPump(MSHeatPumpNum).SuppPlantLoc.loopNum)
-                              .glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                    rho = MSHeatPump(MSHeatPumpNum).SuppPlantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
                     MSHeatPump(MSHeatPumpNum).MaxSuppCoilFluidFlow =
                         WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", MSHeatPump(MSHeatPumpNum).SuppHeatCoilName, ErrorsFound) *
                         rho;
@@ -2145,8 +2143,7 @@ namespace HVACMultiSpeedHeatPump {
 
             if ((MSHeatPump(MSHeatPumpNum).HeatRecActive) && (!MSHeatPump(MSHeatPumpNum).MyPlantScantFlag)) {
 
-                rho = state.dataPlnt->PlantLoop(MSHeatPump(MSHeatPumpNum).HRPlantLoc.loopNum)
-                          .glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                rho = MSHeatPump(MSHeatPumpNum).HRPlantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
 
                 MSHeatPump(MSHeatPumpNum).DesignHeatRecMassFlowRate = MSHeatPump(MSHeatPumpNum).DesignHeatRecFlowRate * rho;
 
@@ -2165,8 +2162,8 @@ namespace HVACMultiSpeedHeatPump {
                         CoilMaxVolFlowRate =
                             WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", MSHeatPump(MSHeatPumpNum).HeatCoilName, ErrorsFound);
                         if (CoilMaxVolFlowRate != DataSizing::AutoSize) {
-                            rho = state.dataPlnt->PlantLoop(MSHeatPump(MSHeatPumpNum).plantLoc.loopNum)
-                                      .glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                            rho = MSHeatPump(MSHeatPumpNum).plantLoc.loop->
+                                      glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
                             MSHeatPump(MSHeatPumpNum).MaxCoilFluidFlow = CoilMaxVolFlowRate * rho;
                         }
                         PlantUtilities::InitComponentNodes(state,
@@ -2206,8 +2203,8 @@ namespace HVACMultiSpeedHeatPump {
                         CoilMaxVolFlowRate =
                             WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", MSHeatPump(MSHeatPumpNum).SuppHeatCoilName, ErrorsFound);
                         if (CoilMaxVolFlowRate != DataSizing::AutoSize) {
-                            rho = state.dataPlnt->PlantLoop(MSHeatPump(MSHeatPumpNum).SuppPlantLoc.loopNum)
-                                      .glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                            rho = MSHeatPump(MSHeatPumpNum).SuppPlantLoc.loop->
+                                      glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
                             MSHeatPump(MSHeatPumpNum).MaxSuppCoilFluidFlow = CoilMaxVolFlowRate * rho;
                         }
                         PlantUtilities::InitComponentNodes(state,
@@ -4083,7 +4080,7 @@ namespace HVACMultiSpeedHeatPump {
 
         if (HeatRecMassFlowRate > 0.0) {
             // Heat reclaim water inlet specific heat [J/kg-K]
-            Real64 CpHeatRec = state.dataPlnt->PlantLoop(mshp.HRPlantLoc.loopNum).glycol->getSpecificHeat(state, HeatRecInletTemp, RoutineName);
+            Real64 CpHeatRec = mshp.HRPlantLoc.loop->glycol->getSpecificHeat(state, HeatRecInletTemp, RoutineName);
 
             HeatRecOutletTemp = QHeatRec / (HeatRecMassFlowRate * CpHeatRec) + HeatRecInletTemp;
             if (HeatRecOutletTemp > mshp.MaxHeatRecOutletTemp) {

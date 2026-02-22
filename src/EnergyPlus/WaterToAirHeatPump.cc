@@ -1000,8 +1000,8 @@ namespace WaterToAirHeatPump {
             heatPump.OutletWaterEnthalpy = 0.0;
 
             // The rest of the one time initializations
-            Real64 rho = state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
-            Real64 Cp = state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).glycol->getSpecificHeat(state, Constant::InitConvTemp, RoutineName);
+            Real64 rho = heatPump.plantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+            Real64 Cp = heatPump.plantLoc.loop->glycol->getSpecificHeat(state, Constant::InitConvTemp, RoutineName);
 
             heatPump.DesignWaterMassFlowRate = rho * heatPump.DesignWaterVolFlowRate;
 
@@ -1196,7 +1196,7 @@ namespace WaterToAirHeatPump {
         LoadSideAirInletEnth_Unit = Psychrometrics::PsyHFnTdbW(heatPump.InletAirDBTemp, heatPump.InletAirHumRat);
         SourceSideVolFlowRate =
             heatPump.InletWaterMassFlowRate /
-            state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).glycol->getDensity(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
+            heatPump.plantLoc.loop->glycol->getDensity(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
 
         StillSimulatingFlag = true;
 
@@ -1309,13 +1309,12 @@ namespace WaterToAirHeatPump {
                     }
 
                     // Determine Effectiveness of Source Side
-                    CpFluid = state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum)
-                                  .glycol->getSpecificHeat(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
+                    CpFluid = heatPump.plantLoc.loop->glycol->getSpecificHeat(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
 
-                    if (state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).glycol->Num == Fluid::GlycolNum_Water) {
+                    if (heatPump.plantLoc.loop->glycol->Num == Fluid::GlycolNum_Water) {
                         SourceSideEffect = 1.0 - std::exp(-heatPump.SourceSideUACoeff / (CpFluid * heatPump.InletWaterMassFlowRate));
                     } else {
-                        DegradFactor = DegradF(state, state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).glycol, heatPump.InletWaterTemp);
+                        DegradFactor = DegradF(state, heatPump.plantLoc.loop->glycol, heatPump.InletWaterTemp);
                         SourceSideEffect =
                             1.0 / ((heatPump.SourceSideHTR1 * std::pow(SourceSideVolFlowRate, -0.8)) / DegradFactor + heatPump.SourceSideHTR2);
                     }
@@ -1653,7 +1652,7 @@ namespace WaterToAirHeatPump {
         CpAir = Psychrometrics::PsyCpAirFnW(heatPump.InletAirHumRat);
         SourceSideVolFlowRate =
             heatPump.InletWaterMassFlowRate /
-            state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).glycol->getDensity(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
+            heatPump.plantLoc.loop->glycol->getDensity(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
 
         // If heat pump is not operating, return
         if (SensDemand == 0.0 || heatPump.InletAirMassFlowRate <= 0.0 || heatPump.InletWaterMassFlowRate <= 0.0 ||
@@ -1720,13 +1719,13 @@ namespace WaterToAirHeatPump {
                 }
 
                 // Determine Effectiveness of Source Side
-                CpFluid = state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum)
-                              .glycol->getSpecificHeat(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
+                CpFluid = heatPump.plantLoc.loop->
+                              glycol->getSpecificHeat(state, heatPump.InletWaterTemp, RoutineNameSourceSideInletTemp);
 
-                if (state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).glycol->Num == Fluid::GlycolNum_Water) {
+                if (heatPump.plantLoc.loop->glycol->Num == Fluid::GlycolNum_Water) {
                     SourceSideEffect = 1.0 - std::exp(-heatPump.SourceSideUACoeff / (CpFluid * heatPump.InletWaterMassFlowRate));
                 } else {
-                    DegradFactor = DegradF(state, state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).glycol, heatPump.InletWaterTemp);
+                    DegradFactor = DegradF(state, heatPump.plantLoc.loop->glycol, heatPump.InletWaterTemp);
                     SourceSideEffect =
                         1.0 / ((heatPump.SourceSideHTR1 * std::pow(SourceSideVolFlowRate, -0.8)) / DegradFactor + heatPump.SourceSideHTR2);
                 }
