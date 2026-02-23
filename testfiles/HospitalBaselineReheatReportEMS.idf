@@ -74050,17 +74050,17 @@
 
   EnergyManagementSystem:ProgramCallingManager,
     Reheat_Sum_Call,         !- Name
-    BeginNewEnvironment,  !- EnergyPlus Model Calling Point
+    EndofZoneTimestepAfterZoneReporting,  !- EnergyPlus Model Calling Point
     Reheat_Sum_Program;      !- Program Name 1
 
   EnergyManagementSystem:ProgramCallingManager,
     Heat_Sum_Call,           !- Name
-    BeginNewEnvironment,  !- EnergyPlus Model Calling Point
+    EndofZoneTimestepAfterZoneReporting,  !- EnergyPlus Model Calling Point
     Heat_Sum_Program;        !- Program Name 1
 
   EnergyManagementSystem:ProgramCallingManager,
     AHU_Heat_Sum_Call,       !- Name
-    BeginNewEnvironment,  !- EnergyPlus Model Calling Point
+    EndofZoneTimestepAfterZoneReporting,  !- EnergyPlus Model Calling Point
     AHU_Heat_Energy_Program; !- Program Name 1
 
 !-   ===========  ALL OBJECTS IN CLASS: ENERGYMANAGEMENTSYSTEM:PROGRAM ===========
@@ -77654,6 +77654,43 @@
     Flr_1_Soil_DT2,          !- <none>
     Flr_1_Stor_DT2,          !- <none>
     Flr_1_Waiting_DT2;       !- <none>
+
+  EnergyManagementSystem:GlobalVariable,
+    A,  !- Erl Variable 1 Name
+    B,  !- Erl Variable 2 Name
+    C,  !- Erl Variable 3 Name
+    D,  !- <none>
+    E,  !- <none>
+    F,  !- <none>
+    G,  !- <none>
+    H,  !- <none>
+    I,  !- <none>
+    J,  !- <none>
+    K,  !- <none>
+    L,  !- <none>
+    M,  !- <none>
+    N,  !- <none>
+    O,  !- <none>
+    P,  !- <none>
+    Q,  !- <none>
+    R,  !- <none>
+    S,  !- <none>
+    T,  !- <none>
+    U,  !- <none>
+    V,  !- <none>
+    W,  !- <none>
+    X,  !- <none>
+    Y,  !- <none>
+    Z,  !- <none>
+    AA,  !- <none>
+    BB,  !- <none>
+    CC,  !- <none>
+    DD,  !- <none>
+    EE,  !- <none>
+    FF,  !- <none>
+    GG,  !- <none>
+    HH,  !- <none>
+    II;  !- <none>
 
 !-   ===========  ALL OBJECTS IN CLASS: ENERGYMANAGEMENTSYSTEM:OUTPUTVARIABLE ===========
 
