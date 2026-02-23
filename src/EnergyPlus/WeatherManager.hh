@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -53,7 +53,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array2D.hh>
-#include <ObjexxFCL/Array3D.hh>
 #include <ObjexxFCL/Optional.hh>
 
 // EnergyPlus Headers
@@ -61,12 +60,12 @@
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EPVector.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/GroundTemperatureModeling/BaseGroundTemperatureModel.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 
 namespace EnergyPlus {
 
 // Forward declarations
-class BaseGroundTempsModel;
 struct EnergyPlusData;
 
 namespace Weather {
@@ -177,8 +176,8 @@ namespace Weather {
     struct EnvironmentData
     {
         // Members
-        std::string Title = "";                                         // Environment name
-        std::string cKindOfEnvrn = "";                                  // kind of environment
+        std::string Title;                                              // Environment name
+        std::string cKindOfEnvrn;                                       // kind of environment
         Constant::KindOfSim KindOfEnvrn = Constant::KindOfSim::Invalid; // Type of environment (see Parameters for KindOfSim in DataGlobals)
         int DesignDayNum = 0;                                           // index in DesignDay structure and DesignDayInput
         int RunPeriodDesignNum = 0;                                     // for WeatherFileDays, index in  RunPeriodDesign and RunPeriodDesignInput
@@ -226,7 +225,7 @@ namespace Weather {
     struct DesignDayData
     {
         // Members
-        std::string Title = "";                                          // Environment name
+        std::string Title;                                               // Environment name
         Real64 MaxDryBulb = 0.0;                                         // Maximum Dry-Bulb Temperature (C)
         Real64 DailyDBRange = 0.0;                                       // Daily Temperature Range (deltaC)
         Real64 HumIndValue = 0.0;                                        // Humidity Indicating Value at Max Dry-bulb Temperature
@@ -243,24 +242,23 @@ namespace Weather {
         int DSTIndicator = 0;                                            // Daylight Saving Time Period Indicator (1=yes, 0=no) for this DesignDay
         DesDaySolarModel solarModel = DesDaySolarModel::ASHRAE_ClearSky; // Solar Model for creating solar values for design day.
         DesDayDryBulbRangeType dryBulbRangeType = DesDayDryBulbRangeType::Default; // Drybulb Range Type (see Parameters)
-        int TempRangeSchPtr = 0; // Schedule pointer to a day schedule for dry-bulb temperature range multipliers
-        int HumIndSchPtr = 0;    // Schedule pointer to a day schedule that specifies
-        //    relative humidity (%) or wet-bulb range multipliers per HumIndType
-        int BeamSolarSchPtr = 0;          // Schedule pointer to a day schedule for beam solar
-        int DiffuseSolarSchPtr = 0;       // Schedule pointer to a day schedule for diffuse solar
-        Real64 TauB = 0.0;                // beam pseudo optical depth for ASHRAE tau model
-        Real64 TauD = 0.0;                // diffuse pseudo optical depth for ASHRAE tau model
-        Real64 DailyWBRange = 0.0;        // daily range of wetbulb (deltaC)
-        bool PressureEntered = false;     // true if a pressure was entered in design day data
-        bool DewPointNeedsSet = false;    // true if the Dewpoint humidicating value needs to be set (after location determined)
-        int maxWarmupDays = -1;           // Maximum warmup days between sizing periods
+        Sched::DaySchedule *tempRangeSched = nullptr;                              // day schedule for dry-bulb temperature range multipliers
+        Sched::DaySchedule *humIndSched = nullptr; // day schedule that specifies relative humidity (%) or wet-bulb range multipliers per HumIndType
+        Sched::DaySchedule *beamSolarSched = nullptr;    // day schedule for beam solar
+        Sched::DaySchedule *diffuseSolarSched = nullptr; // day schedule for diffuse solar
+        Real64 TauB = 0.0;                               // beam pseudo optical depth for ASHRAE tau model
+        Real64 TauD = 0.0;                               // diffuse pseudo optical depth for ASHRAE tau model
+        Real64 DailyWBRange = 0.0;                       // daily range of wetbulb (deltaC)
+        bool PressureEntered = false;                    // true if a pressure was entered in design day data
+        bool DewPointNeedsSet = false;                   // true if the Dewpoint humidicating value needs to be set (after location determined)
+        int maxWarmupDays = -1;                          // Maximum warmup days between sizing periods
         bool suppressBegEnvReset = false; // true if this design day should be run without thermal history being reset at begin environment
     };
 
     struct ReportPeriodData
     {
-        std::string title = "";
-        std::string reportName = "";
+        std::string title;
+        std::string reportName;
         int startYear = 2017;
         int startMonth = 1;
         int startDay = 1;
@@ -286,22 +284,22 @@ namespace Weather {
         int startYear = 2017;          // entered in "consecutive"/real runperiod object
         int endMonth = 12;
         int endDay = 31;
-        int endJulianDate = 2458119; // Calculated end date (Julian or ordinal) for a weather file run period
-        int endYear = 2017;          // entered in "consecutive"/real runperiod object
-        int dayOfWeek = 1;           // Day of Week that the RunPeriod will start on (User Input)
-        ScheduleManager::DayType startWeekDay = ScheduleManager::DayType::Sunday; // Day of the week that the RunPeriod will start on (User Input)
-        bool useDST = false;                                                      // True if DaylightSavingTime is used for this RunPeriod
-        bool useHolidays = false;                                                 // True if Holidays are used for this RunPeriod (from WeatherFile)
-        bool applyWeekendRule = false;                                            // True if "Weekend Rule" is to be applied to RunPeriod
-        bool useRain = true;                                                      // True if Rain from weather file should be used (set rain to true)
-        bool useSnow = true;                                                      // True if Snow from weather file should be used (set Snow to true)
-        Array1D_int monWeekDay = {1, 4, 4, 7, 2, 5, 7, 3, 6, 1, 4, 6};            // Weekday for first day of each month
-        int numSimYears = 1;                                                      // Total Number of years of simulation to be performed
-        bool isLeapYear = false;                                                  // True if Begin Year is leap year.
-        bool RollDayTypeOnRepeat = true;                                          // If repeating run period, increment day type on repeat.
-        bool TreatYearsAsConsecutive = true;                                      // When year rolls over, increment year and recalculate Leap Year
-        bool actualWeather = false;                                               // true when using actual weather data
-        bool firstHrInterpUsingHr1 = false; // true for using Hour 1 for first hour interpolate; false for using Hour 24
+        int endJulianDate = 2458119;                                   // Calculated end date (Julian or ordinal) for a weather file run period
+        int endYear = 2017;                                            // entered in "consecutive"/real runperiod object
+        int dayOfWeek = 1;                                             // Day of Week that the RunPeriod will start on (User Input)
+        Sched::DayType startWeekDay = Sched::DayType::Sunday;          // Day of the week that the RunPeriod will start on (User Input)
+        bool useDST = false;                                           // True if DaylightSavingTime is used for this RunPeriod
+        bool useHolidays = false;                                      // True if Holidays are used for this RunPeriod (from WeatherFile)
+        bool applyWeekendRule = false;                                 // True if "Weekend Rule" is to be applied to RunPeriod
+        bool useRain = true;                                           // True if Rain from weather file should be used (set rain to true)
+        bool useSnow = true;                                           // True if Snow from weather file should be used (set Snow to true)
+        Array1D_int monWeekDay = {1, 4, 4, 7, 2, 5, 7, 3, 6, 1, 4, 6}; // Weekday for first day of each month
+        int numSimYears = 1;                                           // Total Number of years of simulation to be performed
+        bool isLeapYear = false;                                       // True if Begin Year is leap year.
+        bool RollDayTypeOnRepeat = true;                               // If repeating run period, increment day type on repeat.
+        bool TreatYearsAsConsecutive = true;                           // When year rolls over, increment year and recalculate Leap Year
+        bool actualWeather = false;                                    // true when using actual weather data
+        bool firstHrInterpUsingHr1 = false;                            // true for using Hour 1 for first hour interpolate; false for using Hour 24
     };
 
     struct DayWeatherVariables // Derived Type for Storing Weather "Header" Data
@@ -323,7 +321,7 @@ namespace Weather {
     struct SpecialDayData
     {
         // Members
-        std::string Name = "";                 // Name
+        std::string Name;                      // Name
         DateType dateType = DateType::Invalid; // Date type as read in from IDF
         int Month = 0;                         // Start Month
         int Day = 0;                           // Start Day of month or Count for DateTypes=NthDayOfMonth
@@ -340,9 +338,9 @@ namespace Weather {
     struct DataPeriodData
     {
         // Members
-        std::string Name = "";      // DataPeriod Title
-        std::string DayOfWeek = ""; // Start Day of Week for DataPeriod
-        int NumYearsData = 1;       // Number of years for which data is present in EPW.
+        std::string Name;      // DataPeriod Title
+        std::string DayOfWeek; // Start Day of Week for DataPeriod
+        int NumYearsData = 1;  // Number of years for which data is present in EPW.
         int WeekDay = 0;
         int StMon = 0;
         int StDay = 0;
@@ -400,14 +398,14 @@ namespace Weather {
     struct TypicalExtremeData
     {
         // Members
-        std::string Title = "";       // Environment name
-        std::string ShortTitle = "";  // Environment name
-        std::string MatchValue = "";  // String to be matched for input/running these periods for design.
-        std::string MatchValue1 = ""; // String to be also matched (synonym)
-        std::string MatchValue2 = ""; // String to be also matched (synonym)
-        std::string TEType = "";      // Typical or Extreme
-        int TotalDays = 0;            // Number of days in environment
-        int StartJDay = 0;            // Day of year of first day of environment
+        std::string Title;       // Environment name
+        std::string ShortTitle;  // Environment name
+        std::string MatchValue;  // String to be matched for input/running these periods for design.
+        std::string MatchValue1; // String to be also matched (synonym)
+        std::string MatchValue2; // String to be also matched (synonym)
+        std::string TEType;      // Typical or Extreme
+        int TotalDays = 0;       // Number of days in environment
+        int StartJDay = 0;       // Day of year of first day of environment
         int StartMonth = 0;
         int StartDay = 0;
         int EndMonth = 0;
@@ -418,22 +416,21 @@ namespace Weather {
     struct WeatherProperties
     {
         // Members
-        std::string Name = "";         // Reference Name
-        std::string ScheduleName = ""; // Schedule Name or Algorithm Name
-        bool IsSchedule = true;        // Default is using Schedule
+        std::string Name;       // Reference Name
+        bool IsSchedule = true; // Default is using Schedule
         SkyTempModel skyTempModel = SkyTempModel::ClarkAllen;
-        int SchedulePtr = 0; // pointer to schedule when used
+        Sched::DayOrYearSchedule *sched = nullptr; // schedule when used
         bool UsedForEnvrn = false;
         bool UseWeatherFileHorizontalIR = true; // If false, horizontal IR and sky temperature are calculated with WP models
     };
 
     struct UnderwaterBoundary
     {
-        std::string Name = "";
+        std::string Name;
         Real64 distanceFromLeadingEdge = 0.0;
         int OSCMIndex = 0;
-        int WaterTempScheduleIndex = 0;
-        int VelocityScheduleIndex = 0;
+        Sched::Schedule *waterTempSched = nullptr;
+        Sched::Schedule *velocitySched = nullptr;
     };
 
     // Functions
@@ -643,8 +640,10 @@ namespace Weather {
     void CalcWaterMainsTemp(EnergyPlusData &state);
 
     Real64 WaterMainsTempFromCorrelation(EnergyPlusData const &state,
-                                         Real64 AnnualOAAvgDryBulbTemp,        // annual average OA drybulb temperature
-                                         Real64 MonthlyOAAvgDryBulbTempMaxDiff // monthly daily average OA drybulb temperature maximum difference
+                                         Real64 AnnualOAAvgDryBulbTemp,         // annual average OA drybulb temperature
+                                         Real64 MonthlyOAAvgDryBulbTempMaxDiff, // monthly daily average OA drybulb temperature maximum difference
+                                         Real64 TemperatureMultiplier,          // temperature multiplier
+                                         Real64 TemperatureOffset               // temperature offset
     );
 
     void GetWeatherStation(EnergyPlusData &state, bool &ErrorsFound);
@@ -683,7 +682,7 @@ namespace Weather {
 
     GregorianDate computeGregorianDate(int jdate);
 
-    ScheduleManager::DayType calculateDayOfWeek(EnergyPlusData &state, int year, int month, int day);
+    Sched::DayType calculateDayOfWeek(EnergyPlusData &state, int year, int month, int day);
 
     int calculateDayOfYear(int Month, int Day, bool leapYear = false);
 
@@ -762,8 +761,6 @@ namespace Weather {
         Real64 SkyTemp = 0.0;
     };
 
-    // Here's a fun little function
-    void ForAllHrTs(EnergyPlusData const &state, std::function<void(int, int)> f);
 } // namespace Weather
 
 struct WeatherManagerData : BaseGlobalStruct
@@ -785,9 +782,9 @@ struct WeatherManagerData : BaseGlobalStruct
     int YearOfSim = 1;                           // The Present year of Simulation.
     int NumDaysInYear = 365;                     // TODO: removed const from this until leap year behavior is reviewed
     int EnvironmentReportNbr = 0;                // Report number for the environment stamp
-    std::string EnvironmentReportChr = "";       // Report number for the environment stamp (character -- for printing)
+    std::string EnvironmentReportChr;            // Report number for the environment stamp (character -- for printing)
     bool WeatherFileExists = false;              // Set to true if a weather file exists
-    std::string LocationTitle = "";              // Location Title from input File
+    std::string LocationTitle;                   // Location Title from input File
     bool LocationGathered = false;               // flag to show if Location exists on Input File (we assume one is there and correct on weather file)
     bool keepUserSiteLocationDefinition = false; // flag based on user input to set whether to keep the user site location definition (true)
                                                  // or override with the site information given on weather file (false/default)
@@ -803,10 +800,11 @@ struct WeatherManagerData : BaseGlobalStruct
     Real64 SnowGndRefModifierForDayltg = 1.0; // Modifier to ground reflectance during snow for daylighting
     Weather::WaterMainsTempCalcMethod WaterMainsTempsMethod =
         Weather::WaterMainsTempCalcMethod::FixedDefault; // Water mains temperature calculation method
-    int WaterMainsTempsSchedule = 0;                     // Water mains temperature schedule
+    Sched::Schedule *waterMainsTempSched = nullptr;      // Water mains temperature schedule
     Real64 WaterMainsTempsAnnualAvgAirTemp = 0.0;        // Annual average outdoor air temperature (C)
     Real64 WaterMainsTempsMaxDiffAirTemp = 0.0;          // Maximum difference in monthly average outdoor air temperatures (deltaC)
-    std::string WaterMainsTempsScheduleName = "";        // water mains tempeature schedule name
+    Real64 WaterMainsTempsMultiplier = 1.0;              // Temperature multiplier
+    Real64 WaterMainsTempsOffset = 0.0;                  // Temperature offset (C)
     bool wthFCGroundTemps = false;
 
     int TotRunPers = 0;           // Total number of Run Periods (Weather data) to Setup
@@ -907,10 +905,10 @@ struct WeatherManagerData : BaseGlobalStruct
     EPVector<Weather::SpecialDayData> SpecialDays;               // NOLINT(cert-err58-cpp)
     EPVector<Weather::DataPeriodData> DataPeriods;               // NOLINT(cert-err58-cpp)
 
-    BaseGroundTempsModel *siteShallowGroundTempsPtr;         // non-owning pointer
-    BaseGroundTempsModel *siteBuildingSurfaceGroundTempsPtr; // non-owning pointer
-    BaseGroundTempsModel *siteFCFactorMethodGroundTempsPtr;  // non-owning pointer
-    BaseGroundTempsModel *siteDeepGroundTempsPtr;            // non-owning pointer
+    GroundTemp::BaseGroundTempsModel *siteShallowGroundTempsPtr;         // non-owning pointer
+    GroundTemp::BaseGroundTempsModel *siteBuildingSurfaceGroundTempsPtr; // non-owning pointer
+    GroundTemp::BaseGroundTempsModel *siteFCFactorMethodGroundTempsPtr;  // non-owning pointer
+    GroundTemp::BaseGroundTempsModel *siteDeepGroundTempsPtr;            // non-owning pointer
 
     std::vector<Weather::UnderwaterBoundary> underwaterBoundaries;
     Weather::AnnualMonthlyDryBulbWeatherData OADryBulbAverage; // processes outside air drybulb temperature
@@ -929,7 +927,11 @@ struct WeatherManagerData : BaseGlobalStruct
     Real64 IsRainThreshold = 0.8; // precipitation threshold (mm) for timestep IsRain (divided later by NumOfTimeStepInHour)
 
     // ProcessEPWHeader static vars
-    std::string EPWHeaderTitle = "";
+    std::string EPWHeaderTitle;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

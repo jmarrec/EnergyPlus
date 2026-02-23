@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -76,7 +76,6 @@ using namespace AirflowNetwork;
 using namespace DataSurfaces;
 using namespace DataHeatBalance;
 using namespace EnergyPlus::DataLoopNode;
-using namespace EnergyPlus::ScheduleManager;
 
 namespace EnergyPlus {
 
@@ -161,6 +160,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestDefaultBehaviourOfSimulationControl
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
     state->afn->get_input();
 
     // MultizoneZoneData has only 1 element so may be hardcoded
@@ -216,7 +216,7 @@ TEST_F(EnergyPlusFixture, AirflowNetworkSimulationControl_DefaultSolver)
     state->dataHeatBal->People.allocate(state->dataHeatBal->TotPeople);
     state->dataHeatBal->People(1).ZonePtr = 1;
     state->dataHeatBal->People(1).NumberOfPeople = 100.0;
-    state->dataHeatBal->People(1).NumberOfPeoplePtr = 1; // From dataglobals, always returns a 1 for schedule value
+    state->dataHeatBal->People(1).sched = Sched::GetScheduleAlwaysOn(*state); // From dataglobals, always returns a 1 for schedule value
     state->dataHeatBal->People(1).AdaptiveCEN15251 = true;
 
     std::string const idf_objects = delimited_string({
@@ -267,7 +267,7 @@ TEST_F(EnergyPlusFixture, AirflowNetworkSimulationControl_DefaultSolver)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
+    state->init_state(*state);
     state->afn->get_input();
 
     EXPECT_ENUM_EQ(AirflowNetwork::SimulationControl::Solver::SkylineLU, state->afn->simulation_control.solver);
@@ -312,7 +312,7 @@ TEST_F(EnergyPlusFixture, AirflowNetworkSimulationControl_SetSolver)
     state->dataHeatBal->People.allocate(state->dataHeatBal->TotPeople);
     state->dataHeatBal->People(1).ZonePtr = 1;
     state->dataHeatBal->People(1).NumberOfPeople = 100.0;
-    state->dataHeatBal->People(1).NumberOfPeoplePtr = 1; // From dataglobals, always returns a 1 for schedule value
+    state->dataHeatBal->People(1).sched = Sched::GetScheduleAlwaysOn(*state); // From dataglobals, always returns a 1 for schedule value
     state->dataHeatBal->People(1).AdaptiveCEN15251 = true;
 
     std::string const idf_objects = delimited_string({
@@ -365,6 +365,7 @@ TEST_F(EnergyPlusFixture, AirflowNetworkSimulationControl_SetSolver)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->afn->get_input();
 
@@ -509,11 +510,10 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestWindPressureTable)
 
     // Load and verify the table
     ASSERT_TRUE(process_idf(idf_objects));
-    EXPECT_EQ(0, state->dataCurveManager->NumCurves);
-    Curve::GetCurveInput(*state);
-    state->dataCurveManager->GetCurvesInputFlag = false;
-    ASSERT_EQ(1, state->dataCurveManager->NumCurves);
-    EXPECT_EQ(1, state->dataCurveManager->PerfCurve(1)->numDims);
+    state->init_state(*state);
+
+    ASSERT_EQ(1, state->dataCurveManager->curves.size());
+    EXPECT_EQ(1, state->dataCurveManager->curves(1)->numDims);
     EXPECT_EQ("EFACADE_WPCCURVE", Curve::GetCurveName(*state, 1));
     EXPECT_EQ(1, Curve::GetCurveIndex(*state, "EFACADE_WPCCURVE"));
     //    EXPECT_EQ("Table:Lookup", state->dataCurveManager->PerfCurve(1).objectType);
@@ -592,11 +592,9 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestWPCValue)
 
     // Load and verify the table
     ASSERT_TRUE(process_idf(idf_objects));
-    EXPECT_EQ(0, state->dataCurveManager->NumCurves);
-    Curve::GetCurveInput(*state);
-    state->dataCurveManager->GetCurvesInputFlag = false;
-    ASSERT_EQ(1, state->dataCurveManager->NumCurves);
-    EXPECT_EQ(1, state->dataCurveManager->PerfCurve(1)->numDims);
+    state->init_state(*state);
+    ASSERT_EQ(1, state->dataCurveManager->curves.size());
+    EXPECT_EQ(1, state->dataCurveManager->curves(1)->numDims);
     EXPECT_EQ("NFACADE_WPCVALUE", Curve::GetCurveName(*state, 1));
     EXPECT_EQ(1, Curve::GetCurveIndex(*state, "NFACADE_WPCVALUE"));
     //    EXPECT_EQ("AirflowNetwork:MultiZone:WindPressureCoefficientValues", state->dataCurveManager->PerfCurve(1).objectType);
@@ -1598,6 +1596,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodes)
          "ZoneAirHeatBalanceAlgorithm,",
          "  AnalyticalSolution;      !- Algorithm"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errors = false;
 
@@ -1618,8 +1617,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodes)
     SurfaceGeometry::GetSurfaceData(*state, errors); // setup zone geometry and get zone data
     EXPECT_FALSE(errors);                            // expect no errors
 
-    Curve::GetCurveInput(*state);
-    EXPECT_EQ(state->dataCurveManager->NumCurves, 2);
+    EXPECT_EQ(state->dataCurveManager->curves.size(), 2);
 
     state->afn->get_input();
 
@@ -2322,6 +2320,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithTables)
          "ZoneAirHeatBalanceAlgorithm,",
          "  AnalyticalSolution;      !- Algorithm"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errors = false;
 
@@ -2342,8 +2341,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithTables)
     SurfaceGeometry::GetSurfaceData(*state, errors); // setup zone geometry and get zone data
     EXPECT_FALSE(errors);                            // expect no errors
 
-    Curve::GetCurveInput(*state);
-    EXPECT_EQ(state->dataCurveManager->NumCurves, 2);
+    EXPECT_EQ(state->dataCurveManager->curves.size(), 2);
 
     state->afn->get_input();
 
@@ -2965,6 +2963,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithNoInput)
          "ZoneAirHeatBalanceAlgorithm,",
          "  AnalyticalSolution;      !- Algorithm"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errors = false;
 
@@ -2985,12 +2984,11 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithNoInput)
     SurfaceGeometry::GetSurfaceData(*state, errors); // setup zone geometry and get zone data
     EXPECT_FALSE(errors);                            // expect no errors
 
-    Curve::GetCurveInput(*state);
-    EXPECT_EQ(state->dataCurveManager->NumCurves, 1);
+    EXPECT_EQ(state->dataCurveManager->curves.size(), 1);
 
     state->afn->get_input();
 
-    EXPECT_EQ(state->dataCurveManager->NumCurves, 6);
+    EXPECT_EQ(state->dataCurveManager->curves.size(), 6);
 
     // Check the curves
     Real64 cp105N = -0.5 * (0.44267457181949038 + 0.68051108580039887);
@@ -3674,6 +3672,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithSymmetricTable)
          "ZoneAirHeatBalanceAlgorithm,",
          "  AnalyticalSolution;      !- Algorithm"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errors = false;
 
@@ -3694,8 +3693,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithSymmetricTable)
     SurfaceGeometry::GetSurfaceData(*state, errors); // setup zone geometry and get zone data
     EXPECT_FALSE(errors);                            // expect no errors
 
-    Curve::GetCurveInput(*state);
-    EXPECT_EQ(state->dataCurveManager->NumCurves, 1);
+    EXPECT_EQ(state->dataCurveManager->curves.size(), 1);
 
     state->afn->get_input();
 
@@ -4328,6 +4326,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithSymmetricCurve)
          "ZoneAirHeatBalanceAlgorithm,",
          "  AnalyticalSolution;      !- Algorithm"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errors = false;
 
@@ -4348,8 +4347,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithSymmetricCurve)
     SurfaceGeometry::GetSurfaceData(*state, errors); // setup zone geometry and get zone data
     EXPECT_FALSE(errors);                            // expect no errors
 
-    Curve::GetCurveInput(*state);
-    EXPECT_EQ(state->dataCurveManager->NumCurves, 1);
+    EXPECT_EQ(state->dataCurveManager->curves.size(), 1);
 
     state->afn->get_input();
 
@@ -5063,6 +5061,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithLocalAirNode)
          "ZoneAirHeatBalanceAlgorithm,",
          "  AnalyticalSolution;      !- Algorithm"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Set up some environmental parameters
     state->dataEnvrn->OutBaroPress = 101325.0;
@@ -5076,10 +5075,9 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_TestExternalNodesWithLocalAirNode)
     HeatBalanceManager::GetHeatBalanceInput(*state);
     HeatBalanceManager::AllocateHeatBalArrays(*state);
     state->dataHVACGlobal->TimeStepSys = state->dataGlobal->TimeStepZone;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
 
-    Curve::GetCurveInput(*state);
-    EXPECT_EQ(state->dataCurveManager->NumCurves, 2);
+    EXPECT_EQ(state->dataCurveManager->curves.size(), 2);
 
     state->dataGlobal->AnyLocalEnvironmentsInModel = true;
     OutAirNodeManager::SetOutAirNodes(*state);
@@ -5541,6 +5539,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_BasicAdvancedSingleSided)
         -0.56146269488642231};
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errors = false;
 
@@ -5561,13 +5560,12 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_BasicAdvancedSingleSided)
     SurfaceGeometry::GetSurfaceData(*state, errors); // setup zone geometry and get zone data
     EXPECT_FALSE(errors);                            // expect no errors
 
-    Curve::GetCurveInput(*state);
-    EXPECT_EQ(0, state->dataCurveManager->NumCurves);
+    EXPECT_EQ(0, state->dataCurveManager->curves.size());
 
     state->afn->get_input();
 
     // Check that the correct number of curves has been generated (5 facade directions + 2 windows)
-    EXPECT_EQ(7, state->dataCurveManager->NumCurves);
+    EXPECT_EQ(7, state->dataCurveManager->curves.size());
 
     // Check the airflow elements
     ASSERT_EQ(3u, state->afn->MultizoneExternalNodeData.size());
@@ -5598,7 +5596,6 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_BasicAdvancedSingleSided)
 TEST_F(EnergyPlusFixture, AirflowNetwork_BasicAdvancedSingleSidedAvoidCrashTest)
 {
     std::string const idf_objects = delimited_string(
-        //{"Version,9.3;",
         {"SimulationControl,",
          "  No,                      !- Do Zone Sizing Calculation",
          "  No,                      !- Do System Sizing Calculation",
@@ -5996,6 +5993,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_BasicAdvancedSingleSidedAvoidCrashTest)
         -0.56146269488642231};
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errors = false;
 
@@ -6016,8 +6014,7 @@ TEST_F(EnergyPlusFixture, AirflowNetwork_BasicAdvancedSingleSidedAvoidCrashTest)
     SurfaceGeometry::GetSurfaceData(*state, errors); // setup zone geometry and get zone data
     EXPECT_FALSE(errors);                            // expect no errors
 
-    Curve::GetCurveInput(*state);
-    EXPECT_EQ(0, state->dataCurveManager->NumCurves);
+    EXPECT_EQ(0, state->dataCurveManager->curves.size());
 
     // #6912
     state->dataZoneTempPredictorCorrector->zoneHeatBalance.allocate(1);

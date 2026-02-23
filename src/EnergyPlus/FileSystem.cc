@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -56,14 +56,14 @@
 #include <type_traits>
 
 #ifdef _WIN32
-#include <Shlwapi.h>
-#include <windows.h>
+#    include <Shlwapi.h>
+#    include <windows.h>
 #else
-#include <unistd.h>
+#    include <unistd.h>
 #endif
 
 #ifdef __APPLE__
-#include <mach-o/dyld.h>
+#    include <mach-o/dyld.h>
 #endif
 
 // EnergyPlus Headers
@@ -173,18 +173,18 @@ namespace FileSystem {
         }
 
         fs::path result;
-        // `p` now is absolute, but it isn't necessarilly canonical.
+        // `p` now is absolute, but it isn't necessarily canonical.
         // If you have <filesystem>, you can use `fs::weakly_canonical`. <experimental/filesystem> does **not** have `weakly_canonical` though
         // This block resolves a canonical path, even if it doesn't exist (yet?) on disk.
-        for (fs::path::iterator it = p.begin(); it != p.end(); ++it) {
-            if (*it == fs::path("..")) {
+        for (const auto &it : p) {
+            if (it == fs::path("..")) {
                 if (fs::is_symlink(result) || (result.filename() == fs::path(".."))) {
-                    result /= *it;
+                    result /= it;
                 } else {
                     result = result.parent_path();
                 }
-            } else if (*it != fs::path(".")) {
-                result /= *it;
+            } else if (it != fs::path(".")) {
+                result /= it;
             }
         }
 

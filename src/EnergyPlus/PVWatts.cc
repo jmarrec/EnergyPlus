@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -388,7 +388,7 @@ namespace PVWatts {
         Real64 TimeStepSysSec = state.dataHVACGlobal->TimeStepSysSec;
 
         // We only run this once for each zone time step.
-        const int NumTimeStepsToday_loc = state.dataGlobal->HourOfDay * state.dataGlobal->NumOfTimeStepInHour + state.dataGlobal->TimeStep;
+        const int NumTimeStepsToday_loc = state.dataGlobal->HourOfDay * state.dataGlobal->TimeStepsInHour + state.dataGlobal->TimeStep;
         if (NumTimeStepsToday_ != NumTimeStepsToday_loc) {
             NumTimeStepsToday_ = NumTimeStepsToday_loc;
         } else {
@@ -402,7 +402,7 @@ namespace PVWatts {
         ssc_data_set_number(pvwattsData_, "month", state.dataEnvrn->Month);
         ssc_data_set_number(pvwattsData_, "day", state.dataEnvrn->DayOfMonth);
         ssc_data_set_number(pvwattsData_, "hour", state.dataGlobal->HourOfDay - 1);
-        ssc_data_set_number(pvwattsData_, "minute", (state.dataGlobal->TimeStep - 0.5) * state.dataGlobal->MinutesPerTimeStep);
+        ssc_data_set_number(pvwattsData_, "minute", (state.dataGlobal->TimeStep - 0.5) * state.dataGlobal->MinutesInTimeStep);
 
         // Weather Conditions
         ssc_data_set_number(pvwattsData_, "beam", state.dataEnvrn->BeamSolarRad);
@@ -431,7 +431,7 @@ namespace PVWatts {
             int sscErrType;
             float time;
             int i = 0;
-            while ((errtext = ssc_module_log(pvwattsModule_, i++, &sscErrType, &time))) {
+            while ((errtext = ssc_module_log(pvwattsModule_, i++, &sscErrType, &time)) != nullptr) {
                 std::string err("PVWatts: ");
                 switch (sscErrType) {
                 case SSC_WARNING:

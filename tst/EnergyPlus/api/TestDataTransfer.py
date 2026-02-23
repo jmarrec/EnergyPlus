@@ -1,9 +1,9 @@
-# EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University
-# of Illinois, The Regents of the University of California, through Lawrence
-# Berkeley National Laboratory (subject to receipt of any required approvals
-# from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
-# Battelle, Alliance for Sustainable Energy, LLC, and other contributors. All
-# rights reserved.
+# EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the
+# University of Illinois, The Regents of the University of California, through
+# Lawrence Berkeley National Laboratory (subject to receipt of any required
+# approvals from the U.S. Dept. of Energy), Oak Ridge National Laboratory,
+# managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
+# contributors. All rights reserved.
 #
 # NOTICE: This Software was developed under funding from the U.S. Department of
 # Energy and the U.S. Government consequently retains certain rights. As such,
@@ -54,6 +54,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import sys
+
 from pyenergyplus.api import EnergyPlusAPI
 
 one_time = True
@@ -177,4 +178,4 @@ return_code = api.runtime.run_energyplus(state, sys.argv[1:])
 if return_code != 0:
     raise RuntimeError("E+ Simulation failed to run")
 if not ok:
-    raise RuntimeError('DataTransfer failed') from exception
+    raise RuntimeError("DataTransfer failed") from exception

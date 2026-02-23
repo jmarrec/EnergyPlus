@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -58,7 +58,7 @@
 
 // Penumbra Headers
 #ifndef EP_NO_OPENGL
-#include <penumbra/penumbra.h>
+#    include <penumbra/penumbra.h>
 #endif
 
 // EnergyPlus Headers
@@ -477,7 +477,7 @@ struct SolarShadingData : BaseGlobalStruct
     Array1D<Real64> ZVert;
     Array1D<Real64> SurfWinAbsBeam;                                                               // Glass layer beam solar absorptance of a window
     Array1D<Real64> SurfWinAbsBeamEQL = Array1D<Real64>(DataWindowEquivalentLayer::CFSMAXNL + 1); // layers beam solar absorptance of a window
-    Array1D<Real64> SurfWinExtBeamAbsByShadFac; // Factor for exterior beam radiation absorbed by shade (1/m2) (absorbed radation = beam incident *
+    Array1D<Real64> SurfWinExtBeamAbsByShadFac; // Factor for exterior beam radiation absorbed by shade (1/m2) (absorbed radiation = beam incident *
                                                 // ExtBeamAbsByShad
     Array1D<Real64> SurfWinIntBeamAbsByShadFac; // Like SurfWinExtBeamAbsByShadFac, but for interior beam radiation.
     Array1D<Real64>
@@ -510,6 +510,10 @@ struct SolarShadingData : BaseGlobalStruct
     std::vector<Real64> sin_Theta;
     std::vector<Real64> cos_Theta;
     std::unique_ptr<std::iostream> shd_stream; // Shading file stream
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

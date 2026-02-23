@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -121,11 +121,10 @@ namespace DXFEarClipping {
             if (m1 * m2 <= epsilon) {
                 InPolygon = true;
                 break;
-            } else {
-                costheta = (p1.x * p2.x + p1.y * p2.y + p1.z * p2.z) / (m1 * m2);
-                acosval = std::acos(costheta);
-                anglesum += acosval;
             }
+            costheta = (p1.x * p2.x + p1.y * p2.y + p1.z * p2.z) / (m1 * m2);
+            acosval = std::acos(costheta);
+            anglesum += acosval;
         }
 
         if (std::abs(anglesum - Constant::TwoPi) <= epsilon) {
@@ -198,8 +197,12 @@ namespace DXFEarClipping {
             CalcRfFlrCoordinateTransformation(nsides, polygon, surfazimuth, surftilt, xvt, yvt, zvt);
             for (int svert = 1; svert <= nsides; ++svert) {
                 for (int mvert = svert + 1; mvert <= nsides; ++mvert) {
-                    if (std::abs(xvt(svert) - xvt(mvert)) <= point_tolerance) xvt(svert) = xvt(mvert);
-                    if (std::abs(zvt(svert) - zvt(mvert)) <= point_tolerance) zvt(svert) = zvt(mvert);
+                    if (std::abs(xvt(svert) - xvt(mvert)) <= point_tolerance) {
+                        xvt(svert) = xvt(mvert);
+                    }
+                    if (std::abs(zvt(svert) - zvt(mvert)) <= point_tolerance) {
+                        zvt(svert) = zvt(mvert);
+                    }
                 }
             }
             for (int svert = 1; svert <= nsides; ++svert) {
@@ -211,8 +214,12 @@ namespace DXFEarClipping {
             CalcWallCoordinateTransformation(nsides, polygon, surfazimuth, surftilt, xvt, yvt, zvt);
             for (int svert = 1; svert <= nsides; ++svert) {
                 for (int mvert = svert + 1; mvert <= nsides; ++mvert) {
-                    if (std::abs(xvt(svert) - xvt(mvert)) <= point_tolerance) xvt(svert) = xvt(mvert);
-                    if (std::abs(zvt(svert) - zvt(mvert)) <= point_tolerance) zvt(svert) = zvt(mvert);
+                    if (std::abs(xvt(svert) - xvt(mvert)) <= point_tolerance) {
+                        xvt(svert) = xvt(mvert);
+                    }
+                    if (std::abs(zvt(svert) - zvt(mvert)) <= point_tolerance) {
+                        zvt(svert) = zvt(mvert);
+                    }
                 }
             }
             for (int svert = 1; svert <= nsides; ++svert) {
@@ -268,7 +275,9 @@ namespace DXFEarClipping {
                 int j = 1;
                 ++ncount;
                 for (int i = 1; i <= nsides; ++i) {
-                    if (removed(i)) continue;
+                    if (removed(i)) {
+                        continue;
+                    }
                     earvert(ncount, j) = i;
                     ++j;
                 }
@@ -328,7 +337,9 @@ namespace DXFEarClipping {
         Real64 y2 = yc - yb;
 
         Real64 t = std::sqrt((x1 * x1 + y1 * y1) * (x2 * x2 + y2 * y2));
-        if (t == 0.0E+00) t = 1.0E+00;
+        if (t == 0.0E+00) {
+            t = 1.0E+00;
+        }
 
         t = (x1 * x2 + y1 * y2) / t;
 
@@ -448,24 +459,34 @@ namespace DXFEarClipping {
         ncverts = 0;
 
         for (int svert = 1; svert <= nvert; ++svert) {
-            if (removed(svert)) continue;
+            if (removed(svert)) {
+                continue;
+            }
             //  have starting vertex.  now need middle and end
             int mvert = svert + 1;
             for (int j = 1; j <= nvert; ++j) {
-                if (mvert > nvert) mvert = 1;
+                if (mvert > nvert) {
+                    mvert = 1;
+                }
                 if (removed(mvert)) {
                     ++mvert;
-                    if (mvert > nvert) mvert = 1;
+                    if (mvert > nvert) {
+                        mvert = 1;
+                    }
                 } else {
                     break;
                 }
             }
             int evert = mvert + 1;
             for (int j = 1; j <= nvert; ++j) {
-                if (evert > nvert) evert = 1;
+                if (evert > nvert) {
+                    evert = 1;
+                }
                 if (removed(evert)) {
                     ++evert;
-                    if (evert > nvert) evert = 1;
+                    if (evert > nvert) {
+                        evert = 1;
+                    }
                 } else {
                     break;
                 }
@@ -480,10 +501,9 @@ namespace DXFEarClipping {
                 r_vertices(nrverts) = mvert;
                 rangles(nrverts) = ang;
                 continue;
-            } else {
-                ++ncverts;
-                c_vertices(ncverts) = mvert;
             }
+            ++ncverts;
+            c_vertices(ncverts) = mvert;
 
             // convex angle, see if it's an ear
             testtri(1) = vertex(svert);
@@ -492,11 +512,17 @@ namespace DXFEarClipping {
             int tvert = evert;
             for (int j = 4; j <= nvert; ++j) {
                 ++tvert;
-                if (tvert > nvert) tvert = 1;
-                if (removed(tvert)) continue;
+                if (tvert > nvert) {
+                    tvert = 1;
+                }
+                if (removed(tvert)) {
+                    continue;
+                }
                 point = vertex(tvert);
                 inpoly = polygon_contains_point_2d(3, testtri, point);
-                if (!inpoly) continue;
+                if (!inpoly) {
+                    continue;
+                }
                 break;
             }
             //    if (trackit) then

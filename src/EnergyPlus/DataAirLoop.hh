@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -125,7 +125,7 @@ namespace DataAirLoop {
         int OASysNum = 0;                           // index of OA System
         bool CyclingFan = false;                    // TRUE if currently the air loop supply fan is cycling
         bool AnyContFan = false;                    // TRUE if at any time supply fan is continuous
-        int CycFanSchedPtr = 0;                     // index of schedule indicating whether fan is cycling or continuous in a unitary system
+        Sched::Schedule *cycFanSched = nullptr;     // schedule indicating whether fan is cycling or continuous in a unitary system
         HVAC::FanOp fanOp = HVAC::FanOp::Invalid;   // 1=cycling fan cycling compressor; 2=constant fan cycling comptressor
         bool UnitarySys = false;                    // TRUE if a unitary system
         bool UnitarySysSimulating = true;           // set FALSE for AirloopUnitarySystem after simulating to downstream coils can size independently
@@ -141,7 +141,7 @@ namespace DataAirLoop {
         bool HeatRecoveryResimFlag = true;            // Used to trigger new air loop sim when HX is used in OA system
         bool HeatRecoveryResimFlag2 = false;          // Used to trigger new air loop sim when HX is used in OA system
         bool CheckHeatRecoveryBypassStatus = false;   // determines when heat recovery bypass is set
-        bool EconomizerFlowLocked = false;            // locks economizer flow for custon ERV operation
+        bool EconomizerFlowLocked = false;            // locks economizer flow for custom ERV operation
         bool HighHumCtrlActive = false;               // if true high humidity control is active
         bool EconoLockout = false;                    // if true the economizer will be locked out (OA flow set to minimum)
         bool LoopFlowRateSet = false;                 // if true then the air loop flow rate should be set using ReqSupplyFrac
@@ -249,6 +249,10 @@ struct DataAirLoopData : BaseGlobalStruct
     EPVector<DataAirLoop::AirLoopFlowData> AirLoopFlow;
     EPVector<DataAirLoop::OutsideAirSysProps> OutsideAirSys;
     EPVector<DataAirLoop::AirLoopAFNData> AirLoopAFNInfo;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

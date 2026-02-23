@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -101,7 +101,9 @@ Surface2D::Surface2D(ShapeCat const shapeCat, int const axis, Vertices const &v,
         Vector2D const &w(vertices[(i + 1) % n]);
         area += (v.x * w.y) - (w.x * v.y);
     }
-    if (area < 0.0) std::reverse(vertices.begin() + 1, vertices.end()); // Vertices in clockwise order: Reverse all but first
+    if (area < 0.0) {
+        std::reverse(vertices.begin() + 1, vertices.end()); // Vertices in clockwise order: Reverse all but first
+    }
 
     // Set up edge vectors for ray--surface intersection tests
     edges.reserve(n);
@@ -115,8 +117,9 @@ Surface2D::Surface2D(ShapeCat const shapeCat, int const axis, Vertices const &v,
     } else if ((shapeCat == ShapeCat::Nonconvex) || (n >= nVerticesBig)) { // Set up slabs
         assert(n >= 4u);
         slabYs.reserve(n);
-        for (size_type i = 0; i < n; ++i)
+        for (size_type i = 0; i < n; ++i) {
             slabYs.push_back(vertices[i].y);
+        }
         std::sort(slabYs.begin(), slabYs.end());                     // Sort the vertex y coordinates
         auto const iClip(std::unique(slabYs.begin(), slabYs.end())); // Remove duplicate y-coordinate elements
         slabYs.erase(iClip, slabYs.end());
@@ -126,7 +129,7 @@ Surface2D::Surface2D(ShapeCat const shapeCat, int const axis, Vertices const &v,
             Real64 xu(std::numeric_limits<Real64>::lowest());
             Real64 const yl(slabYs[iSlab]);
             Real64 const yu(slabYs[iSlab + 1]);
-            slabs.push_back(Slab(yl, yu));
+            slabs.emplace_back(yl, yu);
             Slab &slab(slabs.back());
             using CrossEdge = std::tuple<Real64, Real64, size_type>;
             using CrossEdges = std::vector<CrossEdge>;
@@ -144,7 +147,7 @@ Surface2D::Surface2D(ShapeCat const shapeCat, int const axis, Vertices const &v,
                     Real64 const xt(v.x + (yu - v.y) * exy); // x_top coordinate where edge intersects yu
                     xl = std::min(xl, std::min(xb, xt));
                     xu = std::max(xu, std::max(xb, xt));
-                    crossEdges.push_back(std::make_tuple(xb, xt, i));
+                    crossEdges.emplace_back(xb, xt, i);
                 }
             }
             slab.xl = xl;
@@ -360,23 +363,32 @@ ShapeCat SurfaceData::computed_shapeCat() const
 {
     if (Shape == SurfaceShape::Triangle) {
         return ShapeCat::Triangular;
-    } else if (Shape == SurfaceShape::TriangularWindow) {
+    }
+    if (Shape == SurfaceShape::TriangularWindow) {
         return ShapeCat::Triangular;
-    } else if (Shape == SurfaceShape::TriangularDoor) {
+    }
+    if (Shape == SurfaceShape::TriangularDoor) {
         return ShapeCat::Triangular;
-    } else if (Shape == SurfaceShape::Rectangle) {
+    }
+    if (Shape == SurfaceShape::Rectangle) {
         return ShapeCat::Rectangular;
-    } else if (Shape == SurfaceShape::RectangularDoorWindow) {
+    }
+    if (Shape == SurfaceShape::RectangularDoorWindow) {
         return ShapeCat::Rectangular;
-    } else if (Shape == SurfaceShape::RectangularOverhang) {
+    }
+    if (Shape == SurfaceShape::RectangularOverhang) {
         return ShapeCat::Rectangular;
-    } else if (Shape == SurfaceShape::RectangularLeftFin) {
+    }
+    if (Shape == SurfaceShape::RectangularLeftFin) {
         return ShapeCat::Rectangular;
-    } else if (Shape == SurfaceShape::RectangularRightFin) {
+    }
+    if (Shape == SurfaceShape::RectangularRightFin) {
         return ShapeCat::Rectangular;
-    } else if (IsConvex) {
+    }
+    if (IsConvex) {
         return ShapeCat::Convex;
-    } else {
+    }
+    {
         return ShapeCat::Nonconvex;
     }
 }
@@ -431,7 +443,8 @@ Surface2D SurfaceData::computed_surface2d() const
             zu = std::max(zu, v.z);
         }
         return Surface2D(shapeCat, axis, v2d, Vertex2D(yl, zl), Vertex2D(yu, zu));
-    } else if (axis == 1) {        // Use x,z for 2D surface
+    }
+    if (axis == 1) {               // Use x,z for 2D surface
         Real64 xl(v0.x), xu(v0.x); // x coordinate ranges
         Real64 zl(v0.z), zu(v0.z); // z coordinate ranges
         for (Vertices::size_type i = 0; i < n; ++i) {
@@ -443,19 +456,18 @@ Surface2D SurfaceData::computed_surface2d() const
             zu = std::max(zu, v.z);
         }
         return Surface2D(shapeCat, axis, v2d, Vertex2D(xl, zl), Vertex2D(xu, zu));
-    } else {                       // Use x,y for 2D surface
-        Real64 xl(v0.x), xu(v0.x); // x coordinate ranges
-        Real64 yl(v0.y), yu(v0.y); // y coordinate ranges
-        for (Vertices::size_type i = 0; i < n; ++i) {
-            Vector const &v(Vertex[i]);
-            v2d[i] = Vertex2D(v.x, v.y);
-            xl = std::min(xl, v.x);
-            xu = std::max(xu, v.x);
-            yl = std::min(yl, v.y);
-            yu = std::max(yu, v.y);
-        }
-        return Surface2D(shapeCat, axis, v2d, Vertex2D(xl, yl), Vertex2D(xu, yu));
+    } // Use x,y for 2D surface
+    Real64 xl(v0.x), xu(v0.x); // x coordinate ranges
+    Real64 yl(v0.y), yu(v0.y); // y coordinate ranges
+    for (Vertices::size_type i = 0; i < n; ++i) {
+        Vector const &v(Vertex[i]);
+        v2d[i] = Vertex2D(v.x, v.y);
+        xl = std::min(xl, v.x);
+        xu = std::max(xu, v.x);
+        yl = std::min(yl, v.y);
+        yu = std::max(yu, v.y);
     }
+    return Surface2D(shapeCat, axis, v2d, Vertex2D(xl, yl), Vertex2D(xu, yu));
 }
 
 Real64 SurfaceData::get_average_height(EnergyPlusData &state) const
@@ -514,6 +526,8 @@ Real64 SurfaceData::get_average_height(EnergyPlusData &state) const
 
 void SurfaceData::make_hash_key(EnergyPlusData &state, const int SurfNum)
 {
+    auto &s_surf = state.dataSurface;
+
     calcHashKey = SurfaceCalcHashKey();
     calcHashKey.Construction = Construction;
     calcHashKey.Azimuth = round(Azimuth * 10.0) / 10.0;
@@ -521,12 +535,12 @@ void SurfaceData::make_hash_key(EnergyPlusData &state, const int SurfNum)
     calcHashKey.Height = round(Height * 10.0) / 10.0;
     calcHashKey.Zone = Zone;
     calcHashKey.EnclIndex = SolarEnclIndex;
-    calcHashKey.TAirRef = state.dataSurface->SurfTAirRef(SurfNum);
+    calcHashKey.TAirRef = s_surf->SurfTAirRef(SurfNum);
 
-    int extBoundCond = state.dataSurface->Surface(SurfNum).ExtBoundCond;
+    int extBoundCond = s_surf->Surface(SurfNum).ExtBoundCond;
     if (extBoundCond > 0) {
-        calcHashKey.ExtZone = state.dataSurface->Surface(extBoundCond).Zone;
-        calcHashKey.ExtEnclIndex = state.dataSurface->Surface(extBoundCond).SolarEnclIndex;
+        calcHashKey.ExtZone = s_surf->Surface(extBoundCond).Zone;
+        calcHashKey.ExtEnclIndex = s_surf->Surface(extBoundCond).SolarEnclIndex;
         calcHashKey.ExtCond = 1;
     } else {
         calcHashKey.ExtZone = 0;
@@ -540,26 +554,28 @@ void SurfaceData::make_hash_key(EnergyPlusData &state, const int SurfNum)
     calcHashKey.ViewFactorSky = round(ViewFactorSky * 10.0) / 10.0;
 
     calcHashKey.HeatTransferAlgorithm = HeatTransferAlgorithm;
-    calcHashKey.intConvModel = state.dataSurface->surfIntConv(SurfNum).model;
-    calcHashKey.extConvModel = state.dataSurface->surfExtConv(SurfNum).model;
-    calcHashKey.intConvUserModelNum = state.dataSurface->surfIntConv(SurfNum).userModelNum;
-    calcHashKey.extConvUserModelNum = state.dataSurface->surfExtConv(SurfNum).userModelNum;
+    calcHashKey.intConvModel = s_surf->surfIntConv(SurfNum).model;
+    calcHashKey.extConvModel = s_surf->surfExtConv(SurfNum).model;
+    calcHashKey.intConvUserModelNum = s_surf->surfIntConv(SurfNum).userModelNum;
+    calcHashKey.extConvUserModelNum = s_surf->surfExtConv(SurfNum).userModelNum;
     calcHashKey.OSCPtr = OSCPtr;
     calcHashKey.OSCMPtr = OSCMPtr;
 
     calcHashKey.FrameDivider = FrameDivider;
-    calcHashKey.SurfWinStormWinConstr = state.dataSurface->SurfWinStormWinConstr(SurfNum);
+    calcHashKey.SurfWinStormWinConstr = s_surf->SurfWinStormWinConstr(SurfNum);
 
-    calcHashKey.MaterialMovInsulExt = state.dataSurface->SurfMaterialMovInsulExt(SurfNum);
-    calcHashKey.MaterialMovInsulInt = state.dataSurface->SurfMaterialMovInsulInt(SurfNum);
-    calcHashKey.SchedMovInsulExt = state.dataSurface->SurfSchedMovInsulExt(SurfNum);
-    calcHashKey.SchedMovInsulInt = state.dataSurface->SurfSchedMovInsulInt(SurfNum);
-    calcHashKey.ExternalShadingSchInd = state.dataSurface->Surface(SurfNum).SurfExternalShadingSchInd;
-    calcHashKey.SurroundingSurfacesNum = state.dataSurface->Surface(SurfNum).SurfSurroundingSurfacesNum;
-    calcHashKey.LinkedOutAirNode = state.dataSurface->Surface(SurfNum).SurfLinkedOutAirNode;
-    calcHashKey.OutsideHeatSourceTermSchedule = OutsideHeatSourceTermSchedule;
-    calcHashKey.InsideHeatSourceTermSchedule = InsideHeatSourceTermSchedule;
-    calcHashKey.ViewFactorSrdSurfs = state.dataSurface->Surface(SurfNum).ViewFactorSrdSurfs;
+    calcHashKey.MaterialMovInsulExt = s_surf->extMovInsuls(SurfNum).matNum;
+    calcHashKey.MaterialMovInsulInt = s_surf->intMovInsuls(SurfNum).matNum;
+    calcHashKey.movInsulExtSchedNum = (s_surf->extMovInsuls(SurfNum).sched == nullptr) ? -1 : s_surf->extMovInsuls(SurfNum).sched->Num;
+    calcHashKey.movInsulIntSchedNum = (s_surf->intMovInsuls(SurfNum).sched == nullptr) ? -1 : s_surf->intMovInsuls(SurfNum).sched->Num;
+
+    calcHashKey.externalShadingSchedNum =
+        (s_surf->Surface(SurfNum).surfExternalShadingSched != nullptr) ? s_surf->Surface(SurfNum).surfExternalShadingSched->Num : -1;
+    calcHashKey.SurroundingSurfacesNum = s_surf->Surface(SurfNum).SurfSurroundingSurfacesNum;
+    calcHashKey.LinkedOutAirNode = s_surf->Surface(SurfNum).SurfLinkedOutAirNode;
+    calcHashKey.outsideHeatSourceTermSchedNum = (outsideHeatSourceTermSched != nullptr) ? outsideHeatSourceTermSched->Num : -1;
+    calcHashKey.insideHeatSourceTermSchedNum = (insideHeatSourceTermSched != nullptr) ? insideHeatSourceTermSched->Num : -1;
+    calcHashKey.ViewFactorSrdSurfs = s_surf->Surface(SurfNum).ViewFactorSrdSurfs;
 }
 
 void SurfaceData::set_representative_surface(EnergyPlusData &state, const int SurfNum)
@@ -610,8 +626,9 @@ void CheckSurfaceOutBulbTempAt(EnergyPlusData &state)
     Real64 minBulb = 0.0;
     for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; SurfNum++) {
         minBulb = min(minBulb, state.dataSurface->SurfOutDryBulbTemp(SurfNum), state.dataSurface->SurfOutWetBulbTemp(SurfNum));
-        if (minBulb < -100.0)
+        if (minBulb < -100.0) {
             SetOutBulbTempAt_error(state, "Surface", state.dataSurface->Surface(SurfNum).Centroid.z, state.dataSurface->Surface(SurfNum).Name);
+        }
     }
 }
 
@@ -626,7 +643,9 @@ void SetSurfaceWindSpeedAt(EnergyPlusData &state)
     } else {
 
         for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; SurfNum++) {
-            if (!state.dataSurface->Surface(SurfNum).ExtWind) continue;
+            if (!state.dataSurface->Surface(SurfNum).ExtWind) {
+                continue;
+            }
             Real64 const Z(state.dataSurface->Surface(SurfNum).Centroid.z); // Centroid value
             if (Z <= 0.0) {
                 state.dataSurface->SurfOutWindSpeed(SurfNum) = 0.0;
@@ -730,14 +749,22 @@ Real64 AbsBackSide(EnergyPlusData &state, int SurfNum)
 
 void GetVariableAbsorptanceSurfaceList(EnergyPlusData &state)
 {
-    if (!state.dataMaterial->AnyVariableAbsorptance) return;
+    if (!state.dataMaterial->AnyVariableAbsorptance) {
+        return;
+    }
     for (int surfNum : state.dataSurface->AllHTSurfaceList) {
         auto const &thisSurface = state.dataSurface->Surface(surfNum);
         auto const &thisConstruct = state.dataConstruction->Construct(thisSurface.Construction);
-        if (thisConstruct.TotLayers == 0) continue;
-        if (thisConstruct.LayerPoint(1) == 0) continue; // error finding material number
+        if (thisConstruct.TotLayers == 0) {
+            continue;
+        }
+        if (thisConstruct.LayerPoint(1) == 0) {
+            continue; // error finding material number
+        }
         auto const *mat = state.dataMaterial->materials(thisConstruct.LayerPoint(1));
-        if (mat->group != Material::Group::Regular) continue;
+        if (mat->group != Material::Group::Regular) {
+            continue;
+        }
 
         if (mat->absorpVarCtrlSignal != Material::VariableAbsCtrlSignal::Invalid) {
             // check for dynamic coating defined on interior surface
@@ -756,7 +783,9 @@ void GetVariableAbsorptanceSurfaceList(EnergyPlusData &state)
         auto const &thisConstruct = state.dataConstruction->Construct(ConstrNum);
         for (int Layer = 2; Layer <= thisConstruct.TotLayers; ++Layer) {
             auto const *mat = state.dataMaterial->materials(thisConstruct.LayerPoint(Layer));
-            if (mat->group != Material::Group::Regular) continue;
+            if (mat->group != Material::Group::Regular) {
+                continue;
+            }
             if (mat->absorpVarCtrlSignal != Material::VariableAbsCtrlSignal::Invalid) {
                 ShowWarningError(state,
                                  format("MaterialProperty:VariableAbsorptance defined on a inside-layer materials, {}. This VariableAbsorptance "
@@ -774,9 +803,13 @@ Compass4 AzimuthToCompass4(Real64 azimuth)
         Real64 lo = Compass4AzimuthLo[c4];
         Real64 hi = Compass4AzimuthHi[c4];
         if (lo > hi) {
-            if (azimuth >= lo || azimuth < hi) return static_cast<Compass4>(c4);
+            if (azimuth >= lo || azimuth < hi) {
+                return static_cast<Compass4>(c4);
+            }
         } else {
-            if (azimuth >= lo && azimuth < hi) return static_cast<Compass4>(c4);
+            if (azimuth >= lo && azimuth < hi) {
+                return static_cast<Compass4>(c4);
+            }
         }
     }
     assert(false);
@@ -790,9 +823,13 @@ Compass8 AzimuthToCompass8(Real64 azimuth)
         Real64 lo = Compass8AzimuthLo[c8];
         Real64 hi = Compass8AzimuthHi[c8];
         if (lo > hi) {
-            if (azimuth >= lo || azimuth < hi) return static_cast<Compass8>(c8);
+            if (azimuth >= lo || azimuth < hi) {
+                return static_cast<Compass8>(c8);
+            }
         } else {
-            if (azimuth >= lo && azimuth < hi) return static_cast<Compass8>(c8);
+            if (azimuth >= lo && azimuth < hi) {
+                return static_cast<Compass8>(c8);
+            }
         }
     }
     assert(false);

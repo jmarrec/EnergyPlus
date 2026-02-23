@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -120,9 +120,6 @@ enum class PipeIndoorBoundaryType
 };
 constexpr std::array<std::string_view, static_cast<int>(PipeIndoorBoundaryType::Num)> pipeIndoorBoundaryTypeNamesUC = {"ZONE", "SCHEDULE"};
 
-// Using/Aliasing
-using namespace GroundTemperatureManager;
-
 // Functions
 
 PlantComponent *PipeHTData::factory(EnergyPlusData &state, DataPlant::PlantEquipmentType objectType, std::string const &objectName)
@@ -136,7 +133,9 @@ PlantComponent *PipeHTData::factory(EnergyPlusData &state, DataPlant::PlantEquip
     auto thisObj = std::find_if(state.dataPipeHT->PipeHT.begin(),
                                 state.dataPipeHT->PipeHT.end(),
                                 [&objectType, &objectName](const PipeHTData &myObj) { return myObj.Type == objectType && myObj.Name == objectName; });
-    if (thisObj != state.dataPipeHT->PipeHT.end()) return thisObj;
+    if (thisObj != state.dataPipeHT->PipeHT.end()) {
+        return thisObj;
+    }
     // If we didn't find it, fatal
     ShowFatalError(state, format("PipeHTFactory: Error getting inputs for pipe named: {}", objectName));
     // Shut up the compiler
@@ -206,14 +205,12 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
     using NodeInputManager::GetOnlySingleNode;
     using namespace DataLoopNode;
     using OutAirNodeManager::CheckOutAirNodeNumber;
-    using ScheduleManager::GetScheduleIndex;
 
     static constexpr std::string_view routineName = "GetPipeHeatTransfer";
 
     // SUBROUTINE PARAMETER DEFINITIONS:
     int constexpr NumPipeSections(20);
     int constexpr NumberOfDepthNodes(8); // Number of nodes in the cartesian grid-Should be an even # for now
-    Real64 const SecondsInHour(Constant::SecInHour);
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     bool ErrorsFound(false); // Set to true if errors in input,
@@ -238,7 +235,9 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
 
     state.dataPipeHT->nsvNumOfPipeHT = NumOfPipeHTInt + NumOfPipeHTExt + NumOfPipeHTUG;
     // allocate data structures
-    if (allocated(state.dataPipeHT->PipeHT)) state.dataPipeHT->PipeHT.deallocate();
+    if (allocated(state.dataPipeHT->PipeHT)) {
+        state.dataPipeHT->PipeHT.deallocate();
+    }
 
     state.dataPipeHT->PipeHT.allocate(state.dataPipeHT->nsvNumOfPipeHT);
     state.dataPipeHT->PipeHTUniqueNames.reserve(static_cast<unsigned>(state.dataPipeHT->nsvNumOfPipeHT));
@@ -318,7 +317,9 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
 
         // get environmental boundary condition type
 
-        if (s_ipsc->lAlphaFieldBlanks(5)) s_ipsc->cAlphaArgs(5) = "ZONE";
+        if (s_ipsc->lAlphaFieldBlanks(5)) {
+            s_ipsc->cAlphaArgs(5) = "ZONE";
+        }
 
         PipeIndoorBoundaryType indoorType = static_cast<PipeIndoorBoundaryType>(getEnumValue(pipeIndoorBoundaryTypeNamesUC, s_ipsc->cAlphaArgs(5)));
         switch (indoorType) {
@@ -334,16 +335,15 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
 
         case PipeIndoorBoundaryType::Schedule:
             state.dataPipeHT->PipeHT(Item).EnvironmentPtr = EnvrnPtr::ScheduleEnv;
-            state.dataPipeHT->PipeHT(Item).EnvrSchedule = s_ipsc->cAlphaArgs(7);
-            state.dataPipeHT->PipeHT(Item).EnvrSchedPtr = GetScheduleIndex(state, state.dataPipeHT->PipeHT(Item).EnvrSchedule);
-            state.dataPipeHT->PipeHT(Item).EnvrVelSchedule = s_ipsc->cAlphaArgs(8);
-            state.dataPipeHT->PipeHT(Item).EnvrVelSchedPtr = GetScheduleIndex(state, state.dataPipeHT->PipeHT(Item).EnvrVelSchedule);
-            if (state.dataPipeHT->PipeHT(Item).EnvrSchedPtr == 0) {
+
+            state.dataPipeHT->PipeHT(Item).envrSched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(7));
+            state.dataPipeHT->PipeHT(Item).envrVelSched = Sched::GetSchedule(state, s_ipsc->cAlphaArgs(8));
+            if (state.dataPipeHT->PipeHT(Item).envrSched == nullptr) {
                 ShowSevereError(state, format("Invalid {}={}", s_ipsc->cAlphaFieldNames(7), s_ipsc->cAlphaArgs(7)));
                 ShowContinueError(state, format("Entered in {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
-            if (state.dataPipeHT->PipeHT(Item).EnvrVelSchedPtr == 0) {
+            if (state.dataPipeHT->PipeHT(Item).envrVelSched == nullptr) {
                 ShowSevereError(state, format("Invalid {}={}", s_ipsc->cAlphaFieldNames(8), s_ipsc->cAlphaArgs(8)));
                 ShowContinueError(state, format("Entered in {}={}", s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)));
                 ErrorsFound = true;
@@ -640,8 +640,7 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
             state.dataPipeHT->PipeHT(Item).DomainDepth = state.dataPipeHT->PipeHT(Item).PipeDepth * 2.0;
             state.dataPipeHT->PipeHT(Item).SoilDiffusivity = state.dataPipeHT->PipeHT(Item).SoilConductivity /
                                                              (state.dataPipeHT->PipeHT(Item).SoilDensity * state.dataPipeHT->PipeHT(Item).SoilCp);
-            state.dataPipeHT->PipeHT(Item).SoilDiffusivityPerDay =
-                state.dataPipeHT->PipeHT(Item).SoilDiffusivity * SecondsInHour * Constant::HoursInDay;
+            state.dataPipeHT->PipeHT(Item).SoilDiffusivityPerDay = state.dataPipeHT->PipeHT(Item).SoilDiffusivity * Constant::rSecsInDay;
 
             // Mesh the cartesian domain
             state.dataPipeHT->PipeHT(Item).NumDepthNodes = NumberOfDepthNodes;
@@ -662,7 +661,13 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
         }
 
         // Get ground temperature model
-        state.dataPipeHT->PipeHT(Item).groundTempModel = GetGroundTempModelAndInit(state, s_ipsc->cAlphaArgs(7), s_ipsc->cAlphaArgs(8));
+        GroundTemp::ModelType gtmType = static_cast<GroundTemp::ModelType>(getEnumValue(GroundTemp::modelTypeNamesUC, s_ipsc->cAlphaArgs(7)));
+        if (gtmType == GroundTemp::ModelType::Invalid) {
+            ShowSevereInvalidKey(state, eoh, s_ipsc->cAlphaFieldNames(7), s_ipsc->cAlphaArgs(7));
+            ErrorsFound = true;
+        }
+
+        state.dataPipeHT->PipeHT(Item).groundTempModel = GroundTemp::GetGroundTempModelAndInit(state, gtmType, s_ipsc->cAlphaArgs(8));
 
         // Select number of pipe sections.  Hanby's optimal number of 20 section is selected.
         state.dataPipeHT->PipeHT(Item).NumSections = NumPipeSections;
@@ -910,9 +915,6 @@ void PipeHTData::InitPipesHeatTransfer(EnergyPlusData &state, bool const FirstHV
     // Using/Aliasing
     Real64 SysTimeElapsed = state.dataHVACGlobal->SysTimeElapsed;
     Real64 TimeStepSysSec = state.dataHVACGlobal->TimeStepSysSec;
-    using FluidProperties::GetDensityGlycol;
-    using FluidProperties::GetSpecificHeatGlycol;
-    using ScheduleManager::GetCurrentScheduleValue;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
     static constexpr std::string_view RoutineName("InitPipesHeatTransfer");
@@ -974,8 +976,12 @@ void PipeHTData::InitPipesHeatTransfer(EnergyPlusData &state, bool const FirstHV
         this->BeginSimEnvrn = false;
     }
 
-    if (!state.dataGlobal->BeginSimFlag) this->BeginSimInit = true;
-    if (!state.dataGlobal->BeginEnvrnFlag) this->BeginSimEnvrn = true;
+    if (!state.dataGlobal->BeginSimFlag) {
+        this->BeginSimInit = true;
+    }
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        this->BeginSimEnvrn = true;
+    }
 
     // time step in seconds
     state.dataPipeHT->nsvDeltaTime = TimeStepSysSec;
@@ -1018,7 +1024,7 @@ void PipeHTData::InitPipesHeatTransfer(EnergyPlusData &state, bool const FirstHV
             state.dataPipeHT->nsvEnvironmentTemp = state.dataZoneTempPredictorCorrector->zoneHeatBalance(this->EnvrZonePtr).MAT;
         } break;
         case EnvrnPtr::ScheduleEnv: {
-            state.dataPipeHT->nsvEnvironmentTemp = GetCurrentScheduleValue(state, this->EnvrSchedPtr);
+            state.dataPipeHT->nsvEnvironmentTemp = this->envrSched->getCurrentVal();
         } break;
         case EnvrnPtr::None: { // default to outside temp
             state.dataPipeHT->nsvEnvironmentTemp = state.dataEnvrn->OutDryBulbTemp;
@@ -1031,8 +1037,12 @@ void PipeHTData::InitPipesHeatTransfer(EnergyPlusData &state, bool const FirstHV
         this->FirstHVACupdateFlag = false;
     }
 
-    if (!state.dataGlobal->BeginEnvrnFlag) this->BeginEnvrnupdateFlag = true;
-    if (!FirstHVACIteration) this->FirstHVACupdateFlag = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        this->BeginEnvrnupdateFlag = true;
+    }
+    if (!FirstHVACIteration) {
+        this->FirstHVACupdateFlag = true;
+    }
 
     // Calculate the current sim time for this pipe (not necessarily structure variable, but it is ok for consistency)
     this->CurrentSimTime = (state.dataGlobal->DayOfSim - 1) * 24 + state.dataGlobal->HourOfDay - 1 +
@@ -1090,16 +1100,9 @@ void PipeHTData::InitPipesHeatTransfer(EnergyPlusData &state, bool const FirstHV
     // Even though the loop eventually has no flow rate, it appears it initializes to a value, then converges to OFF
     // Thus, this is called at the beginning of every time step once.
 
-    this->FluidSpecHeat = GetSpecificHeatGlycol(state,
-                                                state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                state.dataPipeHT->nsvInletTemp,
-                                                state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                RoutineName);
-    this->FluidDensity = GetDensityGlycol(state,
-                                          state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                          state.dataPipeHT->nsvInletTemp,
-                                          state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                          RoutineName);
+    this->FluidSpecHeat =
+        state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getSpecificHeat(state, state.dataPipeHT->nsvInletTemp, RoutineName);
+    this->FluidDensity = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getDensity(state, state.dataPipeHT->nsvInletTemp, RoutineName);
 
     // At this point, for all Pipe:Interior objects we should zero out the energy and rate arrays
     this->FluidHeatLossRate = 0.0;
@@ -1483,7 +1486,9 @@ void PipeHTData::CalcBuriedPipeSoil(EnergyPlusData &state) // Current Simulation
             for (DepthIndex = 1; DepthIndex <= this->NumDepthNodes - 1; ++DepthIndex) {
                 for (WidthIndex = 2; WidthIndex <= this->PipeNodeWidth; ++WidthIndex) {
                     Ttemp = this->T(WidthIndex, DepthIndex, LengthIndex, TimeIndex::Tentative);
-                    if (std::abs(T_O(WidthIndex, DepthIndex, LengthIndex) - Ttemp) > ConvCrit) goto IterationLoop_loop;
+                    if (std::abs(T_O(WidthIndex, DepthIndex, LengthIndex) - Ttemp) > ConvCrit) {
+                        goto IterationLoop_loop;
+                    }
                 }
             }
         }
@@ -1636,15 +1641,20 @@ void PipeHTData::CalcZonePipesHeatGain(EnergyPlusData &state)
     // Sums the heat losses from all of the water heaters in the zone to add as a gain to the zone.
 
     // Using/Aliasing
-    if (state.dataPipeHT->nsvNumOfPipeHT == 0) return;
+    if (state.dataPipeHT->nsvNumOfPipeHT == 0) {
+        return;
+    }
 
     if (state.dataGlobal->BeginEnvrnFlag && state.dataPipeHT->MyEnvrnFlag) {
-        for (auto &e : state.dataPipeHT->PipeHT)
+        for (auto &e : state.dataPipeHT->PipeHT) {
             e.ZoneHeatGainRate = 0.0;
+        }
         state.dataPipeHT->MyEnvrnFlag = false;
     }
 
-    if (!state.dataGlobal->BeginEnvrnFlag) state.dataPipeHT->MyEnvrnFlag = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        state.dataPipeHT->MyEnvrnFlag = true;
+    }
 }
 
 //==============================================================================
@@ -1675,10 +1685,6 @@ Real64 PipeHTData::CalcPipeHeatTransCoef(EnergyPlusData &state,
     // Incropera and DeWitt, Introduction to Heat Transfer, Table A.6.
     // Heat exchanger information also from Incropera and DeWitt.
     // Code based loosely on code from IBLAST program (research version)
-
-    // Using/Aliasing
-    using FluidProperties::GetConductivityGlycol;
-    using FluidProperties::GetViscosityGlycol;
 
     // Return value
     Real64 CalcPipeHeatTransCoef;
@@ -1726,12 +1732,9 @@ Real64 PipeHTData::CalcPipeHeatTransCoef(EnergyPlusData &state,
     }
 
     // look up conductivity and viscosity
-    Kactual = GetConductivityGlycol(
-        state, state.dataPlnt->PlantLoop(LoopNum).FluidName, this->FluidTemp(0), state.dataPlnt->PlantLoop(LoopNum).FluidIndex, RoutineName); // W/m-K
-    MUactual =
-        GetViscosityGlycol(
-            state, state.dataPlnt->PlantLoop(LoopNum).FluidName, this->FluidTemp(0), state.dataPlnt->PlantLoop(LoopNum).FluidIndex, RoutineName) /
-        1000.0; // Note fluid properties routine returns mPa-s, we need Pa-s
+    Kactual = state.dataPlnt->PlantLoop(LoopNum).glycol->getConductivity(state, this->FluidTemp(0), RoutineName); // W/m-K
+    MUactual = state.dataPlnt->PlantLoop(LoopNum).glycol->getViscosity(state, this->FluidTemp(0), RoutineName) /
+               1000.0; // Note fluid properties routine returns mPa-s, we need Pa-s
 
     // Calculate the Reynold's number from RE=(4*Mdot)/(Pi*Mu*Diameter) - as RadiantSysLowTemp
     ReD = 4.0 * MassFlowRate / (Constant::Pi * MUactual * Diameter);
@@ -1774,9 +1777,6 @@ Real64 PipeHTData::OutsidePipeHeatTransCoef(EnergyPlusData &state)
     // REFERENCES:
     // Fundamentals of Heat and Mass Transfer: Incropera and DeWitt, 4th ed.
     // p. 369-370 (Eq. 7:55b)
-
-    // Using/Aliasing
-    using ScheduleManager::GetCurrentScheduleValue;
 
     // Return value
     Real64 OutsidePipeHeatTransCoef;
@@ -1821,8 +1821,8 @@ Real64 PipeHTData::OutsidePipeHeatTransCoef(EnergyPlusData &state)
     case DataPlant::PlantEquipmentType::PipeInterior: {
         switch (this->EnvironmentPtr) {
         case EnvrnPtr::ScheduleEnv: {
-            AirTemp = GetCurrentScheduleValue(state, this->EnvrSchedPtr);
-            AirVel = GetCurrentScheduleValue(state, this->EnvrVelSchedPtr);
+            AirTemp = this->envrSched->getCurrentVal();
+            AirVel = this->envrVelSched->getCurrentVal();
         } break;
         case EnvrnPtr::ZoneEnv: {
             AirTemp = state.dataZoneTempPredictorCorrector->zoneHeatBalance(this->EnvrZonePtr).MAT;
@@ -1920,12 +1920,8 @@ Real64 PipeHTData::TBND(EnergyPlusData &state,
     // REFERENCES: See Module Level Description
 
     // Using/Aliasing
-    Real64 curSimTime = state.dataGlobal->DayOfSim * Constant::SecsInDay;
-    Real64 TBND;
-
-    TBND = this->groundTempModel->getGroundTempAtTimeInSeconds(state, z, curSimTime);
-
-    return TBND;
+    Real64 curSimTime = state.dataGlobal->DayOfSim * Constant::rSecsInDay;
+    return this->groundTempModel->getGroundTempAtTimeInSeconds(state, z, curSimTime);
 }
 
 void PipeHTData::oneTimeInit([[maybe_unused]] EnergyPlusData &state)

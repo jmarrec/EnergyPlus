@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -57,8 +57,8 @@
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/ElectricPowerServiceManager.hh>
+#include <EnergyPlus/GroundTemperatureModeling/BaseGroundTemperatureModel.hh>
 #include <EnergyPlus/GroundTemperatureModeling/FiniteDifferenceGroundTemperatureModel.hh>
-#include <EnergyPlus/GroundTemperatureModeling/GroundTemperatureModelManager.hh>
 #include <EnergyPlus/SimulationManager.hh>
 #include <EnergyPlus/WeatherManager.hh>
 
@@ -69,10 +69,10 @@ using namespace EnergyPlus;
 TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModelTest)
 {
 
-    FiniteDiffGroundTempsModel thisModel;
+    GroundTemp::FiniteDiffGroundTempsModel thisModel;
 
-    thisModel.objectType = GroundTempObjType::FiniteDiffGroundTemp;
-    thisModel.objectName = "Test";
+    thisModel.modelType = GroundTemp::ModelType::FiniteDiff;
+    thisModel.Name = "Test";
     thisModel.baseConductivity = 1.08;
     thisModel.baseDensity = 962.0;
     thisModel.baseSpecificHeat = 2576.0;
@@ -145,10 +145,10 @@ TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModelTest)
 TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModel_GetWeather_NoWeather)
 {
 
-    FiniteDiffGroundTempsModel thisModel;
+    GroundTemp::FiniteDiffGroundTempsModel thisModel;
 
-    thisModel.objectType = EnergyPlus::GroundTempObjType::FiniteDiffGroundTemp;
-    thisModel.objectName = "Test";
+    thisModel.modelType = GroundTemp::ModelType::FiniteDiff;
+    thisModel.Name = "Test";
     thisModel.baseConductivity = 1.08;
     thisModel.baseDensity = 962.0;
     thisModel.baseSpecificHeat = 2576.0;
@@ -277,7 +277,7 @@ TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModel_GetWeather_Weather)
     // Read the project data, such as Timestep
     state->dataGlobal->BeginSimFlag = true;
     SimulationManager::GetProjectData(*state);
-    EXPECT_EQ(state->dataGlobal->NumOfTimeStepInHour, 4);
+    EXPECT_EQ(state->dataGlobal->TimeStepsInHour, 4);
 
     // Needed to avoid crash in SetupSimulation (from ElectricPowerServiceManager.hh)
     createFacilityElectricPowerServiceObject(*state);
@@ -290,10 +290,10 @@ TEST_F(EnergyPlusFixture, FiniteDiffGroundTempModel_GetWeather_Weather)
     EXPECT_EQ(state->dataEnvrn->TotDesDays, 2);
     EXPECT_EQ(state->dataWeather->TotRunPers, 1);
 
-    FiniteDiffGroundTempsModel thisModel;
+    GroundTemp::FiniteDiffGroundTempsModel thisModel;
 
-    thisModel.objectType = EnergyPlus::GroundTempObjType::FiniteDiffGroundTemp;
-    thisModel.objectName = "Test";
+    thisModel.modelType = GroundTemp::ModelType::FiniteDiff;
+    thisModel.Name = "Test";
     thisModel.baseConductivity = 1.08;
     thisModel.baseDensity = 962.0;
     thisModel.baseSpecificHeat = 2576.0;

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -50,10 +50,14 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
+#include <ObjexxFCL/Vector3.hh>
+
+using ObjexxFCL::Vector3;
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/ScheduleManager.hh>
 
 namespace EnergyPlus {
 
@@ -147,7 +151,7 @@ struct EnvironmentData : BaseGlobalStruct
     Real64 EMSWindDirOverrideValue = 0.0;                       // EMS override value for outdoor air wind direction
     Real64 WindSpeed = 0.0;                                     // Current outdoor air wind speed
     bool EMSWindSpeedOverrideOn = false;                        // EMS flag for outdoor air wind speed
-    Real64 EMSWindSpeedOverrideValue = false;                   // EMS override value for outdoor air wind speed
+    Real64 EMSWindSpeedOverrideValue = 0.0;                     // EMS override value for outdoor air wind speed
     Real64 WaterMainsTemp = 0.0;                                // Current water mains temperature
     int Year = 0;                                               // Current calendar year of the simulation from the weather file
     int YearTomorrow = 0;                                       // Tomorrow's calendar year of the simulation
@@ -205,11 +209,15 @@ struct EnvironmentData : BaseGlobalStruct
     std::string EnvironmentStartEnd;   // Start/End dates for Environment
     bool CurrentYearIsLeapYear =
         false; // true when current year is leap year (convoluted logic dealing with whether weather file allows leap years, runperiod inputs.
-    int varyingLocationSchedIndexLat = 0;
-    int varyingLocationSchedIndexLong = 0;
-    int varyingOrientationSchedIndex = 0;
+    Sched::Schedule *varyingLocationLatSched = nullptr;
+    Sched::Schedule *varyingLocationLongSched = nullptr;
+    Sched::Schedule *varyingOrientationSched = nullptr;
     bool forceBeginEnvResetSuppress = false; // for PerformancePrecisionTradeoffs
     bool oneTimeCompRptHeaderFlag = true;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

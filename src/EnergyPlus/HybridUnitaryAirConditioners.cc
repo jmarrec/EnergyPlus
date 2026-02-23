@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -442,9 +442,8 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
     //       RE-ENGINEERED  na
 
     // Using/Aliasing
-    using BranchNodeConnections::TestCompSet;
-    using namespace ScheduleManager;
     using BranchNodeConnections::SetUpCompSets;
+    using BranchNodeConnections::TestCompSet;
     using NodeInputManager::GetOnlySingleNode;
     using namespace DataLoopNode;
     std::string cCurrentModuleObject; // Object type for getting and error messages
@@ -510,16 +509,11 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
             // A1, \field Name
             hybridUnitaryAC.Name = Alphas(1);
             // A2, \field Availability Schedule Name
-            hybridUnitaryAC.Schedule = Alphas(2);
             if (lAlphaBlanks(2)) {
-                hybridUnitaryAC.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-            } else {
-                hybridUnitaryAC.SchedPtr = GetScheduleIndex(state, Alphas(2));
-                if (hybridUnitaryAC.SchedPtr == 0) {
-                    ShowSevereError(state, format("Invalid {}={}", cAlphaFields(2), Alphas(2)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, Alphas(1)));
-                    ErrorsFound = true;
-                }
+                hybridUnitaryAC.availSched = Sched::GetScheduleAlwaysOn(state);
+            } else if ((hybridUnitaryAC.availSched = Sched::GetSchedule(state, Alphas(2))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, cAlphaFields(2), Alphas(2));
+                ErrorsFound = true;
             }
             // A3, \field Availability Manager List Name
             if (!lAlphaBlanks(3)) {
@@ -527,40 +521,31 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
             }
 
             // A4, \field Minimum Supply Air Temperature Schedule Named
-            if (!lAlphaBlanks(4)) {
-                hybridUnitaryAC.TsaMin_schedule_pointer = GetScheduleIndex(state, Alphas(4));
-                if (hybridUnitaryAC.TsaMin_schedule_pointer == 0) {
-                    ShowSevereError(state, format("Invalid {}={}", cAlphaFields(4), Alphas(4)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, Alphas(1)));
-                    ErrorsFound = true;
-                }
+            if (lAlphaBlanks(4)) {
+            } else if ((hybridUnitaryAC.TsaMinSched = Sched::GetSchedule(state, Alphas(4))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, cAlphaFields(4), Alphas(4));
+                ErrorsFound = true;
             }
+
             // A5, \field Maximum Supply Air Temperature Schedule Name
-            if (!lAlphaBlanks(5)) {
-                hybridUnitaryAC.TsaMax_schedule_pointer = GetScheduleIndex(state, Alphas(5));
-                if (hybridUnitaryAC.TsaMax_schedule_pointer == 0) {
-                    ShowSevereError(state, format("Invalid {}={}", cAlphaFields(5), Alphas(5)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, Alphas(1)));
-                    ErrorsFound = true;
-                }
+            if (lAlphaBlanks(5)) {
+            } else if ((hybridUnitaryAC.TsaMaxSched = Sched::GetSchedule(state, Alphas(5))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, cAlphaFields(5), Alphas(5));
+                ErrorsFound = true;
             }
+
             // A6, \field Minimum Supply Air Humidity Ratio Schedule Name
-            if (!lAlphaBlanks(6)) {
-                hybridUnitaryAC.RHsaMin_schedule_pointer = GetScheduleIndex(state, Alphas(6));
-                if (hybridUnitaryAC.RHsaMin_schedule_pointer == 0) {
-                    ShowSevereError(state, format("Invalid {}={}", cAlphaFields(6), Alphas(6)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, Alphas(1)));
-                    ErrorsFound = true;
-                }
+            if (lAlphaBlanks(6)) {
+            } else if ((hybridUnitaryAC.RHsaMinSched = Sched::GetSchedule(state, Alphas(6))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, cAlphaFields(6), Alphas(6));
+                ErrorsFound = true;
             }
+
             // A7, \field Maximum Supply Air Humidity Ratio Schedule Name
-            if (!lAlphaBlanks(7)) {
-                hybridUnitaryAC.RHsaMax_schedule_pointer = GetScheduleIndex(state, Alphas(7));
-                if (hybridUnitaryAC.RHsaMax_schedule_pointer == 0) {
-                    ShowSevereError(state, format("Invalid {}={}", cAlphaFields(7), Alphas(7)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, Alphas(1)));
-                    ErrorsFound = true;
-                }
+            if (lAlphaBlanks(7)) {
+            } else if ((hybridUnitaryAC.RHsaMaxSched = Sched::GetSchedule(state, Alphas(7))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, cAlphaFields(7), Alphas(7));
+                ErrorsFound = true;
             }
 
             // A8, \field Method to Choose Value of Controlled Inputs

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -82,8 +82,8 @@ namespace Window {
         Real64 Phi = 0;
 
         // get window tilt and azimuth
-        Real64 Gamma = Constant::DegToRadians * state.dataSurface->Surface(t_SurfNum).Tilt;
-        Real64 Alpha = Constant::DegToRadians * state.dataSurface->Surface(t_SurfNum).Azimuth;
+        Real64 Gamma = Constant::DegToRad * state.dataSurface->Surface(t_SurfNum).Tilt;
+        Real64 Alpha = Constant::DegToRad * state.dataSurface->Surface(t_SurfNum).Azimuth;
 
         RayIdentificationType RadType = RayIdentificationType::Front_Incident;
 
@@ -119,7 +119,7 @@ namespace Window {
         //          April 2021: returning CSeries instead of pointer to CSeries
 
         // PURPOSE OF THIS SUBROUTINE:
-        // Handles solar radiation spetrum from defalut location or IDF
+        // Handles solar radiation spetrum from default location or IDF
         CSeries solarRadiation;
 
         for (int i = 1; i <= nume; ++i) {
@@ -140,7 +140,7 @@ namespace Window {
         //          April 2021: Function now returns CSeries instead of pointer to CSeries
 
         // PURPOSE OF THIS SUBROUTINE:
-        // Handles solar radiation spetrum from defalut location or IDF
+        // Handles solar radiation spetrum from default location or IDF
         CSeries visibleResponse;
 
         for (int i = 1; i <= numt3; ++i) {

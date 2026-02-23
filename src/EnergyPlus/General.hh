@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -221,8 +221,9 @@ namespace General {
     )
     {
         Array1D_string ItemNames(Items.size());
-        for (std::size_t i = 0, e = Items.size(); i < e; ++i)
+        for (std::size_t i = 0, e = Items.size(); i < e; ++i) {
             ItemNames[i] = Items[i].Name;
+        }
         CheckCreatedZoneItemName(state, calledFrom, CurrentObject, ZoneName, MaxZoneNameLength, ItemName, ItemNames, NumItems, ResultName, errFlag);
     }
 
@@ -239,9 +240,8 @@ namespace General {
     {
         if (denominator == 0.0) {
             return 0.0;
-        } else {
-            return std::exp(numerator / denominator);
         }
+        return std::exp(numerator / denominator);
     }
 } // namespace General
 
@@ -334,6 +334,10 @@ struct GeneralData : BaseGlobalStruct
     std::string LineRptOption1;
     std::string VarDictOption1;
     std::string VarDictOption2;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

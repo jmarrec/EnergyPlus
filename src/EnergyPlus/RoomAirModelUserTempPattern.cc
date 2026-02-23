@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -49,7 +49,7 @@
 #include <ObjexxFCL/Array.functions.hh>
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/ArrayS.functions.hh>
-#include <ObjexxFCL/Fmath.hh>
+// #include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/member.functions.hh>
 
 // EnergyPlus Headers
@@ -147,7 +147,9 @@ void InitTempDistModel(EnergyPlusData &state, int const ZoneNum) // index number
         state.dataRoomAirModelTempPattern->MyEnvrnFlag(ZoneNum) = false;
     }
 
-    if (!state.dataGlobal->BeginEnvrnFlag) state.dataRoomAirModelTempPattern->MyEnvrnFlag(ZoneNum) = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        state.dataRoomAirModelTempPattern->MyEnvrnFlag(ZoneNum) = true;
+    }
 
     // init report variable
     patternZoneInfo.Gradient = 0.0;
@@ -174,8 +176,9 @@ void GetSurfHBDataForTempDistModel(EnergyPlusData &state, int const ZoneNum) // 
     patternZoneInfo.Tstat = zoneHeatBal.MAT;
     patternZoneInfo.Tleaving = zoneHeatBal.MAT;
     patternZoneInfo.Texhaust = zoneHeatBal.MAT;
-    for (auto &e : patternZoneInfo.Surf)
+    for (auto &e : patternZoneInfo.Surf) {
         e.TadjacentAir = zoneHeatBal.MAT;
+    }
 
     // the only input this method needs is the zone MAT or ZT or ZTAV  ?  (original was ZT)
     patternZoneInfo.TairMean = zoneHeatBal.MAT; // this is lagged from previous corrector result
@@ -198,11 +201,10 @@ void CalcTempDistModel(EnergyPlusData &state, int const ZoneNum) // index number
 
     // Using/Aliasing
     using General::FindNumberInList;
-    using ScheduleManager::GetCurrentScheduleValue;
 
     auto &patternZoneInfo = state.dataRoomAir->AirPatternZoneInfo(ZoneNum);
     // first determine availability
-    Real64 AvailTest = GetCurrentScheduleValue(state, patternZoneInfo.AvailSchedID);
+    Real64 AvailTest = patternZoneInfo.availSched->getCurrentVal();
 
     if ((AvailTest != 1.0) || (!patternZoneInfo.IsUsed)) {
         // model not to be used. Use complete mixing method
@@ -210,41 +212,42 @@ void CalcTempDistModel(EnergyPlusData &state, int const ZoneNum) // index number
         patternZoneInfo.Tstat = patternZoneInfo.TairMean;
         patternZoneInfo.Tleaving = patternZoneInfo.TairMean;
         patternZoneInfo.Texhaust = patternZoneInfo.TairMean;
-        for (auto &e : patternZoneInfo.Surf)
+        for (auto &e : patternZoneInfo.Surf) {
             e.TadjacentAir = patternZoneInfo.TairMean;
+        }
 
         return;
 
-    } else { // choose pattern and call subroutine
+    } // choose pattern and call subroutine
 
-        int CurntPatternKey = GetCurrentScheduleValue(state, patternZoneInfo.PatternSchedID);
+    int CurntPatternKey = patternZoneInfo.patternSched->getCurrentVal();
 
-        int CurPatrnID = FindNumberInList(CurntPatternKey, state.dataRoomAir->AirPattern, &TemperaturePattern::PatrnID);
+    int CurPatrnID = FindNumberInList(CurntPatternKey, state.dataRoomAir->AirPattern, &TemperaturePattern::PatrnID);
 
-        if (CurPatrnID == 0) {
-            // throw error here ? way to test schedules before getting to this point?
-            ShowFatalError(state, format("User defined room air pattern index not found: {}", CurntPatternKey));
-            return;
-        }
+    if (CurPatrnID == 0) {
+        // throw error here ? way to test schedules before getting to this point?
+        ShowFatalError(state, format("User defined room air pattern index not found: {}", CurntPatternKey));
+        return;
+    }
 
-        switch (state.dataRoomAir->AirPattern(CurPatrnID).PatternMode) {
-        case UserDefinedPatternType::ConstGradTemp: {
-            FigureConstGradPattern(state, CurPatrnID, ZoneNum);
-        } break;
-        case UserDefinedPatternType::TwoGradInterp: {
-            FigureTwoGradInterpPattern(state, CurPatrnID, ZoneNum);
-        } break;
-        case UserDefinedPatternType::NonDimenHeight: {
-            FigureHeightPattern(state, CurPatrnID, ZoneNum);
-        } break;
-        case UserDefinedPatternType::SurfMapTemp: {
-            FigureSurfMapPattern(state, CurPatrnID, ZoneNum);
-        } break;
-        default: {
-            assert(false);
-        } break;
-        }
-    } // availability control construct
+    switch (state.dataRoomAir->AirPattern(CurPatrnID).PatternMode) {
+    case UserDefinedPatternType::ConstGradTemp: {
+        FigureConstGradPattern(state, CurPatrnID, ZoneNum);
+    } break;
+    case UserDefinedPatternType::TwoGradInterp: {
+        FigureTwoGradInterpPattern(state, CurPatrnID, ZoneNum);
+    } break;
+    case UserDefinedPatternType::NonDimenHeight: {
+        FigureHeightPattern(state, CurPatrnID, ZoneNum);
+    } break;
+    case UserDefinedPatternType::SurfMapTemp: {
+        FigureSurfMapPattern(state, CurPatrnID, ZoneNum);
+    } break;
+    default: {
+        assert(false);
+    } break;
+    }
+    // availability control construct
 }
 
 void FigureSurfMapPattern(EnergyPlusData &state, int const PattrnID, int const ZoneNum)
@@ -300,7 +303,7 @@ void FigureHeightPattern(EnergyPlusData &state, int const PattrnID, int const Zo
     // treat profile as lookup table and interpolate
 
     // Using/Aliasing
-    using FluidProperties::FindArrayIndex;
+    using Fluid::FindArrayIndex;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
@@ -314,7 +317,9 @@ void FigureHeightPattern(EnergyPlusData &state, int const PattrnID, int const Zo
         Real64 zeta = patternZoneInfo.Surf(i).Zeta;
         int lowSideID = FindArrayIndex(zeta, pattern.VertPatrn.ZetaPatrn);
         int highSideID = lowSideID + 1;
-        if (lowSideID == 0) lowSideID = 1; // protect against array bounds
+        if (lowSideID == 0) {
+            lowSideID = 1; // protect against array bounds
+        }
 
         Real64 lowSideZeta = pattern.VertPatrn.ZetaPatrn(lowSideID);
         Real64 hiSideZeta = (highSideID <= isize(pattern.VertPatrn.ZetaPatrn)) ? pattern.VertPatrn.ZetaPatrn(highSideID) : lowSideZeta;
@@ -474,13 +479,14 @@ Real64 OutdoorDryBulbGrad(Real64 DryBulbTemp, // Zone(ZoneNum).OutDryBulbTemp
 {
     if (DryBulbTemp >= UpperBound) {
         return HiGradient;
-    } else if (DryBulbTemp <= LowerBound) {
-        return LowGradient;
-    } else if ((UpperBound - LowerBound) == 0.0) {
-        return LowGradient;
-    } else {
-        return LowGradient + ((DryBulbTemp - LowerBound) / (UpperBound - LowerBound)) * (HiGradient - LowGradient);
     }
+    if (DryBulbTemp <= LowerBound) {
+        return LowGradient;
+    }
+    if ((UpperBound - LowerBound) == 0.0) {
+        return LowGradient;
+    }
+    return LowGradient + ((DryBulbTemp - LowerBound) / (UpperBound - LowerBound)) * (HiGradient - LowGradient);
 }
 
 void FigureConstGradPattern(EnergyPlusData &state, int const PattrnID, int const ZoneNum)
@@ -595,10 +601,11 @@ Real64 FigureNDheightInZone(EnergyPlusData &state, int const thisHBsurf) // inde
 
     // non dimensionalize.
     Real64 Zeta = (Zcm - ZoneZorig) / ZoneCeilHeight;
-    if (Zeta > 0.99)
+    if (Zeta > 0.99) {
         Zeta = 0.99;
-    else if (Zeta < 0.01)
+    } else if (Zeta < 0.01) {
         Zeta = 0.01;
+    }
 
     return Zeta;
 }
@@ -687,7 +694,9 @@ void SetSurfHBDataForTempDistModel(EnergyPlusData &state, int const ZoneNum) // 
                 }
             }
         }
-        if (WinGapFlowToRA > 0.0) WinGapTtoRA = WinGapFlowTtoRA / WinGapFlowToRA;
+        if (WinGapFlowToRA > 0.0) {
+            WinGapTtoRA = WinGapFlowTtoRA / WinGapFlowToRA;
+        }
 
         if (!zone.NoHeatToReturnAir) {
             if (MassFlowRA > 0.0) {
@@ -719,9 +728,13 @@ void SetSurfHBDataForTempDistModel(EnergyPlusData &state, int const ZoneNum) // 
                 }
             } else { // No return air flow
                 // Assign all heat-to-return from window gap airflow to zone air
-                if (WinGapFlowToRA > 0.0) zoneHeatBal.SysDepZoneLoads += WinGapFlowToRA * CpAir * (WinGapTtoRA - TempZoneAir);
+                if (WinGapFlowToRA > 0.0) {
+                    zoneHeatBal.SysDepZoneLoads += WinGapFlowToRA * CpAir * (WinGapTtoRA - TempZoneAir);
+                }
                 // Assign all heat-to-return from lights to zone air
-                if (QRetAir > 0.0) zoneHeatBal.SysDepZoneLoads += QRetAir;
+                if (QRetAir > 0.0) {
+                    zoneHeatBal.SysDepZoneLoads += QRetAir;
+                }
                 returnNode.Temp = zoneNode.Temp;
             }
         } else {

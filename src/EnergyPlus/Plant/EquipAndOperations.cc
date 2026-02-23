@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -70,7 +70,9 @@ namespace DataPlant {
 
     void ChillerHeaterSupervisoryOperationData::OneTimeInitChillerHeaterChangeoverOpScheme(EnergyPlusData &state)
     {
-        if (this->oneTimeSetupComplete) return;
+        if (this->oneTimeSetupComplete) {
+            return;
+        }
 
         SetupOutputVariable(state,
                             "Supervisory Plant Heat Pump Operation Mode",
@@ -883,11 +885,9 @@ namespace DataPlant {
         // Calculate load on primary chilled water loop and store in PrimaryPlantCoolingLoad
 
         Real64 CW_RetMdot = state.dataLoopNodes->Node(this->PlantOps.PrimaryChWLoopSupInletNode).MassFlowRate;
-        Real64 const CpCW = FluidProperties::GetSpecificHeatGlycol(state,
-                                                                   state.dataPlnt->PlantLoop(this->PlantOps.PrimaryChWLoopIndex).FluidName,
-                                                                   state.dataLoopNodes->Node(this->PlantOps.PrimaryChWLoopSupInletNode).Temp,
-                                                                   state.dataPlnt->PlantLoop(this->PlantOps.PrimaryChWLoopIndex).FluidIndex,
-                                                                   "DetermineCurrentPlantLoads");
+        Real64 const CpCW = state.dataPlnt->PlantLoop(this->PlantOps.PrimaryChWLoopIndex)
+                                .glycol->getSpecificHeat(
+                                    state, state.dataLoopNodes->Node(this->PlantOps.PrimaryChWLoopSupInletNode).Temp, "DetermineCurrentPlantLoads");
         Real64 CW_Qdot =
             min(0.0,
                 CW_RetMdot * CpCW *
@@ -899,11 +899,9 @@ namespace DataPlant {
         // int HWSupInletNode = this->PlantOps.PrimaryHWLoopSupInletNode;
         //      state.dataPlnt->PlantLoop(this->PlantOps.PrimaryHWLoopIndex).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).NodeNumIn;
         Real64 HW_RetMdot = state.dataLoopNodes->Node(this->PlantOps.PrimaryHWLoopSupInletNode).MassFlowRate;
-        Real64 const CpHW = FluidProperties::GetSpecificHeatGlycol(state,
-                                                                   state.dataPlnt->PlantLoop(this->PlantOps.PrimaryHWLoopIndex).FluidName,
-                                                                   state.dataLoopNodes->Node(this->PlantOps.PrimaryHWLoopSupInletNode).Temp,
-                                                                   state.dataPlnt->PlantLoop(this->PlantOps.PrimaryHWLoopIndex).FluidIndex,
-                                                                   "DetermineCurrentPlantLoads");
+        Real64 const CpHW = state.dataPlnt->PlantLoop(this->PlantOps.PrimaryHWLoopIndex)
+                                .glycol->getSpecificHeat(
+                                    state, state.dataLoopNodes->Node(this->PlantOps.PrimaryHWLoopSupInletNode).Temp, "DetermineCurrentPlantLoads");
 
         Real64 HW_Qdot =
             max(0.0,
@@ -939,7 +937,7 @@ namespace DataPlant {
         } else if ((this->Report.BuildingPolledCoolingLoad < DataPrecisionGlobals::constant_minusone * HVAC::SmallLoad) &&
                    (this->Report.BuildingPolledHeatingLoad > HVAC::SmallLoad)) {
             this->PlantOps.AirSourcePlantSimultaneousHeatingAndCooling = true;
-            if (this->Report.BuildingPolledHeatingLoad > abs(this->Report.BuildingPolledCoolingLoad)) {
+            if (this->Report.BuildingPolledHeatingLoad > std::abs(this->Report.BuildingPolledCoolingLoad)) {
                 this->PlantOps.SimultaneousHeatingCoolingWithHeatingDominant = true;
                 if (this->PlantOps.SimultHeatCoolOpAvailable) {
                     this->PlantOps.AirSourcePlantSimultaneousHeatingAndCooling = true;
@@ -947,7 +945,7 @@ namespace DataPlant {
                     this->PlantOps.AirSourcePlantHeatingOnly = true;
                     this->PlantOps.AirSourcePlantSimultaneousHeatingAndCooling = false;
                 }
-            } else if (abs(this->Report.BuildingPolledCoolingLoad) > this->Report.BuildingPolledHeatingLoad) {
+            } else if (std::abs(this->Report.BuildingPolledCoolingLoad) > this->Report.BuildingPolledHeatingLoad) {
                 this->PlantOps.SimultaneousHeatingCoolingWithCoolingDominant = true;
                 if (this->PlantOps.SimultHeatCoolOpAvailable) {
                     this->PlantOps.AirSourcePlantSimultaneousHeatingAndCooling = true;
@@ -1372,20 +1370,14 @@ namespace DataPlant {
         // step 2. calculate the loads to adjust the
         // returns to hit the associated setpoints at their current mass flow
         Real64 const CpCW =
-            FluidProperties::GetSpecificHeatGlycol(state,
-                                                   state.dataPlnt->PlantLoop(this->DedicatedHR_HeatingPLHP.sourceSidePlantLoc.loopNum).FluidName,
-                                                   state.dataLoopNodes->Node(inletChWReturnNodeNum).Temp,
-                                                   state.dataPlnt->PlantLoop(this->DedicatedHR_HeatingPLHP.sourceSidePlantLoc.loopNum).FluidIndex,
-                                                   "EvaluateChillerHeaterChangeoverOpScheme");
+            state.dataPlnt->PlantLoop(this->DedicatedHR_HeatingPLHP.sourceSidePlantLoc.loopNum)
+                .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(inletChWReturnNodeNum).Temp, "EvaluateChillerHeaterChangeoverOpScheme");
         Real64 CW_Qdot =
             CW_RetMdot * CpCW *
             (this->Setpoint.SecCW - state.dataLoopNodes->Node(inletChWReturnNodeNum).Temp); // power = Mdot Cp Delta T, cooling load is negative
         Real64 const CpHW =
-            FluidProperties::GetSpecificHeatGlycol(state,
-                                                   state.dataPlnt->PlantLoop(this->DedicatedHR_CoolingPLHP.sourceSidePlantLoc.loopNum).FluidName,
-                                                   state.dataLoopNodes->Node(inletHWReturnNodeNum).Temp,
-                                                   state.dataPlnt->PlantLoop(this->DedicatedHR_CoolingPLHP.sourceSidePlantLoc.loopNum).FluidIndex,
-                                                   "EvaluateChillerHeaterChangeoverOpScheme");
+            state.dataPlnt->PlantLoop(this->DedicatedHR_CoolingPLHP.sourceSidePlantLoc.loopNum)
+                .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(inletHWReturnNodeNum).Temp, "EvaluateChillerHeaterChangeoverOpScheme");
         Real64 HW_Qdot = HW_RetMdot * CpHW * (this->Setpoint.SecHW - state.dataLoopNodes->Node(inletHWReturnNodeNum).Temp); // power = Mdot Cp Delta T
 
         // store for reporting
@@ -1551,7 +1543,9 @@ namespace DataPlant {
         // Check for boiler used as auxiliary or supplemental
         // Assume boilers are in-line on supply side outlet branch, typically on secondary loop but may be on primary loop
         this->Report.BoilerAux_OpMode = 0;
-        if (this->PlantOps.numBoilers <= 0) return;
+        if (this->PlantOps.numBoilers <= 0) {
+            return;
+        }
 
         // first initialize them to be off
         if (this->PlantOps.numBoilers > 0) {
@@ -1604,12 +1598,8 @@ namespace DataPlant {
                 Real64 Tin = state.dataLoopNodes->Node(inletBoilerNodeNum).Temp;
                 Real64 Mdot = state.dataLoopNodes->Node(inletBoilerNodeNum).MassFlowRate;
 
-                Real64 const CpHW =
-                    FluidProperties::GetSpecificHeatGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->PlantBoilerComps(BoilerNum).loopNum).FluidName,
-                                                           Tin,
-                                                           state.dataPlnt->PlantLoop(this->PlantBoilerComps(BoilerNum).loopNum).FluidIndex,
-                                                           "ChillerHeaterSupervisoryOperationData::ProcessAndSetAuxilBoiler");
+                Real64 const CpHW = state.dataPlnt->PlantLoop(this->PlantBoilerComps(BoilerNum).loopNum)
+                                        .glycol->getSpecificHeat(state, Tin, "ChillerHeaterSupervisoryOperationData::ProcessAndSetAuxilBoiler");
                 Real64 LoadToSetpoint = max(0.0, Mdot * CpHW * (HWsetpt - Tin));
                 int pltSizNum = state.dataPlnt->PlantLoop(this->PlantBoilerComps(BoilerNum).loopNum).PlantSizNum;
                 Real64 const thresholdPlantLoad =

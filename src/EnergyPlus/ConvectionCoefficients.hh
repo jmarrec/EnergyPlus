@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -743,23 +743,6 @@ namespace Convect {
     CalcASTMC1340ConvCoeff(EnergyPlusData &state, int const SurfNum, Real64 const Tsurf, Real64 const Tair, Real64 const Vair, Real64 const Tilt);
 
     SurfOrientation GetSurfConvOrientation(Real64 const Tilt);
-
-    void ShowSevereValueOutOfRange(EnergyPlusData &state,
-                                   ErrorObjectHeader const &eoh,
-                                   std::string_view fieldName,
-                                   Real64 fieldVal,
-                                   Real64 lo,
-                                   Real64 hi,
-                                   std::string const &msg);
-
-    void ShowSevereScheduleOutOfRange(EnergyPlusData &state,
-                                      ErrorObjectHeader const &eoh,
-                                      std::string_view fieldName,
-                                      std::string_view fieldVal,
-                                      Real64 lo,
-                                      Real64 hi,
-                                      std::string const &msg);
-
 } // namespace Convect
 
 struct ConvectionCoefficientsData : BaseGlobalStruct
@@ -796,7 +779,7 @@ struct ConvectionCoefficientsData : BaseGlobalStruct
     int CalcClearRoofErrorIDX = 0;
     int CalcMitchellErrorIDX = 0;
 
-    // move random statics so they can be reset for unit tests
+    // move random statistics so they can be reset for unit tests
     bool NodeCheck = true;
     bool ActiveSurfaceCheck = true;
     bool MyEnvirnFlag = true;
@@ -807,6 +790,10 @@ struct ConvectionCoefficientsData : BaseGlobalStruct
     Convect::ExtAdaptiveConvAlgo extAdaptiveConvAlgo;
     Array1D<Convect::HcIntUserCurve> hcIntUserCurve;
     Array1D<Convect::HcExtUserCurve> hcExtUserCurve;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

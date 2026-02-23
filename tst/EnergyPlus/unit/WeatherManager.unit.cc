@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -77,7 +77,6 @@
 #include <numeric>
 
 using namespace EnergyPlus;
-using namespace EnergyPlus::ScheduleManager;
 
 TEST_F(EnergyPlusFixture, SkyTempTest)
 {
@@ -129,31 +128,27 @@ TEST_F(EnergyPlusFixture, SkyTempTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-    Array2D<Real64> TomorrowSkyTemp; // Sky temperature
-    state->dataGlobal->NumOfTimeStepInHour = 4;
-    state->dataGlobal->MinutesPerTimeStep = 60 / state->dataGlobal->NumOfTimeStepInHour;
-    TomorrowSkyTemp.allocate(state->dataGlobal->NumOfTimeStepInHour, 24);
-    TomorrowSkyTemp = 0.0;
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 60 / state->dataGlobal->TimeStepsInHour;
 
-    // Febuary 27
-    ScheduleManager::GetScheduleValuesForDay(*state, 1, TomorrowSkyTemp, 58, 3);
-    EXPECT_NEAR(2.27, TomorrowSkyTemp(1, 1), .001);
+    state->init_state(*state);
 
-    // Febuary 28
-    ScheduleManager::GetScheduleValuesForDay(*state, 1, TomorrowSkyTemp, 59, 4);
-    EXPECT_NEAR(2.28, TomorrowSkyTemp(1, 1), .001);
+    auto *tSkySched = Sched::GetSchedule(*state, "TSKYSCHEDULE");
+    // February 27
+
+    EXPECT_NEAR(2.27, tSkySched->getDayVals(*state, 58, 3)[0 * state->dataGlobal->TimeStepsInHour + 0], .001);
+
+    // February 28
+    EXPECT_NEAR(2.28, tSkySched->getDayVals(*state, 59, 4)[0 * state->dataGlobal->TimeStepsInHour + 0], .001);
 
     // March 1
-    ScheduleManager::GetScheduleValuesForDay(*state, 1, TomorrowSkyTemp, 60, 5);
-    EXPECT_NEAR(3.01, TomorrowSkyTemp(1, 1), .001);
+    EXPECT_NEAR(3.01, tSkySched->getDayVals(*state, 60, 5)[0 * state->dataGlobal->TimeStepsInHour + 0], .001);
 
     // Not March 2, this "Day" is ignored unless its a leap year, otherwise same data as March 1
-    ScheduleManager::GetScheduleValuesForDay(*state, 1, TomorrowSkyTemp, 61, 6);
-    EXPECT_NEAR(3.01, TomorrowSkyTemp(1, 1), .001);
+    EXPECT_NEAR(3.01, tSkySched->getDayVals(*state, 61, 6)[0 * state->dataGlobal->TimeStepsInHour + 0], .001);
 
     // March 2
-    ScheduleManager::GetScheduleValuesForDay(*state, 1, TomorrowSkyTemp, 62, 6);
-    EXPECT_NEAR(3.02, TomorrowSkyTemp(1, 1), .001);
+    EXPECT_NEAR(3.02, tSkySched->getDayVals(*state, 62, 6)[0 * state->dataGlobal->TimeStepsInHour + 0], .001);
 }
 
 TEST_F(EnergyPlusFixture, SkyEmissivityTest)
@@ -190,6 +185,8 @@ TEST_F(EnergyPlusFixture, WaterMainsCorrelationTest)
     state->dataWeather->WaterMainsTempsMethod = Weather::WaterMainsTempCalcMethod::Correlation;
     state->dataWeather->WaterMainsTempsAnnualAvgAirTemp = 9.69;
     state->dataWeather->WaterMainsTempsMaxDiffAirTemp = 28.1;
+    state->dataWeather->WaterMainsTempsMultiplier = 1.0;
+    state->dataWeather->WaterMainsTempsOffset = 0.0;
     state->dataEnvrn->DayOfYear = 50;
 
     state->dataEnvrn->Latitude = 40.0;
@@ -199,6 +196,25 @@ TEST_F(EnergyPlusFixture, WaterMainsCorrelationTest)
     state->dataEnvrn->Latitude = -40.0;
     Weather::CalcWaterMainsTemp(*state);
     EXPECT_NEAR(state->dataEnvrn->WaterMainsTemp, 19.3799, 0.0001);
+}
+
+TEST_F(EnergyPlusFixture, WaterMainsCorrelationTestWithMultiplierAndOffset)
+{
+
+    state->dataWeather->WaterMainsTempsMethod = Weather::WaterMainsTempCalcMethod::Correlation;
+    state->dataWeather->WaterMainsTempsAnnualAvgAirTemp = 9.69;
+    state->dataWeather->WaterMainsTempsMaxDiffAirTemp = 28.1;
+    state->dataWeather->WaterMainsTempsMultiplier = 1.1;
+    state->dataWeather->WaterMainsTempsOffset = 5.0;
+    state->dataEnvrn->DayOfYear = 50;
+
+    state->dataEnvrn->Latitude = 40.0;
+    Weather::CalcWaterMainsTemp(*state);
+    EXPECT_NEAR(state->dataEnvrn->WaterMainsTemp, 12.3334, 0.0001);
+
+    state->dataEnvrn->Latitude = -40.0;
+    Weather::CalcWaterMainsTemp(*state);
+    EXPECT_NEAR(state->dataEnvrn->WaterMainsTemp, 26.3179, 0.0001);
 }
 
 TEST_F(EnergyPlusFixture, JGDate_Test)
@@ -318,6 +334,7 @@ TEST_F(EnergyPlusFixture, UnderwaterBoundaryConditionFullyPopulated)
                           "Schedule:Constant, WaterVelocitySchedule, , 3.0;"
                           "SurfaceProperty:OtherSideConditionsModel, UnderwaterSurfaceName, ConvectiveUnderwater;"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // need to populate the OSCM array by calling the get input for it
     bool errorsFound = false;
@@ -331,8 +348,8 @@ TEST_F(EnergyPlusFixture, UnderwaterBoundaryConditionFullyPopulated)
     EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].Name, "UNDERWATERSURFACENAME");
     EXPECT_NEAR(state->dataWeather->underwaterBoundaries[0].distanceFromLeadingEdge, 31.4159, 0.0001);
     EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].OSCMIndex, 1);
-    EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].WaterTempScheduleIndex, 1);
-    EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].VelocityScheduleIndex, 2);
+    EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].waterTempSched->Name, "WATERTEMPSCHEDULE");
+    EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].velocitySched->Name, "WATERVELOCITYSCHEDULE");
 }
 
 TEST_F(EnergyPlusFixture, UnderwaterBoundaryConditionMissingVelocityOK)
@@ -342,6 +359,7 @@ TEST_F(EnergyPlusFixture, UnderwaterBoundaryConditionMissingVelocityOK)
                                                       "Schedule:Constant, WaterTempSchedule, , 30;",
                                                       "SurfaceProperty:OtherSideConditionsModel, UnderwaterSurfaceName, ConvectiveUnderwater;"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // need to populate the OSCM array by calling the get input for it
     bool errorsFound = false;
@@ -355,8 +373,8 @@ TEST_F(EnergyPlusFixture, UnderwaterBoundaryConditionMissingVelocityOK)
     EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].Name, "UNDERWATERSURFACENAME");
     EXPECT_NEAR(state->dataWeather->underwaterBoundaries[0].distanceFromLeadingEdge, 31.4159, 0.0001);
     EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].OSCMIndex, 1);
-    EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].WaterTempScheduleIndex, 1);
-    EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].VelocityScheduleIndex, 0);
+    EXPECT_NE(state->dataWeather->underwaterBoundaries[0].waterTempSched, nullptr);
+    EXPECT_EQ(state->dataWeather->underwaterBoundaries[0].velocitySched, nullptr);
 }
 
 TEST_F(EnergyPlusFixture, UnderwaterBoundaryConditionConvectionCoefficients)
@@ -688,7 +706,7 @@ TEST_F(EnergyPlusFixture, ASHRAE_Tau2017ModelTest)
 
     bool ErrorsFound(false);
     state->dataEnvrn->TotDesDays = 2;
-    state->dataGlobal->NumOfTimeStepInHour = 0;
+    state->dataGlobal->TimeStepsInHour = 0;
     // setup environment state
     state->dataWeather->Environment.allocate(state->dataEnvrn->TotDesDays);
     state->dataWeather->DesignDay.allocate(state->dataEnvrn->TotDesDays);
@@ -791,7 +809,7 @@ TEST_F(EnergyPlusFixture, WeatherManager_NoLocation)
     ASSERT_TRUE(process_idf(idf_objects));
 
     state->dataGlobal->BeginSimFlag = false;
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
     state->dataWeather->LocationGathered = false;
 
     bool Available{false};
@@ -815,7 +833,7 @@ TEST_F(EnergyPlusFixture, WeatherManager_NoLocation)
     EXPECT_ENUM_EQ(state->dataWeather->Environment(1).KindOfEnvrn, Constant::KindOfSim::DesignDay);
 }
 
-// Test for https://github.com/NREL/EnergyPlus/issues/7550
+// Test for https://github.com/NatLabRockies/EnergyPlus/issues/7550
 TEST_F(SQLiteFixture, DesignDay_EnthalpyAtMaxDB)
 {
     state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");
@@ -874,8 +892,8 @@ TEST_F(SQLiteFixture, DesignDay_EnthalpyAtMaxDB)
 
     state->dataWeather->Environment(1).DesignDayNum = 1;
     state->dataWeather->Environment(1).WP_Type1 = 0;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataGlobal->BeginSimFlag = true;
     state->dataReportFlag->DoWeatherInitReporting = true;
 
@@ -891,7 +909,7 @@ TEST_F(SQLiteFixture, DesignDay_EnthalpyAtMaxDB)
 
     unsigned n_RH_not100 = 0;
     for (int Hour = 1; Hour <= 24; ++Hour) {
-        for (int TS = 1; TS <= state->dataGlobal->NumOfTimeStepInHour; ++TS) {
+        for (int TS = 1; TS <= state->dataGlobal->TimeStepsInHour; ++TS) {
             EXPECT_GE(state->dataWeather->wvarsHrTsTomorrow(TS, Hour).OutRelHum, 0.);
             EXPECT_LE(state->dataWeather->wvarsHrTsTomorrow(TS, Hour).OutRelHum, 100.);
             if (state->dataWeather->wvarsHrTsTomorrow(TS, Hour).OutRelHum < 100.) {
@@ -916,6 +934,7 @@ TEST_F(SQLiteFixture, DesignDay_EnthalpyAtMaxDB)
 
     EXPECT_TRUE(compare_eio_stream(eiooutput, false));
 
+    OutputReportTabular::setTabularReportStyles(*state);
     OutputReportTabular::WriteEioTables(*state);
 
     // Close output files *after* the EIO has been written to
@@ -1084,7 +1103,7 @@ TEST_F(EnergyPlusFixture, IRHoriz_InterpretWeatherCalculateMissingIRHoriz)
 
     state->files.inputWeatherFilePath.filePath = configured_source_directory() / "tst/EnergyPlus/unit/Resources/WeatherManagerIROutputTest.epw";
     std::string const idf_objects = delimited_string({
-        "  Version,9.3;",
+        "  Version," + DataStringGlobals::MatchVersion + ";",
 
         "  SizingPeriod:DesignDay,",
         "    Atlanta Jan 21 cooling,  !- Name",
@@ -1145,7 +1164,7 @@ TEST_F(EnergyPlusFixture, IRHoriz_InterpretWeatherCalculateMissingIRHoriz)
 
     bool ErrorsFound(false);
     state->dataEnvrn->TotDesDays = 2;
-    state->dataGlobal->NumOfTimeStepInHour = 0;
+    state->dataGlobal->TimeStepsInHour = 0;
 
     // setup environment state
     state->dataWeather->Environment.allocate(state->dataEnvrn->TotDesDays);
@@ -1157,7 +1176,7 @@ TEST_F(EnergyPlusFixture, IRHoriz_InterpretWeatherCalculateMissingIRHoriz)
 
     state->dataWeather->Envrn = 1;
 
-    state->dataGlobal->NumOfTimeStepInHour = 1;
+    state->dataGlobal->TimeStepsInHour = 1;
     state->dataWeather->Environment.allocate(1);
     state->dataWeather->Environment(1).skyTempModel = Weather::SkyTempModel::ClarkAllen;
 
@@ -1220,6 +1239,8 @@ TEST_F(EnergyPlusFixture, Add_and_InterpolateWeatherInputOutputTest)
     bool ErrorsFound(false);
     ErrorsFound = false;
 
+    state->init_state(*state);
+
     state->dataWeather->WeatherFileExists = true;
     state->files.inputWeatherFilePath.filePath = configured_source_directory() / "weather/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw";
 
@@ -1249,7 +1270,7 @@ TEST_F(EnergyPlusFixture, Add_and_InterpolateWeatherInputOutputTest)
 
     state->dataWeather->Envrn = 1;
 
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
     state->dataWeather->Environment.allocate(1);
     state->dataWeather->Environment(1).skyTempModel = Weather::SkyTempModel::ClarkAllen;
     state->dataWeather->Environment(1).StartMonth = 1;
@@ -1319,6 +1340,8 @@ TEST_F(EnergyPlusFixture, Fix_first_hour_weather_data_interpolation_OutputTest)
     bool ErrorsFound(false);
     ErrorsFound = false;
 
+    state->init_state(*state);
+
     state->dataWeather->WeatherFileExists = true;
     state->files.inputWeatherFilePath.filePath = configured_source_directory() / "weather/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw";
 
@@ -1333,7 +1356,7 @@ TEST_F(EnergyPlusFixture, Fix_first_hour_weather_data_interpolation_OutputTest)
     // The added first hour processing will be called here:
     Weather::GetNextEnvironment(*state, Available, ErrorsFound);
 
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
     state->dataWeather->Environment(1).skyTempModel = Weather::SkyTempModel::ClarkAllen;
     state->dataWeather->Environment(1).StartMonth = 1;
     state->dataWeather->Environment(1).StartDay = 1;
@@ -1444,8 +1467,9 @@ TEST_F(EnergyPlusFixture, Fix_OpaqueSkyCover_Test)
     ASSERT_TRUE(process_idf(idf_objects));
 
     SimulationManager::PostIPProcessing(*state);
+    state->init_state(*state);
+
     bool ErrorsFound(false);
-    ErrorsFound = false;
 
     state->dataWeather->WeatherFileExists = true;
     state->files.inputWeatherFilePath.filePath = configured_source_directory() / "weather/USA_IL_University.of.Illinois-Willard.AP.725315_TMY3.epw";
@@ -1469,7 +1493,7 @@ TEST_F(EnergyPlusFixture, Fix_OpaqueSkyCover_Test)
 
     state->dataWeather->Envrn = 1;
 
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
     state->dataWeather->Environment.allocate(1);
     state->dataWeather->Environment(1).skyTempModel = Weather::SkyTempModel::ClarkAllen;
     state->dataWeather->Environment(1).StartMonth = 1;
@@ -1583,16 +1607,19 @@ TEST_F(EnergyPlusFixture, WeatherManager_SetRainFlag)
     // setting up start ------------------------------------------------------------------------------
     ASSERT_TRUE(process_idf(idf_objects));
 
-    SimulationManager::ManageSimulation(*state);
-    WaterManager::GetWaterManagerInput(*state);
     state->dataGlobal->DayOfSim = 2; // avoid array bounds problem in RecKeepHeatBalance
     state->dataWeather->Envrn = 1;
-    state->dataGlobal->NumOfTimeStepInHour = 4; // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 15; // must initialize this to get schedules initialized
+    state->dataGlobal->TimeStepsInHour = 4;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 15; // must initialize this to get schedules initialized
     state->dataGlobal->TimeStepZone = 0.25;
-    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::SecInHour;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::rSecsInHour;
 
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
+    state->init_state(*state);
+
+    SimulationManager::ManageSimulation(*state);
+    WaterManager::GetWaterManagerInput(*state);
+
+    state->dataWeather->Envrn = 1;
 
     state->dataEnvrn->Month = 5;
     state->dataEnvrn->DayOfMonth = 31;
@@ -1603,16 +1630,16 @@ TEST_F(EnergyPlusFixture, WeatherManager_SetRainFlag)
     state->dataGlobal->TimeStep = 1;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
     state->dataEnvrn->DSTIndicator = 0; // DST IS OFF
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
-    state->dataWeather->Interpolation.allocate(state->dataGlobal->NumOfTimeStepInHour);
+    state->dataWeather->Interpolation.allocate(state->dataGlobal->TimeStepsInHour);
     state->dataWeather->Interpolation = 0;
     // setting up end ------------------------------------------------------------------------------
 
     // Need to instantiate some stuff to avoid a crash
     // Weather::ReadUserWeatherInput(*state);
 
-    state->dataWeather->wvarsHrTsToday.allocate(state->dataGlobal->NumOfTimeStepInHour, Constant::HoursInDay);
+    state->dataWeather->wvarsHrTsToday.allocate(state->dataGlobal->TimeStepsInHour, Constant::iHoursInDay);
     state->dataWeather->wvarsHrTsToday(1, 24).IsRain = false;
     state->dataEnvrn->RunPeriodEnvironment = true;
     Weather::SetCurrentWeather(*state);
@@ -1626,7 +1653,7 @@ TEST_F(EnergyPlusFixture, WeatherManager_SetRainFlag)
     ASSERT_FALSE(state->dataEnvrn->IsRain);
 
     // site:precipitation overwritten of rain flag does not take effect during sizing period
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
     state->dataWeather->wvarsHrTsToday(1, 24).IsRain = false;
     state->dataEnvrn->RunPeriodEnvironment = false;
     Weather::SetCurrentWeather(*state);
@@ -1745,7 +1772,7 @@ TEST_F(EnergyPlusFixture, WeatherManager_GroupReportPeriodByType)
                                                       "18;                           !- End Hour of Day",
 
                                                       "Output:Table:ReportPeriod,",
-                                                      "ThermalResilienceReportTimeWinter,  !- field Name,",
+                                                      "ThermalResilienceReportTimeSummer,  !- field Name,",
                                                       "ThermalResilienceSummary,     !- field Report Name,",
                                                       ",                             !- Begin Year",
                                                       "7,                            !- Begin Month",
@@ -1842,7 +1869,7 @@ TEST_F(EnergyPlusFixture, WeatherRunPeriod_WeatherFile_OK)
     state->files.inputWeatherFilePath.filePath = configured_source_directory() / "weather/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw";
 
     state->dataGlobal->BeginSimFlag = false;
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
     state->dataWeather->LocationGathered = false;
     state->dataGlobal->DoWeathSim = true;
 
@@ -1899,7 +1926,7 @@ TEST_F(EnergyPlusFixture, WeatherRunPeriod_WeatherFile_Missing)
     state->files.inputWeatherFilePath.filePath = "doesntnotexist.epw";
 
     state->dataGlobal->BeginSimFlag = false;
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
     state->dataWeather->LocationGathered = false;
     state->dataGlobal->DoWeathSim = true;
 
@@ -2477,7 +2504,7 @@ TEST_F(EnergyPlusFixture, EPW_no_eol_at_end_of_file)
     state->files.inputWeatherFilePath.filePath = configured_source_directory() / "tst/EnergyPlus/unit/Resources/chicago_no_eol_at_end_of_file.epw";
 
     state->dataGlobal->BeginSimFlag = false;
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
     state->dataWeather->LocationGathered = false;
     state->dataGlobal->DoWeathSim = true;
 
@@ -2570,4 +2597,439 @@ TEST_F(EnergyPlusFixture, WeatherManager_GetAndResolveLocationInfoTest)
     EXPECT_NEAR(state->dataEnvrn->Elevation, expectedElevationEPW, allowedTolerance);
     EXPECT_FALSE(state->dataWeather->keepUserSiteLocationDefinition);
     EXPECT_TRUE(compare_err_stream(error_text2B, true));
+}
+
+TEST_F(EnergyPlusFixture, WeatherManager_UpdateLocationAndOrientation)
+{
+    std::string const idf_objects = delimited_string({
+        "SimulationControl,",
+        "    No,                      !- Do Zone Sizing Calculation",
+        "    No,                      !- Do System Sizing Calculation",
+        "    No,                      !- Do Plant Sizing Calculation",
+        "    Yes,                     !- Run Simulation for Sizing Periods",
+        "    No,                      !- Run Simulation for Weather File Run Periods",
+        "    No,                      !- Do HVAC Sizing Simulation for Sizing Periods",
+        "    1;                       !- Maximum Number of HVAC Sizing Simulation Passes",
+
+        "Building,",
+        "    Shoebox,                 !- Name",
+        "    0.0,                     !- North Axis {deg}",
+        "    Suburbs,                 !- Terrain",
+        "    0.05,                    !- Loads Convergence Tolerance Value {W}",
+        "    0.05,                    !- Temperature Convergence Tolerance Value {deltaC}",
+        "    FullInteriorAndExterior, !- Solar Distribution",
+        "    35,                      !- Maximum Number of Warmup Days",
+        "    6;                       !- Minimum Number of Warmup Days",
+
+        "Site:Location,",
+        "    Denver Centennial CO USA WMO=724666,  !- Name",
+        "    39.57,                   !- Latitude {deg}",
+        "    -104.85,                 !- Longitude {deg}",
+        "    -7.00,                   !- Time Zone {hr}",
+        "    1793.00;                 !- Elevation {m}",
+
+        "Site:VariableLocation,",
+        "    VaryingBuilding,         !- Name",
+        "    VaryingLatitude,         !- Building Location Latitude Schedule",
+        "    VaryingLongitude,        !- Building Location Longitude Schedule",
+        "    VaryingOrientation;      !- Building Location Orientation Schedule",
+
+        "SizingPeriod:DesignDay,",
+        "    Denver Centennial Ann Htg 99.6% Condns DB,  !- Name",
+        "    12,                      !- Month",
+        "    21,                      !- Day of Month",
+        "    WinterDesignDay,         !- Day Type",
+        "    -18.8,                   !- Maximum Dry-Bulb Temperature {C}",
+        "    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}",
+        "    ,                        !- Dry-Bulb Temperature Range Modifier Type",
+        "    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name",
+        "    Wetbulb,                 !- Humidity Condition Type",
+        "    -18.8,                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}",
+        "    ,                        !- Humidity Condition Day Schedule Name",
+        "    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
+        "    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
+        "    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
+        "    81560.,                  !- Barometric Pressure {Pa}",
+        "    3,                       !- Wind Speed {m/s}",
+        "    340,                     !- Wind Direction {deg}",
+        "    No,                      !- Rain Indicator",
+        "    No,                      !- Snow Indicator",
+        "    No,                      !- Daylight Saving Time Indicator",
+        "    ASHRAEClearSky,          !- Solar Model Indicator",
+        "    ,                        !- Beam Solar Day Schedule Name",
+        "    ,                        !- Diffuse Solar Day Schedule Name",
+        "    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}",
+        "    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}",
+        "    0.00;                    !- Sky Clearness",
+
+        "SizingPeriod:DesignDay,",
+        "    Denver Centennial Ann Clg 1% Condns DB=>MWB,  !- Name",
+        "    7,                       !- Month",
+        "    21,                      !- Day of Month",
+        "    SummerDesignDay,         !- Day Type",
+        "    32,                      !- Maximum Dry-Bulb Temperature {C}",
+        "    15.2,                    !- Daily Dry-Bulb Temperature Range {deltaC}",
+        "    ,                        !- Dry-Bulb Temperature Range Modifier Type",
+        "    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name",
+        "    Wetbulb,                 !- Humidity Condition Type",
+        "    15.5,                    !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}",
+        "    ,                        !- Humidity Condition Day Schedule Name",
+        "    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}",
+        "    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}",
+        "    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}",
+        "    81560.,                  !- Barometric Pressure {Pa}",
+        "    4.9,                     !- Wind Speed {m/s}",
+        "    0,                       !- Wind Direction {deg}",
+        "    No,                      !- Rain Indicator",
+        "    No,                      !- Snow Indicator",
+        "    No,                      !- Daylight Saving Time Indicator",
+        "    ASHRAEClearSky,          !- Solar Model Indicator",
+        "    ,                        !- Beam Solar Day Schedule Name",
+        "    ,                        !- Diffuse Solar Day Schedule Name",
+        "    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}",
+        "    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}",
+        "    1.00;                    !- Sky Clearness",
+
+        "RunPeriod,",
+        "    AnnualRun,               !- Name",
+        "    1,                       !- Begin Month",
+        "    1,                       !- Begin Day of Month",
+        "    ,                        !- Begin Year",
+        "    12,                      !- End Month",
+        "    31,                      !- End Day of Month",
+        "    ,                        !- End Year",
+        "    Tuesday,                 !- Day of Week for Start Day",
+        "    Yes,                     !- Use Weather File Holidays and Special Days",
+        "    Yes,                     !- Use Weather File Daylight Saving Period",
+        "    No,                      !- Apply Weekend Holiday Rule",
+        "    Yes,                     !- Use Weather File Rain Indicators",
+        "    Yes;                     !- Use Weather File Snow Indicators",
+
+        "ScheduleTypeLimits,",
+        "    AnyNumber,               !- Name",
+        "    0,                       !- Lower Limit Value",
+        "    ,                        !- Upper Limit Value",
+        "    ,                        !- Numeric Type",
+        "    Dimensionless;           !- Unit Type",
+
+        "Schedule:Compact,",
+        "    VaryingLatitude,         !- Name",
+        "    AnyNumber,               !- Schedule Type Limits Name",
+        "    Through: 08/31,          !- Field 1",
+        "    For: AllDays,            !- Field 2",
+        "    Until: 24:00,            !- Field 3",
+        "    25,                      !- Field 4",
+        "    Through: 12/31,          !- Field 5",
+        "    For: AllDays,            !- Field 6",
+        "    Until: 24:00,            !- Field 7",
+        "    45;                      !- Field 8",
+
+        "Schedule:Compact,",
+        "    VaryingLongitude,        !- Name",
+        "    AnyNumber,               !- Schedule Type Limits Name",
+        "    Through: 08/31,          !- Field 1",
+        "    For: AllDays,            !- Field 2",
+        "    Until: 24:00,            !- Field 3",
+        "    -95,                     !- Field 4",
+        "    Through: 12/31,          !- Field 5",
+        "    For: AllDays,            !- Field 6",
+        "    Until: 24:00,            !- Field 7",
+        "    -102;                    !- Field 8",
+
+        "Schedule:Compact,",
+        "    VaryingOrientation,      !- Name",
+        "    AnyNumber,               !- Schedule Type Limits Name",
+        "    Through: 08/31,          !- Field 1",
+        "    For: AllDays,            !- Field 2",
+        "    Until: 24:00,            !- Field 3",
+        "    90,                      !- Field 4",
+        "    Through: 12/31,          !- Field 5",
+        "    For: AllDays,            !- Field 6",
+        "    Until: 24:00,            !- Field 7",
+        "    180;                     !- Field 8",
+
+        "Material,",
+        "    Brick,                   !- Name",
+        "    Smooth,                  !- Roughness",
+        "    0.1,                     !- Thickness {m}",
+        "    0.89,                    !- Conductivity {W/m-K}",
+        "    1920,                    !- Density {kg/m3}",
+        "    790,                     !- Specific Heat {J/kg-K}",
+        "    0.7,                     !- Thermal Absorptance",
+        "    0.7,                     !- Solar Absorptance",
+        "    0.7;                     !- Visible Absorptance",
+
+        "WindowMaterial:SimpleGlazingSystem,",
+        "    DoubleGlazing,           !- Name",
+        "    1.99,                    !- U-Factor {W/m2-K}",
+        "    0.3,                     !- Solar Heat Gain Coefficient",
+        "    0.4;                     !- Visible Transmittance",
+
+        "Construction,",
+        "    DefaultConstruction,     !- Name",
+        "    Brick;                   !- Outside Layer",
+
+        "Construction,",
+        "    DefaultWindow,           !- Name",
+        "    DoubleGlazing;           !- Outside Layer",
+
+        "GlobalGeometryRules,",
+        "    UpperLeftCorner,         !- Starting Vertex Position",
+        "    CounterClockWise,        !- Vertex Entry Direction",
+        "    Relative;                !- Coordinate System",
+
+        "Zone,",
+        "    Zone1,                   !- Name",
+        "    ,                        !- Direction of Relative North {deg}",
+        "    0,                       !- X Origin {m}",
+        "    0,                       !- Y Origin {m}",
+        "    0;                       !- Z Origin {m}",
+
+        "BuildingSurface:Detailed,",
+        "    Floor1,                  !- Name",
+        "    Floor,                   !- Surface Type",
+        "    DefaultConstruction,     !- Construction Name",
+        "    Zone1,                   !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Adiabatic,               !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    NoSun,                   !- Sun Exposure",
+        "    NoWind,                  !- Wind Exposure",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Number of Vertices",
+        "    15,                      !- Vertex 1 X-coordinate {m}",
+        "    15,                      !- Vertex 1 Y-coordinate {m}",
+        "    0,                       !- Vertex 1 Z-coordinate {m}",
+        "    15,                      !- Vertex 2 X-coordinate {m}",
+        "    0,                       !- Vertex 2 Y-coordinate {m}",
+        "    0,                       !- Vertex 2 Z-coordinate {m}",
+        "    0,                       !- Vertex 3 X-coordinate {m}",
+        "    0,                       !- Vertex 3 Y-coordinate {m}",
+        "    0,                       !- Vertex 3 Z-coordinate {m}",
+        "    0,                       !- Vertex 4 X-coordinate {m}",
+        "    15,                      !- Vertex 4 Y-coordinate {m}",
+        "    0;                       !- Vertex 4 Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "    Wall1,                   !- Name",
+        "    Wall,                    !- Surface Type",
+        "    DefaultConstruction,     !- Construction Name",
+        "    Zone1,                   !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Number of Vertices",
+        "    0,                       !- Vertex 1 X-coordinate {m}",
+        "    15,                      !- Vertex 1 Y-coordinate {m}",
+        "    3,                       !- Vertex 1 Z-coordinate {m}",
+        "    0,                       !- Vertex 2 X-coordinate {m}",
+        "    15,                      !- Vertex 2 Y-coordinate {m}",
+        "    0,                       !- Vertex 2 Z-coordinate {m}",
+        "    0,                       !- Vertex 3 X-coordinate {m}",
+        "    0,                       !- Vertex 3 Y-coordinate {m}",
+        "    0,                       !- Vertex 3 Z-coordinate {m}",
+        "    0,                       !- Vertex 4 X-coordinate {m}",
+        "    0,                       !- Vertex 4 Y-coordinate {m}",
+        "    3;                       !- Vertex 4 Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "    Wall2,                   !- Name",
+        "    Wall,                    !- Surface Type",
+        "    DefaultConstruction,     !- Construction Name",
+        "    Zone1,                   !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Number of Vertices",
+        "    15,                      !- Vertex 1 X-coordinate {m}",
+        "    15,                      !- Vertex 1 Y-coordinate {m}",
+        "    3,                       !- Vertex 1 Z-coordinate {m}",
+        "    15,                      !- Vertex 2 X-coordinate {m}",
+        "    15,                      !- Vertex 2 Y-coordinate {m}",
+        "    0,                       !- Vertex 2 Z-coordinate {m}",
+        "    0,                       !- Vertex 3 X-coordinate {m}",
+        "    15,                      !- Vertex 3 Y-coordinate {m}",
+        "    0,                       !- Vertex 3 Z-coordinate {m}",
+        "    0,                       !- Vertex 4 X-coordinate {m}",
+        "    15,                      !- Vertex 4 Y-coordinate {m}",
+        "    3;                       !- Vertex 4 Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "    Wall3,                   !- Name",
+        "    Wall,                    !- Surface Type",
+        "    DefaultConstruction,     !- Construction Name",
+        "    Zone1,                   !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Number of Vertices",
+        "    15,                      !- Vertex 1 X-coordinate {m}",
+        "    0,                       !- Vertex 1 Y-coordinate {m}",
+        "    3,                       !- Vertex 1 Z-coordinate {m}",
+        "    15,                      !- Vertex 2 X-coordinate {m}",
+        "    0,                       !- Vertex 2 Y-coordinate {m}",
+        "    0,                       !- Vertex 2 Z-coordinate {m}",
+        "    15,                      !- Vertex 3 X-coordinate {m}",
+        "    15,                      !- Vertex 3 Y-coordinate {m}",
+        "    0,                       !- Vertex 3 Z-coordinate {m}",
+        "    15,                      !- Vertex 4 X-coordinate {m}",
+        "    15,                      !- Vertex 4 Y-coordinate {m}",
+        "    3;                       !- Vertex 4 Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "    Wall4,                   !- Name",
+        "    Wall,                    !- Surface Type",
+        "    DefaultConstruction,     !- Construction Name",
+        "    Zone1,                   !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Number of Vertices",
+        "    0,                       !- Vertex 1 X-coordinate {m}",
+        "    0,                       !- Vertex 1 Y-coordinate {m}",
+        "    3,                       !- Vertex 1 Z-coordinate {m}",
+        "    0,                       !- Vertex 2 X-coordinate {m}",
+        "    0,                       !- Vertex 2 Y-coordinate {m}",
+        "    0,                       !- Vertex 2 Z-coordinate {m}",
+        "    15,                      !- Vertex 3 X-coordinate {m}",
+        "    0,                       !- Vertex 3 Y-coordinate {m}",
+        "    0,                       !- Vertex 3 Z-coordinate {m}",
+        "    15,                      !- Vertex 4 X-coordinate {m}",
+        "    0,                       !- Vertex 4 Y-coordinate {m}",
+        "    3;                       !- Vertex 4 Z-coordinate {m}",
+
+        "BuildingSurface:Detailed,",
+        "    Roof,                    !- Name",
+        "    Roof,                    !- Surface Type",
+        "    DefaultConstruction,     !- Construction Name",
+        "    Zone1,                   !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Number of Vertices",
+        "    15,                      !- Vertex 1 X-coordinate {m}",
+        "    0,                       !- Vertex 1 Y-coordinate {m}",
+        "    3,                       !- Vertex 1 Z-coordinate {m}",
+        "    15,                      !- Vertex 2 X-coordinate {m}",
+        "    15,                      !- Vertex 2 Y-coordinate {m}",
+        "    3,                       !- Vertex 2 Z-coordinate {m}",
+        "    0,                       !- Vertex 3 X-coordinate {m}",
+        "    15,                      !- Vertex 3 Y-coordinate {m}",
+        "    3,                       !- Vertex 3 Z-coordinate {m}",
+        "    0,                       !- Vertex 4 X-coordinate {m}",
+        "    0,                       !- Vertex 4 Y-coordinate {m}",
+        "    3;                       !- Vertex 4 Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "    Window1,                 !- Name",
+        "    Window,                  !- Surface Type",
+        "    DefaultWindow,           !- Construction Name",
+        "    Wall1,                   !- Building Surface Name",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Frame and Divider Name",
+        "    ,                        !- Multiplier",
+        "    ,                        !- Number of Vertices",
+        "    0,                       !- Vertex 1 X-coordinate {m}",
+        "    14,                      !- Vertex 1 Y-coordinate {m}",
+        "    2,                       !- Vertex 1 Z-coordinate {m}",
+        "    0,                       !- Vertex 2 X-coordinate {m}",
+        "    14,                      !- Vertex 2 Y-coordinate {m}",
+        "    1,                       !- Vertex 2 Z-coordinate {m}",
+        "    0,                       !- Vertex 3 X-coordinate {m}",
+        "    1,                       !- Vertex 3 Y-coordinate {m}",
+        "    1,                       !- Vertex 3 Z-coordinate {m}",
+        "    0,                       !- Vertex 4 X-coordinate {m}",
+        "    1,                       !- Vertex 4 Y-coordinate {m}",
+        "    2;                       !- Vertex 4 Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "    Window2,                 !- Name",
+        "    Window,                  !- Surface Type",
+        "    DefaultWindow,           !- Construction Name",
+        "    Wall2,                   !- Building Surface Name",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Frame and Divider Name",
+        "    ,                        !- Multiplier",
+        "    ,                        !- Number of Vertices",
+        "    14,                      !- Vertex 1 X-coordinate {m}",
+        "    15,                      !- Vertex 1 Y-coordinate {m}",
+        "    2,                       !- Vertex 1 Z-coordinate {m}",
+        "    14,                      !- Vertex 2 X-coordinate {m}",
+        "    15,                      !- Vertex 2 Y-coordinate {m}",
+        "    1,                       !- Vertex 2 Z-coordinate {m}",
+        "    1,                       !- Vertex 3 X-coordinate {m}",
+        "    15,                      !- Vertex 3 Y-coordinate {m}",
+        "    1,                       !- Vertex 3 Z-coordinate {m}",
+        "    1,                       !- Vertex 4 X-coordinate {m}",
+        "    15,                      !- Vertex 4 Y-coordinate {m}",
+        "    2;                       !- Vertex 4 Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "    Window3,                 !- Name",
+        "    Window,                  !- Surface Type",
+        "    DefaultWindow,           !- Construction Name",
+        "    Wall3,                   !- Building Surface Name",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Frame and Divider Name",
+        "    ,                        !- Multiplier",
+        "    ,                        !- Number of Vertices",
+        "    15,                      !- Vertex 1 X-coordinate {m}",
+        "    1,                       !- Vertex 1 Y-coordinate {m}",
+        "    2,                       !- Vertex 1 Z-coordinate {m}",
+        "    15,                      !- Vertex 2 X-coordinate {m}",
+        "    1,                       !- Vertex 2 Y-coordinate {m}",
+        "    1,                       !- Vertex 2 Z-coordinate {m}",
+        "    15,                      !- Vertex 3 X-coordinate {m}",
+        "    14,                      !- Vertex 3 Y-coordinate {m}",
+        "    1,                       !- Vertex 3 Z-coordinate {m}",
+        "    15,                      !- Vertex 4 X-coordinate {m}",
+        "    14,                      !- Vertex 4 Y-coordinate {m}",
+        "    2;                       !- Vertex 4 Z-coordinate {m}",
+
+        "FenestrationSurface:Detailed,",
+        "    Window4,                 !- Name",
+        "    Window,                  !- Surface Type",
+        "    DefaultWindow,           !- Construction Name",
+        "    Wall4,                   !- Building Surface Name",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    ,                        !- View Factor to Ground",
+        "    ,                        !- Frame and Divider Name",
+        "    ,                        !- Multiplier",
+        "    ,                        !- Number of Vertices",
+        "    1,                       !- Vertex 1 X-coordinate {m}",
+        "    0,                       !- Vertex 1 Y-coordinate {m}",
+        "    2,                       !- Vertex 1 Z-coordinate {m}",
+        "    1,                       !- Vertex 2 X-coordinate {m}",
+        "    0,                       !- Vertex 2 Y-coordinate {m}",
+        "    1,                       !- Vertex 2 Z-coordinate {m}",
+        "    14,                      !- Vertex 3 X-coordinate {m}",
+        "    0,                       !- Vertex 3 Y-coordinate {m}",
+        "    1,                       !- Vertex 3 Z-coordinate {m}",
+        "    14,                      !- Vertex 4 X-coordinate {m}",
+        "    0,                       !- Vertex 4 Y-coordinate {m}",
+        "    2;                       !- Vertex 4 Z-coordinate {m}",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    state->init_state(*state);
+
+    EXPECT_NO_THROW(SimulationManager::ManageSimulation(*state));
 }

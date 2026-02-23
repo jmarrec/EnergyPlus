@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -55,6 +55,7 @@
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/OutputReportTabular.hh>
 #include <GSL/span.h>
 
 namespace EnergyPlus {
@@ -63,6 +64,21 @@ namespace EnergyPlus {
 struct EnergyPlusData;
 
 namespace InternalHeatGains {
+
+    enum class DesignLevelMethod
+    {
+        Invalid = -1,
+        People,
+        PeoplePerArea,
+        AreaPerPerson,
+        LightingLevel,
+        EquipmentLevel,
+        WattsPerArea,
+        WattsPerPerson,
+        PowerPerArea,
+        PowerPerPerson,
+        Num
+    };
 
     struct GlobalInternalGainMiscObject
     {
@@ -89,6 +105,17 @@ namespace InternalHeatGains {
                                 int &numGainInstances,
                                 bool &errors,
                                 const bool zoneListNotAllowed = false);
+
+    Real64 setDesignLevel(EnergyPlusData &state,
+                          bool &ErrorsFound,
+                          std::string_view const objectType,
+                          InternalHeatGains::GlobalInternalGainMiscObject const &inputObject,
+                          DesignLevelMethod const method,
+                          int const zoneNum,
+                          int const spaceNum,
+                          Real64 const inputValue,
+                          bool const inputBlank,
+                          std::string_view const fieldName);
 
     void setupIHGOutputs(EnergyPlusData &state);
 
@@ -166,9 +193,9 @@ namespace InternalHeatGains {
 
     Real64 SumReturnAirConvectionGainsByTypes(
         EnergyPlusData &state,
-        int const ZoneNum,                                        // zone index pointer for which zone to sum gains for
-        gsl::span<const DataHeatBalance::IntGainType> GainTypeARR // variable length 1-d array of enum valued gain types
-    );
+        int const ZoneNum,                                         // zone index pointer for which zone to sum gains for
+        gsl::span<const DataHeatBalance::IntGainType> GainTypeARR, // variable length 1-d array of enum valued gain types
+        int const spaceIndex = 0);                                 // space index pointer, sum gains only for this space
 
     Real64 SumAllSpaceInternalRadiationGains(EnergyPlusData &state,
                                              int const SpaceNum // space index pointer for which space to sum gains for
@@ -179,6 +206,11 @@ namespace InternalHeatGains {
                                      int const ZoneNum,                                         // zone index pointer for which zone to sum gains for
                                      gsl::span<const DataHeatBalance::IntGainType> GainTypeARR, // variable length 1-d array of enum valued gain types
                                      int const spaceIndex = 0);                                 // space index pointer, sum gains only for this space
+
+    Real64 SumEnclosureInternalRadiationGainsByTypes(
+        EnergyPlusData &state,
+        int const enclosureNum,                                     // enclosure to sum gains for
+        gsl::span<const DataHeatBalance::IntGainType> GainTypeARR); // variable length 1-d array of enum valued gain types
 
     void SumAllInternalLatentGains(EnergyPlusData &state,
                                    int const ZoneNum // zone index pointer for which zone to sum gains for
@@ -221,6 +253,11 @@ namespace InternalHeatGains {
 
     void GatherComponentLoadsIntGain(EnergyPlusData &state);
 
+    void gatherCompLoadIntGain2(EnergyPlusData &state,
+                                OutputReportTabular::compLoadsSpaceZone &szCompLoadDayTS,
+                                int const zoneNum,
+                                int const spaceNum = 0);
+
 } // namespace InternalHeatGains
 
 struct InternalHeatGainsData : BaseGlobalStruct
@@ -229,16 +266,13 @@ struct InternalHeatGainsData : BaseGlobalStruct
     bool GetInternalHeatGainsInputFlag = true; // Controls the GET routine calling (limited to first time)
     bool ErrorsFound = false;                  // if errors were found in the input
 
-    // static variables extracted from functions
-    bool UsingThermalComfort = false;
-    Real64 sumArea = 0.0;
-    Real64 sumPower = 0.0;
-    Real64 curQL = 0.0; // radiant value prior to adjustment for pulse for load component report
-    Real64 adjQL = 0.0; // radiant value including adjustment for pulse for load component report
-
     // Declared here because they are needed later for the demand manager, other types of internal gain inputs are local
     EPVector<InternalHeatGains::GlobalInternalGainMiscObject> lightsObjects;
     EPVector<InternalHeatGains::GlobalInternalGainMiscObject> zoneElectricObjects;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {
@@ -246,14 +280,8 @@ struct InternalHeatGainsData : BaseGlobalStruct
 
     void clear_state() override
     {
-
         this->GetInternalHeatGainsInputFlag = true;
         this->ErrorsFound = false;
-        this->UsingThermalComfort = false;
-        this->sumArea = 0.0;
-        this->sumPower = 0.0;
-        this->curQL = 0.0;
-        this->adjQL = 0.0;
     }
 };
 

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -176,7 +176,6 @@ namespace RoomAir {
         // Using/Aliasing
         using namespace DataEnvironment;
         using namespace DataHeatBalance;
-        using ScheduleManager::GetScheduleIndex;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         Real64 HLD;      // Convection coefficient for the lower area of surface
@@ -204,7 +203,9 @@ namespace RoomAir {
             // WALL Hc, HA and HAT calculation
             for (int Ctd = state.dataRoomAir->PosZ_Wall(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Wall(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Wall(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -257,7 +258,9 @@ namespace RoomAir {
             // WINDOW Hc, HA and HAT CALCULATION
             for (int Ctd = state.dataRoomAir->PosZ_Window(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Window(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Window(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -325,7 +328,9 @@ namespace RoomAir {
             // DOOR Hc, HA and HAT CALCULATION
             for (int Ctd = state.dataRoomAir->PosZ_Door(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Door(ZoneNum).end; ++Ctd) { // DOOR
                 int SurfNum = state.dataRoomAir->APos_Door(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -396,7 +401,9 @@ namespace RoomAir {
                     (state.dataRoomAir->ZoneCeilingHeight2(ZoneNum) - state.dataRoomAir->ZoneCeilingHeight1(ZoneNum)));
             for (int Ctd = state.dataRoomAir->PosZ_Internal(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Internal(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Internal(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -435,7 +442,9 @@ namespace RoomAir {
             // CEILING Hc, HA and HAT CALCULATION
             for (int Ctd = state.dataRoomAir->PosZ_Ceiling(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Ceiling(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Ceiling(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -451,7 +460,9 @@ namespace RoomAir {
             // FLOOR Hc, HA and HAT CALCULATION
             for (int Ctd = state.dataRoomAir->PosZ_Floor(ZoneNum).beg; Ctd <= state.dataRoomAir->PosZ_Floor(ZoneNum).end; ++Ctd) {
                 int SurfNum = state.dataRoomAir->APos_Floor(Ctd);
-                if (SurfNum == 0) continue;
+                if (SurfNum == 0) {
+                    continue;
+                }
 
                 auto const &surf = state.dataSurface->Surface(SurfNum);
                 state.dataSurface->SurfTAirRef(SurfNum) = DataSurfaces::RefAirTemp::AdjacentAirTemp;
@@ -501,7 +512,7 @@ namespace RoomAir {
 
         // REFERENCES:
         // Model developed by Paul Linden (UCSD), G. Carrilho da Graca (UCSD) and P. Haves (LBL).
-        // Work funded by the California Energy Comission. More information on the model can found in:
+        // Work funded by the California Energy Commission. More information on the model can found in:
         // "Simplified Models for Heat Transfer in Rooms" G. Carrilho da Graca, Ph.D. thesis UCSD. December 2003.
 
         // Using/Aliasing
@@ -513,8 +524,6 @@ namespace RoomAir {
 
         using Psychrometrics::PsyCpAirFnW;
         using Psychrometrics::PsyRhoAirFnPbTdbW;
-        using ScheduleManager::GetCurrentScheduleValue;
-        using ScheduleManager::GetScheduleIndex;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         Real64 const OneThird(1.0 / 3.0);
@@ -592,7 +601,7 @@ namespace RoomAir {
         for (int Ctd = 1; Ctd <= state.dataRoomAir->TotDispVent3Node; ++Ctd) {
             auto &zoneDV3N = state.dataRoomAir->ZoneDispVent3Node(Ctd);
             if (ZoneNum == zoneDV3N.ZonePtr) {
-                GainsFrac = GetCurrentScheduleValue(state, zoneDV3N.SchedGainsPtr);
+                GainsFrac = zoneDV3N.gainsSched->getCurrentVal();
                 NumPLPP = zoneDV3N.NumPlumesPerOcc;
                 HeightThermostat = zoneDV3N.ThermostatHeight;
                 HeightComfort = zoneDV3N.ComfortHeight;

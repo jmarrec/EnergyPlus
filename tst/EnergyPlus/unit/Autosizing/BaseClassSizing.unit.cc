@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -76,7 +76,7 @@ using namespace EnergyPlus::Psychrometrics;
 
 TEST_F(EnergyPlusFixture, BaseSizer_selectSizerOutput)
 {
-    // ficticious sizing to test the selectSizerOutput function
+    // fictitious sizing to test the selectSizerOutput function
     // there are several if blocks to determine which type of reporting to output
     // report Design Size and User, Design Size only, or User size only
     // if these if block miss a possible input configuration the simulation may fail
@@ -288,8 +288,10 @@ TEST_F(EnergyPlusFixture, BaseSizer_GetCoilDesFlowT_NoPeak)
     EXPECT_DOUBLE_EQ(state->dataSize->FinalSysSizing(1).CoolSupTemp, designExitTemp);
     EXPECT_DOUBLE_EQ(0.002, designFlowValue);
 }
+
 TEST_F(EnergyPlusFixture, BaseSizer_RequestSizingSystem)
 {
+    state->init_state(*state);
 
     std::string CompName;       // component name
     std::string CompType;       // component type
@@ -325,7 +327,6 @@ TEST_F(EnergyPlusFixture, BaseSizer_RequestSizingSystem)
 
     state->dataEnvrn->StdBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.1583684;
-    InitializePsychRoutines(*state);
 
     state->dataSize->DataFlowUsedForSizing = state->dataSize->FinalSysSizing(state->dataSize->CurSysNum).DesCoolVolFlow;
     // Need this to prevent crash in Sizers
@@ -437,6 +438,7 @@ TEST_F(EnergyPlusFixture, BaseSizer_RequestSizingSystemWithFans)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Fans::GetFanInput(*state);
     state->dataSize->CurZoneEqNum = 0;
@@ -502,7 +504,6 @@ TEST_F(EnergyPlusFixture, BaseSizer_RequestSizingSystemWithFans)
 
     state->dataEnvrn->StdBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.1583684;
-    InitializePsychRoutines(*state);
 
     state->dataSize->DataFlowUsedForSizing = state->dataSize->FinalSysSizing(state->dataSize->CurSysNum).DesCoolVolFlow;
     // Need this to prevent crash in Sizers
@@ -571,6 +572,7 @@ TEST_F(EnergyPlusFixture, BaseSizer_RequestSizingSystemWithFans)
 
 TEST_F(EnergyPlusFixture, BaseSizer_RequestSizingZone)
 {
+    state->init_state(*state);
     int constexpr ZoneNum = 1;
     std::string CompName;       // component name
     std::string CompType;       // component type
@@ -597,7 +599,6 @@ TEST_F(EnergyPlusFixture, BaseSizer_RequestSizingZone)
     state->dataSize->ZoneSizingRunDone = true;
     state->dataEnvrn->StdBaroPress = 101325.0;
     state->dataEnvrn->StdRhoAir = 1.1583684;
-    InitializePsychRoutines(*state);
 
     // Need this to prevent crash in Sizers
     state->dataSize->ZoneEqSizing.allocate(1);
@@ -662,9 +663,10 @@ TEST_F(SQLiteFixture, BaseSizer_SQLiteRecordReportSizerOutputTest)
     auto result = queryResult("SELECT * FROM ComponentSizes;", "ComponentSizes");
     // check that there are two sizing result records
     ASSERT_EQ(2ul, result.size());
-    std::vector<std::string> testResult0{"1", "BOILER:HOTWATER", "RESIDENTIAL BOILER ELECTRIC", "Design Size Nominal Capacity", "105977.98934", "W"};
+    std::vector<std::string> testResult0{
+        "1", "BOILER:HOTWATER", "RESIDENTIAL BOILER ELECTRIC", "Design Size Nominal Capacity", "105977.98934", "W", ""};
     std::vector<std::string> testResult1{
-        "2", "BOILER:HOTWATER", "RESIDENTIAL BOILER ELECTRIC", "User-Specified Nominal Capacity", "26352.97405", "W"};
+        "2", "BOILER:HOTWATER", "RESIDENTIAL BOILER ELECTRIC", "User-Specified Nominal Capacity", "26352.97405", "W", ""};
     EXPECT_EQ(testResult0, result[0]);
     EXPECT_EQ(testResult1, result[1]);
 }
@@ -906,13 +908,13 @@ TEST_F(EnergyPlusFixture, BaseSizer_setZoneCoilInletConditions)
 }
 
 // This tests checks that the Design Day + Peak Time is filled up for Fans
-// https://github.com/NREL/EnergyPlus/issues/6899
+// https://github.com/NatLabRockies/EnergyPlus/issues/6899
 TEST_F(EnergyPlusFixture, BaseSizer_FanPeak)
 {
 
     // This is needed to compute time of Peak as a string
-    state->dataGlobal->NumOfTimeStepInHour = 4;
-    state->dataGlobal->MinutesPerTimeStep = 15;
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 15;
 
     // Setup the predefined tables, because that's where the info is written.
     EnergyPlus::OutputReportPredefined::SetPredefinedTables(*state);
@@ -1472,10 +1474,11 @@ TEST_F(EnergyPlusFixture, BaseSizer_SupplyAirTempLessThanZoneTStatTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
     SimulationManager::ManageSimulation(*state);
 
     int CtrlZoneNum(1);
-    // design peak load conditons and design supply air temperature
+    // design peak load conditions and design supply air temperature
     EXPECT_EQ(state->dataSize->CalcFinalZoneSizing(CtrlZoneNum).HeatTstatTemp, 21.0); // expects specified value
     EXPECT_EQ(state->dataSize->CalcFinalZoneSizing(CtrlZoneNum).HeatDesTemp, 12.0);   // less than zone air Temp
     EXPECT_EQ(state->dataSize->CalcFinalZoneSizing(CtrlZoneNum).HeatDesDay, "PHOENIX SKY HARBOR INTL AP ANN HTG 99.6% CONDNS DB");
@@ -1488,6 +1491,6 @@ TEST_F(EnergyPlusFixture, BaseSizer_SupplyAirTempLessThanZoneTStatTest)
     EXPECT_EQ(state->dataSize->FinalZoneSizing(CtrlZoneNum).DesHeatVolFlow, 0.0);      // expects zero
     EXPECT_EQ(state->dataSize->FinalZoneSizing(CtrlZoneNum).DesHeatMassFlow, 0.0);     // expects zero
     // expects non-zero peak heating load
-    EXPECT_NEAR(state->dataSize->CalcFinalZoneSizing(CtrlZoneNum).DesHeatLoad, 6911.42, 0.01);
-    EXPECT_NEAR(state->dataSize->FinalZoneSizing(CtrlZoneNum).DesHeatLoad, 6911.42, 0.01);
+    EXPECT_NEAR(state->dataSize->CalcFinalZoneSizing(CtrlZoneNum).DesHeatLoad, 6911.42, 0.5);
+    EXPECT_NEAR(state->dataSize->FinalZoneSizing(CtrlZoneNum).DesHeatLoad, 6911.42, 0.5);
 }

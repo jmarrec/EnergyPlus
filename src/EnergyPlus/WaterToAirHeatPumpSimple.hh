@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -63,6 +63,10 @@ namespace EnergyPlus {
 // Forward declarations
 struct EnergyPlusData;
 
+namespace Curve {
+    struct Curve;
+}
+
 namespace WaterToAirHeatPumpSimple {
 
     enum class WatertoAirHP
@@ -77,6 +81,7 @@ namespace WaterToAirHeatPumpSimple {
     {
         // Members
         std::string Name;                                                                     // Name of the Water to Air Heat pump
+        Sched::Schedule *availSched = nullptr;                                                // availability schedule
         WatertoAirHP WAHPType = WatertoAirHP::Invalid;                                        // Type of WatertoAirHP ie. Heating or Cooling
         DataPlant::PlantEquipmentType WAHPPlantType = DataPlant::PlantEquipmentType::Invalid; // type of component in plant
         bool SimFlag = false;                                                                 // Heat Pump Simulation Flag
@@ -127,12 +132,12 @@ namespace WaterToAirHeatPumpSimple {
         Real64 RatedEntAirWetbulbTemp = 0.0;         // Rated Entering Air Wetbulb Temperature [C]
         Real64 RatedEntAirDrybulbTemp = 0.0;         // Rated Entering Air Drybulb Temperature [C]
         Real64 RatioRatedHeatRatedTotCoolCap = 0.0;  // Ratio of Rated Heating Capacity to Rated Cooling Capacity [-]
-        int HeatCapCurveIndex = 0;                   // Index of the heating capacity performance curve
-        int HeatPowCurveIndex = 0;                   // Index of the heating power consumption curve
-        int TotalCoolCapCurveIndex = 0;              // Index of the Total Cooling capacity performance curve
-        int SensCoolCapCurveIndex = 0;               // Index of the Sensible Cooling capacity performance curve
-        int CoolPowCurveIndex = 0;                   // Index of the Cooling power consumption curve
-        int PLFCurveIndex = 0;                       // Index of the Part Load Factor curve
+        Curve::Curve *HeatCapCurve = nullptr;        // Index of the heating capacity performance curve
+        Curve::Curve *HeatPowCurve = nullptr;        // Index of the heating power consumption curve
+        Curve::Curve *TotalCoolCapCurve = nullptr;   // Index of the Total Cooling capacity performance curve
+        Curve::Curve *SensCoolCapCurve = nullptr;    // Index of the Sensible Cooling capacity performance curve
+        Curve::Curve *CoolPowCurve = nullptr;        // Index of the Cooling power consumption curve
+        Curve::Curve *PLFCurve = nullptr;            // Index of the Part Load Factor curve
         int AirInletNodeNum = 0;                     // Node Number of the Air Inlet
         int AirOutletNodeNum = 0;                    // Node Number of the Air Outlet
         int WaterInletNodeNum = 0;                   // Node Number of the Water Onlet
@@ -307,6 +312,10 @@ struct WaterToAirHeatPumpSimpleData : BaseGlobalStruct
     Real64 LoadSideInletHumRat_Init = 0; // rated conditions
     Real64 LoadSideInletEnth_Init = 0;   // rated conditions
     Real64 CpAir_Init = 0;               // rated conditions
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

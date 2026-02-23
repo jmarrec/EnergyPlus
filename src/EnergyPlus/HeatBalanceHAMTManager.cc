@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -84,17 +84,17 @@ namespace HeatBalanceHAMTManager {
     //       RE-ENGINEERED
 
     // PURPOSE OF THIS MODULE:
-    // Calculate, record and report the one dimentional heat and moisture transfer
+    // Calculate, record and report the one dimensional heat and moisture transfer
     // through a surface given the material composition of the building surface and
     // the external and internal Temperatures and Relative Humidities.
 
     // METHODOLOGY EMPLOYED:
-    // Each surface is split into "cells", where all characteristics are initiallised.
+    // Each surface is split into "cells", where all characteristics are initialised.
     // Cells are matched and links created in the initialisation routine.
     // The internal and external "surfaces" of the surface are virtual cells to allow for the
     // input of heat and vapor via heat transfer coefficients, radiation,
     // and vapor transfer coefficients
-    // Uses Forward (implicit) finite difference alogorithm. Heat transfer is caclulated first,
+    // Uses Forward (implicit) finite difference algorithm. Heat transfer is calculated first,
     // with the option of including the latent heat, then liquid and vapor transfer. The process is ittereated.
     // Once the temperatures have converged the internal surface
     // temperature and vapor densities are passed back to EnergyPlus.
@@ -185,7 +185,6 @@ namespace HeatBalanceHAMTManager {
         int Numid;
 
         int HAMTitems;
-        int vtcsid;
 
         bool ErrorsFound;
 
@@ -285,7 +284,7 @@ namespace HeatBalanceHAMTManager {
             auto *mat = s_mat->materials(matNum);
 
             if (mat->group != Material::Group::Regular) {
-                ShowSevereCustomMessage(state, eoh, format("{} = \"{}\" is not a regular material.", cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(state, eoh, format("{} = \"{}\" is not a regular material.", cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -334,7 +333,7 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustomMessage(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -391,7 +390,9 @@ namespace HeatBalanceHAMTManager {
                         avflag = false;
                     }
                 }
-                if (avflag) break;
+                if (avflag) {
+                    break;
+                }
             }
             if (isoerrrise) {
                 ShowWarningError(state, format("{}: data not rising - Check material {}", cHAMTObject2, matHAMT->Name));
@@ -426,7 +427,7 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustomMessage(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -473,7 +474,7 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustomMessage(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -520,7 +521,7 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustomMessage(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -569,7 +570,7 @@ namespace HeatBalanceHAMTManager {
 
             auto *mat = s_mat->materials(matNum);
             if (!mat->hasHAMT) {
-                ShowSevereCustomMessage(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
+                ShowSevereCustom(state, eoh, format("{} is not defined for {} = \"{}\"", cHAMTObject1, cAlphaFieldNames(1), AlphaArray(1)));
                 ErrorsFound = true;
                 continue;
             }
@@ -611,7 +612,7 @@ namespace HeatBalanceHAMTManager {
                                 cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, cHAMTObject7, AlphaArray(1)};
-            vtcsid = Util::FindItemInList(AlphaArray(1), state.dataSurface->Surface);
+            int vtcsid = Util::FindItemInList(AlphaArray(1), state.dataSurface->Surface);
             if (vtcsid == 0) {
                 ShowSevereItemNotFound(state, eoh, cAlphaFieldNames(1), AlphaArray(1));
                 ShowContinueError(state, "The basic material must be defined in addition to specifying HeatAndMoistureTransfer properties.");
@@ -659,7 +660,6 @@ namespace HeatBalanceHAMTManager {
         static constexpr std::string_view RoutineName("InitCombinedHeatAndMoistureFiniteElement: ");
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int sid;
         int conid;
         int errorCount;
 
@@ -678,10 +678,16 @@ namespace HeatBalanceHAMTManager {
         s_hbh->TotCellsMax = 0;
         for (int sid = 1; sid <= state.dataSurface->TotSurfaces; ++sid) {
             auto const &surf = state.dataSurface->Surface(sid);
-            if (surf.Class == SurfaceClass::Window) continue;
-            if (surf.HeatTransferAlgorithm != DataSurfaces::HeatTransferModel::HAMT) continue;
+            if (surf.Class == SurfaceClass::Window) {
+                continue;
+            }
+            if (surf.HeatTransferAlgorithm != DataSurfaces::HeatTransferModel::HAMT) {
+                continue;
+            }
 
-            if (surf.Construction == 0) continue;
+            if (surf.Construction == 0) {
+                continue;
+            }
             auto const &constr = state.dataConstruction->Construct(surf.Construction);
 
             for (int lid = 1; lid <= constr.TotLayers; ++lid) {
@@ -754,7 +760,9 @@ namespace HeatBalanceHAMTManager {
                 while (true) {
                     testlen = matHAMT->Thickness *
                               ((std::sin(Constant::Pi * (-1.0 / double(matHAMT->divs)) - Constant::Pi / 2.0) / 2.0) - (sin_negPIOvr2 / 2.0));
-                    if (testlen > adjdist) break;
+                    if (testlen > adjdist) {
+                        break;
+                    }
                     --matHAMT->divs;
                     if (matHAMT->divs < 1) {
                         ShowSevereError(state, format("{}Construction={}", RoutineName, constr.Name));
@@ -784,9 +792,15 @@ namespace HeatBalanceHAMTManager {
         // Set up surface cell structure
         for (int sid = 1; sid <= state.dataSurface->TotSurfaces; ++sid) {
             auto &surf = state.dataSurface->Surface(sid);
-            if (!surf.HeatTransSurf) continue;
-            if (surf.Class == SurfaceClass::Window) continue;
-            if (surf.HeatTransferAlgorithm != DataSurfaces::HeatTransferModel::HAMT) continue;
+            if (!surf.HeatTransSurf) {
+                continue;
+            }
+            if (surf.Class == SurfaceClass::Window) {
+                continue;
+            }
+            if (surf.HeatTransferAlgorithm != DataSurfaces::HeatTransferModel::HAMT) {
+                continue;
+            }
             // Boundary Cells
             runor = -0.02;
             // Air Convection Cell
@@ -897,12 +911,16 @@ namespace HeatBalanceHAMTManager {
         // Find adjacent cells.
         for (int cid1 = 1; cid1 <= s_hbh->TotCellsMax; ++cid1) {
             for (int cid2 = 1; cid2 <= s_hbh->TotCellsMax; ++cid2) {
-                if (cid1 == cid2) continue;
+                if (cid1 == cid2) {
+                    continue;
+                }
 
                 auto &cell1 = s_hbh->cells(cid1);
                 auto &cell2 = s_hbh->cells(cid2);
 
-                if (cell1.sid != cell2.sid) continue;
+                if (cell1.sid != cell2.sid) {
+                    continue;
+                }
 
                 Real64 high1 = cell1.origin(1) + cell1.length(1) / 2.0;
                 Real64 low2 = cell2.origin(1) - cell2.length(1) / 2.0;
@@ -910,12 +928,16 @@ namespace HeatBalanceHAMTManager {
                     int adj1 = 0;
                     for (int ii = 1; ii <= adjmax; ++ii) {
                         ++adj1;
-                        if (cell1.adjs(adj1) == -1) break;
+                        if (cell1.adjs(adj1) == -1) {
+                            break;
+                        }
                     }
                     int adj2 = 0;
                     for (int ii = 1; ii <= adjmax; ++ii) {
                         ++adj2;
-                        if (cell2.adjs(adj2) == -1) break;
+                        if (cell2.adjs(adj2) == -1) {
+                            break;
+                        }
                     }
                     cell1.adjs(adj1) = cid2;
                     cell2.adjs(adj2) = cid1;
@@ -923,9 +945,9 @@ namespace HeatBalanceHAMTManager {
                     cell1.adjsl(adj1) = adj2;
                     cell2.adjsl(adj2) = adj1;
 
-                    sid = cell1.sid;
-                    cell1.overlap(adj1) = state.dataSurface->Surface(sid).Area;
-                    cell2.overlap(adj2) = state.dataSurface->Surface(sid).Area;
+                    int const surfNum = cell1.sid;
+                    cell1.overlap(adj1) = state.dataSurface->Surface(surfNum).Area;
+                    cell2.overlap(adj2) = state.dataSurface->Surface(surfNum).Area;
                     cell1.dist(adj1) = cell1.length(1) / 2.0;
                     cell2.dist(adj2) = cell2.length(1) / 2.0;
                 }
@@ -939,9 +961,15 @@ namespace HeatBalanceHAMTManager {
         print(state.files.eio, Format_1965);
         // cCurrentModuleObject='MaterialProperty:HeatAndMoistureTransfer:*'
         for (int sid = 1; sid <= state.dataSurface->TotSurfaces; ++sid) {
-            if (!state.dataSurface->Surface(sid).HeatTransSurf) continue;
-            if (state.dataSurface->Surface(sid).Class == SurfaceClass::Window) continue;
-            if (state.dataSurface->Surface(sid).HeatTransferAlgorithm != DataSurfaces::HeatTransferModel::HAMT) continue;
+            if (!state.dataSurface->Surface(sid).HeatTransSurf) {
+                continue;
+            }
+            if (state.dataSurface->Surface(sid).Class == SurfaceClass::Window) {
+                continue;
+            }
+            if (state.dataSurface->Surface(sid).HeatTransferAlgorithm != DataSurfaces::HeatTransferModel::HAMT) {
+                continue;
+            }
             s_hbh->cells(s_hbh->Extcell(sid)).origin(1) += s_hbh->cells(s_hbh->Extcell(sid)).length(1) / 2.0;
             s_hbh->cells(s_hbh->Intcell(sid)).origin(1) -= s_hbh->cells(s_hbh->Intcell(sid)).length(1) / 2.0;
             s_hbh->cells(s_hbh->Extcell(sid)).volume = 0.0;
@@ -1268,7 +1296,9 @@ namespace HeatBalanceHAMTManager {
                 for (int ii = 1; ii <= adjmax; ++ii) {
                     int adj = cell.adjs(ii);
                     int adjl = cell.adjsl(ii);
-                    if (adj == -1) break;
+                    if (adj == -1) {
+                        break;
+                    }
 
                     if (cell.htc > 0) {
                         thermr1 = 1.0 / (cell.overlap(ii) * cell.htc);
@@ -1410,7 +1440,9 @@ namespace HeatBalanceHAMTManager {
                 for (int ii = 1; ii <= adjmax; ++ii) {
                     int adj = cell.adjs(ii);
                     int adjl = cell.adjsl(ii);
-                    if (adj == -1) break;
+                    if (adj == -1) {
+                        break;
+                    }
 
                     if (cell.vtc > 0) {
                         vaporr1 = 1.0 / (cell.overlap(ii) * cell.vtc);
@@ -1463,7 +1495,7 @@ namespace HeatBalanceHAMTManager {
                 if (denominator != 0.0) {
                     cell.rhp1 = (phiorsum + vporsum + (wcap * cell.rh) / s_hbh->deltat) / denominator;
                 } else {
-                    ShowSevereError(state, "CalcHeatBalHAMT: demoninator in calculating RH is zero.  Check material properties for accuracy.");
+                    ShowSevereError(state, "CalcHeatBalHAMT: denominator in calculating RH is zero.  Check material properties for accuracy.");
                     ShowContinueError(state, format("...Problem occurs in Material=\"{}\".", s_mat->materials(cell.matid)->Name));
                     ShowFatalError(state, "Program terminates due to preceding condition.");
                 }
@@ -1473,7 +1505,7 @@ namespace HeatBalanceHAMTManager {
                 }
             }
 
-            // Check for convergence or too many itterations
+            // Check for convergence or too many iterations
             sumtp1 = 0.0;
             for (int cid = s_hbh->Extcell(sid); cid <= s_hbh->Intcell(sid); ++cid) {
                 auto const &cell = s_hbh->cells(cid);
@@ -1513,7 +1545,7 @@ namespace HeatBalanceHAMTManager {
 
         // PURPOSE OF THIS SUBROUTINE:
         // The zone heat balance equation has converged, so now the HAMT values are to be fixed
-        // ready for the next itteration.
+        // ready for the next iteration.
         // Fill all the report variables
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -1541,7 +1573,9 @@ namespace HeatBalanceHAMTManager {
         }
 
         s_hbh->watertot(sid) = 0.0;
-        if (matmass > 0) s_hbh->watertot(sid) = watermass / matmass;
+        if (matmass > 0) {
+            s_hbh->watertot(sid) = watermass / matmass;
+        }
 
         s_hbh->surfrh(sid) = 100.0 * s_hbh->cells(s_hbh->Intcell(sid)).rh;
         s_hbh->surfextrh(sid) = 100.0 * s_hbh->cells(s_hbh->Extcell(sid)).rh;
@@ -1590,7 +1624,9 @@ namespace HeatBalanceHAMTManager {
             for (int step = 2; step <= ndata; ++step) {
                 xxhigh = xx(step);
                 yyhigh = yy(step);
-                if (invalue <= xxhigh) break;
+                if (invalue <= xxhigh) {
+                    break;
+                }
                 xxlow = xxhigh;
                 yylow = yyhigh;
             }

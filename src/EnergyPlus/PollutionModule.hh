@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -320,8 +320,8 @@ namespace Pollution {
         bool used = false;
         Real64 sourceCoeff = 0.0;
         std::array<Real64, (int)Pollutant::Num> pollutantCoeffs = {0.0};
-        int sourceSchedNum = 0;
-        std::array<int, (int)Pollutant::Num> pollutantSchedNums = {0};
+        Sched::Schedule *sourceSched = nullptr;
+        std::array<Sched::Schedule *, (int)Pollutant::Num> pollutantScheds = {0};
     };
 
     void CalculatePollution(EnergyPlusData &state);
@@ -338,12 +338,13 @@ namespace Pollution {
 
     void ReadEnergyMeters(EnergyPlusData &state);
 
-    void GetFuelFactorInfo(EnergyPlusData &state,
-                           Constant::eFuel fuel,         // input fuel name  (standard from Tabular reports)
-                           bool &fuelFactorUsed,         // return value true if user has entered this fuel
-                           Real64 &fuelSourceFactor,     // if used, the source factor
-                           bool &fuelFactorScheduleUsed, // if true, schedules for this fuel are used
-                           int &ffScheduleIndex          // if schedules for this fuel are used, return schedule index
+    void
+    GetFuelFactorInfo(EnergyPlusData &state,
+                      Constant::eFuel fuel,         // input fuel name  (standard from Tabular reports)
+                      bool &fuelFactorUsed,         // return value true if user has entered this fuel
+                      Real64 &fuelSourceFactor,     // if used, the source factor
+                      bool &fuelFactorScheduleUsed, // if true, schedules for this fuel are used
+                      Sched::Schedule **ffSched // if schedules for this fuel are used, return schedule pointer (need pointer to pointer to do this)
     );
 
     void GetEnvironmentalImpactFactorInfo(EnergyPlusData &state,
@@ -386,6 +387,10 @@ struct PollutionData : BaseGlobalStruct
     Real64 PurchHeatEffic = 0.0;
     Real64 PurchCoolCOP = 0.0;
     Real64 SteamConvEffic = 0.0;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

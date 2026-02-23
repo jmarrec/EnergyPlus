@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -166,7 +166,9 @@ namespace HeatBalanceManager {
         // Get the heat balance input at the beginning of the simulation only
         if (state.dataHeatBalMgr->ManageHeatBalanceGetInputFlag) {
             GetHeatBalanceInput(state); // Obtains heat balance related parameters from input file
-            if (state.dataGlobal->DoingSizing) state.dataHeatBal->doSpaceHeatBalance = state.dataHeatBal->doSpaceHeatBalanceSizing;
+            if (state.dataGlobal->DoingSizing) {
+                state.dataHeatBal->doSpaceHeatBalance = state.dataHeatBal->doSpaceHeatBalanceSizing;
+            }
 
             // Surface octree setup
             //  The surface octree holds live references to surfaces so it must be updated
@@ -177,8 +179,9 @@ namespace HeatBalanceManager {
                 }
             }
 
-            for (auto &surface : state.dataSurface->Surface)
+            for (auto &surface : state.dataSurface->Surface) {
                 surface.set_computed_geometry(); // Set up extra surface geometry info for PierceSurface
+            }
 
             state.dataHeatBalMgr->ManageHeatBalanceGetInputFlag = false;
         }
@@ -366,7 +369,9 @@ namespace HeatBalanceManager {
                 } else {
                     CNum = Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(2), state.dataConstruction->Construct);
                 }
-                if (CNum == 0) continue;
+                if (CNum == 0) {
+                    continue;
+                }
                 state.dataConstruction->Construct(CNum).IsUsed = true;
                 if (ONum == 4 || ONum == 6) {
                     // GroundHeatExchanger:Surface or EnergyManagementSystem:ConstructionIndexVariable
@@ -388,7 +393,9 @@ namespace HeatBalanceManager {
                 ShowWarningError(state, format("CheckUsedConstructions: There are {} nominally unused constructions in input.", Unused));
                 ShowContinueError(state, "Each Unused construction is shown.");
                 for (int Loop = 1; Loop <= state.dataHeatBal->TotConstructs; ++Loop) {
-                    if (state.dataConstruction->Construct(Loop).IsUsed) continue;
+                    if (state.dataConstruction->Construct(Loop).IsUsed) {
+                        continue;
+                    }
                     ShowMessage(state, format("Construction={}", state.dataConstruction->Construct(Loop).Name));
                 }
             }
@@ -511,6 +518,7 @@ namespace HeatBalanceManager {
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetProjectControlData: ");
+        static constexpr std::string_view routineName = "GetProjectControlData";
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         Array1D_string AlphaName(4);
@@ -823,13 +831,13 @@ namespace HeatBalanceManager {
                     state.dataHeatBal->OverallHeatTransferSolutionAlgo = DataSurfaces::HeatTransferModel::CondFD;
                     state.dataHeatBal->AnyCondFD = true;
                     state.dataHeatBal->AllCTF = false;
-                    if (state.dataGlobal->NumOfTimeStepInHour < 20) {
+                    if (state.dataGlobal->TimeStepsInHour < 20) {
                         ShowSevereError(
                             state,
                             format("GetSolutionAlgorithm: {} {} is Conduction Finite Difference but Number of TimeSteps in Hour < 20, Value is {}.",
                                    state.dataHeatBalMgr->CurrentModuleObject,
                                    state.dataIPShortCut->cAlphaFieldNames(1),
-                                   state.dataGlobal->NumOfTimeStepInHour));
+                                   state.dataGlobal->TimeStepsInHour));
                         ShowContinueError(state,
                                           "...Suggested minimum number of time steps in hour for Conduction Finite Difference solutions is 20. "
                                           "Errors or inaccurate calculations may occur.");
@@ -839,13 +847,13 @@ namespace HeatBalanceManager {
                     state.dataHeatBal->OverallHeatTransferSolutionAlgo = DataSurfaces::HeatTransferModel::HAMT;
                     state.dataHeatBal->AnyHAMT = true;
                     state.dataHeatBal->AllCTF = false;
-                    if (state.dataGlobal->NumOfTimeStepInHour < 20) {
+                    if (state.dataGlobal->TimeStepsInHour < 20) {
                         ShowSevereError(state,
                                         format("GetSolutionAlgorithm: {} {} is Combined Heat and Moisture Finite Element but Number of TimeSteps in "
                                                "Hour < 20, Value is {}.",
                                                state.dataHeatBalMgr->CurrentModuleObject,
                                                state.dataIPShortCut->cAlphaFieldNames(1),
-                                               state.dataGlobal->NumOfTimeStepInHour));
+                                               state.dataGlobal->TimeStepsInHour));
                         ShowContinueError(state,
                                           "...Suggested minimum number of time steps in hour for Combined Heat and Moisture Finite Element solutions "
                                           "is 20. Errors or inaccurate calculations may occur.");
@@ -992,8 +1000,11 @@ namespace HeatBalanceManager {
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, state.dataHeatBalMgr->CurrentModuleObject, state.dataHeatBalMgr->CurrentModuleObject};
+
             if (NumAlpha > 0) {
-                {
+                { // Why an extra nested scope here?
                     std::string const &SELECT_CASE_var = AlphaName(1);
                     if (SELECT_CASE_var == "YES") {
                         state.dataContaminantBalance->Contaminant.CO2Simulation = true;
@@ -1010,30 +1021,25 @@ namespace HeatBalanceManager {
                     }
                 }
             }
-            if (NumAlpha == 1 && state.dataContaminantBalance->Contaminant.CO2Simulation) {
-                ShowSevereError(state,
-                                format("{}, {} is required and not given.",
-                                       state.dataHeatBalMgr->CurrentModuleObject,
-                                       state.dataIPShortCut->cAlphaFieldNames(2)));
-                ErrorsFound = true;
-            } else if (NumAlpha > 1 && state.dataContaminantBalance->Contaminant.CO2Simulation) {
-                state.dataContaminantBalance->Contaminant.CO2OutdoorSchedPtr = ScheduleManager::GetScheduleIndex(state, AlphaName(2));
-                if (state.dataContaminantBalance->Contaminant.CO2OutdoorSchedPtr == 0) {
-                    ShowSevereError(state,
-                                    format("{}, {} not found: {}",
-                                           state.dataHeatBalMgr->CurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaFieldNames(2),
-                                           AlphaName(2)));
+
+            if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
+                if (state.dataIPShortCut->lAlphaFieldBlanks(2)) {
+                    ShowSevereEmptyField(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2));
+                    ErrorsFound = true;
+                } else if ((state.dataContaminantBalance->Contaminant.CO2OutdoorSched = Sched::GetSchedule(state, AlphaName(2))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), AlphaName(2));
                     ErrorsFound = true;
                 }
             }
+
             if (NumAlpha > 2) {
                 {
                     std::string const &SELECT_CASE_var = AlphaName(3);
                     if (SELECT_CASE_var == "YES") {
                         state.dataContaminantBalance->Contaminant.GenericContamSimulation = true;
-                        if (!state.dataContaminantBalance->Contaminant.CO2Simulation)
+                        if (!state.dataContaminantBalance->Contaminant.CO2Simulation) {
                             state.dataContaminantBalance->Contaminant.SimulateContaminants = true;
+                        }
                     } else if (SELECT_CASE_var == "NO") {
                         state.dataContaminantBalance->Contaminant.GenericContamSimulation = false;
                     } else {
@@ -1045,6 +1051,7 @@ namespace HeatBalanceManager {
                                                 state.dataIPShortCut->cAlphaFieldNames(3)));
                     }
                 }
+
                 if (NumAlpha == 3 && state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
                     ShowSevereError(state,
                                     format("{}, {} is required and not given.",
@@ -1052,8 +1059,7 @@ namespace HeatBalanceManager {
                                            state.dataIPShortCut->cAlphaFieldNames(4)));
                     ErrorsFound = true;
                 } else if (NumAlpha > 3 && state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
-                    state.dataContaminantBalance->Contaminant.GenericContamOutdoorSchedPtr = ScheduleManager::GetScheduleIndex(state, AlphaName(4));
-                    if (state.dataContaminantBalance->Contaminant.GenericContamOutdoorSchedPtr == 0) {
+                    if ((state.dataContaminantBalance->Contaminant.genericOutdoorSched = Sched::GetSchedule(state, AlphaName(4))) == nullptr) {
                         ShowSevereError(state,
                                         format("{}, {} not found: {}",
                                                state.dataHeatBalMgr->CurrentModuleObject,
@@ -1131,8 +1137,9 @@ namespace HeatBalanceManager {
                                                 state.dataIPShortCut->cAlphaFieldNames(1)));
                     }
                 }
-                if (state.dataHeatBal->ZoneAirMassFlow.ZoneFlowAdjustment != DataHeatBalance::AdjustmentType::NoAdjustReturnAndMixing)
+                if (state.dataHeatBal->ZoneAirMassFlow.ZoneFlowAdjustment != DataHeatBalance::AdjustmentType::NoAdjustReturnAndMixing) {
                     state.dataHeatBal->ZoneAirMassFlow.AdjustZoneMixingFlow = true;
+                }
             }
             if (NumAlpha > 1) {
                 {
@@ -1182,8 +1189,9 @@ namespace HeatBalanceManager {
         } else {
             state.dataHeatBal->ZoneAirMassFlow.EnforceZoneMassBalance = false;
         }
-        if (state.dataHeatBal->ZoneAirMassFlow.InfiltrationTreatment != DataHeatBalance::InfiltrationFlow::No)
+        if (state.dataHeatBal->ZoneAirMassFlow.InfiltrationTreatment != DataHeatBalance::InfiltrationFlow::No) {
             state.dataHeatBal->ZoneAirMassFlow.AdjustZoneInfiltrationFlow = true;
+        }
 
         constexpr const char *Format_732(
             "! <Zone Air Mass Flow Balance Simulation>, Enforce Mass Balance, Adjust Zone Mixing and Return {{AdjustMixingOnly | AdjustReturnOnly | "
@@ -1214,30 +1222,17 @@ namespace HeatBalanceManager {
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
+            ErrorObjectHeader eoh{routineName, state.dataHeatBalMgr->CurrentModuleObject, AlphaName(1)};
             if (NumAlpha > 0) {
                 HVACSystemRootFinding.Algorithm = AlphaName(1);
-                {
-                    std::string const &SELECT_CASE_var = AlphaName(1);
-                    if ((SELECT_CASE_var == "REGULAFALSI")) {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsi;
-                    } else if (SELECT_CASE_var == "BISECTION") {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::Bisection;
-                    } else if (SELECT_CASE_var == "BISECTIONTHENREGULAFALSI") {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::BisectionThenRegulaFalsi;
-                    } else if (SELECT_CASE_var == "REGULAFALSITHENBISECTION") {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsiThenBisection;
-                    } else if (SELECT_CASE_var == "ALTERNATION") {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::Alternation;
-                    } else {
-                        HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsi;
-                        ShowWarningError(state,
-                                         format("{}: Invalid input of {}. The default choice is assigned = {}",
-                                                state.dataHeatBalMgr->CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaFieldNames(1),
-                                                AlphaName(1)));
-                        ShowContinueError(
-                            state, "Valid choices are: RegulaFalsi, Bisection, BisectionThenRegulaFalsi, RegulaFalsiThenBisection, or Alternation.");
-                    }
+                HVACSystemRootFinding.HVACSystemRootSolverMethod =
+                    static_cast<HVACSystemRootSolverAlgorithm>(getEnumValue(HVACSystemRootSolverAlgorithmUC, Util::makeUPPER(AlphaName(1))));
+                if (HVACSystemRootFinding.HVACSystemRootSolverMethod == HVACSystemRootSolverAlgorithm::Invalid) {
+                    HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
+                    ShowWarningInvalidKey(
+                        state, eoh, state.dataIPShortCut->cAlphaFieldNames(1), AlphaName(1), "Invalid input. The default choice is assigned.");
+                    ShowContinueError(
+                        state, "Valid choices are: RegulaFalsi, Bisection, BisectionThenRegulaFalsi, RegulaFalsiThenBisection, or Alternation.");
                 }
             }
             if (NumNumber > 0) {
@@ -1245,7 +1240,7 @@ namespace HeatBalanceManager {
             }
         } else {
             HVACSystemRootFinding.Algorithm = "RegulaFalsi";
-            HVACSystemRootFinding.HVACSystemRootSolver = HVACSystemRootSolverAlgorithm::RegulaFalsi;
+            HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
         }
 
         // Write Solution Algorithm to the initialization output file for User Verification
@@ -1293,9 +1288,15 @@ namespace HeatBalanceManager {
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
 
-            if (NumNums > 0) state.dataEnvrn->SiteWindExp = NumArray(1);
-            if (NumNums > 1) state.dataEnvrn->SiteWindBLHeight = NumArray(2);
-            if (NumNums > 2) state.dataEnvrn->SiteTempGradient = NumArray(3);
+            if (NumNums > 0) {
+                state.dataEnvrn->SiteWindExp = NumArray(1);
+            }
+            if (NumNums > 1) {
+                state.dataEnvrn->SiteWindBLHeight = NumArray(2);
+            }
+            if (NumNums > 2) {
+                state.dataEnvrn->SiteTempGradient = NumArray(3);
+            }
 
         } else if (NumObjects > 1) {
             ShowSevereError(state, format("Too many {} objects, only 1 allowed.", state.dataHeatBalMgr->CurrentModuleObject));
@@ -1340,7 +1341,9 @@ namespace HeatBalanceManager {
         static constexpr std::string_view routineName = "GetConstructData";
 
         // If UniqueConstructionNames size, then input has already been gotten
-        if (state.dataHeatBalMgr->UniqueConstructNames.size()) return;
+        if (!state.dataHeatBalMgr->UniqueConstructNames.empty()) {
+            return;
+        }
 
         int ConstructNumAlpha;                                                   // Number of construction alpha names being passed
         int DummyNumProp;                                                        // dummy variable for properties being passed
@@ -1695,7 +1698,6 @@ namespace HeatBalanceManager {
                     if (ConstructNumAlpha <= 2) {
 
                     } else {
-                        auto const *mat = s_mat->materials(state.dataConstruction->Construct(TotRegConstructs + ConstrNum).LayerPoint(Layer));
                         state.dataHeatBal->NominalRforNominalUCalculation(TotRegConstructs + ConstrNum) += mat->NominalR;
                     }
                 }
@@ -1749,7 +1751,7 @@ namespace HeatBalanceManager {
             // frame or divider.)
 
             fs::path window5DataFilePath;
-            if (ConstructAlphas(1) == "") {
+            if (ConstructAlphas(1).empty()) {
                 window5DataFilePath = state.dataStrGlobals->CurrentWorkingFolder / "Window5DataFile.dat";
             } else {
                 window5DataFilePath = ConstructAlphas(1);
@@ -1771,13 +1773,15 @@ namespace HeatBalanceManager {
         WConstructNames.deallocate();
 
         // set some (default) properties of the Construction Derived Type
-        for (int ConstrNum = 1; ConstrNum <= state.dataHeatBal->TotConstructs; ++ConstrNum) {
+        for (int ConstrIndex = 1; ConstrIndex <= state.dataHeatBal->TotConstructs; ++ConstrIndex) {
 
-            auto &thisConstruct = state.dataConstruction->Construct(ConstrNum);
+            auto &thisConstruct = state.dataConstruction->Construct(ConstrIndex);
             // For air boundaries, skip TypeIsAirBoundary
-            if (thisConstruct.TypeIsAirBoundary) continue;
-            if (state.dataHeatBal->NominalRforNominalUCalculation(ConstrNum) != 0.0) {
-                state.dataHeatBal->NominalU(ConstrNum) = 1.0 / state.dataHeatBal->NominalRforNominalUCalculation(ConstrNum);
+            if (thisConstruct.TypeIsAirBoundary) {
+                continue;
+            }
+            if (state.dataHeatBal->NominalRforNominalUCalculation(ConstrIndex) != 0.0) {
+                state.dataHeatBal->NominalU(ConstrIndex) = 1.0 / state.dataHeatBal->NominalRforNominalUCalculation(ConstrIndex);
             } else {
                 if (!thisConstruct.WindowTypeEQL) {
                     ShowSevereError(state, format("Nominal U is zero, for construction={}", thisConstruct.Name));
@@ -1785,7 +1789,7 @@ namespace HeatBalanceManager {
                 }
             }
 
-            DataHeatBalance::CheckAndSetConstructionProperties(state, ConstrNum, ErrorsFound);
+            DataHeatBalance::CheckAndSetConstructionProperties(state, ConstrIndex, ErrorsFound);
 
         } // End of ConstrNum DO loop
     }
@@ -1876,7 +1880,9 @@ namespace HeatBalanceManager {
                 TMP = index(state.dataIPShortCut->cAlphaArgs(1), char(2));
             }
 
-            if (Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataHeatBalMgr->CurrentModuleObject, ErrorsFound)) continue;
+            if (Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataHeatBalMgr->CurrentModuleObject, ErrorsFound)) {
+                continue;
+            }
 
             ++ZoneLoop;
             ProcessZoneData(state,
@@ -1976,7 +1982,7 @@ namespace HeatBalanceManager {
                                 ErrorsFound = true;
                             }
                         } // Loop
-                    }     // ZoneNum
+                    } // ZoneNum
                 }
 
             } // ListNum
@@ -2076,15 +2082,18 @@ namespace HeatBalanceManager {
 
     void GetIncidentSolarMultiplier(EnergyPlusData &state, bool &ErrorsFound)
     {
+        static constexpr std::string_view RoutineName("GetIncidentSolarMultiplier: ");
+        static constexpr std::string_view routineName = "GetIncidentSolarMultiplier";
+
         auto &s_mat = state.dataMaterial;
         auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
         cCurrentModuleObject = "SurfaceProperty:IncidentSolarMultiplier";
 
-        static constexpr std::string_view RoutineName("GetIncidentSolarMultiplier: ");
-
         state.dataSurface->TotSurfIncSolMultiplier = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
 
-        if (state.dataSurface->TotSurfIncSolMultiplier <= 0) return;
+        if (state.dataSurface->TotSurfIncSolMultiplier <= 0) {
+            return;
+        }
 
         if (!allocated(state.dataSurface->SurfIncSolMultiplier)) {
             // could be extended to interior surfaces later
@@ -2107,6 +2116,8 @@ namespace HeatBalanceManager {
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
 
             // Assign surface number
             int SurfNum = Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(1), state.dataSurface->Surface);
@@ -2149,20 +2160,19 @@ namespace HeatBalanceManager {
                 ErrorsFound = true;
                 continue;
             }
-            int ScheduleIdx = ScheduleManager::GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(2));
-            // Schedule not found but schedule field is not empty, user had the wrong schedule name
-            if (ScheduleIdx == 0 && !(state.dataIPShortCut->cAlphaArgs(2).empty())) {
-                ShowSevereError(state, "Invalid Incident Solar Multiplier Schedule Name in SurfaceProperty:IncidentSolarMultiplier");
-                continue;
-            }
+
             Surf.hasIncSolMultiplier = true;
             auto &SurfIncSolMult = state.dataSurface->SurfIncSolMultiplier(SurfNum);
             SurfIncSolMult.Name = state.dataIPShortCut->cAlphaArgs(1);
             SurfIncSolMult.SurfaceIdx = SurfNum;
             SurfIncSolMult.Scaler = state.dataIPShortCut->rNumericArgs(1);
-            SurfIncSolMult.SchedPtr = ScheduleIdx;
-        }
-    }
+
+            if (state.dataIPShortCut->lAlphaFieldBlanks(2)) {
+            } else if ((SurfIncSolMult.sched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(2))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2));
+            }
+        } // for (Loop)
+    } // GetIncidentSolarMultiplier()
 
     void GetZoneLocalEnvData(EnergyPlusData &state, bool &ErrorsFound) // Error flag indicator (true if errors found)
     {
@@ -2299,16 +2309,34 @@ namespace HeatBalanceManager {
         constexpr const char *RoutineName("ProcessZoneData: ");
 
         state.dataHeatBal->Zone(ZoneLoop).Name = cAlphaArgs(1);
-        if (NumNumbers >= 1) state.dataHeatBal->Zone(ZoneLoop).RelNorth = rNumericArgs(1);
-        if (NumNumbers >= 2) state.dataHeatBal->Zone(ZoneLoop).OriginX = rNumericArgs(2);
-        if (NumNumbers >= 3) state.dataHeatBal->Zone(ZoneLoop).OriginY = rNumericArgs(3);
-        if (NumNumbers >= 4) state.dataHeatBal->Zone(ZoneLoop).OriginZ = rNumericArgs(4);
-        if (NumNumbers >= 5) state.dataHeatBal->Zone(ZoneLoop).OfType = rNumericArgs(5);
+        if (NumNumbers >= 1) {
+            state.dataHeatBal->Zone(ZoneLoop).RelNorth = rNumericArgs(1);
+        }
+        if (NumNumbers >= 2) {
+            state.dataHeatBal->Zone(ZoneLoop).OriginX = rNumericArgs(2);
+        }
+        if (NumNumbers >= 3) {
+            state.dataHeatBal->Zone(ZoneLoop).OriginY = rNumericArgs(3);
+        }
+        if (NumNumbers >= 4) {
+            state.dataHeatBal->Zone(ZoneLoop).OriginZ = rNumericArgs(4);
+        }
+        if (NumNumbers >= 5) {
+            state.dataHeatBal->Zone(ZoneLoop).OfType = rNumericArgs(5);
+        }
         state.dataHeatBal->Zone(ZoneLoop).OfType = DataHeatBalance::StandardZone;
-        if (NumNumbers >= 6) state.dataHeatBal->Zone(ZoneLoop).Multiplier = rNumericArgs(6);
-        if (NumNumbers >= 7) state.dataHeatBal->Zone(ZoneLoop).CeilingHeight = rNumericArgs(7);
-        if (NumNumbers >= 8) state.dataHeatBal->Zone(ZoneLoop).Volume = rNumericArgs(8);
-        if (NumNumbers >= 9) state.dataHeatBal->Zone(ZoneLoop).UserEnteredFloorArea = rNumericArgs(9);
+        if (NumNumbers >= 6) {
+            state.dataHeatBal->Zone(ZoneLoop).Multiplier = rNumericArgs(6);
+        }
+        if (NumNumbers >= 7) {
+            state.dataHeatBal->Zone(ZoneLoop).CeilingHeight = rNumericArgs(7);
+        }
+        if (NumNumbers >= 8) {
+            state.dataHeatBal->Zone(ZoneLoop).Volume = rNumericArgs(8);
+        }
+        if (NumNumbers >= 9) {
+            state.dataHeatBal->Zone(ZoneLoop).UserEnteredFloorArea = rNumericArgs(9);
+        }
 
         if (NumAlphas > 1 && !state.dataIPShortCut->lAlphaFieldBlanks(2)) {
             Convect::HcInt hcIn = static_cast<Convect::HcInt>(getEnumValue(Convect::HcIntNamesUC, cAlphaArgs(2)));
@@ -2685,10 +2713,10 @@ namespace HeatBalanceManager {
 
         if (state.dataGlobal->BeginDayFlag && !state.dataGlobal->WarmupFlag && state.dataGlobal->KindOfSim == Constant::KindOfSim::RunPeriodWeather &&
             state.dataSysVars->ReportExtShadingSunlitFrac) {
-            for (int iHour = 1; iHour <= 24; ++iHour) { // Do for all hours.
-                for (int TS = 1; TS <= state.dataGlobal->NumOfTimeStepInHour; ++TS) {
+            for (int iHour = 1; iHour <= Constant::iHoursInDay; ++iHour) { // Do for all hours.
+                for (int TS = 1; TS <= state.dataGlobal->TimeStepsInHour; ++TS) {
                     constexpr const char *ShdFracFmt1(" {:02}/{:02} {:02}:{:02},");
-                    if (TS == state.dataGlobal->NumOfTimeStepInHour) {
+                    if (TS == state.dataGlobal->TimeStepsInHour) {
                         print(state.files.shade, ShdFracFmt1, state.dataEnvrn->Month, state.dataEnvrn->DayOfMonth, iHour, 0);
                     } else {
                         print(state.files.shade,
@@ -2696,7 +2724,7 @@ namespace HeatBalanceManager {
                               state.dataEnvrn->Month,
                               state.dataEnvrn->DayOfMonth,
                               iHour - 1,
-                              (60 / state.dataGlobal->NumOfTimeStepInHour) * TS);
+                              (60 / state.dataGlobal->TimeStepsInHour) * TS);
                     }
                     for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
                         constexpr const char *ShdFracFmt2("{:10.8F},");
@@ -2722,30 +2750,30 @@ namespace HeatBalanceManager {
             SetOutAirNodes(state);
             for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
                 if (state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode > 0) {
-                    if (state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirDryBulbSchedNum > 0) {
-                        state.dataHeatBal->Zone(ZoneNum).OutDryBulbTemp = ScheduleManager::GetCurrentScheduleValue(
-                            state, state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirDryBulbSchedNum);
+                    if (state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).outAirDryBulbSched != nullptr) {
+                        state.dataHeatBal->Zone(ZoneNum).OutDryBulbTemp =
+                            state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).outAirDryBulbSched->getCurrentVal();
                     } else {
                         state.dataHeatBal->Zone(ZoneNum).OutDryBulbTemp =
                             state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirDryBulb;
                     }
-                    if (state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWetBulbSchedNum > 0) {
-                        state.dataHeatBal->Zone(ZoneNum).OutWetBulbTemp = ScheduleManager::GetCurrentScheduleValue(
-                            state, state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWetBulbSchedNum);
+                    if (state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).outAirWetBulbSched != nullptr) {
+                        state.dataHeatBal->Zone(ZoneNum).OutWetBulbTemp =
+                            state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).outAirWetBulbSched->getCurrentVal();
                     } else {
                         state.dataHeatBal->Zone(ZoneNum).OutWetBulbTemp =
                             state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWetBulb;
                     }
-                    if (state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWindSpeedSchedNum > 0) {
-                        state.dataHeatBal->Zone(ZoneNum).WindSpeed = ScheduleManager::GetCurrentScheduleValue(
-                            state, state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWindSpeedSchedNum);
+                    if (state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).outAirWindSpeedSched != nullptr) {
+                        state.dataHeatBal->Zone(ZoneNum).WindSpeed =
+                            state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).outAirWindSpeedSched->getCurrentVal();
                     } else {
                         state.dataHeatBal->Zone(ZoneNum).WindSpeed =
                             state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWindSpeed;
                     }
-                    if (state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWindDirSchedNum > 0) {
-                        state.dataHeatBal->Zone(ZoneNum).WindDir = ScheduleManager::GetCurrentScheduleValue(
-                            state, state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWindDirSchedNum);
+                    if (state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).outAirWindDirSched != nullptr) {
+                        state.dataHeatBal->Zone(ZoneNum).WindDir =
+                            state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).outAirWindDirSched->getCurrentVal();
                     } else {
                         state.dataHeatBal->Zone(ZoneNum).WindDir =
                             state.dataLoopNodes->Node(state.dataHeatBal->Zone(ZoneNum).LinkedOutAirNode).OutAirWindDir;
@@ -2845,15 +2873,13 @@ namespace HeatBalanceManager {
         state.dataHeatBalFanSys->ZoneReOrder = 0;
         state.dataHeatBalFanSys->TempTstatAir.dimension(state.dataGlobal->NumOfZones, DataHeatBalance::ZoneInitialTemp);
         if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
-            state.dataContaminantBalance->OutdoorCO2 =
-                ScheduleManager::GetCurrentScheduleValue(state, state.dataContaminantBalance->Contaminant.CO2OutdoorSchedPtr);
+            state.dataContaminantBalance->OutdoorCO2 = state.dataContaminantBalance->Contaminant.CO2OutdoorSched->getCurrentVal();
             state.dataContaminantBalance->ZoneAirCO2.dimension(state.dataGlobal->NumOfZones, state.dataContaminantBalance->OutdoorCO2);
             state.dataContaminantBalance->ZoneAirCO2Temp.dimension(state.dataGlobal->NumOfZones, state.dataContaminantBalance->OutdoorCO2);
             state.dataContaminantBalance->ZoneAirCO2Avg.dimension(state.dataGlobal->NumOfZones, state.dataContaminantBalance->OutdoorCO2);
         }
         if (state.dataContaminantBalance->Contaminant.GenericContamSimulation) {
-            state.dataContaminantBalance->OutdoorGC =
-                ScheduleManager::GetCurrentScheduleValue(state, state.dataContaminantBalance->Contaminant.GenericContamOutdoorSchedPtr);
+            state.dataContaminantBalance->OutdoorGC = state.dataContaminantBalance->Contaminant.genericOutdoorSched->getCurrentVal();
             state.dataContaminantBalance->ZoneAirGC.dimension(state.dataGlobal->NumOfZones, state.dataContaminantBalance->OutdoorGC);
             state.dataContaminantBalance->ZoneAirGCTemp.dimension(state.dataGlobal->NumOfZones, state.dataContaminantBalance->OutdoorGC);
             state.dataContaminantBalance->ZoneAirGCAvg.dimension(state.dataGlobal->NumOfZones, state.dataContaminantBalance->OutdoorGC);
@@ -2874,12 +2900,12 @@ namespace HeatBalanceManager {
         state.dataHeatBalMgr->WarmupLoadDiff.dimension(state.dataGlobal->NumOfZones, 0.0);
         state.dataHeatBalMgr->TempZone.dimension(state.dataGlobal->NumOfZones, 0.0);
         state.dataHeatBalMgr->LoadZone.dimension(state.dataGlobal->NumOfZones, 0.0);
-        state.dataHeatBalMgr->TempZoneRpt.dimension(state.dataGlobal->NumOfZones, state.dataGlobal->NumOfTimeStepInHour * 24, 0.0);
-        state.dataHeatBalMgr->LoadZoneRpt.dimension(state.dataGlobal->NumOfZones, state.dataGlobal->NumOfTimeStepInHour * 24, 0.0);
-        state.dataHeatBalMgr->MaxLoadZoneRpt.dimension(state.dataGlobal->NumOfZones, state.dataGlobal->NumOfTimeStepInHour * 24, 0.0);
+        state.dataHeatBalMgr->TempZoneRpt.dimension(state.dataGlobal->NumOfZones, state.dataGlobal->TimeStepsInHour * Constant::iHoursInDay, 0.0);
+        state.dataHeatBalMgr->LoadZoneRpt.dimension(state.dataGlobal->NumOfZones, state.dataGlobal->TimeStepsInHour * Constant::iHoursInDay, 0.0);
+        state.dataHeatBalMgr->MaxLoadZoneRpt.dimension(state.dataGlobal->NumOfZones, state.dataGlobal->TimeStepsInHour * Constant::iHoursInDay, 0.0);
         state.dataHeatBalMgr->WarmupConvergenceValues.allocate(state.dataGlobal->NumOfZones);
-        state.dataHeatBalMgr->TempZoneRptStdDev.allocate(state.dataGlobal->NumOfTimeStepInHour * 24);
-        state.dataHeatBalMgr->LoadZoneRptStdDev.allocate(state.dataGlobal->NumOfTimeStepInHour * 24);
+        state.dataHeatBalMgr->TempZoneRptStdDev.allocate(state.dataGlobal->TimeStepsInHour * Constant::iHoursInDay);
+        state.dataHeatBalMgr->LoadZoneRptStdDev.allocate(state.dataGlobal->TimeStepsInHour * Constant::iHoursInDay);
         // MassConservation.allocate( NumOfZones );
 
         state.dataHeatBalFanSys->CrossedColdThreshRepPeriod.allocate(state.dataGlobal->NumOfZones, state.dataWeather->TotThermalReportPers);
@@ -2983,7 +3009,9 @@ namespace HeatBalanceManager {
                     std::abs(state.dataHeatBalMgr->TempZoneSecPrevDay(ZoneNum) - state.dataHeatBalMgr->TempZonePrevDay(ZoneNum));
                 state.dataHeatBalMgr->WarmupLoadDiff(ZoneNum) =
                     std::abs(state.dataHeatBalMgr->LoadZoneSecPrevDay(ZoneNum) - state.dataHeatBalMgr->LoadZonePrevDay(ZoneNum));
-                if (ZoneNum == 1) ++state.dataHeatBalMgr->CountWarmupDayPoints;
+                if (ZoneNum == 1) {
+                    ++state.dataHeatBalMgr->CountWarmupDayPoints;
+                }
                 state.dataHeatBalMgr->TempZoneRpt(ZoneNum, state.dataHeatBalMgr->CountWarmupDayPoints) =
                     state.dataHeatBalMgr->WarmupTempDiff(ZoneNum);
                 state.dataHeatBalMgr->LoadZoneRpt(ZoneNum, state.dataHeatBalMgr->CountWarmupDayPoints) =
@@ -2993,12 +3021,13 @@ namespace HeatBalanceManager {
                 if (state.dataSysVars->ReportDetailedWarmupConvergence) { // only do this detailed thing when requested by user is on
                     // Write Warmup Convergence Information to the initialization output file
                     if (state.dataHeatBalMgr->FirstWarmupWrite) {
-                        constexpr const char *Format_732{"! <Warmup Convergence Information>,Zone Name,Time Step,Hour of Day,Warmup Temperature "
-                                                         "Difference {{deltaC}},Warmup Load Difference {{W}}\n"};
+                        constexpr const char *Format_732{
+                            "! <Warmup Convergence Information - Detailed>,Zone Name,Time Step,Hour of Day,Warmup Temperature "
+                            "Difference {{deltaC}},Warmup Load Difference {{W}}\n"};
                         print(state.files.eio, Format_732);
                         state.dataHeatBalMgr->FirstWarmupWrite = false;
                     }
-                    constexpr const char *Format_731{" Warmup Convergence Information, {},{},{},{:.10R},{:.10R}\n"};
+                    constexpr const char *Format_731{" Warmup Convergence Information - Detailed, {},{},{},{:.10R},{:.10R}\n"};
                     print(state.files.eio,
                           Format_731,
                           state.dataHeatBal->Zone(ZoneNum).Name,
@@ -3013,8 +3042,9 @@ namespace HeatBalanceManager {
         // Update interior movable insulation flag--needed at the end of a zone time step so that the interior radiant
         // exchange algorithm knows whether there has been a change in interior movable insulation or not.
         if (state.dataSurface->AnyMovableInsulation) {
-            for (int surfNum : state.dataHeatBalSurf->SurfMovInsulIndexList) {
-                state.dataHeatBalSurf->SurfMovInsulIntPresentPrevTS(surfNum) = state.dataHeatBalSurf->SurfMovInsulIntPresent(surfNum);
+            for (int surfNum : state.dataSurface->intMovInsulSurfNums) {
+                auto &movInsul = state.dataSurface->intMovInsuls(surfNum);
+                movInsul.presentPrevTS = movInsul.present;
             }
         }
 
@@ -3265,7 +3295,9 @@ namespace HeatBalanceManager {
     {
         for (int SurfNum : state.dataSurface->AllHTWindowSurfaceList) {
             auto &thisConstruction = state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction);
-            if (thisConstruction.WindowTypeBSDF) continue;
+            if (thisConstruction.WindowTypeBSDF) {
+                continue;
+            }
             state.dataHeatBal->SurfWinFenLaySurfTempFront(SurfNum, 1) = state.dataHeatBalSurf->SurfOutsideTempHist(1)(SurfNum);
             state.dataHeatBal->SurfWinFenLaySurfTempBack(SurfNum, thisConstruction.TotLayers) = state.dataHeatBalSurf->SurfInsideTempHist(1)(SurfNum);
         }
@@ -3295,9 +3327,8 @@ namespace HeatBalanceManager {
         using EconomicTariff::UpdateUtilityBills; // added for computing annual utility costs
         using NodeInputManager::CalcMoreNodeInfo;
         using OutputReportTabular::UpdateTabularReports;
-        using ScheduleManager::ReportScheduleValues;
 
-        ReportScheduleValues(state);
+        Sched::ReportScheduleVals(state);
 
         if (!state.dataGlobal->WarmupFlag && state.dataGlobal->DoOutputReporting) {
             if (!state.dataGlobal->DoingSizing) {
@@ -3306,8 +3337,9 @@ namespace HeatBalanceManager {
             UpdateDataandReport(state, OutputProcessor::TimeStepType::Zone);
             if (state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeDesignDay ||
                 state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeRunPeriodDesign) {
-                if (state.dataHVACSizingSimMgr->hvacSizingSimulationManager)
+                if (state.dataHVACSizingSimMgr->hvacSizingSimulationManager) {
                     state.dataHVACSizingSimMgr->hvacSizingSimulationManager->UpdateSizingLogsZoneStep(state);
+                }
             }
 
             UpdateTabularReports(state, OutputProcessor::TimeStepType::Zone);
@@ -3317,7 +3349,9 @@ namespace HeatBalanceManager {
                 state.dataEnvrn->PrintEnvrnStampWarmup = true;
                 state.dataEnvrn->PrintEnvrnStampWarmupPrinted = true;
             }
-            if (!state.dataGlobal->BeginDayFlag) state.dataEnvrn->PrintEnvrnStampWarmupPrinted = false;
+            if (!state.dataGlobal->BeginDayFlag) {
+                state.dataEnvrn->PrintEnvrnStampWarmupPrinted = false;
+            }
             if (state.dataEnvrn->PrintEnvrnStampWarmup) {
                 if (state.dataReportFlag->PrintEndDataDictionary && state.dataGlobal->DoOutputReporting) {
                     constexpr const char *EndOfHeaderString("End of Data Dictionary"); // End of data dictionary marker
@@ -3353,16 +3387,18 @@ namespace HeatBalanceManager {
             UpdateDataandReport(state, OutputProcessor::TimeStepType::Zone);
             if (state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeDesignDay ||
                 state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeRunPeriodDesign) {
-                if (state.dataHVACSizingSimMgr->hvacSizingSimulationManager)
+                if (state.dataHVACSizingSimMgr->hvacSizingSimulationManager) {
                     state.dataHVACSizingSimMgr->hvacSizingSimulationManager->UpdateSizingLogsZoneStep(state);
+                }
             }
 
         } else if (state.dataSysVars->UpdateDataDuringWarmupExternalInterface) { // added for FMI
             UpdateDataandReport(state, OutputProcessor::TimeStepType::Zone);
             if (state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeDesignDay ||
                 state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeRunPeriodDesign) {
-                if (state.dataHVACSizingSimMgr->hvacSizingSimulationManager)
+                if (state.dataHVACSizingSimMgr->hvacSizingSimulationManager) {
                     state.dataHVACSizingSimMgr->hvacSizingSimulationManager->UpdateSizingLogsZoneStep(state);
+                }
             }
         }
         // There is no hourly reporting in the heat balance.
@@ -3431,7 +3467,9 @@ namespace HeatBalanceManager {
         state.dataHeatBal->TotFrameDivider =
             state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, state.dataHeatBalMgr->CurrentModuleObject);
         state.dataSurface->FrameDivider.allocate(state.dataHeatBal->TotFrameDivider);
-        if (state.dataHeatBal->TotFrameDivider == 0) return;
+        if (state.dataHeatBal->TotFrameDivider == 0) {
+            return;
+        }
 
         FrameDividerNum = 0;
 
@@ -3622,30 +3660,31 @@ namespace HeatBalanceManager {
         int FrDivNum;                 // FrameDivider number
         Array1D<Real64> WinHeight(2); // Height, width for glazing system (m)
         Array1D<Real64> WinWidth(2);
-        Array1D<Real64> UValCenter(2);      // Center of glass U-value (W/m2-K) for glazing system
-        Array1D<Real64> SCCenter(2);        // Center of glass shading coefficient for glazing system
-        Array1D<Real64> SHGCCenter(2);      // Center of glass solar heat gain coefficient for glazing system
-        Array1D<Real64> TVisCenter(2);      // Center of glass visible transmittance for glazing system
-        Array1D<Real64> TsolTemp(Window::numPhis+1);           // Solar transmittance vs incidence angle; diffuse trans.
+        Array1D<Real64> UValCenter(2);                 // Center of glass U-value (W/m2-K) for glazing system
+        Array1D<Real64> SCCenter(2);                   // Center of glass shading coefficient for glazing system
+        Array1D<Real64> SHGCCenter(2);                 // Center of glass solar heat gain coefficient for glazing system
+        Array1D<Real64> TVisCenter(2);                 // Center of glass visible transmittance for glazing system
+        Array1D<Real64> TsolTemp(Window::numPhis + 1); // Solar transmittance vs incidence angle; diffuse trans.
         std::array<Real64, Window::numPhis> Tsol;
-        Array2D<Real64> AbsSolTemp(Window::maxGlassLayers, Window::numPhis+1);      // Solar absorptance vs inc. angle in each glass layer
-        Array1D<std::array<Real64, Window::numPhis>> AbsSol(Window::maxGlassLayers);      // Solar absorptance vs inc. angle in each glass layer
-        Array1D<Real64> RfsolTemp(Window::numPhis+1);          // Front solar reflectance vs inc. angle
+        Array2D<Real64> AbsSolTemp(Window::maxGlassLayers, Window::numPhis + 1);     // Solar absorptance vs inc. angle in each glass layer
+        Array1D<std::array<Real64, Window::numPhis>> AbsSol(Window::maxGlassLayers); // Solar absorptance vs inc. angle in each glass layer
+        Array1D<Real64> RfsolTemp(Window::numPhis + 1);                              // Front solar reflectance vs inc. angle
         std::array<Real64, Window::numPhis> Rfsol;
-        Array1D<Real64> RbsolTemp(Window::numPhis+1);          // Back solar reflectance vs inc. angle
+        Array1D<Real64> RbsolTemp(Window::numPhis + 1); // Back solar reflectance vs inc. angle
         std::array<Real64, Window::numPhis> Rbsol;
-        Array1D<Real64> TvisTemp(Window::numPhis+1);           // Visible transmittance vs inc. angle
+        Array1D<Real64> TvisTemp(Window::numPhis + 1); // Visible transmittance vs inc. angle
         std::array<Real64, Window::numPhis> Tvis;
-        Array1D<Real64> RfvisTemp(Window::numPhis+1);          // Front visible reflectance vs inc. angle
+        Array1D<Real64> RfvisTemp(Window::numPhis + 1); // Front visible reflectance vs inc. angle
         std::array<Real64, Window::numPhis> Rfvis;
-        Array1D<Real64> RbvisTemp(Window::numPhis+1);          // Back visible reflectance vs inc. angle
+        Array1D<Real64> RbvisTemp(Window::numPhis + 1); // Back visible reflectance vs inc. angle
         std::array<Real64, Window::numPhis> Rbvis;
-        
-        std::array<Real64, Window::numPhis> tsolFit;        // Fitted solar transmittance vs incidence angle
-        std::array<Real64, Window::numPhis> tvisFit;        // Fitted visible transmittance vs incidence angle
-        std::array<Real64, Window::numPhis> rfsolFit;       // Fitted solar front reflectance vs incidence angle
-        Array1D<std::array<Real64, Window::numPhis>> solabsFit(Window::maxGlassLayers);   // Fitted solar absorptance vs incidence angle for each glass layer
-        Array1D_string DividerType(2);      // Divider type: DividedLite or Suspended
+
+        std::array<Real64, Window::numPhis> tsolFit;  // Fitted solar transmittance vs incidence angle
+        std::array<Real64, Window::numPhis> tvisFit;  // Fitted visible transmittance vs incidence angle
+        std::array<Real64, Window::numPhis> rfsolFit; // Fitted solar front reflectance vs incidence angle
+        Array1D<std::array<Real64, Window::numPhis>> solabsFit(
+            Window::maxGlassLayers);   // Fitted solar absorptance vs incidence angle for each glass layer
+        Array1D_string DividerType(2); // Divider type: DividedLite or Suspended
         Real64 FrameWidth;
         Real64 MullionWidth;
         Real64 FrameProjectionOut;
@@ -3705,7 +3744,9 @@ namespace HeatBalanceManager {
         FileLineCount = 0;
 
         NextLine = W5DataFile.readLine();
-        if (NextLine.eof) goto Label1000;
+        if (NextLine.eof) {
+            goto Label1000;
+        }
         ++FileLineCount;
         if (!has_prefixi(NextLine.data, "WINDOW5")) {
             ShowSevereError(state, format("HeatBalanceManager: SearchWindow5DataFile: Error in Data File={}", DesiredFilePath));
@@ -3715,23 +3756,39 @@ namespace HeatBalanceManager {
         }
 
     Label10:;
-        for (LineNum = 2; LineNum <= 5; ++LineNum) {
+        NextLine = W5DataFile.readLine();
+        if (NextLine.eof) {
+            goto Label1000;
+        }
+        ++FileLineCount;
+        if (!has_prefixi(NextLine.data, "WINDOW NAME")) {
+            // Berkeley Lab WINDOW 7 has been found to include extra blank lines after the "WINDOW5" line
+            // so find the line that begins with "WINDOW NAME"
+            goto Label10;
+        } else {
+            // Get window name
+            W5Name = std::string{NextLine.data.substr(19)};
+            WindowNameInW5DataFile = Util::makeUPPER(W5Name);
+
+            // Get description (currently not used)
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000;
-            DataLine(LineNum) = NextLine.data;
+            if (NextLine.eof) {
+                goto Label1000;
+            }
             ++FileLineCount;
         }
-
-        // Get window name and check for match
-        W5Name = std::string{DataLine(4).substr(19)};
-        WindowNameInW5DataFile = Util::makeUPPER(W5Name);
+        // Check for window name match
         if (DesiredConstructionName != WindowNameInW5DataFile) {
             // Doesn't match; read through file until next window entry is found
         Label20:;
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000;
+            if (NextLine.eof) {
+                goto Label1000;
+            }
             ++FileLineCount;
-            if (!has_prefixi(NextLine.data, "WINDOW5")) goto Label20;
+            if (!has_prefixi(NextLine.data, "WINDOW5")) {
+                goto Label20;
+            }
             // Beginning of next window entry found
             goto Label10;
         } else {
@@ -3742,7 +3799,9 @@ namespace HeatBalanceManager {
             // and WindowFrameAndDividerObjects for this window
 
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000;
+            if (NextLine.eof) {
+                goto Label1000;
+            }
             ++FileLineCount;
             bool error = false;
             NGlSys = static_cast<int>(Util::ProcessNumber(NextLine.data.substr(19), error));
@@ -3754,11 +3813,15 @@ namespace HeatBalanceManager {
                            NGlSys));
             }
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000;
+            if (NextLine.eof) {
+                goto Label1000;
+            }
             ++FileLineCount;
             for (IGlSys = 1; IGlSys <= NGlSys; ++IGlSys) {
                 NextLine = W5DataFile.readLine();
-                if (NextLine.eof) goto Label1000;
+                if (NextLine.eof) {
+                    goto Label1000;
+                }
                 ++FileLineCount;
 
                 const bool succeeded = readList(NextLine.data.substr(19),
@@ -3821,7 +3884,9 @@ namespace HeatBalanceManager {
             }
             for (LineNum = 1; LineNum <= 11; ++LineNum) {
                 NextLine = W5DataFile.readLine();
-                if (NextLine.eof) goto Label1000;
+                if (NextLine.eof) {
+                    goto Label1000;
+                }
                 DataLine(LineNum) = NextLine.data;
             }
 
@@ -3906,13 +3971,17 @@ namespace HeatBalanceManager {
             FileLineCount += 11;
 
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000;
+            if (NextLine.eof) {
+                goto Label1000;
+            }
             ++FileLineCount;
 
             // Divider data for each glazing system
             for (IGlSys = 1; IGlSys <= NGlSys; ++IGlSys) {
                 NextLine = W5DataFile.readLine();
-                if (NextLine.eof) goto Label1000;
+                if (NextLine.eof) {
+                    goto Label1000;
+                }
                 ++FileLineCount;
 
                 const bool dividerReadSucceeded = readList(NextLine.data.substr(19),
@@ -3999,11 +4068,12 @@ namespace HeatBalanceManager {
                 }
             }
 
-            if (ErrorsFound)
+            if (ErrorsFound) {
                 ShowFatalError(state,
                                format("HeatBalanceManager: SearchWindow5DataFile: Construction={} from the Window5 data file cannot be used because "
                                       "of above errors",
                                       DesiredConstructionName));
+            }
 
             for (IGlSys = 1; IGlSys <= NGlSys; ++IGlSys) {
                 NGaps(IGlSys) = NGlass(IGlSys) - 1;
@@ -4011,7 +4081,9 @@ namespace HeatBalanceManager {
 
             // Glass objects
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000;
+            if (NextLine.eof) {
+                goto Label1000;
+            }
             ++FileLineCount;
             for (IGlSys = 1; IGlSys <= NGlSys; ++IGlSys) {
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
@@ -4062,7 +4134,9 @@ namespace HeatBalanceManager {
 
             // Gap objects
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000;
+            if (NextLine.eof) {
+                goto Label1000;
+            }
             ++FileLineCount;
             for (IGlSys = 1; IGlSys <= NGlSys; ++IGlSys) {
                 for (IGap = 1; IGap <= NGaps(IGlSys); ++IGap) {
@@ -4084,7 +4158,9 @@ namespace HeatBalanceManager {
 
             // Gap/gas materials are read in multiple passes
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000; // Exsqueeze me?
+            if (NextLine.eof) {
+                goto Label1000; // Exsqueeze me?
+            }
             ++FileLineCount;
             for (IGlSys = 1; IGlSys <= NGlSys; ++IGlSys) {
                 for (IGap = 1; IGap <= NGaps(IGlSys); ++IGap) {
@@ -4133,8 +4209,24 @@ namespace HeatBalanceManager {
             }
 
             NextLine = W5DataFile.readLine();
-            if (NextLine.eof) goto Label1000;
+            if (NextLine.eof) {
+                goto Label1000;
+            }
             ++FileLineCount;
+
+            // When pulling in develop, the following two blocks appear to have been modified in develop,
+            //  but removed entirely in this branch.  I'm going to leave them commented.
+            // Pre-calculate constants
+            // for (IPhi = 1; IPhi <= 10; ++IPhi) {
+            //     CosPhiIndepVar(IPhi) = std::cos((IPhi - 1) * 10.0 * Constant::DegToRad);
+            //}
+
+            // Pre-calculate constants
+            // for (IPhi = 1; IPhi <= 10; ++IPhi) {
+            //    Phi = double(IPhi - 1) * 10.0;
+            //    CosPhi(IPhi) = std::cos(Phi * Constant::DegToRad);
+            //    if (std::abs(CosPhi(IPhi)) < 0.0001) CosPhi(IPhi) = 0.0;
+            //}
 
             for (IGlSys = 1; IGlSys <= NGlSys; ++IGlSys) {
                 ConstrNum = state.dataHeatBal->TotConstructs - NGlSys + IGlSys;
@@ -4201,7 +4293,9 @@ namespace HeatBalanceManager {
 
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
                     thisConstruct.LayerPoint(2 * IGlass - 1) = MaterNumSysGlass(IGlass, IGlSys);
-                    if (IGlass < NGlass(IGlSys)) thisConstruct.LayerPoint(2 * IGlass) = MaterNumSysGap(IGlass, IGlSys);
+                    if (IGlass < NGlass(IGlSys)) {
+                        thisConstruct.LayerPoint(2 * IGlass) = MaterNumSysGap(IGlass, IGlSys);
+                    }
                 }
 
                 thisConstruct.OutsideRoughness = Material::SurfaceRoughness::VerySmooth;
@@ -4220,15 +4314,21 @@ namespace HeatBalanceManager {
                 // Fill Construct with system transmission, reflection and absorption properties
 
                 NextLine = W5DataFile.readLine();
-                if (NextLine.eof) goto Label1000;
+                if (NextLine.eof) {
+                    goto Label1000;
+                }
                 ++FileLineCount;
                 if (IGlSys == 1) {
                     NextLine = W5DataFile.readLine();
-                    if (NextLine.eof) goto Label1000;
+                    if (NextLine.eof) {
+                        goto Label1000;
+                    }
                     ++FileLineCount;
                 }
                 NextLine = W5DataFile.readLine();
-                if (NextLine.eof) goto Label1000;
+                if (NextLine.eof) {
+                    goto Label1000;
+                }
                 ++FileLineCount;
                 if (!readItem(NextLine.data.substr(5), TsolTemp)) {
                     ShowSevereError(state, "HeatBalanceManager: SearchWindow5DataFile: Error in Read of TSol values.");
@@ -4239,7 +4339,7 @@ namespace HeatBalanceManager {
                     ShowContinueError(state, format("Line (~{}) in error (first 100 characters)={}", FileLineCount, NextLine.data.substr(0, 100)));
                     ErrorsFound = true;
                 }
-                
+
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
                     NextLine = W5DataFile.readLine();
                     ++FileLineCount;
@@ -4312,28 +4412,29 @@ namespace HeatBalanceManager {
                 }
                 FileLineCount += 5;
 
-                if (ErrorsFound)
+                if (ErrorsFound) {
                     ShowFatalError(
                         state,
                         format("HeatBalanceManager: SearchWindow5DataFile: Construction={} from the Window5 data file cannot be used because "
                                "of above errors",
                                DesiredConstructionName));
+                }
 
                 for (int iPhi = 0; iPhi < Window::numPhis; ++iPhi) {
-                    Tsol[iPhi] = TsolTemp(iPhi+1);
-                    Tvis[iPhi] = TvisTemp(iPhi+1);
-                    Rfsol[iPhi] = RfsolTemp(iPhi+1);
-                    Rbsol[iPhi] = RbsolTemp(iPhi+1);
-                    Rfvis[iPhi] = RfvisTemp(iPhi+1);
-                    Rbvis[iPhi] = RbvisTemp(iPhi+1);
+                    Tsol[iPhi] = TsolTemp(iPhi + 1);
+                    Tvis[iPhi] = TvisTemp(iPhi + 1);
+                    Rfsol[iPhi] = RfsolTemp(iPhi + 1);
+                    Rbsol[iPhi] = RbsolTemp(iPhi + 1);
+                    Rfvis[iPhi] = RfvisTemp(iPhi + 1);
+                    Rbvis[iPhi] = RbvisTemp(iPhi + 1);
                 }
 
                 for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
                     for (int iPhi = 0; iPhi < Window::numPhis; ++iPhi) {
-                         AbsSol(IGlass)[iPhi] = AbsSolTemp(IGlass, iPhi+1);
+                        AbsSol(IGlass)[iPhi] = AbsSolTemp(IGlass, iPhi + 1);
                     }
                 }
-                        
+
                 // Hemis
                 thisConstruct.TransDiff = TsolTemp(11);
                 thisConstruct.TransDiffVis = TvisTemp(11);
@@ -4342,7 +4443,7 @@ namespace HeatBalanceManager {
                 thisConstruct.ReflectVisDiffFront = RfvisTemp(11);
                 thisConstruct.ReflectVisDiffBack = RbvisTemp(11);
 
-		// Using pre-calculated/hard-coded cosPhis in this module is okay.  Shrug.
+                // Using pre-calculated/hard-coded cosPhis in this module is okay.  Shrug.
                 Window::W5LsqFit(Window::cosPhis, Tsol, thisConstruct.TransSolBeamCoef);
                 Window::W5LsqFit(Window::cosPhis, Tvis, thisConstruct.TransVisBeamCoef);
                 Window::W5LsqFit(Window::cosPhis, Rfsol, thisConstruct.ReflSolBeamFrontCoef);
@@ -4356,7 +4457,7 @@ namespace HeatBalanceManager {
                     tvisFit[iPhi] = Window::POLYF(Window::cosPhis[iPhi], thisConstruct.TransVisBeamCoef);
                     rfsolFit[iPhi] = Window::POLYF(Window::cosPhis[iPhi], thisConstruct.ReflSolBeamFrontCoef);
                     for (IGlass = 1; IGlass <= NGlass(IGlSys); ++IGlass) {
-                            solabsFit(IGlass)[iPhi] = Window::POLYF(Window::cosPhis[iPhi], thisConstruct.AbsBeamCoef(IGlass));
+                        solabsFit(IGlass)[iPhi] = Window::POLYF(Window::cosPhis[iPhi], thisConstruct.AbsBeamCoef(IGlass));
                     }
                 }
                 // end
@@ -4487,16 +4588,21 @@ namespace HeatBalanceManager {
             state.dataSurface->SurfWinStormWinFlagPrevDay(SurfNum) = state.dataSurface->SurfWinStormWinFlag(SurfNum);
             int DateOff = state.dataSurface->StormWindow(StormWinNum).DateOff - 1;
             // Note: Dateon = Dateoff is not allowed and will have produced an error in getinput.
-            if (DateOff == 0) DateOff = 366;
+            if (DateOff == 0) {
+                DateOff = 366;
+            }
             if (General::BetweenDates(state.dataEnvrn->DayOfYear_Schedule, state.dataSurface->StormWindow(StormWinNum).DateOn, DateOff)) {
                 StormWinFlag = 1;
             } else {
                 StormWinFlag = 0;
             }
             state.dataSurface->SurfWinStormWinFlag(SurfNum) = StormWinFlag;
-            if (state.dataGlobal->BeginSimFlag) state.dataSurface->SurfWinStormWinFlagPrevDay(SurfNum) = StormWinFlag;
-            if (state.dataSurface->SurfWinStormWinFlag(SurfNum) != state.dataSurface->SurfWinStormWinFlagPrevDay(SurfNum))
+            if (state.dataGlobal->BeginSimFlag) {
+                state.dataSurface->SurfWinStormWinFlagPrevDay(SurfNum) = StormWinFlag;
+            }
+            if (state.dataSurface->SurfWinStormWinFlag(SurfNum) != state.dataSurface->SurfWinStormWinFlagPrevDay(SurfNum)) {
                 state.dataHeatBal->StormWinChangeThisDay = true;
+            }
         }
     }
 
@@ -4769,9 +4875,10 @@ namespace HeatBalanceManager {
                                         bool &errorsFound // If errors found in input
     )
     {
+        static constexpr std::string_view routineName = "CreateAirBoundaryConstructions";
+
         auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
         cCurrentModuleObject = "Construction:AirBoundary";
-        static constexpr std::string_view RoutineName = "CreateAirBoundaryConstructions";
         int numAirBoundaryConstructs = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
         if (numAirBoundaryConstructs > 0) {
             auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(cCurrentModuleObject);
@@ -4787,6 +4894,9 @@ namespace HeatBalanceManager {
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
+
+                ErrorObjectHeader eoh{routineName, cCurrentModuleObject, thisObjectName};
+
                 state.dataInputProcessing->inputProcessor->markObjectAsUsed(cCurrentModuleObject, thisObjectName);
 
                 if (GlobalNames::VerifyUniqueInterObjectName(
@@ -4803,33 +4913,28 @@ namespace HeatBalanceManager {
 
                 // Air Exchange Method
                 std::string airMethod = "None";
-                if (fields.find("air_exchange_method") != fields.end()) {
-                    airMethod = fields.at("air_exchange_method").get<std::string>();
+                if (auto found = fields.find("air_exchange_method");
+                    found != fields.end()) { // find("x") followed by at("x") is the same lookup twice
+                    airMethod = found.value().get<std::string>();
                 }
                 if (Util::SameString(airMethod, "SimpleMixing")) {
                     thisConstruct.TypeIsAirBoundaryMixing = true;
-                    if (fields.find("simple_mixing_air_changes_per_hour") != fields.end()) {
-                        thisConstruct.AirBoundaryACH = fields.at("simple_mixing_air_changes_per_hour").get<Real64>();
+                    if (auto found = fields.find("simple_mixing_air_changes_per_hour"); found != fields.end()) {
+                        thisConstruct.AirBoundaryACH = found.value().get<Real64>();
                     } else {
-                        if (!state.dataInputProcessing->inputProcessor->getDefaultValue(
-                                state, cCurrentModuleObject, "simple_mixing_air_changes_per_hour", thisConstruct.AirBoundaryACH)) {
-                            errorsFound = true;
-                        }
+                        state.dataInputProcessing->inputProcessor->getDefaultValue(
+                            state, cCurrentModuleObject, "simple_mixing_air_changes_per_hour", thisConstruct.AirBoundaryACH);
                     }
-                    if (fields.find("simple_mixing_schedule_name") != fields.end()) {
-                        const std::string &schedName = fields.at("simple_mixing_schedule_name").get<std::string>();
-                        thisConstruct.AirBoundaryMixingSched = ScheduleManager::GetScheduleIndex(state, Util::makeUPPER(schedName));
-                        if (thisConstruct.AirBoundaryMixingSched == 0) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}\", invalid (not found) Simple Mixing Schedule Name=\"{}\".",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   thisConstruct.Name,
-                                                   schedName));
+
+                    if (auto found = fields.find("simple_mixing_schedule_name"); found != fields.end()) {
+                        std::string schedName = found.value().get<std::string>(); // .get<std::string>() creates and returns a new string, no &
+                        if ((thisConstruct.airBoundaryMixingSched = Sched::GetSchedule(state, Util::makeUPPER(schedName))) == nullptr) {
+                            ShowSevereItemNotFound(state, eoh, "Simple Mixing Schedule Name", schedName);
                             errorsFound = true;
                         }
                     } else {
-                        thisConstruct.AirBoundaryMixingSched = ScheduleManager::ScheduleAlwaysOn;
+                        thisConstruct.airBoundaryMixingSched =
+                            Sched::GetScheduleAlwaysOn(state); // Not an availability manager, but defaults to constant-1.0
                     }
                 }
             }
@@ -4848,7 +4953,8 @@ namespace HeatBalanceManager {
         // window layers
 
         // SUBROUTINE PARAMETER DEFINITIONS:
-        constexpr const char *RoutineName("GetScheduledSurfaceGains: ");
+        static constexpr std::string_view RoutineName("GetScheduledSurfaceGains: ");
+        static constexpr std::string_view routineName = "GetScheduledSurfaceGains";
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         int NumArgs;
@@ -4858,7 +4964,6 @@ namespace HeatBalanceManager {
         int IOStat;
         int SurfNum;
         int ConstrNum;
-        int ScheduleNum;
 
         //-----------------------------------------------------------------------
         //                SurfaceProperty:SolarIncidentInside
@@ -4895,22 +5000,14 @@ namespace HeatBalanceManager {
                                                                          state.dataIPShortCut->cAlphaFieldNames,
                                                                          state.dataIPShortCut->cNumericFieldNames);
 
+                ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
+
                 state.dataSurface->SurfIncSolSSG(Loop).Name = state.dataIPShortCut->cAlphaArgs(1);
 
                 // Assign surface number
                 SurfNum = Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(2), state.dataSurface->Surface);
                 if (SurfNum == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}=\"{}, object. Illegal value for {} has been found.",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaFieldNames(2)));
-                    ShowContinueError(
-                        state,
-                        format("{} entered value = \"{}\" no corresponding surface (ref BuildingSurface:Detailed) has been found in the input file.",
-                               state.dataIPShortCut->cAlphaFieldNames(2),
-                               state.dataIPShortCut->cAlphaArgs(2)));
+                    ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2));
                     ErrorsFound = true;
                 } else {
                     state.dataSurface->SurfIncSolSSG(Loop).SurfPtr = SurfNum;
@@ -4932,38 +5029,15 @@ namespace HeatBalanceManager {
                 // Assign construction number
                 ConstrNum = Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(3), state.dataConstruction->Construct);
                 if (ConstrNum == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}=\"{}, object. Illegal value for {} has been found.",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaFieldNames(3)));
-                    ShowContinueError(
-                        state,
-                        format("{} entered value = \"{}\" no corresponding construction (ref Construction) has been found in the input file.",
-                               state.dataIPShortCut->cAlphaFieldNames(3),
-                               state.dataIPShortCut->cAlphaArgs(3)));
+                    ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3));
                     ErrorsFound = true;
                 } else {
                     state.dataSurface->SurfIncSolSSG(Loop).ConstrPtr = ConstrNum;
                 }
 
-                // Assign schedule number
-                ScheduleNum = ScheduleManager::GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(4));
-                if (ScheduleNum == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}=\"{}, object. Illegal value for {} has been found.",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaFieldNames(4)));
-                    ShowContinueError(state,
-                                      format("{} entered value = \"{}\" no corresponding schedule has been found in the input file.",
-                                             state.dataIPShortCut->cAlphaFieldNames(4),
-                                             state.dataIPShortCut->cAlphaArgs(4)));
+                if ((state.dataSurface->SurfIncSolSSG(Loop).sched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(4))) == nullptr) {
+                    ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(4), state.dataIPShortCut->cAlphaArgs(4));
                     ErrorsFound = true;
-                } else {
-                    state.dataSurface->SurfIncSolSSG(Loop).SchedPtr = ScheduleNum;
                 }
             }
         }
@@ -4993,22 +5067,14 @@ namespace HeatBalanceManager {
                                                                          state.dataIPShortCut->cAlphaFieldNames,
                                                                          state.dataIPShortCut->cNumericFieldNames);
 
+                ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
+
                 state.dataSurface->FenLayAbsSSG(Loop).Name = state.dataIPShortCut->cAlphaArgs(1);
 
                 // Assign surface number
                 SurfNum = Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(2), state.dataSurface->Surface);
                 if (SurfNum == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}=\"{}, object. Illegal value for {} has been found.",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaFieldNames(2)));
-                    ShowContinueError(
-                        state,
-                        format("{} entered value = \"{}\" no corresponding surface (ref BuildingSurface:Detailed) has been found in the input file.",
-                               state.dataIPShortCut->cAlphaFieldNames(2),
-                               state.dataIPShortCut->cAlphaArgs(2)));
+                    ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2));
                     ErrorsFound = true;
                 } else {
                     state.dataSurface->FenLayAbsSSG(Loop).SurfPtr = SurfNum;
@@ -5016,19 +5082,9 @@ namespace HeatBalanceManager {
 
                 // Assign construction number
                 ConstrNum = Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(3), state.dataConstruction->Construct);
-                auto const &thisConstruct = state.dataConstruction->Construct(ConstrNum);
+                auto const &thisConstruct = state.dataConstruction->Construct(ConstrNum); // Why is this before the error check?
                 if (ConstrNum == 0) {
-                    ShowSevereError(state,
-                                    format("{}{}=\"{}, object. Illegal value for {} has been found.",
-                                           RoutineName,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaFieldNames(3)));
-                    ShowContinueError(
-                        state,
-                        format("{} entered value = \"{}\" no corresponding construction (ref Construction) has been found in the input file.",
-                               state.dataIPShortCut->cAlphaFieldNames(3),
-                               state.dataIPShortCut->cAlphaArgs(3)));
+                    ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3));
                     ErrorsFound = true;
                 } else {
                     state.dataSurface->FenLayAbsSSG(Loop).ConstrPtr = ConstrNum;
@@ -5056,28 +5112,20 @@ namespace HeatBalanceManager {
                         ErrorsFound = true;
                     }
 
-                    if (!allocated(state.dataSurface->FenLayAbsSSG(Loop).SchedPtrs)) {
-                        state.dataSurface->FenLayAbsSSG(Loop).SchedPtrs.allocate(NumOfScheduledLayers);
+                    if (!allocated(state.dataSurface->FenLayAbsSSG(Loop).scheds)) {
+                        state.dataSurface->FenLayAbsSSG(Loop).scheds.allocate(NumOfScheduledLayers);
                     }
 
                     state.dataSurface->FenLayAbsSSG(Loop).NumOfSched = NumOfScheduledLayers;
 
                     for (int i = 1; i <= NumOfScheduledLayers; ++i) {
-                        ScheduleNum = ScheduleManager::GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(i + 3));
-                        if (ScheduleNum == 0) {
-                            ShowSevereError(state,
-                                            format("{}{}=\"{}, object. Illegal value for {} has been found.",
-                                                   RoutineName,
-                                                   cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaFieldNames(NumOfScheduledLayers + 3)));
-                            ShowContinueError(state,
-                                              format("{} entered value = \"{}\" no corresponding schedule has been found in the input file.",
-                                                     state.dataIPShortCut->cAlphaFieldNames(NumOfScheduledLayers + 3),
-                                                     state.dataIPShortCut->cAlphaArgs(NumOfScheduledLayers + 3)));
+                        if ((state.dataSurface->FenLayAbsSSG(Loop).scheds(i) = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(i + 3))) ==
+                            nullptr) {
+                            ShowSevereItemNotFound(state,
+                                                   eoh,
+                                                   state.dataIPShortCut->cAlphaFieldNames(NumOfScheduledLayers + 3),
+                                                   state.dataIPShortCut->cAlphaArgs(NumOfScheduledLayers + 3));
                             ErrorsFound = true;
-                        } else {
-                            state.dataSurface->FenLayAbsSSG(Loop).SchedPtrs(i) = ScheduleNum;
                         }
                     }
                 }
@@ -5181,14 +5229,18 @@ namespace HeatBalanceManager {
         for (int Loop = 1; Loop <= state.dataHeatBal->TotConstructs; ++Loop) {
             auto &constr = state.dataConstruction->Construct(Loop);
 
-            if (!constr.isTCMaster) continue;
+            if (!constr.isTCMaster) {
+                continue;
+            }
 
             auto const *matGlassTC = dynamic_cast<Material::MaterialGlassTC const *>(s_mat->materials(constr.TCMasterMatNum));
             assert(matGlassTC != nullptr);
             NumNewConst += matGlassTC->numMatRefs;
         }
 
-        if (NumNewConst == 0) return; // no need to go further
+        if (NumNewConst == 0) {
+            return; // no need to go further
+        }
 
         // Increase Construct() and copy the extra constructions
         state.dataConstruction->Construct.redimension(state.dataHeatBal->TotConstructs + NumNewConst);
@@ -5200,7 +5252,9 @@ namespace HeatBalanceManager {
         NumNewConst = state.dataHeatBal->TotConstructs;
         for (int Loop = 1; Loop <= state.dataHeatBal->TotConstructs; ++Loop) {
             auto &constr = state.dataConstruction->Construct(Loop);
-            if (!constr.isTCMaster) continue;
+            if (!constr.isTCMaster) {
+                continue;
+            }
 
             auto const *matGlassTC = dynamic_cast<Material::MaterialGlassTC *>(s_mat->materials(constr.TCMasterMatNum));
             assert(matGlassTC != nullptr);
@@ -5306,7 +5360,7 @@ namespace HeatBalanceManager {
 
             windowThermalModel.SDScalar = s_ipsc->rNumericArgs(1);
             if ((s_ipsc->rNumericArgs(1) < 0.0) || (s_ipsc->rNumericArgs(1) > 1.0)) {
-                ShowSevereCustomMessage(
+                ShowSevereCustom(
                     state,
                     eoh,
                     format("{} should be >= 0.0 and <= 1.0, entered value = {:.2R}", s_ipsc->cNumericFieldNames(1), s_ipsc->rNumericArgs(1)));
@@ -5324,21 +5378,21 @@ namespace HeatBalanceManager {
                 windowThermalModel.VacuumPressureLimit = s_ipsc->rNumericArgs(2);
                 if (s_ipsc->rNumericArgs(2) <= 0.0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("{} must be > 0, entered value = {:.2R}", s_ipsc->cNumericFieldNames(2), s_ipsc->rNumericArgs(2)));
                 }
 
                 windowThermalModel.InitialTemperature = s_ipsc->rNumericArgs(3);
                 if (s_ipsc->rNumericArgs(3) <= 0.0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("{} must be > 0, entered value = {:.2R}", s_ipsc->cNumericFieldNames(3), s_ipsc->rNumericArgs(3)));
                 }
 
                 windowThermalModel.InitialPressure = s_ipsc->rNumericArgs(4);
                 if (s_ipsc->rNumericArgs(4) <= 0.0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("{} must be > 0, entered value = {:.2R}", s_ipsc->cNumericFieldNames(4), s_ipsc->rNumericArgs(4)));
                 }
             }
@@ -5350,12 +5404,24 @@ namespace HeatBalanceManager {
         state.dataBSDFWindow->TotComplexFenStates = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, locCurrentModuleObject);
 
         state.dataInputProcessing->inputProcessor->getObjectDefMaxArgs(state, locCurrentModuleObject, TotalArgs, NumAlphas, NumNumbers);
-        if (!allocated(locAlphaFieldNames)) locAlphaFieldNames.allocate(NumAlphas);
-        if (!allocated(locNumericFieldNames)) locNumericFieldNames.allocate(NumNumbers);
-        if (!allocated(locNumericFieldBlanks)) locNumericFieldBlanks.allocate(NumNumbers);
-        if (!allocated(locAlphaFieldBlanks)) locAlphaFieldBlanks.allocate(NumAlphas);
-        if (!allocated(locAlphaArgs)) locAlphaArgs.allocate(NumAlphas);
-        if (!allocated(locNumericArgs)) locNumericArgs.allocate(NumNumbers);
+        if (!allocated(locAlphaFieldNames)) {
+            locAlphaFieldNames.allocate(NumAlphas);
+        }
+        if (!allocated(locNumericFieldNames)) {
+            locNumericFieldNames.allocate(NumNumbers);
+        }
+        if (!allocated(locNumericFieldBlanks)) {
+            locNumericFieldBlanks.allocate(NumNumbers);
+        }
+        if (!allocated(locAlphaFieldBlanks)) {
+            locAlphaFieldBlanks.allocate(NumAlphas);
+        }
+        if (!allocated(locAlphaArgs)) {
+            locAlphaArgs.allocate(NumAlphas);
+        }
+        if (!allocated(locNumericArgs)) {
+            locNumericArgs.allocate(NumNumbers);
+        }
 
         state.dataBSDFWindow->FirstBSDF = ConstrNum + 1; // Location of first BSDF construction input (They will be consecutive)
         for (int Loop = 1; Loop <= state.dataBSDFWindow->TotComplexFenStates; ++Loop) {
@@ -5418,16 +5484,17 @@ namespace HeatBalanceManager {
 
             if (NumCols != 2 && NumCols != 1) {
                 ErrorsFound = true;
-                ShowSevereCustomMessage(state,
-                                        eoh,
-                                        format("{} entered value=\"{}\" invalid matrix dimensions.  Basis matrix dimension can only be 2 x 1.",
-                                               locAlphaFieldNames(5),
-                                               locAlphaArgs(5)));
+                ShowSevereCustom(state,
+                                 eoh,
+                                 format("{} entered value=\"{}\" invalid matrix dimensions.  Basis matrix dimension can only be 2 x 1.",
+                                        locAlphaFieldNames(5),
+                                        locAlphaArgs(5)));
             }
             thisConstruct.BSDFInput.BasisMat.allocate(NumCols, NumRows);
             MatrixDataManager::Get2DMatrix(state, thisConstruct.BSDFInput.BasisMatIndex, thisConstruct.BSDFInput.BasisMat);
-            if (thisConstruct.BSDFInput.BasisType == DataBSDFWindow::Basis::WINDOW)
+            if (thisConstruct.BSDFInput.BasisType == DataBSDFWindow::Basis::WINDOW) {
                 WindowComplexManager::CalculateBasisLength(state, thisConstruct.BSDFInput, ConstrNum, thisConstruct.BSDFInput.NBasis);
+            }
 
             // determine number of layers and optical layers
             NumOfTotalLayers = (NumAlphas - 9) / 3;
@@ -5442,7 +5509,7 @@ namespace HeatBalanceManager {
             if (mod((NumAlphas - 9), 3) != 0) {
                 // throw warning if incomplete field set
                 ErrorsFound = true;
-                ShowSevereCustomMessage(state, eoh, format("{} is missing some of the layers or/and gaps.", locAlphaArgs(1)));
+                ShowSevereCustom(state, eoh, format("{} is missing some of the layers or/and gaps.", locAlphaArgs(1)));
             }
 
             if (thisConstruct.BSDFInput.BasisSymmetryType == DataBSDFWindow::BasisSymmetry::None) {
@@ -5460,7 +5527,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Solar front transmittance matrix \"{}\" is not the same size as it is defined by basis definition. Basis "
@@ -5471,7 +5538,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NumCols) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Solar front transmittance matrix \"{}\" must have the same number of rows and columns.", locAlphaArgs(6)));
@@ -5485,7 +5552,7 @@ namespace HeatBalanceManager {
                 thisConstruct.BSDFInput.SolFrtTrans.allocate(NumCols, NumRows);
                 if (thisConstruct.BSDFInput.SolFrtTransIndex == 0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Solar front transmittance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(6)));
@@ -5503,7 +5570,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Solar back reflectance matrix \"{}\" is not the same size as it is defined by basis definition. Basis size "
@@ -5514,14 +5581,14 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NumCols) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("Solar back reflectance matrix \"{}\" must have the same number of rows and columns.", locAlphaArgs(7)));
                 }
 
                 thisConstruct.BSDFInput.SolBkRefl.allocate(NumCols, NumRows);
                 if (thisConstruct.BSDFInput.SolBkReflIndex == 0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("Solar back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(7)));
                 } else {
                     MatrixDataManager::Get2DMatrix(state, thisConstruct.BSDFInput.SolBkReflIndex, thisConstruct.BSDFInput.SolBkRefl);
@@ -5537,7 +5604,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Visible front transmittance matrix \"{}\" is not the same size as it is defined by basis definition. Basis "
@@ -5548,7 +5615,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NumCols) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Visible front transmittance matrix \"{}\" must have the same number of rows and columns.", locAlphaArgs(8)));
@@ -5557,7 +5624,7 @@ namespace HeatBalanceManager {
                 thisConstruct.BSDFInput.VisFrtTrans.allocate(NumCols, NumRows);
                 if (thisConstruct.BSDFInput.VisFrtTransIndex == 0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Visible front transmittance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(8)));
@@ -5575,26 +5642,25 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
-                        state,
-                        eoh,
-                        format("Visible back reflectance matrix \"{}\" is not the same size as it is defined by basis definition. Basis "
-                               "size is defined by Matrix:TwoDimension = \"{}\".",
-                               locAlphaArgs(9),
-                               locAlphaArgs(5)));
+                    ShowSevereCustom(state,
+                                     eoh,
+                                     format("Visible back reflectance matrix \"{}\" is not the same size as it is defined by basis definition. Basis "
+                                            "size is defined by Matrix:TwoDimension = \"{}\".",
+                                            locAlphaArgs(9),
+                                            locAlphaArgs(5)));
                 }
 
                 if (NumRows != NumCols) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("Visible back reflectance \"{}\" must have the same number of rows and columns.", locAlphaArgs(9)));
                 }
 
                 thisConstruct.BSDFInput.VisBkRefl.allocate(NumCols, NumRows);
                 if (thisConstruct.BSDFInput.VisBkReflIndex == 0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
-                        state, eoh, format("Visble back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(9)));
+                    ShowSevereCustom(
+                        state, eoh, format("Visible back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(9)));
                 } else {
                     MatrixDataManager::Get2DMatrix(state, thisConstruct.BSDFInput.VisBkReflIndex, thisConstruct.BSDFInput.VisBkRefl);
                 }
@@ -5621,37 +5687,35 @@ namespace HeatBalanceManager {
 
                         if (NumRows != 1) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(state,
-                                                    eoh,
-                                                    format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have only one row.",
-                                                           locAlphaArgs(AlphaIndex),
-                                                           currentOpticalLayer));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have only one row.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer));
                         }
 
                         if (NumCols != NBasis) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(
-                                state,
-                                eoh,
-                                format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have same number of columns "
-                                       "as it is defined by basis matrix."
-                                       "Matrix has {} number of columns, while basis definition specifies {} number of columns.",
-                                       locAlphaArgs(AlphaIndex),
-                                       currentOpticalLayer,
-                                       NumCols,
-                                       NBasis));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have same number of columns "
+                                                    "as it is defined by basis matrix."
+                                                    "Matrix has {} number of columns, while basis definition specifies {} number of columns.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer,
+                                                    NumCols,
+                                                    NBasis));
                         }
 
                         thisConstruct.BSDFInput.Layer(currentOpticalLayer).AbsNcols = NumCols;
                         thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbs.allocate(NumCols, NumRows);
                         if (thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbsIndex == 0) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(
-                                state,
-                                eoh,
-                                format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} is missing from the input file.",
-                                       locAlphaArgs(AlphaIndex),
-                                       currentOpticalLayer));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} is missing from the input file.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer));
                         } else {
                             MatrixDataManager::Get2DMatrix(state,
                                                            thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbsIndex,
@@ -5669,36 +5733,34 @@ namespace HeatBalanceManager {
 
                         if (NumRows != 1) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(state,
-                                                    eoh,
-                                                    format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have only one row.",
-                                                           locAlphaArgs(AlphaIndex),
-                                                           currentOpticalLayer));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have only one row.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer));
                         }
 
                         if (NumCols != NBasis) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(
-                                state,
-                                eoh,
-                                format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have same number of columns as "
-                                       "it is defined by basis matrix."
-                                       "Matrix has {} number of columns, while basis definition specifies {} number of columns.",
-                                       locAlphaArgs(AlphaIndex),
-                                       currentOpticalLayer,
-                                       NumCols,
-                                       NBasis));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have same number of columns as "
+                                                    "it is defined by basis matrix."
+                                                    "Matrix has {} number of columns, while basis definition specifies {} number of columns.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer,
+                                                    NumCols,
+                                                    NBasis));
                         }
 
                         thisConstruct.BSDFInput.Layer(currentOpticalLayer).BkAbs.allocate(NumCols, NumRows);
                         if (thisConstruct.BSDFInput.Layer(currentOpticalLayer).BkAbsIndex == 0) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(
-                                state,
-                                eoh,
-                                format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} is missing from the input file.",
-                                       locAlphaArgs(AlphaIndex),
-                                       currentOpticalLayer));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} is missing from the input file.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer));
                         } else {
                             MatrixDataManager::Get2DMatrix(state,
                                                            thisConstruct.BSDFInput.Layer(currentOpticalLayer).BkAbsIndex,
@@ -5721,7 +5783,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Solar front transmittance matrix \"{}\" is not the same size as it is defined by basis definition. Basis "
@@ -5732,7 +5794,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NumCols) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Solar front transmittance matrix \"{}\" must have the same number of rows and columns.", locAlphaArgs(6)));
@@ -5741,7 +5803,7 @@ namespace HeatBalanceManager {
                 thisConstruct.BSDFInput.SolFrtTrans.allocate(NBasis, NBasis);
                 if (thisConstruct.BSDFInput.SolFrtTransIndex == 0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Solar front transmittance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(6)));
@@ -5764,7 +5826,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Solar back reflectance matrix \"{}\" is not the same size as it is defined by basis definition. Basis size "
@@ -5775,14 +5837,14 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NumCols) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("Solar back reflectance matrix \"{}\" must have the same number of rows and columns.", locAlphaArgs(7)));
                 }
 
                 thisConstruct.BSDFInput.SolBkRefl.allocate(NBasis, NBasis);
                 if (thisConstruct.BSDFInput.SolBkReflIndex == 0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("Solar back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(7)));
                 } else {
                     MatrixDataManager::Get2DMatrix(state, thisConstruct.BSDFInput.SolBkReflIndex, state.dataBSDFWindow->BSDFTempMtrx);
@@ -5802,7 +5864,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Visible front transmittance matrix \"{}\" is not the same size as it is defined by basis definition. Basis "
@@ -5813,7 +5875,7 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NumCols) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Visible front transmittance matrix \"{}\" must have the same number of rows and columns.", locAlphaArgs(8)));
@@ -5822,7 +5884,7 @@ namespace HeatBalanceManager {
                 thisConstruct.BSDFInput.VisFrtTrans.allocate(NBasis, NBasis);
                 if (thisConstruct.BSDFInput.VisFrtTransIndex == 0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state,
                         eoh,
                         format("Visible front transmittance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(8)));
@@ -5844,25 +5906,24 @@ namespace HeatBalanceManager {
 
                 if (NumRows != NBasis) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
-                        state,
-                        eoh,
-                        format("Visible back reflectance matrix \"{}\" is not the same size as it is defined by basis definition. Basis "
-                               "size is defined by Matrix:TwoDimension = \"{}\".",
-                               locAlphaArgs(9),
-                               locAlphaArgs(5)));
+                    ShowSevereCustom(state,
+                                     eoh,
+                                     format("Visible back reflectance matrix \"{}\" is not the same size as it is defined by basis definition. Basis "
+                                            "size is defined by Matrix:TwoDimension = \"{}\".",
+                                            locAlphaArgs(9),
+                                            locAlphaArgs(5)));
                 }
 
                 if (NumRows != NumCols) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("Visible back reflectance matrix \"{}\" must have the same number of rows and columns.", locAlphaArgs(9)));
                 }
 
                 thisConstruct.BSDFInput.VisBkRefl.allocate(NBasis, NBasis);
                 if (thisConstruct.BSDFInput.VisBkReflIndex == 0) {
                     ErrorsFound = true;
-                    ShowSevereCustomMessage(
+                    ShowSevereCustom(
                         state, eoh, format("Visible back reflectance Matrix:TwoDimension = \"{}\" is missing from the input file.", locAlphaArgs(9)));
                 } else {
                     MatrixDataManager::Get2DMatrix(state, thisConstruct.BSDFInput.VisBkReflIndex, state.dataBSDFWindow->BSDFTempMtrx);
@@ -5899,25 +5960,24 @@ namespace HeatBalanceManager {
 
                         if (NumRows != 1) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(state,
-                                                    eoh,
-                                                    format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have only one row.",
-                                                           locAlphaArgs(AlphaIndex),
-                                                           currentOpticalLayer));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have only one row.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer));
                         }
 
                         if (NumCols != NBasis) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(
-                                state,
-                                eoh,
-                                format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have same number of columns "
-                                       "as it is defined by basis matrix."
-                                       "Matrix has {} number of columns, while basis definition specifies {} number of columns.",
-                                       locAlphaArgs(AlphaIndex),
-                                       currentOpticalLayer,
-                                       NumCols,
-                                       NBasis));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have same number of columns "
+                                                    "as it is defined by basis matrix."
+                                                    "Matrix has {} number of columns, while basis definition specifies {} number of columns.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer,
+                                                    NumCols,
+                                                    NBasis));
                         }
 
                         thisConstruct.BSDFInput.Layer(currentOpticalLayer).AbsNcols = NumCols;
@@ -5925,12 +5985,11 @@ namespace HeatBalanceManager {
 
                         if (thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbsIndex == 0) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(
-                                state,
-                                eoh,
-                                format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} is missing from the input file.",
-                                       locAlphaArgs(AlphaIndex),
-                                       currentOpticalLayer));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Front absorbtance Matrix:TwoDimension = \"{}\" for layer {} is missing from the input file.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer));
                         } else {
                             MatrixDataManager::Get2DMatrix(state,
                                                            thisConstruct.BSDFInput.Layer(currentOpticalLayer).FrtAbsIndex,
@@ -5948,37 +6007,35 @@ namespace HeatBalanceManager {
 
                         if (NumRows != 1) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(state,
-                                                    eoh,
-                                                    format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have only one row.",
-                                                           locAlphaArgs(AlphaIndex),
-                                                           currentOpticalLayer));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have only one row.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer));
                         }
 
                         if (NumCols != NBasis) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(
-                                state,
-                                eoh,
-                                format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have same number of columns as "
-                                       "it is defined by basis matrix."
-                                       "Matrix has {} number of columns, while basis definition specifies {} number of columns.",
-                                       locAlphaArgs(AlphaIndex),
-                                       currentOpticalLayer,
-                                       NumCols,
-                                       NBasis));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} must have same number of columns as "
+                                                    "it is defined by basis matrix."
+                                                    "Matrix has {} number of columns, while basis definition specifies {} number of columns.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer,
+                                                    NumCols,
+                                                    NBasis));
                         }
 
                         thisConstruct.BSDFInput.Layer(currentOpticalLayer).BkAbs.allocate(NumCols, NumRows);
 
                         if (thisConstruct.BSDFInput.Layer(currentOpticalLayer).BkAbsIndex == 0) {
                             ErrorsFound = true;
-                            ShowSevereCustomMessage(
-                                state,
-                                eoh,
-                                format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} is missing from the input file.",
-                                       locAlphaArgs(AlphaIndex),
-                                       currentOpticalLayer));
+                            ShowSevereCustom(state,
+                                             eoh,
+                                             format("Back absorbtance Matrix:TwoDimension = \"{}\" for layer {} is missing from the input file.",
+                                                    locAlphaArgs(AlphaIndex),
+                                                    currentOpticalLayer));
                         } else {
                             MatrixDataManager::Get2DMatrix(state,
                                                            thisConstruct.BSDFInput.Layer(currentOpticalLayer).BkAbsIndex,
@@ -5993,15 +6050,29 @@ namespace HeatBalanceManager {
             thisConstruct.WindowTypeBSDF = true;
         }
 
-        // Do not forget to deallocate localy allocated variables
-        if (allocated(locAlphaFieldNames)) locAlphaFieldNames.deallocate();
-        if (allocated(locNumericFieldNames)) locNumericFieldNames.deallocate();
-        if (allocated(locNumericFieldBlanks)) locNumericFieldBlanks.deallocate();
-        if (allocated(locAlphaFieldBlanks)) locAlphaFieldBlanks.deallocate();
-        if (allocated(locAlphaArgs)) locAlphaArgs.deallocate();
-        if (allocated(locNumericArgs)) locNumericArgs.deallocate();
+        // Do not forget to deallocate locally allocated variables
+        if (allocated(locAlphaFieldNames)) {
+            locAlphaFieldNames.deallocate();
+        }
+        if (allocated(locNumericFieldNames)) {
+            locNumericFieldNames.deallocate();
+        }
+        if (allocated(locNumericFieldBlanks)) {
+            locNumericFieldBlanks.deallocate();
+        }
+        if (allocated(locAlphaFieldBlanks)) {
+            locAlphaFieldBlanks.deallocate();
+        }
+        if (allocated(locAlphaArgs)) {
+            locAlphaArgs.deallocate();
+        }
+        if (allocated(locNumericArgs)) {
+            locNumericArgs.deallocate();
+        }
 
-        if (ErrorsFound) ShowFatalError(state, "Error in complex fenestration input.");
+        if (ErrorsFound) {
+            ShowFatalError(state, "Error in complex fenestration input.");
+        }
     }
 
     void InitConductionTransferFunctions(EnergyPlusData &state)
@@ -6022,7 +6093,9 @@ namespace HeatBalanceManager {
         }
 
         for (auto &construction : state.dataConstruction->Construct) {
-            if (!construction.IsUsedCTF) continue;
+            if (!construction.IsUsedCTF) {
+                continue;
+            }
             construction.reportLayers(state);
         }
 
@@ -6035,13 +6108,15 @@ namespace HeatBalanceManager {
             print(state.files.eio,
                   "! <Material CTF Summary>,Material Name,Thickness {{m}},Conductivity {{w/m-K}},Density {{kg/m3}},Specific Heat "
                   "{{J/kg-K}},ThermalResistance {{m2-K/w}}\n");
-            print(state.files.eio, "! <Material:Air>,Material Name,ThermalResistance {{m2-K/w}}\n");
+            print(state.files.eio, "! <Material:Air CTF Summary>,Material Name,ThermalResistance {{m2-K/w}}\n");
             print(state.files.eio, "! <CTF>,Time,Outside,Cross,Inside,Flux (except final one)\n");
 
             int cCounter = 0; // just used to keep construction index in output report
             for (auto &construction : state.dataConstruction->Construct) {
                 cCounter++;
-                if (!construction.IsUsedCTF) continue;
+                if (!construction.IsUsedCTF) {
+                    continue;
+                }
                 construction.reportTransferFunction(state, cCounter);
             }
         }

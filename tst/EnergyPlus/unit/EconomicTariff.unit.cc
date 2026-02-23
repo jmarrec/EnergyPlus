@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -189,7 +189,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GetInput_Test)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
+    state->init_state(*state);
     UpdateUtilityBills(*state);
 
     // tariff
@@ -202,26 +202,26 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GetInput_Test)
     EXPECT_EQ(1, state->dataEconTariff->numQualify);
     EXPECT_FALSE(state->dataEconTariff->qualify(1).isMaximum);
     EXPECT_EQ(12, state->dataEconTariff->qualify(1).thresholdVal);
-    EXPECT_EQ(seasonAnnual, state->dataEconTariff->qualify(1).season);
+    EXPECT_ENUM_EQ(Season::Annual, state->dataEconTariff->qualify(1).season);
     EXPECT_FALSE(state->dataEconTariff->qualify(1).isConsecutive);
     EXPECT_EQ(2, state->dataEconTariff->qualify(1).numberOfMonths);
 
     // ChargeSimple
     EXPECT_EQ(3, state->dataEconTariff->numChargeSimple);
-    EXPECT_EQ(seasonWinter, state->dataEconTariff->chargeSimple(3).season);
+    EXPECT_ENUM_EQ(Season::Winter, state->dataEconTariff->chargeSimple(3).season);
     EXPECT_EQ(0.02420, state->dataEconTariff->chargeSimple(3).costPerVal);
 
     // ChargeBlock
     EXPECT_EQ(1, state->dataEconTariff->numChargeBlock);
-    EXPECT_EQ(seasonWinter, state->dataEconTariff->chargeBlock(1).season);
+    EXPECT_ENUM_EQ(Season::Winter, state->dataEconTariff->chargeBlock(1).season);
     EXPECT_EQ(3, state->dataEconTariff->chargeBlock(1).numBlk);
     EXPECT_EQ(350, state->dataEconTariff->chargeBlock(1).blkSzVal(2));
     EXPECT_EQ(0.03763, state->dataEconTariff->chargeBlock(1).blkCostVal(2));
 
     // Ratchet
     EXPECT_EQ(1, state->dataEconTariff->numRatchet);
-    EXPECT_EQ(seasonSummer, state->dataEconTariff->ratchet(1).seasonFrom);
-    EXPECT_EQ(seasonAnnual, state->dataEconTariff->ratchet(1).seasonTo);
+    EXPECT_ENUM_EQ(Season::Summer, state->dataEconTariff->ratchet(1).seasonFrom);
+    EXPECT_ENUM_EQ(Season::Annual, state->dataEconTariff->ratchet(1).seasonTo);
     EXPECT_EQ(0.80, state->dataEconTariff->ratchet(1).multiplierVal);
     EXPECT_EQ(0.0, state->dataEconTariff->ratchet(1).offsetVal);
 
@@ -255,6 +255,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Water_DefaultConv_Test)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Create a water meter, can't use AddMeter because we would need to create a variable for that
     OutputProcessor::Meter *meter = new OutputProcessor::Meter("WATER:FACILITY");
@@ -269,9 +270,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Water_DefaultConv_Test)
     EXPECT_EQ("EXAMPLEWATERTARIFF", state->dataEconTariff->tariff(1).tariffName);
 
     // Check that it correctly assesses the meter type
-    EXPECT_EQ(kindMeterWater, state->dataEconTariff->tariff(1).kindWaterMtr);
-    EXPECT_EQ(kindMeterNotElectric, state->dataEconTariff->tariff(1).kindElectricMtr);
-    EXPECT_EQ(kindMeterNotGas, state->dataEconTariff->tariff(1).kindGasMtr);
+    EXPECT_ENUM_EQ(EconomicTariff::MeterType::Water, state->dataEconTariff->tariff(1).kindMtr);
 
     // Check that if defaults the conversion choice correctly
     EXPECT_ENUM_EQ(EconConv::M3, state->dataEconTariff->tariff(1).convChoice);
@@ -298,6 +297,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Water_CCF_Test)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Create a water meter
     OutputProcessor::Meter *meter = new Meter("WATER:FACILITY");
@@ -311,9 +311,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Water_CCF_Test)
     EXPECT_EQ(1, state->dataEconTariff->numTariff);
 
     // Check that it correctly assesses the meter type (water)
-    EXPECT_EQ(kindMeterWater, state->dataEconTariff->tariff(1).kindWaterMtr);
-    EXPECT_EQ(kindMeterNotElectric, state->dataEconTariff->tariff(1).kindElectricMtr);
-    EXPECT_EQ(kindMeterNotGas, state->dataEconTariff->tariff(1).kindGasMtr);
+    EXPECT_ENUM_EQ(EconomicTariff::MeterType::Water, state->dataEconTariff->tariff(1).kindMtr);
 
     // Check conversion choice
     EXPECT_ENUM_EQ(EconConv::CCF, state->dataEconTariff->tariff(1).convChoice);
@@ -338,6 +336,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Gas_CCF_Test)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Create a water meter
     OutputProcessor::Meter *meter = new Meter("NATURALGAS:FACILITY");
@@ -352,9 +351,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Gas_CCF_Test)
     EXPECT_EQ(1, state->dataEconTariff->numTariff);
 
     // Check that it correctly assesses the meter type (gas)
-    EXPECT_EQ(kindMeterNotWater, state->dataEconTariff->tariff(1).kindWaterMtr);
-    EXPECT_EQ(kindMeterNotElectric, state->dataEconTariff->tariff(1).kindElectricMtr);
-    EXPECT_EQ(kindMeterGas, state->dataEconTariff->tariff(1).kindGasMtr);
+    EXPECT_ENUM_EQ(EconomicTariff::MeterType::Gas, state->dataEconTariff->tariff(1).kindMtr);
 
     // Check conversion choice
 
@@ -380,6 +377,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Electric_CCF_Test)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     // Create a water meter
     OutputProcessor::Meter *meter = new Meter("ELECTRICITY:FACILITY");
@@ -394,10 +392,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Electric_CCF_Test)
     EXPECT_EQ(1, state->dataEconTariff->numTariff);
 
     // Check that it correctly assesses the meter type (electricity, and electric simple in particular)
-    EXPECT_EQ(kindMeterNotWater, state->dataEconTariff->tariff(1).kindWaterMtr);
-    EXPECT_NE(kindMeterNotElectric, state->dataEconTariff->tariff(1).kindElectricMtr);
-    EXPECT_EQ(kindMeterElecSimple, state->dataEconTariff->tariff(1).kindElectricMtr);
-    EXPECT_EQ(kindMeterNotGas, state->dataEconTariff->tariff(1).kindGasMtr);
+    EXPECT_EQ(EconomicTariff::MeterType::ElecSimple, state->dataEconTariff->tariff(1).kindMtr);
 
     // Check conversion choice, should force back to kWh
     EXPECT_ENUM_EQ(EconConv::KWH, state->dataEconTariff->tariff(1).convChoice);
@@ -407,6 +402,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_Electric_CCF_Test)
 
 TEST_F(EnergyPlusFixture, EconomicTariff_LEEDtariffReporting_Test)
 {
+    state->init_state(*state);
     state->dataOutputProcessor->meters.push_back(new Meter("ELECTRICITY:FACILITY"));
     state->dataOutputProcessor->meterMap.insert_or_assign("ELECTRICITY:FACILITY", state->dataOutputProcessor->meters.size() - 1);
     state->dataOutputProcessor->meters.push_back(new Meter("NATURALGAS:FACILITY"));
@@ -422,27 +418,37 @@ TEST_F(EnergyPlusFixture, EconomicTariff_LEEDtariffReporting_Test)
     state->dataEconTariff->tariff(1).isSelected = true;
     state->dataEconTariff->tariff(1).totalAnnualCost = 4151.45;
     state->dataEconTariff->tariff(1).totalAnnualEnergy = 4855.21;
-    state->dataEconTariff->tariff(1).kindElectricMtr = 3;
+    state->dataEconTariff->tariff(1).kindMtr = EconomicTariff::MeterType::ElecPurchased;
     state->dataEconTariff->tariff(1).reportMeterIndx = GetMeterIndex(*state, "ELECTRICITY:FACILITY");
+    state->dataEconTariff->tariff(1).demandWindow = DemandWindow::Day;
 
     state->dataEconTariff->tariff(2).tariffName = "SmallCGUnit";
     state->dataEconTariff->tariff(2).isSelected = true;
     state->dataEconTariff->tariff(2).totalAnnualCost = 415.56;
     state->dataEconTariff->tariff(2).totalAnnualEnergy = 0.00;
-    state->dataEconTariff->tariff(2).kindGasMtr = 1;
+    state->dataEconTariff->tariff(2).kindMtr = EconomicTariff::MeterType::Gas;
     state->dataEconTariff->tariff(2).reportMeterIndx = GetMeterIndex(*state, "NATURALGAS:FACILITY");
+    state->dataEconTariff->tariff(2).demandWindow = DemandWindow::Day;
 
     state->dataEconTariff->tariff(3).tariffName = "DistrictCoolingUnit";
     state->dataEconTariff->tariff(3).isSelected = true;
     state->dataEconTariff->tariff(3).totalAnnualCost = 55.22;
     state->dataEconTariff->tariff(3).totalAnnualEnergy = 8.64;
+    state->dataEconTariff->tariff(3).kindMtr = EconomicTariff::MeterType::Other;
     state->dataEconTariff->tariff(3).reportMeterIndx = GetMeterIndex(*state, "DISTRICTCOOLING:FACILITY");
+    state->dataEconTariff->tariff(3).demandWindow = DemandWindow::Day;
 
     state->dataEconTariff->tariff(4).tariffName = "DistrictHeatingUnit";
     state->dataEconTariff->tariff(4).isSelected = true;
     state->dataEconTariff->tariff(4).totalAnnualCost = 15.98;
     state->dataEconTariff->tariff(4).totalAnnualEnergy = 1.47;
+    state->dataEconTariff->tariff(4).kindMtr = EconomicTariff::MeterType::Other;
     state->dataEconTariff->tariff(4).reportMeterIndx = GetMeterIndex(*state, "DISTRICTHEATINGWATER:FACILITY");
+    state->dataEconTariff->tariff(4).demandWindow = DemandWindow::Day;
+
+    for (auto &tariff : state->dataEconTariff->tariff) {
+        tariff.demandWindow = EconomicTariff::DemandWindow::Hour;
+    }
 
     SetPredefinedTables(*state); // need to setup the predefined table entry numbers
 
@@ -587,12 +593,12 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
-    state->dataGlobal->NumOfTimeStepInHour = 4; // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 15; // must initialize this to get schedules initialized
+    state->dataGlobal->TimeStepsInHour = 4;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 15; // must initialize this to get schedules initialized
     state->dataGlobal->TimeStepZone = 0.25;
-    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::SecInHour;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::rSecsInHour;
 
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
+    state->init_state(*state);
     ExteriorEnergyUse::ManageExteriorEnergyUse(*state);
     EXPECT_EQ(1, state->dataExteriorEnergyUse->NumExteriorLights);
     EXPECT_EQ(1000, state->dataExteriorEnergyUse->ExteriorLights(1).DesignLevel);
@@ -606,26 +612,22 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics)
     EXPECT_EQ("SEASONAL_TARIFF", state->dataEconTariff->tariff(1).tariffName);
     EXPECT_ENUM_EQ(EconConv::KWH, state->dataEconTariff->tariff(1).convChoice);
     EXPECT_EQ(0, state->dataEconTariff->tariff(1).monthChgVal);
-    EXPECT_EQ("ELECTRICITY SEASON SCHEDULE", state->dataEconTariff->tariff(1).seasonSchedule);
-
-    int seasonSchPtr = state->dataEconTariff->tariff(1).seasonSchIndex;
-    EXPECT_GT(seasonSchPtr, 0);
-    EXPECT_EQ("ELECTRICITY SEASON SCHEDULE", state->dataScheduleMgr->Schedule(seasonSchPtr).Name);
+    EXPECT_EQ("ELECTRICITY SEASON SCHEDULE", state->dataEconTariff->tariff(1).seasonSched->Name);
 
     // Two Simple Charges
     EXPECT_EQ(2, state->dataEconTariff->numChargeSimple);
 
-    EXPECT_EQ(seasonWinter, state->dataEconTariff->chargeSimple(1).season);
+    EXPECT_ENUM_EQ(Season::Winter, state->dataEconTariff->chargeSimple(1).season);
     EXPECT_EQ(0.02, state->dataEconTariff->chargeSimple(1).costPerVal);
 
-    EXPECT_EQ(EconomicTariff::seasonSummer, state->dataEconTariff->chargeSimple(2).season);
+    EXPECT_ENUM_EQ(Season::Summer, state->dataEconTariff->chargeSimple(2).season);
     EXPECT_EQ(0.04, state->dataEconTariff->chargeSimple(2).costPerVal);
 
     state->dataGlobal->KindOfSim = Constant::KindOfSim::RunPeriodWeather; // fake a weather run
 
-    // Unitialized: default initialized to 0
-    EXPECT_EQ(0, state->dataEconTariff->tariff(1).seasonForMonth(5));
-    EXPECT_EQ(0, state->dataEconTariff->tariff(1).seasonForMonth(6));
+    // Uninitialized: default initialized to 0
+    EXPECT_ENUM_EQ(Season::Invalid, state->dataEconTariff->tariff(1).seasonForMonth(5));
+    EXPECT_ENUM_EQ(Season::Invalid, state->dataEconTariff->tariff(1).seasonForMonth(6));
 
     state->dataEnvrn->Month = 5;
     state->dataEnvrn->DayOfMonth = 31;
@@ -638,10 +640,9 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics)
     state->dataGlobal->TimeStep = 4;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
 
-    ScheduleManager::UpdateScheduleValues(*state);
-    EXPECT_EQ(1.0, ScheduleManager::LookUpScheduleValue(*state, 1, state->dataGlobal->HourOfDay, state->dataGlobal->TimeStep));
-    EXPECT_EQ(1.0, ScheduleManager::GetCurrentScheduleValue(*state, state->dataEconTariff->tariff(1).seasonSchIndex));
-    EXPECT_EQ(1.0, state->dataScheduleMgr->Schedule(seasonSchPtr).CurrentValue);
+    Sched::UpdateScheduleVals(*state);
+    EXPECT_EQ(1.0, Sched::GetSchedule(*state, "ALWAYS ON DISCRETE")->getHrTsVal(*state, state->dataGlobal->HourOfDay, state->dataGlobal->TimeStep));
+    EXPECT_EQ(1.0, state->dataEconTariff->tariff(1).seasonSched->getCurrentVal());
 
     ExteriorEnergyUse::ManageExteriorEnergyUse(*state);
 
@@ -649,15 +650,14 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics)
     EXPECT_EQ(state->dataExteriorEnergyUse->ExteriorLights(1).Power * state->dataGlobal->TimeStepZoneSec,
               state->dataExteriorEnergyUse->ExteriorLights(1).CurrentUse);
 
-    int curPeriod = 1;
-    EXPECT_EQ(0, state->dataEconTariff->tariff(1).gatherEnergy(state->dataEnvrn->Month, curPeriod));
+    EXPECT_EQ(0, state->dataEconTariff->tariff(1).gatherEnergy(state->dataEnvrn->Month)[(int)Period::Peak]);
 
     // This Should now call GatherForEconomics
     state->dataGlobal->DoOutputReporting = true;
     EconomicTariff::UpdateUtilityBills(*state);
     ;
-    EXPECT_EQ(1, state->dataEconTariff->tariff(1).seasonForMonth(5));
-    EXPECT_EQ(0, state->dataEconTariff->tariff(1).seasonForMonth(6));
+    EXPECT_ENUM_EQ(Season::Winter, state->dataEconTariff->tariff(1).seasonForMonth(5));
+    EXPECT_ENUM_EQ(Season::Invalid, state->dataEconTariff->tariff(1).seasonForMonth(6));
 
     state->dataEnvrn->Month = 5;
     state->dataEnvrn->DayOfMonth = 31;
@@ -670,8 +670,8 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics)
     state->dataGlobal->TimeStep = 1;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
 
-    ScheduleManager::UpdateScheduleValues(*state);
-    EXPECT_EQ(3.0, ScheduleManager::GetCurrentScheduleValue(*state, state->dataEconTariff->tariff(1).seasonSchIndex));
+    Sched::UpdateScheduleVals(*state);
+    EXPECT_EQ(3.0, state->dataEconTariff->tariff(1).seasonSched->getCurrentVal());
 
     ExteriorEnergyUse::ManageExteriorEnergyUse(*state);
 
@@ -682,12 +682,13 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics)
     // This Should now call GatherForEconomics
     EconomicTariff::UpdateUtilityBills(*state);
     ;
-    EXPECT_EQ(1, state->dataEconTariff->tariff(1).seasonForMonth(5));
-    EXPECT_EQ(3, state->dataEconTariff->tariff(1).seasonForMonth(6));
+    EXPECT_ENUM_EQ(Season::Winter, state->dataEconTariff->tariff(1).seasonForMonth(5));
+    EXPECT_ENUM_EQ(Season::Summer, state->dataEconTariff->tariff(1).seasonForMonth(6));
 }
 
 TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics_ZeroMeterIndex)
 {
+    state->init_state(*state);
     // Test for PR #10521 and Issue #10519
     state->dataEconTariff->numTariff = 1;
     state->dataEconTariff->tariff.allocate(state->dataEconTariff->numTariff);
@@ -704,21 +705,22 @@ TEST_F(EnergyPlusFixture, EconomicTariff_GatherForEconomics_ZeroMeterIndex)
     state->dataOutputProcessor->meters.push_back(meter);
 
     GatherForEconomics(*state);
-    EXPECT_EQ(100, state->dataEconTariff->tariff(1).gatherEnergy(1, 1));
+    EXPECT_EQ(100, state->dataEconTariff->tariff(1).gatherEnergy(1)[1]);
 }
 
 TEST_F(EnergyPlusFixture, EconomicTariff_PushPopStack)
 {
+    state->init_state(*state);
     state->dataEconTariff->numTariff = 1;
     state->dataEconTariff->tariff.allocate(state->dataEconTariff->numTariff);
 
-    Array1D<Real64> aMonths(MaxNumMonths);
+    Array1D<Real64> aMonths(NumMonths);
     int aVarPt;
 
-    Array1D<Real64> bMonths(MaxNumMonths);
+    Array1D<Real64> bMonths(NumMonths);
     int bVarPt;
 
-    Array1D<Real64> cMonths(MaxNumMonths);
+    Array1D<Real64> cMonths(NumMonths);
     int cVarPt;
 
     aMonths = {1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6};
@@ -788,7 +790,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_PushPopStack)
     state->dataEconTariff->econVar(1).kindOfObj = ObjType::Variable;
 
     // test getting econ variable
-    Array1D<Real64> dMonths(MaxNumMonths);
+    Array1D<Real64> dMonths(NumMonths);
     int dVarPt;
 
     dMonths = {3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6};
@@ -810,6 +812,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_PushPopStack)
 
 TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeSimple)
 {
+    state->init_state(*state);
     int curTariff = 6;
     state->dataEconTariff->tariff.allocate(curTariff);
 
@@ -817,15 +820,15 @@ TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeSimple)
     state->dataEconTariff->econVar.allocate(curEconVar);
     state->dataEconTariff->econVar(curEconVar).tariffIndx = curTariff;
     state->dataEconTariff->econVar(curEconVar).kindOfObj = ObjType::Variable;
-    Array1D<Real64> results(MaxNumMonths);
+    Array1D<Real64> results(NumMonths);
 
     int sourceEconVar = 4;
-    Array1D<Real64> sourceMonths(MaxNumMonths);
+    Array1D<Real64> sourceMonths(NumMonths);
     sourceMonths = {310, 320, 330, 340, 350, 360, 360, 350, 340, 330, 320, 310};
     state->dataEconTariff->econVar(sourceEconVar).values = sourceMonths;
 
     int costPerEconVar = 6;
-    Array1D<Real64> costPerMonths(MaxNumMonths);
+    Array1D<Real64> costPerMonths(NumMonths);
     costPerMonths = {0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1};
     state->dataEconTariff->econVar(costPerEconVar).values = costPerMonths;
 
@@ -836,7 +839,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeSimple)
     state->dataEconTariff->chargeSimple(curSimpChg).tariffIndx = curTariff;
     state->dataEconTariff->chargeSimple(curSimpChg).sourcePt = sourceEconVar;
     state->dataEconTariff->chargeSimple(curSimpChg).costPerPt = costPerEconVar;
-    state->dataEconTariff->chargeSimple(curSimpChg).season = seasonAnnual;
+    state->dataEconTariff->chargeSimple(curSimpChg).season = Season::Annual;
 
     evaluateChargeSimple(*state, curEconVar);
     results = state->dataEconTariff->econVar(curEconVar).values;
@@ -873,12 +876,12 @@ TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeSimple)
     EXPECT_NEAR(results(11), 320 * 0.15, 0.01);
     EXPECT_NEAR(results(12), 310 * 0.15, 0.01);
 
-    state->dataEconTariff->chargeSimple(curSimpChg).season = seasonSummer;
+    state->dataEconTariff->chargeSimple(curSimpChg).season = Season::Summer;
     int summerEconVar = 2;
-    Array1D<Real64> summerMonths(MaxNumMonths);
+    Array1D<Real64> summerMonths(NumMonths);
     costPerMonths = {0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0};
     state->dataEconTariff->econVar(summerEconVar).values = costPerMonths;
-    state->dataEconTariff->tariff(curTariff).nativeIsSummer = summerEconVar;
+    state->dataEconTariff->tariff(curTariff).natives[(int)Native::IsSummer] = summerEconVar;
 
     evaluateChargeSimple(*state, curEconVar);
     results = state->dataEconTariff->econVar(curEconVar).values;
@@ -899,6 +902,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeSimple)
 
 TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeBlock)
 {
+    state->init_state(*state);
     int curTariff = 8;
     state->dataEconTariff->tariff.allocate(curTariff);
 
@@ -906,10 +910,10 @@ TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeBlock)
     state->dataEconTariff->econVar.allocate(curEconVar);
     state->dataEconTariff->econVar(curEconVar).tariffIndx = curTariff;
     state->dataEconTariff->econVar(curEconVar).kindOfObj = ObjType::Variable;
-    Array1D<Real64> results(MaxNumMonths);
+    Array1D<Real64> results(NumMonths);
 
     int sourceEconVar = 4;
-    Array1D<Real64> sourceMonths(MaxNumMonths);
+    Array1D<Real64> sourceMonths(NumMonths);
     sourceMonths = {450, 650, 950, 1350, 1850, 2850, 500, 1000, 1500, 501, 1001, 1501};
     state->dataEconTariff->econVar(sourceEconVar).values = sourceMonths;
 
@@ -919,7 +923,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeBlock)
     state->dataEconTariff->chargeBlock(curChgBlk).namePt = curEconVar;
     state->dataEconTariff->chargeBlock(curChgBlk).tariffIndx = curTariff;
     state->dataEconTariff->chargeBlock(curChgBlk).sourcePt = sourceEconVar;
-    state->dataEconTariff->chargeBlock(curChgBlk).season = seasonAnnual;
+    state->dataEconTariff->chargeBlock(curChgBlk).season = Season::Annual;
     state->dataEconTariff->chargeBlock(curChgBlk).blkSzMultPt = 0;
     state->dataEconTariff->chargeBlock(curChgBlk).blkSzMultVal = 1;
 
@@ -965,7 +969,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_evaluateChargeBlock)
 TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test0)
 {
     // Tests for PR #8456 and Issue #8455 ... Case 0 of Cases 0-3
-    // to ensure UtilityCost:Variable inputs being procesed properly
+    // to ensure UtilityCost:Variable inputs being processed properly
 
     std::string const idf_objects = delimited_string({
 
@@ -1022,11 +1026,12 @@ TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test0)
     bool ErrorsFound = false;
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetInputEconomicsVariable(*state, ErrorsFound);
 
     // Make sure the "Demand" UtilityCost:Variable is now processed correctly
-    EXPECT_EQ(state->dataEconTariff->econVar(1).varUnitType, varUnitTypeDemand);
+    EXPECT_ENUM_EQ(state->dataEconTariff->econVar(1).varUnitType, VarUnitType::Demand);
 
     // Make sure the numerical inputs after A3 is still being processed correctly
     EXPECT_EQ(state->dataEconTariff->econVar(1).values(1), 1.00);
@@ -1046,7 +1051,7 @@ TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test0)
 TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test1)
 {
     // Tests for PR #8456 and Issue #8455 ... Case 1 of Cases 0-3
-    // to ensure UtilityCost:Variable inputs being procesed properly
+    // to ensure UtilityCost:Variable inputs being processed properly
 
     std::string const idf_objects1 = delimited_string({
 
@@ -1103,10 +1108,11 @@ TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test1)
     bool ErrorsFound = false;
 
     ASSERT_TRUE(process_idf(idf_objects1));
+    state->init_state(*state);
     GetInputEconomicsVariable(*state, ErrorsFound);
 
     // Make sure variable input type "Energy" is processed as expected
-    EXPECT_EQ(state->dataEconTariff->econVar(1).varUnitType, varUnitTypeEnergy);
+    EXPECT_ENUM_EQ(state->dataEconTariff->econVar(1).varUnitType, VarUnitType::Energy);
     // Make sure the numerical inputs after A3 is still being processed correctly
     EXPECT_EQ(state->dataEconTariff->econVar(1).values(1), 1.00);
     EXPECT_EQ(state->dataEconTariff->econVar(1).values(2), 2.00);
@@ -1125,7 +1131,7 @@ TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test1)
 TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test2)
 {
     // Tests for PR #8456 and Issue #8455 ... Case 2 of Cases 0-3
-    // to ensure UtilityCost:Variable inputs being procesed properly
+    // to ensure UtilityCost:Variable inputs being processed properly
 
     std::string const idf_objects2 = delimited_string({
 
@@ -1181,10 +1187,11 @@ TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test2)
 
     bool ErrorsFound = false;
     ASSERT_TRUE(process_idf(idf_objects2));
+    state->init_state(*state);
     GetInputEconomicsVariable(*state, ErrorsFound);
 
     // Make sure variable input type "Dimensionless" is processed as expected
-    EXPECT_EQ(state->dataEconTariff->econVar(1).varUnitType, varUnitTypeDimensionless);
+    EXPECT_ENUM_EQ(state->dataEconTariff->econVar(1).varUnitType, VarUnitType::Dimensionless);
     // Make sure the numerical inputs after A3 is still being processed correctly
     EXPECT_EQ(state->dataEconTariff->econVar(1).values(1), 1.00);
     EXPECT_EQ(state->dataEconTariff->econVar(1).values(2), 2.00);
@@ -1203,7 +1210,7 @@ TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test2)
 TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test3)
 {
     // Tests for PR #8456 and Issue #8455 ... Case 3 of Cases 0-3
-    // to ensure UtilityCost:Variable inputs being procesed properly
+    // to ensure UtilityCost:Variable inputs being processed properly
 
     std::string const idf_objects3 = delimited_string({
 
@@ -1259,10 +1266,11 @@ TEST_F(EnergyPlusFixture, InputEconomics_UtilityCost_Variable_Test3)
 
     bool ErrorsFound = false;
     ASSERT_TRUE(process_idf(idf_objects3));
+    state->init_state(*state);
     GetInputEconomicsVariable(*state, ErrorsFound);
 
     // Make sure variable input type "Currency" is processed as expected
-    EXPECT_EQ(state->dataEconTariff->econVar(1).varUnitType, varUnitTypeCurrency);
+    EXPECT_ENUM_EQ(state->dataEconTariff->econVar(1).varUnitType, VarUnitType::Currency);
     // Make sure the numerical inputs after A3 is still being processed correctly
     EXPECT_EQ(state->dataEconTariff->econVar(1).values(1), 1.00);
     EXPECT_EQ(state->dataEconTariff->econVar(1).values(2), 2.00);
@@ -1405,12 +1413,12 @@ TEST_F(SQLiteFixture, WriteEconomicTariffTable_DualUnits)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
-    state->dataGlobal->NumOfTimeStepInHour = 4;
-    state->dataGlobal->MinutesPerTimeStep = 15;
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 15;
     state->dataGlobal->TimeStepZone = 0.25;
-    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::SecInHour;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::rSecsInHour;
 
-    ScheduleManager::ProcessScheduleInput(*state);
+    state->init_state(*state);
     ExteriorEnergyUse::ManageExteriorEnergyUse(*state);
 
     state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");
@@ -1422,8 +1430,9 @@ TEST_F(SQLiteFixture, WriteEconomicTariffTable_DualUnits)
     state->dataOutRptTab->WriteTabularFiles = true;
 
     OutputReportTabular::SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::JtoKWH;
+    OutputReportTabular::setTabularReportStyles(*state);
     Real64 enerConv = OutputReportTabular::getSpecificUnitDivider(*state, "m2", "ft2");
     EXPECT_NEAR(enerConv, 0.092903, 0.001); // 0.092893973326981863
 
@@ -1442,7 +1451,7 @@ TEST_F(SQLiteFixture, WriteEconomicTariffTable_DualUnits)
     state->dataGlobal->TimeStep = 4;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
 
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     ExteriorEnergyUse::ManageExteriorEnergyUse(*state);
 
     state->dataGlobal->DoOutputReporting = true;
@@ -1500,8 +1509,9 @@ TEST_F(SQLiteFixture, WriteEconomicTariffTable_DualUnits)
     }
 
     // Second case dual-unit:
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    OutputReportTabular::setTabularReportStyles(*state);
 
     EconomicTariff::WriteTabularTariffReports(*state);
 
@@ -1666,6 +1676,7 @@ TEST_F(EnergyPlusFixture, EconomicTariff_LEEDtariff_with_Custom_Meter)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errors_found = false;
 
@@ -1700,23 +1711,21 @@ TEST_F(EnergyPlusFixture, EconomicTariff_LEEDtariff_with_Custom_Meter)
     state->dataEconTariff->tariff(1).isSelected = true;
     state->dataEconTariff->tariff(1).totalAnnualCost = 1000.0;
     state->dataEconTariff->tariff(1).totalAnnualEnergy = 10000.0;
-    state->dataEconTariff->tariff(1).kindElectricMtr = 3;
+    state->dataEconTariff->tariff(1).kindMtr = EconomicTariff::MeterType::ElecPurchased;
     state->dataEconTariff->tariff(1).reportMeterIndx = GetMeterIndex(*state, "ELECTRICITY:FACILITY");
 
     state->dataEconTariff->tariff(2).tariffName = "ExampleI-Sell";
     state->dataEconTariff->tariff(2).isSelected = true;
     state->dataEconTariff->tariff(2).totalAnnualCost = -40.0;
     state->dataEconTariff->tariff(2).totalAnnualEnergy = 2000.0;
-    state->dataEconTariff->tariff(2).kindElectricMtr = 4;
-    state->dataEconTariff->tariff(2).kindGasMtr = 0;
+    state->dataEconTariff->tariff(2).kindMtr = EconomicTariff::MeterType::ElecSurplusSold;
     state->dataEconTariff->tariff(2).reportMeterIndx = GetMeterIndex(*state, "ELECTRICITYSURPLUSSOLD:FACILITY");
 
     state->dataEconTariff->tariff(3).tariffName = "ExampleA-Gas";
     state->dataEconTariff->tariff(3).isSelected = true;
     state->dataEconTariff->tariff(3).totalAnnualCost = 1500.0;
     state->dataEconTariff->tariff(3).totalAnnualEnergy = 3000.0;
-    state->dataEconTariff->tariff(3).kindElectricMtr = 0;
-    state->dataEconTariff->tariff(3).kindGasMtr = 1;
+    state->dataEconTariff->tariff(3).kindMtr = EconomicTariff::MeterType::Gas;
     state->dataEconTariff->tariff(3).reportMeterIndx = GetMeterIndex(*state, "NATURALGAS:FACILITY");
 
     state->dataEconTariff->tariff(4).tariffName = "DistrictCoolingUnit";
@@ -1735,15 +1744,14 @@ TEST_F(EnergyPlusFixture, EconomicTariff_LEEDtariff_with_Custom_Meter)
     state->dataEconTariff->tariff(6).isSelected = true;
     state->dataEconTariff->tariff(6).totalAnnualCost = 1050;
     state->dataEconTariff->tariff(6).totalAnnualEnergy = 150;
-    state->dataEconTariff->tariff(6).kindWaterMtr = 1;
+    state->dataEconTariff->tariff(6).kindMtr = EconomicTariff::MeterType::Water;
     state->dataEconTariff->tariff(6).reportMeterIndx = GetMeterIndex(*state, "WATER:FACILITY");
 
     state->dataEconTariff->tariff(7).tariffName = "Sample with All Utilities_NGas";
     state->dataEconTariff->tariff(7).isSelected = true;
     state->dataEconTariff->tariff(7).totalAnnualCost = 1500.0;
     state->dataEconTariff->tariff(7).totalAnnualEnergy = 3000.0;
-    state->dataEconTariff->tariff(7).kindElectricMtr = 0;
-    state->dataEconTariff->tariff(7).kindGasMtr = 1;
+    state->dataEconTariff->tariff(7).kindMtr = EconomicTariff::MeterType::Gas;
     state->dataEconTariff->tariff(7).reportMeterIndx = GetMeterIndex(*state, "BUILDING NATURAL GAS");
 
     SetPredefinedTables(*state); // setup the predefined table entry numbers first
@@ -1770,4 +1778,73 @@ TEST_F(EnergyPlusFixture, EconomicTariff_LEEDtariff_with_Custom_Meter)
     EXPECT_EQ("11.200", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchLeedEtsVirt, "District Heating Water"));
 
     EXPECT_EQ("NOT FOUND", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchLeedEtsVirt, "Other"));
+}
+
+TEST_F(EnergyPlusFixture, EconomicTariff_ScheduleMismatch)
+{
+    std::string const idf_objects1 = delimited_string({
+
+        "Schedule:Compact,",
+        "  Electricity Season Schedule Mismatch,  !- Name",
+        "  Any Number,              !- Schedule Type Limits Name",
+        "  Through: 5/31,           !- Field 1",
+        "  For: AllDays,            !- Field 2",
+        "  Until: 24:00,            !- Field 3",
+        "  1,                       !- Field 4",
+        "  Through: 9/30,           !- Field 5",
+        "  For: AllDays,            !- Field 6",
+        "  Until: 24:00,            !- Field 7",
+        "  3,                       !- Field 8",
+        "  Through: 12/31,          !- Field 9",
+        "  For: AllDays,            !- Field 10",
+        "  Until: 24:00,            !- Field 11",
+        "  1;                       !- Field 12",
+
+        "UtilityCost:Tariff,",
+        "  ExampleAWithVariableMonthlyCharge,     !- Name",
+        "  ElectricityNet:Facility, !- Output Meter Name",
+        "  kWh,                     !- Conversion Factor Choice",
+        "  ,                        !- Energy Conversion Factor",
+        "  ,                        !- Demand Conversion Factor",
+        "  ,                        !- Time of Use Period Schedule Name",
+        "  Electricity Season Schedule,  !- Season Schedule Name",
+        "  ,                        !- Month Schedule Name",
+        "  ,                        !- Demand Window Length",
+        "  0,                       !- Monthly Charge or Variable Name",
+        "  ,                        !- Minimum Monthly Charge or Variable Name",
+        "  ,                        !- Real Time Pricing Charge Schedule Name",
+        "  ,                        !- Customer Baseline Load Schedule Name",
+        "  ,                        !- Group Name",
+        "  NetMetering;             !- Buy Or Sell",
+
+        "UtilityCost:Variable,",
+        "VariableFixedCharge, !-Name",
+        "ExampleAWithVariableMonthlyCharge, !-Tariff Name",
+        "Energy, !-Variable Type",
+        "1.00, !-January Value",
+        "2.00, !-February Value",
+        "3.00, !-March Value",
+        "4.00, !-April Value",
+        "5.00, !-May Value",
+        "6.00, !-June Value",
+        "7.00, !-July Value",
+        "8.00, !-August Value",
+        "9.00, !-September Value",
+        "10.00, !-October Value",
+        "11.00, !-November Value",
+        "12.00; !-December Value"});
+
+    bool ErrorsFound = false;
+
+    // Load the IDF
+    ASSERT_TRUE(process_idf(idf_objects1));
+    state->init_state(*state);
+
+    // Run economics, this should throw an item not found error since the schedule is named
+    // "Electricity Season Schedule Mismatch" and referenced as "Electricity Season Schedule"
+    GetInputEconomicsTariff(*state, ErrorsFound);
+
+    // Check to make sure that the missing item is displayed in the error message.
+    std::string detailed_error_message = "** Severe  ** GetInputEconomicsTariff: Season Schedule Name = ELECTRICITY SEASON SCHEDULE, item not found.";
+    compare_err_stream_substring(detailed_error_message);
 }

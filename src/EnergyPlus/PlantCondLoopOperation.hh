@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -59,7 +59,7 @@ namespace PlantCondLoopOperation {
 
     void ManagePlantLoadDistribution(EnergyPlusData &state,
                                      PlantLocation const &plantLoc, // PlantLoop data structure Location struct
-                                     Real64 &LoopDemand,
+                                     Real64 const LoopDemand,
                                      Real64 &RemLoopDemand,
                                      bool const FirstHVACIteration,
                                      bool &LoopShutDownFlag, // EMS flag to tell loop solver to shut down pumps
@@ -184,6 +184,10 @@ struct PlantCondLoopOperationData : BaseGlobalStruct
     bool lDummy = false; // for User-defined component load dispatch
     bool LoadSupervisoryChillerHeaterOpScheme = true;
     Array1D<DataPlant::ChillerHeaterSupervisoryOperationData> ChillerHeaterSupervisoryOperationSchemes;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

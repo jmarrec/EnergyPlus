@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -57,6 +57,7 @@
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/ScheduleManager.hh>
 
 namespace EnergyPlus {
 
@@ -312,6 +313,9 @@ namespace DataLoopNode {
         HeatPumpFuelFiredHeating,
         HeatPumpPlantLoopEIRCooling,
         HeatPumpPlantLoopEIRHeating,
+        HeatPumpAirToWaterCooling,
+        HeatPumpAirToWaterHeating,
+        HeatPumpAirToWater,
         HeatPumpWaterToWaterEquationFitCooling,
         HeatPumpWaterToWaterEquationFitHeating,
         HeatPumpWaterToWaterParameterEstimationCooling,
@@ -386,8 +390,10 @@ namespace DataLoopNode {
         TemperingValve,
         ThermalStorageChilledWaterMixed,
         ThermalStorageChilledWaterStratified,
+        ThermalStorageHotWaterStratified,
         ThermalStorageIceDetailed,
         ThermalStorageIceSimple,
+        ThermalStoragePCM,
         WaterHeaterHeatPump,
         WaterHeaterHeatPumpPumpedCondenser,
         WaterHeaterHeatPumpWrappedCondenser,
@@ -463,10 +469,10 @@ namespace DataLoopNode {
 
         //  Following are for Outdoor Air Nodes Scheduled Properties
         bool IsLocalNode = false;
-        int OutAirDryBulbSchedNum = 0;
-        int OutAirWetBulbSchedNum = 0;
-        int OutAirWindSpeedSchedNum = 0;
-        int OutAirWindDirSchedNum = 0;
+        Sched::Schedule *outAirDryBulbSched = nullptr;
+        Sched::Schedule *outAirWetBulbSched = nullptr;
+        Sched::Schedule *outAirWindSpeedSched = nullptr;
+        Sched::Schedule *outAirWindDirSched = nullptr;
 
         //  Following are for Outdoor Air Nodes "read only"
         Real64 OutAirDryBulb = 0.0;              // {C}
@@ -537,6 +543,10 @@ struct LoopNodeData : BaseGlobalStruct
     Array1D<DataLoopNode::MoreNodeData> MoreNodeInfo;
     Array1D<DataLoopNode::MarkedNodeData> MarkedNode;
     Array1D<DataLoopNode::NodeSetpointCheckData> NodeSetpointCheck;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

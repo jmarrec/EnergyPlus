@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -100,6 +100,7 @@ namespace GeneratorFuelSupply {
         //       RE-ENGINEERED  this module extracted from older SOFC module for
         //                      reuse with both Annex 42 models,
 
+        static constexpr std::string_view routineName = "GetGeneratorFuelSupplyInput";
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         //  INTEGER                     :: GeneratorNum !Generator counter
         Array1D_string AlphArray(25);  // character string data
@@ -134,6 +135,7 @@ namespace GeneratorFuelSupply {
                                                                          state.dataIPShortCut->cAlphaFieldNames,
                                                                          state.dataIPShortCut->cNumericFieldNames);
 
+                ErrorObjectHeader eoh{routineName, cCurrentModuleObject, AlphArray(1)};
                 state.dataGenerator->FuelSupply(FuelSupNum).Name = AlphArray(1);
                 if (Util::SameString("TemperatureFromAirNode", AlphArray(2))) {
                     state.dataGenerator->FuelSupply(FuelSupNum).FuelTempMode = DataGenerators::FuelTemperatureMode::FuelInTempFromNode;
@@ -157,13 +159,11 @@ namespace GeneratorFuelSupply {
                                                         NodeInputManager::CompFluidStream::Primary,
                                                         DataLoopNode::ObjectIsNotParent);
 
-                state.dataGenerator->FuelSupply(FuelSupNum).SchedNum = ScheduleManager::GetScheduleIndex(state, AlphArray(4));
-                if ((state.dataGenerator->FuelSupply(FuelSupNum).SchedNum == 0) &&
-                    (state.dataGenerator->FuelSupply(FuelSupNum).FuelTempMode == DataGenerators::FuelTemperatureMode::FuelInTempSchedule)) {
-                    ShowSevereError(state, format("Invalid, {} = {}", state.dataIPShortCut->cAlphaFieldNames(4), AlphArray(4)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, AlphArray(1)));
-                    ShowContinueError(state, "Schedule named was not found");
-                    ErrorsFound = true;
+                if (state.dataGenerator->FuelSupply(FuelSupNum).FuelTempMode == DataGenerators::FuelTemperatureMode::FuelInTempSchedule) {
+                    if ((state.dataGenerator->FuelSupply(FuelSupNum).sched = Sched::GetSchedule(state, AlphArray(4))) == nullptr) {
+                        ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(4), AlphArray(4));
+                        ErrorsFound = true;
+                    }
                 }
 
                 state.dataGenerator->FuelSupply(FuelSupNum).CompPowerCurveID = Curve::GetCurveIndex(state, AlphArray(5));
@@ -174,8 +174,9 @@ namespace GeneratorFuelSupply {
                     ErrorsFound = true;
                 }
 
-                for (auto &e : state.dataGenerator->FuelSupply)
+                for (auto &e : state.dataGenerator->FuelSupply) {
                     e.CompPowerLossFactor = NumArray(1);
+                }
 
                 if (Util::SameString(AlphArray(6), "GaseousConstituents")) {
                     state.dataGenerator->FuelSupply(FuelSupNum).FuelTypeMode = DataGenerators::FuelMode::GaseousConstituents;
@@ -252,8 +253,10 @@ namespace GeneratorFuelSupply {
 
         int constexpr NumHardCodedConstituents = 14; // number of gases included in data
 
+        bool first_time = false;
         if (!allocated(state.dataGenerator->GasPhaseThermoChemistryData)) {
             state.dataGenerator->GasPhaseThermoChemistryData.allocate(NumHardCodedConstituents);
+            first_time = true;
         }
         // Carbon Dioxide (CO2) Temp K 298-1200 (Chase 1998)
         state.dataGenerator->GasPhaseThermoChemistryData(1).ConstituentName = "CarbonDioxide";
@@ -659,10 +662,12 @@ namespace GeneratorFuelSupply {
         }
 
         // report Heating Values in EIO.
-        print(state.files.eio,
-              "! <Fuel Supply>, Fuel Supply Name, Lower Heating Value [J/kmol], Lower Heating Value [kJ/kg], Higher "
-              "Heating Value [KJ/kg],  Molecular Weight [g/mol] \n");
-        static constexpr std::string_view Format_501(" Fuel Supply, {},{:13.6N},{:13.6N},{:13.6N},{:13.6N}\n");
+        if (first_time) {
+            print(state.files.eio,
+                  "! <Fuel Supply>, Fuel Supply Name, Lower Heating Value [J/kmol], Lower Heating Value [kJ/kg], Higher "
+                  "Heating Value [KJ/kg],  Molecular Weight [g/mol] \n");
+        }
+        static constexpr std::string_view Format_501(" Fuel Supply, {},{:13.6G},{:13.6G},{:13.6G},{:13.6G}\n");
         print(state.files.eio,
               Format_501,
               state.dataGenerator->FuelSupply(FuelSupplyNum).Name,

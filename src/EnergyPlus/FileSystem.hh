@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -56,16 +56,16 @@
 #include <nlohmann/json.hpp>
 #include <string>
 #ifndef __cppcheck__
-#if __has_include(<filesystem>)
-#include <filesystem>
+#    if __has_include(<filesystem>)
+#        include <filesystem>
 namespace fs = std::filesystem;
-#elif __has_include(<experimental/filesystem>)
-#include <experimental/filesystem>
+#    elif __has_include(<experimental/filesystem>)
+#        include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
-#else
+#    else
 // cppcheck-suppress preprocessorErrorDirective
-#error "no filesystem support"
-#endif
+#        error "no filesystem support"
+#    endif
 #endif
 
 #include <EnergyPlus/EnergyPlus.hh>
@@ -112,23 +112,23 @@ namespace FileSystem {
         Num
     };
 
-    inline constexpr bool is_all_json_type(FileTypes t)
+    constexpr bool is_all_json_type(FileTypes t)
     {
         return t > FileTypes::Invalid && t <= FileTypes::last_binary_json_type;
     }
-    inline constexpr bool is_json_type(FileTypes t)
+    constexpr bool is_json_type(FileTypes t)
     {
         return t > FileTypes::Invalid && t <= FileTypes::last_json_type;
     }
-    inline constexpr bool is_binary_json_type(FileTypes t)
+    constexpr bool is_binary_json_type(FileTypes t)
     {
         return t > FileTypes::last_json_type && t <= FileTypes::last_binary_json_type;
     }
-    inline constexpr bool is_idf_type(FileTypes t)
+    constexpr bool is_idf_type(FileTypes t)
     {
         return t == FileTypes::IDF || t == FileTypes::IMF;
     }
-    inline constexpr bool is_flat_file_type(FileTypes t)
+    constexpr bool is_flat_file_type(FileTypes t)
     {
         return t > FileTypes::last_binary_json_type && t <= FileTypes::last_flat_file_type;
     }
@@ -172,7 +172,7 @@ namespace FileSystem {
 
     bool fileExists(fs::path const &filePath);
 
-    // Checks that fileExists(filePath), if so tries to rename to destination, falling back on copy+remove if failed (if trying to do move accross
+    // Checks that fileExists(filePath), if so tries to rename to destination, falling back on copy+remove if failed (if trying to do move across
     // devices for eg)
     void moveFile(fs::path const &filePath, fs::path const &destinationPath);
 
@@ -222,8 +222,8 @@ namespace FileSystem {
         is_any<T, std::unique_ptr<fs::path>, std::unique_ptr<fmt::ostream>, std::unique_ptr<std::ostream>, std::unique_ptr<FILE *>>::value;
 
     template <class T, FileTypes fileType>
-    inline constexpr bool enable_json_v = is_all_json_type(fileType) && is_any<T, nlohmann::json>::value &&
-                                          !is_any<T, std::string_view, std::string, char *>::value;
+    inline constexpr bool enable_json_v =
+        is_all_json_type(fileType) && is_any<T, nlohmann::json>::value && !is_any<T, std::string_view, std::string, char *>::value;
 
     template <FileTypes fileType> void writeFile(fs::path const &filePath, const std::string_view data)
     {

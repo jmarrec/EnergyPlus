@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -72,6 +72,7 @@
 #include <EnergyPlus/InternalHeatGains.hh>
 #include <EnergyPlus/OutputReportTabular.hh>
 #include <EnergyPlus/ScheduleManager.hh>
+#include <EnergyPlus/SurfaceGeometry.hh>
 #include <EnergyPlus/ZoneEquipmentManager.hh>
 #include <EnergyPlus/ZoneTempPredictorCorrector.hh>
 
@@ -114,11 +115,11 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipment_CheckFuelType)
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(has_err_output());
 
-    bool ErrorsFound(false);
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
 
-    state->dataGlobal->NumOfTimeStepInHour = 1;    // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60;    // must initialize this to get schedules initialized
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
+    bool ErrorsFound(false);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -163,11 +164,11 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipment_NegativeDesignLevel)
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(has_err_output());
 
-    bool ErrorsFound(false);
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
 
-    state->dataGlobal->NumOfTimeStepInHour = 1;    // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60;    // must initialize this to get schedules initialized
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
+    bool ErrorsFound(false);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -175,7 +176,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipment_NegativeDesignLevel)
     ASSERT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), std::runtime_error);
 
     std::string const error_string = delimited_string(
-        {"   ** Warning ** ProcessScheduleInput: Schedule:Constant=\"SCHEDULE1\", Blank Schedule Type Limits Name input -- will not be validated.",
+        {"   ** Warning ** ProcessScheduleInput: Schedule:Constant = SCHEDULE1",
+         "   **   ~~~   ** Schedule Type Limits Name is empty.",
+         "   **   ~~~   ** Schedule will not be validated.",
          "   ** Severe  ** GetInternalHeatGains: OtherEquipment=\"OTHEREQ1\", Design Level is not allowed to be negative",
          "   **   ~~~   ** ... when a fuel type of FuelOilNo1 is specified.",
          "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
@@ -209,31 +212,33 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_OtherEquipment_BadFuelType)
 
     });
 
-    ASSERT_FALSE(process_idf(idf_objects, false)); // add false to supress error assertions
+    ASSERT_FALSE(process_idf(idf_objects, false)); // add false to suppress error assertions
     EXPECT_TRUE(has_err_output(false));
 
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
+
     std::string error_string =
-        delimited_string({"   ** Severe  ** <root>[OtherEquipment][OtherEq1][fuel_type] - \"Water\" - Failed to match against any enum values."});
+        delimited_string({"   ** Severe  ** <root>[OtherEquipment][OtherEq1][fuel_type] - \"Water\" - Failed to match against any enum values.",
+                          "   ** Warning ** ProcessScheduleInput: Schedule:Constant = SCHEDULE1",
+                          "   **   ~~~   ** Schedule Type Limits Name is empty.",
+                          "   **   ~~~   ** Schedule will not be validated."});
     EXPECT_TRUE(compare_err_stream(error_string, true));
 
     bool ErrorsFound(false);
-
-    state->dataGlobal->NumOfTimeStepInHour = 1;    // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60;    // must initialize this to get schedules initialized
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
 
     ASSERT_THROW(InternalHeatGains::GetInternalHeatGainsInput(*state), std::runtime_error);
 
-    error_string = delimited_string(
-        {"   ** Warning ** ProcessScheduleInput: Schedule:Constant=\"SCHEDULE1\", Blank Schedule Type Limits Name input -- will not be validated.",
-         "   ** Severe  ** GetInternalHeatGains: OtherEquipment: invalid Fuel Type entered=WATER for Name=OTHEREQ1",
-         "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
-         "   ...Summary of Errors that led to program termination:",
-         "   ..... Reference severe error count=2",
-         "   ..... Last severe error=GetInternalHeatGains: OtherEquipment: invalid Fuel Type entered=WATER for Name=OTHEREQ1"});
+    error_string =
+        delimited_string({"   ** Severe  ** GetInternalHeatGains: OtherEquipment: invalid Fuel Type entered=WATER for Name=OTHEREQ1",
+                          "   **  Fatal  ** GetInternalHeatGains: Errors found in Getting Internal Gains Input, Program Stopped",
+                          "   ...Summary of Errors that led to program termination:",
+                          "   ..... Reference severe error count=2",
+                          "   ..... Last severe error=GetInternalHeatGains: OtherEquipment: invalid Fuel Type entered=WATER for Name=OTHEREQ1"});
 
     EXPECT_TRUE(compare_err_stream(error_string, true));
 }
@@ -287,25 +292,27 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_AllowBlankFieldsForAdaptiveComfortMo
 
     ASSERT_TRUE(process_idf(idf_objects));
 
+    state->init_state(*state);
+
     bool ErrorsFound1(false);
 
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
     HeatBalanceManager::GetZoneData(*state, ErrorsFound1);
     ASSERT_FALSE(ErrorsFound1);
 
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
-    state->dataScheduleMgr->Schedule(1).Used = true;
+    auto *occSched = Sched::GetSchedule(*state, "HOUSE OCCUPANCY");
+    occSched->isUsed = true;
+    occSched->currentVal = 1.0;
+    occSched->minVal = 1.0;
+    occSched->maxVal = 1.0;
+    occSched->isMinMaxSet = true;
 
-    state->dataScheduleMgr->Schedule(1).CurrentValue = 1.0;
-    state->dataScheduleMgr->Schedule(1).MinValue = 1.0;
-    state->dataScheduleMgr->Schedule(1).MaxValue = 1.0;
-    state->dataScheduleMgr->Schedule(1).MaxMinSet = true;
-    state->dataScheduleMgr->Schedule(2).Used = true;
+    auto *actSched = Sched::GetSchedule(*state, "ACTIVITY SCH");
+    actSched->isUsed = true;
+    actSched->currentVal = 131.8;
+    actSched->minVal = 131.8;
+    actSched->maxVal = 131.8;
+    actSched->isMinMaxSet = true;
 
-    state->dataScheduleMgr->Schedule(2).CurrentValue = 131.8;
-    state->dataScheduleMgr->Schedule(2).MinValue = 131.8;
-    state->dataScheduleMgr->Schedule(2).MaxValue = 131.8;
-    state->dataScheduleMgr->Schedule(2).MaxMinSet = true;
     InternalHeatGains::GetInternalHeatGainsInput(*state);
 
     EXPECT_FALSE(state->dataInternalHeatGains->ErrorsFound);
@@ -471,8 +478,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ElectricEquipITE_BeginEnvironmentRes
     EXPECT_FALSE(has_err_output());
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -656,6 +664,7 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_CheckZoneComponentLoadSubtotals)
 
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(has_err_output());
+    state->init_state(*state);
 
     bool ErrorsFound(false);
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
@@ -687,21 +696,18 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_CheckZoneComponentLoadSubtotals)
     state->dataEnvrn->TotRunDesPersDays = 0;
     state->dataSize->CurOverallSimDay = 1;
     state->dataGlobal->HourOfDay = 1;
-    state->dataGlobal->NumOfTimeStepInHour = 10;
+    state->dataGlobal->TimeStepsInHour = 10;
     state->dataGlobal->TimeStep = 1;
     OutputReportTabular::AllocateLoadComponentArrays(*state);
-    int timeStepInDay = (state->dataGlobal->HourOfDay - 1) * state->dataGlobal->NumOfTimeStepInHour + state->dataGlobal->TimeStep;
+    int timeStepInDay = (state->dataGlobal->HourOfDay - 1) * state->dataGlobal->TimeStepsInHour + state->dataGlobal->TimeStep;
 
     state->dataGlobal->CompLoadReportIsReq = true;
     state->dataGlobal->isPulseZoneSizing = false;
     InternalHeatGains::GatherComponentLoadsIntGain(*state);
-    totConvGains = state->dataOutRptTab->peopleInstantSeq(state->dataSize->CurOverallSimDay, timeStepInDay, zoneNum) +
-                   state->dataOutRptTab->lightInstantSeq(state->dataSize->CurOverallSimDay, timeStepInDay, zoneNum) +
-                   state->dataOutRptTab->equipInstantSeq(state->dataSize->CurOverallSimDay, timeStepInDay, zoneNum) +
-                   state->dataOutRptTab->refrigInstantSeq(state->dataSize->CurOverallSimDay, timeStepInDay, zoneNum) +
-                   state->dataOutRptTab->waterUseInstantSeq(state->dataSize->CurOverallSimDay, timeStepInDay, zoneNum) +
-                   state->dataOutRptTab->hvacLossInstantSeq(state->dataSize->CurOverallSimDay, timeStepInDay, zoneNum) +
-                   state->dataOutRptTab->powerGenInstantSeq(state->dataSize->CurOverallSimDay, timeStepInDay, zoneNum);
+    auto &znCompLoadDayTS = state->dataOutRptTab->znCompLoads[state->dataSize->CurOverallSimDay - 1].ts[timeStepInDay - 1].spacezone[zoneNum - 1];
+    totConvGains = znCompLoadDayTS.peopleInstantSeq + znCompLoadDayTS.lightInstantSeq + znCompLoadDayTS.equipInstantSeq +
+                   znCompLoadDayTS.refrigInstantSeq + znCompLoadDayTS.waterUseInstantSeq + znCompLoadDayTS.hvacLossInstantSeq +
+                   znCompLoadDayTS.powerGenInstantSeq;
 
     // Legitimate gain types excluded from this total
     expectedTotConvGains -=
@@ -885,8 +891,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ElectricEquipITE_ApproachTemperature
     EXPECT_FALSE(has_err_output());
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -1040,6 +1047,7 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ElectricEquipITE_DefaultCurves)
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(has_err_output());
 
+    state->init_state(*state);
     bool ErrorsFound(false);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
@@ -1326,17 +1334,18 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_ZnRpt_Outputs)
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(has_err_output());
 
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
+
     bool ErrorsFound(false);
 
-    state->dataGlobal->NumOfTimeStepInHour = 1;    // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60;    // must initialize this to get schedules initialized
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
     state->dataEnvrn->DayOfYear_Schedule = 1;
     state->dataEnvrn->DayOfMonth = 1;
     state->dataEnvrn->DayOfWeek = 1;
     state->dataGlobal->HourOfDay = 1;
     state->dataGlobal->TimeStep = 1;
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -1648,8 +1657,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_AdjustedSupplyGoodInletNode)
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -1870,8 +1880,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_AdjustedSupplyBadInletNode)
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -2096,8 +2107,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_FlowControlWithApproachTemperaturesG
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -2322,8 +2334,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_FlowControlWithApproachTemperaturesB
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -2548,8 +2561,9 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_WarnMissingInletNode)
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -2614,11 +2628,11 @@ TEST_F(EnergyPlusFixture, InternalHeatGains_GetHeatColdStressTemp)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
 
@@ -2726,8 +2740,9 @@ TEST_F(EnergyPlusFixture, ITEwithUncontrolledZoneTest)
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -2864,8 +2879,9 @@ TEST_F(EnergyPlusFixture, ITE_Env_Class_Fix_41C)
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     state->dataGlobal->TimeStepZone = 1.0;
 
@@ -3065,8 +3081,9 @@ TEST_F(EnergyPlusFixture, ITE_Env_Class_Fix_39C)
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     state->dataGlobal->TimeStepZone = 1.0;
 
@@ -3099,7 +3116,7 @@ TEST_F(EnergyPlusFixture, ITE_Env_Class_Fix_39C)
     EXPECT_NEAR(state->dataGlobal->TimeStepZone, 1.0, 1e-6);
 
     // Test 2: The following test should pass in with the fix (PR9541);
-    // Witout the fix, some of the following items would fail if tested in the original develop branch
+    // Without the fix, some of the following items would fail if tested in the original develop branch
     // if (TAirIn > DBMax[EnvClass])
     EXPECT_NE(state->dataHeatBal->ZoneITEq(Loop).TimeAboveDryBulbT, state->dataGlobal->TimeStepZone);
     EXPECT_NE(state->dataHeatBal->ZoneITEq(Loop).TimeOutOfOperRange, state->dataGlobal->TimeStepZone);
@@ -3273,8 +3290,9 @@ TEST_F(EnergyPlusFixture, ITE_Env_Class_Update_Class_H1)
     ASSERT_TRUE(process_idf(idf_objects));
 
     bool ErrorsFound(false);
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
 
     state->dataGlobal->TimeStepZone = 1.0;
 
@@ -3466,4 +3484,160 @@ TEST_F(EnergyPlusFixture, ITE_Env_Class_Update_Class_H1)
     EXPECT_EQ(thisZnRpt.ITEqTimeOutOfOperRange, state->dataGlobal->TimeStepZone);
     EXPECT_NE(thisspaceRpt.ITEqTimeBelowRH, state->dataGlobal->TimeStepZone);
     EXPECT_EQ(thisspaceRpt.ITEqTimeOutOfOperRange, state->dataGlobal->TimeStepZone);
+}
+TEST_F(EnergyPlusFixture, InternalHeatGains_SpaceAllocation)
+{
+
+    std::string const idf_objects = delimited_string({
+        " Zone,",
+        "  Zone 1,                  !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  autocalculate,           !- Ceiling Height {m}",
+        "  autocalculate,           !- Volume {m3}",
+        "  20.0;           !- Area {m2}",
+
+        "Space,",
+        "Space 1A,            !- Name",
+        "Zone 1,             !- Zone Name",
+        ",                   !- Ceiling Height {m}",
+        ",                   !- Volume {m3}",
+        "5.0;                !- Floor Area {m2}",
+
+        "Space,",
+        "Space 1B,            !- Name",
+        "Zone 1,             !- Zone Name",
+        ",                   !- Ceiling Height {m}",
+        ",                   !- Volume {m3}",
+        "15.0;                !- Floor Area {m2}",
+
+        " Zone,",
+        "  Zone 2,                  !- Name",
+        "  0,                       !- Direction of Relative North {deg}",
+        "  0,                       !- X Origin {m}",
+        "  0,                       !- Y Origin {m}",
+        "  0,                       !- Z Origin {m}",
+        "  1,                       !- Type",
+        "  1,                       !- Multiplier",
+        "  autocalculate,           !- Ceiling Height {m}",
+        "  autocalculate,           !- Volume {m3}",
+        "  0.0;           !- Area {m2}",
+
+        "Space,",
+        "Space 2A,            !- Name",
+        "Zone 2,             !- Zone Name",
+        ",                   !- Ceiling Height {m}",
+        ",                   !- Volume {m3}",
+        "0.0;                !- Floor Area {m2}",
+
+        "SpaceList, All Spaces, Space 1A, Space 1B, Space 2A;",
+
+        "ZoneList, All Zones, Zone 1, Zone 2;",
+
+        "ScheduleTypeLimits,SchType1,0.0,1.0,Continuous,Dimensionless;",
+
+        "Schedule:Constant,Schedule1,,1.0;",
+
+        "  Lights,",
+        "    Zone 1 Lights,        !- Name",
+        "    Zone 1,               !- Zone or ZoneList Name",
+        "    Schedule1,               !- Schedule Name",
+        "    LightingLevel,           !- Design Level Calculation Method",
+        "    100.0,                   !- Lighting Level {W}",
+        "    ,                        !- Watts per Zone Floor Area {W/m2}",
+        "    ,                        !- Watts per Person {W/person}",
+        "    0.0000,                  !- Return Air Fraction",
+        "    0.7000,                  !- Fraction Radiant",
+        "    0.2000,                  !- Fraction Visible",
+        "    1.0000,                  !- Fraction Replaceable",
+        "    General,                 !- End-Use Subcategory",
+        "    No;                      !- Return Air Fraction Calculated from Plenum Temperature",
+
+        "  Lights,",
+        "    Zone 2 Lights,        !- Name",
+        "    Zone 2,               !- Zone or ZoneList Name",
+        "    Schedule1,               !- Schedule Name",
+        "    LightingLevel,           !- Design Level Calculation Method",
+        "    100.0,                   !- Lighting Level {W}",
+        "    ,                        !- Watts per Zone Floor Area {W/m2}",
+        "    ,                        !- Watts per Person {W/person}",
+        "    0.0000,                  !- Return Air Fraction",
+        "    0.7000,                  !- Fraction Radiant",
+        "    0.2000,                  !- Fraction Visible",
+        "    1.0000,                  !- Fraction Replaceable",
+        "    General,                 !- End-Use Subcategory",
+        "    No;                      !- Return Air Fraction Calculated from Plenum Temperature",
+
+        "  Lights,",
+        "    Space 1A Lights,        !- Name",
+        "    Space 1A,               !- Zone or ZoneList Name",
+        "    Schedule1,               !- Schedule Name",
+        "    LightingLevel,           !- Design Level Calculation Method",
+        "    100.0,                   !- Lighting Level {W}",
+        "    ,                        !- Watts per Zone Floor Area {W/m2}",
+        "    ,                        !- Watts per Person {W/person}",
+        "    0.0000,                  !- Return Air Fraction",
+        "    0.7000,                  !- Fraction Radiant",
+        "    0.2000,                  !- Fraction Visible",
+        "    1.0000,                  !- Fraction Replaceable",
+        "    General,                 !- End-Use Subcategory",
+        "    No;                      !- Return Air Fraction Calculated from Plenum Temperature",
+
+        "  Lights,",
+        "    All Space Lights,        !- Name",
+        "    All Spaces,               !- Zone or ZoneList Name",
+        "    Schedule1,               !- Schedule Name",
+        "    LightingLevel,           !- Design Level Calculation Method",
+        "    100.0,                   !- Lighting Level {W}",
+        "    ,                        !- Watts per Zone Floor Area {W/m2}",
+        "    ,                        !- Watts per Person {W/person}",
+        "    0.0000,                  !- Return Air Fraction",
+        "    0.7000,                  !- Fraction Radiant",
+        "    0.2000,                  !- Fraction Visible",
+        "    1.0000,                  !- Fraction Replaceable",
+        "    General,                 !- End-Use Subcategory",
+        "    No;                      !- Return Air Fraction Calculated from Plenum Temperature",
+
+        "  Lights,",
+        "    All Zone Lights,        !- Name",
+        "    All Zones,               !- Zone or ZoneList Name",
+        "    Schedule1,               !- Schedule Name",
+        "    LightingLevel,           !- Design Level Calculation Method",
+        "    100.0,                   !- Lighting Level {W}",
+        "    ,                        !- Watts per Zone Floor Area {W/m2}",
+        "    ,                        !- Watts per Person {W/person}",
+        "    0.0000,                  !- Return Air Fraction",
+        "    0.7000,                  !- Fraction Radiant",
+        "    0.2000,                  !- Fraction Visible",
+        "    1.0000,                  !- Fraction Replaceable",
+        "    General,                 !- End-Use Subcategory",
+        "    No;                      !- Return Air Fraction Calculated from Plenum Temperature",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    EXPECT_FALSE(has_err_output());
+
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
+
+    bool ErrorsFound(false);
+
+    HeatBalanceManager::GetZoneData(*state, ErrorsFound);
+    SurfaceGeometry::SetupZoneGeometry(*state, ErrorsFound);
+    ASSERT_FALSE(ErrorsFound);
+
+    InternalHeatGains::GetInternalHeatGainsInput(*state);
+
+    // Zone 1 Lights: 2 spaces
+    // Zone 2 Lights: 1 space
+    // Space 1A lights: 1 space
+    // All Space Lights: 3 spaces
+    // All Zone Lights: 3 spaces
+    // 2+1+1+3+3 = 10
+    EXPECT_EQ(state->dataHeatBal->TotLights, 10);
 }

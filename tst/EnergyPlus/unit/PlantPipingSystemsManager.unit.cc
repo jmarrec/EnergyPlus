@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -51,10 +51,12 @@
 #include <gtest/gtest.h>
 
 #include "Fixtures/EnergyPlusFixture.hh"
+#include <EnergyPlus/ConfiguredFunctions.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataHeatBalance.hh>
 #include <EnergyPlus/DataSurfaces.hh>
+#include <EnergyPlus/ElectricPowerServiceManager.hh>
 #include <EnergyPlus/HeatBalanceManager.hh>
 #include <EnergyPlus/HeatBalanceSurfaceManager.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
@@ -62,6 +64,7 @@
 #include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantPipingSystemsManager.hh>
+#include <EnergyPlus/SimulationManager.hh>
 #include <EnergyPlus/SurfaceGeometry.hh>
 
 using namespace EnergyPlus;
@@ -839,7 +842,8 @@ TEST_F(EnergyPlusFixture, SiteGroundDomainSlab_CheckInputs_BadVertInsDepth)
     EXPECT_TRUE(errorsFound);
 }
 
-TEST_F(EnergyPlusFixture, DISABLED_SiteGroundDomainSlab_CheckInputs_BadTimeStepSelection)
+#ifdef GET_OUT // TimeStepSelection is not used
+TEST_F(EnergyPlusFixture, SiteGroundDomainSlab_CheckInputs_BadTimeStepSelection)
 {
 
     std::string const idf_objects = delimited_string({
@@ -908,6 +912,7 @@ TEST_F(EnergyPlusFixture, DISABLED_SiteGroundDomainSlab_CheckInputs_BadTimeStepS
 
     EXPECT_TRUE(errorsFound);
 }
+#endif // GET_OUT
 
 TEST_F(EnergyPlusFixture, SiteGroundDomainBasement_CheckInputs_CorrectInputs)
 {
@@ -1539,6 +1544,7 @@ TEST_F(EnergyPlusFixture, SiteGroundDomainBasement_CheckInputs_BadVertInsName)
     EXPECT_TRUE(errorsFound);
 }
 
+#ifdef GET_OUT // TimeStep is not actually used
 TEST_F(EnergyPlusFixture, SiteGroundDomainBasement_CheckInputs_BadTimestepSelection)
 {
 
@@ -1608,6 +1614,7 @@ TEST_F(EnergyPlusFixture, SiteGroundDomainBasement_CheckInputs_BadTimestepSelect
 
     EXPECT_TRUE(errorsFound);
 }
+#endif // GET_OUT
 
 TEST_F(EnergyPlusFixture, PipingSystemFullSimulation)
 {
@@ -1731,6 +1738,8 @@ TEST_F(EnergyPlusFixture, PipingSystemFullSimulation)
     state->dataPlnt->TotNumLoops = 1;
     state->dataPlnt->PlantLoop.allocate(1);
 
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).TotalBranches = 1;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch.allocate(1);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).TotalComponents = 1;
@@ -2217,4 +2226,133 @@ TEST_F(EnergyPlusFixture, SiteGroundDomainSlab_Fix_HorizInsDepth_Test2)
     EXPECT_NEAR(theDomain.Partitions.Y[partySize - 1].TotalWidth, totalWid, err_tol);
 
     EXPECT_TRUE(theDomain.Partitions.Y[partySize - 1].partitionType == PartitionType::UnderFloor);
+}
+
+TEST_F(EnergyPlusFixture, SiteGroundDomainSlab_FiniteDifference)
+{
+
+    std::string const idf_objects = delimited_string({
+
+        "Site:GroundTemperature:Undisturbed:FiniteDifference,",
+        "  Ground,                  !- Name",
+        "  1,                       !- Soil Thermal Conductivity {W/m-K}",
+        "  1250,                    !- Soil Density {kg/m3}",
+        "  1200,                    !- Soil Specific Heat {J/kg-K}",
+        "  30,                      !- Soil Moisture Content Volume Fraction {percent}",
+        "  50,                      !- Soil Moisture Content Volume Fraction at Saturation {percent}",
+        "  ;                        !- Evapotranspiration Ground Cover Parameter {dimensionless}",
+
+        "Site:GroundDomain:Slab,",
+        "  Slab,                    !- Name",
+        "  10,                      !- Ground Domain Depth {m}",
+        "  1,                       !- Aspect Ratio",
+        "  5,                       !- Perimeter Offset {m}",
+        "  ,                        !- Soil Thermal Conductivity {W/m-K}",
+        "  2800,                    !- Soil Density {kg/m3}",
+        "  850,                     !- Soil Specific Heat {J/kg-K}",
+        "  30,                      !- Soil Moisture Content Volume Fraction {percent}",
+        "  50,                      !- Soil Moisture Content Volume Fraction at Saturation {percent}",
+        "  Site:GroundTemperature:Undisturbed:FiniteDifference,  !- Undisturbed Ground Temperature Model Type",
+        "  Ground,                  !- Undisturbed Ground Temperature Model Name",
+        "  ,                        !- Evapotranspiration Ground Cover Parameter",
+        "  GroundDomain,            !- Slab Boundary Condition Model Name",
+        "  OnGrade,                 !- Slab Location",
+        "  ,                        !- Slab Material Name",
+        "  No,                      !- Horizontal Insulation",
+        "  ,                        !- Horizontal Insulation Material Name",
+        "  Full,                    !- Horizontal Insulation Extents",
+        "  ,                        !- Perimeter Insulation Width {m}",
+        "  No,                      !- Vertical Insulation",
+        "  ,                        !- Vertical Insulation Material Name",
+        "  ,                        !- Vertical Insulation Depth {m}",
+        "  Hourly,                  !- Simulation Timestep",
+        "  ,                        !- Geometric Mesh Coefficient",
+        "  6;                       !- Mesh Density Parameter",
+
+        "SurfaceProperty:OtherSideConditionsModel,",
+        "  GroundDomain,            !- Name",
+        "  GroundCoupledSurface;    !- Type of Modeling",
+
+        "RunPeriod,",
+        "  January,                 !- Name",
+        "  1,                       !- Begin Month",
+        "  1,                       !- Begin Day of Month",
+        "  ,                        !- Begin Year",
+        "  1,                       !- End Month",
+        "  31,                      !- End Day of Month",
+        "  ,                        !- End Year",
+        "  Tuesday,                 !- Day of Week for Start Day",
+        "  Yes,                     !- Use Weather File Holidays and Special Days",
+        "  Yes,                     !- Use Weather File Daylight Saving Period",
+        "  No,                      !- Apply Weekend Holiday Rule",
+        "  Yes,                     !- Use Weather File Rain Indicators",
+        "  Yes;                     !- Use Weather File Snow Indicators",
+    });
+
+    EXPECT_TRUE(process_idf(idf_objects));
+
+    // Set an actual weather file to Chicago EPW
+    state->dataWeather->WeatherFileExists = true;
+    state->files.inputWeatherFilePath.filePath = fs::path(configured_source_directory()) / "weather/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw";
+
+    // Read the project data, such as Timestep
+    state->dataGlobal->BeginSimFlag = true;
+    SimulationManager::GetProjectData(*state);
+    EXPECT_EQ(state->dataGlobal->TimeStepsInHour, 4);
+
+    // Needed to avoid crash in SetupSimulation (from ElectricPowerServiceManager.hh)
+    createFacilityElectricPowerServiceObject(*state);
+
+    bool errorsFound = false;
+    SimulationManager::SetupSimulation(*state, errorsFound);
+    ASSERT_FALSE(errorsFound);
+
+    EXPECT_EQ(state->dataWeather->NumOfEnvrn, 1);
+    EXPECT_EQ(state->dataEnvrn->TotDesDays, 0);
+    EXPECT_EQ(state->dataWeather->TotRunPers, 1);
+
+    // Dummy surface
+    state->dataSurface->Surface.allocate(1);
+    state->dataSurface->Surface(1).OSCMPtr = 1;
+    state->dataSurface->Surface(1).Area = 100;
+
+    // Other necessary inputs
+    GetOSCMData(*state, errorsFound);
+    GetMaterialData(*state, errorsFound);
+
+    state->dataPlantPipingSysMgr->domains.resize(1);
+    EXPECT_NO_THROW(ReadZoneCoupledDomainInputs(*state, 1, 1, errorsFound));
+
+    EXPECT_FALSE(errorsFound);
+    EXPECT_TRUE(compare_err_stream(""));
+}
+
+TEST_F(EnergyPlusFixture, calcFluxWeightingFactorTest)
+{
+    Real64 weightedFlux;
+    Real64 uniformFlux;
+    Real64 actualResult;
+    Real64 expectedResult;
+    Real64 constexpr allowedTolerance = 0.00001;
+
+    // Test 1a: Everything normal and positive, simple calculation.
+    weightedFlux = 1.0;
+    uniformFlux = 1.0;
+    expectedResult = 1.0;
+    actualResult = calcFluxWeightingFactor(weightedFlux, uniformFlux);
+    EXPECT_NEAR(actualResult, expectedResult, allowedTolerance);
+
+    // Test 1b: Everything normal and negative, simple calculation.
+    weightedFlux = -0.1;
+    uniformFlux = -0.5;
+    expectedResult = 0.2;
+    actualResult = calcFluxWeightingFactor(weightedFlux, uniformFlux);
+    EXPECT_NEAR(actualResult, expectedResult, allowedTolerance);
+
+    // Test 2: Zero uniform flux--the condition that caused the problem.  Return a unity value.
+    weightedFlux = 1.0;
+    uniformFlux = 0.0;
+    expectedResult = 1.0;
+    actualResult = calcFluxWeightingFactor(weightedFlux, uniformFlux);
+    EXPECT_NEAR(actualResult, expectedResult, allowedTolerance);
 }

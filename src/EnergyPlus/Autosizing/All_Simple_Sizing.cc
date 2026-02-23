@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -276,7 +276,9 @@ Real64 DesiccantDehumidifierBFPerfDataFaceVelocitySizer::size(EnergyPlusData &st
         this->autoSizedValue = 4.30551 + 0.01969 * this->dataAirFlowUsedForSizing;
         this->autoSizedValue = min(6.0, this->autoSizedValue);
     }
-    if (this->isEpJSON) this->sizingString = "nominal_air_face_velocity [m/s]";
+    if (this->isEpJSON) {
+        this->sizingString = "nominal_air_face_velocity [m/s]";
+    }
     this->selectSizerOutput(state, errorsFound);
     return this->autoSizedValue;
 }
@@ -312,9 +314,10 @@ Real64 HeatingCoilDesAirInletTempSizer::size(EnergyPlusData &state, Real64 _orig
         }
     }
     this->selectSizerOutput(state, errorsFound);
-    if (this->isCoilReportObject)
+    if (this->isCoilReportObject) {
         state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirTemp(
             state, this->compName, this->compType, this->autoSizedValue, this->curSysNum, this->curZoneEqNum);
+    }
     return this->autoSizedValue;
 }
 
@@ -345,8 +348,9 @@ Real64 HeatingCoilDesAirOutletTempSizer::size(EnergyPlusData &state, Real64 _ori
         }
     }
     this->selectSizerOutput(state, errorsFound);
-    if (this->isCoilReportObject)
+    if (this->isCoilReportObject) {
         state.dataRptCoilSelection->coilSelectionReportObj->setCoilLvgAirTemp(state, this->compName, this->compType, this->autoSizedValue);
+    }
     return this->autoSizedValue;
 }
 
@@ -381,8 +385,9 @@ Real64 HeatingCoilDesAirInletHumRatSizer::size(EnergyPlusData &state, Real64 _or
         }
     }
     this->selectSizerOutput(state, errorsFound);
-    if (this->isCoilReportObject)
+    if (this->isCoilReportObject) {
         state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirHumRat(state, this->compName, this->compType, this->autoSizedValue);
+    }
     return this->autoSizedValue;
 }
 

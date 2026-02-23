@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -233,8 +233,8 @@ namespace DElightManagerF {
               state.dataEnvrn->TimeZoneNumber);
 
         // Calc cos and sin of Building Relative North values for later use in transforming Reference Point coordinates
-        CosBldgRelNorth = std::cos(-state.dataHeatBal->BuildingAzimuth * Constant::DegToRadians);
-        SinBldgRelNorth = std::sin(-state.dataHeatBal->BuildingAzimuth * Constant::DegToRadians);
+        CosBldgRelNorth = std::cos(-state.dataHeatBal->BuildingAzimuth * Constant::DegToRad);
+        SinBldgRelNorth = std::sin(-state.dataHeatBal->BuildingAzimuth * Constant::DegToRad);
 
         // Loop through the Daylighting:Controls objects that use DElight checking for a host Zone
         for (auto &znDayl : state.dataDayltg->daylightControl) {
@@ -309,8 +309,8 @@ namespace DElightManagerF {
                           znDayl.DElightGriddingResolution * M22FT2);
 
                     // Calc cos and sin of Zone Relative North values for later use in transforming Reference Point coordinates
-                    CosZoneRelNorth = std::cos(-zn.RelNorth * Constant::DegToRadians);
-                    SinZoneRelNorth = std::sin(-zn.RelNorth * Constant::DegToRadians);
+                    CosZoneRelNorth = std::cos(-zn.RelNorth * Constant::DegToRad);
+                    SinZoneRelNorth = std::sin(-zn.RelNorth * Constant::DegToRad);
 
                     // Zone Lighting Schedule Data Section
                     // NOTE: Schedules are not required since hourly values are retrieved from EnergyPlus as needed
@@ -323,9 +323,15 @@ namespace DElightManagerF {
                         auto const &thisSpace = state.dataHeatBal->space(spaceNum);
                         for (int isurf = thisSpace.HTSurfaceFirst; isurf <= thisSpace.HTSurfaceLast; ++isurf) {
                             auto const &surf(state.dataSurface->Surface(isurf));
-                            if (surf.Class == SurfaceClass::Wall) ++iNumOpaqueSurfs;
-                            if (surf.Class == SurfaceClass::Roof) ++iNumOpaqueSurfs;
-                            if (surf.Class == SurfaceClass::Floor) ++iNumOpaqueSurfs;
+                            if (surf.Class == SurfaceClass::Wall) {
+                                ++iNumOpaqueSurfs;
+                            }
+                            if (surf.Class == SurfaceClass::Roof) {
+                                ++iNumOpaqueSurfs;
+                            }
+                            if (surf.Class == SurfaceClass::Floor) {
+                                ++iNumOpaqueSurfs;
+                            }
                         }
                     } // Zone Opaque Surface loop
 
@@ -421,8 +427,8 @@ namespace DElightManagerF {
                                             }
 
                                         } // Surface hosts Window test
-                                    }     // Window test
-                                }         // Window loop
+                                    } // Window test
+                                } // Window loop
 
                                 print(delightInFile, Format_909, iNumWindows);
 
@@ -461,7 +467,9 @@ namespace DElightManagerF {
                                                     // Has the current Construction index been encountered before?
                                                     lWndoConstFound = false;
                                                     for (int iconst = 1; iconst <= iNumWndoConsts; ++iconst) {
-                                                        if (iconstruct == iWndoConstIndexes(iconst)) lWndoConstFound = true;
+                                                        if (iconstruct == iWndoConstIndexes(iconst)) {
+                                                            lWndoConstFound = true;
+                                                        }
                                                     }
                                                     if (!lWndoConstFound) {
                                                         ++iNumWndoConsts;
@@ -484,10 +492,10 @@ namespace DElightManagerF {
                                                               wndo2.Vertex(ivert).z * M2FT);
                                                     }
                                                 } //! lWndoIsDoppelganger
-                                            }     // Surface hosts Window2 test
-                                        }         // Window2 Class test
-                                    }             // Window2 loop
-                                }                 // Hosted Windows test
+                                            } // Surface hosts Window2 test
+                                        } // Window2 Class test
+                                    } // Window2 loop
+                                } // Hosted Windows test
 
                                 // Write the number of CFS hosted by the current Opaque Bounding Surface
                                 iHostedCFS = 0;
@@ -554,8 +562,8 @@ namespace DElightManagerF {
                                             ErrorsFound = true;
                                         }
                                     } // The current Opaque Bounding Surface hosts the current CFS object?
-                                }     // CFS object loop 2
-                            }         // Opaque Bounding Surface test
+                                } // CFS object loop 2
+                            } // Opaque Bounding Surface test
                         }
                     } // Zone Surface loop
 
@@ -666,11 +674,11 @@ namespace DElightManagerF {
                                           znDayl.LightControlType); // should never happen but just in case send zero fraction and illuminance
                                 }
                             } // Max 100 RefPt test
-                        }     // RefPt in current DElight Zone test
-                    }         // traverse reference points loop
-                }             // if in a zone
-            }                 // Zone hosts DElight object test
-        }                     // traverse ZoneDayLight object loop
+                        } // RefPt in current DElight Zone test
+                    } // traverse reference points loop
+                } // if in a zone
+            } // Zone hosts DElight object test
+        } // traverse ZoneDayLight object loop
 
         // Write BUILDING SHADES
         print(delightInFile, Format_914);
@@ -696,7 +704,9 @@ namespace DElightManagerF {
 
         } // Glass Type loop
 
-        if (ErrorsFound) ShowFatalError(state, "Problems with Daylighting:DElight input, see previous error messages");
+        if (ErrorsFound) {
+            ShowFatalError(state, "Problems with Daylighting:DElight input, see previous error messages");
+        }
     }
 
     void GenerateDElightDaylightCoefficients(Real64 &dLatitude, int &iErrorFlag)

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -50,6 +50,7 @@
 
 // EnergyPlus Headers
 #include "Fixtures/EnergyPlusFixture.hh"
+#include <EnergyPlus/DataBranchNodeConnections.hh>
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataReportingFlags.hh>
@@ -71,6 +72,7 @@ TEST_F(EnergyPlusFixture, CheckThreading)
     });
 
     EXPECT_FALSE(process_idf(idf_objects, false));
+    state->init_state(*state);
 
     std::string const error_string = delimited_string({
         "   ** Severe  ** Line: 1 Index: 14 - \"ProgramControl\" is not a valid Object Type.",
@@ -111,6 +113,8 @@ TEST_F(EnergyPlusFixture, Test_PerformancePrecisionTradeoffs_DirectSolution_Mess
     });
 
     EXPECT_TRUE(process_idf(idf_objects, false));
+
+    state->init_state(*state);
 
     std::string const error_string = delimited_string({
         "   ** Warning ** PerformancePrecisionTradeoffs: Coil Direct Solution simulation is selected.",
@@ -186,6 +190,7 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDebuggingData)
 
         state->init_state_called = false;
         EXPECT_TRUE(process_idf(idf_objects));
+        state->init_state(*state);
 
         EXPECT_TRUE(state->dataReportFlag->DebugOutput);
         EXPECT_FALSE(state->dataReportFlag->EvenDuringWarmup);
@@ -203,6 +208,7 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDebuggingData)
 
         state->init_state_called = false;
         EXPECT_TRUE(process_idf(idf_objects));
+        state->init_state(*state);
 
         EXPECT_FALSE(state->dataReportFlag->DebugOutput);
         EXPECT_TRUE(state->dataReportFlag->EvenDuringWarmup);
@@ -227,6 +233,8 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDebuggingData)
         compare_err_stream_substring("", true);
         // Input processor with throw a severe, so do not use assertions
         EXPECT_FALSE(process_idf(idf_objects, false));
+        state->init_state(*state);
+
         // Instead do it here, making sure to reset the stream
         {
             std::string const expectedError = delimited_string({
@@ -248,6 +256,7 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_DefaultState)
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     EXPECT_FALSE(state->dataGlobal->DisplayAllWarnings);
     EXPECT_FALSE(state->dataGlobal->DisplayExtraWarnings);
@@ -282,6 +291,7 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_SimpleCase)
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     EXPECT_TRUE(state->dataGlobal->DisplayAllWarnings);
     EXPECT_TRUE(state->dataGlobal->DisplayExtraWarnings);
@@ -320,6 +330,7 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_AllKeys)
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     EXPECT_TRUE(state->dataGlobal->DisplayAllWarnings);
     EXPECT_TRUE(state->dataGlobal->DisplayExtraWarnings);
@@ -351,6 +362,8 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_Unicity)
     compare_err_stream_substring("", true);
     // Input processor will throw a severe, so do not use assertions
     EXPECT_FALSE(process_idf(idf_objects, false));
+    state->init_state(*state);
+
     // Instead do it here, making sure to reset the stream
     {
         std::string const expectedError = delimited_string({
@@ -387,6 +400,8 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_UndocumentedFlags)
 
     // This will throw a warning in InputProcessor since these aren't supported keys, so do not use assertions
     EXPECT_FALSE(process_idf(idf_objects, false));
+    state->init_state(*state);
+
     const std::string expected_warning = delimited_string({
         "   ** Severe  ** <root>[Output:Diagnostics][Output:Diagnostics 1][diagnostics][0][key] - \"IgnoreSolarRadiation\" - Failed to match against "
         "any enum values.",
@@ -435,6 +450,7 @@ TEST_F(EnergyPlusFixture, SimulationManager_OutputDiagnostics_HasEmpty)
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     EXPECT_FALSE(state->dataGlobal->DisplayAllWarnings);
     EXPECT_FALSE(state->dataGlobal->DisplayExtraWarnings);
@@ -471,10 +487,11 @@ TEST_F(EnergyPlusFixture, SimulationManager_HVACSizingSimulationChoiceTest)
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
-    EXPECT_TRUE(state->dataGlobal->DoHVACSizingSimulation);
+    EXPECT_FALSE(state->dataGlobal->DoHVACSizingSimulation); // flag gets reset because Do Plant is NO
     // get a default value
-    EXPECT_EQ(state->dataGlobal->HVACSizingSimMaxIterations, 1);
+    EXPECT_EQ(state->dataGlobal->HVACSizingSimMaxIterations, 0); // this is no longer set because
 }
 
 TEST_F(EnergyPlusFixture, Test_SimulationControl_ZeroSimulation)
@@ -492,6 +509,7 @@ TEST_F(EnergyPlusFixture, Test_SimulationControl_ZeroSimulation)
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     ASSERT_THROW(SimulationManager::CheckForMisMatchedEnvironmentSpecifications(*state), std::runtime_error);
     // no error message from PerformancePrecisionTradeoffs objects
@@ -522,6 +540,7 @@ TEST_F(EnergyPlusFixture, Test_SimulationControl_PureLoadCalc)
     });
 
     EXPECT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     EXPECT_NO_THROW(SimulationManager::CheckForMisMatchedEnvironmentSpecifications(*state));
     // no error message from PerformancePrecisionTradeoffs objects
@@ -532,4 +551,56 @@ TEST_F(EnergyPlusFixture, Test_SimulationControl_PureLoadCalc)
     });
 
     EXPECT_TRUE(compare_err_stream(error_string, true));
+}
+
+TEST_F(EnergyPlusFixture, SimulationManager_ReportLoopConnectionsTest)
+{
+    // Unit Test for Defect #11061: Test Error Message (modified level of message)
+    state->dataBranchNodeConnections->NumCompSets = 1;
+    state->dataBranchNodeConnections->CompSets.allocate(1);
+    state->dataBranchNodeConnections->CompSets(1).ParentObjectType = DataLoopNode::ConnectionObjectType::WaterHeaterMixed;
+    state->dataBranchNodeConnections->CompSets(1).ComponentObjectType = DataLoopNode::ConnectionObjectType::WaterHeaterMixed;
+    state->dataBranchNodeConnections->CompSets(1).CName = "WaterHeaterMixed1";
+    state->dataBranchNodeConnections->CompSets(1).InletNodeName = "MixedWaterHeater1Inlet";
+    state->dataBranchNodeConnections->CompSets(1).OutletNodeName = "MixedWaterHeater1Outlet";
+    state->dataSimulationManager->WarningOut = false;
+    state->dataBranchNodeConnections->CompSets(1).Description = "UNDEFINED";
+
+    EXPECT_THROW(EnergyPlus::SimulationManager::ReportLoopConnections(*state), std::runtime_error);
+
+    std::string const error_string = delimited_string({
+        "   ** Severe  ** Potential Node Connection Error for object WATERHEATER:MIXED, name=WaterHeaterMixed1",
+        "   **   ~~~   **   Node Types are still UNDEFINED -- See Branch/Node Details file for further information",
+        "   **   ~~~   **   Inlet Node : MixedWaterHeater1Inlet",
+        "   **   ~~~   **   Outlet Node: MixedWaterHeater1Outlet",
+        "   ************* There was 1 node connection error noted.",
+        "   **  Fatal  ** Please see severe error(s) and correct either the branch nodes or the component nodes so that they match.",
+        "   ...Summary of Errors that led to program termination:",
+        "   ..... Reference severe error count=1",
+        "   ..... Last severe error=Potential Node Connection Error for object WATERHEATER:MIXED, name=WaterHeaterMixed1",
+    });
+
+    EXPECT_TRUE(compare_err_stream(error_string, true));
+}
+
+TEST_F(EnergyPlusFixture, SimulationManager_PlantSizingInputTest)
+{
+    // Unit Test for Defect #10797: Check for Bad Input (avoid a hard crash)
+    std::string const idf_objects = delimited_string({
+        "SimulationControl,",
+        "  No,                       !- Do Zone Sizing Calculation",
+        "  No,                       !- Do System Sizing Calculation",
+        "  Yes,                      !- Do Plant Sizing Calculation",
+        "  No,                       !- Run Simulation for Sizing Periods",
+        "  No,                       !- Run Simulation for Weather File Run Periods",
+        "  Yes,                      !- Do HVAC Sizing Simulation for Sizing Periods",
+        "  2;                        !- Maximum Number of HVAC Sizing Simulation Passes",
+    });
+
+    EXPECT_TRUE(process_idf(idf_objects));
+
+    EXPECT_THROW(SimulationManager::GetProjectData(*state), std::runtime_error);
+
+    EXPECT_TRUE(compare_err_stream_substring(
+        "GetProjectData: No Sizing:Plant object entered when the Do HVAC Sizing Simulation and Do Plant Sizing are both YES", true));
 }

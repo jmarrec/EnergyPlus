@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -71,7 +71,6 @@
 
 using namespace EnergyPlus::MixedAir;
 using namespace EnergyPlus::HVACControllers;
-using namespace EnergyPlus::ScheduleManager;
 using namespace EnergyPlus::SetPointManager;
 using namespace EnergyPlus::WaterCoils;
 
@@ -130,6 +129,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_ResetHumidityRatioCtrlVarType)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetSetPointManagerInputs(*state);
     // check specified control variable type is "HumidityRatio"
@@ -206,6 +206,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_TestTempAndHumidityRatioCtrlVarType)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetSetPointManagerInputs(*state);
     // check specified control variable type is "HumidityRatio"
@@ -257,6 +258,8 @@ TEST_F(EnergyPlusFixture, HVACControllers_TestTempAndHumidityRatioCtrlVarType)
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->TotNumLoops = 1;
 
+    state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).TotalBranches = 1;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch.allocate(1);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).TotalComponents = 1;
@@ -269,7 +272,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_TestTempAndHumidityRatioCtrlVarType)
     bool SimZoneEquipment(false);
     SimAirServingZones::SimAirLoops(*state, true, SimZoneEquipment);
 
-    // after controllers are simulated, AirLoopControllerIndex = index to this controller on this air loop (e.g., n of num contollers on air loop)
+    // after controllers are simulated, AirLoopControllerIndex = index to this controller on this air loop (e.g., n of num controllers on air loop)
     ASSERT_EQ(1, state->dataAirSystemsData->PrimaryAirSystems(1).NumControllers);
     ASSERT_EQ(1, state->dataAirSystemsData->PrimaryAirSystems(1).ControllerIndex(1));
     ASSERT_EQ(1, state->dataHVACControllers->ControllerProps(1).AirLoopControllerIndex);
@@ -303,7 +306,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_SchSetPointMgrsOrderTest)
         "	Until: 24:00, 1.0;        !- Field 3",
 
         "  Controller:WaterCoil,",
-        "    Cooling Coil Contoller,  !- Name",
+        "    Cooling Coil Controller,  !- Name",
         "    HumidityRatio,           !- Control Variable",
         "    Reverse,                 !- Action",
         "    FLOW,                    !- Actuator Variable",
@@ -342,10 +345,11 @@ TEST_F(EnergyPlusFixture, HVACControllers_SchSetPointMgrsOrderTest)
         "  AirLoopHVAC:ControllerList,",
         "	CW Coil Controller,       !- Name",
         "	Controller:WaterCoil,     !- Controller 1 Object Type",
-        "	Cooling Coil Contoller;   !- Controller 1 Name",
+        "	Cooling Coil Controller;   !- Controller 1 Name",
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetSetPointManagerInputs(*state);
     // There are two setpoint managers and are schedule type
@@ -410,6 +414,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_WaterCoilOnPrimaryLoopCheckTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetControllerInput(*state);
 
@@ -503,6 +508,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_WaterCoilOnOutsideAirSystemCheckTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetControllerInput(*state);
 
@@ -635,6 +641,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_CoilSystemCoolingWaterOnOutsideAirSyst
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetControllerInput(*state);
 
@@ -842,7 +849,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_BlankAutosized)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
+    state->init_state(*state);
     GetSetPointManagerInputs(*state);
 
     GetControllerInput(*state);
@@ -917,6 +924,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_MaxFlowZero)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetSetPointManagerInputs(*state);
 
@@ -965,8 +973,8 @@ TEST_F(EnergyPlusFixture, HVACControllers_MaxFlowZero)
     state->dataPlnt->TotNumLoops = 1;
     state->dataPlnt->PlantLoop(1).Name = "CHW LOOP";
     state->dataPlnt->PlantLoop(1).PlantSizNum = 1;
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).TotalBranches = 1;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch.allocate(1);
@@ -1002,7 +1010,7 @@ TEST_F(EnergyPlusFixture, HVACControllers_MaxFlowZero)
     // and issue a warning
     SimAirServingZones::SimAirLoops(*state, true, SimZoneEquipment);
 
-    // after controllers are simulated, AirLoopControllerIndex = index to this controller on this air loop (e.g., n of num contollers on air loop)
+    // after controllers are simulated, AirLoopControllerIndex = index to this controller on this air loop (e.g., n of num controllers on air loop)
     ASSERT_EQ(1, state->dataAirSystemsData->PrimaryAirSystems(1).NumControllers);
     ASSERT_EQ(1, state->dataAirSystemsData->PrimaryAirSystems(1).ControllerIndex(1));
     ASSERT_EQ(1, state->dataHVACControllers->ControllerProps(1).AirLoopControllerIndex);

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -58,6 +58,7 @@
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataIPShortCuts.hh>
 #include <EnergyPlus/DataLoopNode.hh>
+#include <EnergyPlus/DataSizing.hh>
 #include <EnergyPlus/EMSManager.hh>
 #include <EnergyPlus/FluidProperties.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
@@ -99,7 +100,9 @@ PlantComponent *PlantProfileData::factory(EnergyPlusData &state, std::string con
     auto thisObj = std::find_if(state.dataPlantLoadProfile->PlantProfile.begin(),
                                 state.dataPlantLoadProfile->PlantProfile.end(),
                                 [&objectName](const PlantProfileData &plp) { return plp.Name == objectName; });
-    if (thisObj != state.dataPlantLoadProfile->PlantProfile.end()) return thisObj;
+    if (thisObj != state.dataPlantLoadProfile->PlantProfile.end()) {
+        return thisObj;
+    }
     // If we didn't find it, fatal
     ShowFatalError(state, format("PlantLoadProfile::factory: Error getting inputs for pipe named: {}", objectName));
     // Shut up the compiler
@@ -141,11 +144,7 @@ void PlantProfileData::simulate(EnergyPlusData &state,
 
     if (this->FluidType == PlantLoopFluidType::Water) {
         if (this->MassFlowRate > 0.0) {
-            Real64 Cp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                               state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                               this->InletTemp,
-                                                               state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                               RoutineName);
+            Real64 Cp = this->plantLoc.loop->glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
             DeltaTemp = this->Power / (this->MassFlowRate * Cp);
         } else {
             this->Power = 0.0;
@@ -154,29 +153,11 @@ void PlantProfileData::simulate(EnergyPlusData &state,
         this->OutletTemp = this->InletTemp - DeltaTemp;
     } else if (this->FluidType == PlantLoopFluidType::Steam) {
         if (this->MassFlowRate > 0.0 && this->Power > 0.0) {
-            Real64 EnthSteamInDry = FluidProperties::GetSatEnthalpyRefrig(state,
-                                                                          state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                                          this->InletTemp,
-                                                                          1.0,
-                                                                          state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                                          RoutineName);
-            Real64 EnthSteamOutWet = FluidProperties::GetSatEnthalpyRefrig(state,
-                                                                           state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                                           this->InletTemp,
-                                                                           0.0,
-                                                                           state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                                           RoutineName);
+            Real64 EnthSteamInDry = this->plantLoc.loop->steam->getSatEnthalpy(state, this->InletTemp, 1.0, RoutineName);
+            Real64 EnthSteamOutWet = this->plantLoc.loop->steam->getSatEnthalpy(state, this->InletTemp, 0.0, RoutineName);
             Real64 LatentHeatSteam = EnthSteamInDry - EnthSteamOutWet;
-            Real64 SatTemp = FluidProperties::GetSatTemperatureRefrig(state,
-                                                                      state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                                      DataEnvironment::StdPressureSeaLevel,
-                                                                      state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                                      RoutineName);
-            Real64 CpWater = FluidProperties::GetSpecificHeatGlycol(state,
-                                                                    state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                                    SatTemp,
-                                                                    state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                                    RoutineName);
+            Real64 SatTemp = this->plantLoc.loop->steam->getSatTemperature(state, DataEnvironment::StdPressureSeaLevel, RoutineName);
+            Real64 CpWater = this->plantLoc.loop->glycol->getSpecificHeat(state, SatTemp, RoutineName);
 
             // Steam Mass Flow Rate Required
             this->MassFlowRate = this->Power / (LatentHeatSteam + this->DegOfSubcooling * CpWater);
@@ -219,38 +200,18 @@ void PlantProfileData::InitPlantProfile(EnergyPlusData &state)
     static constexpr std::string_view RoutineName("InitPlantProfile");
     Real64 FluidDensityInit;
 
-    // Do the one time initializations
-
-    if (!state.dataGlobal->SysSizingCalc && this->InitSizing) {
-        PlantUtilities::RegisterPlantCompDesignFlow(state, InletNode, this->PeakVolFlowRate);
-        this->InitSizing = false;
-    }
-
     if (state.dataGlobal->BeginEnvrnFlag && this->Init) {
         // Clear node initial conditions
         state.dataLoopNodes->Node(OutletNode).Temp = 0.0;
 
         if (this->FluidType == PlantLoopFluidType::Water) {
-            FluidDensityInit = FluidProperties::GetDensityGlycol(state,
-                                                                 state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                                 Constant::InitConvTemp,
-                                                                 state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                                 RoutineName);
+            FluidDensityInit = this->plantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
         } else { //(this->FluidType == PlantLoopFluidType::Steam)
-            Real64 SatTempAtmPress = FluidProperties::GetSatTemperatureRefrig(state,
-                                                                              state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                                              DataEnvironment::StdPressureSeaLevel,
-                                                                              state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                                              RoutineName);
-            FluidDensityInit = FluidProperties::GetSatDensityRefrig(state,
-                                                                    state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                                    SatTempAtmPress,
-                                                                    1.0,
-                                                                    state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                                    RoutineName);
+            Real64 SatTempAtmPress = this->plantLoc.loop->steam->getSatTemperature(state, DataEnvironment::StdPressureSeaLevel, RoutineName);
+            FluidDensityInit = this->plantLoc.loop->steam->getSatDensity(state, SatTempAtmPress, 1.0, RoutineName);
         }
 
-        Real64 MaxFlowMultiplier = ScheduleManager::GetScheduleMaxValue(state, this->FlowRateFracSchedule);
+        Real64 MaxFlowMultiplier = this->flowRateFracSched->getMaxVal(state);
 
         PlantUtilities::InitComponentNodes(
             state, 0.0, this->PeakVolFlowRate * FluidDensityInit * MaxFlowMultiplier, this->InletNode, this->OutletNode);
@@ -262,39 +223,101 @@ void PlantProfileData::InitPlantProfile(EnergyPlusData &state)
         this->Init = false;
     }
 
-    if (!state.dataGlobal->BeginEnvrnFlag) this->Init = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        this->Init = true;
+    }
 
     this->InletTemp = state.dataLoopNodes->Node(InletNode).Temp;
-    this->Power = ScheduleManager::GetCurrentScheduleValue(state, this->LoadSchedule);
+    this->Power = this->loadSched->getCurrentVal();
 
-    if (this->EMSOverridePower) this->Power = this->EMSPowerValue;
+    if (this->EMSOverridePower) {
+        this->Power = this->EMSPowerValue;
+    }
 
     if (this->FluidType == PlantLoopFluidType::Water) {
-        FluidDensityInit = FluidProperties::GetDensityGlycol(state,
-                                                             state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                             this->InletTemp,
-                                                             state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                             RoutineName);
+        FluidDensityInit = this->plantLoc.loop->glycol->getDensity(state, this->InletTemp, RoutineName);
     } else { //(this->FluidType == PlantLoopFluidType::Steam)
-        FluidDensityInit = FluidProperties::GetSatDensityRefrig(state,
-                                                                state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                                this->InletTemp,
-                                                                1.0,
-                                                                state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                                RoutineName);
+        FluidDensityInit = this->plantLoc.loop->steam->getSatDensity(state, this->InletTemp, 1.0, RoutineName);
     }
 
     // Get the scheduled mass flow rate
-    this->VolFlowRate = this->PeakVolFlowRate * ScheduleManager::GetCurrentScheduleValue(state, this->FlowRateFracSchedule);
+    this->VolFlowRate = this->PeakVolFlowRate * this->flowRateFracSched->getCurrentVal();
 
     this->MassFlowRate = this->VolFlowRate * FluidDensityInit;
 
-    if (this->EMSOverrideMassFlow) this->MassFlowRate = this->EMSMassFlowValue;
+    if (this->EMSOverrideMassFlow) {
+        this->MassFlowRate = this->EMSMassFlowValue;
+    }
 
     // Request the mass flow rate from the plant component flow utility routine
     PlantUtilities::SetComponentFlowRate(state, this->MassFlowRate, InletNode, OutletNode, this->plantLoc);
 
     this->VolFlowRate = this->MassFlowRate / FluidDensityInit;
+
+    // Do the one time initializations
+
+    if (this->InitSizing && !state.dataGlobal->SysSizingCalc) {
+        PlantUtilities::RegisterPlantCompDesignFlow(state, InletNode, this->PeakVolFlowRate);
+        auto &thisLoadSched = this->loadSched->getDayVals(state, -1, -1);
+        auto &thisFlowSched = this->flowRateFracSched->getDayVals(state, -1, -1);
+        int plntSizIndex = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).PlantSizNum;
+        Real64 plntDeltaT = 0.0;
+        Real64 inletTemp = Constant::InitConvTemp;
+        if (plntSizIndex > 0) {
+            plntDeltaT = state.dataSize->PlantSizData(plntSizIndex).DeltaT;
+            inletTemp = state.dataSize->PlantSizData(plntSizIndex).ExitTemp;
+        }
+        auto &plntComps = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).plantCoilObjectNames;
+        auto &cmpType = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).plantCoilObjectTypes;
+        int arrayIndex = -1;
+        for (size_t i = 0; i < plntComps.size(); ++i) {
+            if (plntComps[i] == this->Name && cmpType[i] == this->Type) {
+                arrayIndex = i;
+                break;
+            }
+        }
+        if (arrayIndex == -1) {
+            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).plantCoilObjectNames.emplace_back(this->Name);
+            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).plantCoilObjectTypes.emplace_back(this->Type);
+            std::vector<Real64> tmpFlowData;
+            tmpFlowData.resize(size_t(24 * state.dataGlobal->TimeStepsInHour + 1));
+            tmpFlowData[0] = -1; // comp index
+            if (this->FluidType == PlantLoopFluidType::Water) {
+                FluidDensityInit = this->plantLoc.loop->glycol->getDensity(state, inletTemp, RoutineName);
+            } else { //(this->FluidType == PlantLoopFluidType::Steam)
+                FluidDensityInit = this->plantLoc.loop->steam->getSatDensity(state, inletTemp, 1.0, RoutineName);
+            }
+            Real64 Cp;
+            if (this->FluidType == PlantLoopFluidType::Water) {
+                Cp = this->plantLoc.loop->glycol->getSpecificHeat(state, inletTemp, RoutineName);
+            } else if (this->FluidType == PlantLoopFluidType::Steam) {
+                Real64 EnthSteamInDry = this->plantLoc.loop->steam->getSatEnthalpy(state, inletTemp, 1.0, RoutineName);
+                Real64 EnthSteamOutWet = this->plantLoc.loop->steam->getSatEnthalpy(state, inletTemp, 0.0, RoutineName);
+                Real64 LatentHeatSteam = EnthSteamInDry - EnthSteamOutWet;
+                Real64 SatTemp = this->plantLoc.loop->steam->getSatTemperature(state, DataEnvironment::StdPressureSeaLevel, RoutineName);
+                Cp = this->plantLoc.loop->glycol->getSpecificHeat(state, SatTemp, RoutineName);
+
+                // Steam Mass Flow Rate Required
+                this->MassFlowRate = this->Power / (LatentHeatSteam + this->DegOfSubcooling * Cp);
+                PlantUtilities::SetComponentFlowRate(state, this->MassFlowRate, this->InletNode, this->OutletNode, this->plantLoc);
+                state.dataLoopNodes->Node(this->OutletNode).Quality = 0.0;
+            }
+            for (size_t i = 1; i <= thisLoadSched.size(); ++i) {
+                if (plntDeltaT > 0) {
+                    tmpFlowData[i] =
+                        thisLoadSched[i - 1] / (FluidDensityInit * Cp * plntDeltaT); // back calculate volume flow based on Q and sizing data
+                } else {
+                    tmpFlowData[i] = thisFlowSched[i - 1] * this->PeakVolFlowRate; // use flow schedule if not a sizing run
+                }
+            }
+            auto &plntCoilData = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).compDesWaterFlowRate;
+            size_t newEntryIndex = plntCoilData.size() + 1;
+            plntCoilData.resize(newEntryIndex);
+            plntCoilData[newEntryIndex - 1].tsDesWaterFlowRate.resize(size_t(24 * state.dataGlobal->TimeStepsInHour));
+            plntCoilData[newEntryIndex - 1].tsDesWaterFlowRate = tmpFlowData;
+        } // if PeakVolFlowRate is ever autosized this will need the else
+        this->InitSizing = false; // if PeakVolFlowRate is ever autosized this will need to repeat
+    }
 
 } // InitPlantProfile()
 
@@ -372,6 +395,8 @@ void GetPlantProfileInput(EnergyPlusData &state)
     // PURPOSE OF THIS SUBROUTINE:
     // Gets the plant load profile input from the input file and sets up the objects.
 
+    static constexpr std::string_view routineName = "GetPlantProfileInput";
+
     // Using/Aliasing
     using namespace DataLoopNode;
 
@@ -401,6 +426,9 @@ void GetPlantProfileInput(EnergyPlusData &state)
                                                                      _,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
+
+            ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
+
             Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
             state.dataPlantLoadProfile->PlantProfile(ProfileNum).Name = state.dataIPShortCut->cAlphaArgs(1);
@@ -457,32 +485,17 @@ void GetPlantProfileInput(EnergyPlusData &state)
                                                         ObjectIsNotParent);
             }
 
-            state.dataPlantLoadProfile->PlantProfile(ProfileNum).LoadSchedule =
-                ScheduleManager::GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(4));
-
-            if (state.dataPlantLoadProfile->PlantProfile(ProfileNum).LoadSchedule == 0) {
-                ShowSevereError(state,
-                                format("{}=\"{}\"  The Schedule for {} called {} was not found.",
-                                       cCurrentModuleObject,
-                                       state.dataIPShortCut->cAlphaArgs(1),
-                                       state.dataIPShortCut->cAlphaFieldNames(4),
-                                       state.dataIPShortCut->cAlphaArgs(4)));
+            if ((state.dataPlantLoadProfile->PlantProfile(ProfileNum).loadSched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(4))) ==
+                nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(4), state.dataIPShortCut->cAlphaArgs(4));
                 ErrorsFound = true;
             }
 
             state.dataPlantLoadProfile->PlantProfile(ProfileNum).PeakVolFlowRate = state.dataIPShortCut->rNumericArgs(1);
 
-            state.dataPlantLoadProfile->PlantProfile(ProfileNum).FlowRateFracSchedule =
-                ScheduleManager::GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(5));
-
-            if (state.dataPlantLoadProfile->PlantProfile(ProfileNum).FlowRateFracSchedule == 0) {
-                ShowSevereError(state,
-                                format("{}=\"{}\"  The Schedule for {} called {} was not found.",
-                                       cCurrentModuleObject,
-                                       state.dataIPShortCut->cAlphaArgs(1),
-                                       state.dataIPShortCut->cAlphaFieldNames(5),
-                                       state.dataIPShortCut->cAlphaArgs(5)));
-
+            if ((state.dataPlantLoadProfile->PlantProfile(ProfileNum).flowRateFracSched =
+                     Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(5))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5));
                 ErrorsFound = true;
             }
 
@@ -585,7 +598,9 @@ void GetPlantProfileInput(EnergyPlusData &state)
                                     state.dataPlantLoadProfile->PlantProfile(ProfileNum).Name);
             }
 
-            if (ErrorsFound) ShowFatalError(state, format("Errors in {} input.", cCurrentModuleObject));
+            if (ErrorsFound) {
+                ShowFatalError(state, format("Errors in {} input.", cCurrentModuleObject));
+            }
 
         } // ProfileNum
     }

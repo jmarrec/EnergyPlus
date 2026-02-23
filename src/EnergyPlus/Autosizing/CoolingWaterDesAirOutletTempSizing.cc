@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -66,16 +66,10 @@ Real64 CoolingWaterDesAirOutletTempSizer::size(EnergyPlusData &state, Real64 _or
             this->autoSizedValue = _originalValue;
         } else {
             if (this->termUnitIU) {
-                Real64 Cp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                                   state.dataPlnt->PlantLoop(this->dataWaterLoopNum).FluidName,
-                                                                   Constant::CWInitConvTemp,
-                                                                   state.dataPlnt->PlantLoop(this->dataWaterLoopNum).FluidIndex,
-                                                                   this->callingRoutine);
-                Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                               state.dataPlnt->PlantLoop(this->dataWaterLoopNum).FluidName,
-                                                               Constant::CWInitConvTemp,
-                                                               state.dataPlnt->PlantLoop(this->dataWaterLoopNum).FluidIndex,
-                                                               this->callingRoutine);
+                Real64 Cp =
+                    state.dataPlnt->PlantLoop(this->dataWaterLoopNum).glycol->getSpecificHeat(state, Constant::CWInitConvTemp, this->callingRoutine);
+                Real64 rho =
+                    state.dataPlnt->PlantLoop(this->dataWaterLoopNum).glycol->getDensity(state, Constant::CWInitConvTemp, this->callingRoutine);
                 Real64 DesCoilLoad = this->dataWaterFlowUsedForSizing * this->dataWaterCoilSizCoolDeltaT * Cp * rho;
                 Real64 T1Out =
                     this->dataDesInletAirTemp - DesCoilLoad / (state.dataEnvrn->StdRhoAir * Psychrometrics::PsyCpAirFnW(this->dataDesInletAirHumRat) *
@@ -175,7 +169,9 @@ Real64 CoolingWaterDesAirOutletTempSizer::size(EnergyPlusData &state, Real64 _or
     }
     // override sizing string
     if (this->overrideSizeString) {
-        if (this->isEpJSON) this->sizingString = "design_outlet_air_temperature [C]";
+        if (this->isEpJSON) {
+            this->sizingString = "design_outlet_air_temperature [C]";
+        }
     }
     this->selectSizerOutput(state, errorsFound);
     if (this->isCoilReportObject) {

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -105,7 +105,7 @@ struct DataGlobal : BaseGlobalStruct
     Real64 WeightNow = 0.0;          // Weighting of value for current hour
     int NumOfDayInEnvrn = 0;         // Number of days in the simulation for a particular environment
     bool OverrideTimestep = false;   // True if PerformancePrecision object overrides the number of time steps in each hour
-    int NumOfTimeStepInHour = 0;     // Number of time steps in each hour of the simulation
+    int TimeStepsInHour = 0;         // Number of time steps in each hour of the simulation
     int NumOfZones = 0;              // Total number of Zones for simulation
     int numSpaces = 0;               // Total number of Spaces for simulation
     int numSpaceTypes = 0;           // Number of unique space types
@@ -139,7 +139,7 @@ struct DataGlobal : BaseGlobalStruct
     bool CreateMinimalSurfaceVariables = false;       // True when selection for  "CreateMinimalSurfaceVariables" is entered
     Real64 CurrentTime = 0.0;                         // CurrentTime, in fractional hours, from start of day. Uses Loads time step.
     int SimTimeSteps = 0;                             // Number of (Loads) timesteps since beginning of run period (environment).
-    int MinutesPerTimeStep = 0;   // Minutes per time step calculated from NumTimeStepInHour (number of minutes per load time step)
+    int MinutesInTimeStep = 0;    // Minutes per time step calculated from NumTimeStepInHour (number of minutes per load time step)
     Real64 TimeStepZoneSec = 0.0; // Seconds per time step
     bool MetersHaveBeenInitialized = false;
     bool KickOffSimulation = false;                // Kick off simulation -- meaning run each environment for 1 or 2 time steps.
@@ -149,7 +149,8 @@ struct DataGlobal : BaseGlobalStruct
     bool AnyEnergyManagementSystemInModel = false; // true if there is any EMS or Erl in model.  otherwise false
     bool AnySurfPropOverridesInModel = false;      // true if there is any EMS or Erl overriding the surface properties for any surface.
     bool AnyConstrOverridesInModel = false;        // true if there is any EMS or Erl overriding the constructions for any surface.
-    bool AndShadingControlInModel = false;         // true if there is any window shading control for any fenestration surface
+    bool AnyShadingControlInModel = false;         // true if there is any window shading control for any fenestration surface
+    bool AnyInsideShelf = false;                   // true if these is any inside daylighting shelf
     bool AnyLocalEnvironmentsInModel = false;      // true if there is any local environmental data objected defined in model, otherwise false
     bool AnyPlantInModel = false;                  // true if there are any plant or condenser loops in model, otherwise false
     bool AnyIdealCondEntSetPointInModel = false;   // true if there is any ideal condenser entering set point manager in model.
@@ -162,6 +163,7 @@ struct DataGlobal : BaseGlobalStruct
     bool AnyBasementsInModel = false;              // true if there are any basements in the input file
     bool DoCoilDirectSolutions = false;            // true if use coil direction solutions
     bool createPerfLog = false; // true if the _perflog.csv file should be created and a PerformancePrecisionTradeoffs object is used
+    bool ReportPlantCompWaterFlowDataFlag = true;
     void (*fProgressPtr)(int const) = nullptr;
     void (*fMessagePtr)(std::string const &) = nullptr;
     std::function<void(int const)> progressCallback = nullptr;
@@ -176,6 +178,10 @@ struct DataGlobal : BaseGlobalStruct
     bool installRootOverride = false;
     int numThread = 1;
     bool AirLoopHVACDOASUsedInSim = false;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

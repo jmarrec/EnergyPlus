@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -62,9 +62,9 @@
 #include <EnergyPlus/GroundTemperatureModeling/XingGroundTemperatureModel.hh>
 #include <EnergyPlus/UtilityRoutines.hh>
 
-namespace EnergyPlus::GroundTemperatureManager {
+namespace EnergyPlus::GroundTemp {
 
-BaseGroundTempsModel *GetGroundTempModelAndInit(EnergyPlusData &state, std::string_view const type, std::string const &name)
+BaseGroundTempsModel *GetGroundTempModelAndInit(EnergyPlusData &state, ModelType modelType, std::string const &name)
 {
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Matt Mitchell
@@ -73,37 +73,29 @@ BaseGroundTempsModel *GetGroundTempModelAndInit(EnergyPlusData &state, std::stri
     // PURPOSE OF THIS SUBROUTINE:
     // Called by objects requiring ground temperature models. Determines type and calls appropriate factory method.
 
-    // Set object type
-    const auto objectType = static_cast<GroundTempObjType>(getEnumValue(groundTempModelNamesUC, Util::makeUPPER(type)));
-
-    assert(objectType != GroundTempObjType::Invalid);
-
-    const int numGTMs = static_cast<int>(state.dataGrndTempModelMgr->groundTempModels.size());
-
     // Check if this instance of this model has already been retrieved
-    for (int i = 0; i < numGTMs; ++i) {
-        auto currentModel = state.dataGrndTempModelMgr->groundTempModels[i];
+    for (auto *gtm : state.dataGrndTempModelMgr->groundTempModels) {
         // Check if the type and name match
-        if (objectType == currentModel->objectType && name == currentModel->objectName) {
-            return state.dataGrndTempModelMgr->groundTempModels[i];
+        if (modelType == gtm->modelType && name == gtm->Name) {
+            return gtm;
         }
     }
 
     // If not found, create new instance of the model
-    switch (objectType) {
-    case GroundTempObjType::KusudaGroundTemp:
+    switch (modelType) {
+    case ModelType::Kusuda:
         return KusudaGroundTempsModel::KusudaGTMFactory(state, name);
-    case GroundTempObjType::FiniteDiffGroundTemp:
+    case ModelType::FiniteDiff:
         return FiniteDiffGroundTempsModel::FiniteDiffGTMFactory(state, name);
-    case GroundTempObjType::SiteBuildingSurfaceGroundTemp:
+    case ModelType::SiteBuildingSurface:
         return SiteBuildingSurfaceGroundTemps::BuildingSurfaceGTMFactory(state, name);
-    case GroundTempObjType::SiteShallowGroundTemp:
+    case ModelType::SiteShallow:
         return SiteShallowGroundTemps::ShallowGTMFactory(state, name);
-    case GroundTempObjType::SiteDeepGroundTemp:
+    case ModelType::SiteDeep:
         return SiteDeepGroundTemps::DeepGTMFactory(state, name);
-    case GroundTempObjType::SiteFCFactorMethodGroundTemp:
+    case ModelType::SiteFCFactorMethod:
         return SiteFCFactorMethodGroundTemps::FCFactorGTMFactory(state, name);
-    case GroundTempObjType::XingGroundTemp:
+    case ModelType::Xing:
         return XingGroundTempsModel::XingGTMFactory(state, name);
     default:
         assert(false);
@@ -111,4 +103,4 @@ BaseGroundTempsModel *GetGroundTempModelAndInit(EnergyPlusData &state, std::stri
     }
 }
 
-} // namespace EnergyPlus::GroundTemperatureManager
+} // namespace EnergyPlus::GroundTemp

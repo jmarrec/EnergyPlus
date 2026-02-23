@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -58,6 +58,7 @@
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/DataHVACGlobals.hh>
 #include <EnergyPlus/DataSizing.hh>
+#include <EnergyPlus/DataWater.hh>
 #include <EnergyPlus/Humidifiers.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 
@@ -86,8 +87,7 @@ TEST_F(EnergyPlusFixture, Humidifiers_Sizing)
     thisHum.ThermalEffRated = 1.0;
     thisHum.FanPower = 0.0;
     thisHum.StandbyPower = 0.0;
-    thisHum.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-    thisHum.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
+    thisHum.availSched = Sched::GetScheduleAlwaysOn(*state);
 
     state->dataSize->FinalSysSizing.allocate(state->dataSize->CurSysNum);
     state->dataSize->FinalSysSizing(state->dataSize->CurSysNum).MixTempAtCoolPeak = 30.0;
@@ -122,8 +122,7 @@ TEST_F(EnergyPlusFixture, Humidifiers_AutoSizing)
     thisHum.ThermalEffRated = 0.80;
     thisHum.FanPower = 0.0;
     thisHum.StandbyPower = 0.0;
-    thisHum.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-    thisHum.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
+    thisHum.availSched = Sched::GetScheduleAlwaysOn(*state);
 
     state->dataSize->FinalSysSizing.allocate(state->dataSize->CurSysNum);
     state->dataSize->FinalSysSizing(state->dataSize->CurSysNum).MixTempAtCoolPeak = 30.0;
@@ -152,7 +151,7 @@ TEST_F(EnergyPlusFixture, Humidifiers_EnergyUse)
     HumidifierData thisHum;
 
     state->dataHVACGlobal->TimeStepSys = 0.25;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
 
     state->dataSize->SysSizingRunDone = true;
     state->dataSize->CurSysNum = 1;
@@ -167,8 +166,7 @@ TEST_F(EnergyPlusFixture, Humidifiers_EnergyUse)
     thisHum.ThermalEffRated = 1.0;
     thisHum.FanPower = 0.0;
     thisHum.StandbyPower = 0.0;
-    thisHum.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-    thisHum.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
+    thisHum.availSched = Sched::GetScheduleAlwaysOn(*state);
 
     state->dataSize->FinalSysSizing.allocate(state->dataSize->CurSysNum);
     state->dataSize->FinalSysSizing(state->dataSize->CurSysNum).MixTempAtCoolPeak = 20.0;
@@ -199,6 +197,27 @@ TEST_F(EnergyPlusFixture, Humidifiers_EnergyUse)
 
     thisHum.ReportHumidifier(*state);
     EXPECT_DOUBLE_EQ(93339384.987223208, thisHum.GasUseEnergy);
+
+    // test UpdateReportWaterSystem function
+    thisHum.WaterTankDemandARRID = 1;
+    thisHum.WaterTankID = 1;
+    state->dataWaterData->WaterStorage.allocate(1);
+    state->dataWaterData->WaterStorage(1).VdotRequestDemand.allocate(1);
+    state->dataWaterData->WaterStorage(1).VdotAvailDemand.allocate(1);
+    state->dataWaterData->WaterStorage(1).VdotAvailDemand(1) = 5.0e-5; // this is 0.00001 higher than request
+    thisHum.SuppliedByWaterSystem = true;
+    thisHum.UpdateReportWaterSystem(*state);
+    EXPECT_NEAR(thisHum.WaterConsRate, thisHum.TankSupplyVdot, 1.0e-7);
+    EXPECT_NEAR(0.00004, thisHum.TankSupplyVdot, 1.0e-7);
+    EXPECT_NEAR(0.0, thisHum.StarvedSupplyVdot, 1.0e-7);
+    EXPECT_NEAR(0.0, thisHum.StarvedSupplyVol, 1.0e-7);
+
+    // test excess draw from storage made up by mains water
+    state->dataWaterData->WaterStorage(1).VdotAvailDemand(1) = 3.0e-5; // this is 0.00001 lower than request
+    thisHum.UpdateReportWaterSystem(*state);
+    EXPECT_NEAR(0.00003, thisHum.TankSupplyVdot, 1.0e-7);    // what tank can supply
+    EXPECT_NEAR(0.00001, thisHum.StarvedSupplyVdot, 1.0e-7); // amount of mains water since TankSupplyVdot cannot supply
+    EXPECT_NEAR(0.009, thisHum.StarvedSupplyVol, 1.0e-7);
 }
 
 TEST_F(EnergyPlusFixture, Humidifiers_GetHumidifierInput)
@@ -231,6 +250,7 @@ TEST_F(EnergyPlusFixture, Humidifiers_GetHumidifierInput)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     GetHumidifierInput(*state);
     ASSERT_EQ(1, state->dataHumidifiers->NumHumidifiers);
@@ -240,11 +260,10 @@ TEST_F(EnergyPlusFixture, Humidifiers_GetHumidifierInput)
 TEST_F(EnergyPlusFixture, Humidifiers_ThermalEfficiency)
 {
     // tests thermal efficiency modifier curve use
-
     HumidifierData thisHum;
 
     state->dataHVACGlobal->TimeStepSys = 0.25;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
     state->dataSize->SysSizingRunDone = true;
     state->dataSize->CurSysNum = 1;
 
@@ -259,8 +278,7 @@ TEST_F(EnergyPlusFixture, Humidifiers_ThermalEfficiency)
     thisHum.ThermalEffRated = 0.80;
     thisHum.FanPower = 0.0;
     thisHum.StandbyPower = 0.0;
-    thisHum.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-    thisHum.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
+    thisHum.availSched = Sched::GetScheduleAlwaysOn(*state);
 
     state->dataSize->FinalSysSizing.allocate(state->dataSize->CurSysNum);
     state->dataSize->FinalSysSizing(state->dataSize->CurSysNum).MixTempAtCoolPeak = 20.0;
@@ -289,6 +307,7 @@ TEST_F(EnergyPlusFixture, Humidifiers_ThermalEfficiency)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     thisHum.EfficiencyCurvePtr = Curve::GetCurveIndex(*state, "THERMALEFFICIENCYFPLR");
 

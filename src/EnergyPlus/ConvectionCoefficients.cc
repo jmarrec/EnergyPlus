@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -190,8 +190,12 @@ void InitIntConvCoeff(EnergyPlusData &state,
             state.dataConvect->NodeCheck = false;
             for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
                 auto &zone = state.dataHeatBal->Zone(ZoneNum);
-                if (zone.IntConvAlgo != HcInt::CeilingDiffuser) continue;
-                if (zone.SystemZoneNodeNumber != 0) continue;
+                if (zone.IntConvAlgo != HcInt::CeilingDiffuser) {
+                    continue;
+                }
+                if (zone.SystemZoneNodeNumber != 0) {
+                    continue;
+                }
                 ShowSevereError(
                     state,
                     format("InitInteriorConvectionCoeffs: Inside Convection=CeilingDiffuser, but no system inlet node defined, Zone={}", zone.Name));
@@ -261,7 +265,9 @@ void InitIntConvCoeff(EnergyPlusData &state,
         state.dataConvect->MyEnvirnFlag = false;
     }
 
-    if (!state.dataGlobal->BeginEnvrnFlag) state.dataConvect->MyEnvirnFlag = true;
+    if (!state.dataGlobal->BeginEnvrnFlag) {
+        state.dataConvect->MyEnvirnFlag = true;
+    }
 
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
         switch (Zone(ZoneNum).IntConvAlgo) {
@@ -291,7 +297,9 @@ void InitIntConvCoeff(EnergyPlusData &state,
                 auto const &surface = Surface(SurfNum);
                 if (state.dataSurface->UseRepresentativeSurfaceCalculations) {
                     int repSurfNum = surface.RepresentativeCalcSurfNum;
-                    if (SurfNum != repSurfNum) continue;
+                    if (SurfNum != repSurfNum) {
+                        continue;
+                    }
                 }
 
                 HcInt intConvAlgo = state.dataSurface->surfIntConv(SurfNum).model;
@@ -305,15 +313,17 @@ void InitIntConvCoeff(EnergyPlusData &state,
                 case HcInt::UserCurve: {
                     state.dataHeatBalSurf->SurfHConvInt(SurfNum) = SetIntConvCoeff(state, SurfNum);
                     // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-                    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+                    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
                         state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+                    }
                 } break;
 
                 case HcInt::ASHRAESimple: {
                     CalcASHRAESimpleIntConvCoeff(state, SurfNum, SurfaceTemperatures(SurfNum), spaceMAT);
                     // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-                    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+                    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
                         state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+                    }
                 } break;
 
                 case HcInt::ASHRAETARP: {
@@ -324,8 +334,9 @@ void InitIntConvCoeff(EnergyPlusData &state,
                     }
 
                     // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-                    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+                    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
                         state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+                    }
                 } break;
 
                 case HcInt::AdaptiveConvectionAlgorithm: {
@@ -355,8 +366,8 @@ void InitIntConvCoeff(EnergyPlusData &state,
                 }
 
             } // for (surface)
-        }     // for (space)
-    }         // for (zone)
+        } // for (space)
+    } // for (zone)
 
     for (int ZoneNum = 1; ZoneNum <= state.dataGlobal->NumOfZones; ++ZoneNum) {
         for (int spaceNum : state.dataHeatBal->Zone(ZoneNum).spaceIndexes) {
@@ -365,7 +376,9 @@ void InitIntConvCoeff(EnergyPlusData &state,
                 auto const &surface(Surface(SurfNum));
                 if (state.dataSurface->UseRepresentativeSurfaceCalculations) {
                     int repSurfNum = surface.RepresentativeCalcSurfNum;
-                    if (SurfNum != repSurfNum) continue;
+                    if (SurfNum != repSurfNum) {
+                        continue;
+                    }
                 }
                 if (Surface(SurfNum).ExtBoundCond == ExternalEnvironment) {
                     state.dataHeatBalSurf->SurfHConvInt(SurfNum) =
@@ -434,9 +447,8 @@ void InitExtConvCoeff(EnergyPlusData &state,
 
     if (surface.SurfHasSurroundingSurfProperty) {
         int SrdSurfsNum = surface.SurfSurroundingSurfacesNum;
-        if (state.dataSurface->SurroundingSurfsProperty(SrdSurfsNum).SkyTempSchNum != 0) {
-            TSky = ScheduleManager::GetCurrentScheduleValue(state, state.dataSurface->SurroundingSurfsProperty(SrdSurfsNum).SkyTempSchNum) +
-                   Constant::Kelvin;
+        if (state.dataSurface->SurroundingSurfsProperty(SrdSurfsNum).skyTempSched != nullptr) {
+            TSky = state.dataSurface->SurroundingSurfsProperty(SrdSurfsNum).skyTempSched->getCurrentVal() + Constant::Kelvin;
         }
         HSrdSurf = SurroundingSurfacesRadCoeffAverage(state, SurfNum, TSurf, AbsExt);
     }
@@ -527,7 +539,9 @@ void InitExtConvCoeff(EnergyPlusData &state,
             state.dataSurfaceGeometry->kivaManager.surfaceConvMap[SurfNum].out =
                 [=](double Tsurf, double Tamb, double hfTerm, double, double cosTilt) -> double {
                 Real64 Ts = Tsurf;
-                if (HMovInsul > 0.0) Ts = (HMovInsul * Tsurf + hfTerm * Tamb) / (HMovInsul + hfTerm);
+                if (HMovInsul > 0.0) {
+                    Ts = (HMovInsul * Tsurf + hfTerm * Tamb) / (HMovInsul + hfTerm);
+                }
                 return CalcASHRAETARPNatural(Ts, Tamb, cosTilt) + hfTerm;
             };
         } else {
@@ -544,7 +558,9 @@ void InitExtConvCoeff(EnergyPlusData &state,
             } else {
                 Hf = 0.0;
             }
-            if (HMovInsul > 0.0) TSurf = (HMovInsul * TSurf + Hf * TAir) / (HMovInsul + Hf);
+            if (HMovInsul > 0.0) {
+                TSurf = (HMovInsul * TSurf + Hf * TAir) / (HMovInsul + Hf);
+            }
             Hn = CalcASHRAETARPNatural(TSurf, TAir, surface.CosTilt);
             HExt = Hn + Hf;
         }
@@ -672,9 +688,8 @@ Real64 CalcHfExteriorSparrow(Real64 const SurfWindSpeed,                 // Loca
 {
     if (Windward(CosTilt, Azimuth, WindDirection)) {
         return CalcSparrowWindward(Roughness, Perimeter, GrossArea, SurfWindSpeed);
-    } else {
-        return CalcSparrowLeeward(Roughness, Perimeter, GrossArea, SurfWindSpeed);
     }
+    return CalcSparrowLeeward(Roughness, Perimeter, GrossArea, SurfWindSpeed);
 }
 
 bool Windward(Real64 const CosTilt,      // Cosine of the surface tilt angle
@@ -702,10 +717,14 @@ bool Windward(Real64 const CosTilt,      // Cosine of the surface tilt angle
     //   Champaign, IL.
 
     // Surface is horizontal
-    if (std::abs(CosTilt) >= 0.98) return true;
+    if (std::abs(CosTilt) >= 0.98) {
+        return true;
+    }
 
     Real64 Diff = std::abs(WindDirection - Azimuth); // Difference between the wind direction and the surface azimuth
-    if ((Diff - 180.0) > 0.001) Diff -= 360.0;
+    if ((Diff - 180.0) > 0.001) {
+        Diff -= 360.0;
+    }
     return ((std::abs(Diff) - 90.0) <= 0.001);
 }
 
@@ -773,10 +792,10 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(3), ipsc->cAlphaArgs(3));
                 ErrorsFound = true;
             } else { // check type
-                auto const *curve = state.dataCurveManager->PerfCurve(intConvUserCurve.hcFnTempDiffCurveNum);
+                auto const *curve = state.dataCurveManager->curves(intConvUserCurve.hcFnTempDiffCurveNum);
                 if (curve->numDims != 1) {
                     ErrorsFound = true;
-                    Curve::ShowErrorCurveDims(state, eoh, ipsc->cAlphaFieldNames(3), curve->Name, "1", curve->numDims);
+                    Curve::ShowSevereCurveDims(state, eoh, ipsc->cAlphaFieldNames(3), curve->Name, "1", curve->numDims);
                 }
             }
         } else {
@@ -789,10 +808,10 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(4), ipsc->cAlphaArgs(4));
                 ErrorsFound = true;
             } else { // check type
-                auto const *curve = state.dataCurveManager->PerfCurve(intConvUserCurve.hcFnTempDiffDivHeightCurveNum);
+                auto const *curve = state.dataCurveManager->curves(intConvUserCurve.hcFnTempDiffDivHeightCurveNum);
                 if (curve->numDims != 1) {
                     ErrorsFound = true;
-                    Curve::ShowErrorCurveDims(state, eoh, ipsc->cAlphaFieldNames(4), curve->Name, "1", curve->numDims);
+                    Curve::ShowSevereCurveDims(state, eoh, ipsc->cAlphaFieldNames(4), curve->Name, "1", curve->numDims);
                 }
             }
         } else {
@@ -805,10 +824,10 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(5), ipsc->cAlphaArgs(5));
                 ErrorsFound = true;
             } else { // check type
-                auto const *curve = state.dataCurveManager->PerfCurve(intConvUserCurve.hcFnACHCurveNum);
+                auto const *curve = state.dataCurveManager->curves(intConvUserCurve.hcFnACHCurveNum);
                 if (curve->numDims != 1) {
                     ErrorsFound = true;
-                    Curve::ShowErrorCurveDims(state, eoh, ipsc->cAlphaFieldNames(5), curve->Name, "1", curve->numDims);
+                    Curve::ShowSevereCurveDims(state, eoh, ipsc->cAlphaFieldNames(5), curve->Name, "1", curve->numDims);
                 }
             }
         } else {
@@ -821,10 +840,10 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(6), ipsc->cAlphaArgs(6));
                 ErrorsFound = true;
             } else { // check type
-                auto const *curve = state.dataCurveManager->PerfCurve(intConvUserCurve.hcFnACHDivPerimLengthCurveNum);
+                auto const *curve = state.dataCurveManager->curves(intConvUserCurve.hcFnACHDivPerimLengthCurveNum);
                 if (curve->numDims != 1) {
                     ErrorsFound = true;
-                    Curve::ShowErrorCurveDims(state, eoh, ipsc->cAlphaFieldNames(6), curve->Name, "1", curve->numDims);
+                    Curve::ShowSevereCurveDims(state, eoh, ipsc->cAlphaFieldNames(6), curve->Name, "1", curve->numDims);
                 }
             }
         } else {
@@ -868,10 +887,10 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(3), ipsc->cAlphaArgs(3));
                 ErrorsFound = true;
             } else { // check type
-                auto const *curve = state.dataCurveManager->PerfCurve(extConvUserCurve.hfFnWindSpeedCurveNum);
+                auto const *curve = state.dataCurveManager->curves(extConvUserCurve.hfFnWindSpeedCurveNum);
                 if (curve->numDims != 1) {
                     ErrorsFound = true;
-                    Curve::ShowErrorCurveDims(state, eoh, ipsc->cAlphaFieldNames(3), curve->Name, "1", curve->numDims);
+                    Curve::ShowSevereCurveDims(state, eoh, ipsc->cAlphaFieldNames(3), curve->Name, "1", curve->numDims);
                 }
             }
         } else {
@@ -885,10 +904,10 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(4), ipsc->cAlphaArgs(4));
                 ErrorsFound = true;
             } else { // check type
-                auto const *curve = state.dataCurveManager->PerfCurve(extConvUserCurve.hnFnTempDiffCurveNum);
+                auto const *curve = state.dataCurveManager->curves(extConvUserCurve.hnFnTempDiffCurveNum);
                 if (curve->numDims != 1) {
                     ErrorsFound = true;
-                    Curve::ShowErrorCurveDims(state, eoh, ipsc->cAlphaFieldNames(4), curve->Name, "1", curve->numDims);
+                    Curve::ShowSevereCurveDims(state, eoh, ipsc->cAlphaFieldNames(4), curve->Name, "1", curve->numDims);
                 }
             }
         } else {
@@ -902,10 +921,10 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(5), ipsc->cAlphaArgs(5));
                 ErrorsFound = true;
             } else { // check type
-                auto const *curve = state.dataCurveManager->PerfCurve(extConvUserCurve.hnFnTempDiffDivHeightCurveNum);
+                auto const *curve = state.dataCurveManager->curves(extConvUserCurve.hnFnTempDiffDivHeightCurveNum);
                 if (curve->numDims != 1) {
                     ErrorsFound = true;
-                    Curve::ShowErrorCurveDims(state, eoh, ipsc->cAlphaFieldNames(5), curve->Name, "1", curve->numDims);
+                    Curve::ShowSevereCurveDims(state, eoh, ipsc->cAlphaFieldNames(5), curve->Name, "1", curve->numDims);
                 }
             }
         } else {
@@ -1026,7 +1045,9 @@ void GetUserConvCoeffs(EnergyPlusData &state)
 
         for (int Pass = 1, Ptr = 2, FieldNo = 2, NumField = 1; Pass <= 2; ++Pass, Ptr += 4, FieldNo += 4, ++NumField) {
 
-            if (Alphas(Ptr).empty()) continue;
+            if (Alphas(Ptr).empty()) {
+                continue;
+            }
 
             if (Alphas(Ptr) == "OUTSIDE") {
                 if (Surface(surfNum).OSCPtr > 0) {
@@ -1090,26 +1111,21 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     userExtConvModel.SurfaceName = Alphas(1);
                     userExtConvModel.WhichSurface = surfNum;
                     userExtConvModel.overrideType = OverrideType::Schedule;
-                    userExtConvModel.ScheduleIndex = ScheduleManager::GetScheduleIndex(state, Alphas(Ptr + 2));
-                    if (userExtConvModel.ScheduleIndex == 0) {
+                    if ((userExtConvModel.sched = Sched::GetSchedule(state, Alphas(Ptr + 2))) == nullptr) {
                         ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(Ptr + 2), Alphas(Ptr + 2));
                         ErrorsFound = true;
-                    } else if (!ScheduleManager::CheckScheduleValueMinMax(state,
-                                                                          userExtConvModel.ScheduleIndex,
-                                                                          ScheduleManager::Clusivity::Inclusive,
-                                                                          state.dataHeatBal->LowHConvLimit, // >=
-                                                                          ScheduleManager::Clusivity::Inclusive,
-                                                                          state.dataHeatBal->HighHConvLimit)) { // <=
-                        ShowSevereScheduleOutOfRange(state,
-                                                     eoh,
-                                                     ipsc->cAlphaFieldNames(Ptr + 2),
-                                                     Alphas(Ptr + 2),
-                                                     state.dataHeatBal->LowHConvLimit,
-                                                     state.dataHeatBal->HighHConvLimit,
-                                                     "Limits are set (or default) in HeatBalanceAlgorithm object.");
+                    } else if (!userExtConvModel.sched->checkMinMaxVals(
+                                   state, Clusive::In, state.dataHeatBal->LowHConvLimit, Clusive::In, state.dataHeatBal->HighHConvLimit)) {
+                        Sched::ShowSevereBadMinMax(state,
+                                                   eoh,
+                                                   ipsc->cAlphaFieldNames(Ptr + 2),
+                                                   Alphas(Ptr + 2),
+                                                   Clusive::In,
+                                                   state.dataHeatBal->LowHConvLimit,
+                                                   Clusive::In,
+                                                   state.dataHeatBal->HighHConvLimit,
+                                                   "Limits are set (or default) in HeatBalanceAlgorithm object.");
                         ErrorsFound = true;
-                    } else {
-                        userExtConvModel.ScheduleName = Alphas(Ptr + 2);
                     }
                     ApplyExtConvValue(state, surfNum, hcExt, state.dataSurface->TotUserExtConvModels);
                 } break;
@@ -1197,13 +1213,15 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     userIntConvModel.SurfaceName = Alphas(1);
                     userIntConvModel.WhichSurface = surfNum;
                     if (Numbers(NumField) < state.dataHeatBal->LowHConvLimit || Numbers(NumField) > state.dataHeatBal->HighHConvLimit) {
-                        ShowSevereValueOutOfRange(state,
-                                                  eoh,
-                                                  ipsc->cNumericFieldNames(NumField),
-                                                  Numbers(NumField),
-                                                  state.dataHeatBal->LowHConvLimit,
-                                                  state.dataHeatBal->HighHConvLimit,
-                                                  "Limits are set (or default) in HeatBalanceAlgorithm object.");
+                        ShowSevereBadMinMax(state,
+                                            eoh,
+                                            ipsc->cNumericFieldNames(NumField),
+                                            Numbers(NumField),
+                                            Clusive::In,
+                                            state.dataHeatBal->LowHConvLimit,
+                                            Clusive::In,
+                                            state.dataHeatBal->HighHConvLimit,
+                                            "Limits are set (or default) in HeatBalanceAlgorithm object.");
                         ErrorsFound = true;
                     }
                     userIntConvModel.overrideType = OverrideType::Value;
@@ -1225,26 +1243,21 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     userIntConvModel.SurfaceName = Alphas(1);
                     userIntConvModel.WhichSurface = surfNum;
                     userIntConvModel.overrideType = OverrideType::Schedule;
-                    userIntConvModel.ScheduleIndex = ScheduleManager::GetScheduleIndex(state, Alphas(Ptr + 2));
-                    if (userIntConvModel.ScheduleIndex == 0) {
+                    if ((userIntConvModel.sched = Sched::GetSchedule(state, Alphas(Ptr + 2))) == nullptr) {
                         ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(Ptr + 2), Alphas(Ptr + 2));
                         ErrorsFound = true;
-                    } else if (!ScheduleManager::CheckScheduleValueMinMax(state,
-                                                                          userIntConvModel.ScheduleIndex,
-                                                                          ScheduleManager::Clusivity::Inclusive,
-                                                                          state.dataHeatBal->LowHConvLimit,
-                                                                          ScheduleManager::Clusivity::Inclusive,
-                                                                          state.dataHeatBal->HighHConvLimit)) {
-                        ShowSevereScheduleOutOfRange(state,
-                                                     eoh,
-                                                     ipsc->cAlphaFieldNames(Ptr + 2),
-                                                     Alphas(Ptr + 2),
-                                                     state.dataHeatBal->LowHConvLimit,
-                                                     state.dataHeatBal->HighHConvLimit,
-                                                     "Limits are set (or default) in HeatBalanceAlgorithm object.");
+                    } else if (!userIntConvModel.sched->checkMinMaxVals(
+                                   state, Clusive::In, state.dataHeatBal->LowHConvLimit, Clusive::In, state.dataHeatBal->HighHConvLimit)) {
+                        Sched::ShowSevereBadMinMax(state,
+                                                   eoh,
+                                                   ipsc->cAlphaFieldNames(Ptr + 2),
+                                                   Alphas(Ptr + 2),
+                                                   Clusive::In,
+                                                   state.dataHeatBal->LowHConvLimit,
+                                                   Clusive::In,
+                                                   state.dataHeatBal->HighHConvLimit,
+                                                   "Limits are set (or default) in HeatBalanceAlgorithm object.");
                         ErrorsFound = true;
-                    } else {
-                        userIntConvModel.ScheduleName = Alphas(Ptr + 2);
                     }
                     ApplyIntConvValue(state, surfNum, hcInt, state.dataSurface->TotUserIntConvModels);
                 } break;
@@ -1274,9 +1287,9 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     ApplyIntConvValue(state, surfNum, hcInt, state.dataSurface->TotUserIntConvModels);
                 } break;
                 } // switch(HcInt)
-            }     // if ("INSIDE")
-        }         // for (pass)
-    }             // for (Loop)
+            } // if ("INSIDE")
+        } // for (pass)
+    } // for (Loop)
 
     CurrentModuleObject = "SurfaceProperty:ConvectionCoefficients:MultipleSurface";
     Count = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, CurrentModuleObject);
@@ -1299,7 +1312,9 @@ void GetUserConvCoeffs(EnergyPlusData &state)
 
         for (int Pass = 1, Ptr = 2, FieldNo = 2, NumField = 1; Pass <= 2; ++Pass, Ptr += 4, FieldNo += 4, ++NumField) {
 
-            if (Alphas(Ptr).empty()) continue;
+            if (Alphas(Ptr).empty()) {
+                continue;
+            }
 
             if (Alphas(Ptr) == "OUTSIDE") {
 
@@ -1332,13 +1347,15 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     userExtConvModel.SurfaceName = Alphas(Ptr);
                     userExtConvModel.WhichSurface = -999;
                     if (Numbers(NumField) < state.dataHeatBal->LowHConvLimit || Numbers(NumField) > state.dataHeatBal->HighHConvLimit) {
-                        ShowSevereValueOutOfRange(state,
-                                                  eoh,
-                                                  ipsc->cNumericFieldNames(NumField),
-                                                  Numbers(NumField),
-                                                  state.dataHeatBal->LowHConvLimit,
-                                                  state.dataHeatBal->HighHConvLimit,
-                                                  "Limits are set (or default) in HeatBalanceAlgorithm object.");
+                        ShowSevereBadMinMax(state,
+                                            eoh,
+                                            ipsc->cNumericFieldNames(NumField),
+                                            Numbers(NumField),
+                                            Clusive::In,
+                                            state.dataHeatBal->LowHConvLimit,
+                                            Clusive::In,
+                                            state.dataHeatBal->HighHConvLimit,
+                                            "Limits are set (or default) in HeatBalanceAlgorithm object.");
                         ErrorsFound = true;
                     }
                     userExtConvModel.overrideType = OverrideType::Value;
@@ -1360,26 +1377,21 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     userExtConvModel.SurfaceName = Alphas(Ptr);
                     userExtConvModel.WhichSurface = -999;
                     userExtConvModel.overrideType = OverrideType::Schedule;
-                    userExtConvModel.ScheduleIndex = ScheduleManager::GetScheduleIndex(state, Alphas(Ptr + 2));
-                    if (userExtConvModel.ScheduleIndex == 0) {
+                    if ((userExtConvModel.sched = Sched::GetSchedule(state, Alphas(Ptr + 2))) == nullptr) {
                         ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(Ptr + 2), Alphas(Ptr + 2));
                         ErrorsFound = true;
-                    } else if (!ScheduleManager::CheckScheduleValueMinMax(state,
-                                                                          userExtConvModel.ScheduleIndex,
-                                                                          ScheduleManager::Clusivity::Inclusive,
-                                                                          state.dataHeatBal->LowHConvLimit, // >=
-                                                                          ScheduleManager::Clusivity::Inclusive,
-                                                                          state.dataHeatBal->HighHConvLimit)) { // <=
-                        ShowSevereScheduleOutOfRange(state,
-                                                     eoh,
-                                                     ipsc->cAlphaFieldNames(Ptr + 2),
-                                                     Alphas(Ptr + 2),
-                                                     state.dataHeatBal->LowHConvLimit,
-                                                     state.dataHeatBal->HighHConvLimit,
-                                                     "Limits are set (or default) in HeatBalanceAlgorithm object.");
+                    } else if (!userExtConvModel.sched->checkMinMaxVals(
+                                   state, Clusive::In, state.dataHeatBal->LowHConvLimit, Clusive::In, state.dataHeatBal->HighHConvLimit)) {
+                        Sched::ShowSevereBadMinMax(state,
+                                                   eoh,
+                                                   ipsc->cAlphaFieldNames(Ptr + 2),
+                                                   Alphas(Ptr + 2),
+                                                   Clusive::In,
+                                                   state.dataHeatBal->LowHConvLimit,
+                                                   Clusive::In,
+                                                   state.dataHeatBal->HighHConvLimit,
+                                                   "Limits are set (or default) in HeatBalanceAlgorithm object.");
                         ErrorsFound = true;
-                    } else {
-                        userExtConvModel.ScheduleName = Alphas(Ptr + 2);
                     }
                     ApplyExtConvValueMulti(state, surfaceFilter, hcExt, state.dataSurface->TotUserExtConvModels);
                 } break;
@@ -1449,13 +1461,15 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     userIntConvModel.SurfaceName = Alphas(Ptr);
                     userIntConvModel.WhichSurface = -999;
                     if (Numbers(NumField) < state.dataHeatBal->LowHConvLimit || Numbers(NumField) > state.dataHeatBal->HighHConvLimit) {
-                        ShowSevereValueOutOfRange(state,
-                                                  eoh,
-                                                  ipsc->cNumericFieldNames(NumField),
-                                                  Numbers(NumField),
-                                                  state.dataHeatBal->LowHConvLimit,
-                                                  state.dataHeatBal->HighHConvLimit,
-                                                  "Limits are set (or default) in HeatBalanceAlgorithm object.");
+                        ShowSevereBadMinMax(state,
+                                            eoh,
+                                            ipsc->cNumericFieldNames(NumField),
+                                            Numbers(NumField),
+                                            Clusive::In,
+                                            state.dataHeatBal->LowHConvLimit,
+                                            Clusive::In,
+                                            state.dataHeatBal->HighHConvLimit,
+                                            "Limits are set (or default) in HeatBalanceAlgorithm object.");
                         ErrorsFound = true;
                     }
                     userIntConvModel.overrideType = OverrideType::Value;
@@ -1477,26 +1491,24 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                     userIntConvModel.SurfaceName = Alphas(Ptr);
                     userIntConvModel.WhichSurface = -999;
                     userIntConvModel.overrideType = OverrideType::Schedule;
-                    userIntConvModel.ScheduleIndex = ScheduleManager::GetScheduleIndex(state, Alphas(Ptr + 2));
-                    if (userIntConvModel.ScheduleIndex == 0) {
+                    if ((userIntConvModel.sched = Sched::GetSchedule(state, Alphas(Ptr + 2))) == nullptr) {
                         ShowSevereItemNotFound(state, eoh, ipsc->cAlphaFieldNames(Ptr + 2), Alphas(Ptr + 2));
                         ErrorsFound = true;
-                    } else if (!ScheduleManager::CheckScheduleValueMinMax(state,
-                                                                          userIntConvModel.ScheduleIndex,
-                                                                          ScheduleManager::Clusivity::Inclusive,
-                                                                          state.dataHeatBal->LowHConvLimit, // >=
-                                                                          ScheduleManager::Clusivity::Inclusive,
-                                                                          state.dataHeatBal->HighHConvLimit)) { // <=
-                        ShowSevereScheduleOutOfRange(state,
-                                                     eoh,
-                                                     ipsc->cAlphaFieldNames(Ptr + 2),
-                                                     Alphas(Ptr + 2),
-                                                     state.dataHeatBal->LowHConvLimit,
-                                                     state.dataHeatBal->HighHConvLimit,
-                                                     "Limits are set (or default) in HeatBalanceAlgorithm object.");
+                    } else if (!userIntConvModel.sched->checkMinMaxVals(state,
+                                                                        Clusive::In,
+                                                                        state.dataHeatBal->LowHConvLimit, // >=
+                                                                        Clusive::In,
+                                                                        state.dataHeatBal->HighHConvLimit)) { // <=
+                        Sched::ShowSevereBadMinMax(state,
+                                                   eoh,
+                                                   ipsc->cAlphaFieldNames(Ptr + 2),
+                                                   Alphas(Ptr + 2),
+                                                   Clusive::In,
+                                                   state.dataHeatBal->LowHConvLimit,
+                                                   Clusive::In,
+                                                   state.dataHeatBal->HighHConvLimit,
+                                                   "Limits are set (or default) in HeatBalanceAlgorithm object.");
                         ErrorsFound = true;
-                    } else {
-                        userIntConvModel.ScheduleName = Alphas(Ptr + 2);
                     }
                     ApplyIntConvValueMulti(state, surfaceFilter, hcInt, state.dataSurface->TotUserIntConvModels);
                 } break;
@@ -1533,7 +1545,7 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 ErrorsFound = true;
             }
         } // for (Pass)
-    }     // for (Loop)
+    } // for (Loop)
 
     if (state.dataHeatBal->DefaultExtConvAlgo == HcExt::ASHRAESimple ||
         std::any_of(Zone.begin(), Zone.end(), [](DataHeatBalance::ZoneData const &e) { return e.ExtConvAlgo == HcExt::ASHRAESimple; })) {
@@ -1542,8 +1554,12 @@ void GetUserConvCoeffs(EnergyPlusData &state)
             auto const &userExtConvModel = state.dataSurface->userExtConvModels(Loop);
             int SurfNum = userExtConvModel.WhichSurface;
             // Tests show that Zone will override the simple convection specification of global.
-            if (SurfNum <= 0) continue;               // ignore this error condition
-            if (Surface(SurfNum).Zone == 0) continue; // ignore this error condition
+            if (SurfNum <= 0) {
+                continue; // ignore this error condition
+            }
+            if (Surface(SurfNum).Zone == 0) {
+                continue; // ignore this error condition
+            }
             if (Zone(Surface(SurfNum).Zone).ExtConvAlgo == HcExt::ASHRAESimple &&
                 ((userExtConvModel.overrideType == OverrideType::SpecifiedModel && userExtConvModel.HcExtModelEq != HcExt::ASHRAESimple) ||
                  userExtConvModel.overrideType != OverrideType::SpecifiedModel)) {
@@ -1641,7 +1657,7 @@ void GetUserConvCoeffs(EnergyPlusData &state)
                 }
             }
         } // for (iOutConvClass)
-    }     // if (Count == 1)
+    } // if (Count == 1)
 
     if (ErrorsFound) {
         ShowFatalError(state, format("{}Errors found getting input.  Program termination.", RoutineName));
@@ -1675,7 +1691,7 @@ void ApplyIntConvValueMulti(EnergyPlusData &state, SurfaceFilter surfaceFilter, 
     // PURPOSE OF THIS SUBROUTINE:
     // This subroutine applies a convection type to a set of surfaces.
 
-    if (state.dataSurface->SurfaceFilterLists[(int)surfaceFilter].size() == 0) {
+    if (state.dataSurface->SurfaceFilterLists[(int)surfaceFilter].empty()) {
         ShowWarningError(state,
                          format("User Supplied Convection Coefficients, Multiple Surface Assignments=\"{}\", there were no surfaces of that type "
                                 "found for Inside assignment.",
@@ -1713,7 +1729,9 @@ void ApplyIntConvValueMulti(EnergyPlusData &state, SurfaceFilter surfaceFilter, 
 
 void ApplyExtConvValue(EnergyPlusData &state, int surfNum, HcExt model, int userModelNum)
 {
-    if (state.dataSurface->Surface(surfNum).OSCPtr > 0) return;
+    if (state.dataSurface->Surface(surfNum).OSCPtr > 0) {
+        return;
+    }
 
     auto &surfExtConv = state.dataSurface->surfExtConv(surfNum);
     if (userModelNum == 0) {
@@ -1738,13 +1756,15 @@ void ApplyExtConvValueMulti(EnergyPlusData &state, SurfaceFilter surfaceFilter, 
     // PURPOSE OF THIS SUBROUTINE:
     // This subroutine applies a convection type to a set of surfaces.
 
-    if (state.dataSurface->SurfaceFilterLists[(int)surfaceFilter].size() == 0) {
+    if (state.dataSurface->SurfaceFilterLists[(int)surfaceFilter].empty()) {
         return;
     }
 
     int numWarnings = 0;
     for (int surfNum : state.dataSurface->SurfaceFilterLists[(int)surfaceFilter]) {
-        if (state.dataSurface->Surface(surfNum).OSCPtr > 0) continue;
+        if (state.dataSurface->Surface(surfNum).OSCPtr > 0) {
+            continue;
+        }
         auto &surfExtConv = state.dataSurface->surfExtConv(surfNum);
         if (convUserCoeffNum == 0) {
             surfExtConv.model = model;
@@ -1835,26 +1855,25 @@ Real64 CalcASHRAESimpleIntConvCoeff(Real64 const Tsurf, Real64 const Tamb, Real6
     // Set HConvIn using the proper correlation based on DeltaTemp and Cosine of the Tilt of the Surface
     if (std::abs(cosTilt) < 0.3827) { // Vertical Surface
         return 3.076;
-    } else {
-        Real64 DeltaTempCosTilt = (Tamb - Tsurf) * cosTilt;
-        if (std::abs(cosTilt) >= 0.9239) { // Horizontal Surface
-            if (DeltaTempCosTilt > 0.0) {  // Enhanced Convection
-                return 4.040;
-            } else if (DeltaTempCosTilt < 0.0) { // Reduced Convection
-                return 0.948;
-            } else { // Zero DeltaTemp
-                return 3.076;
-            }
-        } else {                          // tilted surface
-            if (DeltaTempCosTilt > 0.0) { // Enhanced Convection
-                return 3.870;
-            } else if (DeltaTempCosTilt < 0.0) { // Reduced Convection
-                return 2.281;
-            } else { // Zero DeltaTemp
-                return 3.076;
-            }
-        }
     }
+    Real64 DeltaTempCosTilt = (Tamb - Tsurf) * cosTilt;
+    if (std::abs(cosTilt) >= 0.9239) { // Horizontal Surface
+        if (DeltaTempCosTilt > 0.0) {  // Enhanced Convection
+            return 4.040;
+        }
+        if (DeltaTempCosTilt < 0.0) { // Reduced Convection
+            return 0.948;
+        } // Zero DeltaTemp
+        return 3.076;
+
+    } // tilted surface
+    if (DeltaTempCosTilt > 0.0) { // Enhanced Convection
+        return 3.870;
+    }
+    if (DeltaTempCosTilt < 0.0) { // Reduced Convection
+        return 2.281;
+    } // Zero DeltaTemp
+    return 3.076;
 }
 
 void CalcASHRAESimpleIntConvCoeff(EnergyPlusData &state,
@@ -1912,16 +1931,16 @@ Real64 CalcASHRAETARPNatural(Real64 const Tsurf, Real64 const Tamb, Real64 const
     if ((DeltaTemp == 0.0) || (cosTilt == 0.0)) { // Vertical Surface
 
         return CalcASHRAEVerticalWall(DeltaTemp);
-
-    } else if (((DeltaTemp < 0.0) && (cosTilt < 0.0)) || ((DeltaTemp > 0.0) && (cosTilt > 0.0))) { // Enhanced Convection
+    }
+    if (((DeltaTemp < 0.0) && (cosTilt < 0.0)) || ((DeltaTemp > 0.0) && (cosTilt > 0.0))) { // Enhanced Convection
 
         return CalcWaltonUnstableHorizontalOrTilt(DeltaTemp, cosTilt);
 
-    } else { // (((DeltaTemp > 0.0) && (cosTilt < 0.0)) || ((DeltaTemp < 0.0) && (cosTilt > 0.0))) // Reduced Convection
+    } // (((DeltaTemp > 0.0) && (cosTilt < 0.0)) || ((DeltaTemp < 0.0) && (cosTilt > 0.0))) // Reduced Convection
 
-        return CalcWaltonStableHorizontalOrTilt(DeltaTemp, cosTilt);
+    return CalcWaltonStableHorizontalOrTilt(DeltaTemp, cosTilt);
 
-    } // ...end of IF-THEN block to set HConvIn
+    // ...end of IF-THEN block to set HConvIn
 }
 
 void CalcASHRAEDetailedIntConvCoeff(EnergyPlusData &state,
@@ -1941,8 +1960,9 @@ void CalcASHRAEDetailedIntConvCoeff(EnergyPlusData &state,
     }
 
     // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
         state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+    }
 }
 
 void CalcDetailedHcInForDVModel(EnergyPlusData &state,
@@ -2013,7 +2033,9 @@ void CalcDetailedHcInForDVModel(EnergyPlusData &state,
     }
 
     // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-    if (HcIn(SurfNum) < state.dataHeatBal->LowHConvLimit) HcIn(SurfNum) = state.dataHeatBal->LowHConvLimit;
+    if (HcIn(SurfNum) < state.dataHeatBal->LowHConvLimit) {
+        HcIn(SurfNum) = state.dataHeatBal->LowHConvLimit;
+    }
 }
 
 Real64 CalcZoneSystemACH(EnergyPlusData &state, int const ZoneNum)
@@ -2021,21 +2043,21 @@ Real64 CalcZoneSystemACH(EnergyPlusData &state, int const ZoneNum)
 
     if (!allocated(state.dataLoopNodes->Node)) {
         return 0.0;
-    } else {
-        // Set local variables
-        Real64 ZoneVolume = state.dataHeatBal->Zone(ZoneNum).Volume;
-        Real64 ZoneVolFlowRate = CalcZoneSystemVolFlowRate(state, ZoneNum);
+    } // Set local variables
+    Real64 ZoneVolume = state.dataHeatBal->Zone(ZoneNum).Volume;
+    Real64 ZoneVolFlowRate = CalcZoneSystemVolFlowRate(state, ZoneNum);
 
-        // Calculate ACH
-        return ZoneVolFlowRate / ZoneVolume * Constant::SecInHour;
-    }
+    // Calculate ACH
+    return ZoneVolFlowRate / ZoneVolume * Constant::rSecsInHour;
 }
 
 Real64 CalcZoneSupplyAirTemp(EnergyPlusData &state, int const ZoneNum)
 {
 
     int ZoneNode = state.dataHeatBal->Zone(ZoneNum).SystemZoneNodeNumber;
-    if (ZoneNode <= 0) return state.dataLoopNodes->Node(ZoneNode).Temp;
+    if (ZoneNode <= 0) {
+        return state.dataLoopNodes->Node(ZoneNode).Temp;
+    }
 
     auto &zoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(ZoneNum);
     auto &zoneEquipList = state.dataZoneEquip->ZoneEquipList(zoneEquipConfig.EquipListIndex);
@@ -2048,10 +2070,14 @@ Real64 CalcZoneSupplyAirTemp(EnergyPlusData &state, int const ZoneNum)
     for (int EquipNum = 1; EquipNum <= zoneEquipList.NumOfEquipTypes; ++EquipNum) {
 
         auto &equipData = zoneEquipList.EquipData(EquipNum);
-        if (equipData.NumOutlets == 0) continue;
+        if (equipData.NumOutlets == 0) {
+            continue;
+        }
 
         zoneInletNodeNum = equipData.OutletNodeNums(1);
-        if (zoneInletNodeNum == 0) continue;
+        if (zoneInletNodeNum == 0) {
+            continue;
+        }
 
         auto const &zoneInletNode = state.dataLoopNodes->Node(zoneInletNodeNum);
         if (zoneInletNode.MassFlowRate > 0.0) {
@@ -2060,20 +2086,23 @@ Real64 CalcZoneSupplyAirTemp(EnergyPlusData &state, int const ZoneNum)
         }
     }
 
-    if (SumMdot > 0.0) return SumMdotTemp / SumMdot; // mass flow weighted inlet temperature
+    if (SumMdot > 0.0) {
+        return SumMdotTemp / SumMdot; // mass flow weighted inlet temperature
+    }
 
     if (zoneInletNodeNum > 0) {
         return state.dataLoopNodes->Node(zoneInletNodeNum).Temp;
-    } else {
-        return state.dataLoopNodes->Node(ZoneNode).Temp;
     }
+    return state.dataLoopNodes->Node(ZoneNode).Temp;
 }
 
 Real64 CalcZoneSystemVolFlowRate(EnergyPlusData &state, int const ZoneNum)
 {
     auto const &zone = state.dataHeatBal->Zone(ZoneNum);
 
-    if (state.dataGlobal->BeginEnvrnFlag || zone.SystemZoneNodeNumber <= 0) return 0.0;
+    if (state.dataGlobal->BeginEnvrnFlag || zone.SystemZoneNodeNumber <= 0) {
+        return 0.0;
+    }
 
     auto const &zoneNode = state.dataLoopNodes->Node(zone.SystemZoneNodeNumber);
     int ZoneMult = zone.Multiplier * zone.ListMultiplier;
@@ -2148,11 +2177,11 @@ Real64 CalcCeilingDiffuserIntConvCoeff(EnergyPlusData &state,
 
     if (cosTilt < -cos45) {
         return CalcFisherPedersenCeilDiffuserFloor(state, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow); // Floor correlation
-    } else if (cosTilt > cos45) {
-        return CalcFisherPedersenCeilDiffuserCeiling(state, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow); // Ceiling correlation
-    } else {
-        return CalcFisherPedersenCeilDiffuserWalls(state, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow); // Wall correlation
     }
+    if (cosTilt > cos45) {
+        return CalcFisherPedersenCeilDiffuserCeiling(state, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow); // Ceiling correlation
+    }
+    return CalcFisherPedersenCeilDiffuserWalls(state, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow); // Wall correlation
 }
 
 void CalcCeilingDiffuserIntConvCoeff(EnergyPlusData &state,
@@ -2186,8 +2215,9 @@ void CalcCeilingDiffuserIntConvCoeff(EnergyPlusData &state,
                                                     surface.Height,
                                                     state.dataConstruction->Construct(surface.Construction).TypeIsWindow);
                 // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-                if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+                if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
                     state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+                }
             }
         } // SurfNum
     }
@@ -2239,7 +2269,7 @@ void CalcCeilingDiffuserInletCorr(EnergyPlusData &state,
             ACH = 0.0;
         } else {
             // Calculate ACH (AR: can we please stop with these unparenthesized multiple divides? / / )
-            ACH = ZoneMassFlowRate / AirDensity / ZoneVolume * Constant::SecInHour;
+            ACH = ZoneMassFlowRate / AirDensity / ZoneVolume * Constant::rSecsInHour;
             // Limit ACH to range of correlation
             ACH = min(ACH, MaxACH);
             ACH = max(ACH, 0.0);
@@ -2275,12 +2305,15 @@ void CalcCeilingDiffuserInletCorr(EnergyPlusData &state,
             }
 
             // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-            if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+            if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
                 state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+            }
 
         } // SurfNum
     }
-    if (ACH > 100.0) ShowWarningError(state, "CeilingDiffuser convection correlation is out of range: ACH > 100");
+    if (ACH > 100.0) {
+        ShowWarningError(state, "CeilingDiffuser convection correlation is out of range: ACH > 100");
+    }
 }
 
 void CalcTrombeWallIntConvCoeff(EnergyPlusData &state,
@@ -2327,7 +2360,9 @@ void CalcTrombeWallIntConvCoeff(EnergyPlusData &state,
         auto const &thisSpace = state.dataHeatBal->space(spaceNum);
         for (int SurfNum = thisSpace.HTSurfaceFirst; SurfNum <= thisSpace.HTSurfaceLast; ++SurfNum) {
             auto const &surface = state.dataSurface->Surface(SurfNum);
-            if (surface.Class != SurfaceClass::Wall) continue;
+            if (surface.Class != SurfaceClass::Wall) {
+                continue;
+            }
 
             if (surface.Width > majorW) {
                 majorW = surface.Width;
@@ -2340,7 +2375,9 @@ void CalcTrombeWallIntConvCoeff(EnergyPlusData &state,
         // assign major surfaces
         for (int SurfNum = thisSpace.HTSurfaceFirst; SurfNum <= thisSpace.HTSurfaceLast; ++SurfNum) {
             auto const &surface = state.dataSurface->Surface(SurfNum);
-            if (surface.Class != SurfaceClass::Wall) continue;
+            if (surface.Class != SurfaceClass::Wall) {
+                continue;
+            }
 
             if (surface.Width == majorW) {
                 if (Surf1 == 0) {
@@ -2389,7 +2426,7 @@ void CalcTrombeWallIntConvCoeff(EnergyPlusData &state,
             CalcASHRAESimpleIntConvCoeff(
                 state, SurfNum, SurfaceTemperatures(SurfNum), state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNum).MAT);
 
-            // assign the convection coefficent to the major surfaces and any subsurfaces on them
+            // assign the convection coefficient to the major surfaces and any subsurfaces on them
             if ((surface.BaseSurf == Surf1) || (surface.BaseSurf == Surf2)) {
                 if (surface.ExtBoundCond == DataSurfaces::KivaFoundation) {
                     ShowFatalError(state, format("Trombe wall convection model not applicable for foundation surface ={}", surface.Name));
@@ -2398,10 +2435,11 @@ void CalcTrombeWallIntConvCoeff(EnergyPlusData &state,
             }
 
             // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-            if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+            if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
                 state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+            }
         } // for (surfNum)
-    }     // for (spaceNum)
+    } // for (spaceNum)
 }
 
 Real64 CalcNusselt(EnergyPlusData &state,
@@ -2433,19 +2471,20 @@ Real64 CalcNusselt(EnergyPlusData &state,
     auto const &surface = state.dataSurface->Surface(SurfNum);
 
     Real64 tilt = surface.Tilt;
-    Real64 tiltr = tilt * Constant::DegToRadians;
+    Real64 tiltr = tilt * Constant::DegToRad;
     Real64 costilt = surface.CosTilt;
     Real64 sintilt = surface.SinTilt;
     Real64 ra = gr * pr; // Rayleigh number
     //! fw if (ra > 2.0e6): error that outside range of Rayleigh number?
 
     Real64 gnu901; // Nusselt number temporary variables for
-    if (ra <= 1.0e4)
+    if (ra <= 1.0e4) {
         gnu901 = 1.0 + 1.7596678e-10 * std::pow(ra, 2.2984755); // eq. 51
-    else if (ra > 1.0e4 && ra <= 5.0e4)
+    } else if (ra > 1.0e4 && ra <= 5.0e4) {
         gnu901 = 0.028154 * std::pow(ra, 0.4134); // eq. 50
-    else
+    } else {
         gnu901 = 0.0673838 * std::pow(ra, 1.0 / 3.0); // eq. 49
+    }
 
     Real64 gnu902 = 0.242 * std::pow(ra / asp, 0.272); // eq. 52
     Real64 gnu90 = max(gnu901, gnu902);
@@ -2466,15 +2505,14 @@ Real64 CalcNusselt(EnergyPlusData &state,
         // linear interpolation for layers inclined at angles between 60 and 90 deg
         return ((90.0 - tilt) * gnu60 + (tilt - 60.0) * gnu90) / 30.0;
 
-    } else { // eq. 42
-        Real64 cra = ra * costilt;
-        Real64 a = 1.0 - 1708.0 / cra;
-        Real64 b = std::pow(cra / 5830.0, 0.33333) - 1.0; // LKL- replace .333 with OneThird?
-        Real64 gnua = (std::abs(a) + a) / 2.0;
-        Real64 gnub = (std::abs(b) + b) / 2.0;
-        Real64 ang = 1708.0 * std::pow(std::sin(1.8 * tiltr), 1.6);
-        return 1.0 + 1.44 * gnua * (1.0 - ang / cra) + gnub;
-    }
+    } // eq. 42
+    Real64 cra = ra * costilt;
+    Real64 a = 1.0 - 1708.0 / cra;
+    Real64 b = std::pow(cra / 5830.0, 0.33333) - 1.0; // LKL- replace .333 with OneThird?
+    Real64 gnua = (std::abs(a) + a) / 2.0;
+    Real64 gnub = (std::abs(b) + b) / 2.0;
+    Real64 ang = 1708.0 * std::pow(std::sin(1.8 * tiltr), 1.6);
+    return 1.0 + 1.44 * gnua * (1.0 - ang / cra) + gnub;
 }
 
 Real64 SetExtConvCoeff(EnergyPlusData &state, int const SurfNum) // Surface Number
@@ -2509,7 +2547,7 @@ Real64 SetExtConvCoeff(EnergyPlusData &state, int const SurfNum) // Surface Numb
     } break;
 
     case OverrideType::Schedule: {
-        HExt = ScheduleManager::GetCurrentScheduleValue(state, userExtConvModel.ScheduleIndex);
+        HExt = userExtConvModel.sched->getCurrentVal();
         // Need to check for validity
         if (surface.ExtBoundCond == DataSurfaces::KivaFoundation) {
             state.dataSurfaceGeometry->kivaManager.surfaceConvMap[SurfNum].f = KIVA_HF_ZERO;
@@ -2573,7 +2611,7 @@ Real64 SetIntConvCoeff(EnergyPlusData &state, int const SurfNum) // Surface Numb
     } break;
 
     case OverrideType::Schedule: {
-        HInt = ScheduleManager::GetCurrentScheduleValue(state, userIntConvModel.ScheduleIndex);
+        HInt = userIntConvModel.sched->getCurrentVal();
         // Need to check for validity
         if (surface.ExtBoundCond == DataSurfaces::KivaFoundation) {
             state.dataSurfaceGeometry->kivaManager.surfaceConvMap[SurfNum].in = KIVA_CONST_CONV(HInt);
@@ -2624,7 +2662,7 @@ Real64 CalcISO15099WindowIntConvCoeff(EnergyPlusData &state,
     // correlation documented in ISO 15099, Section 8.3.2.2
 
     // REFERENCES:
-    // Internation Standard ISO 15099. Thermal performance of windows, doors and shading devices -- Detailed Calculations
+    // International Standard ISO 15099. Thermal performance of windows, doors and shading devices -- Detailed Calculations
     // First Edition 2003-11-15. ISO 15099:2003(E)
 
     // Locals
@@ -2663,7 +2701,9 @@ Real64 CalcISO15099WindowIntConvCoeff(EnergyPlusData &state,
     Real64 Cp = Psychrometrics::PsyCpAirFnW(AirHumRat);   // specific heat of air [J/kg-K]
 
     // four cases depending on tilt and DeltaTemp (heat flow direction )
-    if (DeltaTemp > 0.0) TiltDeg = 180.0 - TiltDeg; // complement angle if cooling situation
+    if (DeltaTemp > 0.0) {
+        TiltDeg = 180.0 - TiltDeg; // complement angle if cooling situation
+    }
 
     // Rayleigh number for cavity height [ Non dim]
     Real64 RaH = (pow_2(rho) * pow_3(Height) * g * Cp * (std::abs(DeltaTemp))) / (TmeanFilmKelvin * mu * lambda); // eq 132 in ISO 15099
@@ -2736,14 +2776,16 @@ void CalcISO15099WindowIntConvCoeff(EnergyPlusData &state,
         CalcISO15099WindowIntConvCoeff(state, SurfaceTemperature, AirTemperature, AirHumRat, Height, TiltDeg, sineTilt);
 
     // EMS override point (Violates Standard 15099?  throw warning? scary.
-    if (state.dataSurface->SurfEMSOverrideIntConvCoef(SurfNum))
+    if (state.dataSurface->SurfEMSOverrideIntConvCoef(SurfNum)) {
         state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataSurface->SurfEMSValueForIntConvCoef(SurfNum);
-    else
+    } else {
         state.dataHeatBalSurf->SurfHConvInt(SurfNum) *= state.dataHeatBalSurf->SurfWinCoeffAdjRatio(SurfNum);
+    }
 
     // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
         state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+    }
 }
 
 void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
@@ -2783,7 +2825,9 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
             for (int SurfLoop = thisSpace.HTSurfaceFirst; SurfLoop <= thisSpace.HTSurfaceLast; ++SurfLoop) {
                 auto const &surf = state.dataSurface->Surface(SurfLoop);
                 // first catch exterior walls and do summations
-                if (surf.ExtBoundCond != ExternalEnvironment) continue;
+                if (surf.ExtBoundCond != ExternalEnvironment) {
+                    continue;
+                }
 
                 if (surf.Class == SurfaceClass::Wall) {
                     PerimExtLengthSum += surf.Width;
@@ -2813,7 +2857,9 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
                 for (int SurfLoop = thisSpace.HTSurfaceFirst; SurfLoop <= thisSpace.HTSurfaceLast; ++SurfLoop) {
                     auto const &surf = state.dataSurface->Surface(SurfLoop);
                     auto &surfIntConv = state.dataSurface->surfIntConv(SurfLoop);
-                    if (surf.ExtBoundCond != ExternalEnvironment) continue;
+                    if (surf.ExtBoundCond != ExternalEnvironment) {
+                        continue;
+                    }
 
                     if (surf.Class == SurfaceClass::Window || surf.Class == SurfaceClass::GlassDoor) {
 
@@ -2826,8 +2872,12 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
 
                         auto const &baseSurf = state.dataSurface->Surface(surf.BaseSurf);
                         auto &baseSurfIntConv = state.dataSurface->surfIntConv(surf.BaseSurf);
-                        if (baseSurf.ExtBoundCond != ExternalEnvironment) continue;
-                        if (baseSurf.Class != SurfaceClass::Wall) continue;
+                        if (baseSurf.ExtBoundCond != ExternalEnvironment) {
+                            continue;
+                        }
+                        if (baseSurf.Class != SurfaceClass::Wall) {
+                            continue;
+                        }
 
                         baseSurfIntConv.windowLocation =
                             (baseSurf.Centroid.z < surf.Centroid.z) ? IntConvWinLoc::WindowAboveThis : IntConvWinLoc::WindowBelowThis;
@@ -2849,7 +2899,7 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
     state.dataConvect->RoofLongAxisOutwardAzimuth = geoSummaryRoof.Azimuth;
 
     // Calculate facade areas, perimeters, and heights.
-    // Why are these calculations so quick and dirty while the roof calcluation is much more detailed?
+    // Why are these calculations so quick and dirty while the roof calculation is much more detailed?
     std::array<SurfaceGeometry::GeoSummary, (int)DataSurfaces::Compass8::Num> geoSummaryFacades;
 
     // first pass over surfaces for outside face params
@@ -2860,7 +2910,9 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
         if (!surf.HeatTransSurf) {
             continue;
         }
-        if ((surf.Tilt < 45.0) || (surf.Tilt >= 135.0)) continue; // not a vertical wall
+        if ((surf.Tilt < 45.0) || (surf.Tilt >= 135.0)) {
+            continue; // not a vertical wall
+        }
 
         DataSurfaces::Compass8 compass8 = AzimuthToCompass8(surf.Azimuth);
 
@@ -2905,8 +2957,12 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
     }
     for (int surfNum = 1; surfNum <= state.dataSurface->TotSurfaces; ++surfNum) {
         auto const &surf = state.dataSurface->Surface(surfNum);
-        if (surf.ExtBoundCond != ExternalEnvironment) continue;
-        if (!surf.HeatTransSurf) continue;
+        if (surf.ExtBoundCond != ExternalEnvironment) {
+            continue;
+        }
+        if (!surf.HeatTransSurf) {
+            continue;
+        }
 
         Real64 z_min = Constant::BigNumber;
         Real64 z_max = -Constant::BigNumber;
@@ -2952,18 +3008,24 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
             auto const &surfExtConv = state.dataSurface->surfExtConv(SurfLoop);
             auto const &surfIntConv = state.dataSurface->surfIntConv(SurfLoop);
 
-            if (!surf.HeatTransSurf) continue;
+            if (!surf.HeatTransSurf) {
+                continue;
+            }
 
             static constexpr std::string_view Format_901(
                 "Surface Convection Parameters,{},{},{:.2R},{:.2R},{:.2R},{},{:.2R},{:.2R},{:.2R},{:.2R},{},{},{}\n");
 
             // This reporting rubric (using numbers instead of strings, using negative numbers for "built-in" coefficients) is stupid,
-            // but we are maintaining compatiblity here
+            // but we are maintaining compatibility here
             int hcExtRptNum = surfExtConv.userModelNum;
-            if (hcExtRptNum == 0) hcExtRptNum = -Convect::HcExtReportVals[(int)surfExtConv.model];
+            if (hcExtRptNum == 0) {
+                hcExtRptNum = -Convect::HcExtReportVals[(int)surfExtConv.model];
+            }
 
             int hcIntRptNum = surfIntConv.userModelNum;
-            if (hcIntRptNum == 0) hcIntRptNum = -Convect::HcIntReportVals[(int)surfIntConv.model];
+            if (hcIntRptNum == 0) {
+                hcIntRptNum = -Convect::HcIntReportVals[(int)surfIntConv.model];
+            }
 
             print(state.files.eio,
                   Format_901,
@@ -3015,7 +3077,7 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
             static constexpr std::string_view Format_8800(
                 "! <Building Convection Parameters:Roof>, Area [m2], Perimeter [m], Height [m], Tilt [deg], Azimuth [deg]\n");
             print(state.files.eio, Format_8800); // header for roof
-            static constexpr std::string_view Format_8801("Building Convection Parameters:Roof,{:.2R},{:.2R},{:.2R},{:.2R},{:.2R}");
+            static constexpr std::string_view Format_8801("Building Convection Parameters:Roof,{:.2R},{:.2R},{:.2R},{:.2R},{:.2R}\n");
             print(state.files.eio,
                   Format_8801,
                   geoSummaryRoof.Area,
@@ -3024,7 +3086,7 @@ void SetupAdaptiveConvStaticMetaData(EnergyPlusData &state)
                   geoSummaryRoof.Tilt,
                   geoSummaryRoof.Azimuth);
         } // Display
-    }     // Do Report
+    } // Do Report
 }
 
 void SetupAdaptiveConvRadiantSurfaceData(EnergyPlusData &state)
@@ -3054,7 +3116,9 @@ void SetupAdaptiveConvRadiantSurfaceData(EnergyPlusData &state)
             auto const &thisSpace = state.dataHeatBal->space(spaceNum);
             for (int SurfLoop = thisSpace.HTSurfaceFirst; SurfLoop <= thisSpace.HTSurfaceLast; ++SurfLoop) {
                 auto const &surface = state.dataSurface->Surface(SurfLoop);
-                if (!state.dataSurface->surfIntConv(SurfLoop).hasActiveInIt) continue;
+                if (!state.dataSurface->surfIntConv(SurfLoop).hasActiveInIt) {
+                    continue;
+                }
                 if (surface.Class == SurfaceClass::Wall || surface.Class == SurfaceClass::Door) {
                     ++activeWallCount;
                     activeWallArea += surface.Area;
@@ -3508,7 +3572,9 @@ Real64 EvaluateIntHcModels(EnergyPlusData &state, int const SurfNum, HcInt const
 
     state.dataSurface->SurfTAirRefRpt(SurfNum) = DataSurfaces::SurfTAirRefReportVals[state.dataSurface->SurfTAirRef(SurfNum)];
 
-    if (tmpHc < AdaptiveHcIntLowLimit) tmpHc = AdaptiveHcIntLowLimit;
+    if (tmpHc < AdaptiveHcIntLowLimit) {
+        tmpHc = AdaptiveHcIntLowLimit;
+    }
 
     return tmpHc;
 }
@@ -3838,7 +3904,7 @@ Real64 EvaluateExtHcModels(EnergyPlusData &state, int const SurfNum, HcExt const
     default: {
         assert(false);
     }
-    } // swtich (ForcedConvModelEqNum)
+    } // switch (ForcedConvModelEqNum)
 
     Real64 Hc = Hf + Hn;
 
@@ -3847,13 +3913,17 @@ Real64 EvaluateExtHcModels(EnergyPlusData &state, int const SurfNum, HcExt const
         state.dataSurfaceGeometry->kivaManager.surfaceConvMap[SurfNum].out =
             [=](double Tsurf, double Tamb, double HfTerm, double Roughness, double cosTilt) -> double {
             Real64 hcExt = HfFn(Tsurf, Tamb, HfTerm, Roughness, cosTilt) + HnFn(Tsurf, Tamb, HfTerm, Roughness, cosTilt);
-            if (hcExt < AdaptiveHcExtLowLimit) hcExt = AdaptiveHcExtLowLimit;
+            if (hcExt < AdaptiveHcExtLowLimit) {
+                hcExt = AdaptiveHcExtLowLimit;
+            }
             return hcExt;
         };
         Hc = 0.0; // Not used in Kiva
     }
 
-    if (Hc < AdaptiveHcExtLowLimit) Hc = AdaptiveHcExtLowLimit;
+    if (Hc < AdaptiveHcExtLowLimit) {
+        Hc = AdaptiveHcExtLowLimit;
+    }
     return Hc;
 }
 
@@ -3998,7 +4068,9 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
                 switch (zoneEquipList.EquipType(EquipNum)) {
                 case DataZoneEquipment::ZoneEquipType::AirDistributionUnit:
                 case DataZoneEquipment::ZoneEquipType::PurchasedAir: {
-                    if (!allocated(zoneEquipList.EquipData(EquipNum).OutletNodeNums)) continue;
+                    if (!allocated(zoneEquipList.EquipData(EquipNum).OutletNodeNums)) {
+                        continue;
+                    }
 
                     // get inlet node, not zone node if possible
                     int zoneInletNodeNum = zoneEquipList.EquipData(EquipNum).OutletNodeNums(1);
@@ -4019,7 +4091,9 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
                 case DataZoneEquipment::ZoneEquipType::UnitVentilator:
                 case DataZoneEquipment::ZoneEquipType::UnitHeater:
                 case DataZoneEquipment::ZoneEquipType::OutdoorAirUnit: {
-                    if (!allocated(zoneEquipList.EquipData(EquipNum).OutletNodeNums)) continue;
+                    if (!allocated(zoneEquipList.EquipData(EquipNum).OutletNodeNums)) {
+                        continue;
+                    }
 
                     int zoneInletNodeNum = zoneEquipList.EquipData(EquipNum).OutletNodeNums(1);
                     if ((zoneInletNodeNum > 0 && state.dataLoopNodes->Node(zoneInletNodeNum).MassFlowRate > 0.0) ||
@@ -4063,9 +4137,13 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
 
                             for (int SurfLoop = thisSpace.HTSurfaceFirst; SurfLoop <= thisSpace.HTSurfaceLast; ++SurfLoop) {
 
-                                if (!state.dataSurface->surfIntConv(SurfLoop).hasActiveInIt) continue;
+                                if (!state.dataSurface->surfIntConv(SurfLoop).hasActiveInIt) {
+                                    continue;
+                                }
                                 auto const &surfaceLoop = state.dataSurface->Surface(SurfLoop);
-                                if (surfaceLoop.Class != SurfaceClass::Floor) continue;
+                                if (surfaceLoop.Class != SurfaceClass::Floor) {
+                                    continue;
+                                }
 
                                 Real64 DeltaTempLoop = state.dataHeatBalSurf->SurfInsideTempHist(1)(SurfLoop) -
                                                        state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNumLoop).MAT;
@@ -4077,18 +4155,22 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
                                     CoolingPriorityStack[EquipOnCount] = zoneEquipList.CoolingPriority(EquipNum);
                                     break;
                                 } // if (DeltaTemp)
-                            }     // for (SurfLoop)
-                        }         // for (spaceNumLoop)
-                    }             // if (InFloorActiveElement)
+                            } // for (SurfLoop)
+                        } // for (spaceNumLoop)
+                    } // if (InFloorActiveElement)
 
                     if (zoneEquipConfig.InCeilingActiveElement) {
                         for (int spaceNumLoop : zone.spaceIndexes) {
                             auto const &thisSpace = state.dataHeatBal->space(spaceNumLoop);
 
                             for (int SurfLoop = thisSpace.HTSurfaceFirst; SurfLoop <= thisSpace.HTSurfaceLast; ++SurfLoop) {
-                                if (!state.dataSurface->surfIntConv(SurfLoop).hasActiveInIt) continue;
+                                if (!state.dataSurface->surfIntConv(SurfLoop).hasActiveInIt) {
+                                    continue;
+                                }
                                 auto const &surfaceLoop = state.dataSurface->Surface(SurfLoop);
-                                if (surfaceLoop.Class != SurfaceClass::Roof) continue;
+                                if (surfaceLoop.Class != SurfaceClass::Roof) {
+                                    continue;
+                                }
 
                                 Real64 DeltaTempLoop = state.dataHeatBalSurf->SurfInsideTempHist(1)(SurfLoop) -
                                                        state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNumLoop).MAT;
@@ -4100,18 +4182,22 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
                                     CoolingPriorityStack[EquipOnCount] = zoneEquipList.CoolingPriority(EquipNum);
                                     break;
                                 } // if (DeltaTempLoop)
-                            }     // for (SurfLoop)
-                        }         // for (spaceNumLoop)
-                    }             // if (InCeilingActiveElement)
+                            } // for (SurfLoop)
+                        } // for (spaceNumLoop)
+                    } // if (InCeilingActiveElement)
 
                     if (zoneEquipConfig.InWallActiveElement) {
                         for (int spaceNumLoop : zone.spaceIndexes) {
                             auto const &thisSpace = state.dataHeatBal->space(spaceNumLoop);
 
                             for (int SurfLoop = thisSpace.HTSurfaceFirst; SurfLoop <= thisSpace.HTSurfaceLast; ++SurfLoop) {
-                                if (!state.dataSurface->surfIntConv(SurfLoop).hasActiveInIt) continue;
+                                if (!state.dataSurface->surfIntConv(SurfLoop).hasActiveInIt) {
+                                    continue;
+                                }
                                 auto const &surface_test = state.dataSurface->Surface(SurfLoop);
-                                if (surface_test.Class != SurfaceClass::Wall && surface_test.Class != SurfaceClass::Door) continue;
+                                if (surface_test.Class != SurfaceClass::Wall && surface_test.Class != SurfaceClass::Door) {
+                                    continue;
+                                }
 
                                 DeltaTemp = state.dataHeatBalSurf->SurfInsideTempHist(1)(SurfLoop) -
                                             state.dataZoneTempPredictorCorrector->spaceHeatBalance(spaceNumLoop).MAT;
@@ -4127,9 +4213,9 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
                                     HeatingPriorityStack[EquipOnCount] = zoneEquipList.HeatingPriority(EquipNum);
                                     CoolingPriorityStack[EquipOnCount] = zoneEquipList.CoolingPriority(EquipNum);
                                 } // else (DeltaTemp)
-                            }     // for (SurfLoop)
-                        }         // for (spaceNumLoop)
-                    }             // if (InWallActiveElement)
+                            } // for (SurfLoop)
+                        } // for (spaceNumLoop)
+                    } // if (InWallActiveElement)
                 } break;
                 default:; // nothing
                 }
@@ -4173,10 +4259,11 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
             auto const &thisSpace = state.dataHeatBal->space(spaceNumLoop);
             for (int surfNum = thisSpace.HTSurfaceFirst; surfNum <= thisSpace.HTSurfaceLast; ++surfNum) {
                 Real64 SurfTemp = state.dataHeatBalSurf->SurfInsideTempHist(1)(surfNum);
-                if (SurfTemp < Tmin)
+                if (SurfTemp < Tmin) {
                     Tmin = SurfTemp;
-                else if (SurfTemp > Tmax)
+                } else if (SurfTemp > Tmax) {
                     Tmax = SurfTemp;
+                }
             }
         }
         GrH = (g * (Tmax - Tmin) * pow_3(zone.CeilingHeight)) /
@@ -4311,11 +4398,11 @@ void DynamicIntConvSurfaceClassification(EnergyPlusData &state, int const SurfNu
         Real64 deltaT = surfTemp - airTemp;
         if (deltaT > 0.0) {
             return (int)ConvSurfDeltaT::Positive;
-        } else if (deltaT < 0.0) {
-            return (int)ConvSurfDeltaT::Negative;
-        } else {
-            return (int)ConvSurfDeltaT::Zero;
         }
+        if (deltaT < 0.0) {
+            return (int)ConvSurfDeltaT::Negative;
+        }
+        return (int)ConvSurfDeltaT::Zero;
     };
 
     // now finish out specific model eq for this surface
@@ -4668,16 +4755,20 @@ Real64 CalcUserDefinedIntHcModel(EnergyPlusData &state, int const SurfNum, int c
         auto const &zoneNode = state.dataLoopNodes->Node(zone.SystemZoneNodeNumber);
         Real64 AirDensity = Psychrometrics::PsyRhoAirFnPbTdbW(
             state, state.dataEnvrn->OutBaroPress, zoneNode.Temp, Psychrometrics::PsyWFnTdpPb(state, zoneNode.Temp, state.dataEnvrn->OutBaroPress));
-        AirChangeRate = (zoneNode.MassFlowRate * Constant::SecInHour) / (AirDensity * zone.Volume);
+        AirChangeRate = (zoneNode.MassFlowRate * Constant::rSecsInHour) / (AirDensity * zone.Volume);
 
         auto const &zoneEquipConfig = state.dataZoneEquip->ZoneEquipConfig(surface.Zone);
         if (zoneEquipConfig.EquipListIndex > 0) {
             auto const &zoneEquipList = state.dataZoneEquip->ZoneEquipList(zoneEquipConfig.EquipListIndex);
             for (int EquipNum = 1; EquipNum <= zoneEquipList.NumOfEquipTypes; ++EquipNum) {
-                if (!allocated(zoneEquipList.EquipData(EquipNum).OutletNodeNums)) continue;
+                if (!allocated(zoneEquipList.EquipData(EquipNum).OutletNodeNums)) {
+                    continue;
+                }
 
                 int zoneInletNodeNum = zoneEquipList.EquipData(EquipNum).OutletNodeNums(1);
-                if (zoneInletNodeNum <= 0) continue;
+                if (zoneInletNodeNum <= 0) {
+                    continue;
+                }
                 auto const &zoneInletNode = state.dataLoopNodes->Node(zoneInletNodeNum);
                 if (zoneInletNode.MassFlowRate > 0.0) { // Technically speaking, this check is not necessary since x += 0.0 is x.
                     SumMdotTemp += zoneInletNode.MassFlowRate * zoneInletNode.Temp;
@@ -4746,9 +4837,8 @@ Real64 CalcUserDefinedIntHcModel(EnergyPlusData &state, int const SurfNum, int c
                    HcFnACH + HcFnACHDivPerimLength;
         };
         return 0.0;
-    } else {
-        return HcFnTempDiff + HcFnTempDiffDivHeight + HcFnACH + HcFnACHDivPerimLength;
     }
+    return HcFnTempDiff + HcFnTempDiffDivHeight + HcFnACH + HcFnACHDivPerimLength;
 }
 
 Real64 CalcUserDefinedExtHcModel(EnergyPlusData &state, int const SurfNum, int const UserCurveNum)
@@ -4779,12 +4869,12 @@ Real64 CalcUserDefinedExtHcModel(EnergyPlusData &state, int const SurfNum, int c
     case RefWind::ParallelComp:
         // WindSpeed , WindDir, surface Azimuth
         Theta = CalcWindSurfaceTheta(state.dataEnvrn->WindDir, surface.Azimuth);
-        ThetaRad = Theta * Constant::DegToRadians;
+        ThetaRad = Theta * Constant::DegToRad;
         break;
     case RefWind::ParallelCompAtZ:
         // Surface WindSpeed , Surface WindDir, surface Azimuth
         Theta = CalcWindSurfaceTheta(state.dataSurface->SurfOutWindDir(SurfNum), surface.Azimuth);
-        ThetaRad = Theta * Constant::DegToRadians;
+        ThetaRad = Theta * Constant::DegToRad;
         windVel = std::cos(ThetaRad) * state.dataSurface->SurfOutWindSpeed(SurfNum);
         break;
     default:
@@ -4852,10 +4942,9 @@ Real64 CalcFisherPedersenCeilDiffuserFloor(EnergyPlusData &state,
 
     if (ACH >= 3.0) {
         return 3.873 + 0.082 * std::pow(ACH, 0.98);
-    } else {                               // Revert to purely natural convection
-        Real64 Hforced = 4.11365377688938; // Value of Hforced when ACH=3
-        return CalcFisherPedersenCeilDiffuserNatConv(state, Hforced, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow);
-    }
+    } // Revert to purely natural convection
+    Real64 Hforced = 4.11365377688938; // Value of Hforced when ACH=3
+    return CalcFisherPedersenCeilDiffuserNatConv(state, Hforced, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow);
 }
 
 Real64 CalcFisherPedersenCeilDiffuserCeiling(EnergyPlusData &state,
@@ -4875,10 +4964,9 @@ Real64 CalcFisherPedersenCeilDiffuserCeiling(EnergyPlusData &state,
 
     if (ACH >= 3.0) {
         return 2.234 + 4.099 * std::pow(ACH, 0.503);
-    } else {                               // Revert to purely natural convection
-        Real64 Hforced = 9.35711423763866; // Value of Hforced when ACH=3
-        return CalcFisherPedersenCeilDiffuserNatConv(state, Hforced, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow);
-    }
+    } // Revert to purely natural convection
+    Real64 Hforced = 9.35711423763866; // Value of Hforced when ACH=3
+    return CalcFisherPedersenCeilDiffuserNatConv(state, Hforced, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow);
 }
 
 Real64 CalcFisherPedersenCeilDiffuserWalls(EnergyPlusData &state,
@@ -4898,10 +4986,9 @@ Real64 CalcFisherPedersenCeilDiffuserWalls(EnergyPlusData &state,
 
     if (ACH >= 3.0) {
         return 1.208 + 1.012 * std::pow(ACH, 0.604);
-    } else {                               // Revert to purely natural convection
-        Real64 Hforced = 3.17299636062606; // Value of Hforced when ACH=3
-        return CalcFisherPedersenCeilDiffuserNatConv(state, Hforced, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow);
-    }
+    } // Revert to purely natural convection
+    Real64 Hforced = 3.17299636062606; // Value of Hforced when ACH=3
+    return CalcFisherPedersenCeilDiffuserNatConv(state, Hforced, ACH, Tsurf, Tair, cosTilt, humRat, height, isWindow);
 }
 
 Real64 CalcFisherPedersenCeilDiffuserNatConv(EnergyPlusData &state,
@@ -4926,9 +5013,8 @@ Real64 CalcFisherPedersenCeilDiffuserNatConv(EnergyPlusData &state,
     }
     if (ACH <= 0.5) {
         return Hnatural;
-    } else {
-        return Hnatural + ((Hforced - Hnatural) * ((ACH - 0.5) / 2.5)); // range for interpolation goes from ACH=0.5 to ACH=3.0 or a range of 2.5
     }
+    return Hnatural + ((Hforced - Hnatural) * ((ACH - 0.5) / 2.5)); // range for interpolation goes from ACH=0.5 to ACH=3.0 or a range of 2.5
 }
 
 Real64 CalcAlamdariHammondUnstableHorizontal(Real64 const DeltaTemp,        // [C] temperature difference between surface and air
@@ -4962,11 +5048,10 @@ Real64 CalcAlamdariHammondUnstableHorizontal(EnergyPlusData &state,
     std::string_view constexpr routineName = "CalcAlamdariHammondUnstableHorizontal";
     if (HydraulicDiameter > 0.0) {
         return CalcAlamdariHammondUnstableHorizontal(DeltaTemp, HydraulicDiameter);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
-        ShowWarningHydraulicDiameterZero(state, state.dataConvect->AHUnstableHorizontalErrorIDX, eoh);
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
+    ShowWarningHydraulicDiameterZero(state, state.dataConvect->AHUnstableHorizontalErrorIDX, eoh);
+    return 9.999;
 }
 
 Real64 CalcAlamdariHammondStableHorizontal(Real64 const DeltaTemp,        // [C] temperature difference between surface and air
@@ -4999,14 +5084,13 @@ Real64 CalcAlamdariHammondStableHorizontal(EnergyPlusData &state,
     std::string_view constexpr routineName = "CalcAlamdariHammondStableHorizontal";
     if (HydraulicDiameter > 0.0) {
         return CalcAlamdariHammondStableHorizontal(DeltaTemp, HydraulicDiameter);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
-        ShowWarningHydraulicDiameterZero(state, state.dataConvect->AHStableHorizontalErrorIDX, eoh);
-        if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
-            ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedAssistedWallErrorIDX1, eoh);
-        }
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
+    ShowWarningHydraulicDiameterZero(state, state.dataConvect->AHStableHorizontalErrorIDX, eoh);
+    if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
+        ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedAssistedWallErrorIDX1, eoh);
+    }
+    return 9.999;
 }
 
 Real64 CalcAlamdariHammondVerticalWall(Real64 const DeltaTemp, // [C] temperature difference between surface and air
@@ -5043,11 +5127,10 @@ Real64 CalcAlamdariHammondVerticalWall(EnergyPlusData &state,
 
     if (Height > 0.0) {
         return CalcAlamdariHammondVerticalWall(DeltaTemp, Height);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
-        ShowWarningHydraulicDiameterZero(state, state.dataConvect->AHVerticalWallErrorIDX, eoh);
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
+    ShowWarningHydraulicDiameterZero(state, state.dataConvect->AHVerticalWallErrorIDX, eoh);
+    return 9.999;
 }
 
 Real64 CalcKhalifaEq3WallAwayFromHeat(Real64 const DeltaTemp) // [C] temperature difference between surface and air
@@ -5180,10 +5263,9 @@ Real64 CalcAwbiHattonHeatedFloor(Real64 const DeltaTemp,        // [C] temperatu
 
     if (HydraulicDiameter > 1.0) {
         return 2.175 * std::pow(std::abs(DeltaTemp), 0.308) / std::pow(HydraulicDiameter, 0.076);
-    } else {
-        Real64 const pow_fac(2.175 / std::pow(1.0, 0.076));
-        return pow_fac * std::pow(std::abs(DeltaTemp), 0.308);
     }
+    Real64 const pow_fac(2.175 / std::pow(1.0, 0.076));
+    return pow_fac * std::pow(std::abs(DeltaTemp), 0.308);
 }
 
 Real64 CalcAwbiHattonHeatedWall(Real64 const DeltaTemp,        // [C] temperature difference between surface and air
@@ -5253,16 +5335,15 @@ Real64 CalcBeausoleilMorrisonMixedAssistedWall(EnergyPlusData &state,
         Real64 SupplyAirTemp = CalcZoneSupplyAirTemp(state, ZoneNum);
         Real64 AirChangeRate = CalcZoneSystemACH(state, ZoneNum);
         return CalcBeausoleilMorrisonMixedAssistedWall(DeltaTemp, Height, SurfTemp, SupplyAirTemp, AirChangeRate);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
-        if (Height == 0.0) {
-            ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedAssistedWallErrorIDX2, eoh);
-        }
-        if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
-            ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedAssistedWallErrorIDX1, eoh);
-        }
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
+    if (Height == 0.0) {
+        ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedAssistedWallErrorIDX2, eoh);
+    }
+    if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
+        ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedAssistedWallErrorIDX1, eoh);
+    }
+    return 9.999;
 }
 
 Real64 CalcBeausoleilMorrisonMixedOpposingWall(Real64 const DeltaTemp,     // [C] temperature difference between surface and air
@@ -5328,13 +5409,11 @@ Real64 CalcBeausoleilMorrisonMixedOpposingWall(EnergyPlusData &state,
         Real64 SupplyAirTemp = CalcZoneSupplyAirTemp(state, ZoneNum);
         Real64 AirChangeRate = CalcZoneSystemACH(state, ZoneNum);
         return CalcBeausoleilMorrisonMixedOpposingWall(DeltaTemp, Height, SurfTemp, SupplyAirTemp, AirChangeRate);
-
-    } else {
-        if (!state.dataGlobal->WarmupFlag) {
-            ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedOpposingWallErrorIDX1, eoh);
-        }
-        return 9.999;
     }
+    if (!state.dataGlobal->WarmupFlag) {
+        ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedOpposingWallErrorIDX1, eoh);
+    }
+    return 9.999;
 }
 
 Real64 CalcBeausoleilMorrisonMixedStableFloor(Real64 const DeltaTemp,         // [C] temperature difference between surface and air
@@ -5453,16 +5532,15 @@ Real64 CalcBeausoleilMorrisonMixedStableFloor(EnergyPlusData &state,
         Real64 SupplyAirTemp = CalcZoneSupplyAirTemp(state, ZoneNum);
         Real64 AirChangeRate = CalcZoneSystemACH(state, ZoneNum);
         return CalcBeausoleilMorrisonMixedStableFloor(DeltaTemp, HydraulicDiameter, SurfTemp, SupplyAirTemp, AirChangeRate);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
-        if (HydraulicDiameter == 0.0) {
-            ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedStableFloorErrorIDX1, eoh);
-        }
-        if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
-            ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedStableFloorErrorIDX2, eoh);
-        }
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
+    if (HydraulicDiameter == 0.0) {
+        ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedStableFloorErrorIDX1, eoh);
+    }
+    if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
+        ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedStableFloorErrorIDX2, eoh);
+    }
+    return 9.999;
 }
 
 Real64 CalcBeausoleilMorrisonMixedUnstableFloor(Real64 const DeltaTemp,         // [C] temperature difference between surface and air
@@ -5509,17 +5587,16 @@ Real64 CalcBeausoleilMorrisonMixedUnstableFloor(EnergyPlusData &state,
         Real64 SupplyAirTemp = CalcZoneSupplyAirTemp(state, ZoneNum);
         Real64 AirChangeRate = CalcZoneSystemACH(state, ZoneNum);
         return CalcBeausoleilMorrisonMixedUnstableFloor(DeltaTemp, HydraulicDiameter, SurfTemp, SupplyAirTemp, AirChangeRate);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
-        if (HydraulicDiameter == 0.0) {
-            ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedUnstableFloorErrorIDX1, eoh);
-        }
-
-        if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
-            ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedUnstableFloorErrorIDX2, eoh);
-        }
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
+    if (HydraulicDiameter == 0.0) {
+        ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedUnstableFloorErrorIDX1, eoh);
+    }
+
+    if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
+        ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedUnstableFloorErrorIDX2, eoh);
+    }
+    return 9.999;
 }
 
 Real64 CalcBeausoleilMorrisonMixedStableCeiling(Real64 const DeltaTemp,         // [C] temperature difference between surface and air
@@ -5564,17 +5641,16 @@ Real64 CalcBeausoleilMorrisonMixedStableCeiling(EnergyPlusData &state,
         Real64 SupplyAirTemp = CalcZoneSupplyAirTemp(state, ZoneNum);
         Real64 AirChangeRate = CalcZoneSystemACH(state, ZoneNum);
         return CalcBeausoleilMorrisonMixedStableCeiling(DeltaTemp, HydraulicDiameter, SurfTemp, SupplyAirTemp, AirChangeRate);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
-
-        if (HydraulicDiameter == 0.0) {
-            ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedStableCeilingErrorIDX1, eoh);
-        }
-        if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
-            ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedStableCeilingErrorIDX2, eoh);
-        }
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
+
+    if (HydraulicDiameter == 0.0) {
+        ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedStableCeilingErrorIDX1, eoh);
+    }
+    if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
+        ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedStableCeilingErrorIDX2, eoh);
+    }
+    return 9.999;
 }
 
 Real64 CalcBeausoleilMorrisonMixedUnstableCeiling(Real64 const DeltaTemp,         // [C] temperature difference between surface and air
@@ -5621,16 +5697,15 @@ Real64 CalcBeausoleilMorrisonMixedUnstableCeiling(EnergyPlusData &state,
         Real64 SupplyAirTemp = CalcZoneSupplyAirTemp(state, ZoneNum);
         Real64 AirChangeRate = CalcZoneSystemACH(state, ZoneNum);
         return CalcBeausoleilMorrisonMixedUnstableCeiling(DeltaTemp, HydraulicDiameter, SurfTemp, SupplyAirTemp, AirChangeRate);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
-        if (HydraulicDiameter == 0.0) {
-            ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedUnstableCeilingErrorIDX1, eoh);
-        }
-        if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
-            ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedUnstableCeilingErrorIDX2, eoh);
-        }
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Zone", state.dataHeatBal->Zone(ZoneNum).Name};
+    if (HydraulicDiameter == 0.0) {
+        ShowWarningHydraulicDiameterZero(state, state.dataConvect->BMMixedUnstableCeilingErrorIDX1, eoh);
+    }
+    if (DeltaTemp == 0.0 && !state.dataGlobal->WarmupFlag) {
+        ShowWarningDeltaTempZero(state, state.dataConvect->BMMixedUnstableCeilingErrorIDX2, eoh);
+    }
+    return 9.999;
 }
 
 Real64 CalcFohannoPolidoriVerticalWall(Real64 const DeltaTemp, // [C] temperature difference between surface and air
@@ -5662,9 +5737,8 @@ Real64 CalcFohannoPolidoriVerticalWall(Real64 const DeltaTemp, // [C] temperatur
 
     if (RaH <= 6.3e09) {
         return 1.332 * std::pow(std::abs(DeltaTemp) / Height, 0.25);
-    } else {
-        return 1.235 * std::exp(0.0467 * Height) * std::pow(std::abs(DeltaTemp), 0.316);
     }
+    return 1.235 * std::exp(0.0467 * Height) * std::pow(std::abs(DeltaTemp), 0.316);
 }
 
 Real64 CallCalcFohannoPolidoriVerticalWall(EnergyPlusData &state,
@@ -5678,12 +5752,11 @@ Real64 CallCalcFohannoPolidoriVerticalWall(EnergyPlusData &state,
     std::string_view constexpr routineName = "CalcFohannoPolidoriVerticalWall";
     if (Height > 0.0) {
         return CalcFohannoPolidoriVerticalWall(DeltaTemp, Height, SurfTemp, QdotConv);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
-        // bad value for Height, but we have little info to identify calling culprit
-        ShowWarningHydraulicDiameterZero(state, state.dataConvect->CalcFohannoPolidoriVerticalWallErrorIDX, eoh);
-        return 9.999;
     }
+    ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
+    // bad value for Height, but we have little info to identify calling culprit
+    ShowWarningHydraulicDiameterZero(state, state.dataConvect->CalcFohannoPolidoriVerticalWallErrorIDX, eoh);
+    return 9.999;
 }
 
 Real64 CalcKaradagChilledCeiling(Real64 const DeltaTemp) // [C] temperature difference between surface and air
@@ -5848,9 +5921,8 @@ Real64 CalcGoldsteinNovoselacCeilingDiffuserFloor(Real64 const AirSystemFlowRate
 
     if (ZoneExtPerimLength > 0.0) {
         return 0.048 * std::pow(AirSystemFlowRate / ZoneExtPerimLength, 0.8);
-    } else {
-        return 9.999; // safe but noticeable
     }
+    return 9.999; // safe but noticeable
 }
 
 Real64 CalcGoldsteinNovoselacCeilingDiffuserFloor(EnergyPlusData &state,
@@ -5928,12 +6000,10 @@ Real64 CalcSparrowWindward(EnergyPlusData &state,
 
     if (FaceArea > 0.0) {
         return CalcSparrowWindward(RoughnessIndex, FacePerimeter, FaceArea, WindAtZ);
-
-    } else {
-        ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
-        ShowWarningFaceAreaZero(state, state.dataConvect->CalcSparrowWindwardErrorIDX, eoh);
-        return 9.999; // safe but noticeable
     }
+    ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
+    ShowWarningFaceAreaZero(state, state.dataConvect->CalcSparrowWindwardErrorIDX, eoh);
+    return 9.999; // safe but noticeable
 }
 
 Real64 CalcSparrowLeeward(EnergyPlusData &state,
@@ -5947,11 +6017,10 @@ Real64 CalcSparrowLeeward(EnergyPlusData &state,
 
     if (FaceArea > 0.0) {
         return CalcSparrowLeeward(RoughnessIndex, FacePerimeter, FaceArea, WindAtZ);
-    } else {
-        ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
-        ShowWarningFaceAreaZero(state, state.dataConvect->CalcSparrowLeewardErrorIDX, eoh);
-        return 9.999; // safe but noticeable
     }
+    ErrorObjectHeader eoh{routineName, "Surface", state.dataSurface->Surface(SurfNum).Name};
+    ShowWarningFaceAreaZero(state, state.dataConvect->CalcSparrowLeewardErrorIDX, eoh);
+    return 9.999; // safe but noticeable
 }
 
 Real64 CalcMoWITTNatural(Real64 DeltaTemp)
@@ -6130,18 +6199,17 @@ Real64 CalcMitchell(EnergyPlusData &state, Real64 const WindAtZ, Real64 const Le
 {
     if (LengthScale > 0.0) {
         return CalcMitchell(WindAtZ, LengthScale);
-    } else {
-        if (state.dataConvect->CalcMitchellErrorIDX == 0) {
-            ShowSevereMessage(state, "CalcMitchell: Convection model not evaluated (bad length scale)");
-            ShowContinueError(state, format("Value for effective length scale = {:.5R}", LengthScale));
-            ShowContinueError(state, format("Occurs for surface named = {}", state.dataSurface->Surface(SurfNum).Name));
-            ShowContinueError(state, "Convection surface heat transfer coefficient set to 9.999 [W/m2-K] and the simulation continues");
-        }
-        ShowRecurringSevereErrorAtEnd(state,
-                                      "CalcMitchell: Convection model not evaluated because bad length scale and set to 9.999 [W/m2-k]",
-                                      state.dataConvect->CalcMitchellErrorIDX);
-        return 9.999; // safe but noticeable
     }
+    if (state.dataConvect->CalcMitchellErrorIDX == 0) {
+        ShowSevereMessage(state, "CalcMitchell: Convection model not evaluated (bad length scale)");
+        ShowContinueError(state, format("Value for effective length scale = {:.5R}", LengthScale));
+        ShowContinueError(state, format("Occurs for surface named = {}", state.dataSurface->Surface(SurfNum).Name));
+        ShowContinueError(state, "Convection surface heat transfer coefficient set to 9.999 [W/m2-K] and the simulation continues");
+    }
+    ShowRecurringSevereErrorAtEnd(state,
+                                  "CalcMitchell: Convection model not evaluated because bad length scale and set to 9.999 [W/m2-k]",
+                                  state.dataConvect->CalcMitchellErrorIDX);
+    return 9.999; // safe but noticeable
 }
 
 Real64 CalcWindSurfaceTheta(Real64 const WindDir, Real64 const SurfAzimuth)
@@ -6154,9 +6222,8 @@ Real64 CalcWindSurfaceTheta(Real64 const WindDir, Real64 const SurfAzimuth)
     Real64 theta = std::abs(windDir - surfAzi);
     if (theta > 180) {
         return abs(theta - 360);
-    } else {
-        return theta;
     }
+    return theta;
 }
 
 Real64 CalcBlockenWindward(EnergyPlusData &state,
@@ -6183,23 +6250,25 @@ Real64 CalcBlockenWindward(EnergyPlusData &state,
 
     if (Theta <= 11.25) {
         return 4.6 * std::pow(WindAt10m, 0.89);
-    } else if (Theta <= 33.75) {
-        return 5.0 * std::pow(WindAt10m, 0.8);
-    } else if (Theta <= 56.25) {
-        return 4.6 * std::pow(WindAt10m, 0.84);
-    } else if (Theta <= 100.0) {
-        return 4.5 * std::pow(WindAt10m, 0.81);
-    } else {
-        if (state.dataConvect->CalcBlockenWindwardErrorIDX == 0) {
-            ShowSevereMessage(state, "CalcBlockenWindward: Convection model wind angle calculation suspect (developer issue)");
-            ShowContinueError(state, format("Value for theta angle = {:.5R}", Theta));
-            ShowContinueError(state, format("Occurs for surface named = {}", state.dataSurface->Surface(SurfNum).Name));
-            ShowContinueError(state, "Convection model uses EmmelVertical correlation and the simulation continues");
-        }
-        ShowRecurringSevereErrorAtEnd(
-            state, "CalcBlockenWindward: Convection model wind angle calculation suspect.", state.dataConvect->CalcBlockenWindwardErrorIDX);
-        return CalcEmmelVertical(WindAt10m, WindDir, SurfAzimuth);
     }
+    if (Theta <= 33.75) {
+        return 5.0 * std::pow(WindAt10m, 0.8);
+    }
+    if (Theta <= 56.25) {
+        return 4.6 * std::pow(WindAt10m, 0.84);
+    }
+    if (Theta <= 100.0) {
+        return 4.5 * std::pow(WindAt10m, 0.81);
+    }
+    if (state.dataConvect->CalcBlockenWindwardErrorIDX == 0) {
+        ShowSevereMessage(state, "CalcBlockenWindward: Convection model wind angle calculation suspect (developer issue)");
+        ShowContinueError(state, format("Value for theta angle = {:.5R}", Theta));
+        ShowContinueError(state, format("Occurs for surface named = {}", state.dataSurface->Surface(SurfNum).Name));
+        ShowContinueError(state, "Convection model uses EmmelVertical correlation and the simulation continues");
+    }
+    ShowRecurringSevereErrorAtEnd(
+        state, "CalcBlockenWindward: Convection model wind angle calculation suspect.", state.dataConvect->CalcBlockenWindwardErrorIDX);
+    return CalcEmmelVertical(WindAt10m, WindDir, SurfAzimuth);
 }
 
 Real64 CalcEmmelVertical(Real64 const WindAt10m,
@@ -6224,15 +6293,17 @@ Real64 CalcEmmelVertical(Real64 const WindAt10m,
 
     if (Theta <= 22.5) {
         return 5.15 * std::pow(WindAt10m, 0.81);
-    } else if (Theta <= 67.5) {
-        return 3.34 * std::pow(WindAt10m, 0.84);
-    } else if (Theta <= 112.5) {
-        return 4.78 * std::pow(WindAt10m, 0.71);
-    } else if (Theta <= 157.5) {
-        return 4.05 * std::pow(WindAt10m, 0.77);
-    } else {
-        return 3.54 * std::pow(WindAt10m, 0.76);
     }
+    if (Theta <= 67.5) {
+        return 3.34 * std::pow(WindAt10m, 0.84);
+    }
+    if (Theta <= 112.5) {
+        return 4.78 * std::pow(WindAt10m, 0.71);
+    }
+    if (Theta <= 157.5) {
+        return 4.05 * std::pow(WindAt10m, 0.77);
+    }
+    return 3.54 * std::pow(WindAt10m, 0.76);
 }
 
 Real64 CalcEmmelRoof(Real64 const WindAt10m,
@@ -6257,15 +6328,17 @@ Real64 CalcEmmelRoof(Real64 const WindAt10m,
 
     if (Theta <= 22.5) {
         return 5.11 * std::pow(WindAt10m, 0.78);
-    } else if (Theta <= 67.5) {
-        return 4.60 * std::pow(WindAt10m, 0.79);
-    } else if (Theta <= 112.5) {
-        return 3.67 * std::pow(WindAt10m, 0.85);
-    } else if (Theta <= 157.5) {
-        return 4.60 * std::pow(WindAt10m, 0.79);
-    } else {
-        return 5.11 * std::pow(WindAt10m, 0.78);
     }
+    if (Theta <= 67.5) {
+        return 4.60 * std::pow(WindAt10m, 0.79);
+    }
+    if (Theta <= 112.5) {
+        return 3.67 * std::pow(WindAt10m, 0.85);
+    }
+    if (Theta <= 157.5) {
+        return 4.60 * std::pow(WindAt10m, 0.79);
+    }
+    return 5.11 * std::pow(WindAt10m, 0.78);
 }
 
 Real64 CalcClearRoof(EnergyPlusData &state,
@@ -6326,21 +6399,20 @@ Real64 CalcClearRoof(EnergyPlusData &state,
 
     if (x > 0.0) {
         return CalcClearRoof(state, SurfTemp, AirTemp, WindAtZ, RoofArea, RoofPerimeter, RoughnessIndex);
-    } else {
-        if (state.dataSurface->Surface(SurfNum).ExtBoundCond != DataSurfaces::OtherSideCondModeledExt) {
-            if (state.dataConvect->CalcClearRoofErrorIDX == 0) {
-                ShowSevereMessage(state, "CalcClearRoof: Convection model not evaluated (bad value for distance to roof edge)");
-                ShowContinueError(state, format("Value for distance to roof edge ={:.3R}", x));
-                ShowContinueError(state, format("Occurs for surface named = {}", state.dataSurface->Surface(SurfNum).Name));
-                ShowContinueError(state, "Convection surface heat transfer coefficient set to 9.999 [W/m2-K] and the simulation continues");
-            }
-            ShowRecurringSevereErrorAtEnd(
-                state,
-                "CalcClearRoof: Convection model not evaluated because bad value for distance to roof edge and set to 9.999 [W/m2-k]",
-                state.dataConvect->CalcClearRoofErrorIDX);
-        }
-        return 9.9999; // safe but noticeable
     }
+    if (state.dataSurface->Surface(SurfNum).ExtBoundCond != DataSurfaces::OtherSideCondModeledExt) {
+        if (state.dataConvect->CalcClearRoofErrorIDX == 0) {
+            ShowSevereMessage(state, "CalcClearRoof: Convection model not evaluated (bad value for distance to roof edge)");
+            ShowContinueError(state, format("Value for distance to roof edge ={:.3R}", x));
+            ShowContinueError(state, format("Occurs for surface named = {}", state.dataSurface->Surface(SurfNum).Name));
+            ShowContinueError(state, "Convection surface heat transfer coefficient set to 9.999 [W/m2-K] and the simulation continues");
+        }
+        ShowRecurringSevereErrorAtEnd(
+            state,
+            "CalcClearRoof: Convection model not evaluated because bad value for distance to roof edge and set to 9.999 [W/m2-k]",
+            state.dataConvect->CalcClearRoofErrorIDX);
+    }
+    return 9.9999; // safe but noticeable
 }
 
 void CalcASTMC1340ConvCoeff(EnergyPlusData &state,
@@ -6359,8 +6431,9 @@ void CalcASTMC1340ConvCoeff(EnergyPlusData &state,
         CalcASTMC1340ConvCoeff(state, SurfNum, SurfaceTemperature, ZoneMeanAirTemperature, Vair, surface.Tilt);
 
     // Establish some lower limit to avoid a zero convection coefficient (and potential divide by zero problems)
-    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit)
+    if (state.dataHeatBalSurf->SurfHConvInt(SurfNum) < state.dataHeatBal->LowHConvLimit) {
         state.dataHeatBalSurf->SurfHConvInt(SurfNum) = state.dataHeatBal->LowHConvLimit;
+    }
 }
 
 Real64 CalcASTMC1340ConvCoeff(EnergyPlusData &state, int const SurfNum, Real64 const Tsurf, Real64 const Tair, Real64 const Vair, Real64 const Tilt)
@@ -6383,7 +6456,7 @@ Real64 CalcASTMC1340ConvCoeff(EnergyPlusData &state, int const SurfNum, Real64 c
     Real64 Nuf; // Nusselt number for forced convection
     Real64 Grc; // Critical Grashof number
 
-    constexpr Real64 g = Constant::GravityConstant; // Acceleration of gravity, m/s2
+    constexpr Real64 g = Constant::Gravity; // Acceleration of gravity, m/s2
 
     auto const &surface = state.dataSurface->Surface(SurfNum);
 
@@ -6433,7 +6506,7 @@ Real64 CalcASTMC1340ConvCoeff(EnergyPlusData &state, int const SurfNum, Real64 c
             if (Tilt < 2) {
                 Nun = 0.58 * std::pow(Ra, 0.2);
             } else {
-                Nun = 0.56 * std::pow(Ra * (std::sin(Tilt * Constant::DegToRadians)), 0.25);
+                Nun = 0.56 * std::pow(Ra * (std::sin(Tilt * Constant::DegToRad)), 0.25);
             }
         } else { // heat flow up
             if (Tilt < 15) {
@@ -6447,7 +6520,7 @@ Real64 CalcASTMC1340ConvCoeff(EnergyPlusData &state, int const SurfNum, Real64 c
                 Nun = 0.56 * std::pow(Ra * (std::sin(Tilt * 3.14159 / 180)), 0.25);
             } else {
                 Nun = 0.14 * (std::pow(Ra, Constant::OneThird) - std::pow(Grc * Pr, Constant::OneThird)) +
-                      0.56 * std::pow(Grc * Pr * (std::sin(Tilt * Constant::DegToRadians)), 0.25);
+                      0.56 * std::pow(Grc * Pr * (std::sin(Tilt * Constant::DegToRad)), 0.25);
             }
         }
     } else if (Tilt == 180) { // Horizontal surface: Floor
@@ -6463,7 +6536,7 @@ Real64 CalcASTMC1340ConvCoeff(EnergyPlusData &state, int const SurfNum, Real64 c
             if (Tilt > 178) {
                 Nun = 0.58 * std::pow(Ra, 0.2);
             } else {
-                Nun = 0.56 * std::pow(Ra * (std::sin(Tilt * Constant::DegToRadians)), 0.25);
+                Nun = 0.56 * std::pow(Ra * (std::sin(Tilt * Constant::DegToRad)), 0.25);
             }
         } else { // heat flow up
             if (Tilt > 165) {
@@ -6474,10 +6547,10 @@ Real64 CalcASTMC1340ConvCoeff(EnergyPlusData &state, int const SurfNum, Real64 c
                 Grc = 5000000000;
             }
             if ((Ra / Pr) <= Grc) {
-                Nun = 0.56 * std::pow(Ra * (std::sin(Tilt * Constant::DegToRadians)), 0.25);
+                Nun = 0.56 * std::pow(Ra * (std::sin(Tilt * Constant::DegToRad)), 0.25);
             } else {
                 Nun = 0.14 * (std::pow(Ra, Constant::OneThird) - std::pow(Grc * Pr, Constant::OneThird)) +
-                      0.56 * std::pow(Grc * Pr * (std::sin(Tilt * Constant::DegToRadians)), 0.25);
+                      0.56 * std::pow(Grc * Pr * (std::sin(Tilt * Constant::DegToRad)), 0.25);
             }
         }
     } else { // Vertical wall (Tilt = 90)
@@ -6505,40 +6578,20 @@ SurfOrientation GetSurfConvOrientation(Real64 const Tilt)
 {
     if (Tilt < 5.0) {
         return SurfOrientation::HorizontalDown;
-    } else if ((Tilt >= 5.0) && (Tilt < 85.0)) {
-        return SurfOrientation::TiltedDownward;
-    } else if ((Tilt >= 85.0) && (Tilt < 95.0)) {
-        return SurfOrientation::Vertical;
-    } else if ((Tilt >= 95.0) && (Tilt < 175.0)) {
-        return SurfOrientation::TiltedUpward;
-    } else if (Tilt >= 175.0) {
-        return SurfOrientation::HorizontalUp;
-    } else {
-        return SurfOrientation::Invalid;
     }
-}
-
-void ShowSevereValueOutOfRange(
-    EnergyPlusData &state, ErrorObjectHeader const &eoh, std::string_view fieldName, Real64 fieldVal, Real64 lo, Real64 hi, std::string const &msg)
-{
-    ShowSevereError(state, format("{}: {} = {} out of range value", eoh.routineName, eoh.objectType, eoh.objectName));
-    ShowContinueError(state, format("{} = [{:.5R}] is out-of-range", fieldName, fieldVal));
-    ShowContinueError(state, format("Low/high limits = [>={:.9R}, <={:.1R}].", lo, hi));
-    if (!msg.empty()) ShowContinueError(state, msg);
-}
-
-void ShowSevereScheduleOutOfRange(EnergyPlusData &state,
-                                  ErrorObjectHeader const &eoh,
-                                  std::string_view fieldName,
-                                  std::string_view fieldVal,
-                                  Real64 lo,
-                                  Real64 hi,
-                                  std::string const &msg)
-{
-    ShowSevereError(state, format("{}: {} = {} out of range value", eoh.routineName, eoh.objectType, eoh.objectName));
-    ShowContinueError(state, format("{} = {} contains an out-of-range value", fieldName, fieldVal));
-    ShowContinueError(state, format("Low/high limits = [>={:.9R}, <={:.1R}].", lo, hi));
-    if (!msg.empty()) ShowContinueError(state, msg);
+    if ((Tilt >= 5.0) && (Tilt < 85.0)) {
+        return SurfOrientation::TiltedDownward;
+    }
+    if ((Tilt >= 85.0) && (Tilt < 95.0)) {
+        return SurfOrientation::Vertical;
+    }
+    if ((Tilt >= 95.0) && (Tilt < 175.0)) {
+        return SurfOrientation::TiltedUpward;
+    }
+    if (Tilt >= 175.0) {
+        return SurfOrientation::HorizontalUp;
+    }
+    return SurfOrientation::Invalid;
 }
 
 Real64 SurroundingSurfacesRadCoeffAverage(EnergyPlusData &state, int const SurfNum, Real64 const TSurfK, Real64 const AbsExt)

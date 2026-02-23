@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -66,7 +66,7 @@ namespace EnergyPlus::TARCOGMain {
 //       AUTHOR         D. Charlie Curcija
 //       DATE WRITTEN   July 2000
 //       MODIFIED       na
-//       RE-ENGINEERED  (see information bellow)
+//       RE-ENGINEERED  (see information below)
 //  Revision: 7.0.13  (March/27/2012), Simon Vidanovic
 //   - feature: New set of equations is set instead of hhat coefficients and new approach to solution which improves
 //               speed and stability.  Note that this solution does not include laminates
@@ -1110,8 +1110,8 @@ void TARCOG90(EnergyPlusData &state,
                     ErrorMessage = "Deflection calculations failed to converge";
                 }
             } // do while (.not.(converged))
-        }     // if ((CalcDeflection.eq.DeflectionCalculation::TEMPERATURE).or.(CalcDeflection.eq.DeflectionCalculation::GAP_WIDTHS)) then
-    }         // if (GoAhead(nperr)) then
+        } // if ((CalcDeflection.eq.DeflectionCalculation::TEMPERATURE).or.(CalcDeflection.eq.DeflectionCalculation::GAP_WIDTHS)) then
+    } // if (GoAhead(nperr)) then
 
     FinishDebugOutputFiles(files, nperr);
 }

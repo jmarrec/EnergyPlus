@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -584,6 +584,7 @@ TEST_F(ConvectionCoefficientsFixture, initExtConvCoeffAdjRatio)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound(false);
     HeatBalanceManager::GetProjectControlData(*state, ErrorsFound); // read project control data
@@ -804,6 +805,7 @@ TEST_F(ConvectionCoefficientsFixture, initIntConvCoeffAdjRatio)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound(false);
     HeatBalanceManager::GetProjectControlData(*state, ErrorsFound); // read project control data
@@ -890,6 +892,7 @@ TEST_F(ConvectionCoefficientsFixture, DynamicIntConvSurfaceClassification)
     std::string const idf_objects = this->getIDFString();
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool errorsFound(false);
     HeatBalanceManager::GetProjectControlData(*state, errorsFound); // read project control data
@@ -1230,7 +1233,9 @@ TEST_F(ConvectionCoefficientsFixture, TestCalcZoneSystemACH)
     Real64 ACHAnswer;
     Real64 ACHExpected;
 
-    if (!allocated(state->dataHeatBal->Zone)) state->dataHeatBal->Zone.allocate(TotalNumberofZones);
+    if (!allocated(state->dataHeatBal->Zone)) {
+        state->dataHeatBal->Zone.allocate(TotalNumberofZones);
+    }
     state->dataHeatBal->Zone(ZoneNum).Volume = 100.0;
     state->dataHeatBal->Zone(ZoneNum).SystemZoneNodeNumber = 1;
     state->dataGlobal->BeginEnvrnFlag = false;
@@ -1240,7 +1245,9 @@ TEST_F(ConvectionCoefficientsFixture, TestCalcZoneSystemACH)
     Real64 ZoneNode = state->dataHeatBal->Zone(ZoneNum).SystemZoneNodeNumber;
 
     // Test 1: Node not allocated, returns a zero ACH
-    if (allocated(state->dataLoopNodes->Node)) state->dataLoopNodes->Node.deallocate();
+    if (allocated(state->dataLoopNodes->Node)) {
+        state->dataLoopNodes->Node.deallocate();
+    }
     ACHExpected = 0.0;
     ACHAnswer = Convect::CalcZoneSystemACH(*state, ZoneNum);
     EXPECT_NEAR(ACHExpected, ACHAnswer, 0.0001);
@@ -1440,6 +1447,7 @@ TEST_F(ConvectionCoefficientsFixture, CalcBeausoleilMorrisonMixedAssistedWall)
     std::string const idf_objects = this->getIDFString();
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->OutBaroPress = 101325.0;
 
@@ -1495,6 +1503,7 @@ TEST_F(ConvectionCoefficientsFixture, CalcBeausoleilMorrisonMixedOpposingWall)
     std::string const idf_objects = this->getIDFString();
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->OutBaroPress = 101325.0;
 
@@ -1550,6 +1559,7 @@ TEST_F(ConvectionCoefficientsFixture, CalcBeausoleilMorrisonMixedStableFloor)
     std::string const idf_objects = this->getIDFString();
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->OutBaroPress = 101325.0;
 
@@ -1605,6 +1615,7 @@ TEST_F(ConvectionCoefficientsFixture, CalcBeausoleilMorrisonMixedUnstableFloor)
     std::string const idf_objects = this->getIDFString();
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->OutBaroPress = 101325.0;
 
@@ -1660,6 +1671,7 @@ TEST_F(ConvectionCoefficientsFixture, CalcBeausoleilMorrisonMixedStableCeiling)
     std::string const idf_objects = this->getIDFString();
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->OutBaroPress = 101325.0;
 
@@ -1715,6 +1727,7 @@ TEST_F(ConvectionCoefficientsFixture, CalcBeausoleilMorrisonMixedUnstableCeiling
     std::string const idf_objects = this->getIDFString();
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataEnvrn->OutBaroPress = 101325.0;
 
@@ -1913,6 +1926,7 @@ TEST_F(EnergyPlusFixture, AdaptiveModelSelections_ProperConstruction)
                                                       "Default algorithms;      !- Name"});
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Convect::HcInt algo;
 
@@ -2041,6 +2055,7 @@ TEST_F(EnergyPlusFixture, AdaptiveModelSelections_Implicit)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataHeatBalSurf->SurfTempInTmp.allocate(6);
     state->dataHeatBalSurf->SurfTempInTmp(1) = 15.0;
@@ -2281,6 +2296,7 @@ TEST_F(EnergyPlusFixture, AdaptiveModelSelections_ExplicitSelection)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataHeatBalSurf->SurfTempInTmp.allocate(6);
     state->dataHeatBalSurf->SurfTempInTmp(1) = 15.0;
@@ -2620,6 +2636,7 @@ TEST_F(ConvectionCoefficientsFixture, TestSetAdaptiveConvectionAlgoCoefficient)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataHeatBalSurf->SurfTempInTmp.allocate(6);
     state->dataHeatBalSurf->SurfTempInTmp(1) = 15.0;
@@ -2783,6 +2800,7 @@ TEST_F(ConvectionCoefficientsFixture, TestBlockenWindward)
     std::string const idf_objects = this->getIDFString();
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound(false);
     HeatBalanceManager::GetProjectControlData(*state, ErrorsFound); // read project control data
@@ -2871,6 +2889,7 @@ TEST_F(ConvectionCoefficientsFixture, TestMultipleSurfaceConvectionArrayAllocati
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataSurface->surfIntConv.allocate(2);
     state->dataSurface->surfExtConv.allocate(2);
@@ -2898,6 +2917,7 @@ TEST_F(ConvectionCoefficientsFixture, TestMultipleSurfaceConvectionArrayAllocati
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataSurface->surfIntConv.allocate(2);
     state->dataSurface->surfExtConv.allocate(2);
@@ -2921,6 +2941,7 @@ TEST_F(ConvectionCoefficientsFixture, TestSurfaceConvectionArrayAllocation1)
                                                       "  10;   !- Convection Coefficient 2"});
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataSurface->Surface.allocate(2);
     state->dataSurface->Surface(1).Name = "FAKESURFACE";
@@ -2950,6 +2971,7 @@ TEST_F(ConvectionCoefficientsFixture, TestSurfaceConvectionArrayAllocation2)
                                                       "  10;   !- Convection Coefficient 2"});
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataSurface->Surface.allocate(2);
     state->dataSurface->Surface(1).Name = "FAKESURFACE";
@@ -3138,6 +3160,7 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_PerfectSquare_Rotated)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound = false;
 
@@ -3360,6 +3383,7 @@ TEST_F(ConvectionCoefficientsFixture, RoofPerimeter_WeirderShape)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     bool ErrorsFound = false;
 
@@ -3822,7 +3846,7 @@ TEST_F(ConvectionCoefficientsFixture, SurroundingSurfacesHRadCoefTest)
         1,                            !- Multiplier
         autocalculate,                !- Ceiling Height {m}
         autocalculate;                !- Volume {m3}
-                          
+
 	  Material,
         NothWallConcreteBlock,        !- Name
         MediumRough,                  !- Roughness
@@ -3931,7 +3955,7 @@ TEST_F(ConvectionCoefficientsFixture, SurroundingSurfacesHRadCoefTest)
         SrdSurfs:Surface 4,           !- Surrounding Surface 2 Name
         0.2,                          !- Surrounding Surface 2 View Factor
         Surrounding Temp Sch 4;       !- Surrounding Surface 2 Temperature Schedule Name
-							
+
       Schedule:Compact,
         Surrounding Temp Sch 1,       !- Name
         Any Number,                   !- Schedule Type Limits Name
@@ -3981,15 +4005,18 @@ TEST_F(ConvectionCoefficientsFixture, SurroundingSurfacesHRadCoefTest)
 
     bool ErrorsFound = false;
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
+    state->dataGlobal->TimeStep = 1;
+    state->dataGlobal->TimeStepZone = 1;
+    state->dataGlobal->TimeStepZoneSec = 3600.0;
+
     // set global and environmental variables
     state->dataGlobal->BeginSimFlag = true;
     state->dataGlobal->BeginEnvrnFlag = true;
     state->dataGlobal->HourOfDay = 15;
-    state->dataGlobal->TimeStep = 1;
-    state->dataGlobal->TimeStepZone = 1;
-    state->dataGlobal->TimeStepZoneSec = 3600.0;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
     state->dataEnvrn->Month = 7;
     state->dataEnvrn->DayOfMonth = 21;
     state->dataEnvrn->DSTIndicator = 0;
@@ -3997,9 +4024,6 @@ TEST_F(ConvectionCoefficientsFixture, SurroundingSurfacesHRadCoefTest)
     state->dataEnvrn->HolidayIndex = 0;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
     state->dataEnvrn->OutBaroPress = 101325;
-    // process schedules
-    ScheduleManager::ProcessScheduleInput(*state);
-    state->dataScheduleMgr->ScheduleInputProcessed = true;
 
     state->dataHeatBal->ZoneIntGain.allocate(1);
     // createFacilityElectricPowerServiceObject(*state);
@@ -4017,7 +4041,7 @@ TEST_F(ConvectionCoefficientsFixture, SurroundingSurfacesHRadCoefTest)
     //  reset sky and ground view factors
     HeatBalanceSurfaceManager::InitSurfacePropertyViewFactors(*state);
     // update schedule values for surrounding surfaces temperature
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     HeatBalanceSurfaceManager::GetSurroundingSurfacesTemperatureAverage(*state);
     // set outside face temperature of the exterior surfaces
     state->dataHeatBalSurf->SurfOutsideTempHist(1).dimension(state->dataSurface->TotSurfaces, 0.0);

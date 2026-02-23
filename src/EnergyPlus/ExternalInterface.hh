@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -215,7 +215,7 @@ namespace ExternalInterface {
         std::string Name;               // FMU Filename
         std::string modelID;            // FMU modelID
         std::string modelGUID;          // FMU modelGUID
-        fs::path WorkingFolder;         // Path to the FMU wokring folder
+        fs::path WorkingFolder;         // Path to the FMU working folder
         fs::path WorkingFolder_wLib;    // Path to the binaries
         std::string fmiVersionNumber;   // Version number of FMI used
         int NumInputVariablesInFMU;     // Number of input variables in fmu
@@ -392,6 +392,10 @@ struct ExternalInterfaceData : BaseGlobalStruct
     int nOutVal; // Number of output values (E+ -> ExternalInterface)
     int nInpVar; // Number of input values (ExternalInterface -> E+)
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {
     }
@@ -447,7 +451,7 @@ struct ExternalInterfaceData : BaseGlobalStruct
         this->fmiEndSimulation = 0;         // Flag to indicate end of simulation
         this->UniqueFMUInputVarNames.clear();
 
-        // these were statics without an initial value
+        // these were statistics without an initial value
         //        int nOutVal;       // Number of output values (E+ -> ExternalInterface)
         //        int nInpVar;       // Number of input values (ExternalInterface -> E+)
     }

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -113,12 +113,14 @@ namespace PlantManager {
                                        const std::string_view &compName,
                                        int &rowCounter);
 
+    void FillPlantEquipmentOperationLoad(EnergyPlusData &state);
+
     void InitializeLoops(EnergyPlusData &state,
                          bool FirstHVACIteration); // true if first iteration of the simulation
 
     void ReInitPlantLoopsAtFirstHVACIteration(EnergyPlusData &state);
 
-    void UpdateNodeThermalHistory(EnergyPlusData &state);
+    void UpdateNodeThermalHistory(EnergyPlusData const &state);
 
     void CheckPlantOnAbort(EnergyPlusData &state);
 
@@ -141,6 +143,8 @@ namespace PlantManager {
     void CheckIfAnyPlant(EnergyPlusData &state);
 
     void CheckOngoingPlantWarnings(EnergyPlusData &state);
+
+    void ReportPlantCompWaterFlowData(EnergyPlusData &state, bool const reportFlag);
 
     struct EmptyPlantComponent : PlantComponent
     {
@@ -175,6 +179,10 @@ struct PlantMgrData : BaseGlobalStruct
     int NewOtherDemandSideCallingIndex = 0;
     int newCallingIndex = 0;
     PlantManager::EmptyPlantComponent dummyPlantComponent;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

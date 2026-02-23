@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -52,6 +52,7 @@
 #include <array>
 #include <iosfwd>
 #include <map>
+#include <type_traits>
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
@@ -63,6 +64,7 @@
 #include <EnergyPlus/DisplayRoutines.hh>
 #include <EnergyPlus/EPVector.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/ScheduleManager.hh>
 
 // Third party Headers
 #include "re2/re2.h"
@@ -444,26 +446,26 @@ namespace OutputProcessor {
         int maxValueDate = 0;               // Date stamp of maximum
         int minValueDate = 0;               // Date stamp of minimum
         int ReportID = 0;                   // Report variable ID number
-        int SchedPtr = 0;                   // If scheduled, this points to the schedule
+        Sched::Schedule *sched = nullptr;   // If scheduled, this is schedule
         int ZoneMult = 1;                   // If metered, Zone Multiplier is applied
         int ZoneListMult = 1;               // If metered, Zone List Multiplier is applied
 
-        std::string keyColonName = "";   // Name of Variable key:variable
-        std::string keyColonNameUC = ""; // Name of Variable (Uppercase)
-        std::string name = "";           // Name of Variable
-        std::string nameUC = "";         // Name of Variable with out key in uppercase
-        std::string key = "";            // Name of key only
-        std::string keyUC = "";          // Name of key only witht out variable in uppercase
+        std::string keyColonName;   // Name of Variable key:variable
+        std::string keyColonNameUC; // Name of Variable (Uppercase)
+        std::string name;           // Name of Variable
+        std::string nameUC;         // Name of Variable with out key in uppercase
+        std::string key;            // Name of key only
+        std::string keyUC;          // Name of key only with out variable in uppercase
 
         Constant::Units units = Constant::Units::Invalid; // Units for Variable
         std::string unitNameCustomEMS;                    // name of units when customEMS is used for EMS variables that are unusual
 
-        std::string indexGroup = "";
+        std::string indexGroup;
         int indexGroupKey = -1; // Is this thing even used?
 
         std::vector<int> meterNums; // Meter Numbers
 
-        virtual ~OutVar(){};
+        virtual ~OutVar() = default;
 
         std::string multiplierString() const;
 
@@ -499,14 +501,14 @@ namespace OutputProcessor {
     struct DDOutVar
     {
         // Members
-        std::string name = "";                             // Name of Variable
+        std::string name;                                  // Name of Variable
         TimeStepType timeStepType = TimeStepType::Invalid; // Type whether Zone or HVAC
         StoreType storeType = StoreType::Invalid;          // Variable Type (Summed/Non-Static or Average/Static)
         VariableType variableType = VariableType::Invalid; // Integer, Real.
         int Next = -1;                                     // Next variable of same name (different units)
         bool ReportedOnDDFile = false;                     // true after written to .rdd/.mdd file
         Constant::Units units = Constant::Units::Invalid;  // Units for Variable
-        std::string unitNameCustomEMS = "";                // name of units when customEMS is used for EMS variables that are unusual
+        std::string unitNameCustomEMS;                     // name of units when customEMS is used for EMS variables that are unusual
 
         std::vector<int> keyOutVarNums;
     };
@@ -514,11 +516,10 @@ namespace OutputProcessor {
     struct ReqVar // Structure for requested Report Variables
     {
         // Members
-        std::string key = "";               // Could be blank or "*"
-        std::string name = "";              // Name of Variable
+        std::string key;                    // Could be blank or "*"
+        std::string name;                   // Name of Variable
         ReportFreq freq = ReportFreq::Hour; // Reporting Frequency
-        int SchedPtr = 0;                   // Index of the Schedule
-        std::string SchedName = "";         // Schedule Name
+        Sched::Schedule *sched = nullptr;   // Schedule
         bool Used = false;                  // True when this combination (key, varname, frequency) has been set
 
         bool is_simple_string = true; // Whether the Key potentially includes a Regular Expression pattern
@@ -555,18 +556,18 @@ namespace OutputProcessor {
     struct Meter
     {
         // Members
-        std::string Name = "";                                       // Name of the meter
+        std::string Name;                                            // Name of the meter
         MeterType type = MeterType::Invalid;                         // type of meter
         Constant::eResource resource = Constant::eResource::Invalid; // Resource Type of the meter
         EndUseCat endUseCat = EndUseCat::Invalid;                    // End Use of the meter
-        std::string EndUseSub = "";                                  // End Use subcategory of the meter
+        std::string EndUseSub;                                       // End Use subcategory of the meter
         Group group = Group::Invalid;                                // Group of the meter
         Constant::Units units = Constant::Units::Invalid;            // Units for the Meter
         RT_IPUnits RT_forIPUnits;                                    // Resource type number for IP Units (tabular) reporting
 
         Real64 CurTSValue = 0.0; // Current TimeStep Value (internal access)
 
-        std::string indexGroup = "";
+        std::string indexGroup;
 
         std::array<MeterPeriod, (int)ReportFreq::Num> periods;
 
@@ -588,7 +589,7 @@ namespace OutputProcessor {
     struct MeteredVar
     {
         int num = -1;
-        std::string name = "";
+        std::string name;
         Constant::eResource resource = Constant::eResource::Invalid;
         Constant::Units units = Constant::Units::Invalid;
         VariableType varType = VariableType::Invalid;
@@ -677,6 +678,8 @@ namespace OutputProcessor {
     );
 
     void UpdateMeters(EnergyPlusData &state, int TimeStamp); // Current TimeStamp (for max/min)
+
+    void ResetAccumulationWhenWarmupComplete(EnergyPlusData &state);
 
     void ReportTSMeters(EnergyPlusData &state,
                         Real64 StartMinute,      // Start Minute for TimeStep
@@ -797,7 +800,7 @@ void SetupOutputVariable(
     std::string const &spaceType = {},                                          // Space type (applicable for Building group only)
     int const indexGroupKey = -999,                                             // Group identifier for SQL output
     std::string_view const customUnitName = {},                                 // the custom name for the units from EMS definition of units
-    OutputProcessor::ReportFreq reportFreq = OutputProcessor::ReportFreq::Hour  // Internal use -- causes reporting at this freqency
+    OutputProcessor::ReportFreq reportFreq = OutputProcessor::ReportFreq::Hour  // Internal use -- causes reporting at this frequency
 );
 
 void SetupOutputVariable(EnergyPlusData &state,
@@ -808,8 +811,31 @@ void SetupOutputVariable(EnergyPlusData &state,
                          OutputProcessor::StoreType VariableType,                             // State, Average=1, NonState, Sum=2
                          std::string const &KeyedValue,                                       // Associated Key for this variable
                          int const indexGroupKey = -999,                                      // Group identifier for SQL output
-                         OutputProcessor::ReportFreq freq = OutputProcessor::ReportFreq::Hour // Internal use -- causes reporting at this freqency
+                         OutputProcessor::ReportFreq freq = OutputProcessor::ReportFreq::Hour // Internal use -- causes reporting at this frequency
 );
+
+// A helper to be able to cast an enum to an int& for use in the above function
+template <typename EnumType, typename = std::enable_if_t<std::is_enum_v<EnumType>>>
+void SetupOutputVariable(EnergyPlusData &state,
+                         std::string_view const VariableName,                                 // String Name of variable
+                         Constant::Units VariableUnit,                                        // Actual units corresponding to the actual variable
+                         EnumType &ActualVariable,                                            // Actual Variable, used to set up pointer
+                         OutputProcessor::TimeStepType TimeStepType,                          // Zone, HeatBalance=1, HVAC, System, Plant=2
+                         OutputProcessor::StoreType VariableType,                             // State, Average=1, NonState, Sum=2
+                         std::string const &KeyedValue,                                       // Associated Key for this variable
+                         int const indexGroupKey = -999,                                      // Group identifier for SQL output
+                         OutputProcessor::ReportFreq freq = OutputProcessor::ReportFreq::Hour // Internal use -- causes reporting at this frequency
+)
+{
+#if defined(__GNUC__) || defined(__clang__)
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
+    SetupOutputVariable(state, VariableName, VariableUnit, (int &)ActualVariable, TimeStepType, VariableType, KeyedValue, indexGroupKey, freq);
+#if defined(__GNUC__) || defined(__clang__)
+#    pragma GCC diagnostic pop
+#endif
+}
 
 void UpdateDataandReport(EnergyPlusData &state, OutputProcessor::TimeStepType TimeStepTypeKey); // What kind of data to update (Zone, HVAC)
 
@@ -942,6 +968,10 @@ struct OutputProcessorData : BaseGlobalStruct
     int maxNumEndUseSpaceTypes = 1;
     EPVector<OutputProcessor::EndUseCategoryType> EndUseCategory;
 
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
+
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {
     }
@@ -977,24 +1007,29 @@ struct OutputProcessorData : BaseGlobalStruct
         this->GetMeterIndexFirstCall = true;
         this->InitFlag = true;
 
-        for (int i = 0; i < (int)OutputProcessor::TimeStepType::Num; ++i)
+        for (int i = 0; i < (int)OutputProcessor::TimeStepType::Num; ++i) {
             new (&this->TimeValue[i]) OutputProcessor::TimeSteps();
+        }
 
-        for (int i = 0; i < (int)this->outVars.size(); ++i)
-            delete this->outVars[i];
+        for (auto &outVar : this->outVars) {
+            delete outVar;
+        }
         this->outVars.clear();
 
-        for (int i = 0; i < (int)this->ddOutVars.size(); ++i)
-            delete this->ddOutVars[i];
+        for (auto &ddOutVar : this->ddOutVars) {
+            delete ddOutVar;
+        }
         this->ddOutVars.clear();
         this->ddOutVarMap.clear();
 
-        for (int i = 0; i < (int)this->reqVars.size(); ++i)
-            delete this->reqVars[i];
+        for (auto &reqVar : this->reqVars) {
+            delete reqVar;
+        }
         this->reqVars.clear();
 
-        for (int i = 0; i < (int)this->meters.size(); ++i)
-            delete this->meters[i];
+        for (auto &meter : this->meters) {
+            delete meter;
+        }
         this->meters.clear();
         this->meterMap.clear();
 

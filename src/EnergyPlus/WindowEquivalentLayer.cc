@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -50,7 +50,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Construction.hh>
@@ -121,7 +120,7 @@ namespace EnergyPlus::WindowEquivalentLayer {
 using namespace DataHeatBalance;
 using namespace DataSurfaces;
 
-constexpr std::array<std::string_view, (int)Orientation::Num> orientationNamesUC = {"HORIZONTAL", "VERTICAL"};
+// constexpr std::array<std::string_view, (int)Orientation::Num> orientationNamesUC = {"HORIZONTAL", "VERTICAL"};
 
 void InitEquivalentLayerWindowCalculations(EnergyPlusData &state)
 {
@@ -136,26 +135,38 @@ void InitEquivalentLayerWindowCalculations(EnergyPlusData &state)
     // Gets the EquivalentLayer Window Layers Inputs.  Fills in the derived data type
     // based on the inputs specified.
 
-    if (state.dataWindowEquivLayer->TotWinEquivLayerConstructs < 1) return;
-    if (!allocated(state.dataWindowEquivLayer->CFS)) state.dataWindowEquivLayer->CFS.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
-    if (!allocated(state.dataWindowEquivalentLayer->EQLDiffPropFlag))
+    if (state.dataWindowEquivLayer->TotWinEquivLayerConstructs < 1) {
+        return;
+    }
+    if (!allocated(state.dataWindowEquivLayer->CFS)) {
+        state.dataWindowEquivLayer->CFS.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
+    }
+    if (!allocated(state.dataWindowEquivalentLayer->EQLDiffPropFlag)) {
         state.dataWindowEquivalentLayer->EQLDiffPropFlag.allocate(state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
-    if (!allocated(state.dataWindowEquivalentLayer->CFSDiffAbsTrans))
+    }
+    if (!allocated(state.dataWindowEquivalentLayer->CFSDiffAbsTrans)) {
         state.dataWindowEquivalentLayer->CFSDiffAbsTrans.allocate(2, CFSMAXNL + 1, state.dataWindowEquivLayer->TotWinEquivLayerConstructs);
+    }
 
     state.dataWindowEquivalentLayer->EQLDiffPropFlag = true;
     state.dataWindowEquivalentLayer->CFSDiffAbsTrans = 0.0;
 
     for (int ConstrNum = 1; ConstrNum <= state.dataHeatBal->TotConstructs; ++ConstrNum) {
-        if (!state.dataConstruction->Construct(ConstrNum).TypeIsWindow) continue;
-        if (!state.dataConstruction->Construct(ConstrNum).WindowTypeEQL) continue; // skip if not equivalent layer window
+        if (!state.dataConstruction->Construct(ConstrNum).TypeIsWindow) {
+            continue;
+        }
+        if (!state.dataConstruction->Construct(ConstrNum).WindowTypeEQL) {
+            continue; // skip if not equivalent layer window
+        }
 
         SetEquivalentLayerWindowProperties(state, ConstrNum);
 
     } //  end do for TotConstructs
 
     for (int SurfNum : state.dataSurface->AllHTWindowSurfaceList) {
-        if (!state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).WindowTypeEQL) continue;
+        if (!state.dataConstruction->Construct(state.dataSurface->Surface(SurfNum).Construction).WindowTypeEQL) {
+            continue;
+        }
 
         state.dataSurface->SurfWinWindowModelType(SurfNum) = WindowModel::EQL;
 
@@ -180,8 +191,9 @@ void SetEquivalentLayerWindowProperties(EnergyPlusData &state, int const ConstrN
 
     auto &s_mat = state.dataMaterial;
 
-    if (!allocated(state.dataWindowEquivLayer->CFSLayers))
+    if (!allocated(state.dataWindowEquivLayer->CFSLayers)) {
         state.dataWindowEquivLayer->CFSLayers.allocate(state.dataConstruction->Construct(ConstrNum).TotLayers);
+    }
 
     int sLayer = 0; // glazing and shade layers (non-gas layers) index
     int gLayer = 0; // gap layer index
@@ -195,8 +207,9 @@ void SetEquivalentLayerWindowProperties(EnergyPlusData &state, int const ConstrN
 
         Material::Group group1 = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(1))->group;
         if (group1 != Material::Group::GlassEQL && group1 != Material::Group::ShadeEQL && group1 != Material::Group::DrapeEQL &&
-            group1 != Material::Group::ScreenEQL && group1 != Material::Group::BlindEQL && group1 != Material::Group::WindowGapEQL)
+            group1 != Material::Group::ScreenEQL && group1 != Material::Group::BlindEQL && group1 != Material::Group::WindowGapEQL) {
             continue;
+        }
 
         int MaterNum = state.dataConstruction->Construct(ConstrNum).LayerPoint(Layer);
         auto const *mat = s_mat->materials(MaterNum);
@@ -384,7 +397,9 @@ void SetEquivalentLayerWindowProperties(EnergyPlusData &state, int const ConstrN
     // calculate U-Value, SHGC and Normal Transmittance of EQL Window
     CalcEQLWindowStandardRatings(state, ConstrNum);
 
-    if (CFSHasControlledShade(state, CFS(EQLNum)) > 0) CFS(EQLNum).ISControlled = true; // is controlled
+    if (CFSHasControlledShade(state, CFS(EQLNum)) > 0) {
+        CFS(EQLNum).ISControlled = true; // is controlled
+    }
 
     // set internal face emissivity
     state.dataConstruction->Construct(ConstrNum).InsideAbsorpThermal = EffectiveEPSLB(CFS(EQLNum));
@@ -461,11 +476,15 @@ void CalcEQLWindowUvalue(EnergyPlusData &state,
         TGIK = TGI + Constant::Kelvin;
         TIK = TIN + Constant::Kelvin;
         HCI = HCInWindowStandardRatings(state, Height, TGIK, TIK);
-        if (HCI < 0.001) break;
+        if (HCI < 0.001) {
+            break;
+        }
         HXI = HCI + HRI;
         HXO = HCO + HRO;
         UOld = U;
-        if (!CFSUFactor(state, FS, TOUT, HCO, TIN, HCI, U)) break;
+        if (!CFSUFactor(state, FS, TOUT, HCO, TIN, HCI, U)) {
+            break;
+        }
         if (I > 1 && FEQX(U, UOld, 0.001)) {
             CFSURated = true;
             break;
@@ -674,7 +693,6 @@ void EQLWindowSurfaceHeatBalance(EnergyPlusData &state,
 
     using Psychrometrics::PsyCpAirFnW;
     using Psychrometrics::PsyTdpFnWPb;
-    using ScheduleManager::GetCurrentScheduleValue;
 
     Real64 constexpr TOL(0.0001); // convergence tolerance
 
@@ -713,7 +731,9 @@ void EQLWindowSurfaceHeatBalance(EnergyPlusData &state,
     Real64 SrdSurfTempAbs; // Absolute temperature of a surrounding surface
     Real64 OutSrdIR;
 
-    if (CalcCondition != DataBSDFWindow::Condition::Invalid) return;
+    if (CalcCondition != DataBSDFWindow::Condition::Invalid) {
+        return;
+    }
 
     ConstrNum = state.dataSurface->Surface(SurfNum).Construction;
     QXConv = 0.0;
@@ -943,7 +963,9 @@ HEMINT(EnergyPlusData &state,
                 //   2 * sin( x) * cos( x) covers hemisphere with single integral
                 X = X1 + I * DX;
                 FX = 2.0 * std::sin(X) * std::cos(X) * F(state, X, F_Opt, F_P);
-                if (K == 1) FX /= 2.0;
+                if (K == 1) {
+                    FX /= 2.0;
+                }
                 SUM += FX;
             }
         }
@@ -960,7 +982,9 @@ HEMINT(EnergyPlusData &state,
             //    do 8 panels minimum, else can miss F() features
             if (nPan >= 8) {
                 DIFF = std::abs(T(K, K) - T(K - 1, K - 1));
-                if (DIFF < TOL) break;
+                if (DIFF < TOL) {
+                    break;
+                }
             }
         }
         nPan *= 2;
@@ -1070,7 +1094,7 @@ void RB_BEAM(EnergyPlusData &state,
     Real64 TAUBB_EXPO;   // exponent in the beam-beam transmittance model
     Real64 TAU_BT;       // beam-total transmittance
 
-    THETA = min(89.99 * Constant::DegToRadians, xTHETA);
+    THETA = min(89.99 * Constant::DegToRad, xTHETA);
 
     if (TAU_BB0 > 0.9999) {
         TAU_BB = 1.0;
@@ -1086,7 +1110,7 @@ void RB_BEAM(EnergyPlusData &state,
         TAU_BT = TAU_BT0 * std::pow(std::cos(THETA), TAUBT_EXPO); // always 0 - 1
 
         Real64 const cos_TAU_BB0(std::cos(TAU_BB0 * Constant::PiOvr2));
-        THETA_CUTOFF = Constant::DegToRadians * (90.0 - 25.0 * cos_TAU_BB0);
+        THETA_CUTOFF = Constant::DegToRad * (90.0 - 25.0 * cos_TAU_BB0);
         if (THETA >= THETA_CUTOFF) {
             TAU_BB = 0.0;
         } else {
@@ -1173,11 +1197,11 @@ Real64 IS_F(EnergyPlusData &state,
 
     if (OPT == state.dataWindowEquivalentLayer->hipRHO) {
         return RHO_BD;
-    } else if (OPT == state.dataWindowEquivalentLayer->hipTAU) {
-        return TAU_BB + TAU_BD;
-    } else {
-        return -1.0;
     }
+    if (OPT == state.dataWindowEquivalentLayer->hipTAU) {
+        return TAU_BB + TAU_BD;
+    }
+    return -1.0;
 }
 
 void IS_BEAM(EnergyPlusData &state,
@@ -1212,7 +1236,7 @@ void IS_BEAM(EnergyPlusData &state,
     Real64 RHO_BT90;     // beam-total reflectance at 90 deg incidence
     Real64 TAU_BT;       // beam-total transmittance
 
-    Real64 const THETA(min(89.99 * Constant::DegToRadians, xTHETA)); // working incident angle, radians
+    Real64 const THETA(min(89.99 * Constant::DegToRad, xTHETA)); // working incident angle, radians
     Real64 const COSTHETA(std::cos(THETA));
 
     RHO_W = RHO_BT0 / max(0.00001, 1.0 - TAU_BB0);
@@ -1253,9 +1277,8 @@ Real64 IS_OPENNESS(Real64 const D, // wire diameter
 
     if (S > 0.0) {
         return pow_2(max(S - D, 0.0) / S);
-    } else {
-        return 0.0;
     }
+    return 0.0;
 }
 
 Real64 IS_DSRATIO(Real64 const OPENNESS) // openness
@@ -1267,9 +1290,8 @@ Real64 IS_DSRATIO(Real64 const OPENNESS) // openness
 
     if (OPENNESS > 0.0) {
         return 1.0 - min(std::sqrt(OPENNESS), 1.0);
-    } else {
-        return 0.0;
     }
+    return 0.0;
 }
 
 void FM_DIFF(EnergyPlusData &state,
@@ -1346,11 +1368,11 @@ Real64 FM_F(EnergyPlusData &state,
 
     if (Opt == state.dataWindowEquivalentLayer->hipRHO) {
         return RHO_BD;
-    } else if (Opt == state.dataWindowEquivalentLayer->hipTAU) {
-        return TAU_BB + TAU_BD;
-    } else {
-        return -1.0;
     }
+    if (Opt == state.dataWindowEquivalentLayer->hipTAU) {
+        return TAU_BB + TAU_BD;
+    }
+    return -1.0;
 }
 
 void FM_BEAM(EnergyPlusData &state,
@@ -1384,7 +1406,7 @@ void FM_BEAM(EnergyPlusData &state,
     Real64 RHO_BT90; // beam-total reflectance at 90 deg incidence
     Real64 TAU_BT;   // beam-total transmittance
 
-    THETA = std::abs(max(-89.99 * Constant::DegToRadians, min(89.99 * Constant::DegToRadians, xTHETA)));
+    THETA = std::abs(max(-89.99 * Constant::DegToRad, min(89.99 * Constant::DegToRad, xTHETA)));
     // limit -89.99 - +89.99
     // by symmetry, optical properties same at +/- theta
     Real64 const COSTHETA(std::cos(THETA));
@@ -1667,8 +1689,8 @@ void PD_BEAM(EnergyPlusData &state,
     Real64 TAUBF_BB_PERP;
     Real64 TAUBF_BD_PERP;
 
-    OMEGA_V = std::abs(max(-89.5 * Constant::DegToRadians, min(89.5 * Constant::DegToRadians, OHM_V_RAD)));
-    OMEGA_H = std::abs(max(-89.5 * Constant::DegToRadians, min(89.5 * Constant::DegToRadians, OHM_H_RAD)));
+    OMEGA_V = std::abs(max(-89.5 * Constant::DegToRad, min(89.5 * Constant::DegToRad, OHM_V_RAD)));
+    OMEGA_H = std::abs(max(-89.5 * Constant::DegToRad, min(89.5 * Constant::DegToRad, OHM_H_RAD)));
     // limit profile angles -89.5 - +89.5
     // by symmetry, properties same for +/- profile angle
 
@@ -3594,10 +3616,9 @@ Real64 VB_SLAT_RADIUS_RATIO(Real64 const W, // slat tip-to-tip (chord) width (an
     if (C <= 0.0 || W <= 0.0) {
         // it is flat
         return 0.0;
-    } else {
-        Real64 CX = min(C, W / 2.001);
-        return 2.0 * W * CX / (CX * CX + W * W / 4);
     }
+    Real64 CX = min(C, W / 2.001);
+    return 2.0 * W * CX / (CX * CX + W * W / 4);
 }
 
 void VB_SOL46_CURVE(EnergyPlusData const &state,
@@ -3666,9 +3687,9 @@ void VB_SOL46_CURVE(EnergyPlusData const &state,
     CORR = 1;
 
     // limit slat angle to +/- 90 deg
-    PHI = max(-Constant::DegToRadians * 90.0, min(Constant::DegToRadians * 90.0, PHIx));
+    PHI = max(-Constant::DegToRad * 90.0, min(Constant::DegToRad * 90.0, PHIx));
     // limit profile angle to +/- 89.5 deg
-    OMEGA = max(-Constant::DegToRadians * 89.5, min(Constant::DegToRadians * 89.5, OMEGAx));
+    OMEGA = max(-Constant::DegToRad * 89.5, min(Constant::DegToRad * 89.5, OMEGAx));
 
     SL_RAD = W / max(SL_WR, 0.0000001);
     SL_THETA = 2.0 * std::asin(0.5 * SL_WR);
@@ -3818,7 +3839,7 @@ void VB_SOL46_CURVE(EnergyPlusData const &state,
 
     } else { // DO NOT CORRECT FOR SLAT CURVATURE
 
-        //  CHECK TO SEE IF BEAM IS ALLIGNED WITH SLATS
+        //  CHECK TO SEE IF BEAM IS ALIGNED WITH SLATS
         if (std::abs(PHI + OMEGA) < state.dataWindowEquivalentLayer->SMALL_ERROR) { // YES!
             RHO_BD = 0.0;
             TAU_BB = 1.0;
@@ -3832,13 +3853,15 @@ void VB_SOL46_CURVE(EnergyPlusData const &state,
             //  CHECK TO SEE IF THERE IS DIRECT BEAM TRANSMISSION
             if ((DE / W) > (1.0 - state.dataWindowEquivalentLayer->SMALL_ERROR)) { // YES
                 TAU_BB = (DE - W) / DE;
-                if (TAU_BB < 0.0) TAU_BB = 0.0;
+                if (TAU_BB < 0.0) {
+                    TAU_BB = 0.0;
+                }
                 VB_SOL4(state, S, W, OMEGA, DE, PHI, RHODFS_SLAT, RHOUFS_SLAT, TAU_SLAT, RHO_BD, TAU_BD);
             } else { // NO
                 TAU_BB = 0.0;
                 VB_SOL6(state, S, W, OMEGA, DE, PHI, RHODFS_SLAT, RHOUFS_SLAT, TAU_SLAT, RHO_BD, TAU_BD);
             } //  END CHECK FOR DIRECT BEAM TRANSMISSION
-        }     // END CHECK TO SEE IF BEAM ALLIGNED WITH SLATS
+        } // END CHECK TO SEE IF BEAM ALIGNED WITH SLATS
     }
 }
 
@@ -4306,7 +4329,9 @@ void ASHWAT_ThermalCalc(EnergyPlusData &state,
     Real64 QGAIN;                        // total gain to conditioned space [[W/m2]
 
     NL = FS.NL; // working copy
-    if (NL < 1) return;
+    if (NL < 1) {
+        return;
+    }
 
     HCOCFout = HCOUT; // outdoor side
 
@@ -4370,8 +4395,12 @@ void ASHWAT_ThermalCalc(EnergyPlusData &state,
 
     ALPHA = 1.0;
     if (NL >= 2) {
-        if (FS.G(NL - 1).GTYPE == state.dataWindowEquivalentLayer->gtyOPENin) ALPHA = 0.5;
-        if (FS.G(1).GTYPE == state.dataWindowEquivalentLayer->gtyOPENout) ALPHA = 0.10;
+        if (FS.G(NL - 1).GTYPE == state.dataWindowEquivalentLayer->gtyOPENin) {
+            ALPHA = 0.5;
+        }
+        if (FS.G(1).GTYPE == state.dataWindowEquivalentLayer->gtyOPENout) {
+            ALPHA = 0.10;
+        }
     }
 
     //   FIRST ESTIMATE OF GLAZING TEMPERATURES AND BLACK EMISSIVE POWERS
@@ -4592,8 +4621,12 @@ void ASHWAT_ThermalCalc(EnergyPlusData &state,
         }
 
         //  CHECK FOR CONVERGENCE
-        if (CONVRG > 0) break;
-        if (MAXERR < TOL) ++CONVRG;
+        if (CONVRG > 0) {
+            break;
+        }
+        if (MAXERR < TOL) {
+            ++CONVRG;
+        }
 
     } // main iteration
 
@@ -4781,7 +4814,9 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
 
     ASHWAT_ThermalRatings = false; // init to failure
     NL = FS.NL;                    // working copy
-    if (NL < 1) return ASHWAT_ThermalRatings;
+    if (NL < 1) {
+        return ASHWAT_ThermalRatings;
+    }
 
     HCOCFout = HCOUT; // outdoor side
 
@@ -4845,8 +4880,12 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
 
     ALPHA = 1.0;
     if (NL >= 2) {
-        if (FS.G(NL - 1).GTYPE == state.dataWindowEquivalentLayer->gtyOPENin) ALPHA = 0.5;
-        if (FS.G(1).GTYPE == state.dataWindowEquivalentLayer->gtyOPENout) ALPHA = 0.10;
+        if (FS.G(NL - 1).GTYPE == state.dataWindowEquivalentLayer->gtyOPENin) {
+            ALPHA = 0.5;
+        }
+        if (FS.G(1).GTYPE == state.dataWindowEquivalentLayer->gtyOPENout) {
+            ALPHA = 0.10;
+        }
     }
 
     //   FIRST ESTIMATE OF GLAZING TEMPERATURES AND BLACK EMISSIVE POWERS
@@ -4877,7 +4916,9 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
                        // trigger calculation of HC[NL] using ASHRAE correlation
                        //  HC[NL] = HIC_ASHRAE(1.0d0, T(NL), TIN)  ! h - flat plate
                        // Add by BAN June 2013 for standard ratings U-value and SHGC calc only
-        if (HCInFlag) HC[NL] = HCInWindowStandardRatings(state, Height, T(NL), TIN);
+        if (HCInFlag) {
+            HC[NL] = HCInWindowStandardRatings(state, Height, T(NL), TIN);
+        }
         HC[0] = HCOUT; // HC[0] supplied by calling routine as HCOUT
 
         // Check for open channels -  only possible with at least two layers
@@ -5065,8 +5106,12 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
         }
 
         //  CHECK FOR CONVERGENCE
-        if (CONVRG > 0) break;
-        if (MAXERR < TOL) ++CONVRG;
+        if (CONVRG > 0) {
+            break;
+        }
+        if (MAXERR < TOL) {
+            ++CONVRG;
+        }
 
     } // main iteration
 
@@ -5135,12 +5180,13 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
     //  Identify the diathermanous layers
     ISDL = 0;
     for (I = 1; I <= NL; ++I) {
-        if (FS.L(I).LWP_EL.TAUL > 0.001)
+        if (FS.L(I).LWP_EL.TAUL > 0.001) {
             ISDL(I) = 1; // layer is diathermanous
-                         // of tau_lw > 0.001 (ie 0.1%)
-                         // Note:  ISDL(0) and ISDL(NL+1)
-                         //        must both be zero
-    }                    // end loop to calculate ISDL(i)
+        }
+        // of tau_lw > 0.001 (ie 0.1%)
+        // Note:  ISDL(0) and ISDL(NL+1)
+        //        must both be zero
+    } // end loop to calculate ISDL(i)
 
     //  determine the largest number of consecutive diathermanous layers, NDLIAR
     //                   i.e., the number of diathermanous layers in a row
@@ -5152,15 +5198,18 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
         } else {
             IDV = 0;
         }
-        if (IDV > NDLIAR) NDLIAR = IDV;
+        if (IDV > NDLIAR) {
+            NDLIAR = IDV;
+        }
     } // end loop to calculate NDLIAR
 
-    if (NDLIAR > 1)
+    if (NDLIAR > 1) {
         return ASHWAT_ThermalRatings; // cannot handle two (or more) consecutive
-                                      // diathermanous layers, U/SHGC calculation
-                                      // will be skipped entirely
-                                      // CHANGE TO (NDLIAR .GT. 2) ONCE
-                                      // SUBROUTINE DL2_RES IS AVAILABLE
+    }
+    // diathermanous layers, U/SHGC calculation
+    // will be skipped entirely
+    // CHANGE TO (NDLIAR .GT. 2) ONCE
+    // SUBROUTINE DL2_RES IS AVAILABLE
 
     //   calculate radiant heat transfer coefficients between adjacent opaque
     //   layers
@@ -5194,9 +5243,9 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
                 } else { // some intermediate layer is diathermanous
                     DL_RES_r2(T(I), T(I + 1), T(I + 2), RHOB(I), RHOF(I + 1), RHOB(I + 1), TAU(I + 1), RHOF(I + 2), HJR(I + 1), HR(I), HR(I + 1));
                 } //   end of IF/ELSE (I .EQ. NL-1)
-            }     //  end of IF/ELSE (I .EQ. 0)
-        }         //  end of IF(ISDL(I) .EQ. 0) .AND. .....
-    }             //   end of scan through all layers
+            } //  end of IF/ELSE (I .EQ. 0)
+        } //  end of IF(ISDL(I) .EQ. 0) .AND. .....
+    } //   end of scan through all layers
 
     //   calculate radiant heat transfer coefficients at double diathermanous
     //   layers,six coefficients in each case
@@ -5214,9 +5263,9 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
                     } else {
                         //                CALL DL2_RES(T(I), T(I+1), T(I+2), T(I+3) etc)
                     } //   end of IF/ELSE (I .EQ. NL-1)
-                }     //  end of IF/ELSE (I .EQ. 0)
-            }         //  end of IF(ISDL(I) .EQ. 0) .AND. .....
-        }             //   end of scan through all layers
+                } //  end of IF/ELSE (I .EQ. 0)
+            } //  end of IF(ISDL(I) .EQ. 0) .AND. .....
+        } //   end of scan through all layers
 
         //  calculate convective OCF/jump heat transfer coefficients
         // no OCF unless at least two layers exist
@@ -5271,11 +5320,15 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
 
     //  outdoor side
     HCIout(1) = HC[0];
-    if (NL >= 2) HCIout(2) = HJC(1);
+    if (NL >= 2) {
+        HCIout(2) = HJC(1);
+    }
 
     //  indoor side
     HCIin(NL) = HC[NL];
-    if (NL >= 2) HCIin(NL - 1) = HJC(NL);
+    if (NL >= 2) {
+        HCIin(NL - 1) = HJC(NL);
+    }
 
     //  special case - indoor-to-outdoor convection (?)
     HCinout = 0.0;
@@ -5313,14 +5366,20 @@ bool ASHWAT_ThermalRatings(EnergyPlusData &state,
 
     //  outdoor side
     HRIout(1) = HR(0);
-    if (NL >= 2) HRIout(2) = HJR(1);
+    if (NL >= 2) {
+        HRIout(2) = HJR(1);
+    }
 
     //  indoor side
     HRIin(NL) = HR(NL);
-    if (NL >= 2) HRIin(NL - 1) = HJR(NL);
+    if (NL >= 2) {
+        HRIin(NL - 1) = HJR(NL);
+    }
 
     //  special case - indoor-to-outdoor radiation
-    if (NL == 1) HRinout = HJR(1);
+    if (NL == 1) {
+        HRinout = HJR(1);
+    }
     //       IF(NL .EQ. 2)  HRinout=H2JR(1)
 
     //  CONFIRM VALIDITY OF CODE
@@ -5732,7 +5791,7 @@ Real64 FRA(Real64 const TM, // mean gas temp, K
     Real64 CP = ACP + BCP * TM + BCP * TM * TM;
     Real64 VISC = AVISC + BVISC * TM + BVISC * TM * TM;
 
-    return (Constant::GravityConstant * RHOGAS * RHOGAS * DT * T * T * T * CP) / (VISC * K * TM * Z * Z);
+    return (Constant::Gravity * RHOGAS * RHOGAS * DT * T * T * T * CP) / (VISC * K * TM * Z * Z);
 }
 
 Real64 FNU(Real64 const RA) // Rayleigh number
@@ -5752,11 +5811,11 @@ Real64 FNU(Real64 const RA) // Rayleigh number
     Real64 const ARA(std::abs(RA));
     if (ARA <= 10000.0) {
         return 1.0 + 1.75967e-10 * std::pow(ARA, 2.2984755);
-    } else if (ARA <= 50000.0) {
-        return 0.028154 * std::pow(ARA, 0.413993);
-    } else {
-        return 0.0673838 * std::pow(ARA, 1.0 / 3.0);
     }
+    if (ARA <= 50000.0) {
+        return 0.028154 * std::pow(ARA, 0.413993);
+    }
+    return 0.0673838 * std::pow(ARA, 1.0 / 3.0);
 }
 
 Real64 HConvGap(CFSGAP const &G, // gap
@@ -5868,7 +5927,9 @@ void SLtoGL(EnergyPlusData const &state,
     if (scheme == 1) { //  simple conduction layer, Nu=1
 
         b = breal;
-        if (b < 0.00001) b = 0.00001; // avoid division by zero in
+        if (b < 0.00001) {
+            b = 0.00001; // avoid division by zero in
+        }
         // calculation of this scheme
 
         Tavg = (Ts + Tg) / 2.0;                                      // T for properties calculations
@@ -5878,7 +5939,9 @@ void SLtoGL(EnergyPlusData const &state,
     } else if (scheme == 2) { // similar to Nu=1 but small penalty at
         // larger Ra    (Collins)
         b = breal;
-        if (b < 0.00001) b = 0.00001; // avoid division by zero in
+        if (b < 0.00001) {
+            b = 0.00001; // avoid division by zero in
+        }
         // calculation of this scheme
 
         Tavg = (Ts + Tg) / 2.0; // T for properties calculations
@@ -6120,9 +6183,8 @@ Real64 ConvectionFactor(CFSLAYER const &L) // window layer
         // horiz VB: enhanced convection at +/- 45 due to "pumping"
         Real64 SlatADeg = min(90.0, std::abs(L.PHI_DEG));
         return 1.0 + 0.2 * std::sin(2.0 * SlatADeg);
-    } else {
-        return 1.0;
     }
+    return 1.0;
 }
 
 bool CFSUFactor(EnergyPlusData &state,
@@ -6255,7 +6317,9 @@ void ASHWAT_Solar(int const NL,                                 // # of layers
     int I;
     int LINE;
 
-    if (NL < 1) return;
+    if (NL < 1) {
+        return;
+    }
 
     //  STEP ONE: THE BEAM-BEAM ANALYSIS TO FIND BPLUS AND BMINUS
     NETRAD(NL, LSWP_ON, SWP_ROOM.RHOSFBB, IBEAM, BPLUS, BMINUS);
@@ -6371,7 +6435,9 @@ void NETRAD(int const NL,                  // # of layers, 1=outside .. NL=insid
     //  but with reversed layers order indexing (layer 1=outside .. NL=inside)
     //  GAP I is between layer I and I+1
 
-    if (NL < 1) return;
+    if (NL < 1) {
+        return;
+    }
 
     Array1D<Real64> TED(NL + 1);
     Array1D<Real64> RED(NL + 1);
@@ -6493,7 +6559,9 @@ void AUTOTDMA(Array1D<Real64> &X, Array1D<Real64> &AP, const Array1D<Real64> &AE
         //  This "fix" (on the next line) is only used as a last resort
         //  The if-statement will catch the very unusual situation where both
         //  RHOSBxx(N-1)=0.   AND     RHOSFxx(1)=0.
-        if (AP(1) < 0.0001) AP(1) = 0.0001;
+        if (AP(1) < 0.0001) {
+            AP(1) = 0.0001;
+        }
         TDMA(X, AP, AE, AW, BP, N);
     }
 }
@@ -6597,11 +6665,11 @@ bool Specular_OffNormal(Real64 const THETA, // solar beam angle of incidence, fr
 
     Specular_OffNormal = true;
     THETA1 = std::abs(THETA);
-    if (THETA1 > Constant::PiOvr2 - Constant::DegToRadians) {
+    if (THETA1 > Constant::PiOvr2 - Constant::DegToRad) {
         // theta > 89 deg
         RAT_TAU = 0.0;
         RAT_1MR = 0.0;
-    } else if (THETA1 >= Constant::DegToRadians) {
+    } else if (THETA1 >= Constant::DegToRad) {
         // theta >= 1 deg
         N2 = 1.526;
         KL = 55.0 * 0.006;
@@ -6785,7 +6853,9 @@ bool RB_LWP(CFSLAYER const &L, // RB layer
     Real64 OPENNESS;
 
     RB_LWP = false;
-    if (L.LTYPE != LayerType::ROLLB) return RB_LWP;
+    if (L.LTYPE != LayerType::ROLLB) {
+        return RB_LWP;
+    }
 
     OPENNESS = L.SWP_MAT.TAUSFBB;
 
@@ -6817,7 +6887,9 @@ bool RB_SWP(EnergyPlusData &state,
     //   sets ONLY RHOSFDD, RHOSBDD, TAUS_DD
     //  if missing, derive diffuse properties
 
-    if (L.LTYPE != LayerType::ROLLB) return false;
+    if (L.LTYPE != LayerType::ROLLB) {
+        return false;
+    }
 
     // normal beam-total properties of fabric
     Real64 RHOFF_BT0 = L.SWP_MAT.RHOSFBB + L.SWP_MAT.RHOSFBD; // front rho
@@ -6852,7 +6924,9 @@ bool RB_SWP(EnergyPlusData &state,
     //   sets ONLY RHOSFDD, RHOSBDD, TAUS_DD
     //  if missing, derive diffuse properties
 
-    if (L.LTYPE != LayerType::ROLLB) return false;
+    if (L.LTYPE != LayerType::ROLLB) {
+        return false;
+    }
 
     // normal beam-total properties of fabric
     Real64 RHOFF_BT0 = L.SWP_MAT.RHOSFBB + L.SWP_MAT.RHOSFBD; // front rho
@@ -6891,7 +6965,9 @@ bool IS_LWP(CFSLAYER const &L, // IS layer
     Real64 TAULX;
 
     IS_LWP = false;
-    if (L.LTYPE != LayerType::INSCRN) return IS_LWP;
+    if (L.LTYPE != LayerType::INSCRN) {
+        return IS_LWP;
+    }
 
     OPENNESS = L.SWP_MAT.TAUSFBB;
 
@@ -6922,7 +6998,9 @@ bool IS_SWP(EnergyPlusData &state,
     //   sets ONLY RHOSFDD, RHOSBDD, TAUS_DD
     //  if missing, derive diffuse properties
 
-    if (L.LTYPE != LayerType::INSCRN) return false;
+    if (L.LTYPE != LayerType::INSCRN) {
+        return false;
+    }
 
     // normal beam-total properties
     Real64 RHOFF_BT0 = L.SWP_MAT.RHOSFBB + L.SWP_MAT.RHOSFBD; // front rho
@@ -6959,7 +7037,9 @@ bool IS_SWP(EnergyPlusData &state,
     //   sets ONLY RHOSFDD, RHOSBDD, TAUS_DD
     //  if missing, derive diffuse properties
 
-    if (L.LTYPE != LayerType::INSCRN) return false;
+    if (L.LTYPE != LayerType::INSCRN) {
+        return false;
+    }
 
     // normal beam-total properties
     Real64 RHOFF_BT0 = L.SWP_MAT.RHOSFBB + L.SWP_MAT.RHOSFBD; // front rho
@@ -7026,7 +7106,9 @@ bool PD_LWP(EnergyPlusData &state,
     Real64 OPENNESS_FABRIC;
 
     PD_LWP = false;
-    if (L.LTYPE != LayerType::DRAPE) return PD_LWP;
+    if (L.LTYPE != LayerType::DRAPE) {
+        return PD_LWP;
+    }
 
     OPENNESS_FABRIC = L.SWP_MAT.TAUSFBB;
 
@@ -7055,7 +7137,9 @@ bool PD_SWP(EnergyPlusData &state,
     // Modifies drape fabric shortwave properties for openness. If not drape Fabric layer
     // returns false. If profile angles not specified diffuse properties are returned.
 
-    if (!(L.LTYPE == LayerType::DRAPE)) return false;
+    if (!(L.LTYPE == LayerType::DRAPE)) {
+        return false;
+    }
 
     // normal beam-total properties of fabric
     Real64 RHOFF_BT0 = L.SWP_MAT.RHOSFBB + L.SWP_MAT.RHOSFBD; // front rho
@@ -7121,7 +7205,9 @@ bool PD_SWP(EnergyPlusData &state,
 
     Real64 TAUX; // This gets used as output of PD_DIFF and is then discarded
 
-    if (!(L.LTYPE == LayerType::DRAPE)) return false;
+    if (!(L.LTYPE == LayerType::DRAPE)) {
+        return false;
+    }
 
     PD_DIFF(state, L.S, L.W, L.SWP_MAT.RHOSFDD, L.SWP_MAT.RHOSBDD, L.SWP_MAT.TAUS_DD, LSWP.RHOSFDD, LSWP.TAUS_DD);
 
@@ -7155,17 +7241,19 @@ bool VB_LWP(EnergyPlusData &state,
     Real64 TAULX;
 
     VB_LWP = false;
-    if (!IsVBLayer(L)) return VB_LWP;
+    if (!IsVBLayer(L)) {
+        return VB_LWP;
+    }
 
     // slat reflectances
     RHODFS_SLAT = 1.0 - L.LWP_MAT.EPSLB - L.LWP_MAT.TAUL; // downward surface
     RHOUFS_SLAT = 1.0 - L.LWP_MAT.EPSLF - L.LWP_MAT.TAUL; // upward surface
 
     // TODO: are there cases where 2 calls not needed (RHODFS_SLAT == RHOUFS_SLAT??)
-    VB_DIFF(state, L.S, L.W, Constant::DegToRadians * L.PHI_DEG, RHODFS_SLAT, RHOUFS_SLAT, L.LWP_MAT.TAUL, RHOLF, LLWP.TAUL);
+    VB_DIFF(state, L.S, L.W, Constant::DegToRad * L.PHI_DEG, RHODFS_SLAT, RHOUFS_SLAT, L.LWP_MAT.TAUL, RHOLF, LLWP.TAUL);
     LLWP.EPSLF = 1.0 - RHOLF - LLWP.TAUL;
 
-    VB_DIFF(state, L.S, L.W, -Constant::DegToRadians * L.PHI_DEG, RHODFS_SLAT, RHOUFS_SLAT, L.LWP_MAT.TAUL, RHOLB, TAULX);
+    VB_DIFF(state, L.S, L.W, -Constant::DegToRad * L.PHI_DEG, RHODFS_SLAT, RHOUFS_SLAT, L.LWP_MAT.TAUL, RHOLB, TAULX);
     LLWP.EPSLB = 1.0 - RHOLB - LLWP.TAUL;
 
     VB_LWP = true;
@@ -7191,7 +7279,9 @@ bool VB_SWP(EnergyPlusData const &state,
     // FUNCTION ARGUMENT DEFINITIONS:
     //   sets: RHOSFBD, TAUSFBB, TAUSFBD
 
-    if (!IsVBLayer(L)) return false;
+    if (!IsVBLayer(L)) {
+        return false;
+    }
 
     Real64 SL_WR = VB_SLAT_RADIUS_RATIO(L.W, L.C);
 
@@ -7200,7 +7290,7 @@ bool VB_SWP(EnergyPlusData const &state,
                    L.S,
                    L.W,
                    SL_WR,
-                   Constant::DegToRadians * L.PHI_DEG,
+                   Constant::DegToRad * L.PHI_DEG,
                    OMEGA,
                    L.SWP_MAT.RHOSBDD,
                    L.SWP_MAT.RHOSFDD,
@@ -7213,7 +7303,7 @@ bool VB_SWP(EnergyPlusData const &state,
                    L.S,
                    L.W,
                    SL_WR,
-                   -Constant::DegToRadians * L.PHI_DEG,
+                   -Constant::DegToRad * L.PHI_DEG,
                    OMEGA,
                    L.SWP_MAT.RHOSBDD,
                    L.SWP_MAT.RHOSFDD,
@@ -7246,13 +7336,15 @@ bool VB_SWP(EnergyPlusData &state,
     Real64 SL_WR;
     Real64 TAUX; // This gets used as output of VB_DIFF and is then discarded
 
-    if (!IsVBLayer(L)) return false;
+    if (!IsVBLayer(L)) {
+        return false;
+    }
 
     SL_WR = VB_SLAT_RADIUS_RATIO(L.W, L.C);
 
-    VB_DIFF(state, L.S, L.W, Constant::DegToRadians * L.PHI_DEG, L.SWP_MAT.RHOSBDD, L.SWP_MAT.RHOSFDD, L.SWP_MAT.TAUS_DD, LSWP.RHOSFDD, LSWP.TAUS_DD);
+    VB_DIFF(state, L.S, L.W, Constant::DegToRad * L.PHI_DEG, L.SWP_MAT.RHOSBDD, L.SWP_MAT.RHOSFDD, L.SWP_MAT.TAUS_DD, LSWP.RHOSFDD, LSWP.TAUS_DD);
 
-    VB_DIFF(state, L.S, L.W, -Constant::DegToRadians * L.PHI_DEG, L.SWP_MAT.RHOSBDD, L.SWP_MAT.RHOSFDD, L.SWP_MAT.TAUS_DD, LSWP.RHOSBDD, TAUX);
+    VB_DIFF(state, L.S, L.W, -Constant::DegToRad * L.PHI_DEG, L.SWP_MAT.RHOSBDD, L.SWP_MAT.RHOSFDD, L.SWP_MAT.TAUS_DD, LSWP.RHOSBDD, TAUX);
 
     return true;
 }
@@ -7553,7 +7645,9 @@ void AdjustVBGap(CFSGAP &G,        // gap, returned updated
 
     Real64 VBTHICK;
 
-    if (!IsVBLayer(L)) return; // insurance
+    if (!IsVBLayer(L)) {
+        return; // insurance
+    }
 
     VBTHICK = L.W * std::cos(L.PHI_DEG); // VB layer thickness at slat angle
     G.TAS_EFF = G.TAS + (L.W - 0.7 * VBTHICK) / 2.0;
@@ -7635,8 +7729,12 @@ void FillDefaultsSWP(EnergyPlusData &state,
     static constexpr std::string_view RoutineName("FillDefaultsSWP: ");
 
     // default back taus to front (often equal)
-    if (SWP.TAUSBBB < 0.0) SWP.TAUSBBB = SWP.TAUSFBB;
-    if (SWP.TAUSBBD < 0.0) SWP.TAUSBBD = SWP.TAUSFBD;
+    if (SWP.TAUSBBB < 0.0) {
+        SWP.TAUSBBB = SWP.TAUSFBB;
+    }
+    if (SWP.TAUSBBD < 0.0) {
+        SWP.TAUSBBD = SWP.TAUSFBD;
+    }
 
     if (L.LTYPE == LayerType::GLAZE) {
         // estimate diffuse properties if any < 0 or autocalculate
@@ -7658,7 +7756,9 @@ void FillDefaultsSWP(EnergyPlusData &state,
     } else if (L.LTYPE == LayerType::INSCRN) {
         if (SWP.TAUSFBB < 0.0) {
             SWP.TAUSFBB = IS_OPENNESS(L.S, L.W);
-            if (SWP.TAUSBBB < 0.0) SWP.TAUSBBB = SWP.TAUSFBB;
+            if (SWP.TAUSBBB < 0.0) {
+                SWP.TAUSBBB = SWP.TAUSFBB;
+            }
         }
         if (min(SWP.RHOSBDD, SWP.RHOSFDD, SWP.TAUS_DD) < 0.0) {
             IS_SWP(state, L, SWP); // TODO IS
@@ -7696,8 +7796,12 @@ void FinalizeCFS(EnergyPlusData &state, CFSTY &FS)
             ErrorsFound = true;
         } else {
             LVBPREV = true;
-            if (iL > 1) AdjustVBGap(FS.G(iL - 1), FS.L(iL));
-            if (iL < FS.NL) AdjustVBGap(FS.G(iL), FS.L(iL));
+            if (iL > 1) {
+                AdjustVBGap(FS.G(iL - 1), FS.L(iL));
+            }
+            if (iL < FS.NL) {
+                AdjustVBGap(FS.G(iL), FS.L(iL));
+            }
         }
         if (iL < FS.NL) {
             int gType = FS.G(iL).GTYPE;
@@ -7736,7 +7840,9 @@ Real64 EffectiveEPSLF(CFSTY const &FS) // Complex Fenestration
             E += 0.9 * TX;
         } else {
             E += FS.L(iL).LWP_EL.EPSLF * TX;
-            if (FS.L(iL).LWP_EL.TAUL < 0.001) break;
+            if (FS.L(iL).LWP_EL.TAUL < 0.001) {
+                break;
+            }
             TX *= FS.L(iL).LWP_EL.TAUL;
         }
     }
@@ -7757,7 +7863,9 @@ Real64 EffectiveEPSLB(CFSTY const &FS) // Complex Fenestration
             E += 0.9 * TX;
         } else {
             E += FS.L(iL).LWP_EL.EPSLB * TX;
-            if (FS.L(iL).LWP_EL.TAUL < 0.001) break;
+            if (FS.L(iL).LWP_EL.TAUL < 0.001) {
+                break;
+            }
             TX *= FS.L(iL).LWP_EL.TAUL;
         }
     }
@@ -7781,9 +7889,8 @@ bool FEQX(Real64 const a, // values to compare, fractional tolerance
     Real64 d = std::abs(a - b);
     if (d < tolAbsX) {
         return true;
-    } else {
-        return (2.0 * d / (std::abs(a) + std::abs(b))) < tolF;
     }
+    return (2.0 * d / (std::abs(a) + std::abs(b))) < tolF;
 }
 
 Real64 TRadC(Real64 const J,    // radiosity, W/m2
@@ -7834,7 +7941,9 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
     int ConstrNum = surf.Construction;
     int EQLNum = state.dataConstruction->Construct(surf.Construction).EQLConsPtr;
     if (BeamDIffFlag != SolarArrays::DIFF) {
-        if (state.dataHeatBal->SurfCosIncAng(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, SurfNum) <= 0.0) return;
+        if (state.dataHeatBal->SurfCosIncAng(state.dataGlobal->HourOfDay, state.dataGlobal->TimeStep, SurfNum) <= 0.0) {
+            return;
+        }
 
         for (int Lay = 1; Lay <= CFS(EQLNum).NL; ++Lay) {
             if (IsVBLayer(CFS(EQLNum).L(Lay))) {
@@ -7871,7 +7980,9 @@ void CalcEQLOpticalProperty(EnergyPlusData &state,
             state.dataConstruction->Construct(ConstrNum).AbsDiffBackEQL({1, CFSMAXNL}) = Abs1(2, {1, CFSMAXNL});
             state.dataConstruction->Construct(ConstrNum).ReflectSolDiffFront = CFS(EQLNum).L(1).SWP_EL.RHOSFDD;
             state.dataConstruction->Construct(ConstrNum).ReflectSolDiffBack = CFS(EQLNum).L(CFS(EQLNum).NL).SWP_EL.RHOSBDD;
-            if (!CFS(EQLNum).ISControlled) state.dataWindowEquivalentLayer->EQLDiffPropFlag(EQLNum) = false;
+            if (!CFS(EQLNum).ISControlled) {
+                state.dataWindowEquivalentLayer->EQLDiffPropFlag(EQLNum) = false;
+            }
         } else {
             CFSAbs(_, {1, CFSMAXNL + 1}) = state.dataWindowEquivalentLayer->CFSDiffAbsTrans(_, {1, CFSMAXNL + 1}, EQLNum);
             state.dataConstruction->Construct(ConstrNum).TransDiff = state.dataWindowEquivalentLayer->CFSDiffAbsTrans(1, CFS(EQLNum).NL + 1, EQLNum);
@@ -7974,7 +8085,7 @@ Real64 HCInWindowStandardRatings(EnergyPlusData &state,
     Real64 Nuint;           // Nusselt number for interior surface convection
 
     TiltDeg = 90.0;
-    sineTilt = std::sin(TiltDeg * Constant::DegToRadians); // degrees as arg
+    sineTilt = std::sin(TiltDeg * Constant::DegToRad); // degrees as arg
 
     // Begin calculating for ISO 15099 method.
     // mean film temperature
@@ -7987,8 +8098,7 @@ Real64 HCInWindowStandardRatings(EnergyPlusData &state,
     mu = 3.723E-6 + 4.94E-8 * TmeanFilmKelvin;     // Table B.2 in ISO 15099
     Cp = 1002.737 + 1.2324E-2 * TmeanFilmKelvin;   // Table B.3 in ISO 15099
 
-    RaH = (pow_2(rho) * pow_3(Height) * Constant::GravityConstant * Cp * std::abs(TSurfIn - TAirIn)) /
-          (TmeanFilmKelvin * mu * lambda); // eq 132 in ISO 15099
+    RaH = (pow_2(rho) * pow_3(Height) * Constant::Gravity * Cp * std::abs(TSurfIn - TAirIn)) / (TmeanFilmKelvin * mu * lambda); // eq 132 in ISO 15099
 
     // eq. 135 in ISO 15099 (only need this one because tilt is 90 deg)
     Nuint = 0.56 * root_4(RaH * sineTilt);

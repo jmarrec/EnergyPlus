@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -91,7 +91,6 @@ using namespace EnergyPlus::DataAirLoop;
 using namespace EnergyPlus::DataAirSystems;
 using namespace EnergyPlus::DataSizing;
 using namespace EnergyPlus::DataHeatBalance;
-using namespace EnergyPlus::ScheduleManager;
 using namespace EnergyPlus::DataEnvironment;
 using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::DataLoopNode;
@@ -110,13 +109,12 @@ using namespace EnergyPlus::SizingManager;
 using EnergyPlus::Curve::CurveValue;
 using EnergyPlus::Curve::GetCurveName;
 using EnergyPlus::Curve::GetNormalPoint;
-using EnergyPlus::Psychrometrics::PsyHFnTdbRhPb;
-using EnergyPlus::Psychrometrics::PsyRhFnTdbWPb;
-using EnergyPlus::Psychrometrics::PsyWFnTdbRhPb;
-using namespace EnergyPlus::ScheduleManager;
 using EnergyPlus::HybridEvapCoolingModel::CMode;
 using EnergyPlus::HybridEvapCoolingModel::CSetting;
 using EnergyPlus::HybridEvapCoolingModel::Model;
+using EnergyPlus::Psychrometrics::PsyHFnTdbRhPb;
+using EnergyPlus::Psychrometrics::PsyRhFnTdbWPb;
+using EnergyPlus::Psychrometrics::PsyWFnTdbRhPb;
 using namespace EnergyPlus::HybridUnitaryAirConditioners;
 
 namespace EnergyPlus {
@@ -126,6 +124,10 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     ASSERT_TRUE(process_idf(
         delimited_string(read_lines_in_file(configured_source_directory() / "tst/EnergyPlus/unit/Resources/UnitaryHybridUnitTest_DOSA.idf"))));
 
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
     // setup environment
     bool ErrorsFound(false);
     GetZoneData(*state, ErrorsFound);
@@ -133,9 +135,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     // Initialize schedule values
     state->dataGlobal->TimeStep = 1;
     state->dataHVACGlobal->TimeStepSys = 1;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
     state->dataEnvrn->Month = 1;
     state->dataEnvrn->DayOfMonth = 21;
     state->dataGlobal->HourOfDay = 1;
@@ -144,7 +144,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     state->dataEnvrn->HolidayIndex = 0;
     state->dataGlobal->WarmupFlag = false;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Initialize zone areas and volumes - too many other things need to be set up to do these in the normal routines
     state->dataHeatBal->Zone(1).FloorArea = 232.26;
     state->dataEnvrn->StdRhoAir = 1.225;
@@ -157,8 +157,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     // Setup performance tables
     using namespace EnergyPlus::DataEnvironment;
     // process schedules
-    ProcessScheduleInput(*state); // read schedules
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Get Unitary system
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     EXPECT_EQ(1, state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner.size());
@@ -191,7 +190,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
 
     InitZoneHybridUnitaryAirConditioners(*state, 1, 1);
     // setup local variables for model inputs
-    Real64 Requestedheating = 0.0;
+    Real64 RequestedHeating = 0.0;
     Real64 RequestedCooling = 0.0;
     constexpr Real64 Requested_Humidification = 0.0;
     constexpr Real64 Requested_Dehumidification = 0.0;
@@ -199,11 +198,11 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
 
     // Scenario 1: Hi Cooling
 
-    Requestedheating = -122396.255;  // Watts (Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate
+    RequestedHeating = -122396.255;  // Watts (Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate
     RequestedCooling = -58469.99445; // Watts (Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate
     thisUnitary.Initialize(1);
     thisUnitary.InitializeModelParams();
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
     Real64 NormalizationDivisor = 3.0176;
@@ -233,7 +232,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     thisUnitary.InitializeModelParams();
     thisUnitary.ScalingFactor = thisUnitary.ScalingFactor * 2;
     thisUnitary.ScaledSystemMaximumSupplyAirMassFlowRate = thisUnitary.ScaledSystemMaximumSupplyAirMassFlowRate * 2;
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
     modenumber = thisUnitary.PrimaryMode;
@@ -261,7 +260,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     thisUnitary.ScaledSystemMaximumSupplyAirMassFlowRate = thisUnitary.ScaledSystemMaximumSupplyAirMassFlowRate / 2; // reset back to original values
     thisUnitary.SecInletTemp = 150;
     thisUnitary.SecInletHumRat = 0;
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
     modenumber = thisUnitary.PrimaryMode;
@@ -272,14 +271,14 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     EXPECT_NEAR(Electricpower, 244 / NormalizationDivisor, 1);
 
     // Scenario 4: Low Cooling
-    Requestedheating = -64358.68966; //-
+    RequestedHeating = -64358.68966; //-
     RequestedCooling = -633.6613591; // W
     /// add all the correct values to set in pZoneHybridUnitaryAirConditioner
     thisUnitary.Initialize(1);
     thisUnitary.InitializeModelParams();
     thisUnitary.SecInletTemp = Tosa;
     thisUnitary.SecInletHumRat = Wosa;
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
     modenumber = thisUnitary.PrimaryMode;
@@ -298,13 +297,13 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     EXPECT_LT(Electricpower, 5000 / NormalizationDivisor);
 
     // Scenario 5: No Heating or Cooling, Minimum Ventilation
-    Requestedheating = -55795.8058;
+    RequestedHeating = -55795.8058;
     RequestedCooling = 8171.47128;
     thisUnitary.Initialize(1);
     thisUnitary.InitializeModelParams();
     thisUnitary.SecInletTemp = Tosa;
     thisUnitary.SecInletHumRat = Wosa;
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
     modenumber = thisUnitary.PrimaryMode;
@@ -326,7 +325,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     thisUnitary.InitializeModelParams();
     thisUnitary.SecInletTemp = Tosa;
     thisUnitary.SecInletHumRat = Wosa;
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
 
@@ -342,7 +341,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     thisUnitary.InitializeModelParams();
     thisUnitary.SecInletTemp = Tosa;
     thisUnitary.SecInletHumRat = Wosa;
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
     Tsa = thisUnitary.OutletTemp;
@@ -350,14 +349,14 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
     EXPECT_NEAR(Tsa, Tosa + 0.36, 0.1);
 
     // Scenario 6: Availability Manager Off
-    Requestedheating = -122396.255;  // Watts (Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate
+    RequestedHeating = -122396.255;  // Watts (Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate
     RequestedCooling = -58469.99445; // Watts (Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate
     thisUnitary.Initialize(1);
     thisUnitary.InitializeModelParams();
     thisUnitary.SecInletTemp = Tosa;
     thisUnitary.SecInletHumRat = Wosa;
     thisUnitary.availStatus = Avail::Status::ForceOff;
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
     modenumber = thisUnitary.PrimaryMode;
@@ -390,23 +389,21 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_Unittest)
 
     // Setup performance tables
     using namespace EnergyPlus::DataEnvironment;
-    // process schedules
-    ProcessScheduleInput(*state); // read schedules
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Get Unitary system: no, we don't want to do it twice! Otherwise the Output Variables will be duplicated
     // GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     EXPECT_EQ(1, state->dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner.size());
     // All to get OA requirements
     GetOARequirements(*state);
 
-    Requestedheating = -122396.255;  // Watts (Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate
+    RequestedHeating = -122396.255;  // Watts (Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate
     RequestedCooling = -58469.99445; // Watts (Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate
     thisUnitary.Initialize(1);
     thisUnitary.InitializeModelParams();
     thisUnitary.InletTemp = Tra;
     thisUnitary.SecInletTemp = Tosa;
     thisUnitary.SecInletMassFlowRate = DesignMinVR;
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
     ReportZoneHybridUnitaryAirConditioners(*state, 1);
 
     SystemReports::ReportVentilationLoads(*state);
@@ -846,10 +843,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_CalculateCurveVal)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
-
-    Curve::GetCurveInput(*state);
-    state->dataCurveManager->GetCurvesInputFlag = false;
-    EXPECT_EQ(4, state->dataCurveManager->NumCurves);
+    state->init_state(*state);
+    EXPECT_EQ(4, state->dataCurveManager->curves.size());
 
     bool ErrorsFound(false);
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
@@ -1255,10 +1250,9 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ModelOperatingSetting
         "3.25;                    !- Output Value 1",
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
-    Curve::GetCurveInput(*state);
-    state->dataCurveManager->GetCurvesInputFlag = false;
-    EXPECT_EQ(8, state->dataCurveManager->NumCurves);
+    EXPECT_EQ(8, state->dataCurveManager->curves.size());
 
     bool ErrorsFound(false);
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
@@ -1301,14 +1295,14 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ModelOperatingSetting
 
     InitZoneHybridUnitaryAirConditioners(*state, 1, 2);
 
-    constexpr Real64 Requestedheating = -122396.255;  // Watts (Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate
+    constexpr Real64 RequestedHeating = -122396.255;  // Watts (Zone Predicted Sensible Load to Heating Setpoint Heat Transfer Rate
     constexpr Real64 RequestedCooling = -58469.99445; // Watts (Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate
     constexpr Real64 Requested_Humidification = 0;
     constexpr Real64 Requested_Dehumidification = 0;
 
     thisUnitary.Initialize(1);
     thisUnitary.InitializeModelParams();
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     for (auto &Setting : thisUnitary.Settings) {
         const int MassFlowSolutionSize = Setting.oMode.sol.MassFlowRatio.size();
@@ -1430,6 +1424,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_ValidateOptionalError
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
     bool ErrorsFound = false;
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     // Design Specification Outdoor Air Object Name 'SZ DSOA SPACE2-1' is not defined in this model, thus an error is thrown
@@ -1444,6 +1440,10 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
     ASSERT_TRUE(process_idf(
         delimited_string(read_lines_in_file(configured_source_directory() / "tst/EnergyPlus/unit/Resources/UnitaryHybridUnitTest_DOSA.idf"))));
 
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
     // setup environment
     bool ErrorsFound(false);
     GetZoneData(*state, ErrorsFound);
@@ -1451,9 +1451,8 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
     // Initialize schedule values
     state->dataGlobal->TimeStep = 1;
     state->dataHVACGlobal->TimeStepSys = 1;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
+
     state->dataEnvrn->Month = 1;
     state->dataEnvrn->DayOfMonth = 21;
     state->dataGlobal->HourOfDay = 1;
@@ -1462,7 +1461,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
     state->dataEnvrn->HolidayIndex = 0;
     state->dataGlobal->WarmupFlag = false;
     state->dataEnvrn->DayOfYear_Schedule = General::OrdinalDay(state->dataEnvrn->Month, state->dataEnvrn->DayOfMonth, 1);
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Initialize zone areas and volumes - too many other things need to be set up to do these in the normal routines
     state->dataHeatBal->Zone(1).FloorArea = 232.26;
     state->dataEnvrn->StdRhoAir = 1.225;
@@ -1474,9 +1473,7 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
 
     // Setup performance tables
     using namespace EnergyPlus::DataEnvironment;
-    // process schedules
-    ProcessScheduleInput(*state); // read schedules
-    UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
     // Get Unitary system
     GetInputZoneHybridUnitaryAirConditioners(*state, ErrorsFound);
     // All to get OA requirements
@@ -1511,18 +1508,18 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
 
     InitZoneHybridUnitaryAirConditioners(*state, 1, 1);
     // setup local variables for model inputs
-    Real64 Requestedheating = 0.0;
+    Real64 RequestedHeating = 0.0;
     Real64 RequestedCooling = 0.0;
     constexpr Real64 Requested_Humidification = 0.0;
     constexpr Real64 Requested_Dehumidification = 0.0;
 
     // Scenario 1: Low Cooling
 
-    Requestedheating = -64358.68966; //-
+    RequestedHeating = -64358.68966; //-
     RequestedCooling = -633.6613591; // W
     thisUnitary.Initialize(1);
     thisUnitary.InitializeModelParams();
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, DesignMinVR);
 
     // output results
     Real64 Setting0Mode = thisUnitary.CurrentOperatingSettings[0].Mode;
@@ -1537,14 +1534,14 @@ TEST_F(EnergyPlusFixture, Test_UnitaryHybridAirConditioner_RuntimeFraction_Initi
     EXPECT_NEAR(Setting1RuntimeFraction, 0.453, 0.001); // Standby Mode
 
     // Scenario 2: Outside of env conditions. should go to standby and have standby energy
-    Requestedheating = -55795.8058;
+    RequestedHeating = -55795.8058;
     RequestedCooling = 8171.47128;
     thisUnitary.SecInletTemp = 150;
     thisUnitary.SecInletHumRat = 0;
 
     thisUnitary.Initialize(1);
     thisUnitary.InitializeModelParams();
-    thisUnitary.doStep(*state, RequestedCooling, Requestedheating, Requested_Humidification, Requested_Dehumidification, 0);
+    thisUnitary.doStep(*state, RequestedCooling, RequestedHeating, Requested_Humidification, Requested_Dehumidification, 0);
 
     // output results
     Setting0Mode = thisUnitary.CurrentOperatingSettings[0].Mode;

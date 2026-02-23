@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -82,6 +82,7 @@
 #include <EnergyPlus/IOFiles.hh>
 #include <EnergyPlus/InputProcessing/InputProcessor.hh>
 #include <EnergyPlus/InternalHeatGains.hh>
+#include <EnergyPlus/Material.hh>
 #include <EnergyPlus/MixedAir.hh>
 #include <EnergyPlus/OutputProcessor.hh>
 #include <EnergyPlus/OutputReportPredefined.hh>
@@ -89,11 +90,13 @@
 #include <EnergyPlus/PollutionModule.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/ReportCoilSelection.hh>
+#include <EnergyPlus/ResultsFramework.hh>
 #include <EnergyPlus/SQLiteProcedures.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/SimulationManager.hh>
 #include <EnergyPlus/SurfaceGeometry.hh>
 #include <EnergyPlus/WeatherManager.hh>
+#include <EnergyPlus/WindowModel.hh>
 
 // C++ Headers
 #include <algorithm>
@@ -129,30 +132,30 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_Basic)
 
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_RealToStr)
 {
-    EXPECT_EQ("       0.001", RealToStr(0.0011, 3));
-    EXPECT_NE("       0.001", RealToStr(0.0019, 3));
+    EXPECT_EQ("       0.001", RealToStr(true, 0.0011, 3));
+    EXPECT_NE("       0.001", RealToStr(true, 0.0019, 3));
 
-    EXPECT_EQ("          1.", RealToStr(1.23456789, 0));
-    EXPECT_EQ("         1.2", RealToStr(1.23456789, 1));
-    EXPECT_EQ("        1.23", RealToStr(1.23456789, 2));
-    EXPECT_EQ("       1.235", RealToStr(1.23456789, 3));
-    EXPECT_EQ("      1.2346", RealToStr(1.23456789, 4));
-    EXPECT_EQ("     1.23457", RealToStr(1.23456789, 5));
-    EXPECT_EQ("    1.234568", RealToStr(1.23456789, 6));
-    EXPECT_EQ("   1.2345679", RealToStr(1.23456789, 7));
-    EXPECT_EQ("  1.23456789", RealToStr(1.23456789, 8));
+    EXPECT_EQ("          1.", RealToStr(true, 1.23456789, 0));
+    EXPECT_EQ("         1.2", RealToStr(true, 1.23456789, 1));
+    EXPECT_EQ("        1.23", RealToStr(true, 1.23456789, 2));
+    EXPECT_EQ("       1.235", RealToStr(true, 1.23456789, 3));
+    EXPECT_EQ("      1.2346", RealToStr(true, 1.23456789, 4));
+    EXPECT_EQ("     1.23457", RealToStr(true, 1.23456789, 5));
+    EXPECT_EQ("    1.234568", RealToStr(true, 1.23456789, 6));
+    EXPECT_EQ("   1.2345679", RealToStr(true, 1.23456789, 7));
+    EXPECT_EQ("  1.23456789", RealToStr(true, 1.23456789, 8));
 
-    EXPECT_EQ("    1.234000", RealToStr(1.234, 6));
-    EXPECT_EQ("   1.2340000", RealToStr(1.234, 7));
-    EXPECT_EQ("  1.23400000", RealToStr(1.234, 8));
+    EXPECT_EQ("    1.234000", RealToStr(true, 1.234, 6));
+    EXPECT_EQ("   1.2340000", RealToStr(true, 1.234, 7));
+    EXPECT_EQ("  1.23400000", RealToStr(true, 1.234, 8));
 
-    EXPECT_EQ("     123457.", RealToStr(123456.789, 0));
-    EXPECT_EQ("    123456.8", RealToStr(123456.789, 1));
-    EXPECT_EQ("   123456.79", RealToStr(123456.789, 2));
-    EXPECT_EQ("  123456.789", RealToStr(123456.789, 3));
-    EXPECT_EQ(" 123456.7890", RealToStr(123456.789, 4));
+    EXPECT_EQ("     123457.", RealToStr(true, 123456.789, 0));
+    EXPECT_EQ("    123456.8", RealToStr(true, 123456.789, 1));
+    EXPECT_EQ("   123456.79", RealToStr(true, 123456.789, 2));
+    EXPECT_EQ("  123456.789", RealToStr(true, 123456.789, 3));
+    EXPECT_EQ(" 123456.7890", RealToStr(true, 123456.789, 4));
 
-    EXPECT_EQ("0.123457E+06", RealToStr(123456.789, 5));
+    EXPECT_EQ("1.234568E+05", RealToStr(true, 123456.789, 5));
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_isNumber)
@@ -191,15 +194,29 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_digitsAferDecimal)
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_splitCommaString)
 {
     std::vector<std::string> actual;
-    actual.push_back("part1");
+    actual.emplace_back("part1");
     EXPECT_EQ(actual, splitCommaString("part1"));
-    actual.push_back("part2");
+    actual.emplace_back("part2");
     EXPECT_EQ(actual, splitCommaString("part1,part2"));
     EXPECT_EQ(actual, splitCommaString(" part1,part2 "));
     EXPECT_EQ(actual, splitCommaString(" part1 , part2 "));
-    actual.push_back("part3");
+    actual.emplace_back("part3");
     EXPECT_EQ(actual, splitCommaString("part1,part2,part3"));
     EXPECT_EQ(actual, splitCommaString(" part1 , part2 , part3 "));
+}
+
+TEST_F(EnergyPlusFixture, OutputReportTabularTest_stringJoinDelimiter)
+{
+    std::vector<std::string> original;
+    EXPECT_EQ("", stringJoinDelimiter(original, ";"));
+    original.emplace_back("part1");
+    EXPECT_EQ("part1", stringJoinDelimiter(original, ";"));
+    original.emplace_back("part2");
+    EXPECT_EQ("part1;part2", stringJoinDelimiter(original, ";"));
+    EXPECT_EQ("part1 ; part2", stringJoinDelimiter(original, " ; "));
+    original.emplace_back("part3");
+    EXPECT_EQ("part1;part2;part3", stringJoinDelimiter(original, ";"));
+    EXPECT_EQ("part1 ; part2 ; part3", stringJoinDelimiter(original, " ; "));
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_unitsFromHeading)
@@ -211,7 +228,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_unitsFromHeading)
     Real64 curConversionOffset;
 
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     unitString = "";
     EXPECT_EQ(97, unitsFromHeading(*state, unitString));
@@ -455,7 +473,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetColumnUsingTabs)
     }
 
     {
-        std::string inString = "";
+        std::string inString;
         EXPECT_EQ("", GetColumnUsingTabs(inString, 1));
         EXPECT_EQ("", GetColumnUsingTabs(inString, 2));
     }
@@ -508,7 +526,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_AllocateLoadComponentArraysTes
     state->dataGlobal->NumOfZones = 4;
     state->dataViewFactor->NumOfRadiantEnclosures = 4;
     state->dataSurface->TotSurfaces = 7;
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
 
     AllocateLoadComponentArrays(*state);
 
@@ -518,128 +536,23 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_AllocateLoadComponentArraysTes
     // radiantPulseReceived.allocate( { 0, TotDesDays + TotRunDesPersDays }, TotSurfaces );
     EXPECT_EQ(state->dataOutRptTab->radiantPulseReceived.size(), 42u);
 
-    // loadConvectedNormal.allocate( TotDesDays + TotRunDesPersDays, { 0, NumOfTimeStepInHour * 24 }, TotSurfaces );
-    EXPECT_EQ(state->dataOutRptTab->loadConvectedNormal.size(), 3395u);
-
-    // loadConvectedWithPulse.allocate( TotDesDays + TotRunDesPersDays, { 0, NumOfTimeStepInHour * 24 }, TotSurfaces );
-    EXPECT_EQ(state->dataOutRptTab->loadConvectedWithPulse.size(), 3395u);
-
-    // netSurfRadSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, TotSurfaces );
-    EXPECT_EQ(state->dataOutRptTab->netSurfRadSeq.size(), 3360u);
-
-    // decayCurveCool.allocate( NumOfTimeStepInHour * 24, TotSurfaces );
+    // decayCurveCool.allocate( TimeStepsInHour * 24, TotSurfaces );
     EXPECT_EQ(state->dataOutRptTab->decayCurveCool.size(), 672u);
 
-    // decayCurveHeat.allocate( NumOfTimeStepInHour * 24, TotSurfaces );
+    // decayCurveHeat.allocate( TimeStepsInHour * 24, TotSurfaces );
     EXPECT_EQ(state->dataOutRptTab->decayCurveHeat.size(), 672u);
 
-    // ITABSFseq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, TotSurfaces );
-    EXPECT_EQ(state->dataOutRptTab->ITABSFseq.size(), 3360u);
+    EXPECT_EQ(state->dataOutRptTab->surfCompLoads.size(), 5u);
+    EXPECT_EQ(state->dataOutRptTab->surfCompLoads[0].ts.size(), 96u);
+    EXPECT_EQ(state->dataOutRptTab->surfCompLoads[0].ts[0].surf.size(), 7u);
+    EXPECT_EQ(state->dataOutRptTab->surfCompLoads[4].ts.size(), 96u);
+    EXPECT_EQ(state->dataOutRptTab->surfCompLoads[4].ts[95].surf.size(), 7u);
 
-    // TMULTseq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->TMULTseq.size(), 1920u);
-
-    // peopleInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->peopleInstantSeq.size(), 1920u);
-
-    // peopleLatentSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->peopleLatentSeq.size(), 1920u);
-
-    // peopleRadSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->peopleRadSeq.size(), 1920u);
-
-    // peopleDelaySeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    // EXPECT_EQ( peopleDelaySeq.size(), 1920u );
-
-    // lightInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->lightInstantSeq.size(), 1920u);
-
-    // lightRetAirSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->lightRetAirSeq.size(), 1920u);
-
-    // lightLWRadSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->lightLWRadSeq.size(), 1920u);
-
-    // lightSWRadSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, TotSurfaces );
-    EXPECT_EQ(state->dataOutRptTab->lightSWRadSeq.size(), 3360u);
-
-    // lightDelaySeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    // EXPECT_EQ( lightDelaySeq.size(), 1920u );
-
-    // equipInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->equipInstantSeq.size(), 1920u);
-
-    // equipLatentSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->equipLatentSeq.size(), 1920u);
-
-    // equipRadSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->equipRadSeq.size(), 1920u);
-
-    // equipDelaySeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    // EXPECT_EQ( equipDelaySeq.size(), 1920u );
-
-    // refrigInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->refrigInstantSeq.size(), 1920u);
-
-    // refrigRetAirSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->refrigRetAirSeq.size(), 1920u);
-
-    // refrigLatentSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->refrigLatentSeq.size(), 1920u);
-
-    // waterUseInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->waterUseInstantSeq.size(), 1920u);
-
-    // waterUseLatentSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->waterUseLatentSeq.size(), 1920u);
-
-    // hvacLossInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->hvacLossInstantSeq.size(), 1920u);
-
-    // hvacLossRadSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->hvacLossRadSeq.size(), 1920u);
-
-    // hvacLossDelaySeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    // EXPECT_EQ( hvacLossDelaySeq.size(), 1920u );
-
-    // powerGenInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->powerGenInstantSeq.size(), 1920u);
-
-    // powerGenRadSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->powerGenRadSeq.size(), 1920u);
-
-    // powerGenDelaySeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    // EXPECT_EQ( powerGenDelaySeq.size(), 1920u );
-
-    // infilInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->infilInstantSeq.size(), 1920u);
-
-    // infilLatentSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->infilLatentSeq.size(), 1920u);
-
-    // zoneVentInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->zoneVentInstantSeq.size(), 1920u);
-
-    // zoneVentLatentSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->zoneVentLatentSeq.size(), 1920u);
-
-    // interZoneMixInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->interZoneMixInstantSeq.size(), 1920u);
-
-    // interZoneMixLatentSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->interZoneMixLatentSeq.size(), 1920u);
-
-    // feneCondInstantSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    EXPECT_EQ(state->dataOutRptTab->feneCondInstantSeq.size(), 1920u);
-
-    // feneSolarRadSeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, TotSurfaces );
-    EXPECT_EQ(state->dataOutRptTab->feneSolarRadSeq.size(), 3360u);
-
-    // feneSolarDelaySeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, NumOfZones );
-    // EXPECT_EQ( feneSolarDelaySeq.size(), 1920u );
-
-    // surfDelaySeq.allocate( TotDesDays + TotRunDesPersDays, NumOfTimeStepInHour * 24, TotSurfaces );
-    // EXPECT_EQ( surfDelaySeq.size(), 3360u );
+    EXPECT_EQ(state->dataOutRptTab->znCompLoads.size(), 5u);
+    EXPECT_EQ(state->dataOutRptTab->znCompLoads[0].ts.size(), 96u);
+    EXPECT_EQ(state->dataOutRptTab->znCompLoads[0].ts[0].spacezone.size(), 4u);
+    EXPECT_EQ(state->dataOutRptTab->znCompLoads[4].ts.size(), 96u);
+    EXPECT_EQ(state->dataOutRptTab->znCompLoads[4].ts[95].spacezone.size(), 4u);
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_ConfirmConvertToEscaped)
@@ -3641,7 +3554,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabular_ConfirmResetBEPSGathering)
     state->dataGlobal->DoWeathSim = true;
     state->dataGlobal->TimeStepZone = 1.0;
     state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * 3600.0;
-    state->dataGlobal->MinutesPerTimeStep = state->dataGlobal->TimeStepZone * 60.0;
+    state->dataGlobal->MinutesInTimeStep = state->dataGlobal->TimeStepZone * 60.0;
     state->dataOutRptTab->displayTabularBEPS = true;
     // OutputProcessor::TimeValue.allocate(2);
 
@@ -3811,7 +3724,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabular_GatherHeatEmissionReport)
     state->dataOutRptTab->displayHeatEmissionsSummary = true;
     state->dataGlobal->DoWeathSim = true;
     state->dataHVACGlobal->TimeStepSys = 10.0;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
 
     state->dataEnvrn->OutHumRat = 0.005;
     state->dataEnvrn->OutDryBulbTemp = 25.0;
@@ -3893,8 +3806,9 @@ TEST_F(EnergyPlusFixture, OutputTableTimeBins_GetInput)
                                                       "0.00, !- Interval Start",
                                                       "0.20, !- Interval Size",
                                                       "5,                       !- Interval Count",
-                                                      "Always1; !- Schedule Name"});
+                                                      "Constant-1.0; !- Schedule Name"});
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->DoWeathSim = true;
 
@@ -3906,7 +3820,7 @@ TEST_F(EnergyPlusFixture, OutputTableTimeBins_GetInput)
     EXPECT_EQ(state->dataOutRptTab->OutputTableBinned(1).intervalStart, 0.0);
     EXPECT_EQ(state->dataOutRptTab->OutputTableBinned(1).intervalSize, 0.20);
     EXPECT_EQ(state->dataOutRptTab->OutputTableBinned(1).intervalCount, 5);
-    EXPECT_EQ(state->dataOutRptTab->OutputTableBinned(1).ScheduleName, "ALWAYS1");
+    EXPECT_EQ(state->dataOutRptTab->OutputTableBinned(1).sched->Name, "Constant-1.0");
 }
 
 // TEST_F( EnergyPlusFixture, FinAndOverhangCount )
@@ -6236,6 +6150,7 @@ TEST_F(SQLiteFixture, WriteVeriSumTableAreasTest)
     state->dataHeatBal->Zone(1).ExteriorTotalGroundSurfArea = 0;
     state->dataHeatBal->Zone(1).ExtWindowArea = state->dataSurface->Surface(3).GrossArea + state->dataSurface->Surface(4).GrossArea;
 
+    OutputReportTabular::setTabularReportStyles(*state);
     WriteVeriSumTable(*state);
 
     auto tabularData = queryResult("SELECT * FROM TabularData;", "TabularData");
@@ -6435,6 +6350,7 @@ TEST_F(SQLiteFixture, WriteVeriSumTable_TestNotPartOfTotal)
     state->dataHeatBal->Zone(3).ExteriorTotalGroundSurfArea = 0;
     state->dataHeatBal->Zone(3).ExtWindowArea = 0.0;
 
+    OutputReportTabular::setTabularReportStyles(*state);
     WriteVeriSumTable(*state);
 
     // Check Yes/No flag
@@ -6581,6 +6497,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_invalidAggregationOrder)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 extLitUse;
 
@@ -6631,7 +6548,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_invalidAggregationOrder)
 
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_CollectPeakZoneConditions_test)
 {
-    Psychrometrics::InitializePsychRoutines(*state);
+    state->init_state(*state);
     createCoilSelectionReportObj(*state);
 
     CompLoadTablesType compLoad;
@@ -6648,8 +6565,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_CollectPeakZoneConditions_test
     state->dataWeather->DesDayInput(1).Month = 5;
     state->dataWeather->DesDayInput(1).DayOfMonth = 21;
 
-    state->dataGlobal->NumOfTimeStepInHour = 4;
-    state->dataGlobal->MinutesPerTimeStep = 15;
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 15;
 
     state->dataSize->CalcFinalZoneSizing.allocate(1);
     state->dataSize->CalcFinalZoneSizing(1).CoolOutTempSeq.allocate(96);
@@ -6716,6 +6633,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_ComputeEngineeringChecks_test)
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetZoneComponentAreas_test)
 {
     Array1D<ZompComponentAreasType> areas;
+    Array1D<ZompComponentAreasType> spaceAreas;
     areas.allocate(1);
 
     state->dataHeatBal->Zone.allocate(1);
@@ -6802,7 +6720,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetZoneComponentAreas_test)
     state->dataSurface->Surface(13).Zone = 1;
     state->dataSurface->Surface(13).HeatTransSurf = true;
 
-    GetZoneComponentAreas(*state, areas);
+    GetZoneComponentAreas(*state, areas, spaceAreas);
 
     EXPECT_EQ(12., areas(1).floor);
     EXPECT_EQ(8., areas(1).roof);
@@ -6902,11 +6820,12 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_LoadSummaryUnitConversion_test
     compLoad.airflowPerTotCap = 0.2;
     compLoad.totCapPerArea = 0.15;
 
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
+    SetupUnitConversions(*state);
     Real64 powerConversion = getSpecificUnitMultiplier(*state, "W", "Btu/h");
     Real64 areaConversion = getSpecificUnitMultiplier(*state, "m2", "ft2");
     Real64 airFlowConversion = getSpecificUnitMultiplier(*state, "m3/s", "ft3/min");
-    Real64 airFlowPerAreaConversion = getSpecificUnitMultiplier(*state, "m3/s-m2", "ft3/min-ft2");
     int tempConvIndx = getSpecificUnitIndex(*state, "C", "F");
 
     LoadSummaryUnitConversion(*state, compLoad);
@@ -6918,7 +6837,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_LoadSummaryUnitConversion_test
 
     EXPECT_EQ(ConvertIP(*state, tempConvIndx, 20.), compLoad.outsideDryBulb);
     EXPECT_EQ(0.7 * airFlowConversion, compLoad.mainFanAirFlow);
-    EXPECT_EQ(0.2 * airFlowPerAreaConversion / powerConversion, compLoad.airflowPerTotCap);
+    EXPECT_EQ(0.2 * airFlowConversion / powerConversion, compLoad.airflowPerTotCap);
     EXPECT_EQ(0.15 * powerConversion / areaConversion, compLoad.totCapPerArea);
 }
 
@@ -6982,7 +6901,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesTwice_test)
     int iZone = 1;
     state->dataEnvrn->TotDesDays = 2;
     state->dataEnvrn->TotRunDesPersDays = 3;
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
 
     state->dataGlobal->NumOfZones = 4;
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
@@ -7002,48 +6921,43 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesTwice_test)
     state->dataSurface->Surface(1).RadEnclIndex = 1;
 
     Array1D<Real64> peopleDelaySeq;
-    peopleDelaySeq.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    peopleDelaySeq.allocate(state->dataGlobal->TimeStepsInHour * 24);
     peopleDelaySeq = 0.;
 
     Array1D<Real64> peopleDelaySeqCool;
-    peopleDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    peopleDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     peopleDelaySeqCool = 0.;
 
     Array1D<Real64> equipDelaySeqCool;
-    equipDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    equipDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     equipDelaySeqCool = 0.;
 
     Array1D<Real64> hvacLossDelaySeqCool;
-    hvacLossDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    hvacLossDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     hvacLossDelaySeqCool = 0.;
 
     Array1D<Real64> powerGenDelaySeqCool;
-    powerGenDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    powerGenDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     powerGenDelaySeqCool = 0.;
 
     Array1D<Real64> lightDelaySeqCool;
-    lightDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    lightDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     lightDelaySeqCool = 0.;
 
     Array1D<Real64> feneSolarDelaySeqCool;
-    feneSolarDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    feneSolarDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     feneSolarDelaySeqCool = 0.;
 
-    Array3D<Real64> feneCondInstantSeq;
-    feneCondInstantSeq.allocate(state->dataEnvrn->TotDesDays + state->dataEnvrn->TotRunDesPersDays,
-                                state->dataGlobal->NumOfTimeStepInHour * 24,
-                                state->dataViewFactor->NumOfRadiantEnclosures);
-    feneCondInstantSeq = 0.0;
-
     Array2D<Real64> surfDelaySeqCool;
-    surfDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24, state->dataSurface->TotSurfaces);
+    surfDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24, state->dataSurface->TotSurfaces);
     surfDelaySeqCool = 0.0;
 
     AllocateLoadComponentArrays(*state);
 
-    feneCondInstantSeq(coolDesSelected, 1, 1) = 0.88;
+    auto &znCL = state->dataOutRptTab->znCompLoads;
+    znCL[coolDesSelected - 1].ts[0].spacezone[iZone - 1].feneCondInstantSeq = 0.88;
 
-    state->dataOutRptTab->netSurfRadSeq(coolDesSelected, 1, 1) = 0.05;
+    state->dataOutRptTab->surfCompLoads[coolDesSelected - 1].ts[0].surf[0].netSurfRadSeq = 0.05;
 
     GetDelaySequences(*state,
                       coolDesSelected,
@@ -7055,10 +6969,12 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesTwice_test)
                       powerGenDelaySeqCool,
                       lightDelaySeqCool,
                       feneSolarDelaySeqCool,
-                      feneCondInstantSeq,
+                      znCL,
                       surfDelaySeqCool);
 
-    EXPECT_EQ(0.83, feneCondInstantSeq(coolDesSelected, 1, 1)); // the first time the subtraction operation should have occurred
+    EXPECT_EQ(
+        0.83,
+        znCL[coolDesSelected - 1].ts[0].spacezone[iZone - 1].feneCondInstantSeq); // the first time the subtraction operation should have occurred
 
     GetDelaySequences(*state,
                       coolDesSelected,
@@ -7070,14 +6986,13 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesTwice_test)
                       powerGenDelaySeqCool,
                       lightDelaySeqCool,
                       feneSolarDelaySeqCool,
-                      feneCondInstantSeq,
+                      znCL,
                       surfDelaySeqCool);
 
     EXPECT_EQ(0.83,
-              feneCondInstantSeq(
-                  coolDesSelected,
-                  1,
-                  1)); // the second time the subtraction should not have happened since it is only adjusted once so the value should be the same.
+              znCL[coolDesSelected - 1].ts[0].spacezone[iZone - 1].feneCondInstantSeq); // the second time the subtraction should not have happened
+                                                                                        // since it is
+    // only adjusted once so the value should be the same.
 }
 
 TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoop_ZeroDesignDay)
@@ -7098,6 +7013,7 @@ TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoo
     state->dataSize->SysSizPeakDDNum(state->dataHVACGlobal->NumPrimaryAirSys).TotCoolPeakDD = 0; // set to zero to indicate no design day chosen
     state->dataSize->SysSizPeakDDNum(state->dataHVACGlobal->NumPrimaryAirSys).HeatPeakDD = 0;    // set to zero to indicate no design day chosen
 
+    setTabularReportStyles(*state);
     WriteLoadComponentSummaryTables(*state);
 
     auto tabularData = queryResult("SELECT * FROM TabularData;", "TabularData");
@@ -7109,15 +7025,18 @@ TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoo
     EXPECT_EQ("AirLoop Component Load Summary", strings[0][2]); // just make sure that the output table was generated and did not crash
 }
 
-// Test for https://github.com/NREL/EnergyPlus/issues/7346
+// Test for https://github.com/NatLabRockies/EnergyPlus/issues/7346
 // We ensure that if the Airloop peak matches the zone peak, we don't do the IP conversion twice
 TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoop_IPConversion)
 {
+    state->init_state(*state);
+
     state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");
 
     OutputReportTabular::SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::InchPound;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     // We ask for the air loop component load summary since that's the one we test
     // We also ask for the zone component load summary because that's necessary to "copy" the load and trigger a potential double conversion
@@ -7126,7 +7045,6 @@ TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoo
     state->dataOutRptTab->displayFacilityComponentLoadSummary = true;
     state->dataGlobal->CompLoadReportIsReq = true;
 
-    Psychrometrics::InitializePsychRoutines(*state);
     createCoilSelectionReportObj(*state);
 
     // Two design days
@@ -7139,8 +7057,8 @@ TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoo
     state->dataWeather->DesDayInput(2).Month = 1;
     state->dataWeather->DesDayInput(2).DayOfMonth = 21;
 
-    state->dataGlobal->NumOfTimeStepInHour = 4;
-    state->dataGlobal->MinutesPerTimeStep = 15;
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 15;
     int numTimeStepInDay = 96;
 
     // One Zone
@@ -7234,10 +7152,7 @@ TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoo
     state->dataSize->SysSizInput.allocate(state->dataSize->NumSysSizInput);
     state->dataSize->SysSizInput(1).AirLoopNum = 1;
     state->dataSize->SysSizInput(1).SizingOption = DataSizing::SizingConcurrence::NonCoincident;
-    auto degC_to_F = [](Real64 celsius) constexpr
-    {
-        return celsius * (9.0 / 5.0) + 32.0;
-    };
+    auto degC_to_F = [](Real64 celsius) constexpr { return celsius * (9.0 / 5.0) + 32.0; };
     constexpr Real64 coolMixTempSys = 26.2;
     constexpr Real64 coolMixTempSysIP = degC_to_F(coolMixTempSys);
     constexpr Real64 heatMixTempSys = -1.7;
@@ -7299,7 +7214,7 @@ TEST_F(SQLiteFixture, OutputReportTabular_WriteLoadComponentSummaryTables_AirLoo
         EXPECT_EQ(std::get<2>(v), oa_db) << "Failed for TableName=" << tableName << "; ReportName=" << reportName;
     }
 
-    // https://github.com/NREL/EnergyPlus/pull/7741
+    // https://github.com/NatLabRockies/EnergyPlus/pull/7741
     std::string query_2("SELECT Value From TabularDataWithStrings"
                         "  WHERE TableName = 'Engineering Checks for Cooling'"
                         "  AND RowName = 'Outside Air Fraction';");
@@ -7405,7 +7320,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_hasSizingPeriodsDays_Sizing
 
 // This tests aims to ensure that the needed Output:Variables for the Predefined Monthly table
 // are indeeed set up, and that as a result the numTables is good.
-// https://github.com/NREL/EnergyPlus/issues/7019
+// https://github.com/NatLabRockies/EnergyPlus/issues/7019
 TEST_F(EnergyPlusFixture, OutputReportTabularMonthlyPredefined_FindNeededOutputVars)
 {
 
@@ -7415,6 +7330,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthlyPredefined_FindNeededOutputV
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     EXPECT_EQ(1, state->dataInputProcessing->inputProcessor->getNumObjectsFound(*state, "Output:Table:SummaryReports"));
     EXPECT_EQ(0, state->dataInputProcessing->inputProcessor->getNumObjectsFound(*state, "Output:Variable"));
@@ -7498,7 +7414,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthlyPredefined_FindNeededOutputV
     // and so the numTables was zero
     EXPECT_EQ(state->dataOutRptTab->MonthlyInput(1).numTables, 2);
 }
-// https://github.com/NREL/EnergyPlus/issues/6442
+// https://github.com/NatLabRockies/EnergyPlus/issues/6442
 TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableDXConversion)
 {
     state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");
@@ -7506,8 +7422,9 @@ TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableDXConversion)
     state->dataOutRptTab->WriteTabularFiles = true;
 
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::InchPound;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     SetPredefinedTables(*state);
     std::string CompName = "My DX Coil with 10000W cooling";
@@ -7554,7 +7471,7 @@ TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableDXConversion)
 
     EXPECT_EQ("2.8", s);
 }
-// https://github.com/NREL/EnergyPlus/issues/7565
+// https://github.com/NatLabRockies/EnergyPlus/issues/7565
 TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableCoilHumRat)
 {
     state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");
@@ -7562,8 +7479,9 @@ TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableCoilHumRat)
     state->dataOutRptTab->WriteTabularFiles = true;
 
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::InchPound;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     SetPredefinedTables(*state);
     std::string CompName = "My DX Coil";
@@ -7574,10 +7492,10 @@ TEST_F(SQLiteFixture, OutputReportTabularTest_PredefinedTableCoilHumRat)
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchCoilLvgHumRatIdealPeak, CompName, 0.006, 8);
 
     // We enable the reports we care about, making sure we have the right ones
-    EXPECT_EQ("HVACSizingSummary", state->dataOutRptPredefined->reportName(6).name);
-    state->dataOutRptPredefined->reportName(6).show = true;
-    EXPECT_EQ("CoilSizingDetails", state->dataOutRptPredefined->reportName(7).name);
+    EXPECT_EQ("HVACSizingSummary", state->dataOutRptPredefined->reportName(7).name);
     state->dataOutRptPredefined->reportName(7).show = true;
+    EXPECT_EQ("CoilSizingDetails", state->dataOutRptPredefined->reportName(8).name);
+    state->dataOutRptPredefined->reportName(8).show = true;
 
     WritePredefinedTables(*state);
     state->dataSQLiteProcedures->sqlite->initializeIndexes();
@@ -7631,6 +7549,7 @@ TEST_F(EnergyPlusFixture, AzimuthToCardinal)
     int nTests = expectedAzimuthToCards.size();
 
     // Allocate some needed arrays
+    state->dataHeatBal->space.allocate(1);
     state->dataHeatBal->Zone.allocate(1);
     state->dataHeatBal->Zone(1).ListMultiplier = 1;
     state->dataConstruction->Construct.allocate(1);
@@ -7657,6 +7576,7 @@ TEST_F(EnergyPlusFixture, AzimuthToCardinal)
         state->dataSurface->Surface(i).GrossArea = 200.;
         state->dataSurface->Surface(i).Tilt = 90.;
         state->dataSurface->Surface(i).Zone = 1;
+        state->dataSurface->Surface(i).spaceNum = 1;
         state->dataSurface->Surface(i).Construction = 1;
         state->dataSurface->AllSurfaceListReportOrder.push_back(i);
 
@@ -7745,6 +7665,7 @@ TEST_F(EnergyPlusFixture, AzimuthToCardinal)
 TEST_F(EnergyPlusFixture, InteriorSurfaceEnvelopeSummaryReport)
 {
     // Allocate some needed arrays
+    state->dataHeatBal->space.allocate(2);
     state->dataHeatBal->Zone.allocate(2);
     state->dataHeatBal->Zone(1).ListMultiplier = 1;
     state->dataHeatBal->Zone(2).ListMultiplier = 1;
@@ -7782,10 +7703,12 @@ TEST_F(EnergyPlusFixture, InteriorSurfaceEnvelopeSummaryReport)
         }
         if ((i + 1) / 2 == 1) {
             // first pair of wall and door
+            state->dataSurface->Surface(i).spaceNum = 1;
             state->dataSurface->Surface(i).Zone = 1;
             state->dataSurface->Surface(i).ExtBoundCond = i + 2;
         } else {
             // second pair of wall and door
+            state->dataSurface->Surface(i).spaceNum = 2;
             state->dataSurface->Surface(i).Zone = 2;
             state->dataSurface->Surface(i).ExtBoundCond = i - 2;
         }
@@ -7857,7 +7780,7 @@ TEST_F(EnergyPlusFixture, InteriorSurfaceEnvelopeSummaryReport)
             EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(
                           *state, state->dataOutRptPredefined->pdchIntDrCons, state->dataSurface->Surface(i).Name),
                       "A Construction");
-            // Check the door parant surface name
+            // Check the door parent surface name
             EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(
                           *state, state->dataOutRptPredefined->pdchIntDrParent, state->dataSurface->Surface(i).Name),
                       state->dataSurface->Surface(i - 1).Name);
@@ -7996,8 +7919,9 @@ TEST_F(SQLiteFixture, WriteSourceEnergyEndUseSummary_TestPerArea)
     state->dataOutRptTab->gatherTotalsBySourceBEPS(1) = 3.6e10;
     Real64 eleckWh = 1e4;
 
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::JtoKWH;
+    setTabularReportStyles(*state);
 
     // Now we're ready to call the actual function of interest
     OutputReportTabular::WriteSourceEnergyEndUseSummary(*state);
@@ -8057,8 +7981,9 @@ TEST_F(SQLiteFixture, OutputReportTabular_EndUseBySubcategorySQL)
     state->dataOutRptTab->WriteTabularFiles = true;
 
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::JtoKWH;
+    setTabularReportStyles(*state);
 
     // Needed to avoid crash (from ElectricPowerServiceManager.hh)
     createFacilityElectricPowerServiceObject(*state);
@@ -8138,7 +8063,7 @@ TEST_F(SQLiteFixture, OutputReportTabular_EndUseBySubcategorySQL)
                         "General");
     state->dataGlobal->DoWeathSim = true;
     state->dataGlobal->TimeStepZone = 1.0;
-    state->dataGlobal->MinutesPerTimeStep = state->dataGlobal->TimeStepZone * 60;
+    state->dataGlobal->MinutesInTimeStep = state->dataGlobal->TimeStepZone * 60;
     state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * 3600.0;
     state->dataOutRptTab->displayTabularBEPS = true;
     // OutputProcessor::TimeValue.allocate(2);
@@ -8364,7 +8289,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
     int iZone = 1;
     state->dataEnvrn->TotDesDays = 2;
     state->dataEnvrn->TotRunDesPersDays = 3;
-    state->dataGlobal->NumOfTimeStepInHour = 4;
+    state->dataGlobal->TimeStepsInHour = 4;
 
     state->dataGlobal->NumOfZones = 1;
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
@@ -8382,41 +8307,35 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
     state->dataSurface->Surface.allocate(state->dataSurface->TotSurfaces);
 
     Array1D<Real64> peopleDelaySeq;
-    peopleDelaySeq.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    peopleDelaySeq.allocate(state->dataGlobal->TimeStepsInHour * 24);
     peopleDelaySeq = 0.;
 
     Array1D<Real64> peopleDelaySeqCool;
-    peopleDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    peopleDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     peopleDelaySeqCool = 0.;
 
     Array1D<Real64> equipDelaySeqCool;
-    equipDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    equipDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     equipDelaySeqCool = 0.;
 
     Array1D<Real64> hvacLossDelaySeqCool;
-    hvacLossDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    hvacLossDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     hvacLossDelaySeqCool = 0.;
 
     Array1D<Real64> powerGenDelaySeqCool;
-    powerGenDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    powerGenDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     powerGenDelaySeqCool = 0.;
 
     Array1D<Real64> lightDelaySeqCool;
-    lightDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    lightDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     lightDelaySeqCool = 0.;
 
     Array1D<Real64> feneSolarDelaySeqCool;
-    feneSolarDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24);
+    feneSolarDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24);
     feneSolarDelaySeqCool = 0.;
 
-    Array3D<Real64> feneCondInstantSeq;
-    feneCondInstantSeq.allocate(state->dataEnvrn->TotDesDays + state->dataEnvrn->TotRunDesPersDays,
-                                state->dataGlobal->NumOfTimeStepInHour * 24,
-                                state->dataViewFactor->NumOfRadiantEnclosures);
-    feneCondInstantSeq = 0.0;
-
     Array2D<Real64> surfDelaySeqCool;
-    surfDelaySeqCool.allocate(state->dataGlobal->NumOfTimeStepInHour * 24, state->dataSurface->TotSurfaces);
+    surfDelaySeqCool.allocate(state->dataGlobal->TimeStepsInHour * 24, state->dataSurface->TotSurfaces);
     surfDelaySeqCool = 0.0;
 
     AllocateLoadComponentArrays(*state);
@@ -8435,22 +8354,30 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
     state->dataSurface->Surface(2).Class = SurfaceClass::Wall;
     state->dataSurface->Surface(3).Class = SurfaceClass::Floor;
     state->dataSurface->Surface(4).Class = SurfaceClass::Shading;
-    state->dataSurface->Surface(1).RadEnclIndex = 1;
-    state->dataSurface->Surface(2).RadEnclIndex = 1;
-    state->dataSurface->Surface(3).RadEnclIndex = 1;
-    state->dataSurface->Surface(4).RadEnclIndex = 1;
+    state->dataSurface->Surface(1).RadEnclIndex = radEnclosureNum;
+    state->dataSurface->Surface(2).RadEnclIndex = radEnclosureNum;
+    state->dataSurface->Surface(3).RadEnclIndex = radEnclosureNum;
+    state->dataSurface->Surface(4).RadEnclIndex = radEnclosureNum;
 
+    auto &znCL = state->dataOutRptTab->znCompLoads;
+    // auto &znCLDay = znCL[coolDesSelected - 1];
     for (int jSurf = 1; jSurf <= 4; ++jSurf) {
         for (int step = 1; step <= 10; ++step) {
-            state->dataOutRptTab->TMULTseq(coolDesSelected, step, radEnclosureNum) = 0.1 * step;
-            state->dataOutRptTab->ITABSFseq(coolDesSelected, step, jSurf) = 0.2 * step * surfBaseValue[jSurf - 1];
+            // auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
+            auto &surfCLDayTS = state->dataOutRptTab->surfCompLoads[coolDesSelected - 1].ts[step - 1].surf[jSurf - 1];
+            surfCLDayTS.TMULTseq = 0.1 * step;
+            surfCLDayTS.ITABSFseq = 0.2 * step * surfBaseValue[jSurf - 1];
             state->dataOutRptTab->decayCurveCool(step, jSurf) = 0.3 * step * surfBaseValue[jSurf - 1];
-            state->dataOutRptTab->peopleRadSeq(coolDesSelected, step, iZone) = 0.4 * step;
-            state->dataOutRptTab->equipRadSeq(coolDesSelected, step, iZone) = 0.5 * step;
-            state->dataOutRptTab->hvacLossRadSeq(coolDesSelected, step, iZone) = 0.6 * step;
-            state->dataOutRptTab->powerGenRadSeq(coolDesSelected, step, iZone) = 0.7 * step;
-            state->dataOutRptTab->lightLWRadSeq(coolDesSelected, step, iZone) = 0.8 * step;
         }
+    }
+
+    for (int step = 1; step <= 10; ++step) {
+        auto &enclCLDayTS = state->dataOutRptTab->enclCompLoads[coolDesSelected - 1].ts[step - 1].encl[radEnclosureNum - 1];
+        enclCLDayTS.peopleRadSeq = 0.4 * step;
+        enclCLDayTS.equipRadSeq = 0.5 * step;
+        enclCLDayTS.hvacLossRadSeq = 0.6 * step;
+        enclCLDayTS.powerGenRadSeq = 0.7 * step;
+        enclCLDayTS.lightLWRadSeq = 0.8 * step;
     }
 
     GetDelaySequences(*state,
@@ -8463,7 +8390,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
                       powerGenDelaySeqCool,
                       lightDelaySeqCool,
                       feneSolarDelaySeqCool,
-                      feneCondInstantSeq,
+                      znCL,
                       surfDelaySeqCool);
 
     // Save some results from first pass
@@ -8495,15 +8422,21 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
 
     for (int jSurf = 1; jSurf <= 4; ++jSurf) {
         for (int step = 1; step <= 10; ++step) {
-            state->dataOutRptTab->TMULTseq(coolDesSelected, step, radEnclosureNum) = 0.1 * step;
-            state->dataOutRptTab->ITABSFseq(coolDesSelected, step, jSurf) = 0.2 * step * surfBaseValue[jSurf - 1];
+            // auto &znCLDayTS = znCLDay.ts[step - 1].spacezone[iZone - 1];
+            auto &surfCLDayTS = state->dataOutRptTab->surfCompLoads[coolDesSelected - 1].ts[step - 1].surf[jSurf - 1];
+            surfCLDayTS.TMULTseq = 0.1 * step;
+            surfCLDayTS.ITABSFseq = 0.2 * step * surfBaseValue[jSurf - 1];
             state->dataOutRptTab->decayCurveCool(step, jSurf) = 0.3 * step * surfBaseValue[jSurf - 1];
-            state->dataOutRptTab->peopleRadSeq(coolDesSelected, step, iZone) = 0.4 * step;
-            state->dataOutRptTab->equipRadSeq(coolDesSelected, step, iZone) = 0.5 * step;
-            state->dataOutRptTab->hvacLossRadSeq(coolDesSelected, step, iZone) = 0.6 * step;
-            state->dataOutRptTab->powerGenRadSeq(coolDesSelected, step, iZone) = 0.7 * step;
-            state->dataOutRptTab->lightLWRadSeq(coolDesSelected, step, iZone) = 0.8 * step;
         }
+    }
+
+    for (int step = 1; step <= 10; ++step) {
+        auto &enclCLDayTS = state->dataOutRptTab->enclCompLoads[coolDesSelected - 1].ts[step - 1].encl[radEnclosureNum - 1];
+        enclCLDayTS.peopleRadSeq = 0.4 * step;
+        enclCLDayTS.equipRadSeq = 0.5 * step;
+        enclCLDayTS.hvacLossRadSeq = 0.6 * step;
+        enclCLDayTS.powerGenRadSeq = 0.7 * step;
+        enclCLDayTS.lightLWRadSeq = 0.8 * step;
     }
 
     GetDelaySequences(*state,
@@ -8516,7 +8449,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_GetDelaySequencesSurfaceOrder_
                       powerGenDelaySeqCool,
                       lightDelaySeqCool,
                       feneSolarDelaySeqCool,
-                      feneCondInstantSeq,
+                      znCL,
                       surfDelaySeqCool);
 
     // Save some results from second pass
@@ -8541,9 +8474,9 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_ConfirmConversionFactors)
     Real64 curSourceFactor;
     bool fuelFactorUsed;
     bool fFScheduleUsed;
-    int ffScheduleIndex;
+    Sched::Schedule *ffSched;
 
-    Pollution::GetFuelFactorInfo(*state, Constant::eFuel::DistrictHeatingSteam, fuelFactorUsed, curSourceFactor, fFScheduleUsed, ffScheduleIndex);
+    Pollution::GetFuelFactorInfo(*state, Constant::eFuel::DistrictHeatingSteam, fuelFactorUsed, curSourceFactor, fFScheduleUsed, &ffSched);
     EXPECT_EQ(curSourceFactor, 1.2);
 }
 
@@ -8556,7 +8489,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabular_GatherHeatGainReport)
     state->dataOutRptPredefined->reportName(state->dataOutRptPredefined->pdrSensibleGain).show = true;
 
     state->dataHVACGlobal->TimeStepSys = 10.0;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
 
     state->dataGlobal->TimeStepZone = 20.0;
 
@@ -8625,6 +8558,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_8317_ValidateOutputTableMon
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 extLitUse;
 
@@ -8658,9 +8592,9 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_8317_ValidateOutputTableMon
 
     InitializeOutput(*state);
 
-    std::string endUseSub("");
-    std::string const zoneName("");
-    std::string const spaceType("");
+    std::string endUseSub;
+    std::string const zoneName;
+    std::string const spaceType;
 
     // AttachMeters(*state, Constant::Units::J, resource, sovEndUseCat, endUseSub, sovGroup, zoneName, spaceType, -1);
     Meter *meter1 = new Meter("NATURALGAS:FACILITY");
@@ -8743,7 +8677,7 @@ TEST_F(SQLiteFixture, ORT_DualUnits_Process_Missing_Case_1)
 TEST_F(SQLiteFixture, ORT_DualUnits_Process_Missing_Case_2)
 {
     // Test the missing scenario (has missing or default fields) Case 2: Missing A2 field at all
-    // This will allow a backward compatiability: even an earlier version format can be correctly handeled.
+    // This will allow a backward compatibility: even an earlier version format can be correctly handeled.
     std::string const idf_objects = delimited_string({"Output:SQLite,", "SimpleAndTabular; !-Option Type"});
 
     ASSERT_TRUE(process_idf(idf_objects));
@@ -8769,8 +8703,9 @@ TEST_F(SQLiteFixture, ORT_DualUnits_Heat_Emission)
     state->dataHeatBal->BuildingPreDefRep.emiTotHeat = 4000.00;        // * energyconversion, 2);
 
     // Test Combination 0: GJ
-    state->dataOutRptTab->unitsStyle = UnitsStyle::JtoGJ;
+    state->dataOutRptTab->unitsStyle_Tabular = UnitsStyle::JtoGJ;
     state->dataOutRptTab->unitsStyle_SQLite = UnitsStyle::JtoGJ;
+    setTabularReportStyles(*state);
     Real64 energyconversion = 1.0;
 
     WriteHeatEmissionTable(*state);
@@ -8824,8 +8759,9 @@ TEST_F(SQLiteFixture, ORT_DualUnits_Heat_Emission)
     }
 
     // Test Combination 1: None
-    state->dataOutRptTab->unitsStyle = UnitsStyle::None;
+    state->dataOutRptTab->unitsStyle_Tabular = UnitsStyle::None;
     state->dataOutRptTab->unitsStyle_SQLite = UnitsStyle::None;
+    setTabularReportStyles(*state);
     energyconversion = 1.0;
 
     WriteHeatEmissionTable(*state);
@@ -8879,11 +8815,12 @@ TEST_F(SQLiteFixture, ORT_DualUnits_Heat_Emission)
     }
 
     // Test Combination 2:
-    state->dataOutRptTab->unitsStyle = UnitsStyle::JtoKWH;
+    state->dataOutRptTab->unitsStyle_Tabular = UnitsStyle::JtoKWH;
     state->dataOutRptTab->unitsStyle_SQLite = UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     // Test 2.5:
-    // Actually here is an additonal test unit for the getSpecificUnitDivider:
+    // Actually here is an additional test unit for the getSpecificUnitDivider:
     SetupUnitConversions(*state);
     Real64 rconv = getSpecificUnitDivider(*state, "GJ", "kBtu");
     energyconversion = 1.0 / rconv; // 948.45
@@ -9069,8 +9006,9 @@ TEST_F(SQLiteFixture, WriteSourceEnergyEndUseSummary_DualUnits)
     state->dataOutRptTab->gatherTotalsBySourceBEPS(1) = 3.6e10;
     Real64 eleckWh = 1e4;
 
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     SetupUnitConversions(*state);
     Real64 largeConv = getSpecificUnitDivider(*state, "J", "kBtu");
@@ -9148,10 +9086,10 @@ TEST_F(EnergyPlusFixture, ORT_LoadSummaryUnitConversion_OverLoad_DualUnits)
     compLoad.totCapPerArea = 0.15;
 
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    SetupUnitConversions(*state);
     Real64 powerConversion = getSpecificUnitMultiplier(*state, "W", "Btu/h");
     Real64 areaConversion = getSpecificUnitMultiplier(*state, "m2", "ft2");
     Real64 airFlowConversion = getSpecificUnitMultiplier(*state, "m3/s", "ft3/min");
-    Real64 airFlowPerAreaConversion = getSpecificUnitMultiplier(*state, "m3/s-m2", "ft3/min-ft2");
     int tempConvIndx = getSpecificUnitIndex(*state, "C", "F");
 
     // LoadSummaryUnitConversion(*state, compLoad);
@@ -9164,7 +9102,7 @@ TEST_F(EnergyPlusFixture, ORT_LoadSummaryUnitConversion_OverLoad_DualUnits)
 
     EXPECT_EQ(ConvertIP(*state, tempConvIndx, 20.), compLoad.outsideDryBulb);
     EXPECT_EQ(0.7 * airFlowConversion, compLoad.mainFanAirFlow);
-    EXPECT_EQ(0.2 * airFlowPerAreaConversion / powerConversion, compLoad.airflowPerTotCap);
+    EXPECT_EQ(0.2 * airFlowConversion / powerConversion, compLoad.airflowPerTotCap);
     EXPECT_EQ(0.15 * powerConversion / areaConversion, compLoad.totCapPerArea);
 }
 
@@ -9240,8 +9178,9 @@ TEST_F(SQLiteFixture, WriteVeriSumTableAreasTest_DualUnits)
     state->dataHeatBal->Zone(1).ExteriorTotalGroundSurfArea = 0;
     state->dataHeatBal->Zone(1).ExtWindowArea = state->dataSurface->Surface(3).GrossArea + state->dataSurface->Surface(4).GrossArea;
 
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::None;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::None;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     SetupUnitConversions(*state);
     Real64 areaConv = getSpecificUnitDivider(*state, "m2", "ft2");
@@ -9434,8 +9373,9 @@ TEST_F(SQLiteFixture, WriteVeriSumTable_TestNotPartOfTotal_DualUnits)
     state->dataHeatBal->Zone(3).ExteriorTotalGroundSurfArea = 0;
     state->dataHeatBal->Zone(3).ExtWindowArea = 0.0;
 
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::None;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::None;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     SetupUnitConversions(*state);
     Real64 areaConv = getSpecificUnitDivider(*state, "m2", "ft2");
@@ -9587,9 +9527,35 @@ TEST_F(SQLiteFixture, ORT_EndUseBySubcategorySQL_DualUnits)
 
     state->dataOutRptTab->WriteTabularFiles = true;
 
+    // activate JSON output
+    std::string const idf_objects = delimited_string({
+        "Output:SQLite,",
+        "SimpleAndTabular,    !- Option Type",
+        "InchPound,   !- Unit Conversion for Tabular Data",
+        "Yes;      !- Format Numeric Values for Tabular Data",
+        "Output:JSON,",
+        "TimeSeriesAndTabular,    !- Option Type",
+        "Yes,                     !- Output JSON",
+        "No,                      !- Output CBOR",
+        "No,                      !- Output MessagePack",
+        "None,   !- Unit Conversion for Tabular Data",
+        "No;      !- Format Numeric Values for Tabular Data",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->files.outputControl.getInput(*state);
+    state->dataResultsFramework->resultsFramework->setupOutputOptions(*state);
+    bool writeOutputToSQLite = false;
+    bool writeTabularDataToSQLite = false;
+    bool parsedSQLite = ParseSQLiteInput(*state, writeOutputToSQLite, writeTabularDataToSQLite);
+    EXPECT_TRUE(parsedSQLite);
+    EXPECT_ENUM_EQ(state->dataOutRptTab->unitsStyle_SQLite, OutputReportTabular::UnitsStyle::InchPound);
+    EXPECT_TRUE(state->dataOutRptTab->formatReals_SQLite);
+
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
-    state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
+
+    setTabularReportStyles(*state);
     Real64 enerConv = getSpecificUnitDivider(*state, "GJ", "kBtu"); // 948.45
     EXPECT_NEAR(1.0 / enerConv, 948.0, 0.5);
 
@@ -9599,9 +9565,9 @@ TEST_F(SQLiteFixture, ORT_EndUseBySubcategorySQL_DualUnits)
     SetPredefinedTables(*state);
 
     Real64 extLitUse = 1e8;
-    Real64 CoalHeating = 2e8;
-    Real64 GasolineHeating = 3e8;
-    Real64 PropaneHeating = 4e8;
+    Real64 CoalHeating = 2.0000012e8;
+    Real64 GasolineHeating = 3.1256e8;
+    Real64 PropaneHeating = 4.9876e8;
 
     SetupOutputVariable(*state,
                         "Exterior Lights Electricity Energy",
@@ -9672,7 +9638,7 @@ TEST_F(SQLiteFixture, ORT_EndUseBySubcategorySQL_DualUnits)
     state->dataGlobal->DoWeathSim = true;
     state->dataGlobal->TimeStepZone = 1.0;
     state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * 3600.0;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataOutRptTab->displayTabularBEPS = true;
     // OutputProcessor::TimeValue.allocate(2);
 
@@ -9867,6 +9833,421 @@ TEST_F(SQLiteFixture, ORT_EndUseBySubcategorySQL_DualUnits)
 
         ASSERT_EQ(14u, result.size()) << "Failed for query: " << query;
     }
+
+    // Check JSON output - no units conversion, no formatting
+    std::vector<std::string> expectColHeaders = {"Electricity [GJ]",
+                                                 "Natural Gas [GJ]",
+                                                 "Gasoline [GJ]",
+                                                 "Diesel [GJ]",
+                                                 "Coal [GJ]",
+                                                 "Fuel Oil No 1 [GJ]",
+                                                 "Fuel Oil No 2 [GJ]",
+                                                 "Propane [GJ]",
+                                                 "Other Fuel 1 [GJ]",
+                                                 "Other Fuel 2 [GJ]",
+                                                 "District Cooling [GJ]",
+                                                 "District Heating Water [GJ]",
+                                                 "District Heating Steam [GJ]",
+                                                 "Water [m3]"};
+    std::vector<std::string> expectExtLtgAnother = {"0.3", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"};
+    std::vector<std::string> expectExtLtg = {"0.9", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"};
+    std::vector<std::string> expectHeating = {"0", "0", "0.93768", "0", "0.60000036", "0", "0", "1.49628", "0", "0", "0", "0", "0", "0"};
+    // Get JSON output
+    ResultsFramework::json JSONout;
+    JSONout = {{"SimulationResults", {{"Simulation", state->dataResultsFramework->resultsFramework->SimulationInformation.getJSON()}}}};
+    JSONout["TabularReports"] = state->dataResultsFramework->resultsFramework->TabularReportsCollection.getJSON();
+
+    ResultsFramework::json tables = JSONout["TabularReports"];
+    for (auto &report : tables) {
+        if (report["ReportName"] == "AnnualBuildingUtilityPerformanceSummary") {
+            for (auto &subTable : report["Tables"]) {
+                if (subTable["TableName"] == "End Uses By Subcategory") {
+                    std::vector<std::string> colHeaders = subTable["Cols"];
+                    EXPECT_EQ(colHeaders, expectColHeaders);
+                    auto &row = subTable["Rows"]["Exterior Lighting:AnotherEndUseSubCat"];
+                    EXPECT_EQ(row, expectExtLtgAnother);
+                    row = subTable["Rows"]["Heating:General"];
+                    EXPECT_EQ(row, expectHeating);
+                }
+                if (subTable["TableName"] == "End Uses") {
+                    std::vector<std::string> colHeaders = subTable["Cols"];
+                    EXPECT_EQ(colHeaders, expectColHeaders);
+                    auto &row = subTable["Rows"]["Exterior Lighting"];
+                    EXPECT_EQ(row, expectExtLtg);
+                    row = subTable["Rows"]["Heating"];
+                    EXPECT_EQ(row, expectHeating);
+                }
+            }
+        }
+    }
+}
+
+TEST_F(SQLiteFixture, ORT_EndUseBySubcategorySQL_DualUnits2)
+{
+    state->dataSQLiteProcedures->sqlite->createSQLiteSimulationsRecord(1, "EnergyPlus Version", "Current Time");
+
+    state->dataOutRptTab->displayTabularBEPS = true;
+    state->dataOutRptTab->displayDemandEndUse = true;
+    state->dataOutRptTab->displayLEEDSummary = true;
+
+    state->dataOutRptTab->WriteTabularFiles = true;
+
+    // activate JSON output
+    std::string const idf_objects = delimited_string({
+        "Output:SQLite,",
+        "SimpleAndTabular,    !- Option Type",
+        "None,     !- Unit Conversion for Tabular Data",
+        "Yes;      !- Format Numeric Values for Tabular Data",
+        "Output:JSON,",
+        "TimeSeriesAndTabular,    !- Option Type",
+        "Yes,                     !- Output JSON",
+        "No,                      !- Output CBOR",
+        "No,                      !- Output MessagePack",
+        "InchPoundExceptElectricity,   !- Unit Conversion for Tabular Data",
+        "Yes;      !- Format Real Values for Tabular Data",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->files.outputControl.getInput(*state);
+    state->dataResultsFramework->resultsFramework->setupOutputOptions(*state);
+    bool writeOutputToSQLite = false;
+    bool writeTabularDataToSQLite = false;
+    bool parsedSQLite = ParseSQLiteInput(*state, writeOutputToSQLite, writeTabularDataToSQLite);
+    EXPECT_TRUE(parsedSQLite);
+    EXPECT_EQ(state->dataOutRptTab->unitsStyle_SQLite, OutputReportTabular::UnitsStyle::None);
+    EXPECT_TRUE(state->dataOutRptTab->formatReals_SQLite);
+
+    SetupUnitConversions(*state);
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
+
+    setTabularReportStyles(*state);
+    Real64 enerConv = getSpecificUnitDivider(*state, "GJ", "kBtu"); // 948.45
+    EXPECT_NEAR(1.0 / enerConv, 948.0, 0.5);
+
+    // Needed to avoid crash (from ElectricPowerServiceManager.hh)
+    createFacilityElectricPowerServiceObject(*state);
+
+    SetPredefinedTables(*state);
+
+    Real64 extLitUse = 1e8;
+    Real64 CoalHeating = 2.0000012e8;
+    Real64 GasolineHeating = 3.1256e8;
+    Real64 PropaneHeating = 4.9876e8;
+
+    SetupOutputVariable(*state,
+                        "Exterior Lights Electricity Energy",
+                        Constant::Units::J,
+                        extLitUse,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Lite1",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
+                        "General");
+    SetupOutputVariable(*state,
+                        "Exterior Lights Electricity Energy",
+                        Constant::Units::J,
+                        extLitUse,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Lite2",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
+                        "AnotherEndUseSubCat");
+    SetupOutputVariable(*state,
+                        "Exterior Lights Electricity Energy",
+                        Constant::Units::J,
+                        extLitUse,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Lite3",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
+                        "General");
+    SetupOutputVariable(*state,
+                        "Heating Coal Energy",
+                        Constant::Units::J,
+                        CoalHeating,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Lite4",
+                        Constant::eResource::Coal,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::Heating,
+                        "General");
+    SetupOutputVariable(*state,
+                        "Heating Gasoline Energy",
+                        Constant::Units::J,
+                        GasolineHeating,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Lite5",
+                        Constant::eResource::Gasoline,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::Heating,
+                        "General");
+    SetupOutputVariable(*state,
+                        "Heating Propane Energy",
+                        Constant::Units::J,
+                        PropaneHeating,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Lite6",
+                        Constant::eResource::Propane,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::Heating,
+                        "General");
+    state->dataGlobal->DoWeathSim = true;
+    state->dataGlobal->TimeStepZone = 1.0;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * 3600.0;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->dataOutRptTab->displayTabularBEPS = true;
+    // OutputProcessor::TimeValue.allocate(2);
+
+    auto timeStep = 1.0;
+
+    SetupTimePointers(*state, OutputProcessor::TimeStepType::Zone, timeStep);
+    SetupTimePointers(*state, OutputProcessor::TimeStepType::System, timeStep);
+
+    *state->dataOutputProcessor->TimeValue[(int)OutputProcessor::TimeStepType::Zone].TimeStep = 60;
+    *state->dataOutputProcessor->TimeValue[(int)OutputProcessor::TimeStepType::System].TimeStep = 60;
+
+    GetInputOutputTableSummaryReports(*state);
+
+    state->dataEnvrn->Month = 12;
+
+    UpdateMeterReporting(*state);
+    UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
+    GatherBEPSResultsForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+    GatherPeakDemandForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+    EXPECT_NEAR(extLitUse * 3, state->dataOutRptTab->gatherEndUseBEPS(1, static_cast<int>(Constant::EndUse::ExteriorLights) + 1), 1.);
+    // General
+    EXPECT_NEAR(extLitUse * 2, state->dataOutRptTab->gatherEndUseSubBEPS(1, static_cast<int>(Constant::EndUse::ExteriorLights) + 1, 1), 1.);
+    // AnotherEndUseSubCat
+    EXPECT_NEAR(extLitUse * 1, state->dataOutRptTab->gatherEndUseSubBEPS(2, static_cast<int>(Constant::EndUse::ExteriorLights) + 1, 1), 1.);
+
+    UpdateMeterReporting(*state);
+    UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
+    GatherBEPSResultsForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+    GatherPeakDemandForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+    EXPECT_NEAR(extLitUse * 6, state->dataOutRptTab->gatherEndUseBEPS(1, static_cast<int>(Constant::EndUse::ExteriorLights) + 1), 1.);
+    // General
+    EXPECT_NEAR(extLitUse * 4, state->dataOutRptTab->gatherEndUseSubBEPS(1, static_cast<int>(Constant::EndUse::ExteriorLights) + 1, 1), 1.);
+    // AnotherEndUseSubCat
+    EXPECT_NEAR(extLitUse * 2, state->dataOutRptTab->gatherEndUseSubBEPS(2, static_cast<int>(Constant::EndUse::ExteriorLights) + 1, 1), 1.);
+
+    UpdateMeterReporting(*state);
+    UpdateDataandReport(*state, OutputProcessor::TimeStepType::Zone);
+    GatherBEPSResultsForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+    GatherPeakDemandForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+    EXPECT_NEAR(extLitUse * 9, state->dataOutRptTab->gatherEndUseBEPS(1, static_cast<int>(Constant::EndUse::ExteriorLights) + 1), 1.);
+    // General
+    EXPECT_NEAR(extLitUse * 6, state->dataOutRptTab->gatherEndUseSubBEPS(1, static_cast<int>(Constant::EndUse::ExteriorLights) + 1, 1), 1.);
+    // AnotherEndUseSubCat
+    EXPECT_NEAR(extLitUse * 3, state->dataOutRptTab->gatherEndUseSubBEPS(2, static_cast<int>(Constant::EndUse::ExteriorLights) + 1, 1), 1.);
+
+    OutputReportTabular::WriteBEPSTable(*state);
+    OutputReportTabular::WriteDemandEndUseSummary(*state);
+
+    // We test for Heating and Total, since they should be the same
+    std::vector<std::string> testReportNames = {"AnnualBuildingUtilityPerformanceSummary", "DemandEndUseComponentsSummary"};
+    std::vector<std::string> endUseSubCategoryNames = {"General", "AnotherEndUseSubCat"};
+
+    std::string endUseName = "Exterior Lighting";
+    std::string endUseSubCategoryName = "AnotherEndUseSubCat";
+    std::string rowName = endUseName + ":" + endUseSubCategoryName;
+    std::string columnName = "Electricity";
+
+    for (auto &endUseSubCategoryName : endUseSubCategoryNames) {
+        for (auto &reportName : testReportNames) {
+
+            std::string query("SELECT Value From TabularDataWithStrings"
+                              "  WHERE TableName = 'End Uses By Subcategory'"
+                              "  AND ColumnName = 'Electricity'"
+                              "  AND ReportName = '" +
+                              reportName +
+                              "'"
+                              "  AND RowName = '" +
+                              endUseName + ":" + endUseSubCategoryName + "'"); // Now Like 'Exterior Lighting:General'
+
+            auto result = queryResult(query, "TabularDataWithStrings");
+
+            ASSERT_EQ(1ul, result.size()) << "Query crashed for reportName=" << reportName;
+        }
+    }
+
+    for (auto &reportName : testReportNames) {
+
+        std::string query("SELECT Value From TabularDataWithStrings"
+                          "  WHERE TableName = 'End Uses'"
+                          "  AND ColumnName = 'Electricity'"
+                          "  AND ReportName = '" +
+                          reportName +
+                          "'"
+                          "  AND RowName = '" +
+                          endUseName + "'");
+
+        auto result = queryResult(query, "TabularDataWithStrings");
+
+        ASSERT_EQ(1ul, result.size()) << "Query crashed for reportName=" << reportName;
+    }
+
+    // Specifically get the electricity usage for End Use = Exterior Lighting, and End Use Subcat = AnotherEndUseSubCat,
+    // and make sure it's the right number that's returned
+    std::string query("SELECT Value From TabularDataWithStrings"
+                      "  WHERE TableName = 'End Uses By Subcategory'"
+                      "  AND ReportName = 'AnnualBuildingUtilityPerformanceSummary'"
+                      "  AND ColumnName = 'Electricity'"
+                      "  AND RowName = 'Exterior Lighting:AnotherEndUseSubCat'");
+    Real64 return_val = execAndReturnFirstDouble(query);
+
+    // EXPECT_NEAR(extLitUse * 3 / 3.6e6, return_val, 0.01) << "Failed for query: " << query;
+    Real64 expected_value = extLitUse * 3.0 / 1.0e9;
+    EXPECT_NEAR(expected_value, return_val, 0.01) << "Failed for query: " << query;
+
+    // Get all Interior Lighting End Uses (all subcats) for Electricity
+    {
+        std::string query("SELECT Value From TabularDataWithStrings"
+                          "  WHERE TableName = 'End Uses By Subcategory'"
+                          "  AND ReportName = 'AnnualBuildingUtilityPerformanceSummary'"
+                          "  AND ColumnName = 'Electricity'"
+                          "  AND RowName LIKE 'Exterior Lighting:%'");
+        auto result = queryResult(query, "TabularDataWithStrings");
+
+        ASSERT_EQ(2u, result.size()) << "Failed for query: " << query;
+    }
+
+    // Get all subcat usage for all fuels (13)
+    {
+        std::string query("SELECT Value From TabularDataWithStrings"
+                          "  WHERE TableName = 'End Uses By Subcategory'"
+                          "  AND ReportName = 'AnnualBuildingUtilityPerformanceSummary'"
+                          "  AND RowName = 'Exterior Lighting:AnotherEndUseSubCat'");
+        auto result = queryResult(query, "TabularDataWithStrings");
+
+        ASSERT_EQ(14u, result.size()) << "Failed for query: " << query;
+    }
+
+    // Specifically get the each fuel (Coal, Gasoline, and Propane) usage for End Use = Heating,
+    // and make sure it's the right number that's returned
+
+    {
+        std::string query("SELECT Value From TabularDataWithStrings"
+                          "  WHERE TableName = 'End Uses'"
+                          "  AND ReportName = 'AnnualBuildingUtilityPerformanceSummary'"
+                          "  AND ColumnName = 'Coal'"
+                          "  AND RowName = 'Heating'");
+        auto result = queryResult(query, "TabularDataWithStrings");
+        Real64 return_val1 = execAndReturnFirstDouble(query);
+
+        ASSERT_EQ(1u, result.size()) << "Failed for query: " << query;
+        // EXPECT_NEAR(CoalHeating * 3 / 3.6e6, return_val1, 0.01) << "Failed for query: " << query;
+        Real64 expected_coalHt = CoalHeating * 3 / 1.0e9;
+        EXPECT_NEAR(expected_coalHt, return_val1, 0.01) << "Failed for query: " << query;
+    }
+
+    {
+        std::string query("SELECT Value From TabularDataWithStrings"
+                          "  WHERE TableName = 'End Uses'"
+                          "  AND ReportName = 'AnnualBuildingUtilityPerformanceSummary'"
+                          "  AND ColumnName = 'Gasoline'"
+                          "  AND RowName = 'Heating'");
+        auto result = queryResult(query, "TabularDataWithStrings");
+        Real64 return_val2 = execAndReturnFirstDouble(query);
+
+        ASSERT_EQ(1u, result.size()) << "Failed for query: " << query;
+        // EXPECT_NEAR(GasolineHeating * 3 / 3.6e6, return_val2, 0.01) << "Failed for query: " << query;
+        EXPECT_NEAR(GasolineHeating * 3 / 1.0e9, return_val2, 0.01) << "Failed for query: " << query;
+    }
+
+    {
+        std::string query("SELECT Value From TabularDataWithStrings"
+                          "  WHERE TableName = 'End Uses'"
+                          "  AND ReportName = 'AnnualBuildingUtilityPerformanceSummary'"
+                          "  AND ColumnName = 'Propane'"
+                          "  AND RowName = 'Heating'");
+        auto result = queryResult(query, "TabularDataWithStrings");
+        Real64 return_val3 = execAndReturnFirstDouble(query);
+
+        ASSERT_EQ(1u, result.size()) << "Failed for query: " << query;
+        // EXPECT_NEAR(PropaneHeating * 3 / 3.6e6, return_val3, 0.01) << "Failed for query: " << query;
+        EXPECT_NEAR(PropaneHeating * 3 / 1.0e9, return_val3, 0.01) << "Failed for query: " << query;
+    }
+
+    // Check the heating category has the result size of 13 (including all disaggregated additional fuels) in both reports)
+
+    {
+        std::string query("SELECT Value From TabularDataWithStrings"
+                          "  WHERE TableName = 'End Uses'"
+                          "  AND ReportName = 'AnnualBuildingUtilityPerformanceSummary'"
+                          "  AND RowName = 'Heating'");
+        auto result = queryResult(query, "TabularDataWithStrings");
+
+        ASSERT_EQ(14u, result.size()) << "Failed for query: " << query;
+    }
+
+    {
+        std::string query("SELECT Value From TabularDataWithStrings"
+                          "  WHERE TableName = 'End Uses'"
+                          "  AND ReportName = 'DemandEndUseComponentsSummary'"
+                          "  AND RowName = 'Heating'");
+        auto result = queryResult(query, "TabularDataWithStrings");
+
+        ASSERT_EQ(14u, result.size()) << "Failed for query: " << query;
+    }
+
+    // Check JSON output - InchPoundExceptElectricity units conversion, yes formatting
+    std::vector<std::string> expectColHeaders = {"Electricity [kWh]",
+                                                 "Natural Gas [kBtu]",
+                                                 "Gasoline [kBtu]",
+                                                 "Diesel [kBtu]",
+                                                 "Coal [kBtu]",
+                                                 "Fuel Oil No 1 [kBtu]",
+                                                 "Fuel Oil No 2 [kBtu]",
+                                                 "Propane [kBtu]",
+                                                 "Other Fuel 1 [kBtu]",
+                                                 "Other Fuel 2 [kBtu]",
+                                                 "District Cooling [kBtu]",
+                                                 "District Heating Water [kBtu]",
+                                                 "District Heating Steam [kBtu]",
+                                                 "Water [gal]"};
+    std::vector<std::string> expectExtLtgAnother = {
+        "83.33", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00"};
+    std::vector<std::string> expectExtLtg = {
+        "250.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00"};
+    std::vector<std::string> expectHeating = {
+        "0.00", "0.00", "889.34", "0.00", "569.07", "0.00", "0.00", "1419.15", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00"};
+    // Get JSON output
+    ResultsFramework::json JSONout;
+    JSONout = {{"SimulationResults", {{"Simulation", state->dataResultsFramework->resultsFramework->SimulationInformation.getJSON()}}}};
+    JSONout["TabularReports"] = state->dataResultsFramework->resultsFramework->TabularReportsCollection.getJSON();
+
+    ResultsFramework::json tables = JSONout["TabularReports"];
+    for (auto &report : tables) {
+        if (report["ReportName"] == "AnnualBuildingUtilityPerformanceSummary") {
+            for (auto &subTable : report["Tables"]) {
+                if (subTable["TableName"] == "End Uses By Subcategory") {
+                    std::vector<std::string> colHeaders = subTable["Cols"];
+                    EXPECT_EQ(colHeaders, expectColHeaders);
+                    auto &row = subTable["Rows"]["Exterior Lighting:AnotherEndUseSubCat"];
+                    EXPECT_EQ(row, expectExtLtgAnother);
+                    row = subTable["Rows"]["Heating:General"];
+                    EXPECT_EQ(row, expectHeating);
+                }
+                if (subTable["TableName"] == "End Uses") {
+                    std::vector<std::string> colHeaders = subTable["Cols"];
+                    EXPECT_EQ(colHeaders, expectColHeaders);
+                    auto &row = subTable["Rows"]["Exterior Lighting"];
+                    EXPECT_EQ(row, expectExtLtg);
+                    row = subTable["Rows"]["Heating"];
+                    EXPECT_EQ(row, expectHeating);
+                }
+            }
+        }
+    }
 }
 
 TEST_F(SQLiteFixture, OutputReportTabularTest_EscapeHTML)
@@ -9882,7 +10263,8 @@ TEST_F(SQLiteFixture, OutputReportTabularTest_EscapeHTML)
     ort->WriteTabularFiles = true;
 
     SetupUnitConversions(*state);
-    ort->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
+    ort->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
+    setTabularReportStyles(*state);
 
     SetPredefinedTables(*state);
     std::string CompName = "My Coil <coil is DX>";
@@ -9896,8 +10278,8 @@ TEST_F(SQLiteFixture, OutputReportTabularTest_EscapeHTML)
                      "My Design Day where it's >= 8\u00B0"); // this is >= 8 degree sign
 
     // We enable the reports we care about, making sure we have the right ones
-    EXPECT_EQ("HVACSizingSummary", state->dataOutRptPredefined->reportName(6).name);
-    state->dataOutRptPredefined->reportName(6).show = true;
+    EXPECT_EQ("HVACSizingSummary", state->dataOutRptPredefined->reportName(7).name);
+    state->dataOutRptPredefined->reportName(7).show = true;
 
     OutputReportTabular::OpenOutputTabularFile(*state);
 
@@ -9982,18 +10364,18 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_PredefinedTable_SigDigits_Forc
     value = 123456789.1;
 
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizDesDay, "MyPlant Sizing Pass 1", value, 3);
-    EXPECT_EQ("0.123E+09", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizDesDay, "MyPlant Sizing Pass 1"));
+    EXPECT_EQ("1.235E+08", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizDesDay, "MyPlant Sizing Pass 1"));
 
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizPrevVdot, "MyPlant Sizing Pass 1", value, 2);
-    EXPECT_EQ("0.12E+09", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizPrevVdot, "MyPlant Sizing Pass 1"));
+    EXPECT_EQ("1.23E+08", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizPrevVdot, "MyPlant Sizing Pass 1"));
 
     // Force reset to numSigDigits = 2 since we switch to scientific notation
 
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizMeasVdot, "MyPlant Sizing Pass 1", value, 1);
-    EXPECT_EQ("0.12E+09", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizMeasVdot, "MyPlant Sizing Pass 1"));
+    EXPECT_EQ("1.23E+08", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizMeasVdot, "MyPlant Sizing Pass 1"));
 
     PreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizCalcVdot, "MyPlant Sizing Pass 1", value, 0);
-    EXPECT_EQ("0.12E+09", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizCalcVdot, "MyPlant Sizing Pass 1"));
+    EXPECT_EQ("1.23E+08", RetrievePreDefTableEntry(*state, state->dataOutRptPredefined->pdchPlantSizCalcVdot, "MyPlant Sizing Pass 1"));
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularTest_PredefinedTable_Standard62_1_NoSizing)
@@ -10116,6 +10498,7 @@ TEST_F(SQLiteFixture, OutputReportTabularMonthly_CurlyBraces)
     OutputReportTabular::GetInputTabularMonthly(*state);
     EXPECT_EQ(state->dataOutRptTab->MonthlyInputCount, 1);
     OutputReportTabular::InitializeTabularMonthly(*state);
+    setTabularReportStyles(*state);
 
     OutputReportTabular::WriteMonthlyTables(*state);
 
@@ -10257,14 +10640,14 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WarningMultiplePeopleObj)
 
     });
     ASSERT_TRUE(process_idf(idf_objects));
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
 
     bool ErrorsFound = false;
     HeatBalanceManager::GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
 
-    state->dataGlobal->NumOfTimeStepInHour = 1; // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60; // must initialize this to get schedules initialized
-    ScheduleManager::ProcessScheduleInput(*state);
     state->dataGlobal->NumOfZones = 1;
     state->dataHeatBal->Resilience.allocate(state->dataGlobal->NumOfZones);
     InternalHeatGains::GetInternalHeatGainsInput(*state);
@@ -10287,6 +10670,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteSETHoursTableReportingPer
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
     state->dataHeatBal->Resilience.allocate(state->dataGlobal->NumOfZones);
     state->dataHeatBal->Zone(1).Name = "Test";
+    OutputReportTabular::setTabularReportStyles(*state);
+    OutputReportTabular::tabularReportStyle const &style = state->dataOutRptTab->tabularReportPasses[0];
 
     int columnNum = 5;
 
@@ -10334,6 +10719,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteSETHoursTableReportingPer
                                       state->dataHeatBalFanSys->ZoneLowSETHoursRepPeriod,
                                       rowHead,
                                       tableBody,
+                                      style,
                                       degreeHourConversion);
 
     EXPECT_EQ("0.00", RetrieveEntryFromTableBody(tableBody, 1, 1));
@@ -10353,6 +10739,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteSETHoursTableReportingPer
                                       state->dataHeatBalFanSys->ZoneLowSETHoursRepPeriod,
                                       rowHead,
                                       tableBody,
+                                      style,
                                       degreeHourConversion);
 
     EXPECT_EQ("0.00", RetrieveEntryFromTableBody(tableBody, 1, 1));
@@ -10369,6 +10756,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_UnmetDegreeHourRepPeriodUnitCo
     state->dataGlobal->NumOfZones = 1;
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
     state->dataHeatBal->Zone(1).Name = "Test";
+    OutputReportTabular::setTabularReportStyles(*state);
+    OutputReportTabular::tabularReportStyle const &style = state->dataOutRptTab->tabularReportPasses[0];
 
     int columnNumUnmetDegHr = 6;
     Array1D_string columnHeadUnmetDegHr(6);
@@ -10414,6 +10803,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_UnmetDegreeHourRepPeriodUnitCo
                                             state->dataHeatBalFanSys->ZoneUnmetDegreeHourBinsRepPeriod,
                                             rowHead,
                                             tableBody,
+                                            style,
                                             degreeHourConversion);
 
     EXPECT_EQ("0.00", RetrieveEntryFromTableBody(tableBody, 1, 1));
@@ -10434,6 +10824,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_UnmetDegreeHourRepPeriodUnitCo
                                             state->dataHeatBalFanSys->ZoneUnmetDegreeHourBinsRepPeriod,
                                             rowHead,
                                             tableBody,
+                                            style,
                                             degreeHourConversion);
 
     EXPECT_EQ("0.00", RetrieveEntryFromTableBody(tableBody, 2, 1));
@@ -10494,20 +10885,23 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteResilienceBinsTableNonPre
         }
     }
 
+    OutputReportTabular::setTabularReportStyles(*state);
+    OutputReportTabular::tabularReportStyle const &style = state->dataOutRptTab->tabularReportPasses[0];
+
     std::array<Real64, numColumnThermalTbl> DataHeatBalance::ZoneResilience::*ptrHeatIndex = &DataHeatBalance::ZoneResilience::ZoneHeatIndexHourBins;
     WriteResilienceBinsTableNonPreDefUseZoneData<numColumnThermalTbl>(
-        *state, tableName, columnHead, columnWidth, ptrHeatIndex, rowHead, tableBody, unitConvMultiplier);
+        *state, tableName, columnHead, columnWidth, ptrHeatIndex, rowHead, tableBody, style, unitConvMultiplier);
     for (int zone_i = 1; zone_i <= numZone; zone_i++) {
         for (int j = 0; j < numColumnThermalTbl; j++) {
-            EXPECT_EQ(tableBody(j + 1, zone_i), RealToStr(std::pow(j, 2) * zone_i * 1.0, 2));
+            EXPECT_EQ(tableBody(j + 1, zone_i), RealToStr(true, std::pow(j, 2) * zone_i * 1.0, 2));
         }
     }
 
     for (int j = 0; j < numColumnThermalTbl; j++) {
-        EXPECT_EQ(tableBody(j + 1, numZone + 1), RealToStr(std::pow(j, 2) * 1 * 1.0, 2));                                    // min
-        EXPECT_EQ(tableBody(j + 1, numZone + 2), RealToStr(std::pow(j, 2) * 2 * 1.0, 2));                                    // max
-        EXPECT_EQ(tableBody(j + 1, numZone + 3), RealToStr((std::pow(j, 2) * 1 * 1.0 + std::pow(j, 2) * 2 * 1.0) / 2.0, 2)); // mean
-        EXPECT_EQ(tableBody(j + 1, numZone + 4), RealToStr(std::pow(j, 2) * 1 * 1.0 + std::pow(j, 2) * 2 * 1.0, 2));         // sum
+        EXPECT_EQ(tableBody(j + 1, numZone + 1), RealToStr(true, std::pow(j, 2) * 1 * 1.0, 2));                                    // min
+        EXPECT_EQ(tableBody(j + 1, numZone + 2), RealToStr(true, std::pow(j, 2) * 2 * 1.0, 2));                                    // max
+        EXPECT_EQ(tableBody(j + 1, numZone + 3), RealToStr(true, (std::pow(j, 2) * 1 * 1.0 + std::pow(j, 2) * 2 * 1.0) / 2.0, 2)); // mean
+        EXPECT_EQ(tableBody(j + 1, numZone + 4), RealToStr(true, std::pow(j, 2) * 1 * 1.0 + std::pow(j, 2) * 2 * 1.0, 2));         // sum
     }
 }
 
@@ -10534,6 +10928,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteSETHoursTableNonPreDef)
     state->dataHeatBal->Zone(2).Name = "Zone 2";
 
     state->dataHeatBal->Zone.allocate(numZone);
+    OutputReportTabular::setTabularReportStyles(*state);
+    OutputReportTabular::tabularReportStyle const &style = state->dataOutRptTab->tabularReportPasses[0];
 
     int encodedMonDayHrMin;
     for (int zone_i = 1; zone_i <= numZone; zone_i++) {
@@ -10552,7 +10948,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteSETHoursTableNonPreDef)
 
     std::array<Real64, numColumnThermalTbl> DataHeatBalance::ZoneResilience::*ptrZoneLowSETHours = &DataHeatBalance::ZoneResilience::ZoneLowSETHours;
     WriteSETHoursTableNonPreDefUseZoneData(
-        *state, numColumnThermalTbl, tableName, columnHead, columnWidth, ptrZoneLowSETHours, rowHead, tableBody, unitConvMultiplier);
+        *state, numColumnThermalTbl, tableName, columnHead, columnWidth, ptrZoneLowSETHours, rowHead, tableBody, style, unitConvMultiplier);
 
     EXPECT_EQ("0.00", RetrieveEntryFromTableBody(tableBody, 1, 1));
     EXPECT_EQ("-1.0", RetrieveEntryFromTableBody(tableBody, 1, 2));
@@ -10567,7 +10963,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteSETHoursTableNonPreDef)
 
     unitConvMultiplier = 1.8;
     WriteSETHoursTableNonPreDefUseZoneData(
-        *state, numColumnThermalTbl, tableName, columnHead, columnWidth, ptrZoneLowSETHours, rowHead, tableBody, unitConvMultiplier);
+        *state, numColumnThermalTbl, tableName, columnHead, columnWidth, ptrZoneLowSETHours, rowHead, tableBody, style, unitConvMultiplier);
 
     EXPECT_EQ("0.00", RetrieveEntryFromTableBody(tableBody, 1, 1));
     EXPECT_EQ("-1.8", RetrieveEntryFromTableBody(tableBody, 1, 2));
@@ -10607,6 +11003,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteHourOfSafetyTableNonPreDe
     columnHead(4) = "Safe Temperature Exceedance OccupantHours [hr]";
     columnHead(5) = "Safe Temperature Exceedance OccupiedHours [hr]";
 
+    OutputReportTabular::setTabularReportStyles(*state);
+    OutputReportTabular::tabularReportStyle const &style = state->dataOutRptTab->tabularReportPasses[0];
     state->dataHeatBal->Zone.allocate(numZone);
     int timeColumnIdx = 2;
     int encodedMonDayHrMin;
@@ -10621,7 +11019,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularTest_WriteHourOfSafetyTableNonPreDe
     std::array<Real64, numColumnThermalTbl> DataHeatBalance::ZoneResilience::*ptrColdHourOfSafetyBins =
         &DataHeatBalance::ZoneResilience::ZoneColdHourOfSafetyBins;
     WriteHourOfSafetyTableNonPreDefUseZoneData(
-        *state, numColumnThermalTbl, tableName, columnHead, columnWidth, ptrColdHourOfSafetyBins, rowHead, tableBody, timeColumnIdx);
+        *state, numColumnThermalTbl, tableName, columnHead, columnWidth, ptrColdHourOfSafetyBins, rowHead, tableBody, timeColumnIdx, style);
 
     EXPECT_EQ("0.00", RetrieveEntryFromTableBody(tableBody, 1, 1));
     EXPECT_EQ("01-JAN-04:30", RetrieveEntryFromTableBody(tableBody, 1, 2));
@@ -10646,8 +11044,9 @@ TEST_F(SQLiteFixture, StatFile_TMYx)
     state->dataOutRptTab->WriteTabularFiles = true;
 
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::InchPound;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     SetPredefinedTables(*state);
 
@@ -10769,16 +11168,21 @@ TEST_F(SQLiteFixture, WriteVeriSumSpaceTables_Test)
     state->dataHeatBal->Zone(2).spaceIndexes.allocate(1);
     state->dataHeatBal->Zone(2).spaceIndexes(1) = 2;
 
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::None;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::None;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::None;
+    setTabularReportStyles(*state);
 
     SetupUnitConversions(*state);
     // Real64 areaConv = getSpecificUnitDivider(*state, "m2", "ft2");
     // Real64 volConv = getSpecificUnitDivider(*state, "m3", "ft3");
 
     // WriteVeriSumTable(*state);
-    bool produceTabular = true;
-    bool produceSQLite = true;
+    OutputReportTabular::tabularReportStyle style;
+    style.produceTabular = true;
+    style.produceSQLite = true;
+    style.produceJSON = true;
+    style.unitsStyle = OutputReportTabular::UnitsStyle::None;
+    style.formatReals = true;
     state->dataGlobal->numSpaces = 2;
 
     state->dataOutRptTab->m_unitName = "[m]";
@@ -10832,7 +11236,7 @@ TEST_F(SQLiteFixture, WriteVeriSumSpaceTables_Test)
     state->dataHeatBal->space(1).FloorArea = 100.0;
     state->dataHeatBal->space(2).FloorArea = 100.0;
 
-    OutputReportTabular::writeVeriSumSpaceTables(*state, produceTabular, produceSQLite);
+    OutputReportTabular::writeVeriSumSpaceTables(*state, style);
 
     auto tabularData = queryResult("SELECT * FROM TabularData;", "TabularData");
     auto strings = queryResult("SELECT * FROM Strings;", "Strings");
@@ -10861,7 +11265,7 @@ TEST_F(SQLiteFixture, WriteVeriSumSpaceTables_Test)
 TEST_F(SQLiteFixture, DOASDirectToZone_ZoneMultiplierRemoved)
 {
     std::string const idf_objects_1 = R"IDF(
-  Version,23.1;
+  Version,26.1;
 
   Timestep,4;
 
@@ -11675,6 +12079,7 @@ TEST_F(SQLiteFixture, DOASDirectToZone_ZoneMultiplierRemoved)
 
     std::string const idf_objects = idf_objects_1 + idf_objects_2 + idf_objects_3;
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     ManageSimulation(*state); // run the design days
     auto &finalSysSizing = state->dataSize->FinalSysSizing(1);
@@ -11704,7 +12109,7 @@ TEST_F(SQLiteFixture, DOASDirectToZone_ZoneMultiplierRemoved)
 TEST_F(SQLiteFixture, UpdateSizing_EndSysSizingCalc)
 {
     std::string const idf_objects_1 = R"IDF(
-  Version,23.1;
+  Version,26.1;
 
   Timestep,4;
 
@@ -12621,6 +13026,7 @@ TEST_F(SQLiteFixture, UpdateSizing_EndSysSizingCalc)
 
     std::string const idf_objects = idf_objects_1 + idf_objects_2 + idf_objects_3;
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     ManageSimulation(*state); // run the design days
     auto &finalSysSizing = state->dataSize->FinalSysSizing(1);
@@ -12646,7 +13052,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_WarnMonthly)
         "  2, !-  Digits After Decimal",
         "  Exterior Lights Electricity Energy, !- Variable or Meter 1 Name",
         "  SumOrAverage, !- Aggregation Type for Variable or Meter 1",
-        "  NON EXISTANT VARIABLE, !- Variable or Meter 2 Name", // That's not how you spell EXISTENT
+        "  NON EXISTENT VARIABLE, !- Variable or Meter 2 Name", // That's not how you spell EXISTENT
         "  Maximum; !- Aggregation Type for Variable or Meter 2",
 
         "Output:Table:SummaryReports,",
@@ -12707,7 +13113,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_WarnMonthly_AlwaysIfWeather
         "  2,                                  !-  Digits After Decimal",
         "  Exterior Lights Electricity Energy, !- Variable or Meter 1 Name",
         "  SumOrAverage,                       !- Aggregation Type for Variable or Meter 1",
-        "  NON EXISTANT VARIABLE,              !- Variable or Meter 2 Name",
+        "  NON EXISTENT VARIABLE,              !- Variable or Meter 2 Name",
         "  Maximum;                            !- Aggregation Type for Variable or Meter 2",
 
         "Output:Table:SummaryReports,",
@@ -12761,9 +13167,9 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_WarnMonthlyDisplayExtraWarn
         "Output:Table:Monthly,",
         "  Space Gains Annual Report, !- Name",
         "  2, !-  Digits After Decimal",
-        "  NON EXISTANT VARIABLE, !- Variable or Meter 1 Name",
+        "  NON EXISTENT VARIABLE, !- Variable or Meter 1 Name",
         "  SumOrAverage, !- Aggregation Type for Variable or Meter 1",
-        "  NON EXISTANT VARIABLE BIS, !- Variable or Meter 2 Name",
+        "  NON EXISTENT VARIABLE BIS, !- Variable or Meter 2 Name",
         "  Maximum; !- Aggregation Type for Variable or Meter 2",
 
         "Output:Table:SummaryReports,",
@@ -12814,8 +13220,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_WarnMonthlyDisplayExtraWarn
     std::string const expected_error = delimited_string({
         "   ** Warning ** Processing Monthly Tabular Reports: Variable names not valid for this simulation",
         "   **   ~~~   ** ..Variables not valid for this simulation will have \"[Invalid/Undefined]\" in the Units Column of the Table Report.",
-        "   ** Warning ** In Output:Table:Monthly 'SPACE GAINS ANNUAL REPORT' invalid Variable or Meter Name 'NON EXISTANT VARIABLE'",
-        "   ** Warning ** In Output:Table:Monthly 'SPACE GAINS ANNUAL REPORT' invalid Variable or Meter Name 'NON EXISTANT VARIABLE BIS'",
+        "   ** Warning ** In Output:Table:Monthly 'SPACE GAINS ANNUAL REPORT' invalid Variable or Meter Name 'NON EXISTENT VARIABLE'",
+        "   ** Warning ** In Output:Table:Monthly 'SPACE GAINS ANNUAL REPORT' invalid Variable or Meter Name 'NON EXISTENT VARIABLE BIS'",
     });
     compare_err_stream(expected_error);
 }
@@ -12887,9 +13293,9 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_NoWarnMonthlIfNoWeatherFile
         "Output:Table:Monthly,",
         "  Space Gains Annual Report, !- Name",
         "  2, !-  Digits After Decimal",
-        "  NON EXISTANT VARIABLE, !- Variable or Meter 1 Name",
+        "  NON EXISTENT VARIABLE, !- Variable or Meter 1 Name",
         "  SumOrAverage, !- Aggregation Type for Variable or Meter 1",
-        "  NON EXISTANT VARIABLE BIS, !- Variable or Meter 2 Name",
+        "  NON EXISTENT VARIABLE BIS, !- Variable or Meter 2 Name",
         "  Maximum; !- Aggregation Type for Variable or Meter 2",
 
         "Output:Table:SummaryReports,",
@@ -12984,6 +13390,121 @@ TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_DontWarnMonthlyIfOnlyNamedR
     compare_err_stream("");
 }
 
+TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_ElectricityEndUseColumns)
+{
+    std::string const idf_objects = delimited_string({
+        "Output:Table:SummaryReports,",
+        "  AllMonthly;  !- Report 1 Name",
+    });
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    Real64 extLitUse;
+    Real64 refrigerationUse;
+
+    SetupOutputVariable(*state,
+                        "Exterior Lights Electricity Energy",
+                        Constant::Units::J,
+                        extLitUse,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Lite1",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
+                        "General");
+
+    SetupOutputVariable(*state,
+                        "Refrigeration Electricity Energy",
+                        Constant::Units::J,
+                        refrigerationUse,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "Refrigeration1",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::Refrigeration,
+                        "General");
+
+    state->dataGlobal->DoWeathSim = true;
+
+    GetInputTabularMonthly(*state);
+    EXPECT_EQ(state->dataOutRptTab->MonthlyInputCount, 0);
+    GetInputOutputTableSummaryReports(*state);
+    EXPECT_EQ(state->dataOutRptTab->MonthlyInputCount, numNamedMonthly);
+
+    InitializeTabularMonthly(*state);
+
+    std::map<std::string, std::vector<std::string>> const reportColumnsMap{{"EndUseEnergyConsumptionElectricityMonthly",
+                                                                            {"INTERIORLIGHTS:ELECTRICITY",
+                                                                             "EXTERIORLIGHTS:ELECTRICITY",
+                                                                             "INTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "EXTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "FANS:ELECTRICITY",
+                                                                             "PUMPS:ELECTRICITY",
+                                                                             "HEATING:ELECTRICITY",
+                                                                             "COOLING:ELECTRICITY",
+                                                                             "HEATREJECTION:ELECTRICITY",
+                                                                             "HUMIDIFIER:ELECTRICITY",
+                                                                             "HEATRECOVERY:ELECTRICITY",
+                                                                             "WATERSYSTEMS:ELECTRICITY",
+                                                                             "REFRIGERATION:ELECTRICITY",
+                                                                             "COGENERATION:ELECTRICITY"}},
+
+                                                                           {"PeakEnergyEndUseElectricityPart1Monthly",
+                                                                            {"INTERIORLIGHTS:ELECTRICITY",
+                                                                             "EXTERIORLIGHTS:ELECTRICITY",
+                                                                             "INTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "EXTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "FANS:ELECTRICITY",
+                                                                             "PUMPS:ELECTRICITY",
+                                                                             "HEATING:ELECTRICITY"}},
+
+                                                                           {"PeakEnergyEndUseElectricityPart2Monthly",
+                                                                            {"COOLING:ELECTRICITY",
+                                                                             "HEATREJECTION:ELECTRICITY",
+                                                                             "HUMIDIFIER:ELECTRICITY",
+                                                                             "HEATRECOVERY:ELECTRICITY",
+                                                                             "WATERSYSTEMS:ELECTRICITY",
+                                                                             "REFRIGERATION:ELECTRICITY",
+                                                                             "COGENERATION:ELECTRICITY"}},
+
+                                                                           {"ElectricComponentsOfPeakDemandMonthly",
+                                                                            {"ELECTRICITY:FACILITY",
+                                                                             "INTERIORLIGHTS:ELECTRICITY",
+                                                                             "INTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "EXTERIORLIGHTS:ELECTRICITY",
+                                                                             "EXTERIOREQUIPMENT:ELECTRICITY",
+                                                                             "FANS:ELECTRICITY",
+                                                                             "PUMPS:ELECTRICITY",
+                                                                             "HEATING:ELECTRICITY",
+                                                                             "COOLING:ELECTRICITY",
+                                                                             "HEATREJECTION:ELECTRICITY",
+                                                                             "HUMIDIFIER:ELECTRICITY",
+                                                                             "HEATRECOVERY:ELECTRICITY",
+                                                                             "WATERSYSTEMS:ELECTRICITY",
+                                                                             "REFRIGERATION:ELECTRICITY",
+                                                                             "COGENERATION:ELECTRICITY"}}};
+
+    for (int i = 1; i <= state->dataOutRptTab->MonthlyInputCount; i++) {
+        std::string reportName = state->dataOutRptTab->MonthlyInput(i).name;
+        if (reportColumnsMap.find(reportName) != reportColumnsMap.end()) {
+            EXPECT_EQ(state->dataOutRptTab->MonthlyInput(i).numTables, 1);
+
+            int tableIndex = state->dataOutRptTab->MonthlyInput(i).firstTable;
+            int firstColumnIndex = state->dataOutRptTab->MonthlyTables(tableIndex).firstColumn;
+            int numberOfColumns = state->dataOutRptTab->MonthlyTables(tableIndex).numColumns;
+
+            std::vector<std::string> columnNames;
+            for (int j = firstColumnIndex; j < firstColumnIndex + numberOfColumns; j++) {
+                columnNames.push_back(state->dataOutRptTab->MonthlyColumns(j).varName);
+            }
+            EXPECT_EQ(columnNames, reportColumnsMap.at(reportName));
+        }
+    }
+
+    compare_err_stream("");
+}
+
 TEST_F(SQLiteFixture, OutputReportTabular_DistrictHeating)
 {
     // Test for #10190 - District Heating Steam is empty
@@ -12996,8 +13517,9 @@ TEST_F(SQLiteFixture, OutputReportTabular_DistrictHeating)
     state->dataOutRptTab->WriteTabularFiles = true;
 
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::JtoKWH;
+    setTabularReportStyles(*state);
 
     // Needed to avoid crash (from ElectricPowerServiceManager.hh)
     createFacilityElectricPowerServiceObject(*state);
@@ -13032,7 +13554,7 @@ TEST_F(SQLiteFixture, OutputReportTabular_DistrictHeating)
 
     state->dataGlobal->DoWeathSim = true;
     state->dataGlobal->TimeStepZone = 1.0;
-    state->dataGlobal->MinutesPerTimeStep = state->dataGlobal->TimeStepZone * 60;
+    state->dataGlobal->MinutesInTimeStep = state->dataGlobal->TimeStepZone * 60;
     state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * 3600.0;
     state->dataOutRptTab->displayTabularBEPS = true;
     // OutputProcessor::TimeValue.allocate(2);
@@ -13162,7 +13684,8 @@ TEST_F(EnergyPlusFixture, OutputReportTabular_Test_SetupUnitConversion_Fix)
     std::string curUnits;
 
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::InchPound;
+    setTabularReportStyles(*state);
 
     // Mimic the unit conversion for LEED Table EAp2-17b
     // Energy Use Intensity - Natural Gas
@@ -13333,9 +13856,9 @@ TEST_F(SQLiteFixture, WriteSourceEnergyEndUseSummaryperArea_IPExceptElec)
     state->dataOutRptTab->gatherTotalsBySourceBEPS(1) = 3.6e10;                                                  // J
     Real64 eleckWh = 1e4;                                                                                        // kWh
 
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::InchPoundExceptElectricity;
-
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::InchPoundExceptElectricity;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPoundExceptElectricity;
+    setTabularReportStyles(*state);
 
     // Call Source Energy End Use Summary writing function
     OutputReportTabular::WriteSourceEnergyEndUseSummary(*state);
@@ -13395,9 +13918,9 @@ TEST_F(SQLiteFixture, ORT_EndUseBySubcategorySQL_IPUnitExceptElec)
     state->dataOutRptTab->WriteTabularFiles = true;
 
     SetupUnitConversions(*state);
-    state->dataOutRptTab->unitsStyle = OutputReportTabular::UnitsStyle::JtoKWH;
-    // state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPound;
+    state->dataOutRptTab->unitsStyle_Tabular = OutputReportTabular::UnitsStyle::JtoKWH;
     state->dataOutRptTab->unitsStyle_SQLite = OutputReportTabular::UnitsStyle::InchPoundExceptElectricity;
+    setTabularReportStyles(*state);
     Real64 enerConv = getSpecificUnitDivider(*state, "GJ", "kBtu"); // 948.45
     EXPECT_NEAR(1.0 / enerConv, 948.0, 0.5);
 
@@ -13480,7 +14003,7 @@ TEST_F(SQLiteFixture, ORT_EndUseBySubcategorySQL_IPUnitExceptElec)
     state->dataGlobal->DoWeathSim = true;
     state->dataGlobal->TimeStepZone = 1.0;
     state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * 3600.0;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->MinutesInTimeStep = 60;
     state->dataOutRptTab->displayTabularBEPS = true;
     // OutputProcessor::TimeValue.allocate(2);
 
@@ -13675,4 +14198,706 @@ TEST_F(SQLiteFixture, ORT_EndUseBySubcategorySQL_IPUnitExceptElec)
 
         ASSERT_EQ(14u, result.size()) << "Failed for query: " << query;
     }
+}
+
+TEST_F(EnergyPlusFixture, OutputReportTabularMonthly_HandleMultipleDuringHoursShown)
+{
+    // Test for #10899
+    std::string const idf_objects = delimited_string({
+        "Output:Table:Monthly,",
+        "  Test,                               !- Name",
+        "  3,                                  !- Digits After Decimal",
+        "  ConditionA,                         !- Variable or Meter 1 Name",
+        "  HoursNonZero,                       !- Aggregation Type for Variable or Meter 1",
+        "  VariableToBeSummedDuringHoursShown, !- Variable or Meter 2 Name",
+        "  SumOrAverageDuringHoursShown,       !- Aggregation Type for Variable or Meter 2",
+        "  ConditionA_Inverse,                 !- Variable or Meter 3 Name",
+        "  HoursNonZero,                       !- Aggregation Type for Variable or Meter 3",
+        "  VariableToBeSummedDuringHoursShown, !- Variable or Meter 4 Name",
+        "  SumOrAverageDuringHoursShown,       !- Aggregation Type for Variable or Meter 4",
+        "  VariableToBeSummedDuringHoursShown, !- Variable or Meter 5 Name",
+        "  SumOrAverage;                       !- Aggregation Type for Variable or Meter 5",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+
+    // Can't be const since it's taken as a non-const reference in SetupOutputVariable, but I will NOT modify it
+    Real64 VariableToBeSummedDuringHourShown = 1.0;
+
+    Real64 ConditionA = 0.0;
+    Real64 ConditionNotA = 0.0;
+
+    Real64 expectedTotalConditionA = 0.0;
+    Real64 expectedTotalConditionNotA = 0.0;
+
+    auto setConditionAB = [&ConditionA, &ConditionNotA, &expectedTotalConditionA, &expectedTotalConditionNotA](bool isConditionA) {
+        if (isConditionA) {
+            ConditionA = 1.0;
+            ConditionNotA = 0.0;
+        } else {
+            ConditionA = 0.0;
+            ConditionNotA = 1.0;
+        }
+        expectedTotalConditionA += ConditionA;
+        expectedTotalConditionNotA += ConditionNotA;
+    };
+
+    SetupOutputVariable(*state,
+                        "ConditionA",
+                        Constant::Units::J,
+                        ConditionA,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "SomethingNamed",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
+                        "General");
+    SetupOutputVariable(*state,
+                        "ConditionA_Inverse",
+                        Constant::Units::J,
+                        ConditionNotA,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "SomethingNamed",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
+                        "General");
+    SetupOutputVariable(*state,
+                        "VariableToBeSummedDuringHoursShown",
+                        Constant::Units::J,
+                        VariableToBeSummedDuringHourShown,
+                        OutputProcessor::TimeStepType::Zone,
+                        OutputProcessor::StoreType::Sum,
+                        "SomethingNamed",
+                        Constant::eResource::Electricity,
+                        OutputProcessor::Group::Invalid,
+                        OutputProcessor::EndUseCat::ExteriorLights,
+                        "General");
+
+    state->dataGlobal->DoWeathSim = true;
+    state->dataGlobal->TimeStepZone = 1.0;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * 60.0;
+    state->dataHVACGlobal->TimeStepSys = 0.25;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
+
+    auto &ort = state->dataOutRptTab;
+    OutputReportTabular::GetInputTabularMonthly(*state);
+    EXPECT_EQ(ort->MonthlyInputCount, 1);
+    OutputReportTabular::InitializeTabularMonthly(*state);
+
+    compare_err_stream("");
+
+    // I made all 3 variables use the same ObjectName for simplicity (if I use 3 object names, there are actually 3 * 5 = 15 MonthlyColumns...)
+    EXPECT_EQ(5, ort->MonthlyColumns.size());
+
+    constexpr int colConditionA = 1;
+    constexpr int colValueWhenConditionA = 2;
+    constexpr int colConditionNotA = 3;
+    constexpr int colValueWhenConditionNotA = 4;
+    constexpr int colValue = 5;
+    EXPECT_EQ("CONDITIONA", ort->MonthlyColumns(colConditionA).varName);
+    EXPECT_EQ("VARIABLETOBESUMMEDDURINGHOURSSHOWN", ort->MonthlyColumns(colValueWhenConditionA).varName);
+    EXPECT_EQ("CONDITIONA_INVERSE", ort->MonthlyColumns(colConditionNotA).varName);
+    EXPECT_EQ("VARIABLETOBESUMMEDDURINGHOURSSHOWN", ort->MonthlyColumns(colValueWhenConditionNotA).varName);
+    EXPECT_EQ("VARIABLETOBESUMMEDDURINGHOURSSHOWN", ort->MonthlyColumns(colValue).varName);
+
+    state->dataEnvrn->Month = 12;
+
+    {
+        setConditionAB(true);
+        GatherMonthlyResultsForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+        compare_err_stream("");
+        EXPECT_EQ(1.0, ort->MonthlyColumns(colConditionA).reslt(12));
+        EXPECT_EQ(1.0, ort->MonthlyColumns(colValueWhenConditionA).reslt(12));
+        EXPECT_EQ(0.0, ort->MonthlyColumns(colConditionNotA).reslt(12));
+        EXPECT_EQ(0.0, ort->MonthlyColumns(colValueWhenConditionNotA).reslt(12));
+        EXPECT_EQ(1.0, ort->MonthlyColumns(colValue).reslt(12));
+
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colValueWhenConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colValueWhenConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA + expectedTotalConditionNotA, ort->MonthlyColumns(colValue).reslt(12));
+    }
+
+    {
+        setConditionAB(true);
+        GatherMonthlyResultsForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+        EXPECT_EQ(2.0, ort->MonthlyColumns(colConditionA).reslt(12));
+        EXPECT_EQ(2.0, ort->MonthlyColumns(colValueWhenConditionA).reslt(12));
+        EXPECT_EQ(0.0, ort->MonthlyColumns(colConditionNotA).reslt(12));
+        EXPECT_EQ(0.0, ort->MonthlyColumns(colValueWhenConditionNotA).reslt(12));
+        EXPECT_EQ(2.0, ort->MonthlyColumns(colValue).reslt(12));
+
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colValueWhenConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colValueWhenConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA + expectedTotalConditionNotA, ort->MonthlyColumns(colValue).reslt(12));
+    }
+
+    {
+        setConditionAB(false);
+        GatherMonthlyResultsForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colValueWhenConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colValueWhenConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA + expectedTotalConditionNotA, ort->MonthlyColumns(colValue).reslt(12));
+    }
+
+    {
+        setConditionAB(false);
+        GatherMonthlyResultsForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colValueWhenConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colValueWhenConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA + expectedTotalConditionNotA, ort->MonthlyColumns(colValue).reslt(12));
+    }
+
+    {
+        setConditionAB(true);
+        GatherMonthlyResultsForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA, ort->MonthlyColumns(colValueWhenConditionA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionNotA, ort->MonthlyColumns(colValueWhenConditionNotA).reslt(12));
+        EXPECT_EQ(expectedTotalConditionA + expectedTotalConditionNotA, ort->MonthlyColumns(colValue).reslt(12));
+    }
+}
+
+TEST_F(EnergyPlusFixture, LEEDSummary_RenewableEnergySourceSummary)
+{
+    // Test for #11224
+    std::string const idf_objects_1 = R"IDF(
+  Building,
+    PVWatts Test Case,       !- Name
+    0.0,                     !- North Axis {deg}
+    Suburbs,                 !- Terrain
+    0.04,                    !- Loads Convergence Tolerance Value {W}
+    0.4,                     !- Temperature Convergence Tolerance Value {deltaC}
+    FullInteriorAndExterior, !- Solar Distribution
+    25,                      !- Maximum Number of Warmup Days
+    6;                       !- Minimum Number of Warmup Days
+
+  Timestep,1;
+
+  SimulationControl,
+    No,                      !- Do Zone Sizing Calculation
+    No,                      !- Do System Sizing Calculation
+    No,                      !- Do Plant Sizing Calculation
+    Yes,                     !- Run Simulation for Sizing Periods
+    No,                      !- Run Simulation for Weather File Run Periods
+    No,                      !- Do HVAC Sizing Simulation for Sizing Periods
+    1;                       !- Maximum Number of HVAC Sizing Simulation Passes
+
+  RunPeriod,
+    All Year,                !- Name
+    1,                       !- Begin Month
+    1,                       !- Begin Day of Month
+    ,                        !- Begin Year
+    12,                      !- End Month
+    31,                      !- End Day of Month
+    ,                        !- End Year
+    ,                        !- Day of Week for Start Day
+    Yes,                     !- Use Weather File Holidays and Special Days
+    Yes,                     !- Use Weather File Daylight Saving Period
+    No,                      !- Apply Weekend Holiday Rule
+    Yes,                     !- Use Weather File Rain Indicators
+    Yes;                     !- Use Weather File Snow Indicators
+
+  GlobalGeometryRules,
+    UpperLeftCorner,         !- Starting Vertex Position
+    CounterClockWise,        !- Vertex Entry Direction
+    Relative;                !- Coordinate System
+
+  Site:Location,
+    Phoenix Sky Harbor Intl Ap_AZ_USA Design_Conditions,  !- Name
+    33.45,                   !- Latitude {deg}
+    -111.98,                 !- Longitude {deg}
+    -7.00,                   !- Time Zone {hr}
+    337.00;                  !- Elevation {m}
+
+! Phoenix Sky Harbor Intl Ap_AZ_USA Annual Heating 99%, MaxDB=5.2°C
+
+  SizingPeriod:DesignDay,
+    Phoenix Sky Harbor Intl Ap Ann Htg 99% Condns DB,  !- Name
+    12,                      !- Month
+    21,                      !- Day of Month
+    WinterDesignDay,         !- Day Type
+    5.2,                     !- Maximum Dry-Bulb Temperature {C}
+    0.0,                     !- Daily Dry-Bulb Temperature Range {deltaC}
+    DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                 !- Humidity Condition Type
+    5.2,                     !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    97342.,                  !- Barometric Pressure {Pa}
+    1.7,                     !- Wind Speed {m/s}
+    100,                     !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAEClearSky,          !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    ,                        !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    ,                        !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+    0.00;                    !- Sky Clearness
+
+! Phoenix Sky Harbor Intl Ap_AZ_USA Annual Cooling (DB=>MWB) 1%, MaxDB=42.3°C MWB=21°C
+
+  SizingPeriod:DesignDay,
+    Phoenix Sky Harbor Intl Ap Ann Clg 1% Condns DB=>MWB,  !- Name
+    7,                       !- Month
+    21,                      !- Day of Month
+    SummerDesignDay,         !- Day Type
+    42.3,                    !- Maximum Dry-Bulb Temperature {C}
+    12,                      !- Daily Dry-Bulb Temperature Range {deltaC}
+    DefaultMultipliers,      !- Dry-Bulb Temperature Range Modifier Type
+    ,                        !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+    Wetbulb,                 !- Humidity Condition Type
+    21,                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+    ,                        !- Humidity Condition Day Schedule Name
+    ,                        !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+    ,                        !- Enthalpy at Maximum Dry-Bulb {J/kg}
+    ,                        !- Daily Wet-Bulb Temperature Range {deltaC}
+    97342.,                  !- Barometric Pressure {Pa}
+    4.1,                     !- Wind Speed {m/s}
+    260,                     !- Wind Direction {deg}
+    No,                      !- Rain Indicator
+    No,                      !- Snow Indicator
+    No,                      !- Daylight Saving Time Indicator
+    ASHRAETau,               !- Solar Model Indicator
+    ,                        !- Beam Solar Day Schedule Name
+    ,                        !- Diffuse Solar Day Schedule Name
+    0.588,                   !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+    1.653;                   !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+)IDF";
+
+    std::string const idf_objects_2 = R"IDF(
+
+  Material:NoMass,
+    R13LAYER,                !- Name
+    Rough,                   !- Roughness
+    2.290965,                !- Thermal Resistance {m2-K/W}
+    0.9000000,               !- Thermal Absorptance
+    0.7500000,               !- Solar Absorptance
+    0.7500000;               !- Visible Absorptance
+
+  Material:NoMass,
+    R31LAYER,                !- Name
+    Rough,                   !- Roughness
+    5.456,                   !- Thermal Resistance {m2-K/W}
+    0.9000000,               !- Thermal Absorptance
+    0.7500000,               !- Solar Absorptance
+    0.7500000;               !- Visible Absorptance
+
+  Material,
+    C5 - 4 IN HW CONCRETE,   !- Name
+    MediumRough,             !- Roughness
+    0.1014984,               !- Thickness {m}
+    1.729577,                !- Conductivity {W/m-K}
+    2242.585,                !- Density {kg/m3}
+    836.8000,                !- Specific Heat {J/kg-K}
+    0.9000000,               !- Thermal Absorptance
+    0.6500000,               !- Solar Absorptance
+    0.6500000;               !- Visible Absorptance
+
+  Construction,
+    R13WALL,                 !- Name
+    R13LAYER;                !- Outside Layer
+
+  Construction,
+    FLOOR,                   !- Name
+    C5 - 4 IN HW CONCRETE;   !- Outside Layer
+
+  Construction,
+    ROOF31,                  !- Name
+    R31LAYER;                !- Outside Layer
+
+  Zone,
+    ZONE ONE,                !- Name
+    0,                       !- Direction of Relative North {deg}
+    0,                       !- X Origin {m}
+    0,                       !- Y Origin {m}
+    0,                       !- Z Origin {m}
+    1,                       !- Type
+    1,                       !- Multiplier
+    autocalculate,           !- Ceiling Height {m}
+    autocalculate;           !- Volume {m3}
+
+  ScheduleTypeLimits,
+    OnOff,                   !- Name
+    0,                       !- Lower Limit Value
+    1,                       !- Upper Limit Value
+    Discrete;                !- Numeric Type
+
+  BuildingSurface:Detailed,
+    Zn001:Wall001,           !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    ZONE ONE,                !- Zone Name
+    ,                        !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    0.5000000,               !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0,0,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
+    0,0,0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24000,0,0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24000,0,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Zn001:Wall002,           !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    ZONE ONE,                !- Zone Name
+    ,                        !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    0.5000000,               !- View Factor to Ground
+    4,                       !- Number of Vertices
+    15.24000,0,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
+    15.24000,0,0,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24000,15.24000,0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24000,15.24000,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Zn001:Wall003,           !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    ZONE ONE,                !- Zone Name
+    ,                        !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    0.5000000,               !- View Factor to Ground
+    4,                       !- Number of Vertices
+    15.24000,15.24000,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
+    15.24000,15.24000,0,  !- X,Y,Z ==> Vertex 2 {m}
+    0,15.24000,0,  !- X,Y,Z ==> Vertex 3 {m}
+    0,15.24000,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Zn001:Wall004,           !- Name
+    Wall,                    !- Surface Type
+    R13WALL,                 !- Construction Name
+    ZONE ONE,                !- Zone Name
+    ,                        !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    0.5000000,               !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0,15.24000,4.572000,  !- X,Y,Z ==> Vertex 1 {m}
+    0,15.24000,0,  !- X,Y,Z ==> Vertex 2 {m}
+    0,0,0,  !- X,Y,Z ==> Vertex 3 {m}
+    0,0,4.572000;  !- X,Y,Z ==> Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Zn001:Flr001,            !- Name
+    Floor,                   !- Surface Type
+    FLOOR,                   !- Construction Name
+    ZONE ONE,                !- Zone Name
+    ,                        !- Space Name
+    Adiabatic,               !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    NoSun,                   !- Sun Exposure
+    NoWind,                  !- Wind Exposure
+    1.000000,                !- View Factor to Ground
+    4,                       !- Number of Vertices
+    15.24000,0.000000,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.000000,0.000000,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    0.000000,15.24000,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24000,15.24000,0.0;  !- X,Y,Z ==> Vertex 4 {m}
+
+  BuildingSurface:Detailed,
+    Zn001:Roof001,           !- Name
+    Roof,                    !- Surface Type
+    ROOF31,                  !- Construction Name
+    ZONE ONE,                !- Zone Name
+    ,                        !- Space Name
+    Outdoors,                !- Outside Boundary Condition
+    ,                        !- Outside Boundary Condition Object
+    SunExposed,              !- Sun Exposure
+    WindExposed,             !- Wind Exposure
+    0,                       !- View Factor to Ground
+    4,                       !- Number of Vertices
+    0.000000,15.24000,4.572,  !- X,Y,Z ==> Vertex 1 {m}
+    0.000000,0.000000,4.572,  !- X,Y,Z ==> Vertex 2 {m}
+    15.24000,0.000000,4.572,  !- X,Y,Z ==> Vertex 3 {m}
+    15.24000,15.24000,4.572;  !- X,Y,Z ==> Vertex 4 {m}
+)IDF";
+
+    std::string const idf_objects_3 = R"IDF(
+
+  ElectricLoadCenter:Distribution,
+    ELC1,                    !- Name
+    PVList1,                 !- Generator List Name
+    Baseload,                !- Generator Operation Scheme Type
+    0,                       !- Generator Demand Limit Scheme Purchased Electric Demand Limit {W}
+    ,                        !- Generator Track Schedule Name Scheme Schedule Name
+    ,                        !- Generator Track Meter Scheme Meter Name
+    DirectCurrentWithInverter,  !- Electrical Buss Type
+    Inverter1;               !- Inverter Name
+
+  ElectricLoadCenter:Inverter:PVWatts,
+    Inverter1,               !- Name
+    1.10,                    !- DC to AC Size Ratio
+    0.96;                    !- Inverter Efficiency
+
+  ElectricLoadCenter:Generators,
+    PVList1,                 !- Name
+    PVWatts1,                !- Generator 1 Name
+    Generator:PVWatts,       !- Generator 1 Object Type
+    4000,                    !- Generator 1 Rated Electric Power Output {W}
+    ,                        !- Generator 1 Availability Schedule Name
+    ,                        !- Generator 1 Rated Thermal to Electrical Power Ratio
+    PVWatts2,                !- Generator 2 Name
+    Generator:PVWatts,       !- Generator 2 Object Type
+    3000,                    !- Generator 2 Rated Electric Power Output {W}
+    ,                        !- Generator 2 Availability Schedule Name
+    ,                        !- Generator 2 Rated Thermal to Electrical Power Ratio
+    PVWatts3,                !- Generator 3 Name
+    Generator:PVWatts,       !- Generator 3 Object Type
+    3000,                    !- Generator 3 Rated Electric Power Output {W}
+    ,                        !- Generator 3 Availability Schedule Name
+    ;                        !- Generator 3 Rated Thermal to Electrical Power Ratio
+
+  Generator:PVWatts,
+    PVWatts1,                !- Name
+    5,                       !- PVWatts Version
+    4000,                    !- DC System Capacity {W}
+    Standard,                !- Module Type
+    FixedOpenRack,           !- Array Type
+    0.14,                    !- System Losses
+    TiltAzimuth,             !- Array Geometry Type
+    20,                      !- Tilt Angle {deg}
+    180;                     !- Azimuth Angle {deg}
+
+  Shading:Site:Detailed,
+    FlatSurface,             !- Name
+    ,                        !- Transmittance Schedule Name
+    4,                       !- Number of Vertices
+    40.0,2.0,0.0,  !- X,Y,Z ==> Vertex 1 {m}
+    40.0,0.00,0.0,  !- X,Y,Z ==> Vertex 2 {m}
+    45.0,0.00,0.0,  !- X,Y,Z ==> Vertex 3 {m}
+    45.0,2.0,0.0;  !- X,Y,Z ==> Vertex 4 {m}
+
+  Generator:PVWatts,
+    PVWatts2,                !- Name
+    5,                       !- PVWatts Version
+    3000,                    !- DC System Capacity {W}
+    Premium,                 !- Module Type
+    FixedOpenRack,           !- Array Type
+    0.14,                    !- System Losses
+    Surface,                 !- Array Geometry Type
+    ,                        !- Tilt Angle {deg}
+    ,                        !- Azimuth Angle {deg}
+    FlatSurface;             !- Surface Name
+
+  Shading:Site:Detailed,
+    FlatSurfaceShadetoEast,  !- Name
+    ,                        !- Transmittance Schedule Name
+    4,                       !- Number of Vertices
+    0.0,25.0,12.0,  !- X,Y,Z ==> Vertex 1 {m}
+    0.0,20.00,12.0,  !- X,Y,Z ==> Vertex 2 {m}
+    5.0,20.00,12.0,  !- X,Y,Z ==> Vertex 3 {m}
+    5.0,25.0,12.0;  !- X,Y,Z ==> Vertex 4 {m}
+
+  Shading:Site:Detailed,
+    ShadetoEast,             !- Name
+    ,                        !- Transmittance Schedule Name
+    4,                       !- Number of Vertices
+    5.0,25.0,22.0,  !- X,Y,Z ==> Vertex 1 {m}
+    5.0,25.00,12.0,  !- X,Y,Z ==> Vertex 2 {m}
+    5.0,20.00,12.0,  !- X,Y,Z ==> Vertex 3 {m}
+    5.0,20.0,22.0;  !- X,Y,Z ==> Vertex 4 {m}
+
+  Generator:PVWatts,
+    PVWatts3,                !- Name
+    5,                       !- PVWatts Version
+    3000,                    !- DC System Capacity {W}
+    Premium,                 !- Module Type
+    FixedOpenRack,           !- Array Type
+    0.14,                    !- System Losses
+    Surface,                 !- Array Geometry Type
+    ,                        !- Tilt Angle {deg}
+    ,                        !- Azimuth Angle {deg}
+    FlatSurfaceShadetoEast;  !- Surface Name
+
+  Output:VariableDictionary,regular;
+
+  OutputControl:Table:Style,
+    TabAndHTML;              !- Column Separator
+
+  Output:SQLite,
+    SimpleAndTabular;        !- Option Type
+
+  Output:Table:SummaryReports,
+    AllSummary,                 !- Report 1 Name
+    AllSummaryAndSizingPeriod;  !- Report 2 Name
+    )IDF";
+
+    std::string const idf_objects = idf_objects_1 + idf_objects_2 + idf_objects_3;
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    ManageSimulation(*state); // run the design days
+    // get user specified generators capacity
+    auto &elecGenObjs = state->dataElectPwrSvcMgr->facilityElectricServiceObj->elecLoadCenterObjs[0]->elecGenCntrlObj;
+    double gens_cap_kW = 0.0;
+    for (const auto &g : elecGenObjs) {
+        if (g->generatorType == GeneratorType::PVWatts) {
+            gens_cap_kW += g->pvwattsGenerator->getDCSystemCapacity() / 1000.0;
+        }
+    }
+    // check user specified generators capacity, kW
+    EXPECT_EQ(10.0, gens_cap_kW);
+    // check tabular data for a design day run
+    auto &orp = *state->dataOutRptPredefined;
+    EXPECT_EQ("10.00", RetrievePreDefTableEntry(*state, orp.pdchLeedRenRatCap, "Photovoltaic"));
+    EXPECT_EQ("0.00", RetrievePreDefTableEntry(*state, orp.pdchLeedRenAnGen, "Photovoltaic"));
+}
+
+TEST_F(EnergyPlusFixture, ExteriorFenestrationShadedStateTest)
+{
+    // Test for Fix of Defect #10919
+    // Allocations and setting of test data
+    auto &dHB = state->dataHeatBal;
+    auto &dCon = state->dataConstruction;
+    auto &dSurf = state->dataSurface;
+    dHB->space.allocate(1);
+    dHB->Zone.allocate(1);
+    dHB->Zone(1).ListMultiplier = 1;
+    dCon->Construct.allocate(2);
+    dCon->Construct(1).Name = "LowTalker";
+    dCon->Construct(1).OutsideAbsorpSolar = 0.1;
+    dCon->Construct(1).VisTransNorm = 0.3;
+    dCon->Construct(1).SummerSHGC = 0.1;
+    dCon->Construct(1).TotLayers = 1;
+    dCon->Construct(1).TotGlassLayers = 1;
+    dCon->Construct(1).LayerPoint.allocate(dCon->Construct(1).TotLayers);
+    dCon->Construct(1).LayerPoint(1) = 1;
+    dCon->Construct(1).AbsDiff.allocate(dCon->Construct(1).TotLayers);
+    dCon->Construct(1).AbsDiff(1) = 0.75;
+    dCon->Construct(2).Name = "CloseTalker";
+    dCon->Construct(2).OutsideAbsorpSolar = 0.9;
+    dCon->Construct(2).VisTransNorm = 0.7;
+    dCon->Construct(2).SummerSHGC = 0.9;
+    dCon->Construct(2).TotLayers = 1;
+    dCon->Construct(2).TotGlassLayers = 1;
+    dCon->Construct(2).LayerPoint.allocate(dCon->Construct(2).TotLayers);
+    dCon->Construct(2).LayerPoint(1) = 2;
+    dCon->Construct(2).AbsDiff.allocate(dCon->Construct(1).TotLayers);
+    dCon->Construct(2).AbsDiff(1) = 0.75;
+
+    state->init_state(*state);
+    auto &s_mat = state->dataMaterial;
+
+    auto *mat1 = new Material::MaterialGlass;
+    s_mat->materials.push_back(mat1);
+    mat1->Thickness = 0.1;
+    mat1->Conductivity = 0.125;
+    mat1->Resistance = 1.25;
+    mat1->Roughness = Material::SurfaceRoughness::VerySmooth;
+    mat1->group = Material::Group::Glass;
+    mat1->AbsorpSolar = 0.75;
+    mat1->AbsorpThermal = 0.75;
+    mat1->Trans = 0.25;
+    mat1->ReflectSolBeamFront = 0.20;
+
+    auto *mat2 = new Material::MaterialGlass;
+    s_mat->materials.push_back(mat2);
+    mat2->Thickness = 0.1;
+    mat2->Conductivity = 0.25;
+    mat2->Resistance = 2.5;
+    mat2->Roughness = Material::SurfaceRoughness::VerySmooth;
+    mat2->group = Material::Group::Glass;
+    mat2->AbsorpSolar = 0.25;
+    mat2->AbsorpThermal = 0.25;
+    mat2->Trans = 0.5;
+    mat2->ReflectSolBeamFront = 0.20;
+
+    EnergyPlus::Window::initWindowModel(*state);
+
+    // auto aModel = std::make_unique<WindowModel>(); // (AUTO_OK)
+    // aModel->m_Model = static_cast<WindowModel>(getEnumValue(EnergyPlus::Window::windowsModelNamesUC, "BUILTINWINDOWSMODEL"));
+
+    dHB->NominalU.allocate(2);
+    dHB->NominalU(1) = 1.1;
+    dHB->NominalU(2) = 2.2;
+    dHB->NominalUBeforeAdjusted.allocate(2);
+    dHB->NominalUBeforeAdjusted(1) = 1.1;
+    dHB->NominalUBeforeAdjusted(2) = 2.2;
+
+    dSurf->TotSurfaces = 4;
+    dSurf->Surface.allocate(dSurf->TotSurfaces);
+    dSurf->SurfaceWindow.allocate(dSurf->TotSurfaces);
+    dSurf->Surface(2).windowShadingControlList.resize(1);
+    dSurf->Surface(2).windowShadingControlList[0] = 1;
+    dSurf->Surface(4).windowShadingControlList.resize(1);
+    dSurf->Surface(4).windowShadingControlList[0] = 2;
+    dSurf->Surface(2).shadedConstructionList.resize(1);
+    dSurf->Surface(2).shadedConstructionList[0] = 1;
+    dSurf->Surface(4).shadedConstructionList.resize(1);
+    dSurf->Surface(4).shadedConstructionList[0] = 2;
+
+    // first surface, exterior walls and doors
+    for (int i = 1; i <= dSurf->TotSurfaces; i++) {
+        dSurf->Surface(i).HeatTransSurf = true;
+        dSurf->Surface(i).Azimuth = 180.;
+        dSurf->Surface(i).Tilt = 90.;
+        dSurf->Surface(i).ExtBoundCond = 0;
+        dSurf->Surface(i).FrameDivider = 0;
+        dSurf->Surface(i).spaceNum = 1;
+        dSurf->Surface(i).Zone = 1;
+        if ((i == 1) || (i == 2)) {
+            dSurf->Surface(i).Construction = 1;
+        } else {
+            dSurf->Surface(i).Construction = 2;
+        }
+        // odd number - wall, even number - window
+        if (i % 2 == 1) {
+            dSurf->Surface(i).Name = "Exterior_Wall_" + fmt::to_string((i + 1) / 2);
+            dSurf->Surface(i).GrossArea = 200.;
+            dSurf->Surface(i).Class = DataSurfaces::SurfaceClass::Wall;
+            dSurf->AllSurfaceListReportOrder.push_back(i);
+        } else {
+            dSurf->Surface(i).Name = "Window_" + fmt::to_string((i + 1) / 2);
+            dSurf->Surface(i).BaseSurfName = dSurf->Surface(i - 1).Name;
+            dSurf->Surface(i).BaseSurf = i - 1;
+            dSurf->Surface(i).GrossArea = 50.;
+            dSurf->Surface(i).Class = DataSurfaces::SurfaceClass::Window;
+            dSurf->AllSurfaceListReportOrder.push_back(i);
+        }
+    }
+
+    // Setup pre def tables
+    OutputReportPredefined::SetPredefinedTables(*state);
+
+    // Call the routine that fills up the table we care about
+    HeatBalanceSurfaceManager::GatherForPredefinedReport(*state);
+
+    // Check output to see that it matches expectations
+    auto &dORP = state->dataOutRptPredefined;
+    EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(*state, dORP->pdchFenShdUfact, dCon->Construct(1).Name), "0.805");
+    EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(*state, dORP->pdchFenShdSHGC, dCon->Construct(1).Name), "0.309");
+    EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(*state, dORP->pdchFenShdVisTr, dCon->Construct(1).Name), "0.300");
+    EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(*state, dORP->pdchFenShdUfact, dCon->Construct(2).Name), "1.237");
+    EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(*state, dORP->pdchFenShdSHGC, dCon->Construct(2).Name), "0.272");
+    EXPECT_EQ(OutputReportPredefined::RetrievePreDefTableEntry(*state, dORP->pdchFenShdVisTr, dCon->Construct(2).Name), "0.700");
 }

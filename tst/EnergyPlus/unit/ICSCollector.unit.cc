@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -84,7 +84,7 @@ TEST_F(EnergyPlusFixture, ICSSolarCollectorTest_CalcPassiveExteriorBaffleGapTest
     int ConstrNum;
     int MatNum;
 
-    InitializePsychRoutines(*state);
+    state->init_state(*state);
 
     state->dataGlobal->BeginEnvrnFlag = true;
     state->dataEnvrn->OutBaroPress = 101325.0;
@@ -200,8 +200,9 @@ TEST_F(EnergyPlusFixture, ICSSolarCollectorTest_CalcPassiveExteriorBaffleGapTest
     state->dataConstruction->Construct(ConstrNum).LayerPoint.deallocate();
     state->dataConstruction->Construct.deallocate();
 
-    for (int i = 1; i <= state->dataMaterial->materials.isize(); ++i)
+    for (int i = 1; i <= state->dataMaterial->materials.isize(); ++i) {
         delete state->dataMaterial->materials(i);
+    }
 
     state->dataMaterial->materials.deallocate();
     state->dataHeatBal->ExtVentedCavity(NumOfSurf).SurfPtrs.deallocate();

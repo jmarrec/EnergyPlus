@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -70,13 +70,19 @@ int main(int argc, char *argv[])
     if (argc < 2) {
         std::cout << "Call this with a path to run EnergyPlus as the only argument" << std::endl;
         return EXIT_FAILURE;
-    } else {
-        status = RunEnergyPlus(*state, argv[1]);
-        stateDelete(reinterpret_cast<EnergyPlusState>(state));
     }
-    if (!std::cin.good()) std::cin.clear();
-    if (!std::cerr.good()) std::cerr.clear();
-    if (!std::cout.good()) std::cout.clear();
+    status = RunEnergyPlus(*state, argv[1]);
+    stateDelete(reinterpret_cast<EnergyPlusState>(state));
+
+    if (!std::cin.good()) {
+        std::cin.clear();
+    }
+    if (!std::cerr.good()) {
+        std::cerr.clear();
+    }
+    if (!std::cout.good()) {
+        std::cout.clear();
+    }
     std::cerr << "Standard error is still available for use" << std::endl;
     std::cout << "Standard output is still available for use" << std::endl;
     return status;

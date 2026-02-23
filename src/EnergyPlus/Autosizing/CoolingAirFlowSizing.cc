@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -336,7 +336,9 @@ Real64 CoolingAirFlowSizer::size(EnergyPlusData &state, Real64 _originalValue, b
         if (this->overrideSizeString) {
             if (Util::SameString(this->compType, "ZoneHVAC:FourPipeFanCoil")) {
                 this->sizingString = "Maximum Supply Air Flow Rate [m3/s]";
-                if (this->isEpJSON) this->sizingString = "maximum_supply_air_flow_rate [m3/s]";
+                if (this->isEpJSON) {
+                    this->sizingString = "maximum_supply_air_flow_rate [m3/s]";
+                }
             } else if (this->coilType_Num == HVAC::CoilDX_CoolingTwoSpeed) {
                 if (this->dataDXSpeedNum == 1) { // mode 1 is high speed in DXCoils loop
                     if (this->isEpJSON) {

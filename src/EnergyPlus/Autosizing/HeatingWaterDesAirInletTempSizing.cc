@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -118,14 +118,17 @@ Real64 HeatingWaterDesAirInletTempSizer::size(EnergyPlusData &state, Real64 _ori
         }
     }
     if (this->overrideSizeString) {
-        if (this->isEpJSON) this->sizingString = "rated_inlet_air_temperature";
+        if (this->isEpJSON) {
+            this->sizingString = "rated_inlet_air_temperature";
+        }
     }
     this->selectSizerOutput(state, errorsFound);
     // report not written for OA coils and needs to be corrected
     if (this->curSysNum <= this->numPrimaryAirSys) {
-        if (this->isCoilReportObject)
+        if (this->isCoilReportObject) {
             state.dataRptCoilSelection->coilSelectionReportObj->setCoilEntAirTemp(
                 state, this->compName, this->compType, this->autoSizedValue, this->curSysNum, this->curZoneEqNum);
+        }
     }
     return this->autoSizedValue;
 }

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -314,7 +314,7 @@ namespace Photovoltaics {
 
     //     EnergyPlus V1.2 and beyond include models for photovoltaic calculations called
     //     Generator:Photovoltaic:Simple and Generator:PV:Sandia implemented by the Center for
-    //     Buildings and Thermal Systems, National Renewable Energy Laboratory, 1617 Cole Blvd
+    //     Buildings and Thermal Systems, National Laboratory of the Rockies, 1617 Cole Blvd
     //     MS 2722, Golden, CO, 80401
 
     //     EnergyPlus v1.1.1 and beyond includes model for Photovoltaic calculations, now
@@ -333,6 +333,10 @@ struct PhotovoltaicStateData : BaseGlobalStruct
     bool firstTime = true;
     Real64 PVTimeStep; // internal timestep (in seconds) for cell temperature mode 3
     Array1D_bool MyEnvrnFlag;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

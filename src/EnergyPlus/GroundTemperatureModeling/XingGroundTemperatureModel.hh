@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -57,26 +57,28 @@ namespace EnergyPlus {
 // Forward declarations
 struct EnergyPlusData;
 
-struct XingGroundTempsModel final : BaseGroundTempsModel
-{
-    Real64 depth = 0.0;
-    Real64 groundThermalDiffusivity = 0.0;
-    Real64 simTimeInDays = 0.0;
-    Real64 aveGroundTemp = 0.0;
-    Real64 surfTempAmplitude_1 = 0.0;
-    Real64 phaseShift_1 = 0.0;
-    Real64 surfTempAmplitude_2 = 0.0;
-    Real64 phaseShift_2 = 0.0;
+namespace GroundTemp {
+    struct XingGroundTempsModel final : BaseGroundTempsModel
+    {
+        Real64 depth = 0.0;
+        Real64 groundThermalDiffusivity = 0.0;
+        Real64 simTimeInDays = 0.0;
+        Real64 aveGroundTemp = 0.0;
+        Real64 surfTempAmplitude_1 = 0.0;
+        Real64 phaseShift_1 = 0.0;
+        Real64 surfTempAmplitude_2 = 0.0;
+        Real64 phaseShift_2 = 0.0;
 
-    static XingGroundTempsModel *XingGTMFactory(EnergyPlusData &state, const std::string &objectName);
+        static XingGroundTempsModel *XingGTMFactory(EnergyPlusData &state, const std::string &objectName);
 
-    Real64 getGroundTemp(EnergyPlusData &state) override;
+        Real64 getGroundTemp(EnergyPlusData &state) override;
 
-    Real64 getGroundTempAtTimeInSeconds(EnergyPlusData &state, Real64 depth, Real64 timeInSecondsOfSim) override;
+        Real64 getGroundTempAtTimeInSeconds(EnergyPlusData &state, Real64 depth, Real64 timeInSecondsOfSim) override;
 
-    Real64 getGroundTempAtTimeInMonths(EnergyPlusData &state, Real64 depth, int monthOfSim) override;
-};
+        Real64 getGroundTempAtTimeInMonths(EnergyPlusData &state, Real64 depth, int monthOfSim) override;
+    };
 
+} // namespace GroundTemp
 } // namespace EnergyPlus
 
 #endif

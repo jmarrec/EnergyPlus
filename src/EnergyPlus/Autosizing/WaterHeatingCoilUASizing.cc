@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -385,9 +385,13 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
             }
         }
     }
-    if (this->dataErrorsFound) state.dataSize->DataErrorsFound = true;
+    if (this->dataErrorsFound) {
+        state.dataSize->DataErrorsFound = true;
+    }
     if (this->overrideSizeString) {
-        if (this->isEpJSON) this->sizingString = "u-factor_times_area_value [W/K]";
+        if (this->isEpJSON) {
+            this->sizingString = "u-factor_times_area_value [W/K]";
+        }
     }
     this->selectSizerOutput(state, errorsFound);
     if (this->isCoilReportObject && this->curSysNum <= state.dataHVACGlobal->NumPrimaryAirSys) {

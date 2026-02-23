@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -140,10 +140,17 @@ namespace Window {
             }
             SurfInsideTemp = aTemp - Constant::Kelvin;
             if (ANY_INTERIOR_SHADE_BLIND(state.dataSurface->SurfWinShadingFlag(SurfNum))) {
-                auto const &surfShade = state.dataSurface->surfShades(SurfNum);
+                auto &surfShade = state.dataSurface->surfShades(SurfNum);
                 Real64 EffShBlEmiss = surfShade.effShadeEmi;
                 Real64 EffGlEmiss = surfShade.effGlassEmi;
-
+                if (surfShade.blind.movableSlats) {
+                    surfShade.effShadeEmi = Interp(construction.effShadeBlindEmi[surfShade.blind.slatAngIdxLo],
+                                                   construction.effShadeBlindEmi[surfShade.blind.slatAngIdxHi],
+                                                   surfShade.blind.slatAngInterpFac);
+                    surfShade.effGlassEmi = Interp(construction.effGlassEmi[surfShade.blind.slatAngIdxLo],
+                                                   construction.effGlassEmi[surfShade.blind.slatAngIdxHi],
+                                                   surfShade.blind.slatAngInterpFac);
+                }
                 state.dataSurface->SurfWinEffInsSurfTemp(SurfNum) =
                     (EffShBlEmiss * SurfInsideTemp + EffGlEmiss * (state.dataWindowManager->thetas[2 * totSolidLayers - 3] - Constant::Kelvin)) /
                     (EffShBlEmiss + EffGlEmiss);
@@ -265,7 +272,7 @@ namespace Window {
         auto aFactory = CWCEHeatTransferFactory(state, surface, surfNum, constrNum); // (AUTO_OK)
 
         const auto summerGlassUnit = aFactory.getTarcogSystemForReporting(state, true, windowWidth, windowHeight, tilt); // (AUTO_OK_SPTR)
-        return summerGlassUnit->getSHGC(state.dataConstruction->Construct(surface.Construction).SolTransNorm);
+        return summerGlassUnit->getSHGC(state.dataConstruction->Construct(constrNum).SolTransNorm);
     }
 
     void GetWindowAssemblyNfrcForReport(EnergyPlusData &state,
@@ -532,7 +539,7 @@ namespace Window {
         Real64 transThermalBack = 0.0;
         Real64 thickness = 0.0;
         Real64 conductivity = 0.0;
-        Real64 createOpenness = false;
+        bool createOpenness = false;
         Real64 Atop = 0.0;
         Real64 Abot = 0.0;
         Real64 Aleft = 0.0;
@@ -551,7 +558,7 @@ namespace Window {
             conductivity = matGlass->Conductivity;
 
         } else if (mat->group == Material::Group::Blind) {
-            auto const &surfShade = state.dataSurface->surfShades(m_SurfNum);
+            // auto const &surfShade = state.dataSurface->surfShades(m_SurfNum);
             auto const *matBlind = dynamic_cast<Material::MaterialBlind const *>(mat);
             assert(matBlind != nullptr);
             thickness = matBlind->SlatThickness;
@@ -946,16 +953,18 @@ namespace Window {
             ShadeFlag = WinShadingType::IntBlind;
         } else if (TotGlassLay == 2) {
             auto const *mat3 = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(3));
-            if (mat3->group == Material::Group::Shade)
+            if (mat3->group == Material::Group::Shade) {
                 ShadeFlag = WinShadingType::BGShade;
-            else if (mat3->group == Material::Group::Blind)
+            } else if (mat3->group == Material::Group::Blind) {
                 ShadeFlag = WinShadingType::BGBlind;
+            }
         } else if (TotGlassLay == 3) {
             auto const *mat5 = s_mat->materials(state.dataConstruction->Construct(ConstrNum).LayerPoint(5));
-            if (mat5->group == Material::Group::Shade)
+            if (mat5->group == Material::Group::Shade) {
                 ShadeFlag = WinShadingType::BGShade;
-            else if (mat5->group == Material::Group::Blind)
+            } else if (mat5->group == Material::Group::Blind) {
                 ShadeFlag = WinShadingType::BGBlind;
+            }
         }
 
         return ShadeFlag;

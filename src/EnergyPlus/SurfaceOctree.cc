@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -84,12 +84,14 @@ namespace EnergyPlus {
 bool SurfaceOctreeCube::contains(Surface const &surface) const
 {
     for (Vertex const &v : surface.Vertex) { // All surface vertices must be in cube
-        if (!contains(v)) return false;
+        if (!contains(v)) {
+            return false;
+        }
     }
     return true;
 }
 
-// Surfaces Outer Cube Initilization
+// Surfaces Outer Cube Initialization
 void SurfaceOctreeCube::init(EPVector<Surface> &surfaces)
 {
     assert(d_ == 0u);
@@ -229,7 +231,9 @@ void SurfaceOctreeCube::surfaceBranch(Surface &surface)
 bool SurfaceOctreeCube::contains(Vertex const &l, Vertex const &u, Surface const &surface)
 {
     for (Vertex const &v : surface.Vertex) { // All surface vertices must be in cube
-        if (!contains(l, u, v)) return false;
+        if (!contains(l, u, v)) {
+            return false;
+        }
     }
     return true;
 }

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -87,11 +87,12 @@ using namespace EnergyPlus;
 
 TEST_F(EnergyPlusFixture, SetPointManager_DefineReturnWaterChWSetPointManager)
 {
+    state->dataFluid->init_state(*state);
 
     // Set up the required plant loop data
     state->dataPlnt->TotNumLoops = 1;
     state->dataPlnt->PlantLoop.allocate(1);
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).NodeNumIn = 1;  // Supply inlet, return
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).NodeNumOut = 2; // Supply outlet, supply
@@ -189,15 +190,18 @@ TEST_F(EnergyPlusFixture, SetPointManager_DefineReturnWaterChWSetPointManager_Fl
 
     ASSERT_TRUE(process_idf(idf_objects));
 
-    EXPECT_EQ(2, state->dataFluidProps->glycols.isize());
-    const auto *glycol = state->dataFluidProps->glycols(2);
+    state->init_state(*state);
+
+    EXPECT_EQ(2, state->dataFluid->glycols.isize());
+    const auto *glycol = state->dataFluid->glycols(2);
+
     EXPECT_EQ("ETHYLENEGLYCOL40PERCENT", glycol->Name);
     EXPECT_EQ("ETHYLENEGLYCOL", glycol->GlycolName);
 
     // Set up the required plant loop data
     state->dataPlnt->TotNumLoops = 1;
     state->dataPlnt->PlantLoop.allocate(1);
-    state->dataPlnt->PlantLoop(1).FluidIndex = 2;
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetGlycol(*state, "ETHYLENEGLYCOL40PERCENT");
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).NodeNumIn = 1;  // Supply inlet, return
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).NodeNumOut = 2; // Supply outlet, supply
@@ -253,10 +257,11 @@ TEST_F(EnergyPlusFixture, SetPointManager_DefineReturnWaterChWSetPointManager_Fl
 
 TEST_F(EnergyPlusFixture, SetPointManager_DefineReturnWaterHWSetPointManager)
 {
+    state->dataFluid->init_state(*state);
     // Set up the required plant loop data
     state->dataPlnt->TotNumLoops = 1;
     state->dataPlnt->PlantLoop.allocate(1);
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).NodeNumIn = 1;  // Supply inlet, return
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).NodeNumOut = 2; // Supply outlet, supply
@@ -407,14 +412,15 @@ TEST_F(EnergyPlusFixture, SetPointManager_DefineCondEntSetPointManager)
                                                       "For: AllDays,            !- Field 2",
                                                       "Until: 24:00,30.0;       !- Field 3"});
     ASSERT_TRUE(process_idf(idf_objects));
-    state->dataGlobal->NumOfTimeStepInHour = 4;
-    state->dataGlobal->MinutesPerTimeStep = 60 / state->dataGlobal->NumOfTimeStepInHour;
-    ScheduleManager::ProcessScheduleInput(*state);
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 60 / state->dataGlobal->TimeStepsInHour;
+    state->init_state(*state);
+
     state->dataGlobal->TimeStep = 1;
     state->dataGlobal->HourOfDay = 1;
     state->dataEnvrn->DayOfWeek = 1;
     state->dataEnvrn->DayOfYear_Schedule = 1;
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     // a few constants for convenience
     int constexpr evapOutletNodeNum = 1;
@@ -465,7 +471,7 @@ TEST_F(EnergyPlusFixture, SetPointManager_DefineCondEntSetPointManager)
     thisSPM.minTowerDesignWetBulbCurveNum = Curve::GetCurveIndex(*state, "MINDSNWBCURVENAME");
     thisSPM.minOAWetBulbCurveNum = Curve::GetCurveIndex(*state, "MINACTWBCURVENAME");
     thisSPM.optCondenserEnteringTempCurveNum = Curve::GetCurveIndex(*state, "OPTCONDENTCURVENAME");
-    thisSPM.condenserEnteringTempSchedNum = ScheduleManager::GetScheduleIndex(*state, "CONDENSER LOOP TEMP SCHEDULE");
+    thisSPM.condenserEnteringTempSched = Sched::GetSchedule(*state, "CONDENSER LOOP TEMP SCHEDULE");
     thisSPM.plantPloc = {chwLoopIndex, DataPlant::LoopSideLocation::Supply, chillerBranchChW, chillerCompIndex};
 
     thisSPM.demandPloc = {condLoopIndex, DataPlant::LoopSideLocation::Demand, chillerBranchCW, chillerCompIndex};
@@ -611,40 +617,35 @@ TEST_F(EnergyPlusFixture, CalcScheduledTESSetPoint)
     spmTESS.nonChargeCHWTemp = 5;
     spmTESS.chargeCHWTemp = -5;
 
-    // indexes in Schedule
-    int constexpr OnSched = 1;
-    int constexpr OffSched = 2;
-    std::string const idf_contents(delimited_string({
-        "Schedule:Constant,MyScheduleOn,,1;",
-        "Schedule:Constant,MyScheduleOff,,0;",
-    }));
-    ASSERT_TRUE(process_idf(idf_contents));
-    state->dataGlobal->NumOfTimeStepInHour = 4;
-    state->dataGlobal->MinutesPerTimeStep = 60 / state->dataGlobal->NumOfTimeStepInHour;
-    ScheduleManager::ProcessScheduleInput(*state);
+    state->dataGlobal->TimeStepsInHour = 4;
+    state->dataGlobal->MinutesInTimeStep = 60 / state->dataGlobal->TimeStepsInHour;
+
+    state->init_state(*state);
+
     state->dataGlobal->TimeStep = 1;
     state->dataGlobal->HourOfDay = 1;
     state->dataEnvrn->DayOfWeek = 1;
     state->dataEnvrn->DayOfYear_Schedule = 1;
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     // CtrlType Bug
     //    state->dataSetPointManager->SchTESSetPtMgr(schManNum).CompOpType = DataPlant::CtrlType::CoolingOp;
     spmTESS.compOpType = DataPlant::CtrlType::HeatingOp;
 
-    spmTESS.schedNum = OnSched;
+    spmTESS.sched = Sched::GetScheduleAlwaysOn(*state);
+    spmTESS.chargeSched = Sched::GetScheduleAlwaysOff(*state);
 
     spmTESS.calculate(*state);
     EXPECT_EQ(spmTESS.nonChargeCHWTemp, spmTESS.setPt);
 
-    spmTESS.schedNum = OffSched;
-    spmTESS.schedNumCharge = OffSched;
+    spmTESS.sched = Sched::GetScheduleAlwaysOff(*state);
+    spmTESS.chargeSched = Sched::GetScheduleAlwaysOff(*state);
 
     spmTESS.calculate(*state);
     EXPECT_EQ(spmTESS.nonChargeCHWTemp, spmTESS.setPt);
 
-    spmTESS.schedNum = OffSched;
-    spmTESS.schedNumCharge = OnSched;
+    spmTESS.sched = Sched::GetScheduleAlwaysOff(*state);
+    spmTESS.chargeSched = Sched::GetScheduleAlwaysOn(*state);
 
     spmTESS.calculate(*state);
     EXPECT_EQ(spmTESS.chargeCHWTemp, spmTESS.setPt);
@@ -673,6 +674,9 @@ TEST_F(EnergyPlusFixture, SZRHOAFractionImpact)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+
+    state->init_state(*state);
+
     bool ErrorsFound = false;
     state->dataGlobal->NumOfZones = 1;
 
@@ -737,6 +741,7 @@ TEST_F(EnergyPlusFixture, SZRHOAFractionImpact)
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).TotalComponents = 1;
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp.allocate(1);
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).TypeOf = "Fan:ConstantVolume";
+    state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).CompType_Num = SimAirServingZones::CompType::Fan_Simple_CV;
 
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).NodeNumIn =
         NodeInputManager::GetOnlySingleNode(*state,
@@ -972,6 +977,8 @@ TEST_F(EnergyPlusFixture, MixedAirSetPointManager_SameRefAndSPNodeName)
 
     ASSERT_TRUE(process_idf(idf_objects)); // read idf objects
 
+    state->init_state(*state);
+
     // GetInput should fail since reference and set point node names are the same
     bool ErrorsFound = false;
     SetPointManager::GetSetPointManagerInputData(*state, ErrorsFound);
@@ -1122,7 +1129,7 @@ TEST_F(EnergyPlusFixture, ColdestSetPointMgrInSingleDuct)
         "  AirLoopHVAC:ControllerList,",
         "    VAV Sys 1 Controllers,   !- Name",
         "    Controller:WaterCoil,    !- Controller 1 Object Type",
-        "    Central Cooling Coil Contoller 1;  !- Controller 1 Name",
+        "    Central Cooling Coil Controller 1;  !- Controller 1 Name",
 
         "  BranchList,",
         "    VAV Sys 1 Branches,      !- Name",
@@ -1215,7 +1222,7 @@ TEST_F(EnergyPlusFixture, ColdestSetPointMgrInSingleDuct)
         "    VAV Sys 1 Outlet Node;   !- Air Outlet Node Name",
 
         "  Controller:WaterCoil,",
-        "    Central Cooling Coil Contoller 1,  !- Name",
+        "    Central Cooling Coil Controller 1,  !- Name",
         "    Temperature,             !- Control Variable",
         "    Reverse,                 !- Action",
         "    FLOW,                    !- Actuator Variable",
@@ -1286,9 +1293,10 @@ TEST_F(EnergyPlusFixture, ColdestSetPointMgrInSingleDuct)
     ASSERT_TRUE(process_idf(idf_objects));
     bool ErrorsFound = false;
 
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
-    ScheduleManager::ProcessScheduleInput(*state);
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+
+    state->init_state(*state);
 
     HeatBalanceManager::GetZoneData(*state, ErrorsFound); // read zone data
     EXPECT_FALSE(ErrorsFound);                            // zones are specified in the idf snippet
@@ -1374,6 +1382,8 @@ TEST_F(EnergyPlusFixture, SetPointManager_OutdoorAirResetMaxTempTest)
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(ErrorsFound); // zones are specified in the idf snippet
 
+    state->init_state(*state);
+
     SetPointManager::GetSetPointManagerInputs(*state);
     // check Set Point Manager get inputs
     int spmNum = SetPointManager::GetSetPointManagerIndex(*state, "HOT WATER LOOP SETPOINT MANAGER");
@@ -1433,6 +1443,8 @@ TEST_F(EnergyPlusFixture, SetPointManager_OutdoorAirResetMinTempTest)
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(ErrorsFound); // zones are specified in the idf snippet
 
+    state->init_state(*state);
+
     SetPointManager::GetSetPointManagerInputs(*state);
     // check Set Point Manager get inputs
 
@@ -1490,6 +1502,9 @@ TEST_F(EnergyPlusFixture, SingZoneRhSetPtMgrZoneInletNodeTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+
+    state->init_state(*state);
+
     state->dataGlobal->NumOfZones = 1;
 
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
@@ -1557,6 +1572,9 @@ TEST_F(EnergyPlusFixture, SingZoneCoolHeatSetPtMgrZoneInletNodeTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+
+    state->init_state(*state);
+
     state->dataGlobal->NumOfZones = 1;
 
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
@@ -1625,6 +1643,9 @@ TEST_F(EnergyPlusFixture, SingZoneCoolHeatSetPtMgrSetPtTest)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+
+    state->init_state(*state);
+
     state->dataGlobal->NumOfZones = 1;
 
     state->dataHeatBal->Zone.allocate(state->dataGlobal->NumOfZones);
@@ -1724,6 +1745,7 @@ TEST_F(EnergyPlusFixture, SetPointManager_SystemNodeResetTempTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(ErrorsFound);
+    state->init_state(*state);
 
     // check Setpoint Manager inputs
     SetPointManager::GetSetPointManagerInputs(*state);
@@ -1785,6 +1807,7 @@ TEST_F(EnergyPlusFixture, SetPointManager_SystemNodeResetHumRatTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(ErrorsFound);
+    state->init_state(*state);
 
     // check Setpoint Manager inputs
     SetPointManager::GetSetPointManagerInputs(*state);
@@ -1901,8 +1924,10 @@ TEST_F(EnergyPlusFixture, SetPointManager_OutdoorAirResetCalculateSchedValTest)
     ASSERT_TRUE(process_idf(idf_objects));
     EXPECT_FALSE(ErrorsFound); // zones are specified in the idf snippet
 
-    state->dataGlobal->NumOfTimeStepInHour = 1;
-    state->dataGlobal->MinutesPerTimeStep = 60;
+    state->dataGlobal->TimeStepsInHour = 1;
+    state->dataGlobal->MinutesInTimeStep = 60;
+    state->init_state(*state);
+
     state->dataGlobal->HourOfDay = 1;
     state->dataGlobal->TimeStep = 1;
     state->dataGlobal->DayOfSim = 1;
@@ -1911,7 +1936,6 @@ TEST_F(EnergyPlusFixture, SetPointManager_OutdoorAirResetCalculateSchedValTest)
     state->dataEnvrn->DayOfWeek = 1;
     state->dataEnvrn->HolidayIndex = 0;
 
-    ScheduleManager::ProcessScheduleInput(*state);
     SetPointManager::GetSetPointManagerInputs(*state);
 
     int spm1Num = SetPointManager::GetSetPointManagerIndex(*state, "OA RESET MANAGER 1");
@@ -1928,7 +1952,7 @@ TEST_F(EnergyPlusFixture, SetPointManager_OutdoorAirResetCalculateSchedValTest)
 
     // Set general data for all tests
     state->dataEnvrn->OutDryBulbTemp = 7.0;
-    ScheduleManager::UpdateScheduleValues(*state);
+    Sched::UpdateScheduleVals(*state);
 
     // Test 1: First outdoor air reset setpoint manager--should use the first set of setpoint data
     expectedAnswer = 50.0;

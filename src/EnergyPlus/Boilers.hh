@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -50,9 +50,6 @@
 
 #include <array>
 
-// ObjexxFCL Headers
-#include <ObjexxFCL/Array1D.hh>
-
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataBranchAirLoopPlant.hh>
@@ -67,6 +64,10 @@ namespace EnergyPlus {
 
 // Forward declarations
 struct EnergyPlusData;
+
+namespace Curve {
+    struct Curve;
+}
 
 namespace Boilers {
 
@@ -108,7 +109,7 @@ namespace Boilers {
         Real64 OptPartLoadRat = 0.0;                                 // Optimal operating part load ratio
         Real64 OperPartLoadRat = 0.0;                                // Actual operating part load ratio
         TempMode CurveTempMode = TempMode::NOTSET;                   // water temp to use in curve, switch between entering and leaving
-        int EfficiencyCurvePtr = 0;                                  // Index to efficiency curve
+        Curve::Curve *EfficiencyCurve = nullptr;                     // Efficiency curve
         Real64 TempUpLimitBoilerOut = 0.0;                           // C - Boiler outlet maximum temperature limit
         Real64 ParasiticElecLoad = 0.0;                              // W - Parasitic electric power (e.g. forced draft fan)
         Real64 ParasiticFuelConsumption = 0.0; // parasitic fuel consumption associated with the boiler (standing pilot light) [J]
@@ -187,7 +188,11 @@ namespace Boilers {
 struct BoilersData : BaseGlobalStruct
 {
     bool getBoilerInputFlag = true;
-    Array1D<Boilers::BoilerSpecs> Boiler;
+    std::vector<Boilers::BoilerSpecs> Boiler;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

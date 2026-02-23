@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -61,125 +61,128 @@ namespace EnergyPlus {
 // Forward declarations
 struct EnergyPlusData;
 
-// Derived class for Finite-Difference Model
-class FiniteDiffGroundTempsModel : public BaseGroundTempsModel
-{
+namespace GroundTemp {
 
-    static int constexpr maxYearsToIterate = 10;
-
-    Real64 rhoCp_soil_liq_1 = 0.0;
-    Real64 rhoCP_soil_liq = 0.0;
-    Real64 rhoCP_soil_transient = 0.0;
-    Real64 rhoCP_soil_ice = 0.0;
-
-public:
-    Real64 baseConductivity = 0.0;
-    Real64 baseDensity = 0.0;
-    Real64 baseSpecificHeat = 0.0;
-    int totalNumCells = 0;
-    Real64 timeStepInSeconds = 0.0;
-    Real64 evapotransCoeff = 0.0;
-    Real64 saturatedWaterContent = 0.0;
-    Real64 waterContent = 0.0;
-    Real64 annualAveAirTemp = 0.0;
-    Real64 minDailyAirTemp = 100.0;  // Set hi. Will be reset later
-    Real64 maxDailyAirTemp = -100.0; // Set low. Will be reset later
-    Real64 dayOfMinDailyAirTemp = 1;
-    Real64 depth = 0.0;
-    Real64 simTimeInDays = 0.0;
-
-    struct instanceOfCellData
+    // Derived class for Finite-Difference Model
+    class FiniteDiffGroundTempsModel : public BaseGroundTempsModel
     {
 
-        struct properties
+        static int constexpr maxYearsToIterate = 10;
+
+        Real64 rhoCp_soil_liq_1 = 0.0;
+        Real64 rhoCP_soil_liq = 0.0;
+        Real64 rhoCP_soil_transient = 0.0;
+        Real64 rhoCP_soil_ice = 0.0;
+
+    public:
+        Real64 baseConductivity = 0.0;
+        Real64 baseDensity = 0.0;
+        Real64 baseSpecificHeat = 0.0;
+        int totalNumCells = 0;
+        Real64 timeStepInSeconds = 0.0;
+        Real64 evapotransCoeff = 0.0;
+        Real64 saturatedWaterContent = 0.0;
+        Real64 waterContent = 0.0;
+        Real64 annualAveAirTemp = 0.0;
+        Real64 minDailyAirTemp = 100.0;  // Set hi. Will be reset later
+        Real64 maxDailyAirTemp = -100.0; // Set low. Will be reset later
+        Real64 dayOfMinDailyAirTemp = 1;
+        Real64 depth = 0.0;
+        Real64 simTimeInDays = 0.0;
+
+        struct instanceOfCellData
         {
-            Real64 conductivity = 0.0;
-            Real64 density = 0.0;
-            Real64 specificHeat = 0.0;
-            Real64 diffusivity = 0.0;
-            Real64 rhoCp = 0.0;
+
+            struct properties
+            {
+                Real64 conductivity = 0.0;
+                Real64 density = 0.0;
+                Real64 specificHeat = 0.0;
+                Real64 diffusivity = 0.0;
+                Real64 rhoCp = 0.0;
+            };
+
+            properties props;
+
+            int index = 0;
+            Real64 thickness = 0.0;
+            Real64 minZValue = 0.0;
+            Real64 maxZValue = 0.0;
+            Real64 temperature = 0.0;
+            Real64 temperature_prevIteration = 0.0;
+            Real64 temperature_prevTimeStep = 0.0;
+            Real64 temperature_finalConvergence = 0.0;
+            Real64 beta = 0.0;
+            Real64 volume = 0.0;
+            Real64 conductionArea = 1.0; // Assumes 1 m2
         };
 
-        properties props;
+        Array1D<instanceOfCellData> cellArray;
 
-        int index = 0;
-        Real64 thickness = 0.0;
-        Real64 minZValue = 0.0;
-        Real64 maxZValue = 0.0;
-        Real64 temperature = 0.0;
-        Real64 temperature_prevIteration = 0.0;
-        Real64 temperature_prevTimeStep = 0.0;
-        Real64 temperature_finalConvergence = 0.0;
-        Real64 beta = 0.0;
-        Real64 volume = 0.0;
-        Real64 conductionArea = 1.0; // Assumes 1 m2
+        struct instanceOfWeatherData
+        {
+            Real64 dryBulbTemp = 0.0;
+            Real64 relativeHumidity = 0.0;
+            Real64 windSpeed = 0.0;
+            Real64 horizontalRadiation = 0.0;
+            Real64 airDensity = 0.0;
+        };
+
+        Array1D<instanceOfWeatherData> weatherDataArray;
+
+        static FiniteDiffGroundTempsModel *FiniteDiffGTMFactory(EnergyPlusData &state, const std::string &objectName);
+
+        void getWeatherData(EnergyPlusData &state);
+
+        void initAndSim(EnergyPlusData &state);
+
+        void developMesh();
+
+        void performSimulation(EnergyPlusData &state);
+
+        void updateSurfaceCellTemperature(const EnergyPlusData &state);
+
+        void updateGeneralDomainCellTemperature(int cell);
+
+        void updateBottomCellTemperature();
+
+        void initDomain(EnergyPlusData &state);
+
+        bool checkFinalTemperatureConvergence(const EnergyPlusData &state);
+
+        bool checkIterationTemperatureConvergence();
+
+        void updateIterationTemperatures();
+
+        void updateTimeStepTemperatures(const EnergyPlusData &state);
+
+        void doStartOfTimeStepInits();
+
+        Real64 getGroundTemp(EnergyPlusData &state) override;
+
+        Real64 getGroundTempAtTimeInSeconds(EnergyPlusData &state, Real64 depth, Real64 timeInSecondsOfSim) override;
+
+        Real64 getGroundTempAtTimeInMonths(EnergyPlusData &state, Real64 depth, int monthOfSim) override;
+
+        void evaluateSoilRhoCpInit();
+
+        void evaluateSoilRhoCpCell(int cell);
+
+        static Real64 interpolate(Real64 x, Real64 x_hi, Real64 x_low, Real64 y_hi, Real64 y_low);
+
+        Array2D<Real64> groundTemps;
+
+        Array1D<Real64> cellDepths;
+
+        enum surfaceTypes
+        {
+            surfaceCoverType_bareSoil = 1,
+            surfaceCoverType_shortGrass = 2,
+            surfaceCoverType_longGrass = 3
+        };
     };
 
-    Array1D<instanceOfCellData> cellArray;
-
-    struct instanceOfWeatherData
-    {
-        Real64 dryBulbTemp = 0.0;
-        Real64 relativeHumidity = 0.0;
-        Real64 windSpeed = 0.0;
-        Real64 horizontalRadiation = 0.0;
-        Real64 airDensity = 0.0;
-    };
-
-    Array1D<instanceOfWeatherData> weatherDataArray;
-
-    static FiniteDiffGroundTempsModel *FiniteDiffGTMFactory(EnergyPlusData &state, const std::string &objectName);
-
-    void getWeatherData(EnergyPlusData &state);
-
-    void initAndSim(EnergyPlusData &state);
-
-    void developMesh();
-
-    void performSimulation(EnergyPlusData &state);
-
-    void updateSurfaceCellTemperature(const EnergyPlusData &state);
-
-    void updateGeneralDomainCellTemperature(int cell);
-
-    void updateBottomCellTemperature();
-
-    void initDomain(EnergyPlusData &state);
-
-    bool checkFinalTemperatureConvergence(const EnergyPlusData &state);
-
-    bool checkIterationTemperatureConvergence();
-
-    void updateIterationTemperatures();
-
-    void updateTimeStepTemperatures(const EnergyPlusData &state);
-
-    void doStartOfTimeStepInits();
-
-    Real64 getGroundTemp(EnergyPlusData &state) override;
-
-    Real64 getGroundTempAtTimeInSeconds(EnergyPlusData &state, Real64 depth, Real64 timeInSecondsOfSim) override;
-
-    Real64 getGroundTempAtTimeInMonths(EnergyPlusData &state, Real64 depth, int monthOfSim) override;
-
-    void evaluateSoilRhoCpInit();
-
-    void evaluateSoilRhoCpCell(int cell);
-
-    static Real64 interpolate(Real64 x, Real64 x_hi, Real64 x_low, Real64 y_hi, Real64 y_low);
-
-    Array2D<Real64> groundTemps;
-
-    Array1D<Real64> cellDepths;
-
-    enum surfaceTypes
-    {
-        surfaceCoverType_bareSoil = 1,
-        surfaceCoverType_shortGrass = 2,
-        surfaceCoverType_longGrass = 3
-    };
-};
-
+} // namespace GroundTemp
 } // namespace EnergyPlus
 
 #endif

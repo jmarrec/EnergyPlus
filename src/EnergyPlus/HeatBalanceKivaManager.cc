@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -50,8 +50,8 @@
 // Kiva Headers
 #include <libkiva/Errors.hpp>
 #ifdef GROUND_PLOT
-#include <EnergyPlus/DataStringGlobals.hh>
-#include <libgroundplot/GroundPlot.hpp>
+#    include <EnergyPlus/DataStringGlobals.hh>
+#    include <libgroundplot/GroundPlot.hpp>
 #endif
 
 // EnergyPlus Headers
@@ -79,12 +79,12 @@ namespace EnergyPlus::HeatBalanceKivaManager {
 
 void kivaErrorCallback(const int messageType, const std::string message, void *contextPtr)
 {
-    if (!contextPtr) {
+    if (contextPtr == nullptr) {
         throw FatalError(format("Unhandled Kiva Error: {}", message));
     }
     std::string fullMessage;
     std::pair<EnergyPlusData *, std::string> contextPair = *(std::pair<EnergyPlusData *, std::string> *)contextPtr;
-    if (contextPair.second.size() > 0) {
+    if (!contextPair.second.empty()) {
         fullMessage = format("{}: {}", contextPair.second, message);
     } else {
         fullMessage = format("Kiva: {}", message);
@@ -179,7 +179,7 @@ void KivaInstanceMap::initGround(EnergyPlusData &state, const KivaWeatherData &k
     int accDate = getAccDate(state, numAccelaratedTimesteps, acceleratedTimestep);
     // Initialize with steady state before accelerated timestepping
     instance.ground->foundation.numericalScheme = Kiva::Foundation::NS_STEADY_STATE;
-    setInitialBoundaryConditions(state, kivaWeather, accDate, 24, state.dataGlobal->NumOfTimeStepInHour);
+    setInitialBoundaryConditions(state, kivaWeather, accDate, 24, state.dataGlobal->TimeStepsInHour);
     instance.calculate();
     accDate += acceleratedTimestep;
     while (accDate > 365 + state.dataWeather->LeapYearAdd) {
@@ -189,7 +189,7 @@ void KivaInstanceMap::initGround(EnergyPlusData &state, const KivaWeatherData &k
     // Accelerated timestepping
     instance.ground->foundation.numericalScheme = Kiva::Foundation::NS_IMPLICIT;
     for (int i = 0; i < numAccelaratedTimesteps; ++i) {
-        setInitialBoundaryConditions(state, kivaWeather, accDate, 24, state.dataGlobal->NumOfTimeStepInHour);
+        setInitialBoundaryConditions(state, kivaWeather, accDate, 24, state.dataGlobal->TimeStepsInHour);
         instance.calculate(acceleratedTimestep * 24 * 60 * 60);
         accDate += acceleratedTimestep;
         while (accDate > 365 + state.dataWeather->LeapYearAdd) {
@@ -222,9 +222,9 @@ void KivaInstanceMap::setInitialBoundaryConditions(
 
     if (kivaWeather.intervalsPerHour == 1) {
         index = (date - 1) * 24 + (hour - 1);
-        weightNow = min(1.0, (double(timestep) / double(state.dataGlobal->NumOfTimeStepInHour)));
+        weightNow = min(1.0, (double(timestep) / double(state.dataGlobal->TimeStepsInHour)));
     } else {
-        index = (date - 1) * 24 * state.dataGlobal->NumOfTimeStepInHour + (hour - 1) * state.dataGlobal->NumOfTimeStepInHour + (timestep - 1);
+        index = (date - 1) * 24 * state.dataGlobal->TimeStepsInHour + (hour - 1) * state.dataGlobal->TimeStepsInHour + (timestep - 1);
         weightNow = 1.0; // weather data interval must be the same as the timestep interval (i.e., no interpolation)
     }
     if (index == 0) {
@@ -268,37 +268,37 @@ void KivaInstanceMap::setInitialBoundaryConditions(
         }
         case KIVAZONE_TEMPCONTROL: {
 
-            int controlTypeSchId = state.dataZoneCtrls->TempControlledZone(zoneControlNum).CTSchedIndex;
-            HVAC::ThermostatType controlType =
-                static_cast<HVAC::ThermostatType>(ScheduleManager::LookUpScheduleValue(state, controlTypeSchId, hour, timestep));
+            auto const *ctrlTypeSched = state.dataZoneCtrls->TempControlledZone(zoneControlNum).setptTypeSched;
+            HVAC::SetptType controlType = static_cast<HVAC::SetptType>(ctrlTypeSched->getHrTsVal(state, hour, timestep));
 
             switch (controlType) {
-            case HVAC::ThermostatType::Uncontrolled:
+            case HVAC::SetptType::Uncontrolled:
                 Tin = assumedFloatingTemp + Constant::Kelvin;
                 break;
-            case HVAC::ThermostatType::SingleHeating: {
-                int schNameId = state.dataZoneCtrls->TempControlledZone(zoneControlNum).SchIndx_SingleHeatSetPoint;
-                Real64 setpoint = ScheduleManager::LookUpScheduleValue(state, schNameId, hour, timestep);
+            case HVAC::SetptType::SingleHeat: {
+                auto const *sched = state.dataZoneCtrls->TempControlledZone(zoneControlNum).setpts[(int)controlType].heatSetptSched;
+                Real64 setpoint = sched->getHrTsVal(state, hour, timestep);
                 Tin = setpoint + Constant::Kelvin;
-                break;
-            }
-            case HVAC::ThermostatType::SingleCooling: {
-                int schNameId = state.dataZoneCtrls->TempControlledZone(zoneControlNum).SchIndx_SingleCoolSetPoint;
-                Real64 setpoint = ScheduleManager::LookUpScheduleValue(state, schNameId, hour, timestep);
+            } break;
+
+            case HVAC::SetptType::SingleCool: {
+                auto const *sched = state.dataZoneCtrls->TempControlledZone(zoneControlNum).setpts[(int)controlType].coolSetptSched;
+                Real64 setpoint = sched->getHrTsVal(state, hour, timestep);
                 Tin = setpoint + Constant::Kelvin;
-                break;
-            }
-            case HVAC::ThermostatType::SingleHeatCool: {
-                int schNameId = state.dataZoneCtrls->TempControlledZone(zoneControlNum).SchIndx_SingleHeatCoolSetPoint;
-                Real64 setpoint = ScheduleManager::LookUpScheduleValue(state, schNameId, hour, timestep);
+            } break;
+
+            case HVAC::SetptType::SingleHeatCool: {
+                // Heat and cool setpt scheds will be the same for this option
+                auto const *sched = state.dataZoneCtrls->TempControlledZone(zoneControlNum).setpts[(int)controlType].heatSetptSched;
+                Real64 setpoint = sched->getHrTsVal(state, hour, timestep);
                 Tin = setpoint + Constant::Kelvin;
-                break;
-            }
-            case HVAC::ThermostatType::DualSetPointWithDeadBand: {
-                int schNameIdHeat = state.dataZoneCtrls->TempControlledZone(zoneControlNum).SchIndx_DualSetPointWDeadBandHeat;
-                int schNameIdCool = state.dataZoneCtrls->TempControlledZone(zoneControlNum).SchIndx_DualSetPointWDeadBandCool;
-                Real64 heatSetpoint = ScheduleManager::LookUpScheduleValue(state, schNameIdHeat, hour, timestep);
-                Real64 coolSetpoint = ScheduleManager::LookUpScheduleValue(state, schNameIdCool, hour, timestep);
+            } break;
+
+            case HVAC::SetptType::DualHeatCool: {
+                auto const *heatSched = state.dataZoneCtrls->TempControlledZone(zoneControlNum).setpts[(int)controlType].heatSetptSched;
+                auto const *coolSched = state.dataZoneCtrls->TempControlledZone(zoneControlNum).setpts[(int)controlType].coolSetptSched;
+                Real64 heatSetpoint = heatSched->getHrTsVal(state, hour, timestep);
+                Real64 coolSetpoint = coolSched->getHrTsVal(state, hour, timestep);
                 constexpr Real64 heatBalanceTemp = 10.0 + Constant::Kelvin; // (assumed)
                 constexpr Real64 coolBalanceTemp = 15.0 + Constant::Kelvin; // (assumed)
 
@@ -310,16 +310,18 @@ void KivaInstanceMap::setInitialBoundaryConditions(
                     Real64 weight = (coolBalanceTemp - bcs->outdoorTemp) / (coolBalanceTemp - heatBalanceTemp);
                     Tin = heatSetpoint * weight + coolSetpoint * (1.0 - weight) + Constant::Kelvin;
                 }
-                break;
-            }
-            default:
+            } break;
+
+            default: {
                 Tin = 0.0;
                 ShowSevereError(state,
                                 format("Illegal control type for Zone={}, Found value={}, in Schedule={}",
                                        state.dataHeatBal->Zone(zoneNum).Name,
                                        controlType,
-                                       state.dataZoneCtrls->TempControlledZone(zoneControlNum).ControlTypeSchedName));
-            }
+                                       state.dataZoneCtrls->TempControlledZone(zoneControlNum).setptTypeSched->Name));
+            } break;
+
+            } // switch (tstatType)
             break;
         }
         case KIVAZONE_COMFORTCONTROL: {
@@ -329,10 +331,10 @@ void KivaInstanceMap::setInitialBoundaryConditions(
         }
         case KIVAZONE_STAGEDCONTROL: {
 
-            int heatSpSchId = state.dataZoneCtrls->StageControlledZone(zoneControlNum).HSBchedIndex;
-            int coolSpSchId = state.dataZoneCtrls->StageControlledZone(zoneControlNum).CSBchedIndex;
-            Real64 heatSetpoint = ScheduleManager::LookUpScheduleValue(state, heatSpSchId, hour, timestep);
-            Real64 coolSetpoint = ScheduleManager::LookUpScheduleValue(state, coolSpSchId, hour, timestep);
+            auto const *heatSched = state.dataZoneCtrls->StageControlledZone(zoneControlNum).heatSetptBaseSched;
+            auto const *coolSched = state.dataZoneCtrls->StageControlledZone(zoneControlNum).coolSetptBaseSched;
+            Real64 heatSetpoint = heatSched->getHrTsVal(state, hour, timestep);
+            Real64 coolSetpoint = coolSched->getHrTsVal(state, hour, timestep);
             constexpr Real64 heatBalanceTemp = 10.0 + Constant::Kelvin; // (assumed)
             constexpr Real64 coolBalanceTemp = 15.0 + Constant::Kelvin; // (assumed)
             if (bcs->outdoorTemp < heatBalanceTemp) {
@@ -377,7 +379,7 @@ void KivaInstanceMap::setBoundaryConditions(EnergyPlusData &state)
 
     bcs->outdoorTemp = state.dataEnvrn->OutDryBulbTemp + Constant::Kelvin;
     bcs->localWindSpeed = DataEnvironment::WindSpeedAt(state, instance.ground->foundation.grade.roughness);
-    bcs->windDirection = state.dataEnvrn->WindDir * Constant::DegToRadians;
+    bcs->windDirection = state.dataEnvrn->WindDir * Constant::DegToRad;
     bcs->solarAzimuth = std::atan2(state.dataEnvrn->SOLCOS(1), state.dataEnvrn->SOLCOS(2));
     bcs->solarAltitude = Constant::PiOvr2 - std::acos(state.dataEnvrn->SOLCOS(3));
     bcs->directNormalFlux = state.dataEnvrn->BeamSolarRad;
@@ -490,7 +492,9 @@ void KivaManager::readWeatherData(EnergyPlusData &state)
         }
         std::string::size_type Pos = FindNonSpace(LineResult.data);
         std::string::size_type const HdPos = index(LineResult.data, Header(HdLine));
-        if (Pos != HdPos) continue;
+        if (Pos != HdPos) {
+            continue;
+        }
         Pos = index(LineResult.data, ',');
 
         // Below borrowed from ProcessEPWHeader
@@ -500,7 +504,9 @@ void KivaManager::readWeatherData(EnergyPlusData &state)
             ShowContinueError(state, format("Line={}", LineResult.data));
             ShowFatalError(state, "Previous conditions cause termination.");
         }
-        if (Pos != std::string::npos) LineResult.data.erase(0, Pos + 1);
+        if (Pos != std::string::npos) {
+            LineResult.data.erase(0, Pos + 1);
+        }
 
         if (Util::makeUPPER(Header(HdLine)) == "DATA PERIODS") {
             bool IOStatus;
@@ -540,7 +546,9 @@ void KivaManager::readWeatherData(EnergyPlusData &state)
         }
 
         ++HdLine;
-        if (HdLine == 9) StillLooking = false;
+        if (HdLine == 9) {
+            StillLooking = false;
+        }
     }
 
     bool ErrorFound = false;
@@ -729,8 +737,7 @@ bool KivaManager::setupKivaInstances(EnergyPlusData &state)
             }
 
             Kiva::Polygon floorPolygon;
-            for (std::size_t i = 0; i < surface.Vertex.size(); ++i) {
-                auto const &v = surface.Vertex[i];
+            for (const auto &v : surface.Vertex) {
                 floorPolygon.outer().push_back(Kiva::Point(v.x, v.y));
                 if (!userSetExposedPerimeter) {
                     isExposedPerimeter.push_back(true);
@@ -775,7 +782,7 @@ bool KivaManager::setupKivaInstances(EnergyPlusData &state)
 
             Real64 totalExposedPerimeter = exposedFraction * totalPerimeter;
 
-            // Remaining exposed perimeter will be alloted to each instance as appropriate
+            // Remaining exposed perimeter will be allotted to each instance as appropriate
             Real64 remainingExposedPerimeter = totalExposedPerimeter;
 
             // Get combinations of wall constructions and wall heights -- each different
@@ -839,7 +846,7 @@ bool KivaManager::setupKivaInstances(EnergyPlusData &state)
 
                     Real64 surfHeight = Surfaces(wl).get_average_height(state);
                     // round to avoid numerical precision differences
-                    surfHeight = std::round((surfHeight)*1000.0) / 1000.0;
+                    surfHeight = std::round((surfHeight) * 1000.0) / 1000.0;
 
                     if (combinationMap.count({Surfaces(wl).Construction, surfHeight}) == 0) {
                         // create new combination

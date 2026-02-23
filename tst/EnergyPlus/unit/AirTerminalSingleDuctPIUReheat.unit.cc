@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -67,7 +67,6 @@ using namespace EnergyPlus::DataEnvironment;
 using namespace EnergyPlus::DataZoneEquipment;
 using namespace EnergyPlus::HeatBalanceManager;
 using namespace EnergyPlus::PoweredInductionUnits;
-using namespace EnergyPlus::ScheduleManager;
 using namespace EnergyPlus::SimulationManager;
 using namespace EnergyPlus::ZoneAirLoopEquipmentManager;
 
@@ -88,7 +87,6 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctSeriesPIUReheat_GetInputtest)
         "    SPACE1-1 ATU In Node,    !- Supply Air Inlet Node Name",
         "    SPACE1-1 ATU Sec Node,   !- Secondary Air Inlet Node Name",
         "    SPACE1-1 In Node,        !- Outlet Node Name",
-        "    SPACE1-1 Zone Coil Air In Node,  !- Reheat Coil Air Inlet Node Name",
         "    SPACE1-1 PIU Mixer,      !- Zone Mixer Name",
         "    SPACE1-1 PIU Fan,        !- Fan Name",
         "    Coil:Heating:Water,      !- Reheat Coil Object Type",
@@ -176,9 +174,9 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctSeriesPIUReheat_GetInputtest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
-    state->dataGlobal->NumOfTimeStepInHour = 1; // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60; // must initialize this to get schedules initialized
-    ProcessScheduleInput(*state);               // read schedules
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
 
     GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -210,7 +208,6 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctSeriesPIU_SetADUInletNodeTest)
         "    SPACE1-1 ATU In Node,    !- Supply Air Inlet Node Name",
         "    SPACE1-1 ATU Sec Node,   !- Secondary Air Inlet Node Name",
         "    SPACE1-1 In Node,        !- Outlet Node Name",
-        "    SPACE1-1 Zone Coil Air In Node,  !- Reheat Coil Air Inlet Node Name",
         "    SPACE1-1 PIU Mixer,      !- Zone Mixer Name",
         "    SPACE1-1 PIU Fan,        !- Fan Name",
         "    Coil:Heating:Electric,   !- Reheat Coil Object Type",
@@ -286,9 +283,9 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctSeriesPIU_SetADUInletNodeTest)
 
     ASSERT_TRUE(process_idf(idf_objects));
 
-    state->dataGlobal->NumOfTimeStepInHour = 1; // must initialize this to get schedules initialized
-    state->dataGlobal->MinutesPerTimeStep = 60; // must initialize this to get schedules initialized
-    ProcessScheduleInput(*state);               // read schedules
+    state->dataGlobal->TimeStepsInHour = 1;    // must initialize this to get schedules initialized
+    state->dataGlobal->MinutesInTimeStep = 60; // must initialize this to get schedules initialized
+    state->init_state(*state);
 
     GetZoneData(*state, ErrorsFound);
     ASSERT_FALSE(ErrorsFound);
@@ -1078,7 +1075,6 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctSeriesPIU_SimTest)
         "    Node 24,                 !- Supply Air Inlet Node Name",
         "    Node 25,                 !- Secondary Air Inlet Node Name",
         "    Node 6,                  !- Outlet Node Name",
-        "    Series PIU Elec Rht Fan Outlet,  !- Reheat Coil Air Inlet Node Name",
         "    Series PIU Elec Rht Mixer,  !- Zone Mixer Name",
         "    Series PIU Fan,          !- Fan Name",
         "    Coil:Heating:Electric,   !- Reheat Coil Object Type",

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -51,10 +51,10 @@
 #include <EnergyPlus/Data/EnergyPlusData.hh>
 
 #if LINK_WITH_PYTHON
-#ifndef PyObject_HEAD
+#    ifndef PyObject_HEAD
 struct _object;
 using PyObject = _object;
-#endif
+#    endif
 #endif
 
 namespace EnergyPlus {
@@ -71,6 +71,8 @@ namespace Python {
         PythonEngine &operator=(PythonEngine &&) = delete;
         ~PythonEngine();
 
+        static std::string getBasicPreamble();
+        static std::string getTclPreppedPreamble(std::vector<std::string> const &python_fwd_args);
         void exec(std::string_view sv);
 
         bool eplusRunningViaPythonAPI = false;

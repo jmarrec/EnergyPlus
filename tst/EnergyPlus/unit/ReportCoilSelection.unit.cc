@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -80,7 +80,7 @@ TEST_F(EnergyPlusFixture, ReportCoilSelection_ChWCoil)
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).Name = "Chilled Water Loop";
     state->dataPlnt->PlantLoop(1).FluidName = "Water";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).MaxMassFlowRate = 0.1;
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch.allocate(1);
@@ -235,7 +235,9 @@ TEST_F(EnergyPlusFixture, ReportCoilSelection_SteamCoil)
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).Name = "Steam Loop";
     state->dataPlnt->PlantLoop(1).FluidName = "Steam";
-    state->dataPlnt->PlantLoop(1).FluidIndex = 1;
+    state->dataPlnt->PlantLoop(1).steam = Fluid::GetSteam(*state);
+    state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+
     state->dataPlnt->PlantLoop(1).MaxMassFlowRate = 0.1;
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch.allocate(1);
@@ -952,8 +954,6 @@ TEST_F(EnergyPlusFixture, ReportCoilSelection_4PipeFCU_ElecHeatingCoil)
 TEST_F(EnergyPlusFixture, Test_finishCoilSummaryReportTable)
 {
     Real64 constexpr mult = 1.0;
-    int curSysNum = 0;
-    int curOASysNum = 0;
     int curZoneEqNum = 1;
     std::string coil1Name = "ElecHeatCoil";          // user-defined name of the coil
     std::string coil1Type = "Coil:Heating:Electric"; // idf input object class name of coil

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -205,7 +205,9 @@ Real64 HeatingAirflowUASizer::size(EnergyPlusData &state, Real64 _originalValue,
         this->autoSizedValue = 0.0;
     }
     if (this->overrideSizeString) {
-        if (this->isEpJSON) this->sizingString = "heating_coil_airflow_for_ua";
+        if (this->isEpJSON) {
+            this->sizingString = "heating_coil_airflow_for_ua";
+        }
     }
     this->selectSizerOutput(state, errorsFound);
     return this->autoSizedValue;

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -51,7 +51,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/Fmath.hh>
 #include <ObjexxFCL/string.functions.hh>
 
 // EnergyPlus Headers
@@ -199,9 +198,7 @@ namespace WindTurbine {
         // This subroutine gets input data for wind turbine components
         // and stores it in the wind turbine data structure.
 
-        // Using/Aliasing
-
-        using ScheduleManager::GetScheduleIndex;
+        static constexpr std::string_view routineName = "GetWindTurbineInput";
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static std::string const CurrentModuleObject("Generator:WindTurbine");
@@ -252,26 +249,20 @@ namespace WindTurbine {
                                                                      lAlphaBlanks,
                                                                      cAlphaFields,
                                                                      cNumericFields);
+
+            ErrorObjectHeader eoh{routineName, CurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
+
             Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), CurrentModuleObject, ErrorsFound);
 
             auto &windTurbine = state.dataWindTurbine->WindTurbineSys(WindTurbineNum);
 
             windTurbine.Name = state.dataIPShortCut->cAlphaArgs(1); // Name of wind turbine
 
-            windTurbine.Schedule = state.dataIPShortCut->cAlphaArgs(2); // Get schedule
             if (lAlphaBlanks(2)) {
-                windTurbine.SchedPtr = ScheduleManager::ScheduleAlwaysOn;
-            } else {
-                windTurbine.SchedPtr = GetScheduleIndex(state, state.dataIPShortCut->cAlphaArgs(2));
-                if (windTurbine.SchedPtr == 0) {
-                    ShowSevereError(state,
-                                    format("{}=\"{}\" invalid {}=\"{}\" not found.",
-                                           CurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           cAlphaFields(2),
-                                           state.dataIPShortCut->cAlphaArgs(2)));
-                    ErrorsFound = true;
-                }
+                windTurbine.availSched = Sched::GetScheduleAlwaysOn(state);
+            } else if ((windTurbine.availSched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(2))) == nullptr) {
+                ShowSevereItemNotFound(state, eoh, cAlphaFields(2), state.dataIPShortCut->cAlphaArgs(2));
+                ErrorsFound = true;
             }
             // Select rotor type
             windTurbine.rotorType =
@@ -664,7 +655,9 @@ namespace WindTurbine {
         lAlphaBlanks.deallocate();
         lNumericBlanks.deallocate();
 
-        if (ErrorsFound) ShowFatalError(state, format("{} errors occurred in input.  Program terminates.", CurrentModuleObject));
+        if (ErrorsFound) {
+            ShowFatalError(state, format("{} errors occurred in input.  Program terminates.", CurrentModuleObject));
+        }
 
         for (WindTurbineNum = 1; WindTurbineNum <= NumWindTurbines; ++WindTurbineNum) {
             auto &windTurbine = state.dataWindTurbine->WindTurbineSys(WindTurbineNum);
@@ -783,12 +776,16 @@ namespace WindTurbine {
                     auto lineIn = statFile.readLine();
                     // reconcile line with different versions of stat file
                     size_t lnPtr = index(lineIn.data, "Wind Speed");
-                    if (lnPtr == std::string::npos) continue;
+                    if (lnPtr == std::string::npos) {
+                        continue;
+                    }
                     // have hit correct section.
                     while (statFile.good()) { // find daily avg line
                         lineIn = statFile.readLine();
                         lnPtr = index(lineIn.data, "Daily Avg");
-                        if (lnPtr == std::string::npos) continue;
+                        if (lnPtr == std::string::npos) {
+                            continue;
+                        }
                         // tab delimited file
                         lineIn.data.erase(0, lnPtr + 10);
                         MonthWS = 0.0;
@@ -831,7 +828,9 @@ namespace WindTurbine {
                         }
                         break;
                     }
-                    if (wsStatFound) break;
+                    if (wsStatFound) {
+                        break;
+                    }
                 }
                 if (wsStatFound) {
                     AnnualTMYWS = sum(MonthWS) / 12.0;
@@ -861,7 +860,9 @@ namespace WindTurbine {
             windTurbine.WSFactor = LocalTMYWS / windTurbine.LocalAnnualAvgWS;
         }
         // Assign factor of 1.0 if no stat file or no input of local average wind speed
-        if (windTurbine.WSFactor == 0.0) windTurbine.WSFactor = 1.0;
+        if (windTurbine.WSFactor == 0.0) {
+            windTurbine.WSFactor = 1.0;
+        }
 
         // Do every time step initialization
         windTurbine.Power = 0.0;
@@ -898,7 +899,6 @@ namespace WindTurbine {
         using DataEnvironment::OutWetBulbTempAt;
         using Psychrometrics::PsyRhoAirFnPbTdbW;
         using Psychrometrics::PsyWFnTdbTwbPb;
-        using ScheduleManager::GetCurrentScheduleValue;
 
         Real64 constexpr MaxTheta(90.0);   // Maximum of theta
         Real64 constexpr MaxDegree(360.0); // Maximum limit of outdoor air wind speed in m/s
@@ -957,8 +957,7 @@ namespace WindTurbine {
         LocalWindSpeed /= windTurbine.WSFactor;
 
         // Check wind conditions for system operation
-        if (GetCurrentScheduleValue(state, windTurbine.SchedPtr) > 0 && LocalWindSpeed > windTurbine.CutInSpeed &&
-            LocalWindSpeed < windTurbine.CutOutSpeed) {
+        if (windTurbine.availSched->getCurrentVal() > 0 && LocalWindSpeed > windTurbine.CutInSpeed && LocalWindSpeed < windTurbine.CutOutSpeed) {
 
             // System is on
             Period = 2.0 * Constant::Pi;
@@ -1029,8 +1028,8 @@ namespace WindTurbine {
 
                 InducedVel = LocalWindSpeed * 2.0 / 3.0;
                 // Velocity components
-                Real64 const sin_AzimuthAng(std::sin(AzimuthAng * Constant::DegToRadians));
-                Real64 const cos_AzimuthAng(std::cos(AzimuthAng * Constant::DegToRadians));
+                Real64 const sin_AzimuthAng = std::sin(AzimuthAng * Constant::DegToRad);
+                Real64 const cos_AzimuthAng = std::cos(AzimuthAng * Constant::DegToRad);
                 ChordalVel = RotorVel + InducedVel * cos_AzimuthAng;
                 NormalVel = InducedVel * sin_AzimuthAng;
                 RelFlowVel = std::sqrt(pow_2(ChordalVel) + pow_2(NormalVel));
@@ -1039,8 +1038,8 @@ namespace WindTurbine {
                 AngOfAttack = std::atan((sin_AzimuthAng / ((RotorVel / LocalWindSpeed) / (InducedVel / LocalWindSpeed) + cos_AzimuthAng)));
 
                 // Force coefficients
-                Real64 const sin_AngOfAttack(std::sin(AngOfAttack * Constant::DegToRadians));
-                Real64 const cos_AngOfAttack(std::cos(AngOfAttack * Constant::DegToRadians));
+                Real64 const sin_AngOfAttack = std::sin(AngOfAttack * Constant::DegToRad);
+                Real64 const cos_AngOfAttack = std::cos(AngOfAttack * Constant::DegToRad);
                 TanForceCoeff = std::abs(windTurbine.LiftCoeff * sin_AngOfAttack - windTurbine.DragCoeff * cos_AngOfAttack);
                 NorForceCoeff = windTurbine.LiftCoeff * cos_AngOfAttack + windTurbine.DragCoeff * sin_AngOfAttack;
 

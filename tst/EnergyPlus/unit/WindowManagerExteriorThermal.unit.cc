@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -92,7 +92,6 @@ TEST_F(EnergyPlusFixture, test_overallUfactorFromFilmsAndCond)
     state->dataConstruction->Construct(numCons).LayerPoint(1) = materialOutside;
     state->dataConstruction->Construct(numCons).LayerPoint(numLayers) = materialInside;
     state->dataConstruction->Construct(numCons).AbsDiff.allocate(2);
-    int numMaterials = materialInside;
 
     s_mat->materials.push_back(new Material::MaterialGlass);
     s_mat->materials.push_back(new Material::MaterialGlass);
@@ -147,7 +146,6 @@ TEST_F(EnergyPlusFixture, test_getOutdoorNfrc)
     state->dataConstruction->Construct(numCons).LayerPoint(1) = materialOutside;
     state->dataConstruction->Construct(numCons).LayerPoint(numLayers) = materialInside;
     state->dataConstruction->Construct(numCons).AbsDiff.allocate(2);
-    int numMaterials = materialInside;
 
     auto *matOutside = new Material::MaterialGlass;
     s_mat->materials.push_back(matOutside);
@@ -215,7 +213,6 @@ TEST_F(EnergyPlusFixture, test_getShadeType)
     state->dataConstruction->Construct(simpleCons).LayerPoint(1) = materialOutside;
     state->dataConstruction->Construct(simpleCons).LayerPoint(numLayers) = materialInside;
     state->dataConstruction->Construct(simpleCons).AbsDiff.allocate(2);
-    int numMaterials = materialInside + 1;
     s_mat->materials.push_back(new Material::MaterialGlass);
     s_mat->materials.push_back(new Material::MaterialGlass);
     auto aFactory = CWCEHeatTransferFactory(*state, state->dataSurface->Surface(numSurf), numSurf, simpleCons);
@@ -298,7 +295,6 @@ TEST_F(EnergyPlusFixture, test_getActiveConstructionNumber)
     state->dataConstruction->Construct(numCons).LayerPoint(1) = materialOutside;
     state->dataConstruction->Construct(numCons).LayerPoint(numLayers) = materialInside;
     state->dataConstruction->Construct(numCons).AbsDiff.allocate(2);
-    int numMaterials = materialInside;
 
     s_mat->materials.push_back(new Material::MaterialGlass);
     s_mat->materials.push_back(new Material::MaterialGlass);
@@ -336,7 +332,6 @@ TEST_F(EnergyPlusFixture, test_getIGU)
     state->dataConstruction->Construct(numCons).LayerPoint(1) = materialOutside;
     state->dataConstruction->Construct(numCons).LayerPoint(numLayers) = materialInside;
     state->dataConstruction->Construct(numCons).AbsDiff.allocate(2);
-    int numMaterials = materialInside;
 
     s_mat->materials.push_back(new Material::MaterialGlass);
     s_mat->materials.push_back(new Material::MaterialGlass);
@@ -674,15 +669,14 @@ TEST_F(EnergyPlusFixture, test_GetWindowAssemblyNfrcForReport_withIDF)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
-    SimulationManager::GetProjectData(*state);
     bool FoundError = false;
 
     HeatBalanceManager::GetProjectControlData(*state, FoundError); // read project control data
     EXPECT_FALSE(FoundError);                                      // expect no errors
 
     HeatBalanceManager::SetPreConstructionInputParameters(*state);
-    ScheduleManager::ProcessScheduleInput(*state); // read schedules
 
     Material::GetMaterialData(*state, FoundError);
     EXPECT_FALSE(FoundError);
@@ -701,8 +695,8 @@ TEST_F(EnergyPlusFixture, test_GetWindowAssemblyNfrcForReport_withIDF)
     state->dataSurfaceGeometry->CosZoneRelNorth.allocate(1);
     state->dataSurfaceGeometry->SinZoneRelNorth.allocate(1);
 
-    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
-    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRadians);
+    state->dataSurfaceGeometry->CosZoneRelNorth(1) = std::cos(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
+    state->dataSurfaceGeometry->SinZoneRelNorth(1) = std::sin(-state->dataHeatBal->Zone(1).RelNorth * Constant::DegToRad);
     state->dataSurfaceGeometry->CosBldgRelNorth = 1.0;
     state->dataSurfaceGeometry->SinBldgRelNorth = 0.0;
 

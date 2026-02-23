@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -51,7 +51,6 @@
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1D.hh>
 #include <ObjexxFCL/Array2D.hh>
-#include <ObjexxFCL/Array3D.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
@@ -231,19 +230,17 @@ struct HeatBalSurfData : BaseGlobalStruct
     Array1D_bool EnclSolRecDifShortFromZ;  // True if Zone gets short radiation from another
 
     // Surface Heat Balance
-    Array1D<bool> SurfMovInsulExtPresent;       // True when interior movable insulation is present
-    Array1D<bool> SurfMovInsulIntPresent;       // True when interior movable insulation is present
-    Array1D<bool> SurfMovInsulIntPresentPrevTS; // True when interior movable insulation was present during the previous time step
-
-    Array1D<Real64> SurfMovInsulHExt;                     // Resistance or "h" value of exterior movable insulation
-    Array1D<Real64> SurfMovInsulHInt;                     // Resistance or "h" value of interior movable insulation
     Array1D<Real64> SurfAbsSolarExt;                      // Solar Absorptivity of surface outside face or interior movable insulation if present
     Array1D<Real64> SurfAbsThermalExt;                    // Thermal Absorptivity of surface outside face or interior movable insulation if present
     Array1D<Real64> SurfAbsSolarInt;                      // Solar absorptivity of surface inside face or exterior movable insulation if present
     Array1D<Material::SurfaceRoughness> SurfRoughnessExt; // Roughness of surface inside face or exterior movable insulation if present
     Array1D<Real64> SurfAbsThermalInt;                    // Thermal absorptivity of surface inside face or exterior movable insulation if present
-    std::vector<int> SurfMovInsulIndexList;
+
     std::vector<int> SurfMovSlatsIndexList;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

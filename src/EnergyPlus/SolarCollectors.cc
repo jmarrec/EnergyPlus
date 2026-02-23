@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -50,7 +50,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array.functions.hh>
-#include <ObjexxFCL/Fmath.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/BranchNodeConnections.hh>
@@ -91,8 +90,6 @@ namespace SolarCollectors {
     // Solar collectors are called as non-zone equipment on the demand side of the plant loop.  The collector object
     // must be connected to a WATER HEATER object on the supply side of the plant loop.  Water is assumed to be
     // the heat transfer fluid.
-
-    static constexpr std::string_view fluidNameWater("WATER");
 
     PlantComponent *CollectorData::factory(EnergyPlusData &state, std::string const &objectName)
     {
@@ -272,7 +269,9 @@ namespace SolarCollectors {
                 }
             } // ParametersNum
 
-            if (ErrorsFound) ShowFatalError(state, format("Errors in {} input.", CurrentModuleParamObject));
+            if (ErrorsFound) {
+                ShowFatalError(state, format("Errors in {} input.", CurrentModuleParamObject));
+            }
         }
 
         if (state.dataSolarCollectors->NumOfCollectors > 0) {
@@ -326,47 +325,44 @@ namespace SolarCollectors {
                                            state.dataIPShortCut->cAlphaArgs(3)));
                     ErrorsFound = true;
                     continue; // avoid hard crash
-                } else {
-
-                    if (!state.dataSurface->Surface(SurfNum).ExtSolar) {
-                        ShowWarningError(state,
-                                         format("{} = {}:  Surface {} is not exposed to exterior radiation.",
-                                                CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                state.dataIPShortCut->cAlphaArgs(3)));
-                    }
-
-                    // check surface orientation, warn if upside down
-                    if ((state.dataSurface->Surface(SurfNum).Tilt < -95.0) || (state.dataSurface->Surface(SurfNum).Tilt > 95.0)) {
-                        ShowWarningError(state,
-                                         format("Suspected input problem with {} = {}",
-                                                state.dataIPShortCut->cAlphaFieldNames(3),
-                                                state.dataIPShortCut->cAlphaArgs(3)));
-                        ShowContinueError(
-                            state, format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                        ShowContinueError(state, "Surface used for solar collector faces down");
-                        ShowContinueError(
-                            state,
-                            format("Surface tilt angle (degrees from ground outward normal) = {:.2R}", state.dataSurface->Surface(SurfNum).Tilt));
-                    }
-
-                    // Check to make sure other solar collectors are not using the same surface
-                    // NOTE:  Must search over all solar collector types
-                    for (int CollectorNum2 = 1; CollectorNum2 <= NumFlatPlateUnits; ++CollectorNum2) {
-                        if (state.dataSolarCollectors->Collector(CollectorNum2).Surface == SurfNum) {
-                            ShowSevereError(state,
-                                            format("{} = {}:  Surface {} is referenced by more than one {}",
-                                                   CurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(3),
-                                                   CurrentModuleObject));
-                            ErrorsFound = true;
-                            break;
-                        }
-                    } // CollectorNum2
-
-                    state.dataSolarCollectors->Collector(CollectorNum).Surface = SurfNum;
                 }
+                if (!state.dataSurface->Surface(SurfNum).ExtSolar) {
+                    ShowWarningError(state,
+                                     format("{} = {}:  Surface {} is not exposed to exterior radiation.",
+                                            CurrentModuleObject,
+                                            state.dataIPShortCut->cAlphaArgs(1),
+                                            state.dataIPShortCut->cAlphaArgs(3)));
+                }
+
+                // check surface orientation, warn if upside down
+                if ((state.dataSurface->Surface(SurfNum).Tilt < -95.0) || (state.dataSurface->Surface(SurfNum).Tilt > 95.0)) {
+                    ShowWarningError(state,
+                                     format("Suspected input problem with {} = {}",
+                                            state.dataIPShortCut->cAlphaFieldNames(3),
+                                            state.dataIPShortCut->cAlphaArgs(3)));
+                    ShowContinueError(state,
+                                      format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                    ShowContinueError(state, "Surface used for solar collector faces down");
+                    ShowContinueError(
+                        state, format("Surface tilt angle (degrees from ground outward normal) = {:.2R}", state.dataSurface->Surface(SurfNum).Tilt));
+                }
+
+                // Check to make sure other solar collectors are not using the same surface
+                // NOTE:  Must search over all solar collector types
+                for (int CollectorNum2 = 1; CollectorNum2 <= NumFlatPlateUnits; ++CollectorNum2) {
+                    if (state.dataSolarCollectors->Collector(CollectorNum2).Surface == SurfNum) {
+                        ShowSevereError(state,
+                                        format("{} = {}:  Surface {} is referenced by more than one {}",
+                                               CurrentModuleObject,
+                                               state.dataIPShortCut->cAlphaArgs(1),
+                                               state.dataIPShortCut->cAlphaArgs(3),
+                                               CurrentModuleObject));
+                        ErrorsFound = true;
+                        break;
+                    }
+                } // CollectorNum2
+
+                state.dataSolarCollectors->Collector(CollectorNum).Surface = SurfNum;
 
                 // Give warning if surface area and gross area do not match within tolerance
                 if (SurfNum > 0 && ParametersNum > 0 && state.dataSolarCollectors->Parameters(ParametersNum).Area > 0.0 &&
@@ -522,7 +518,9 @@ namespace SolarCollectors {
 
             } // end of ParametersNum
 
-            if (ErrorsFound) ShowFatalError(state, format("Errors in {} input.", CurrentModuleParamObject));
+            if (ErrorsFound) {
+                ShowFatalError(state, format("Errors in {} input.", CurrentModuleParamObject));
+            }
 
             CurrentModuleObject = "SolarCollector:IntegralCollectorStorage";
 
@@ -598,47 +596,44 @@ namespace SolarCollectors {
                                            state.dataIPShortCut->cAlphaArgs(3)));
                     ErrorsFound = true;
                     continue; // avoid hard crash
-                } else {
-
-                    if (!state.dataSurface->Surface(SurfNum).ExtSolar) {
-                        ShowWarningError(state,
-                                         format("{} = {}:  Surface {} is not exposed to exterior radiation.",
-                                                CurrentModuleObject,
-                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                state.dataIPShortCut->cAlphaArgs(3)));
-                    }
-
-                    // check surface orientation, warn if upside down
-                    if ((state.dataSurface->Surface(SurfNum).Tilt < -95.0) || (state.dataSurface->Surface(SurfNum).Tilt > 95.0)) {
-                        ShowWarningError(state,
-                                         format("Suspected input problem with {} = {}",
-                                                state.dataIPShortCut->cAlphaFieldNames(3),
-                                                state.dataIPShortCut->cAlphaArgs(3)));
-                        ShowContinueError(
-                            state, format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
-                        ShowContinueError(state, "Surface used for solar collector faces down");
-                        ShowContinueError(
-                            state,
-                            format("Surface tilt angle (degrees from ground outward normal) = {:.2R}", state.dataSurface->Surface(SurfNum).Tilt));
-                    }
-
-                    // Check to make sure other solar collectors are not using the same surface
-                    // NOTE:  Must search over all solar collector types
-                    for (int CollectorNum2 = 1; CollectorNum2 <= state.dataSolarCollectors->NumOfCollectors; ++CollectorNum2) {
-                        if (state.dataSolarCollectors->Collector(CollectorNum2).Surface == SurfNum) {
-                            ShowSevereError(state,
-                                            format("{} = {}:  Surface {} is referenced by more than one {}",
-                                                   CurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(3),
-                                                   CurrentModuleObject));
-                            ErrorsFound = true;
-                            break;
-                        }
-                    } // ICSNum2
-
-                    state.dataSolarCollectors->Collector(CollectorNum).Surface = SurfNum;
                 }
+                if (!state.dataSurface->Surface(SurfNum).ExtSolar) {
+                    ShowWarningError(state,
+                                     format("{} = {}:  Surface {} is not exposed to exterior radiation.",
+                                            CurrentModuleObject,
+                                            state.dataIPShortCut->cAlphaArgs(1),
+                                            state.dataIPShortCut->cAlphaArgs(3)));
+                }
+
+                // check surface orientation, warn if upside down
+                if ((state.dataSurface->Surface(SurfNum).Tilt < -95.0) || (state.dataSurface->Surface(SurfNum).Tilt > 95.0)) {
+                    ShowWarningError(state,
+                                     format("Suspected input problem with {} = {}",
+                                            state.dataIPShortCut->cAlphaFieldNames(3),
+                                            state.dataIPShortCut->cAlphaArgs(3)));
+                    ShowContinueError(state,
+                                      format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                    ShowContinueError(state, "Surface used for solar collector faces down");
+                    ShowContinueError(
+                        state, format("Surface tilt angle (degrees from ground outward normal) = {:.2R}", state.dataSurface->Surface(SurfNum).Tilt));
+                }
+
+                // Check to make sure other solar collectors are not using the same surface
+                // NOTE:  Must search over all solar collector types
+                for (int CollectorNum2 = 1; CollectorNum2 <= state.dataSolarCollectors->NumOfCollectors; ++CollectorNum2) {
+                    if (state.dataSolarCollectors->Collector(CollectorNum2).Surface == SurfNum) {
+                        ShowSevereError(state,
+                                        format("{} = {}:  Surface {} is referenced by more than one {}",
+                                               CurrentModuleObject,
+                                               state.dataIPShortCut->cAlphaArgs(1),
+                                               state.dataIPShortCut->cAlphaArgs(3),
+                                               CurrentModuleObject));
+                        ErrorsFound = true;
+                        break;
+                    }
+                } // ICSNum2
+
+                state.dataSolarCollectors->Collector(CollectorNum).Surface = SurfNum;
 
                 // Give warning if surface area and gross area do not match within tolerance
                 if (SurfNum > 0 && ParametersNum > 0 && state.dataSolarCollectors->Parameters(ParametersNum).Area > 0.0 &&
@@ -726,7 +721,9 @@ namespace SolarCollectors {
 
             } // ICSNum
 
-            if (ErrorsFound) ShowFatalError(state, format("Errors in {} input.", CurrentModuleObject));
+            if (ErrorsFound) {
+                ShowFatalError(state, format("Errors in {} input.", CurrentModuleObject));
+            }
         }
     }
 
@@ -937,11 +934,7 @@ namespace SolarCollectors {
         if (state.dataGlobal->BeginEnvrnFlag && this->Init) {
             // Clear node initial conditions
             if (this->VolFlowRateMax > 0) {
-                Real64 rho = FluidProperties::GetDensityGlycol(state,
-                                                               state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                               Constant::InitConvTemp,
-                                                               state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                               RoutineName);
+                Real64 rho = this->plantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
 
                 this->MassFlowRateMax = this->VolFlowRateMax * rho;
             } else {
@@ -965,7 +958,9 @@ namespace SolarCollectors {
             }
         }
 
-        if (!state.dataGlobal->BeginEnvrnFlag) this->Init = true;
+        if (!state.dataGlobal->BeginEnvrnFlag) {
+            this->Init = true;
+        }
 
         if (this->SetDiffRadFlag && this->InitICS) {
             // calculates the sky and ground reflective diffuse radiation optical properties (only one time)
@@ -974,14 +969,14 @@ namespace SolarCollectors {
 
             this->Tilt = state.dataSurface->Surface(SurfNum).Tilt;
             this->TiltR2V = std::abs(90.0 - Tilt);
-            this->CosTilt = std::cos(Tilt * Constant::DegToRadians);
-            this->SinTilt = std::sin(1.8 * Tilt * Constant::DegToRadians);
+            this->CosTilt = std::cos(Tilt * Constant::DegToRad);
+            this->SinTilt = std::sin(1.8 * Tilt * Constant::DegToRad);
 
             // Diffuse reflectance of the cover for solar radiation diffusely reflected back from the absorber
             // plate to the cover.  The diffuse solar radiation reflected back from the absorber plate to the
             // cover is represented by the 60 degree equivalent incident angle.  This diffuse reflectance is
             // used to calculate the transmittance - absorptance product (Duffie and Beckman, 1991)
-            Real64 Theta = 60.0 * Constant::DegToRadians;
+            Real64 Theta = 60.0 * Constant::DegToRad;
             Real64 TransSys = 0.0;
             Real64 RefSys = 0.0;
             Real64 AbsCover1 = 0.0;
@@ -996,7 +991,7 @@ namespace SolarCollectors {
 
             // transmittance-absorptance product for sky diffuse radiation.  Uses equivalent incident angle
             // of sky radiation (radians), and is calculated according to Brandemuehl and Beckman (1980):
-            Theta = (59.68 - 0.1388 * Tilt + 0.001497 * pow_2(Tilt)) * Constant::DegToRadians;
+            Theta = (59.68 - 0.1388 * Tilt + 0.001497 * pow_2(Tilt)) * Constant::DegToRad;
             this->CalcTransRefAbsOfCover(state, Theta, TransSys, RefSys, AbsCover1, AbsCover2);
             this->TauAlphaSkyDiffuse = TransSys * state.dataSolarCollectors->Parameters(ParamNum).AbsorOfAbsPlate /
                                        (1.0 - (1.0 - state.dataSolarCollectors->Parameters(ParamNum).AbsorOfAbsPlate) * this->RefDiffInnerCover);
@@ -1005,7 +1000,7 @@ namespace SolarCollectors {
 
             // transmittance-absorptance product for ground diffuse radiation.  Uses equivalent incident angle
             // of ground radiation (radians), and is calculated according to Brandemuehl and Beckman (1980):
-            Theta = (90.0 - 0.5788 * Tilt + 0.002693 * pow_2(Tilt)) * Constant::DegToRadians;
+            Theta = (90.0 - 0.5788 * Tilt + 0.002693 * pow_2(Tilt)) * Constant::DegToRad;
             this->CalcTransRefAbsOfCover(state, Theta, TransSys, RefSys, AbsCover1, AbsCover2);
             this->TauAlphaGndDiffuse = TransSys * state.dataSolarCollectors->Parameters(ParamNum).AbsorOfAbsPlate /
                                        (1.0 - (1.0 - state.dataSolarCollectors->Parameters(ParamNum).AbsorOfAbsPlate) * this->RefDiffInnerCover);
@@ -1094,10 +1089,10 @@ namespace SolarCollectors {
             Real64 tilt = state.dataSurface->Surface(SurfNum).Tilt;
 
             // Equivalent incident angle of sky radiation (radians)
-            Real64 ThetaSky = (59.68 - 0.1388 * tilt + 0.001497 * pow_2(tilt)) * Constant::DegToRadians;
+            Real64 ThetaSky = (59.68 - 0.1388 * tilt + 0.001497 * pow_2(tilt)) * Constant::DegToRad;
 
             // Equivalent incident angle of ground radiation (radians)
-            Real64 ThetaGnd = (90.0 - 0.5788 * tilt + 0.002693 * pow_2(tilt)) * Constant::DegToRadians;
+            Real64 ThetaGnd = (90.0 - 0.5788 * tilt + 0.002693 * pow_2(tilt)) * Constant::DegToRad;
 
             incidentAngleModifier =
                 (state.dataHeatBal->SurfQRadSWOutIncidentBeam(SurfNum) * state.dataSolarCollectors->Parameters(ParamNum).IAM(state, ThetaBeam) +
@@ -1115,11 +1110,7 @@ namespace SolarCollectors {
         Real64 massFlowRate = this->MassFlowRate;
 
         // Specific heat of collector fluid (J/kg-K)
-        Real64 Cp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                           inletTemp,
-                                                           state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
+        Real64 Cp = this->plantLoc.loop->glycol->getSpecificHeat(state, inletTemp, RoutineName);
 
         // Gross area of collector (m2)
         Real64 area = state.dataSurface->Surface(SurfNum).Area;
@@ -1271,8 +1262,9 @@ namespace SolarCollectors {
                 }
             }
 
-            if (state.dataSolarCollectors->Parameters(ParamNum).TestType == TestTypeEnum::INLET)
+            if (state.dataSolarCollectors->Parameters(ParamNum).TestType == TestTypeEnum::INLET) {
                 break; // Inlet temperature test correlations do not need to iterate
+            }
 
             if (Iteration > 100) {
                 if (this->IterErrIndex == 0) {
@@ -1287,9 +1279,8 @@ namespace SolarCollectors {
                                                       this->Name),
                                                this->IterErrIndex);
                 break;
-            } else {
-                ++Iteration;
             }
+            ++Iteration;
 
         } // Check for temperature convergence
 
@@ -1327,7 +1318,7 @@ namespace SolarCollectors {
         Real64 IAM;
 
         // cut off IAM for angles greater than 60 degrees. (CR 7534)
-        Real64 CutoffAngle = 60.0 * Constant::DegToRadians;
+        Real64 CutoffAngle = 60.0 * Constant::DegToRad;
         if (std::abs(IncidentAngle) > CutoffAngle) { // cut off, model curves not robust beyond cutoff
             // curves from FSEC/SRCC testing are only certified to 60 degrees, larger angles can cause numerical problems in curves
             IAM = 0.0;
@@ -1405,18 +1396,10 @@ namespace SolarCollectors {
         Real64 massFlowRate = this->MassFlowRate;
 
         // Specific heat of collector fluid (J/kg-K)
-        Real64 Cpw = FluidProperties::GetSpecificHeatGlycol(state,
-                                                            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                            inletTemp,
-                                                            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                            RoutineName);
+        Real64 Cpw = this->plantLoc.loop->glycol->getSpecificHeat(state, inletTemp, RoutineName);
 
         // density of collector fluid (kg/m3)
-        Real64 Rhow = FluidProperties::GetDensityGlycol(state,
-                                                        state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                        inletTemp,
-                                                        state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                        RoutineName);
+        Real64 Rhow = this->plantLoc.loop->glycol->getDensity(state, inletTemp, RoutineName);
 
         // calculate heat transfer coefficients and covers temperature:
         this->CalcHeatTransCoeffAndCoverTemp(state);
@@ -1486,7 +1469,9 @@ namespace SolarCollectors {
         Real64 efficiency = 0.0; // Thermal efficiency of solar energy conversion
         if (state.dataHeatBal->SurfQRadSWOutIncident(SurfNum) > 0.0) {
             efficiency = (this->HeatGainRate + this->StoredHeatRate) / (state.dataHeatBal->SurfQRadSWOutIncident(SurfNum) * area);
-            if (efficiency < 0.0) efficiency = 0.0;
+            if (efficiency < 0.0) {
+                efficiency = 0.0;
+            }
         }
         this->Efficiency = efficiency;
     }
@@ -1746,7 +1731,9 @@ namespace SolarCollectors {
 
         // solar absorptance of the individual cover
         AbsCover1 = 0.5 * (AbsorPerp(1) + AbsorPara(1));
-        if (state.dataSolarCollectors->Parameters(ParamNum).NumOfCovers == 2) AbsCover2 = 0.5 * (AbsorPerp(2) + AbsorPara(2));
+        if (state.dataSolarCollectors->Parameters(ParamNum).NumOfCovers == 2) {
+            AbsCover2 = 0.5 * (AbsorPerp(2) + AbsorPara(2));
+        }
 
         // calculate from outer to inner cover:
         TransSys =
@@ -1970,7 +1957,9 @@ namespace SolarCollectors {
         Real64 Tref = 0.5 * (TempSurf1 + TempSurf2);
         int Index = 0;
         while (Index < NumOfPropDivisions) {
-            if (Tref < Temps[Index]) break; // DO loop
+            if (Tref < Temps[Index]) {
+                break; // DO loop
+            }
             ++Index;
         }
 
@@ -2049,22 +2038,23 @@ namespace SolarCollectors {
         Real64 DeltaT = std::abs(TAbsorber - TWater);
         Real64 TReference = TAbsorber - 0.25 * (TAbsorber - TWater);
         // record fluid prop index for water
-        int WaterIndex = FluidProperties::GetGlycolNum(state, fluidNameWater);
+
+        auto *water = Fluid::GetWater(state);
         // find properties of water - always assume water
-        Real64 WaterSpecHeat = FluidProperties::GetSpecificHeatGlycol(state, fluidNameWater, max(TReference, 0.0), WaterIndex, CalledFrom);
-        Real64 CondOfWater = FluidProperties::GetConductivityGlycol(state, fluidNameWater, max(TReference, 0.0), WaterIndex, CalledFrom);
-        Real64 VisOfWater = FluidProperties::GetViscosityGlycol(state, fluidNameWater, max(TReference, 0.0), WaterIndex, CalledFrom);
-        Real64 DensOfWater = FluidProperties::GetDensityGlycol(state, fluidNameWater, max(TReference, 0.0), WaterIndex, CalledFrom);
+        Real64 WaterSpecHeat = water->getSpecificHeat(state, max(TReference, 0.0), CalledFrom);
+        Real64 CondOfWater = water->getConductivity(state, max(TReference, 0.0), CalledFrom);
+        Real64 VisOfWater = water->getViscosity(state, max(TReference, 0.0), CalledFrom);
+        Real64 DensOfWater = water->getDensity(state, max(TReference, 0.0), CalledFrom);
         Real64 PrOfWater = VisOfWater * WaterSpecHeat / CondOfWater;
         // Requires a different reference temperature for volumetric expansion coefficient
         TReference = TWater - 0.25 * (TWater - TAbsorber);
-        Real64 VolExpWater = -(FluidProperties::GetDensityGlycol(state, fluidNameWater, max(TReference, 10.0) + 5.0, WaterIndex, CalledFrom) -
-                               FluidProperties::GetDensityGlycol(state, fluidNameWater, max(TReference, 10.0) - 5.0, WaterIndex, CalledFrom)) /
-                             (10.0 * DensOfWater);
+        Real64 VolExpWater =
+            -(water->getDensity(state, max(TReference, 10.0) + 5.0, CalledFrom) - water->getDensity(state, max(TReference, 10.0) - 5.0, CalledFrom)) /
+            (10.0 * DensOfWater);
 
         // Grashof number
         Real64 GrNum = gravity * VolExpWater * DensOfWater * DensOfWater * PrOfWater * DeltaT * pow_3(Lc) / pow_2(VisOfWater);
-        Real64 CosTilt = std::cos(TiltR2V * Constant::DegToRadians);
+        Real64 CosTilt = std::cos(TiltR2V * Constant::DegToRad);
 
         Real64 RaNum; // Raleigh number
         Real64 NuL;   // Nusselt number
@@ -2093,7 +2083,9 @@ namespace SolarCollectors {
                 NuL = 0.13 * std::pow(RaNum, 1.0 / 3.0);
             } else {
                 NuL = 0.16 * std::pow(RaNum, 1.0 / 3.0);
-                if (RaNum <= 1708.0) NuL = 1.0;
+                if (RaNum <= 1708.0) {
+                    NuL = 1.0;
+                }
             }
         }
         hConvA2W = NuL * CondOfWater / Lc;
@@ -2116,11 +2108,7 @@ namespace SolarCollectors {
         PlantUtilities::SafeCopyPlantNode(state, this->InletNode, this->OutletNode);
         // Set outlet node variables that are possibly changed
         state.dataLoopNodes->Node(this->OutletNode).Temp = this->OutletTemp;
-        Real64 Cp = FluidProperties::GetSpecificHeatGlycol(state,
-                                                           state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName,
-                                                           this->OutletTemp,
-                                                           state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex,
-                                                           RoutineName);
+        Real64 Cp = this->plantLoc.loop->glycol->getSpecificHeat(state, this->OutletTemp, RoutineName);
         state.dataLoopNodes->Node(this->OutletNode).Enthalpy = Cp * state.dataLoopNodes->Node(this->OutletNode).Temp;
     }
 

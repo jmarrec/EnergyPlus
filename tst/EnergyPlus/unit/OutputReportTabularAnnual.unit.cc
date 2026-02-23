@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -71,7 +71,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GetInput)
         "Output:Table:Annual,",
         "Space Gains Annual Report, !- Name",
         "Filter1, !- Filter",
-        "Schedule2, !- Schedule Name",
+        "Constant-1.0, !- Schedule Name",
         "Zone People Total Heating Energy, !- Variable or Meter 1 Name",
         "SumOrAverage, !- Aggregation Type for Variable or Meter 1",
         "4, !- field Digits After Decimal 1",
@@ -82,6 +82,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GetInput)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->DoWeathSim = true;
 
@@ -97,7 +98,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GetInput)
 
     EXPECT_EQ(tableParams[0], "SPACE GAINS ANNUAL REPORT"); // m_name
     EXPECT_EQ(tableParams[1], "FILTER1");                   //  m_filter
-    EXPECT_EQ(tableParams[2], "SCHEDULE2");                 //  m_scheduleName
+    EXPECT_EQ(tableParams[2], "Constant-1.0");              //  m_scheduleName
 
     std::vector<std::string> fieldSetParams = firstTable->inspectTableFieldSets(0);
     EXPECT_EQ(fieldSetParams[0], "ZONE PEOPLE TOTAL HEATING ENERGY");
@@ -129,6 +130,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_SetupGathering)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 extLitPow;
     Real64 extLitUse;
@@ -221,6 +223,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 extLitPow;
     Real64 extLitUse;
@@ -292,7 +295,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults)
     // UpdateDataandReport( 1 ); not sure if this is needed
     GatherAnnualResultsForTimeStep(*state, OutputProcessor::TimeStepType::Zone);
 
-    // STOPPPED HERE. NOT SEEING THE POWER VARIABLE SHOWING UP
+    // STOPPED HERE. NOT SEEING THE POWER VARIABLE SHOWING UP
 
     std::vector<AnnualTable>::iterator firstTable = state->dataOutputReportTabularAnnual->annualTables.begin();
     std::vector<std::string> fieldSetParams = firstTable->inspectTableFieldSets(0);
@@ -302,8 +305,9 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults_MinMaxHrsShown
 {
     using namespace OutputProcessor;
     state->dataGlobal->TimeStepZone = 1.0;
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::rSecsInHour;
     state->dataHVACGlobal->TimeStepSys = 1.0;
-    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::SecInHour;
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour;
 
     Meter *meter1 = new Meter("HEATING:MYTH:VARIABLE");
     meter1->units = Constant::Units::None;
@@ -315,7 +319,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults_MinMaxHrsShown
     state->dataOutputProcessor->meterMap.insert_or_assign("ELECTRICITY:MYTH", state->dataOutputProcessor->meters.size() - 1);
 
     std::vector<AnnualTable> annualTables;
-    annualTables.push_back(AnnualTable(*state, "PEAK ELECTRICTY ANNUAL MYTH REPORT", "", ""));
+    annualTables.emplace_back(*state, "PEAK ELECTRICITY ANNUAL MYTH REPORT", "", "");
     annualTables.back().addFieldSet("HEATING:MYTH:VARIABLE", AnnualFieldSet::AggregationKind::hoursPositive, 2);
     annualTables.back().addFieldSet("ELECTRICITY:MYTH", AnnualFieldSet::AggregationKind::maximumDuringHoursShown, 2);
     annualTables.back().setupGathering(*state);
@@ -329,8 +333,9 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults_MinMaxHrsShown
     EXPECT_EQ(fieldSetParams[13], "0.000000");             // m_cell[0].result
 
     fieldSetParams = annualTables.back().inspectTableFieldSets(1);
-    EXPECT_EQ(fieldSetParams[0], "ELECTRICITY:MYTH");                  // m_colHead
-    EXPECT_EQ(fieldSetParams[13].std::string::substr(0, 6), "-99000"); // m_cell[0].result
+    EXPECT_EQ(fieldSetParams[0], "ELECTRICITY:MYTH"); // m_colHead
+    std::string const limit = std::to_string(std::numeric_limits<Real64>::lowest());
+    EXPECT_EQ(fieldSetParams[13].std::string::substr(0, 6), limit.substr(0, 6)); // m_cell[0].result
 
     meter1->CurTSValue = 15.;
     meter2->CurTSValue = 55.;
@@ -343,6 +348,37 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_GatherResults_MinMaxHrsShown
     fieldSetParams = annualTables.back().inspectTableFieldSets(1);
     EXPECT_EQ(fieldSetParams[0], "ELECTRICITY:MYTH");                  // m_colHead
     EXPECT_EQ(fieldSetParams[13].std::string::substr(0, 6), "0.0152"); // m_cell[0].result
+}
+
+TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_Maximum_SummedVariable_UsesZoneSeconds)
+{
+    using namespace OutputProcessor;
+
+    // Make zone and system timesteps different so a swapped mapping is detectable
+    state->dataGlobal->TimeStepZone = 0.25;                                                       // hours
+    state->dataGlobal->TimeStepZoneSec = state->dataGlobal->TimeStepZone * Constant::rSecsInHour; // 900 s
+
+    state->dataHVACGlobal->TimeStepSys = 1.0;                                                           // hours
+    state->dataHVACGlobal->TimeStepSysSec = state->dataHVACGlobal->TimeStepSys * Constant::rSecsInHour; // 3600 s
+
+    Meter *meter = new Meter("ELECTRICITY:MYTH");
+    meter->units = Constant::Units::None;
+    state->dataOutputProcessor->meters.push_back(meter);
+    state->dataOutputProcessor->meterMap.insert_or_assign("ELECTRICITY:MYTH", state->dataOutputProcessor->meters.size() - 1);
+
+    std::vector<AnnualTable> annualTables;
+    annualTables.emplace_back(*state, "TEST MAX RATE FROM SUM", "", "");
+    annualTables.back().addFieldSet("ELECTRICITY:MYTH", AnnualFieldSet::AggregationKind::maximum, 6);
+    annualTables.back().setupGathering(*state);
+
+    // CurTSValue behaves like a summed timestep quantity here; maximum aggregation converts to a rate by dividing by secondsInTimeStep
+    meter->CurTSValue = 55.0;
+    annualTables.back().gatherForTimestep(*state, OutputProcessor::TimeStepType::Zone);
+
+    // Expect 55 / 900 = 0.061111...
+    std::vector<std::string> fieldSetParams = annualTables.back().inspectTableFieldSets(0);
+    EXPECT_EQ(fieldSetParams[0], "ELECTRICITY:MYTH");                  // m_colHead
+    EXPECT_EQ(fieldSetParams[13].std::string::substr(0, 6), "0.0611"); // m_cell[0].result
 }
 
 TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_columnHeadersToTitleCase)
@@ -377,6 +413,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_columnHeadersToTitleCase)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 facilUse;
     SetupOutputVariable(*state,
@@ -441,6 +478,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_invalidAggregationOrder)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Real64 facilUse;
     SetupOutputVariable(*state,
@@ -538,6 +576,7 @@ TEST_F(SQLiteFixture, OutputReportTabularAnnual_CurlyBraces)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     Meter *meter1 = new Meter("ELECTRICITY:FACILITY");
     meter1->units = Constant::Units::None;
@@ -550,6 +589,7 @@ TEST_F(SQLiteFixture, OutputReportTabularAnnual_CurlyBraces)
 
     OutputReportTabularAnnual::GetInputTabularAnnual(*state);
     EXPECT_EQ(state->dataOutputReportTabularAnnual->annualTables.size(), 1u);
+    OutputReportTabular::setTabularReportStyles(*state);
 
     OutputReportTabularAnnual::WriteAnnualTables(*state);
 
@@ -581,7 +621,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_WarnBlankVariable)
         "Output:Table:Annual,",
         "Space Gains Annual Report, !- Name",
         "Filter1, !- Filter",
-        "Schedule2, !- Schedule Name",
+        "Constant-1.0, !- Schedule Name",
         "Zone People Total Heating Energy, !- Variable or Meter 1 Name",
         "SumOrAverage, !- Aggregation Type for Variable or Meter 1",
         "4, !- field Digits After Decimal 1",
@@ -592,6 +632,7 @@ TEST_F(EnergyPlusFixture, OutputReportTabularAnnual_WarnBlankVariable)
     });
 
     ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
 
     state->dataGlobal->DoWeathSim = true;
 

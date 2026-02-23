@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -217,6 +217,13 @@ namespace SystemReports {
         Real64 TimeAboveVozDynTotalOcc = 0.0; // time [hrs] that mechanical+natural ventilation is > VozTarget + 1% during occupied
         Real64 TimeVentUnoccTotal = 0.0;      // time [hrs] that mechanical+natural ventilation is > zero during unoccupied
         Real64 TimeOccupiedTotal = 0.0;       // time [hrs] that any zone is occupied
+        Real64 TimeFanContTotalOcc = 0.0;     // time [hrs] that fan is continuous when occupied
+        Real64 TimeFanCycTotalOcc = 0.0;      // time [hrs] that fan is cycling when occupied
+        Real64 TimeFanOffTotalOcc = 0.0;      // time [hrs] that fan is off when occupied
+        Real64 TimeUnoccupiedTotal = 0.0;     // time [hrs] that all zones are unoccupied
+        Real64 TimeFanContTotalUnocc = 0.0;   // time [hrs] that fan is continuous when unoccupied
+        Real64 TimeFanCycTotalUnocc = 0.0;    // time [hrs] that fan is cycling when unoccupied
+        Real64 TimeFanOffTotalUnocc = 0.0;    // time [hrs] that fan is off when unoccupied
 
         std::vector<Real64> TimeAtOALimit = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};    // time [hrs] at limit [n]
         std::vector<Real64> TimeAtOALimitOcc = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}; // time [hrs] at limit [n] during occupied
@@ -414,6 +421,10 @@ struct SystemReportsData : BaseGlobalStruct
     int NumCompTypes = 0;
     Array1D<SystemReports::CompTypeError> CompTypeErrors = Array1D<SystemReports::CompTypeError>(100);
     Array1D<SystemReports::IdentifyLoop> LoopStack;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

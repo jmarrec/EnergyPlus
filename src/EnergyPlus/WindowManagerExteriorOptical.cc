@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -178,10 +178,14 @@ namespace Window {
         // are calculated with new WCE optical engine (for both blinds and screens)
         auto &s_mat = state.dataMaterial;
 
-        if (s_mat->NumBlinds > 0) CalcWindowBlindProperties(state);
+        if (s_mat->NumBlinds > 0) {
+            CalcWindowBlindProperties(state);
+        }
 
         // Initialize SurfaceScreen structure
-        if (s_mat->NumScreens > 0) CalcWindowScreenProperties(state);
+        if (s_mat->NumScreens > 0) {
+            CalcWindowScreenProperties(state);
+        }
 
         auto &aWinConstSimp = CWindowConstructionsSimplified::instance(state);
         for (int ConstrNum = 1; ConstrNum <= state.dataHeatBal->TotConstructs; ++ConstrNum) {
@@ -216,12 +220,22 @@ namespace Window {
             auto &surf = state.dataSurface->Surface(SurfNum);
             auto &surfShade = state.dataSurface->surfShades(SurfNum);
 
-            if (!surf.HeatTransSurf) continue;
-            if (!state.dataConstruction->Construct(surf.Construction).TypeIsWindow) continue;
-            if (state.dataSurface->SurfWinWindowModelType(SurfNum) == WindowModel::BSDF) continue; // Irrelevant for Complex Fen
-            if (state.dataConstruction->Construct(surf.Construction).WindowTypeEQL) continue;      // not required
+            if (!surf.HeatTransSurf) {
+                continue;
+            }
+            if (!state.dataConstruction->Construct(surf.Construction).TypeIsWindow) {
+                continue;
+            }
+            if (state.dataSurface->SurfWinWindowModelType(SurfNum) == WindowModel::BSDF) {
+                continue; // Irrelevant for Complex Fen
+            }
+            if (state.dataConstruction->Construct(surf.Construction).WindowTypeEQL) {
+                continue; // not required
+            }
 
-            if (surf.activeShadedConstruction == 0) continue;
+            if (surf.activeShadedConstruction == 0) {
+                continue;
+            }
             auto &constrSh = state.dataConstruction->Construct(surf.activeShadedConstruction);
             int TotLay = constrSh.TotLayers;
             auto const *mat = s_mat->materials(constrSh.LayerPoint(TotLay));
@@ -249,16 +263,19 @@ namespace Window {
                     constrSh.effShadeBlindEmi[iSlatAng] = EpsShIR * (1.0 + RhoGlIR * TauShIR / (1.0 - RhoGlIR * RhoShIR));
                     constrSh.effGlassEmi[iSlatAng] = EpsGlIR * TauShIR / (1.0 - RhoGlIR * RhoShIR);
                 }
-
-                surfShade.effShadeEmi = Interp(constrSh.effShadeBlindEmi[surfShade.blind.slatAngIdxLo],
-                                               constrSh.effShadeBlindEmi[surfShade.blind.slatAngIdxHi],
-                                               surfShade.blind.slatAngInterpFac);
-                surfShade.effGlassEmi = Interp(constrSh.effGlassEmi[surfShade.blind.slatAngIdxLo],
-                                               constrSh.effGlassEmi[surfShade.blind.slatAngIdxHi],
-                                               surfShade.blind.slatAngInterpFac);
+                // The following surface assignments previously lived in the WindowManagerExteriorThermal file.
+                // They were moved here during the Material refactor, however I found that the array index values Lo/Hi
+                // were making it here still as -1, and this was causing a difficult to diagnose segfault.
+                // I'm moving these back over there, but open to suggestion if they need to be here.
+                // surfShade.effShadeEmi = Interp(constrSh.effShadeBlindEmi[surfShade.blind.slatAngIdxLo],
+                //                                constrSh.effShadeBlindEmi[surfShade.blind.slatAngIdxHi],
+                //                                surfShade.blind.slatAngInterpFac);
+                // surfShade.effGlassEmi = Interp(constrSh.effGlassEmi[surfShade.blind.slatAngIdxLo],
+                //                                constrSh.effGlassEmi[surfShade.blind.slatAngIdxHi],
+                //                                surfShade.blind.slatAngInterpFac);
             } // End of check if interior shade or interior blind
-        }     // End of surface loop
-    }         // InitWCE_SimplifiedOpticalData()
+        } // End of surface loop
+    } // InitWCE_SimplifiedOpticalData()
 
     Real64 GetSolarTransDirectHemispherical(EnergyPlusData &state, int ConstrNum)
     {
@@ -533,7 +550,7 @@ namespace Window {
     std::shared_ptr<ICellDescription> CWCEScreenCellFactory::getCellDescription([[maybe_unused]] EnergyPlusData &state)
     {
         Real64 diameter = m_Material->Thickness; // Thickness in this case is diameter
-        // ratio is not saved withing material but rather calculated from transmittance
+        // ratio is not saved within material but rather calculated from transmittance
         const Real64 ratio = 1.0 - sqrt(dynamic_cast<Material::MaterialScreen const *>(m_Material)->Trans);
         Real64 spacing = diameter / ratio;
         return std::make_shared<CWovenCellDescription>(diameter, spacing);

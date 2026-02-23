@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-# EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University
-# of Illinois, The Regents of the University of California, through Lawrence
-# Berkeley National Laboratory (subject to receipt of any required approvals
-# from the U.S. Dept. of Energy), Oak Ridge National Laboratory, managed by UT-
-# Battelle, Alliance for Sustainable Energy, LLC, and other contributors. All
-# rights reserved.
+# EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the
+# University of Illinois, The Regents of the University of California, through
+# Lawrence Berkeley National Laboratory (subject to receipt of any required
+# approvals from the U.S. Dept. of Energy), Oak Ridge National Laboratory,
+# managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
+# contributors. All rights reserved.
 #
 # NOTICE: This Software was developed under funding from the U.S. Department of
 # Energy and the U.S. Government consequently retains certain rights. As such,
@@ -55,14 +55,17 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from os import path
+from pathlib import Path
 from sys import argv, exit
 
-summary_input_md_file = argv[1]
-summary_output_js_file = argv[2]
-matrix_os = argv[3]
-github_sha = argv[4]
-github_run_id = argv[5]
-artifact_url = argv[6]
+workspace = argv[1]
+matrix_os = argv[2]
+github_sha = argv[3]
+github_run_id = argv[4]
+artifact_url = argv[5]
+
+summary_input_md_file = Path(workspace) / "regressions" / "summary.md"
+summary_output_js_file = Path(workspace) / "regressions" / "summary.js"
 
 if not path.exists(summary_input_md_file):
     print("Regression script shows failure exit code, but could not find summary file.")
@@ -78,13 +81,13 @@ fixed_up_contents = f"""
 
 {md_contents}
 
- - [View Results](https://github.com/NREL/EnergyPlus/actions/runs/{github_run_id})
+ - [View Results](https://github.com/NatLabRockies/EnergyPlus/actions/runs/{github_run_id})
  - [Download Regressions]({artifact_url})
 """
 
-with open(summary_output_js_file, 'w') as js:
+with open(summary_output_js_file, "w") as js:
     js_contents = f"""
-module.exports = ({{github, context}}) => {{    
+module.exports = ({{github, context}}) => {{
     github.rest.issues.createComment({{
         issue_number: context.issue.number,
         owner: context.repo.owner,

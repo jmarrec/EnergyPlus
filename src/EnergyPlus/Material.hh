@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -53,11 +53,17 @@
 #include <EnergyPlus/DataWindowEquivalentLayer.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/General.hh>
+#include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/TARCOGGassesParams.hh>
 #include <EnergyPlus/TARCOGParams.hh>
 #include <EnergyPlus/WindowModel.hh>
 
 namespace EnergyPlus {
+
+// Forward declarations
+namespace Curve {
+    struct Curve;
+}
 
 namespace Material {
 
@@ -212,7 +218,7 @@ namespace Material {
     struct MaterialBase
     {
         // Members
-        std::string Name = "";        // Name of material layer
+        std::string Name;             // Name of material layer
         int Num = 0;                  // Index in material array, comes in handy sometimes
         Group group = Group::Invalid; // Material group type (see Material Parameters above.  Currently
 
@@ -247,7 +253,7 @@ namespace Material {
 
         // Radiation parameters // Are these for windows or for opaque materials also?
         bool AbsorpSolarEMSOverrideOn = false;   // if true, then EMS calling to override value for solar absorptance
-        Real64 AbsorpSolarEMSOverride = false;   // value to use when EMS calling to override value for solar absorptance
+        Real64 AbsorpSolarEMSOverride = 0.0;     // value to use when EMS calling to override value for solar absorptance
         bool AbsorpThermalEMSOverrideOn = false; // if true, then EMS calling to override value for thermal absorptance
         Real64 AbsorpThermalEMSOverride = 0.0;   // value to use when EMS calling to override value for thermal absorptance
         bool AbsorpVisibleEMSOverrideOn = false; // if true, then EMS calling to override value for visible absorptance
@@ -255,10 +261,10 @@ namespace Material {
 
         // dynamic thermal and solar absorptance coating parameters
         VariableAbsCtrlSignal absorpVarCtrlSignal = VariableAbsCtrlSignal::Invalid;
-        int absorpThermalVarSchedIdx = 0;
-        int absorpThermalVarFuncIdx = 0;
-        int absorpSolarVarSchedIdx = 0;
-        int absorpSolarVarFuncIdx = 0;
+        Sched::Schedule *absorpThermalVarSched = nullptr;
+        Curve::Curve *absorpThermalVarCurve = nullptr;
+        Sched::Schedule *absorpSolarVarSched = nullptr;
+        Curve::Curve *absorpSolarVarCurve = nullptr;
 
         bool hasEMPD = false;
         bool hasHAMT = false;
@@ -341,15 +347,15 @@ namespace Material {
 
     // This may seem like an overly complicated way to handle a set of
     // multi-dimensional variables, but I think that it is actually
-    // cleaner than either a multi-dimensional array (and certaily
+    // cleaner than either a multi-dimensional array (and certainly
     // faster) and also better than just a long list of variables.
 
     // Blind-properties essentially have four dimensions: property
     // type (transmittance, reflectance, absorptance), beam or
     // diffuse, front or back, solar or visible (maybe solar or
     // visible or thermal/IR).  Rather than coming up with and
-    // enforcing a consistent namming scheme for these variables,
-    // arranging them into nested structres keeps the ordering (as
+    // enforcing a consistent naming scheme for these variables,
+    // arranging them into nested structures keeps the ordering (as
     // well as the naming) of the dimensions consistent, and also
     // inserts periods between the dimensions to help with
     // readability.  In this case, I chose the struct nesting to be
@@ -363,7 +369,7 @@ namespace Material {
     // single offset like it loads every other variable in an object.
     // This is another downside of references in C++.  Accessing
     // variables in structures (even nested structures) is fast.
-    // Acessing variables through pointer indirection is slow.
+    // Accessing variables through pointer indirection is slow.
     // W->X->Y->Z is slower than W.X.Y.Z.  References are pointers,
     // but they use the . notation rather than -> for accessing
     // fields.  So if W.X.Y.Z is implemented using nested structures
@@ -436,8 +442,9 @@ namespace Material {
 
         void interpSlatAng(BlindBmDf const &t1, BlindBmDf const &t2, Real64 interpFac)
         {
-            for (int i = 0; i < ProfAngs; ++i)
+            for (int i = 0; i < ProfAngs; ++i) {
                 Bm[i].interpSlatAng(t1.Bm[i], t2.Bm[i], interpFac);
+            }
             Df.interpSlatAng(t1.Df, t2.Df, interpFac);
         }
     };
@@ -838,15 +845,12 @@ namespace Material {
         Real64 PoissonsRatio = 0.0; // Poisson's ratio - used in window deflection calculations
 
         // Added 12/22/2008 for thermochromic window glazing material
-        Real64 SpecTemp = 0.0;        // Temperature corresponding to the specified material properties
-        int TCParentMatNum = 0;       // Reference to the parent object WindowMaterial:Glazing:Thermochromic
-        int GlassSpectralDataPtr = 0; // Number of a spectral data set associated with a window glass material
-        int GlassSpecAngTransDataPtr =
-            0; // Data set index of transmittance as a function of spectral and angle associated with a window glass material
-        int GlassSpecAngFRefleDataPtr = 0; // Data set index of front reflectance as a function of spectral and angle associated with a window glass
-        // material
-        int GlassSpecAngBRefleDataPtr = 0; // Data set index of back reflectance as a function of spectral and angle associated with a window glass
-        // material
+        Real64 SpecTemp = 0.0;                          // Temperature corresponding to the specified material properties
+        int TCParentMatNum = 0;                         // Reference to the parent object WindowMaterial:Glazing:Thermochromic
+        int GlassSpectralDataPtr = 0;                   // Number of a spectral data set associated with a window glass material
+        Curve::Curve *GlassSpecAngTransCurve = nullptr; // Transmittance as a function of spectral and angle associated with a glass material
+        Curve::Curve *GlassSpecAngFReflCurve = nullptr; // Front reflectance as a function of spectral and angle associated with a glass material
+        Curve::Curve *GlassSpecAngBReflCurve = nullptr; // Back reflectance as a function of spectral and angle associated with a glass material
 
         // TODO: these and others need to be moved to a child class
         // Simple Glazing System
@@ -963,6 +967,10 @@ struct MaterialData : BaseGlobalStruct
 
     Array1D<Material::WindowThermalModelParams> WindowThermalModel;
     Array1D<Material::SpectralDataProperties> SpectralData;
+
+    void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
+    {
+    }
 
     void init_state([[maybe_unused]] EnergyPlusData &state) override
     {

@@ -1,7 +1,7 @@
-// EnergyPlus, Copyright (c) 1996-2024, The Board of Trustees of the University of Illinois,
+// EnergyPlus, Copyright (c) 1996-present, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -59,19 +59,19 @@
 
 #if LINK_WITH_PYTHON
 
-#ifdef _DEBUG
+#    ifdef _DEBUG
 // We don't want to try to import a debug build of Python here
 // so if we are building a Debug build of the C++ code, we need
 // to undefine _DEBUG during the #include command for Python.h.
 // Otherwise it will fail
-#undef _DEBUG
-#include <Python.h>
-#define _DEBUG
-#else
-#include <Python.h>
-#endif
+#        undef _DEBUG
+#        include <Python.h>
+#        define _DEBUG
+#    else
+#        include <Python.h>
+#    endif
 
-#include <fmt/format.h>
+#    include <fmt/format.h>
 template <> struct fmt::formatter<PyStatus>
 {
     // parse is inherited from formatter<string_view>.
@@ -82,16 +82,16 @@ template <> struct fmt::formatter<PyStatus>
 
     static auto format(const PyStatus &status, format_context &ctx) -> format_context::iterator
     {
-        if (!PyStatus_Exception(status)) {
+        if (PyStatus_Exception(status) == 0) {
             return ctx.out();
         }
-        if (PyStatus_IsExit(status)) {
+        if (PyStatus_IsExit(status) != 0) {
             return format_to(ctx.out(), "Exited with code {}", status.exitcode);
         }
-        if (PyStatus_IsError(status)) {
+        if (PyStatus_IsError(status) != 0) {
             auto it = ctx.out();
             it = format_to(it, "Fatal Python error: ");
-            if (status.func) {
+            if (status.func != nullptr) {
                 it = format_to(it, "{}: ", status.func);
             }
             it = format_to(it, "{}", status.err_msg);
@@ -145,7 +145,9 @@ int PluginManager::numActiveCallbacks(const EnergyPlusData &state)
 
 void runAnyRegisteredCallbacks(EnergyPlusData &state, EMSManager::EMSCallFrom const iCalledFrom, bool &anyRan)
 {
-    if (state.dataGlobal->KickOffSimulation) return;
+    if (state.dataGlobal->KickOffSimulation) {
+        return;
+    }
     for (auto const &cb : state.dataPluginManager->callbacks[iCalledFrom]) {
         if (iCalledFrom == EMSManager::EMSCallFrom::UserDefinedComponentModel) {
             continue; // these are called -intentionally- using the runSingleUserDefinedCallback method
@@ -156,7 +158,9 @@ void runAnyRegisteredCallbacks(EnergyPlusData &state, EMSManager::EMSCallFrom co
 #if LINK_WITH_PYTHON
     for (auto &plugin : state.dataPluginManager->plugins) {
         if (plugin.runDuringWarmup || !state.dataGlobal->WarmupFlag) {
-            if (plugin.run(state, iCalledFrom)) anyRan = true;
+            if (plugin.run(state, iCalledFrom)) {
+                anyRan = true;
+            }
         }
     }
 #endif
@@ -181,7 +185,7 @@ std::string pythonStringForUsage([[maybe_unused]] const EnergyPlusData &state)
 }
 #endif
 
-void PluginManager::setupOutputVariables(EnergyPlusData &state)
+void PluginManager::setupOutputVariables([[maybe_unused]] EnergyPlusData &state)
 {
 #if LINK_WITH_PYTHON
     // with the PythonPlugin:Variables all set in memory, we can now set them up as outputs as needed
@@ -371,7 +375,7 @@ void PluginManager::setupOutputVariables(EnergyPlusData &state)
                 }
             }
         } // for (instance)
-    }     // if (OutputVarInstances > 0)
+    } // if (OutputVarInstances > 0)
 #endif
 } // setupOutputVariables()
 
@@ -388,7 +392,7 @@ void initPython(EnergyPlusData &state, fs::path const &pathToPythonPackages)
     // PyPreConfig_InitIsolatedConfig(&preConfig);
     preConfig.utf8_mode = 1;
     status = Py_PreInitialize(&preConfig);
-    if (PyStatus_Exception(status)) {
+    if (PyStatus_Exception(status) != 0) {
         ShowFatalError(state, fmt::format("Could not pre-initialize Python to speak UTF-8... {}", status));
     }
 
@@ -397,12 +401,12 @@ void initPython(EnergyPlusData &state, fs::path const &pathToPythonPackages)
     config.isolated = 1;
 
     status = PyConfig_SetBytesString(&config, &config.program_name, PluginManagement::programName);
-    if (PyStatus_Exception(status)) {
+    if (PyStatus_Exception(status) != 0) {
         ShowFatalError(state, fmt::format("Could not initialize program_name on PyConfig... {}", status));
     }
 
     status = PyConfig_Read(&config);
-    if (PyStatus_Exception(status)) {
+    if (PyStatus_Exception(status) != 0) {
         ShowFatalError(state, fmt::format("Could not read back the PyConfig... {}", status));
     }
 
@@ -414,16 +418,16 @@ void initPython(EnergyPlusData &state, fs::path const &pathToPythonPackages)
         const wchar_t *wcharPath = ws.c_str();
 
         status = PyConfig_SetString(&config, &config.home, wcharPath);
-        if (PyStatus_Exception(status)) {
+        if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, fmt::format("Could not set home to {:g} on PyConfig... {}", pathToPythonPackages, status));
         }
         status = PyConfig_SetString(&config, &config.base_prefix, wcharPath);
-        if (PyStatus_Exception(status)) {
+        if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, fmt::format("Could not set base_prefix to {:g} on PyConfig... {}", pathToPythonPackages, status));
         }
         config.module_search_paths_set = 1;
         status = PyWideStringList_Append(&config.module_search_paths, wcharPath);
-        if (PyStatus_Exception(status)) {
+        if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, fmt::format("Could not add {:g} to module_search_paths on PyConfig... {}", pathToPythonPackages, status));
         }
 
@@ -434,16 +438,16 @@ void initPython(EnergyPlusData &state, fs::path const &pathToPythonPackages)
         wchar_t *wcharPath = Py_DecodeLocale(pathToPythonPackages.generic_string().c_str(), nullptr); // This allocates!
 
         status = PyConfig_SetString(&config, &config.home, wcharPath);
-        if (PyStatus_Exception(status)) {
+        if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, fmt::format("Could not set home to {:g} on PyConfig... {}", pathToPythonPackages, status));
         }
         status = PyConfig_SetString(&config, &config.base_prefix, wcharPath);
-        if (PyStatus_Exception(status)) {
+        if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, fmt::format("Could not set base_prefix to {:g} on PyConfig... {}", pathToPythonPackages, status));
         }
         config.module_search_paths_set = 1;
         status = PyWideStringList_Append(&config.module_search_paths, wcharPath);
-        if (PyStatus_Exception(status)) {
+        if (PyStatus_Exception(status) != 0) {
             ShowFatalError(state, fmt::format("Could not add {:g} to module_search_paths on PyConfig... {}", pathToPythonPackages, status));
         }
 
@@ -756,12 +760,12 @@ void PluginInstance::reportPythonError([[maybe_unused]] EnergyPlusData &state)
     PyObject *pyth_func = PyObject_GetAttrString(pyth_module, "format_exception");
     Py_DECREF(pyth_module); // PyImport_Import returns a new reference, decrement it
 
-    if (pyth_func || PyCallable_Check(pyth_func)) {
+    if ((pyth_func != nullptr) || (PyCallable_Check(pyth_func) != 0)) {
 
         PyObject *pyth_val = PyObject_CallFunction(pyth_func, "OOO", exc_type, exc_value, exc_tb);
 
         // traceback.format_exception returns a list, so iterate on that
-        if (!pyth_val || !PyList_Check(pyth_val)) { // NOLINT(hicpp-signed-bitwise)
+        if ((pyth_val == nullptr) || !PyList_Check(pyth_val)) { // NOLINT(hicpp-signed-bitwise)
             ShowContinueError(state, "In reportPythonError(), traceback.format_exception did not return a list.");
             return;
         }
@@ -818,11 +822,11 @@ void PluginInstance::setup([[maybe_unused]] EnergyPlusData &state)
     this->pModule = PyImport_Import(pModuleName);
     Py_DECREF(pModuleName);
 
-    if (!this->pModule) {
+    if (this->pModule == nullptr) {
         ShowSevereError(state, format("Failed to import module \"{:g}\"", this->modulePath));
         ShowContinueError(state, format("Current sys.path={}", PluginManager::currentPythonPath()));
         // ONLY call PyErr_Print if PyErr has occurred, otherwise it will cause other problems
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             reportPythonError(state);
         } else {
             ShowContinueError(state, "It could be that the module could not be found, or that there was an error in importing");
@@ -830,9 +834,9 @@ void PluginInstance::setup([[maybe_unused]] EnergyPlusData &state)
         ShowFatalError(state, "Python import error causes program termination");
     }
     PyObject *pModuleDict = PyModule_GetDict(this->pModule);
-    if (!pModuleDict) {
+    if (pModuleDict == nullptr) {
         ShowSevereError(state, format("Failed to read module dictionary from module \"{:g}\"", this->modulePath));
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             reportPythonError(state);
         } else {
             ShowContinueError(state, "It could be that the module was empty");
@@ -841,7 +845,7 @@ void PluginInstance::setup([[maybe_unused]] EnergyPlusData &state)
     }
     std::string fileVarName = "__file__";
     PyObject *pFullPath = PyDict_GetItemString(pModuleDict, fileVarName.c_str());
-    if (!pFullPath) {
+    if (pFullPath == nullptr) {
         // something went really wrong, this should only happen if you do some *weird* python stuff like
         // import from database or something
         ShowFatalError(state, "Could not get full path");
@@ -852,18 +856,18 @@ void PluginInstance::setup([[maybe_unused]] EnergyPlusData &state)
     }
     PyObject *pClass = PyDict_GetItemString(pModuleDict, className.c_str());
     // Py_DECREF(pModuleDict);  // PyModule_GetDict returns a borrowed reference, DO NOT decrement
-    if (!pClass) {
+    if (pClass == nullptr) {
         ShowSevereError(state, format(R"(Failed to get class type "{}" from module "{:g}")", className, modulePath));
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             reportPythonError(state);
         } else {
             ShowContinueError(state, "It could be the class name is misspelled or missing.");
         }
         ShowFatalError(state, "Python class import error causes program termination");
     }
-    if (!PyCallable_Check(pClass)) {
+    if (PyCallable_Check(pClass) == 0) {
         ShowSevereError(state, format("Got class type \"{}\", but it cannot be called/instantiated", className));
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             reportPythonError(state);
         } else {
             ShowContinueError(state, "Is it possible the class name is actually just a variable?");
@@ -872,9 +876,9 @@ void PluginInstance::setup([[maybe_unused]] EnergyPlusData &state)
     }
     this->pClassInstance = PyObject_CallObject(pClass, nullptr);
     // Py_DECREF(pClass);  // PyDict_GetItemString returns a borrowed reference, DO NOT decrement
-    if (!this->pClassInstance) {
+    if (this->pClassInstance == nullptr) {
         ShowSevereError(state, format("Something went awry calling class constructor for class \"{}\"", className));
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             reportPythonError(state);
         } else {
             ShowContinueError(state, "It is possible the plugin class constructor takes extra arguments - it shouldn't.");
@@ -889,11 +893,11 @@ void PluginInstance::setup([[maybe_unused]] EnergyPlusData &state)
     // check which methods are overridden in the derived class
     std::string const detectOverriddenFunctionName = "_detect_overridden";
     PyObject *detectFunction = PyObject_GetAttrString(this->pClassInstance, detectOverriddenFunctionName.c_str());
-    if (!detectFunction || !PyCallable_Check(detectFunction)) {
+    if ((detectFunction == nullptr) || (PyCallable_Check(detectFunction) == 0)) {
         ShowSevereError(
             state,
             format(R"(Could not find or call function "{}" on class "{:g}.{}")", detectOverriddenFunctionName, this->modulePath, this->className));
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             reportPythonError(state);
         } else {
             ShowContinueError(state, "This function should be available on the base class, so this is strange.");
@@ -902,9 +906,9 @@ void PluginInstance::setup([[maybe_unused]] EnergyPlusData &state)
     }
     PyObject *pFunctionResponse = PyObject_CallFunction(detectFunction, nullptr);
     Py_DECREF(detectFunction); // PyObject_GetAttrString returns a new reference, decrement it
-    if (!pFunctionResponse) {
+    if (pFunctionResponse == nullptr) {
         ShowSevereError(state, format("Call to _detect_overridden() on {} failed!", this->stringIdentifier));
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             reportPythonError(state);
         } else {
             ShowContinueError(state, "This is available on the base class and should not be overridden...strange.");
@@ -996,23 +1000,57 @@ void PluginInstance::shutdown() const
 #if LINK_WITH_PYTHON
     Py_DECREF(this->pClassInstance);
     Py_DECREF(this->pModule); // PyImport_Import returns a new reference, decrement it
-    if (this->bHasBeginNewEnvironment) Py_DECREF(this->pBeginNewEnvironment);
-    if (this->bHasAfterNewEnvironmentWarmUpIsComplete) Py_DECREF(this->pAfterNewEnvironmentWarmUpIsComplete);
-    if (this->bHasBeginZoneTimestepBeforeInitHeatBalance) Py_DECREF(this->pBeginZoneTimestepBeforeInitHeatBalance);
-    if (this->bHasBeginZoneTimestepAfterInitHeatBalance) Py_DECREF(this->pBeginZoneTimestepAfterInitHeatBalance);
-    if (this->bHasBeginTimestepBeforePredictor) Py_DECREF(this->pBeginTimestepBeforePredictor);
-    if (this->bHasAfterPredictorBeforeHVACManagers) Py_DECREF(this->pAfterPredictorBeforeHVACManagers);
-    if (this->bHasAfterPredictorAfterHVACManagers) Py_DECREF(this->pAfterPredictorAfterHVACManagers);
-    if (this->bHasInsideHVACSystemIterationLoop) Py_DECREF(this->pInsideHVACSystemIterationLoop);
-    if (this->bHasEndOfZoneTimestepBeforeZoneReporting) Py_DECREF(this->pEndOfZoneTimestepBeforeZoneReporting);
-    if (this->bHasEndOfZoneTimestepAfterZoneReporting) Py_DECREF(this->pEndOfZoneTimestepAfterZoneReporting);
-    if (this->bHasEndOfSystemTimestepBeforeHVACReporting) Py_DECREF(this->pEndOfSystemTimestepBeforeHVACReporting);
-    if (this->bHasEndOfSystemTimestepAfterHVACReporting) Py_DECREF(this->pEndOfSystemTimestepAfterHVACReporting);
-    if (this->bHasEndOfZoneSizing) Py_DECREF(this->pEndOfZoneSizing);
-    if (this->bHasEndOfSystemSizing) Py_DECREF(this->pEndOfSystemSizing);
-    if (this->bHasAfterComponentInputReadIn) Py_DECREF(this->pAfterComponentInputReadIn);
-    if (this->bHasUserDefinedComponentModel) Py_DECREF(this->pUserDefinedComponentModel);
-    if (this->bHasUnitarySystemSizing) Py_DECREF(this->pUnitarySystemSizing);
+    if (this->bHasBeginNewEnvironment) {
+        Py_DECREF(this->pBeginNewEnvironment);
+    }
+    if (this->bHasAfterNewEnvironmentWarmUpIsComplete) {
+        Py_DECREF(this->pAfterNewEnvironmentWarmUpIsComplete);
+    }
+    if (this->bHasBeginZoneTimestepBeforeInitHeatBalance) {
+        Py_DECREF(this->pBeginZoneTimestepBeforeInitHeatBalance);
+    }
+    if (this->bHasBeginZoneTimestepAfterInitHeatBalance) {
+        Py_DECREF(this->pBeginZoneTimestepAfterInitHeatBalance);
+    }
+    if (this->bHasBeginTimestepBeforePredictor) {
+        Py_DECREF(this->pBeginTimestepBeforePredictor);
+    }
+    if (this->bHasAfterPredictorBeforeHVACManagers) {
+        Py_DECREF(this->pAfterPredictorBeforeHVACManagers);
+    }
+    if (this->bHasAfterPredictorAfterHVACManagers) {
+        Py_DECREF(this->pAfterPredictorAfterHVACManagers);
+    }
+    if (this->bHasInsideHVACSystemIterationLoop) {
+        Py_DECREF(this->pInsideHVACSystemIterationLoop);
+    }
+    if (this->bHasEndOfZoneTimestepBeforeZoneReporting) {
+        Py_DECREF(this->pEndOfZoneTimestepBeforeZoneReporting);
+    }
+    if (this->bHasEndOfZoneTimestepAfterZoneReporting) {
+        Py_DECREF(this->pEndOfZoneTimestepAfterZoneReporting);
+    }
+    if (this->bHasEndOfSystemTimestepBeforeHVACReporting) {
+        Py_DECREF(this->pEndOfSystemTimestepBeforeHVACReporting);
+    }
+    if (this->bHasEndOfSystemTimestepAfterHVACReporting) {
+        Py_DECREF(this->pEndOfSystemTimestepAfterHVACReporting);
+    }
+    if (this->bHasEndOfZoneSizing) {
+        Py_DECREF(this->pEndOfZoneSizing);
+    }
+    if (this->bHasEndOfSystemSizing) {
+        Py_DECREF(this->pEndOfSystemSizing);
+    }
+    if (this->bHasAfterComponentInputReadIn) {
+        Py_DECREF(this->pAfterComponentInputReadIn);
+    }
+    if (this->bHasUserDefinedComponentModel) {
+        Py_DECREF(this->pUserDefinedComponentModel);
+    }
+    if (this->bHasUnitarySystemSizing) {
+        Py_DECREF(this->pUnitarySystemSizing);
+    }
 #endif
 }
 
@@ -1115,7 +1153,7 @@ bool PluginInstance::run(EnergyPlusData &state, EMSManager::EMSCallFrom iCalledF
     }
 
     // leave if we didn't find a match
-    if (!pFunctionName) {
+    if (pFunctionName == nullptr) {
         return false;
     }
 
@@ -1127,10 +1165,10 @@ bool PluginInstance::run(EnergyPlusData &state, EMSManager::EMSCallFrom iCalledF
     PyObject *pStateInstance = PyLong_FromVoidPtr(&state);
     PyObject *pFunctionResponse = PyObject_CallMethodObjArgs(this->pClassInstance, pFunctionName, pStateInstance, nullptr);
     Py_DECREF(pStateInstance);
-    if (!pFunctionResponse) {
+    if (pFunctionResponse == nullptr) {
         std::string const functionNameAsString(functionName); // only convert to string if an error occurs
         ShowSevereError(state, format("Call to {}() on {} failed!", functionNameAsString, this->stringIdentifier));
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             reportPythonError(state);
         } else {
             ShowContinueError(state, "This could happen for any number of reasons, check the plugin code.");
@@ -1206,7 +1244,7 @@ void PluginManager::addToPythonPath(EnergyPlusData &state, const fs::path &inclu
     Py_DECREF(unicodeIncludePath);
 
     if (ret != 0) {
-        if (PyErr_Occurred()) {
+        if (PyErr_Occurred() != nullptr) {
             PluginInstance::reportPythonError(state);
         }
         ShowFatalError(state, format("ERROR adding \"{:g}\" to the sys.path in Python", includePath));
@@ -1507,7 +1545,9 @@ int PluginManager::getUserDefinedCallbackIndex(const EnergyPlusData &state, cons
 
 void PluginManager::runSingleUserDefinedCallback(EnergyPlusData &state, int index)
 {
-    if (state.dataGlobal->KickOffSimulation) return;              // Maybe?
+    if (state.dataGlobal->KickOffSimulation) {
+        return; // Maybe?
+    }
     state.dataPluginManager->userDefinedCallbacks[index](&state); // Check Index first
 }
 
