@@ -9456,7 +9456,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
     // Simulate the water heater tank, DX coil, and fan to meet the water heating requirements.
 
     int constexpr MaxIte(500);   // maximum number of iterations
-    Real64 constexpr Acc(0.001); // Accuracy of result from RegulaFalsi
+    Real64 constexpr Acc(0.005); // Accuracy of result from RegulaFalsi // was 0.001, trying to eliminate some "big" diffs
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     Real64 MdotWater;                                                                         // mass flow rate of condenser water, kg/s

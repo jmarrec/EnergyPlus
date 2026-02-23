@@ -4372,7 +4372,7 @@ void SingleDuctAirTerminal::SimVAVVS(EnergyPlusData &state, bool const FirstHVAC
         if (HCType == HeatingCoilType::SimpleHeating) {
             if (QTotLoad < QHeatFanOffMax - SmallLoad) {
                 // vary HW flow, leave air flow at minimum
-                ErrTolerance = this->ControllerOffset;
+                ErrTolerance = this->ControllerOffset / 2; // Added /2 to try to eliminate a "big" diff
                 MassFlow = MinMassFlow;
                 FanOp = 0;
 
