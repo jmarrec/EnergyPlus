@@ -88,10 +88,10 @@ Headers updated for the following existing tables in the HTML summary report:
 - 'DX Cooling Coil Standard Ratings 2017'
 - 'DX Cooling Coil Standard Ratings 2023'
 
-See Pull Request [#10311](https://github.com/NREL/EnergyPlus/pull/10311) for more detail
+See Pull Request [#10311](https://github.com/NatLabRockies/EnergyPlus/pull/10311) for more detail
 
 EXTRA NOTE: As a follow-up to this work, the EIO/tabular ratings tables were cleaned up to avoid duplicated table names and mismatches between the word Rating and Rated.
-More information can be found in PR [#10597](https://github.com/NREL/EnergyPlus/pull/10597)
+More information can be found in PR [#10597](https://github.com/NatLabRockies/EnergyPlus/pull/10597)
 
 
 ### EnvelopeSummary in Tabular Reports
@@ -123,4 +123,4 @@ The HVAC Topology report provides information about the arrangement of HVAC comp
 ### New Space Sizing Output File (spsz)
 When space sizing is active (ZoneAirHeatBalanceAlgorithm, "Do Space Heat Balance for Sizing=Yes") a new space sizing (spsz) output file is created, similar to the existing zone sizing (zsz) output. A new field "Output Space Sizing" has been added to OutputControl:Files to control this file.
 
-See pull request [#10566](https://github.com/NREL/EnergyPlus/pull/10566) for more details.
+See pull request [#10566](https://github.com/NatLabRockies/EnergyPlus/pull/10566) for more details.

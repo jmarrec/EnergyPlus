@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -3005,11 +3005,13 @@ void SingleDuctAirTerminal::SizeSys(EnergyPlusData &state)
                 state.dataSize->TermUnitFinalZoneSizing(state.dataSize->CurTermUnitSizingNum).DesHeatVolFlow) {
             ShowMessage(state, format("SizeHVACSingleDuct: Potential issue with equipment sizing for {} = \"{}\".", this->sysType, this->SysName));
             ShowContinueError(state,
-                              format("Terminal unit design air flow rate during Reheat of {:.5R} [m3/s]",
+                              format("Terminal unit design air flow rate during Reheat of {:.5R} [m3/s] used to size the heating coil",
                                      TermUnitSizing(state.dataSize->CurTermUnitSizingNum).AirVolFlow));
             ShowContinueError(state,
                               format("is less than the zone design heating air flow rate of {:.5R} [m3/s]",
                                      state.dataSize->TermUnitFinalZoneSizing(state.dataSize->CurTermUnitSizingNum).DesHeatVolFlow));
+            ShowContinueError(
+                state, format("and this {} Maximum Flow Fraction During Reheat is {:.5R} []", this->sysType, this->MaxAirVolFractionDuringReheat));
             ShowContinueError(state,
                               format("For reference the zone design cooling air flow rate is {:.5R} [m3/s]",
                                      state.dataSize->TermUnitFinalZoneSizing(state.dataSize->CurTermUnitSizingNum).DesCoolVolFlow));
@@ -3030,6 +3032,7 @@ void SingleDuctAirTerminal::SizeSys(EnergyPlusData &state)
                     ShowContinueError(state,
                                       format("Sizing:Zone Heating Maximum Air Flow per Zone Floor Area = {:.5R} [m3/s/m2]",
                                              state.dataSize->ZoneSizingInput(SizingInputNum).DesHeatMaxAirFlowPerArea));
+                    ShowContinueError(state, format("For reference the Zone Floor Area = {:.5R} [m3]", state.dataHeatBal->Zone(zoneNum).FloorArea));
                     ShowContinueError(state,
                                       format("For reference the zone design maximum heating air flow rate is {:.5R} [m3/s]",
                                              state.dataSize->TermUnitFinalZoneSizing(state.dataSize->CurTermUnitSizingNum).DesHeatVolFlowMax));

@@ -37,7 +37,7 @@ To ensure the reasonableness of the proposed curves, for each code requirement t
 
 ![ASHRAE 62.1 Simplified Procedure](NFP-CodeCompliantEquipmentDataset.png)
 
-The authors would like to point out that to obtain the IPLV.IP and IPLV.SI specific curves, the actual rated conditions from the AHRI Standard 550/590 and 551/591 were used (with a tolerance of 0.5% in IPLV value). Currently, EnergyPlus uses a mix of rated conditions from both Standard 550/590 and 551/591, see issue [#8967](https://github.com/NREL/EnergyPlus/issues/8967) so the IPLV reported when using the curves included in this PR might differ a bit. As mentioned in the issue, we hope that in the future EnergyPlus can report both a chiller's IPLV.IP and IPLV.SI.
+The authors would like to point out that to obtain the IPLV.IP and IPLV.SI specific curves, the actual rated conditions from the AHRI Standard 550/590 and 551/591 were used (with a tolerance of 0.5% in IPLV value). Currently, EnergyPlus uses a mix of rated conditions from both Standard 550/590 and 551/591, see issue [#8967](https://github.com/NatLabRockies/EnergyPlus/issues/8967) so the IPLV reported when using the curves included in this PR might differ a bit. As mentioned in the issue, we hope that in the future EnergyPlus can report both a chiller's IPLV.IP and IPLV.SI.
 
 ## Input Output Reference Documentation ##
 A description of the dataset is added to the "OutputDetailsAndExamples" guide.

@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -1920,7 +1920,6 @@ void warnIfNativeVarname(
 
     //   Issue a warning if the variable name (usually the object name) is
     //   one of the names of native variables
-    auto &s_econ = state.dataEconTariff;
 
     bool throwError = false;
     if (getEnumValue(nativeNamesUC, objName) != -1) {
@@ -1930,6 +1929,7 @@ void warnIfNativeVarname(
     }
 
     if (throwError) {
+        auto &s_econ = state.dataEconTariff;
         ErrorsFound = true;
         if (curTariffIndex >= 1 && curTariffIndex <= s_econ->numTariff) {
             ShowSevereError(state, format("UtilityCost:Tariff=\"{}\" invalid referenced name", s_econ->tariff(curTariffIndex).tariffName));
@@ -1957,10 +1957,10 @@ int AssignVariablePt(EnergyPlusData &state,
     //   the variable using the string as its name.
     //   Return the index of the variable.
 
-    auto &s_econ = state.dataEconTariff;
     int AssignVariablePt;
 
     if (flagIfNotNumeric && (len(stringIn) >= 1)) {
+        auto &s_econ = state.dataEconTariff;
         std::string inNoSpaces = RemoveSpaces(state, stringIn);
         int found = 0;
         if (allocated(s_econ->econVar)) {
@@ -2445,9 +2445,9 @@ void addOperand(EnergyPlusData &state, int const varMe, int const varOperand)
     //   relationship in the EconVar array
 
     int constexpr sizeIncrement(100);
-    auto &s_econ = state.dataEconTariff;
 
     if (varOperand != 0) {
+        auto &s_econ = state.dataEconTariff;
         // increment the numOperand and allocate/reallocate the array
         // if necessary
         if (!allocated(s_econ->operands)) {
@@ -3864,11 +3864,10 @@ void LEEDtariffReporting(EnergyPlusData &state)
     DemandWindow distHeatSteamDemWindowUnits;
     DemandWindow othrDemWindowUnits;
 
-    auto &s_orp = state.dataOutRptPredefined;
-
     auto &s_econ = state.dataEconTariff;
 
     if (s_econ->numTariff > 0) {
+        auto &s_orp = state.dataOutRptPredefined;
         int distCoolFacilMeter = GetMeterIndex(state, "DISTRICTCOOLING:FACILITY");
         int distHeatWaterFacilMeter = GetMeterIndex(state, "DISTRICTHEATINGWATER:FACILITY");
         int distHeatSteamFacilMeter = GetMeterIndex(state, "DISTRICTHEATINGSTEAM:FACILITY");
@@ -4085,8 +4084,6 @@ void WriteTabularTariffReports(EnergyPlusData &state)
     }
 
     if (s_econ->numTariff > 0) {
-        auto &econVar = s_econ->econVar;
-
         if (state.dataOutRptTab->displayEconomicResultSummary) {
             DisplayString(state, "Writing Tariff Reports");
             showWarningsBasedOnTotal(state);
@@ -4252,6 +4249,7 @@ void WriteTabularTariffReports(EnergyPlusData &state)
             // Tariff Report
             //---------------------------------
             if (state.dataOutRptTab->displayTariffReport) {
+                auto &econVar = s_econ->econVar;
                 for (auto &currentStyle : state.dataOutRptTab->tabularReportPasses) {
                     // Clear this for each style pass
                     for (auto &e : econVar) {
@@ -4541,23 +4539,15 @@ void ReportEconomicVariable(EnergyPlusData &state,
     Array2D_string tableBody;
     Real64 sumVal;
     Real64 maximumVal;
-    Real64 curVal;
-    int curIndex;
-    int curCatPt;
-    int curCategory;
-
-    int iVar;
-    int jMonth;
-    int cntOfVar;
-    int nCntOfVar;
+    int curCatPt = 0;
 
     auto const &s_econ = state.dataEconTariff;
     auto const &econVar = s_econ->econVar;
     auto const &chargeBlock = s_econ->chargeBlock;
     auto const &chargeSimple = s_econ->chargeSimple;
 
-    cntOfVar = 0;
-    for (iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
+    int cntOfVar = 0;
+    for (int iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
         if (econVar(iVar).activeNow) {
             ++cntOfVar;
         }
@@ -4591,9 +4581,9 @@ void ReportEconomicVariable(EnergyPlusData &state,
     if (includeCategory) {
         columnHead(15) = "Category";
     }
-    nCntOfVar = 0;
+    int nCntOfVar = 0;
     // row names
-    for (iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
+    for (int iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
         if (econVar(iVar).activeNow) {
             ++nCntOfVar;
             if (showCurrencySymbol) {
@@ -4605,11 +4595,12 @@ void ReportEconomicVariable(EnergyPlusData &state,
     }
     // fill the body
     nCntOfVar = 0;
-    for (iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
+    for (int iVar = 1; iVar <= s_econ->numEconVar; ++iVar) {
         if (econVar(iVar).activeNow) {
             ++nCntOfVar;
-            for (jMonth = 1; jMonth <= 12; ++jMonth) { // note not all months get printed out if more than 12 are used.- need to fix this later
-                curVal = econVar(iVar).values(jMonth);
+            for (int jMonth = 1; jMonth <= 12; ++jMonth) {
+                // note not all months get printed out if more than 12 are used.- need to fix this later
+                const Real64 curVal = econVar(iVar).values(jMonth);
                 if ((curVal > 0) && (curVal < 1)) {
                     tableBody(jMonth, nCntOfVar) = OutputReportTabular::RealToStr(style.formatReals, curVal, 4);
                 } else {
@@ -4621,8 +4612,7 @@ void ReportEconomicVariable(EnergyPlusData &state,
             tableBody(14, nCntOfVar) = OutputReportTabular::RealToStr(style.formatReals, maximumVal, 2);
             if (includeCategory) {
                 // first find category
-                curCategory = 0;
-                curIndex = econVar(iVar).index;
+                const int curIndex = econVar(iVar).index;
 
                 switch (econVar(iVar).kindOfObj) {
                 case ObjType::ChargeSimple:
@@ -4637,10 +4627,6 @@ void ReportEconomicVariable(EnergyPlusData &state,
                     break;
                 default:
                     break;
-                }
-
-                if ((curCatPt >= 1) && (curCatPt <= s_econ->numEconVar)) {
-                    curCategory = econVar(curCatPt).specific;
                 }
 
                 // In this specific table, "NotIncluded" is written as "none" so need a special case for that

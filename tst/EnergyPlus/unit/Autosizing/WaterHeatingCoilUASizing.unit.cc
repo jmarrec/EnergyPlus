@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -176,12 +176,12 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     state->dataSize->ZoneSizingInput(1).ZoneNum = 1;
     sizer.initializeWithinEP(*this->state, HVAC::cAllCoilTypes(HVAC::Coil_HeatingWater), "MyWaterCoil", printFlag, routineName);
     sizedValue = sizer.size(*state, inputValue, errorsFound);
-    EXPECT_FALSE(errorsFound);
-    EXPECT_FALSE(state->dataSize->DataErrorsFound);
-    EXPECT_FALSE(sizer.dataErrorsFound);
-    EXPECT_ENUM_EQ(AutoSizingResultType::NoError, sizer.errorType);
+    EXPECT_TRUE(errorsFound);
+    EXPECT_TRUE(state->dataSize->DataErrorsFound);
+    EXPECT_TRUE(sizer.dataErrorsFound);
+    EXPECT_ENUM_EQ(AutoSizingResultType::ErrorType1, sizer.errorType);
     EXPECT_TRUE(sizer.wasAutoSized);
-    EXPECT_NEAR(3000.0, sizedValue, 0.01); // 100% of 3000 W capacity
+    EXPECT_NEAR(3.0, sizedValue, 0.01); // 0.1% of 3000 W capacity
     state->dataWaterCoils->WaterCoil(1).InletAirTemp = 21.0;
     state->dataSize->DataErrorsFound = false;
     sizer.dataErrorsFound = false;
@@ -272,9 +272,9 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     EXPECT_ENUM_EQ(AutoSizingResultType::ErrorType1, sizer.errorType);
     EXPECT_TRUE(sizer.wasAutoSized);
     EXPECT_TRUE(errorsFound);
-    EXPECT_FALSE(state->dataSize->DataErrorsFound);
-    EXPECT_FALSE(sizer.dataErrorsFound);
-    EXPECT_NEAR(3000.0, sizedValue, 0.01); // 100% of 3000 W capacity
+    EXPECT_TRUE(state->dataSize->DataErrorsFound);
+    EXPECT_TRUE(sizer.dataErrorsFound);
+    EXPECT_NEAR(3.0, sizedValue, 0.01); // 0.1% of 3000 W capacity
     state->dataWaterCoils->WaterCoil(1).InletAirTemp = 21.0;
     state->dataSize->DataErrorsFound = false;
     sizer.dataErrorsFound = false;

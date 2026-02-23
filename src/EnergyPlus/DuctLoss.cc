@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -226,7 +226,6 @@ namespace DuctLoss {
 
         auto instances = state.dataInputProcessing->inputProcessor->epJSON.find(CurrentModuleObject);
         if (instances != state.dataInputProcessing->inputProcessor->epJSON.end()) {
-            std::string cFieldName;
             int DuctLossCondNum = 0;
             auto &instancesValue = instances.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
@@ -291,7 +290,6 @@ namespace DuctLoss {
 
         instances = state.dataInputProcessing->inputProcessor->epJSON.find(CurrentModuleObject);
         if (instances != state.dataInputProcessing->inputProcessor->epJSON.end()) {
-            std::string cFieldName;
             int DuctLossLeakNum = 0;
             auto &instancesValue = instances.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
@@ -328,7 +326,6 @@ namespace DuctLoss {
 
         instances = state.dataInputProcessing->inputProcessor->epJSON.find(CurrentModuleObject);
         if (instances != state.dataInputProcessing->inputProcessor->epJSON.end()) {
-            std::string cFieldName;
             int DuctLossMakeNum = 0;
             auto &instancesValue = instances.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
@@ -597,7 +594,6 @@ namespace DuctLoss {
         Real64 CpAir;
         int NodeNum1;
         int NodeNum2;
-        int NodeNum;
         NodeNum1 = state.afn->AirflowNetworkLinkageData(this->LinkageNum).NodeNums[0];
         NodeNum2 = state.afn->AirflowNetworkLinkageData(this->LinkageNum).NodeNums[1];
 
@@ -660,7 +656,7 @@ namespace DuctLoss {
             state.afn->AirflowNetworkNodeSimu(NodeNum2).WZ = Wout;
         } break;
         case DuctLossSubType::RetLeakBranch: {
-            NodeNum = state.afn->DisSysNodeData(NodeNum2).EPlusNodeNum;
+            int NodeNum = state.afn->DisSysNodeData(NodeNum2).EPlusNodeNum;
             MassFlowRate = state.dataLoopNodes->Node(NodeNum).MassFlowRate;
             Tout = state.dataLoopNodes->Node(this->RetLeakZoneNum).Temp * (1.0 - LeakRatio) +
                    state.dataZoneTempPredictorCorrector->zoneHeatBalance(state.afn->AirflowNetworkNodeData(NodeNum1).EPlusZoneNum).MAT * LeakRatio;
@@ -718,14 +714,12 @@ namespace DuctLoss {
 
     void InitDuctLoss(EnergyPlusData &state)
     {
-        bool errorsFound(false);
-        std::string CurrentModuleObject;
-
         if (state.dataDuctLoss->AirLoopConnectionFlag) {
+            bool errorsFound(false);
+            std::string CurrentModuleObject;
 
             for (int DuctLossNum = 1; DuctLossNum <= state.dataDuctLoss->NumOfDuctLosses; DuctLossNum++) {
                 auto &thisDuctLoss(state.dataDuctLoss->ductloss(DuctLossNum));
-
                 thisDuctLoss.AirLoopNum = Util::FindItemInList(thisDuctLoss.AirLoopName, state.dataAirSystemsData->PrimaryAirSystems);
                 if (thisDuctLoss.LossType == DuctLossType::Conduction) {
                     CurrentModuleObject = cCMO_DuctLossConduction;

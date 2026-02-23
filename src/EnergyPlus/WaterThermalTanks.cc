@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -1148,8 +1148,6 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
 
     int const NumPumpedCondenser = state.dataInputProcessing->inputProcessor->getNumObjectsFound(
         state, cHPWHPumpedCondenser); // number of WaterHeater:HeatPump:PumpedCondenser objects
-    int nAlphaOffset;                 // the difference of array location between alpha items between pumped and wrapped condensers
-    int nNumericOffset;               // the difference of array location between numeric items between pumped and wrapped condensers
     int nNumPossibleNumericArgs;      // the number of possible numeric arguments in the idd
     int nNumPossibleAlphaArgs;        // the number of possible numeric arguments in the idd
 
@@ -1162,8 +1160,8 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
         HeatPumpWaterHeaterData &HPWH = state.dataWaterThermalTanks->HPWaterHeater(HPWaterHeaterNum);
 
         // Initialize the offsets to zero
-        nAlphaOffset = 0;
-        nNumericOffset = 0;
+        int nAlphaOffset = 0;   // the difference of array location between alpha items between pumped and wrapped condensers
+        int nNumericOffset = 0; // the difference of array location between numeric items between pumped and wrapped condensers
 
         DataLoopNode::ConnectionObjectType objType;
 
@@ -1977,10 +1975,10 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
         if ((HPWH.InletAirConfiguration == WTTAmbientTemp::TempZone || HPWH.InletAirConfiguration == WTTAmbientTemp::ZoneAndOA) &&
             HPWH.AmbientTempZone > 0) {
             if (allocated(state.dataZoneEquip->ZoneEquipConfig)) {
-                bool FoundInletNode = false;
-                bool FoundOutletNode = false;
                 int ZoneNum = HPWH.AmbientTempZone;
                 if (ZoneNum <= state.dataGlobal->NumOfZones) {
+                    bool FoundOutletNode = false;
+                    bool FoundInletNode = false;
                     for (int SupAirIn = 1; SupAirIn <= state.dataZoneEquip->ZoneEquipConfig(ZoneNum).NumInletNodes; ++SupAirIn) {
                         if (HPWH.HeatPumpAirOutletNode != state.dataZoneEquip->ZoneEquipConfig(ZoneNum).InletNode(SupAirIn)) {
                             continue;
@@ -6240,10 +6238,8 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
     // METHODOLOGY EMPLOYED:
     // Inlet and outlet nodes are initialized.  Scheduled values are retrieved for the current timestep.
 
-    auto &ZoneEqSizing = state.dataSize->ZoneEqSizing;
-
     static constexpr std::string_view RoutineName("InitWaterThermalTank");
-    static constexpr std::string_view GetWaterThermalTankInput("GetWaterThermalTankInput");
+    static constexpr std::string_view GetTankInputString("GetWaterThermalTankInput");
     static constexpr std::string_view SizeTankForDemand("SizeTankForDemandSide");
 
     if (this->scanPlantLoopsFlag && allocated(state.dataPlnt->PlantLoop)) {
@@ -6290,7 +6286,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
     if (this->SetLoopIndexFlag && allocated(state.dataPlnt->PlantLoop)) {
         if ((this->UseInletNode > 0) && (this->HeatPumpNum == 0)) {
             Real64 rho =
-                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetWaterThermalTankInput);
+                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
             this->Mass = this->Volume * rho;
             this->UseSidePlantSizNum = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).PlantSizNum;
@@ -6302,7 +6298,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         }
         if ((this->UseInletNode > 0) && (this->HeatPumpNum > 0)) {
             Real64 rho =
-                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetWaterThermalTankInput);
+                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
             this->Mass = this->Volume * rho;
             this->UseSidePlantSizNum = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).PlantSizNum;
@@ -6314,7 +6310,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         }
         if ((this->SourceInletNode > 0) && (this->DesuperheaterNum == 0) && (this->HeatPumpNum == 0)) {
             Real64 rho =
-                state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetWaterThermalTankInput);
+                state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantSourceMassFlowRateMax = this->SourceDesignVolFlowRate * rho;
             this->SourceSidePlantSizNum = state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).PlantSizNum;
             if ((this->SourceDesignVolFlowRateWasAutoSized) && (this->SourceSidePlantSizNum == 0)) {
@@ -6378,7 +6374,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         if (this->UseInletNode > 0 && this->UseOutletNode > 0) {
             state.dataLoopNodes->Node(this->UseInletNode).Temp = 0.0;
             Real64 rho =
-                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetWaterThermalTankInput);
+                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->MassFlowRateMin = this->VolFlowRateMin * rho;
             this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
             PlantUtilities::InitComponentNodes(state, this->MassFlowRateMin, this->PlantUseMassFlowRateMax, this->UseInletNode, this->UseOutletNode);
@@ -6392,7 +6388,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
 
         if ((this->SourceInletNode > 0) && (this->DesuperheaterNum == 0) && (this->HeatPumpNum == 0)) {
             Real64 rho =
-                state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetWaterThermalTankInput);
+                state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantSourceMassFlowRateMax = this->SourceDesignVolFlowRate * rho;
             PlantUtilities::InitComponentNodes(state, 0.0, this->PlantSourceMassFlowRateMax, this->SourceInletNode, this->SourceOutletNode);
 
@@ -6761,6 +6757,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
             state.dataWaterThermalTanks->HPWaterHeater(HPNum).OperatingAirMassFlowRate =
                 state.dataWaterThermalTanks->HPWaterHeater(HPNum).OperatingAirFlowRate * state.dataEnvrn->StdRhoAir;
             if (state.dataSize->CurZoneEqNum > 0) {
+                auto &ZoneEqSizing = state.dataSize->ZoneEqSizing;
                 ZoneEqSizing(state.dataSize->CurZoneEqNum).CoolingAirFlow = true;
                 ZoneEqSizing(state.dataSize->CurZoneEqNum).CoolingAirVolFlow = state.dataSize->DataNonZoneNonAirloopValue;
             }
@@ -7488,7 +7485,7 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
                 TimeNeeded = TimeRemaining;
 
                 // Calculate the steady-state venting rate needed to maintain the tank at maximum temperature
-                Real64 Qloss = LossCoeff_loc * (AmbientTemp_loc - MaxTemp);
+                Qloss = LossCoeff_loc * (AmbientTemp_loc - MaxTemp);
                 Quse = UseMassFlowRate_loc * Cp * (UseInletTemp_loc - MaxTemp);
                 Qsource = SourceMassFlowRate_loc * Cp * (SourceInletTemp_loc - MaxTemp);
                 Qvent = -Quse - Qsource - Qloss - Qoffcycheat;
@@ -9150,26 +9147,25 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                     DesupHtr.DesuperheaterPLR = partLoadRatio;
                     DesupHtr.HeaterRate = QHeatRate * partLoadRatio;
                     this->CalcWaterThermalTank(state);
-                    Real64 NewTankTemp = this->TankTemp;
+                    Real64 tankTemp = this->TankTemp;
 
-                    if (NewTankTemp > desupHtrSetPointTemp) {
+                    if (tankTemp > desupHtrSetPointTemp) {
                         //           Only revert to floating mode if the tank temperature is higher than the cut out temperature
-                        if (NewTankTemp > DesupHtr.SetPointTemp) {
+                        if (tankTemp > DesupHtr.SetPointTemp) {
                             DesupHtr.Mode = TankOperatingMode::Floating;
                         }
                         int SolFla;
-                        std::string IterNum;
                         auto f = [&state, this, desupHtrSetPointTemp, &DesupHtr, MdotWater](Real64 const HPPartLoadRatio) {
                             this->Mode = DesupHtr.SaveWHMode;
                             this->SourceMassFlowRate = MdotWater * HPPartLoadRatio;
                             this->CalcWaterThermalTank(state);
-                            Real64 NewTankTemp = this->TankTemp;
-                            Real64 PLRResidualWaterThermalTank = desupHtrSetPointTemp - NewTankTemp;
+                            Real64 tankTemp_local = this->TankTemp;
+                            Real64 PLRResidualWaterThermalTank = desupHtrSetPointTemp - tankTemp_local;
                             return PLRResidualWaterThermalTank;
                         };
                         General::SolveRoot(state, Acc, MaxIte, SolFla, partLoadRatio, f, 0.0, DesupHtr.DXSysPLR);
                         if (SolFla == -1) {
-                            IterNum = fmt::to_string(MaxIte);
+                            std::string IterNum = fmt::to_string(MaxIte);
                             if (!state.dataGlobal->WarmupFlag) {
                                 ++DesupHtr.IterLimitExceededNum1;
                                 if (DesupHtr.IterLimitExceededNum1 == 1) {
@@ -9192,7 +9188,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                             }
                         } else if (SolFla == -2) {
                             partLoadRatio =
-                                max(0.0, min(DesupHtr.DXSysPLR, (desupHtrSetPointTemp - this->SavedTankTemp) / (NewTankTemp - this->SavedTankTemp)));
+                                max(0.0, min(DesupHtr.DXSysPLR, (desupHtrSetPointTemp - this->SavedTankTemp) / (tankTemp - this->SavedTankTemp)));
                             this->SourceMassFlowRate = MdotWater * partLoadRatio;
                             this->CalcWaterThermalTank(state);
                             if (!state.dataGlobal->WarmupFlag) {
@@ -9284,7 +9280,6 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                                 DesupHtr.Mode = TankOperatingMode::Floating;
                             }
                             int SolFla;
-                            std::string IterNum;
                             auto f = [&state, this, desupHtrSetPointTemp, &DesupHtr, MdotWater](Real64 const HPPartLoadRatio) {
                                 this->Mode = DesupHtr.SaveWHMode;
                                 this->SourceMassFlowRate = MdotWater * HPPartLoadRatio;
@@ -9295,7 +9290,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                             };
                             General::SolveRoot(state, Acc, MaxIte, SolFla, partLoadRatio, f, 0.0, DesupHtr.DXSysPLR);
                             if (SolFla == -1) {
-                                IterNum = fmt::to_string(MaxIte);
+                                std::string IterNum = fmt::to_string(MaxIte);
                                 if (!state.dataGlobal->WarmupFlag) {
                                     ++DesupHtr.IterLimitExceededNum2;
                                     if (DesupHtr.IterLimitExceededNum2 == 1) {
@@ -10144,7 +10139,6 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
 
                 if (NewTankTemp > HPSetPointTemp) {
                     int SolFla;
-                    std::string IterNum;
                     auto f = [&state, this, SpeedNum, HPWaterInletNode, HPWaterOutletNode, RhoWater, HPSetPointTemp, &HeatPump, FirstHVACIteration](
                                  Real64 const SpeedRatio) {
                         return this->PLRResidualIterSpeed(state,
@@ -10161,7 +10155,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                     General::SolveRoot(state, Acc, MaxIte, SolFla, SpeedRatio, f, 1.0e-10, 1.0);
 
                     if (SolFla == -1) {
-                        IterNum = fmt::to_string(MaxIte);
+                        std::string IterNum = fmt::to_string(MaxIte);
                         if (!state.dataGlobal->WarmupFlag) {
                             ++HeatPump.IterLimitExceededNum1;
                             if (HeatPump.IterLimitExceededNum1 == 1) {
@@ -12588,7 +12582,6 @@ void WaterThermalTankData::CalcStandardRatings(EnergyPlusData &state)
         return;
     }
 
-    bool FirstTimeFlag; // used during HPWH rating procedure
     bool bIsVSCoil = false;
     Real64 RecoveryEfficiency;
     Real64 EnergyFactor;
@@ -12611,7 +12604,7 @@ void WaterThermalTankData::CalcStandardRatings(EnergyPlusData &state)
         Real64 SecInTimeStep = state.dataHVACGlobal->TimeStepSysSec;
         Real64 DrawMassFlowRate = DrawMass / SecInTimeStep;
         Real64 FuelEnergy_loc = 0.0;
-        FirstTimeFlag = true;
+        bool FirstTimeFlag = true; // used during HPWH rating procedure
 
         int TimeStepPerHour = int(1.0 / state.dataHVACGlobal->TimeStepSys);
         // Simulate 24 hour test

@@ -142,7 +142,7 @@ On 4/21/2017 1:58 PM, Lixing Gu wrote:
 >>
 >> An NFP to enhance Proportional Demand Control Ventilation (DCV) is available on github.
 >>
->> https://github.com/NREL/EnergyPlus/blob/ProportionalDCVEnhancements/d
+>> https://github.com/NatLabRockies/EnergyPlus/blob/ProportionalDCVEnhancements/d
 >> e sign/FY2017/NFP-ProportionalDCVEnhancements.md
 >>
 >> Comments are welcome via e-mail or github.  Please let me know if you wish to be a reviewer for this task.
@@ -262,7 +262,7 @@ This is what Tiejun defined in an enhancement item.
 
 On re-reading the enhancement item, I disagree with using the existing Outdoor Air Schedule for calculating the minimum flow.  The schedule value is currently multiplied times all of the design level inputs (oa/person, oa/area, oa/zone) regardless of the OA control method.
 See CalcMechVentController
-https://github.com/NREL/EnergyPlus/blob/cecaea1295fd603c9ae24d89a63339bd45fb454e/src/EnergyPlus/MixedAir.cc#L3780-L3802
+https://github.com/NatLabRockies/EnergyPlus/blob/cecaea1295fd603c9ae24d89a63339bd45fb454e/src/EnergyPlus/MixedAir.cc#L3780-L3802
 
 So it is already modifying the design level OA flow for proportional control.  It is already included in ZoneOAArea, ZoneOAPeople, ZoneOABZ, etc.
 
@@ -309,7 +309,7 @@ Mike
 On 4/27/2017 3:10 PM, Lixing Gu wrote:
 All:
 
-The NFP was updated based on comments. I also added design document. Please review it (https://github.com/NREL/EnergyPlus/blob/ProportionalDCVEnhancements/design/FY2017/NFP-ProportionalDCVEnhancements.md) and give me your feedback.
+The NFP was updated based on comments. I also added design document. Please review it (https://github.com/NatLabRockies/EnergyPlus/blob/ProportionalDCVEnhancements/design/FY2017/NFP-ProportionalDCVEnhancements.md) and give me your feedback.
 
 Thanks.
 

@@ -1,7 +1,7 @@
 // EnergyPlus, Copyright (c) 1996-2026, The Board of Trustees of the University of Illinois,
 // The Regents of the University of California, through Lawrence Berkeley National Laboratory
 // (subject to receipt of any required approvals from the U.S. Dept. of Energy), Oak Ridge
-// National Laboratory, managed by UT-Battelle, Alliance for Sustainable Energy, LLC, and other
+// National Laboratory, managed by UT-Battelle, Alliance for Energy Innovation, LLC, and other
 // contributors. All rights reserved.
 //
 // NOTICE: This Software was developed under funding from the U.S. Department of Energy and the
@@ -82,6 +82,7 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                 };
                 General::SolveRoot(state, Acc, MaxIte, SolFla, this->autoSizedValue, f, UA0, UA1);
                 if (SolFla == -1) {
+                    errorsFound = true;
                     std::string msg = "Autosizing of heating coil UA failed for Coil:Heating:Water \"" + this->compName + "\"";
                     this->addErrorMessage(msg);
                     ShowSevereError(state, msg);
@@ -140,7 +141,10 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                         this->addErrorMessage(msg);
                         ShowContinueError(state, msg);
                     }
+                    this->dataErrorsFound = true;
                 } else if (SolFla == -2) {
+                    this->errorType = AutoSizingResultType::ErrorType1;
+                    errorsFound = true;
                     std::string msg = "Autosizing of heating coil UA failed for Coil:Heating:Water \"" + this->compName + "\"";
                     this->addErrorMessage(msg);
                     ShowSevereError(state, msg);
@@ -213,7 +217,7 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                         this->addErrorMessage(msg);
                         ShowContinueError(state, msg);
                     }
-                    this->autoSizedValue = UA1;
+                    this->dataErrorsFound = true;
                 }
             } else {
                 this->autoSizedValue = 1.0;
@@ -254,6 +258,7 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                 };
                 General::SolveRoot(state, Acc, MaxIte, SolFla, this->autoSizedValue, f, UA0, UA1);
                 if (SolFla == -1) {
+                    errorsFound = true;
                     std::string msg = "Autosizing of heating coil UA failed for Coil:Heating:Water \"" + this->compName + "\"";
                     this->addErrorMessage(msg);
                     ShowSevereError(state, msg);
@@ -296,6 +301,7 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                         this->addErrorMessage(msg);
                         ShowContinueError(state, msg);
                     }
+                    this->dataErrorsFound = true;
                 } else if (SolFla == -2) {
                     this->errorType = AutoSizingResultType::ErrorType1;
                     errorsFound = true;
@@ -355,7 +361,7 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                         this->addErrorMessage(msg);
                         ShowContinueError(state, msg);
                     }
-                    this->autoSizedValue = UA1;
+                    this->dataErrorsFound = true;
                 }
             } else {
                 this->autoSizedValue = 1.0;
