@@ -3227,11 +3227,22 @@ void DistributePlantLoad(EnergyPlusData &state,
                     ChangeInLoad = std::abs(RemLoopDemand);
                 }
 
+                PlantLocation plantLoc;
+                plantLoc.loopNum = LoopNum;
+                plantLoc.loopSideNum = LoopSideNum;
+                plantLoc.branchNum = BranchNum;
+                plantLoc.compNum = CompNum;
+
+                plantLoc.loop = &state.dataPlnt->PlantLoop(LoopNum);
+                plantLoc.side = &plantLoc.loop->LoopSide(LoopSideNum);
+                plantLoc.branch = &plantLoc.side->Branch(BranchNum);
+                plantLoc.comp = &plantLoc.branch->Comp(CompNum);
+                
                 AdjustChangeInLoadForLastStageUpperRangeLimit(state, LoopNum, CurSchemePtr, ListPtr, ChangeInLoad);
 
-                AdjustChangeInLoadByEMSControls(state, {LoopNum, LoopSideNum, BranchNum, CompNum}, ChangeInLoad);
+                AdjustChangeInLoadByEMSControls(state, plantLoc, ChangeInLoad);
 
-                AdjustChangeInLoadByHowServed(state, {LoopNum, LoopSideNum, BranchNum, CompNum}, ChangeInLoad);
+                AdjustChangeInLoadByHowServed(state, plantLoc, ChangeInLoad);
                 ChangeInLoad = max(0.0, ChangeInLoad);
                 this_component.MyLoad = sign(ChangeInLoad, RemLoopDemand);
                 RemLoopDemand -= sign(ChangeInLoad, RemLoopDemand);
@@ -3357,11 +3368,22 @@ void DistributePlantLoad(EnergyPlusData &state,
                     ChangeInLoad = std::abs(RemLoopDemand);
                 }
 
+                PlantLocation plantLoc;
+                plantLoc.loopNum = LoopNum;
+                plantLoc.loopSideNum = LoopSideNum;
+                plantLoc.branchNum = BranchNum;
+                plantLoc.compNum = CompNum;
+
+                plantLoc.loop = &state.dataPlnt->PlantLoop(LoopNum);
+                plantLoc.side = &plantLoc.loop->LoopSide(LoopSideNum);
+                plantLoc.branch = &plantLoc.side->Branch(BranchNum);
+                plantLoc.comp = &plantLoc.branch->Comp(CompNum);
+                
                 AdjustChangeInLoadForLastStageUpperRangeLimit(state, LoopNum, CurSchemePtr, ListPtr, ChangeInLoad);
 
-                AdjustChangeInLoadByEMSControls(state, {LoopNum, LoopSideNum, BranchNum, CompNum}, ChangeInLoad);
+                AdjustChangeInLoadByEMSControls(state, plantLoc, ChangeInLoad);
 
-                AdjustChangeInLoadByHowServed(state, {LoopNum, LoopSideNum, BranchNum, CompNum}, ChangeInLoad);
+                AdjustChangeInLoadByHowServed(state, plantLoc, ChangeInLoad);
 
                 ChangeInLoad = max(0.0, ChangeInLoad);
 
@@ -3448,11 +3470,22 @@ void DistributePlantLoad(EnergyPlusData &state,
                     ChangeInLoad = std::abs(RemLoopDemand);
                 }
 
+                PlantLocation plantLoc;
+                plantLoc.loopNum = LoopNum;
+                plantLoc.loopSideNum = LoopSideNum;
+                plantLoc.branchNum = BranchNum;
+                plantLoc.compNum = CompNum;
+
+                plantLoc.loop = &state.dataPlnt->PlantLoop(LoopNum);
+                plantLoc.side = &plantLoc.loop->LoopSide(LoopSideNum);
+                plantLoc.branch = &plantLoc.side->Branch(BranchNum);
+                plantLoc.comp = &plantLoc.branch->Comp(CompNum);
+                
                 AdjustChangeInLoadForLastStageUpperRangeLimit(state, LoopNum, CurSchemePtr, ListPtr, ChangeInLoad);
 
-                AdjustChangeInLoadByEMSControls(state, {LoopNum, LoopSideNum, BranchNum, CompNum}, ChangeInLoad);
+                AdjustChangeInLoadByEMSControls(state, plantLoc, ChangeInLoad);
 
-                AdjustChangeInLoadByHowServed(state, {LoopNum, LoopSideNum, BranchNum, CompNum}, ChangeInLoad);
+                AdjustChangeInLoadByHowServed(state, plantLoc, ChangeInLoad);
 
                 ChangeInLoad = max(0.0, ChangeInLoad);
 
