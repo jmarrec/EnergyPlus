@@ -691,7 +691,7 @@ namespace WaterThermalTanks {
         int waterIndex;
 
         General::SolveRootStats solveRootStats{};
-      
+
         ~WaterThermalTankData() = default;
 
         // Default Constructor

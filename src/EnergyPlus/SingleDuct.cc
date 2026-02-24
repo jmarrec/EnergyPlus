@@ -4324,7 +4324,13 @@ void SingleDuctAirTerminal::SimVAVVS(EnergyPlusData &state, bool const FirstHVAC
                 return (QTotLoad - UnitOutput) / QTotLoad;
             };
 
-            MassFlow = General::SolveRoot2(state, UnitFlowToler, 50, SolFlag, f, MinMassFlow, MaxCoolMassFlow,
+            MassFlow = General::SolveRoot2(state,
+                                           UnitFlowToler,
+                                           50,
+                                           SolFlag,
+                                           f,
+                                           MinMassFlow,
+                                           MaxCoolMassFlow,
                                            state.dataSingleDuct->sd_airterminal(this->SysNum).solveRootStats);
             if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                 if (this->IterationLimit == 0) {
@@ -4386,7 +4392,13 @@ void SingleDuctAirTerminal::SimVAVVS(EnergyPlusData &state, bool const FirstHVAC
                     return (QTotLoad - UnitOutput) / QTotLoad;
                 };
 
-                HWFlow = General::SolveRoot2(state, ErrTolerance, 500, SolFlag, f, MinFlowWater, MaxFlowWater,
+                HWFlow = General::SolveRoot2(state,
+                                             ErrTolerance,
+                                             500,
+                                             SolFlag,
+                                             f,
+                                             MinFlowWater,
+                                             MaxFlowWater,
                                              state.dataSingleDuct->sd_airterminal(this->SysNum).solveRootStats);
                 if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                     ShowRecurringWarningErrorAtEnd(state, "Hot Water flow control failed in VS VAV terminal unit " + this->SysName, this->ErrCount1);
@@ -4412,7 +4424,13 @@ void SingleDuctAirTerminal::SimVAVVS(EnergyPlusData &state, bool const FirstHVAC
                     return (QTotLoad - UnitOutput) / QTotLoad;
                 };
 
-                MassFlow = General::SolveRoot2(state, UnitFlowToler, 50, SolFlag, f, MinMassFlow, MaxHeatMassFlow, 
+                MassFlow = General::SolveRoot2(state,
+                                               UnitFlowToler,
+                                               50,
+                                               SolFlag,
+                                               f,
+                                               MinMassFlow,
+                                               MaxHeatMassFlow,
                                                state.dataSingleDuct->sd_airterminal(this->SysNum).solveRootStats);
                 if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                     if (this->IterationLimit == 0) {
@@ -4458,7 +4476,13 @@ void SingleDuctAirTerminal::SimVAVVS(EnergyPlusData &state, bool const FirstHVAC
                     return (QTotLoad - UnitOutput) / QTotLoad;
                 };
 
-                HWFlow = General::SolveRoot2(state, ErrTolerance, 500, SolFlag, f, MinFlowSteam, MaxFlowSteam, 
+                HWFlow = General::SolveRoot2(state,
+                                             ErrTolerance,
+                                             500,
+                                             SolFlag,
+                                             f,
+                                             MinFlowSteam,
+                                             MaxFlowSteam,
                                              state.dataSingleDuct->sd_airterminal(this->SysNum).solveRootStats);
                 if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                     ShowRecurringWarningErrorAtEnd(state, "Steam flow control failed in VS VAV terminal unit " + this->SysName, this->ErrCount1);
@@ -4485,7 +4509,13 @@ void SingleDuctAirTerminal::SimVAVVS(EnergyPlusData &state, bool const FirstHVAC
                     return (QTotLoad - UnitOutput) / QTotLoad;
                 };
 
-                MassFlow = General::SolveRoot2(state, UnitFlowToler, 50, SolFlag, f, MinMassFlow, MaxHeatMassFlow, 
+                MassFlow = General::SolveRoot2(state,
+                                               UnitFlowToler,
+                                               50,
+                                               SolFlag,
+                                               f,
+                                               MinMassFlow,
+                                               MaxHeatMassFlow,
                                                state.dataSingleDuct->sd_airterminal(this->SysNum).solveRootStats);
                 if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                     if (this->IterationLimit == 0) {
@@ -4533,8 +4563,8 @@ void SingleDuctAirTerminal::SimVAVVS(EnergyPlusData &state, bool const FirstHVAC
                     return (QTotLoad - UnitOutput) / QTotLoad;
                 };
 
-                FracDelivered = General::SolveRoot2(state, UnitFlowToler, 50, SolFlag, f, 0.0, 1.0, 
-                                                    state.dataSingleDuct->sd_airterminal(this->SysNum).solveRootStats);
+                FracDelivered = General::SolveRoot2(
+                    state, UnitFlowToler, 50, SolFlag, f, 0.0, 1.0, state.dataSingleDuct->sd_airterminal(this->SysNum).solveRootStats);
                 MassFlow = state.dataLoopNodes->Node(SysInletNode).MassFlowRate;
                 if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                     if (this->IterationLimit == 0) {

@@ -284,10 +284,10 @@ struct WaterToAirHeatPumpSimpleData : BaseGlobalStruct
     Array1D_bool MySizeFlag;
     Array1D_bool SimpleHPTimeStepFlag; // determines whether the previous operating mode for the coil and it's partner has been initialized
 
-    Real64 QLatRated;              // Latent Capacity [W] rated at entering air conditions [Tdb=26.7C Twb=19.4C]
-    Real64 QLatActual;             // Actual Latent Capacity [W]
-    Real64 Winput;                 // Power Consumption [W]
-    bool MyOneTimeFlag = true;     // one time allocation flag
+    Real64 QLatRated;          // Latent Capacity [W] rated at entering air conditions [Tdb=26.7C Twb=19.4C]
+    Real64 QLatActual;         // Actual Latent Capacity [W]
+    Real64 Winput;             // Power Consumption [W]
+    bool MyOneTimeFlag = true; // one time allocation flag
 
     Array1D<WaterToAirHeatPumpSimple::SimpleWatertoAirHPConditions> SimpleWatertoAirHP;
 
@@ -317,9 +317,7 @@ struct WaterToAirHeatPumpSimpleData : BaseGlobalStruct
 
     // Default Constructor
     WaterToAirHeatPumpSimpleData()
-        : NumWatertoAirHPs(0), AirflowErrPointer(0), GetCoilsInputFlag(true), 
-          QLatRated(0.0), QLatActual(0.0), Winput(0.0),
-          MyOneTimeFlag(true)
+        : NumWatertoAirHPs(0), AirflowErrPointer(0), GetCoilsInputFlag(true), QLatRated(0.0), QLatActual(0.0), Winput(0.0), MyOneTimeFlag(true)
     {
     }
 };

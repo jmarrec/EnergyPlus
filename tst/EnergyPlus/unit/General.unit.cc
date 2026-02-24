@@ -284,7 +284,7 @@ TEST_F(EnergyPlusFixture, General_SolveRoot2)
     SolveRootStats solveRootStats;
     int maxIters = 30;
     int SolFla;
-    
+
     for (int i = 0; i < 100; ++i) {
         Real64 Request = (Real64)((i % 13) + 0.172);
         auto residual = [Request](Real64 const Frac) {
@@ -304,7 +304,7 @@ TEST_F(EnergyPlusFixture, General_SolveRoot2)
         };
         General::SolveRoot2(*state, 0.001, maxIters, SolFla, residual, 0.0, 1.0, solveRootStats);
     }
-    
+
     EXPECT_ENUM_EQ(solveRootStats.algo, RootAlgo::ShortBisectionThenRegulaFalsi);
 }
 

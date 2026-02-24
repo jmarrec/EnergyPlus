@@ -76,7 +76,7 @@ namespace General {
 
     constexpr int SOLVEROOT_ERROR_INIT = -2;
     constexpr int SOLVEROOT_ERROR_ITER = -1;
-  
+
     struct SolveRootStats
     {
         RootAlgo algo = RootAlgo::RegulaFalsi;
@@ -84,7 +84,7 @@ namespace General {
         std::array<int, (int)RootAlgo::Num> algoCounts = {0};
         std::array<int, (int)RootAlgo::Num> algoIters = {0};
     };
-  
+
     // A second version that does not require a payload -- use lambdas
     void SolveRoot(const EnergyPlusData &state,
                    Real64 Eps,   // required absolute accuracy
@@ -100,10 +100,10 @@ namespace General {
                       int maxIters, // maximum number of iterations
                       int &SolFlag, // solution flag
                       const std::function<Real64(Real64)> &f,
-                      Real64 X_0,  // 1st bound of interval that contains the solution
+                      Real64 X_0, // 1st bound of interval that contains the solution
                       Real64 X_1,
                       SolveRootStats &config); // 2nd bound of interval that contains the solution
-  
+
     void MovingAvg(Array1D<Real64> &DataIn, int NumItemsInAvg);
 
     void ProcessDateString(EnergyPlusData &state,

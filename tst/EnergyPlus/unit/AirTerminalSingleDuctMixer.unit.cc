@@ -7934,8 +7934,8 @@ TEST_F(EnergyPlusFixture, AirTerminalSingleDuctMixer_SimFCU_ATMInletSideTest)
     // than 1/10th or even 1/100th of a percent needed on anything?
     // Also, the tolerance of finding water coil UA is 0.001, how
     // can this be lower?
-    EXPECT_NEAR(thisFanCoil.PLR, 0.76235, 0.001); // Was 0.78843 
-    
+    EXPECT_NEAR(thisFanCoil.PLR, 0.76235, 0.001); // Was 0.78843
+
     // check mass flow rates
     EXPECT_NEAR(PrimaryAirMassFlowRate, 0.2, 0.000001);
     // Tolerance here wwas 0.000001, why?  Why is tolerance of less

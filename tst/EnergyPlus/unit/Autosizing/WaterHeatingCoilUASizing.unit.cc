@@ -116,7 +116,7 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
-    
+
     state->dataWaterCoils->WaterCoil.allocate(1);
     state->dataWaterCoils->WaterCoil(1).InletAirTemp = 21.0;
     state->dataWaterCoils->WaterCoil(1).InletAirHumRat = 0.006;
@@ -140,6 +140,9 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     state->dataSize->ZoneEqSizing.allocate(1);
     state->dataSize->PlantSizData.allocate(1);
     state->dataSize->PlantSizData(1).ExitTemp = 60.0;
+
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
 
     state->dataSize->ZoneSizingRunDone = true;
 
@@ -298,7 +301,7 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     EXPECT_TRUE(sizer.wasAutoSized);
     // tolerance was 0.01, this is a root finding algo sensitivity (RegulaFalsi finds solution at -0.00008
     // RegulaFalsiThenBisection finds it at 0.00008).
-    EXPECT_NEAR(98.35, sizedValue, 0.03); 
+    EXPECT_NEAR(98.35, sizedValue, 0.03);
     sizer.autoSizedValue = 0.0; // reset for next test
 
     // reset eio stream
@@ -320,7 +323,7 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
 
     EXPECT_FALSE(errorsFound);
 
-#ifdef GET_OUT    
+#ifdef GET_OUT
     // <Component Sizing Information> header already reported above (and flag set false). Only coil sizing information reported here.
     eiooutput =
         std::string(" Component Sizing Information, Coil:Heating:Water, MyWaterCoil, Design Size U-Factor Times Area Value [W/K], 98.35096\n"

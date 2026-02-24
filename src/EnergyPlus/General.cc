@@ -238,7 +238,9 @@ void SolveRoot(const EnergyPlusData &state,
             if (AltIte > state.dataRootFinder->NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
 
-                if (AltIte >= 2 * state.dataRootFinder->NumOfIter) AltIte = 0;
+                if (AltIte >= 2 * state.dataRootFinder->NumOfIter) {
+                    AltIte = 0;
+                }
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
             }
@@ -269,15 +271,15 @@ void SolveRoot(const EnergyPlusData &state,
             return;
         };
 
-#ifdef GET_OUT        
+#ifdef GET_OUT
         if (NIte > 20) {
             assert(false);
             Flag = NIte;
             XRes = XTemp;
             return;
-        }        
+        }
 #endif // GET_OUT
-        
+
         // OK, so we didn't converge, lets check max iterations to see if we should break early
         if (NIte > MaxIte) {
             break;
@@ -311,13 +313,13 @@ void SolveRoot(const EnergyPlusData &state,
 
 // A second version that does not require a payload -- use lambdas
 Real64 SolveRoot2(const EnergyPlusData &state,
-                  Real64 Eps,   // required absolute accuracy
+                  Real64 Eps, // required absolute accuracy
                   int maxIters,
                   int &SolFla,
                   const std::function<Real64(Real64)> &f,
                   Real64 X_0, // 1st bound of interval that contains the solution
                   Real64 X_1, // 2nd bound of interval that contains the solution
-                  SolveRootStats &stats) 
+                  SolveRootStats &stats)
 {
     // SUBROUTINE INFORMATION:
     //       AUTHOR         Amir Roth
@@ -326,9 +328,8 @@ Real64 SolveRoot2(const EnergyPlusData &state,
     // PURPOSE OF THIS SUBROUTINE:
     // This is a wrapper to SolveRoot that iterates over all root finding algorithms to find the best one.
 
-
     Real64 XRes;
-    
+
     // Save and restore "global" root finding algorithm
     RootAlgo algoTemp = state.dataRootFinder->rootAlgo;
     state.dataRootFinder->rootAlgo = stats.algo;
@@ -338,35 +339,38 @@ Real64 SolveRoot2(const EnergyPlusData &state,
     state.dataRootFinder->rootAlgo = algoTemp;
 
     if (SolFla > 0) {
-        stats.counts ++;
-        stats.algoCounts[(int)stats.algo] ++;
+        stats.counts++;
+        stats.algoCounts[(int)stats.algo]++;
         stats.algoIters[(int)stats.algo] += SolFla;
 
         constexpr int TRIALS_PER_COUNT = 5;
 
         // Trial period, cycle thru algorithms
         if (stats.counts < TRIALS_PER_COUNT * (int)RootAlgo::Num) {
-            stats.algo = static_cast<RootAlgo>((int)stats.algo+1);
-            if (stats.algo == RootAlgo::Num) stats.algo = RootAlgo::RegulaFalsi;
+            stats.algo = static_cast<RootAlgo>((int)stats.algo + 1);
+            if (stats.algo == RootAlgo::Num) {
+                stats.algo = RootAlgo::RegulaFalsi;
+            }
 
-        // Choose base algorithm, i.e., fewest total iterations
+            // Choose base algorithm, i.e., fewest total iterations
         } else if (stats.counts == TRIALS_PER_COUNT * (int)RootAlgo::Num) {
             int minIters = maxIters * TRIALS_PER_COUNT;
             stats.algo = RootAlgo::Invalid;
-            for (int i = 0; i < (int)RootAlgo::Num; ++i)
+            for (int i = 0; i < (int)RootAlgo::Num; ++i) {
                 if (stats.algoIters[i] < minIters) {
                     stats.algo = static_cast<RootAlgo>(i);
                     minIters = stats.algoIters[i];
-          }
-      
-        // Have chosen an algorithm, stats.algo should be it
+                }
+            }
+
+            // Have chosen an algorithm, stats.algo should be it
         } else {
         }
     }
-    
+
     return XRes;
 }
-  
+
 void MovingAvg(Array1D<Real64> &DataIn, int const NumItemsInAvg)
 {
     if (NumItemsInAvg <= 1) {

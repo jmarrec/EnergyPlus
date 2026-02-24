@@ -59,7 +59,7 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
     if (!this->checkInitialized(state, errorsFound)) {
         return 0.0;
     }
-    
+
     this->preSize(state, _originalValue);
     if (this->curZoneEqNum > 0) {
         if (!this->wasAutoSized && !this->sizingDesRunThisZone) {
@@ -83,7 +83,7 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                 int SolFla;
                 // Don't use SolveRoot2 (optimizer) for sizing
                 General::SolveRoot(state, Acc, 500, SolFla, this->autoSizedValue, f, UA0, UA1);
-                
+
                 if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                     errorsFound = true;
                     std::string msg = "Autosizing of heating coil UA failed for Coil:Heating:Water \"" + this->compName + "\"";
@@ -265,7 +265,7 @@ Real64 WaterHeatingCoilUASizer::size(EnergyPlusData &state, Real64 _originalValu
                 int SolFla;
                 // Don't use SolveRoot2 (optimizer) for sizing
                 General::SolveRoot(state, Acc, 500, SolFla, this->autoSizedValue, f, UA0, UA1);
-                
+
                 if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                     errorsFound = true;
                     std::string msg = "Autosizing of heating coil UA failed for Coil:Heating:Water \"" + this->compName + "\"";

@@ -1910,7 +1910,8 @@ namespace WaterToAirHeatPumpSimple {
                         RatedratioTWB = (RatedMixWetBulb + Constant::Kelvin) / Tref;
                         RatedratioTS = (simpleWatertoAirHP.RatedEntWaterTemp + Constant::Kelvin) / Tref;
                         PeakSensCapTempModFac = simpleWatertoAirHP.SensCoolCapCurve->value(state, ratioTDB, ratioTWB, ratioTS, 1.0, 1.0);
-                        RatedSensCapTempModFac = simpleWatertoAirHP.SensCoolCapCurve->value(state, RatedratioTDB, RatedratioTWB, RatedratioTS, 1.0, 1.0);
+                        RatedSensCapTempModFac =
+                            simpleWatertoAirHP.SensCoolCapCurve->value(state, RatedratioTDB, RatedratioTWB, RatedratioTS, 1.0, 1.0);
                         // Check curve output when rated mixed air wetbulb is the design mixed air wetbulb
                         // calculate the rated sensible capacity based on peak conditions
                         // note: the rated sensible capacity can be different than the sensible capacity
@@ -2823,7 +2824,8 @@ namespace WaterToAirHeatPumpSimple {
 
             if (PltSizNum > 0) {
                 rho = simpleWatertoAirHP.plantLoc.loop->glycol->getDensity(state, state.dataSize->PlantSizData(PltSizNum).ExitTemp, RoutineNameAlt);
-                Cp = simpleWatertoAirHP.plantLoc.loop->glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizNum).ExitTemp, RoutineNameAlt);
+                Cp = simpleWatertoAirHP.plantLoc.loop->glycol->getSpecificHeat(
+                    state, state.dataSize->PlantSizData(PltSizNum).ExitTemp, RoutineNameAlt);
 
                 if (simpleWatertoAirHP.WAHPType == WatertoAirHP::Heating) {
                     RatedWaterVolFlowRateDes =
@@ -3039,7 +3041,8 @@ namespace WaterToAirHeatPumpSimple {
         static const Real64 LoadSideInletEnth_Init = Psychrometrics::PsyHFnTdbW(LoadSideInletDBTemp_Init, LoadSideInletHumRat_Init);
         static const Real64 CpAir_Init = Psychrometrics::PsyCpAirFnW(LoadSideInletHumRat_Init);
 
-        static const Real64 LoadSideInletWBTemp_Init = Psychrometrics::PsyTwbFnTdbWPb(state, LoadSideInletDBTemp_Init, LoadSideInletHumRat_Init, state.dataEnvrn->OutBaroPress, RoutineName);
+        static const Real64 LoadSideInletWBTemp_Init =
+            Psychrometrics::PsyTwbFnTdbWPb(state, LoadSideInletDBTemp_Init, LoadSideInletHumRat_Init, state.dataEnvrn->OutBaroPress, RoutineName);
 
         //  LOAD LOCAL VARIABLES FROM DATA STRUCTURE (for code readability)
 
@@ -3066,8 +3069,8 @@ namespace WaterToAirHeatPumpSimple {
         }
 
         Real64 SourceSideMassFlowRate = simpleWatertoAirHP.WaterMassFlowRate; // Source Side Mass flow rate [Kg/s]
-        Real64 SourceSideInletTemp = simpleWatertoAirHP.InletWaterTemp; // Source Side Inlet Temperature [C]
-        Real64 SourceSideInletEnth = simpleWatertoAirHP.InletWaterEnthalpy; // Source Side Inlet Enthalpy [J/kg]
+        Real64 SourceSideInletTemp = simpleWatertoAirHP.InletWaterTemp;       // Source Side Inlet Temperature [C]
+        Real64 SourceSideInletEnth = simpleWatertoAirHP.InletWaterEnthalpy;   // Source Side Inlet Enthalpy [J/kg]
         CpWater = simpleWatertoAirHP.plantLoc.loop->glycol->getSpecificHeat(state, SourceSideInletTemp, RoutineNameSourceSideInletTemp);
 
         // Check for flows, do not perform simulation if no flow in load side or source side.
@@ -3113,12 +3116,12 @@ namespace WaterToAirHeatPumpSimple {
         LoadSideInletEnth_Unit = simpleWatertoAirHP.InletAirEnthalpy;
         CpAir_Unit = Psychrometrics::PsyCpAirFnW(LoadSideInletHumRat_Unit);
 
-        Real64 LoadSideInletDBTemp;    // Load Side Inlet Dry Bulb Temp [C]
-        Real64 LoadSideInletWBTemp;    // Load Side Inlet Wet Bulb Temp [C]
-        Real64 LoadSideInletHumRat;    // Load Side Outlet Humidity ratio
-        Real64 LoadSideInletEnth;      // Load Side Inlet Enthalpy [J/kg]
-        Real64 LoadSideOutletDBTemp;   // Load Side Outlet Dry Bulb Temp [C]
-        Real64 LoadSideOutletHumRat;   // Load Side Outlet Humidity ratio
+        Real64 LoadSideInletDBTemp;  // Load Side Inlet Dry Bulb Temp [C]
+        Real64 LoadSideInletWBTemp;  // Load Side Inlet Wet Bulb Temp [C]
+        Real64 LoadSideInletHumRat;  // Load Side Outlet Humidity ratio
+        Real64 LoadSideInletEnth;    // Load Side Inlet Enthalpy [J/kg]
+        Real64 LoadSideOutletDBTemp; // Load Side Outlet Dry Bulb Temp [C]
+        Real64 LoadSideOutletHumRat; // Load Side Outlet Humidity ratio
 
         while (true) {
             ++NumIteration;
@@ -3142,11 +3145,8 @@ namespace WaterToAirHeatPumpSimple {
             ratioTWB = ((LoadSideInletWBTemp + Constant::Kelvin) / Tref);
             ratioTS = ((SourceSideInletTemp + Constant::Kelvin) / Tref);
             ratioVL = (LoadSideFullMassFlowRate /
-                       (AirVolFlowRateRated * Psychrometrics::PsyRhoAirFnPbTdbW(state,
-                                                                                state.dataEnvrn->StdBaroPress,
-                                                                                LoadSideInletDBTemp,
-                                                                                LoadSideInletHumRat,
-                                                                                RoutineName)));
+                       (AirVolFlowRateRated * Psychrometrics::PsyRhoAirFnPbTdbW(
+                                                  state, state.dataEnvrn->StdBaroPress, LoadSideInletDBTemp, LoadSideInletHumRat, RoutineName)));
 
             if (simpleWatertoAirHP.DesignWaterMassFlowRate > 0.0) {
                 ratioVS = (SourceSideMassFlowRate) / (simpleWatertoAirHP.DesignWaterMassFlowRate);
@@ -3211,10 +3211,10 @@ namespace WaterToAirHeatPumpSimple {
 
         // scale heat transfer rates to PLR and power to RTF
         simpleWatertoAirHP.QLoadTotal *= PartLoadRatio;
-        simpleWatertoAirHP.QLoadTotalReport = simpleWatertoAirHP.AirMassFlowRate *
-                                              (LoadSideInletEnth -
-                                               Psychrometrics::PsyHFnTdbW(simpleWatertoAirHP.OutletAirDBTemp,
-                                                                          simpleWatertoAirHP.OutletAirHumRat)); // Why doesn't this match QLoadTotal?
+        simpleWatertoAirHP.QLoadTotalReport =
+            simpleWatertoAirHP.AirMassFlowRate *
+            (LoadSideInletEnth - Psychrometrics::PsyHFnTdbW(simpleWatertoAirHP.OutletAirDBTemp,
+                                                            simpleWatertoAirHP.OutletAirHumRat)); // Why doesn't this match QLoadTotal?
         simpleWatertoAirHP.QSensible *= PartLoadRatio;
         state.dataWaterToAirHeatPumpSimple->Winput *= simpleWatertoAirHP.RunFrac;
         simpleWatertoAirHP.QSource = simpleWatertoAirHP.QLoadTotalReport + state.dataWaterToAirHeatPumpSimple->Winput;
@@ -3257,8 +3257,8 @@ namespace WaterToAirHeatPumpSimple {
                                                  simpleWatertoAirHP.WaterOutletNodeNum,
                                                  simpleWatertoAirHP.plantLoc);
             if (simpleWatertoAirHP.WaterMassFlowRate > 0.0) {
-                simpleWatertoAirHP.OutletWaterTemp = SourceSideInletTemp +
-                                                     simpleWatertoAirHP.QSource / (simpleWatertoAirHP.WaterMassFlowRate * CpWater);
+                simpleWatertoAirHP.OutletWaterTemp =
+                    SourceSideInletTemp + simpleWatertoAirHP.QSource / (simpleWatertoAirHP.WaterMassFlowRate * CpWater);
                 simpleWatertoAirHP.OutletWaterEnthalpy = SourceSideInletEnth + simpleWatertoAirHP.QSource / simpleWatertoAirHP.WaterMassFlowRate;
             }
         } else {
@@ -3387,11 +3387,8 @@ namespace WaterToAirHeatPumpSimple {
         ratioTDB = ((LoadSideInletDBTemp + Constant::Kelvin) / Tref);
         ratioTS = ((SourceSideInletTemp + Constant::Kelvin) / Tref);
         ratioVL = (LoadSideFullMassFlowRate /
-                   (AirVolFlowRateRated * Psychrometrics::PsyRhoAirFnPbTdbW(state,
-                                                                            state.dataEnvrn->StdBaroPress,
-                                                                            LoadSideInletDBTemp,
-                                                                            LoadSideInletHumRat,
-                                                                            RoutineName)));
+                   (AirVolFlowRateRated *
+                    Psychrometrics::PsyRhoAirFnPbTdbW(state, state.dataEnvrn->StdBaroPress, LoadSideInletDBTemp, LoadSideInletHumRat, RoutineName)));
         if (simpleWatertoAirHP.DesignWaterMassFlowRate > 0.0) {
             ratioVS = (SourceSideMassFlowRate) / (simpleWatertoAirHP.DesignWaterMassFlowRate);
         } else {
@@ -3456,10 +3453,9 @@ namespace WaterToAirHeatPumpSimple {
                                                  simpleWatertoAirHP.WaterOutletNodeNum,
                                                  simpleWatertoAirHP.plantLoc);
             if (simpleWatertoAirHP.WaterMassFlowRate > 0.0) {
-                simpleWatertoAirHP.OutletWaterTemp = SourceSideInletTemp -
-                                                     simpleWatertoAirHP.QSource / (simpleWatertoAirHP.WaterMassFlowRate * CpWater);
-                simpleWatertoAirHP.OutletWaterEnthalpy =
-                    SourceSideInletEnth - simpleWatertoAirHP.QSource / simpleWatertoAirHP.WaterMassFlowRate;
+                simpleWatertoAirHP.OutletWaterTemp =
+                    SourceSideInletTemp - simpleWatertoAirHP.QSource / (simpleWatertoAirHP.WaterMassFlowRate * CpWater);
+                simpleWatertoAirHP.OutletWaterEnthalpy = SourceSideInletEnth - simpleWatertoAirHP.QSource / simpleWatertoAirHP.WaterMassFlowRate;
             }
         } else {
             if ((simpleWatertoAirHP.WaterCyclingMode) == HVAC::WaterFlow::Constant) {

@@ -6288,7 +6288,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
             Real64 rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
             this->Mass = this->Volume * rho;
-            this->UseSidePlantSizNum = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).PlantSizNum;
+            this->UseSidePlantSizNum = this->UseSidePlantLoc.loop->PlantSizNum;
             if ((this->UseDesignVolFlowRateWasAutoSized) && (this->UseSidePlantSizNum == 0)) {
                 ShowSevereError(state,
                                 format("InitWaterThermalTank: Did not find Sizing:Plant object for use side of plant thermal tank = {}", this->Name));
@@ -6309,7 +6309,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         if ((this->SourceInletNode > 0) && (this->DesuperheaterNum == 0) && (this->HeatPumpNum == 0)) {
             Real64 rho = this->SrcSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantSourceMassFlowRateMax = this->SourceDesignVolFlowRate * rho;
-            this->SourceSidePlantSizNum = state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).PlantSizNum;
+            this->SourceSidePlantSizNum = this->SrcSidePlantLoc.loop->PlantSizNum;
             if ((this->SourceDesignVolFlowRateWasAutoSized) && (this->SourceSidePlantSizNum == 0)) {
                 ShowSevereError(
                     state, format("InitWaterThermalTank: Did not find Sizing:Plant object for source side of plant thermal tank = {}", this->Name));
@@ -7986,9 +7986,8 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
     const Real64 Cp = [&] {
         if (this->UseSidePlantLoc.loopNum > 0) {
             return this->UseSidePlantLoc.loop->glycol->getSpecificHeat(state, this->TankTemp, RoutineName);
-        } else {
-            return this->water->getSpecificHeat(state, this->TankTemp, RoutineName);
         }
+        return this->water->getSpecificHeat(state, this->TankTemp, RoutineName);
     }();
 
     Real64 Eloss = 0.0;             // Energy change due to ambient losses over the DataGlobals::TimeStep (J)
@@ -9161,7 +9160,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                         };
 
                         int SolFla;
-                        
+
                         partLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, DesupHtr.DXSysPLR, this->solveRootStats);
                         if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                             if (!state.dataGlobal->WarmupFlag) {
@@ -9287,14 +9286,13 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                                 return PLRResidualWaterThermalTank;
                             };
 
-
                             // Shared by all instances of this call to learn fastest algorithm.  This is not
                             // thread, "object", or "state" safe, does it really need to be?  Does it need to
                             // exist within state?  Within each thermal tank object?  That's probably excessive.
 
                             // TODO: move to state
                             int SolFla;
-                            
+
                             partLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, DesupHtr.DXSysPLR, this->solveRootStats);
                             if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                                 if (!state.dataGlobal->WarmupFlag) {
@@ -9986,9 +9984,8 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
 
                 // Shared by all calls to learn fastest algorithm
                 int SolFla;
-              
-                state.dataWaterThermalTanks->hpPartLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, 1.0,
-                                                                                   this->solveRootStats);
+
+                state.dataWaterThermalTanks->hpPartLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, 1.0, this->solveRootStats);
                 if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                     if (!state.dataGlobal->WarmupFlag) {
                         ++HeatPump.IterLimitExceededNum2;

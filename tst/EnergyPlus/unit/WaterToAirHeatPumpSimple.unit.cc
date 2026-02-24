@@ -431,7 +431,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimple_TestAirFlow)
     // variables to state->dataX just for testing purposes is not a
     // good thing to do.  I don't know what a better thing to do is,
     // but this is not it.
-    
+
     // EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->Winput, 2853.98 * 0.85781, 0.1);
     // EXPECT_EQ(state->dataWaterToAirHeatPumpSimple->LoadSideInletDBTemp, 26.0);
     // EXPECT_NEAR(state->dataWaterToAirHeatPumpSimple->LoadSideOutletDBTemp, 26.0 - (14360.848 / 1.0 / CpAir), 0.0001);
@@ -1256,7 +1256,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     // create and attach a plant loop
     state->dataPlnt->TotNumLoops = 1;
     state->dataPlnt->PlantLoop.allocate(1);
-    
+
     auto &loop = state->dataPlnt->PlantLoop(1);
     loop.Name = "Condenser Water Loop";
     loop.FluidName = "WATER";
@@ -1265,7 +1265,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     auto &demandside = loop.LoopSide(DataPlant::LoopSideLocation::Demand);
     demandside.TotalBranches = 1;
     demandside.Branch.allocate(1);
-    
+
     auto &branch = demandside.Branch(1);
     branch.TotalComponents = 2;
     branch.Comp.allocate(2);

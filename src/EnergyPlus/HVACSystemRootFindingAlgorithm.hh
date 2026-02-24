@@ -65,18 +65,13 @@ enum class RootAlgo : int
 };
 
 static constexpr std::array<std::string_view, (int)RootAlgo::Num> rootAlgoNamesUC = {
-    "REGULAFALSI",
-    "BISECTION",
-    "REGULAFALSITHENBISECTION",
-    "BISECTIONTHENREGULAFALSI",
-    "ALTERNATION",
-    "SHORTBISECTIONTHENREGULAFALSI"};
+    "REGULAFALSI", "BISECTION", "REGULAFALSITHENBISECTION", "BISECTIONTHENREGULAFALSI", "ALTERNATION", "SHORTBISECTIONTHENREGULAFALSI"};
 
 struct RootFindingData : BaseGlobalStruct
 {
     std::string Algorithm = {}; // Choice of algorithm
 
-    int NumOfIter = 5;          // Number of Iteration Before Algorith Switch
+    int NumOfIter = 5; // Number of Iteration Before Algorith Switch
     RootAlgo rootAlgo = RootAlgo::RegulaFalsi;
 
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override

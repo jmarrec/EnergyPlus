@@ -1490,9 +1490,8 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
             };
 
             int SolFlag;
-            
-            UA = General::SolveRoot2(state, 0.001, 500, SolFlag, f, UA0, UA1,
-                                     state.dataWaterCoils->WaterCoil(CoilNum).solveRootStats);
+
+            UA = General::SolveRoot2(state, 0.001, 500, SolFlag, f, UA0, UA1, state.dataWaterCoils->WaterCoil(CoilNum).solveRootStats);
 
             // if the numerical inversion failed, issue error messages.
             if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
@@ -1506,7 +1505,7 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
                 waterCoil.UAWetExtPerUnitArea = waterCoil.UACoilExternal / waterCoil.TotCoilOutsideSurfArea;
                 waterCoil.UADryExtPerUnitArea = waterCoil.UAWetExtPerUnitArea;
                 ShowContinueError(state, format(" Coil design UA set to {:.6R} [W/C]", waterCoil.UACoilTotal));
-            } else if (SolFlag  == General::SOLVEROOT_ERROR_INIT) {
+            } else if (SolFlag == General::SOLVEROOT_ERROR_INIT) {
                 ShowSevereError(state, format("Calculation of cooling coil design UA failed for coil {}", waterCoil.Name));
                 ShowContinueError(state, "  Bad starting values for UA");
                 waterCoil.UACoilExternal = UA0 * 10.0;
@@ -5867,12 +5866,12 @@ Real64 TdbFnHRhPb(EnergyPlusData &state,
 
     // FUNCTION PARAMETER DEFINITIONS:
     Real64 constexpr Acc(1.0); // Accuracy of result
-    
+
     auto f = [&state, H, RH, PB](Real64 const Tprov) { return H - Psychrometrics::PsyHFnTdbRhPb(state, Tprov, RH, PB); };
 
     static General::SolveRootStats solveRootStats;
     int SolFla;
-    
+
     Real64 Tprov = General::SolveRoot2(state, Acc, 500, SolFla, f, 1.0, 50.0, solveRootStats);
     // if the numerical inversion failed, issue error messages.
     if (SolFla == General::SOLVEROOT_ERROR_ITER) {
