@@ -1476,7 +1476,7 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_HeatRecoveryTest)
 
     state->dataHVACMultiSpdHP->MSHeatPump(1).HRPlantLoc.loopNum = 1;
     state->dataHVACMultiSpdHP->MSHeatPump(1).HRPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    
+
     state->dataLoopNodes->Node(HeatRecInNode).MassFlowRate = 0.0; // test heat recovery result with 0 water flow rate
     HVACMultiSpeedHeatPump::MSHPHeatRecovery(*state, 1);
 

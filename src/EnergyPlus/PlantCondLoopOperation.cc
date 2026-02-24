@@ -3068,7 +3068,7 @@ void DistributePlantLoad(EnergyPlusData &state,
                 plantLoc.side = &plantLoc.loop->LoopSide(LoopSideNum);
                 plantLoc.branch = &plantLoc.side->Branch(BranchNum);
                 plantLoc.comp = &plantLoc.branch->Comp(CompNum);
-                
+
                 AdjustChangeInLoadForLastStageUpperRangeLimit(state, LoopNum, CurSchemePtr, ListPtr, ChangeInLoad);
 
                 AdjustChangeInLoadByEMSControls(state, plantLoc, ChangeInLoad);
@@ -3170,7 +3170,7 @@ void DistributePlantLoad(EnergyPlusData &state,
                 plantLoc.side = &plantLoc.loop->LoopSide(LoopSideNum);
                 plantLoc.branch = &plantLoc.side->Branch(BranchNum);
                 plantLoc.comp = &plantLoc.branch->Comp(CompNum);
-                
+
                 AdjustChangeInLoadForLastStageUpperRangeLimit(state, LoopNum, CurSchemePtr, ListPtr, ChangeInLoad);
 
                 AdjustChangeInLoadByEMSControls(state, plantLoc, ChangeInLoad);
@@ -3237,7 +3237,7 @@ void DistributePlantLoad(EnergyPlusData &state,
                 plantLoc.side = &plantLoc.loop->LoopSide(LoopSideNum);
                 plantLoc.branch = &plantLoc.side->Branch(BranchNum);
                 plantLoc.comp = &plantLoc.branch->Comp(CompNum);
-                
+
                 AdjustChangeInLoadForLastStageUpperRangeLimit(state, LoopNum, CurSchemePtr, ListPtr, ChangeInLoad);
 
                 AdjustChangeInLoadByEMSControls(state, plantLoc, ChangeInLoad);
@@ -3378,7 +3378,7 @@ void DistributePlantLoad(EnergyPlusData &state,
                 plantLoc.side = &plantLoc.loop->LoopSide(LoopSideNum);
                 plantLoc.branch = &plantLoc.side->Branch(BranchNum);
                 plantLoc.comp = &plantLoc.branch->Comp(CompNum);
-                
+
                 AdjustChangeInLoadForLastStageUpperRangeLimit(state, LoopNum, CurSchemePtr, ListPtr, ChangeInLoad);
 
                 AdjustChangeInLoadByEMSControls(state, plantLoc, ChangeInLoad);
@@ -3480,7 +3480,7 @@ void DistributePlantLoad(EnergyPlusData &state,
                 plantLoc.side = &plantLoc.loop->LoopSide(LoopSideNum);
                 plantLoc.branch = &plantLoc.side->Branch(BranchNum);
                 plantLoc.comp = &plantLoc.branch->Comp(CompNum);
-                
+
                 AdjustChangeInLoadForLastStageUpperRangeLimit(state, LoopNum, CurSchemePtr, ListPtr, ChangeInLoad);
 
                 AdjustChangeInLoadByEMSControls(state, plantLoc, ChangeInLoad);

@@ -1607,10 +1607,8 @@ namespace FanCoilUnits {
                             }
                             fanCoil.DesHeatingLoad = DesCoilLoad;
                             if (DesCoilLoad >= HVAC::SmallLoad) {
-                                rho = fanCoil.HeatCoilPlantLoc.loop->
-                                          glycol->getDensity(state, Constant::HWInitConvTemp, RoutineNameNoSpace);
-                                Cp = fanCoil.HeatCoilPlantLoc.loop->
-                                         glycol->getSpecificHeat(state, Constant::HWInitConvTemp, RoutineNameNoSpace);
+                                rho = fanCoil.HeatCoilPlantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineNameNoSpace);
+                                Cp = fanCoil.HeatCoilPlantLoc.loop->glycol->getSpecificHeat(state, Constant::HWInitConvTemp, RoutineNameNoSpace);
 
                                 MaxHotWaterVolFlowDes = DesCoilLoad / (WaterCoilSizDeltaT * Cp * rho);
                             } else {

@@ -1885,8 +1885,7 @@ namespace IceThermalStorage {
         // then based on MyLoad, new ITSMassFlowRate will be calculated.
 
         //----------------------------
-        Real64 CpFluid =
-            this->plantLoc.loop->glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->PltInletNodeNum).Temp, RoutineName);
+        Real64 CpFluid = this->plantLoc.loop->glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->PltInletNodeNum).Temp, RoutineName);
 
         // Calculate Umyload based on MyLoad from E+
         Real64 Umyload = -myLoad * TimeInterval / this->ITSNomCap;

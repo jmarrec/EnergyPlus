@@ -1052,8 +1052,7 @@ void FluidCoolerspecs::size(EnergyPlusData &state)
                     ensureSizingPlantExitTempIsNotLessThanDesignEnteringAirTemp();
 
                     rho = this->plantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, CalledFrom);
-                    Cp = this->plantLoc.loop->
-                             glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, CalledFrom);
+                    Cp = this->plantLoc.loop->glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, CalledFrom);
 
                     DesFluidCoolerLoad = rho * Cp * tmpDesignWaterFlowRate * state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
                     tmpHighSpeedFanPower = 0.0105 * DesFluidCoolerLoad;
@@ -1128,8 +1127,7 @@ void FluidCoolerspecs::size(EnergyPlusData &state)
                     ensureSizingPlantExitTempIsNotLessThanDesignEnteringAirTemp();
 
                     rho = this->plantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, CalledFrom);
-                    Cp = this->plantLoc.loop->
-                             glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, CalledFrom);
+                    Cp = this->plantLoc.loop->glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, CalledFrom);
 
                     DesFluidCoolerLoad = rho * Cp * tmpDesignWaterFlowRate * state.dataSize->PlantSizData(PltSizCondNum).DeltaT;
                     tmpHighSpeedAirFlowRate = DesFluidCoolerLoad / (this->DesignEnteringWaterTemp - this->DesignEnteringAirTemp) * 4.0;

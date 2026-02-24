@@ -3959,7 +3959,7 @@ TEST_F(EnergyPlusFixture, Desuperheater_WAHP_VSEQ_Coil_Test)
 
     state->dataVariableSpeedCoils->VarSpeedCoil(1).plantLoc.loopNum = PlantLoopNum;
     state->dataVariableSpeedCoils->VarSpeedCoil(1).plantLoc.loop = &state->dataPlnt->PlantLoop(PlantLoopNum);
-    
+
     state->dataPlnt->PlantLoop(PlantLoopNum).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(PlantLoopNum).FluidName = "WATER";
     state->dataLoopNodes->Node(5).MassFlowRate = state->dataVariableSpeedCoils->VarSpeedCoil(1).MSRatedAirMassFlowRate(2);
