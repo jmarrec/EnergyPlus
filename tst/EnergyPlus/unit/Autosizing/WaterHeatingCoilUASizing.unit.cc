@@ -120,7 +120,6 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     state->dataWaterCoils->WaterCoil(1).InletWaterTemp = 60.0;
     state->dataWaterCoils->WaterCoil(1).InletAirMassFlowRate = 0.2;
     state->dataWaterCoils->WaterCoil(1).InletWaterMassFlowRate = 0.8;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
     state->dataWaterCoils->MyUAAndFlowCalcFlag.allocate(1);
     state->dataWaterCoils->MySizeFlag.allocate(1);
     state->dataWaterCoils->WaterCoil(1).availSched = Sched::GetScheduleAlwaysOn(*state);
@@ -138,6 +137,9 @@ TEST_F(AutoSizingFixture, WaterHeatingCoilUASizingGauntlet)
     state->dataPlnt->PlantLoop.allocate(1);
     state->dataPlnt->PlantLoop(1).FluidIndex = 1;
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
+
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
 
     state->dataSize->ZoneSizingRunDone = true;
 

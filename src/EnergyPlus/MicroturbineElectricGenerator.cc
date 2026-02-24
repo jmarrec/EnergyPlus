@@ -1253,7 +1253,7 @@ void MTGeneratorSpecs::CalcMTGeneratorModel(EnergyPlusData &state,
 
     if (this->HeatRecActive) {
         HeatRecInTemp = state.dataLoopNodes->Node(this->HeatRecInletNodeNum).Temp;
-        HeatRecCp = state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).glycol->getSpecificHeat(state, HeatRecInTemp, RoutineName);
+        HeatRecCp = this->HRPlantLoc.loop->glycol->getSpecificHeat(state, HeatRecInTemp, RoutineName);
         heatRecMdot = state.dataLoopNodes->Node(this->HeatRecInletNodeNum).MassFlowRate;
     } else {
         HeatRecInTemp = 0.0;
@@ -1583,7 +1583,7 @@ void MTGeneratorSpecs::CalcMTGeneratorModel(EnergyPlusData &state,
 
         //     Calculate heat recovery rate modifier curve output (function of water [volumetric] flow rate)
         if (this->HeatRecRateFWaterFlowCurveNum > 0) {
-            Real64 rho = state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).glycol->getDensity(state, HeatRecInTemp, RoutineName);
+            Real64 rho = this->HRPlantLoc.loop->glycol->getDensity(state, HeatRecInTemp, RoutineName);
 
             // Heat recovery fluid flow rate (m3/s)
             Real64 HeatRecVolFlowRate = heatRecMdot / rho;
@@ -1953,7 +1953,7 @@ void MTGeneratorSpecs::oneTimeInit(EnergyPlusData &state)
     if (this->MySizeAndNodeInitFlag && (!this->MyPlantScanFlag) && this->HeatRecActive) {
 
         // size mass flow rate
-        Real64 rho = state.dataPlnt->PlantLoop(this->HRPlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+        Real64 rho = this->HRPlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
 
         this->DesignHeatRecMassFlowRate = rho * this->RefHeatRecVolFlowRate;
         this->HeatRecMaxMassFlowRate = rho * this->HeatRecMaxVolFlowRate;

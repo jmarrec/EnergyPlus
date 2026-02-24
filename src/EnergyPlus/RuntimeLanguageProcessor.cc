@@ -816,7 +816,6 @@ ErlValueType EvaluateStack(EnergyPlusData &state, int const StackNum)
     ReturnValue.Number = 0.0;
 
     auto const &thisErlStack = state.dataRuntimeLang->ErlStack(StackNum);
-
     InstructionNum = 1;
     while (InstructionNum <= thisErlStack.NumInstructions) {
 
@@ -1799,9 +1798,15 @@ ErlValueType EvaluateExpression(EnergyPlusData &state, int const ExpressionNum, 
                 if (thisErlVar.Value.initialized) { // check that value has been initialized
                     thisOperand = thisErlVar.Value;
                 } else { // value has never been set
-                    ReturnValue.Type = Value::Error;
-                    ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
-                    if (!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) {
+                    // During setup (before simulation), we want to avoid initializing variables to zero without throwing an error.
+                    // Throw the error, and write it to edd file, if variable is uninitialized and is *not* a global or internal variable.
+                    // The assumption is that if we made it here for a global variable, it is initialized in another program.
+                    // E.g., if it's initialized in a program with BeginNewEnvironment calling point, setup won't set it but simulation will.
+                    if ((!state.dataGlobal->DoingSizing && !state.dataGlobal->KickOffSimulation && !state.dataEMSMgr->FinishProcessingUserInput) ||
+                        (!(thisErlVar.SetByGlobalVariable || thisErlVar.SetByInternalVariable))) {
+
+                        ReturnValue.Type = Value::Error;
+                        ReturnValue.Error = "EvaluateExpression: Variable = '" + thisErlVar.Name + "' used in expression has not been initialized!";
 
                         // check if this is an arg in CurveValue,
                         if (thisErlExpression.Operator !=
@@ -2972,6 +2977,8 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                                 // Initialize variables for the ExternalInterface variables.
                                 // This object requires an initial value.
                                 ExternalInterfaceInitializeErlVariable(state, VariableNum, SetErlValueNumber(rNumericArgs(1)), false);
+                            } else {
+                                state.dataRuntimeLang->ErlVariable(VariableNum).SetByGlobalVariable = true;
                             }
                         }
                     }
@@ -3007,7 +3014,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 } else if (!errFlag) {
                     VariableNum = FindEMSVariable(state, cAlphaArgs(1), 0);
                     if (VariableNum > 0) {
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}", cAlphaFieldNames(1)));
                         ShowContinueError(state, "Name conflicts with an existing variable name");
                         ErrorsFound = true;
@@ -3022,11 +3029,11 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 int CurveIndexNum = GetCurveIndex(state, cAlphaArgs(2)); // curve name
                 if (CurveIndexNum == 0) {
                     if (lAlphaFieldBlanks(2)) {
-                        ShowSevereError(state, format("{}{}=\"{} blank field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" blank field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Blank {}", cAlphaFieldNames(2)));
                         ShowContinueError(state, "Blank entry for curve or table name is not allowed");
                     } else {
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
                         ShowContinueError(state, "Curve or table was not found.");
                     }
@@ -3067,7 +3074,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 } else if (!errFlag) {
                     VariableNum = FindEMSVariable(state, cAlphaArgs(1), 0);
                     if (VariableNum > 0) {
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}", cAlphaFieldNames(1)));
                         ShowContinueError(state, "Name conflicts with an existing variable name");
                         ErrorsFound = true;
@@ -3085,11 +3092,11 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
 
                 if (ConstructNum == 0) {
                     if (lAlphaFieldBlanks(2)) {
-                        ShowSevereError(state, format("{}{}=\"{} blank field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" blank field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Blank {}", cAlphaFieldNames(2)));
                         ShowContinueError(state, "Blank entry for construction name is not allowed");
                     } else {
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
                         ShowContinueError(state, "Construction was not found.");
                     }
@@ -3204,7 +3211,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 VariableNum = FindEMSVariable(state, cAlphaArgs(2), 0);
                 // Still need to check for conflicts with program and function names too
                 if (VariableNum == 0) { // did not find it
-                    ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
                     ShowContinueError(state, "Did not find a match with an EMS variable name");
                     ErrorsFound = true;
@@ -3238,7 +3245,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                             state.dataRuntimeLang->TrendVariable(TrendNum).TimeARR(loop - 1) - state.dataGlobal->TimeStepZone; // fractional hours
                     }
                 } else {
-                    ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, format("Invalid {}={:.2T}", cNumericFieldNames(1), rNumericArgs(1)));
                     ShowContinueError(state, "must be greater than zero");
                     ErrorsFound = true;
@@ -3335,7 +3342,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     }
                     if (!UnitsA.empty() && !UnitsB.empty()) {
                         if (UnitsA != UnitsB) {
-                            ShowWarningError(state, format("{}{}=\"{} mismatched units.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                            ShowWarningError(state, format("{}{}=\"{}\" mismatched units.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                             ShowContinueError(state, format("...Units entered in {} (deprecated use)=\"{}\"", cAlphaFieldNames(1), UnitsA));
                             ShowContinueError(state, format("...{}=\"{}\" (will be used)", cAlphaFieldNames(6), UnitsB));
                         }
@@ -3361,7 +3368,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     }
                     if (!Found) {
                         StackNum = 0;
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(5), cAlphaArgs(5)));
                         ShowContinueError(state, "EMS program or subroutine not found.");
                         ErrorsFound = true;
@@ -3374,11 +3381,11 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
 
                 if (VariableNum == 0) {
                     if (lAlphaFieldBlanks(5)) {
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
                         ShowContinueError(state, "EMS variable not found among global variables.");
                     } else if (StackNum != 0) {
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
                         ShowContinueError(state, format("EMS variable not found among local variables in {}", cAlphaArgs(5)));
                     }
@@ -3397,7 +3404,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 } else if (cAlphaArgs(3) == "SUMMED") {
                     sovStoreType = OutputProcessor::StoreType::Sum;
                 } else {
-                    ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(3), cAlphaArgs(3)));
                     ShowContinueError(state, "...valid values are Averaged or Summed.");
                     ErrorsFound = true;
@@ -3408,7 +3415,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 } else if (cAlphaArgs(4) == "SYSTEMTIMESTEP") {
                     sovTimeStepType = OutputProcessor::TimeStepType::System;
                 } else {
-                    ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(4), cAlphaArgs(4)));
                     ShowContinueError(state, "...valid values are ZoneTimestep or SystemTimestep.");
                     ErrorsFound = true;
@@ -3508,7 +3515,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     }
                     if (!UnitsA.empty() && !UnitsB.empty()) {
                         if (UnitsA != UnitsB) {
-                            ShowWarningError(state, format("{}{}=\"{} mismatched units.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                            ShowWarningError(state, format("{}{}=\"{}\" mismatched units.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                             ShowContinueError(state, format("...Units entered in {} (deprecated use)=\"{}\"", cAlphaFieldNames(1), UnitsA));
                             ShowContinueError(state, format("...{}=\"{}\" (will be used)", cAlphaFieldNames(9), UnitsB));
                         }
@@ -3534,7 +3541,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     }
                     if (!Found) {
                         StackNum = 0;
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(4), cAlphaArgs(4)));
                         ShowContinueError(state, "EMS program or subroutine not found.");
                         ErrorsFound = true;
@@ -3546,11 +3553,11 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 VariableNum = FindEMSVariable(state, cAlphaArgs(2), StackNum);
                 if (VariableNum == 0) {
                     if (lAlphaFieldBlanks(4)) {
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
                         ShowContinueError(state, "EMS variable not found among global variables.");
                     } else if (StackNum != 0) {
-                        ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                        ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                         ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(2), cAlphaArgs(2)));
                         ShowContinueError(state, format("EMS variable not found among local variables in {}", cAlphaArgs(5)));
                     }
@@ -3571,7 +3578,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 } else if (cAlphaArgs(3) == "SYSTEMTIMESTEP") {
                     sovTimeStepType = OutputProcessor::TimeStepType::System;
                 } else {
-                    ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(4), cAlphaArgs(4)));
                     ShowContinueError(state, "...valid values are ZoneTimestep or SystemTimestep.");
                     ErrorsFound = true;
@@ -3582,7 +3589,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                     static_cast<Constant::eResource>(getEnumValue(Constant::eResourceNamesUC, Util::makeUPPER(cAlphaArgs(5))));
 
                 if (resource == Constant::eResource::Invalid) {
-                    ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(5), cAlphaArgs(5)));
                     ErrorsFound = true;
                 }
@@ -3599,7 +3606,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 } else if (cAlphaArgs(6) == "SYSTEM") {
                     sovGroup = OutputProcessor::Group::HVAC;
                 } else {
-                    ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(6), cAlphaArgs(6)));
                     ErrorsFound = true;
                 }
@@ -3650,7 +3657,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                 } else if (cAlphaArgs(7) == "HEATRECOVERYFORHEATING") {
                     sovEndUseCat = OutputProcessor::EndUseCat::HeatRecoveryForHeating;
                 } else {
-                    ShowSevereError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowSevereError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state, format("Invalid {}={}", cAlphaFieldNames(7), cAlphaArgs(7)));
                     ErrorsFound = true;
                 }
@@ -3661,7 +3668,7 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                      sovEndUseCat == OutputProcessor::EndUseCat::Chillers || sovEndUseCat == OutputProcessor::EndUseCat::Boilers ||
                      sovEndUseCat == OutputProcessor::EndUseCat::Baseboard || sovEndUseCat == OutputProcessor::EndUseCat::HeatRecoveryForCooling ||
                      sovEndUseCat == OutputProcessor::EndUseCat::HeatRecoveryForHeating)) {
-                    ShowWarningError(state, format("{}{}=\"{} invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
+                    ShowWarningError(state, format("{}{}=\"{}\" invalid field.", RoutineName, cCurrentModuleObject, cAlphaArgs(1)));
                     ShowContinueError(state,
                                       format("Invalid {}={} for {}={}", cAlphaFieldNames(5), cAlphaArgs(5), cAlphaFieldNames(7), cAlphaArgs(7)));
                     ShowContinueError(state, format("Field {} is reset from {} to EnergyTransfer", cAlphaFieldNames(5), cAlphaArgs(5)));

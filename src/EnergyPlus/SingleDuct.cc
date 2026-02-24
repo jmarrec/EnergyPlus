@@ -2137,7 +2137,7 @@ void SingleDuctAirTerminal::InitSys(EnergyPlusData &state, bool const FirstHVACI
         this->MassFlowDiff = 1.0e-10 * this->AirMassFlowRateMax;
 
         if (this->HWplantLoc.loopNum > 0 && this->ReheatComp_Num != HeatingCoilType::SteamAirHeating) { // protect early calls before plant is setup
-            rho = state.dataPlnt->PlantLoop(this->HWplantLoc.loopNum).glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+            rho = this->HWplantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
         } else {
             rho = 1000.0;
         }
@@ -3125,11 +3125,9 @@ void SingleDuctAirTerminal::SizeSys(EnergyPlusData &state)
                                                                           (state.dataSingleDuct->ZoneDesTempSS - state.dataSingleDuct->CoilInTempSS);
                         if (state.dataSingleDuct->DesCoilLoadSS >= SmallLoad) {
 
-                            rho =
-                                state.dataPlnt->PlantLoop(this->HWplantLoc.loopNum).glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                            rho = this->HWplantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
 
-                            Cp = state.dataPlnt->PlantLoop(this->HWplantLoc.loopNum)
-                                     .glycol->getSpecificHeat(state, Constant::HWInitConvTemp, RoutineName);
+                            Cp = this->HWplantLoc.loop->glycol->getSpecificHeat(state, Constant::HWInitConvTemp, RoutineName);
 
                             MaxReheatWaterVolFlowDes =
                                 state.dataSingleDuct->DesCoilLoadSS / (state.dataSize->PlantSizData(PltSizHeatNum).DeltaT * Cp * rho);

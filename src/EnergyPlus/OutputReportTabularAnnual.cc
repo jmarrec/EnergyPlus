@@ -1007,7 +1007,9 @@ void AnnualTable::writeTable(EnergyPlusData &state, OutputReportTabular::tabular
                 const Real64 binBottom = fldStIt.m_bottomBinValue;
                 const Real64 binTop = fldStIt.m_topBinValue;
                 constexpr int numBins = 10;
-                const Real64 intervalSize = (binTop - binBottom) / static_cast<Real64>(numBins);
+                const Real64 intervalSize =
+                    ((binBottom == veryLarge) && (binTop == verySmall)) ? 0 : ((binTop - binBottom) / static_cast<Real64>(numBins));
+
                 // Column headers
                 for (int iBin = 0; iBin < numBins; ++iBin) {
                     const char binLetter = static_cast<char>('A' + iBin);
@@ -1412,11 +1414,16 @@ std::vector<Real64> AnnualTable::calculateBins(int const numberOfBins,
                                                Real64 &timeAboveTopBin,
                                                Real64 &timeBelowBottomBin)
 {
-    std::vector<Real64> returnBins(0.0);
-    returnBins.resize(numberOfBins);
-    const Real64 intervalSize = (topOfBins - bottomOfBins) / static_cast<float>(numberOfBins);
+    if (numberOfBins <= 0) {
+        return {};
+    }
+    std::vector returnBins(numberOfBins, 0.0);
     timeAboveTopBin = 0.0;
     timeBelowBottomBin = 0.0;
+    if (valuesToBin.empty()) {
+        return returnBins;
+    }
+    const Real64 intervalSize = (topOfBins - bottomOfBins) / static_cast<Real64>(numberOfBins);
     std::vector<Real64>::iterator elapsedTimeIt = corrElapsedTime.begin();
     for (auto const &valueIt : valuesToBin) {
         if (valueIt < bottomOfBins) {
