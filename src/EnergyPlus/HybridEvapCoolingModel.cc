@@ -1627,7 +1627,7 @@ namespace HybridEvapCoolingModel {
         if ((TimeElapsed > 24) && WarnOnceFlag && !state.dataGlobal->WarmupFlag) {
             if (count_EnvironmentConditionsNotMet > 0) {
                 ShowWarningError(state,
-                                 format("In day {:.1R} was unable to operate for  of simulation, {}{:.1R} timesteps because environment conditions "
+                                 format("In day {:.1R} of simulation, {} was unable to operate for {:.1R} timesteps because environment conditions "
                                         "were beyond the allowable operating range for any mode.",
                                         (Real64)state.dataGlobal->DayOfSim,
                                         Name,
@@ -1635,8 +1635,8 @@ namespace HybridEvapCoolingModel {
             }
             if (count_SAHR_OC_MetOnce > 0) {
                 ShowWarningError(state,
-                                 format("In day {:.1R} of simulation, {} failed to meet supply air humidity ratio for {:.1R} time steps. For these "
-                                        "time steps For these time steps was set to mode 0{}",
+                                 format("In day {:.1R} of simulation, {} failed to meet supply air humidity ratio for {:.1R} timesteps. For these "
+                                        "time steps {} was set to mode 0.",
                                         (Real64)state.dataGlobal->DayOfSim,
                                         Name,
                                         Real64(count_SAHR_OC_MetOnce),
@@ -1644,8 +1644,8 @@ namespace HybridEvapCoolingModel {
             }
             if (count_SAT_OC_MetOnce > 0) {
                 ShowWarningError(state,
-                                 format("In day {:.1R} of simulation, {} failed to meet supply air temperature constraints for {:.1R} time steps. "
-                                        "For these time steps For these time steps{} was set to mode 0",
+                                 format("In day {:.1R} of simulation, {} failed to meet supply air temperature constraints for {:.1R} timesteps. "
+                                        "For these time steps {} was set to mode 0.",
                                         (Real64)state.dataGlobal->DayOfSim,
                                         Name,
                                         Real64(count_SAT_OC_MetOnce),
@@ -1653,7 +1653,7 @@ namespace HybridEvapCoolingModel {
             }
 
             ShowWarningError(state,
-                             format("In day {:.1R} of simulation, {} failed to  satisfy sensible load for {:.1R} time steps. For these time steps "
+                             format("In day {:.1R} of simulation, {} failed to satisfy sensible load for {:.1R} timesteps. For these timesteps "
                                     "settings were selected to provide as much sensible cooling or heating as possible, given other constraints.",
                                     (Real64)state.dataGlobal->DayOfSim,
                                     Name,
