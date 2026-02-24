@@ -1267,6 +1267,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).WaterInletNodeNum;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).plantLoc.loopNum = 1;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).plantLoc.loop = &state->dataPlnt->PlantLoop(1);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(2).Name =
         state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).Name;
@@ -1275,6 +1276,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(2).NodeNumIn =
         state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WaterInletNodeNum;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).plantLoc.loopNum = 1;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).plantLoc.loop = &state->dataPlnt->PlantLoop(1);
 
     // plant loop design leaving water temperature (design entering water temperature for WAHP coil)
     state->dataSize->NumPltSizInput = 1;
@@ -1503,6 +1505,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).WaterInletNodeNum;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).plantLoc.loopNum = 1;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(1).plantLoc.loop = &state->dataPlnt->PlantLoop(1);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(2).Name =
         state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).Name;
@@ -1511,6 +1514,7 @@ TEST_F(EnergyPlusFixture, WaterToAirHeatPumpSimpleTest_SizeHVACWaterToAirRatedCo
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(2).NodeNumIn =
         state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).WaterInletNodeNum;
     state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).plantLoc.loopNum = 1;
+    state->dataWaterToAirHeatPumpSimple->SimpleWatertoAirHP(2).plantLoc.loop = &state->dataPlnt->PlantLoop(1);
 
     // plant loop design leaving water temperature (design entering water temperature for WAHP coil)
     state->dataSize->NumPltSizInput = 1;

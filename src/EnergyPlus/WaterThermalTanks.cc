@@ -6029,7 +6029,7 @@ void WaterThermalTankData::SetupStratifiedNodes(EnergyPlusData &state)
     this->Node.allocate(NumNodes);
     Real64 rho;
     if ((this->UseSidePlantLoc.loopNum > 0) && allocated(state.dataPlnt->PlantLoop)) {
-        rho = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+        rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
     } else {
         rho = this->water->getDensity(state, Constant::InitConvTemp, RoutineName);
     }
@@ -6285,11 +6285,10 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
 
     if (this->SetLoopIndexFlag && allocated(state.dataPlnt->PlantLoop)) {
         if ((this->UseInletNode > 0) && (this->HeatPumpNum == 0)) {
-            Real64 rho =
-                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
+            Real64 rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
             this->Mass = this->Volume * rho;
-            this->UseSidePlantSizNum = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).PlantSizNum;
+            this->UseSidePlantSizNum = this->UseSidePlantLoc.loop->PlantSizNum;
             if ((this->UseDesignVolFlowRateWasAutoSized) && (this->UseSidePlantSizNum == 0)) {
                 ShowSevereError(state,
                                 format("InitWaterThermalTank: Did not find Sizing:Plant object for use side of plant thermal tank = {}", this->Name));
@@ -6297,8 +6296,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
             }
         }
         if ((this->UseInletNode > 0) && (this->HeatPumpNum > 0)) {
-            Real64 rho =
-                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
+            Real64 rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
             this->Mass = this->Volume * rho;
             this->UseSidePlantSizNum = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).PlantSizNum;
@@ -6309,10 +6307,9 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
             }
         }
         if ((this->SourceInletNode > 0) && (this->DesuperheaterNum == 0) && (this->HeatPumpNum == 0)) {
-            Real64 rho =
-                state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
+            Real64 rho = this->SrcSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantSourceMassFlowRateMax = this->SourceDesignVolFlowRate * rho;
-            this->SourceSidePlantSizNum = state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).PlantSizNum;
+            this->SourceSidePlantSizNum = this->SrcSidePlantLoc.loop->PlantSizNum;
             if ((this->SourceDesignVolFlowRateWasAutoSized) && (this->SourceSidePlantSizNum == 0)) {
                 ShowSevereError(
                     state, format("InitWaterThermalTank: Did not find Sizing:Plant object for source side of plant thermal tank = {}", this->Name));
@@ -6373,8 +6370,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         // Clear node initial conditions
         if (this->UseInletNode > 0 && this->UseOutletNode > 0) {
             state.dataLoopNodes->Node(this->UseInletNode).Temp = 0.0;
-            Real64 rho =
-                state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
+            Real64 rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->MassFlowRateMin = this->VolFlowRateMin * rho;
             this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
             PlantUtilities::InitComponentNodes(state, this->MassFlowRateMin, this->PlantUseMassFlowRateMax, this->UseInletNode, this->UseOutletNode);
@@ -6387,8 +6383,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
         }
 
         if ((this->SourceInletNode > 0) && (this->DesuperheaterNum == 0) && (this->HeatPumpNum == 0)) {
-            Real64 rho =
-                state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
+            Real64 rho = this->SrcSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantSourceMassFlowRateMax = this->SourceDesignVolFlowRate * rho;
             PlantUtilities::InitComponentNodes(state, 0.0, this->PlantSourceMassFlowRateMax, this->SourceInletNode, this->SourceOutletNode);
 
@@ -7084,7 +7079,7 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
 
     Real64 rho;
     if (this->UseSidePlantLoc.loopNum > 0) {
-        rho = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, TankTemp_loc, RoutineName);
+        rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, TankTemp_loc, RoutineName);
     } else {
         rho = this->water->getDensity(state, TankTemp_loc, RoutineName);
     }
@@ -7093,7 +7088,7 @@ void WaterThermalTankData::CalcWaterThermalTankMixed(EnergyPlusData &state) // W
 
     Real64 Cp;
     if (this->UseSidePlantLoc.loopNum > 0) {
-        Cp = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getSpecificHeat(state, TankTemp_loc, RoutineName);
+        Cp = this->UseSidePlantLoc.loop->glycol->getSpecificHeat(state, TankTemp_loc, RoutineName);
     } else {
         Cp = this->water->getSpecificHeat(state, TankTemp_loc, RoutineName);
     }
@@ -7990,7 +7985,7 @@ void WaterThermalTankData::CalcWaterThermalTankStratified(EnergyPlusData &state)
     // Specific Heat of water (J/kg K)
     const Real64 Cp = [&] {
         if (this->UseSidePlantLoc.loopNum > 0) {
-            return state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getSpecificHeat(state, this->TankTemp, RoutineName);
+            return this->UseSidePlantLoc.loop->glycol->getSpecificHeat(state, this->TankTemp, RoutineName);
         }
         return this->water->getSpecificHeat(state, this->TankTemp, RoutineName);
     }();
@@ -11207,8 +11202,7 @@ void WaterThermalTankData::SizeSupplySidePlantConnections(EnergyPlusData &state,
                         PlantUtilities::RegisterPlantCompDesignFlow(state, this->UseInletNode, tmpUseDesignVolFlowRate);
                     }
 
-                    Real64 rho =
-                        state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                    Real64 rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                         this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
                     } else {
@@ -11223,7 +11217,7 @@ void WaterThermalTankData::SizeSupplySidePlantConnections(EnergyPlusData &state,
             PlantUtilities::RegisterPlantCompDesignFlow(state, this->UseInletNode, this->UseDesignVolFlowRate);
             Real64 rho;
             if (this->UseSidePlantLoc.loopNum > 0) {
-                rho = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
             } else {
                 rho = this->water->getDensity(state, Constant::InitConvTemp, RoutineName);
             }
@@ -11264,8 +11258,7 @@ void WaterThermalTankData::SizeSupplySidePlantConnections(EnergyPlusData &state,
                     } else {
                         PlantUtilities::RegisterPlantCompDesignFlow(state, this->SourceInletNode, tmpSourceDesignVolFlowRate);
                     }
-                    Real64 rho =
-                        state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                    Real64 rho = this->SrcSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                         this->PlantSourceMassFlowRateMax = this->SourceDesignVolFlowRate * rho;
                     } else {
@@ -11280,7 +11273,7 @@ void WaterThermalTankData::SizeSupplySidePlantConnections(EnergyPlusData &state,
                 PlantUtilities::RegisterPlantCompDesignFlow(state, this->SourceInletNode, this->SourceDesignVolFlowRate);
                 Real64 rho;
                 if (this->SrcSidePlantLoc.loopNum > 0) {
-                    rho = state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                    rho = this->SrcSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
                 } else {
                     rho = this->water->getDensity(state, Constant::InitConvTemp, RoutineName);
                 }
@@ -11587,8 +11580,8 @@ void WaterThermalTankData::SizeTankForDemandSide(EnergyPlusData &state)
             Real64 rho;
             Real64 Cp;
             if (this->UseSidePlantLoc.loopNum > 0) {
-                rho = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
-                Cp = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
+                rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
+                Cp = this->UseSidePlantLoc.loop->glycol->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
             } else {
                 rho = this->water->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
                 Cp = this->water->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
@@ -11632,8 +11625,8 @@ void WaterThermalTankData::SizeTankForDemandSide(EnergyPlusData &state)
             Real64 rho;
             Real64 Cp;
             if (this->UseSidePlantLoc.loopNum > 0) {
-                rho = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
-                Cp = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
+                rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
+                Cp = this->UseSidePlantLoc.loop->glycol->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
             } else {
                 rho = this->water->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
                 Cp = this->water->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
@@ -11671,8 +11664,8 @@ void WaterThermalTankData::SizeTankForDemandSide(EnergyPlusData &state)
             Real64 rho;
             Real64 Cp;
             if (this->UseSidePlantLoc.loopNum > 0) {
-                rho = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
-                Cp = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
+                rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
+                Cp = this->UseSidePlantLoc.loop->glycol->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
             } else {
                 rho = this->water->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
                 Cp = this->water->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
@@ -11779,9 +11772,8 @@ void WaterThermalTankData::SizeTankForSupplySide(EnergyPlusData &state)
                 constexpr Real64 Tfinish = 57.22;
 
                 if (this->SrcSidePlantLoc.loopNum > 0) {
-                    rho = state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
-                    Cp = state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum)
-                             .glycol->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
+                    rho = this->SrcSidePlantLoc.loop->glycol->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
+                    Cp = this->SrcSidePlantLoc.loop->glycol->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
                 } else {
                     rho = this->water->getDensity(state, ((Tfinish + Tstart) / 2.0), RoutineName);
                     Cp = this->water->getSpecificHeat(state, ((Tfinish + Tstart) / 2.0), RoutineName);
@@ -11970,8 +11962,7 @@ void WaterThermalTankData::SizeDemandSidePlantConnections(EnergyPlusData &state)
                     } else {
                         PlantUtilities::RegisterPlantCompDesignFlow(state, this->UseInletNode, tmpUseDesignVolFlowRate);
                     }
-                    Real64 rho =
-                        state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                    Real64 rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                         this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
                     } else {
@@ -11988,7 +11979,7 @@ void WaterThermalTankData::SizeDemandSidePlantConnections(EnergyPlusData &state)
             PlantUtilities::RegisterPlantCompDesignFlow(state, this->UseInletNode, this->UseDesignVolFlowRate);
             Real64 rho;
             if (this->UseSidePlantLoc.loopNum > 0) {
-                rho = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
             } else {
                 rho = this->water->getDensity(state, Constant::InitConvTemp, RoutineName);
             }
@@ -12052,8 +12043,7 @@ void WaterThermalTankData::SizeDemandSidePlantConnections(EnergyPlusData &state)
                     } else {
                         PlantUtilities::RegisterPlantCompDesignFlow(state, this->SourceInletNode, tmpSourceDesignVolFlowRate);
                     }
-                    Real64 rho =
-                        state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                    Real64 rho = this->SrcSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
                     if (state.dataPlnt->PlantFirstSizesOkayToFinalize) {
                         this->PlantSourceMassFlowRateMax = this->SourceDesignVolFlowRate * rho;
                     } else {
@@ -12069,7 +12059,7 @@ void WaterThermalTankData::SizeDemandSidePlantConnections(EnergyPlusData &state)
             PlantUtilities::RegisterPlantCompDesignFlow(state, this->SourceInletNode, this->SourceDesignVolFlowRate);
             Real64 rho;
             if (this->SrcSidePlantLoc.loopNum > 0) {
-                rho = state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
+                rho = this->SrcSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
             } else {
                 rho = this->water->getDensity(state, Constant::InitConvTemp, RoutineName);
             }

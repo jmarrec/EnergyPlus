@@ -995,7 +995,7 @@ void ExhaustAbsorberSpecs::initialize(EnergyPlusData &state)
         if (this->isWaterCooled) {
             // init max available condenser water flow rate
             if (this->CDPlantLoc.loopNum > 0) {
-                rho = state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
+                rho = this->CDPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
             } else {
                 rho = Psychrometrics::RhoH2O(Constant::InitConvTemp);
             }
@@ -1005,7 +1005,7 @@ void ExhaustAbsorberSpecs::initialize(EnergyPlusData &state)
         }
 
         if (this->HWPlantLoc.loopNum > 0) {
-            rho = state.dataPlnt->PlantLoop(this->HWPlantLoc.loopNum).glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+            rho = this->HWPlantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
         } else {
             rho = Psychrometrics::RhoH2O(Constant::InitConvTemp);
         }
@@ -1014,7 +1014,7 @@ void ExhaustAbsorberSpecs::initialize(EnergyPlusData &state)
         PlantUtilities::InitComponentNodes(state, 0.0, this->DesHeatMassFlowRate, HeatInletNode, HeatOutletNode);
 
         if (this->CWPlantLoc.loopNum > 0) {
-            rho = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
+            rho = this->CWPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
         } else {
             rho = Psychrometrics::RhoH2O(Constant::InitConvTemp);
         }
@@ -1102,8 +1102,8 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
 
     if (PltSizCoolNum > 0) {
         if (state.dataSize->PlantSizData(PltSizCoolNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
-            Cp = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).glycol->getSpecificHeat(state, Constant::CWInitConvTemp, RoutineName);
-            rho = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
+            Cp = this->CWPlantLoc.loop->glycol->getSpecificHeat(state, Constant::CWInitConvTemp, RoutineName);
+            rho = this->CWPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
             tmpNomCap = Cp * rho * state.dataSize->PlantSizData(PltSizCoolNum).DeltaT * state.dataSize->PlantSizData(PltSizCoolNum).DesVolFlowRate *
                         this->SizFac;
             if (!this->NomCoolingCapWasAutoSized) {
@@ -1336,8 +1336,8 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
     if (PltSizCondNum > 0 && PltSizCoolNum > 0) {
         if (state.dataSize->PlantSizData(PltSizCoolNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow && tmpNomCap > 0.0) {
 
-            Cp = state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).glycol->getSpecificHeat(state, this->TempDesCondReturn, RoutineName);
-            rho = state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).glycol->getDensity(state, this->TempDesCondReturn, RoutineName);
+            Cp = this->CDPlantLoc.loop->glycol->getSpecificHeat(state, this->TempDesCondReturn, RoutineName);
+            rho = this->CDPlantLoc.loop->glycol->getDensity(state, this->TempDesCondReturn, RoutineName);
             tmpCondVolFlowRate = tmpNomCap * (1.0 + this->ThermalEnergyCoolRatio) / (state.dataSize->PlantSizData(PltSizCondNum).DeltaT * Cp * rho);
             if (!this->CondVolFlowRateWasAutoSized) {
                 tmpCondVolFlowRate = this->CondVolFlowRate;
@@ -1575,9 +1575,9 @@ void ExhaustAbsorberSpecs::calcChiller(EnergyPlusData &state, Real64 &MyLoad)
     Real64 lExhaustInFlow = state.dataLoopNodes->Node(lExhaustAirInletNodeNum).MassFlowRate;
     Real64 lExhaustAirHumRat = state.dataLoopNodes->Node(lExhaustAirInletNodeNum).HumRat;
 
-    Real64 Cp_CW = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).glycol->getSpecificHeat(state, lChillReturnTemp, RoutineName);
+    Real64 Cp_CW = this->CWPlantLoc.loop->glycol->getSpecificHeat(state, lChillReturnTemp, RoutineName);
     if (this->CDPlantLoc.loopNum > 0) {
-        Cp_CD = state.dataPlnt->PlantLoop(this->CDPlantLoc.loopNum).glycol->getSpecificHeat(state, lChillReturnTemp, RoutineName);
+        Cp_CD = this->CDPlantLoc.loop->glycol->getSpecificHeat(state, lChillReturnTemp, RoutineName);
     }
 
     // If no loop demand or Absorber OFF, return
