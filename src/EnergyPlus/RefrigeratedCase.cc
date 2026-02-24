@@ -10513,7 +10513,7 @@ void InitRefrigerationPlantConnections(EnergyPlusData &state)
                 ShowFatalError(state, "InitRefrigerationPlantConnections: Program terminated due to previous condition(s).");
             }
 
-            Real64 rho = state.dataPlnt->PlantLoop(Condenser(RefCondLoop).plantLoc.loopNum).glycol->getDensity(state, 20.0, RoutineName);
+            Real64 rho = Condenser(RefCondLoop).plantLoc.loop->glycol->getDensity(state, 20.0, RoutineName);
 
             if (Condenser(RefCondLoop).FlowType == CndsrFlowType::Constant) {
                 Condenser(RefCondLoop).MassFlowRateMax = Condenser(RefCondLoop).DesVolFlowRate * rho;
@@ -10542,7 +10542,7 @@ void InitRefrigerationPlantConnections(EnergyPlusData &state)
                 ShowFatalError(state, "InitRefrigerationPlantConnections: Program terminated due to previous condition(s).");
             }
 
-            Real64 rho = state.dataPlnt->PlantLoop(RefrigRack(RefCompRackLoop).plantLoc.loopNum).glycol->getDensity(state, 20.0, RoutineName);
+            Real64 rho = RefrigRack(RefCompRackLoop).plantLoc.loop->glycol->getDensity(state, 20.0, RoutineName);
 
             if (RefrigRack(RefCompRackLoop).FlowType == CndsrFlowType::Constant) {
                 RefrigRack(RefCompRackLoop).MassFlowRateMax = RefrigRack(RefCompRackLoop).DesVolFlowRate * rho;
@@ -10565,7 +10565,7 @@ void InitRefrigerationPlantConnections(EnergyPlusData &state)
                     continue;
                 }
 
-                Real64 rho = state.dataPlnt->PlantLoop(Condenser(RefCondLoop).plantLoc.loopNum).glycol->getDensity(state, 20.0, RoutineName);
+                Real64 rho = Condenser(RefCondLoop).plantLoc.loop->glycol->getDensity(state, 20.0, RoutineName);
 
                 if (Condenser(RefCondLoop).FlowType == CndsrFlowType::Constant) {
                     Condenser(RefCondLoop).MassFlowRateMax = Condenser(RefCondLoop).DesVolFlowRate * rho;
@@ -10581,7 +10581,7 @@ void InitRefrigerationPlantConnections(EnergyPlusData &state)
                     continue;
                 }
 
-                Real64 rho = state.dataPlnt->PlantLoop(RefrigRack(RefCompRackLoop).plantLoc.loopNum).glycol->getDensity(state, 20.0, RoutineName);
+                Real64 rho = RefrigRack(RefCompRackLoop).plantLoc.loop->glycol->getDensity(state, 20.0, RoutineName);
 
                 if (RefrigRack(RefCompRackLoop).FlowType == CndsrFlowType::Constant) {
                     RefrigRack(RefCompRackLoop).MassFlowRateMax = RefrigRack(RefCompRackLoop).DesVolFlowRate * rho;
@@ -11469,8 +11469,8 @@ void RefrigCondenserData::simulate(EnergyPlusData &state,
     // Make demand request on first HVAC iteration
 
     // get cooling fluid properties
-    Real64 rho = state.dataPlnt->PlantLoop(PlantLoc.loopNum).glycol->getDensity(state, this->InletTemp, RoutineName);
-    Real64 Cp = state.dataPlnt->PlantLoop(PlantLoc.loopNum).glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
+    Real64 rho = PlantLoc.loop->glycol->getDensity(state, this->InletTemp, RoutineName);
+    Real64 Cp = PlantLoc.loop->glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
 
     if (this->FlowType == CndsrFlowType::Variable && state.dataRefrigCase->TotalCondenserHeat > 0.0) {
 
@@ -11621,8 +11621,8 @@ void RefrigRackData::simulate(EnergyPlusData &state,
     // Make demand request on first HVAC iteration
 
     // get cooling fluid properties
-    Real64 rho = state.dataPlnt->PlantLoop(PlantLoc.loopNum).glycol->getDensity(state, this->InletTemp, RoutineName);
-    Real64 Cp = state.dataPlnt->PlantLoop(PlantLoc.loopNum).glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
+    Real64 rho = PlantLoc.loop->glycol->getDensity(state, this->InletTemp, RoutineName);
+    Real64 Cp = PlantLoc.loop->glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
 
     if (this->FlowType == CndsrFlowType::Variable && state.dataRefrigCase->TotalCondenserHeat > 0.0) {
         this->OutletTemp = this->outletTempSched->getCurrentVal();
