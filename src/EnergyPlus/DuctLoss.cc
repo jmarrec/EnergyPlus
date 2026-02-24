@@ -373,10 +373,7 @@ namespace DuctLoss {
         }
         if (!airLoopFound) {
             ShowSevereError(state, "Multiple AirLoopHVAC names are found. A single AirLoopHVAC is required");
-            errorsFound = true;
-            if (errorsFound) {
-                ShowFatalError(state, "GetDuctLossMakeupAirInput: Previous errors cause termination.");
-            }
+            ShowFatalError(state, "GetDuctLossMakeupAirInput: Previous errors cause termination.");
         }
         state.dataDuctLoss->SplitterNum = 1;
         state.dataDuctLoss->MixerNum = 1;
