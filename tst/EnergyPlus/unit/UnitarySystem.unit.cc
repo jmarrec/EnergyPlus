@@ -26817,6 +26817,18 @@ TEST_F(ZoneUnitarySysTest, ZeroCoolingSpeedTest)
     ,                        !- Heat Recovery Water Outlet Node Name
     UnitarySystemPerformance:Multispeed,  !- Design Specification Multispeed Object Type
     Sys 1 Furnace DX Cool Unitary System MultiSpeed Performance;  !- Design Specification Multispeed Object Name
+
+  UnitarySystemPerformance:Multispeed,
+    MultiSpeed Performance,                 !- Name
+    1,                                      !- Number of Speeds for Heating
+    2,                                      !- Number of Speeds for Cooling
+    No,                                     !- Single Mode Operation
+    ,                                       !- No Load Supply Air Flow Rate Ratio
+    AutoSize,                               !- Heating Speed 1 Supply Air Flow Ratio
+    AutoSize,                               !- Cooling Speed 1 Supply Air Flow Ratio
+    AutoSize,                               !- Heating Speed 2 Supply Air Flow Ratio
+    AutoSize;                               !- Cooling Speed 2 Supply Air Flow Ratio
+
   Coil:Cooling:DX,
     Sys 1 Furnace DX Cool Cooling Coil,  !- Name
     Sys 1 Furnace DX Cool Supply Fan Outlet,  !- Evaporator Inlet Node Name
