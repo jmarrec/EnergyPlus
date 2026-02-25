@@ -475,44 +475,6 @@ namespace Util {
         return Util::FindItemInList(String, ListOfItems, name_p, ListOfItems.isize());
     }
 
-    int FindItemInSortedList(std::string_view const string, Array1S_string const ListOfItems, int NumItems);
-
-    inline int FindItemInSortedList(std::string_view const String, Array1S_string const ListOfItems)
-    {
-        return FindItemInSortedList(String, ListOfItems, ListOfItems.isize());
-    }
-
-    template <typename A>
-    inline int FindItemInSortedList(std::string_view const String, MArray1<A, std::string> const &ListOfItems, int const NumItems)
-    {
-        int Probe(0);
-        int LBnd(0);
-        int UBnd(NumItems + 1);
-        bool Found(false);
-        while ((!Found) || (Probe != 0)) {
-            Probe = (UBnd - LBnd) / 2;
-            if (Probe == 0) {
-                break;
-            }
-            Probe += LBnd;
-            if (equali(String, ListOfItems(Probe))) {
-                Found = true;
-                break;
-            }
-            if (lessthani(String, ListOfItems(Probe))) {
-                UBnd = Probe;
-            } else {
-                LBnd = Probe;
-            }
-        }
-        return Probe;
-    }
-
-    template <typename A> inline int FindItemInSortedList(std::string_view const String, MArray1<A, std::string> const &ListOfItems)
-    {
-        return FindItemInSortedList(String, ListOfItems, ListOfItems.isize());
-    }
-
     template <typename InputIterator> inline int FindItem(InputIterator first, InputIterator last, std::string_view const str, std::false_type)
     {
         using valueType = typename std::iterator_traits<InputIterator>::value_type;

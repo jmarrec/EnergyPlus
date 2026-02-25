@@ -216,40 +216,6 @@ namespace Util {
         return 0; // Not found
     }
 
-    int FindItemInSortedList(std::string_view const String, Array1S_string const ListOfItems, int const NumItems)
-    {
-
-        // FUNCTION INFORMATION:
-        //       AUTHOR         Linda K. Lawrie
-        //       DATE WRITTEN   September 1997
-
-        // PURPOSE OF THIS FUNCTION:
-        // This function looks up a string in a similar list of
-        // items and returns the index of the item in the list, if
-        // found.  This routine is case insensitive.
-
-        // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int Probe = 0;
-        int LBnd = 0;
-        int UBnd = NumItems + 1;
-        while (true) {
-            Probe = (UBnd - LBnd) / 2;
-            if (Probe == 0) {
-                break;
-            }
-            Probe += LBnd;
-            if (equali(String, ListOfItems(Probe))) {
-                break;
-            }
-            if (lessthani(String, ListOfItems(Probe))) {
-                UBnd = Probe;
-            } else {
-                LBnd = Probe;
-            }
-        }
-        return Probe;
-    }
-
     int FindItem(std::string_view const String, Array1D_string const &ListOfItems, int const NumItems)
     {
 
