@@ -1263,7 +1263,7 @@ namespace Window {
                     ShadeReflFac = 1.0 / (1.0 - ShadeRefl * constr.ReflectSolDiffFront);
                     ShadeReflFacVis = 1.0 / (1.0 - ShadeReflVis * constr.ReflectVisDiffFront);
 
-                    for (int iGlass = 1; iGlass < NGlass; ++iGlass) {
+                    for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
                         auto &dfAbs = constr.layerSlatBlindDfAbs(iGlass+1)[iSlatAng];
                         dfAbs.Sol.Ft.Df.Abs = ShadeTrans * ShadeReflFac * solabsDiff[iGlass];
                         dfAbs.Sol.Ft.Df.AbsGnd = ShadeTransGnd * ShadeReflFac * solabsDiff[iGlass];
