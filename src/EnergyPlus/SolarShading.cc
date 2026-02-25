@@ -776,7 +776,7 @@ void processShadowingInput(EnergyPlusData &state)
             for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; SurfNum++) {
                 if (state.dataSurface->Surface(SurfNum).ExtBoundCond == 0) { // Loop through all exterior surfaces
                     int SurfZoneGroup = 0;
-                    int CurZoneGroup = 0;
+                    int CurZoneGroup;
                     // Check the shading zone group of each exterior surface
                     for (int ZoneGroupLoop = 1; ZoneGroupLoop <= NumOfShadingGroups; ZoneGroupLoop++) { // Loop through all defined shading groups
                         CurZoneGroup = DisableSelfShadingGroups(ZoneGroupLoop);
@@ -4347,7 +4347,6 @@ void CLIPPOLY(EnergyPlusData &state,
     NVOUT = NV1; // First point-loop is the length of the subject polygon.
     INTFLAG = false;
     NVTEMP = 0;
-    KK = 0;
 
     // Check if clipping polygon is rectangle
     if (state.dataSysVars->SlaterBarsky) {
@@ -8235,7 +8234,6 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
 
                             int ConstrNumBack = s_surf->Surface(BackSurfNum).Construction;
                             auto const &constrBack = state.dataConstruction->Construct(ConstrNumBack);
-                            int NBackGlass = constrBack.TotGlassLayers;
                             // Irradiated (overlap) area for this back surface, projected onto window plane
                             // (includes effect of shadowing on exterior window)
 
@@ -8292,7 +8290,7 @@ void CalcInteriorSolarDistribution(EnergyPlusData &state)
                                 }
 
                                 // determine the number of glass layers
-                                NBackGlass = 0;
+                                int NBackGlass = 0;
                                 for (int Lay = 1; Lay <= CFS(EQLNum).NL; ++Lay) {
                                     if (CFS(EQLNum).L(Lay).LTYPE != LayerType::GLAZE) {
                                         continue;
