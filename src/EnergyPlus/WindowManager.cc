@@ -512,28 +512,27 @@ namespace Window {
             std::array<int, Window::maxGlassLayers> LayerNum = {0}; // Glass layer number
 
             // Loop over glass layers in the construction
-            for (int IGlass = 1; IGlass <= NGlass; ++IGlass) {
-                int LayNum = 1 + 2 * (IGlass - 1);
+            for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
+                int LayNum = 1 + 2 * iGlass;
                 if (ExtShade || ExtBlind || ExtScreen) {
-                    LayNum = 2 + 2 * (IGlass - 1);
+                    LayNum = 2 + 2 * iGlass;
                 }
                 if (BGShade || BGBlind) {
                     LayNum = 1;
                     if (NGlass == 2) {
-                        if (IGlass == 2) {
+                        if (iGlass == 1) {
                             LayNum = 5;
                         }
                     } else { // NGlass = 3
-                        if (IGlass == 2) {
+                        if (iGlass == 1) {
                             LayNum = 3;
-                        }
-                        if (IGlass == 3) {
+                        } else if (iGlass == 2) {
                             LayNum = 7;
                         }
                     }
                 }
 
-                LayerNum[IGlass - 1] = LayNum;
+                LayerNum[iGlass] = LayNum;
                 LayPtr = thisConstruct.LayerPoint(LayNum);
                 auto *matGlass = dynamic_cast<Material::MaterialGlass *>(s_mat->materials(LayPtr));
                 assert(matGlass != nullptr);
@@ -549,15 +548,15 @@ namespace Window {
                     // In this case, "front" means incident from the outside and "back"
                     // means incident from the inside.
                     numptDAT = specData.NumOfWavelengths;
-                    numpt[IGlass - 1] = numptDAT;
+                    numpt[iGlass] = numptDAT;
 
                     for (int iLam = 0; iLam < numptDAT; ++iLam) {
-                        wlt[IGlass - 1][iLam] = specData.WaveLength(iLam+1);
-                        t[IGlass - 1][iLam] = specData.Trans(iLam+1);
-                        if ((IGlass == 1 || (IGlass == 2 && StormWinConst)) && (!wm->BGFlag))
-                            t[IGlass - 1][iLam] *= matGlass->GlassTransDirtFactor;
-                        rff[IGlass - 1][iLam] = specData.ReflFront(iLam+1);
-                        rbb[IGlass - 1][iLam] = specData.ReflBack(iLam+1);
+                        wlt[iGlass][iLam] = specData.WaveLength(iLam+1);
+                        t[iGlass][iLam] = specData.Trans(iLam+1);
+                        if ((iGlass == 0 || (iGlass == 1 && StormWinConst)) && (!wm->BGFlag))
+                            t[iGlass][iLam] *= matGlass->GlassTransDirtFactor;
+                        rff[iGlass][iLam] = specData.ReflFront(iLam+1);
+                        rbb[iGlass][iLam] = specData.ReflBack(iLam+1);
                     }
 
                     // If there is spectral data for between-glass shades or blinds, calc the average spectral properties for use.
@@ -593,19 +592,19 @@ namespace Window {
                 // No spectral data for this layer; use spectral average values
                 if (SpecDataNum == 0 && matGlass->windowOpticalData != Window::OpticalDataModel::SpectralAndAngle) {
                     lquasi = true;
-                    numpt[IGlass - 1] = 2;
-                    t[IGlass - 1][0] = matGlass->Trans;
-                    if (IGlass == 1 || (IGlass == 2 && StormWinConst)) {
-                        t[IGlass - 1][0] *= matGlass->GlassTransDirtFactor;
+                    numpt[iGlass] = 2;
+                    t[iGlass][0] = matGlass->Trans;
+                    if (iGlass == 0 || (iGlass == 1 && StormWinConst)) {
+                        t[iGlass][0] *= matGlass->GlassTransDirtFactor;
                     }
-                    t[IGlass - 1][1] = matGlass->TransVis;
-                    if (IGlass == 1 || (IGlass == 2 && StormWinConst)) {
-                        t[IGlass - 1][1] *= matGlass->GlassTransDirtFactor;
+                    t[iGlass][1] = matGlass->TransVis;
+                    if (iGlass == 0 || (iGlass == 1 && StormWinConst)) {
+                        t[iGlass][1] *= matGlass->GlassTransDirtFactor;
                     }
-                    rff[IGlass - 1][0] = matGlass->ReflectSolBeamFront;
-                    rbb[IGlass - 1][0] = matGlass->ReflectSolBeamBack;
-                    rff[IGlass - 1][1] = matGlass->ReflectVisBeamFront;
-                    rbb[IGlass - 1][1] = matGlass->ReflectVisBeamBack;
+                    rff[iGlass][0] = matGlass->ReflectSolBeamFront;
+                    rbb[iGlass][0] = matGlass->ReflectSolBeamBack;
+                    rff[iGlass][1] = matGlass->ReflectVisBeamFront;
+                    rbb[iGlass][1] = matGlass->ReflectVisBeamBack;
                 }
 
                 if (matGlass->windowOpticalData == Window::OpticalDataModel::SpectralAndAngle) {
@@ -613,7 +612,7 @@ namespace Window {
                         AllGlassIsSpectralAverage = false;
                     }
                     numptDAT = wm->wle.size();
-                    numpt[IGlass - 1] = numptDAT;
+                    numpt[iGlass] = numptDAT;
                     if (wm->BGFlag) {
                         // 5/16/2012 CR 8793. Add warning message for the glazing defined with full spectral data.
                         ShowWarningError(state,
@@ -634,10 +633,10 @@ namespace Window {
 
                         for (int iLam = 0; iLam < nume; ++iLam) {
                             Real64 lam = wm->wle[iLam];
-                            wlt[IGlass - 1][iLam] = lam;
-                            t[IGlass - 1][iLam] = matGlass->GlassSpecAngTransCurve->value(state, 0.0, lam);
-                            rff[IGlass - 1][iLam] = matGlass->GlassSpecAngFReflCurve->value(state, 0.0, lam);
-                            rbb[IGlass - 1][iLam] = matGlass->GlassSpecAngBReflCurve->value(state, 0.0, lam);
+                            wlt[iGlass][iLam] = lam;
+                            t[iGlass][iLam] = matGlass->GlassSpecAngTransCurve->value(state, 0.0, lam);
+                            rff[iGlass][iLam] = matGlass->GlassSpecAngFReflCurve->value(state, 0.0, lam);
+                            rbb[iGlass][iLam] = matGlass->GlassSpecAngBReflCurve->value(state, 0.0, lam);
                         }
                         
                         // set this material to average spectral data
