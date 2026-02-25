@@ -2231,10 +2231,10 @@
     autosize,                !- Cooling Design Capacity {W}
     ,                        !- Cooling Design Capacity Per Floor Area {W/m2}
     ,                        !- Fraction of Autosized Cooling Design Capacity
-    HeatingDesignCapacity,   !- Heating Design Capacity Method
+    FractionOfAutosizedHeatingCapacity,   !- Heating Design Capacity Method
     autosize,                !- Heating Design Capacity {W}
     ,                        !- Heating Design Capacity Per Floor Area {W/m2}
-    ,                        !- Fraction of Autosized Heating Design Capacity
+    1.5,                        !- Fraction of Autosized Heating Design Capacity
     VAV;                     !- Central Cooling Capacity Control Method
 
   AirLoopHVAC:UnitaryHeatCool,
@@ -2244,8 +2244,8 @@
     Air Loop Outlet Node,    !- Unitary System Air Outlet Node Name
     CyclingFanSchedule,      !- Supply Air Fan Operating Mode Schedule Name
     50,                      !- Maximum Supply Air Temperature {C}
-    1.02,                    !- Cooling Supply Air Flow Rate {m3/s}
-    1.02,                    !- Heating Supply Air Flow Rate {m3/s}
+    autosize,                !- Cooling Supply Air Flow Rate {m3/s}
+    autosize,                !- Heating Supply Air Flow Rate {m3/s}
     0,                       !- No Load Supply Air Flow Rate {m3/s}
     LIVING ZONE,             !- Controlling Zone or Thermostat Location
     Fan:OnOff,               !- Supply Fan Object Type
@@ -2325,7 +2325,7 @@
     HVACAvailSched,          !- Availability Schedule Name
     NaturalGas,              !- Fuel Type
     0.8,                     !- Burner Efficiency
-    25000,                   !- Nominal Capacity {W}
+    autosize,                !- Nominal Capacity {W}
     Heating Coil Air Inlet Node,  !- Air Inlet Node Name
     Fan Inlet Node;          !- Air Outlet Node Name
 
@@ -2334,7 +2334,7 @@
     HVACAvailSched,          !- Availability Schedule Name
     NaturalGas,              !- Fuel Type
     0.8,                     !- Burner Efficiency
-    25000,                   !- Nominal Capacity {W}
+    autosize,                !- Nominal Capacity {W}
     Reheat Coil Air Inlet Node,  !- Air Inlet Node Name
     Air Loop Outlet Node;    !- Air Outlet Node Name
 
