@@ -1953,30 +1953,30 @@ namespace Window {
         rbt = rbop[0][n - 1];
 
         // Absorptance in each layer
-        for (int j = 1; j <= n; ++j) {
-            if (j == 1) {
+        for (int j = 0; j < n; ++j) {
+            if (j == 0) {
                 t0 = 1.0;
                 rb0 = 0.0;
             } else {
-                t0 = top[j - 2][0];
-                rb0 = rbop[0][j - 2];
+                t0 = top[j - 1][0];
+                rb0 = rbop[0][j - 1];
             }
 
-            if (j == n) {
+            if (j == n - 1) {
                 rf0 = 0.0;
             } else {
-                rf0 = rfop[n - 1][j];
+                rf0 = rfop[n - 1][j + 1];
             }
 
-            af = 1.0 - top[j - 1][j - 1] - rfop[j - 1][j - 1];
-            ab = 1.0 - top[j - 1][j - 1] - rbop[j - 1][j - 1];
-            denom1 = 1.0 - rfop[n - 1][j - 1] * rb0;
-            denom2 = 1.0 - rbop[0][j - 1] * rf0;
+            af = 1.0 - top[j][j] - rfop[j][j];
+            ab = 1.0 - top[j][j] - rbop[j][j];
+            denom1 = 1.0 - rfop[n - 1][j] * rb0;
+            denom2 = 1.0 - rbop[0][j] * rf0;
 
             if (denom1 == 0.0 || denom2 == 0.0) {
-                aft[j - 1] = 0.0;
+                aft[j] = 0.0;
             } else {
-                aft[j - 1] = (t0 * af) / denom1 + (top[j - 1][0] * rf0 * ab) / denom2;
+                aft[j] = (t0 * af) / denom1 + (top[j][0] * rf0 * ab) / denom2;
             }
         }
     } // SystemPropertiesAtLambdaAndPhi()
