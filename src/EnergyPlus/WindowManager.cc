@@ -552,13 +552,13 @@ namespace Window {
                     numptDAT = specData.NumOfWavelengths;
                     numpt[IGlass - 1] = numptDAT;
 
-                    for (int ILam = 1; ILam <= numptDAT; ++ILam) {
-                        wlt[IGlass - 1][ILam - 1] = specData.WaveLength(ILam);
-                        t[IGlass - 1][ILam - 1] = specData.Trans(ILam);
+                    for (int iLam = 0; iLam < numptDAT; ++iLam) {
+                        wlt[IGlass - 1][iLam] = specData.WaveLength(iLam+1);
+                        t[IGlass - 1][iLam] = specData.Trans(iLam+1);
                         if ((IGlass == 1 || (IGlass == 2 && StormWinConst)) && (!wm->BGFlag))
-                            t[IGlass - 1][ILam - 1] *= matGlass->GlassTransDirtFactor;
-                        rff[IGlass - 1][ILam - 1] = specData.ReflFront(ILam);
-                        rbb[IGlass - 1][ILam - 1] = specData.ReflBack(ILam);
+                            t[IGlass - 1][iLam] *= matGlass->GlassTransDirtFactor;
+                        rff[IGlass - 1][iLam] = specData.ReflFront(iLam+1);
+                        rbb[IGlass - 1][iLam] = specData.ReflBack(iLam+1);
                     }
 
                     // If there is spectral data for between-glass shades or blinds, calc the average spectral properties for use.
@@ -633,12 +633,12 @@ namespace Window {
                         // calc Trans, TransVis, ReflectSolBeamFront, ReflectSolBeamBack, ReflectVisBeamFront, ReflectVisBeamBack
                         //  assuming wlt same as wle
 
-                        for (int ILam = 1; ILam <= nume; ++ILam) {
-                            Real64 lam = wm->wle[ILam - 1];
-                            wlt[IGlass - 1][ILam - 1] = lam;
-                            t[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngTransCurve->value(state, 0.0, lam);
-                            rff[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngFReflCurve->value(state, 0.0, lam);
-                            rbb[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngBReflCurve->value(state, 0.0, lam);
+                        for (int iLam = 0; iLam < nume; ++iLam) {
+                            Real64 lam = wm->wle[iLam];
+                            wlt[IGlass - 1][iLam] = lam;
+                            t[IGlass - 1][iLam] = matGlass->GlassSpecAngTransCurve->value(state, 0.0, lam);
+                            rff[IGlass - 1][iLam] = matGlass->GlassSpecAngFReflCurve->value(state, 0.0, lam);
+                            rbb[IGlass - 1][iLam] = matGlass->GlassSpecAngBReflCurve->value(state, 0.0, lam);
                         }
                         
                         // set this material to average spectral data
@@ -674,26 +674,26 @@ namespace Window {
                     auto *matGlass = dynamic_cast<Material::MaterialGlass *>(s_mat->materials(LayPtr));
                     assert(matGlass != nullptr);
                     if (matGlass->windowOpticalData != Window::OpticalDataModel::SpectralAndAngle) {
-                        for (int ILam = 1; ILam <= numpt[IGlass - 1]; ++ILam) {
+                        for (int iLam = 0; iLam < numpt[IGlass - 1]; ++iLam) {
                             TransAndReflAtPhi(cosPhisLocal[iPhi],
-                                              t[IGlass - 1][ILam - 1],
-                                              rff[IGlass - 1][ILam - 1],
-                                              rbb[IGlass - 1][ILam - 1],
-                                              tPhi[IGlass - 1][ILam - 1],
-                                              rfPhi[IGlass - 1][ILam - 1],
-                                              rbPhi[IGlass - 1][ILam - 1],
+                                              t[IGlass - 1][iLam],
+                                              rff[IGlass - 1][iLam],
+                                              rbb[IGlass - 1][iLam],
+                                              tPhi[IGlass - 1][iLam],
+                                              rfPhi[IGlass - 1][iLam],
+                                              rbPhi[IGlass - 1][iLam],
                                               lSimpleGlazingSystem,
                                               SimpleGlazingSHGC,
                                               SimpleGlazingU);
                         }
                     } else {
 
-                        for (int ILam = 1; ILam <= nume; ++ILam) {
-                            Real64 lam = wm->wle[ILam - 1];
-                            wlt[IGlass - 1][ILam - 1] = lam;
-                            tPhi[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngTransCurve->value(state, iPhi * dPhiDeg, lam);
-                            rfPhi[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngFReflCurve->value(state, iPhi * dPhiDeg, lam);
-                            rbPhi[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngBReflCurve->value(state, iPhi * dPhiDeg, lam);
+                        for (int iLam = 0; iLam < nume; ++iLam) {
+                            Real64 lam = wm->wle[iLam];
+                            wlt[IGlass - 1][iLam] = lam;
+                            tPhi[IGlass - 1][iLam] = matGlass->GlassSpecAngTransCurve->value(state, iPhi * dPhiDeg, lam);
+                            rfPhi[IGlass - 1][iLam] = matGlass->GlassSpecAngFReflCurve->value(state, iPhi * dPhiDeg, lam);
+                            rbPhi[IGlass - 1][iLam] = matGlass->GlassSpecAngBReflCurve->value(state, iPhi * dPhiDeg, lam);
                         }
                     }
                     // For use with between-glass shade/blind, save angular properties of isolated glass
@@ -732,8 +732,8 @@ namespace Window {
                 rbsolPhi[iPhi] = solarSpectrumAverage(state, srbPhi);
 
                 for (int IGlass = 1; IGlass <= NGlass; ++IGlass) {
-                    for (int ILam = 1; ILam <= nume; ++ILam) {
-                        sabsPhi[ILam - 1] = saPhi(IGlass)[ILam - 1];
+                    for (int iLam = 0; iLam < nume; ++iLam) {
+                        sabsPhi[iLam] = saPhi(IGlass)[iLam];
                     }
                     solabsPhi(IGlass)[iPhi] = solarSpectrumAverage(state, sabsPhi);
                 }
@@ -845,12 +845,12 @@ namespace Window {
                     numptDAT = specData.NumOfWavelengths;
                     numpt[IGlass - 1] = numptDAT;
 
-                    for (int ILam = 1; ILam <= numptDAT; ++ILam) {
-                        wlt[IGlass - 1][ILam - 1] = specData.WaveLength(ILam);
-                        t[IGlass - 1][ILam - 1] = specData.Trans(ILam);
-                        if (IGlass == NGlass || (IGlass == (NGlass - 1) && StormWinConst)) t[IGlass - 1][ILam - 1] *= matGlass->GlassTransDirtFactor;
-                        rff[IGlass - 1][ILam - 1] = specData.ReflBack(ILam);
-                        rbb[IGlass - 1][ILam - 1] = specData.ReflFront(ILam);
+                    for (int iLam = 0; iLam < numptDAT; ++iLam) {
+                        wlt[IGlass - 1][iLam] = specData.WaveLength(iLam+1);
+                        t[IGlass - 1][iLam] = specData.Trans(iLam+1);
+                        if (IGlass == NGlass || (IGlass == (NGlass - 1) && StormWinConst)) t[IGlass - 1][iLam] *= matGlass->GlassTransDirtFactor;
+                        rff[IGlass - 1][iLam] = specData.ReflBack(iLam+1);
+                        rbb[IGlass - 1][iLam] = specData.ReflFront(iLam+1);
                     }
 
                     // No spectral data for this layer; use spectral average values
@@ -900,15 +900,15 @@ namespace Window {
                     auto const *matGlass = dynamic_cast<Material::MaterialGlass const *>(s_mat->materials(LayPtr));
                     assert(matGlass != nullptr);
                     if (matGlass->windowOpticalData != Window::OpticalDataModel::SpectralAndAngle) {
-                        for (int ILam = 1; ILam <= numpt[IGlass - 1]; ++ILam) {
+                        for (int iLam = 0; iLam < numpt[IGlass - 1]; ++iLam) {
 
                             TransAndReflAtPhi(cosPhisLocal[iPhi],
-                                              t[IGlass - 1][ILam - 1],
-                                              rff[IGlass - 1][ILam - 1],
-                                              rbb[IGlass - 1][ILam - 1],
-                                              tPhi[IGlass - 1][ILam - 1],
-                                              rfPhi[IGlass - 1][ILam - 1],
-                                              rbPhi[IGlass - 1][ILam - 1],
+                                              t[IGlass - 1][iLam],
+                                              rff[IGlass - 1][iLam],
+                                              rbb[IGlass - 1][iLam],
+                                              tPhi[IGlass - 1][iLam],
+                                              rfPhi[IGlass - 1][iLam],
+                                              rbPhi[IGlass - 1][iLam],
                                               lSimpleGlazingSystem,
                                               SimpleGlazingSHGC,
                                               SimpleGlazingU);
@@ -916,12 +916,12 @@ namespace Window {
 
                     } else {
 
-                        for (int ILam = 1; ILam <= nume; ++ILam) {
-                            Real64 lam = wm->wle[ILam - 1];
-                            wlt[IGlass - 1][ILam - 1] = lam;
-                            tPhi[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngTransCurve->value(state, iPhi * dPhiDeg, lam);
-                            rfPhi[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngFReflCurve->value(state, iPhi * dPhiDeg, lam);
-                            rbPhi[IGlass - 1][ILam - 1] = matGlass->GlassSpecAngBReflCurve->value(state, iPhi * dPhiDeg, lam);
+                        for (int iLam = 1; iLam < nume; ++iLam) {
+                            Real64 lam = wm->wle[iLam];
+                            wlt[IGlass - 1][iLam] = lam;
+                            tPhi[IGlass - 1][iLam] = matGlass->GlassSpecAngTransCurve->value(state, iPhi * dPhiDeg, lam);
+                            rfPhi[IGlass - 1][iLam] = matGlass->GlassSpecAngFReflCurve->value(state, iPhi * dPhiDeg, lam);
+                            rbPhi[IGlass - 1][iLam] = matGlass->GlassSpecAngBReflCurve->value(state, iPhi * dPhiDeg, lam);
                         }
                     }
                 }
@@ -3804,7 +3804,7 @@ namespace Window {
 
         // Convective heat flow from gap to room air for interior shade or blind
         if (ANY_INTERIOR_SHADE_BLIND(ShadeFlag)) {
-            RhoAir = AirDens + AirDens * (TGapNew - Constant::Kelvin);
+            RhoAir = AirDens + AirDDensDT * (TGapNew - Constant::Kelvin);
             QConvGap = RhoAir * AGap * VGap * 1008.0 * (TGapOutlet - TGapInlet);
             // Exclude convection to gap due to divider, if present; divider convection handled
             // separately in CalcWinFrameAndDividerTemps
