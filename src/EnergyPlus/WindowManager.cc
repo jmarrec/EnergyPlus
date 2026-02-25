@@ -1933,17 +1933,17 @@ namespace Window {
         Real64 ab;
 
         // Calculate perimeter elements of rt matrix
-        for (int i = 1; i <= n - 1; ++i) {
-            for (int j = i + 1; j <= n; ++j) {
-                denom = 1.0 - rfop[j - 1][j - 1] * rbop[i - 1][j - 2];
+        for (int i = 0; i < n - 1; ++i) {
+            for (int j = i + 1; j < n; ++j) {
+                denom = 1.0 - rfop[j][j] * rbop[i][j - 1];
                 if (denom == 0.0) {
-                    top[j - 1][i - 1] = 0.0;
-                    rfop[j - 1][i - 1] = 1.0;
-                    rbop[i - 1][j - 1] = 1.0;
+                    top[j][i] = 0.0;
+                    rfop[j][i] = 1.0;
+                    rbop[i][j] = 1.0;
                 } else {
-                    top[j - 1][i - 1] = top[j - 2][i - 1] * top[j - 1][j - 1] / denom;
-                    rfop[j - 1][i - 1] = rfop[j - 2][i - 1] + pow_2(top[j - 2][i - 1]) * rfop[j - 1][j - 1] / denom;
-                    rbop[i - 1][j - 1] = rbop[j - 1][j - 1] + pow_2(top[j - 1][j - 1]) * rbop[i - 1][j - 2] / denom;
+                    top[j][i] = top[j - 1][i] * top[j][j] / denom;
+                    rfop[j][i] = rfop[j - 1][i] + pow_2(top[j - 1][i]) * rfop[j][j] / denom;
+                    rbop[i][j] = rbop[j][j] + pow_2(top[j][j]) * rbop[i][j - 1] / denom;
                 }
             }
         }
