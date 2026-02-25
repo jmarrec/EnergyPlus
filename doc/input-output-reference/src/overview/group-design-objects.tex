@@ -1532,7 +1532,7 @@ Enter the heating capacity per unit floor area in m3/s-m2. This field is require
 
 \paragraph{Field: Fraction of Autosized Heating Design Capacity}\label{field-fraction-of-autosized-heating-design-capacity}
 
-Enter the heating capacity as a fraction of the autosized heating capacity. This input field is required when the Heating Design Capacity Method is \emph{FractionOfAutosizedHeatingCapacity}. This input field may be left blank if a heating coil is not included in the zone HVAC equipment or the Heating Design Capacity Method is not \emph{FractionOfAutosizedHeatingCapacity}. The program calculates the heating capacity from the design autosized heating capacity and user specified fraction. Design day sizing run must be specified.
+Enter the heating capacity as a fraction of the autosized heating capacity. This input field is required when the Heating Design Capacity Method is \emph{FractionOfAutosizedHeatingCapacity}. This input field may be left blank if a heating coil is not included in the zone HVAC equipment or the Heating Design Capacity Method is not \emph{FractionOfAutosizedHeatingCapacity}. The program calculates the heating capacity from the design autosized cooling capacity and user specified fraction. Design day sizing run must be specified.
 
 \begin{lstlisting}
 DesignSpecification:ZoneHVAC:Sizing,
@@ -1816,7 +1816,7 @@ Enter the method used to determine the cooling design capacity for scalable sizi
 
 \paragraph{Field: Cooling Design Capacity \{W\}}\label{field-cooling-design-capacity-w-1}
 
-Enter the magnitude of the cooling capacity in Watts. This input is an alternative to using the program auto-calculated cooling capacity value. This input is a required field when the Cooling Design Capacity Method is \emph{CoolingDesignCapacity}. This field may be left blank if a cooling coil is not included in the airloop or alternative method is specified. This input field is autosizable.
+Enter the magnitude of the cooling capacity in Watts. This input is an alternative to using the program auto-calculated cooling capacity value. This input is a required field when the Cooling Design Capacity Method is \emph{CoolingDesignCapacity}. This field may be left blank if a cooling coil is not included in the airloop or alternative method is specified. This input field is autosizable. Design day sizing run must be specified.
 
 \paragraph{Field: Cooling Design Capacity Per Floor Area \{W/m2\}}\label{field-cooling-design-capacity-per-floor-area-wm2-1}
 
@@ -1824,7 +1824,7 @@ Enter the cooling capacity per unit floor area in m3/s-m2. This field is require
 
 \paragraph{Field: Fraction of Autosized Cooling Design Capacity}\label{field-fraction-of-autosized-cooling-design-capacity-1}
 
-Enter the cooling capacity as a fraction of the autosized cooling capacity. This input field is required when the Cooling Design Capacity Method is \emph{FractionOfAutosizedCoolingCapacity}. This input field may be left blank if a cooling coil is not included in the airloop or the Cooling Design Capacity Method is not \emph{FractionOfAutosizedCoolingCapacity}. The program calculates the cooling capacity from the design autosized cooling capacity and user specified fraction.
+Enter the cooling capacity as a fraction of the autosized cooling capacity. This input field is required when the Cooling Design Capacity Method is \emph{FractionOfAutosizedCoolingCapacity}. This input field may be left blank if a cooling coil is not included in the airloop or the Cooling Design Capacity Method is not \emph{FractionOfAutosizedCoolingCapacity}. The program calculates the cooling capacity from the design autosized cooling capacity and user specified fraction. Design day sizing run must be specified.
 
 \paragraph{Field: Heating Design Capacity Method}\label{field-heating-design-capacity-method-1}
 
@@ -1832,7 +1832,7 @@ Enter the method used to determine the heating design capacity for scalable sizi
 
 \paragraph{Field: Heating Design Capacity \{W\}}\label{field-heating-design-capacity-w-1}
 
-Enter the magnitude of the heating capacity in Watts. This input is an alternative to using the program auto-calculated heating capacity value. This input is a required field when the Heating Design Capacity Method is \emph{HeatingDesignCapacity}. This field may be left blank if a heating coil is not included in the airloop or alternative method is specified. This input field is autosizable.
+Enter the magnitude of the heating capacity in Watts. This input is an alternative to using the program auto-calculated heating capacity value. This input is a required field when the Heating Design Capacity Method is \emph{HeatingDesignCapacity}. This field may be left blank if a heating coil is not included in the airloop or alternative method is specified. This input field is autosizable. Design day sizing run must be specified.
 
 \paragraph{Field: Heating Design Capacity Per Floor Area \{W/m2\}}\label{field-heating-design-capacity-per-floor-area-wm2-1}
 
@@ -1840,7 +1840,7 @@ Enter the heating capacity per unit floor area in m3/s-m2. This field is require
 
 \paragraph{Field: Fraction of Autosized Heating Design Capacity}\label{field-fraction-of-autosized-heating-design-capacity-1}
 
-Enter the heating capacity as a fraction of the autosized heating capacity. This input field is required when the Heating Design Capacity Method is \emph{FractionOfAutosizedHeatingCapacity}. This input field may be left blank if a heating coil is not included in the airloop or the Heating Design Capacity Method is not \emph{FractionOfAutosizedHeatingCapacity}. The program calculates the heating capacity from the design autosized heating capacity and user specified fraction.
+Enter the heating capacity as a fraction of the autosized heating capacity. This input field is required when the Heating Design Capacity Method is \emph{FractionOfAutosizedHeatingCapacity}. This input field may be left blank if a heating coil is not included in the airloop or the Heating Design Capacity Method is not \emph{FractionOfAutosizedHeatingCapacity}. The program calculates the heating capacity from the design autosized cooling capacity and user specified fraction. Design day sizing run must be specified.
 
 \paragraph{Field: Central Cooling Capacity Control Method}\label{field-central-cooling-capacity-control-method}
 
