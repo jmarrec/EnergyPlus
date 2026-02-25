@@ -1948,9 +1948,9 @@ namespace Window {
             }
         }
         // System properties: transmittance, front and back reflectance
-        tt = top[n - 1][0];
-        rft = rfop[n - 1][0];
-        rbt = rbop[0][n - 1];
+        tt = top[n - 2][0];
+        rft = rfop[n - 2][0];
+        rbt = rbop[0][n - 2];
 
         // Absorptance in each layer
         for (int j = 0; j < n; ++j) {
