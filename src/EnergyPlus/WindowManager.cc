@@ -915,7 +915,7 @@ namespace Window {
 
                     } else {
 
-                        for (int iLam = 1; iLam < nume; ++iLam) {
+                        for (int iLam = 0; iLam < nume; ++iLam) {
                             Real64 lam = wm->wle[iLam];
                             wlt[iGlass][iLam] = lam;
                             tPhi[iGlass][iLam] = matGlass->GlassSpecAngTransCurve->value(state, iPhi * dPhiDeg, lam);
