@@ -718,8 +718,7 @@ namespace Window {
                 std::array<Real64, nume> srfPhi = {0.0}; // Glazing system front reflectance at angle of incidence for each wavelength in wle
                 std::array<Real64, nume> srbPhi = {0.0}; // Glazing system back reflectance at angle of incidence for each wavelength in wle
                 // For each layer, glazing system absorptance at angle of incidence
-                Array1D<std::array<Real64, nume>> saPhi(maxGlassLayers);
-                for (int IGlass = 1; IGlass <= maxGlassLayers; ++IGlass) std::fill(saPhi(IGlass).begin(), saPhi(IGlass).end(), 0.0);
+                std::array<std::array<Real64, nume>, maxGlassLayers> saPhi = {{0.0}};
 
                 SystemSpectralPropertiesAtPhi(state, 1, NGlass, 0.0, 2.54, numpt, wlt, tPhi, rfPhi, rbPhi, stPhi, srfPhi, srbPhi, saPhi);
 
@@ -932,8 +931,7 @@ namespace Window {
                 std::array<Real64, nume> srfPhi = {0.0}; // Glazing system front reflectance at angle of incidence for each wavelength in wle
                 std::array<Real64, nume> srbPhi = {0.0}; // Glazing system back reflectance at angle of incidence for each wavelength in wle
                 // For each layer, glazing system absorptance at angle of incidence
-                Array1D<std::array<Real64, nume>> saPhi(maxGlassLayers);
-                for (int iGlass = 1; iGlass <= maxGlassLayers; ++iGlass) std::fill(saPhi(iGlass).begin(), saPhi(iGlass).end(), 0.0);
+                std::array<std::array<Real64, nume>, maxGlassLayers> saPhi = {{0.0}};
 
                 SystemSpectralPropertiesAtPhi(state, 1, NGlass, 0.0, 2.54, numpt, wlt, tPhi, rfPhi, rbPhi, stPhi, srfPhi, srbPhi, saPhi);
 
@@ -1808,7 +1806,7 @@ namespace Window {
                                        std::array<Real64, nume> &stPhi,
                                        std::array<Real64, nume> &srfPhi,
                                        std::array<Real64, nume> &srbPhi,
-                                       Array1D<std::array<Real64, nume>> &saPhi)
+                                       std::array<std::array<Real64, nume>, maxGlassLayers> &saPhi)
     {
 
         // SUBROUTINE INFORMATION:
@@ -1829,7 +1827,7 @@ namespace Window {
         //   srbPhi    back reflectance of system at each wavelength in swl
         //   sabsPhi   absorptance by layer at each wavelength in swl
 
-        Array1D<Real64> sabsPhi(maxGlassLayers); // System solar absorptance in each glass layer for
+        std::array<Real64, maxGlassLayers> sabsPhi = {0.0}; // System solar absorptance in each glass layer for
         //   particular angle of incidence
 
         // transmittance at angle of incidence
@@ -1846,7 +1844,7 @@ namespace Window {
         auto const &wm = state.dataWindowManager;
         // For each glass layer find tPhi, rfPhi, and rbPhi at each wavelength
 
-        for (int in = 1; in <= ngllayer; ++in) {
+        for (int in = 0; in < ngllayer; ++in) {
             for (int iwl = 0; iwl < nume; ++iwl) {
                 Real64 wl = wm->wle[iwl];
                 if (wl < wlbot || wl > wltop) {
@@ -1854,15 +1852,15 @@ namespace Window {
                 }
                 // In the following numpt is the number of spectral data points for each layer;
                 // numpt = 2 if there is no spectral data for a layer.
-                if (numpt[in - 1] <= 2) {
-                    tadjPhi[in - 1][iwl] = tPhi[in - 1][iquasi - 1];
-                    rfadjPhi[in - 1][iwl] = rfPhi[in - 1][iquasi - 1];
-                    rbadjPhi[in - 1][iwl] = rbPhi[in - 1][iquasi - 1];
+                if (numpt[in] <= 2) {
+                    tadjPhi[in][iwl] = tPhi[in][iquasi - 1];
+                    rfadjPhi[in][iwl] = rfPhi[in][iquasi - 1];
+                    rbadjPhi[in][iwl] = rbPhi[in][iquasi - 1];
                 } else {
                     // Interpolate to get properties at the solar spectrum wavelengths
-                    tadjPhi[in - 1][iwl] = Interpolate(wlt[in - 1], tPhi[in - 1], numpt[in - 1], wl);
-                    rfadjPhi[in - 1][iwl] = Interpolate(wlt[in - 1], rfPhi[in - 1], numpt[in - 1], wl);
-                    rbadjPhi[in - 1][iwl] = Interpolate(wlt[in - 1], rbPhi[in - 1], numpt[in - 1], wl);
+                    tadjPhi[in][iwl] = Interpolate(wlt[in], tPhi[in], numpt[in], wl);
+                    rfadjPhi[in][iwl] = Interpolate(wlt[in], rfPhi[in], numpt[in], wl);
+                    rbadjPhi[in][iwl] = Interpolate(wlt[in], rbPhi[in], numpt[in], wl);
                 }
             }
         }
@@ -1875,10 +1873,10 @@ namespace Window {
             }
 
             // Set diagonal of matrix for subroutine SystemPropertiesAtLambdaAndPhi
-            for (int i = 1; i <= ngllayer; ++i) {
-                top[i - 1][i - 1] = tadjPhi[i - 1][j];
-                rfop[i - 1][i - 1] = rfadjPhi[i - 1][j];
-                rbop[i - 1][i - 1] = rbadjPhi[i - 1][j];
+            for (int i = 0; i < ngllayer; ++i) {
+                top[i][i] = tadjPhi[i][j];
+                rfop[i][i] = rfadjPhi[i][j];
+                rbop[i][i] = rbadjPhi[i][j];
             }
 
             // Calculate glazing system properties
@@ -1886,14 +1884,14 @@ namespace Window {
                 stPhi[j] = top[0][0];
                 srfPhi[j] = rfop[0][0];
                 srbPhi[j] = rbop[0][0];
-                sabsPhi(1) = 1.0 - stPhi[j] - srfPhi[j];
+                sabsPhi[0] = 1.0 - stPhi[j] - srfPhi[j];
             } else { // Multilayer system
                 // Get glazing system properties stPhi, etc., at this wavelength and incidence angle
                 SystemPropertiesAtLambdaAndPhi(state, ngllayer, stPhi[j], srfPhi[j], srbPhi[j], top, rfop, rbop, sabsPhi);
             }
 
-            for (int i = 1; i <= ngllayer; ++i) {
-                saPhi(i)[j] = sabsPhi(i);
+            for (int i = 0; i < ngllayer; ++i) {
+                saPhi[i][j] = sabsPhi[i];
             }
 
         } // End of wavelength loop
@@ -1909,7 +1907,7 @@ namespace Window {
                                         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &top,
                                         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &rfop,
                                         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &rbop,
-                                        Array1A<Real64> aft // System absorptance of each glass layer
+                                        std::array<Real64, maxGlassLayers> &aft // System absorptance of each glass layer
     )
     {
 
@@ -1923,9 +1921,6 @@ namespace Window {
         // PURPOSE OF THIS SUBROUTINE:
         // For a given angle of incidence, finds the overall properties of
         // of a series of layers at a particular wavelength
-
-        // Argument array dimensioning
-        aft.dim(5);
 
         Real64 denom; // Intermediate variables
         Real64 denom1;
@@ -1979,9 +1974,9 @@ namespace Window {
             denom2 = 1.0 - rbop[0][j - 1] * rf0;
 
             if (denom1 == 0.0 || denom2 == 0.0) {
-                aft(j) = 0.0;
+                aft[j - 1] = 0.0;
             } else {
-                aft(j) = (t0 * af) / denom1 + (top[j - 1][0] * rf0 * ab) / denom2;
+                aft[j - 1] = (t0 * af) / denom1 + (top[j - 1][0] * rf0 * ab) / denom2;
             }
         }
     } // SystemPropertiesAtLambdaAndPhi()

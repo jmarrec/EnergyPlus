@@ -129,7 +129,7 @@ namespace Window {
                                        std::array<Real64, nume> &stPhi,
                                        std::array<Real64, nume> &srfPhi,
                                        std::array<Real64, nume> &srbPhi,
-                                       Array1D<std::array<Real64, nume>> &saPhi);
+                                       std::array<std::array<Real64, nume>, maxGlassLayers> &saPhi);
 
     void SystemPropertiesAtLambdaAndPhi(EnergyPlusData &state,
                                         int n,       // Number of glass layers
@@ -139,7 +139,7 @@ namespace Window {
                                         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &top,
                                         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &rfop,
                                         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> &rbop,
-                                        Array1A<Real64> aft // System absorptance of each glass layer
+                                        std::array<Real64, maxGlassLayers> &aft // System absorptance of each glass layer
     );
 
     Real64 solarSpectrumAverage(EnergyPlusData const &state, gsl::span<Real64 const> p);
