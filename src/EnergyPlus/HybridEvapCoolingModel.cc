@@ -1273,8 +1273,8 @@ namespace HybridEvapCoolingModel {
 
         Real64 Wosa = PsyWFnTdbRhPb(state, StepIns.Tosa, StepIns.RHosa, state.dataEnvrn->OutBaroPress);
         Real64 Wra = PsyWFnTdbRhPb(state, StepIns.Tra, StepIns.RHra, InletPressure);
-        bool EnvironmentConditionsMet, EnvironmentConditionsMetOnce, MinVRMet, SAT_OC_Met, SAT_OC_MetOnce, SARH_OC_Met, SAHR_OC_MetOnce;
-        EnvironmentConditionsMetOnce = SAT_OC_Met = SAT_OC_MetOnce = SARH_OC_Met = SAHR_OC_MetOnce = false;
+        bool EnvironmentConditionsMet, EnvironmentConditionsMetOnce, MinVRMet, SAT_OC_MetOnce, SAHR_OC_MetOnce;
+        EnvironmentConditionsMetOnce = SAT_OC_MetOnce = SAHR_OC_MetOnce = false;
 
         MinOA_Msa = StepIns.MinimumOA; // Set object version of minimum VR Kg/s
 
@@ -1360,6 +1360,8 @@ namespace HybridEvapCoolingModel {
                             FanHeatTemp = PowerLossToAir / (PsyCpAirFnW(Wsa) * ScaledMsa);
                             Tsa = Tsa + FanHeatTemp;
 
+                            bool SAT_OC_Met = false;
+                            bool SARH_OC_Met = false;
                             // Check it meets constraints
                             if (MeetsSupplyAirTOC(state, Tsa)) {
                                 SAT_OC_Met = SAT_OC_MetOnce = SAT_OC_MetinMode = true;
@@ -1911,7 +1913,6 @@ namespace HybridEvapCoolingModel {
             if (OutletMassFlowRate > 0) {
                 averageOSAF = SupplyVentilationAir / OutletMassFlowRate;
             } else {
-                std::string ObjectID = Name.c_str();
                 if (CoolingRequested || HeatingRequested) {
                     ShowSevereError(
                         state,

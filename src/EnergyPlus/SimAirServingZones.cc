@@ -3742,8 +3742,6 @@ void UpdateBranchConnections(EnergyPlusData &state,
 
     int InletNodeNum;               // node number of splitter inlet node
     int OutletNodeNum;              // node number of a splitter outlet node
-    int RABNodeNum;                 // splitter outlet RAB node
-    int NonRABNodeNum;              // splitter outlet nonRAB node
     Real64 MassFlowRateSetSum;      // sum of mass flow rate setpoints for splitter outlet nodes
     Real64 MassFlowRateOut;         // outlet mass flow rate of mixer
     Real64 MassFlowRateMinAvailOut; // outlet minimum available mass flow rate
@@ -3758,8 +3756,6 @@ void UpdateBranchConnections(EnergyPlusData &state,
     OutletHumRat = 0.0;
     OutletEnthalpy = 0.0;
     OutletPress = 0.0;
-    RABNodeNum = 0;
-    NonRABNodeNum = 0;
     OutletCO2 = 0.0;
     OutletGC = 0.0;
 
@@ -3803,8 +3799,8 @@ void UpdateBranchConnections(EnergyPlusData &state,
                 }
             } else { // set the RAB flow rates
                 auto &AirLoopControlInfo = state.dataAirLoop->AirLoopControlInfo;
-                RABNodeNum = PrimaryAirSystems(AirLoopNum).RABSplitOutNode;
-                NonRABNodeNum = PrimaryAirSystems(AirLoopNum).OtherSplitOutNode;
+                int RABNodeNum = PrimaryAirSystems(AirLoopNum).RABSplitOutNode;      // splitter outlet RAB node
+                int NonRABNodeNum = PrimaryAirSystems(AirLoopNum).OtherSplitOutNode; // splitter outlet nonRAB node
                 if (AirLoopControlInfo(AirLoopNum).EconoActive) {
                     state.dataLoopNodes->Node(RABNodeNum).MassFlowRate = 0.0;
                     state.dataLoopNodes->Node(NonRABNodeNum).MassFlowRate = state.dataLoopNodes->Node(InletNodeNum).MassFlowRate;

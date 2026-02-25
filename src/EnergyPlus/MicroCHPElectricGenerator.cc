@@ -178,8 +178,6 @@ void GetMicroCHPGeneratorInput(EnergyPlusData &state)
 
             auto &microCHPParams = state.dataCHPElectGen->MicroCHPParamInput(CHPParamNum);
 
-            std::string ObjMSGName = s_ipsc->cCurrentModuleObject + " Named " + AlphArray(1);
-
             microCHPParams.Name = AlphArray(1);        // A1 name
             microCHPParams.MaxElecPower = NumArray(1); // N1 Maximum Electric Power [W]
             microCHPParams.MinElecPower = NumArray(2); // N2 Minimum Electric Power [W]
@@ -711,8 +709,7 @@ void MicroCHPDataStruct::onInitLoopEquip(EnergyPlusData &state, const EnergyPlus
 {
     static constexpr std::string_view RoutineName("MicroCHPDataStruct::onInitLoopEquip");
 
-    Real64 rho = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum)
-                     .glycol->getDensity(state, state.dataLoopNodes->Node(this->PlantInletNodeID).Temp, RoutineName);
+    Real64 rho = this->CWPlantLoc.loop->glycol->getDensity(state, state.dataLoopNodes->Node(this->PlantInletNodeID).Temp, RoutineName);
     if (this->A42Model.InternalFlowControl) { // got a curve
         this->PlantMassFlowRateMax =
             2.0 * this->A42Model.WaterFlowCurve->value(state, this->A42Model.MaxElecPower, state.dataLoopNodes->Node(this->PlantInletNodeID).Temp);
@@ -1170,7 +1167,7 @@ void MicroCHPDataStruct::CalcMicroCHPNoNormalizeGeneratorModel(EnergyPlusData &s
         Teng = FuncDetermineEngineTemp(
             TcwOut, this->A42Model.MCeng, this->A42Model.UAhx, this->A42Model.UAskin, thisAmbientTemp, Qgenss, this->A42Model.TengLast, dt);
 
-        Real64 Cp = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).glycol->getSpecificHeat(state, TcwIn, RoutineName);
+        Real64 Cp = this->CWPlantLoc.loop->glycol->getSpecificHeat(state, TcwIn, RoutineName);
 
         TcwOut =
             FuncDetermineCoolantWaterExitTemp(TcwIn, this->A42Model.MCcw, this->A42Model.UAhx, MdotCW * Cp, Teng, this->A42Model.TempCWOutLast, dt);
@@ -1389,7 +1386,7 @@ void MicroCHPDataStruct::CalcUpdateHeatRecovery(EnergyPlusData &state) const
 
     state.dataLoopNodes->Node(this->PlantOutletNodeID).Temp = this->A42Model.TcwOut;
 
-    Real64 Cp = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).glycol->getSpecificHeat(state, this->A42Model.TcwIn, RoutineName);
+    Real64 Cp = this->CWPlantLoc.loop->glycol->getSpecificHeat(state, this->A42Model.TcwIn, RoutineName);
 
     state.dataLoopNodes->Node(this->PlantOutletNodeID).Enthalpy = this->A42Model.TcwOut * Cp;
 }
@@ -1420,7 +1417,7 @@ void MicroCHPDataStruct::UpdateMicroCHPGeneratorRecords(EnergyPlusData &state) /
     this->A42Model.ACEnergyGen = this->A42Model.Pnet * state.dataHVACGlobal->TimeStepSysSec;     // energy produced (J)
     this->A42Model.QdotHX = this->A42Model.UAhx * (this->A42Model.Teng - this->A42Model.TcwOut); //  heat recovered rate (W)
 
-    Real64 Cp = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).glycol->getSpecificHeat(state, this->A42Model.TcwIn, RoutineName);
+    Real64 Cp = this->CWPlantLoc.loop->glycol->getSpecificHeat(state, this->A42Model.TcwIn, RoutineName);
 
     this->A42Model.QdotHR = this->PlantMassFlowRate * Cp * (this->A42Model.TcwOut - this->A42Model.TcwIn);
     this->A42Model.TotalHeatEnergyRec = this->A42Model.QdotHR * state.dataHVACGlobal->TimeStepSysSec; // heat recovered energy (J)

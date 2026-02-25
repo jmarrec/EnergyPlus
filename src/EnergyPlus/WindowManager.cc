@@ -4013,7 +4013,7 @@ namespace Window {
 
         TGapNew(1) =
             TAve(1) - (TAve(1) - TAve(2)) * (GapHeightChar(1) / GapHeight) * (1 - EpsChar(1)) * (1 - EpsChar(2)) / (1 - EpsChar(1) * EpsChar(2));
-
+        // cppcheck-suppress unreadVariable
         TGapNew(2) =
             TAve(2) - (TAve(2) - TAve(1)) * (GapHeightChar(2) / GapHeight) * (1 - EpsChar(1)) * (1 - EpsChar(2)) / (1 - EpsChar(1) * EpsChar(2));
     }
@@ -8008,6 +8008,7 @@ namespace Window {
             Real64 BlindIRreflBack = G(2) * (1.0 - fEdge) + fEdge * ri; // Blind back IR reflectance
 
             //     Back IR emissivity
+            // cppcheck-suppress unreadVariable
             p(15) = max(0.0001, 1.0 - p(13) - BlindIRreflBack);
 
         } // End of IR properties calculation
