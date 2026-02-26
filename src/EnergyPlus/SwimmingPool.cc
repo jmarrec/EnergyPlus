@@ -229,7 +229,6 @@ void GetSwimmingPool(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-        Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
         state.dataSwimmingPools->Pool(Item).Name = Alphas(1);
 
         state.dataSwimmingPools->Pool(Item).SurfaceName = Alphas(2);

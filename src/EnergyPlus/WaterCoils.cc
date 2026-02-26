@@ -306,7 +306,6 @@ void GetWaterCoilInput(EnergyPlusData &state)
     NumArray.dimension(MaxNums, 0.0);
     lAlphaBlanks.dimension(MaxAlphas, true);
     lNumericBlanks.dimension(MaxNums, true);
-    auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
     CurrentModuleObject = "Coil:Heating:Water";
     // Get the data for simple heating coils
     for (SimpHeatNum = 1; SimpHeatNum <= NumSimpHeat; ++SimpHeatNum) {
@@ -331,7 +330,6 @@ void GetWaterCoilInput(EnergyPlusData &state)
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames.allocate(MaxNums);
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames = "";
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames = cNumericFields;
-        Util::IsNameEmpty(state, AlphArray(1), cCurrentModuleObject, ErrorsFound);
 
         // ErrorsFound will be set to True if problem was found, left untouched otherwise
         GlobalNames::VerifyUniqueCoilName(state, CurrentModuleObject, AlphArray(1), ErrorsFound, CurrentModuleObject + " Name");
@@ -501,7 +499,6 @@ void GetWaterCoilInput(EnergyPlusData &state)
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames.allocate(MaxNums);
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames = "";
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames = cNumericFields;
-        Util::IsNameEmpty(state, AlphArray(1), cCurrentModuleObject, ErrorsFound);
 
         // ErrorsFound will be set to True if problem was found, left untouched otherwise
         GlobalNames::VerifyUniqueCoilName(state, CurrentModuleObject, AlphArray(1), ErrorsFound, CurrentModuleObject + " Name");
@@ -725,7 +722,6 @@ void GetWaterCoilInput(EnergyPlusData &state)
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames.allocate(MaxNums);
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames = "";
         state.dataWaterCoils->WaterCoilNumericFields(CoilNum).FieldNames = cNumericFields;
-        Util::IsNameEmpty(state, AlphArray(1), cCurrentModuleObject, ErrorsFound);
 
         // ErrorsFound will be set to True if problem was found, left untouched otherwise
         GlobalNames::VerifyUniqueCoilName(state, CurrentModuleObject, AlphArray(1), ErrorsFound, CurrentModuleObject + " Name");

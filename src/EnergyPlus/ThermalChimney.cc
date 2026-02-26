@@ -184,7 +184,7 @@ namespace ThermalChimney {
 
             ErrorObjectHeader eoh{routineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
 
-            if (Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound)) {
+            if (state.dataIPShortCut->cAlphaArgs(1).empty()) {
                 continue;
             }
 

@@ -706,8 +706,6 @@ bool getDesuperHtrInput(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
 
-        Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-
         // ErrorsFound will be set to True if problem was found, left untouched otherwise
         GlobalNames::VerifyUniqueCoilName(state, cCurrentModuleObject, cAlphaArgs(1), ErrorsFound, cCurrentModuleObject + " Name");
 
@@ -1226,7 +1224,6 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
         for (int i = NumAlphas + 1; i <= nNumPossibleAlphaArgs; ++i) {
             hpwhAlphaBlank[i] = true;
         }
-        Util::IsNameEmpty(state, hpwhAlpha[1], state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
 
         // Name and type
         HPWH.Name = hpwhAlpha[1];

@@ -343,7 +343,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                             s_ipsc->cNumericFieldNames);
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
 
         TStatObjects(Item).Name = s_ipsc->cAlphaArgs(1);
         Item1 = Util::FindItemInList(s_ipsc->cAlphaArgs(2), Zone);
@@ -541,7 +540,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
         auto &setpt = s_ztpc->tempSetptScheds[(int)HVAC::SetptType::SingleHeat](idx);
         setpt.Name = s_ipsc->cAlphaArgs(1);
 
@@ -578,7 +576,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
         auto &setpt = s_ztpc->tempSetptScheds[(int)HVAC::SetptType::SingleCool](idx);
         setpt.Name = s_ipsc->cAlphaArgs(1);
 
@@ -650,7 +647,7 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                             s_ipsc->cNumericFieldNames);
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
+
         auto &setpt = s_ztpc->tempSetptScheds[(int)HVAC::SetptType::DualHeatCool](idx);
         setpt.Name = s_ipsc->cAlphaArgs(1);
 
@@ -828,8 +825,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
-
         auto &humidControlledZone = state.dataZoneCtrls->HumidityControlZone(HumidControlledZoneNum);
         humidControlledZone.ControlName = s_ipsc->cAlphaArgs(1);
         GlobalNames::IntraObjUniquenessCheck(state,
@@ -891,7 +886,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                             s_ipsc->lAlphaFieldBlanks,
                             s_ipsc->cAlphaFieldNames,
                             s_ipsc->cNumericFieldNames);
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
 
         Item1 = Util::FindItemInList(s_ipsc->cAlphaArgs(2), Zone);
         ZLItem = 0;
@@ -1184,7 +1178,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
         auto &setpt = s_ztpc->comfortSetptScheds[(int)HVAC::SetptType::SingleHeat](idx);
         setpt.Name = s_ipsc->cAlphaArgs(1);
 
@@ -1223,7 +1216,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
         auto &setpt = s_ztpc->comfortSetptScheds[(int)HVAC::SetptType::SingleCool](idx);
         setpt.Name = s_ipsc->cAlphaArgs(1);
 
@@ -1263,7 +1255,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
         auto &setpt = s_ztpc->comfortSetptScheds[(int)HVAC::SetptType::SingleHeatCool](idx);
         setpt.Name = s_ipsc->cAlphaArgs(1);
 
@@ -1303,7 +1294,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
         auto &setpt = s_ztpc->comfortSetptScheds[(int)HVAC::SetptType::DualHeatCool](idx);
         setpt.Name = s_ipsc->cAlphaArgs(1);
 
@@ -1937,7 +1927,6 @@ void GetZoneAirSetPoints(EnergyPlusData &state)
                             s_ipsc->lAlphaFieldBlanks,
                             s_ipsc->cAlphaFieldNames,
                             s_ipsc->cNumericFieldNames);
-        Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
 
         state.dataZoneCtrls->StagedTStatObjects(Item).Name = s_ipsc->cAlphaArgs(1);
         Item1 = Util::FindItemInList(s_ipsc->cAlphaArgs(2), Zone);

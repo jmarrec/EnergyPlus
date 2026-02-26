@@ -294,7 +294,6 @@ namespace WindowAC {
             state.dataWindowAC->WindACNumericFields(WindACNum).FieldNames.allocate(NumNumbers);
             state.dataWindowAC->WindACNumericFields(WindACNum).FieldNames = "";
             state.dataWindowAC->WindACNumericFields(WindACNum).FieldNames = cNumericFields;
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             state.dataWindowAC->WindAC(WindACNum).Name = Alphas(1);
             state.dataWindowAC->WindAC(WindACNum).UnitType = state.dataWindowAC->WindowAC_UnitType; // 'ZoneHVAC:WindowAirConditioner'

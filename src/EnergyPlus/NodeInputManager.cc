@@ -558,7 +558,7 @@ void GetNodeListsInput(EnergyPlusData &state, bool &ErrorsFound) // Set to true 
     for (int Loop = 1; Loop <= state.dataNodeInputMgr->NumOfNodeLists; ++Loop) {
         state.dataInputProcessing->inputProcessor->getObjectItem(
             state, CurrentModuleObject, Loop, cAlphas, NumAlphas, rNumbers, NumNumbers, IOStatus);
-        if (Util::IsNameEmpty(state, cAlphas(1), CurrentModuleObject, localErrorsFound)) {
+        if (cAlphas(1).empty()) {
             continue;
         }
 

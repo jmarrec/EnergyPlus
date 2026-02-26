@@ -584,7 +584,7 @@ void GetWrapperInput(EnergyPlusData &state)
         state.dataPlantCentralGSHP->Wrapper(WrapperNum).Name = state.dataIPShortCut->cAlphaArgs(1);
 
         // initialize nth chiller heater index (including identical units) for current wrapper
-        if (Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound)) {
+        if (state.dataIPShortCut->cAlphaArgs(1).empty()) {
             continue;
         }
 
@@ -1202,7 +1202,6 @@ void GetChillerHeaterInput(EnergyPlusData &state)
                                                                  state.dataIPShortCut->cNumericFieldNames);
 
         state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).Name = state.dataIPShortCut->cAlphaArgs(1);
-        Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, CHErrorsFound);
 
         if (Util::SameString(state.dataIPShortCut->cAlphaArgs(4), "LEAVINGCONDENSER")) {
             state.dataPlantCentralGSHP->ChillerHeater(ChillerHeaterNum).CondModeCooling = CondenserModeTemperature::LeavingCondenser;

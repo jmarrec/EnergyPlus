@@ -268,17 +268,6 @@ namespace Util {
         return 0; // Not found
     }
 
-    bool IsNameEmpty(EnergyPlusData &state, std::string &NameToVerify, std::string_view StringToDisplay, bool &ErrorFound)
-    {
-        if (NameToVerify.empty()) {
-            ShowSevereError(state, format("{} Name, cannot be blank", StringToDisplay));
-            ErrorFound = true;
-            NameToVerify = "xxxxx";
-            return true;
-        }
-        return false;
-    }
-
     void setDesignObjectNameAndPointer(EnergyPlusData &state,
                                        std::string &nameToBeSet,
                                        int &ptrToBeSet,

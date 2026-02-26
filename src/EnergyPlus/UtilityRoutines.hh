@@ -633,8 +633,6 @@ namespace Util {
         return equali(s, t);
     }
 
-    bool IsNameEmpty(EnergyPlusData &state, std::string &NameToVerify, std::string_view StringToDisplay, bool &ErrorFound);
-
     void setDesignObjectNameAndPointer(EnergyPlusData &state,
                                        std::string &nameToBeSet,          // field that is being set once a match is found
                                        int &ptrToBeSet,                   // pointer that is being set once a match is found

@@ -389,7 +389,6 @@ void GetPlantLoopData(EnergyPlusData &state)
             eoh.objectName = Alpha(1);
         }
 
-        Util::IsNameEmpty(state, Alpha(1), CurrentModuleObject, ErrorsFound);
         this_loop.Name = Alpha(1); // Load the Plant Loop Name
 
         if (Util::SameString(Alpha(2), "STEAM")) {

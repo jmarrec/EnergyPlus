@@ -261,7 +261,6 @@ namespace UnitHeater {
             state.dataUnitHeaters->UnitHeatNumericFields(UnitHeatNum).FieldNames.allocate(NumNumbers);
             state.dataUnitHeaters->UnitHeatNumericFields(UnitHeatNum).FieldNames = "";
             state.dataUnitHeaters->UnitHeatNumericFields(UnitHeatNum).FieldNames = cNumericFields;
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             state.dataUnitHeaters->UnitHeat(UnitHeatNum).Name = Alphas(1);
 

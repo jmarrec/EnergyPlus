@@ -252,8 +252,6 @@ namespace WindTurbine {
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
 
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), CurrentModuleObject, ErrorsFound);
-
             auto &windTurbine = state.dataWindTurbine->WindTurbineSys(WindTurbineNum);
 
             windTurbine.Name = state.dataIPShortCut->cAlphaArgs(1); // Name of wind turbine

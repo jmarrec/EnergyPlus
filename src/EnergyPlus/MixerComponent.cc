@@ -216,7 +216,6 @@ void GetMixerInput(EnergyPlusData &state)
                                                                  lAlphaBlanks,
                                                                  cAlphaFields,
                                                                  cNumericFields);
-        Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
 
         state.dataMixerComponent->MixerCond(MixerNum).MixerName = AlphArray(1);
 

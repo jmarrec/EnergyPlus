@@ -220,7 +220,6 @@ namespace SplitterComponent {
                                                                      lAlphaBlanks,
                                                                      cAlphaFields,
                                                                      cNumericFields);
-            Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
 
             state.dataSplitterComponent->SplitterCond(SplitterNum).SplitterName = AlphArray(1);
             state.dataSplitterComponent->SplitterCond(SplitterNum).InletNode =

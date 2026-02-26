@@ -370,7 +370,6 @@ void GetInputTabularMonthly(EnergyPlusData &state)
     Array1D_string AlphArray; // character string data
     Array1D<Real64> NumArray; // numeric data
     int IOStat = -1;          // IO Status when calling get input subroutine
-    bool ErrorsFound = false;
 
     state.dataInputProcessing->inputProcessor->getObjectDefMaxArgs(state, CurrentModuleObject, NumParams, NumAlphas, NumNums);
     AlphArray.allocate(NumAlphas);
@@ -378,9 +377,10 @@ void GetInputTabularMonthly(EnergyPlusData &state)
     for (int TabNum = 1, TabNum_end = ort->MonthlyInputCount; TabNum <= TabNum_end; ++TabNum) { // MonthlyInputCount is modified in the loop
         state.dataInputProcessing->inputProcessor->getObjectItem(state, CurrentModuleObject, TabNum, AlphArray, NumAlphas, NumArray, NumNums, IOStat);
 
-        if (TabNum - 1 > 0) {
-            Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
-        }
+        // TODO: check this
+        // if (TabNum - 1 > 0) {
+        //     Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
+        // }
         if (NumAlphas < 2) {
             ShowSevereError(state, format("{}: No fields specified.", CurrentModuleObject));
         }

@@ -158,7 +158,7 @@ void GetMTGeneratorInput(EnergyPlusData &state)
                                                                  state.dataIPShortCut->lAlphaFieldBlanks,
                                                                  state.dataIPShortCut->cAlphaFieldNames,
                                                                  state.dataIPShortCut->cNumericFieldNames);
-        Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
+
         state.dataMircoturbElectGen->MTGenerator(GeneratorNum).Name = AlphArray(1);
 
         state.dataMircoturbElectGen->MTGenerator(GeneratorNum).RefElecPowerOutput = NumArray(1);

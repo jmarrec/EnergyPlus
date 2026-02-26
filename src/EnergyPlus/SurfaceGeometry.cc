@@ -7876,8 +7876,6 @@ namespace SurfaceGeometry {
 
                 ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-                Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
-
                 SurfLocalEnv.Name = s_ipsc->cAlphaArgs(1);
 
                 // Assign surface number
@@ -8052,8 +8050,6 @@ namespace SurfaceGeometry {
                                                                          s_ipsc->cNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
-
-                Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
 
                 // A1: Name
                 SrdSurfsProp.Name = s_ipsc->cAlphaArgs(1);
@@ -10834,7 +10830,7 @@ namespace SurfaceGeometry {
 
                 fndInput.name = s_ipsc->cAlphaArgs(alpF);
                 alpF++;
-                Util::IsNameEmpty(state, fndInput.name, s_ipsc->cCurrentModuleObject, ErrorInName);
+
                 if (ErrorInName) {
                     ErrorsFound = true;
                     continue;

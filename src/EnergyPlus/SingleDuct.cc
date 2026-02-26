@@ -5091,7 +5091,7 @@ void GetATMixers(EnergyPlusData &state)
                                                                  state.dataIPShortCut->cNumericFieldNames);
 
         auto &atMixer = state.dataSingleDuct->SysATMixer(ATMixerNum);
-        Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
+
         state.dataSingleDuct->SysATMixer(ATMixerNum).Name = state.dataIPShortCut->cAlphaArgs(1);
 
         atMixer.type = static_cast<HVAC::MixerType>(getEnumValue(HVAC::mixerTypeLocNamesUC, ipsc->cAlphaArgs(7)));

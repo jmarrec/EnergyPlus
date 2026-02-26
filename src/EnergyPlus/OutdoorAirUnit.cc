@@ -305,7 +305,6 @@ namespace OutdoorAirUnit {
                                                                      cNumericFields);
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), CurrentModuleObject, ErrorsFound);
 
             // A1
             thisOutAirUnit.Name = state.dataIPShortCut->cAlphaArgs(1);

@@ -488,8 +488,6 @@ namespace PlantComponentTemperatureSources {
 
             ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
 
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-
             state.dataPlantCompTempSrc->WaterSource(SourceNum).Name = state.dataIPShortCut->cAlphaArgs(1);
 
             state.dataPlantCompTempSrc->WaterSource(SourceNum).InletNodeNum =

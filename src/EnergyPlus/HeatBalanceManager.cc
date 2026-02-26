@@ -1880,7 +1880,7 @@ namespace HeatBalanceManager {
                 TMP = index(state.dataIPShortCut->cAlphaArgs(1), char(2));
             }
 
-            if (Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataHeatBalMgr->CurrentModuleObject, ErrorsFound)) {
+            if (state.dataIPShortCut->cAlphaArgs(1).empty()) {
                 continue;
             }
 

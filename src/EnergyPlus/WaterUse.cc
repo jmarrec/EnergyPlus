@@ -319,7 +319,7 @@ namespace WaterUse {
                                                                          state.dataIPShortCut->cNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
-                Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
+
                 thisWEq.Name = state.dataIPShortCut->cAlphaArgs(1);
 
                 thisWEq.EndUseSubcatName = state.dataIPShortCut->cAlphaArgs(2);
@@ -398,7 +398,6 @@ namespace WaterUse {
 
                 ErrorObjectHeader eoh{routineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
 
-                Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
                 auto &waterConnection = state.dataWaterUse->WaterConnections(WaterConnNum);
                 waterConnection.Name = state.dataIPShortCut->cAlphaArgs(1);
 

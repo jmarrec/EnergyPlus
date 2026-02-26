@@ -249,7 +249,6 @@ namespace ZoneAirLoopEquipmentManager {
                                                                          lAlphaBlanks,
                                                                          cAlphaFields,
                                                                          cNumericFields); //  data for one zone
-                Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
 
                 airDistUnit.Name = AlphArray(1);
                 // Input Outlet Node Num
