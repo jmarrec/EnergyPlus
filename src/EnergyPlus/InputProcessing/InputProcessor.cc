@@ -689,7 +689,6 @@ int InputProcessor::getIntFieldValue(json const &ep_object, json const &schema_o
 
     auto const &schema_field_obj = schema_obj_props[fieldName];
     assert(!schema_field_obj.empty()); // Check that field name exists in the schema for this object type
-    bool isDefaulted = false;
     int value = 0;
     Real64 defaultValue = 0.0;
     auto it = ep_object.find(fieldName);
@@ -702,14 +701,12 @@ int InputProcessor::getIntFieldValue(json const &ep_object, json const &schema_o
             // really is an int then the input processor will have forced it to be an integer.
             assert(!field_value.is_number());
         } else if (field_value.get<std::string>().empty()) {
-            isDefaulted = findDefault(defaultValue, schema_field_obj);
-            if (isDefaulted) {
+            if (findDefault(defaultValue, schema_field_obj)) {
                 value = static_cast<int>(defaultValue);
             }
         }
     } else {
-        isDefaulted = findDefault(defaultValue, schema_field_obj);
-        if (isDefaulted) {
+        if (findDefault(defaultValue, schema_field_obj)) {
             value = static_cast<int>(defaultValue);
         }
     }

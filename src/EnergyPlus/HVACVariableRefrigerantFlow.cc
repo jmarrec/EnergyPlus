@@ -11295,8 +11295,6 @@ void VRFCondenserEquipment::CalcVRFCondenser_FluidTCtrl(EnergyPlusData &state, c
     NumTUInCoolingMode = 0;
     NumTUInHeatingMode = 0;
     Tolerance = 0.05;
-    Counter = 1;
-    NumIteHIUIn = 1;
     this->ElecCoolingPower = 0.0;
     this->ElecHeatingPower = 0.0;
     this->CrankCaseHeaterPower = 0.0;
@@ -13757,7 +13755,6 @@ void VRFCondenserEquipment::VRFOU_TeModification(
     } while (!converged_11);
 
     if (std::abs(Tsuction - Te_low) > 0.5) {
-        NumTeIte = 999;
         Tsuction = Te_low;
         Pipe_SH_merged = 3.0;
         Te_update = Te_low + 1;
