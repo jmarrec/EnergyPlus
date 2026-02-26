@@ -2815,11 +2815,6 @@ void GetZoneSizingInput(EnergyPlusData &state)
                         state.dataSize->ZoneSizingInput(ZoneSizIndex).ZoneName = "Invalid Zone Name";
                     }
                 }
-                // TODO: check this
-                // bool const nameEmpty = Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-                // if (nameEmpty && !SizingZoneObjects(Item).ZoneListActive) {
-                //     ShowContinueError(state, "Zone may have been entered in a ZoneList assignment.");
-                // }
 
                 //  A2, \field Zone Cooling Design Supply Air Temperature Input Method
                 //      \required-field
