@@ -314,11 +314,11 @@ namespace Window {
         bool StormWinConst;     // True if a construction with a storm window
         bool Triangle;          // True if window is triangular
         bool Rectangle;         // True if window is rectangular
-        Vector3<Real64> W1;     // Window vertices (m)
-        Vector3<Real64> W2;
-        Vector3<Real64> W3;
-        Vector3<Real64> W21; // W1-W2, W3-W2, resp. (m)
-        Vector3<Real64> W23;
+        Vector3<Real64> W1 = {0.0, 0.0, 0.0};     // Window vertices (m)
+        Vector3<Real64> W2 = {0.0, 0.0, 0.0};
+        Vector3<Real64> W3 = {0.0, 0.0, 0.0};
+        Vector3<Real64> W21 = {0.0, 0.0, 0.0}; // W1-W2, W3-W2, resp. (m)
+        Vector3<Real64> W23 = {0.0, 0.0, 0.0};
 
         // Spectral data wavelengths for each glass layer in a glazing system
         std::array<std::array<Real64, maxSpectralDataElements>, maxGlassLayers> wlt = {0.0};
