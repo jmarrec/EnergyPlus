@@ -1100,9 +1100,8 @@ void PipeHTData::InitPipesHeatTransfer(EnergyPlusData &state, bool const FirstHV
     // Even though the loop eventually has no flow rate, it appears it initializes to a value, then converges to OFF
     // Thus, this is called at the beginning of every time step once.
 
-    this->FluidSpecHeat =
-        state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getSpecificHeat(state, state.dataPipeHT->nsvInletTemp, RoutineName);
-    this->FluidDensity = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).glycol->getDensity(state, state.dataPipeHT->nsvInletTemp, RoutineName);
+    this->FluidSpecHeat = this->plantLoc.loop->glycol->getSpecificHeat(state, state.dataPipeHT->nsvInletTemp, RoutineName);
+    this->FluidDensity = this->plantLoc.loop->glycol->getDensity(state, state.dataPipeHT->nsvInletTemp, RoutineName);
 
     // At this point, for all Pipe:Interior objects we should zero out the energy and rate arrays
     this->FluidHeatLossRate = 0.0;

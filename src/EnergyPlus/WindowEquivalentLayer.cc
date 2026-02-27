@@ -5752,6 +5752,7 @@ void SETUP4x4_A(Real64 const rhog, Real64 const rhodf, Real64 const rhodb, Real6
     A(3, 3) = 1.0;
     A(4, 3) = -1.0 * rhodb;
     A(3, 4) = -1.0 * rhom;
+    // cppcheck-suppress unreadVariable
     A(4, 4) = 1.0;
 }
 
@@ -7487,7 +7488,6 @@ void FinalizeCFSLAYER(EnergyPlusData &state, CFSLAYER &L) // layer, input: LTYPE
     bool LOK;
     bool DOK;
     bool BOK;
-    bool CFSLAYERFlag;
 
     if (IsVBLayer(L)) {
         LOK = VB_LWP(state, L, L.LWP_EL);
@@ -7529,7 +7529,6 @@ void FinalizeCFSLAYER(EnergyPlusData &state, CFSLAYER &L) // layer, input: LTYPE
             }
         }
     }
-    CFSLAYERFlag = LOK && DOK && BOK;
 }
 
 bool IsGZSLayer(CFSLAYER const &L)

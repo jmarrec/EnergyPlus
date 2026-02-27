@@ -1451,6 +1451,7 @@ TEST_F(EnergyPlusFixture, ExhAbsorption_calcChiller_Err_Msg_Test)
     state->dataPlnt->PlantLoop.allocate(state->dataPlnt->TotNumLoops);
 
     thisChillerHeater.CWPlantLoc.loopNum = 1;
+    thisChillerHeater.CWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
     thisChillerHeater.CWPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
 
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
