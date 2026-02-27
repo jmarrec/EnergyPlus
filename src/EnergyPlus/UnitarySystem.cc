@@ -1905,7 +1905,6 @@ namespace UnitarySystems {
                 bool errorsFound = false;
                 HeatingCapacitySizer sizerHeatingCapacity;
                 sizerHeatingCapacity.overrideSizingString(SizingString);
-                state.dataSize->DataFracOfAutosizedHeatingCapacity = heatingCapacityMultiplier;
                 sizerHeatingCapacity.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
                 HeatCapAtPeak = sizerHeatingCapacity.size(state, TempSize, errorsFound);
                 if (state.dataSize->CurSysNum > 0) {
@@ -1931,7 +1930,6 @@ namespace UnitarySystems {
                         bool errorsFound = false;
                         HeatingCapacitySizer sizerHeatingCapacity;
                         sizerHeatingCapacity.overrideSizingString(SizingString);
-                        state.dataSize->DataFracOfAutosizedHeatingCapacity = heatingCapacityMultiplier;
                         sizerHeatingCapacity.initializeWithinEP(state, CompType, CompName, PrintFlag, RoutineName);
                         HeatCapAtPeak = sizerHeatingCapacity.size(state, TempSize, errorsFound);
                         if (state.dataSize->CurSysNum > 0) {
