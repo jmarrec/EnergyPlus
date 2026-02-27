@@ -191,7 +191,7 @@ jobs:
 
       - name: Install cppcheck
         if: always()
-        run: sudo apt-get install cppcheck
+        run: sudo apt-get install -y cppcheck
 
       - name: Run CppCheck
         id: cpp_check_run
