@@ -677,7 +677,6 @@ namespace VariableSpeedCoils {
             auto const &schemaProps = s_ip->getObjectSchemaProps(state, CurrentModuleObject);
             auto &instancesValue = instances_ccVS.value();
             for (auto instance = instancesValue.begin(); instance != instancesValue.end(); ++instance) {
-                std::string cFieldName;
                 ++DXCoilNum;
                 auto const &fields = instance.value();
                 std::string const &thisObjectName = instance.key();
@@ -744,193 +743,221 @@ namespace VariableSpeedCoils {
 
                 BranchNodeConnections::TestCompSet(state, CurrentModuleObject, varSpeedCoil.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
 
-                cFieldName = "Number of Speeds";
-                if (varSpeedCoil.NumOfSpeeds < 1) {
-                    ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state, format("...{} must be >= 1. entered number is {:.0T}", cFieldName, varSpeedCoil.NumOfSpeeds));
-                    ErrorsFound = true;
-                }
-                if (varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) {
-                    varSpeedCoil.NormSpedLevel = varSpeedCoil.NumOfSpeeds;
-                }
-                cFieldName = "Nominal Speed Level";
-                if ((varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) || (varSpeedCoil.NormSpedLevel <= 0)) {
-                    ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state,
-                                      format("...{} must be valid speed level entered number is {:.0T}", cFieldName, varSpeedCoil.NormSpedLevel));
-                    ErrorsFound = true;
-                }
-
-                // part load curve
-                cFieldName = "Energy Part Load Fraction Curve Name"; // cAlphaFields(4)
-                std::string const coolPLFCurveName = s_ip->getAlphaFieldValue(fields, schemaProps, "energy_part_load_fraction_curve_name");
-                if (coolPLFCurveName.empty()) {
-                    ShowWarningEmptyField(state, eoh, cFieldName, "Required field is blank.");
-                    ErrorsFound = true;
-                } else if ((varSpeedCoil.PLFFPLR = Curve::GetCurveIndex(state, coolPLFCurveName)) == 0) {
-                    ShowSevereItemNotFound(state, eoh, cFieldName, coolPLFCurveName);
-                    ErrorsFound = true;
-                } else {
-                    CurveVal = Curve::CurveValue(state, varSpeedCoil.PLFFPLR, 1.0);
-                    if (CurveVal > 1.10 || CurveVal < 0.90) {
-                        ShowWarningError(state, format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                        ShowContinueError(state, format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
-                        ShowContinueError(state, format("...Curve output at rated conditions = {:.3T}", CurveVal));
-                    }
-                }
-
-                cFieldName = "Condenser Air Inlet Node Name"; // cAlphaFields(10)
-                std::string condenserAirInletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_air_inlet_node_name");
-                // outdoor condenser node
-                if (condenserAirInletNodeName.empty()) {
-                    varSpeedCoil.CondenserInletNodeNum = 0;
-                } else {
-                    varSpeedCoil.CondenserInletNodeNum = GetOnlySingleNode(state,
-                                                                           condenserAirInletNodeName,
-                                                                           ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::CoilCoolingDXVariableSpeed,
-                                                                           varSpeedCoil.Name,
-                                                                           DataLoopNode::NodeFluidType::Air,
-                                                                           DataLoopNode::ConnectionType::OutsideAirReference,
-                                                                           NodeInputManager::CompFluidStream::Primary,
-                                                                           DataLoopNode::ObjectIsNotParent);
-                    // std::string cAlphaField10 = "Basin Heater Operating Schedule Name";
-                    if (!OutAirNodeManager::CheckOutAirNodeNumber(state, varSpeedCoil.CondenserInletNodeNum)) {
-                        ShowWarningError(state, format("{}{}=\"{}\", may be invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                        ShowContinueError(state,
-                                          format("{}=\"{}\", node does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.",
-                                                 cFieldName,
-                                                 condenserAirInletNodeName));
-                        ShowContinueError(
-                            state,
-                            "This node needs to be included in an air system or the coil model will not be valid, and the simulation continues");
-                    }
-                }
-
-                cFieldName = "Condenser Type"; // cAlphaFields(6)
-                std::string const condenserType = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_type");
-                if ((Util::SameString(condenserType, "AirCooled")) || cFieldName.empty()) {
-                    varSpeedCoil.CondenserType = DataHeatBalance::RefrigCondenserType::Air;
-                } else if (Util::SameString(condenserType, "EvaporativelyCooled")) {
-                    varSpeedCoil.CondenserType = DataHeatBalance::RefrigCondenserType::Evap;
-                    varSpeedCoil.ReportEvapCondVars = true;
-                } else {
-                    ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state, format("...{}=\"{}\":", cFieldName, condenserType));
-                    ShowContinueError(state, "...must be AirCooled or EvaporativelyCooled.");
-                    ErrorsFound = true;
-                }
-
-                cFieldName = "Evaporative Condenser Pump Rated Power Consumption";                       // NumArray(10)
-                if (fields.find("evaporative_condenser_pump_rated_power_consumption") != fields.end()) { // not required field, has default value
-                    auto &evapCondPumpPower = fields.at("evaporative_condenser_pump_rated_power_consumption");
-                    varSpeedCoil.EvapCondPumpElecNomPower = (evapCondPumpPower.type() == nlohmann::detail::value_t::string &&
-                                                             Util::SameString(evapCondPumpPower.get<std::string>(), "Autosize"))
-                                                                ? DataSizing::AutoSize
-                                                                : evapCondPumpPower.get<Real64>();
-                }
-                if (varSpeedCoil.EvapCondPumpElecNomPower != DataSizing::AutoSize) {
-                    if (varSpeedCoil.EvapCondPumpElecNomPower < 0.0) {
+                {
+                    constexpr std::string_view cFieldName = "Number of Speeds";
+                    if (varSpeedCoil.NumOfSpeeds < 1) {
                         ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                        ShowContinueError(state, format("...{} cannot be < 0.0.", cFieldName));
-                        ShowContinueError(state, format("...entered value=[{:.2T}].", varSpeedCoil.EvapCondPumpElecNomPower));
+                        ShowContinueError(state, format("...{} must be >= 1. entered number is {:.0T}", cFieldName, varSpeedCoil.NumOfSpeeds));
+                        ErrorsFound = true;
+                    }
+                    if (varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) {
+                        varSpeedCoil.NormSpedLevel = varSpeedCoil.NumOfSpeeds;
+                    }
+                }
+
+                {
+                    constexpr std::string_view cFieldName = "Nominal Speed Level";
+                    if ((varSpeedCoil.NormSpedLevel > varSpeedCoil.NumOfSpeeds) || (varSpeedCoil.NormSpedLevel <= 0)) {
+                        ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                        ShowContinueError(state,
+                                          format("...{} must be valid speed level entered number is {:.0T}", cFieldName, varSpeedCoil.NormSpedLevel));
                         ErrorsFound = true;
                     }
                 }
 
-                // Set crankcase heater capacity
-                cFieldName = "Crankcase Heater Capacity"; // cNumericFields(11)
-                varSpeedCoil.CrankcaseHeaterCapacity = s_ip->getRealFieldValue(fields, schemaProps, "crankcase_heater_capacity"); // NumArray(11);
-                if (varSpeedCoil.CrankcaseHeaterCapacity < 0.0) {
-                    ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state, format("...{} cannot be < 0.0.", cFieldName));
-                    ShowContinueError(state, format("...entered value=[{:.2T}].", varSpeedCoil.CrankcaseHeaterCapacity));
-                    ErrorsFound = true;
-                }
-
-                // Set crankcase heater cutout temperature
-                varSpeedCoil.MaxOATCrankcaseHeater =
-                    s_ip->getRealFieldValue(fields, schemaProps, "maximum_outdoor_dry_bulb_temperature_for_crankcase_heater_operation");
-                // Set compressor cutout temperature
-                varSpeedCoil.MinOATCompressor =
-                    s_ip->getRealFieldValue(fields, schemaProps, "minimum_outdoor_dry_bulb_temperature_for_compressor_operation");
-                // A7; \field Crankcase Heater Capacity Function of Outdoor Temperature Curve Name
-                cFieldName = "Crankcase Heater Capacity Function of Temperature Curve Name"; // cAlphaFields(7)
-                std::string crankcaseHeaterCapCurveName =
-                    s_ip->getAlphaFieldValue(fields, schemaProps, "crankcase_heater_capacity_function_of_temperature_curve_name");
-                if (!crankcaseHeaterCapCurveName.empty()) {
-                    varSpeedCoil.CrankcaseHeaterCapacityCurveIndex = Curve::GetCurveIndex(state, crankcaseHeaterCapCurveName);
-                    if (varSpeedCoil.CrankcaseHeaterCapacityCurveIndex == 0) { // can't find the curve
-                        ShowSevereError(
-                            state,
-                            format("{} = {}:  {} not found = {}", CurrentModuleObject, varSpeedCoil.Name, cFieldName, crankcaseHeaterCapCurveName));
+                {
+                    // part load curve
+                    constexpr std::string_view cFieldName = "Energy Part Load Fraction Curve Name"; // cAlphaFields(4)
+                    std::string const coolPLFCurveName = s_ip->getAlphaFieldValue(fields, schemaProps, "energy_part_load_fraction_curve_name");
+                    if (coolPLFCurveName.empty()) {
+                        ShowWarningEmptyField(state, eoh, cFieldName, "Required field is blank.");
+                        ErrorsFound = true;
+                    } else if ((varSpeedCoil.PLFFPLR = Curve::GetCurveIndex(state, coolPLFCurveName)) == 0) {
+                        ShowSevereItemNotFound(state, eoh, cFieldName, coolPLFCurveName);
                         ErrorsFound = true;
                     } else {
-                        ErrorsFound |= Curve::CheckCurveDims(state,
-                                                             varSpeedCoil.CrankcaseHeaterCapacityCurveIndex, // Curve index
-                                                             {1},                                            // Valid dimensions
-                                                             RoutineName,                                    // Routine name
-                                                             CurrentModuleObject,                            // Object Type
-                                                             varSpeedCoil.Name,                              // Object Name
-                                                             cFieldName);                                    // Field Name
+                        CurveVal = Curve::CurveValue(state, varSpeedCoil.PLFFPLR, 1.0);
+                        if (CurveVal > 1.10 || CurveVal < 0.90) {
+                            ShowWarningError(state, format("{}{}=\"{}\", curve values", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                            ShowContinueError(state, format("...{} output is not equal to 1.0 (+ or - 10%) at rated conditions.", cFieldName));
+                            ShowContinueError(state, format("...Curve output at rated conditions = {:.3T}", CurveVal));
+                        }
                     }
                 }
 
-                // Get Water System tank connections
-                //  A8, \field Name of Water Storage Tank for Supply
-                cFieldName = "Supply Water Storage Tank Name"; // cAlphaFields(8)
-                varSpeedCoil.EvapWaterSupplyName = s_ip->getAlphaFieldValue(fields, schemaProps, "supply_water_storage_tank_name");
-                if (varSpeedCoil.EvapWaterSupplyName.empty()) {
-                    varSpeedCoil.EvapWaterSupplyMode = WaterSupplyFromMains;
-                } else {
-                    varSpeedCoil.EvapWaterSupplyMode = WaterSupplyFromTank;
-                    WaterManager::SetupTankDemandComponent(state,
-                                                           varSpeedCoil.Name,
-                                                           CurrentModuleObject,
-                                                           varSpeedCoil.EvapWaterSupplyName,
-                                                           ErrorsFound,
-                                                           varSpeedCoil.EvapWaterSupTankID,
-                                                           varSpeedCoil.EvapWaterTankDemandARRID);
-                }
-
-                // A9; \field Name of Water Storage Tank for Condensate Collection
-                cFieldName = "Condensate Collection Water Storage Tank Name"; // cAlphaFields(9)
-                varSpeedCoil.CondensateCollectName = s_ip->getAlphaFieldValue(fields, schemaProps, "condensate_collection_water_storage_tank_name");
-                if (varSpeedCoil.CondensateCollectName.empty()) {
-                    varSpeedCoil.CondensateCollectMode = CondensateDiscarded;
-                } else {
-                    varSpeedCoil.CondensateCollectMode = CondensateToTank;
-                    WaterManager::SetupTankSupplyComponent(state,
-                                                           varSpeedCoil.Name,
-                                                           CurrentModuleObject,
-                                                           varSpeedCoil.CondensateCollectName,
-                                                           ErrorsFound,
-                                                           varSpeedCoil.CondensateTankID,
-                                                           varSpeedCoil.CondensateTankSupplyARRID);
-                }
-
-                //   Basin heater power as a function of temperature must be greater than or equal to 0
-                cFieldName = "Basin Heater Capacity";                                                                           // cNumericFields(14)
-                varSpeedCoil.BasinHeaterPowerFTempDiff = s_ip->getRealFieldValue(fields, schemaProps, "basin_heater_capacity"); // NumArray(14);
-                if (varSpeedCoil.BasinHeaterPowerFTempDiff < 0.0) {
-                    ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                    ShowContinueError(state, format("...{} must be >= 0.0.", cFieldName));
-                    ShowContinueError(state, format("...entered value=[{:.2T}].", varSpeedCoil.BasinHeaterPowerFTempDiff));
-                    ErrorsFound = true;
-                }
-
-                cFieldName = "Basin Heater Setpoint Temperature"; // cNumericFields(15)
-                varSpeedCoil.BasinHeaterSetPointTemp =
-                    s_ip->getRealFieldValue(fields, schemaProps, "basin_heater_setpoint_temperature"); // NumArray(15);
-                if (varSpeedCoil.BasinHeaterPowerFTempDiff > 0.0) {
-                    if (varSpeedCoil.BasinHeaterSetPointTemp < 2.0) {
-                        ShowWarningError(state, format("{}{}=\"{}\", freeze possible", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
-                        ShowContinueError(state, format("...{} is < 2 {{C}}. Freezing could occur.", cFieldName));
-                        ShowContinueError(state, format("...entered value=[{:.2T}].", varSpeedCoil.BasinHeaterSetPointTemp));
+                {
+                    constexpr std::string_view cFieldName = "Condenser Air Inlet Node Name"; // cAlphaFields(10)
+                    std::string condenserAirInletNodeName = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_air_inlet_node_name");
+                    // outdoor condenser node
+                    if (condenserAirInletNodeName.empty()) {
+                        varSpeedCoil.CondenserInletNodeNum = 0;
+                    } else {
+                        varSpeedCoil.CondenserInletNodeNum = GetOnlySingleNode(state,
+                                                                               condenserAirInletNodeName,
+                                                                               ErrorsFound,
+                                                                               DataLoopNode::ConnectionObjectType::CoilCoolingDXVariableSpeed,
+                                                                               varSpeedCoil.Name,
+                                                                               DataLoopNode::NodeFluidType::Air,
+                                                                               DataLoopNode::ConnectionType::OutsideAirReference,
+                                                                               NodeInputManager::CompFluidStream::Primary,
+                                                                               DataLoopNode::ObjectIsNotParent);
+                        // std::string cAlphaField10 = "Basin Heater Operating Schedule Name";
+                        if (!OutAirNodeManager::CheckOutAirNodeNumber(state, varSpeedCoil.CondenserInletNodeNum)) {
+                            ShowWarningError(state, format("{}{}=\"{}\", may be invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                            ShowContinueError(state,
+                                              format("{}=\"{}\", node does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.",
+                                                     cFieldName,
+                                                     condenserAirInletNodeName));
+                            ShowContinueError(
+                                state,
+                                "This node needs to be included in an air system or the coil model will not be valid, and the simulation continues");
+                        }
                     }
                 }
 
-                cFieldName = "Basin Heater Operating Schedule Name"; // cAlphaFields(10)
+                {
+                    constexpr std::string_view cFieldName = "Condenser Type"; // cAlphaFields(6)
+                    std::string const condenserType = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_type");
+                    if ((Util::SameString(condenserType, "AirCooled")) || cFieldName.empty()) {
+                        varSpeedCoil.CondenserType = DataHeatBalance::RefrigCondenserType::Air;
+                    } else if (Util::SameString(condenserType, "EvaporativelyCooled")) {
+                        varSpeedCoil.CondenserType = DataHeatBalance::RefrigCondenserType::Evap;
+                        varSpeedCoil.ReportEvapCondVars = true;
+                    } else {
+                        ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                        ShowContinueError(state, format("...{}=\"{}\":", cFieldName, condenserType));
+                        ShowContinueError(state, "...must be AirCooled or EvaporativelyCooled.");
+                        ErrorsFound = true;
+                    }
+                }
+
+                {
+                    constexpr std::string_view cFieldName = "Evaporative Condenser Pump Rated Power Consumption"; // NumArray(10)
+                    if (fields.find("evaporative_condenser_pump_rated_power_consumption") != fields.end()) { // not required field, has default value
+                        auto &evapCondPumpPower = fields.at("evaporative_condenser_pump_rated_power_consumption");
+                        varSpeedCoil.EvapCondPumpElecNomPower = (evapCondPumpPower.type() == nlohmann::detail::value_t::string &&
+                                                                 Util::SameString(evapCondPumpPower.get<std::string>(), "Autosize"))
+                                                                    ? DataSizing::AutoSize
+                                                                    : evapCondPumpPower.get<Real64>();
+                    }
+                    if (varSpeedCoil.EvapCondPumpElecNomPower != DataSizing::AutoSize) {
+                        if (varSpeedCoil.EvapCondPumpElecNomPower < 0.0) {
+                            ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                            ShowContinueError(state, format("...{} cannot be < 0.0.", cFieldName));
+                            ShowContinueError(state, format("...entered value=[{:.2T}].", varSpeedCoil.EvapCondPumpElecNomPower));
+                            ErrorsFound = true;
+                        }
+                    }
+                }
+
+                {
+                    // Set crankcase heater capacity
+                    constexpr std::string_view cFieldName = "Crankcase Heater Capacity"; // cNumericFields(11)
+                    varSpeedCoil.CrankcaseHeaterCapacity = s_ip->getRealFieldValue(fields, schemaProps, "crankcase_heater_capacity"); // NumArray(11);
+                    if (varSpeedCoil.CrankcaseHeaterCapacity < 0.0) {
+                        ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                        ShowContinueError(state, format("...{} cannot be < 0.0.", cFieldName));
+                        ShowContinueError(state, format("...entered value=[{:.2T}].", varSpeedCoil.CrankcaseHeaterCapacity));
+                        ErrorsFound = true;
+                    }
+
+                    // Set crankcase heater cutout temperature
+                    varSpeedCoil.MaxOATCrankcaseHeater =
+                        s_ip->getRealFieldValue(fields, schemaProps, "maximum_outdoor_dry_bulb_temperature_for_crankcase_heater_operation");
+                    // Set compressor cutout temperature
+                    varSpeedCoil.MinOATCompressor =
+                        s_ip->getRealFieldValue(fields, schemaProps, "minimum_outdoor_dry_bulb_temperature_for_compressor_operation");
+                    // A7; \field Crankcase Heater Capacity Function of Outdoor Temperature Curve Name
+                }
+
+                {
+                    constexpr std::string_view cFieldName = "Crankcase Heater Capacity Function of Temperature Curve Name"; // cAlphaFields(7)
+                    std::string crankcaseHeaterCapCurveName =
+                        s_ip->getAlphaFieldValue(fields, schemaProps, "crankcase_heater_capacity_function_of_temperature_curve_name");
+                    if (!crankcaseHeaterCapCurveName.empty()) {
+                        varSpeedCoil.CrankcaseHeaterCapacityCurveIndex = Curve::GetCurveIndex(state, crankcaseHeaterCapCurveName);
+                        if (varSpeedCoil.CrankcaseHeaterCapacityCurveIndex == 0) { // can't find the curve
+                            ShowSevereError(
+                                state,
+                                format(
+                                    "{} = {}:  {} not found = {}", CurrentModuleObject, varSpeedCoil.Name, cFieldName, crankcaseHeaterCapCurveName));
+                            ErrorsFound = true;
+                        } else {
+                            ErrorsFound |= Curve::CheckCurveDims(state,
+                                                                 varSpeedCoil.CrankcaseHeaterCapacityCurveIndex, // Curve index
+                                                                 {1},                                            // Valid dimensions
+                                                                 RoutineName,                                    // Routine name
+                                                                 CurrentModuleObject,                            // Object Type
+                                                                 varSpeedCoil.Name,                              // Object Name
+                                                                 cFieldName);                                    // Field Name
+                        }
+                    }
+                }
+
+                {
+                    // Get Water System tank connections
+                    //  A8, \field Name of Water Storage Tank for Supply
+                    constexpr std::string_view cFieldName = "Supply Water Storage Tank Name"; // cAlphaFields(8)
+                    varSpeedCoil.EvapWaterSupplyName = s_ip->getAlphaFieldValue(fields, schemaProps, "supply_water_storage_tank_name");
+                    if (varSpeedCoil.EvapWaterSupplyName.empty()) {
+                        varSpeedCoil.EvapWaterSupplyMode = WaterSupplyFromMains;
+                    } else {
+                        varSpeedCoil.EvapWaterSupplyMode = WaterSupplyFromTank;
+                        WaterManager::SetupTankDemandComponent(state,
+                                                               varSpeedCoil.Name,
+                                                               CurrentModuleObject,
+                                                               varSpeedCoil.EvapWaterSupplyName,
+                                                               ErrorsFound,
+                                                               varSpeedCoil.EvapWaterSupTankID,
+                                                               varSpeedCoil.EvapWaterTankDemandARRID);
+                    }
+                }
+
+                {
+                    // A9; \field Name of Water Storage Tank for Condensate Collection
+                    constexpr std::string_view cFieldName = "Condensate Collection Water Storage Tank Name"; // cAlphaFields(9)
+                    varSpeedCoil.CondensateCollectName =
+                        s_ip->getAlphaFieldValue(fields, schemaProps, "condensate_collection_water_storage_tank_name");
+                    if (varSpeedCoil.CondensateCollectName.empty()) {
+                        varSpeedCoil.CondensateCollectMode = CondensateDiscarded;
+                    } else {
+                        varSpeedCoil.CondensateCollectMode = CondensateToTank;
+                        WaterManager::SetupTankSupplyComponent(state,
+                                                               varSpeedCoil.Name,
+                                                               CurrentModuleObject,
+                                                               varSpeedCoil.CondensateCollectName,
+                                                               ErrorsFound,
+                                                               varSpeedCoil.CondensateTankID,
+                                                               varSpeedCoil.CondensateTankSupplyARRID);
+                    }
+                }
+
+                {
+                    //   Basin heater power as a function of temperature must be greater than or equal to 0
+                    constexpr std::string_view cFieldName = "Basin Heater Capacity"; // cNumericFields(14)
+                    varSpeedCoil.BasinHeaterPowerFTempDiff = s_ip->getRealFieldValue(fields, schemaProps, "basin_heater_capacity"); // NumArray(14);
+                    if (varSpeedCoil.BasinHeaterPowerFTempDiff < 0.0) {
+                        ShowSevereError(state, format("{}{}=\"{}\", invalid", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                        ShowContinueError(state, format("...{} must be >= 0.0.", cFieldName));
+                        ShowContinueError(state, format("...entered value=[{:.2T}].", varSpeedCoil.BasinHeaterPowerFTempDiff));
+                        ErrorsFound = true;
+                    }
+                }
+
+                {
+                    constexpr std::string_view cFieldName = "Basin Heater Setpoint Temperature"; // cNumericFields(15)
+                    varSpeedCoil.BasinHeaterSetPointTemp =
+                        s_ip->getRealFieldValue(fields, schemaProps, "basin_heater_setpoint_temperature"); // NumArray(15);
+                    if (varSpeedCoil.BasinHeaterPowerFTempDiff > 0.0) {
+                        if (varSpeedCoil.BasinHeaterSetPointTemp < 2.0) {
+                            ShowWarningError(state, format("{}{}=\"{}\", freeze possible", RoutineName, CurrentModuleObject, varSpeedCoil.Name));
+                            ShowContinueError(state, format("...{} is < 2 {{C}}. Freezing could occur.", cFieldName));
+                            ShowContinueError(state, format("...entered value=[{:.2T}].", varSpeedCoil.BasinHeaterSetPointTemp));
+                        }
+                    }
+                }
+
+                constexpr std::string_view cFieldName = "Basin Heater Operating Schedule Name"; // cAlphaFields(10)
                 std::string basinHeaterOperSch = s_ip->getAlphaFieldValue(fields, schemaProps, "basin_heater_operating_schedule_name");
                 if (basinHeaterOperSch.empty()) {
                     // Should this be ScheduleAlwaysOff?

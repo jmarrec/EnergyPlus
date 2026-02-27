@@ -8664,8 +8664,8 @@ namespace Weather {
                         for (int i = 1; i <= 7; ++i) {
                             lineIn = statFile.readLine();
                         }
-                        lineIn = statFile.readLine();
-                        lineAvg = lineIn.data;
+                        auto lineAvgIn = statFile.readLine();
+                        lineAvg = lineAvgIn.data;
                         break;
                     }
                 }

@@ -848,7 +848,7 @@ namespace ThermalChimney {
                     if (std::abs(TempTCMassAirFlowRate(IterationLoop) - TempTCMassAirFlowRate(IterationLoop - 1)) < ThermChimTolerance) {
                         ThermChimTolerance = std::abs(TempTCMassAirFlowRate(IterationLoop) - TempTCMassAirFlowRate(IterationLoop - 1));
                         TCMassAirFlowRate = TempTCMassAirFlowRate(IterationLoop);
-                        TCVolumeAirFlowRate = TempTCVolumeAirFlowRate(IterationLoop);
+                        // TCVolumeAirFlowRate = TempTCVolumeAirFlowRate(IterationLoop);
                     }
 
                 } // IF (IterationLoop == 1) THEN
