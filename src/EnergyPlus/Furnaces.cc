@@ -703,7 +703,6 @@ namespace Furnaces {
             if (errorFound) {
                 ShowSevereError(state, format("The index of \"{}\" is not found", thisFurnace.SuppHeatCoilName));
                 ShowContinueError(state, format("...occurs for {}", thisFurnace.Name));
-                errorFound = false;
             }
             state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF =
                 max(refAFNLoopHeatingCoilMaxRTF, heatingCoilRTF, suppHeatingCoilRTF);
@@ -4877,8 +4876,7 @@ namespace Furnaces {
                     thisFurnace.MaxHeatCoilFluidFlow =
                         WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", thisFurnace.HeatingCoilName, ErrorsFound);
                     if (thisFurnace.MaxHeatCoilFluidFlow > 0.0) {
-                        rho =
-                            state.dataPlnt->PlantLoop(thisFurnace.plantLoc.loopNum).glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                        rho = thisFurnace.plantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
                         thisFurnace.MaxHeatCoilFluidFlow *= rho;
                     }
                 } else if (thisFurnace.HeatingCoilType_Num == HVAC::Coil_HeatingSteam) {

@@ -2707,13 +2707,10 @@ void HeatPumpAirToWater::oneTimeInit(EnergyPlusData &state)
         return;
     }
     EIRPlantLoopHeatPump::oneTimeInit(state);
-    std::string suffix;
     std::string mode_keyword;
     if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
-        suffix = " in Heating Mode";
         mode_keyword = "Heating";
     } else if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling) {
-        suffix = " in Cooling Mode";
         mode_keyword = "Cooling";
     }
     if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating ||
@@ -4261,11 +4258,8 @@ void EIRPlantLoopHeatPump::setUpEMS(EnergyPlusData &)
 
 void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
 {
-
-    std::string mode_keyword;
     if (this->EIRHPType == DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating) {
         // defrost related actuators
-        mode_keyword = "Heating";
         SetupEMSActuator(
             state, "HeatPump:AirToWater", this->name, "Defrost Flag", "[]", this->DefrosstFlagEMSOverrideOn, this->DefrosstFlagEMSOverrideValue);
         SetupEMSActuator(state,
@@ -4282,8 +4276,6 @@ void HeatPumpAirToWater::setUpEMS(EnergyPlusData &state)
                          "[C]",
                          this->LeavingTempEMSOverrideOn,
                          this->LeavingTempEMSOverrideValue);
-    } else {
-        mode_keyword = "Cooling";
     }
     SetupEMSActuator(
         state, "HeatPump:AirToWater", this->name, "Operating Mode", "[ ]", this->OperationModeEMSOverrideOn, this->OperationModeEMSOverrideValue);
@@ -4609,8 +4601,8 @@ void HeatPumpAirToWater::calcOpMode(EnergyPlus::EnergyPlusData &state, Real64 cu
                 }
                 int numCoolingUnit = 0;
                 int numHeatingUnit = 0;
-                int numCoolingUnitNeeded = 0;
-                int numHeatingUnitNeeded = 0;
+                int numCoolingUnitNeeded;
+                int numHeatingUnitNeeded;
                 if (modeCalcMethod == OperatingModeControlOptionMultipleUnit::CoolingPriority) {
                     // prioritize satisfy cooling need
                     numCoolingUnit = int(ceil(coolingLoad / coolCapacity));
