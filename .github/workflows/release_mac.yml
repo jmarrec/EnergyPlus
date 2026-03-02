@@ -313,7 +313,7 @@ jobs:
         architecture: ${{ matrix.python-arch }}
 
     - name: Gather Test Package from Artifacts
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: energyplus-${{ matrix.os }}.tar.gz
         path: package
@@ -331,7 +331,7 @@ jobs:
       run: python checkout/scripts/package_tests/runner.py --verbose ${{ matrix.test_key }} package/
 
     - name: Gather Dmg Package from Artifacts
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: energyplus-${{ matrix.os }}.dmg
         path: dmg
