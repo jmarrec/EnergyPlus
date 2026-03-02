@@ -703,7 +703,6 @@ namespace Furnaces {
             if (errorFound) {
                 ShowSevereError(state, format("The index of \"{}\" is not found", thisFurnace.SuppHeatCoilName));
                 ShowContinueError(state, format("...occurs for {}", thisFurnace.Name));
-                errorFound = false;
             }
             state.dataAirLoop->AirLoopAFNInfo(AirLoopNum).AFNLoopHeatingCoilMaxRTF =
                 max(refAFNLoopHeatingCoilMaxRTF, heatingCoilRTF, suppHeatingCoilRTF);
