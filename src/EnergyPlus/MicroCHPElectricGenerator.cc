@@ -178,8 +178,6 @@ void GetMicroCHPGeneratorInput(EnergyPlusData &state)
 
             auto &microCHPParams = state.dataCHPElectGen->MicroCHPParamInput(CHPParamNum);
 
-            std::string ObjMSGName = s_ipsc->cCurrentModuleObject + " Named " + AlphArray(1);
-
             microCHPParams.Name = AlphArray(1);        // A1 name
             microCHPParams.MaxElecPower = NumArray(1); // N1 Maximum Electric Power [W]
             microCHPParams.MinElecPower = NumArray(2); // N2 Minimum Electric Power [W]

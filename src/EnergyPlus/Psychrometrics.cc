@@ -1309,7 +1309,7 @@ namespace Psychrometrics {
 
         // FUNCTION LOCAL VARIABLE DECLARATIONS:
         Real64 tSat; // Water temperature guess
-        int iter;    // Iteration counter
+        int iter(0); // Iteration counter
 
 #ifdef EP_psych_stats
         ++state.dataPsychCache->NumTimesCalled[static_cast<int>(PsychrometricFunction::TsatFnPb)];
@@ -1345,7 +1345,6 @@ namespace Psychrometrics {
             return state.dataPsychrometrics->tSat_Save;
         }
         state.dataPsychrometrics->Press_Save = Press;
-        iter = 0;
         if (state.dataPsychrometrics->useInterpolationPsychTsatFnPb) {
             int n_sample = 1651; // sample bin size = 64 Pa; continuous sample size = 1651
             // CSpline interpolation
