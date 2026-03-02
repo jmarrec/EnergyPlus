@@ -70,14 +70,14 @@ struct EnergyPlusData;
 namespace Window {
 
     Real64 constexpr AirDens = 1.29;
-    Real64 constexpr AirDDensDT = - 0.4e-2;
+    Real64 constexpr AirDDensDT = -0.4e-2;
     Real64 constexpr AirCon = 2.41e-2;
     Real64 constexpr AirDConDT = 7.6e-5;
     Real64 constexpr AirVis = 1.73e-5;
     Real64 constexpr AirDVisDT = 1.0e-7;
     Real64 constexpr AirPrandtl = 0.72;
     Real64 constexpr AirDPrandtlDT = 1.8e-3;
-  
+
     int constexpr nume = 107; // Number of wavelength values in solar spectrum
     int constexpr numt3 = 81; // Number of wavelength values in the photopic response
 
@@ -522,12 +522,12 @@ struct WindowManagerData : BaseGlobalStruct
     std::unique_ptr<Window::CWindowOpticalModel> winOpticalModel; // Information about windows optical model (Simplified or BSDF)
 
     bool RunMeOnceFlag = false;
-    bool BGFlag = false;               // True if between-glass shade or blind
-    bool locTCFlag = false;            // True if this surface is a TC window
+    bool BGFlag = false;    // True if between-glass shade or blind
+    bool locTCFlag = false; // True if this surface is a TC window
     bool DoReport = false;
     bool HasWindows = false;
     bool HasComplexWindows = false;
-    bool HasEQLWindows = false;     // equivalent layer window defined
+    bool HasEQLWindows = false; // equivalent layer window defined
 
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
     {
@@ -573,8 +573,8 @@ struct WindowManagerData : BaseGlobalStruct
         this->A67 = 0.0;
         Window::CWindowConstructionsSimplified::clearState();
         this->RunMeOnceFlag = false;
-        this->BGFlag = false;               // True if between-glass shade or blind
-        this->locTCFlag = false;            // True if this surface is a TC window
+        this->BGFlag = false;    // True if between-glass shade or blind
+        this->locTCFlag = false; // True if this surface is a TC window
         this->DoReport = false;
         this->HasWindows = false;
         this->HasComplexWindows = false;

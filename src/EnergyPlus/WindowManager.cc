@@ -203,7 +203,7 @@ namespace Window {
         // Glazing system visible transmittance from fit at each incidence angle
         std::array<Real64, numPhis> tvisPhiFit;
 #endif // GET_OUT
-        
+
         // Isolated glass solar transmittance for each incidence angle
         std::array<std::array<Real64, numPhis>, maxGlassLayers> tBareSolPhi;
         Real64 t1; // = tBareSolPhi(,1)(,2)
@@ -299,22 +299,22 @@ namespace Window {
         Real64 rfsh;         // Diffuse solar front reflectance of isolated blind
         Real64 rfshGnd;      // Ground and sky diffuse solar front reflectance of isolated blind
         Real64 rfshSky;
-        Real64 rbsh;            // Diffuse solar back reflectance of isolated blind
-        Real64 ShadeReflFac;    // Shade/blind solar reflection factor
-        Real64 ShadeTransVis;   // Visible transmittance of isolated shade/blind
-        Real64 tshv;            // = ShadeTransVis
-        Real64 tshv2;           // = tshv**2
-        Real64 ShadeReflVis;    // Visible reflectance of isolated shade
-        Real64 rshv;            // = ShadeReflVis
-        Real64 rfshv;           // Diffuse visible front reflectance of isolated blind
-        Real64 rbshv;           // Diffuse visible back reflectance of isolated blind
-        Real64 ShadeReflFacVis; // Shade/blind visible reflection factor
-        int SpecDataNum = 0;    // Spectral data set number
-        int numptDAT;           // Number of wavelengths in a spectral data set
-        bool StormWinConst;     // True if a construction with a storm window
-        bool Triangle;          // True if window is triangular
-        bool Rectangle;         // True if window is rectangular
-        Vector3<Real64> W1 = {0.0, 0.0, 0.0};     // Window vertices (m)
+        Real64 rbsh;                          // Diffuse solar back reflectance of isolated blind
+        Real64 ShadeReflFac;                  // Shade/blind solar reflection factor
+        Real64 ShadeTransVis;                 // Visible transmittance of isolated shade/blind
+        Real64 tshv;                          // = ShadeTransVis
+        Real64 tshv2;                         // = tshv**2
+        Real64 ShadeReflVis;                  // Visible reflectance of isolated shade
+        Real64 rshv;                          // = ShadeReflVis
+        Real64 rfshv;                         // Diffuse visible front reflectance of isolated blind
+        Real64 rbshv;                         // Diffuse visible back reflectance of isolated blind
+        Real64 ShadeReflFacVis;               // Shade/blind visible reflection factor
+        int SpecDataNum = 0;                  // Spectral data set number
+        int numptDAT;                         // Number of wavelengths in a spectral data set
+        bool StormWinConst;                   // True if a construction with a storm window
+        bool Triangle;                        // True if window is triangular
+        bool Rectangle;                       // True if window is rectangular
+        Vector3<Real64> W1 = {0.0, 0.0, 0.0}; // Window vertices (m)
         Vector3<Real64> W2 = {0.0, 0.0, 0.0};
         Vector3<Real64> W3 = {0.0, 0.0, 0.0};
         Vector3<Real64> W21 = {0.0, 0.0, 0.0}; // W1-W2, W3-W2, resp. (m)
@@ -391,11 +391,11 @@ namespace Window {
             BGBlind = false;
             ExtScreen = false;
             StormWinConst = false;
-            
+
             bool lSimpleGlazingSystem = false;
             Real64 SimpleGlazingSHGC = 0.0;
             Real64 SimpleGlazingU = 0.0;
-            
+
             if (mat->group == Material::Group::GlassSimple) {
                 auto const *matWin = dynamic_cast<Material::MaterialGlass const *>(mat);
                 assert(matWin != nullptr);
@@ -551,12 +551,13 @@ namespace Window {
                     numpt[iGlass] = numptDAT;
 
                     for (int iLam = 0; iLam < numptDAT; ++iLam) {
-                        wlt[iGlass][iLam] = specData.WaveLength(iLam+1);
-                        t[iGlass][iLam] = specData.Trans(iLam+1);
-                        if ((iGlass == 0 || (iGlass == 1 && StormWinConst)) && (!wm->BGFlag))
+                        wlt[iGlass][iLam] = specData.WaveLength(iLam + 1);
+                        t[iGlass][iLam] = specData.Trans(iLam + 1);
+                        if ((iGlass == 0 || (iGlass == 1 && StormWinConst)) && (!wm->BGFlag)) {
                             t[iGlass][iLam] *= matGlass->GlassTransDirtFactor;
-                        rff[iGlass][iLam] = specData.ReflFront(iLam+1);
-                        rbb[iGlass][iLam] = specData.ReflBack(iLam+1);
+                        }
+                        rff[iGlass][iLam] = specData.ReflFront(iLam + 1);
+                        rbb[iGlass][iLam] = specData.ReflBack(iLam + 1);
                     }
 
                     // If there is spectral data for between-glass shades or blinds, calc the average spectral properties for use.
@@ -580,7 +581,7 @@ namespace Window {
                         // set this material to average spectral data
                         matGlass->GlassSpectralDataPtr = 0;
                         matGlass->Trans = solarSpectrumAverage(state, t[0]);
-                        matGlass->TransVis = visibleSpectrumAverage(state, t[0]); 
+                        matGlass->TransVis = visibleSpectrumAverage(state, t[0]);
                         matGlass->ReflectSolBeamFront = solarSpectrumAverage(state, rff[0]);
                         matGlass->ReflectSolBeamBack = solarSpectrumAverage(state, rbb[0]);
                         matGlass->ReflectVisBeamFront = visibleSpectrumAverage(state, rff[0]);
@@ -638,7 +639,7 @@ namespace Window {
                             rff[iGlass][iLam] = matGlass->GlassSpecAngFReflCurve->value(state, 0.0, lam);
                             rbb[iGlass][iLam] = matGlass->GlassSpecAngBReflCurve->value(state, 0.0, lam);
                         }
-                        
+
                         // set this material to average spectral data
                         matGlass->windowOpticalData = Window::OpticalDataModel::SpectralAverage;
                         matGlass->Trans = solarSpectrumAverage(state, t[0]);
@@ -659,7 +660,7 @@ namespace Window {
             // Apparently, using pre-calcaulated and hard-coded cosPhis (e.g., Window::cosPhis) causes a bunch of
             // diffs, including some big ones
             std::array<Real64, numPhis> cosPhisLocal;
-	    
+
             for (int iPhi = 0; iPhi < numPhis; ++iPhi) {
                 cosPhisLocal[iPhi] = std::cos((double)iPhi * dPhiDeg * Constant::DegToRad);
             }
@@ -777,7 +778,7 @@ namespace Window {
             for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
                 solabsPhiLay = solabsPhi[iGlass]; // Is this a deep copy?
                 solabsDiff[iGlass] = DiffuseAverage(solabsPhiLay);
-                thisConstruct.AbsDiff(iGlass+1) = solabsDiff[iGlass];
+                thisConstruct.AbsDiff(iGlass + 1) = solabsDiff[iGlass];
 
                 // For use with between-glass shade/blind, get diffuse properties of isolated glass for case when
                 // all glass layers were input with spectral-average properties
@@ -840,14 +841,13 @@ namespace Window {
                     numpt[iGlass] = numptDAT;
 
                     for (int iLam = 0; iLam < numptDAT; ++iLam) {
-                        wlt[iGlass][iLam] = specData.WaveLength(iLam+1);
-                        t[iGlass][iLam] = specData.Trans(iLam+1);
-                        if ((iGlass + 1) == NGlass ||
-                            ((iGlass + 1) == (NGlass - 1) && StormWinConst)) {
+                        wlt[iGlass][iLam] = specData.WaveLength(iLam + 1);
+                        t[iGlass][iLam] = specData.Trans(iLam + 1);
+                        if ((iGlass + 1) == NGlass || ((iGlass + 1) == (NGlass - 1) && StormWinConst)) {
                             t[iGlass][iLam] *= matGlass->GlassTransDirtFactor;
                         }
-                        rff[iGlass][iLam] = specData.ReflBack(iLam+1);
-                        rbb[iGlass][iLam] = specData.ReflFront(iLam+1);
+                        rff[iGlass][iLam] = specData.ReflBack(iLam + 1);
+                        rbb[iGlass][iLam] = specData.ReflFront(iLam + 1);
                     }
 
                     // No spectral data for this layer; use spectral average values
@@ -855,13 +855,11 @@ namespace Window {
                     lquasi = true;
                     numpt[iGlass] = 2;
                     t[iGlass][0] = matGlass->Trans;
-                    if ((iGlass + 1) == NGlass ||
-                        ((iGlass + 1) == (NGlass - 1) && StormWinConst)) {
+                    if ((iGlass + 1) == NGlass || ((iGlass + 1) == (NGlass - 1) && StormWinConst)) {
                         t[iGlass][0] *= matGlass->GlassTransDirtFactor;
                     }
                     t[iGlass][1] = matGlass->TransVis;
-                    if ((iGlass + 1) == NGlass ||
-                        ((iGlass + 1) == (NGlass - 1) && StormWinConst)) {
+                    if ((iGlass + 1) == NGlass || ((iGlass + 1) == (NGlass - 1) && StormWinConst)) {
                         t[iGlass][1] *= matGlass->GlassTransDirtFactor;
                     }
                     rff[iGlass][0] = matGlass->ReflectSolBeamBack;
@@ -948,8 +946,8 @@ namespace Window {
             } // End of loop over incidence angles for back calculation
 
             for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-              int iGlassBack = NGlass - iGlass - 1; // Was NGlass - IGlass + 1 when IGlass was 1-based
-                thisConstruct.AbsDiffBack(iGlass+1) = DiffuseAverage(solabsBackPhi[iGlassBack]);
+                int iGlassBack = NGlass - iGlass - 1; // Was NGlass - IGlass + 1 when IGlass was 1-based
+                thisConstruct.AbsDiffBack(iGlass + 1) = DiffuseAverage(solabsBackPhi[iGlassBack]);
             }
 
             //-----------------------------------------------------------------------
@@ -989,7 +987,7 @@ namespace Window {
                 // Front incident solar, beam, interior shade
                 for (int iPhi = 0; iPhi < numPhis; ++iPhi) {
                     for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-                        solabsPhi[iGlass][iPhi] += tsolPhi[iPhi] * ShadeRefl * ShadeReflFac * constr.AbsDiffBack(iGlass+1);
+                        solabsPhi[iGlass][iPhi] += tsolPhi[iPhi] * ShadeRefl * ShadeReflFac * constr.AbsDiffBack(iGlass + 1);
                     }
                     solabsShadePhi[iPhi] = tsolPhi[iPhi] * ShadeReflFac * ShadeAbs;
                     tsolPhi[iPhi] *= ShadeReflFac * ShadeTrans;
@@ -998,7 +996,7 @@ namespace Window {
 
                 // Front incident solar, diffuse, interior shade
                 for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-                    constr.AbsDiff(iGlass+1) += tsolDiff * ShadeRefl * ShadeReflFac * solabsDiff[iGlass];
+                    constr.AbsDiff(iGlass + 1) += tsolDiff * ShadeRefl * ShadeReflFac * solabsDiff[iGlass];
                 }
 
                 constr.AbsDiffShade = tsolDiff * ShadeReflFac * ShadeAbs;
@@ -1047,7 +1045,7 @@ namespace Window {
 
                 // Front incident solar, diffuse, exterior shade/screen/blind
                 for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-                    constr.AbsDiff(iGlass+1) = ShadeTrans * ShadeReflFac * solabsDiff[iGlass];
+                    constr.AbsDiff(iGlass + 1) = ShadeTrans * ShadeReflFac * solabsDiff[iGlass];
                 }
 
                 // Front incident solar, diffuse, exterior shade/screen
@@ -1059,7 +1057,7 @@ namespace Window {
 
                 // Back incident solar, diffuse, exterior shade/screen
                 for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-                    constr.AbsDiffBack(iGlass+1) += tsolDiff * ShadeRefl * ShadeReflFac * solabsDiff[iGlass];
+                    constr.AbsDiffBack(iGlass + 1) += tsolDiff * ShadeRefl * ShadeReflFac * solabsDiff[iGlass];
                 }
                 constr.AbsDiffBackShade = tsolDiff * ShadeReflFac * ShadeAbs;
                 constr.ReflectSolDiffBack += tsolDiff_2 * ShadeRefl * ShadeReflFac;
@@ -1264,7 +1262,7 @@ namespace Window {
                     ShadeReflFacVis = 1.0 / (1.0 - ShadeReflVis * constr.ReflectVisDiffFront);
 
                     for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-                        auto &dfAbs = constr.layerSlatBlindDfAbs(iGlass+1)[iSlatAng];
+                        auto &dfAbs = constr.layerSlatBlindDfAbs(iGlass + 1)[iSlatAng];
                         dfAbs.Sol.Ft.Df.Abs = ShadeTrans * ShadeReflFac * solabsDiff[iGlass];
                         dfAbs.Sol.Ft.Df.AbsGnd = ShadeTransGnd * ShadeReflFac * solabsDiff[iGlass];
                         dfAbs.Sol.Ft.Df.AbsSky = ShadeTransSky * ShadeReflFac * solabsDiff[iGlass];
@@ -1283,8 +1281,8 @@ namespace Window {
 
                     // Back incident solar, diffuse, exterior shade/blind
                     for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-                        auto &dfAbs = constr.layerSlatBlindDfAbs(iGlass+1)[iSlatAng];
-                        dfAbs.Sol.Bk.Df.Abs = constr.AbsDiffBack(iGlass+1) + tsolDiff * ShadeRefl * ShadeReflFac * solabsDiff[iGlass];
+                        auto &dfAbs = constr.layerSlatBlindDfAbs(iGlass + 1)[iSlatAng];
+                        dfAbs.Sol.Bk.Df.Abs = constr.AbsDiffBack(iGlass + 1) + tsolDiff * ShadeRefl * ShadeReflFac * solabsDiff[iGlass];
                     }
 
                     cbtar.Sol.Bk.Df.Abs = tsolDiff * ShadeReflFac * ShadeAbs;
@@ -1445,7 +1443,7 @@ namespace Window {
 
                 // Front incident solar, diffuse, exterior shade/screen/blind
                 for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-                    constr.AbsDiff(iGlass+1) = ShadeTrans * ShadeReflFac * solabsDiff[iGlass];
+                    constr.AbsDiff(iGlass + 1) = ShadeTrans * ShadeReflFac * solabsDiff[iGlass];
                 }
 
                 // Front incident solar, diffuse, exterior shade/screen
@@ -1457,7 +1455,7 @@ namespace Window {
 
                 // Back incident solar, diffuse, exterior shade/screen
                 for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
-                    constr.AbsDiffBack(iGlass+1) += tsolDiff * ShadeRefl * ShadeReflFac * solabsDiff[iGlass];
+                    constr.AbsDiffBack(iGlass + 1) += tsolDiff * ShadeRefl * ShadeReflFac * solabsDiff[iGlass];
                 }
                 constr.AbsDiffBackShade = tsolDiff * ShadeReflFac * ShadeAbs;
                 constr.ReflectSolDiffBack += tsolDiff_2 * ShadeRefl * ShadeReflFac;
@@ -1475,14 +1473,14 @@ namespace Window {
 
                 for (int iGlass = 0; iGlass < NGlass; ++iGlass) {
                     // Front absorptance coefficients for glass layers
-                    W5LsqFit(cosPhisLocal, solabsPhi[iGlass], thisConstruct.AbsBeamCoef(iGlass+1));
+                    W5LsqFit(cosPhisLocal, solabsPhi[iGlass], thisConstruct.AbsBeamCoef(iGlass + 1));
 
                     // Back absorptance coefficients for glass layers
                     int iGlassBack = NGlass - iGlass - 1; // Was NGlass - IGlass + 1;
-                    W5LsqFit(cosPhisLocal, solabsBackPhi[iGlassBack], thisConstruct.AbsBeamBackCoef(iGlass+1));
+                    W5LsqFit(cosPhisLocal, solabsBackPhi[iGlassBack], thisConstruct.AbsBeamBackCoef(iGlass + 1));
                 }
 
-#ifdef GET_OUT                
+#ifdef GET_OUT
                 // To check goodness of fit //Tuned
 
                 for (int iPhi = 0; iPhi < numPhis; ++iPhi) {
@@ -1505,7 +1503,7 @@ namespace Window {
                         // >>>>>>> origin/develop
                     }
                 }
-#endif // GET_OUT                
+#endif // GET_OUT
             }
 
             if (ShadeOn) {
@@ -1840,7 +1838,7 @@ namespace Window {
         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> top = {0.0};  // Transmittance matrix for subr. op
         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> rfop = {0.0}; // Front reflectance matrix for subr. op
         std::array<std::array<Real64, maxGlassLayers>, maxGlassLayers> rbop = {0.0}; // Back transmittance matrix for subr. op
-        
+
         auto const &wm = state.dataWindowManager;
         // For each glass layer find tPhi, rfPhi, and rbPhi at each wavelength
 
@@ -1988,8 +1986,8 @@ namespace Window {
         auto const &wm = state.dataWindowManager;
 
         for (int i = 0; i < nume - 1; ++i) {
-            Real64 const esol = (wm->wle[i+1] - wm->wle[i]) * 0.5 * (wm->e[i] + wm->e[i+1]);
-            num += 0.5 * (p[i] + p[i+1]) * esol;
+            Real64 const esol = (wm->wle[i + 1] - wm->wle[i]) * 0.5 * (wm->e[i] + wm->e[i + 1]);
+            num += 0.5 * (p[i] + p[i + 1]) * esol;
             denom += esol;
         }
         return num / denom; // dangerous, doesn't check for zero denominator
@@ -3678,11 +3676,11 @@ namespace Window {
         Real64 AEqOutlet;
         Real64 Zinlet; // Inlet and outlet pressure loss factors
         Real64 Zoutlet;
-        Real64 AVGap;         // Coeff. of VGap**2 term in pressure balance equation
-        Real64 BVGap;         // Coeff. of VGap term in pressure balance equation
-        Real64 CVGap;         // VGap-independent term in pressure balance equation
-        Real64 GapHeightChar; // Characteristic height of the gap air temperature profile (m)
-        Real64 TAve;          // Average of TGlass and TShade (K)
+        Real64 AVGap;             // Coeff. of VGap**2 term in pressure balance equation
+        Real64 BVGap;             // Coeff. of VGap term in pressure balance equation
+        Real64 CVGap;             // VGap-independent term in pressure balance equation
+        Real64 GapHeightChar;     // Characteristic height of the gap air temperature profile (m)
+        Real64 TAve;              // Average of TGlass and TShade (K)
         int TotGaps;              // Glass/glass gaps + glass-shade/blind gap
         Real64 con;               // Gap conductivity and derivative
         Real64 gr;                // glass-shade/blind gap Grashof number
@@ -4053,10 +4051,10 @@ namespace Window {
         //   is in horizontal plane normal to window.
         Real64 GapHeightChar; // Characteristic height of the airflow gap air temperature profile (m)
         Real64 TAve;          // Average of TGlassFace1 and TGlassFace2 (K)
-        Real64 con; // Gap conductivity and derivative
-        Real64 gr;  // Gap air Grashof number
-        Real64 pr;  // Gap air Prandtl number
-        Real64 nu;  // Gap air Nusselt number
+        Real64 con;           // Gap conductivity and derivative
+        Real64 gr;            // Gap air Grashof number
+        Real64 pr;            // Gap air Prandtl number
+        Real64 nu;            // Gap air Nusselt number
 
         auto &s_mat = state.dataMaterial;
         auto &s_surf = state.dataSurface;
