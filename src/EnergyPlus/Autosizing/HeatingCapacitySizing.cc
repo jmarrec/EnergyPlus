@@ -340,9 +340,14 @@ Real64 HeatingCapacitySizer::size(EnergyPlusData &state, Real64 _originalValue, 
                     }
                 }
                 this->autoSizedValue = NominalCapacityDes * this->dataHeatSizeRatio;
-                if (allocated(this->unitarySysEqSizing)) {
+                // apply sizing factor once; see #10290
+                if (this->curOASysNum > 0) {
+                  if (!this->oaSysEqSizing(this->curOASysNum).HeatingCapacity) {
+                      this->autoSizedValue = this->autoSizedValue * this->dataFracOfAutosizedHeatingCapacity;
+                  }
+                } else {
                   if (!this->unitarySysEqSizing(this->curSysNum).HeatingCapacity) {
-                      this->autoSizedValue = this->autoSizedValue * this->dataFracOfAutosizedHeatingCapacity; // apply sizing factor once; see #10290
+                      this->autoSizedValue = this->autoSizedValue * this->dataFracOfAutosizedHeatingCapacity;
                   }
                 }
                 if (state.dataGlobal->DisplayExtraWarnings && this->autoSizedValue <= 0.0) {
