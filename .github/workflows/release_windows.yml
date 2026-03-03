@@ -231,7 +231,7 @@ jobs:
           architecture: ${{ matrix.python-arch }}
 
       - name: Gather Test Package from Artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: energyplus-${{ matrix.package-arch }}
           path: package
