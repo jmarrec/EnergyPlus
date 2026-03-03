@@ -1809,11 +1809,11 @@ namespace HeatBalanceManager {
         // METHODOLOGY EMPLOYED:
         // The GetObjectItem routines are employed to retrieve the data.
 
-        SolarShading::GetShadowingInput(state);
-
         GetZoneData(state, ErrorsFound); // Read Zone data from input file
 
         SurfaceGeometry::SetupZoneGeometry(state, ErrorsFound);
+
+        SolarShading::GetShadowingInput(state);
     }
 
     void GetZoneData(EnergyPlusData &state, bool &ErrorsFound) // If errors found in input
