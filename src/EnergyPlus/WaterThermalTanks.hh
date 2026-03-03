@@ -57,6 +57,7 @@
 #include <EnergyPlus/DataGlobalConstants.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/General.hh>
 #include <EnergyPlus/Plant/Enums.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
 #include <EnergyPlus/PlantComponent.hh>
@@ -688,6 +689,8 @@ namespace WaterThermalTanks {
 
         int callerLoopNum;
         int waterIndex;
+
+        General::SolveRootStats solveRootStats{};
 
         ~WaterThermalTankData() = default;
 
