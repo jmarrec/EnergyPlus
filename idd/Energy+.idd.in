@@ -18873,7 +18873,7 @@ SurfaceProperty:LocalEnvironment,
        \reference SurfaceLocalEnvironmentNames
    A2, \field Exterior Surface Name
        \type object-list
-       \object-list SurfaceNames
+       \object-list AllHeatTranSurfNames
        \note Enter the name of an exterior surface object
    A3, \field Sunlit Fraction Schedule Name
        \type object-list
@@ -18920,7 +18920,8 @@ SurfaceProperty:SurroundingSurfaces,
    N1, \field Sky View Factor
        \minimum 0.0
        \maximum 1.0
-       \default 0.5
+       \autocalculatable
+       \default autocalculate
        \note optional
    A2, \field Sky Temperature Schedule Name
        \type object-list
@@ -18930,7 +18931,8 @@ SurfaceProperty:SurroundingSurfaces,
    N2, \field Ground View Factor
        \minimum 0.0
        \maximum 1.0
-       \default 0.5
+       \autocalculatable
+       \default autocalculate
        \note optional
    A3, \field Ground Temperature Schedule Name
        \type object-list
