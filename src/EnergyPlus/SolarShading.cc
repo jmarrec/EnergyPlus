@@ -490,12 +490,15 @@ void GetShadowingInput(EnergyPlusData &state)
                                   format("Value entered=\"{}\" while no Schedule:File:Shading object is defined, InternalCalculation will be used.",
                                          state.dataIPShortCut->cAlphaArgs(aNum)));
             }
+            checkNotScheduledSurfacePresent(state);
         } else if (Util::SameString(state.dataIPShortCut->cAlphaArgs(aNum), "PolygonClipping")) {
             state.dataSysVars->shadingMethod = ShadingMethod::PolygonClipping;
             state.dataIPShortCut->cAlphaArgs(aNum) = "PolygonClipping";
+            checkNotScheduledSurfacePresent(state);
         } else if (Util::SameString(state.dataIPShortCut->cAlphaArgs(aNum), "PixelCounting")) {
             state.dataSysVars->shadingMethod = ShadingMethod::PixelCounting;
             state.dataIPShortCut->cAlphaArgs(aNum) = "PixelCounting";
+            checkNotScheduledSurfacePresent(state);
             if (NumNumbers >= 3) {
                 pixelRes = (unsigned)state.dataIPShortCut->rNumericArgs(3);
             }
@@ -526,6 +529,7 @@ void GetShadowingInput(EnergyPlusData &state)
     } else {
         state.dataIPShortCut->cAlphaArgs(aNum) = "PolygonClipping";
         state.dataSysVars->shadingMethod = ShadingMethod::PolygonClipping;
+        checkNotScheduledSurfacePresent(state);
     }
 
     aNum++;
@@ -818,7 +822,7 @@ void processShadowingInput(EnergyPlusData &state)
 
 void checkScheduledSurfacePresent(EnergyPlusData &state)
 {
-    // User has chosen "Scheduled" for sunlit fraction so check to see which surfaces don't have a schedule
+    // User has chosen "Scheduled" for sunlit fraction so check to see which surfaces don't have a schedule.
     int numNotDef = 0;
     int constexpr maxErrMessages = 50;
     auto &surfData = state.dataSurface;
@@ -833,14 +837,42 @@ void checkScheduledSurfacePresent(EnergyPlusData &state)
             if (numNotDef == 1) {
                 ShowWarningError(
                     state,
-                    format("ShadowCalculation specified Schedule for the Shading Calculation Method but no schedule provided for {}", thisSurf.Name));
+                    format("ShadowCalculation specified Schedule for the Shading Calculation Method but no schedule provided for {}.", thisSurf.Name));
                 ShowContinueError(
                     state, "When Schedule is selected for the Shading Calculation Method and no schedule is provided for a particular surface,");
                 ShowContinueError(
                     state, "EnergyPlus will assume that the surface is not shaded.  Use SurfaceProperty:LocalEnvironment to specify a schedule");
                 ShowContinueError(state, "for sunlit fraction if this was not desired.  Otherwise, this surface will not be shaded at all.");
             } else if (numNotDef <= maxErrMessages) {
-                ShowWarningError(state, format("No schedule was provided for {} either.  See above error message for more details", thisSurf.Name));
+                ShowWarningError(state, format("No schedule was provided for {} either.  See above error message for more details.", thisSurf.Name));
+            }
+        }
+    }
+    if (numNotDef > maxErrMessages) {
+        ShowContinueError(state, format("This message is only shown for the first {} occurrences of this issue.", maxErrMessages));
+    }
+}
+
+void checkNotScheduledSurfacePresent(EnergyPlusData &state)
+{
+    // User has *not* chosen "Scheduled" for sunlit fraction so check to see which surfaces *have* a schedule.
+    int numNotDef = 0;
+    int constexpr maxErrMessages = 50;
+    auto &surfData = state.dataSurface;
+    for (int surfNum = 1; surfNum <= surfData->TotSurfaces; ++surfNum) {
+        auto &thisSurf = surfData->Surface(surfNum);
+        if ((thisSurf.Class == SurfaceClass::Shading || thisSurf.Class == SurfaceClass::Detached_F || thisSurf.Class == SurfaceClass::Detached_B ||
+             thisSurf.Class == SurfaceClass::Overhang || thisSurf.Class == SurfaceClass::Fin)) {
+            continue; // skip shading surfaces
+        }
+        if (thisSurf.SurfSchedExternalShadingFrac) {
+            numNotDef += 1;
+            if (numNotDef == 1) {
+                ShowWarningError(
+                    state,
+                    format("ShadowCalculation did not specify Schedule for the Shading Calculation Method but schedule provided for {}.", thisSurf.Name));
+            } else if (numNotDef <= maxErrMessages) {
+                ShowWarningError(state, format("Schedule was also provided for {}.  See above error message for more details.", thisSurf.Name));
             }
         }
     }

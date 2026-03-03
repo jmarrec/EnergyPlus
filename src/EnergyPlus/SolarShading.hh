@@ -103,6 +103,8 @@ namespace SolarShading {
 
     void checkScheduledSurfacePresent(EnergyPlusData &state);
 
+    void checkNotScheduledSurfacePresent(EnergyPlusData &state);
+
     void AllocateModuleArrays(EnergyPlusData &state);
 
     void AnisoSkyViewFactors(EnergyPlusData &state);
