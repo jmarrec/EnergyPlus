@@ -478,11 +478,8 @@ namespace WindowComplexManager {
         // PURPOSE OF THIS SUBROUTINE:
         // Check if there are new states available for complex fenestration and performs proper initialization
 
-        bool StateFound; // variable to indicate if state has been found
-        int CurrentCFSState;
-
-        StateFound = false;
-        CurrentCFSState = state.dataSurface->SurfaceWindow(iSurf).ComplexFen.CurrentState;
+        bool StateFound = false; // variable to indicate if state has been found
+        int const CurrentCFSState = state.dataSurface->SurfaceWindow(iSurf).ComplexFen.CurrentState;
 
         // Check if EMS changed construction number
         if (state.dataSurface->Surface(iSurf).Construction != state.dataSurface->SurfaceWindow(iSurf).ComplexFen.State(CurrentCFSState).Konst) {
@@ -493,7 +490,6 @@ namespace WindowComplexManager {
             for (int i = 1; i <= NumOfStates; ++i) {
                 if (state.dataSurface->Surface(iSurf).Construction == state.dataSurface->SurfaceWindow(iSurf).ComplexFen.State(i).Konst) {
                     StateFound = true;
-                    CurrentCFSState = i;
                     state.dataSurface->SurfaceWindow(iSurf).ComplexFen.CurrentState = i;
                 }
             }
@@ -504,8 +500,7 @@ namespace WindowComplexManager {
         // If new state is not found in the list of current states, then create new one, initialize and make it active
         if (!StateFound) {
             ExpandComplexState(state, iSurf, state.dataSurface->Surface(iSurf).Construction);
-            CurrentCFSState = state.dataSurface->SurfaceWindow(iSurf).ComplexFen.NumStates;
-            state.dataSurface->SurfaceWindow(iSurf).ComplexFen.CurrentState = CurrentCFSState;
+            state.dataSurface->SurfaceWindow(iSurf).ComplexFen.CurrentState = state.dataSurface->SurfaceWindow(iSurf).ComplexFen.NumStates;
         }
     }
 
@@ -2747,7 +2742,6 @@ namespace WindowComplexManager {
         // Simon: locally used variables
         int ngllayer;
         int nglface;
-        int nglfacep;
         int ThermalModelNum;
         Real64 rmir; // IR radiance of window's interior surround (W/m2)
         Real64 outir;
@@ -2772,7 +2766,6 @@ namespace WindowComplexManager {
 
         ngllayer = state.dataConstruction->Construct(ConstrNum).TotGlassLayers;
         nglface = 2 * ngllayer;
-        nglfacep = nglface;
         hrin = 0.0;
         hcin = 0.0;
         hrout = 0.0;
@@ -3281,7 +3274,7 @@ namespace WindowComplexManager {
                 //   IR to zone from glass when interior shade/blind is present.
                 ShadeArea = state.dataSurface->Surface(SurfNum).Area + state.dataSurface->SurfWinDividerArea(SurfNum);
                 sconsh = scon(ngllayer + 1) / thick(ngllayer + 1);
-                nglfacep = nglface + 2;
+                int const nglfacep = nglface + 2;
                 // CondHeatGainShade = ShadeArea * sconsh * (theta(nglfacep - 1) - theta(nglfacep));
                 EpsShIR1 = emis(nglface + 1);
                 EpsShIR2 = emis(nglface + 2);

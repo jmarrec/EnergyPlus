@@ -736,7 +736,6 @@ fs::path GLHEVert::runGHEDesigner(EnergyPlusData &state, nlohmann::json const &i
 void GLHEVert::performBoreholeFieldDesignAndSizingWithGHEDesigner(EnergyPlusData &state, std::vector<Real64> const &hourlyLoads) const
 {
     nlohmann::json gheDesignerInputs = this->getCommonGHEDesignerInputs(state);
-    std::string const p = fmt::format("[GHEDesigner Calculation for GHE Named: {}] ", this->name);
 
     // grab thermal and borehole properties
     nlohmann::json grout = {{"conductivity", this->grout.k}, {"rho_cp", this->grout.rhoCp}};
@@ -871,7 +870,6 @@ void GLHEVert::performBoreholeFieldDesignAndSizingWithGHEDesigner(EnergyPlusData
         nlohmann::json data = nlohmann::json::parse(file3);
         std::vector<double> t = data["log_time"];
         std::vector<double> g = data["g_values"];
-        std::vector<double> gbhw = data["g_bhw_values"];
         this->myRespFactors->time = t;
         this->myRespFactors->LNTTS = t;
         this->myRespFactors->GFNC = g;
@@ -1290,8 +1288,6 @@ void GLHEVert::calcShortTimestepGFunctions(EnergyPlusData &state)
     for (auto const val : GFNC_shortTimestep) {
         g << val << '\n';
     }
-    std::string l2 = l.str();
-    std::string g2 = g.str();
 }
 
 Real64 GLHEVert::calcBHAverageResistance(EnergyPlusData &state)

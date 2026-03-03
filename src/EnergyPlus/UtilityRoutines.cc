@@ -232,15 +232,13 @@ namespace Util {
         int Probe = 0;
         int LBnd = 0;
         int UBnd = NumItems + 1;
-        bool Found = false;
-        while ((!Found) || (Probe != 0)) {
+        while (true) {
             Probe = (UBnd - LBnd) / 2;
             if (Probe == 0) {
                 break;
             }
             Probe += LBnd;
             if (equali(String, ListOfItems(Probe))) {
-                Found = true;
                 break;
             }
             if (lessthani(String, ListOfItems(Probe))) {

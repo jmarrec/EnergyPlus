@@ -487,7 +487,6 @@ namespace PCMStorage {
         int NumPCMObjs = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, "ThermalStorage:PCM");
         if (NumPCMObjs != 1) {
             ShowSevereError(state, "Exactly one ThermalStorage:PCM object is required.");
-            ErrorsFound = true;
             return;
         }
 

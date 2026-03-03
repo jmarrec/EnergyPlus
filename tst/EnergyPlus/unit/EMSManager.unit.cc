@@ -52,6 +52,7 @@
 
 // EnergyPlus Headers
 #include "Fixtures/EnergyPlusFixture.hh"
+#include <EnergyPlus/ConfiguredFunctions.hh>
 #include <EnergyPlus/Construction.hh>
 #include <EnergyPlus/CurveManager.hh>
 #include <EnergyPlus/Data/EnergyPlusData.hh>
@@ -936,7 +937,7 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable2)
     state->dataEMSMgr->FinishProcessingUserInput = true;
     bool anyRan;
     EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::SetupSimulation, anyRan, ObjexxFCL::Optional_int_const());
-    // Expect the variable to not yet be initialized, call EvaluateExpresssion and check argument
+    // Expect the variable to not yet be initialized, call EvaluateExpression and check argument
 
     ErlValueType ReturnValue;
     bool seriousErrorFound = false;
@@ -956,6 +957,181 @@ TEST_F(EnergyPlusFixture, TestUnInitializedEMSVariable2)
         state->dataRuntimeLang->ErlStack(Util::FindItemInList("SETNODESETPOINTTEST", state->dataRuntimeLang->ErlStack)).Instruction(1).Argument2,
         seriousErrorFound);
     EXPECT_FALSE(seriousErrorFound);
+}
+
+TEST_F(EnergyPlusFixture, TestEMSVariableInitAfterRef1)
+{
+    // test for #11360 - EMS variable initialized after reference, outside of ManageSimulation
+    std::string const idf_objects = delimited_string({
+
+        "EnergyManagementSystem:Program,",
+        "    ev_discharge_program,                          !- Name",
+        "    Set power_mult = site_temp_adj,                !- Program Line 1",
+        "    Set site_temp_adj = 0.1;                       !- Program Line 2",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "    ev_discharge_pcm,              !- Name",
+        "    BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "    ev_discharge_program;          !- Program Name 1",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    int internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    EXPECT_EQ(internalVarNum, 0);
+
+    bool anyRan;
+    EXPECT_TRUE(state->dataEMSMgr->GetEMSUserInput);
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::SetupSimulation, anyRan, ObjexxFCL::Optional_int_const());
+
+    internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_FALSE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
+
+    EXPECT_FALSE(state->dataEMSMgr->GetEMSUserInput);
+    EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginNewEnvironment, anyRan, ObjexxFCL::Optional_int_const());
+
+    internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_FALSE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
+
+    EXPECT_FALSE(state->dataEMSMgr->GetEMSUserInput);
+    ASSERT_THROW(EMSManager::ManageEMS(*state, EMSManager::EMSCallFrom::BeginTimestepBeforePredictor, anyRan, ObjexxFCL::Optional_int_const()),
+                 EnergyPlus::FatalError);
+
+    internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_FALSE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
+
+    // Expect the variable to not yet be initialized, call EvaluateExpression and check argument
+    bool seriousErrorFound = false;
+    ErlValueType ReturnValue = RuntimeLanguageProcessor::EvaluateExpression(
+        *state,
+        state->dataRuntimeLang->ErlStack(Util::FindItemInList("EV_DISCHARGE_PROGRAM", state->dataRuntimeLang->ErlStack)).Instruction(1).Argument2,
+        seriousErrorFound);
+    EXPECT_TRUE(seriousErrorFound);
+
+    const std::string expected_error = delimited_string({
+        "   ** Severe  ** Problem found in EMS EnergyPlus Runtime Language.",
+        "   **   ~~~   ** Erl program name: EV_DISCHARGE_PROGRAM",
+        "   **   ~~~   ** Erl program line number: 1",
+        "   **   ~~~   ** Erl program line text: SET POWER_MULT = SITE_TEMP_ADJ",
+        "   **   ~~~   ** Error message:  *** Error: EvaluateExpression: Variable = 'SITE_TEMP_ADJ' used in expression has not been initialized! "
+        "*** ",
+        "   **   ~~~   **  Environment=, at Simulation time= 00:-15 - 00:00",
+        "   **  Fatal  ** Previous EMS error caused program termination.",
+        "   ...Summary of Errors that led to program termination:",
+        "   ..... Reference severe error count=1",
+        "   ..... Last severe error=Problem found in EMS EnergyPlus Runtime Language.",
+    });
+
+    compare_err_stream(expected_error);
+}
+
+TEST_F(EnergyPlusFixture, TestEMSVariableInitAfterRef2)
+{
+    // test for #11360 - EMS variable initialized after reference, within ManageSimulation
+    std::string const idf_objects = delimited_string({
+        "Version," + DataStringGlobals::MatchVersion + ";",
+
+        "RunPeriod,",
+        "    Run Period 1,            !- Name",
+        "    1,                       !- Begin Month",
+        "    1,                       !- Begin Day of Month",
+        "    2007,                    !- Begin Year",
+        "    1,                       !- End Month",
+        "    1,                       !- End Day of Month",
+        "    2007,                    !- End Year",
+        "    Monday,                  !- Day of Week for Start Day",
+        "    No,                      !- Use Weather File Holidays and Special Days",
+        "    No,                      !- Use Weather File Daylight Saving Period",
+        "    No,                      !- Apply Weekend Holiday Rule",
+        "    Yes,                     !- Use Weather File Rain Indicators",
+        "    Yes;                     !- Use Weather File Snow Indicators",
+
+        "SimulationControl,",
+        "    No,                      !- Do Zone Sizing Calculation",
+        "    No,                      !- Do System Sizing Calculation",
+        "    No,                      !- Do Plant Sizing Calculation",
+        "    No,                      !- Run Simulation for Sizing Periods",
+        "    Yes,                     !- Run Simulation for Weather File Run Periods",
+        "    ,                        !- Do HVAC Sizing Simulation for Sizing Periods",
+        "    ;                        !- Maximum Number of HVAC Sizing Simulation Passes",
+
+        "Site:Location,",
+        "    Denver Stapleton Intl Arpt CO USA WMO=724690,  !- Name",
+        "    39.77,                   !- Latitude {deg}",
+        "    -104.87,                 !- Longitude {deg}",
+        "    -7.00,                   !- Time Zone {hr}",
+        "    1611.00;                 !- Elevation {m}",
+
+        "Material,",
+        "    Concrete Block,          !- Name",
+        "    MediumRough,             !- Roughness",
+        "    0.1014984,               !- Thickness {m}",
+        "    0.3805070,               !- Conductivity {W/m-K}",
+        "    608.7016,                !- Density {kg/m3}",
+        "    836.8000;                !- Specific Heat {J/kg-K}",
+
+        "Construction,",
+        "    ConcConstruction,        !- Name",
+        "    Concrete Block;          !- Outside Layer",
+
+        "BuildingSurface:Detailed,"
+        "    Wall,                    !- Name",
+        "    Wall,                    !- Surface Type",
+        "    ConcConstruction,        !- Construction Name",
+        "    Zone,                    !- Zone Name",
+        "    ,                        !- Space Name",
+        "    Outdoors,                !- Outside Boundary Condition",
+        "    ,                        !- Outside Boundary Condition Object",
+        "    SunExposed,              !- Sun Exposure",
+        "    WindExposed,             !- Wind Exposure",
+        "    0.5000000,               !- View Factor to Ground",
+        "    4,                       !- Number of Vertices",
+        "    0.000000,0.000000,10.00000,  !- X,Y,Z ==> Vertex 1 {m}",
+        "    0.000000,0.000000,0,  !- X,Y,Z ==> Vertex 2 {m}",
+        "    10.00000,0.000000,0,  !- X,Y,Z ==> Vertex 3 {m}",
+        "    10.00000,0.000000,10.00000;  !- X,Y,Z ==> Vertex 4 {m}",
+
+        "Zone,"
+        "    Zone,                    !- Name",
+        "    0,                       !- Direction of Relative North {deg}",
+        "    6.000000,                !- X Origin {m}",
+        "    6.000000,                !- Y Origin {m}",
+        "    0,                       !- Z Origin {m}",
+        "    1,                       !- Type",
+        "    1,                       !- Multiplier",
+        "    autocalculate,           !- Ceiling Height {m}",
+        "    autocalculate;           !- Volume {m3}",
+
+        "EnergyManagementSystem:Program,",
+        "    ev_discharge_program,                          !- Name",
+        "    Set power_mult = site_temp_adj,                !- Program Line 1",
+        "    Set site_temp_adj = 0.1;                       !- Program Line 2",
+
+        "EnergyManagementSystem:ProgramCallingManager,",
+        "    ev_discharge_pcm,              !- Name",
+        "    BeginTimestepBeforePredictor,  !- EnergyPlus Model Calling Point",
+        "    ev_discharge_program;          !- Program Name 1",
+    });
+
+    ASSERT_TRUE(process_idf(idf_objects));
+    state->init_state(*state);
+
+    state->dataWeather->WeatherFileExists = true;
+    state->files.inputWeatherFilePath.filePath = configured_source_directory() / "weather/USA_CO_Golden-NREL.724666_TMY3.epw";
+
+    int internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    EXPECT_EQ(internalVarNum, 0);
+
+    EXPECT_TRUE(state->dataEMSMgr->GetEMSUserInput);
+    ASSERT_THROW(SimulationManager::ManageSimulation(*state), EnergyPlus::FatalError);
+
+    internalVarNum = RuntimeLanguageProcessor::FindEMSVariable(*state, "site_temp_adj", 1);
+    ASSERT_GT(internalVarNum, 0);
+    EXPECT_FALSE(state->dataRuntimeLang->ErlVariable(internalVarNum).Value.initialized);
 }
 
 TEST_F(EnergyPlusFixture, EMSManager_CheckIfAnyEMS_OutEMS)

@@ -186,11 +186,6 @@ namespace RoomAir {
                 if (!afnZoneInfo.IsUsed) {
                     continue;
                 }
-                int NumSurfs = 0; // NumSurfs isn't used anywhere?
-                for (int spaceNum : state.dataHeatBal->Zone(iZone).spaceIndexes) {
-                    auto const &thisSpace = state.dataHeatBal->space(spaceNum);
-                    NumSurfs += thisSpace.HTSurfaceLast - thisSpace.HTSurfaceFirst + 1;
-                }
 
                 for (auto &afnNode : afnZoneInfo.Node) {
                     // calculate volume of air in node's control volume

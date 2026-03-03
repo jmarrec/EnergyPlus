@@ -4986,8 +4986,7 @@ namespace Furnaces {
                     thisFurnace.MaxHeatCoilFluidFlow =
                         WaterCoils::GetCoilMaxWaterFlowRate(state, "Coil:Heating:Water", thisFurnace.HeatingCoilName, ErrorsFound);
                     if (thisFurnace.MaxHeatCoilFluidFlow > 0.0) {
-                        rho =
-                            state.dataPlnt->PlantLoop(thisFurnace.plantLoc.loopNum).glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                        rho = thisFurnace.plantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
                         thisFurnace.MaxHeatCoilFluidFlow *= rho;
                     }
                 } else if (thisFurnace.HeatingCoilType_Num == HVAC::Coil_HeatingSteam) {
@@ -11109,8 +11108,9 @@ namespace Furnaces {
             if (thisFurnace.NumOfSpeedCooling > 0) {
                 state.dataFurnaces->CompOnMassFlow = thisFurnace.CoolMassFlowRate(thisFurnace.NumOfSpeedCooling);
                 state.dataFurnaces->CompOnFlowRatio = thisFurnace.MSCoolingSpeedRatio(thisFurnace.NumOfSpeedCooling);
-                state.dataHVACGlobal->MSHPMassFlowRateLow = thisFurnace.CoolMassFlowRate(thisFurnace.NumOfSpeedCooling);
-                state.dataHVACGlobal->MSHPMassFlowRateHigh = thisFurnace.CoolMassFlowRate(thisFurnace.NumOfSpeedCooling);
+                state.dataFurnaces->CompOnMassFlow = min(state.dataFurnaces->CompOnMassFlow, thisFurnace.MaxCoolAirMassFlow);
+                state.dataHVACGlobal->MSHPMassFlowRateLow = state.dataFurnaces->CompOnMassFlow;
+                state.dataHVACGlobal->MSHPMassFlowRateHigh = state.dataFurnaces->CompOnMassFlow;
             } else {
                 state.dataFurnaces->CompOnMassFlow = thisFurnace.MaxCoolAirMassFlow;
                 state.dataFurnaces->CompOnFlowRatio = thisFurnace.CoolingSpeedRatio;
@@ -11126,8 +11126,9 @@ namespace Furnaces {
             if (thisFurnace.NumOfSpeedHeating > 0) {
                 state.dataFurnaces->CompOnMassFlow = thisFurnace.HeatMassFlowRate(thisFurnace.NumOfSpeedHeating);
                 state.dataFurnaces->CompOnFlowRatio = thisFurnace.MSHeatingSpeedRatio(thisFurnace.NumOfSpeedHeating);
-                state.dataHVACGlobal->MSHPMassFlowRateLow = thisFurnace.HeatMassFlowRate(thisFurnace.NumOfSpeedHeating);
-                state.dataHVACGlobal->MSHPMassFlowRateHigh = thisFurnace.HeatMassFlowRate(thisFurnace.NumOfSpeedHeating);
+                state.dataFurnaces->CompOnMassFlow = min(state.dataFurnaces->CompOnMassFlow, thisFurnace.MaxHeatAirMassFlow);
+                state.dataHVACGlobal->MSHPMassFlowRateLow = state.dataFurnaces->CompOnMassFlow;
+                state.dataHVACGlobal->MSHPMassFlowRateHigh = state.dataFurnaces->CompOnMassFlow;
             } else {
                 state.dataFurnaces->CompOnMassFlow = thisFurnace.MaxHeatAirMassFlow;
                 state.dataFurnaces->CompOnFlowRatio = thisFurnace.HeatingSpeedRatio;

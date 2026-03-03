@@ -210,7 +210,6 @@ namespace WaterManager {
             int MaxNumAlphas(0);     // argument for call to GetObjectDefMaxArgs
             int MaxNumNumbers(0);    // argument for call to GetObjectDefMaxArgs
             int TotalArgs(0);        // argument for call to GetObjectDefMaxArgs
-            std::string objNameMsg;
             int NumIrrigation;
 
             // initialize rainfall model
@@ -272,7 +271,6 @@ namespace WaterManager {
                     state.dataWaterData->AnyWaterSystemsInModel = true;
                     state.dataWaterData->WaterStorage(Item).Name = cAlphaArgs(1);
                     Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-                    objNameMsg = cCurrentModuleObject + " = " + cAlphaArgs(1);
 
                     state.dataWaterData->WaterStorage(Item).QualitySubCategoryName = cAlphaArgs(2);
 
@@ -423,7 +421,6 @@ namespace WaterManager {
 
                     state.dataWaterData->RainCollector(Item).Name = cAlphaArgs(1);
                     Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-                    objNameMsg = cCurrentModuleObject + " Named " + cAlphaArgs(1);
 
                     state.dataWaterData->RainCollector(Item).StorageTankName = cAlphaArgs(2);
                     state.dataWaterData->RainCollector(Item).StorageTankID = Util::FindItemInList(cAlphaArgs(2), state.dataWaterData->WaterStorage);
@@ -539,7 +536,6 @@ namespace WaterManager {
 
                     state.dataWaterData->GroundwaterWell(Item).Name = cAlphaArgs(1);
                     Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-                    objNameMsg = cCurrentModuleObject + " Named " + cAlphaArgs(1);
                     state.dataWaterData->GroundwaterWell(Item).StorageTankName = cAlphaArgs(2);
 
                     InternalSetupTankSupplyComponent(state,

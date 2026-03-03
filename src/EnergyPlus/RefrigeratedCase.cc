@@ -10584,7 +10584,7 @@ void InitRefrigerationPlantConnections(EnergyPlusData &state)
                 ShowFatalError(state, "InitRefrigerationPlantConnections: Program terminated due to previous condition(s).");
             }
 
-            Real64 rho = state.dataPlnt->PlantLoop(Condenser(RefCondLoop).plantLoc.loopNum).glycol->getDensity(state, 20.0, RoutineName);
+            Real64 rho = Condenser(RefCondLoop).plantLoc.loop->glycol->getDensity(state, 20.0, RoutineName);
 
             if (Condenser(RefCondLoop).FlowType == CndsrFlowType::Constant) {
                 Condenser(RefCondLoop).MassFlowRateMax = Condenser(RefCondLoop).DesVolFlowRate * rho;
@@ -10613,7 +10613,7 @@ void InitRefrigerationPlantConnections(EnergyPlusData &state)
                 ShowFatalError(state, "InitRefrigerationPlantConnections: Program terminated due to previous condition(s).");
             }
 
-            Real64 rho = state.dataPlnt->PlantLoop(RefrigRack(RefCompRackLoop).plantLoc.loopNum).glycol->getDensity(state, 20.0, RoutineName);
+            Real64 rho = RefrigRack(RefCompRackLoop).plantLoc.loop->glycol->getDensity(state, 20.0, RoutineName);
 
             if (RefrigRack(RefCompRackLoop).FlowType == CndsrFlowType::Constant) {
                 RefrigRack(RefCompRackLoop).MassFlowRateMax = RefrigRack(RefCompRackLoop).DesVolFlowRate * rho;
@@ -10636,7 +10636,7 @@ void InitRefrigerationPlantConnections(EnergyPlusData &state)
                     continue;
                 }
 
-                Real64 rho = state.dataPlnt->PlantLoop(Condenser(RefCondLoop).plantLoc.loopNum).glycol->getDensity(state, 20.0, RoutineName);
+                Real64 rho = Condenser(RefCondLoop).plantLoc.loop->glycol->getDensity(state, 20.0, RoutineName);
 
                 if (Condenser(RefCondLoop).FlowType == CndsrFlowType::Constant) {
                     Condenser(RefCondLoop).MassFlowRateMax = Condenser(RefCondLoop).DesVolFlowRate * rho;
@@ -10652,7 +10652,7 @@ void InitRefrigerationPlantConnections(EnergyPlusData &state)
                     continue;
                 }
 
-                Real64 rho = state.dataPlnt->PlantLoop(RefrigRack(RefCompRackLoop).plantLoc.loopNum).glycol->getDensity(state, 20.0, RoutineName);
+                Real64 rho = RefrigRack(RefCompRackLoop).plantLoc.loop->glycol->getDensity(state, 20.0, RoutineName);
 
                 if (RefrigRack(RefCompRackLoop).FlowType == CndsrFlowType::Constant) {
                     RefrigRack(RefCompRackLoop).MassFlowRateMax = RefrigRack(RefCompRackLoop).DesVolFlowRate * rho;
@@ -11541,8 +11541,8 @@ void RefrigCondenserData::simulate(EnergyPlusData &state,
     // Make demand request on first HVAC iteration
 
     // get cooling fluid properties
-    Real64 rho = state.dataPlnt->PlantLoop(PlantLoc.loopNum).glycol->getDensity(state, this->InletTemp, RoutineName);
-    Real64 Cp = state.dataPlnt->PlantLoop(PlantLoc.loopNum).glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
+    Real64 rho = PlantLoc.loop->glycol->getDensity(state, this->InletTemp, RoutineName);
+    Real64 Cp = PlantLoc.loop->glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
 
     if (this->FlowType == CndsrFlowType::Variable && state.dataRefrigCase->TotalCondenserHeat > 0.0) {
 
@@ -11694,8 +11694,8 @@ void RefrigRackData::simulate(EnergyPlusData &state,
     // Make demand request on first HVAC iteration
 
     // get cooling fluid properties
-    Real64 rho = state.dataPlnt->PlantLoop(PlantLoc.loopNum).glycol->getDensity(state, this->InletTemp, RoutineName);
-    Real64 Cp = state.dataPlnt->PlantLoop(PlantLoc.loopNum).glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
+    Real64 rho = PlantLoc.loop->glycol->getDensity(state, this->InletTemp, RoutineName);
+    Real64 Cp = PlantLoc.loop->glycol->getSpecificHeat(state, this->InletTemp, RoutineName);
 
     if (this->FlowType == CndsrFlowType::Variable && state.dataRefrigCase->TotalCondenserHeat > 0.0) {
         this->OutletTemp = this->outletTempSched->getCurrentVal();
@@ -15301,7 +15301,6 @@ void SecondaryLoopData::CalculateSecondary(EnergyPlusData &state, int const Seco
     RefrigerationLoad = 0.0;
     TotalHotDefrostCondCredit = 0.0;
     FlowVolNeeded = 0.0;
-    DeRate = false;
 
     // SCE page 28 gives a delta T for pipe heat gains
     //         (.25F each for supply and discharge) for use with mdot*cp.
@@ -15378,9 +15377,6 @@ void SecondaryLoopData::CalculateSecondary(EnergyPlusData &state, int const Seco
             TotalPumpPower = this->PumpTotRatedPower;
             TotalLoad += TotalPumpPower * this->PumpPowerToHeat;
             AtPartLoad = false;
-            if (this->NumCoils > 0) {
-                DeRate = true;
-            }
         } // flowvolneeded >= maxvolflow
     } else { // have SecFluidTypePhaseChange !>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         if (TotalLoad >= this->MaxLoad) {
@@ -15388,9 +15384,6 @@ void SecondaryLoopData::CalculateSecondary(EnergyPlusData &state, int const Seco
             TotalLoad += TotalPumpPower * this->PumpPowerToHeat;
             VolFlowRate = this->MaxVolFlow;
             AtPartLoad = false;
-            if (this->NumCoils > 0) {
-                DeRate = true;
-            }
         }
     } // fluid type check for max load or max flow       >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -16372,8 +16365,6 @@ void ZeroHVACValues(EnergyPlusData &state)
     // to zero when called on zone timestep. Otherwise, values may be held over when
     // no HVAC load calls module during that zone time step.
 
-    int DemandARRID = 0; // Index to water tank Demand used for evap condenser
-
     if (state.dataRefrigCase->HaveRefrigRacks) {
         // HaveRefrigRacks is TRUE when NumRefrigeratedRAcks > 0
         // RefrigRack ALLOCATED to NumRefrigeratedRacks
@@ -16386,7 +16377,7 @@ void ZeroHVACValues(EnergyPlusData &state)
             }
             if (RefrigRack(RackNum).CondenserType == DataHeatBalance::RefrigCondenserType::Evap) {
                 if (RefrigRack(RackNum).EvapWaterSupplyMode == WaterSupply::FromTank) {
-                    DemandARRID = RefrigRack(RackNum).EvapWaterTankDemandARRID;
+                    int DemandARRID = RefrigRack(RackNum).EvapWaterTankDemandARRID;
                     int TankID = RefrigRack(RackNum).EvapWaterSupTankID;
                     state.dataWaterData->WaterStorage(TankID).VdotRequestDemand(DemandARRID) = 0.0;
                 }
@@ -16405,7 +16396,7 @@ void ZeroHVACValues(EnergyPlusData &state)
             }
             if (Condenser(CondID).CondenserType == DataHeatBalance::RefrigCondenserType::Evap) {
                 if (Condenser(CondID).EvapWaterSupplyMode == WaterSupply::FromTank) {
-                    DemandARRID = Condenser(CondID).EvapWaterTankDemandARRID;
+                    int DemandARRID = Condenser(CondID).EvapWaterTankDemandARRID;
                     int TankID = Condenser(CondID).EvapWaterSupTankID;
                     state.dataWaterData->WaterStorage(TankID).VdotRequestDemand(DemandARRID) = 0.0;
                 }
