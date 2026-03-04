@@ -182,21 +182,21 @@ TEST_F(EnergyPlusFixture, SetVSHPAirFlowTest_VSFurnaceFlowTest)
     state->dataFurnaces->HeatingLoad = true;
     state->dataFurnaces->CoolingLoad = false;
     SetVSHPAirFlow(*state, FurnaceNum, PartLoadRatio, OnOffAirFlowRatio);
-    EXPECT_DOUBLE_EQ(1.0, state->dataHVACGlobal->MSHPMassFlowRateLow);
-    EXPECT_DOUBLE_EQ(1.0, state->dataHVACGlobal->MSHPMassFlowRateHigh);
+    EXPECT_DOUBLE_EQ(0.5, state->dataHVACGlobal->MSHPMassFlowRateLow);
+    EXPECT_DOUBLE_EQ(0.5, state->dataHVACGlobal->MSHPMassFlowRateHigh);
     EXPECT_DOUBLE_EQ(0.0, state->dataFurnaces->CompOffMassFlow);
-    EXPECT_DOUBLE_EQ(1.0, state->dataFurnaces->CompOnMassFlow);
+    EXPECT_DOUBLE_EQ(0.5, state->dataFurnaces->CompOnMassFlow);
     EXPECT_DOUBLE_EQ(1.0, OnOffAirFlowRatio);
-    EXPECT_DOUBLE_EQ(1.0, state->dataLoopNodes->Node(state->dataFurnaces->Furnace(FurnaceNum).FurnaceInletNodeNum).MassFlowRate);
+    EXPECT_DOUBLE_EQ(0.5, state->dataLoopNodes->Node(state->dataFurnaces->Furnace(FurnaceNum).FurnaceInletNodeNum).MassFlowRate);
 
     // Test availability manager signal
     state->dataHVACGlobal->TurnFansOff = true;
     state->dataHVACGlobal->TurnFansOn = false;
     SetVSHPAirFlow(*state, FurnaceNum, PartLoadRatio, OnOffAirFlowRatio);
-    EXPECT_DOUBLE_EQ(1.0, state->dataHVACGlobal->MSHPMassFlowRateLow);
-    EXPECT_DOUBLE_EQ(1.0, state->dataHVACGlobal->MSHPMassFlowRateHigh);
+    EXPECT_DOUBLE_EQ(0.5, state->dataHVACGlobal->MSHPMassFlowRateLow);
+    EXPECT_DOUBLE_EQ(0.5, state->dataHVACGlobal->MSHPMassFlowRateHigh);
     EXPECT_DOUBLE_EQ(0.0, state->dataFurnaces->CompOffMassFlow);
-    EXPECT_DOUBLE_EQ(1.0, state->dataFurnaces->CompOnMassFlow);
+    EXPECT_DOUBLE_EQ(0.5, state->dataFurnaces->CompOnMassFlow);
     EXPECT_DOUBLE_EQ(0.0, OnOffAirFlowRatio);
     EXPECT_DOUBLE_EQ(0.0, state->dataLoopNodes->Node(state->dataFurnaces->Furnace(FurnaceNum).FurnaceInletNodeNum).MassFlowRate);
     state->dataHVACGlobal->TurnFansOff = false;
@@ -230,12 +230,12 @@ TEST_F(EnergyPlusFixture, SetVSHPAirFlowTest_VSFurnaceFlowTest)
     state->dataFurnaces->HeatingLoad = false;
     state->dataFurnaces->CoolingLoad = true;
     SetVSHPAirFlow(*state, FurnaceNum, PartLoadRatio, OnOffAirFlowRatio);
-    EXPECT_DOUBLE_EQ(1.2, state->dataHVACGlobal->MSHPMassFlowRateLow);
-    EXPECT_DOUBLE_EQ(1.2, state->dataHVACGlobal->MSHPMassFlowRateHigh);
+    EXPECT_DOUBLE_EQ(0.75, state->dataHVACGlobal->MSHPMassFlowRateLow);
+    EXPECT_DOUBLE_EQ(0.75, state->dataHVACGlobal->MSHPMassFlowRateHigh);
     EXPECT_DOUBLE_EQ(0.0, state->dataFurnaces->CompOffMassFlow);
-    EXPECT_DOUBLE_EQ(1.2, state->dataFurnaces->CompOnMassFlow);
+    EXPECT_DOUBLE_EQ(0.75, state->dataFurnaces->CompOnMassFlow);
     EXPECT_DOUBLE_EQ(1.0, OnOffAirFlowRatio);
-    EXPECT_DOUBLE_EQ(1.2, state->dataLoopNodes->Node(state->dataFurnaces->Furnace(FurnaceNum).FurnaceInletNodeNum).MassFlowRate);
+    EXPECT_DOUBLE_EQ(0.75, state->dataLoopNodes->Node(state->dataFurnaces->Furnace(FurnaceNum).FurnaceInletNodeNum).MassFlowRate);
 
     // constant fan mode should drop to idle flow rate
     state->dataFurnaces->Furnace(FurnaceNum).fanOp = HVAC::FanOp::Continuous;
