@@ -471,9 +471,6 @@ namespace Photovoltaics {
 
                 ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-                if (s_ipsc->cAlphaArgs(1).empty()) {
-                    continue;
-                }
                 tmpSimpleModuleParams(ModNum).Name = s_ipsc->cAlphaArgs(1);
                 tmpSimpleModuleParams(ModNum).ActiveFraction = s_ipsc->rNumericArgs(1);
 
@@ -517,9 +514,7 @@ namespace Photovoltaics {
                                                                          s_ipsc->cNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
-                if (s_ipsc->cAlphaArgs(1).empty()) {
-                    continue;
-                }
+
                 tmpTRNSYSModuleParams(ModNum).Name = s_ipsc->cAlphaArgs(1);
 
                 if (s_ipsc->lAlphaFieldBlanks(2)) {
@@ -569,9 +564,6 @@ namespace Photovoltaics {
                                                                          s_ipsc->lAlphaFieldBlanks,
                                                                          s_ipsc->cAlphaFieldNames,
                                                                          s_ipsc->cNumericFieldNames);
-                if (s_ipsc->cAlphaArgs(1).empty()) {
-                    continue;
-                }
 
                 tmpSNLModuleParams(ModNum).name = s_ipsc->cAlphaArgs(1);
                 tmpSNLModuleParams(ModNum).Acoll = s_ipsc->rNumericArgs(1);
