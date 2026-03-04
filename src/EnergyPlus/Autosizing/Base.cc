@@ -425,10 +425,10 @@ void BaseSizer::selectSizerOutput(EnergyPlusData &state, bool &errorsFound)
                     std::string msg = this->callingRoutine + ": Potential issue with equipment sizing for " + this->compType + ' ' + this->compName;
                     this->addErrorMessage(msg);
                     ShowMessage(state, msg);
-                    msg = format("User-Specified {}{} = {:.5R}", this->sizingStringScalable, this->sizingString, this->originalValue);
+                    msg = EnergyPlus::format("User-Specified {}{} = {:.5R}", this->sizingStringScalable, this->sizingString, this->originalValue);
                     this->addErrorMessage(msg);
                     ShowContinueError(state, msg);
-                    msg = format("differs from Design Size {} = {:.5R}", this->sizingString, this->autoSizedValue);
+                    msg = EnergyPlus::format("differs from Design Size {} = {:.5R}", this->sizingString, this->autoSizedValue);
                     this->addErrorMessage(msg);
                     ShowContinueError(state, msg);
                     msg = "This may, or may not, indicate mismatched component sizes.";
@@ -449,7 +449,7 @@ void BaseSizer::selectSizerOutput(EnergyPlusData &state, bool &errorsFound)
             std::string msg = this->callingRoutine + ' ' + this->compType + ' ' + this->compName + ", Developer Error: Component sizing incomplete.";
             this->addErrorMessage(msg);
             ShowSevereError(state, msg);
-            msg = format("SizingString = {}, SizingResult = {:.1T}", this->sizingString, this->originalValue);
+            msg = EnergyPlus::format("SizingString = {}, SizingResult = {:.1T}", this->sizingString, this->originalValue);
             this->addErrorMessage(msg);
             ShowContinueError(state, msg);
             this->errorType = AutoSizingResultType::ErrorType1;
@@ -561,10 +561,10 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
                     std::string msg = this->callingRoutine + ": Potential issue with equipment sizing for " + this->compType + ' ' + this->compName;
                     this->addErrorMessage(msg);
                     ShowMessage(state, msg);
-                    msg = format("User-Specified {}{} = {:.5R}", this->sizingStringScalable, this->sizingString, this->originalValue);
+                    msg = EnergyPlus::format("User-Specified {}{} = {:.5R}", this->sizingStringScalable, this->sizingString, this->originalValue);
                     this->addErrorMessage(msg);
                     ShowContinueError(state, msg);
-                    msg = format("differs from Design Size {} = {:.5R}", this->sizingString, this->autoSizedValue);
+                    msg = EnergyPlus::format("differs from Design Size {} = {:.5R}", this->sizingString, this->autoSizedValue);
                     this->addErrorMessage(msg);
                     ShowContinueError(state, msg);
                     msg = "This may, or may not, indicate mismatched component sizes.";
@@ -585,7 +585,7 @@ void BaseSizer::select2StgDXHumCtrlSizerOutput(EnergyPlusData &state, bool &erro
             std::string msg = this->callingRoutine + ' ' + this->compType + ' ' + this->compName + ", Developer Error: Component sizing incomplete.";
             this->addErrorMessage(msg);
             ShowSevereError(state, msg);
-            msg = format("SizingString = {}, SizingResult = {:.1T}", this->sizingString, this->originalValue);
+            msg = EnergyPlus::format("SizingString = {}, SizingResult = {:.1T}", this->sizingString, this->originalValue);
             this->addErrorMessage(msg);
             ShowContinueError(state, msg);
             this->errorType = AutoSizingResultType::ErrorType1;

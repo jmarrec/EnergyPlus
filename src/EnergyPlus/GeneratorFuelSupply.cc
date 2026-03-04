@@ -115,7 +115,7 @@ namespace GeneratorFuelSupply {
             int NumGeneratorFuelSups = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
 
             if (NumGeneratorFuelSups <= 0) {
-                ShowSevereError(state, format("No {} equipment specified in input file", cCurrentModuleObject));
+                ShowSevereError(state, EnergyPlus::format("No {} equipment specified in input file", cCurrentModuleObject));
                 ErrorsFound = true;
             }
 
@@ -142,8 +142,8 @@ namespace GeneratorFuelSupply {
                 } else if (Util::SameString("Scheduled", AlphArray(2))) {
                     state.dataGenerator->FuelSupply(FuelSupNum).FuelTempMode = DataGenerators::FuelTemperatureMode::FuelInTempSchedule;
                 } else {
-                    ShowSevereError(state, format("Invalid, {} = {}", state.dataIPShortCut->cAlphaFieldNames(2), AlphArray(2)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, AlphArray(1)));
+                    ShowSevereError(state, EnergyPlus::format("Invalid, {} = {}", state.dataIPShortCut->cAlphaFieldNames(2), AlphArray(2)));
+                    ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, AlphArray(1)));
                     ErrorsFound = true;
                 }
 
@@ -168,8 +168,8 @@ namespace GeneratorFuelSupply {
 
                 state.dataGenerator->FuelSupply(FuelSupNum).CompPowerCurveID = Curve::GetCurveIndex(state, AlphArray(5));
                 if (state.dataGenerator->FuelSupply(FuelSupNum).CompPowerCurveID == 0) {
-                    ShowSevereError(state, format("Invalid, {} = {}", state.dataIPShortCut->cAlphaFieldNames(5), AlphArray(5)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, AlphArray(1)));
+                    ShowSevereError(state, EnergyPlus::format("Invalid, {} = {}", state.dataIPShortCut->cAlphaFieldNames(5), AlphArray(5)));
+                    ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, AlphArray(1)));
                     ShowContinueError(state, "Curve named was not found ");
                     ErrorsFound = true;
                 }
@@ -183,8 +183,8 @@ namespace GeneratorFuelSupply {
                 } else if (Util::SameString(AlphArray(6), "LiquidGeneric")) {
                     state.dataGenerator->FuelSupply(FuelSupNum).FuelTypeMode = DataGenerators::FuelMode::GenericLiquid;
                 } else {
-                    ShowSevereError(state, format("Invalid, {} = {}", state.dataIPShortCut->cAlphaFieldNames(6), AlphArray(6)));
-                    ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, AlphArray(1)));
+                    ShowSevereError(state, EnergyPlus::format("Invalid, {} = {}", state.dataIPShortCut->cAlphaFieldNames(6), AlphArray(6)));
+                    ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, AlphArray(1)));
                     ErrorsFound = true;
                 }
 
@@ -198,11 +198,11 @@ namespace GeneratorFuelSupply {
                     state.dataGenerator->FuelSupply(FuelSupNum).NumConstituents = NumFuelConstit;
 
                     if (NumFuelConstit > 12) {
-                        ShowSevereError(state, format("{} model not set up for more than 12 fuel constituents", cCurrentModuleObject));
+                        ShowSevereError(state, EnergyPlus::format("{} model not set up for more than 12 fuel constituents", cCurrentModuleObject));
                         ErrorsFound = true;
                     }
                     if (NumFuelConstit < 1) {
-                        ShowSevereError(state, format("{} model needs at least one fuel constituent", cCurrentModuleObject));
+                        ShowSevereError(state, EnergyPlus::format("{} model needs at least one fuel constituent", cCurrentModuleObject));
                         ErrorsFound = true;
                     }
 
@@ -213,9 +213,10 @@ namespace GeneratorFuelSupply {
 
                     // check for molar fractions summing to 1.0.
                     if (std::abs(sum(state.dataGenerator->FuelSupply(FuelSupNum).ConstitMolalFract) - 1.0) > 0.0001) {
-                        ShowSevereError(state, format("{} molar fractions do not sum to 1.0", cCurrentModuleObject));
-                        ShowContinueError(state, format("Sum was={:.5R}", sum(state.dataGenerator->FuelSupply(FuelSupNum).ConstitMolalFract)));
-                        ShowContinueError(state, format("Entered in {} = {}", cCurrentModuleObject, AlphArray(1)));
+                        ShowSevereError(state, EnergyPlus::format("{} molar fractions do not sum to 1.0", cCurrentModuleObject));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Sum was={:.5R}", sum(state.dataGenerator->FuelSupply(FuelSupNum).ConstitMolalFract)));
+                        ShowContinueError(state, EnergyPlus::format("Entered in {} = {}", cCurrentModuleObject, AlphArray(1)));
                         ErrorsFound = true;
                     }
                 }
@@ -228,7 +229,7 @@ namespace GeneratorFuelSupply {
             }
 
             if (ErrorsFound) {
-                ShowFatalError(state, format("Problem found processing input for {}", cCurrentModuleObject));
+                ShowFatalError(state, EnergyPlus::format("Problem found processing input for {}", cCurrentModuleObject));
             }
 
             state.dataGeneratorFuelSupply->MyOneTimeFlag = false;
@@ -581,7 +582,7 @@ namespace GeneratorFuelSupply {
                 state.dataGenerator->FuelSupply(FuelSupplyNum).GasLibID(i) = thisGasID;
 
                 if (thisGasID == 0) {
-                    ShowSevereError(state, format("Fuel constituent not found in thermochemistry data: {}", thisName));
+                    ShowSevereError(state, EnergyPlus::format("Fuel constituent not found in thermochemistry data: {}", thisName));
                     ErrorsFound = true;
                 }
 

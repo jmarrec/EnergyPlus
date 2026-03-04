@@ -767,7 +767,7 @@ InputProcessor::MaxFields InputProcessor::findMaxFields(
                 continue;
             }
             for (std::size_t i = maxFields.max_fields; i < legacy_idd_fields.size(); ++i) {
-                if (field_key == legacy_idd_fields[i]) {
+                if (field_key == legacy_idd_fields[i].get<std::string>()) {
                     maxFields.max_fields = (i + 1);
                 }
             }
@@ -785,7 +785,7 @@ InputProcessor::MaxFields InputProcessor::findMaxFields(
                     for (auto const &ext : exts.value().items()) {
                         auto const &ext_key = ext.key();
                         for (std::size_t i = max_extensible_field; i < legacy_idd_extensibles.size(); ++i) {
-                            if (ext_key == legacy_idd_extensibles[i]) {
+                            if (ext_key == legacy_idd_extensibles[i].get<std::string>()) {
                                 max_extensible_field = (i + 1);
                             }
                         }
@@ -915,7 +915,7 @@ const json &InputProcessor::getJSONObjectItem(EnergyPlusData &state, std::string
         auto tmp_umit = caseInsensitiveObjectMap.find(convertToUpper(objectInfo.objectType));
         if (tmp_umit == caseInsensitiveObjectMap.end()) {
             // indicates object type not found, see function GeneralRoutines::ValidateComponent
-            ShowFatalError(state, format(R"(ObjectType of type "{}" requested was not found in input)", objectInfo.objectType));
+            ShowFatalError(state, EnergyPlus::format(R"(ObjectType of type "{}" requested was not found in input)", objectInfo.objectType));
         }
         objectInfo.objectType = tmp_umit->second;
         obj_iter = epJSON.find(objectInfo.objectType);
@@ -935,7 +935,8 @@ const json &InputProcessor::getJSONObjectItem(EnergyPlusData &state, std::string
         }
     }
 
-    ShowFatalError(state, format(R"(Name "{}" requested was not found in input for ObjectType "{}")", objectInfo.objectType, objectInfo.objectName));
+    ShowFatalError(
+        state, EnergyPlus::format(R"(Name "{}" requested was not found in input for ObjectType "{}")", objectInfo.objectType, objectInfo.objectName));
     throw;
 }
 

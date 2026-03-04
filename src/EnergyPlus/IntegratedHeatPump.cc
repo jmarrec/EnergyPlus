@@ -113,24 +113,25 @@ void SimIHP(EnergyPlusData &state,
     if (CompIndex == 0) {
         DXCoilNum = Util::FindItemInList(CompName, state.dataIntegratedHP->IntegratedHeatPumps);
         if (DXCoilNum == 0) {
-            ShowFatalError(state, format("Integrated Heat Pump not found={}", CompName));
+            ShowFatalError(state, EnergyPlus::format("Integrated Heat Pump not found={}", CompName));
         }
         CompIndex = DXCoilNum;
     } else {
         DXCoilNum = CompIndex;
         if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
             ShowFatalError(state,
-                           format("SimIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name={}",
-                                  DXCoilNum,
-                                  state.dataIntegratedHP->IntegratedHeatPumps.size(),
-                                  CompName));
+                           EnergyPlus::format("SimIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name={}",
+                                              DXCoilNum,
+                                              state.dataIntegratedHP->IntegratedHeatPumps.size(),
+                                              CompName));
         }
         if (!CompName.empty() && CompName != state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum).Name) {
-            ShowFatalError(state,
-                           format("SimIHP: Invalid CompIndex passed={}, Integrated HP name={}, stored Integrated HP Name for that index={}",
-                                  DXCoilNum,
-                                  CompName,
-                                  state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum).Name));
+            ShowFatalError(
+                state,
+                EnergyPlus::format("SimIHP: Invalid CompIndex passed={}, Integrated HP name={}, stored Integrated HP Name for that index={}",
+                                   DXCoilNum,
+                                   CompName,
+                                   state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum).Name));
         }
     };
 
@@ -486,13 +487,13 @@ void GetIHPInput(EnergyPlusData &state)
 
         ValidateComponent(state, ihp.SCCoilType, ihp.SCCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
-            ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+            ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
             ErrorsFound = true;
         } else {
             errFlag = false;
             ihp.SCCoilIndex = GetCoilIndexVariableSpeed(state, ihp.SCCoilType, ihp.SCCoilName, errFlag);
             if (errFlag) {
-                ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+                ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
         }
@@ -503,13 +504,13 @@ void GetIHPInput(EnergyPlusData &state)
 
         ValidateComponent(state, ihp.SHCoilType, ihp.SHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
-            ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+            ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
             ErrorsFound = true;
         } else {
             errFlag = false;
             ihp.SHCoilIndex = GetCoilIndexVariableSpeed(state, ihp.SHCoilType, ihp.SHCoilName, errFlag);
             if (errFlag) {
-                ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+                ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
         }
@@ -520,13 +521,13 @@ void GetIHPInput(EnergyPlusData &state)
 
         ValidateComponent(state, ihp.DWHCoilType, ihp.DWHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
-            ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+            ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
             ErrorsFound = true;
         } else {
             errFlag = false;
             ihp.DWHCoilIndex = GetCoilIndexVariableSpeed(state, ihp.DWHCoilType, ihp.DWHCoilName, errFlag);
             if (errFlag) {
-                ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+                ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
         }
@@ -537,13 +538,13 @@ void GetIHPInput(EnergyPlusData &state)
 
         ValidateComponent(state, ihp.SCWHCoilType, ihp.SCWHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
-            ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+            ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
             ErrorsFound = true;
         } else {
             errFlag = false;
             ihp.SCWHCoilIndex = GetCoilIndexVariableSpeed(state, ihp.SCWHCoilType, ihp.SCWHCoilName, errFlag);
             if (errFlag) {
-                ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+                ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
         }
@@ -554,13 +555,13 @@ void GetIHPInput(EnergyPlusData &state)
 
         ValidateComponent(state, ihp.SCDWHCoolCoilType, ihp.SCDWHCoolCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
-            ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+            ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
             ErrorsFound = true;
         } else {
             errFlag = false;
             ihp.SCDWHCoolCoilIndex = GetCoilIndexVariableSpeed(state, ihp.SCDWHCoolCoilType, ihp.SCDWHCoolCoilName, errFlag);
             if (errFlag) {
-                ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+                ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
         }
@@ -571,13 +572,13 @@ void GetIHPInput(EnergyPlusData &state)
 
         ValidateComponent(state, ihp.SCDWHWHCoilType, ihp.SCDWHWHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
-            ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+            ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
             ErrorsFound = true;
         } else {
             errFlag = false;
             ihp.SCDWHWHCoilIndex = GetCoilIndexVariableSpeed(state, ihp.SCDWHWHCoilType, ihp.SCDWHWHCoilName, errFlag);
             if (errFlag) {
-                ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+                ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             } else {
                 state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCDWHWHCoilIndex).bIsDesuperheater = true;
@@ -590,13 +591,13 @@ void GetIHPInput(EnergyPlusData &state)
 
         ValidateComponent(state, ihp.SHDWHHeatCoilType, ihp.SHDWHHeatCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
-            ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+            ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
             ErrorsFound = true;
         } else {
             errFlag = false;
             ihp.SHDWHHeatCoilIndex = GetCoilIndexVariableSpeed(state, ihp.SHDWHHeatCoilType, ihp.SHDWHHeatCoilName, errFlag);
             if (errFlag) {
-                ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+                ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             }
         }
@@ -607,13 +608,13 @@ void GetIHPInput(EnergyPlusData &state)
 
         ValidateComponent(state, ihp.SHDWHWHCoilType, ihp.SHDWHWHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
-            ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+            ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
             ErrorsFound = true;
         } else {
             errFlag = false;
             ihp.SHDWHWHCoilIndex = GetCoilIndexVariableSpeed(state, ihp.SHDWHWHCoilType, ihp.SHDWHWHCoilName, errFlag);
             if (errFlag) {
-                ShowContinueError(state, format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
+                ShowContinueError(state, EnergyPlus::format("...specified in {}=\"{}\".", CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;
             } else {
                 state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHWHCoilIndex).bIsDesuperheater = true;
@@ -695,7 +696,8 @@ void GetIHPInput(EnergyPlusData &state)
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCWHCoilIndex).AirInletNodeNum != InNode) ||
             (state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCWHCoilIndex).AirOutletNodeNum != OutNode)) {
-            ShowContinueError(state, format("Mistaken air node connection: {}{}-wrong coil node names.", CurrentModuleObject, ihp.SCWHCoilName));
+            ShowContinueError(state,
+                              EnergyPlus::format("Mistaken air node connection: {}{}-wrong coil node names.", CurrentModuleObject, ihp.SCWHCoilName));
             ErrorsFound = true;
         }
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Cooling Coil", ihp.SCWHCoilType, ihp.SCWHCoilName, InNodeName, OutNodeName);
@@ -720,7 +722,8 @@ void GetIHPInput(EnergyPlusData &state)
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCDWHCoolCoilIndex).AirInletNodeNum != InNode) ||
             (state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCDWHCoolCoilIndex).AirOutletNodeNum != OutNode)) {
-            ShowContinueError(state, format("Mistaken air node connection: {}{}-wrong coil node names.", CurrentModuleObject, ihp.SCDWHCoolCoilName));
+            ShowContinueError(
+                state, EnergyPlus::format("Mistaken air node connection: {}{}-wrong coil node names.", CurrentModuleObject, ihp.SCDWHCoolCoilName));
             ErrorsFound = true;
         }
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Cooling Coil", ihp.SCDWHCoolCoilType, ihp.SCDWHCoolCoilName, InNodeName, OutNodeName);
@@ -752,8 +755,9 @@ void GetIHPInput(EnergyPlusData &state)
         InNodeName = state.dataLoopNodes->NodeID(InNode);
         OutNodeName = state.dataLoopNodes->NodeID(OutNode);
         if (state.dataVariableSpeedCoils->VarSpeedCoil(ChildCoilIndex).AirInletNodeNum != InNode) {
-            ShowContinueError(state,
-                              format("Mistaken air node connection: {}- cooling coil outlet mismatches heating coil inlet.", CurrentModuleObject));
+            ShowContinueError(
+                state,
+                EnergyPlus::format("Mistaken air node connection: {}- cooling coil outlet mismatches heating coil inlet.", CurrentModuleObject));
             ErrorsFound = true;
         }
         TestCompSet(state, CurrentModuleObject, ihp.Name + " Heating Coil", InNodeName, OutNodeName, "Heating Air Nodes");
@@ -798,8 +802,8 @@ void GetIHPInput(EnergyPlusData &state)
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHHeatCoilIndex).AirInletNodeNum != InNode) ||
             (state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHHeatCoilIndex).AirOutletNodeNum != OutNode)) {
-            ShowContinueError(state,
-                              format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SHDWHHeatCoilName));
+            ShowContinueError(
+                state, EnergyPlus::format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SHDWHHeatCoilName));
             ErrorsFound = true;
         }
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Heating Coil", ihp.SHDWHHeatCoilType, ihp.SHDWHHeatCoilName, InNodeName, OutNodeName);
@@ -833,7 +837,8 @@ void GetIHPInput(EnergyPlusData &state)
         ihp.WaterOutletNodeNum = OutNode;
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCDWHWHCoilIndex).WaterInletNodeNum != InNode) ||
             (state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCDWHWHCoilIndex).WaterOutletNodeNum != OutNode)) {
-            ShowContinueError(state, format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SCDWHWHCoilName));
+            ShowContinueError(
+                state, EnergyPlus::format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SCDWHWHCoilName));
             ErrorsFound = true;
         }
 
@@ -899,7 +904,8 @@ void GetIHPInput(EnergyPlusData &state)
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHWHCoilIndex).WaterInletNodeNum != InNode) ||
             (state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHWHCoilIndex).WaterOutletNodeNum != OutNode)) {
-            ShowContinueError(state, format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SHDWHWHCoilName));
+            ShowContinueError(
+                state, EnergyPlus::format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SHDWHWHCoilName));
             ErrorsFound = true;
         }
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Water Coil", ihp.SHDWHWHCoilType, ihp.SHDWHWHCoilName, InNodeName, OutNodeName);
@@ -924,7 +930,8 @@ void GetIHPInput(EnergyPlusData &state)
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.DWHCoilIndex).WaterInletNodeNum != InNode) ||
             (state.dataVariableSpeedCoils->VarSpeedCoil(ihp.DWHCoilIndex).WaterOutletNodeNum != OutNode)) {
-            ShowContinueError(state, format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.DWHCoilName));
+            ShowContinueError(state,
+                              EnergyPlus::format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.DWHCoilName));
             ErrorsFound = true;
         }
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Water Coil", ihp.DWHCoilType, ihp.DWHCoilName, InNodeName, OutNodeName);
@@ -968,7 +975,8 @@ void GetIHPInput(EnergyPlusData &state)
         ihp.ODAirOutletNodeNum = OutNode;
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCDWHWHCoilIndex).AirInletNodeNum != InNode) ||
             (state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCDWHWHCoilIndex).AirOutletNodeNum != OutNode)) {
-            ShowContinueError(state, format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SCDWHWHCoilName));
+            ShowContinueError(
+                state, EnergyPlus::format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SCDWHWHCoilName));
             ErrorsFound = true;
         }
 
@@ -1038,7 +1046,8 @@ void GetIHPInput(EnergyPlusData &state)
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHWHCoilIndex).AirInletNodeNum != InNode) ||
             (state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHWHCoilIndex).AirOutletNodeNum != OutNode)) {
-            ShowContinueError(state, format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SHDWHWHCoilName));
+            ShowContinueError(
+                state, EnergyPlus::format("Mistaken air node connection: {}:{}-wrong coil node names.", CurrentModuleObject, ihp.SHDWHWHCoilName));
             ErrorsFound = true;
         }
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Outdoor Coil", ihp.SHDWHWHCoilType, ihp.SHDWHWHCoilName, InNodeName, OutNodeName);
@@ -1072,8 +1081,9 @@ void GetIHPInput(EnergyPlusData &state)
     }
 
     if (ErrorsFound) {
-        ShowFatalError(state,
-                       format("{} Errors found in getting {} input. Preceding condition(s) causes termination.", RoutineName, CurrentModuleObject));
+        ShowFatalError(
+            state,
+            EnergyPlus::format("{} Errors found in getting {} input. Preceding condition(s) causes termination.", RoutineName, CurrentModuleObject));
     }
 
     for (int CoilCounter = 1; CoilCounter <= NumASIHPs; ++CoilCounter) {
@@ -1207,9 +1217,9 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("SizeIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("SizeIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     if (state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum).IHPCoilsSized) {
@@ -1222,14 +1232,15 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
     bool errFlag = false;
     SetVarSpeedCoilData(state, ihp.SCCoilIndex, errFlag, _, ihp.SHCoilIndex);
     if (errFlag) {
-        ShowSevereError(state, format(R"(SizeIHP: Could not match cooling coil"{}" with heating coil="{}")", ihp.SCCoilName, ihp.SHCoilName));
+        ShowSevereError(state,
+                        EnergyPlus::format(R"(SizeIHP: Could not match cooling coil"{}" with heating coil="{}")", ihp.SCCoilName, ihp.SHCoilName));
         ErrorsFound = true;
     };
 
     errFlag = false;
     SizeVarSpeedCoil(state, ihp.SCCoilIndex, errFlag); // size cooling coil
     if (errFlag) {
-        ShowSevereError(state, format("SizeIHP: failed to size SC coil\"{}\"", ihp.SCCoilName));
+        ShowSevereError(state, EnergyPlus::format("SizeIHP: failed to size SC coil\"{}\"", ihp.SCCoilName));
         ErrorsFound = true;
     } else {
         RatedCapacity = state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCCoilIndex).RatedCapCoolTotal;
@@ -1238,7 +1249,7 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
     errFlag = false;
     SizeVarSpeedCoil(state, ihp.SHCoilIndex, errFlag); // size heating coil
     if (errFlag) {
-        ShowSevereError(state, format("SizeIHP: failed to size SH coil\"{}\"", ihp.SHCoilName));
+        ShowSevereError(state, EnergyPlus::format("SizeIHP: failed to size SH coil\"{}\"", ihp.SHCoilName));
         ErrorsFound = true;
     };
 
@@ -1253,7 +1264,7 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
     // size SCDWH air coil
     SizeVarSpeedCoil(state, ihp.SCDWHCoolCoilIndex, errFlag);
     if (errFlag) {
-        ShowSevereError(state, format("SizeIHP: failed to size SCDWH cooling coil\"{}\"", ihp.SCDWHCoolCoilName));
+        ShowSevereError(state, EnergyPlus::format("SizeIHP: failed to size SCDWH cooling coil\"{}\"", ihp.SCDWHCoolCoilName));
         ErrorsFound = true;
     };
 
@@ -1261,7 +1272,7 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
     errFlag = false;
     SizeVarSpeedCoil(state, ihp.SHDWHHeatCoilIndex, errFlag);
     if (errFlag) {
-        ShowSevereError(state, format("SizeIHP: failed to size SHDWH heating coil\"{}\"", ihp.SHDWHHeatCoilName));
+        ShowSevereError(state, EnergyPlus::format("SizeIHP: failed to size SHDWH heating coil\"{}\"", ihp.SHDWHHeatCoilName));
         ErrorsFound = true;
     };
 
@@ -1275,7 +1286,7 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
     errFlag = false;
     SizeVarSpeedCoil(state, ihp.SCWHCoilIndex, errFlag);
     if (errFlag) {
-        ShowSevereError(state, format("SizeIHP: failed to size SCWH coil\"{}\"", ihp.SCWHCoilName));
+        ShowSevereError(state, EnergyPlus::format("SizeIHP: failed to size SCWH coil\"{}\"", ihp.SCWHCoilName));
         ErrorsFound = true;
     };
 
@@ -1287,7 +1298,7 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
     errFlag = false;
     SizeVarSpeedCoil(state, ihp.DWHCoilIndex, errFlag);
     if (errFlag) {
-        ShowSevereError(state, format("SizeIHP: failed to size DWH coil\"{}\"", ihp.DWHCoilName));
+        ShowSevereError(state, EnergyPlus::format("SizeIHP: failed to size DWH coil\"{}\"", ihp.DWHCoilName));
         ErrorsFound = true;
     };
 
@@ -1299,7 +1310,7 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
     errFlag = false;
     SizeVarSpeedCoil(state, ihp.SCDWHWHCoilIndex, errFlag);
     if (errFlag) {
-        ShowSevereError(state, format("SizeIHP: failed to size SCDWH water heating coil\"{}\"", ihp.SCDWHWHCoilName));
+        ShowSevereError(state, EnergyPlus::format("SizeIHP: failed to size SCDWH water heating coil\"{}\"", ihp.SCDWHWHCoilName));
         ErrorsFound = true;
     };
 
@@ -1311,7 +1322,7 @@ void SizeIHP(EnergyPlusData &state, int const DXCoilNum)
     errFlag = false;
     SizeVarSpeedCoil(state, ihp.SHDWHWHCoilIndex, errFlag);
     if (errFlag) {
-        ShowSevereError(state, format("SizeIHP: failed to size SHDWH water heating coil\"{}\"", ihp.SHDWHWHCoilName));
+        ShowSevereError(state, EnergyPlus::format("SizeIHP: failed to size SHDWH water heating coil\"{}\"", ihp.SHDWHWHCoilName));
         ErrorsFound = true;
     };
 
@@ -1332,9 +1343,9 @@ void InitializeIHP(EnergyPlusData &state, int const DXCoilNum)
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("InitializeIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("InitializeIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     auto &ihp = state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum);
@@ -1368,9 +1379,9 @@ void UpdateIHP(EnergyPlusData &state, int const DXCoilNum)
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("UpdateIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("UpdateIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     auto &ihp = state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum);
@@ -1480,9 +1491,9 @@ void DecideWorkMode(EnergyPlusData &state,
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("DecideWorkMode: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("DecideWorkMode: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     auto &ihp = state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum);
@@ -1621,9 +1632,9 @@ void ClearCoils(EnergyPlusData &state, int const DXCoilNum)
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("ClearCoils: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("ClearCoils: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     auto &ihp = state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum);
@@ -1649,9 +1660,9 @@ IHPOperationMode GetCurWorkMode(EnergyPlusData &state, int const DXCoilNum)
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("GetCurWorkMode: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("GetCurWorkMode: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     if (state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum).IHPCoilsSized == false) {
@@ -1700,7 +1711,7 @@ int GetCoilIndexIHP(EnergyPlusData &state,
     IndexNum = Util::FindItemInList(CoilName, state.dataIntegratedHP->IntegratedHeatPumps);
 
     if (IndexNum == 0) {
-        ShowSevereError(state, format(R"(GetCoilIndexIHP: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
+        ShowSevereError(state, EnergyPlus::format(R"(GetCoilIndexIHP: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
         ErrorsFound = true;
     }
 
@@ -1742,7 +1753,7 @@ int GetCoilInletNodeIHP(EnergyPlusData &state,
     }
 
     if (WhichCoil == 0) {
-        ShowSevereError(state, format(R"(GetCoilInletNodeIHP: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
+        ShowSevereError(state, EnergyPlus::format(R"(GetCoilInletNodeIHP: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
         ErrorsFound = true;
         NodeNumber = 0;
     }
@@ -1785,7 +1796,7 @@ int GetDWHCoilInletNodeIHP(EnergyPlusData &state,
     }
 
     if (WhichCoil == 0) {
-        ShowSevereError(state, format(R"(GetCoilInletNodeIHP: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
+        ShowSevereError(state, EnergyPlus::format(R"(GetCoilInletNodeIHP: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
         ErrorsFound = true;
         NodeNumber = 0;
     }
@@ -1828,7 +1839,7 @@ int GetDWHCoilOutletNodeIHP(EnergyPlusData &state,
     }
 
     if (WhichCoil == 0) {
-        ShowSevereError(state, format(R"(GetCoilInletNodeIHP: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
+        ShowSevereError(state, EnergyPlus::format(R"(GetCoilInletNodeIHP: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
         ErrorsFound = true;
         NodeNumber = 0;
     }
@@ -1882,7 +1893,7 @@ int GetIHPDWHCoilPLFFPLR(EnergyPlusData &state,
     }
 
     if (WhichCoil == 0) {
-        ShowSevereError(state, format(R"(GetIHPDWHCoilPLFFPLR: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
+        ShowSevereError(state, EnergyPlus::format(R"(GetIHPDWHCoilPLFFPLR: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
         ErrorsFound = true;
         PLRNumber = 0;
     }
@@ -1940,7 +1951,8 @@ Real64 GetDWHCoilCapacityIHP(EnergyPlusData &state,
     }
 
     if (WhichCoil == 0) {
-        ShowSevereError(state, format(R"(GetCoilCapacityVariableSpeed: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
+        ShowSevereError(state,
+                        EnergyPlus::format(R"(GetCoilCapacityVariableSpeed: Could not find CoilType="{}" with Name="{}")", CoilType, CoilName));
         ErrorsFound = true;
         CoilCapacity = -1000.0;
     }
@@ -1960,9 +1972,9 @@ int GetLowSpeedNumIHP(EnergyPlusData &state, int const DXCoilNum)
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("GetLowSpeedNumIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("GetLowSpeedNumIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     auto const &ihp = state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum);
@@ -2003,9 +2015,9 @@ int GetMaxSpeedNumIHP(EnergyPlusData &state, int const DXCoilNum)
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("GetMaxSpeedNumIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("GetMaxSpeedNumIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     int SpeedNum(0);
@@ -2061,9 +2073,9 @@ Real64 GetAirVolFlowRateIHP(EnergyPlusData &state,
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("GetAirVolFlowRateIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("GetAirVolFlowRateIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     auto &ihp = state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum);
@@ -2170,9 +2182,9 @@ Real64 GetWaterVolFlowRateIHP(EnergyPlusData &state, int const DXCoilNum, int co
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("GetWaterVolFlowRateIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("GetWaterVolFlowRateIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     auto const &ihp = state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum);
@@ -2253,9 +2265,9 @@ Real64 GetAirMassFlowRateIHP(EnergyPlusData &state,
 
     if (DXCoilNum > static_cast<int>(state.dataIntegratedHP->IntegratedHeatPumps.size()) || DXCoilNum < 1) {
         ShowFatalError(state,
-                       format("GetAirMassFlowRateIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
-                              DXCoilNum,
-                              state.dataIntegratedHP->IntegratedHeatPumps.size()));
+                       EnergyPlus::format("GetAirMassFlowRateIHP: Invalid CompIndex passed={}, Number of Integrated HPs={}, IHP name=AS-IHP",
+                                          DXCoilNum,
+                                          state.dataIntegratedHP->IntegratedHeatPumps.size()));
     }
 
     auto &ihp = state.dataIntegratedHP->IntegratedHeatPumps(DXCoilNum);

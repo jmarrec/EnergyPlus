@@ -146,7 +146,7 @@ namespace SurfaceGroundHeatExchanger {
             }
         }
         // If we didn't find it, fatal
-        ShowFatalError(state, format("Surface Ground Heat Exchanger: Error getting inputs for pipe named: {}", objectName));
+        ShowFatalError(state, EnergyPlus::format("Surface Ground Heat Exchanger: Error getting inputs for pipe named: {}", objectName));
         // Shut up the compiler
         return nullptr;
     }
@@ -231,15 +231,17 @@ namespace SurfaceGroundHeatExchanger {
                 Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(2), state.dataConstruction->Construct);
 
             if (state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).ConstructionNum == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(state,
+                                EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
 
             // Error checking for surfaces, zones, and construction information
             if (!state.dataConstruction->Construct(state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).ConstructionNum).SourceSinkPresent) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(state,
+                                EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(
                     state, "Construction must have internal source/sink and be referenced by a ConstructionProperty:InternalHeatSource object");
                 ErrorsFound = true;
@@ -258,8 +260,9 @@ namespace SurfaceGroundHeatExchanger {
                                   NodeInputManager::CompFluidStream::Primary,
                                   ObjectIsNotParent);
             if (state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).InletNodeNum == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(state,
+                                EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
 
@@ -276,8 +279,9 @@ namespace SurfaceGroundHeatExchanger {
                                   NodeInputManager::CompFluidStream::Primary,
                                   ObjectIsNotParent);
             if (state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).OutletNodeNum == 0) {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(4), state.dataIPShortCut->cAlphaArgs(4)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(state,
+                                EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(4), state.dataIPShortCut->cAlphaArgs(4)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ErrorsFound = true;
             }
 
@@ -294,16 +298,18 @@ namespace SurfaceGroundHeatExchanger {
             state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).TubeSpacing = state.dataIPShortCut->rNumericArgs(3);
 
             if (state.dataIPShortCut->rNumericArgs(2) == 0) {
-                ShowSevereError(state,
-                                format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(2), state.dataIPShortCut->rNumericArgs(2)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(2), state.dataIPShortCut->rNumericArgs(2)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "Value must be greater than 0.0");
                 ErrorsFound = true;
             }
             if (state.dataIPShortCut->rNumericArgs(3) == 0.0) {
-                ShowSevereError(state,
-                                format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(3), state.dataIPShortCut->rNumericArgs(3)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(3), state.dataIPShortCut->rNumericArgs(3)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "Value must be greater than 0.0");
                 ErrorsFound = true;
             }
@@ -312,16 +318,18 @@ namespace SurfaceGroundHeatExchanger {
             state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).SurfaceLength = state.dataIPShortCut->rNumericArgs(4);
             state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).SurfaceWidth = state.dataIPShortCut->rNumericArgs(5);
             if (state.dataIPShortCut->rNumericArgs(4) <= 0.0) {
-                ShowSevereError(state,
-                                format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(4), state.dataIPShortCut->rNumericArgs(4)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(4), state.dataIPShortCut->rNumericArgs(4)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "Value must be greater than 0.0");
                 ErrorsFound = true;
             }
             if (state.dataIPShortCut->rNumericArgs(5) <= 0.0) {
-                ShowSevereError(state,
-                                format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(5), state.dataIPShortCut->rNumericArgs(5)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("Invalid {}={:.2R}", state.dataIPShortCut->cNumericFieldNames(5), state.dataIPShortCut->rNumericArgs(5)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "Value must be greater than 0.0");
                 ErrorsFound = true;
             }
@@ -332,8 +340,9 @@ namespace SurfaceGroundHeatExchanger {
             } else if (Util::SameString(state.dataIPShortCut->cAlphaArgs(5), "EXPOSED")) {
                 state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).LowerSurfCond = SurfCond_Exposed;
             } else {
-                ShowSevereError(state, format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5)));
-                ShowContinueError(state, format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
+                ShowSevereError(state,
+                                EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(5), state.dataIPShortCut->cAlphaArgs(5)));
+                ShowContinueError(state, EnergyPlus::format("Entered in {}={}", cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "Only \"Ground\" or \"Exposed\" is allowed.");
                 ErrorsFound = true;
             }
@@ -342,7 +351,7 @@ namespace SurfaceGroundHeatExchanger {
 
         // final error check
         if (ErrorsFound) {
-            ShowFatalError(state, format("Errors found in processing input for {}", cCurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", cCurrentModuleObject));
         }
 
         // Set up the output variables
@@ -437,8 +446,8 @@ namespace SurfaceGroundHeatExchanger {
             if (!state.dataEnvrn->GroundTempInputs[(int)DataEnvironment::GroundTempType::Shallow]) {
                 ShowWarningError(state, "GetSurfaceGroundHeatExchanger: No \"Site:GroundTemperature:Shallow\" were input.");
                 ShowContinueError(state,
-                                  format("Defaults, constant throughout the year of ({:.1R}) will be used.",
-                                         state.dataEnvrn->GroundTemp[(int)DataEnvironment::GroundTempType::Shallow]));
+                                  EnergyPlus::format("Defaults, constant throughout the year of ({:.1R}) will be used.",
+                                                     state.dataEnvrn->GroundTemp[(int)DataEnvironment::GroundTempType::Shallow]));
             }
             state.dataSurfaceGroundHeatExchangers->NoSurfaceGroundTempObjWarning = false;
         }
@@ -690,8 +699,10 @@ namespace SurfaceGroundHeatExchanger {
                 // Check for non-convergence
                 if (iter > Maxiter) {
                     if (this->ConvErrIndex1 == 0) {
-                        ShowWarningMessage(
-                            state, format("CalcSurfaceGroundHeatExchanger=\"{}\", Did not converge (part 1), Iterations={}", this->Name, Maxiter));
+                        ShowWarningMessage(state,
+                                           EnergyPlus::format("CalcSurfaceGroundHeatExchanger=\"{}\", Did not converge (part 1), Iterations={}",
+                                                              this->Name,
+                                                              Maxiter));
                         ShowContinueErrorTimeStamp(state, "");
                     }
                     ShowRecurringWarningErrorAtEnd(
@@ -791,9 +802,10 @@ namespace SurfaceGroundHeatExchanger {
                     // Check for non-convergence
                     if (iter1 > Maxiter1) {
                         if (this->ConvErrIndex2 == 0) {
-                            ShowWarningMessage(
-                                state,
-                                format("CalcSurfaceGroundHeatExchanger=\"{}\", Did not converge (part 2), Iterations={}", this->Name, Maxiter));
+                            ShowWarningMessage(state,
+                                               EnergyPlus::format("CalcSurfaceGroundHeatExchanger=\"{}\", Did not converge (part 2), Iterations={}",
+                                                                  this->Name,
+                                                                  Maxiter));
                             ShowContinueErrorTimeStamp(state, "");
                         }
                         ShowRecurringWarningErrorAtEnd(
@@ -813,8 +825,10 @@ namespace SurfaceGroundHeatExchanger {
                 // Check for non-convergence
                 if (iter > Maxiter) {
                     if (this->ConvErrIndex3 == 0) {
-                        ShowWarningMessage(
-                            state, format("CalcSurfaceGroundHeatExchanger=\"{}\", Did not converge (part 3), Iterations={}", this->Name, Maxiter));
+                        ShowWarningMessage(state,
+                                           EnergyPlus::format("CalcSurfaceGroundHeatExchanger=\"{}\", Did not converge (part 3), Iterations={}",
+                                                              this->Name,
+                                                              Maxiter));
                         ShowContinueErrorTimeStamp(state, "");
                     }
                     ShowRecurringWarningErrorAtEnd(
@@ -1148,9 +1162,10 @@ namespace SurfaceGroundHeatExchanger {
                 if (this->FrozenErrIndex1 == 0) {
                     ShowWarningMessage(
                         state,
-                        format("GroundHeatExchanger:Surface=\"{}\", water is frozen; Model not valid. Calculated Water Temperature=[{:.2R}] C",
-                               this->Name,
-                               this->InletTemp));
+                        EnergyPlus::format(
+                            "GroundHeatExchanger:Surface=\"{}\", water is frozen; Model not valid. Calculated Water Temperature=[{:.2R}] C",
+                            this->Name,
+                            this->InletTemp));
                     ShowContinueErrorTimeStamp(state, "");
                 }
                 ShowRecurringWarningErrorAtEnd(state,

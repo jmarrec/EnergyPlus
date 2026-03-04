@@ -648,11 +648,13 @@ void GetPlantLoopData(EnergyPlusData &state)
                     ShowContinueError(
                         state, "Invalid " + state.dataIPShortCut->cAlphaFieldNames(PressSimAlphaIndex) + "=\"" + Alpha(PressSimAlphaIndex) + "\".");
                     ShowContinueError(state, "Currently only options are: ");
-                    ShowContinueError(state, "  - " + format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::NoPressure)]));
-                    ShowContinueError(state,
-                                      "  - " + format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::PumpPowerCorrection)]));
-                    ShowContinueError(state,
-                                      "  - " + format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::FlowCorrection)]));
+                    ShowContinueError(
+                        state, "  - " + EnergyPlus::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::NoPressure)]));
+                    ShowContinueError(
+                        state,
+                        "  - " + EnergyPlus::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::PumpPowerCorrection)]));
+                    ShowContinueError(
+                        state, "  - " + EnergyPlus::format("{}", PressureSimTypeNamesUC[static_cast<int>(DataPlant::PressSimType::FlowCorrection)]));
                     ErrorsFound = true;
                 }
             }
@@ -1429,7 +1431,7 @@ void GetPlantInput(EnergyPlusData &state)
                     }
 
                     if (this_comp.compPtr == nullptr) {
-                        ShowFatalError(state, format(" Plant component \"{}\" was not assigned a pointer.", this_comp_type));
+                        ShowFatalError(state, EnergyPlus::format(" Plant component \"{}\" was not assigned a pointer.", this_comp_type));
                     }
 
                     this_comp.Name = CompNames(CompNum);
@@ -2165,9 +2167,9 @@ void fillPlantCondenserTopology(EnergyPlusData &state, DataPlant::PlantLoopData 
         // s->pdchTopPlantCompName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Component Name");
         // s->pdchTopPlantMixName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Mixer Name");
 
-        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, format("{}", rowCounter), loopType);
-        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, format("{}", rowCounter), thisLoop.Name);
-        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, format("{}", rowCounter), loopSide);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, EnergyPlus::format("{}", rowCounter), loopType);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, EnergyPlus::format("{}", rowCounter), thisLoop.Name);
+        OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, EnergyPlus::format("{}", rowCounter), loopSide);
         ++rowCounter;
 
         // Report for first branch
@@ -2222,10 +2224,10 @@ void fillPlantToplogySplitterRow2(EnergyPlusData &state,
 {
     auto &orp = state.dataOutRptPredefined;
     // s->pdchTopPlantSplitName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Splitter Name");
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, format("{}", rowCounter), loopType);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, format("{}", rowCounter), loopName);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, format("{}", rowCounter), side);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSplitName2, format("{}", rowCounter), splitterName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, EnergyPlus::format("{}", rowCounter), loopType);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, EnergyPlus::format("{}", rowCounter), loopName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, EnergyPlus::format("{}", rowCounter), side);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSplitName2, EnergyPlus::format("{}", rowCounter), splitterName);
 }
 void fillPlantToplogyMixerRow2(EnergyPlusData &state,
                                const std::string_view &loopType,
@@ -2236,10 +2238,10 @@ void fillPlantToplogyMixerRow2(EnergyPlusData &state,
 {
     auto &orp = state.dataOutRptPredefined;
     // s->pdchTopPlantMixName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Mixer Name");
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, format("{}", rowCounter), loopType);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, format("{}", rowCounter), loopName);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, format("{}", rowCounter), side);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantMixName2, format("{}", rowCounter), mixerName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, EnergyPlus::format("{}", rowCounter), loopType);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, EnergyPlus::format("{}", rowCounter), loopName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, EnergyPlus::format("{}", rowCounter), side);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantMixName2, EnergyPlus::format("{}", rowCounter), mixerName);
 }
 void fillPlantToplogyComponentRow2(EnergyPlusData &state,
                                    const std::string_view &loopType,
@@ -2254,12 +2256,12 @@ void fillPlantToplogyComponentRow2(EnergyPlusData &state,
     // s->pdchTopPlantBranchName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Branch Name");
     // s->pdchTopPlantCompType2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Component Type");
     // s->pdchTopPlantCompName2 = newPreDefColumn(state, s->pdstTopPlantLoop2, "Component Name");
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, format("{}", rowCounter), loopType);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, format("{}", rowCounter), loopName);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, format("{}", rowCounter), side);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantBranchName2, format("{}", rowCounter), branchName);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantCompType2, format("{}", rowCounter), compType);
-    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantCompName2, format("{}", rowCounter), compName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopType2, EnergyPlus::format("{}", rowCounter), loopType);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantLoopName2, EnergyPlus::format("{}", rowCounter), loopName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantSide2, EnergyPlus::format("{}", rowCounter), side);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantBranchName2, EnergyPlus::format("{}", rowCounter), branchName);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantCompType2, EnergyPlus::format("{}", rowCounter), compType);
+    OutputReportPredefined::PreDefTableEntry(state, orp->pdchTopPlantCompName2, EnergyPlus::format("{}", rowCounter), compName);
     ++rowCounter;
 }
 
@@ -2284,7 +2286,7 @@ void FillPlantEquipmentOperationLoad(EnergyPlusData &state)
         for (int jScheme = 1; jScheme <= thisLoop.NumOpSchemes; ++jScheme) {
             for (int kList = 1; kList <= thisLoop.OpScheme(jScheme).NumEquipLists; ++kList) {
                 ++row;
-                std::string rowS = format("{}", row);
+                std::string rowS = EnergyPlus::format("{}", row);
                 OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbPltLpNm, rowS, thisLoop.Name);
                 OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbNm, rowS, thisLoop.OpScheme(jScheme).Name);
                 OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbType, rowS, thisLoop.OpScheme(jScheme).TypeOf);
@@ -2293,7 +2295,7 @@ void FillPlantEquipmentOperationLoad(EnergyPlusData &state)
                 } else {
                     OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbSchNm, rowS, "n/a");
                 }
-                OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbIndex, rowS, format("{}", kList));
+                OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbIndex, rowS, EnergyPlus::format("{}", kList));
                 OutputReportPredefined::PreDefTableEntry(state, orp->pdchPLtEqOpLbEqLstNm, rowS, thisLoop.OpScheme(jScheme).EquipList(kList).Name);
                 OutputReportPredefined::PreDefTableEntry(
                     state, orp->pdchPLtEqOpLbLow, rowS, thisLoop.OpScheme(jScheme).EquipList(kList).RangeLowerLimit);
@@ -3301,9 +3303,10 @@ void SizePlantLoop(EnergyPlusData &state,
             } else {
                 loop.MaxVolFlowRate = 0.0;
                 if (state.dataPlnt->PlantFinalSizesOkayToReport) {
-                    ShowWarningError(state,
-                                     format("SizePlantLoop: Calculated Plant Sizing Design Volume Flow Rate=[{:.2R}] is too small. Set to 0.0",
-                                            loopSizData.DesVolFlowRate));
+                    ShowWarningError(
+                        state,
+                        EnergyPlus::format("SizePlantLoop: Calculated Plant Sizing Design Volume Flow Rate=[{:.2R}] is too small. Set to 0.0",
+                                           loopSizData.DesVolFlowRate));
                     ShowContinueError(state, "..occurs for PlantLoop=" + loop.Name);
                 }
             }
@@ -3486,9 +3489,10 @@ void ResizePlantLoopLevelSizes(EnergyPlusData &state, int const LoopNum // Suppl
             } else {
                 state.dataPlnt->PlantLoop(LoopNum).MaxVolFlowRate = 0.0;
                 if (state.dataPlnt->PlantFinalSizesOkayToReport) {
-                    ShowWarningError(state,
-                                     format("SizePlantLoop: Calculated Plant Sizing Design Volume Flow Rate=[{:.2R}] is too small. Set to 0.0",
-                                            state.dataSize->PlantSizData(PlantSizNum).DesVolFlowRate));
+                    ShowWarningError(
+                        state,
+                        EnergyPlus::format("SizePlantLoop: Calculated Plant Sizing Design Volume Flow Rate=[{:.2R}] is too small. Set to 0.0",
+                                           state.dataSize->PlantSizData(PlantSizNum).DesVolFlowRate));
                     ShowContinueError(state, "..occurs for PlantLoop=" + state.dataPlnt->PlantLoop(LoopNum).Name);
                 }
             }
@@ -4603,19 +4607,21 @@ void CheckOngoingPlantWarnings(EnergyPlusData &state)
             state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Demand).LoopSideInlet_TotalTime / 2) {
             ShowWarningError(
                 state, "Plant Loop: " + state.dataPlnt->PlantLoop(LoopNum).Name + " Demand Side is storing excess heat the majority of the time.");
-            ShowContinueError(state,
-                              format("Excess Storage Time={:.2R}[hr], Total Loop Active Time={:.2R}[hr]",
-                                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Supply).LoopSideInlet_CapExcessStorageTime,
-                                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Demand).LoopSideInlet_TotalTime));
+            ShowContinueError(
+                state,
+                EnergyPlus::format("Excess Storage Time={:.2R}[hr], Total Loop Active Time={:.2R}[hr]",
+                                   state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Supply).LoopSideInlet_CapExcessStorageTime,
+                                   state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Demand).LoopSideInlet_TotalTime));
         }
         if (state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Supply).LoopSideInlet_CapExcessStorageTime >
             state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Supply).LoopSideInlet_TotalTime / 2) {
             ShowWarningError(
                 state, "Plant Loop: " + state.dataPlnt->PlantLoop(LoopNum).Name + " Supply Side is storing excess heat the majority of the time.");
-            ShowContinueError(state,
-                              format("Excess Storage Time={:.2R}[hr], Total Loop Active Time={:.2R}[hr]",
-                                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Supply).LoopSideInlet_CapExcessStorageTime,
-                                     state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Demand).LoopSideInlet_TotalTime));
+            ShowContinueError(
+                state,
+                EnergyPlus::format("Excess Storage Time={:.2R}[hr], Total Loop Active Time={:.2R}[hr]",
+                                   state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Supply).LoopSideInlet_CapExcessStorageTime,
+                                   state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideLocation::Demand).LoopSideInlet_TotalTime));
         }
     }
 }

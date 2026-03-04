@@ -180,26 +180,26 @@ void SetUpSchemeColors(EnergyPlusData &state, std::string const &SchemeName, std
             if (lNumericBlanks(numargs)) {
                 if (!lAlphaBlanks(numargs + 1)) {
                     ShowWarningError(state,
-                                     format("SetUpSchemeColors: {}={}, {}={}, {} was blank.  Default color retained.",
-                                            cAlphaFields(1),
-                                            SchemeName,
-                                            cAlphaFields(numargs + 1),
-                                            cAlphas(numargs + 1),
-                                            cNumericFields(numargs)));
+                                     EnergyPlus::format("SetUpSchemeColors: {}={}, {}={}, {} was blank.  Default color retained.",
+                                                        cAlphaFields(1),
+                                                        SchemeName,
+                                                        cAlphaFields(numargs + 1),
+                                                        cAlphas(numargs + 1),
+                                                        cNumericFields(numargs)));
                 }
                 continue;
             }
             if (!MatchAndSetColorTextString(state, cAlphas(numargs + 1), numptr, ColorType)) {
                 ShowWarningError(state,
-                                 format("SetUpSchemeColors: {}={}, {}={}, is invalid.  No color set.",
-                                        cAlphaFields(1),
-                                        SchemeName,
-                                        cAlphaFields(numargs + 1),
-                                        cAlphas(numargs + 1)));
+                                 EnergyPlus::format("SetUpSchemeColors: {}={}, {}={}, is invalid.  No color set.",
+                                                    cAlphaFields(1),
+                                                    SchemeName,
+                                                    cAlphaFields(numargs + 1),
+                                                    cAlphas(numargs + 1)));
             }
         }
     } else {
-        ShowWarningError(state, format("SetUpSchemeColors: Name={} not on input file. Default colors will be used.", SchemeName));
+        ShowWarningError(state, EnergyPlus::format("SetUpSchemeColors: Name={} not on input file. Default colors will be used.", SchemeName));
     }
 }
 
