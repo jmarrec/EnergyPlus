@@ -247,7 +247,7 @@ namespace Avail {
         {
         }
 
-        void SetOptStartFlag(EnergyPlusData &state, int const AirLoopNum);
+        void SetOptStartFlag(EnergyPlusData &state, int const AirLoopNum, int const zoneNum = 0);
     };
 
     struct DefineASHRAEAdaptiveOptimumStartCoeffs // Derived type for Differential Thermostat Sys Avail Managers
@@ -466,6 +466,7 @@ namespace Avail {
                               int &SysAvailNum,
                               int const PriAirSysNum, // Primary Air System index. If being called for a ZoneHVAC:* component
                               Status const previousStatus,
+                              ObjexxFCL::Optional_int_const zoneNum = 0,       // Index of ZoneHVAC:* equipment component
                               ObjexxFCL::Optional_int_const ZoneEquipType = _, // Type of ZoneHVAC:* equipment component
                               ObjexxFCL::Optional_int_const CompNum = _        // Index of ZoneHVAC:* equipment component
     );
@@ -504,6 +505,7 @@ namespace Avail {
     Status CalcOptStartSysAvailMgr(EnergyPlusData &state,
                                    int const SysAvailNum,  // number of the current scheduled system availability manager
                                    int const PriAirSysNum, // number of the primary air system affected by this Avail. Manager
+                                   ObjexxFCL::Optional_int_const zoneNum = 0,
                                    ObjexxFCL::Optional_int_const ZoneEquipType = _, // Type of ZoneHVAC equipment component
                                    ObjexxFCL::Optional_int_const CompNum = _        // Index of ZoneHVAC equipment component
     );
