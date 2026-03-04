@@ -193,7 +193,7 @@ void SolveRoot(const EnergyPlusData &state,
     Real64 Y1 = f(X1); // f at X1
     // check initial values
     if (Y0 * Y1 > 0) {
-        Flag = -2;
+        Flag = SOLVEROOT_ERROR_INIT;
         XRes = X0;
         return;
     }
@@ -209,35 +209,36 @@ void SolveRoot(const EnergyPlusData &state,
             break;
         }
         // new estimation
-        switch (state.dataRootFinder->HVACSystemRootFinding.HVACSystemRootSolverMethod) {
-        case HVACSystemRootSolverAlgorithm::RegulaFalsi: {
+        switch (state.dataRootFinder->rootAlgo) {
+        case RootAlgo::RegulaFalsi: {
             XTemp = (Y0 * X1 - Y1 * X0) / DY;
             break;
         }
-        case HVACSystemRootSolverAlgorithm::Bisection: {
+        case RootAlgo::Bisection: {
             XTemp = (X1 + X0) / 2.0;
             break;
         }
-        case HVACSystemRootSolverAlgorithm::RegulaFalsiThenBisection: {
-            if (NIte > state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
+        case RootAlgo::RegulaFalsiThenBisection: {
+            if (NIte > state.dataRootFinder->NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
             }
             break;
         }
-        case HVACSystemRootSolverAlgorithm::BisectionThenRegulaFalsi: {
-            if (NIte <= state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
+        case RootAlgo::BisectionThenRegulaFalsi: {
+            if (NIte <= state.dataRootFinder->NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
             } else {
                 XTemp = (Y0 * X1 - Y1 * X0) / DY;
             }
             break;
         }
-        case HVACSystemRootSolverAlgorithm::Alternation: {
-            if (AltIte > state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
+        case RootAlgo::Alternation: {
+            if (AltIte > state.dataRootFinder->NumOfIter) {
                 XTemp = (X1 + X0) / 2.0;
-                if (AltIte >= 2 * state.dataRootFinder->HVACSystemRootFinding.NumOfIter) {
+
+                if (AltIte >= 2 * state.dataRootFinder->NumOfIter) {
                     AltIte = 0;
                 }
             } else {
@@ -245,7 +246,7 @@ void SolveRoot(const EnergyPlusData &state,
             }
             break;
         }
-        case HVACSystemRootSolverAlgorithm::ShortBisectionThenRegulaFalsi: {
+        case RootAlgo::ShortBisectionThenRegulaFalsi: {
             if (NIte < 3) {
                 XTemp = (X1 + X0) / 2.0;
             } else {
@@ -269,6 +270,15 @@ void SolveRoot(const EnergyPlusData &state,
             XRes = XTemp;
             return;
         };
+
+#ifdef GET_OUT
+        if (NIte > 20) {
+            assert(false);
+            Flag = NIte;
+            XRes = XTemp;
+            return;
+        }
+#endif // GET_OUT
 
         // OK, so we didn't converge, lets check max iterations to see if we should break early
         if (NIte > MaxIte) {
@@ -297,8 +307,68 @@ void SolveRoot(const EnergyPlusData &state,
     } // Cont
 
     // if we make it here we haven't converged, so just set the flag and leave
-    Flag = -1;
+    Flag = SOLVEROOT_ERROR_ITER;
     XRes = XTemp;
+}
+
+// A second version that does not require a payload -- use lambdas
+Real64 SolveRoot2(const EnergyPlusData &state,
+                  Real64 Eps, // required absolute accuracy
+                  int maxIters,
+                  int &SolFla,
+                  const std::function<Real64(Real64)> &f,
+                  Real64 X_0, // 1st bound of interval that contains the solution
+                  Real64 X_1, // 2nd bound of interval that contains the solution
+                  SolveRootStats &stats)
+{
+    // SUBROUTINE INFORMATION:
+    //       AUTHOR         Amir Roth
+    //       DATE WRITTEN   Nov. 2025
+
+    // PURPOSE OF THIS SUBROUTINE:
+    // This is a wrapper to SolveRoot that iterates over all root finding algorithms to find the best one.
+
+    Real64 XRes;
+
+    // Save and restore "global" root finding algorithm
+    RootAlgo algoTemp = state.dataRootFinder->rootAlgo;
+    state.dataRootFinder->rootAlgo = stats.algo;
+
+    SolveRoot(state, Eps, maxIters, SolFla, XRes, f, X_0, X_1);
+
+    state.dataRootFinder->rootAlgo = algoTemp;
+
+    if (SolFla > 0) {
+        stats.counts++;
+        stats.algoCounts[(int)stats.algo]++;
+        stats.algoIters[(int)stats.algo] += SolFla;
+
+        constexpr int TRIALS_PER_COUNT = 5;
+
+        // Trial period, cycle thru algorithms
+        if (stats.counts < TRIALS_PER_COUNT * (int)RootAlgo::Num) {
+            stats.algo = static_cast<RootAlgo>((int)stats.algo + 1);
+            if (stats.algo == RootAlgo::Num) {
+                stats.algo = RootAlgo::RegulaFalsi;
+            }
+
+            // Choose base algorithm, i.e., fewest total iterations
+        } else if (stats.counts == TRIALS_PER_COUNT * (int)RootAlgo::Num) {
+            int minIters = maxIters * TRIALS_PER_COUNT;
+            stats.algo = RootAlgo::Invalid;
+            for (int i = 0; i < (int)RootAlgo::Num; ++i) {
+                if (stats.algoIters[i] < minIters) {
+                    stats.algo = static_cast<RootAlgo>(i);
+                    minIters = stats.algoIters[i];
+                }
+            }
+
+            // Have chosen an algorithm, stats.algo should be it
+        } else {
+        }
+    }
+
+    return XRes;
 }
 
 void MovingAvg(Array1D<Real64> &DataIn, int const NumItemsInAvg)

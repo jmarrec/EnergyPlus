@@ -57,6 +57,7 @@
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/General.hh>
 
 namespace EnergyPlus {
 
@@ -134,6 +135,8 @@ namespace UnitHeater {
         int ZonePtr;             // pointer to a zone served by a unit heater
         int HVACSizingIndex;     // index of a HVACSizing object for a unit heater
         bool FirstPass;          // detects first time through for resetting sizing data
+
+        General::SolveRootStats solveRootStats;
 
         // Default Constructor
         UnitHeaterData()
