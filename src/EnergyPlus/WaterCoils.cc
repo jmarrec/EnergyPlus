@@ -950,7 +950,6 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
     // SUBROUTINE PARAMETER DEFINITIONS:
     constexpr Real64 SmallNo(1.e-9); // SmallNo number in place of zero
     constexpr int itmax(10);
-    constexpr int MaxIte(500); // Maximum number of iterations
     static constexpr std::string_view RoutineName("InitWaterCoil");
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
@@ -980,7 +979,6 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
     Real64 FinDiamVar;
     Real64 TubeToFinDiamRatio;
     Real64 CpAirStd; // specific heat of air at std conditions
-    int SolFla;      // Flag of solver
     Real64 UA0;      // lower bound for UA
     Real64 UA1;      // upper bound for UA
     Real64 UA;
@@ -1468,6 +1466,7 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
             // set the lower and upper limits on the UA
             UA0 = 0.1 * waterCoil.UACoilExternal;
             UA1 = 10.0 * waterCoil.UACoilExternal;
+
             // Invert the simple cooling coil model: given the design inlet conditions and the design load, find the design UA
             auto f = [&state, CoilNum](Real64 const UA) {
                 HVAC::FanOp fanOp = HVAC::FanOp::Continuous;
@@ -1485,9 +1484,13 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
 
                 return (waterCoil.DesTotWaterCoilLoad - waterCoil.TotWaterCoolingCoilRate) / waterCoil.DesTotWaterCoilLoad;
             };
-            General::SolveRoot(state, 0.001, MaxIte, SolFla, UA, f, UA0, UA1);
+
+            int SolFlag;
+
+            UA = General::SolveRoot2(state, 0.001, 500, SolFlag, f, UA0, UA1, state.dataWaterCoils->WaterCoil(CoilNum).solveRootStats);
+
             // if the numerical inversion failed, issue error messages.
-            if (SolFla == -1) {
+            if (SolFlag == General::SOLVEROOT_ERROR_ITER) {
                 ShowSevereError(state, format("Calculation of cooling coil design UA failed for coil {}", waterCoil.Name));
                 ShowContinueError(state, "  Iteration limit exceeded in calculating coil UA");
                 waterCoil.UACoilExternal = UA0 * 10.0;
@@ -1498,7 +1501,7 @@ void InitWaterCoil(EnergyPlusData &state, int const CoilNum, bool const FirstHVA
                 waterCoil.UAWetExtPerUnitArea = waterCoil.UACoilExternal / waterCoil.TotCoilOutsideSurfArea;
                 waterCoil.UADryExtPerUnitArea = waterCoil.UAWetExtPerUnitArea;
                 ShowContinueError(state, format(" Coil design UA set to {:.6R} [W/C]", waterCoil.UACoilTotal));
-            } else if (SolFla == -2) {
+            } else if (SolFlag == General::SOLVEROOT_ERROR_INIT) {
                 ShowSevereError(state, format("Calculation of cooling coil design UA failed for coil {}", waterCoil.Name));
                 ShowContinueError(state, "  Bad starting values for UA");
                 waterCoil.UACoilExternal = UA0 * 10.0;
@@ -5857,51 +5860,29 @@ Real64 TdbFnHRhPb(EnergyPlusData &state,
     // Given the specific enthalpy, relative humidity, and the
     // barometric pressure, the function returns the dry bulb temperature.
 
-    // Return value
-    Real64 T; // result=> humidity ratio
-
-    // Locals
-    // FUNCTION ARGUMENT DEFINITIONS:
-
     // FUNCTION PARAMETER DEFINITIONS:
-    int constexpr MaxIte(500); // Maximum number of iterations
     Real64 constexpr Acc(1.0); // Accuracy of result
-
-    // INTERFACE BLOCK SPECIFICATIONS
-    // na
-
-    // DERIVED TYPE DEFINITIONS
-    // na
-
-    // FUNCTION LOCAL VARIABLE DECLARATIONS:
-    int SolFla;        // Flag of solver
-    Real64 T0;         // lower bound for Tprov [C]
-    Real64 T1;         // upper bound for Tprov [C]
-    Real64 Tprov(0.0); // provisional value of drybulb temperature [C]
-
-    T0 = 1.0;
-    T1 = 50.0;
 
     auto f = [&state, H, RH, PB](Real64 const Tprov) { return H - Psychrometrics::PsyHFnTdbRhPb(state, Tprov, RH, PB); };
 
-    General::SolveRoot(state, Acc, MaxIte, SolFla, Tprov, f, T0, T1);
+    thread_local General::SolveRootStats solveRootStats;
+    int SolFla;
+
+    Real64 Tprov = General::SolveRoot2(state, Acc, 500, SolFla, f, 1.0, 50.0, solveRootStats);
     // if the numerical inversion failed, issue error messages.
-    if (SolFla == -1) {
+    if (SolFla == General::SOLVEROOT_ERROR_ITER) {
         ShowSevereError(state, "Calculation of drybulb temperature failed in TdbFnHRhPb(H,RH,PB)");
         ShowContinueError(state, "   Iteration limit exceeded");
         ShowContinueError(state, format("   H=[{:.6R}], RH=[{:.4R}], PB=[{:.5R}].", H, RH, PB));
-    } else if (SolFla == -2) {
+        return 0.0;
+    } else if (SolFla == General::SOLVEROOT_ERROR_INIT) {
         ShowSevereError(state, "Calculation of drybulb temperature failed in TdbFnHRhPb(H,RH,PB)");
         ShowContinueError(state, "  Bad starting values for Tdb");
         ShowContinueError(state, format("   H=[{:.6R}], RH=[{:.4R}], PB=[{:.5R}].", H, RH, PB));
-    }
-    if (SolFla < 0) {
-        T = 0.0;
+        return 0.0;
     } else {
-        T = Tprov;
+        return Tprov;
     }
-
-    return T;
 }
 
 Real64 EstimateHEXSurfaceArea(EnergyPlusData &state, int const CoilNum) // coil number, [-]

@@ -9146,7 +9146,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                         if (tankTemp > DesupHtr.SetPointTemp) {
                             DesupHtr.Mode = TankOperatingMode::Floating;
                         }
-                        int SolFla;
+
                         auto f = [&state, this, desupHtrSetPointTemp, &DesupHtr, MdotWater](Real64 const HPPartLoadRatio) {
                             this->Mode = DesupHtr.SaveWHMode;
                             this->SourceMassFlowRate = MdotWater * HPPartLoadRatio;
@@ -9155,9 +9155,11 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                             Real64 PLRResidualWaterThermalTank = desupHtrSetPointTemp - tankTemp_local;
                             return PLRResidualWaterThermalTank;
                         };
-                        General::SolveRoot(state, Acc, MaxIte, SolFla, partLoadRatio, f, 0.0, DesupHtr.DXSysPLR);
-                        if (SolFla == -1) {
-                            std::string IterNum = fmt::to_string(MaxIte);
+
+                        int SolFla;
+
+                        partLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, DesupHtr.DXSysPLR, this->solveRootStats);
+                        if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                             if (!state.dataGlobal->WarmupFlag) {
                                 ++DesupHtr.IterLimitExceededNum1;
                                 if (DesupHtr.IterLimitExceededNum1 == 1) {
@@ -9165,7 +9167,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                                     ShowContinueError(state,
                                                       format("Iteration limit exceeded calculating desuperheater unit part-load ratio, "
                                                              "maximum iterations = {}. Part-load ratio returned = {:.3R}",
-                                                             IterNum,
+                                                             MaxIte,
                                                              partLoadRatio));
                                     ShowContinueErrorTimeStamp(state, "This error occurred in heating mode.");
                                 } else {
@@ -9178,7 +9180,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                                                                    partLoadRatio);
                                 }
                             }
-                        } else if (SolFla == -2) {
+                        } else if (SolFla == General::SOLVEROOT_ERROR_INIT) {
                             partLoadRatio =
                                 max(0.0, min(DesupHtr.DXSysPLR, (desupHtrSetPointTemp - this->SavedTankTemp) / (tankTemp - this->SavedTankTemp)));
                             this->SourceMassFlowRate = MdotWater * partLoadRatio;
@@ -9271,7 +9273,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                             if (NewTankTemp > DesupHtr.SetPointTemp) {
                                 DesupHtr.Mode = TankOperatingMode::Floating;
                             }
-                            int SolFla;
+
                             auto f = [&state, this, desupHtrSetPointTemp, &DesupHtr, MdotWater](Real64 const HPPartLoadRatio) {
                                 this->Mode = DesupHtr.SaveWHMode;
                                 this->SourceMassFlowRate = MdotWater * HPPartLoadRatio;
@@ -9280,9 +9282,16 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                                 Real64 PLRResidualWaterThermalTank = desupHtrSetPointTemp - NewTankTemp;
                                 return PLRResidualWaterThermalTank;
                             };
-                            General::SolveRoot(state, Acc, MaxIte, SolFla, partLoadRatio, f, 0.0, DesupHtr.DXSysPLR);
-                            if (SolFla == -1) {
-                                std::string IterNum = fmt::to_string(MaxIte);
+
+                            // Shared by all instances of this call to learn fastest algorithm.  This is not
+                            // thread, "object", or "state" safe, does it really need to be?  Does it need to
+                            // exist within state?  Within each thermal tank object?  That's probably excessive.
+
+                            // TODO: move to state
+                            int SolFla;
+
+                            partLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, DesupHtr.DXSysPLR, this->solveRootStats);
+                            if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                                 if (!state.dataGlobal->WarmupFlag) {
                                     ++DesupHtr.IterLimitExceededNum2;
                                     if (DesupHtr.IterLimitExceededNum2 == 1) {
@@ -9290,7 +9299,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                                         ShowContinueError(state,
                                                           format("Iteration limit exceeded calculating desuperheater unit part-load ratio, "
                                                                  "maximum iterations = {}. Part-load ratio returned = {:.3R}",
-                                                                 IterNum,
+                                                                 MaxIte,
                                                                  partLoadRatio));
                                         ShowContinueErrorTimeStamp(state, "This error occurred in float mode.");
                                     } else {
@@ -9303,7 +9312,7 @@ void WaterThermalTankData::CalcDesuperheaterWaterHeater(EnergyPlusData &state, b
                                                                        partLoadRatio);
                                     }
                                 }
-                            } else if (SolFla == -2) {
+                            } else if (SolFla == General::SOLVEROOT_ERROR_INIT) {
                                 partLoadRatio = max(
                                     0.0, min(DesupHtr.DXSysPLR, (desupHtrSetPointTemp - this->SavedTankTemp) / (NewTankTemp - this->SavedTankTemp)));
                                 if (!state.dataGlobal->WarmupFlag) {
@@ -9442,7 +9451,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
     // Simulate the water heater tank, DX coil, and fan to meet the water heating requirements.
 
     int constexpr MaxIte(500);   // maximum number of iterations
-    Real64 constexpr Acc(0.001); // Accuracy of result from RegulaFalsi
+    Real64 constexpr Acc(0.005); // Accuracy of result from RegulaFalsi // was 0.001, trying to eliminate some "big" diffs
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     Real64 MdotWater;                                                                         // mass flow rate of condenser water, kg/s
@@ -9969,11 +9978,12 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
             }
 
             if (zeroResidual > 0.0) { // then iteration
+
+                // Shared by all calls to learn fastest algorithm
                 int SolFla;
-                General::SolveRoot(state, Acc, MaxIte, SolFla, state.dataWaterThermalTanks->hpPartLoadRatio, f, 0.0, 1.0);
-                if (SolFla == -1) {
-                    std::string IterNum;
-                    IterNum = fmt::to_string(MaxIte);
+
+                state.dataWaterThermalTanks->hpPartLoadRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 0.0, 1.0, this->solveRootStats);
+                if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                     if (!state.dataGlobal->WarmupFlag) {
                         ++HeatPump.IterLimitExceededNum2;
                         if (HeatPump.IterLimitExceededNum2 == 1) {
@@ -9981,7 +9991,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                             ShowContinueError(state,
                                               format("Iteration limit exceeded calculating heat pump water heater compressor part-load ratio, "
                                                      "maximum iterations = {}. Part-load ratio returned = {:.3R}",
-                                                     IterNum,
+                                                     MaxIte,
                                                      state.dataWaterThermalTanks->hpPartLoadRatio));
                             ShowContinueErrorTimeStamp(state, "This error occurred in float mode.");
                         } else {
@@ -9994,7 +10004,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                 state.dataWaterThermalTanks->hpPartLoadRatio);
                         }
                     }
-                } else if (SolFla == -2) {
+                } else if (SolFla == General::SOLVEROOT_ERROR_INIT) {
                     state.dataWaterThermalTanks->hpPartLoadRatio =
                         max(0.0, min(1.0, (HPSetPointTemp - savedTankTemp) / (NewTankTemp - savedTankTemp)));
                     if (!state.dataGlobal->WarmupFlag) {
@@ -10130,7 +10140,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                 }
 
                 if (NewTankTemp > HPSetPointTemp) {
-                    int SolFla;
+
                     auto f = [&state, this, SpeedNum, HPWaterInletNode, HPWaterOutletNode, RhoWater, HPSetPointTemp, &HeatPump, FirstHVACIteration](
                                  Real64 const SpeedRatio) {
                         return this->PLRResidualIterSpeed(state,
@@ -10144,10 +10154,11 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                                           HeatPump.SaveWHMode,
                                                           FirstHVACIteration);
                     };
-                    General::SolveRoot(state, Acc, MaxIte, SolFla, SpeedRatio, f, 1.0e-10, 1.0);
 
-                    if (SolFla == -1) {
-                        std::string IterNum = fmt::to_string(MaxIte);
+                    int SolFla;
+                    SpeedRatio = General::SolveRoot2(state, Acc, MaxIte, SolFla, f, 1.0e-10, 1.0, this->solveRootStats);
+
+                    if (SolFla == General::SOLVEROOT_ERROR_ITER) {
                         if (!state.dataGlobal->WarmupFlag) {
                             ++HeatPump.IterLimitExceededNum1;
                             if (HeatPump.IterLimitExceededNum1 == 1) {
@@ -10155,7 +10166,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                 ShowContinueError(state,
                                                   format("Iteration limit exceeded calculating heat pump water heater speed speed ratio ratio, "
                                                          "maximum iterations = {}. speed ratio returned = {:.3R}",
-                                                         IterNum,
+                                                         MaxIte,
                                                          SpeedRatio));
                                 ShowContinueErrorTimeStamp(state, "This error occurred in heating mode.");
                             } else {
@@ -10168,7 +10179,7 @@ void WaterThermalTankData::CalcHeatPumpWaterHeater(EnergyPlusData &state, bool c
                                     SpeedRatio);
                             }
                         }
-                    } else if (SolFla == -2) {
+                    } else if (SolFla == General::SOLVEROOT_ERROR_INIT) {
                         SpeedRatio = max(0.0, min(1.0, (HPSetPointTemp - LowSpeedTankTemp) / (NewTankTemp - LowSpeedTankTemp)));
                         if (!state.dataGlobal->WarmupFlag) {
                             ++HeatPump.RegulaFalsiFailedNum1;

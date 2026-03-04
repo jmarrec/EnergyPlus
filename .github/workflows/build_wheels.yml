@@ -41,7 +41,7 @@ jobs:
         pip install wheel
         python setup.py bdist_wheel
 
-    - uses: actions/upload-artifact@v6
+    - uses: actions/upload-artifact@v7
       with:
         name: energyplus-wheel-${{ matrix.os }}
         path: ./dist

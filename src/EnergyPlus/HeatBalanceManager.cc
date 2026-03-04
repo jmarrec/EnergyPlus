@@ -513,9 +513,6 @@ namespace HeatBalanceManager {
         // ZoneAirHeatBalanceAlgorithm, Added by L. Gu, 12/09
         // ZoneAirContaminantBalance, Added by L. Gu, 06/10
 
-        // Using/Aliasing
-        auto &HVACSystemRootFinding = state.dataRootFinder->HVACSystemRootFinding;
-
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetProjectControlData: ");
         static constexpr std::string_view routineName = "GetProjectControlData";
@@ -1224,11 +1221,10 @@ namespace HeatBalanceManager {
                                                                      state.dataIPShortCut->cNumericFieldNames);
             ErrorObjectHeader eoh{routineName, state.dataHeatBalMgr->CurrentModuleObject, AlphaName(1)};
             if (NumAlpha > 0) {
-                HVACSystemRootFinding.Algorithm = AlphaName(1);
-                HVACSystemRootFinding.HVACSystemRootSolverMethod =
-                    static_cast<HVACSystemRootSolverAlgorithm>(getEnumValue(HVACSystemRootSolverAlgorithmUC, Util::makeUPPER(AlphaName(1))));
-                if (HVACSystemRootFinding.HVACSystemRootSolverMethod == HVACSystemRootSolverAlgorithm::Invalid) {
-                    HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
+                state.dataRootFinder->Algorithm = AlphaName(1);
+                state.dataRootFinder->rootAlgo = static_cast<RootAlgo>(getEnumValue(rootAlgoNamesUC, Util::makeUPPER(AlphaName(1))));
+                if (state.dataRootFinder->rootAlgo == RootAlgo::Invalid) {
+                    state.dataRootFinder->rootAlgo = RootAlgo::RegulaFalsi;
                     ShowWarningInvalidKey(
                         state, eoh, state.dataIPShortCut->cAlphaFieldNames(1), AlphaName(1), "Invalid input. The default choice is assigned.");
                     ShowContinueError(
@@ -1236,11 +1232,11 @@ namespace HeatBalanceManager {
                 }
             }
             if (NumNumber > 0) {
-                HVACSystemRootFinding.NumOfIter = BuildingNumbers(1);
+                state.dataRootFinder->NumOfIter = BuildingNumbers(1);
             }
         } else {
-            HVACSystemRootFinding.Algorithm = "RegulaFalsi";
-            HVACSystemRootFinding.HVACSystemRootSolverMethod = HVACSystemRootSolverAlgorithm::RegulaFalsi;
+            state.dataRootFinder->Algorithm = "RegulaFalsi";
+            state.dataRootFinder->rootAlgo = RootAlgo::RegulaFalsi;
         }
 
         // Write Solution Algorithm to the initialization output file for User Verification
@@ -1248,7 +1244,7 @@ namespace HeatBalanceManager {
             "! <HVACSystemRootFindingAlgorithm>, Value {{RegulaFalsi | Bisection | BisectionThenRegulaFalsi | RegulaFalsiThenBisection}}\n");
         constexpr const char *Format_735(" HVACSystemRootFindingAlgorithm, {}\n");
         print(state.files.eio, Format_734);
-        print(state.files.eio, Format_735, HVACSystemRootFinding.Algorithm);
+        print(state.files.eio, Format_735, state.dataRootFinder->Algorithm);
     }
 
     void GetSiteAtmosphereData(EnergyPlusData &state, bool &ErrorsFound)
