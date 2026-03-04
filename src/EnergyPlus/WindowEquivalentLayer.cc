@@ -491,8 +491,8 @@ void CalcEQLWindowUvalue(EnergyPlusData &state,
         }
     }
     if (!CFSURated) {
-        ShowWarningMessage(state, format("{}Fenestration U-Value calculation failed for {}", RoutineName, FS.Name));
-        ShowContinueError(state, format("...Calculated U-value = {:.4T}", U));
+        ShowWarningMessage(state, EnergyPlus::format("{}Fenestration U-Value calculation failed for {}", RoutineName, FS.Name));
+        ShowContinueError(state, EnergyPlus::format("...Calculated U-value = {:.4T}", U));
         ShowContinueError(state, "...Check consistency of inputs");
     }
     UNFRC = U;
@@ -598,9 +598,9 @@ void CalcEQLWindowSHGCAndTransNormal(EnergyPlusData &state,
                                          true);
 
     if (!CFSSHGC) {
-        ShowWarningMessage(state, format("{}Solar heat gain coefficient calculation failed for {}", RoutineName, FS.Name));
-        ShowContinueError(state, format("...Calculated SHGC = {:.4T}", SHGC));
-        ShowContinueError(state, format("...Calculated U-Value = {:.4T}", UCG));
+        ShowWarningMessage(state, EnergyPlus::format("{}Solar heat gain coefficient calculation failed for {}", RoutineName, FS.Name));
+        ShowContinueError(state, EnergyPlus::format("...Calculated SHGC = {:.4T}", SHGC));
+        ShowContinueError(state, EnergyPlus::format("...Calculated U-Value = {:.4T}", UCG));
         ShowContinueError(state, "...Check consistency of inputs.");
         return;
     }
@@ -910,8 +910,8 @@ Real64 P01(EnergyPlusData &state,
     static constexpr std::string_view RoutineName("P01: ");
 
     if (P < -0.05 || P > 1.05) {
-        ShowWarningMessage(state, format("{}property value should have been between 0 and 1", RoutineName));
-        ShowContinueError(state, format("{}=:  property value is ={:.4T}", WHAT, P));
+        ShowWarningMessage(state, EnergyPlus::format("{}property value should have been between 0 and 1", RoutineName));
+        ShowContinueError(state, EnergyPlus::format("{}=:  property value is ={:.4T}", WHAT, P));
         if (P < 0.0) {
             ShowContinueError(state, "property value is reset to 0.0");
         } else if (P > 1.0) {
@@ -1025,10 +1025,10 @@ void RB_DIFF(EnergyPlusData &state,
 
     if (RHO_DD + TAU_DD > 1.0) {
         SumRefAndTran = RHO_DD + TAU_DD;
-        ShowWarningMessage(state, format("{}Roller blind diffuse-diffuse properties are inconsistent", RoutineName));
-        ShowContinueError(state, format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
-        ShowContinueError(state, format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
-        ShowContinueError(state, format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
+        ShowWarningMessage(state, EnergyPlus::format("{}Roller blind diffuse-diffuse properties are inconsistent", RoutineName));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
+        ShowContinueError(state, EnergyPlus::format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
         ShowContinueError(state, "...This sum cannot be > 1.0. Transmittance will be reset to 1 minus reflectance");
         TAU_DD = 1.0 - RHO_DD;
     }
@@ -1159,10 +1159,10 @@ void IS_DIFF(EnergyPlusData &state,
 
     if (RHO_DD + TAU_DD > 1.0) {
         SumRefAndTran = RHO_DD + TAU_DD;
-        ShowWarningMessage(state, format("{}Calculated insect screen diffuse-diffuse properties are inconsistent", RoutineName));
-        ShowContinueError(state, format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
-        ShowContinueError(state, format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
-        ShowContinueError(state, format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
+        ShowWarningMessage(state, EnergyPlus::format("{}Calculated insect screen diffuse-diffuse properties are inconsistent", RoutineName));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
+        ShowContinueError(state, EnergyPlus::format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
         ShowContinueError(state, "...This sum cannot be > 1.0. Transmittance will be reset to 1 minus reflectance");
         TAU_DD = 1.0 - RHO_DD;
     }
@@ -1330,10 +1330,10 @@ void FM_DIFF(EnergyPlusData &state,
 
     if (RHO_DD + TAU_DD > 1.0) {
         SumRefAndTran = RHO_DD + TAU_DD;
-        ShowWarningMessage(state, format("{}Calculated drape fabric diffuse-diffuse properties are inconsistent", RoutineName));
-        ShowContinueError(state, format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
-        ShowContinueError(state, format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
-        ShowContinueError(state, format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
+        ShowWarningMessage(state, EnergyPlus::format("{}Calculated drape fabric diffuse-diffuse properties are inconsistent", RoutineName));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse reflectance = {:.4T}", RHO_DD));
+        ShowContinueError(state, EnergyPlus::format("...The diffuse-diffuse transmittance = {:.4T}", TAU_DD));
+        ShowContinueError(state, EnergyPlus::format("...Sum of diffuse reflectance and transmittance = {:.4T}", SumRefAndTran));
         ShowContinueError(state, "...This sum cannot be > 1.0. Transmittance will be reset to 1 minus reflectance");
         TAU_DD = 1.0 - RHO_DD;
     }
@@ -4634,10 +4634,10 @@ void ASHWAT_ThermalCalc(EnergyPlusData &state,
 
         if (FS.WEQLSolverErrorIndex < 1) {
             ++FS.WEQLSolverErrorIndex;
-            ShowSevereError(state, format("CONSTRUCTION:WINDOWEQUIVALENTLAYER = \"{}\"", FS.Name));
-            ShowContinueError(state, format("{}Net radiation analysis did not converge", RoutineName));
-            ShowContinueError(state, format("...Maximum error is = {:.6T}", MAXERR));
-            ShowContinueError(state, format("...Convergence tolerance is = {:.6T}", TOL));
+            ShowSevereError(state, EnergyPlus::format("CONSTRUCTION:WINDOWEQUIVALENTLAYER = \"{}\"", FS.Name));
+            ShowContinueError(state, EnergyPlus::format("{}Net radiation analysis did not converge", RoutineName));
+            ShowContinueError(state, EnergyPlus::format("...Maximum error is = {:.6T}", MAXERR));
+            ShowContinueError(state, EnergyPlus::format("...Convergence tolerance is = {:.6T}", TOL));
             ShowContinueErrorTimeStamp(state, "");
         } else {
             ShowRecurringWarningErrorAtEnd(state,
@@ -7611,7 +7611,7 @@ void BuildGap(EnergyPlusData &state,
     static constexpr std::string_view RoutineName("BuildGap: ");
 
     if (TAS < GapThickMin) {
-        ShowSevereError(state, format("{}{}", RoutineName, G.Name));
+        ShowSevereError(state, EnergyPlus::format("{}{}", RoutineName, G.Name));
         ShowContinueError(state, "...specified gap thickness is < 0.0001 m.  Reset to 0.00001 m");
         TAS = GapThickMin;
     }
@@ -7765,7 +7765,7 @@ void FillDefaultsSWP(EnergyPlusData &state,
     } else if (L.LTYPE == LayerType::NONE || L.LTYPE == LayerType::ROOM) {
         // none or room: do nothing
     } else {
-        ShowSevereError(state, format("{}{}.", RoutineName, L.Name));
+        ShowSevereError(state, EnergyPlus::format("{}{}.", RoutineName, L.Name));
         ShowContinueError(state, "...invalid layer type specified.");
     }
 }
@@ -7790,7 +7790,7 @@ void FinalizeCFS(EnergyPlusData &state, CFSTY &FS)
         if (!IsVBLayer(FS.L(iL))) {
             LVBPREV = false;
         } else if (LVBPREV) {
-            ShowSevereError(state, format("{}=\"{}\", illegal.", CurrentModuleObject, FS.Name));
+            ShowSevereError(state, EnergyPlus::format("{}=\"{}\", illegal.", CurrentModuleObject, FS.Name));
             ShowContinueError(state, "...adjacent VB layers are specified.");
             ErrorsFound = true;
         } else {
@@ -7805,19 +7805,19 @@ void FinalizeCFS(EnergyPlusData &state, CFSTY &FS)
         if (iL < FS.NL) {
             int gType = FS.G(iL).GTYPE;
             if (gType == state.dataWindowEquivalentLayer->gtyOPENout && iL != 1) {
-                ShowSevereError(state, format("{}=\"{}", CurrentModuleObject, FS.Name));
-                ShowContinueError(state, format("...invalid EquivalentLayer window gap type specified ={}.", FS.G(iL).Name));
+                ShowSevereError(state, EnergyPlus::format("{}=\"{}", CurrentModuleObject, FS.Name));
+                ShowContinueError(state, EnergyPlus::format("...invalid EquivalentLayer window gap type specified ={}.", FS.G(iL).Name));
                 ShowContinueError(state, "...VentedOutDoor gap is not outermost.");
             }
             if (gType == state.dataWindowEquivalentLayer->gtyOPENin && iL != FS.NL - 1) {
-                ShowSevereError(state, format("{}=\"{}", CurrentModuleObject, FS.Name));
-                ShowContinueError(state, format("...invalid EquivalentLayer window gap type specified ={}.", FS.G(iL).Name));
+                ShowSevereError(state, EnergyPlus::format("{}=\"{}", CurrentModuleObject, FS.Name));
+                ShowContinueError(state, EnergyPlus::format("...invalid EquivalentLayer window gap type specified ={}.", FS.G(iL).Name));
                 ShowContinueError(state, "...VentedIndoor gap is not innermost.");
             }
         }
     }
     if (ErrorsFound) {
-        ShowFatalError(state, format("{}Program terminates for preceding reason(s).", RoutineName));
+        ShowFatalError(state, EnergyPlus::format("{}Program terminates for preceding reason(s).", RoutineName));
     }
 }
 

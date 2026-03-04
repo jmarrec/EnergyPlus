@@ -82,9 +82,7 @@ namespace fs = std::experimental::filesystem;
 // }
 
 namespace EnergyPlus {
-
 namespace FileSystem {
-
     extern std::string const exeExtension;
 
     enum class FileTypes
@@ -116,18 +114,22 @@ namespace FileSystem {
     {
         return t > FileTypes::Invalid && t <= FileTypes::last_binary_json_type;
     }
+
     constexpr bool is_json_type(FileTypes t)
     {
         return t > FileTypes::Invalid && t <= FileTypes::last_json_type;
     }
+
     constexpr bool is_binary_json_type(FileTypes t)
     {
         return t > FileTypes::last_json_type && t <= FileTypes::last_binary_json_type;
     }
+
     constexpr bool is_idf_type(FileTypes t)
     {
         return t == FileTypes::IDF || t == FileTypes::IMF;
     }
+
     constexpr bool is_flat_file_type(FileTypes t)
     {
         return t > FileTypes::last_binary_json_type && t <= FileTypes::last_flat_file_type;
@@ -318,7 +320,6 @@ namespace FileSystem {
     std::string toGenericString(fs::path const &p);
 
     fs::path appendSuffixToPath(fs::path const &outputFilePrefixFullPath, const std::string &suffix);
-
 } // namespace FileSystem
 } // namespace EnergyPlus
 
@@ -348,7 +349,8 @@ template <> struct fmt::formatter<fs::path>
 
     template <typename FormatContext> auto format(const fs::path &p, FormatContext &ctx) -> decltype(ctx.out())
     {
-        return format_to(ctx.out(), "{}", presentation == 'g' ? EnergyPlus::FileSystem::toGenericString(p) : EnergyPlus::FileSystem::toString(p));
+        return fmt::format_to(
+            ctx.out(), "{}", presentation == 'g' ? EnergyPlus::FileSystem::toGenericString(p) : EnergyPlus::FileSystem::toString(p));
     }
 };
 

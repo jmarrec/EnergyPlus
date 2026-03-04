@@ -128,26 +128,28 @@ namespace WaterToAirHeatPump {
         if (CompIndex == 0) {
             HPNum = Util::FindItemInList(CompName, state.dataWaterToAirHeatPump->WatertoAirHP);
             if (HPNum == 0) {
-                ShowFatalError(state, format("WaterToAir HP not found={}", CompName));
+                ShowFatalError(state, EnergyPlus::format("WaterToAir HP not found={}", CompName));
             }
             CompIndex = HPNum;
         } else {
             HPNum = CompIndex;
             if (HPNum > state.dataWaterToAirHeatPump->NumWatertoAirHPs || HPNum < 1) {
-                ShowFatalError(state,
-                               format("SimWatertoAirHP: Invalid CompIndex passed={}, Number of Water to Air HPs={}, WaterToAir HP name={}",
-                                      HPNum,
-                                      state.dataWaterToAirHeatPump->NumWatertoAirHPs,
-                                      CompName));
+                ShowFatalError(
+                    state,
+                    EnergyPlus::format("SimWatertoAirHP: Invalid CompIndex passed={}, Number of Water to Air HPs={}, WaterToAir HP name={}",
+                                       HPNum,
+                                       state.dataWaterToAirHeatPump->NumWatertoAirHPs,
+                                       CompName));
             }
             if (state.dataWaterToAirHeatPump->CheckEquipName(HPNum)) {
                 if (!CompName.empty() && CompName != state.dataWaterToAirHeatPump->WatertoAirHP(HPNum).Name) {
                     ShowFatalError(
                         state,
-                        format("SimWatertoAirHP: Invalid CompIndex passed={}, WaterToAir HP name={}, stored WaterToAir HP Name for that index={}",
-                               HPNum,
-                               CompName,
-                               state.dataWaterToAirHeatPump->WatertoAirHP(HPNum).Name));
+                        EnergyPlus::format(
+                            "SimWatertoAirHP: Invalid CompIndex passed={}, WaterToAir HP name={}, stored WaterToAir HP Name for that index={}",
+                            HPNum,
+                            CompName,
+                            state.dataWaterToAirHeatPump->WatertoAirHP(HPNum).Name));
                 }
                 state.dataWaterToAirHeatPump->CheckEquipName(HPNum) = false;
             }
@@ -239,7 +241,8 @@ namespace WaterToAirHeatPump {
                 heatPump.WatertoAirHPType = "COOLING";
                 heatPump.WAHPType = DataPlant::PlantEquipmentType::CoilWAHPCoolingParamEst;
                 ErrorObjectHeader eoh{routineName, CurrentModuleObject, heatPump.Name};
-                GlobalNames::VerifyUniqueCoilName(state, CurrentModuleObject, heatPump.Name, ErrorsFound, format("{} Name", CurrentModuleObject));
+                GlobalNames::VerifyUniqueCoilName(
+                    state, CurrentModuleObject, heatPump.Name, ErrorsFound, EnergyPlus::format("{} Name", CurrentModuleObject));
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
                     heatPump.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -309,7 +312,7 @@ namespace WaterToAirHeatPump {
                 heatPump.LoadSideTotalUACoeff = s_ip->getRealFieldValue(fields, schemaProps, "load_side_total_heat_transfer_coefficient");
                 heatPump.LoadSideOutsideUACoeff = s_ip->getRealFieldValue(fields, schemaProps, "load_side_outside_surface_heat_transfer_coefficient");
                 if ((heatPump.LoadSideOutsideUACoeff < Constant::rTinyValue) || (heatPump.LoadSideTotalUACoeff < Constant::rTinyValue)) {
-                    ShowSevereError(state, format("Input problem for {}={}", CurrentModuleObject, heatPump.Name));
+                    ShowSevereError(state, EnergyPlus::format("Input problem for {}={}", CurrentModuleObject, heatPump.Name));
                     ShowContinueError(state, " One or both load side UA values entered are below tolerance, likely zero or blank.");
                     ShowContinueError(state, " Verify inputs, as the parameter syntax for this object went through a change with");
                     ShowContinueError(state, "  the release of EnergyPlus version 5.");
@@ -479,7 +482,8 @@ namespace WaterToAirHeatPump {
                 heatPump.WatertoAirHPType = "HEATING";
                 heatPump.WAHPType = DataPlant::PlantEquipmentType::CoilWAHPHeatingParamEst;
                 ErrorObjectHeader eoh{routineName, CurrentModuleObject, heatPump.Name};
-                GlobalNames::VerifyUniqueCoilName(state, CurrentModuleObject, heatPump.Name, ErrorsFound, format("{} Name", CurrentModuleObject));
+                GlobalNames::VerifyUniqueCoilName(
+                    state, CurrentModuleObject, heatPump.Name, ErrorsFound, EnergyPlus::format("{} Name", CurrentModuleObject));
                 std::string const availSchedName = s_ip->getAlphaFieldValue(fields, schemaProps, "availability_schedule_name");
                 if (availSchedName.empty()) {
                     heatPump.availSched = Sched::GetScheduleAlwaysOn(state);
@@ -546,7 +550,7 @@ namespace WaterToAirHeatPump {
 
                 heatPump.LoadSideTotalUACoeff = s_ip->getRealFieldValue(fields, schemaProps, "load_side_total_heat_transfer_coefficient");
                 if (heatPump.LoadSideTotalUACoeff < Constant::rTinyValue) {
-                    ShowSevereError(state, format("Input problem for {}={}", CurrentModuleObject, heatPump.Name));
+                    ShowSevereError(state, EnergyPlus::format("Input problem for {}={}", CurrentModuleObject, heatPump.Name));
                     ShowContinueError(state, " Load side UA value is less than tolerance, likely zero or blank.");
                     ShowContinueError(state, " Verify inputs, as the parameter syntax for this object went through a change with");
                     ShowContinueError(state, "  the release of EnergyPlus version 5.");
@@ -677,7 +681,7 @@ namespace WaterToAirHeatPump {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, format("{}Errors found getting input. Program terminates.", RoutineName));
+            ShowFatalError(state, EnergyPlus::format("{}Errors found getting input. Program terminates.", RoutineName));
         }
 
         for (HPNum = 1; HPNum <= state.dataWaterToAirHeatPump->NumWatertoAirHPs; ++HPNum) {
@@ -948,7 +952,7 @@ namespace WaterToAirHeatPump {
 
             if (state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).FluidName == "WATER") {
                 if (heatPump.SourceSideUACoeff < Constant::rTinyValue) {
-                    ShowSevereError(state, format("Input problem for water to air heat pump, \"{}\".", heatPump.Name));
+                    ShowSevereError(state, EnergyPlus::format("Input problem for water to air heat pump, \"{}\".", heatPump.Name));
                     ShowContinueError(state, " Source side UA value is less than tolerance, likely zero or blank.");
                     ShowContinueError(state, " Verify inputs, as the parameter syntax for this object went through a change with");
                     ShowContinueError(state, "  the release of EnergyPlus version 5.");
@@ -956,7 +960,7 @@ namespace WaterToAirHeatPump {
                 }
             } else {
                 if ((heatPump.SourceSideHTR1 < Constant::rTinyValue) || (heatPump.SourceSideHTR2 < Constant::rTinyValue)) {
-                    ShowSevereError(state, format("Input problem for water to air heat pump, \"{}\".", heatPump.Name));
+                    ShowSevereError(state, EnergyPlus::format("Input problem for water to air heat pump, \"{}\".", heatPump.Name));
                     ShowContinueError(state, " A source side heat transfer resistance value is less than tolerance, likely zero or blank.");
                     ShowContinueError(state, " Verify inputs, as the parameter syntax for this object went through a change with");
                     ShowContinueError(state, "  the release of EnergyPlus version 5.");
@@ -1342,15 +1346,16 @@ namespace WaterToAirHeatPump {
 
                     if (LoadSidePressure < heatPump.LowPressCutoff && !FirstHVACIteration) {
                         if (!state.dataGlobal->WarmupFlag) {
-                            ShowRecurringWarningErrorAtEnd(
-                                state,
-                                format("WaterToAir Heat pump:cooling [{}] shut off on low pressure < {:.0R}", heatPump.Name, heatPump.LowPressCutoff),
-                                heatPump.LowPressClgError,
-                                LoadSidePressure,
-                                LoadSidePressure,
-                                _,
-                                "[Pa]",
-                                "[Pa]");
+                            ShowRecurringWarningErrorAtEnd(state,
+                                                           EnergyPlus::format("WaterToAir Heat pump:cooling [{}] shut off on low pressure < {:.0R}",
+                                                                              heatPump.Name,
+                                                                              heatPump.LowPressCutoff),
+                                                           heatPump.LowPressClgError,
+                                                           LoadSidePressure,
+                                                           LoadSidePressure,
+                                                           _,
+                                                           "[Pa]",
+                                                           "[Pa]");
                         }
                         heatPump.SimFlag = false;
                         return;
@@ -1359,9 +1364,9 @@ namespace WaterToAirHeatPump {
                     if (SourceSidePressure > heatPump.HighPressCutoff && !FirstHVACIteration) {
                         if (!state.dataGlobal->WarmupFlag) {
                             ShowRecurringWarningErrorAtEnd(state,
-                                                           format("WaterToAir Heat pump:cooling [{}] shut off on high pressure > {:.0R}",
-                                                                  heatPump.Name,
-                                                                  heatPump.HighPressCutoff),
+                                                           EnergyPlus::format("WaterToAir Heat pump:cooling [{}] shut off on high pressure > {:.0R}",
+                                                                              heatPump.Name,
+                                                                              heatPump.HighPressCutoff),
                                                            heatPump.HighPressClgError,
                                                            heatPump.InletWaterTemp,
                                                            heatPump.InletWaterTemp,
@@ -1739,15 +1744,16 @@ namespace WaterToAirHeatPump {
                 LoadSidePressure = heatPump.refrig->getSatPressure(state, LoadSideTemp, RoutineNameLoadSideTemp);
                 if (SourceSidePressure < heatPump.LowPressCutoff && !FirstHVACIteration) {
                     if (!state.dataGlobal->WarmupFlag) {
-                        ShowRecurringWarningErrorAtEnd(
-                            state,
-                            format("WaterToAir Heat pump:heating [{}] shut off on low pressure < {:.0R}", heatPump.Name, heatPump.LowPressCutoff),
-                            heatPump.LowPressHtgError,
-                            SourceSidePressure,
-                            SourceSidePressure,
-                            _,
-                            "[Pa]",
-                            "[Pa]");
+                        ShowRecurringWarningErrorAtEnd(state,
+                                                       EnergyPlus::format("WaterToAir Heat pump:heating [{}] shut off on low pressure < {:.0R}",
+                                                                          heatPump.Name,
+                                                                          heatPump.LowPressCutoff),
+                                                       heatPump.LowPressHtgError,
+                                                       SourceSidePressure,
+                                                       SourceSidePressure,
+                                                       _,
+                                                       "[Pa]",
+                                                       "[Pa]");
                     }
                     heatPump.SimFlag = false;
                     return;
@@ -1755,15 +1761,16 @@ namespace WaterToAirHeatPump {
 
                 if (LoadSidePressure > heatPump.HighPressCutoff && !FirstHVACIteration) {
                     if (!state.dataGlobal->WarmupFlag) {
-                        ShowRecurringWarningErrorAtEnd(
-                            state,
-                            format("WaterToAir Heat pump:heating [{}] shut off on high pressure > {:.0R}", heatPump.Name, heatPump.HighPressCutoff),
-                            heatPump.HighPressHtgError,
-                            heatPump.InletWaterTemp,
-                            heatPump.InletWaterTemp,
-                            _,
-                            "SourceSideInletTemp[C]",
-                            "SourceSideInletTemp[C]");
+                        ShowRecurringWarningErrorAtEnd(state,
+                                                       EnergyPlus::format("WaterToAir Heat pump:heating [{}] shut off on high pressure > {:.0R}",
+                                                                          heatPump.Name,
+                                                                          heatPump.HighPressCutoff),
+                                                       heatPump.HighPressHtgError,
+                                                       heatPump.InletWaterTemp,
+                                                       heatPump.InletWaterTemp,
+                                                       _,
+                                                       "SourceSideInletTemp[C]",
+                                                       "SourceSideInletTemp[C]");
                     }
                     //         CALL ShowWarningError(state, 'Heat pump:heating shut off on high pressure')
                     //         WRITE(CErrCount,*) SourceSideInletTemp
@@ -2239,7 +2246,7 @@ namespace WaterToAirHeatPump {
         int IndexNum = Util::FindItemInList(CoilName, state.dataWaterToAirHeatPump->WatertoAirHP);
 
         if (IndexNum == 0) {
-            ShowSevereError(state, format("Could not find CoilType=\"{}\" with Name=\"{}\"", CoilType, CoilName));
+            ShowSevereError(state, EnergyPlus::format("Could not find CoilType=\"{}\" with Name=\"{}\"", CoilType, CoilName));
             ErrorsFound = true;
         }
 
@@ -2289,7 +2296,7 @@ namespace WaterToAirHeatPump {
         }
 
         if (WhichCoil == 0) {
-            ShowSevereError(state, format("Could not find CoilType=\"{}\" with Name=\"{}\"", CoilType, CoilName));
+            ShowSevereError(state, EnergyPlus::format("Could not find CoilType=\"{}\" with Name=\"{}\"", CoilType, CoilName));
             ErrorsFound = true;
             CoilCapacity = -1000.0;
         }
@@ -2328,7 +2335,7 @@ namespace WaterToAirHeatPump {
         }
 
         if (WhichCoil == 0) {
-            ShowSevereError(state, format("Could not find CoilType=\"{}\" with Name=\"{}\"", CoilType, CoilName));
+            ShowSevereError(state, EnergyPlus::format("Could not find CoilType=\"{}\" with Name=\"{}\"", CoilType, CoilName));
             ErrorsFound = true;
             NodeNumber = 0;
         }
@@ -2367,7 +2374,7 @@ namespace WaterToAirHeatPump {
         }
 
         if (WhichCoil == 0) {
-            ShowSevereError(state, format("Could not find CoilType=\"{}\" with Name=\"{}\"", CoilType, CoilName));
+            ShowSevereError(state, EnergyPlus::format("Could not find CoilType=\"{}\" with Name=\"{}\"", CoilType, CoilName));
             ErrorsFound = true;
             NodeNumber = 0;
         }

@@ -84,8 +84,8 @@ void CoilCoolingDXCurveFitPerformance::instantiateFromInputSpec(EnergyPlus::Ener
     } else if (Util::SameString(input_data.capacity_control, "DISCRETE")) {
         this->capControlMethod = CapControlMethod::DISCRETE;
     } else {
-        ShowSevereError(state, format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
-        ShowContinueError(state, format("...Capacity Control Method=\"{}\":", input_data.capacity_control));
+        ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid", routineName, this->object_name, this->name));
+        ShowContinueError(state, EnergyPlus::format("...Capacity Control Method=\"{}\":", input_data.capacity_control));
         ShowContinueError(state, "...must be Discrete or Continuous.");
         errorsFound = true;
     }
@@ -107,8 +107,8 @@ void CoilCoolingDXCurveFitPerformance::instantiateFromInputSpec(EnergyPlus::Ener
     // Validate fuel type input
     this->compressorFuelType = static_cast<Constant::eFuel>(getEnumValue(Constant::eFuelNamesUC, Util::makeUPPER(input_data.compressor_fuel_type)));
     if (this->compressorFuelType == Constant::eFuel::Invalid) {
-        ShowSevereError(state, format("{} {} =\"{}\" invalid", std::string{routineName}, this->object_name, this->name));
-        ShowContinueError(state, format("...Compressor Fuel Type=\"{}\".", input_data.compressor_fuel_type));
+        ShowSevereError(state, EnergyPlus::format("{} {} =\"{}\" invalid", std::string{routineName}, this->object_name, this->name));
+        ShowContinueError(state, EnergyPlus::format("...Compressor Fuel Type=\"{}\".", input_data.compressor_fuel_type));
         errorsFound = true;
     }
 
@@ -126,11 +126,11 @@ void CoilCoolingDXCurveFitPerformance::instantiateFromInputSpec(EnergyPlus::Ener
             Curve::GetCurveIndex(state, input_data.outdoor_temperature_dependent_crankcase_heater_capacity_curve_name);
         if (this->crankcaseHeaterCapacityCurveIndex == 0) { // can't find the curve
             ShowSevereError(state,
-                            format("{} = {}:  {} not found = {}",
-                                   this->object_name,
-                                   this->name,
-                                   "Crankcase Heater Capacity Function of Temperature Curve Name",
-                                   input_data.outdoor_temperature_dependent_crankcase_heater_capacity_curve_name));
+                            EnergyPlus::format("{} = {}:  {} not found = {}",
+                                               this->object_name,
+                                               this->name,
+                                               "Crankcase Heater Capacity Function of Temperature Curve Name",
+                                               input_data.outdoor_temperature_dependent_crankcase_heater_capacity_curve_name));
 
             errorsFound = true;
         } else {
@@ -145,9 +145,10 @@ void CoilCoolingDXCurveFitPerformance::instantiateFromInputSpec(EnergyPlus::Ener
         }
     }
     if (errorsFound) {
-        ShowFatalError(
-            state,
-            format("{} Errors found in getting {} input. Preceding condition(s) causes termination.", std::string{routineName}, this->object_name));
+        ShowFatalError(state,
+                       EnergyPlus::format("{} Errors found in getting {} input. Preceding condition(s) causes termination.",
+                                          std::string{routineName},
+                                          this->object_name));
     }
 }
 
@@ -210,7 +211,7 @@ CoilCoolingDXCurveFitPerformance::CoilCoolingDXCurveFitPerformance(EnergyPlus::E
     }
 
     if (!found_it) {
-        ShowFatalError(state, format("Could not find Coil:Cooling:DX:Performance object with name: {}", name_to_find));
+        ShowFatalError(state, EnergyPlus::format("Could not find Coil:Cooling:DX:Performance object with name: {}", name_to_find));
     }
 }
 
@@ -622,7 +623,8 @@ void CoilCoolingDXCurveFitPerformance::calcStandardRatings210240(EnergyPlus::Ene
     } else {
         ShowSevereError(
             state,
-            format("Standard Ratings: Coil:Cooling:DX {} has zero rated total cooling capacity. Standard ratings cannot be calculated.", this->name));
+            EnergyPlus::format("Standard Ratings: Coil:Cooling:DX {} has zero rated total cooling capacity. Standard ratings cannot be calculated.",
+                               this->name));
     }
 }
 
@@ -637,16 +639,18 @@ void CoilCoolingDXCurveFitPerformance::setOperMode(EnergyPlus::EnergyPlusData &s
         currentMode.speeds[speedNum].parentOperatingMode = mode;
         if (mode == 2) {
             if (currentMode.speeds[speedNum].indexSHRFT == 0) {
-                ShowSevereError(state,
-                                format("{}=\"{}\", Curve check:", currentMode.speeds[speedNum].object_name, currentMode.speeds[speedNum].name));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("{}=\"{}\", Curve check:", currentMode.speeds[speedNum].object_name, currentMode.speeds[speedNum].name));
                 ShowContinueError(state,
                                   "The input of Sensible Heat Ratio Modifier Function of Temperature Curve Name is required, but not available for "
                                   "SubcoolReheat mode. Please input");
                 errorsFound = true;
             }
             if (currentMode.speeds[speedNum].indexSHRFFF == 0) {
-                ShowSevereError(state,
-                                format("{}=\"{}\", Curve check:", currentMode.speeds[speedNum].object_name, currentMode.speeds[speedNum].name));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("{}=\"{}\", Curve check:", currentMode.speeds[speedNum].object_name, currentMode.speeds[speedNum].name));
                 ShowContinueError(state,
                                   "The input of Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name is required, but not available for "
                                   "SubcoolReheat mode. Please input");
@@ -655,16 +659,18 @@ void CoilCoolingDXCurveFitPerformance::setOperMode(EnergyPlus::EnergyPlusData &s
         }
         if (mode == 3) {
             if (currentMode.speeds[speedNum].indexSHRFT == 0) {
-                ShowSevereError(state,
-                                format("{}=\"{}\", Curve check:", currentMode.speeds[speedNum].object_name, currentMode.speeds[speedNum].name));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("{}=\"{}\", Curve check:", currentMode.speeds[speedNum].object_name, currentMode.speeds[speedNum].name));
                 ShowContinueError(state,
                                   "The input of Sensible Heat Ratio Modifier Function of Temperature Curve Name is required, but not available for "
                                   "SubcoolReheat mode. Please input");
                 errorsFound = true;
             }
             if (currentMode.speeds[speedNum].indexSHRFFF == 0) {
-                ShowSevereError(state,
-                                format("{}=\"{}\", Curve check:", currentMode.speeds[speedNum].object_name, currentMode.speeds[speedNum].name));
+                ShowSevereError(
+                    state,
+                    EnergyPlus::format("{}=\"{}\", Curve check:", currentMode.speeds[speedNum].object_name, currentMode.speeds[speedNum].name));
                 ShowContinueError(state,
                                   "The input of Sensible Heat Ratio Modifier Function of Flow Fraction Curve Name is required, but not available for "
                                   "SubcoolReheat mode. Please input");
@@ -673,9 +679,10 @@ void CoilCoolingDXCurveFitPerformance::setOperMode(EnergyPlus::EnergyPlusData &s
         }
     }
     if (errorsFound) {
-        ShowFatalError(state,
-                       format("CoilCoolingDXCurveFitPerformance: Errors found in getting {} input. Preceding condition(s) causes termination.",
-                              this->object_name));
+        ShowFatalError(
+            state,
+            EnergyPlus::format("CoilCoolingDXCurveFitPerformance: Errors found in getting {} input. Preceding condition(s) causes termination.",
+                               this->object_name));
     }
 }
 

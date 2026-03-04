@@ -174,25 +174,25 @@ void SimPurchasedAir(EnergyPlusData &state,
     if (CompIndex == 0) {
         PurchAirNum = Util::FindItemInList(PurchAirName, state.dataPurchasedAirMgr->PurchAir);
         if (PurchAirNum == 0) {
-            ShowFatalError(state, format("SimPurchasedAir: Unit not found={}", PurchAirName));
+            ShowFatalError(state, EnergyPlus::format("SimPurchasedAir: Unit not found={}", PurchAirName));
         }
         CompIndex = PurchAirNum;
     } else {
         PurchAirNum = CompIndex;
         if (PurchAirNum > state.dataPurchasedAirMgr->NumPurchAir || PurchAirNum < 1) {
             ShowFatalError(state,
-                           format("SimPurchasedAir:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
-                                  PurchAirNum,
-                                  state.dataPurchasedAirMgr->NumPurchAir,
-                                  PurchAirName));
+                           EnergyPlus::format("SimPurchasedAir:  Invalid CompIndex passed={}, Number of Units={}, Entered Unit name={}",
+                                              PurchAirNum,
+                                              state.dataPurchasedAirMgr->NumPurchAir,
+                                              PurchAirName));
         }
         if (state.dataPurchasedAirMgr->CheckEquipName(PurchAirNum)) {
             if (PurchAirName != state.dataPurchasedAirMgr->PurchAir(PurchAirNum).Name) {
                 ShowFatalError(state,
-                               format("SimPurchasedAir: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
-                                      PurchAirNum,
-                                      PurchAirName,
-                                      state.dataPurchasedAirMgr->PurchAir(PurchAirNum).Name));
+                               EnergyPlus::format("SimPurchasedAir: Invalid CompIndex passed={}, Unit name={}, stored Unit Name for that index={}",
+                                                  PurchAirNum,
+                                                  PurchAirName,
+                                                  state.dataPurchasedAirMgr->PurchAir(PurchAirNum).Name));
             }
             state.dataPurchasedAirMgr->CheckEquipName(PurchAirNum) = false;
         }
@@ -422,8 +422,9 @@ void GetPurchasedAir(EnergyPlusData &state)
                     }
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         ShowWarningEmptyField(state, eoh, cAlphaFieldName);
-                        ShowContinueError(state, format("{} is blank, but there is outdoor air requested for this system.", cAlphaFieldName));
-                        ShowContinueError(state, format("Creating node name ={}", oaInletNodeName));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("{} is blank, but there is outdoor air requested for this system.", cAlphaFieldName));
+                        ShowContinueError(state, EnergyPlus::format("Creating node name ={}", oaInletNodeName));
                     }
                 }
                 // Register OA node
@@ -440,9 +441,10 @@ void GetPurchasedAir(EnergyPlusData &state)
                 bool IsOANodeListed; // Flag for OA node name listed in OutdoorAir:Node or Nodelist
                 CheckAndAddAirNodeNumber(state, PurchAir.OutdoorAirNodeNum, IsOANodeListed);
                 if ((!IsOANodeListed) && state.dataGlobal->DisplayExtraWarnings) {
-                    ShowWarningError(state, format("{}{}=\"{} missing data", RoutineName, s_ipsc->cCurrentModuleObject, PurchAir.Name));
-                    ShowContinueError(state, format("{} does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.", oaInletNodeName));
-                    ShowContinueError(state, format("Adding OutdoorAir:Node={}", oaInletNodeName));
+                    ShowWarningError(state, EnergyPlus::format("{}{}=\"{} missing data", RoutineName, s_ipsc->cCurrentModuleObject, PurchAir.Name));
+                    ShowContinueError(state,
+                                      EnergyPlus::format("{} does not appear in an OutdoorAir:NodeList or as an OutdoorAir:Node.", oaInletNodeName));
+                    ShowContinueError(state, EnergyPlus::format("Adding OutdoorAir:Node={}", oaInletNodeName));
                 }
                 UniqueNodeError = false;
                 CheckUniqueNodeNames(state, cAlphaFieldName, UniqueNodeError, oaInletNodeName, PurchAir.Name);
@@ -456,9 +458,10 @@ void GetPurchasedAir(EnergyPlusData &state)
                 if (PurchAir.DCVType == DCV::CO2SetPoint) {
                     if (!state.dataContaminantBalance->Contaminant.CO2Simulation) {
                         PurchAir.DCVType = DCV::None;
-                        ShowWarningError(state, format("{}{}=\"{} invalid data", RoutineName, s_ipsc->cCurrentModuleObject, PurchAir.Name));
-                        ShowContinueError(state, format("{}={} but CO2 simulation is not active.", cAlphaFieldName, fieldValue));
-                        ShowContinueError(state, format("Resetting {} to NoDCV", cAlphaFieldName));
+                        ShowWarningError(state,
+                                         EnergyPlus::format("{}{}=\"{} invalid data", RoutineName, s_ipsc->cCurrentModuleObject, PurchAir.Name));
+                        ShowContinueError(state, EnergyPlus::format("{}={} but CO2 simulation is not active.", cAlphaFieldName, fieldValue));
+                        ShowContinueError(state, EnergyPlus::format("Resetting {} to NoDCV", cAlphaFieldName));
                         ShowContinueError(state,
                                           "To activate CO2 simulation, use ZoneAirContaminantBalance object and specify \"Carbon Dioxide "
                                           "Concentration\"=\"Yes\".");
@@ -1055,7 +1058,7 @@ void GetPurchasedAir(EnergyPlusData &state)
     }
 
     if (ErrorsFound) {
-        ShowFatalError(state, format("{}Errors found in input. Preceding conditions cause termination.", RoutineName));
+        ShowFatalError(state, EnergyPlus::format("{}Errors found in input. Preceding conditions cause termination.", RoutineName));
     }
 }
 
@@ -1103,9 +1106,9 @@ void InitPurchasedAir(EnergyPlusData &state, int const PurchAirNum, int const Co
                     InitializePlenumArrays(state, Loop);
                 } else {
                     ShowSevereError(state,
-                                    format("InitPurchasedAir: {} = {} cannot find ZoneHVAC:ReturnPlenum.  It will not be simulated.",
-                                           PurchAirLoop.cObjectName,
-                                           PurchAirLoop.Name));
+                                    EnergyPlus::format("InitPurchasedAir: {} = {} cannot find ZoneHVAC:ReturnPlenum.  It will not be simulated.",
+                                                       PurchAirLoop.cObjectName,
+                                                       PurchAirLoop.Name));
                 }
             }
 
@@ -1113,9 +1116,9 @@ void InitPurchasedAir(EnergyPlusData &state, int const PurchAirNum, int const Co
                 continue;
             }
             ShowSevereError(state,
-                            format("InitPurchasedAir: {} = {} is not on any ZoneHVAC:EquipmentList.  It will not be simulated.",
-                                   PurchAirLoop.cObjectName,
-                                   PurchAirLoop.Name));
+                            EnergyPlus::format("InitPurchasedAir: {} = {} is not on any ZoneHVAC:EquipmentList.  It will not be simulated.",
+                                               PurchAirLoop.cObjectName,
+                                               PurchAirLoop.Name));
         }
     }
 
@@ -1132,12 +1135,12 @@ void InitPurchasedAir(EnergyPlusData &state, int const PurchAirNum, int const Co
                                              state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).InletNode,
                                              state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).NumInletNodes);
             if (NodeIndex == 0) {
-                ShowSevereError(state, format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
-                ShowContinueError(state,
-                                  format("Zone Supply Air Node Name={} is not a zone inlet node.", state.dataLoopNodes->NodeID(SupplyNodeNum)));
+                ShowSevereError(state, EnergyPlus::format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
                 ShowContinueError(
-                    state,
-                    format("Check ZoneHVAC:EquipmentConnections for zone={}", state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).ZoneName));
+                    state, EnergyPlus::format("Zone Supply Air Node Name={} is not a zone inlet node.", state.dataLoopNodes->NodeID(SupplyNodeNum)));
+                ShowContinueError(state,
+                                  EnergyPlus::format("Check ZoneHVAC:EquipmentConnections for zone={}",
+                                                     state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).ZoneName));
                 ShowFatalError(state, "Preceding condition causes termination.");
             }
         }
@@ -1152,12 +1155,13 @@ void InitPurchasedAir(EnergyPlusData &state, int const PurchAirNum, int const Co
                                              state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).ExhaustNode,
                                              state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).NumExhaustNodes);
             if (NodeIndex == 0) {
-                ShowSevereError(state, format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
-                ShowContinueError(state,
-                                  format("Zone Exhaust Air Node Name={} is not a zone exhaust node.", state.dataLoopNodes->NodeID(ExhaustNodeNum)));
+                ShowSevereError(state, EnergyPlus::format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
                 ShowContinueError(
                     state,
-                    format("Check ZoneHVAC:EquipmentConnections for zone={}", state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).ZoneName));
+                    EnergyPlus::format("Zone Exhaust Air Node Name={} is not a zone exhaust node.", state.dataLoopNodes->NodeID(ExhaustNodeNum)));
+                ShowContinueError(state,
+                                  EnergyPlus::format("Check ZoneHVAC:EquipmentConnections for zone={}",
+                                                     state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).ZoneName));
                 ShowContinueError(state, "Zone return air node will be used for ideal loads recirculation air.");
                 UseReturnNode = true;
             } else {
@@ -1170,14 +1174,15 @@ void InitPurchasedAir(EnergyPlusData &state, int const PurchAirNum, int const Co
             if (state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).NumReturnNodes == 1) {
                 PurchAir.ZoneRecircAirNodeNum = state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).ReturnNode(1);
             } else if (state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).NumReturnNodes > 1) {
-                ShowWarningError(state, format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
+                ShowWarningError(state, EnergyPlus::format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
                 ShowContinueError(state,
                                   "No Zone Exhaust Air Node Name has been specified for this system and the zone has more than one Return Air Node.");
-                ShowContinueError(state,
-                                  format("Using the first return air node ={}",
-                                         state.dataLoopNodes->NodeID(state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).ReturnNode(1))));
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format("Using the first return air node ={}",
+                                       state.dataLoopNodes->NodeID(state.dataZoneEquip->ZoneEquipConfig(ControlledZoneNum).ReturnNode(1))));
             } else {
-                ShowFatalError(state, format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
+                ShowFatalError(state, EnergyPlus::format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
                 ShowContinueError(
                     state,
                     " Invalid recirculation node. No exhaust or return node has been specified for this zone in ZoneHVAC:EquipmentConnections.");
@@ -1187,7 +1192,7 @@ void InitPurchasedAir(EnergyPlusData &state, int const PurchAirNum, int const Co
         // If there is OA and economizer is active, then there must be a limit on cooling flow rate
         if (PurchAir.OutdoorAir && (PurchAir.EconomizerType != Econ::NoEconomizer)) {
             if ((PurchAir.CoolingLimit == LimitType::None) || (PurchAir.CoolingLimit == LimitType::Capacity)) {
-                ShowSevereError(state, format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
+                ShowSevereError(state, EnergyPlus::format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
                 ShowContinueError(state, "There is outdoor air with economizer active but there is no limit on cooling air flow rate.");
                 ShowContinueError(state,
                                   "Cooling Limit must be set to LimitFlowRate or LimitFlowRateAndCapacity, and Maximum Cooling Air Flow Rate "
@@ -1246,19 +1251,20 @@ void InitPurchasedAir(EnergyPlusData &state, int const PurchAirNum, int const Co
         if (UnitOn && CoolOn) {
             if (PurchAir.CoolErrIndex == 0) {
                 ShowSevereError(state,
-                                format("InitPurchasedAir: For {} = {} serving Zone {}",
-                                       PurchAir.cObjectName,
-                                       PurchAir.Name,
-                                       state.dataHeatBal->Zone(ControlledZoneNum).Name));
-                ShowContinueError(state,
-                                  format("..the minimum supply air temperature for cooling [{:.2R}] is greater than the zone cooling mean air "
-                                         "temperature (MAT) setpoint [{:.2R}].",
-                                         PurchAir.MinCoolSuppAirTemp,
-                                         zoneTstatSetpt.setptHi));
+                                EnergyPlus::format("InitPurchasedAir: For {} = {} serving Zone {}",
+                                                   PurchAir.cObjectName,
+                                                   PurchAir.Name,
+                                                   state.dataHeatBal->Zone(ControlledZoneNum).Name));
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format("..the minimum supply air temperature for cooling [{:.2R}] is greater than the zone cooling mean air "
+                                       "temperature (MAT) setpoint [{:.2R}].",
+                                       PurchAir.MinCoolSuppAirTemp,
+                                       zoneTstatSetpt.setptHi));
                 ShowContinueError(state, "..For operative and comfort thermostat controls, the MAT setpoint is computed.");
                 ShowContinueError(state, "..This error may indicate that the mean radiant temperature or another comfort factor is too warm.");
                 ShowContinueError(state, "Unit availability is nominally ON and Cooling availability is nominally ON.");
-                ShowContinueError(state, format("Limit Cooling Capacity Type={}", limitTypeNames[(int)PurchAir.CoolingLimit]));
+                ShowContinueError(state, EnergyPlus::format("Limit Cooling Capacity Type={}", limitTypeNames[(int)PurchAir.CoolingLimit]));
                 // could check for optemp control or comfort control here
                 ShowContinueErrorTimeStamp(state, "");
             }
@@ -1294,19 +1300,20 @@ void InitPurchasedAir(EnergyPlusData &state, int const PurchAirNum, int const Co
         if (UnitOn && HeatOn) {
             if (PurchAir.HeatErrIndex == 0) {
                 ShowSevereMessage(state,
-                                  format("InitPurchasedAir: For {} = {} serving Zone {}",
-                                         PurchAir.cObjectName,
-                                         PurchAir.Name,
-                                         state.dataHeatBal->Zone(ControlledZoneNum).Name));
-                ShowContinueError(state,
-                                  format("..the maximum supply air temperature for heating [{:.2R}] is less than the zone mean air temperature "
-                                         "heating setpoint [{:.2R}].",
-                                         PurchAir.MaxHeatSuppAirTemp,
-                                         zoneTstatSetpt.setptLo));
+                                  EnergyPlus::format("InitPurchasedAir: For {} = {} serving Zone {}",
+                                                     PurchAir.cObjectName,
+                                                     PurchAir.Name,
+                                                     state.dataHeatBal->Zone(ControlledZoneNum).Name));
+                ShowContinueError(
+                    state,
+                    EnergyPlus::format("..the maximum supply air temperature for heating [{:.2R}] is less than the zone mean air temperature "
+                                       "heating setpoint [{:.2R}].",
+                                       PurchAir.MaxHeatSuppAirTemp,
+                                       zoneTstatSetpt.setptLo));
                 ShowContinueError(state, "..For operative and comfort thermostat controls, the MAT setpoint is computed.");
                 ShowContinueError(state, "..This error may indicate that the mean radiant temperature or another comfort factor is too cold.");
                 ShowContinueError(state, "Unit availability is nominally ON and Heating availability is nominally ON.");
-                ShowContinueError(state, format("Limit Heating Capacity Type={}", limitTypeNames[(int)PurchAir.HeatingLimit]));
+                ShowContinueError(state, EnergyPlus::format("Limit Heating Capacity Type={}", limitTypeNames[(int)PurchAir.HeatingLimit]));
                 // could check for optemp control or comfort control here
                 ShowContinueErrorTimeStamp(state, "");
             }
@@ -1530,12 +1537,15 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                                                  MaxHeatSensCapUser);
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(MaxHeatSensCapDes - MaxHeatSensCapUser) / MaxHeatSensCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                            ShowMessage(
-                                state,
-                                format("SizePurchasedAir: Potential issue with equipment sizing for {} {}", PurchAir.cObjectName, PurchAir.Name));
-                            ShowContinueError(state, format("...User-Specified Maximum Sensible Heating Capacity of {:.2R} [W]", MaxHeatSensCapUser));
+                            ShowMessage(state,
+                                        EnergyPlus::format("SizePurchasedAir: Potential issue with equipment sizing for {} {}",
+                                                           PurchAir.cObjectName,
+                                                           PurchAir.Name));
                             ShowContinueError(
-                                state, format("...differs from Design Size Maximum Sensible Heating Capacity of {:.2R} [W]", MaxHeatSensCapDes));
+                                state, EnergyPlus::format("...User-Specified Maximum Sensible Heating Capacity of {:.2R} [W]", MaxHeatSensCapUser));
+                            ShowContinueError(
+                                state,
+                                EnergyPlus::format("...differs from Design Size Maximum Sensible Heating Capacity of {:.2R} [W]", MaxHeatSensCapDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -1680,12 +1690,14 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                                                  MaxCoolTotCapUser);
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(MaxCoolTotCapDes - MaxCoolTotCapUser) / MaxCoolTotCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                            ShowMessage(
-                                state,
-                                format("SizePurchasedAir: Potential issue with equipment sizing for {} {}", PurchAir.cObjectName, PurchAir.Name));
-                            ShowContinueError(state, format("User-Specified Maximum Total Cooling Capacity of {:.2R} [W]", MaxCoolTotCapUser));
+                            ShowMessage(state,
+                                        EnergyPlus::format("SizePurchasedAir: Potential issue with equipment sizing for {} {}",
+                                                           PurchAir.cObjectName,
+                                                           PurchAir.Name));
                             ShowContinueError(state,
-                                              format("differs from Design Size Maximum Total Cooling Capacity of {:.2R} [W]", MaxCoolTotCapDes));
+                                              EnergyPlus::format("User-Specified Maximum Total Cooling Capacity of {:.2R} [W]", MaxCoolTotCapUser));
+                            ShowContinueError(
+                                state, EnergyPlus::format("differs from Design Size Maximum Total Cooling Capacity of {:.2R} [W]", MaxCoolTotCapDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -1760,12 +1772,12 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                     state, PurchAir.cObjectName, PurchAir.Name, "Design Size Maximum Sensible Heating Capacity [W]", MaxHeatSensCapDes);
                 // If there is OA, check if sizing calcs have OA>0, throw warning if not
                 if ((PurchAir.OutdoorAir) && (state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MinOA == 0.0)) {
-                    ShowWarningError(state, format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
+                    ShowWarningError(state, EnergyPlus::format("InitPurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
                     ShowContinueError(state, "There is outdoor air specified in this object, but the design outdoor air flow rate for this ");
                     ShowContinueError(state, "zone is zero. The Maximum Sensible Heating Capacity will be autosized for zero outdoor air flow. ");
                     ShowContinueError(state,
-                                      format("Check the outdoor air specifications in the Sizing:Zone object for zone {}.",
-                                             state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).ZoneName));
+                                      EnergyPlus::format("Check the outdoor air specifications in the Sizing:Zone object for zone {}.",
+                                                         state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).ZoneName));
                 }
             } else {
                 if (PurchAir.MaxHeatSensCap > 0.0 && MaxHeatSensCapDes > 0.0) {
@@ -1779,12 +1791,15 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                                                  MaxHeatSensCapUser);
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(MaxHeatSensCapDes - MaxHeatSensCapUser) / MaxHeatSensCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                            ShowMessage(
-                                state,
-                                format("SizePurchasedAir: Potential issue with equipment sizing for {} {}", PurchAir.cObjectName, PurchAir.Name));
-                            ShowContinueError(state, format("...User-Specified Maximum Sensible Heating Capacity of {:.2R} [W]", MaxHeatSensCapUser));
+                            ShowMessage(state,
+                                        EnergyPlus::format("SizePurchasedAir: Potential issue with equipment sizing for {} {}",
+                                                           PurchAir.cObjectName,
+                                                           PurchAir.Name));
                             ShowContinueError(
-                                state, format("...differs from Design Size Maximum Sensible Heating Capacity of {:.2R} [W]", MaxHeatSensCapDes));
+                                state, EnergyPlus::format("...User-Specified Maximum Sensible Heating Capacity of {:.2R} [W]", MaxHeatSensCapUser));
+                            ShowContinueError(
+                                state,
+                                EnergyPlus::format("...differs from Design Size Maximum Sensible Heating Capacity of {:.2R} [W]", MaxHeatSensCapDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -1862,12 +1877,12 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                     state, PurchAir.cObjectName, PurchAir.Name, "Design Size Maximum Total Cooling Capacity [W]", MaxCoolTotCapDes);
                 // If there is OA, check if sizing calcs have OA>0, throw warning if not
                 if ((PurchAir.OutdoorAir) && (state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).MinOA == 0.0)) {
-                    ShowWarningError(state, format("SizePurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
+                    ShowWarningError(state, EnergyPlus::format("SizePurchasedAir: In {} = {}", PurchAir.cObjectName, PurchAir.Name));
                     ShowContinueError(state, "There is outdoor air specified in this object, but the design outdoor air flow rate for this ");
                     ShowContinueError(state, "zone is zero. The Maximum Total Cooling Capacity will be autosized for zero outdoor air flow. ");
                     ShowContinueError(state,
-                                      format("Check the outdoor air specifications in the Sizing:Zone object for zone {}.",
-                                             state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).ZoneName));
+                                      EnergyPlus::format("Check the outdoor air specifications in the Sizing:Zone object for zone {}.",
+                                                         state.dataSize->FinalZoneSizing(state.dataSize->CurZoneEqNum).ZoneName));
                 }
             } else {
                 if (PurchAir.MaxCoolTotCap > 0.0 && MaxCoolTotCapDes > 0.0) {
@@ -1881,12 +1896,14 @@ void SizePurchasedAir(EnergyPlusData &state, int const PurchAirNum)
                                                  MaxCoolTotCapUser);
                     if (state.dataGlobal->DisplayExtraWarnings) {
                         if ((std::abs(MaxCoolTotCapDes - MaxCoolTotCapUser) / MaxCoolTotCapUser) > state.dataSize->AutoVsHardSizingThreshold) {
-                            ShowMessage(
-                                state,
-                                format("SizePurchasedAir: Potential issue with equipment sizing for {} {}", PurchAir.cObjectName, PurchAir.Name));
-                            ShowContinueError(state, format("User-Specified Maximum Total Cooling Capacity of {:.2R} [W]", MaxCoolTotCapUser));
+                            ShowMessage(state,
+                                        EnergyPlus::format("SizePurchasedAir: Potential issue with equipment sizing for {} {}",
+                                                           PurchAir.cObjectName,
+                                                           PurchAir.Name));
                             ShowContinueError(state,
-                                              format("differs from Design Size Maximum Total Cooling Capacity of {:.2R} [W]", MaxCoolTotCapDes));
+                                              EnergyPlus::format("User-Specified Maximum Total Cooling Capacity of {:.2R} [W]", MaxCoolTotCapUser));
+                            ShowContinueError(
+                                state, EnergyPlus::format("differs from Design Size Maximum Total Cooling Capacity of {:.2R} [W]", MaxCoolTotCapDes));
                             ShowContinueError(state, "This may, or may not, indicate mismatched component sizes.");
                             ShowContinueError(state, "Verify that the value entered is intended and is consistent with other components.");
                         }
@@ -2053,12 +2070,13 @@ void CalcPurchAirLoads(EnergyPlusData &state,
                 if (PurchAir.OAFlowMaxCoolOutputError < 1) {
                     ++PurchAir.OAFlowMaxCoolOutputError;
                     ShowWarningError(state,
-                                     format("{} \"{}\" Requested outdoor air flow rate = {:.5T} [m3/s] exceeds limit.",
-                                            PurchAir.cObjectName,
-                                            PurchAir.Name,
-                                            OAVolFlowRate));
-                    ShowContinueError(state,
-                                      format(" Will be reduced to the Maximum Cooling Air Flow Rate = {:.5T} [m3/s]", PurchAir.MaxCoolVolFlowRate));
+                                     EnergyPlus::format("{} \"{}\" Requested outdoor air flow rate = {:.5T} [m3/s] exceeds limit.",
+                                                        PurchAir.cObjectName,
+                                                        PurchAir.Name,
+                                                        OAVolFlowRate));
+                    ShowContinueError(
+                        state,
+                        EnergyPlus::format(" Will be reduced to the Maximum Cooling Air Flow Rate = {:.5T} [m3/s]", PurchAir.MaxCoolVolFlowRate));
                     ShowContinueErrorTimeStamp(state, "");
                 } else {
                     ShowRecurringWarningErrorAtEnd(
@@ -2357,12 +2375,13 @@ void CalcPurchAirLoads(EnergyPlusData &state,
                 if (PurchAir.OAFlowMaxHeatOutputError < 1) {
                     ++PurchAir.OAFlowMaxHeatOutputError;
                     ShowWarningError(state,
-                                     format("{} \"{}\" Requested outdoor air flow rate = {:.5T} [m3/s] exceeds limit.",
-                                            PurchAir.cObjectName,
-                                            PurchAir.Name,
-                                            OAVolFlowRate));
-                    ShowContinueError(state,
-                                      format(" Will be reduced to the Maximum Heating Air Flow Rate = {:.5T} [m3/s]", PurchAir.MaxHeatVolFlowRate));
+                                     EnergyPlus::format("{} \"{}\" Requested outdoor air flow rate = {:.5T} [m3/s] exceeds limit.",
+                                                        PurchAir.cObjectName,
+                                                        PurchAir.Name,
+                                                        OAVolFlowRate));
+                    ShowContinueError(
+                        state,
+                        EnergyPlus::format(" Will be reduced to the Maximum Heating Air Flow Rate = {:.5T} [m3/s]", PurchAir.MaxHeatVolFlowRate));
                     ShowContinueErrorTimeStamp(state, "");
                 } else {
                     ShowRecurringWarningErrorAtEnd(
@@ -2615,11 +2634,11 @@ void CalcPurchAirLoads(EnergyPlusData &state,
                 if (PurchAir.SaturationOutputError < 1) {
                     ++PurchAir.SaturationOutputError;
                     ShowWarningError(state,
-                                     format("{} \"{}\" Supply humidity ratio = {:.5T} exceeds saturation limit {:.5T} [kgWater/kgDryAir]",
-                                            PurchAir.cObjectName,
-                                            PurchAir.Name,
-                                            SupplyHumRatOrig,
-                                            SupplyHumRatSat));
+                                     EnergyPlus::format("{} \"{}\" Supply humidity ratio = {:.5T} exceeds saturation limit {:.5T} [kgWater/kgDryAir]",
+                                                        PurchAir.cObjectName,
+                                                        PurchAir.Name,
+                                                        SupplyHumRatOrig,
+                                                        SupplyHumRatSat));
                     ShowContinueError(state, " Simulation continuing . . . ");
                     ShowContinueErrorTimeStamp(state, "");
                 } else {
