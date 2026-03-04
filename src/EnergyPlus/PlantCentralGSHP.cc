@@ -583,11 +583,6 @@ void GetWrapperInput(EnergyPlusData &state)
 
         state.dataPlantCentralGSHP->Wrapper(WrapperNum).Name = state.dataIPShortCut->cAlphaArgs(1);
 
-        // initialize nth chiller heater index (including identical units) for current wrapper
-        if (state.dataIPShortCut->cAlphaArgs(1).empty()) {
-            continue;
-        }
-
         if (state.dataIPShortCut->cAlphaArgs(2) == "SMARTMIXING") {
             state.dataPlantCentralGSHP->Wrapper(WrapperNum).ControlMode = CondenserType::SmartMixing;
         }

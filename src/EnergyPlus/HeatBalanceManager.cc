@@ -1876,10 +1876,6 @@ namespace HeatBalanceManager {
                 TMP = index(state.dataIPShortCut->cAlphaArgs(1), char(2));
             }
 
-            if (state.dataIPShortCut->cAlphaArgs(1).empty()) {
-                continue;
-            }
-
             ++ZoneLoop;
             ProcessZoneData(state,
                             cCurrentModuleObject,
