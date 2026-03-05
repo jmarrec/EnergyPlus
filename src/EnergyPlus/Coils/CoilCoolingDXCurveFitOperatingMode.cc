@@ -81,6 +81,11 @@ void CoilCoolingDXCurveFitOperatingMode::instantiateFromInputSpec(EnergyPlus::En
     this->evapRateRatio = input_data.ratio_of_initial_moisture_evaporation_rate_and_steady_state_latent_capacity;
     this->maxCyclingRate = input_data.maximum_cycling_rate;
     this->latentTimeConst = input_data.latent_capacity_time_constant;
+    if (Util::SameString(input_data.apply_part_load_fraction_to_speeds_greater_than_1, "Yes")) {
+        this->applyPartLoadFractionAllSpeeds = true;
+    } else {
+        this->applyPartLoadFractionAllSpeeds = false;
+    }
     if (Util::SameString(input_data.apply_latent_degradation_to_speeds_greater_than_1, "Yes")) {
         this->applyLatentDegradationAllSpeeds = true;
     } else {
@@ -157,11 +162,12 @@ CoilCoolingDXCurveFitOperatingMode::CoilCoolingDXCurveFitOperatingMode(EnergyPlu
         input_specs.ratio_of_initial_moisture_evaporation_rate_and_steady_state_latent_capacity = state.dataIPShortCut->rNumericArgs(5);
         input_specs.latent_capacity_time_constant = state.dataIPShortCut->rNumericArgs(6);
         input_specs.nominal_time_for_condensate_removal_to_begin = state.dataIPShortCut->rNumericArgs(7);
-        input_specs.apply_latent_degradation_to_speeds_greater_than_1 = state.dataIPShortCut->cAlphaArgs(2);
-        input_specs.condenser_type = state.dataIPShortCut->cAlphaArgs(3);
+        input_specs.apply_part_load_fraction_to_speeds_greater_than_1 = state.dataIPShortCut->cAlphaArgs(2);
+        input_specs.apply_latent_degradation_to_speeds_greater_than_1 = state.dataIPShortCut->cAlphaArgs(3);
+        input_specs.condenser_type = state.dataIPShortCut->cAlphaArgs(4);
         input_specs.nominal_evap_condenser_pump_power = state.dataIPShortCut->rNumericArgs(8);
         input_specs.nominal_speed_number = state.dataIPShortCut->rNumericArgs(9);
-        for (int fieldNum = 4; fieldNum <= NumAlphas; fieldNum++) {
+        for (int fieldNum = 5; fieldNum <= NumAlphas; fieldNum++) {
             if (state.dataIPShortCut->cAlphaArgs(fieldNum).empty()) {
                 break;
             }
@@ -376,7 +382,11 @@ void CoilCoolingDXCurveFitOperatingMode::CalcOperatingMode(EnergyPlus::EnergyPlu
     }
 
     OpModeRTF = thisspeed.RTF;
-    OpModePower = thisspeed.fullLoadPower * thisspeed.RTF;
+    if ((!this->applyPartLoadFractionAllSpeeds) && (speedNum > 1)) {
+      OpModePower = thisspeed.fullLoadPower * speedRatio;
+    } else {
+      OpModePower = thisspeed.fullLoadPower * thisspeed.RTF;
+    }
     OpModeWasteHeat = thisspeed.fullLoadWasteHeat * thisspeed.RTF;
 
     if ((speedNum > 1) && (speedRatio < 1.0) && !singleMode) {
@@ -411,7 +421,11 @@ void CoilCoolingDXCurveFitOperatingMode::CalcOperatingMode(EnergyPlus::EnergyPlu
             inletNode.MassFlowRate;
         outletNode.Temp = Psychrometrics::PsyTdbFnHW(outletNode.Enthalpy, outletNode.HumRat);
 
-        this->OpModePower += (1.0 - thisspeed.RTF) * lowerspeed.fullLoadPower;
+        if (!this->applyPartLoadFractionAllSpeeds) {
+          this->OpModePower += (1.0 - speedRatio) * lowerspeed.fullLoadPower;
+        } else {
+          this->OpModePower += (1.0 - thisspeed.RTF) * lowerspeed.fullLoadPower;
+        }
         this->OpModeWasteHeat += (1.0 - thisspeed.RTF) * lowerspeed.fullLoadWasteHeat;
         this->OpModeRTF = 1.0; // if we are on greater than 1 speed, RTF *must* be 1
     }
