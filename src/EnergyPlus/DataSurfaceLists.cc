@@ -149,14 +149,16 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
 
             NameConflict = Util::FindItemInList(SurfList(Item).Name, state.dataSurface->Surface);
             if (NameConflict > 0) { // A surface list has the same name as a surface--not allowed
-                ShowSevereError(
-                    state,
-                    format("{}{}", CurrentModuleObject1, " = " + SurfList(Item).Name + " has the same name as a surface; this is not allowed."));
+                ShowSevereError(state,
+                                EnergyPlus::format("{}{}",
+                                                   CurrentModuleObject1,
+                                                   " = " + SurfList(Item).Name + " has the same name as a surface; this is not allowed."));
                 ErrorsFound = true;
             }
 
             if (SurfList(Item).NumOfSurfaces < 1) {
-                ShowSevereError(state, format("{}{}", CurrentModuleObject1, " = " + SurfList(Item).Name + " does not have any surfaces listed."));
+                ShowSevereError(
+                    state, EnergyPlus::format("{}{}", CurrentModuleObject1, " = " + SurfList(Item).Name + " does not have any surfaces listed."));
                 ErrorsFound = true;
             } else {
                 SurfList(Item).SurfName.allocate(SurfList(Item).NumOfSurfaces);
@@ -183,7 +185,8 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                     }
                     if (SurfNum > 1) {
                         if (ZoneForSurface != state.dataSurface->Surface(SurfList(Item).SurfPtr(SurfNum)).Zone && showSameZoneWarning) {
-                            ShowWarningError(state, format("Not all surfaces in same zone for {} = {}", CurrentModuleObject1, SurfList(Item).Name));
+                            ShowWarningError(
+                                state, EnergyPlus::format("Not all surfaces in same zone for {} = {}", CurrentModuleObject1, SurfList(Item).Name));
                             if (!state.dataGlobal->DisplayExtraWarnings) {
                                 ShowContinueError(state, "If this is intentionally a radiant system with surfaces in more than one thermal zone,");
                                 ShowContinueError(state,
@@ -196,13 +199,13 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                 SurfList(Item).SurfFlowFrac(SurfNum) = Numbers(SurfNum);
                 if (SurfList(Item).SurfFlowFrac(SurfNum) < SurfListMinFlowFrac) {
                     ShowSevereError(state,
-                                    format("The Flow Fraction for Surface {} in Surface Group {} is too low",
-                                           SurfList(Item).SurfName(SurfNum),
-                                           SurfList(Item).Name));
+                                    EnergyPlus::format("The Flow Fraction for Surface {} in Surface Group {} is too low",
+                                                       SurfList(Item).SurfName(SurfNum),
+                                                       SurfList(Item).Name));
                     ShowContinueError(state,
-                                      format("Flow fraction of {:.6R} is less than minimum criteria = {:.6R}",
-                                             SurfList(Item).SurfFlowFrac(SurfNum),
-                                             SurfListMinFlowFrac));
+                                      EnergyPlus::format("Flow fraction of {:.6R} is less than minimum criteria = {:.6R}",
+                                                         SurfList(Item).SurfFlowFrac(SurfNum),
+                                                         SurfListMinFlowFrac));
                     ShowContinueError(state,
                                       "Zero or extremely low flow fractions are not allowed. Remove this surface from the surface group or "
                                       "combine small surfaces together.");
@@ -212,7 +215,8 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
             }
 
             if (std::abs(SumOfAllFractions - 1.0) > FlowFractionTolerance) {
-                ShowSevereError(state, format("{}{}", CurrentModuleObject1, " flow fractions do not add up to unity for " + SurfList(Item).Name));
+                ShowSevereError(
+                    state, EnergyPlus::format("{}{}", CurrentModuleObject1, " flow fractions do not add up to unity for " + SurfList(Item).Name));
                 ErrorsFound = true;
             }
         }
@@ -225,7 +229,7 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
         lNumericBlanks.deallocate();
 
         if (ErrorsFound) {
-            ShowSevereError(state, format("{}{}", CurrentModuleObject1, " errors found getting input. Program will terminate."));
+            ShowSevereError(state, EnergyPlus::format("{}{}", CurrentModuleObject1, " errors found getting input. Program will terminate."));
         }
     }
 
@@ -258,13 +262,16 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
 
             NameConflict = Util::FindItemInList(SlabList(Item).Name, state.dataSurface->Surface);
             if (NameConflict > 0) { // A surface list has the same name as a surface--not allowed
-                ShowSevereError(
-                    state, format("{}{}", CurrentModuleObject2, " = " + SlabList(Item).Name + " has the same name as a slab; this is not allowed."));
+                ShowSevereError(state,
+                                EnergyPlus::format("{}{}",
+                                                   CurrentModuleObject2,
+                                                   " = " + SlabList(Item).Name + " has the same name as a slab; this is not allowed."));
                 ErrorsFound = true;
             }
 
             if (SlabList(Item).NumOfSurfaces < 1) {
-                ShowSevereError(state, format("{}{}", CurrentModuleObject2, " = " + SlabList(Item).Name + " does not have any slabs listed."));
+                ShowSevereError(state,
+                                EnergyPlus::format("{}{}", CurrentModuleObject2, " = " + SlabList(Item).Name + " does not have any slabs listed."));
                 ErrorsFound = true;
             } else {
                 SlabList(Item).ZoneName.allocate(SlabList(Item).NumOfSurfaces);
@@ -305,9 +312,11 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
                     NameConflict =
                         Util::FindItemInList(SlabList(Item).SurfName(SurfNum), SurfList(SrfList).SurfName, SurfList(SrfList).NumOfSurfaces);
                     if (NameConflict > 0) { // A slab list includes a surface on a surface list--not allowed
-                        ShowSevereError(state, format("{}{}", CurrentModuleObject2, "=\"" + SlabList(Item).Name + "\", invalid surface specified."));
-                        ShowContinueError(state, format("Surface=\"{}\" is also on a Surface List.", SlabList(Item).SurfName(SurfNum)));
-                        ShowContinueError(state, format("{}{}", CurrentModuleObject1, "=\"" + SurfList(SrfList).Name + "\" has this surface also."));
+                        ShowSevereError(
+                            state, EnergyPlus::format("{}{}", CurrentModuleObject2, "=\"" + SlabList(Item).Name + "\", invalid surface specified."));
+                        ShowContinueError(state, EnergyPlus::format("Surface=\"{}\" is also on a Surface List.", SlabList(Item).SurfName(SurfNum)));
+                        ShowContinueError(
+                            state, EnergyPlus::format("{}{}", CurrentModuleObject1, "=\"" + SurfList(SrfList).Name + "\" has this surface also."));
                         ShowContinueError(state, "A surface cannot be on both lists. The models cannot operate correctly.");
                         ErrorsFound = true;
                     }
@@ -332,7 +341,7 @@ void GetSurfaceListsInputs(EnergyPlusData &state)
         lNumericBlanks.deallocate();
 
         if (ErrorsFound) {
-            ShowSevereError(state, format("{}{}", CurrentModuleObject2, " errors found getting input. Program will terminate."));
+            ShowSevereError(state, EnergyPlus::format("{}{}", CurrentModuleObject2, " errors found getting input. Program will terminate."));
         }
     }
 

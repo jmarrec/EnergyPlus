@@ -60,6 +60,7 @@
 #include <EnergyPlus/DataZoneEquipment.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/General.hh>
 #include <EnergyPlus/Plant/Enums.hh>
 #include <EnergyPlus/Plant/PlantLocation.hh>
 
@@ -218,6 +219,7 @@ namespace SingleDuct {
         SingleDuctAirTerminalFlowConditions sd_airterminalInlet;
         SingleDuctAirTerminalFlowConditions sd_airterminalOutlet;
 
+        General::SolveRootStats solveRootStats;
         // Default Constructor
         SingleDuctAirTerminal()
             : SysNum(-1), SysType_Num(SysType::Invalid), ReheatComp_Num(HeatingCoilType::None), ReheatComp_Index(0),

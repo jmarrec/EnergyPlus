@@ -207,14 +207,15 @@ namespace CoolTower {
                 if (lAlphaBlanks(3)) {
                     ShowSevereError(
                         state,
-                        format("{}=\"{}\" invalid {} is required but input is blank.", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cAlphaFields(3)));
+                        EnergyPlus::format(
+                            "{}=\"{}\" invalid {} is required but input is blank.", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cAlphaFields(3)));
                 } else {
                     ShowSevereError(state,
-                                    format("{}=\"{}\" invalid {}=\"{}\" not found.",
-                                           CurrentModuleObject,
-                                           s_ipsc->cAlphaArgs(1),
-                                           cAlphaFields(3),
-                                           s_ipsc->cAlphaArgs(3)));
+                                    EnergyPlus::format("{}=\"{}\" invalid {}=\"{}\" not found.",
+                                                       CurrentModuleObject,
+                                                       s_ipsc->cAlphaArgs(1),
+                                                       cAlphaFields(3),
+                                                       s_ipsc->cAlphaArgs(3)));
                 }
                 ErrorsFound = true;
             } else if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).ZonePtr == 0) {
@@ -241,7 +242,8 @@ namespace CoolTower {
                 if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).FlowCtrlType == FlowCtrl::Invalid) {
                     ShowSevereError(
                         state,
-                        format("{}=\"{}\" invalid {}=\"{}\".", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cAlphaFields(5), s_ipsc->cAlphaArgs(5)));
+                        EnergyPlus::format(
+                            "{}=\"{}\" invalid {}=\"{}\".", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cAlphaFields(5), s_ipsc->cAlphaArgs(5)));
                     ErrorsFound = true;
                 }
             }
@@ -256,15 +258,17 @@ namespace CoolTower {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).MaxWaterFlowRate = MaximumWaterFlowRate;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(1), s_ipsc->rNumericArgs(1)));
-                ShowContinueError(state, format("...Maximum Allowable=[{:.2R}].", MaximumWaterFlowRate));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(1), s_ipsc->rNumericArgs(1)));
+                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaximumWaterFlowRate));
             }
             if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).MaxWaterFlowRate < MinimumWaterFlowRate) {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).MaxWaterFlowRate = MinimumWaterFlowRate;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(1), s_ipsc->rNumericArgs(1)));
-                ShowContinueError(state, format("...Minimum Allowable=[{:.2R}].", MinimumWaterFlowRate));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(1), s_ipsc->rNumericArgs(1)));
+                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinimumWaterFlowRate));
             }
 
             state.dataCoolTower->CoolTowerSys(CoolTowerNum).TowerHeight = s_ipsc->rNumericArgs(2); // Get effective tower height
@@ -272,15 +276,17 @@ namespace CoolTower {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).TowerHeight = MaxHeight;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(2), s_ipsc->rNumericArgs(2)));
-                ShowContinueError(state, format("...Maximum Allowable=[{:.2R}].", MaxHeight));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(2), s_ipsc->rNumericArgs(2)));
+                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxHeight));
             }
             if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).TowerHeight < MinHeight) {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).TowerHeight = MinHeight;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(2), s_ipsc->rNumericArgs(2)));
-                ShowContinueError(state, format("...Minimum Allowable=[{:.2R}].", MinHeight));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(2), s_ipsc->rNumericArgs(2)));
+                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinHeight));
             }
 
             state.dataCoolTower->CoolTowerSys(CoolTowerNum).OutletArea = s_ipsc->rNumericArgs(3); // Get outlet area
@@ -288,15 +294,17 @@ namespace CoolTower {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).OutletArea = MaxValue;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(3), s_ipsc->rNumericArgs(3)));
-                ShowContinueError(state, format("...Maximum Allowable=[{:.2R}].", MaxValue));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(3), s_ipsc->rNumericArgs(3)));
+                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxValue));
             }
             if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).OutletArea < MinValue) {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).OutletArea = MinValue;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(3), s_ipsc->rNumericArgs(3)));
-                ShowContinueError(state, format("...Minimum Allowable=[{:.2R}].", MinValue));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(3), s_ipsc->rNumericArgs(3)));
+                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinValue));
             }
 
             state.dataCoolTower->CoolTowerSys(CoolTowerNum).MaxAirVolFlowRate = s_ipsc->rNumericArgs(4); // Maximum limit of air flow to the space
@@ -304,15 +312,17 @@ namespace CoolTower {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).MaxAirVolFlowRate = MaxValue;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(4), s_ipsc->rNumericArgs(4)));
-                ShowContinueError(state, format("...Maximum Allowable=[{:.2R}].", MaxValue));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(4), s_ipsc->rNumericArgs(4)));
+                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxValue));
             }
             if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).MaxAirVolFlowRate < MinValue) {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).MaxAirVolFlowRate = MinValue;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(4), s_ipsc->rNumericArgs(4)));
-                ShowContinueError(state, format("...Minimum Allowable=[{:.2R}].", MinValue));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(4), s_ipsc->rNumericArgs(4)));
+                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinValue));
             }
 
             state.dataCoolTower->CoolTowerSys(CoolTowerNum).MinZoneTemp =
@@ -321,15 +331,17 @@ namespace CoolTower {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).MinZoneTemp = MaxValue;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(5), s_ipsc->rNumericArgs(5)));
-                ShowContinueError(state, format("...Maximum Allowable=[{:.2R}].", MaxValue));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(5), s_ipsc->rNumericArgs(5)));
+                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxValue));
             }
             if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).MinZoneTemp < MinValue) {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).MinZoneTemp = MinValue;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(5), s_ipsc->rNumericArgs(5)));
-                ShowContinueError(state, format("...Minimum Allowable=[{:.2R}].", MinValue));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(5), s_ipsc->rNumericArgs(5)));
+                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinValue));
             }
 
             state.dataCoolTower->CoolTowerSys(CoolTowerNum).FracWaterLoss = s_ipsc->rNumericArgs(6); // Fraction of water loss
@@ -337,15 +349,17 @@ namespace CoolTower {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).FracWaterLoss = MaxFrac;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(6), s_ipsc->rNumericArgs(6)));
-                ShowContinueError(state, format("...Maximum Allowable=[{:.2R}].", MaxFrac));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(6), s_ipsc->rNumericArgs(6)));
+                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxFrac));
             }
             if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).FracWaterLoss < MinFrac) {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).FracWaterLoss = MinFrac;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(6), s_ipsc->rNumericArgs(6)));
-                ShowContinueError(state, format("...Minimum Allowable=[{:.2R}].", MinFrac));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(6), s_ipsc->rNumericArgs(6)));
+                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinFrac));
             }
 
             state.dataCoolTower->CoolTowerSys(CoolTowerNum).FracFlowSched = s_ipsc->rNumericArgs(7); // Fraction of loss of air flow
@@ -353,15 +367,17 @@ namespace CoolTower {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).FracFlowSched = MaxFrac;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(7), s_ipsc->rNumericArgs(7)));
-                ShowContinueError(state, format("...Maximum Allowable=[{:.2R}].", MaxFrac));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.2R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(7), s_ipsc->rNumericArgs(7)));
+                ShowContinueError(state, EnergyPlus::format("...Maximum Allowable=[{:.2R}].", MaxFrac));
             }
             if (state.dataCoolTower->CoolTowerSys(CoolTowerNum).FracFlowSched < MinFrac) {
                 state.dataCoolTower->CoolTowerSys(CoolTowerNum).FracFlowSched = MinFrac;
                 ShowWarningError(
                     state,
-                    format("{}=\"{}\" invalid {}=[{:.5R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(7), s_ipsc->rNumericArgs(7)));
-                ShowContinueError(state, format("...Minimum Allowable=[{:.2R}].", MinFrac));
+                    EnergyPlus::format(
+                        "{}=\"{}\" invalid {}=[{:.5R}].", CurrentModuleObject, s_ipsc->cAlphaArgs(1), cNumericFields(7), s_ipsc->rNumericArgs(7)));
+                ShowContinueError(state, EnergyPlus::format("...Minimum Allowable=[{:.2R}].", MinFrac));
             }
 
             state.dataCoolTower->CoolTowerSys(CoolTowerNum).RatedPumpPower = s_ipsc->rNumericArgs(8); // Get rated pump power
@@ -375,7 +391,7 @@ namespace CoolTower {
         lNumericBlanks.deallocate();
 
         if (ErrorsFound) {
-            ShowFatalError(state, format("{} errors occurred in input.  Program terminates.", CurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("{} errors occurred in input.  Program terminates.", CurrentModuleObject));
         }
 
         for (int CoolTowerNum = 1; CoolTowerNum <= NumCoolTowers; ++CoolTowerNum) {
@@ -620,7 +636,7 @@ namespace CoolTower {
 
                 if (OutletTemp < state.dataEnvrn->OutWetBulbTemp) {
                     ShowSevereError(state, "Cooltower outlet temperature exceed the outdoor wet bulb temperature reset to input values");
-                    ShowContinueError(state, format("Occurs in Cooltower ={}", state.dataCoolTower->CoolTowerSys(CoolTowerNum).Name));
+                    ShowContinueError(state, EnergyPlus::format("Occurs in Cooltower ={}", state.dataCoolTower->CoolTowerSys(CoolTowerNum).Name));
                 }
 
                 WaterFlowRate /= UCFactor;

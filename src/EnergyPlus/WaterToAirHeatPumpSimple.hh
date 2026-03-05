@@ -276,9 +276,6 @@ namespace WaterToAirHeatPumpSimple {
 
 struct WaterToAirHeatPumpSimpleData : BaseGlobalStruct
 {
-
-    Real64 const CelsiustoKelvin; // Conversion from Celsius to Kelvin
-
     int NumWatertoAirHPs; // The Number of Water to Air Heat Pumps found in the Input
                           // INTEGER        :: WaterIndex = 0                   ! Water index
                           // INTEGER        :: Count = 0
@@ -287,31 +284,15 @@ struct WaterToAirHeatPumpSimpleData : BaseGlobalStruct
     Array1D_bool MySizeFlag;
     Array1D_bool SimpleHPTimeStepFlag; // determines whether the previous operating mode for the coil and it's partner has been initialized
 
-    Real64 SourceSideMassFlowRate; // Source Side Mass flow rate [Kg/s]
-    Real64 SourceSideInletTemp;    // Source Side Inlet Temperature [C]
-    Real64 SourceSideInletEnth;    // Source Side Inlet Enthalpy [J/kg]
-    Real64 LoadSideInletDBTemp;    // Load Side Inlet Dry Bulb Temp [C]
-    Real64 LoadSideInletWBTemp;    // Load Side Inlet Wet Bulb Temp [C]
-    Real64 LoadSideInletHumRat;    // Load Side Outlet Humidity ratio
-    Real64 LoadSideInletEnth;      // Load Side Inlet Enthalpy [J/kg]
-    Real64 LoadSideOutletDBTemp;   // Load Side Outlet Dry Bulb Temp [C]
-    Real64 LoadSideOutletHumRat;   // Load Side Outlet Humidity ratio
-    Real64 QLatRated;              // Latent Capacity [W] rated at entering air conditions [Tdb=26.7C Twb=19.4C]
-    Real64 QLatActual;             // Actual Latent Capacity [W]
-    Real64 Winput;                 // Power Consumption [W]
-    bool MyOneTimeFlag = true;     // one time allocation flag
-    bool firstTime = true;
+    Real64 QLatRated;          // Latent Capacity [W] rated at entering air conditions [Tdb=26.7C Twb=19.4C]
+    Real64 QLatActual;         // Actual Latent Capacity [W]
+    Real64 Winput;             // Power Consumption [W]
+    bool MyOneTimeFlag = true; // one time allocation flag
 
     Array1D<WaterToAirHeatPumpSimple::SimpleWatertoAirHPConditions> SimpleWatertoAirHP;
 
     Array1D_bool MyEnvrnFlag; // used for initializations each begin environment flag
     Array1D_bool MyPlantScanFlag;
-
-    Real64 LoadSideInletDBTemp_Init = 0; // rated conditions
-    Real64 LoadSideInletWBTemp_Init = 0; // rated conditions
-    Real64 LoadSideInletHumRat_Init = 0; // rated conditions
-    Real64 LoadSideInletEnth_Init = 0;   // rated conditions
-    Real64 CpAir_Init = 0;               // rated conditions
 
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
     {
@@ -330,22 +311,13 @@ struct WaterToAirHeatPumpSimpleData : BaseGlobalStruct
         this->MySizeFlag.clear();
         this->SimpleHPTimeStepFlag.clear();
         this->SimpleWatertoAirHP.deallocate();
-        this->firstTime = true;
         this->MyEnvrnFlag.deallocate();
         this->MyPlantScanFlag.deallocate();
-        this->LoadSideInletDBTemp_Init = 0;
-        this->LoadSideInletWBTemp_Init = 0;
-        this->LoadSideInletHumRat_Init = 0;
-        this->LoadSideInletEnth_Init = 0;
-        this->CpAir_Init = 0;
     }
 
     // Default Constructor
     WaterToAirHeatPumpSimpleData()
-        : CelsiustoKelvin(Constant::Kelvin), NumWatertoAirHPs(0), AirflowErrPointer(0), GetCoilsInputFlag(true), SourceSideMassFlowRate(0.0),
-          SourceSideInletTemp(0.0), SourceSideInletEnth(0.0), LoadSideInletDBTemp(0.0), LoadSideInletWBTemp(0.0), LoadSideInletHumRat(0.0),
-          LoadSideInletEnth(0.0), LoadSideOutletDBTemp(0.0), LoadSideOutletHumRat(0.0), QLatRated(0.0), QLatActual(0.0), Winput(0.0),
-          MyOneTimeFlag(true), firstTime(true)
+        : NumWatertoAirHPs(0), AirflowErrPointer(0), GetCoilsInputFlag(true), QLatRated(0.0), QLatActual(0.0), Winput(0.0), MyOneTimeFlag(true)
     {
     }
 };

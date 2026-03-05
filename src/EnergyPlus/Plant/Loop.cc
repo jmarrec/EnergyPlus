@@ -249,13 +249,13 @@ void PlantLoopData::CheckLoopExitNode(EnergyPlusData &state, bool const FirstHVA
                                      "\", Error (CheckLoopExitNode) -- Mass Flow Rate Calculation. Outlet and Inlet differ by more than tolerance.");
                 ShowContinueErrorTimeStamp(state, "");
                 ShowContinueError(state,
-                                  format("Loop inlet node={}, flowrate={:.4R} kg/s",
-                                         state.dataLoopNodes->NodeID(LoopInlet),
-                                         state.dataLoopNodes->Node(LoopInlet).MassFlowRate));
+                                  EnergyPlus::format("Loop inlet node={}, flowrate={:.4R} kg/s",
+                                                     state.dataLoopNodes->NodeID(LoopInlet),
+                                                     state.dataLoopNodes->Node(LoopInlet).MassFlowRate));
                 ShowContinueError(state,
-                                  format("Loop outlet node={}, flowrate={:.4R} kg/s",
-                                         state.dataLoopNodes->NodeID(LoopOutlet),
-                                         state.dataLoopNodes->Node(LoopOutlet).MassFlowRate));
+                                  EnergyPlus::format("Loop outlet node={}, flowrate={:.4R} kg/s",
+                                                     state.dataLoopNodes->NodeID(LoopOutlet),
+                                                     state.dataLoopNodes->Node(LoopOutlet).MassFlowRate));
                 ShowContinueError(state, "This loop might be helped by a bypass.");
             }
             ShowRecurringWarningErrorAtEnd(

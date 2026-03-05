@@ -56,6 +56,7 @@
 #include <EnergyPlus/Data/BaseData.hh>
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
+#include <EnergyPlus/General.hh>
 #include <EnergyPlus/HVACControllers.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
 
@@ -219,6 +220,7 @@ namespace WaterCoils {
         bool AirLoopDOASFlag;           // True when this coil is used AirLoopDOAS
         bool heatRecoveryCoil;          // is true when coils are connected to each other to create a heat recovery loop
 
+        General::SolveRootStats solveRootStats{};
         // Default Constructor
         WaterCoilEquipConditions()
             : WaterCoilType(DataPlant::PlantEquipmentType::Invalid), WaterCoilModel(CoilModel::Invalid), RequestingAutoSize(false),
