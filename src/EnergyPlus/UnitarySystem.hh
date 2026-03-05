@@ -177,7 +177,7 @@ namespace UnitarySystems {
         bool m_SingleModeFlag = false;
 
         static void getDesignSpecMSHP(EnergyPlusData &state);
-        static void getDesignSpecMSHPdata([[maybe_unused]] EnergyPlusData &state, bool errorsFound);
+        static void getDesignSpecMSHPdata([[maybe_unused]] EnergyPlusData &state, bool &errorsFound);
 
         DesignSpecMSHP() = default;
         ~DesignSpecMSHP() = default;

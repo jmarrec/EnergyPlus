@@ -2159,10 +2159,10 @@ TEST_F(LowTempRadiantSystemTest, InitLowTempRadiantSystemCFloPump)
         0.4; // because of how other parameters are set, this value is equal to the pump efficiency
     InitLowTempRadiantSystem(*state, false, RadSysNum, systemType, InitErrorFound);
     actualEfficiencyPercentage = state->dataLowTempRadSys->CFloRadSys(RadSysNum).PumpEffic * 100.0;
-    std::string const error_string02 =
-        delimited_string({format("   ** Warning ** Check input.  Calc Pump Efficiency={:.5R}% which is less than 50%, for pump in radiant system {}",
-                                 actualEfficiencyPercentage,
-                                 state->dataLowTempRadSys->CFloRadSys(RadSysNum).Name)});
+    std::string const error_string02 = delimited_string(
+        {EnergyPlus::format("   ** Warning ** Check input.  Calc Pump Efficiency={:.5R}% which is less than 50%, for pump in radiant system {}",
+                            actualEfficiencyPercentage,
+                            state->dataLowTempRadSys->CFloRadSys(RadSysNum).Name)});
     EXPECT_EQ(state->dataLowTempRadSys->CFloRadSys(RadSysNum).WaterVolFlowMax, state->dataLowTempRadSys->CFloRadSys(RadSysNum).PumpEffic);
     EXPECT_TRUE(compare_err_stream(error_string02, true));
     EXPECT_EQ(InitErrorFound, false);
@@ -2204,10 +2204,10 @@ TEST_F(LowTempRadiantSystemTest, InitLowTempRadiantSystemCFloPump)
         0.98; // because of how other parameters are set, this value is equal to the pump efficiency
     InitLowTempRadiantSystem(*state, false, RadSysNum, systemType, InitErrorFound);
     actualEfficiencyPercentage = state->dataLowTempRadSys->CFloRadSys(RadSysNum).PumpEffic * 100.0;
-    std::string const error_string03 =
-        delimited_string({format("   ** Warning ** Check input.  Calc Pump Efficiency={:.5R}% is approaching 100%, for pump in radiant system {}",
-                                 actualEfficiencyPercentage,
-                                 state->dataLowTempRadSys->CFloRadSys(RadSysNum).Name)});
+    std::string const error_string03 = delimited_string(
+        {EnergyPlus::format("   ** Warning ** Check input.  Calc Pump Efficiency={:.5R}% is approaching 100%, for pump in radiant system {}",
+                            actualEfficiencyPercentage,
+                            state->dataLowTempRadSys->CFloRadSys(RadSysNum).Name)});
     EXPECT_EQ(state->dataLowTempRadSys->CFloRadSys(RadSysNum).WaterVolFlowMax, state->dataLowTempRadSys->CFloRadSys(RadSysNum).PumpEffic);
     EXPECT_TRUE(compare_err_stream(error_string03, true));
     EXPECT_EQ(InitErrorFound, false);
@@ -2250,9 +2250,9 @@ TEST_F(LowTempRadiantSystemTest, InitLowTempRadiantSystemCFloPump)
     InitLowTempRadiantSystem(*state, false, RadSysNum, systemType, InitErrorFound);
     actualEfficiencyPercentage = state->dataLowTempRadSys->CFloRadSys(RadSysNum).PumpEffic * 100.0;
     std::string const error_string04 = delimited_string(
-        {format("   ** Severe  ** Check input.  Calc Pump Efficiency={:.5R}% which is bigger than 100%, for pump in radiant system {}",
-                actualEfficiencyPercentage,
-                state->dataLowTempRadSys->CFloRadSys(RadSysNum).Name)});
+        {EnergyPlus::format("   ** Severe  ** Check input.  Calc Pump Efficiency={:.5R}% which is bigger than 100%, for pump in radiant system {}",
+                            actualEfficiencyPercentage,
+                            state->dataLowTempRadSys->CFloRadSys(RadSysNum).Name)});
     EXPECT_EQ(state->dataLowTempRadSys->CFloRadSys(RadSysNum).WaterVolFlowMax, state->dataLowTempRadSys->CFloRadSys(RadSysNum).PumpEffic);
     EXPECT_TRUE(compare_err_stream(error_string04, true));
     EXPECT_EQ(InitErrorFound, true);

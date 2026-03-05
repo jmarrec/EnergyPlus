@@ -164,8 +164,9 @@ namespace WaterUse {
                 if (NumIteration > MaxIterations) {
                     if (!state.dataGlobal->WarmupFlag) {
                         if (waterConnection.MaxIterationsErrorIndex == 0) {
-                            ShowWarningError(state,
-                                             format("WaterUse:Connections = {}:  Heat recovery temperature did not converge", waterConnection.Name));
+                            ShowWarningError(
+                                state,
+                                EnergyPlus::format("WaterUse:Connections = {}:  Heat recovery temperature did not converge", waterConnection.Name));
                             ShowContinueErrorTimeStamp(state, "");
                         }
                         ShowRecurringWarningErrorAtEnd(state,
@@ -199,7 +200,8 @@ namespace WaterUse {
             }
         }
         // If we didn't find it, fatal
-        ShowFatalError(state, format("LocalWaterUseConnectionFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(state,
+                       EnergyPlus::format("LocalWaterUseConnectionFactory: Error getting inputs for object named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -262,7 +264,8 @@ namespace WaterUse {
             if (NumIteration > MaxIterations) {
                 if (!state.dataGlobal->WarmupFlag) {
                     if (this->MaxIterationsErrorIndex == 0) {
-                        ShowWarningError(state, format("WaterUse:Connections = {}:  Heat recovery temperature did not converge", this->Name));
+                        ShowWarningError(state,
+                                         EnergyPlus::format("WaterUse:Connections = {}:  Heat recovery temperature did not converge", this->Name));
                         ShowContinueErrorTimeStamp(state, "");
                     }
                     ShowRecurringWarningErrorAtEnd(state,
@@ -371,7 +374,7 @@ namespace WaterUse {
             } // WaterEquipNum
 
             if (ErrorsFound) {
-                ShowFatalError(state, format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
+                ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
             }
         }
 
@@ -471,18 +474,22 @@ namespace WaterUse {
                     waterConnection.HeatRecoveryHX =
                         static_cast<HeatRecovHX>(getEnumValue(HeatRecoverHXNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(8))));
                     if (waterConnection.HeatRecoveryHX == HeatRecovHX::Invalid) {
-                        ShowSevereError(state,
-                                        format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(8), state.dataIPShortCut->cAlphaArgs(8)));
-                        ShowContinueError(state, format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
+                        ShowSevereError(
+                            state,
+                            EnergyPlus::format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(8), state.dataIPShortCut->cAlphaArgs(8)));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
                         ErrorsFound = true;
                     }
 
                     waterConnection.HeatRecoveryConfig =
                         static_cast<HeatRecovConfig>(getEnumValue(HeatRecoveryConfigNamesUC, Util::makeUPPER(state.dataIPShortCut->cAlphaArgs(9))));
                     if (waterConnection.HeatRecoveryConfig == HeatRecovConfig::Invalid) {
-                        ShowSevereError(state,
-                                        format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(9), state.dataIPShortCut->cAlphaArgs(9)));
-                        ShowContinueError(state, format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
+                        ShowSevereError(
+                            state,
+                            EnergyPlus::format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(9), state.dataIPShortCut->cAlphaArgs(9)));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
                         ErrorsFound = true;
                     }
                 }
@@ -495,18 +502,20 @@ namespace WaterUse {
                     int WaterEquipNum = Util::FindItemInList(state.dataIPShortCut->cAlphaArgs(AlphaNum), state.dataWaterUse->WaterEquipment);
 
                     if (WaterEquipNum == 0) {
-                        ShowSevereError(
-                            state,
-                            format("Invalid {} = {}", state.dataIPShortCut->cAlphaFieldNames(AlphaNum), state.dataIPShortCut->cAlphaArgs(AlphaNum)));
-                        ShowContinueError(state, format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
+                        ShowSevereError(state,
+                                        EnergyPlus::format("Invalid {} = {}",
+                                                           state.dataIPShortCut->cAlphaFieldNames(AlphaNum),
+                                                           state.dataIPShortCut->cAlphaArgs(AlphaNum)));
+                        ShowContinueError(state,
+                                          EnergyPlus::format("Entered in {} = {}", state.dataIPShortCut->cCurrentModuleObject, waterConnection.Name));
                         ErrorsFound = true;
                     } else {
                         if (state.dataWaterUse->WaterEquipment(WaterEquipNum).Connections > 0) {
                             ShowSevereError(state,
-                                            format("{} = {}:  WaterUse:Equipment = {} is already referenced by another object.",
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   waterConnection.Name,
-                                                   state.dataIPShortCut->cAlphaArgs(AlphaNum)));
+                                            EnergyPlus::format("{} = {}:  WaterUse:Equipment = {} is already referenced by another object.",
+                                                               state.dataIPShortCut->cCurrentModuleObject,
+                                                               waterConnection.Name,
+                                                               state.dataIPShortCut->cAlphaArgs(AlphaNum)));
                             ErrorsFound = true;
                         } else {
                             state.dataWaterUse->WaterEquipment(WaterEquipNum).Connections = WaterConnNum;
@@ -523,7 +532,7 @@ namespace WaterUse {
             } // WaterConnNum
 
             if (ErrorsFound) {
-                ShowFatalError(state, format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
+                ShowFatalError(state, EnergyPlus::format("Errors found in processing input for {}", state.dataIPShortCut->cCurrentModuleObject));
             }
 
             if (state.dataWaterUse->numWaterConnections > 0) {
@@ -1036,19 +1045,20 @@ namespace WaterUse {
                     if (this->TargetCWTempErrorCount < 2) {
                         ShowWarningError(
                             state,
-                            format("CalcEquipmentFlowRates: \"{}\" - Target water temperature is less than the cold water temperature by ({:.2R} C)",
-                                   this->Name,
-                                   TempDiff));
+                            EnergyPlus::format(
+                                "CalcEquipmentFlowRates: \"{}\" - Target water temperature is less than the cold water temperature by ({:.2R} C)",
+                                this->Name,
+                                TempDiff));
                         ShowContinueErrorTimeStamp(state, "");
-                        ShowContinueError(state, format("...target water temperature     = {:.2R} C", this->TargetTemp));
-                        ShowContinueError(state, format("...cold water temperature       = {:.2R} C", this->ColdTemp));
+                        ShowContinueError(state, EnergyPlus::format("...target water temperature     = {:.2R} C", this->TargetTemp));
+                        ShowContinueError(state, EnergyPlus::format("...cold water temperature       = {:.2R} C", this->ColdTemp));
                         ShowContinueError(state,
                                           "...Target water temperature should be greater than or equal to the cold water temperature. "
                                           "Verify temperature setpoints and schedules.");
                     } else {
                         ShowRecurringWarningErrorAtEnd(
                             state,
-                            format(
+                            EnergyPlus::format(
                                 "\"{}\" - Target water temperature should be greater than or equal to the cold water temperature error continues...",
                                 this->Name),
                             this->TargetCWTempErrIndex,
@@ -1068,20 +1078,22 @@ namespace WaterUse {
                         if (this->CWHWTempErrorCount < 2) {
                             ShowWarningError(
                                 state,
-                                format("CalcEquipmentFlowRates: \"{}\" - Hot water temperature is less than the cold water temperature by ({:.2R} C)",
-                                       this->Name,
-                                       TempDiff));
+                                EnergyPlus::format(
+                                    "CalcEquipmentFlowRates: \"{}\" - Hot water temperature is less than the cold water temperature by ({:.2R} C)",
+                                    this->Name,
+                                    TempDiff));
                             ShowContinueErrorTimeStamp(state, "");
-                            ShowContinueError(state, format("...hot water temperature        = {:.2R} C", this->HotTemp));
-                            ShowContinueError(state, format("...cold water temperature       = {:.2R} C", this->ColdTemp));
+                            ShowContinueError(state, EnergyPlus::format("...hot water temperature        = {:.2R} C", this->HotTemp));
+                            ShowContinueError(state, EnergyPlus::format("...cold water temperature       = {:.2R} C", this->ColdTemp));
                             ShowContinueError(state,
                                               "...Hot water temperature should be greater than or equal to the cold water temperature. "
                                               "Verify temperature setpoints and schedules.");
                         } else {
                             ShowRecurringWarningErrorAtEnd(
                                 state,
-                                format("\"{}\" - Hot water temperature should be greater than the cold water temperature error continues... ",
-                                       this->Name),
+                                EnergyPlus::format(
+                                    "\"{}\" - Hot water temperature should be greater than the cold water temperature error continues... ",
+                                    this->Name),
                                 this->CWHWTempErrIndex,
                                 TempDiff,
                                 TempDiff);
@@ -1090,25 +1102,27 @@ namespace WaterUse {
                         TempDiff = this->TargetTemp - this->HotTemp;
                         ++this->TargetHWTempErrorCount;
                         if (this->TargetHWTempErrorCount < 2) {
-                            ShowWarningError(state,
-                                             format("CalcEquipmentFlowRates: \"{}\" - Target water temperature is greater than the hot water "
-                                                    "temperature by ({:.2R} C)",
-                                                    this->Name,
-                                                    TempDiff));
+                            ShowWarningError(
+                                state,
+                                EnergyPlus::format("CalcEquipmentFlowRates: \"{}\" - Target water temperature is greater than the hot water "
+                                                   "temperature by ({:.2R} C)",
+                                                   this->Name,
+                                                   TempDiff));
                             ShowContinueErrorTimeStamp(state, "");
-                            ShowContinueError(state, format("...target water temperature     = {:.2R} C", this->TargetTemp));
-                            ShowContinueError(state, format("...hot water temperature        = {:.2R} C", this->HotTemp));
+                            ShowContinueError(state, EnergyPlus::format("...target water temperature     = {:.2R} C", this->TargetTemp));
+                            ShowContinueError(state, EnergyPlus::format("...hot water temperature        = {:.2R} C", this->HotTemp));
                             ShowContinueError(state,
                                               "...Target water temperature should be less than or equal to the hot water temperature. "
                                               "Verify temperature setpoints and schedules.");
                         } else {
-                            ShowRecurringWarningErrorAtEnd(state,
-                                                           format("\"{}\" - Target water temperature should be less than or equal to the hot "
-                                                                  "water temperature error continues...",
-                                                                  this->Name),
-                                                           this->TargetHWTempErrIndex,
-                                                           TempDiff,
-                                                           TempDiff);
+                            ShowRecurringWarningErrorAtEnd(
+                                state,
+                                EnergyPlus::format("\"{}\" - Target water temperature should be less than or equal to the hot "
+                                                   "water temperature error continues...",
+                                                   this->Name),
+                                this->TargetHWTempErrIndex,
+                                TempDiff,
+                                TempDiff);
                         }
                     }
                 }
@@ -1124,21 +1138,22 @@ namespace WaterUse {
                         TempDiff = this->ColdTemp - this->HotTemp;
                         if (this->CWHWTempErrorCount < 2) {
                             ShowWarningError(state,
-                                             format("CalcEquipmentFlowRates: \"{}\" - Hot water temperature is less than the cold water "
-                                                    "temperature by ({:.2R} C)",
-                                                    this->Name,
-                                                    TempDiff));
+                                             EnergyPlus::format("CalcEquipmentFlowRates: \"{}\" - Hot water temperature is less than the cold water "
+                                                                "temperature by ({:.2R} C)",
+                                                                this->Name,
+                                                                TempDiff));
                             ShowContinueErrorTimeStamp(state, "");
-                            ShowContinueError(state, format("...hot water temperature        = {:.2R} C", this->HotTemp));
-                            ShowContinueError(state, format("...cold water temperature       = {:.2R} C", this->ColdTemp));
+                            ShowContinueError(state, EnergyPlus::format("...hot water temperature        = {:.2R} C", this->HotTemp));
+                            ShowContinueError(state, EnergyPlus::format("...cold water temperature       = {:.2R} C", this->ColdTemp));
                             ShowContinueError(state,
                                               "...Hot water temperature should be greater than or equal to the cold water temperature. "
                                               "Verify temperature setpoints and schedules.");
                         } else {
                             ShowRecurringWarningErrorAtEnd(
                                 state,
-                                format("\"{}\" - Hot water temperature should be greater than the cold water temperature error continues... ",
-                                       this->Name),
+                                EnergyPlus::format(
+                                    "\"{}\" - Hot water temperature should be greater than the cold water temperature error continues... ",
+                                    this->Name),
                                 this->CWHWTempErrIndex,
                                 TempDiff,
                                 TempDiff);

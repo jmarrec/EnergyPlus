@@ -161,7 +161,8 @@ namespace ExteriorEnergyUse {
                 ShowSevereCustom(
                     state,
                     eoh,
-                    format("{} = {} minimum is [{:.1R}]. Values must be >= 0.0.", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3), SchMin));
+                    EnergyPlus::format(
+                        "{} = {} minimum is [{:.1R}]. Values must be >= 0.0.", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3), SchMin));
                 ErrorsFound = true;
             }
 
@@ -288,7 +289,7 @@ namespace ExteriorEnergyUse {
                                     OutputProcessor::StoreType::Average,
                                     exteriorEquip.Name);
                 SetupOutputVariable(state,
-                                    format("Exterior Equipment {} Energy", Constant::eFuelNames[(int)exteriorEquip.FuelType]),
+                                    EnergyPlus::format("Exterior Equipment {} Energy", Constant::eFuelNames[(int)exteriorEquip.FuelType]),
                                     Constant::Units::J,
                                     exteriorEquip.CurrentUse,
                                     OutputProcessor::TimeStepType::Zone,
@@ -307,7 +308,7 @@ namespace ExteriorEnergyUse {
                                     OutputProcessor::StoreType::Average,
                                     exteriorEquip.Name);
                 SetupOutputVariable(state,
-                                    format("Exterior Equipment {} Volume", Constant::eFuelNames[(int)exteriorEquip.FuelType]),
+                                    EnergyPlus::format("Exterior Equipment {} Volume", Constant::eFuelNames[(int)exteriorEquip.FuelType]),
                                     Constant::Units::m3,
                                     exteriorEquip.CurrentUse,
                                     OutputProcessor::TimeStepType::Zone,
@@ -329,7 +330,8 @@ namespace ExteriorEnergyUse {
                 ShowSevereCustom(
                     state,
                     eoh,
-                    format("{} = {} minimum is [{:.1R}]. Values must be >= 0.0.", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3), SchMin));
+                    EnergyPlus::format(
+                        "{} = {} minimum is [{:.1R}]. Values must be >= 0.0.", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3), SchMin));
                 ErrorsFound = true;
             }
             exteriorEquip.DesignLevel = s_ipsc->rNumericArgs(1);
@@ -377,7 +379,8 @@ namespace ExteriorEnergyUse {
                 ShowSevereCustom(
                     state,
                     eoh,
-                    format("{} = {} minimum is [{:.1R}]. Values must be >= 0.0.", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3), SchMin));
+                    EnergyPlus::format(
+                        "{} = {} minimum is [{:.1R}]. Values must be >= 0.0.", s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3), SchMin));
                 ErrorsFound = true;
             }
 
@@ -422,7 +425,7 @@ namespace ExteriorEnergyUse {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, format("{}Errors found in input.  Program terminates.", routineName));
+            ShowFatalError(state, EnergyPlus::format("{}Errors found in input.  Program terminates.", routineName));
         }
     } // GetExteriorEnergyUseInput()
 
