@@ -383,9 +383,9 @@ void CoilCoolingDXCurveFitOperatingMode::CalcOperatingMode(EnergyPlus::EnergyPlu
 
     OpModeRTF = thisspeed.RTF;
     if ((!this->applyPartLoadFractionAllSpeeds) && (speedNum > 1)) {
-      OpModePower = thisspeed.fullLoadPower * speedRatio;
+        OpModePower = thisspeed.fullLoadPower * speedRatio;
     } else {
-      OpModePower = thisspeed.fullLoadPower * thisspeed.RTF;
+        OpModePower = thisspeed.fullLoadPower * thisspeed.RTF;
     }
     OpModeWasteHeat = thisspeed.fullLoadWasteHeat * thisspeed.RTF;
 
@@ -422,9 +422,9 @@ void CoilCoolingDXCurveFitOperatingMode::CalcOperatingMode(EnergyPlus::EnergyPlu
         outletNode.Temp = Psychrometrics::PsyTdbFnHW(outletNode.Enthalpy, outletNode.HumRat);
 
         if (!this->applyPartLoadFractionAllSpeeds) {
-          this->OpModePower += (1.0 - speedRatio) * lowerspeed.fullLoadPower;
+            this->OpModePower += (1.0 - speedRatio) * lowerspeed.fullLoadPower;
         } else {
-          this->OpModePower += (1.0 - thisspeed.RTF) * lowerspeed.fullLoadPower;
+            this->OpModePower += (1.0 - thisspeed.RTF) * lowerspeed.fullLoadPower;
         }
         this->OpModeWasteHeat += (1.0 - thisspeed.RTF) * lowerspeed.fullLoadWasteHeat;
         this->OpModeRTF = 1.0; // if we are on greater than 1 speed, RTF *must* be 1
