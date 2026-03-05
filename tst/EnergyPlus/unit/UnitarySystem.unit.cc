@@ -18341,6 +18341,7 @@ TEST_F(EnergyPlusFixture, Test_UnitarySystemModel_SubcoolReheatCoil)
     0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
     0,                       !- Latent Capacity Time Constant {s}
     0,                       !- Nominal Time for Condensate Removal to Begin {s}
+    Yes,                     !- Apply Part Load Fraction to Speeds Greater than 1
     ,                        !- Apply Latent Degradation to Speeds Greater than 1
     AirCooled,               !- Condenser Type
     0,                       !- Nominal Evaporative Condenser Pump Power {W}
@@ -18468,6 +18469,7 @@ Dimensionless;	!- Output Unit Type
     0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
     0,                       !- Latent Capacity Time Constant {s}
     0,                       !- Nominal Time for Condensate Removal to Begin {s}
+    Yes,                     !- Apply Part Load Fraction to Speeds Greater than 1
     ,                        !- Apply Latent Degradation to Speeds Greater than 1
     AirCooled,               !- Condenser Type
     0,                       !- Nominal Evaporative Condenser Pump Power {W}
@@ -18595,6 +18597,7 @@ Dimensionless;	!- Output Unit Type
     0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
     0,                       !- Latent Capacity Time Constant {s}
     0,                       !- Nominal Time for Condensate Removal to Begin {s}
+    Yes,                     !- Apply Part Load Fraction to Speeds Greater than 1
     ,                        !- Apply Latent Degradation to Speeds Greater than 1
     AirCooled,               !- Condenser Type
     0,                       !- Nominal Evaporative Condenser Pump Power {W}
@@ -19977,6 +19980,7 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_MultiSpeedDXCoilsNoLoadFlowRateSiz
       0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
       0,                       !- Latent Capacity Time Constant {s}
       0,                       !- Nominal Time for Condensate Removal to Begin {s}
+      Yes,                     !- Apply Part Load Fraction to Speeds Greater than 1
       No,                      !- Apply Latent Degradation to Speeds Greater than 1
       AirCooled,               !- Condenser Type
       ,                        !- Nominal Evaporative Condenser Pump Power {W}
@@ -20286,6 +20290,7 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_MultiSpeedDXCoilsDirectSolutionTes
       0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
       0,                       !- Latent Capacity Time Constant {s}
       0,                       !- Nominal Time for Condensate Removal to Begin {s}
+      Yes,                     !- Apply Part Load Fraction to Speeds Greater than 1
       No,                      !- Apply Latent Degradation to Speeds Greater than 1
       AirCooled,               !- Condenser Type
       ,                        !- Nominal Evaporative Condenser Pump Power {W}
@@ -23280,6 +23285,7 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_LowerSpeedFlowSizingTest)
     0,                               !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
     0,                               !- Latent Capacity Time Constant {s}
     0,                               !- Nominal Time for Condensate Removal to Begin {s}
+    Yes,                             !- Apply Part Load Fraction to Speeds Greater than 1
     ,                                !- Apply Latent Degradation to Speeds Greater than 1
     AirCooled,                       !- Condenser Type
     0,                               !- Nominal Evaporative Condenser Pump Power {W}
@@ -26852,6 +26858,7 @@ TEST_F(ZoneUnitarySysTest, ZeroCoolingSpeedTest)
     0,                       !- Ratio of Initial Moisture Evaporation Rate and Steady State Latent Capacity {dimensionless}
     0,                       !- Latent Capacity Time Constant {s}
     0,                       !- Nominal Time for Condensate Removal to Begin {s}
+    Yes,                     !- Apply Part Load Fraction to Speeds Greater than 1
     No,                      !- Apply Latent Degradation to Speeds Greater than 1
     AirCooled,               !- Condenser Type
     ,                        !- Nominal Evaporative Condenser Pump Power {W}
