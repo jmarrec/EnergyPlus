@@ -11639,7 +11639,6 @@ void CalcMultiSpeedDXCoil(EnergyPlusData &state,
             // get current total capacity, SHR, EIR
             if (SpeedRatio >= 1.0) {
                 TotCap = TotCapHS;
-                SHR = SHRHS;
                 EIR = EIRHS;
                 CBFNom = CBFHS;
                 AirMassFlowNom = thisDXCoil.InletAirMassFlowRateMax;
