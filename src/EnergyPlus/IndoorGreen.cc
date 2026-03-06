@@ -426,7 +426,7 @@ namespace IndoorGreen {
         Real64 HCons;       // enthalpy (J/kg)
         Real64 HMid;        // enthalpy 3rd point (J/kg)
         Real64 ZoneAirVol;  // zone air volume (m3)
-        Real64 LAI;         // leaf area index, the ratio of one-side leaf area per unit plant growing area, maximum LAI =2 if LAI_cal>2.0
+        Real64 LAI;         // leaf area index, the ratio of one-side leaf area per unit plant growing area
         Real64 LAI_Cal;     // calculated leaf area index based on users's input on total leaf area
         Real64 OutPb;       // outdoor pressure (kPa)
         Real64 vp;          // actual vapor pressure of the air (kpa)
@@ -444,11 +444,6 @@ namespace IndoorGreen {
             ig.ZVPD = (vpSat - vp) * 1000; // Pa
             LAI_Cal = ig.LeafArea / state.dataSurface->Surface(ig.SurfPtr).Area;
             LAI = LAI_Cal;
-            if (LAI_Cal > 2.0) {
-                LAI = 2.0; // maximum LAI=2.0 in the surface heat balance
-                ShowSevereError(state,
-                                EnergyPlus::format("Maximum indoor living wall leaf area index (LAI) =2.0 is used,calculated LAI is {}", LAI_Cal));
-            }
             switch (ig.lightingMethod) {
             case LightingMethod::LED: {
                 ig.ZPPFD = ig.ledSched->getCurrentVal() * ig.LEDNominalPPFD; // PPFD
