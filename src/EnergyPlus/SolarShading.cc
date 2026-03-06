@@ -848,21 +848,23 @@ void checkScheduledSurfacePresent(EnergyPlusData &state)
         if (!thisSurf.SurfSchedExternalShadingFrac) {
             numNotDef += 1;
             if (numNotDef == 1) {
-                ShowWarningError(state,
-                                 format("ShadowCalculation specified Schedule for the Shading Calculation Method but no schedule provided for {}.",
-                                        thisSurf.Name));
+                ShowWarningError(
+                    state,
+                    EnergyPlus::format("ShadowCalculation specified Schedule for the Shading Calculation Method but no schedule provided for {}.",
+                                       thisSurf.Name));
                 ShowContinueError(
                     state, "When Schedule is selected for the Shading Calculation Method and no schedule is provided for a particular surface,");
                 ShowContinueError(
                     state, "EnergyPlus will assume that the surface is not shaded.  Use SurfaceProperty:LocalEnvironment to specify a schedule");
                 ShowContinueError(state, "for sunlit fraction if this was not desired.  Otherwise, this surface will not be shaded at all.");
             } else if (numNotDef <= maxErrMessages) {
-                ShowWarningError(state, format("No schedule was provided for {} either.  See above error message for more details.", thisSurf.Name));
+                ShowWarningError(
+                    state, EnergyPlus::format("No schedule was provided for {} either.  See above error message for more details.", thisSurf.Name));
             }
         }
     }
     if (numNotDef > maxErrMessages) {
-        ShowContinueError(state, format("This message is only shown for the first {} occurrences of this issue.", maxErrMessages));
+        ShowContinueError(state, EnergyPlus::format("This message is only shown for the first {} occurrences of this issue.", maxErrMessages));
     }
 }
 
@@ -881,11 +883,13 @@ void checkNotScheduledSurfacePresent(EnergyPlusData &state)
         if (thisSurf.SurfSchedExternalShadingFrac) {
             numNotDef += 1;
             if (numNotDef == 1) {
-                ShowWarningError(state,
-                                 format("ShadowCalculation did not specify Schedule for the Shading Calculation Method but schedule provided for {}.",
-                                        thisSurf.Name));
+                ShowWarningError(
+                    state,
+                    EnergyPlus::format("ShadowCalculation did not specify Schedule for the Shading Calculation Method but schedule provided for {}.",
+                                       thisSurf.Name));
             } else if (numNotDef <= maxErrMessages) {
-                ShowWarningError(state, format("Schedule was also provided for {}.  See above error message for more details.", thisSurf.Name));
+                ShowWarningError(state,
+                                 EnergyPlus::format("Schedule was also provided for {}.  See above error message for more details.", thisSurf.Name));
             }
         }
     }
