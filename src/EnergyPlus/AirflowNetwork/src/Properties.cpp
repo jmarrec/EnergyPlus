@@ -91,21 +91,23 @@ namespace AirflowNetwork {
             if (lowerLimitErrIdx == 0) {
                 ShowWarningMessage(m_state, "Air temperature below lower limit of -20C for conductivity calculation");
             }
-            ShowRecurringWarningErrorAtEnd(m_state,
-                                           format("Air temperature below lower limit of -20C for conductivity calculation. Air temperature of {:.1R} "
-                                                  "used for conductivity calculation.",
-                                                  LowerLimit),
-                                           lowerLimitErrIdx);
+            ShowRecurringWarningErrorAtEnd(
+                m_state,
+                EnergyPlus::format("Air temperature below lower limit of -20C for conductivity calculation. Air temperature of {:.1R} "
+                                   "used for conductivity calculation.",
+                                   LowerLimit),
+                lowerLimitErrIdx);
             T = LowerLimit;
         } else if (T > UpperLimit) {
             if (upperLimitErrIdx == 0) {
                 ShowWarningMessage(m_state, "Air temperature above upper limit of 70C for conductivity calculation");
             }
-            ShowRecurringWarningErrorAtEnd(m_state,
-                                           format("Air temperature above upper limit of 70C for conductivity calculation. Air temperature of {:.1R} "
-                                                  "used for conductivity calculation.",
-                                                  UpperLimit),
-                                           upperLimitErrIdx);
+            ShowRecurringWarningErrorAtEnd(
+                m_state,
+                EnergyPlus::format("Air temperature above upper limit of 70C for conductivity calculation. Air temperature of {:.1R} "
+                                   "used for conductivity calculation.",
+                                   UpperLimit),
+                upperLimitErrIdx);
             T = UpperLimit;
         }
 

@@ -905,7 +905,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
         if (!rviFileExists) {
             std::ofstream ofs{RVIfile};
             if (!ofs.good()) {
-                ShowFatalError(state, format("EnergyPlus: Could not open file \"{}\" for output (write).", RVIfile));
+                ShowFatalError(state, EnergyPlus::format("EnergyPlus: Could not open file \"{}\" for output (write).", RVIfile));
             } else {
                 ofs << FileSystem::toString(state.files.eso.filePath) << '\n';
                 ofs << FileSystem::toString(state.files.csv.filePath) << '\n';
@@ -916,7 +916,7 @@ state.dataStrGlobals->inputFilePath='{:g}',
         if (!mviFileExists) {
             std::ofstream ofs{MVIfile};
             if (!ofs.good()) {
-                ShowFatalError(state, format("EnergyPlus: Could not open file \"{}\" for output (write).", RVIfile));
+                ShowFatalError(state, EnergyPlus::format("EnergyPlus: Could not open file \"{}\" for output (write).", RVIfile));
             } else {
                 ofs << FileSystem::toString(state.files.mtr.filePath) << '\n';
                 ofs << FileSystem::toString(state.files.mtr_csv.filePath) << '\n';

@@ -143,15 +143,15 @@ namespace ExhaustAirSystemManager {
                     bool IsNotOK = false; // Flag to verify name
                     ValidateComponent(state, "AirLoopHVAC:ZoneMixer", zoneMixerName, IsNotOK, "AirLoopHVAC:ExhaustSystem");
                     if (IsNotOK) {
-                        ShowSevereError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
-                        ShowContinueError(state, format("ZoneMixer Name ={} mismatch or not found.", zoneMixerName));
+                        ShowSevereError(state, EnergyPlus::format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
+                        ShowContinueError(state, EnergyPlus::format("ZoneMixer Name ={} mismatch or not found.", zoneMixerName));
                         ErrorsFound = true;
                     } else {
                         // normal conditions
                     }
                 } else {
-                    ShowSevereError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
-                    ShowContinueError(state, format("Zone Mixer Name ={} not found.", zoneMixerName));
+                    ShowSevereError(state, EnergyPlus::format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
+                    ShowContinueError(state, EnergyPlus::format("Zone Mixer Name ={} not found.", zoneMixerName));
                     ErrorsFound = true;
                 }
                 thisExhSys.ZoneMixerName = zoneMixerName;
@@ -160,8 +160,9 @@ namespace ExhaustAirSystemManager {
                 thisExhSys.centralFanType = static_cast<HVAC::FanType>(
                     getEnumValue(HVAC::fanTypeNamesUC, Util::makeUPPER(ip->getAlphaFieldValue(objectFields, objectSchemaProps, "fan_object_type"))));
                 if (thisExhSys.centralFanType != HVAC::FanType::SystemModel && thisExhSys.centralFanType != HVAC::FanType::ComponentModel) {
-                    ShowSevereError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
-                    ShowContinueError(state, format("Fan Type ={} is not supported.", HVAC::fanTypeNames[(int)thisExhSys.centralFanType]));
+                    ShowSevereError(state, EnergyPlus::format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
+                    ShowContinueError(state,
+                                      EnergyPlus::format("Fan Type ={} is not supported.", HVAC::fanTypeNames[(int)thisExhSys.centralFanType]));
                     ShowContinueError(state, "It needs to be either a Fan:SystemModel or a Fan:ComponentModel type.");
                     ErrorsFound = true;
                 }
@@ -255,7 +256,7 @@ namespace ExhaustAirSystemManager {
             MixerComponent::SimAirMixer(state, thisExhSys.ZoneMixerName, thisExhSys.ZoneMixerIndex);
         } else {
             // Give a warning that the current model does not work with AirflowNetwork for now
-            ShowSevereError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
+            ShowSevereError(state, EnergyPlus::format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
             ShowContinueError(state, "AirloopHVAC:ExhaustSystem currently does not work with AirflowNetwork.");
             ErrorsFound = true;
         }
@@ -340,7 +341,7 @@ namespace ExhaustAirSystemManager {
             // calculate a ratio
             Real64 flowRatio = mixerFlow_Posterior / mixerFlow_Prior;
             if (flowRatio > 1.0) {
-                ShowWarningError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
+                ShowWarningError(state, EnergyPlus::format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhSys.Name));
                 ShowContinueError(state, "Requested flow rate is lower than the exhasut fan flow rate.");
                 ShowContinueError(state, "Will scale up the requested flow rate to meet fan flow rate.");
             }
@@ -486,9 +487,10 @@ namespace ExhaustAirSystemManager {
                     for (size_t i = 1; i <= thisExhCtrl.SuppNodeNums.size(); ++i) {
                         CheckForSupplyNode(state, exhCtrlNum, nodeNotFound);
                         if (nodeNotFound) {
-                            ShowSevereError(state, format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhCtrl.Name));
-                            ShowContinueError(state,
-                                              format("Node or NodeList Name ={}. Must all be supply nodes.", thisExhCtrl.SupplyNodeOrNodelistName));
+                            ShowSevereError(state, EnergyPlus::format("{}{}={}", RoutineName, cCurrentModuleObject, thisExhCtrl.Name));
+                            ShowContinueError(
+                                state,
+                                EnergyPlus::format("Node or NodeList Name ={}. Must all be supply nodes.", thisExhCtrl.SupplyNodeOrNodelistName));
                             ErrorsFound = true;
                         }
                     }
@@ -586,7 +588,8 @@ namespace ExhaustAirSystemManager {
                 FlowFrac = thisExhCtrl.exhaustFlowFractionSched->getCurrentVal();
                 if (FlowFrac < 0.0) {
                     ShowWarningError(
-                        state, format("Exhaust Flow Fraction Schedule value is negative for Zone Exhaust Control Named: {};", thisExhCtrl.Name));
+                        state,
+                        EnergyPlus::format("Exhaust Flow Fraction Schedule value is negative for Zone Exhaust Control Named: {};", thisExhCtrl.Name));
                     ShowContinueError(state, "Reset value to zero and continue the simulation.");
                     FlowFrac = 0.0;
                 }
@@ -598,7 +601,8 @@ namespace ExhaustAirSystemManager {
                 if (MinFlowFrac < 0.0) {
                     ShowWarningError(
                         state,
-                        format("Minimum Exhaust Flow Fraction Schedule value is negative for Zone Exhaust Control Named: {};", thisExhCtrl.Name));
+                        EnergyPlus::format("Minimum Exhaust Flow Fraction Schedule value is negative for Zone Exhaust Control Named: {};",
+                                           thisExhCtrl.Name));
                     ShowContinueError(state, "Reset value to zero and continue the simulation.");
                     MinFlowFrac = 0.0;
                 }
@@ -765,12 +769,13 @@ namespace ExhaustAirSystemManager {
                 }
             }
             if (ZoneNodeNotFound) {
-                ShowSevereError(state, format("{}{}={}", RoutineName, CurrentModuleObject, thisExhCtrl.Name));
+                ShowSevereError(state, EnergyPlus::format("{}{}={}", RoutineName, CurrentModuleObject, thisExhCtrl.Name));
                 ShowContinueError(
                     state,
-                    format("Supply or supply list = \"{}\" contains at least one node that is not a zone inlet node for Zone Name = \"{}\"",
-                           thisExhCtrl.SupplyNodeOrNodelistName,
-                           thisExhCtrl.ZoneName));
+                    EnergyPlus::format(
+                        "Supply or supply list = \"{}\" contains at least one node that is not a zone inlet node for Zone Name = \"{}\"",
+                        thisExhCtrl.SupplyNodeOrNodelistName,
+                        thisExhCtrl.ZoneName));
                 ShowContinueError(state, "..Nodes in the supply node or nodelist must be a zone inlet node.");
                 ErrorsFound = true;
             }

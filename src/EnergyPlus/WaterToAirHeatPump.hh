@@ -56,6 +56,7 @@
 #include <EnergyPlus/DataGlobals.hh>
 #include <EnergyPlus/EnergyPlus.hh>
 #include <EnergyPlus/FluidProperties.hh>
+#include <EnergyPlus/General.hh>
 
 namespace EnergyPlus {
 
@@ -149,6 +150,7 @@ namespace WaterToAirHeatPump {
         int HighPressHtgError;         // count for high pressure errors (heating)
         PlantLocation plantLoc;
 
+        General::SolveRootStats solveRootStats{};
         // Default Constructor
         WatertoAirHPEquipConditions()
             : WAHPType(DataPlant::PlantEquipmentType::Invalid), SimFlag(false), InletAirMassFlowRate(0.0), OutletAirMassFlowRate(0.0),

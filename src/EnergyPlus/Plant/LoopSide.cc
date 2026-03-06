@@ -778,11 +778,12 @@ namespace DataPlant {
                                               "For example, if using SetpointManager:Scheduled:DualSetpoint, then check that the low setpoint is "
                                               "below the high setpoint.");
                             ShowContinueError(state, "Occurs in PlantLoop=" + thisPlantLoop.Name);
-                            ShowContinueError(
-                                state,
-                                format("LoadToHeatingSetPoint={:.3R}, LoadToCoolingSetPoint={:.3R}", LoadToHeatingSetPoint, LoadToCoolingSetPoint));
-                            ShowContinueError(state, format("Loop Heating Low Setpoint={:.2R}", LoopSetPointTemperatureLo));
-                            ShowContinueError(state, format("Loop Cooling High Setpoint={:.2R}", LoopSetPointTemperatureHi));
+                            ShowContinueError(state,
+                                              EnergyPlus::format("LoadToHeatingSetPoint={:.3R}, LoadToCoolingSetPoint={:.3R}",
+                                                                 LoadToHeatingSetPoint,
+                                                                 LoadToCoolingSetPoint));
+                            ShowContinueError(state, EnergyPlus::format("Loop Heating Low Setpoint={:.2R}", LoopSetPointTemperatureLo));
+                            ShowContinueError(state, EnergyPlus::format("Loop Cooling High Setpoint={:.2R}", LoopSetPointTemperatureHi));
 
                             ShowFatalError(state, "Program terminates due to above conditions.");
                         }
@@ -797,11 +798,12 @@ namespace DataPlant {
                                             "DualSetPointWithDeadBand: Unanticipated combination of heating and cooling loads - report to EnergyPlus "
                                             "Development Team");
                             ShowContinueError(state, "occurs in PlantLoop=" + thisPlantLoop.Name);
-                            ShowContinueError(
-                                state,
-                                format("LoadToHeatingSetPoint={:.3R}, LoadToCoolingSetPoint={:.3R}", LoadToHeatingSetPoint, LoadToCoolingSetPoint));
-                            ShowContinueError(state, format("Loop Heating Setpoint={:.2R}", LoopSetPointTemperatureLo));
-                            ShowContinueError(state, format("Loop Cooling Setpoint={:.2R}", LoopSetPointTemperatureHi));
+                            ShowContinueError(state,
+                                              EnergyPlus::format("LoadToHeatingSetPoint={:.3R}, LoadToCoolingSetPoint={:.3R}",
+                                                                 LoadToHeatingSetPoint,
+                                                                 LoadToCoolingSetPoint));
+                            ShowContinueError(state, EnergyPlus::format("Loop Heating Setpoint={:.2R}", LoopSetPointTemperatureLo));
+                            ShowContinueError(state, EnergyPlus::format("Loop Cooling Setpoint={:.2R}", LoopSetPointTemperatureHi));
                             ShowFatalError(state, "Program terminates due to above conditions.");
                         }
                     } else {
@@ -1661,9 +1663,9 @@ namespace DataPlant {
                 // Call fatal diagnostic error. !The math should work out!
                 ShowSevereError(state, "ResolveParallelFlows: Dev note, failed to redistribute restricted flow");
                 ShowContinueErrorTimeStamp(state, "");
-                ShowContinueError(state, format("Loop side flow = {:.8R} (kg/s)", ThisLoopSideFlow));
-                ShowContinueError(state, format("Flow Remaining = {:.8R} (kg/s)", FlowRemaining));
-                ShowContinueError(state, format("Parallel Branch requests  = {:.8R} (kg/s)", TotParallelBranchFlowReq));
+                ShowContinueError(state, EnergyPlus::format("Loop side flow = {:.8R} (kg/s)", ThisLoopSideFlow));
+                ShowContinueError(state, EnergyPlus::format("Flow Remaining = {:.8R} (kg/s)", FlowRemaining));
+                ShowContinueError(state, EnergyPlus::format("Parallel Branch requests  = {:.8R} (kg/s)", TotParallelBranchFlowReq));
             }
 
             // 2)  ! Reset the flow on the Mixer outlet branch

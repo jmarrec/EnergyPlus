@@ -842,10 +842,10 @@ int ReportCoilSelection::getIndexForOrCreateDataObjFromCoilName(EnergyPlusData &
                     return index = i;
                 } // throw error  coil type does not match coil name, check for unique names across coil types
                 ShowWarningError(state,
-                                 format("check for unique coil names across different coil types: {} occurs in both {} and {}",
-                                        coilName,
-                                        coilType,
-                                        coilSelectionDataObjs[i]->coilObjName));
+                                 EnergyPlus::format("check for unique coil names across different coil types: {} occurs in both {} and {}",
+                                                    coilName,
+                                                    coilType,
+                                                    coilSelectionDataObjs[i]->coilObjName));
             }
         }
     }
@@ -874,7 +874,8 @@ int ReportCoilSelection::getIndexForOrCreateDataObjFromCoilName(EnergyPlusData &
     }
 
     if (index == -1) {
-        ShowFatalError(state, format("getIndexForOrCreateDataObjFromCoilName: Developer error - not a coil: {} = {}", coilType, coilName));
+        ShowFatalError(state,
+                       EnergyPlus::format("getIndexForOrCreateDataObjFromCoilName: Developer error - not a coil: {} = {}", coilType, coilName));
     }
     return index;
 }
@@ -972,7 +973,7 @@ void ReportCoilSelection::associateZoneCoilWithParent(EnergyPlusData &state, std
     } // for (equipLoop)
 
     if (c->typeHVACname == "Unknown") {
-        ShowWarningError(state, format("Parent object not found for zone coil = {}", c->coilName_));
+        ShowWarningError(state, EnergyPlus::format("Parent object not found for zone coil = {}", c->coilName_));
     }
 }
 
@@ -2020,7 +2021,7 @@ std::string ReportCoilSelection::getTimeText(EnergyPlusData &state, int const ti
                 hourPrint = hourCounter - 1;
             }
             if (timeStepIndex == timeStepAtPeak) {
-                returnString = format(DataSizing::PeakHrMinFmt, hourPrint, minutes);
+                returnString = EnergyPlus::format(DataSizing::PeakHrMinFmt, hourPrint, minutes);
             }
         }
     }
