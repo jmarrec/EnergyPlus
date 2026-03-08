@@ -1829,7 +1829,11 @@ namespace DataPlant {
             int const EndingComponent = branch.TotalComponents;
             for (int CompCounter = StartingComponent; CompCounter <= EndingComponent; ++CompCounter) {
                 PlantLocation this_plantLoc = {this->plantLoc.loopNum, this->plantLoc.loopSideNum, BranchCounter, CompCounter};
-
+                this_plantLoc.loop = &state.dataPlnt->PlantLoop(this_plantLoc.loopNum);
+                this_plantLoc.side = &this_plantLoc.loop->LoopSide(this_plantLoc.loopSideNum);
+                this_plantLoc.branch = &this_plantLoc.side->Branch(this_plantLoc.branchNum);
+                this_plantLoc.comp = &this_plantLoc.branch->Comp(this_plantLoc.compNum);
+                
                 DataPlant::OpScheme const CurOpSchemeType(branch.Comp(CompCounter).CurOpSchemeType);
 
                 switch (CurOpSchemeType) {

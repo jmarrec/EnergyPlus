@@ -196,27 +196,11 @@ namespace PCMStorage {
             PlantUtilities::InitComponentNodes(state, 0.0, this->PlantSideMassFlowRate, this->PlantSideInletNode, this->PlantSideOutletNode);
 
             // Set the component flow priorities so that the plant loop will attempt to deliver the required flow.
-            for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                                                 .LoopSide(this->usePlantLoc.loopSideNum)
-                                                 .Branch(this->usePlantLoc.branchNum)
-                                                 .TotalComponents;
-                 ++compNum) {
-                state.dataPlnt->PlantLoop(this->usePlantLoc.loopNum)
-                    .LoopSide(this->usePlantLoc.loopSideNum)
-                    .Branch(this->usePlantLoc.branchNum)
-                    .Comp(compNum)
-                    .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+            for (int compNum = 1; compNum <= this->usePlantLoc.branch->TotalComponents; ++compNum) {
+                this->usePlantLoc.branch->Comp(compNum).FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
             }
-            for (int compNum = 1; compNum <= state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum)
-                                                 .LoopSide(this->sourcePlantLoc.loopSideNum)
-                                                 .Branch(this->sourcePlantLoc.branchNum)
-                                                 .TotalComponents;
-                 ++compNum) {
-                state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum)
-                    .LoopSide(this->sourcePlantLoc.loopSideNum)
-                    .Branch(this->sourcePlantLoc.branchNum)
-                    .Comp(compNum)
-                    .FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
+            for (int compNum = 1; compNum <= this->sourcePlantLoc.branch->TotalComponents; ++compNum) {
+                this->sourcePlantLoc.branch->Comp(compNum).FlowPriority = DataPlant::LoopFlowStatus::NeedyAndTurnsLoopOn;
             }
 
             // Reset state variables for the start of the new environment.
@@ -347,7 +331,7 @@ namespace PCMStorage {
         if (mUseReq > 0.0) {
             useOutlet.Temp = useOutletTemp;
         } else if (mPlantReq > 0.0) {
-            plantOutlet.Temp = std::min(plantOutletTemp, state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp);
+          plantOutlet.Temp = std::min(plantOutletTemp, state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp); // Why is this in brackets?
         }
 
         // Recompute heat-transfer rates using the requested flows (W)

@@ -566,12 +566,12 @@ void BoilerSpecs::InitBoiler(EnergyPlusData &state) // number of the current boi
     if ((this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) && this->ModulatedFlowSetToLoop) {
         // fix for clumsy old input that worked because loop setpoint was spread.
         //  could be removed with transition, testing , model change, period of being obsolete.
-        if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::SingleSetPoint) {
+        if (this->plantLoc.loop->LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::SingleSetPoint) {
             state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPoint =
-                state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(this->plantLoc.loopNum).TempSetPointNodeNum).TempSetPoint;
+                state.dataLoopNodes->Node(this->plantLoc.loop->TempSetPointNodeNum).TempSetPoint;
         } else { // DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand
             state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPointLo =
-                state.dataLoopNodes->Node(state.dataPlnt->PlantLoop(this->plantLoc.loopNum).TempSetPointNodeNum).TempSetPointLo;
+                state.dataLoopNodes->Node(this->plantLoc.loop->TempSetPointNodeNum).TempSetPointLo;
         }
     }
 }
@@ -602,7 +602,7 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
     Real64 tmpNomCap = this->NomCap;                 // local nominal capacity cooling power
     Real64 tmpBoilerVolFlowRate = this->VolFlowRate; // local boiler design volume flow rate
 
-    int const PltSizNum = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).PlantSizNum; // Plant Sizing index corresponding to CurLoopNum
+    int const PltSizNum = this->plantLoc.loop->PlantSizNum; // Plant Sizing index corresponding to CurLoopNum
 
     if (PltSizNum > 0) {
         if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {
@@ -739,14 +739,12 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
         OutputReportPredefined::PreDefTableEntry(state,
                                                  state.dataOutRptPredefined->pdchBoilerPlantloopName,
                                                  equipName,
-                                                 this->plantLoc.loopNum > 0 ? state.dataPlnt->PlantLoop(this->plantLoc.loopNum).Name : "N/A");
+                                                 this->plantLoc.loop != nullptr ? this->plantLoc.loop->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(
             state,
             state.dataOutRptPredefined->pdchBoilerPlantloopBranchName,
             equipName,
-            this->plantLoc.loopNum > 0
-                ? state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).Branch(this->plantLoc.branchNum).Name
-                : "N/A");
+            this->plantLoc.loop != nullptr ? this->plantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchBoilerMinPLR, equipName, this->MinPartLoadRat);
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchBoilerFuelType, equipName, Constant::eFuelNames[static_cast<int>(this->FuelType)]);
@@ -831,7 +829,7 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
     // Initialize the delta temperature to zero
     Real64 BoilerDeltaTemp; // C - boiler inlet to outlet temperature difference, set in all necessary code paths so no initialization required
 
-    if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).FlowLock == DataPlant::FlowLock::Unlocked) {
+    if (this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
         // Either set the flow to the Constant value or calculate the flow for the variable volume
         if ((this->FlowMode == DataPlant::FlowMode::Constant) || (this->FlowMode == DataPlant::FlowMode::NotModulated)) {
             // Then find the flow rate and outlet temp
@@ -849,7 +847,7 @@ void BoilerSpecs::CalcBoilerModel(EnergyPlusData &state,
             // Calculate the Delta Temp from the inlet temp to the boiler outlet setpoint
             // Then find the flow rate and outlet temp
 
-            if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::SingleSetPoint) {
+            if (this->plantLoc.loop->LoopDemandCalcScheme == DataPlant::LoopDemandCalcScheme::SingleSetPoint) {
                 BoilerDeltaTemp = state.dataLoopNodes->Node(BoilerOutletNode).TempSetPoint - state.dataLoopNodes->Node(BoilerInletNode).Temp;
             } else { // DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand
                 BoilerDeltaTemp = state.dataLoopNodes->Node(BoilerOutletNode).TempSetPointLo - state.dataLoopNodes->Node(BoilerInletNode).Temp;

@@ -296,7 +296,7 @@ void WaterThermalTankData::simulate(
     this->UseSideLoadRequested = std::abs(CurLoad);
     if (this->UseSidePlantLoc.loopNum > 0 && this->UseSidePlantLoc.loopSideNum != DataPlant::LoopSideLocation::Invalid &&
         !state.dataGlobal->KickOffSimulation) {
-        this->UseCurrentFlowLock = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).LoopSide(this->UseSidePlantLoc.loopSideNum).FlowLock;
+        this->UseCurrentFlowLock = this->UseSidePlantLoc.side->FlowLock;
     } else {
         this->UseCurrentFlowLock = DataPlant::FlowLock::Locked;
     }
@@ -391,7 +391,7 @@ void HeatPumpWaterHeaterData::simulate(
     Tank.UseSideLoadRequested = std::abs(CurLoad);
     if (Tank.UseSidePlantLoc.loopNum > 0 && Tank.UseSidePlantLoc.loopSideNum != DataPlant::LoopSideLocation::Invalid &&
         !state.dataGlobal->KickOffSimulation) {
-        Tank.UseCurrentFlowLock = state.dataPlnt->PlantLoop(Tank.UseSidePlantLoc.loopNum).LoopSide(Tank.UseSidePlantLoc.loopSideNum).FlowLock;
+        Tank.UseCurrentFlowLock = Tank.UseSidePlantLoc.side->FlowLock;
     } else {
         Tank.UseCurrentFlowLock = DataPlant::FlowLock::Locked;
     }
@@ -6375,7 +6375,7 @@ void WaterThermalTankData::initialize(EnergyPlusData &state, bool const FirstHVA
             Real64 rho = this->UseSidePlantLoc.loop->glycol->getDensity(state, Constant::InitConvTemp, GetTankInputString);
             this->PlantUseMassFlowRateMax = this->UseDesignVolFlowRate * rho;
             this->Mass = this->Volume * rho;
-            this->UseSidePlantSizNum = state.dataPlnt->PlantLoop(this->UseSidePlantLoc.loopNum).PlantSizNum;
+            this->UseSidePlantSizNum = this->UseSidePlantLoc.loop->PlantSizNum;
             if ((this->UseDesignVolFlowRateWasAutoSized) && (this->UseSidePlantSizNum == 0)) {
                 ShowSevereError(
                     state,
@@ -11207,21 +11207,17 @@ void WaterThermalTankData::MinePlantStructForInfo(EnergyPlusData &state)
 
         // check plant structure for useful data.
 
-        int PlantLoopNum = this->UseSidePlantLoc.loopNum;
-        DataPlant::LoopSideLocation LoopSideNum = this->UseSidePlantLoc.loopSideNum;
-
         if ((this->UseDesignVolFlowRateWasAutoSized) && (this->UseSidePlantSizNum == 0)) {
             ShowSevereError(state,
                             EnergyPlus::format("Water heater = {} for autosizing Use side flow rate, did not find Sizing:Plant object {}",
                                                this->Name,
-                                               state.dataPlnt->PlantLoop(PlantLoopNum).Name));
+                                               this->UseSidePlantLoc.loop->Name));
             ErrorsFound = true;
         }
         // Is this wh Use side plumbed in series (default) or are there other branches in parallel?
-        if (state.dataPlnt->PlantLoop(PlantLoopNum).LoopSide(LoopSideNum).Splitter.Exists) {
-            if (any_eq(state.dataPlnt->PlantLoop(PlantLoopNum).LoopSide(LoopSideNum).Splitter.NodeNumOut,
-                       this->UseInletNode)) { // this wh is on the splitter
-                if (state.dataPlnt->PlantLoop(PlantLoopNum).LoopSide(LoopSideNum).Splitter.TotalOutletNodes > 1) {
+        if (this->UseSidePlantLoc.side->Splitter.Exists) {
+            if (any_eq(this->UseSidePlantLoc.side->Splitter.NodeNumOut, this->UseInletNode)) { // this wh is on the splitter
+                if (this->UseSidePlantLoc.side->Splitter.TotalOutletNodes > 1) {
                     this->UseSideSeries = false;
                 }
             }
@@ -11235,15 +11231,13 @@ void WaterThermalTankData::MinePlantStructForInfo(EnergyPlusData &state)
             ShowSevereError(state,
                             EnergyPlus::format("Water heater = {}for autosizing Source side flow rate, did not find Sizing:Plant object {}",
                                                this->Name,
-                                               state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).Name));
+                                               this->SrcSidePlantLoc.loop->Name));
             ErrorsFound = true;
         }
         // Is this wh Source side plumbed in series (default) or are there other branches in parallel?
-        if (state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).LoopSide(this->SrcSidePlantLoc.loopSideNum).Splitter.Exists) {
-            if (any_eq(state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).LoopSide(this->SrcSidePlantLoc.loopSideNum).Splitter.NodeNumOut,
-                       this->SourceInletNode)) { // this wh is on the splitter
-                if (state.dataPlnt->PlantLoop(this->SrcSidePlantLoc.loopNum).LoopSide(this->SrcSidePlantLoc.loopSideNum).Splitter.TotalOutletNodes >
-                    1) {
+        if (this->SrcSidePlantLoc.side->Splitter.Exists) {
+            if (any_eq(this->SrcSidePlantLoc.side->Splitter.NodeNumOut, this->SourceInletNode)) { // this wh is on the splitter
+                if (this->SrcSidePlantLoc.side->Splitter.TotalOutletNodes > 1) {
                     this->SourceSideSeries = false;
                 }
             }

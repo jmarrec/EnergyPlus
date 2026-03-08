@@ -968,7 +968,7 @@ void FluidCoolerspecs::size(EnergyPlusData &state)
     Real64 tmpDesignWaterFlowRate = this->DesignWaterFlowRate;
     Real64 tmpHighSpeedAirFlowRate = this->HighSpeedAirFlowRate;
     // Find the appropriate Plant Sizing object
-    int PltSizCondNum = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).PlantSizNum;
+    int PltSizCondNum = this->plantLoc.loop->PlantSizNum;
 
     // This is to trap when the user specified Condenser/Fluid Cooler water design setpoint temperature is less than design inlet air dry bulb
     // temperature
@@ -1619,18 +1619,17 @@ void FluidCoolerspecs::size(EnergyPlusData &state)
         OutputReportPredefined::PreDefTableEntry(state,
                                                  state.dataOutRptPredefined->pdchCTFCCondLoopName,
                                                  this->Name,
-                                                 this->plantLoc.loopNum > 0 ? state.dataPlnt->PlantLoop(this->plantLoc.loopNum).Name : "N/A");
+                                                 this->plantLoc.loop != nullptr ? this->plantLoc.loop->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(
             state,
             state.dataOutRptPredefined->pdchCTFCCondLoopBranchName,
             this->Name,
-            this->plantLoc.loopNum > 0 ? state.dataPlnt->PlantLoop(plantLoc.loopNum).LoopSide(plantLoc.loopSideNum).Branch(plantLoc.branchNum).Name
-                                       : "N/A");
+            this->plantLoc.loop != nullptr ? plantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(
             state,
             state.dataOutRptPredefined->pdchCTFCFluidType,
             this->Name,
-            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName); // Fluid Name more reasonable than FluidType
+            this->plantLoc.loop->FluidName); // Fluid Name more reasonable than FluidType
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchCTFCRange, this->Name, this->DesignEnteringWaterTemp - this->DesignLeavingWaterTemp);
         OutputReportPredefined::PreDefTableEntry(
@@ -1720,12 +1719,12 @@ void FluidCoolerspecs::calcSingleSpeed(EnergyPlusData &state)
     this->Qactual = 0.0;
     this->FanPower = 0.0;
     this->OutletWaterTemp = state.dataLoopNodes->Node(this->WaterInletNodeNum).Temp;
-    switch (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme) {
+    switch (this->plantLoc.loop->LoopDemandCalcScheme) {
     case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
-        TempSetPoint = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).TempSetPoint;
+        TempSetPoint = this->plantLoc.side->TempSetPoint;
     } break;
     case DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand: {
-        TempSetPoint = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).TempSetPointHi;
+        TempSetPoint = this->plantLoc.side->TempSetPointHi;
     } break;
     default:
         break;
@@ -1824,12 +1823,12 @@ void FluidCoolerspecs::calcTwoSpeed(EnergyPlusData &state)
     this->Qactual = 0.0;
     this->FanPower = 0.0;
     this->OutletWaterTemp = state.dataLoopNodes->Node(this->WaterInletNodeNum).Temp;
-    switch (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopDemandCalcScheme) {
+    switch (this->plantLoc.loop->LoopDemandCalcScheme) {
     case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
-        TempSetPoint = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).TempSetPoint;
+        TempSetPoint = this->plantLoc.side->TempSetPoint;
     } break;
     case DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand: {
-        TempSetPoint = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).TempSetPointHi;
+        TempSetPoint = this->plantLoc.side->TempSetPointHi;
     } break;
     default:
         break;
@@ -1837,7 +1836,7 @@ void FluidCoolerspecs::calcTwoSpeed(EnergyPlusData &state)
 
     // MassFlowTol is a parameter to indicate a no flow condition
     if (this->WaterMassFlowRate <= DataBranchAirLoopPlant::MassFlowTolerance ||
-        state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).FlowLock == DataPlant::FlowLock::Unlocked) {
+        this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
         return;
     }
 
@@ -1964,7 +1963,7 @@ void FluidCoolerspecs::update(EnergyPlusData &state)
     int waterOutletNode = this->WaterOutletNodeNum;
     state.dataLoopNodes->Node(waterOutletNode).Temp = this->OutletWaterTemp;
 
-    if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).LoopSide(this->plantLoc.loopSideNum).FlowLock == DataPlant::FlowLock::Unlocked ||
+    if (this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked ||
         state.dataGlobal->WarmupFlag) {
         return;
     }
@@ -1994,7 +1993,7 @@ void FluidCoolerspecs::update(EnergyPlusData &state)
     }
 
     // Check if OutletWaterTemp is below the minimum condenser loop temp and warn user
-    Real64 LoopMinTemp = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).MinTemp;
+    Real64 LoopMinTemp = this->plantLoc.loop->MinTemp;
     if ((this->OutletWaterTemp < LoopMinTemp) && (this->WaterMassFlowRate > 0.0)) {
         ++this->OutletWaterTempErrorCount;
 
