@@ -609,7 +609,6 @@ namespace UserDefinedComponents {
                                                                          lAlphaFieldBlanks,
                                                                          cAlphaFieldNames,
                                                                          _);
-                Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
                 state.dataUserDefinedComponents->UserPlantComp(CompLoop).Name = cAlphaArgs(1);
 
@@ -1087,7 +1086,6 @@ namespace UserDefinedComponents {
                                                                          lAlphaFieldBlanks,
                                                                          cAlphaFieldNames,
                                                                          _);
-                Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
                 // ErrorsFound will be set to True if problem was found, left untouched otherwise
                 GlobalNames::VerifyUniqueCoilName(state, cCurrentModuleObject, cAlphaArgs(1), ErrorsFound, cCurrentModuleObject + " Name");
@@ -1493,7 +1491,7 @@ namespace UserDefinedComponents {
                                                                          lAlphaFieldBlanks,
                                                                          cAlphaFieldNames,
                                                                          _);
-                Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
+
                 state.dataUserDefinedComponents->UserZoneAirHVAC(CompLoop).Name = cAlphaArgs(1);
 
                 // now get program manager for model simulations
@@ -1975,7 +1973,7 @@ namespace UserDefinedComponents {
                                                                          lAlphaFieldBlanks,
                                                                          cAlphaFieldNames,
                                                                          _);
-                Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
+
                 state.dataUserDefinedComponents->UserAirTerminal(CompLoop).Name = cAlphaArgs(1);
 
                 // now get program manager for model simulations

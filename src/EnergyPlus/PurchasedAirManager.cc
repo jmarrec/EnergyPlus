@@ -282,7 +282,6 @@ void GetPurchasedAir(EnergyPlusData &state)
             state.dataPurchasedAirMgr->PurchAirNumericFields(purchAirNum).FieldNames.allocate(NumNums);
             state.dataPurchasedAirMgr->PurchAirNumericFields(purchAirNum).FieldNames = "";
             state.dataPurchasedAirMgr->PurchAirNumericFields(purchAirNum).FieldNames = s_ipsc->cNumericFieldNames;
-            Util::IsNameEmpty(state, thisObjectName, s_ipsc->cCurrentModuleObject, ErrorsFound);
             PurchAir.Name = Util::makeUPPER(thisObjectName);
             std::string cAlphaFieldName = "Availability Schedule Name";
             // get optional  availability schedule

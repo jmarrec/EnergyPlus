@@ -738,7 +738,6 @@ namespace IceThermalStorage {
                                                                      _,
                                                                      _,
                                                                      state.dataIPShortCut->cNumericFieldNames);
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
 
             state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).name = state.dataIPShortCut->cAlphaArgs(1);
             state.dataIceThermalStorage->ThermalStorageSizing(sizingNum).onPeakStart = state.dataIPShortCut->rNumericArgs(1);
@@ -779,7 +778,6 @@ namespace IceThermalStorage {
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
 
             ++state.dataIceThermalStorage->TotalNumIceStorage;
             state.dataIceThermalStorage->SimpleIceStorage(iceNum).MapNum = state.dataIceThermalStorage->TotalNumIceStorage;
@@ -904,8 +902,6 @@ namespace IceThermalStorage {
                                                                      state.dataIPShortCut->cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
-
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
 
             ++state.dataIceThermalStorage->TotalNumIceStorage;
 

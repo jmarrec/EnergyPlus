@@ -1572,7 +1572,6 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                  lAlphaFieldBlanks,
                                                                  cAlphaFieldNames,
                                                                  cNumericFieldNames);
-        Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
         auto &thisTUList = state.dataHVACVarRefFlow->TerminalUnitList(TUListNum);
         thisTUList.Name = cAlphaArgs(1);
@@ -3347,7 +3346,6 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
 
         state.dataHVACVarRefFlow->VRFTUNumericFields(VRFTUNum).FieldNames.allocate(NumNums);
         state.dataHVACVarRefFlow->VRFTUNumericFields(VRFTUNum).FieldNames = cNumericFieldNames;
-        Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
         auto &thisVrfTU = state.dataHVACVarRefFlow->VRFTU(VRFTUNum);
         thisVrfTU.Name = cAlphaArgs(1);
