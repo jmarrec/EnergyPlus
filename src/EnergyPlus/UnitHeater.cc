@@ -692,8 +692,8 @@ namespace UnitHeater {
             state.dataLoopNodes->Node(InNode).MassFlowRateMin = 0.0;
 
             if (state.dataUnitHeaters->UnitHeat(UnitHeatNum).Type == HCoilType::WaterHeatingCoil) {
-                rho = state.dataPlnt->PlantLoop(state.dataUnitHeaters->UnitHeat(UnitHeatNum).HWplantLoc.loopNum)
-                          .glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                rho = state.dataUnitHeaters->UnitHeat(UnitHeatNum).HWplantLoc.loop->
+                          glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
 
                 state.dataUnitHeaters->UnitHeat(UnitHeatNum).MaxHotWaterFlow = rho * state.dataUnitHeaters->UnitHeat(UnitHeatNum).MaxVolHotWaterFlow;
                 state.dataUnitHeaters->UnitHeat(UnitHeatNum).MinHotWaterFlow = rho * state.dataUnitHeaters->UnitHeat(UnitHeatNum).MinVolHotWaterFlow;
@@ -1022,10 +1022,10 @@ namespace UnitHeater {
                             }
 
                             if (DesCoilLoad >= HVAC::SmallLoad) {
-                                rho = state.dataPlnt->PlantLoop(state.dataUnitHeaters->UnitHeat(UnitHeatNum).HWplantLoc.loopNum)
-                                          .glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
-                                Cp = state.dataPlnt->PlantLoop(state.dataUnitHeaters->UnitHeat(UnitHeatNum).HWplantLoc.loopNum)
-                                         .glycol->getSpecificHeat(state, Constant::HWInitConvTemp, RoutineName);
+                                rho = state.dataUnitHeaters->UnitHeat(UnitHeatNum).HWplantLoc.loop->
+                                          glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                                Cp = state.dataUnitHeaters->UnitHeat(UnitHeatNum).HWplantLoc.loop->
+                                          glycol->getSpecificHeat(state, Constant::HWInitConvTemp, RoutineName);
                                 MaxVolHotWaterFlowDes = DesCoilLoad / (WaterCoilSizDeltaT * Cp * rho);
                             } else {
                                 MaxVolHotWaterFlowDes = 0.0;

@@ -4426,7 +4426,7 @@ void ActivateEMSControls(EnergyPlusData &state, PlantLocation const &plantLoc, b
     } // EMSFlag
 }
 
-void AdjustChangeInLoadByEMSControls(EnergyPlusData &state,
+void AdjustChangeInLoadByEMSControls([[maybe_unused]] EnergyPlusData &state,
                                      PlantLocation const &plantLoc,
                                      Real64 &ChangeInLoad // positive magnitude of load change
 )
@@ -4468,7 +4468,7 @@ void AdjustChangeInLoadByEMSControls(EnergyPlusData &state,
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
     // set up some nice references to avoid lookups
-    auto &this_loopside = state.dataPlnt->PlantLoop(plantLoc.loopNum).LoopSide(plantLoc.loopSideNum);
+    auto &this_loopside = plantLoc.loop->LoopSide(plantLoc.loopSideNum);
     auto &this_branch = this_loopside.Branch(plantLoc.branchNum);
     auto const &this_comp = this_branch.Comp(plantLoc.compNum);
 

@@ -265,18 +265,27 @@ TEST_F(EnergyPlusFixture, TestPullCompInterconnectTrigger)
 {
     // This test captures all code paths through the PullCompInterconnectTrigger function
 
+    state->dataPlnt->PlantLoop.allocate(2);
+
     // We'll set up two plant loops, the one to test and the connected one
     // each one will need a single loop side, but no branches are checked or anything like that
     int thisLoopNum = 1, thisBranchNum = 1, thisCompNum = 1;
     DataPlant::LoopSideLocation thisLoopSideNum = DataPlant::LoopSideLocation::Demand;
     PlantLocation plantLoc{thisLoopNum, thisLoopSideNum, thisBranchNum, thisCompNum};
+    plantLoc.loop = &state->dataPlnt->PlantLoop(plantLoc.loopNum);
+    plantLoc.side = &plantLoc.loop->LoopSide(plantLoc.loopSideNum);
+    // plantLoc.branch = &plantLoc.side->Branch(plantLoc.branchNum);
+    // plantLoc.comp = &plantLoc.branch->Comp(plantLoc.compNum);
+    
     int connectedLoopNum = 2;
     DataPlant::LoopSideLocation connectedLoopSideNum = DataPlant::LoopSideLocation::Demand;
     PlantLocation connectedPlantLoc{connectedLoopNum, connectedLoopSideNum, 0, 0};
+    connectedPlantLoc.loop = &state->dataPlnt->PlantLoop(connectedPlantLoc.loopNum);
+    connectedPlantLoc.side = &connectedPlantLoc.loop->LoopSide(connectedPlantLoc.loopSideNum);
+    
     int criteriaCheckIndex1 = 0, criteriaCheckIndex2 = 0, criteriaCheckIndex3 = 0;
     Real64 criteriaValue1 = 0.0, criteriaValue2 = 0.0, criteriaValue3 = 0.0;
 
-    state->dataPlnt->PlantLoop.allocate(2);
     auto &connectedLoopSide = state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand);
 
     // the first time we call each criteria check, we should just get an index back and it should trigger the connected loop
@@ -478,6 +487,10 @@ TEST_F(EnergyPlusFixture, TestScanPlantLoopsErrorFlagReturnType)
     EXPECT_ENUM_EQ(DataPlant::LoopSideLocation::Demand, plantLoc.loopSideNum);
     EXPECT_EQ(1, plantLoc.branchNum);
     EXPECT_EQ(1, plantLoc.compNum);
+    EXPECT_EQ(&state->dataPlnt->PlantLoop(plantLoc.loopNum), plantLoc.loop);
+    EXPECT_EQ(&plantLoc.loop->LoopSide(plantLoc.loopSideNum), plantLoc.side);
+    EXPECT_EQ(&plantLoc.side->Branch(plantLoc.branchNum), plantLoc.branch);
+    EXPECT_EQ(&plantLoc.branch->Comp(plantLoc.compNum), plantLoc.comp);
     EXPECT_FALSE(errorFlag);
 
     // then test to make sure errorFlag is passed by reference

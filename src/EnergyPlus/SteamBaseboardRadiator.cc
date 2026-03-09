@@ -1078,11 +1078,11 @@ namespace SteamBaseboardRadiator {
         Real64 SteamVolFlowRateMaxUser(0.0); // User hard-sized maximum steam volume flow for reporting
         Real64 TempSize;                     // autosized value of coil input field
 
-        SteamBaseboardDesignData SteamBaseboardDesignDataObject{state.dataSteamBaseboardRadiator->SteamBaseboardDesign(
+        SteamBaseboardDesignData const &SteamBaseboardDesignDataObject{state.dataSteamBaseboardRadiator->SteamBaseboardDesign(
             state.dataSteamBaseboardRadiator->SteamBaseboard(BaseboardNum).DesignObjectPtr)}; // Contains the data for variable flow hydronic systems
 
         // Find the appropriate steam plant sizing object
-        PltSizSteamNum = state.dataPlnt->PlantLoop(state.dataSteamBaseboardRadiator->SteamBaseboard(BaseboardNum).plantLoc.loopNum).PlantSizNum;
+        PltSizSteamNum = state.dataSteamBaseboardRadiator->SteamBaseboard(BaseboardNum).plantLoc.loop->PlantSizNum;
         //    PltSizSteamNum = MyPlantSizingIndex('Coil:Heating:Steam', SteamBaseboard(BaseboardNum)%EquipID, &
         //                    SteamBaseboard(BaseboardNum)%SteamInletNode, &
         //                    SteamBaseboard(BaseboardNum)%SteamOutletNode, ErrorsFound)

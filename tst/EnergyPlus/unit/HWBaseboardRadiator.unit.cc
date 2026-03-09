@@ -160,9 +160,7 @@ TEST_F(EnergyPlusFixture, HWBaseboardRadiator_HWBaseboardWaterFlowResetTest)
     HWBaseboard(1).WaterMassFlowRateMax = 0.40;
     HWBaseboard(1).AirMassFlowRateStd = 0.5;
     HWBaseboard(1).availSched = Sched::GetScheduleAlwaysOn(*state);
-    HWBaseboard(1).plantLoc.loopNum = 1;
-    HWBaseboard(1).plantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    HWBaseboard(1).plantLoc.branchNum = 1;
+    
     HWBaseboard(1).UA = 400.0;
     HWBaseboard(1).QBBRadSource = 0.0;
     state->dataPlnt->PlantLoop(1).FluidName = "Water";
@@ -192,6 +190,13 @@ TEST_F(EnergyPlusFixture, HWBaseboardRadiator_HWBaseboardWaterFlowResetTest)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn = HWBaseboard(1).WaterInletNode;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut = HWBaseboard(1).WaterOutletNode;
 
+    HWBaseboard(1).plantLoc.loopNum = 1;
+    HWBaseboard(1).plantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
+    HWBaseboard(1).plantLoc.branchNum = 1;
+    HWBaseboard(1).plantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    HWBaseboard(1).plantLoc.side = &HWBaseboard(1).plantLoc.loop->LoopSide(HWBaseboard(1).plantLoc.loopSideNum);
+    HWBaseboard(1).plantLoc.branch = &HWBaseboard(1).plantLoc.side->Branch(HWBaseboard(1).plantLoc.branchNum);
+    
     // zero zone load case, so zero LoadMet must be returned
     CalcHWBaseboard(*state, BBNum, LoadMet);
 

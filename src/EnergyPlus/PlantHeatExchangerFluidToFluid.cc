@@ -2020,10 +2020,10 @@ void HeatExchangerStruct::updateCompFlowData(EnergyPlusData &state)
 {
     int demandArrayIndex = -1;
     int supplyArrayIndex = -1;
-    auto &demandCompNames = state.dataPlnt->PlantLoop(this->DemandSideLoop.loopNum).plantCoilObjectNames;
-    auto &demandCompTypes = state.dataPlnt->PlantLoop(this->DemandSideLoop.loopNum).plantCoilObjectTypes;
-    auto &supplyCompNames = state.dataPlnt->PlantLoop(this->SupplySideLoop.loopNum).plantCoilObjectNames;
-    auto &supplyCompTypes = state.dataPlnt->PlantLoop(this->SupplySideLoop.loopNum).plantCoilObjectTypes;
+    auto &demandCompNames = this->DemandSideLoop.loop->plantCoilObjectNames;
+    auto &demandCompTypes = this->DemandSideLoop.loop->plantCoilObjectTypes;
+    auto &supplyCompNames = this->SupplySideLoop.loop->plantCoilObjectNames;
+    auto &supplyCompTypes = this->SupplySideLoop.loop->plantCoilObjectTypes;
     for (size_t i = 0; i < demandCompNames.size(); ++i) {
         if (demandCompNames[i] == this->Name && demandCompTypes[i] == this->DemandSideLoop.comp->Type) {
             demandArrayIndex = i;
@@ -2036,12 +2036,12 @@ void HeatExchangerStruct::updateCompFlowData(EnergyPlusData &state)
             break;
         }
     }
-    size_t demandCompSize = state.dataPlnt->PlantLoop(this->DemandSideLoop.loopNum).compDesWaterFlowRate.size();
-    auto &demandCoilData = state.dataPlnt->PlantLoop(this->DemandSideLoop.loopNum).compDesWaterFlowRate;
-    size_t supplyCompSize = state.dataPlnt->PlantLoop(this->SupplySideLoop.loopNum).compDesWaterFlowRate.size();
-    auto &supplyCoilData = state.dataPlnt->PlantLoop(this->SupplySideLoop.loopNum).compDesWaterFlowRate;
+    size_t demandCompSize = this->DemandSideLoop.loop->compDesWaterFlowRate.size();
+    auto &demandCoilData = this->DemandSideLoop.loop->compDesWaterFlowRate;
+    size_t supplyCompSize = this->SupplySideLoop.loop->compDesWaterFlowRate.size();
+    auto &supplyCoilData = this->SupplySideLoop.loop->compDesWaterFlowRate;
     std::vector<Real64> supplyFlowData;
-    supplyFlowData.resize(size_t(24 * state.dataGlobal->TimeStepsInHour + 1));
+    supplyFlowData.resize(size_t(Constant::iHoursInDay * state.dataGlobal->TimeStepsInHour + 1));
     for (double &i : supplyFlowData) {
         i = 0.0;
     }
@@ -2099,9 +2099,9 @@ void HeatExchangerStruct::updateCompFlowData(EnergyPlusData &state)
     }
 }
 
-bool HeatExchangerStruct::hasSupplySideTES(EnergyPlusData &state)
+bool HeatExchangerStruct::hasSupplySideTES([[maybe_unused]] EnergyPlusData &state)
 {
-    for (auto const &loopSide : state.dataPlnt->PlantLoop(this->SupplySideLoop.loopNum).LoopSide) {
+    for (auto const &loopSide : this->SupplySideLoop.loop->LoopSide) {
         for (auto const &branch : loopSide.Branch) {
             for (auto const &comp : branch.Comp) {
                 if (comp.Type == DataPlant::PlantEquipmentType::TS_IceDetailed || comp.Type == DataPlant::PlantEquipmentType::TS_IceSimple) {

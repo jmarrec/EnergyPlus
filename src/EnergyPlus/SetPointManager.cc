@@ -3652,10 +3652,10 @@ void SPMCondenserEnteringTemp::calculate(EnergyPlusData &state)
     // Current timestep's condenser water entering setpoint
     Real64 CondenserEnteringTempSetPoint = this->condenserEnteringTempSched->getCurrentVal();
 
-    auto &supplyLoop = state.dataPlnt->PlantLoop(this->plantPloc.loopNum).LoopSide(LoopSideLocation::Supply);
+    auto &supplyLoop = this->plantPloc.loop->LoopSide(LoopSideLocation::Supply);
     auto &supplyComp = supplyLoop.Branch(this->plantPloc.branchNum).Comp(this->plantPloc.compNum);
 
-    auto &demandLoop = state.dataPlnt->PlantLoop(this->demandPloc.loopNum).LoopSide(LoopSideLocation::Demand);
+    auto &demandLoop = this->demandPloc.loop->LoopSide(LoopSideLocation::Demand);
     auto &demandComp = demandLoop.Branch(this->demandPloc.branchNum).Comp(this->demandPloc.compNum);
 
     // If chiller is on
@@ -3681,7 +3681,7 @@ void SPMCondenserEnteringTemp::calculate(EnergyPlusData &state)
             EvapOutletTemp = state.dataLoopNodes->Node(supplyComp.NodeNumOut).Temp;
             DesignEvapOutTemp = supplyComp.TempDesEvapOut;
             DesignLoad = supplyComp.MaxLoad;
-            ActualLoad = state.dataPlnt->PlantLoop(this->plantPloc.loopNum).CoolingDemand;
+            ActualLoad = this->plantPloc.loop->CoolingDemand;
         } else if (this->chillerType == PlantEquipmentType::Chiller_Indirect_Absorption ||
                    this->chillerType == PlantEquipmentType::Chiller_DFAbsorption) {
             DesignCondenserInTemp = supplyComp.TempDesCondIn;
@@ -3814,7 +3814,7 @@ void SPMIdealCondenserEnteringTemp::calculate(EnergyPlusData &state)
     auto &dspm = state.dataSetPointManager;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    auto &supplyLoop = state.dataPlnt->PlantLoop(this->chillerPloc.loopNum).LoopSide(LoopSideLocation::Supply);
+    auto &supplyLoop = this->chillerPloc.loop->LoopSide(LoopSideLocation::Supply);
     auto &supplyComp = supplyLoop.Branch(this->chillerPloc.branchNum).Comp(this->chillerPloc.compNum);
 
     if (state.dataGlobal->MetersHaveBeenInitialized) {
@@ -4068,10 +4068,8 @@ void SPMIdealCondenserEnteringTemp::SetupMeteredVarsForSetPt(EnergyPlusData &sta
     this->chilledWaterPumpVar.Type = meteredVars(1).varType;
     this->chilledWaterPumpVar.Num = meteredVars(1).num;
 
-    auto &towerLoopSide = state.dataPlnt->PlantLoop(this->towerPlocs(1).loopNum).LoopSide(this->towerPlocs(1).loopSideNum);
-
     for (int i = 1; i <= this->numTowers; i++) {
-        auto &towerComp = towerLoopSide.Branch(this->towerPlocs(i).branchNum).Comp(this->towerPlocs(i).compNum);
+      auto &towerComp = towerPlocs(1).side->Branch(this->towerPlocs(i).branchNum).Comp(this->towerPlocs(i).compNum);
         NumVariables = GetNumMeteredVariables(state, towerComp.TypeOf, towerComp.Name);
         meteredVars.allocate(NumVariables);
 
@@ -4079,7 +4077,7 @@ void SPMIdealCondenserEnteringTemp::SetupMeteredVarsForSetPt(EnergyPlusData &sta
         this->towerVars.push_back({meteredVars(1).varType, meteredVars(1).num});
     }
 
-    auto &condenserPumpComp = towerLoopSide.Branch(this->condenserPumpPloc.branchNum).Comp(this->condenserPumpPloc.compNum);
+    auto &condenserPumpComp = towerPlocs(1).side->Branch(this->condenserPumpPloc.branchNum).Comp(this->condenserPumpPloc.compNum);
     NumVariables = GetNumMeteredVariables(state, condenserPumpComp.TypeOf, condenserPumpComp.Name);
     meteredVars.allocate(NumVariables);
 
