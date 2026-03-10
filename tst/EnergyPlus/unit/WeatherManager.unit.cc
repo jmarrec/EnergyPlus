@@ -338,7 +338,7 @@ TEST_F(EnergyPlusFixture, UnderwaterBoundaryConditionFullyPopulated)
 
     // need to populate the OSCM array by calling the get input for it
     bool errorsFound = false;
-    SurfaceGeometry::GetOSCMData(*state, errorsFound);
+    SurfaceGeometry::GetOSCMData(*state);
     EXPECT_FALSE(errorsFound);
     EXPECT_EQ(state->dataSurface->TotOSCM, 1);
 
@@ -363,7 +363,7 @@ TEST_F(EnergyPlusFixture, UnderwaterBoundaryConditionMissingVelocityOK)
 
     // need to populate the OSCM array by calling the get input for it
     bool errorsFound = false;
-    SurfaceGeometry::GetOSCMData(*state, errorsFound);
+    SurfaceGeometry::GetOSCMData(*state);
     EXPECT_FALSE(errorsFound);
     EXPECT_EQ(state->dataSurface->TotOSCM, 1);
 

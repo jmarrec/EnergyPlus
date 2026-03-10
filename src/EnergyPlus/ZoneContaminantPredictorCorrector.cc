@@ -240,8 +240,6 @@ void GetZoneContaminanInputs(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphaName(1)};
 
-        Util::IsNameEmpty(state, AlphaName(1), CurrentModuleObject, ErrorsFound);
-
         auto &contam = state.dataContaminantBalance->ZoneContamGenericConstant(Loop);
         contam.Name = AlphaName(1);
         contam.ZoneName = AlphaName(2);
@@ -341,8 +339,6 @@ void GetZoneContaminanInputs(EnergyPlusData &state)
                                                                  state.dataIPShortCut->cNumericFieldNames);
 
         ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphaName(1)};
-
-        Util::IsNameEmpty(state, AlphaName(1), CurrentModuleObject, ErrorsFound);
 
         auto &contam = state.dataContaminantBalance->ZoneContamGenericPDriven(Loop);
         contam.Name = AlphaName(1);
@@ -477,8 +473,6 @@ void GetZoneContaminanInputs(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphaName(1)};
 
-        Util::IsNameEmpty(state, AlphaName(1), CurrentModuleObject, ErrorsFound);
-
         auto &contam = state.dataContaminantBalance->ZoneContamGenericCutoff(Loop);
         contam.Name = AlphaName(1);
 
@@ -588,7 +582,6 @@ void GetZoneContaminanInputs(EnergyPlusData &state)
 
         auto &contam = state.dataContaminantBalance->ZoneContamGenericDecay(Loop);
 
-        Util::IsNameEmpty(state, AlphaName(1), CurrentModuleObject, ErrorsFound);
         contam.Name = AlphaName(1);
 
         contam.ZoneName = AlphaName(2);
@@ -701,8 +694,6 @@ void GetZoneContaminanInputs(EnergyPlusData &state)
                                                                  state.dataIPShortCut->cNumericFieldNames);
 
         ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphaName(1)};
-
-        Util::IsNameEmpty(state, AlphaName(1), CurrentModuleObject, ErrorsFound);
 
         auto &contam = state.dataContaminantBalance->ZoneContamGenericBLDiff(Loop);
         contam.Name = AlphaName(1);
@@ -818,7 +809,6 @@ void GetZoneContaminanInputs(EnergyPlusData &state)
 
         ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphaName(1)};
 
-        Util::IsNameEmpty(state, AlphaName(1), CurrentModuleObject, ErrorsFound);
         auto &contam = state.dataContaminantBalance->ZoneContamGenericDVS(Loop);
         contam.Name = AlphaName(1);
 
@@ -913,8 +903,6 @@ void GetZoneContaminanInputs(EnergyPlusData &state)
                                                                  state.dataIPShortCut->cNumericFieldNames);
 
         ErrorObjectHeader eoh{routineName, CurrentModuleObject, AlphaName(1)};
-
-        Util::IsNameEmpty(state, AlphaName(1), CurrentModuleObject, ErrorsFound);
 
         auto &contam = state.dataContaminantBalance->ZoneContamGenericDRS(Loop);
         contam.Name = AlphaName(1);
@@ -1067,8 +1055,6 @@ void GetZoneContaminanSetPoints(EnergyPlusData &state)
                                                                  state.dataIPShortCut->cNumericFieldNames);
 
         ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
-
-        Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
         auto &controlledZone = state.dataContaminantBalance->ContaminantControlledZone(ContControlledZoneNum);
         controlledZone.Name = state.dataIPShortCut->cAlphaArgs(1);

@@ -445,7 +445,7 @@ void GetAirPathData(EnergyPlusData &state)
         // Assign the air system data to the simulation variables.
         // Data needed to simulate the system goes into PrimaryAirSystem.
         // Data connecting the air system to the zone equipment goes into AirToZoneNodeInfo (in DataLoopNode).
-        Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
+
         primaryAirSystems.Name = Alphas(1);
         airLoopZoneInfo.AirLoopName = Alphas(1);
         if (NumAlphas < 9) {
