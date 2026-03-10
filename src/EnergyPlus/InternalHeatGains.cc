@@ -2565,7 +2565,6 @@ namespace InternalHeatGains {
                                                                      IHGNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, contamSSModuleObject, IHGAlphas(1)};
-            Util::IsNameEmpty(state, IHGAlphas(1), contamSSModuleObject, ErrorsFound);
 
             state.dataHeatBal->ZoneCO2Gen(Loop).Name = IHGAlphas(1);
 

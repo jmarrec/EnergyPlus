@@ -270,7 +270,6 @@ namespace WaterManager {
 
                     state.dataWaterData->AnyWaterSystemsInModel = true;
                     state.dataWaterData->WaterStorage(Item).Name = cAlphaArgs(1);
-                    Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
                     state.dataWaterData->WaterStorage(Item).QualitySubCategoryName = cAlphaArgs(2);
 
@@ -420,7 +419,6 @@ namespace WaterManager {
                     ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
 
                     state.dataWaterData->RainCollector(Item).Name = cAlphaArgs(1);
-                    Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
                     state.dataWaterData->RainCollector(Item).StorageTankName = cAlphaArgs(2);
                     state.dataWaterData->RainCollector(Item).StorageTankID = Util::FindItemInList(cAlphaArgs(2), state.dataWaterData->WaterStorage);
@@ -535,7 +533,7 @@ namespace WaterManager {
                     ErrorObjectHeader eoh{routineName, cCurrentModuleObject, cAlphaArgs(1)};
 
                     state.dataWaterData->GroundwaterWell(Item).Name = cAlphaArgs(1);
-                    Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
+
                     state.dataWaterData->GroundwaterWell(Item).StorageTankName = cAlphaArgs(2);
 
                     InternalSetupTankSupplyComponent(state,

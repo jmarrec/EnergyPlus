@@ -2246,7 +2246,6 @@ void GetOARequirements(EnergyPlusData &state)
                                                                      lAlphaBlanks,
                                                                      cAlphaFields,
                                                                      cNumericFields);
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             state.dataSize->OARequirements(OAIndex).Name = Alphas(1);
 
@@ -2499,7 +2498,6 @@ void GetZoneAirDistribution(EnergyPlusData &state)
                                                                      cNumericFields);
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             state.dataSize->ZoneAirDistribution(ZADIndex).Name = Alphas(1);
 
@@ -2744,7 +2742,6 @@ void GetZoneSizingInput(EnergyPlusData &state)
                                                                  state.dataIPShortCut->lAlphaFieldBlanks,
                                                                  state.dataIPShortCut->cAlphaFieldNames,
                                                                  state.dataIPShortCut->cNumericFieldNames);
-        Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
         SizingZoneObjects(Item).Name = state.dataIPShortCut->cAlphaArgs(1);
 
@@ -2828,10 +2825,6 @@ void GetZoneSizingInput(EnergyPlusData &state)
                         // Invalid zone, will be caught later
                         state.dataSize->ZoneSizingInput(ZoneSizIndex).ZoneName = "Invalid Zone Name";
                     }
-                }
-                bool const nameEmpty = Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-                if (nameEmpty && !SizingZoneObjects(Item).ZoneListActive) {
-                    ShowContinueError(state, "Zone may have been entered in a ZoneList assignment.");
                 }
 
                 //  A2, \field Zone Cooling Design Supply Air Temperature Input Method
@@ -4078,7 +4071,6 @@ void GetPlantSizingInput(EnergyPlusData &state)
                                                                  state.dataIPShortCut->lAlphaFieldBlanks,
                                                                  state.dataIPShortCut->cAlphaFieldNames,
                                                                  state.dataIPShortCut->cNumericFieldNames);
-        Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
         state.dataSize->PlantSizData(PltSizIndex).PlantLoopName = state.dataIPShortCut->cAlphaArgs(1);
         state.dataSize->PlantSizData(PltSizIndex).ExitTemp = state.dataIPShortCut->rNumericArgs(1);
@@ -4654,7 +4646,6 @@ void GetZoneHVACSizing(EnergyPlusData &state)
                                                                      lAlphaBlanks,
                                                                      cAlphaFields,
                                                                      cNumericFields);
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             state.dataSize->ZoneHVACSizing(zSIndex).Name = Alphas(1);
 
@@ -5178,8 +5169,6 @@ void GetAirTerminalSizing(EnergyPlusData &state)
                                                                      state.dataIPShortCut->lAlphaFieldBlanks,
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
-
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
             auto &thisATSizing = state.dataSize->AirTerminalSizingSpec(zSIndex);
             thisATSizing.Name = state.dataIPShortCut->cAlphaArgs(1);

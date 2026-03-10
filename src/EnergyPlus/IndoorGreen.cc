@@ -137,7 +137,6 @@ namespace IndoorGreen {
                                 s_ipsc->cAlphaFieldNames,
                                 s_ipsc->cNumericFieldNames);
             ErrorObjectHeader eoh{RoutineName, cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
-            Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
             ig.Name = s_ipsc->cAlphaArgs(1);
             ig.SurfName = s_ipsc->cAlphaArgs(2);
             ig.SurfPtr = Util::FindItemInList(s_ipsc->cAlphaArgs(2), state.dataSurface->Surface);

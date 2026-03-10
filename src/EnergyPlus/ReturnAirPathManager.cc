@@ -142,7 +142,6 @@ namespace ReturnAirPathManager {
                                                                          state.dataIPShortCut->rNumericArgs,
                                                                          NumNums,
                                                                          IOStat);
-                Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
                 state.dataZoneEquip->ReturnAirPath(PathNum).Name = state.dataIPShortCut->cAlphaArgs(1);
                 state.dataZoneEquip->ReturnAirPath(PathNum).NumOfComponents = nint((NumAlphas - 2.0) / 2.0);

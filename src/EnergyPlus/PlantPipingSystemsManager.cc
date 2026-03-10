@@ -545,7 +545,7 @@ namespace PlantPipingSystemsManager {
 
             // Get the name, validate
             thisDomain.Name = state.dataIPShortCut->cAlphaArgs(1);
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
+
             // Mesh extents, validated by IP
             thisDomain.Extents.xMax = state.dataIPShortCut->rNumericArgs(1);
             thisDomain.Extents.yMax = state.dataIPShortCut->rNumericArgs(2);
@@ -1530,7 +1530,6 @@ namespace PlantPipingSystemsManager {
 
             // Get the name, validate
             thisCircuit.Name = s_ipsc->cAlphaArgs(1);
-            Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
 
             // Read pipe thermal properties, validated by IP
             thisCircuit.PipeProperties.Conductivity = s_ipsc->rNumericArgs(1);
@@ -1807,7 +1806,7 @@ namespace PlantPipingSystemsManager {
 
             // Get the name, validate
             thisSegment.Name = s_ipsc->cAlphaArgs(1);
-            Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
+
             // Read in the pipe location, validated as positive by IP
             // -- note that these values will be altered by the main GetInput routine in two ways:
             //   1) shift for basement wall if selected
@@ -1890,7 +1889,6 @@ namespace PlantPipingSystemsManager {
 
             // Get the name, validate
             std::string thisTrenchName = s_ipsc->cAlphaArgs(1);
-            Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
 
             int const NumPipeSegments = static_cast<int>(s_ipsc->rNumericArgs(3));
             Real64 const thisInterPipeSpacing = s_ipsc->rNumericArgs(4);
