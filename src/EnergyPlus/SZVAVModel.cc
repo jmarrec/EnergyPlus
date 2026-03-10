@@ -529,13 +529,15 @@ namespace SZVAVModel {
                     15.0) { // water coil can provide same output at varying water PLR (model discontinuity?)
                     if (SZVAVModel.MaxIterIndex == 0) {
                         ShowWarningMessage(
-                            state, format("{}Coil control failed to converge for {}:{}", MessagePrefix, SZVAVModel.UnitType, SZVAVModel.Name));
+                            state,
+                            EnergyPlus::format("{}Coil control failed to converge for {}:{}", MessagePrefix, SZVAVModel.UnitType, SZVAVModel.Name));
                         ShowContinueError(state, "  Iteration limit exceeded in calculating system sensible part-load ratio.");
                         ShowContinueErrorTimeStamp(
                             state,
-                            format("Sensible load to be met = {:.2T} (watts), sensible output = {:.2T} (watts), and the simulation continues.",
-                                   ZoneLoad,
-                                   TempSensOutput));
+                            EnergyPlus::format(
+                                "Sensible load to be met = {:.2T} (watts), sensible output = {:.2T} (watts), and the simulation continues.",
+                                ZoneLoad,
+                                TempSensOutput));
                     }
                     ShowRecurringWarningErrorAtEnd(
                         state,
@@ -547,9 +549,11 @@ namespace SZVAVModel {
                 }
             } else if (SolFlag == -2) {
                 if (SZVAVModel.RegulaFalsiFailedIndex == 0) {
-                    ShowWarningMessage(state, format("{}Coil control failed for {}:{}", MessagePrefix, SZVAVModel.UnitType, SZVAVModel.Name));
+                    ShowWarningMessage(state,
+                                       EnergyPlus::format("{}Coil control failed for {}:{}", MessagePrefix, SZVAVModel.UnitType, SZVAVModel.Name));
                     ShowContinueError(state, "  sensible part-load ratio determined to be outside the range of 0-1.");
-                    ShowContinueErrorTimeStamp(state, format("Sensible load to be met = {:.2T} (watts), and the simulation continues.", ZoneLoad));
+                    ShowContinueErrorTimeStamp(
+                        state, EnergyPlus::format("Sensible load to be met = {:.2T} (watts), and the simulation continues.", ZoneLoad));
                 }
                 ShowRecurringWarningErrorAtEnd(state,
                                                SZVAVModel.UnitType + " \"" + SZVAVModel.Name +
@@ -1054,13 +1058,15 @@ namespace SZVAVModel {
                     15.0) { // water coil can provide same output at varying water PLR (model discontinuity?)
                     if (SZVAVModel.MaxIterIndex == 0) {
                         ShowWarningMessage(
-                            state, format("{}Coil control failed to converge for {}:{}", MessagePrefix, SZVAVModel.UnitType, SZVAVModel.Name));
+                            state,
+                            EnergyPlus::format("{}Coil control failed to converge for {}:{}", MessagePrefix, SZVAVModel.UnitType, SZVAVModel.Name));
                         ShowContinueError(state, "  Iteration limit exceeded in calculating system sensible part-load ratio.");
                         ShowContinueErrorTimeStamp(
                             state,
-                            format("Sensible load to be met = {:.2T} (watts), sensible output = {:.2T} (watts), and the simulation continues.",
-                                   ZoneLoad,
-                                   TempSensOutput));
+                            EnergyPlus::format(
+                                "Sensible load to be met = {:.2T} (watts), sensible output = {:.2T} (watts), and the simulation continues.",
+                                ZoneLoad,
+                                TempSensOutput));
                     }
                     ShowRecurringWarningErrorAtEnd(
                         state,
@@ -1072,9 +1078,11 @@ namespace SZVAVModel {
                 }
             } else if (SolFlag == -2) {
                 if (SZVAVModel.RegulaFalsiFailedIndex == 0) {
-                    ShowWarningMessage(state, format("{}Coil control failed for {}:{}", MessagePrefix, SZVAVModel.UnitType, SZVAVModel.Name));
+                    ShowWarningMessage(state,
+                                       EnergyPlus::format("{}Coil control failed for {}:{}", MessagePrefix, SZVAVModel.UnitType, SZVAVModel.Name));
                     ShowContinueError(state, "  sensible part-load ratio determined to be outside the range of 0-1.");
-                    ShowContinueErrorTimeStamp(state, format("Sensible load to be met = {:.2T} (watts), and the simulation continues.", ZoneLoad));
+                    ShowContinueErrorTimeStamp(
+                        state, EnergyPlus::format("Sensible load to be met = {:.2T} (watts), and the simulation continues.", ZoneLoad));
                 }
                 ShowRecurringWarningErrorAtEnd(state,
                                                SZVAVModel.UnitType + " \"" + SZVAVModel.Name +

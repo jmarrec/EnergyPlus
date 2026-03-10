@@ -352,6 +352,7 @@ TEST_F(AirloopUnitarySysTest, MultipleWaterCoolingCoilSizing)
     state->dataWaterCoils->WaterCoil(CoilNum).Name = "Test Water Cooling Coil";
 
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loopNum = 1;
+    state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.compNum = 1;
@@ -429,6 +430,7 @@ TEST_F(AirloopUnitarySysTest, MultipleWaterCoolingCoilSizing)
     state->dataWaterCoils->WaterCoil(CoilNum).Name = "Test Water Heating Coil";
 
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loopNum = 2;
+    state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(2);
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.branchNum = 1;
     state->dataWaterCoils->WaterCoil(CoilNum).WaterPlantLoc.compNum = 1;
@@ -26815,8 +26817,9 @@ TEST_F(ZoneUnitarySysTest, ZeroCoolingSpeedTest)
     ,                        !- Maximum Temperature for Heat Recovery {C}
     ,                        !- Heat Recovery Water Inlet Node Name
     ,                        !- Heat Recovery Water Outlet Node Name
-    UnitarySystemPerformance:Multispeed,  !- Design Specification Multispeed Object Type
-    Sys 1 Furnace DX Cool Unitary System MultiSpeed Performance;  !- Design Specification Multispeed Object Name
+    ,                        !- Design Specification Multispeed Object Type
+    ;                        !- Design Specification Multispeed Object Name
+
   Coil:Cooling:DX,
     Sys 1 Furnace DX Cool Cooling Coil,  !- Name
     Sys 1 Furnace DX Cool Supply Fan Outlet,  !- Evaporator Inlet Node Name
