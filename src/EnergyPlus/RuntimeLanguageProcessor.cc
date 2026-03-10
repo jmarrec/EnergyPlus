@@ -3204,7 +3204,6 @@ void GetRuntimeLanguageUserInput(EnergyPlusData &state)
                                                                          lAlphaFieldBlanks,
                                                                          cAlphaFieldNames,
                                                                          cNumericFieldNames);
-                Util::IsNameEmpty(state, cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
                 ValidateEMSVariableName(state, cCurrentModuleObject, cAlphaArgs(1), cAlphaFieldNames(1), errFlag, ErrorsFound);
                 if (!errFlag) {

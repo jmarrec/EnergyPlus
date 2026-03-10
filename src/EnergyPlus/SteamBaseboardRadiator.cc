@@ -332,8 +332,6 @@ namespace SteamBaseboardRadiator {
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
 
-            Util::IsNameEmpty(
-                state, state.dataIPShortCut->cAlphaArgs(1), state.dataSteamBaseboardRadiator->cCMO_BBRadiator_Steam_Design, ErrorsFound);
             state.dataSteamBaseboardRadiator->SteamBaseboardDesignNumericFields(BaseboardDesignNum).FieldNames.allocate(NumNumbers);
             state.dataSteamBaseboardRadiator->SteamBaseboardDesignNumericFields(BaseboardDesignNum).FieldNames = "";
             state.dataSteamBaseboardRadiator->SteamBaseboardDesignNumericFields(BaseboardDesignNum).FieldNames =
@@ -520,7 +518,6 @@ namespace SteamBaseboardRadiator {
 
             ErrorObjectHeader eoh{routineName, state.dataSteamBaseboardRadiator->cCMO_BBRadiator_Steam, state.dataIPShortCut->cAlphaArgs(1)};
 
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataSteamBaseboardRadiator->cCMO_BBRadiator_Steam, ErrorsFound);
             state.dataSteamBaseboardRadiator->SteamBaseboardNumericFields(BaseboardNum).FieldNames.allocate(NumNumbers);
             state.dataSteamBaseboardRadiator->SteamBaseboardNumericFields(BaseboardNum).FieldNames = "";
             state.dataSteamBaseboardRadiator->SteamBaseboardNumericFields(BaseboardNum).FieldNames = state.dataIPShortCut->cNumericFieldNames;

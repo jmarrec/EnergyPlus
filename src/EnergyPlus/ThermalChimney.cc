@@ -184,10 +184,6 @@ namespace ThermalChimney {
 
             ErrorObjectHeader eoh{routineName, state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
 
-            if (Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound)) {
-                continue;
-            }
-
             // First Alpha is Thermal Chimney Name
             state.dataThermalChimneys->ThermalChimneySys(Loop).Name = state.dataIPShortCut->cAlphaArgs(1);
 

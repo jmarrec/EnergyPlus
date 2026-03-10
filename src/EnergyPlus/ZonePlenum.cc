@@ -295,7 +295,6 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                                  lAlphaBlanks,
                                                                  cAlphaFields,
                                                                  cNumericFields);
-        Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
 
         auto &thisRetPlenum = state.dataZonePlenum->ZoneRetPlenCond(ZonePlenumNum);
         thisRetPlenum.ZonePlenumName = AlphArray(1);
@@ -482,7 +481,6 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                                  lAlphaBlanks,
                                                                  cAlphaFields,
                                                                  cNumericFields);
-        Util::IsNameEmpty(state, AlphArray(1), CurrentModuleObject, ErrorsFound);
 
         auto &thisSupPlenum = state.dataZonePlenum->ZoneSupPlenCond(ZonePlenumNum);
         thisSupPlenum.ZonePlenumName = AlphArray(1);

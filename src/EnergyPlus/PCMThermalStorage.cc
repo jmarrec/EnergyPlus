@@ -509,8 +509,6 @@ namespace PCMStorage {
                                                                  state.dataIPShortCut->cAlphaFieldNames,
                                                                  state.dataIPShortCut->cNumericFieldNames);
 
-        Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), state.dataIPShortCut->cCurrentModuleObject, ErrorsFound);
-
         PCM.Name = state.dataIPShortCut->cAlphaArgs(1);
         PCM.AvailabilityScheduleName = state.dataIPShortCut->cAlphaArgs(2);
 
