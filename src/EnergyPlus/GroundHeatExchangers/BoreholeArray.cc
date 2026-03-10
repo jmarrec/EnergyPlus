@@ -57,7 +57,7 @@ GLHEVertArray::GLHEVertArray(EnergyPlusData &state, std::string const &objName, 
     // Check for duplicates
     for (const auto &existingObj : state.dataGroundHeatExchanger->vertArraysVector) {
         if (objName == existingObj->name) {
-            ShowFatalError(state, format("Invalid input for {} object: Duplicate name found: {}", this->moduleName, existingObj->name));
+            ShowFatalError(state, EnergyPlus::format("Invalid input for {} object: Duplicate name found: {}", this->moduleName, existingObj->name));
         }
     }
 

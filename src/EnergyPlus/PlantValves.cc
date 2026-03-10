@@ -98,7 +98,7 @@ namespace PlantValves {
             }
         }
         // If we didn't find it, fatal
-        ShowFatalError(state, format("TemperValveDataFactory: Error getting inputs for valve named: {}", objectName)); // LCOV_EXCL_LINE
+        ShowFatalError(state, EnergyPlus::format("TemperValveDataFactory: Error getting inputs for valve named: {}", objectName)); // LCOV_EXCL_LINE
         // Shut up the compiler
         return nullptr; // LCOV_EXCL_LINE
     }
@@ -239,7 +239,7 @@ namespace PlantValves {
         }
 
         if (ErrorsFound) {
-            ShowFatalError(state, format("GetPlantValvesInput: {} Errors found in input", CurrentModuleObject));
+            ShowFatalError(state, EnergyPlus::format("GetPlantValvesInput: {} Errors found in input", CurrentModuleObject));
         }
     }
 
@@ -398,7 +398,7 @@ namespace PlantValves {
                     ErrorsFound = true;
                 }
                 if (ErrorsFound) {
-                    ShowFatalError(state, format("Errors found in input, TemperingValve object {}", this->Name));
+                    ShowFatalError(state, EnergyPlus::format("Errors found in input, TemperingValve object {}", this->Name));
                 }
                 this->compDelayedInitFlag = false;
             } // my two time flag for input checking
