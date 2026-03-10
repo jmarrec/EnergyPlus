@@ -2498,10 +2498,10 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
             mat->gapVentType = matGasMix->gapVentType;
         }
 
-        // Find referenced DeflectionState object and copy field from it
+        // Find referenced DeflectionState object and copy field (i.e., deflected thickness) from it
         if (!s_ipsc->lAlphaFieldBlanks(3)) {
-            s_ipsc->cCurrentModuleObject = "WindowGap:DeflectionState";
-            auto const itInstances = s_ip->epJSON.find(s_ipsc->cCurrentModuleObject);
+            std::string deflectionState = "WindowGap:DeflectionState";
+            auto const itInstances = s_ip->epJSON.find(deflectionState);
             if (itInstances == s_ip->epJSON.end()) {
                 ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(3), s_ipsc->cAlphaArgs(3));
                 ErrorsFound = true;
@@ -2523,16 +2523,16 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
                 continue;
             }
 
-            s_ip->markObjectAsUsed(s_ipsc->cCurrentModuleObject, itObj.key());
+            s_ip->markObjectAsUsed(deflectionState, itObj.key());
             auto const &obj = itObj.value();
-            auto const &objSchemaProps = s_ip->getObjectSchemaProps(state, s_ipsc->cCurrentModuleObject);
+            auto const &objSchemaProps = s_ip->getObjectSchemaProps(state, deflectionState);
             mat->deflectedThickness = s_ip->getRealFieldValue(obj, objSchemaProps, "deflected_thickness");
         }
 
-        // Find referenced
+        // Find referenced SupportPillar obect and copy fields (i.e., spacing, radius) from it
         if (!s_ipsc->lAlphaFieldBlanks(4)) {
-            s_ipsc->cCurrentModuleObject = "WindowGap:SupportPillar";
-            auto const itInstances = s_ip->epJSON.find(s_ipsc->cCurrentModuleObject);
+            std::string supportPillar = "WindowGap:SupportPillar";
+            auto const itInstances = s_ip->epJSON.find(supportPillar);
             if (itInstances == s_ip->epJSON.end()) {
                 ShowSevereItemNotFound(state, eoh, s_ipsc->cAlphaFieldNames(4), s_ipsc->cAlphaArgs(4));
                 ErrorsFound = true;
@@ -2555,9 +2555,9 @@ void GetMaterialData(EnergyPlusData &state, bool &ErrorsFound) // set to true if
                 continue;
             }
 
-            s_ip->markObjectAsUsed(s_ipsc->cCurrentModuleObject, itObj.key());
+            s_ip->markObjectAsUsed(supportPillar, itObj.key());
             auto const &obj = itObj.value();
-            auto const &objSchemaProps = s_ip->getObjectSchemaProps(state, s_ipsc->cCurrentModuleObject);
+            auto const &objSchemaProps = s_ip->getObjectSchemaProps(state, supportPillar);
             mat->pillarSpacing = s_ip->getRealFieldValue(obj, objSchemaProps, "spacing");
             mat->pillarRadius = s_ip->getRealFieldValue(obj, objSchemaProps, "radius");
         }
