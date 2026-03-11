@@ -1163,15 +1163,12 @@ TEST_F(EnergyPlusFixture, calcLoadSideHeatTransfer_AWHP)
     PLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
     state->dataLoopNodes->Node.allocate(2);
     thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
-    thisAWHP.loadSidePlantLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
-    thisAWHP.loadSidePlantLoc.branchNum = 1;
-    thisAWHP.loadSidePlantLoc.compNum = 1;
+    thisAWHP.loadSidePlantLoc = {1, DataPlant::LoopSideLocation::Supply, 1, 1};
     PlantUtilities::SetPlantLocationLinks(*state, thisAWHP.loadSidePlantLoc);
     thisAWHP.loadSideNodes.outlet = 2;
     thisAWHP.loadSideNodes.inlet = 1;
     thisAWHP.loadSideMassFlowRate = 2;
     thisAWHP.loadSideInletTemp = 20;
-    thisAWHP.loadSidePlantLoc.loop = &state->dataPlnt->PlantLoop(1);
     state->dataLoopNodes->Node(thisAWHP.loadSideNodes.inlet).Temp = thisAWHP.loadSideInletTemp;
     Real64 CpLoad = thisAWHP.loadSidePlantLoc.loop->glycol->getSpecificHeat(
         *state, state->dataLoopNodes->Node(thisAWHP.loadSideNodes.inlet).Temp, "HeatPumpAirToWater::calcLoadSideHeatTransfer()");
@@ -1281,8 +1278,8 @@ TEST_F(EnergyPlusFixture, calcPowerUsage_AWHP)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
     auto &PLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
     PLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
-    thisAWHP.loadSidePlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    thisAWHP.loadSidePlantLoc.comp = &PLHPPlantLoadSideComp;
+    thisAWHP.loadSidePlantLoc = {1, DataPlant::LoopSideLocation::Supply, 1, 1}; 
+    PlantUtilities::SetPlantLocationLinks(*state, thisAWHP.loadSidePlantLoc);
     thisAWHP.loadSidePlantLoc.comp->CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
     thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
 
@@ -1405,12 +1402,8 @@ TEST_F(EnergyPlusFixture, calcOpMode_AWHP)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
     auto &PLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
     PLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
-    thisAWHP.loadSidePlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    thisAWHP.loadSidePlantLoc.comp = &PLHPPlantLoadSideComp;
-    thisAWHP.loadSidePlantLoc.loopNum = 1;
-    thisAWHP.loadSidePlantLoc.loopSideNum = EnergyPlus::DataPlant::LoopSideLocation::Supply;
-    thisAWHP.loadSidePlantLoc.branchNum = 1;
-    thisAWHP.loadSidePlantLoc.compNum = 1;
+    thisAWHP.loadSidePlantLoc = {1, EnergyPlus::DataPlant::LoopSideLocation::Supply, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, thisAWHP.loadSidePlantLoc);
     thisAWHP.OperationModeEMSOverrideOn = false;
 
     state->dataPlnt->PlantLoop(2).FluidName = "WATER";
@@ -1421,12 +1414,8 @@ TEST_F(EnergyPlusFixture, calcOpMode_AWHP)
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
     auto &companionPLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
     companionPLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterHeating;
-    companionAWHP.loadSidePlantLoc.loop = &state->dataPlnt->PlantLoop(2);
-    companionAWHP.loadSidePlantLoc.comp = &companionPLHPPlantLoadSideComp;
-    companionAWHP.loadSidePlantLoc.loopNum = 2;
-    companionAWHP.loadSidePlantLoc.loopSideNum = EnergyPlus::DataPlant::LoopSideLocation::Supply;
-    companionAWHP.loadSidePlantLoc.branchNum = 1;
-    companionAWHP.loadSidePlantLoc.compNum = 1;
+    companionAWHP.loadSidePlantLoc = {2, EnergyPlus::DataPlant::LoopSideLocation::Supply, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, companionAWHP.loadSidePlantLoc);
     companionAWHP.OperationModeEMSOverrideOn = false;
 
     thisAWHP.capFuncTempCurveIndex[0] = 1;

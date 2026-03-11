@@ -2106,6 +2106,7 @@ void InitSetPointManagers(EnergyPlusData &state)
                                                     auto const &comp2 = branch2.Comp(CompNum2);
                                                     if (comp2.Type == ChillerType) {
                                                         spmCET->plantPloc = {LoopNum2, LoopSideLocation::Supply, BranchNum2, CompNum2};
+                                                        PlantUtilities::SetPlantLocationLinks(state, spmCET->plantPloc);
                                                         break;
                                                     }
                                                 }
@@ -2113,6 +2114,7 @@ void InitSetPointManagers(EnergyPlusData &state)
                                         }
                                         spmCET->chillerType = ChillerType;
                                         spmCET->demandPloc = {LoopNum, LoopSideLocation::Demand, BranchNum, CompNum};
+                                        PlantUtilities::SetPlantLocationLinks(state, spmCET->demandPloc);
                                     } break;
 
                                     default:
@@ -2221,6 +2223,7 @@ void InitSetPointManagers(EnergyPlusData &state)
                                         }
                                         spmIdealCET->chillerType = ChillerType;
                                         spmIdealCET->condenserPumpPloc.loopNum = LoopNum;
+                                        spmIdealCET->condenserPumpPloc.loop = &state.dataPlnt->PlantLoop(LoopNum);
                                     } break;
 
                                     default:

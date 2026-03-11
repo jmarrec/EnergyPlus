@@ -57,6 +57,7 @@
 #include <EnergyPlus/DataEnvironment.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
 #include <EnergyPlus/Plant/PlantManager.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/PlantCondLoopOperation.hh>
 #include <EnergyPlus/SetPointManager.hh>
 
@@ -794,10 +795,7 @@ TEST_F(DistributePlantLoadTest, DistributePlantLoadSequentialDryBulbRB)
     thisOpScheme.Available = true;
 
     PlantLocation this_plantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
-    this_plantLoc.loop = &state->dataPlnt->PlantLoop(this_plantLoc.loopNum);
-    this_plantLoc.side = &this_plantLoc.loop->LoopSide(this_plantLoc.loopSideNum);
-    this_plantLoc.branch = &this_plantLoc.side->Branch(this_plantLoc.branchNum);
-    this_plantLoc.comp = &this_plantLoc.branch->Comp(this_plantLoc.compNum);
+    PlantUtilities::SetPlantLocationLinks(*state, this_plantLoc);
     
     DistributePlantLoadTest::ResetLoads();
     Real64 loopDemand = 550.0;
@@ -854,10 +852,7 @@ TEST_F(DistributePlantLoadTest, DistributePlantLoadSequentialDryBulbTDB)
     thisOpScheme.Available = true;
 
     PlantLocation this_plantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
-    this_plantLoc.loop = &state->dataPlnt->PlantLoop(this_plantLoc.loopNum);
-    this_plantLoc.side = &this_plantLoc.loop->LoopSide(this_plantLoc.loopSideNum);
-    this_plantLoc.branch = &this_plantLoc.side->Branch(this_plantLoc.branchNum);
-    this_plantLoc.comp = &this_plantLoc.branch->Comp(this_plantLoc.compNum);
+    PlantUtilities::SetPlantLocationLinks(*state, this_plantLoc);
 
     DistributePlantLoadTest::ResetLoads();
     Real64 loopDemand = 550.0;

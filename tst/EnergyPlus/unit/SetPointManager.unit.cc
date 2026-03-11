@@ -72,6 +72,7 @@
 #include <EnergyPlus/MixedAir.hh>
 #include <EnergyPlus/NodeInputManager.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/ReturnAirPathManager.hh>
 #include <EnergyPlus/ScheduleManager.hh>
@@ -473,16 +474,10 @@ TEST_F(EnergyPlusFixture, SetPointManager_DefineCondEntSetPointManager)
     thisSPM.optCondenserEnteringTempCurveNum = Curve::GetCurveIndex(*state, "OPTCONDENTCURVENAME");
     thisSPM.condenserEnteringTempSched = Sched::GetSchedule(*state, "CONDENSER LOOP TEMP SCHEDULE");
     thisSPM.plantPloc = {chwLoopIndex, DataPlant::LoopSideLocation::Supply, chillerBranchChW, chillerCompIndex};
-    thisSPM.plantPloc.loop = &state->dataPlnt->PlantLoop(thisSPM.plantPloc.loopNum);
-    thisSPM.plantPloc.side = &thisSPM.plantPloc.loop->LoopSide(thisSPM.plantPloc.loopSideNum);
-    thisSPM.plantPloc.branch = &thisSPM.plantPloc.side->Branch(thisSPM.plantPloc.branchNum);
-    thisSPM.plantPloc.comp = &thisSPM.plantPloc.branch->Comp(thisSPM.plantPloc.compNum);
+    PlantUtilities::SetPlantLocationLinks(*state, thisSPM.plantPloc);
     
     thisSPM.demandPloc = {condLoopIndex, DataPlant::LoopSideLocation::Demand, chillerBranchCW, chillerCompIndex};
-    thisSPM.demandPloc.loop = &state->dataPlnt->PlantLoop(thisSPM.demandPloc.loopNum);
-    thisSPM.demandPloc.side = &thisSPM.demandPloc.loop->LoopSide(thisSPM.demandPloc.loopSideNum);
-    thisSPM.demandPloc.branch = &thisSPM.demandPloc.side->Branch(thisSPM.demandPloc.branchNum);
-    thisSPM.demandPloc.comp = &thisSPM.demandPloc.branch->Comp(thisSPM.demandPloc.compNum);
+    PlantUtilities::SetPlantLocationLinks(*state, thisSPM.demandPloc);
     
     thisSPM.chillerType = DataPlant::PlantEquipmentType::Chiller_Electric;
 

@@ -269,19 +269,13 @@ TEST_F(EnergyPlusFixture, TestPullCompInterconnectTrigger)
 
     // We'll set up two plant loops, the one to test and the connected one
     // each one will need a single loop side, but no branches are checked or anything like that
-    int thisLoopNum = 1, thisBranchNum = 1, thisCompNum = 1;
-    DataPlant::LoopSideLocation thisLoopSideNum = DataPlant::LoopSideLocation::Demand;
-    PlantLocation plantLoc{thisLoopNum, thisLoopSideNum, thisBranchNum, thisCompNum};
-    plantLoc.loop = &state->dataPlnt->PlantLoop(plantLoc.loopNum);
-    plantLoc.side = &plantLoc.loop->LoopSide(plantLoc.loopSideNum);
+    PlantLocation plantLoc{1, DataPlant::LoopSideLocation::Demand, 0, 0};
+    PlantUtilities::SetPlantLocationLinks(*state, plantLoc);
     // plantLoc.branch = &plantLoc.side->Branch(plantLoc.branchNum);
     // plantLoc.comp = &plantLoc.branch->Comp(plantLoc.compNum);
     
-    int connectedLoopNum = 2;
-    DataPlant::LoopSideLocation connectedLoopSideNum = DataPlant::LoopSideLocation::Demand;
-    PlantLocation connectedPlantLoc{connectedLoopNum, connectedLoopSideNum, 0, 0};
-    connectedPlantLoc.loop = &state->dataPlnt->PlantLoop(connectedPlantLoc.loopNum);
-    connectedPlantLoc.side = &connectedPlantLoc.loop->LoopSide(connectedPlantLoc.loopSideNum);
+    PlantLocation connectedPlantLoc{2, DataPlant::LoopSideLocation::Demand, 0, 0};
+    PlantUtilities::SetPlantLocationLinks(*state, connectedPlantLoc);
     
     int criteriaCheckIndex1 = 0, criteriaCheckIndex2 = 0, criteriaCheckIndex3 = 0;
     Real64 criteriaValue1 = 0.0, criteriaValue2 = 0.0, criteriaValue3 = 0.0;

@@ -193,15 +193,8 @@ namespace DataPlant {
                 for (int BranchNum = 1; BranchNum <= this_plant_loopside.TotalBranches; ++BranchNum) {
                     for (int CompNum = 1; CompNum <= this_plant_loopside.Branch(BranchNum).TotalComponents; ++CompNum) {
                         if (this_plant_loopside.Branch(BranchNum).Comp(CompNum).Type == DataPlant::PlantEquipmentType::PlantLoadProfile) {
-                            PlantLocation foundLoc;
-                            foundLoc.loopNum = LoopNum;
-                            foundLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-                            foundLoc.branchNum = BranchNum;
-                            foundLoc.compNum = CompNum;
-                            foundLoc.loop = &state.dataPlnt->PlantLoop(foundLoc.loopNum);
-                            foundLoc.side = &foundLoc.loop->LoopSide(foundLoc.loopSideNum);
-                            foundLoc.branch = &foundLoc.side->Branch(foundLoc.branchNum);
-                            foundLoc.comp = &foundLoc.branch->Comp(foundLoc.compNum);
+                            PlantLocation foundLoc{LoopNum, DataPlant::LoopSideLocation::Demand, BranchNum, CompNum};
+                            PlantUtilities::SetPlantLocationLinks(state, foundLoc);
                             
                             PlantLoadProfileComps(loadProfileCompNum) = foundLoc;
                             ++loadProfileCompNum;
@@ -236,15 +229,8 @@ namespace DataPlant {
                 for (int BranchNum = 1; BranchNum <= this_plant_loopside.TotalBranches; ++BranchNum) {
                     for (int CompNum = 1; CompNum <= this_plant_loopside.Branch(BranchNum).TotalComponents; ++CompNum) {
                         if (this_plant_loopside.Branch(BranchNum).Comp(CompNum).Type == DataPlant::PlantEquipmentType::Boiler_Simple) {
-                            PlantLocation foundLoc;
-                            foundLoc.loopNum = LoopNum;
-                            foundLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
-                            foundLoc.branchNum = BranchNum;
-                            foundLoc.compNum = CompNum;
-                            foundLoc.loop = &state.dataPlnt->PlantLoop(foundLoc.loopNum);
-                            foundLoc.side = &foundLoc.loop->LoopSide(foundLoc.loopSideNum);
-                            foundLoc.branch = &foundLoc.side->Branch(foundLoc.branchNum);
-                            foundLoc.comp = &foundLoc.branch->Comp(foundLoc.compNum);
+                            PlantLocation foundLoc{LoopNum, DataPlant::LoopSideLocation::Supply, BranchNum, CompNum};
+                            PlantUtilities::SetPlantLocationLinks(state, foundLoc);
                             PlantBoilerComps(BoilerCompNum) = foundLoc;
                             ++BoilerCompNum;
                         }
@@ -280,15 +266,8 @@ namespace DataPlant {
                 for (int BranchNum = 1; BranchNum <= this_plant_loopside.TotalBranches; ++BranchNum) {
                     for (int CompNum = 1; CompNum <= this_plant_loopside.Branch(BranchNum).TotalComponents; ++CompNum) {
                         if (this_plant_loopside.Branch(BranchNum).Comp(CompNum).Type == DataPlant::PlantEquipmentType::FluidToFluidPlantHtExchg) {
-                            PlantLocation foundLoc;
-                            foundLoc.loopNum = LoopNum;
-                            foundLoc.loopSideNum = DataPlant::LoopSideLocation::Supply;
-                            foundLoc.branchNum = BranchNum;
-                            foundLoc.compNum = CompNum;
-                            foundLoc.loop = &state.dataPlnt->PlantLoop(foundLoc.loopNum);
-                            foundLoc.side = &foundLoc.loop->LoopSide(foundLoc.loopSideNum);
-                            foundLoc.branch = &foundLoc.side->Branch(foundLoc.branchNum);
-                            foundLoc.comp = &foundLoc.branch->Comp(foundLoc.compNum);
+                            PlantLocation foundLoc{LoopNum, DataPlant::LoopSideLocation::Supply, BranchNum, CompNum};
+                            PlantUtilities::SetPlantLocationLinks(state, foundLoc);
                             PlantHXComps(HXCompNum) = foundLoc;
                             ++HXCompNum;
 
