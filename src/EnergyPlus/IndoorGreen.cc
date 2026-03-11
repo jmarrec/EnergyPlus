@@ -444,6 +444,11 @@ namespace IndoorGreen {
             ig.ZVPD = (vpSat - vp) * 1000; // Pa
             LAI_Cal = ig.LeafArea / state.dataSurface->Surface(ig.SurfPtr).Area;
             LAI = LAI_Cal;
+            if (LAI_Cal > 10.0) {
+                LAI = 10.0;
+                ShowSevereError(state,
+                                EnergyPlus::format("Maximum indoor living wall leaf area index (LAI) =10.0 is used,calculated LAI is {}", LAI_Cal));
+            }
             switch (ig.lightingMethod) {
             case LightingMethod::LED: {
                 ig.ZPPFD = ig.ledSched->getCurrentVal() * ig.LEDNominalPPFD; // PPFD
