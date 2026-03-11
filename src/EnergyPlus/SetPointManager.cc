@@ -2156,12 +2156,15 @@ void InitSetPointManagers(EnergyPlusData &state)
                                         ErrorsFound = true;
                                     } else if (InitType == PlantEquipmentType::CoolingTower_TwoSpd ||
                                                InitType == PlantEquipmentType::CoolingTower_VarSpd) {
-                                        spmIdealCET->towerPlocs.push_back(PlantLocation(LoopNum, LoopSideLocation::Supply, BranchNum, CompNum));
+                                        PlantLocation towerPloc{LoopNum, LoopSideLocation::Supply, BranchNum, CompNum};
+                                        PlantUtilities::SetPlantLocationLinks(state, towerPloc);
+                                        spmIdealCET->towerPlocs.push_back(towerPloc);
                                         spmIdealCET->numTowers++;
                                     }
                                     // Scan the pump on the condenser water loop
                                     if (InitType == PlantEquipmentType::PumpVariableSpeed || InitType == PlantEquipmentType::PumpConstantSpeed) {
                                         spmIdealCET->condenserPumpPloc = {LoopNum, LoopSideLocation::Supply, BranchNum, CompNum};
+                                        PlantUtilities::SetPlantLocationLinks(state, spmIdealCET->condenserPumpPloc);
                                     }
                                 }
                             }
@@ -2198,6 +2201,7 @@ void InitSetPointManagers(EnergyPlusData &state)
                                                     if (InitType == ChillerType) {
                                                         ++NumChiller;
                                                         spmIdealCET->chillerPloc = {LoopNum2, LoopSideLocation::Supply, BranchNum2, CompNum2};
+                                                        PlantUtilities::SetPlantLocationLinks(state, spmIdealCET->chillerPloc);
                                                         // Scan the pump on the chilled water loop
                                                         for (int BranchNum3 = 1; BranchNum3 <= supplySide2.TotalBranches; ++BranchNum3) {
                                                             auto &branch3 = supplySide2.Branch(BranchNum3);
@@ -2208,6 +2212,7 @@ void InitSetPointManagers(EnergyPlusData &state)
                                                                     InitType == PlantEquipmentType::PumpConstantSpeed) {
                                                                     spmIdealCET->chilledWaterPumpPloc = {
                                                                         LoopNum2, LoopSideLocation::Supply, BranchNum3, CompNum3};
+                                                                    PlantUtilities::SetPlantLocationLinks(state, spmIdealCET->chilledWaterPumpPloc);
                                                                 }
                                                             }
                                                         }
@@ -4072,7 +4077,7 @@ void SPMIdealCondenserEnteringTemp::SetupMeteredVarsForSetPt(EnergyPlusData &sta
     this->chilledWaterPumpVar.Num = meteredVars(1).num;
 
     for (int i = 1; i <= this->numTowers; i++) {
-      auto &towerComp = towerPlocs(1).side->Branch(this->towerPlocs(i).branchNum).Comp(this->towerPlocs(i).compNum);
+        auto &towerComp = towerPlocs(1).side->Branch(this->towerPlocs(i).branchNum).Comp(this->towerPlocs(i).compNum);
         NumVariables = GetNumMeteredVariables(state, towerComp.TypeOf, towerComp.Name);
         meteredVars.allocate(NumVariables);
 
