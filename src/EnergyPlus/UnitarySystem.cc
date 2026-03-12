@@ -4844,6 +4844,7 @@ namespace UnitarySystems {
                                 this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
                                 this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
                                 this->m_HeatPump = true;
+                                // FIXME: ReportCoolingCoilCrankcasePower already handled in DXCoils.cc?
                             }
                         }
 
@@ -4924,6 +4925,12 @@ namespace UnitarySystems {
                             this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
                             this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
                             this->m_HeatPump = true;
+                            if (this->m_HeatingCoilType_Num == HVAC::Coil_HeatingAirToAirVariableSpeed ||
+                                this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
+                                this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
+                                auto &newCoil = state.dataCoilCoolingDX->coilCoolingDXs[this->m_CoolingCoilIndex];
+                                newCoil.performance->ReportCoolingCoilCrankcasePower = false;
+                            }
                         }
                     }
                 }
@@ -4969,6 +4976,7 @@ namespace UnitarySystems {
                                 this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
                                 this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
                                 this->m_HeatPump = true;
+                                // FIXME: ReportCoolingCoilCrankcasePower already handled in DXCoils.cc?
                             }
                         }
                     }
@@ -5247,6 +5255,12 @@ namespace UnitarySystems {
                         this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
                         this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
                         this->m_HeatPump = true;
+                        if (this->m_HeatingCoilType_Num == HVAC::Coil_HeatingAirToAirVariableSpeed ||
+                            this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
+                            this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
+                            auto &thisCoolCoil = state.dataVariableSpeedCoils->VarSpeedCoil(this->m_CoolingCoilIndex);
+                            thisCoolCoil.ReportCoolingCoilCrankcasePower = false;
+                        }
                     }
                 }
 
@@ -5285,6 +5299,7 @@ namespace UnitarySystems {
                         this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
                         this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
                         this->m_HeatPump = true;
+                        // FIXME: ReportCoolingCoilCrankcasePower already handled in DXCoils.cc?
                     }
                 }
 
