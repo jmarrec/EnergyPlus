@@ -4077,7 +4077,7 @@ void SPMIdealCondenserEnteringTemp::SetupMeteredVarsForSetPt(EnergyPlusData &sta
     this->chilledWaterPumpVar.Num = meteredVars(1).num;
 
     for (int i = 1; i <= this->numTowers; i++) {
-        auto &towerComp = towerPlocs(1).side->Branch(this->towerPlocs(i).branchNum).Comp(this->towerPlocs(i).compNum);
+        auto &towerComp = towerPlocs(i).side->Branch(this->towerPlocs(i).branchNum).Comp(this->towerPlocs(i).compNum);
         NumVariables = GetNumMeteredVariables(state, towerComp.TypeOf, towerComp.Name);
         meteredVars.allocate(NumVariables);
 

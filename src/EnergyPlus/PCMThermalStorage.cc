@@ -331,7 +331,7 @@ namespace PCMStorage {
         if (mUseReq > 0.0) {
             useOutlet.Temp = useOutletTemp;
         } else if (mPlantReq > 0.0) {
-          plantOutlet.Temp = std::min(plantOutletTemp, state.dataPlnt->PlantLoop[this->sourcePlantLoc.loopNum].MaxTemp); // Why is this in brackets?
+          plantOutlet.Temp = std::min(plantOutletTemp, state.dataPlnt->PlantLoop(this->sourcePlantLoc.loopNum).MaxTemp); // This was in brackets, probably a bug
         }
 
         // Recompute heat-transfer rates using the requested flows (W)

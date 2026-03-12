@@ -2586,7 +2586,7 @@ void InitLoadDistribution(EnergyPlusData &state, bool const FirstHVACIteration)
     bool errFlag2;
     Real64 HighestRange;
 
-    // Object Data≈ç
+    // Object Data
 
     errFlag2 = false;
     // Get Input
