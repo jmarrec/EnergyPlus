@@ -3937,7 +3937,7 @@ namespace Window {
         }
 
         GapHeight = s_surf->Surface(SurfNum).Height;
-        GapDepth = wm->gaps[IGapInc].width; // What the what?
+        GapDepth = wm->gaps[IGapInc].width; // IGapInc is supposed to be an increment, so that would make this index 0 + iGapInc. Why?
         AGap = GapDepth * s_surf->Surface(SurfNum).Width;
 
         ATopGap = matShadingDevice->topOpeningMult * AGap;
