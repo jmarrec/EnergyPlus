@@ -149,15 +149,15 @@ namespace GeneratorFuelSupply {
 
                 state.dataGenerator->FuelSupply(FuelSupNum).NodeName = AlphArray(3);
                 state.dataGenerator->FuelSupply(FuelSupNum).NodeNum =
-                    NodeInputManager::GetOnlySingleNode(state,
+                    Node::GetOnlySingleNode(state,
                                                         AlphArray(3),
                                                         ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::GeneratorFuelSupply,
+                                                        Node::ConnectionObjectType::GeneratorFuelSupply,
                                                         AlphArray(1),
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Sensor,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        DataLoopNode::ObjectIsNotParent);
+                                                        Node::NodeFluidType::Air,
+                                                        Node::ConnectionType::Sensor,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsNotParent);
 
                 if (state.dataGenerator->FuelSupply(FuelSupNum).FuelTempMode == DataGenerators::FuelTemperatureMode::FuelInTempSchedule) {
                     if ((state.dataGenerator->FuelSupply(FuelSupNum).sched = Sched::GetSchedule(state, AlphArray(4))) == nullptr) {

@@ -79,9 +79,6 @@ namespace EnergyPlus::MixerComponent {
 // and sets that to the outlet conditions.  For the State Properties
 // it just takes the flow weighted averages of them.
 
-// Using/Aliasing
-using namespace DataLoopNode;
-
 void SimAirMixer(EnergyPlusData &state, std::string_view CompName, int &CompIndex)
 {
 
@@ -164,7 +161,7 @@ void GetMixerInput(EnergyPlusData &state)
     // Uses the status flags to trigger events.
 
     // Using/Aliasing
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetOnlySingleNode;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
     static constexpr std::string_view RoutineName("GetMixerInput: "); // include trailing blank space
@@ -222,12 +219,12 @@ void GetMixerInput(EnergyPlusData &state)
         state.dataMixerComponent->MixerCond(MixerNum).OutletNode = GetOnlySingleNode(state,
                                                                                      AlphArray(2),
                                                                                      ErrorsFound,
-                                                                                     DataLoopNode::ConnectionObjectType::AirLoopHVACZoneMixer,
+                                                                                     Node::ConnectionObjectType::AirLoopHVACZoneMixer,
                                                                                      AlphArray(1),
-                                                                                     DataLoopNode::NodeFluidType::Air,
-                                                                                     DataLoopNode::ConnectionType::Outlet,
-                                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                                     ObjectIsNotParent);
+                                                                                     Node::NodeFluidType::Air,
+                                                                                     Node::ConnectionType::Outlet,
+                                                                                     Node::CompFluidStream::Primary,
+                                                                                     Node::ObjectIsNotParent);
         state.dataMixerComponent->MixerCond(MixerNum).NumInletNodes = NumAlphas - 2;
 
         for (auto &e : state.dataMixerComponent->MixerCond) {
@@ -265,12 +262,12 @@ void GetMixerInput(EnergyPlusData &state)
                 GetOnlySingleNode(state,
                                   AlphArray(2 + NodeNum),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::AirLoopHVACZoneMixer,
+                                  Node::ConnectionObjectType::AirLoopHVACZoneMixer,
                                   AlphArray(1),
-                                  DataLoopNode::NodeFluidType::Air,
-                                  DataLoopNode::ConnectionType::Inlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  ObjectIsNotParent);
+                                  Node::NodeFluidType::Air,
+                                  Node::ConnectionType::Inlet,
+                                  Node::CompFluidStream::Primary,
+                                  Node::ObjectIsNotParent);
             if (lAlphaBlanks(2 + NodeNum)) {
                 ShowSevereError(state, EnergyPlus::format("{} is Blank, {} = {}", cAlphaFields(2 + NodeNum), CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;

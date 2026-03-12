@@ -215,9 +215,8 @@ namespace BaseboardRadiator {
         // Standard input processor calls.
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
-        using NodeInputManager::GetOnlySingleNode;
-        using namespace DataLoopNode;
+        using Node::TestCompSet;
+        using Node::GetOnlySingleNode;
         using GlobalNames::VerifyUniqueBaseboardName;
         using namespace DataSizing;
 
@@ -281,24 +280,24 @@ namespace BaseboardRadiator {
                 thisBaseboard.WaterInletNode = GetOnlySingleNode(state,
                                                                  s_ipsc->cAlphaArgs(3),
                                                                  ErrorsFound,
-                                                                 DataLoopNode::ConnectionObjectType::ZoneHVACBaseboardConvectiveWater,
+                                                                 Node::ConnectionObjectType::ZoneHVACBaseboardConvectiveWater,
                                                                  s_ipsc->cAlphaArgs(1),
-                                                                 DataLoopNode::NodeFluidType::Water,
-                                                                 DataLoopNode::ConnectionType::Inlet,
-                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                 ObjectIsNotParent);
+                                                                 Node::NodeFluidType::Water,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
                 // get outlet node number
                 thisBaseboard.WaterOutletNode = GetOnlySingleNode(state,
                                                                   s_ipsc->cAlphaArgs(4),
                                                                   ErrorsFound,
-                                                                  DataLoopNode::ConnectionObjectType::ZoneHVACBaseboardConvectiveWater,
+                                                                  Node::ConnectionObjectType::ZoneHVACBaseboardConvectiveWater,
                                                                   s_ipsc->cAlphaArgs(1),
-                                                                  DataLoopNode::NodeFluidType::Water,
-                                                                  DataLoopNode::ConnectionType::Outlet,
-                                                                  NodeInputManager::CompFluidStream::Primary,
-                                                                  ObjectIsNotParent);
+                                                                  Node::NodeFluidType::Water,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
 
-                TestCompSet(state, cCMO_BBRadiator_Water, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(3), s_ipsc->cAlphaArgs(4), "Hot Water Nodes");
+                Node::TestCompSet(state, cCMO_BBRadiator_Water, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(3), s_ipsc->cAlphaArgs(4), "Hot Water Nodes");
 
                 // Determine steam baseboard radiator system heating design capacity sizing method
                 if (Util::SameString(s_ipsc->cAlphaArgs(iHeatCAPMAlphaNum), "HeatingDesignCapacity")) {

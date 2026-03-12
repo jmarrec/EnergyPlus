@@ -494,26 +494,26 @@ namespace PlantComponentTemperatureSources {
             state.dataPlantCompTempSrc->WaterSource(SourceNum).Name = state.dataIPShortCut->cAlphaArgs(1);
 
             state.dataPlantCompTempSrc->WaterSource(SourceNum).InletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
+                Node::GetOnlySingleNode(state,
                                                     state.dataIPShortCut->cAlphaArgs(2),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::PlantComponentTemperatureSource,
+                                                    Node::ConnectionObjectType::PlantComponentTemperatureSource,
                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                                                    Node::NodeFluidType::Water,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
             state.dataPlantCompTempSrc->WaterSource(SourceNum).OutletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
+                Node::GetOnlySingleNode(state,
                                                     state.dataIPShortCut->cAlphaArgs(3),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::PlantComponentTemperatureSource,
+                                                    Node::ConnectionObjectType::PlantComponentTemperatureSource,
                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
-            BranchNodeConnections::TestCompSet(state,
+                                                    Node::NodeFluidType::Water,
+                                                    Node::ConnectionType::Outlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
+            Node::TestCompSet(state,
                                                cCurrentModuleObject,
                                                state.dataIPShortCut->cAlphaArgs(1),
                                                state.dataIPShortCut->cAlphaArgs(2),

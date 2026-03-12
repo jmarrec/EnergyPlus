@@ -2186,8 +2186,8 @@ namespace HeatBalanceManager {
         // load input data for Outdoor Air Node for zones
 
         // Using/Aliasing
-        using DataLoopNode::ObjectIsParent;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::ObjectIsParent;
+        using Node::GetOnlySingleNode;
         using OutAirNodeManager::CheckOutAirNodeNumber;
 
         //-----------------------------------------------------------------------
@@ -2247,11 +2247,11 @@ namespace HeatBalanceManager {
                 int NodeNum = GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(3),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::ZonePropertyLocalEnvironment,
+                                                Node::ConnectionObjectType::ZonePropertyLocalEnvironment,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Air,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Primary,
+                                                Node::NodeFluidType::Air,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Primary,
                                                 ObjectIsParent);
                 if (NodeNum == 0 && CheckOutAirNodeNumber(state, NodeNum)) {
                     ShowSevereError(state,
@@ -3334,7 +3334,7 @@ namespace HeatBalanceManager {
 
         // Using/Aliasing
         using EconomicTariff::UpdateUtilityBills; // added for computing annual utility costs
-        using NodeInputManager::CalcMoreNodeInfo;
+        using Node::CalcMoreNodeInfo;
         using OutputReportTabular::UpdateTabularReports;
 
         Sched::ReportScheduleVals(state);

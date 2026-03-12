@@ -118,8 +118,6 @@ namespace EnergyPlus::WaterCoils {
 // To encapsulate the data and algorithms required to
 // manage the WaterCoil System Component
 
-using namespace DataLoopNode;
-
 using Psychrometrics::PsyCpAirFnW;
 using Psychrometrics::PsyHFnTdbRhPb;
 using Psychrometrics::PsyHFnTdbW;
@@ -351,42 +349,42 @@ void GetWaterCoilInput(EnergyPlusData &state)
         waterCoil.UACoil = NumArray(1);
         waterCoil.UACoilVariable = waterCoil.UACoil;
         waterCoil.MaxWaterVolFlowRate = NumArray(2);
-        waterCoil.WaterInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+        waterCoil.WaterInletNodeNum = Node::GetOnlySingleNode(state,
                                                                           AlphArray(3),
                                                                           ErrorsFound,
-                                                                          DataLoopNode::ConnectionObjectType::CoilHeatingWater,
+                                                                          Node::ConnectionObjectType::CoilHeatingWater,
                                                                           AlphArray(1),
-                                                                          DataLoopNode::NodeFluidType::Water,
-                                                                          DataLoopNode::ConnectionType::Inlet,
-                                                                          NodeInputManager::CompFluidStream::Secondary,
-                                                                          ObjectIsNotParent);
-        waterCoil.WaterOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                          Node::NodeFluidType::Water,
+                                                                          Node::ConnectionType::Inlet,
+                                                                          Node::CompFluidStream::Secondary,
+                                                              Node::ObjectIsNotParent);
+        waterCoil.WaterOutletNodeNum = Node::GetOnlySingleNode(state,
                                                                            AlphArray(4),
                                                                            ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::CoilHeatingWater,
+                                                                           Node::ConnectionObjectType::CoilHeatingWater,
                                                                            AlphArray(1),
-                                                                           DataLoopNode::NodeFluidType::Water,
-                                                                           DataLoopNode::ConnectionType::Outlet,
-                                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                                           ObjectIsNotParent);
-        waterCoil.AirInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                           Node::NodeFluidType::Water,
+                                                                           Node::ConnectionType::Outlet,
+                                                                           Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
+        waterCoil.AirInletNodeNum = Node::GetOnlySingleNode(state,
                                                                         AlphArray(5),
                                                                         ErrorsFound,
-                                                                        DataLoopNode::ConnectionObjectType::CoilHeatingWater,
+                                                                        Node::ConnectionObjectType::CoilHeatingWater,
                                                                         AlphArray(1),
-                                                                        DataLoopNode::NodeFluidType::Air,
-                                                                        DataLoopNode::ConnectionType::Inlet,
-                                                                        NodeInputManager::CompFluidStream::Primary,
-                                                                        ObjectIsNotParent);
-        waterCoil.AirOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                        Node::NodeFluidType::Air,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
+        waterCoil.AirOutletNodeNum = Node::GetOnlySingleNode(state,
                                                                          AlphArray(6),
                                                                          ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::CoilHeatingWater,
+                                                                         Node::ConnectionObjectType::CoilHeatingWater,
                                                                          AlphArray(1),
-                                                                         DataLoopNode::NodeFluidType::Air,
-                                                                         DataLoopNode::ConnectionType::Outlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         ObjectIsNotParent);
+                                                                         Node::NodeFluidType::Air,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
 
         if (AlphArray(7) == "NOMINALCAPACITY") { // not "UFACTORTIMESAREAANDDESIGNWATERFLOWRATE"
             waterCoil.CoilPerfInpMeth = state.dataWaterCoils->NomCap;
@@ -435,8 +433,8 @@ void GetWaterCoilInput(EnergyPlusData &state)
             ErrorsFound = true;
         }
 
-        BranchNodeConnections::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(3), AlphArray(4), "Water Nodes");
-        BranchNodeConnections::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(5), AlphArray(6), "Air Nodes");
+        Node::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(3), AlphArray(4), "Water Nodes");
+        Node::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(5), AlphArray(6), "Air Nodes");
 
         // Setup the Simple Heating Coil reporting variables
         // CurrentModuleObject = "Coil:Heating:Water"
@@ -582,42 +580,42 @@ void GetWaterCoilInput(EnergyPlusData &state)
         } else {
             waterCoil.UseDesignWaterDeltaTemp = false;
         }
-        waterCoil.WaterInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+        waterCoil.WaterInletNodeNum = Node::GetOnlySingleNode(state,
                                                                           AlphArray(3),
                                                                           ErrorsFound,
-                                                                          DataLoopNode::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
+                                                                          Node::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
                                                                           AlphArray(1),
-                                                                          DataLoopNode::NodeFluidType::Water,
-                                                                          DataLoopNode::ConnectionType::Inlet,
-                                                                          NodeInputManager::CompFluidStream::Secondary,
-                                                                          ObjectIsNotParent);
-        waterCoil.WaterOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                          Node::NodeFluidType::Water,
+                                                                          Node::ConnectionType::Inlet,
+                                                                          Node::CompFluidStream::Secondary,
+                                                              Node::ObjectIsNotParent);
+        waterCoil.WaterOutletNodeNum = Node::GetOnlySingleNode(state,
                                                                            AlphArray(4),
                                                                            ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
+                                                                           Node::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
                                                                            AlphArray(1),
-                                                                           DataLoopNode::NodeFluidType::Water,
-                                                                           DataLoopNode::ConnectionType::Outlet,
-                                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                                           ObjectIsNotParent);
-        waterCoil.AirInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                           Node::NodeFluidType::Water,
+                                                                           Node::ConnectionType::Outlet,
+                                                                           Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
+        waterCoil.AirInletNodeNum = Node::GetOnlySingleNode(state,
                                                                         AlphArray(5),
                                                                         ErrorsFound,
-                                                                        DataLoopNode::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
+                                                                        Node::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
                                                                         AlphArray(1),
-                                                                        DataLoopNode::NodeFluidType::Air,
-                                                                        DataLoopNode::ConnectionType::Inlet,
-                                                                        NodeInputManager::CompFluidStream::Primary,
-                                                                        ObjectIsNotParent);
-        waterCoil.AirOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                        Node::NodeFluidType::Air,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
+        waterCoil.AirOutletNodeNum = Node::GetOnlySingleNode(state,
                                                                          AlphArray(6),
                                                                          ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
+                                                                         Node::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
                                                                          AlphArray(1),
-                                                                         DataLoopNode::NodeFluidType::Air,
-                                                                         DataLoopNode::ConnectionType::Outlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         ObjectIsNotParent);
+                                                                         Node::NodeFluidType::Air,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
 
         // A7 ; \field Name of Water Storage Tank for Condensate Collection
         waterCoil.CondensateCollectName = AlphArray(7);
@@ -634,8 +632,8 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                    waterCoil.CondensateTankSupplyARRID);
         }
 
-        BranchNodeConnections::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(3), AlphArray(4), "Water Nodes");
-        BranchNodeConnections::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(5), AlphArray(6), "Air Nodes");
+        Node::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(3), AlphArray(4), "Water Nodes");
+        Node::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(5), AlphArray(6), "Air Nodes");
 
         // Setup Report variables for the Detailed Flat Fin Cooling Coils
         // CurrentModuleObject = "Coil:Cooling:Water:DetailedGeometry"
@@ -779,42 +777,42 @@ void GetWaterCoilInput(EnergyPlusData &state)
             waterCoil.UseDesignWaterDeltaTemp = false;
         }
 
-        waterCoil.WaterInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+        waterCoil.WaterInletNodeNum = Node::GetOnlySingleNode(state,
                                                                           AlphArray(3),
                                                                           ErrorsFound,
-                                                                          DataLoopNode::ConnectionObjectType::CoilCoolingWater,
+                                                                          Node::ConnectionObjectType::CoilCoolingWater,
                                                                           AlphArray(1),
-                                                                          DataLoopNode::NodeFluidType::Water,
-                                                                          DataLoopNode::ConnectionType::Inlet,
-                                                                          NodeInputManager::CompFluidStream::Secondary,
-                                                                          ObjectIsNotParent);
-        waterCoil.WaterOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                          Node::NodeFluidType::Water,
+                                                                          Node::ConnectionType::Inlet,
+                                                                          Node::CompFluidStream::Secondary,
+                                                              Node::ObjectIsNotParent);
+        waterCoil.WaterOutletNodeNum = Node::GetOnlySingleNode(state,
                                                                            AlphArray(4),
                                                                            ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::CoilCoolingWater,
+                                                                           Node::ConnectionObjectType::CoilCoolingWater,
                                                                            AlphArray(1),
-                                                                           DataLoopNode::NodeFluidType::Water,
-                                                                           DataLoopNode::ConnectionType::Outlet,
-                                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                                           ObjectIsNotParent);
-        waterCoil.AirInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                           Node::NodeFluidType::Water,
+                                                                           Node::ConnectionType::Outlet,
+                                                                           Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
+        waterCoil.AirInletNodeNum = Node::GetOnlySingleNode(state,
                                                                         AlphArray(5),
                                                                         ErrorsFound,
-                                                                        DataLoopNode::ConnectionObjectType::CoilCoolingWater,
+                                                                        Node::ConnectionObjectType::CoilCoolingWater,
                                                                         AlphArray(1),
-                                                                        DataLoopNode::NodeFluidType::Air,
-                                                                        DataLoopNode::ConnectionType::Inlet,
-                                                                        NodeInputManager::CompFluidStream::Primary,
-                                                                        ObjectIsNotParent);
-        waterCoil.AirOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                        Node::NodeFluidType::Air,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
+        waterCoil.AirOutletNodeNum = Node::GetOnlySingleNode(state,
                                                                          AlphArray(6),
                                                                          ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::CoilCoolingWater,
+                                                                         Node::ConnectionObjectType::CoilCoolingWater,
                                                                          AlphArray(1),
-                                                                         DataLoopNode::NodeFluidType::Air,
-                                                                         DataLoopNode::ConnectionType::Outlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         ObjectIsNotParent);
+                                                                         Node::NodeFluidType::Air,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
 
         // The default is SimpleAnalysis = 2.  and DetailedAnalysis   =1
         if (AlphArray(7) == "DETAILEDANALYSIS") { // not "SIMPLEANALYSIS"
@@ -847,8 +845,8 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                    waterCoil.CondensateTankSupplyARRID);
         }
 
-        BranchNodeConnections::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(3), AlphArray(4), "Water Nodes");
-        BranchNodeConnections::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(5), AlphArray(6), "Air Nodes");
+        Node::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(3), AlphArray(4), "Water Nodes");
+        Node::TestCompSet(state, CurrentModuleObject, AlphArray(1), AlphArray(5), AlphArray(6), "Air Nodes");
 
         // Setup Report variables for the Design input Cooling Coils
         // CurrentModuleObject = "Coil:Cooling:Water"

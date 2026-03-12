@@ -299,27 +299,27 @@ void GetCoolingPanelInput(EnergyPlusData &state)
         }
 
         // Get inlet node number
-        thisCP.WaterInletNode = NodeInputManager::GetOnlySingleNode(state,
+        thisCP.WaterInletNode = Node::GetOnlySingleNode(state,
                                                                     s_ipsc->cAlphaArgs(3),
                                                                     ErrorsFound,
-                                                                    DataLoopNode::ConnectionObjectType::ZoneHVACCoolingPanelRadiantConvectiveWater,
+                                                                    Node::ConnectionObjectType::ZoneHVACCoolingPanelRadiantConvectiveWater,
                                                                     s_ipsc->cAlphaArgs(1),
-                                                                    DataLoopNode::NodeFluidType::Water,
-                                                                    DataLoopNode::ConnectionType::Inlet,
-                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                    DataLoopNode::ObjectIsNotParent);
+                                                                    Node::NodeFluidType::Water,
+                                                                    Node::ConnectionType::Inlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
 
         // Get outlet node number
-        thisCP.WaterOutletNode = NodeInputManager::GetOnlySingleNode(state,
+        thisCP.WaterOutletNode = Node::GetOnlySingleNode(state,
                                                                      s_ipsc->cAlphaArgs(4),
                                                                      ErrorsFound,
-                                                                     DataLoopNode::ConnectionObjectType::ZoneHVACCoolingPanelRadiantConvectiveWater,
+                                                                     Node::ConnectionObjectType::ZoneHVACCoolingPanelRadiantConvectiveWater,
                                                                      s_ipsc->cAlphaArgs(1),
-                                                                     DataLoopNode::NodeFluidType::Water,
-                                                                     DataLoopNode::ConnectionType::Outlet,
-                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                     DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(
+                                                                     Node::NodeFluidType::Water,
+                                                                     Node::ConnectionType::Outlet,
+                                                                     Node::CompFluidStream::Primary,
+                                                                     Node::ObjectIsNotParent);
+        Node::TestCompSet(
             state, cCMO_CoolingPanel_Simple, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(3), s_ipsc->cAlphaArgs(4), "Chilled Water Nodes");
 
         thisCP.RatedWaterTemp = s_ipsc->rNumericArgs(1);

@@ -1732,7 +1732,7 @@ TEST_F(EnergyPlusFixture, processInputForEIRPLHP_TestAirSourceNoOANode)
     // expects fatal error due to same node names
     EIRPlantLoopHeatPump::factory(*state, DataPlant::PlantEquipmentType::HeatPumpEIRCooling, "HP COOLING SIDE");
     bool ErrFound = false;
-    BranchNodeConnections::CheckNodeConnections(*state, ErrFound);
+    Node::CheckNodeConnections(*state, ErrFound);
     // expect error related to OA node not being an OutdoorAirNode
     std::string error_msg = delimited_string({
         "   ** Severe  ** Node Connection Error, Node=\"NODE 1\", Inlet node did not find an appropriate matching \"outlet\" node.",
@@ -1992,12 +1992,12 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
     // Test SingleSetPoint operation first
     loadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
     state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPoint = 30.0;
-    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointHi = DataLoopNode::SensedNodeFlagValue;
-    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointLo = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointHi = Node::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointLo = Node::SensedNodeFlagValue;
     // This is already the case, but I'm being explicit
-    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = DataLoopNode::SensedNodeFlagValue;
-    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi = DataLoopNode::SensedNodeFlagValue;
-    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = Node::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi = Node::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo = Node::SensedNodeFlagValue;
 
     // the init call expects a "from" calling point
     PlantLocation myLocation = PlantLocation(loadSidePlantIndex, DataPlant::LoopSideLocation::Supply, 1, 1);
@@ -2017,17 +2017,17 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
 
     EXPECT_NEAR(30.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
     EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint, 0.001);
-    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointHi, 0.001);
-    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointLo, 0.001);
+    EXPECT_NEAR(Node::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointHi, 0.001);
+    EXPECT_NEAR(Node::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointLo, 0.001);
 
     // test for dual setpoint operation
     loadSideLoop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand;
-    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPoint = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPoint = Node::SensedNodeFlagValue;
     state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointHi = 30.0;
     state->dataLoopNodes->Node(loadSidePlantOutletNodeIndex).TempSetPointLo = 10.0;
-    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = DataLoopNode::SensedNodeFlagValue;
-    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi = DataLoopNode::SensedNodeFlagValue;
-    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPoint = Node::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointHi = Node::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisHeatingPLHP->loadSideNodes.outlet).TempSetPointLo = Node::SensedNodeFlagValue;
 
     // reset the flag to force re-running oneTimeInit
     thisHeatingPLHP->oneTimeInitFlag = true;
@@ -2044,7 +2044,7 @@ TEST_F(EnergyPlusFixture, EIRPLHP_Initialization_SetpointMissing)
     EXPECT_EQ(loadSidePlantOutletNodeIndex, thisHeatingPLHP->setPointNodeNum);
 
     EXPECT_NEAR(10.0, thisHeatingPLHP->getLoadSideOutletSetPointTemp(*state), 0.001);
-    EXPECT_NEAR(DataLoopNode::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint, 0.001);
+    EXPECT_NEAR(Node::SensedNodeFlagValue, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPoint, 0.001);
     EXPECT_NEAR(30.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointHi, 0.001);
     EXPECT_NEAR(10.0, state->dataLoopNodes->Node(thisHeatingPLHP->setPointNodeNum).TempSetPointLo, 0.001);
 

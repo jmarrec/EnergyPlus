@@ -144,8 +144,8 @@ namespace DataPlant {
         HalfLoopData()
             : SimLoopSideNeeded(true), SimZoneEquipNeeded(true), SimAirLoopsNeeded(true), SimNonZoneEquipNeeded(true), SimElectLoadCentrNeeded(true),
               OncePerTimeStepOperations(true), TimeElapsed(0.0), FlowRequest(0.0), FlowRequestTemperature(0.0),
-              TempSetPoint(DataLoopNode::SensedNodeFlagValue), TempSetPointHi(DataLoopNode::SensedNodeFlagValue),
-              TempSetPointLo(DataLoopNode::SensedNodeFlagValue), TempInterfaceTankOutlet(0.0), LastTempInterfaceTankOutlet(0.0), TotalBranches(0),
+              TempSetPoint(Node::SensedNodeFlagValue), TempSetPointHi(Node::SensedNodeFlagValue),
+              TempSetPointLo(Node::SensedNodeFlagValue), TempInterfaceTankOutlet(0.0), LastTempInterfaceTankOutlet(0.0), TotalBranches(0),
               NodeNumIn(0), NodeNumOut(0), TotalPumps(0), BranchPumpsExist(false), TotalPumpHeat(0.0), BypassExists(false), InletNodeSetPt(false),
               OutletNodeSetPt(false), EMSCtrl(false), EMSValue(0.0), FlowRestrictionFlag(false), FlowLock(DataPlant::FlowLock::Unlocked),
               TotalConnected(0), HasPressureComponents(false), HasParallelPressComps(false), PressureDrop(0.0), PressureEffectiveK(0.0),

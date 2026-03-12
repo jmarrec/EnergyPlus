@@ -72,31 +72,31 @@ GLHESlinky::GLHESlinky(EnergyPlusData &state, std::string const &objName, nlohma
     std::string outletNodeName = Util::makeUPPER(j["outlet_node_name"].get<std::string>());
 
     // get inlet node num
-    this->inletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+    this->inletNodeNum = Node::GetOnlySingleNode(state,
                                                              inletNodeName,
                                                              errorsFound,
-                                                             DataLoopNode::ConnectionObjectType::GroundHeatExchangerSlinky,
+                                                             Node::ConnectionObjectType::GroundHeatExchangerSlinky,
                                                              this->name,
-                                                             DataLoopNode::NodeFluidType::Water,
-                                                             DataLoopNode::ConnectionType::Inlet,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             DataLoopNode::ObjectIsNotParent);
+                                                             Node::NodeFluidType::Water,
+                                                             Node::ConnectionType::Inlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
 
     // get outlet node num
-    this->outletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+    this->outletNodeNum = Node::GetOnlySingleNode(state,
                                                               outletNodeName,
                                                               errorsFound,
-                                                              DataLoopNode::ConnectionObjectType::GroundHeatExchangerSlinky,
+                                                              Node::ConnectionObjectType::GroundHeatExchangerSlinky,
                                                               this->name,
-                                                              DataLoopNode::NodeFluidType::Water,
-                                                              DataLoopNode::ConnectionType::Outlet,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              DataLoopNode::ObjectIsNotParent);
+                                                              Node::NodeFluidType::Water,
+                                                              Node::ConnectionType::Outlet,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsNotParent);
 
     this->available = true;
     this->on = true;
 
-    BranchNodeConnections::TestCompSet(state, this->moduleName, this->name, inletNodeName, outletNodeName, "Condenser Water Nodes");
+    Node::TestCompSet(state, this->moduleName, this->name, inletNodeName, outletNodeName, "Condenser Water Nodes");
 
     // load data
     this->designFlow = j["design_flow_rate"].get<Real64>();

@@ -507,7 +507,6 @@ void GetOperationSchemeInput(EnergyPlusData &state)
     //    PlantEquipmentOperation:*
 
     // Using/Aliasing
-    using namespace DataLoopNode;
     using namespace DataSizing;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
@@ -697,7 +696,7 @@ void GetOperationSchemeInput(EnergyPlusData &state)
                 } else if (plantLoopOperation == "PLANTEQUIPMENTOPERATION:OUTDOORDRYBULBDIFFERENCE") {
                     CurrentModuleObject = "PlantEquipmentOperation:OutdoorDryBulbDifference";
                     FindDeltaTempRangeInput(state,
-                                            DataLoopNode::ConnectionObjectType::PlantEquipmentOperationOutdoorDrybulbDifference,
+                                            Node::ConnectionObjectType::PlantEquipmentOperationOutdoorDrybulbDifference,
                                             DBTDBO,
                                             LoopNum,
                                             SchemeNum,
@@ -706,7 +705,7 @@ void GetOperationSchemeInput(EnergyPlusData &state)
                 } else if (plantLoopOperation == "PLANTEQUIPMENTOPERATION:OUTDOORWETBULBDIFFERENCE") {
                     CurrentModuleObject = "PlantEquipmentOperation:OutdoorWetBulbDifference";
                     FindDeltaTempRangeInput(state,
-                                            DataLoopNode::ConnectionObjectType::PlantEquipmentOperationOutdoorWetbulbDifference,
+                                            Node::ConnectionObjectType::PlantEquipmentOperationOutdoorWetbulbDifference,
                                             WBTDBO,
                                             LoopNum,
                                             SchemeNum,
@@ -715,7 +714,7 @@ void GetOperationSchemeInput(EnergyPlusData &state)
                 } else if (plantLoopOperation == "PLANTEQUIPMENTOPERATION:OUTDOORDEWPOINTDIFFERENCE") {
                     CurrentModuleObject = "PlantEquipmentOperation:OutdoorDewPointDifference";
                     FindDeltaTempRangeInput(state,
-                                            DataLoopNode::ConnectionObjectType::PlantEquipmentOperationOutdoorDewpointDifference,
+                                            Node::ConnectionObjectType::PlantEquipmentOperationOutdoorDewpointDifference,
                                             DPTDBO,
                                             LoopNum,
                                             SchemeNum,
@@ -951,7 +950,7 @@ void FindRangeBasedOrUncontrolledInput(EnergyPlusData &state,
 }
 
 void FindDeltaTempRangeInput(EnergyPlusData &state,
-                             DataLoopNode::ConnectionObjectType const CurrentModuleObject, // for ease in renaming
+                             Node::ConnectionObjectType const CurrentModuleObject, // for ease in renaming
                              int const NumSchemes,                                         // May be set here and passed on
                              int const LoopNum,                                            // May be set here and passed on
                              int const SchemeNum,                                          // May be set here and passed on
@@ -979,8 +978,7 @@ void FindDeltaTempRangeInput(EnergyPlusData &state,
     // Based on subroutine FindRangeBasedOrUncontrolledInput from Dan Fisher, July 2010
 
     // Using/Aliasing
-    using NodeInputManager::GetOnlySingleNode;
-    using namespace DataLoopNode;
+    using Node::GetOnlySingleNode;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     int NumAlphas;
@@ -995,7 +993,7 @@ void FindDeltaTempRangeInput(EnergyPlusData &state,
     //   certain object in the input file
     std::string LoopOpSchemeObj; // Used to identify the object name for loop equipment operation scheme
 
-    std::string cmoStr = std::string(BranchNodeConnections::ConnectionObjectTypeNamesUC[static_cast<int>(CurrentModuleObject)]);
+    std::string cmoStr = std::string(Node::ConnectionObjectTypeNamesUC[static_cast<int>(CurrentModuleObject)]);
 
     // Determine max number of alpha and numeric arguments for all objects being read, in order to allocate local arrays
     state.dataInputProcessing->inputProcessor->getObjectDefMaxArgs(state, cmoStr, TotalArgs, NumAlphas, NumNums);
@@ -1049,10 +1047,10 @@ void FindDeltaTempRangeInput(EnergyPlusData &state,
                                       ErrorsFound,
                                       CurrentModuleObject,
                                       AlphArray(1),
-                                      DataLoopNode::NodeFluidType::Water,
-                                      DataLoopNode::ConnectionType::Sensor,
-                                      NodeInputManager::CompFluidStream::Primary,
-                                      ObjectIsNotParent);
+                                      Node::NodeFluidType::Water,
+                                      Node::ConnectionType::Sensor,
+                                      Node::CompFluidStream::Primary,
+                                      Node::ObjectIsNotParent);
                 // For DO Loop below -- Check for lower limit > upper limit.(invalid)
                 for (int ListNum = 1; ListNum <= NumEquipLists; ++ListNum) {
                     state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).RangeLowerLimit = NumArray(ListNum * 2 - 1);
@@ -1383,8 +1381,7 @@ void FindCompSPInput(EnergyPlusData &state,
     static constexpr std::string_view routineName = "FindCompSPInput";
 
     // Using/Aliasing
-    using namespace DataLoopNode;
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetOnlySingleNode;
     using namespace DataSizing;
     using EMSManager::CheckIfNodeSetPointManagedByEMS;
     using SetPointManager::SetUpNewScheduledTESSetPtMgr;
@@ -1399,8 +1396,8 @@ void FindCompSPInput(EnergyPlusData &state,
 
     SchemeNameFound = true;
 
-    DataLoopNode::ConnectionObjectType objType = static_cast<DataLoopNode::ConnectionObjectType>(
-        getEnumValue(BranchNodeConnections::ConnectionObjectTypeNamesUC, Util::makeUPPER(CurrentModuleObject)));
+    Node::ConnectionObjectType objType = static_cast<Node::ConnectionObjectType>(
+        getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(CurrentModuleObject)));
 
     if (state.dataPlnt->PlantLoop(LoopNum).TypeOfLoop == LoopType::Plant) {
         LoopOpSchemeObj = "PlantEquipmentOperationSchemes";
@@ -1483,10 +1480,10 @@ void FindCompSPInput(EnergyPlusData &state,
                                           ErrorsFound,
                                           objType,
                                           state.dataIPShortCut->cAlphaArgs(1),
-                                          DataLoopNode::NodeFluidType::Water,
-                                          DataLoopNode::ConnectionType::Sensor,
-                                          NodeInputManager::CompFluidStream::Primary,
-                                          ObjectIsNotParent);
+                                          Node::NodeFluidType::Water,
+                                          Node::ConnectionType::Sensor,
+                                          Node::CompFluidStream::Primary,
+                                          Node::ObjectIsNotParent);
                     state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(1).Comp(CompNum).SetPointNodeName =
                         state.dataIPShortCut->cAlphaArgs(CompNumA);
                     state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(1).Comp(CompNum).SetPointNodeNum =
@@ -1495,10 +1492,10 @@ void FindCompSPInput(EnergyPlusData &state,
                                           ErrorsFound,
                                           objType,
                                           state.dataIPShortCut->cAlphaArgs(1),
-                                          DataLoopNode::NodeFluidType::Water,
-                                          DataLoopNode::ConnectionType::Sensor,
-                                          NodeInputManager::CompFluidStream::Primary,
-                                          ObjectIsNotParent);
+                                          Node::NodeFluidType::Water,
+                                          Node::ConnectionType::Sensor,
+                                          Node::CompFluidStream::Primary,
+                                          Node::ObjectIsNotParent);
                     state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(1).Comp(CompNum).SetPointFlowRate =
                         state.dataIPShortCut->rNumericArgs(CompNumN);
 
@@ -2997,9 +2994,6 @@ void DistributePlantLoad(EnergyPlusData &state,
     // na
     // REFERENCES:
     // na
-    // Using/Aliasing
-    using namespace DataLoopNode;
-
     // Locals
     // SUBROUTINE ARGUMENT DEFINITIONS:
 
@@ -3776,7 +3770,7 @@ void FindCompSPLoad(EnergyPlusData &state,
     // Component SetPoint based scheme.
 
     // Using/Aliasing
-    using DataLoopNode::SensedNodeFlagValue;
+    using Node::SensedNodeFlagValue;
 
     // Locals
     // SUBROUTINE ARGUMENT DEFINITIONS:
@@ -4014,8 +4008,6 @@ Real64 FindRangeVariable(EnergyPlusData &state,
     //       MODIFIED       Chandan Sharma, August 2010
     //       RE-ENGINEERED  na
 
-    // Using/Aliasing
-    using namespace DataLoopNode;
     // Return value
     Real64 FindRangeVariable(0.0);
 
@@ -4334,9 +4326,6 @@ void ActivateEMSControls(EnergyPlusData &state, PlantLocation const &plantLoc, b
 
     // REFERENCES:
     // na
-
-    // Using/Aliasing
-    using namespace DataLoopNode;
 
     // SUBROUTINE ARGUMENT DEFINITIONS
 

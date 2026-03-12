@@ -82,7 +82,6 @@
 
 using namespace EnergyPlus;
 using namespace Curve;
-using namespace DataBranchNodeConnections;
 using namespace DataEnvironment;
 using namespace DataHeatBalance;
 using namespace EnergyPlus::DataSizing;
@@ -187,15 +186,15 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
     thisUnit.HeatCoilOutletNodeNum = DXCoils::GetCoilOutletNode(*state, "Coil:Heating:DX:SingleSpeed", "HEATINGCOIL", errFlag);
     thisUnit.AirOutNode = thisUnit.HeatCoilOutletNodeNum;
     // set zone condition
-    int zoneNodeNum = NodeInputManager::GetOnlySingleNode(*state,
+    int zoneNodeNum = Node::GetOnlySingleNode(*state,
                                                           "ZoneNode",
                                                           errFlag,
-                                                          DataLoopNode::ConnectionObjectType::ZoneHVACPackagedTerminalAirConditioner,
+                                                          Node::ConnectionObjectType::ZoneHVACPackagedTerminalAirConditioner,
                                                           "PTUnit",
-                                                          DataLoopNode::NodeFluidType::Air,
-                                                          DataLoopNode::ConnectionType::Inlet,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          DataLoopNode::ObjectIsNotParent);
+                                                          Node::NodeFluidType::Air,
+                                                          Node::ConnectionType::Inlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent);
 
     state->dataLoopNodes->Node(thisUnit.AirInNode).Temp = 21.0;
     state->dataLoopNodes->Node(thisUnit.AirInNode).HumRat = 0.00773;
@@ -259,13 +258,13 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
 
     state->dataBranchNodeConnections->NumCompSets = 2;
     state->dataBranchNodeConnections->CompSets.allocate(2);
-    state->dataBranchNodeConnections->CompSets(1).ComponentObjectType = DataLoopNode::ConnectionObjectType::CoilCoolingDXSingleSpeed;
+    state->dataBranchNodeConnections->CompSets(1).ComponentObjectType = Node::ConnectionObjectType::CoilCoolingDXSingleSpeed;
     state->dataBranchNodeConnections->CompSets(1).CName = "CoolingCoil";
-    state->dataBranchNodeConnections->CompSets(1).ParentObjectType = DataLoopNode::ConnectionObjectType::ZoneHVACPackagedTerminalHeatPump;
+    state->dataBranchNodeConnections->CompSets(1).ParentObjectType = Node::ConnectionObjectType::ZoneHVACPackagedTerminalHeatPump;
     state->dataBranchNodeConnections->CompSets(1).ParentCName = "AirSystem";
-    state->dataBranchNodeConnections->CompSets(2).ComponentObjectType = DataLoopNode::ConnectionObjectType::CoilHeatingDXSingleSpeed;
+    state->dataBranchNodeConnections->CompSets(2).ComponentObjectType = Node::ConnectionObjectType::CoilHeatingDXSingleSpeed;
     state->dataBranchNodeConnections->CompSets(2).CName = "HeatingCoil";
-    state->dataBranchNodeConnections->CompSets(2).ParentObjectType = DataLoopNode::ConnectionObjectType::ZoneHVACPackagedTerminalHeatPump;
+    state->dataBranchNodeConnections->CompSets(2).ParentObjectType = Node::ConnectionObjectType::ZoneHVACPackagedTerminalHeatPump;
     state->dataBranchNodeConnections->CompSets(2).ParentCName = "AirSystem";
 
     state->dataEnvrn->OutDryBulbTemp = 30.0;

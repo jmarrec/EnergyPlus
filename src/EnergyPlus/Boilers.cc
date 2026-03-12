@@ -308,25 +308,25 @@ void GetBoilerInput(EnergyPlusData &state)
             thisBoiler.SizFac = 1.0;
         }
 
-        thisBoiler.BoilerInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+        thisBoiler.BoilerInletNodeNum = Node::GetOnlySingleNode(state,
                                                                             s_ipsc->cAlphaArgs(5),
                                                                             ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::BoilerHotWater,
+                                                                            Node::ConnectionObjectType::BoilerHotWater,
                                                                             s_ipsc->cAlphaArgs(1),
-                                                                            DataLoopNode::NodeFluidType::Water,
-                                                                            DataLoopNode::ConnectionType::Inlet,
-                                                                            NodeInputManager::CompFluidStream::Primary,
-                                                                            DataLoopNode::ObjectIsNotParent);
-        thisBoiler.BoilerOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                            Node::NodeFluidType::Water,
+                                                                            Node::ConnectionType::Inlet,
+                                                                            Node::CompFluidStream::Primary,
+                                                                            Node::ObjectIsNotParent);
+        thisBoiler.BoilerOutletNodeNum = Node::GetOnlySingleNode(state,
                                                                              s_ipsc->cAlphaArgs(6),
                                                                              ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::BoilerHotWater,
+                                                                             Node::ConnectionObjectType::BoilerHotWater,
                                                                              s_ipsc->cAlphaArgs(1),
-                                                                             DataLoopNode::NodeFluidType::Water,
-                                                                             DataLoopNode::ConnectionType::Outlet,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(
+                                                                             Node::NodeFluidType::Water,
+                                                                             Node::ConnectionType::Outlet,
+                                                                             Node::CompFluidStream::Primary,
+                                                                             Node::ObjectIsNotParent);
+        Node::TestCompSet(
             state, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(5), s_ipsc->cAlphaArgs(6), "Hot Water Nodes");
 
         if (s_ipsc->cAlphaArgs(7) == "CONSTANTFLOW") {
@@ -498,8 +498,8 @@ void BoilerSpecs::initEachEnvironment(EnergyPlusData &state)
     PlantUtilities::InitComponentNodes(state, 0.0, this->DesMassFlowRate, this->BoilerInletNodeNum, this->BoilerOutletNodeNum);
 
     if (this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) { // check if setpoint on outlet node
-        if ((state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPoint == DataLoopNode::SensedNodeFlagValue) &&
-            (state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPointLo == DataLoopNode::SensedNodeFlagValue)) {
+        if ((state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPoint == Node::SensedNodeFlagValue) &&
+            (state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPointLo == Node::SensedNodeFlagValue)) {
             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 if (!this->ModulatedFlowErrDone) {
                     ShowWarningError(

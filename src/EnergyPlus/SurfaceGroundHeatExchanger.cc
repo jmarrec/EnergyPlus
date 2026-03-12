@@ -115,11 +115,6 @@ namespace SurfaceGroundHeatExchanger {
 
     // OTHER NOTES: none
 
-    // USE STATEMENTS:
-    // Use statements for data only modules
-    // Using/Aliasing
-    using namespace DataLoopNode;
-
     // Use statements for access to subroutines in other modules
 
     // Data
@@ -181,9 +176,8 @@ namespace SurfaceGroundHeatExchanger {
         // Standard EnergyPlus methodology.
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
-        using NodeInputManager::GetOnlySingleNode;
-        using namespace DataLoopNode;
+        using Node::TestCompSet;
+        using Node::GetOnlySingleNode;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
@@ -253,12 +247,12 @@ namespace SurfaceGroundHeatExchanger {
                 GetOnlySingleNode(state,
                                   state.dataIPShortCut->cAlphaArgs(3),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::GroundHeatExchangerSurface,
+                                  Node::ConnectionObjectType::GroundHeatExchangerSurface,
                                   state.dataIPShortCut->cAlphaArgs(1),
-                                  DataLoopNode::NodeFluidType::Water,
-                                  DataLoopNode::ConnectionType::Inlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  ObjectIsNotParent);
+                                  Node::NodeFluidType::Water,
+                                  Node::ConnectionType::Inlet,
+                                  Node::CompFluidStream::Primary,
+                                  Node::ObjectIsNotParent);
             if (state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).InletNodeNum == 0) {
                 ShowSevereError(state,
                                 EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
@@ -272,12 +266,12 @@ namespace SurfaceGroundHeatExchanger {
                 GetOnlySingleNode(state,
                                   state.dataIPShortCut->cAlphaArgs(4),
                                   ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::GroundHeatExchangerSurface,
+                                  Node::ConnectionObjectType::GroundHeatExchangerSurface,
                                   state.dataIPShortCut->cAlphaArgs(1),
-                                  DataLoopNode::NodeFluidType::Water,
-                                  DataLoopNode::ConnectionType::Outlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  ObjectIsNotParent);
+                                  Node::NodeFluidType::Water,
+                                  Node::ConnectionType::Outlet,
+                                  Node::CompFluidStream::Primary,
+                                  Node::ObjectIsNotParent);
             if (state.dataSurfaceGroundHeatExchangers->SurfaceGHE(Item).OutletNodeNum == 0) {
                 ShowSevereError(state,
                                 EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(4), state.dataIPShortCut->cAlphaArgs(4)));

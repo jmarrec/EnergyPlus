@@ -1135,7 +1135,7 @@ void UpdateAbsorberChillerComponentGeneratorSide(EnergyPlusData &state,
                                                  [[maybe_unused]] DataPlant::PlantEquipmentType const Type,         // Component's type index
                                                  int const InletNodeNum,                                            // Component's inlet node pointer
                                                  [[maybe_unused]] int const OutletNodeNum,                          // Component's outlet node pointer
-                                                 [[maybe_unused]] DataLoopNode::NodeFluidType const HeatSourceType, // Type of fluid in Generator loop
+                                                 [[maybe_unused]] Node::NodeFluidType const HeatSourceType, // Type of fluid in Generator loop
                                                  Real64 const ModelGeneratorHeatRate,                               // model's generator heat rate (W)
                                                  Real64 const ModelMassFlowRate, // model's generator mass flow rate (kg/s)
                                                  bool const FirstHVACIteration)

@@ -251,25 +251,25 @@ namespace BoilerSteam {
                     EnergyPlus::format("Invalid {}={:.3R}", state.dataIPShortCut->cNumericFieldNames(3), state.dataIPShortCut->rNumericArgs(3)));
                 ErrorsFound = true;
             }
-            thisBoiler.BoilerInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+            thisBoiler.BoilerInletNodeNum = Node::GetOnlySingleNode(state,
                                                                                 state.dataIPShortCut->cAlphaArgs(3),
                                                                                 ErrorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::BoilerSteam,
+                                                                                Node::ConnectionObjectType::BoilerSteam,
                                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                                DataLoopNode::NodeFluidType::Steam,
-                                                                                DataLoopNode::ConnectionType::Inlet,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                DataLoopNode::ObjectIsNotParent);
-            thisBoiler.BoilerOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                                                                                Node::NodeFluidType::Steam,
+                                                                                Node::ConnectionType::Inlet,
+                                                                                Node::CompFluidStream::Primary,
+                                                                                Node::ObjectIsNotParent);
+            thisBoiler.BoilerOutletNodeNum = Node::GetOnlySingleNode(state,
                                                                                  state.dataIPShortCut->cAlphaArgs(4),
                                                                                  ErrorsFound,
-                                                                                 DataLoopNode::ConnectionObjectType::BoilerSteam,
+                                                                                 Node::ConnectionObjectType::BoilerSteam,
                                                                                  state.dataIPShortCut->cAlphaArgs(1),
-                                                                                 DataLoopNode::NodeFluidType::Steam,
-                                                                                 DataLoopNode::ConnectionType::Outlet,
-                                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                                 DataLoopNode::ObjectIsNotParent);
-            BranchNodeConnections::TestCompSet(state,
+                                                                                 Node::NodeFluidType::Steam,
+                                                                                 Node::ConnectionType::Outlet,
+                                                                                 Node::CompFluidStream::Primary,
+                                                                                 Node::ObjectIsNotParent);
+            Node::TestCompSet(state,
                                                state.dataIPShortCut->cCurrentModuleObject,
                                                state.dataIPShortCut->cAlphaArgs(1),
                                                state.dataIPShortCut->cAlphaArgs(3),
@@ -328,8 +328,8 @@ namespace BoilerSteam {
         this->BoilerEff = 0.0;
         this->BoilerOutletTemp = 0.0;
 
-        if ((state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPoint == DataLoopNode::SensedNodeFlagValue) &&
-            (state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPointLo == DataLoopNode::SensedNodeFlagValue)) {
+        if ((state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPoint == Node::SensedNodeFlagValue) &&
+            (state.dataLoopNodes->Node(this->BoilerOutletNodeNum).TempSetPointLo == Node::SensedNodeFlagValue)) {
             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 if (!this->MissingSetPointErrDone) {
                     ShowWarningError(state, EnergyPlus::format("Missing temperature setpoint for Boiler:Steam = {}", this->Name));

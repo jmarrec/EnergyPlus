@@ -63,11 +63,7 @@ namespace EnergyPlus {
 // Forward declarations
 struct EnergyPlusData;
 
-namespace NodeInputManager {
-
-    // Using/Aliasing
-    using DataLoopNode::MarkedNodeData;
-    using DataLoopNode::NodeData;
+namespace Node {
 
     // For GetOnlySingleNode(), GetNodeNums(), etc
     enum class CompFluidStream
@@ -99,10 +95,10 @@ namespace NodeInputManager {
                      int &NumNodes,                                     // Number of nodes accompanying this Name
                      Array1D_int &NodeNumbers,                          // Node Numbers accompanying this Name
                      bool &ErrorsFound,                                 // True when errors are found...
-                     DataLoopNode::NodeFluidType nodeFluidType,         // Fluidtype for checking/setting node FluidType
-                     DataLoopNode::ConnectionObjectType NodeObjectType, // Node Object Type (i.e. "Chiller:Electric")
+                     Node::NodeFluidType nodeFluidType,         // Fluidtype for checking/setting node FluidType
+                     Node::ConnectionObjectType NodeObjectType, // Node Object Type (i.e. "Chiller:Electric")
                      std::string const &NodeObjectName,                 // Node Object Name (i.e. "MyChiller")
-                     DataLoopNode::ConnectionType nodeConnectionType,   // Node Connection Type (see DataLoopNode)
+                     Node::ConnectionType nodeConnectionType,   // Node Connection Type (see DataLoopNode)
                      CompFluidStream NodeFluidStream,                   // Which Fluid Stream (1,2,3,...)
                      bool ObjectIsParent,                               // True/False
                      bool const IncrementFluidStream = false,           // True/False
@@ -115,16 +111,16 @@ namespace NodeInputManager {
 
     int AssignNodeNumber(EnergyPlusData &state,
                          std::string const &Name,                   // Name for assignment
-                         DataLoopNode::NodeFluidType nodeFluidType, // must be valid
+                         Node::NodeFluidType nodeFluidType, // must be valid
                          bool &ErrorsFound);
 
     int GetOnlySingleNode(EnergyPlusData &state,
                           std::string const &NodeName,
                           bool &errFlag,
-                          DataLoopNode::ConnectionObjectType NodeObjectType, // Node Object Type (i.e. "Chiller:Electric")
+                          Node::ConnectionObjectType NodeObjectType, // Node Object Type (i.e. "Chiller:Electric")
                           std::string const &NodeObjectName,                 // Node Object Name (i.e. "MyChiller")
-                          DataLoopNode::NodeFluidType nodeFluidType,         // Fluidtype for checking/setting node FluidType
-                          DataLoopNode::ConnectionType nodeConnectionType,   // Node Connection Type (see DataLoopNode)
+                          Node::NodeFluidType nodeFluidType,         // Fluidtype for checking/setting node FluidType
+                          Node::ConnectionType nodeConnectionType,   // Node Connection Type (see DataLoopNode)
                           CompFluidStream NodeFluidStream,                   // Which Fluid Stream (1,2,3,...)
                           bool ObjectIsParent,                               // True/False
                           std::string_view const InputFieldName = {}         // Input Field Name
@@ -144,13 +140,13 @@ namespace NodeInputManager {
 
     void MarkNode(EnergyPlusData &state,
                   int NodeNumber, // Node Number to be marked
-                  DataLoopNode::ConnectionObjectType ObjectType,
+                  Node::ConnectionObjectType ObjectType,
                   std::string const &ObjectName,
                   std::string const &FieldName);
 
     void CheckMarkedNodes(EnergyPlusData &state, bool &ErrorsFound);
 
-} // namespace NodeInputManager
+} // namespace Node
 
 struct NodeInputManagerData : BaseGlobalStruct
 {
@@ -172,7 +168,7 @@ struct NodeInputManagerData : BaseGlobalStruct
     bool GetOnlySingleNodeFirstTime = true;
 
     // Object Data
-    Array1D<NodeInputManager::NodeListDef> NodeLists; // Node Lists
+    Array1D<Node::NodeListDef> NodeLists; // Node Lists
 
     Real64 RhoAirStdInit;
     Real64 RhoWaterStdInit;

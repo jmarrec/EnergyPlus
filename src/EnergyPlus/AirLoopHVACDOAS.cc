@@ -229,15 +229,15 @@ namespace AirLoopHVACDOAS {
                 thisMixer.name = Util::makeUPPER(thisObjectName);
                 thisMixer.OutletNodeName = Util::makeUPPER(fields.at("outlet_node_name").get<std::string>());
                 thisMixer.m_AirLoopMixer_Num = AirLoopMixerNum - 1;
-                thisMixer.OutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                thisMixer.OutletNodeNum = Node::GetOnlySingleNode(state,
                                                                               thisMixer.OutletNodeName,
                                                                               errorsFound,
-                                                                              DataLoopNode::ConnectionObjectType::AirLoopHVACMixer,
+                                                                              Node::ConnectionObjectType::AirLoopHVACMixer,
                                                                               thisObjectName,
-                                                                              DataLoopNode::NodeFluidType::Air,
-                                                                              DataLoopNode::ConnectionType::Outlet,
-                                                                              NodeInputManager::CompFluidStream::Primary,
-                                                                              DataLoopNode::ObjectIsParent);
+                                                                              Node::NodeFluidType::Air,
+                                                                              Node::ConnectionType::Outlet,
+                                                                              Node::CompFluidStream::Primary,
+                                                                              Node::ObjectIsParent);
 
                 auto NodeNames = fields.find("nodes");
                 if (NodeNames != fields.end()) {
@@ -247,15 +247,15 @@ namespace AirLoopHVACDOAS {
                     for (auto const &NodeDOASName : NodeArray) {
                         num += 1;
                         std::string const name = Util::makeUPPER(NodeDOASName.at("inlet_node_name").get<std::string>());
-                        int const NodeNum = NodeInputManager::GetOnlySingleNode(state,
+                        int const NodeNum = Node::GetOnlySingleNode(state,
                                                                                 name,
                                                                                 errorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::AirLoopHVACMixer,
+                                                                                Node::ConnectionObjectType::AirLoopHVACMixer,
                                                                                 thisObjectName,
-                                                                                DataLoopNode::NodeFluidType::Air,
-                                                                                DataLoopNode::ConnectionType::Inlet,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                DataLoopNode::ObjectIsParent);
+                                                                                Node::NodeFluidType::Air,
+                                                                                Node::ConnectionType::Inlet,
+                                                                                Node::CompFluidStream::Primary,
+                                                                                Node::ObjectIsParent);
                         if (NodeNum > 0 && num <= thisMixer.numOfInletNodes) {
                             thisMixer.InletNodeName.push_back(name);
                             thisMixer.InletNodeNum.push_back(NodeNum);
@@ -401,15 +401,15 @@ namespace AirLoopHVACDOAS {
 
                 thisSplitter.name = Util::makeUPPER(thisObjectName);
                 thisSplitter.InletNodeName = Util::makeUPPER(fields.at("inlet_node_name").get<std::string>());
-                thisSplitter.InletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                thisSplitter.InletNodeNum = Node::GetOnlySingleNode(state,
                                                                                 thisSplitter.InletNodeName,
                                                                                 errorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::AirLoopHVACSplitter,
+                                                                                Node::ConnectionObjectType::AirLoopHVACSplitter,
                                                                                 thisObjectName,
-                                                                                DataLoopNode::NodeFluidType::Air,
-                                                                                DataLoopNode::ConnectionType::Inlet,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                DataLoopNode::ObjectIsParent);
+                                                                                Node::NodeFluidType::Air,
+                                                                                Node::ConnectionType::Inlet,
+                                                                                Node::CompFluidStream::Primary,
+                                                                                Node::ObjectIsParent);
                 thisSplitter.m_AirLoopSplitter_Num = AirLoopSplitterNum - 1;
 
                 auto NodeNames = fields.find("nodes");
@@ -421,15 +421,15 @@ namespace AirLoopHVACDOAS {
                         num += 1;
 
                         std::string const name = Util::makeUPPER(NodeDOASName.at("outlet_node_name").get<std::string>());
-                        int const NodeNum = NodeInputManager::GetOnlySingleNode(state,
+                        int const NodeNum = Node::GetOnlySingleNode(state,
                                                                                 name,
                                                                                 errorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::AirLoopHVACSplitter,
+                                                                                Node::ConnectionObjectType::AirLoopHVACSplitter,
                                                                                 thisObjectName,
-                                                                                DataLoopNode::NodeFluidType::Air,
-                                                                                DataLoopNode::ConnectionType::Inlet,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                DataLoopNode::ObjectIsParent);
+                                                                                Node::NodeFluidType::Air,
+                                                                                Node::ConnectionType::Inlet,
+                                                                                Node::CompFluidStream::Primary,
+                                                                                Node::ObjectIsParent);
                         if (NodeNum > 0 && num <= thisSplitter.numOfOutletNodes) {
                             thisSplitter.OutletNodeName.push_back(name);
                             thisSplitter.OutletNodeNum.push_back(NodeNum);
@@ -796,7 +796,7 @@ namespace AirLoopHVACDOAS {
                 thisDOAS.m_OutletNodeNum = thisOutsideAirSys.OutletNodeNum(thisOutsideAirSys.NumComponents + DOASOutletNodeNumAdjustment);
                 thisOutsideAirSys.AirLoopDOASNum = AirLoopDOASNum - 1;
                 // Set up parent-child connection
-                BranchNodeConnections::SetUpCompSets(state,
+                Node::SetUpCompSets(state,
                                                      cCurrentModuleObject,
                                                      thisDOAS.Name,
                                                      "AIRLOOPHVAC:OUTDOORAIRSYSTEM",

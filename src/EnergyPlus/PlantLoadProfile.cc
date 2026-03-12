@@ -397,9 +397,6 @@ void GetPlantProfileInput(EnergyPlusData &state)
 
     static constexpr std::string_view routineName = "GetPlantProfileInput";
 
-    // Using/Aliasing
-    using namespace DataLoopNode;
-
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     auto &cCurrentModuleObject = state.dataIPShortCut->cCurrentModuleObject;
 
@@ -441,46 +438,46 @@ void GetPlantProfileInput(EnergyPlusData &state)
 
             if (state.dataPlantLoadProfile->PlantProfile(ProfileNum).FluidType == PlantLoopFluidType::Water) {
                 state.dataPlantLoadProfile->PlantProfile(ProfileNum).InletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
+                    Node::GetOnlySingleNode(state,
                                                         state.dataIPShortCut->cAlphaArgs(2),
                                                         ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::LoadProfilePlant,
+                                                        Node::ConnectionObjectType::LoadProfilePlant,
                                                         state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsNotParent);
+                                                        Node::NodeFluidType::Water,
+                                                        Node::ConnectionType::Inlet,
+                                                        Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 state.dataPlantLoadProfile->PlantProfile(ProfileNum).OutletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
+                    Node::GetOnlySingleNode(state,
                                                         state.dataIPShortCut->cAlphaArgs(3),
                                                         ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::LoadProfilePlant,
+                                                        Node::ConnectionObjectType::LoadProfilePlant,
                                                         state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsNotParent);
+                                                        Node::NodeFluidType::Water,
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
             } else { // state.dataPlantLoadProfile->PlantProfile(ProfileNum).FluidType == PlantLoopFluidType::Steam
                 state.dataPlantLoadProfile->PlantProfile(ProfileNum).InletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
+                    Node::GetOnlySingleNode(state,
                                                         state.dataIPShortCut->cAlphaArgs(2),
                                                         ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::LoadProfilePlant,
+                                                        Node::ConnectionObjectType::LoadProfilePlant,
                                                         state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Steam,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsNotParent);
+                                                        Node::NodeFluidType::Steam,
+                                                        Node::ConnectionType::Inlet,
+                                                        Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 state.dataPlantLoadProfile->PlantProfile(ProfileNum).OutletNode =
-                    NodeInputManager::GetOnlySingleNode(state,
+                    Node::GetOnlySingleNode(state,
                                                         state.dataIPShortCut->cAlphaArgs(3),
                                                         ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::LoadProfilePlant,
+                                                        Node::ConnectionObjectType::LoadProfilePlant,
                                                         state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Steam,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsNotParent);
+                                                        Node::NodeFluidType::Steam,
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
             }
 
             if ((state.dataPlantLoadProfile->PlantProfile(ProfileNum).loadSched = Sched::GetSchedule(state, state.dataIPShortCut->cAlphaArgs(4))) ==
@@ -512,7 +509,7 @@ void GetPlantProfileInput(EnergyPlusData &state)
             }
 
             // Check plant connections
-            BranchNodeConnections::TestCompSet(state,
+            Node::TestCompSet(state,
                                                cCurrentModuleObject,
                                                state.dataIPShortCut->cAlphaArgs(1),
                                                state.dataIPShortCut->cAlphaArgs(2),

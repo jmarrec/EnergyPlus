@@ -99,7 +99,6 @@ namespace RoomAir {
     // na
 
     // Using/Aliasing
-    using namespace DataLoopNode;
     using namespace DataEnvironment;
     using namespace DataHeatBalance;
     using namespace DataHeatBalSurface;
@@ -127,7 +126,6 @@ namespace RoomAir {
         // Note that much of the initialization is done in RoomAirManager, SharedDVCVUFDataInit
 
         // Using/Aliasing
-        using namespace DataLoopNode;
         using namespace DataEnvironment;
         using namespace DataHeatBalance;
         using namespace DataHeatBalSurface;

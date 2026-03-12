@@ -5323,7 +5323,7 @@ SetpointManager:Scheduled,
     // reset system to original values
     thisSys->m_DehumidControlType_Num = UnitarySys::DehumCtrlType::None;
     thisSys->m_RunOnLatentLoad = false;
-    state->dataLoopNodes->Node(thisSys->AirOutNode).HumRatMax = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(thisSys->AirOutNode).HumRatMax = Node::SensedNodeFlagValue;
 
     // HEATING mode
     // Unitary system AIR inlet node = 1
@@ -5726,7 +5726,7 @@ SetpointManager:Scheduled,
               state->dataLoopNodes->Node(coolingCoilWaterInletNodeIndex).MassFlowRateMaxAvail);
 
     // Case 4 - COOLING mode - dehumidification set point at air outlet instead of coil outlet
-    state->dataLoopNodes->Node(coolingCoilAirOutletNodeIndex).HumRatMax = DataLoopNode::SensedNodeFlagValue;
+    state->dataLoopNodes->Node(coolingCoilAirOutletNodeIndex).HumRatMax = Node::SensedNodeFlagValue;
     state->dataLoopNodes->Node(thisSys->AirOutNode).HumRatMax = 0.009;
     Real64 partLoadRatio = thisSys->m_CoolingPartLoadFrac;
 
@@ -20578,7 +20578,7 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_MultiSpeedDXCoilsDirectSolutionTes
     state->dataHeatBalFanSys->TempControlType.allocate(1);
     state->dataHeatBalFanSys->TempControlTypeRpt.allocate(1);
     state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
-    state->dataLoopNodes->Node(7).FluidType = DataLoopNode::NodeFluidType::Air;
+    state->dataLoopNodes->Node(7).FluidType = Node::NodeFluidType::Air;
     state->dataLoopNodes->Node(7).Temp = 24.0;      // 24C db
     state->dataLoopNodes->Node(7).HumRat = 0.01522; // 17C wb
     state->dataLoopNodes->Node(7).Press = state->dataEnvrn->OutBaroPress;

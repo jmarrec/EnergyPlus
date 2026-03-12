@@ -273,26 +273,26 @@ namespace UnitHeater {
 
             // Main air nodes (except outside air node):
             state.dataUnitHeaters->UnitHeat(UnitHeatNum).AirInNode =
-                NodeInputManager::GetOnlySingleNode(state,
+                Node::GetOnlySingleNode(state,
                                                     Alphas(3),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::ZoneHVACUnitHeater,
+                                                    Node::ConnectionObjectType::ZoneHVACUnitHeater,
                                                     Alphas(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+                                                    Node::NodeFluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsParent);
 
             state.dataUnitHeaters->UnitHeat(UnitHeatNum).AirOutNode =
-                NodeInputManager::GetOnlySingleNode(state,
+                Node::GetOnlySingleNode(state,
                                                     Alphas(4),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::ZoneHVACUnitHeater,
+                                                    Node::ConnectionObjectType::ZoneHVACUnitHeater,
                                                     Alphas(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+                                                    Node::NodeFluidType::Air,
+                                                    Node::ConnectionType::Outlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsParent);
 
             auto &unitHeat = state.dataUnitHeaters->UnitHeat(UnitHeatNum);
             // Fan information:
@@ -487,7 +487,7 @@ namespace UnitHeater {
             }
 
             // Add fan to component sets array
-            BranchNodeConnections::SetUpCompSets(state,
+            Node::SetUpCompSets(state,
                                                  CurrentModuleObject,
                                                  unitHeat.Name,
                                                  HVAC::fanTypeNamesUC[(int)unitHeat.fanType],
@@ -496,7 +496,7 @@ namespace UnitHeater {
                                                  state.dataLoopNodes->NodeID(unitHeat.FanOutletNode));
 
             // Add heating coil to component sets array
-            BranchNodeConnections::SetUpCompSets(state,
+            Node::SetUpCompSets(state,
                                                  CurrentModuleObject,
                                                  unitHeat.Name,
                                                  unitHeat.HCoilTypeCh,

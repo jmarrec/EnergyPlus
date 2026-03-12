@@ -306,46 +306,46 @@ void GetGshpInput(EnergyPlusData &state)
         thisGSHP.SourceSideInletNodeNum = GetOnlySingleNode(state,
                                                             AlphArray(2),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationHeating,
+                                                            Node::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationHeating,
                                                             thisGSHP.Name,
-                                                            DataLoopNode::NodeFluidType::Water,
-                                                            DataLoopNode::ConnectionType::Inlet,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            DataLoopNode::ObjectIsNotParent);
+                                                            Node::NodeFluidType::Water,
+                                                            Node::ConnectionType::Inlet,
+                                                            Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
 
         thisGSHP.SourceSideOutletNodeNum = GetOnlySingleNode(state,
                                                              AlphArray(3),
                                                              ErrorsFound,
-                                                             DataLoopNode::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationHeating,
+                                                             Node::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationHeating,
                                                              thisGSHP.Name,
-                                                             DataLoopNode::NodeFluidType::Water,
-                                                             DataLoopNode::ConnectionType::Outlet,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             DataLoopNode::ObjectIsNotParent);
+                                                             Node::NodeFluidType::Water,
+                                                             Node::ConnectionType::Outlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
 
         thisGSHP.LoadSideInletNodeNum = GetOnlySingleNode(state,
                                                           AlphArray(4),
                                                           ErrorsFound,
-                                                          DataLoopNode::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationHeating,
+                                                          Node::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationHeating,
                                                           thisGSHP.Name,
-                                                          DataLoopNode::NodeFluidType::Water,
-                                                          DataLoopNode::ConnectionType::Inlet,
-                                                          NodeInputManager::CompFluidStream::Secondary,
-                                                          DataLoopNode::ObjectIsNotParent);
+                                                          Node::NodeFluidType::Water,
+                                                          Node::ConnectionType::Inlet,
+                                                          Node::CompFluidStream::Secondary,
+                                                          Node::ObjectIsNotParent);
 
         thisGSHP.LoadSideOutletNodeNum = GetOnlySingleNode(state,
                                                            AlphArray(5),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationHeating,
+                                                           Node::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationHeating,
                                                            thisGSHP.Name,
-                                                           DataLoopNode::NodeFluidType::Water,
-                                                           DataLoopNode::ConnectionType::Outlet,
-                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                           DataLoopNode::ObjectIsNotParent);
+                                                           Node::NodeFluidType::Water,
+                                                           Node::ConnectionType::Outlet,
+                                                           Node::CompFluidStream::Secondary,
+                                                           Node::ObjectIsNotParent);
 
         // Test node sets
-        BranchNodeConnections::TestCompSet(state, ModuleCompNameUC, thisGSHP.Name, AlphArray(2), AlphArray(3), "Condenser Water Nodes");
-        BranchNodeConnections::TestCompSet(state, ModuleCompNameUC, thisGSHP.Name, AlphArray(4), AlphArray(5), "Hot Water Nodes");
+        Node::TestCompSet(state, ModuleCompNameUC, thisGSHP.Name, AlphArray(2), AlphArray(3), "Condenser Water Nodes");
+        Node::TestCompSet(state, ModuleCompNameUC, thisGSHP.Name, AlphArray(4), AlphArray(5), "Hot Water Nodes");
 
         // save the design source side flow rate for use by plant loop sizing algorithms
         PlantUtilities::RegisterPlantCompDesignFlow(state, thisGSHP.SourceSideInletNodeNum, 0.5 * thisGSHP.SourceSideVolFlowRate);
@@ -494,7 +494,7 @@ void GshpPeHeatingSpecs::initialize(EnergyPlusData &state)
         this->SourceSideDesignMassFlow = this->SourceSideVolFlowRate * rho;
 
         PlantUtilities::InitComponentNodes(state, 0.0, this->SourceSideDesignMassFlow, this->SourceSideInletNodeNum, this->SourceSideOutletNodeNum);
-        if (state.dataLoopNodes->Node(this->SourceSideOutletNodeNum).TempSetPoint == DataLoopNode::SensedNodeFlagValue) {
+        if (state.dataLoopNodes->Node(this->SourceSideOutletNodeNum).TempSetPoint == Node::SensedNodeFlagValue) {
             state.dataLoopNodes->Node(this->SourceSideOutletNodeNum).TempSetPoint = 0.0;
         }
         state.dataLoopNodes->Node(this->SourceSideInletNodeNum).Temp = state.dataLoopNodes->Node(this->SourceSideOutletNodeNum).TempSetPoint + 30.0;

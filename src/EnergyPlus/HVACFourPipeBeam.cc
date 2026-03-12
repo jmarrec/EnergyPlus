@@ -90,10 +90,10 @@ namespace FourPipeBeam {
     std::shared_ptr<AirTerminalUnit> HVACFourPipeBeam::fourPipeBeamFactory(EnergyPlusData &state, std::string objectName)
     {
 
-        using BranchNodeConnections::TestCompSet;
-        using DataLoopNode::ObjectIsNotParent;
-        using DataLoopNode::ObjectIsParent;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::TestCompSet;
+        using Node::ObjectIsNotParent;
+        using Node::ObjectIsParent;
+        using Node::GetOnlySingleNode;
         using namespace DataSizing;
         using Curve::GetCurveIndex;
         static constexpr std::string_view routineName("FourPipeBeamFactory "); // include trailing blank space
@@ -169,21 +169,21 @@ namespace FourPipeBeam {
         thisBeam->airInNodeNum = GetOnlySingleNode(state,
                                                    state.dataIPShortCut->cAlphaArgs(5),
                                                    ErrorsFound,
-                                                   DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
+                                                   Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                   DataLoopNode::NodeFluidType::Air,
-                                                   DataLoopNode::ConnectionType::Inlet,
-                                                   NodeInputManager::CompFluidStream::Primary,
+                                                   Node::NodeFluidType::Air,
+                                                   Node::ConnectionType::Inlet,
+                                                   Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent,
                                                    state.dataIPShortCut->cAlphaFieldNames(5));
         thisBeam->airOutNodeNum = GetOnlySingleNode(state,
                                                     state.dataIPShortCut->cAlphaArgs(6),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
+                                                    Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
+                                                    Node::NodeFluidType::Air,
+                                                    Node::ConnectionType::Outlet,
+                                                    Node::CompFluidStream::Primary,
                                                     ObjectIsNotParent,
                                                     state.dataIPShortCut->cAlphaFieldNames(6));
         if (state.dataIPShortCut->lAlphaFieldBlanks(7) && state.dataIPShortCut->lAlphaFieldBlanks(8)) { // no chilled water nodes, no beam cooling
@@ -213,21 +213,21 @@ namespace FourPipeBeam {
             thisBeam->cWInNodeNum = GetOnlySingleNode(state,
                                                       state.dataIPShortCut->cAlphaArgs(7),
                                                       ErrorsFound,
-                                                      DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
+                                                      Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                      DataLoopNode::NodeFluidType::Water,
-                                                      DataLoopNode::ConnectionType::Inlet,
-                                                      NodeInputManager::CompFluidStream::Secondary,
+                                                      Node::NodeFluidType::Water,
+                                                      Node::ConnectionType::Inlet,
+                                                      Node::CompFluidStream::Secondary,
                                                       ObjectIsParent,
                                                       state.dataIPShortCut->cAlphaFieldNames(7));
             thisBeam->cWOutNodeNum = GetOnlySingleNode(state,
                                                        state.dataIPShortCut->cAlphaArgs(8),
                                                        ErrorsFound,
-                                                       DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
+                                                       Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                       DataLoopNode::NodeFluidType::Water,
-                                                       DataLoopNode::ConnectionType::Outlet,
-                                                       NodeInputManager::CompFluidStream::Secondary,
+                                                       Node::NodeFluidType::Water,
+                                                       Node::ConnectionType::Outlet,
+                                                       Node::CompFluidStream::Secondary,
                                                        ObjectIsParent,
                                                        state.dataIPShortCut->cAlphaFieldNames(8));
         }
@@ -258,21 +258,21 @@ namespace FourPipeBeam {
             thisBeam->hWInNodeNum = GetOnlySingleNode(state,
                                                       state.dataIPShortCut->cAlphaArgs(9),
                                                       ErrorsFound,
-                                                      DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
+                                                      Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                      DataLoopNode::NodeFluidType::Water,
-                                                      DataLoopNode::ConnectionType::Inlet,
-                                                      NodeInputManager::CompFluidStream::Secondary,
+                                                      Node::NodeFluidType::Water,
+                                                      Node::ConnectionType::Inlet,
+                                                      Node::CompFluidStream::Secondary,
                                                       ObjectIsParent,
                                                       state.dataIPShortCut->cAlphaFieldNames(9));
             thisBeam->hWOutNodeNum = GetOnlySingleNode(state,
                                                        state.dataIPShortCut->cAlphaArgs(10),
                                                        ErrorsFound,
-                                                       DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
+                                                       Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                       DataLoopNode::NodeFluidType::Water,
-                                                       DataLoopNode::ConnectionType::Outlet,
-                                                       NodeInputManager::CompFluidStream::Secondary,
+                                                       Node::NodeFluidType::Water,
+                                                       Node::ConnectionType::Outlet,
+                                                       Node::CompFluidStream::Secondary,
                                                        ObjectIsParent,
                                                        state.dataIPShortCut->cAlphaFieldNames(10));
         }

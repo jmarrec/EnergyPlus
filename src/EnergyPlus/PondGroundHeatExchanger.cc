@@ -219,15 +219,15 @@ void GetPondGroundHeatExchanger(EnergyPlusData &state)
         // get inlet node data
         state.dataPondGHE->PondGHE(Item).InletNode = state.dataIPShortCut->cAlphaArgs(2);
         state.dataPondGHE->PondGHE(Item).InletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(2),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::GroundHeatExchangerPond,
+                                                Node::ConnectionObjectType::GroundHeatExchangerPond,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent);
         if (state.dataPondGHE->PondGHE(Item).InletNodeNum == 0) {
             ShowSevereError(state,
                             EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(2), state.dataIPShortCut->cAlphaArgs(2)));
@@ -239,15 +239,15 @@ void GetPondGroundHeatExchanger(EnergyPlusData &state)
         // get outlet node data
         state.dataPondGHE->PondGHE(Item).OutletNode = state.dataIPShortCut->cAlphaArgs(3);
         state.dataPondGHE->PondGHE(Item).OutletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(3),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::GroundHeatExchangerPond,
+                                                Node::ConnectionObjectType::GroundHeatExchangerPond,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Outlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Outlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent);
         if (state.dataPondGHE->PondGHE(Item).OutletNodeNum == 0) {
             ShowSevereError(state,
                             EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(3), state.dataIPShortCut->cAlphaArgs(3)));
@@ -256,7 +256,7 @@ void GetPondGroundHeatExchanger(EnergyPlusData &state)
             ErrorsFound = true;
         }
 
-        BranchNodeConnections::TestCompSet(state,
+        Node::TestCompSet(state,
                                            state.dataIPShortCut->cCurrentModuleObject,
                                            state.dataIPShortCut->cAlphaArgs(1),
                                            state.dataIPShortCut->cAlphaArgs(2),

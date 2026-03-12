@@ -1658,10 +1658,10 @@ namespace AirflowNetwork {
 
         // Using/Aliasing
         using Curve::GetCurveIndex;
-        using DataLoopNode::ObjectIsParent;
+        using Node::ObjectIsParent;
         using HVACHXAssistedCoolingCoil::VerifyHeatExchangerParent;
         using MixedAir::GetOAMixerNumber;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
         using OutAirNodeManager::SetOutAirNodes;
         using RoomAir::GetRAFNNodeNum;
 
@@ -2683,11 +2683,11 @@ namespace AirflowNetwork {
                         int NodeNum = GetOnlySingleNode(m_state,
                                                         Alphas(1),
                                                         ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::OutdoorAirNode,
+                                                        Node::ConnectionObjectType::OutdoorAirNode,
                                                         "AirflowNetwork:Multizone:Surface",
-                                                        DataLoopNode::NodeFluidType::Air,
-                                                        DataLoopNode::ConnectionType::Inlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
+                                                        Node::NodeFluidType::Air,
+                                                        Node::ConnectionType::Inlet,
+                                                        Node::CompFluidStream::Primary,
                                                         ObjectIsParent);
                         MultizoneExternalNodeData(i).OutAirNodeNum = NodeNum;               // Name of outdoor air node
                         MultizoneExternalNodeData(i).height = Node(NodeNum).Height;         // Nodal height
@@ -10406,12 +10406,11 @@ namespace AirflowNetwork {
         // Note: this routine shouldn't be called more than once
 
         // Using/Aliasing
-        using BranchNodeConnections::GetNodeConnectionType;
+        using Node::GetNodeConnectionType;
         using MixedAir::GetNumOAMixers;
         using MixedAir::GetOAMixerInletNodeNumber;
         using MixedAir::GetOAMixerReliefNodeNumber;
         using SingleDuct::GetHVACSingleDuctSysIndex;
-        using namespace DataLoopNode;
         auto &NumPrimaryAirSys = m_state.dataHVACGlobal->NumPrimaryAirSys;
         using DXCoils::SetDXCoilAirLoopNumber;
         using HeatingCoils::SetHeatingCoilAirLoopNumber;
@@ -10436,7 +10435,7 @@ namespace AirflowNetwork {
         bool ErrorsFound(false);
         bool IsNotOK(false);
         bool errFlag(false);
-        EPVector<DataLoopNode::ConnectionType> NodeConnectionType; // Specifies the type of node connection
+        EPVector<Node::ConnectionType> NodeConnectionType; // Specifies the type of node connection
         std::string CurrentModuleObject;
 
         bool hpwhFound(false);            // Flag for HPWH identification
@@ -10526,7 +10525,7 @@ namespace AirflowNetwork {
             if (NodeFound(m_state.dataBranchNodeConnections->NodeConnections(k).NodeNumber)) {
                 continue;
             }
-            if (m_state.dataBranchNodeConnections->NodeConnections(k).FluidStream == NodeInputManager::CompFluidStream::Secondary) {
+            if (m_state.dataBranchNodeConnections->NodeConnections(k).FluidStream == Node::CompFluidStream::Secondary) {
                 NodeFound(m_state.dataBranchNodeConnections->NodeConnections(k).NodeNumber) = true;
             }
         }
@@ -10536,7 +10535,7 @@ namespace AirflowNetwork {
             if (NodeFound(k)) {
                 continue;
             }
-            if (m_state.dataLoopNodes->Node(k).FluidType == DataLoopNode::NodeFluidType::Water) {
+            if (m_state.dataLoopNodes->Node(k).FluidType == Node::NodeFluidType::Water) {
                 NodeFound(k) = true;
             }
         }
@@ -10652,7 +10651,7 @@ namespace AirflowNetwork {
             } else {
                 //   skip nodes for air cooled condensers
                 for (int j = 1; j <= isize(NodeConnectionType); ++j) {
-                    if (NodeConnectionType(j) == DataLoopNode::ConnectionType::OutsideAirReference) {
+                    if (NodeConnectionType(j) == Node::ConnectionType::OutsideAirReference) {
                         NodeFound(i) = true;
                     }
                 }
@@ -12204,9 +12203,9 @@ namespace AirflowNetwork {
         // This function outputs an AirLoopNum based on node number
 
         // Using/Aliasing
-        using BranchNodeConnections::GetChildrenData;
-        using BranchNodeConnections::GetNumChildren;
-        using BranchNodeConnections::IsParentObject;
+        using Node::GetChildrenData;
+        using Node::GetNumChildren;
+        using Node::IsParentObject;
         auto &NumPrimaryAirSys = m_state.dataHVACGlobal->NumPrimaryAirSys;
         using SingleDuct::GetHVACSingleDuctSysIndex;
 
@@ -12254,15 +12253,15 @@ namespace AirflowNetwork {
                         return AirLoopNum;
                     }
                     if (m_state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).Branch(BranchNum).Comp(NumOfComp).NumSubComps == 0) {
-                        DataLoopNode::ConnectionObjectType TypeOfComp = static_cast<DataLoopNode::ConnectionObjectType>(EnergyPlus::getEnumValue(
-                            BranchNodeConnections::ConnectionObjectTypeNamesUC,
+                        Node::ConnectionObjectType TypeOfComp = static_cast<Node::ConnectionObjectType>(EnergyPlus::getEnumValue(
+                            Node::ConnectionObjectTypeNamesUC,
                             m_state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).Branch(BranchNum).Comp(NumOfComp).TypeOf));
                         std::string const &NameOfComp =
                             m_state.dataAirSystemsData->PrimaryAirSystems(AirLoopNum).Branch(BranchNum).Comp(NumOfComp).Name;
                         if (IsParentObject(m_state, TypeOfComp, NameOfComp)) {
 
                             int NumChildren = GetNumChildren(m_state, TypeOfComp, NameOfComp);
-                            EPVector<DataLoopNode::ConnectionObjectType> SubCompTypes;
+                            EPVector<Node::ConnectionObjectType> SubCompTypes;
                             Array1D_string SubCompNames;
                             Array1D_string InletNodeNames;
                             Array1D_int InletNodeNumbers;
@@ -12309,12 +12308,12 @@ namespace AirflowNetwork {
                                 }
                             }
                             for (NumOfSubComp = 1; NumOfSubComp <= NumChildren; ++NumOfSubComp) {
-                                DataLoopNode::ConnectionObjectType TypeOfSubComp = SubCompTypes(NumOfSubComp);
+                                Node::ConnectionObjectType TypeOfSubComp = SubCompTypes(NumOfSubComp);
                                 std::string NameOfSubComp = SubCompNames(NumOfSubComp);
                                 if (IsParentObject(m_state, TypeOfSubComp, NameOfSubComp)) {
 
                                     int NumGrandChildren = GetNumChildren(m_state, TypeOfSubComp, NameOfSubComp);
-                                    EPVector<DataLoopNode::ConnectionObjectType> SubSubCompTypes;
+                                    EPVector<Node::ConnectionObjectType> SubSubCompTypes;
                                     Array1D_string SubSubCompNames;
                                     Array1D_string SubSubInletNodeNames;
                                     Array1D_int SubSubInletNodeNumbers;

@@ -111,7 +111,6 @@ namespace OutdoorAirUnit {
     // condition.
 
     // Using/Aliasing
-    using namespace DataLoopNode;
     using HVAC::SmallAirVolFlow;
     using HVAC::SmallLoad;
     using HVAC::SmallMassFlow;
@@ -216,16 +215,15 @@ namespace OutdoorAirUnit {
         // Mixed Air.cc
 
         // Using/Aliasing
-        using BranchNodeConnections::SetUpCompSets;
-        using BranchNodeConnections::TestCompSet;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::SetUpCompSets;
+        using Node::TestCompSet;
+        using Node::GetOnlySingleNode;
         using SteamCoils::GetCoilAirInletNode;
         using SteamCoils::GetCoilAirOutletNode;
         using SteamCoils::GetCoilMaxSteamFlowRate;
         using SteamCoils::GetCoilSteamInletNode;
         using SteamCoils::GetCoilSteamOutletNode;
         using SteamCoils::GetSteamCoilIndex;
-        using namespace DataLoopNode;
         using HeatingCoils::GetCoilInletNode;
         using HeatingCoils::GetCoilOutletNode;
         using OutAirNodeManager::CheckAndAddAirNodeNumber;
@@ -487,22 +485,22 @@ namespace OutdoorAirUnit {
             thisOutAirUnit.AirOutletNode = GetOnlySingleNode(state,
                                                              state.dataIPShortCut->cAlphaArgs(13),
                                                              ErrorsFound,
-                                                             DataLoopNode::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
+                                                             Node::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
                                                              state.dataIPShortCut->cAlphaArgs(1),
-                                                             DataLoopNode::NodeFluidType::Air,
-                                                             DataLoopNode::ConnectionType::Outlet,
-                                                             NodeInputManager::CompFluidStream::Primary,
-                                                             ObjectIsParent);
+                                                             Node::NodeFluidType::Air,
+                                                             Node::ConnectionType::Outlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsParent);
             if (!lAlphaBlanks(14)) {
                 thisOutAirUnit.AirInletNode = GetOnlySingleNode(state,
                                                                 state.dataIPShortCut->cAlphaArgs(14),
                                                                 ErrorsFound,
-                                                                DataLoopNode::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
+                                                                Node::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                DataLoopNode::NodeFluidType::Air,
-                                                                DataLoopNode::ConnectionType::Inlet,
-                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                ObjectIsParent);
+                                                                Node::NodeFluidType::Air,
+                                                                Node::ConnectionType::Inlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsParent);
             } else {
                 if (thisOutAirUnit.ExtFan) {
                     ShowSevereError(state,
@@ -517,23 +515,23 @@ namespace OutdoorAirUnit {
             thisOutAirUnit.SFanOutletNode = GetOnlySingleNode(state,
                                                               state.dataIPShortCut->cAlphaArgs(15),
                                                               ErrorsFound,
-                                                              DataLoopNode::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
+                                                              Node::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::Internal,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              ObjectIsNotParent);
+                                                              Node::NodeFluidType::Air,
+                                                              Node::ConnectionType::Internal,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsNotParent);
 
             //  Set connection type to 'OutdoorAir', because this is hardwired to OA conditions
             thisOutAirUnit.OutsideAirNode = GetOnlySingleNode(state,
                                                               state.dataIPShortCut->cAlphaArgs(12),
                                                               ErrorsFound,
-                                                              DataLoopNode::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
+                                                              Node::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                              DataLoopNode::NodeFluidType::Air,
-                                                              DataLoopNode::ConnectionType::OutsideAirReference,
-                                                              NodeInputManager::CompFluidStream::Primary,
-                                                              ObjectIsNotParent);
+                                                              Node::NodeFluidType::Air,
+                                                              Node::ConnectionType::OutsideAirReference,
+                                                              Node::CompFluidStream::Primary,
+                                                              Node::ObjectIsNotParent);
 
             if (!lAlphaBlanks(12)) {
                 CheckAndAddAirNodeNumber(state, thisOutAirUnit.OutsideAirNode, IsValid);

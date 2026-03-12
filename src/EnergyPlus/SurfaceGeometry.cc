@@ -8057,12 +8057,12 @@ namespace SurfaceGeometry {
                     int NodeNum = GetOnlySingleNode(state,
                                                     s_ipsc->cAlphaArgs(5),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::SurfacePropertyLocalEnvironment,
+                                                    Node::ConnectionObjectType::SurfacePropertyLocalEnvironment,
                                                     SurfLocalEnv.Name,
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsParent);
+                                                    Node::NodeFluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsParent);
                     if (NodeNum == 0 && OutAirNodeManager::CheckOutAirNodeNumber(state, NodeNum)) {
                         ShowSevereError(state,
                                         EnergyPlus::format("{} {} = \"{}\", object. Illegal value for \"{}\" has been found.",

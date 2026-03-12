@@ -598,26 +598,26 @@ void GetWrapperInput(EnergyPlusData &state)
         }
 
         state.dataPlantCentralGSHP->Wrapper(WrapperNum).CHWInletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(3),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::CentralHeatPumpSystem,
+                                                Node::ConnectionObjectType::CentralHeatPumpSystem,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent); // node name : connection should be careful!
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent); // node name : connection should be careful!
         state.dataPlantCentralGSHP->Wrapper(WrapperNum).CHWOutletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(4),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::CentralHeatPumpSystem,
+                                                Node::ConnectionObjectType::CentralHeatPumpSystem,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Outlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(state,
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Outlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent);
+        Node::TestCompSet(state,
                                            state.dataIPShortCut->cCurrentModuleObject,
                                            state.dataIPShortCut->cAlphaArgs(1),
                                            state.dataIPShortCut->cAlphaArgs(3),
@@ -625,26 +625,26 @@ void GetWrapperInput(EnergyPlusData &state)
                                            "Chilled Water Nodes");
 
         state.dataPlantCentralGSHP->Wrapper(WrapperNum).GLHEInletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(5),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::CentralHeatPumpSystem,
+                                                Node::ConnectionObjectType::CentralHeatPumpSystem,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Secondary,
-                                                DataLoopNode::ObjectIsNotParent); // node name : connection should be careful!
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Secondary,
+                                                Node::ObjectIsNotParent); // node name : connection should be careful!
         state.dataPlantCentralGSHP->Wrapper(WrapperNum).GLHEOutletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(6),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::CentralHeatPumpSystem,
+                                                Node::ConnectionObjectType::CentralHeatPumpSystem,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Outlet,
-                                                NodeInputManager::CompFluidStream::Secondary,
-                                                DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(state,
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Outlet,
+                                                Node::CompFluidStream::Secondary,
+                                                Node::ObjectIsNotParent);
+        Node::TestCompSet(state,
                                            state.dataIPShortCut->cCurrentModuleObject,
                                            state.dataIPShortCut->cAlphaArgs(1),
                                            state.dataIPShortCut->cAlphaArgs(5),
@@ -652,26 +652,26 @@ void GetWrapperInput(EnergyPlusData &state)
                                            "GLHE Nodes");
 
         state.dataPlantCentralGSHP->Wrapper(WrapperNum).HWInletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(7),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::CentralHeatPumpSystem,
+                                                Node::ConnectionObjectType::CentralHeatPumpSystem,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Tertiary,
-                                                DataLoopNode::ObjectIsNotParent); // node name : connection should be careful!
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Tertiary,
+                                                Node::ObjectIsNotParent); // node name : connection should be careful!
         state.dataPlantCentralGSHP->Wrapper(WrapperNum).HWOutletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 state.dataIPShortCut->cAlphaArgs(8),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::CentralHeatPumpSystem,
+                                                Node::ConnectionObjectType::CentralHeatPumpSystem,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Outlet,
-                                                NodeInputManager::CompFluidStream::Tertiary,
-                                                DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(state,
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Outlet,
+                                                Node::CompFluidStream::Tertiary,
+                                                Node::ObjectIsNotParent);
+        Node::TestCompSet(state,
                                            state.dataIPShortCut->cCurrentModuleObject,
                                            state.dataIPShortCut->cAlphaArgs(1),
                                            state.dataIPShortCut->cAlphaArgs(7),
@@ -1648,7 +1648,7 @@ void WrapperSpecs::initialize(EnergyPlusData &state,
             }
 
             // check if setpoint on outlet node - chilled water loop
-            if (state.dataLoopNodes->Node(this->CHWOutletNodeNum).TempSetPoint == DataLoopNode::SensedNodeFlagValue) {
+            if (state.dataLoopNodes->Node(this->CHWOutletNodeNum).TempSetPoint == Node::SensedNodeFlagValue) {
                 if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                     if (!this->CoolSetPointErrDone) {
                         ShowWarningError(
@@ -1682,7 +1682,7 @@ void WrapperSpecs::initialize(EnergyPlusData &state,
                     state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
             }
 
-            if (state.dataLoopNodes->Node(this->HWOutletNodeNum).TempSetPoint == DataLoopNode::SensedNodeFlagValue) {
+            if (state.dataLoopNodes->Node(this->HWOutletNodeNum).TempSetPoint == Node::SensedNodeFlagValue) {
                 if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                     if (!this->HeatSetPointErrDone) {
                         ShowWarningError(

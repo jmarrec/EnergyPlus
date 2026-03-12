@@ -225,26 +225,26 @@ void GetFluidCoolerInput(EnergyPlusData &state)
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).indexInArray = FluidCoolerNum;
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerMassFlowRateMultiplier = 2.5;
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).WaterInletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 AlphArray(2),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::FluidCoolerSingleSpeed,
+                                                Node::ConnectionObjectType::FluidCoolerSingleSpeed,
                                                 AlphArray(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent);
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).WaterOutletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 AlphArray(3),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::FluidCoolerSingleSpeed,
+                                                Node::ConnectionObjectType::FluidCoolerSingleSpeed,
                                                 AlphArray(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Outlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(state, cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Outlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent);
+        Node::TestCompSet(state, cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUA = NumArray(1);
         if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
             state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUAWasAutoSized = true;
@@ -271,15 +271,15 @@ void GetFluidCoolerInput(EnergyPlusData &state)
             state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum = 0;
         } else {
             state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
+                Node::GetOnlySingleNode(state,
                                                     AlphArray(5),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::FluidCoolerSingleSpeed,
+                                                    Node::ConnectionObjectType::FluidCoolerSingleSpeed,
                                                     state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name,
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::OutsideAirReference,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                                                    Node::NodeFluidType::Air,
+                                                    Node::ConnectionType::OutsideAirReference,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
             if (!OutAirNodeManager::CheckOutAirNodeNumber(state, state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum)) {
                 ShowSevereError(state,
                                 EnergyPlus::format("{}= \"{}\" {}= \"{}\" not valid.",
@@ -326,26 +326,26 @@ void GetFluidCoolerInput(EnergyPlusData &state)
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).indexInArray = FluidCoolerNum;
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).FluidCoolerMassFlowRateMultiplier = 2.5;
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).WaterInletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 AlphArray(2),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::FluidCoolerTwoSpeed,
+                                                Node::ConnectionObjectType::FluidCoolerTwoSpeed,
                                                 AlphArray(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Inlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Inlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent);
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).WaterOutletNodeNum =
-            NodeInputManager::GetOnlySingleNode(state,
+            Node::GetOnlySingleNode(state,
                                                 AlphArray(3),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::FluidCoolerTwoSpeed,
+                                                Node::ConnectionObjectType::FluidCoolerTwoSpeed,
                                                 AlphArray(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Outlet,
-                                                NodeInputManager::CompFluidStream::Primary,
-                                                DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(state, cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Outlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent);
+        Node::TestCompSet(state, cCurrentModuleObject, AlphArray(1), AlphArray(2), AlphArray(3), "Chilled Water Nodes");
 
         state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUA = NumArray(1);
         if (state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).HighSpeedFluidCoolerUA == DataSizing::AutoSize) {
@@ -393,15 +393,15 @@ void GetFluidCoolerInput(EnergyPlusData &state)
             state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum = 0;
         } else {
             state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
+                Node::GetOnlySingleNode(state,
                                                     AlphArray(5),
                                                     ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::FluidCoolerTwoSpeed,
+                                                    Node::ConnectionObjectType::FluidCoolerTwoSpeed,
                                                     state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name,
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::OutsideAirReference,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                                                    Node::NodeFluidType::Air,
+                                                    Node::ConnectionType::OutsideAirReference,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
             if (!OutAirNodeManager::CheckOutAirNodeNumber(state, state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).OutdoorAirInletNodeNum)) {
                 ShowSevereError(state,
                                 EnergyPlus::format("{}= \"{}\" {}= \"{}\" not valid.",

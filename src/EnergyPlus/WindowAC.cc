@@ -106,7 +106,6 @@ namespace WindowAC {
     // modeled - instead cycling inefficiencies must be included in the efficiency
     // curves of the DX module.
 
-    using namespace DataLoopNode;
     using namespace DataSizing;
     using HVAC::CoilDX_CoolingHXAssisted;
     using HVAC::CoilDX_CoolingSingleSpeed;
@@ -215,9 +214,9 @@ namespace WindowAC {
         // METHODOLOGY EMPLOYED:
         // Uses "Get" routines to read in data.
 
-        using BranchNodeConnections::SetUpCompSets;
+        using Node::SetUpCompSets;
 
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
         auto &GetDXCoilOutletNode(DXCoils::GetCoilOutletNode);
         auto &GetDXHXAsstdCoilOutletNode(HVACHXAssistedCoolingCoil::GetCoilOutletNode);
         using MixedAir::GetOAMixerIndex;
@@ -311,22 +310,22 @@ namespace WindowAC {
             state.dataWindowAC->WindAC(WindACNum).AirInNode = GetOnlySingleNode(state,
                                                                                 Alphas(3),
                                                                                 ErrorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::ZoneHVACWindowAirConditioner,
+                                                                                Node::ConnectionObjectType::ZoneHVACWindowAirConditioner,
                                                                                 Alphas(1),
-                                                                                DataLoopNode::NodeFluidType::Air,
-                                                                                DataLoopNode::ConnectionType::Inlet,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                ObjectIsParent);
+                                                                                Node::NodeFluidType::Air,
+                                                                                Node::ConnectionType::Inlet,
+                                                                                Node::CompFluidStream::Primary,
+                                                                                Node::ObjectIsParent);
 
             state.dataWindowAC->WindAC(WindACNum).AirOutNode = GetOnlySingleNode(state,
                                                                                  Alphas(4),
                                                                                  ErrorsFound,
-                                                                                 DataLoopNode::ConnectionObjectType::ZoneHVACWindowAirConditioner,
+                                                                                 Node::ConnectionObjectType::ZoneHVACWindowAirConditioner,
                                                                                  Alphas(1),
-                                                                                 DataLoopNode::NodeFluidType::Air,
-                                                                                 DataLoopNode::ConnectionType::Outlet,
-                                                                                 NodeInputManager::CompFluidStream::Primary,
-                                                                                 ObjectIsParent);
+                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::ConnectionType::Outlet,
+                                                                                 Node::CompFluidStream::Primary,
+                                                                                 Node::ObjectIsParent);
 
             state.dataWindowAC->WindAC(WindACNum).OAMixType = Alphas(5);
             state.dataWindowAC->WindAC(WindACNum).OAMixName = Alphas(6);
@@ -1295,7 +1294,7 @@ namespace WindowAC {
         // DX Cooling HX assisted coils can cycle the heat exchanger, see if coil ON, HX OFF can meet humidity setpoint if one exists
         if (state.dataWindowAC->WindAC(WindACNum).DXCoilType_Num == CoilDX_CoolingHXAssisted) {
             // Check for a setpoint at the HX outlet node, if it doesn't exist always run the HX
-            if (state.dataLoopNodes->Node(state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum).HumRatMax == SensedNodeFlagValue) {
+            if (state.dataLoopNodes->Node(state.dataWindowAC->WindAC(WindACNum).CoilOutletNodeNum).HumRatMax == Node::SensedNodeFlagValue) {
                 HXUnitOn = true;
             } else {
                 HXUnitOn = false;

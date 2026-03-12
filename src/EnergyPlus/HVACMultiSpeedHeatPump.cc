@@ -559,24 +559,24 @@ namespace HVACMultiSpeedHeatPump {
             thisMSHP.AirInletNodeNum = GetOnlySingleNode(state,
                                                          Alphas(3),
                                                          ErrorsFound,
-                                                         DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
+                                                         Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
                                                          Alphas(1),
-                                                         DataLoopNode::NodeFluidType::Air,
-                                                         DataLoopNode::ConnectionType::Inlet,
-                                                         NodeInputManager::CompFluidStream::Primary,
-                                                         DataLoopNode::ObjectIsParent);
+                                                         Node::NodeFluidType::Air,
+                                                         Node::ConnectionType::Inlet,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsParent);
 
             thisMSHP.AirOutletNodeNum = GetOnlySingleNode(state,
                                                           Alphas(4),
                                                           ErrorsFound,
-                                                          DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
+                                                          Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
                                                           Alphas(1),
-                                                          DataLoopNode::NodeFluidType::Air,
-                                                          DataLoopNode::ConnectionType::Outlet,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          DataLoopNode::ObjectIsParent);
+                                                          Node::NodeFluidType::Air,
+                                                          Node::ConnectionType::Outlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsParent);
 
-            BranchNodeConnections::TestCompSet(state, state.dataHVACMultiSpdHP->CurrentModuleObject, Alphas(1), Alphas(3), Alphas(4), "Air Nodes");
+            Node::TestCompSet(state, state.dataHVACMultiSpdHP->CurrentModuleObject, Alphas(1), Alphas(3), Alphas(4), "Air Nodes");
 
             // Get the Controlling Zone or Location of the engine driven heat pump Thermostat
             thisMSHP.ControlZoneNum = Util::FindItemInList(Alphas(5), state.dataHeatBal->Zone);
@@ -676,7 +676,7 @@ namespace HVACMultiSpeedHeatPump {
                 thisMSHP.fanType = fan->type;
                 thisMSHP.FanInletNode = fan->inletNodeNum;
                 thisMSHP.FanOutletNode = fan->outletNodeNum;
-                BranchNodeConnections::SetUpCompSets(state,
+                Node::SetUpCompSets(state,
                                                      state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                      thisMSHP.Name,
                                                      HVAC::fanTypeNames[(int)thisMSHP.fanType],
@@ -753,7 +753,7 @@ namespace HVACMultiSpeedHeatPump {
                         EnergyPlus::format("...for heating coil. Occurs in {} \"{}\"", state.dataHVACMultiSpdHP->CurrentModuleObject, Alphas(1)));
                     LocalError = false;
                 }
-                BranchNodeConnections::SetUpCompSets(state,
+                Node::SetUpCompSets(state,
                                                      state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                      thisMSHP.Name,
                                                      "Coil:Heating:DX:MultiSpeed",
@@ -822,7 +822,7 @@ namespace HVACMultiSpeedHeatPump {
                     LocalError = false;
                 }
                 if (Util::SameString(Alphas(10), "Coil:Heating:Electric:MultiStage")) {
-                    BranchNodeConnections::SetUpCompSets(state,
+                    Node::SetUpCompSets(state,
                                                          state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                          thisMSHP.Name,
                                                          "Coil:Heating:Electric:MultiStage",
@@ -830,7 +830,7 @@ namespace HVACMultiSpeedHeatPump {
                                                          "UNDEFINED",
                                                          "UNDEFINED");
                 } else {
-                    BranchNodeConnections::SetUpCompSets(state,
+                    Node::SetUpCompSets(state,
                                                          state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                          thisMSHP.Name,
                                                          "Coil:Heating:Gas:MultiStage",
@@ -883,7 +883,7 @@ namespace HVACMultiSpeedHeatPump {
                                           EnergyPlus::format("Occurs in {} = {}", state.dataHVACMultiSpdHP->CurrentModuleObject, thisMSHP.Name));
                         ErrorsFound = true;
                     }
-                    BranchNodeConnections::SetUpCompSets(state,
+                    Node::SetUpCompSets(state,
                                                          state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                          thisMSHP.Name,
                                                          "Coil:Heating:Water",
@@ -948,7 +948,7 @@ namespace HVACMultiSpeedHeatPump {
                         ErrorsFound = true;
                     }
 
-                    BranchNodeConnections::SetUpCompSets(state,
+                    Node::SetUpCompSets(state,
                                                          state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                          thisMSHP.Name,
                                                          "Coil:Heating:Steam",
@@ -1019,7 +1019,7 @@ namespace HVACMultiSpeedHeatPump {
                 ShowContinueError(state, EnergyPlus::format("The entered {} = \"{}\".", cAlphaFields(12), Alphas(12)));
                 ErrorsFound = true;
             }
-            BranchNodeConnections::SetUpCompSets(state,
+            Node::SetUpCompSets(state,
                                                  state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                  thisMSHP.Name,
                                                  "Coil:Cooling:DX:MultiSpeed",
@@ -1065,7 +1065,7 @@ namespace HVACMultiSpeedHeatPump {
                     ErrorsFound = true;
                     LocalError = false;
                 }
-                BranchNodeConnections::SetUpCompSets(state,
+                Node::SetUpCompSets(state,
                                                      state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                      thisMSHP.Name,
                                                      "Coil:Heating:Fuel",
@@ -1110,7 +1110,7 @@ namespace HVACMultiSpeedHeatPump {
                     LocalError = false;
                 }
 
-                BranchNodeConnections::SetUpCompSets(state,
+                Node::SetUpCompSets(state,
                                                      state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                      thisMSHP.Name,
                                                      "Coil:Heating:Electric",
@@ -1165,7 +1165,7 @@ namespace HVACMultiSpeedHeatPump {
                                           EnergyPlus::format("Occurs in {} = {}", state.dataHVACMultiSpdHP->CurrentModuleObject, thisMSHP.Name));
                         ErrorsFound = true;
                     }
-                    BranchNodeConnections::SetUpCompSets(state,
+                    Node::SetUpCompSets(state,
                                                          state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                          thisMSHP.Name,
                                                          "Coil:Heating:Water",
@@ -1231,7 +1231,7 @@ namespace HVACMultiSpeedHeatPump {
                         ErrorsFound = true;
                     }
 
-                    BranchNodeConnections::SetUpCompSets(state,
+                    Node::SetUpCompSets(state,
                                                          state.dataHVACMultiSpdHP->CurrentModuleObject,
                                                          thisMSHP.Name,
                                                          "Coil:Heating:Steam",
@@ -1297,12 +1297,12 @@ namespace HVACMultiSpeedHeatPump {
                 thisMSHP.HeatRecInletNodeNum = GetOnlySingleNode(state,
                                                                  Alphas(16),
                                                                  ErrorsFound,
-                                                                 DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
+                                                                 Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
                                                                  Alphas(1),
-                                                                 DataLoopNode::NodeFluidType::Water,
-                                                                 DataLoopNode::ConnectionType::Inlet,
-                                                                 NodeInputManager::CompFluidStream::Tertiary,
-                                                                 DataLoopNode::ObjectIsNotParent);
+                                                                 Node::NodeFluidType::Water,
+                                                                 Node::ConnectionType::Inlet,
+                                                                 Node::CompFluidStream::Tertiary,
+                                                                 Node::ObjectIsNotParent);
                 if (thisMSHP.HeatRecInletNodeNum == 0) {
                     ShowSevereError(state,
                                     EnergyPlus::format(
@@ -1312,19 +1312,19 @@ namespace HVACMultiSpeedHeatPump {
                 thisMSHP.HeatRecOutletNodeNum = GetOnlySingleNode(state,
                                                                   Alphas(17),
                                                                   ErrorsFound,
-                                                                  DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
+                                                                  Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
                                                                   Alphas(1),
-                                                                  DataLoopNode::NodeFluidType::Water,
-                                                                  DataLoopNode::ConnectionType::Outlet,
-                                                                  NodeInputManager::CompFluidStream::Tertiary,
-                                                                  DataLoopNode::ObjectIsNotParent);
+                                                                  Node::NodeFluidType::Water,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Tertiary,
+                                                                  Node::ObjectIsNotParent);
                 if (thisMSHP.HeatRecOutletNodeNum == 0) {
                     ShowSevereError(state,
                                     EnergyPlus::format(
                                         "{}, \"{}\", Missing {}.", state.dataHVACMultiSpdHP->CurrentModuleObject, thisMSHP.Name, cAlphaFields(17)));
                     ErrorsFound = true;
                 }
-                BranchNodeConnections::TestCompSet(
+                Node::TestCompSet(
                     state, state.dataHVACMultiSpdHP->CurrentModuleObject, Alphas(1), Alphas(16), Alphas(17), "MSHP Heat Recovery Nodes");
                 DXCoils::SetMSHPDXCoilHeatRecoveryFlag(state, thisMSHP.DXCoolCoilIndex);
                 if (thisMSHP.DXHeatCoilIndex > 0) {

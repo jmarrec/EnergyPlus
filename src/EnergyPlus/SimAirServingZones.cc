@@ -129,7 +129,6 @@ namespace EnergyPlus::SimAirServingZones {
 // METHODOLOGY EMPLOYED:
 // Successive iteration forward from the return air inlet to the supply air outlets.
 
-using namespace DataLoopNode;
 using namespace DataAirLoop;
 using namespace DataSizing;
 using namespace DataZoneEquipment;
@@ -264,8 +263,8 @@ void GetAirPathData(EnergyPlusData &state)
     using MixedAir::GetOASysNumHXs;
     using MixedAir::GetOASysNumSimpControllers;
     using MixedAir::GetOASystemNumber;
-    using NodeInputManager::GetNodeNums;
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetNodeNums;
+    using Node::GetOnlySingleNode;
     using WaterCoils::GetCoilWaterInletNode;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
@@ -475,22 +474,22 @@ void GetAirPathData(EnergyPlusData &state)
         airLoopZoneInfo.AirLoopReturnNodeNum(1) = GetOnlySingleNode(state,
                                                                     Alphas(6),
                                                                     ErrorsFound,
-                                                                    DataLoopNode::ConnectionObjectType::AirLoopHVAC,
+                                                                    Node::ConnectionObjectType::AirLoopHVAC,
                                                                     Alphas(1),
-                                                                    DataLoopNode::NodeFluidType::Air,
-                                                                    DataLoopNode::ConnectionType::Inlet,
-                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                    ObjectIsParent);
+                                                                    Node::NodeFluidType::Air,
+                                                                    Node::ConnectionType::Inlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsParent);
         if (!lAlphaBlanks(7)) {
             airLoopZoneInfo.ZoneEquipReturnNodeNum(1) = GetOnlySingleNode(state,
                                                                           Alphas(7),
                                                                           ErrorsFound,
-                                                                          DataLoopNode::ConnectionObjectType::AirLoopHVAC,
+                                                                          Node::ConnectionObjectType::AirLoopHVAC,
                                                                           Alphas(1),
-                                                                          DataLoopNode::NodeFluidType::Air,
-                                                                          DataLoopNode::ConnectionType::Outlet,
-                                                                          NodeInputManager::CompFluidStream::Primary,
-                                                                          ObjectIsParent);
+                                                                          Node::NodeFluidType::Air,
+                                                                          Node::ConnectionType::Outlet,
+                                                                          Node::CompFluidStream::Primary,
+                                                                          Node::ObjectIsParent);
         } else {
             // If no return path, set this to zero to trigger special handling when calling UpdateHVACInterface
             airLoopZoneInfo.ZoneEquipReturnNodeNum(1) = 0;
@@ -599,12 +598,12 @@ void GetAirPathData(EnergyPlusData &state)
                     NumNodes,
                     NodeNums,
                     ErrInList,
-                    DataLoopNode::NodeFluidType::Air,
-                    DataLoopNode::ConnectionObjectType::AirLoopHVAC,
+                    Node::NodeFluidType::Air,
+                    Node::ConnectionObjectType::AirLoopHVAC,
                     primaryAirSystems.Name,
-                    DataLoopNode::ConnectionType::Inlet,
-                    NodeInputManager::CompFluidStream::Primary,
-                    ObjectIsParent,
+                    Node::ConnectionType::Inlet,
+                    Node::CompFluidStream::Primary,
+                    Node::ObjectIsParent,
                     false,
                     cAlphaFields(8));
         if (ErrInList) {
@@ -642,12 +641,12 @@ void GetAirPathData(EnergyPlusData &state)
                     NumNodes,
                     NodeNums,
                     ErrInList,
-                    DataLoopNode::NodeFluidType::Air,
-                    DataLoopNode::ConnectionObjectType::AirLoopHVAC,
+                    Node::NodeFluidType::Air,
+                    Node::ConnectionObjectType::AirLoopHVAC,
                     primaryAirSystems.Name,
-                    DataLoopNode::ConnectionType::Outlet,
-                    NodeInputManager::CompFluidStream::Primary,
-                    ObjectIsParent,
+                    Node::ConnectionType::Outlet,
+                    Node::CompFluidStream::Primary,
+                    Node::ObjectIsParent,
                     false,
                     cAlphaFields(9));
         if (ErrInList) {

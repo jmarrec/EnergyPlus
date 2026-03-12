@@ -68,9 +68,6 @@
 
 namespace EnergyPlus::IntegratedHeatPump {
 
-// Using/Aliasing
-using namespace DataLoopNode;
-
 Real64 constexpr WaterDensity(986.0); // standard water density at 60 C
 
 void SimIHP(EnergyPlusData &state,
@@ -402,11 +399,10 @@ void GetIHPInput(EnergyPlusData &state)
     // Uses "Get" routines to read in data.
 
     // Using/Aliasing
-    using namespace NodeInputManager;
-    using BranchNodeConnections::OverrideNodeConnectionType;
-    using BranchNodeConnections::RegisterNodeConnection;
-    using BranchNodeConnections::SetUpCompSets;
-    using BranchNodeConnections::TestCompSet;
+    using Node::OverrideNodeConnectionType;
+    using Node::RegisterNodeConnection;
+    using Node::SetUpCompSets;
+    using Node::TestCompSet;
     using GlobalNames::VerifyUniqueCoilName;
     using VariableSpeedCoils::GetCoilIndexVariableSpeed;
 
@@ -483,7 +479,7 @@ void GetIHPInput(EnergyPlusData &state)
 
         ihp.SCCoilType = "COIL:COOLING:DX:VARIABLESPEED";
         ihp.SCCoilName = AlphArray(3);
-        ihp.SCCoilTypeNum = DataLoopNode::ConnectionObjectType::CoilCoolingDXVariableSpeed;
+        ihp.SCCoilTypeNum = Node::ConnectionObjectType::CoilCoolingDXVariableSpeed;
 
         ValidateComponent(state, ihp.SCCoilType, ihp.SCCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
@@ -500,7 +496,7 @@ void GetIHPInput(EnergyPlusData &state)
 
         ihp.SHCoilType = "COIL:HEATING:DX:VARIABLESPEED";
         ihp.SHCoilName = AlphArray(4);
-        ihp.SHCoilTypeNum = DataLoopNode::ConnectionObjectType::CoilHeatingDXVariableSpeed;
+        ihp.SHCoilTypeNum = Node::ConnectionObjectType::CoilHeatingDXVariableSpeed;
 
         ValidateComponent(state, ihp.SHCoilType, ihp.SHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
@@ -517,7 +513,7 @@ void GetIHPInput(EnergyPlusData &state)
 
         ihp.DWHCoilType = "COIL:WATERHEATING:AIRTOWATERHEATPUMP:VARIABLESPEED";
         ihp.DWHCoilName = AlphArray(5);
-        ihp.DWHCoilTypeNum = DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed;
+        ihp.DWHCoilTypeNum = Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed;
 
         ValidateComponent(state, ihp.DWHCoilType, ihp.DWHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
@@ -534,7 +530,7 @@ void GetIHPInput(EnergyPlusData &state)
 
         ihp.SCWHCoilType = "COIL:WATERHEATING:AIRTOWATERHEATPUMP:VARIABLESPEED";
         ihp.SCWHCoilName = AlphArray(6);
-        ihp.SCWHCoilTypeNum = DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed;
+        ihp.SCWHCoilTypeNum = Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed;
 
         ValidateComponent(state, ihp.SCWHCoilType, ihp.SCWHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
@@ -551,7 +547,7 @@ void GetIHPInput(EnergyPlusData &state)
 
         ihp.SCDWHCoolCoilType = "COIL:COOLING:DX:VARIABLESPEED";
         ihp.SCDWHCoolCoilName = AlphArray(7);
-        ihp.SCDWHCoolCoilTypeNum = DataLoopNode::ConnectionObjectType::CoilCoolingDXVariableSpeed;
+        ihp.SCDWHCoolCoilTypeNum = Node::ConnectionObjectType::CoilCoolingDXVariableSpeed;
 
         ValidateComponent(state, ihp.SCDWHCoolCoilType, ihp.SCDWHCoolCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
@@ -568,7 +564,7 @@ void GetIHPInput(EnergyPlusData &state)
 
         ihp.SCDWHWHCoilType = "COIL:WATERHEATING:AIRTOWATERHEATPUMP:VARIABLESPEED";
         ihp.SCDWHWHCoilName = AlphArray(8);
-        ihp.SCDWHWHCoilTypeNum = DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed;
+        ihp.SCDWHWHCoilTypeNum = Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed;
 
         ValidateComponent(state, ihp.SCDWHWHCoilType, ihp.SCDWHWHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
@@ -587,7 +583,7 @@ void GetIHPInput(EnergyPlusData &state)
 
         ihp.SHDWHHeatCoilType = "COIL:HEATING:DX:VARIABLESPEED";
         ihp.SHDWHHeatCoilName = AlphArray(9);
-        ihp.SHDWHHeatCoilTypeNum = DataLoopNode::ConnectionObjectType::CoilHeatingDXVariableSpeed;
+        ihp.SHDWHHeatCoilTypeNum = Node::ConnectionObjectType::CoilHeatingDXVariableSpeed;
 
         ValidateComponent(state, ihp.SHDWHHeatCoilType, ihp.SHDWHHeatCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
@@ -604,7 +600,7 @@ void GetIHPInput(EnergyPlusData &state)
 
         ihp.SHDWHWHCoilType = "COIL:WATERHEATING:AIRTOWATERHEATPUMP:VARIABLESPEED";
         ihp.SHDWHWHCoilName = AlphArray(10);
-        ihp.SHDWHWHCoilTypeNum = DataLoopNode::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed;
+        ihp.SHDWHWHCoilTypeNum = Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed;
 
         ValidateComponent(state, ihp.SHDWHWHCoilType, ihp.SHDWHWHCoilName, IsNotOK, CurrentModuleObject);
         if (IsNotOK) {
@@ -658,20 +654,20 @@ void GetIHPInput(EnergyPlusData &state)
         RegisterNodeConnection(state,
                                InNode,
                                state.dataLoopNodes->NodeID(InNode),
-                               DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                               Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                ihp.Name + " Cooling Coil",
-                               DataLoopNode::ConnectionType::Inlet,
-                               NodeInputManager::CompFluidStream::Primary,
-                               ObjectIsNotParent,
+                               Node::ConnectionType::Inlet,
+                               Node::CompFluidStream::Primary,
+                               Node::ObjectIsNotParent,
                                ErrorsFound);
         RegisterNodeConnection(state,
                                OutNode,
                                state.dataLoopNodes->NodeID(OutNode),
-                               DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                               Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                ihp.Name + " Cooling Coil",
-                               DataLoopNode::ConnectionType::Outlet,
-                               NodeInputManager::CompFluidStream::Primary,
-                               ObjectIsNotParent,
+                               Node::ConnectionType::Outlet,
+                               Node::CompFluidStream::Primary,
+                               Node::ObjectIsNotParent,
                                ErrorsFound);
 
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Cooling Coil", ihp.SCCoilType, ihp.SCCoilName, InNodeName, OutNodeName);
@@ -680,18 +676,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SCCoilTypeNum,
                                    ihp.SCCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SCCoilTypeNum,
                                    ihp.SCCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCWHCoilIndex).AirInletNodeNum != InNode) ||
@@ -706,18 +702,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SCWHCoilTypeNum,
                                    ihp.SCWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SCWHCoilTypeNum,
                                    ihp.SCWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SCDWHCoolCoilIndex).AirInletNodeNum != InNode) ||
@@ -732,18 +728,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SCDWHCoolCoilTypeNum,
                                    ihp.SCDWHCoolCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SCDWHCoolCoilTypeNum,
                                    ihp.SCDWHCoolCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         // heating coil air node connections
@@ -764,20 +760,20 @@ void GetIHPInput(EnergyPlusData &state)
         RegisterNodeConnection(state,
                                InNode,
                                state.dataLoopNodes->NodeID(InNode),
-                               DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                               Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                ihp.Name + " Heating Coil",
-                               DataLoopNode::ConnectionType::Inlet,
-                               NodeInputManager::CompFluidStream::Primary,
-                               ObjectIsNotParent,
+                               Node::ConnectionType::Inlet,
+                               Node::CompFluidStream::Primary,
+                               Node::ObjectIsNotParent,
                                ErrorsFound);
         RegisterNodeConnection(state,
                                OutNode,
                                state.dataLoopNodes->NodeID(OutNode),
-                               DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                               Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                ihp.Name + " Heating Coil",
-                               DataLoopNode::ConnectionType::Outlet,
-                               NodeInputManager::CompFluidStream::Primary,
-                               ObjectIsNotParent,
+                               Node::ConnectionType::Outlet,
+                               Node::CompFluidStream::Primary,
+                               Node::ObjectIsNotParent,
                                ErrorsFound);
 
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Heating Coil", ihp.SHCoilType, ihp.SHCoilName, InNodeName, OutNodeName);
@@ -786,18 +782,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SHCoilTypeNum,
                                    ihp.SHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SHCoilTypeNum,
                                    ihp.SHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHHeatCoilIndex).AirInletNodeNum != InNode) ||
@@ -812,18 +808,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SHDWHHeatCoilTypeNum,
                                    ihp.SHDWHHeatCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SHDWHHeatCoilTypeNum,
                                    ihp.SHDWHHeatCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         // water node connections
@@ -846,20 +842,20 @@ void GetIHPInput(EnergyPlusData &state)
         RegisterNodeConnection(state,
                                InNode,
                                state.dataLoopNodes->NodeID(InNode),
-                               DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                               Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                ihp.Name + " Water Coil",
-                               DataLoopNode::ConnectionType::Inlet,
-                               NodeInputManager::CompFluidStream::Primary,
-                               ObjectIsNotParent,
+                               Node::ConnectionType::Inlet,
+                               Node::CompFluidStream::Primary,
+                               Node::ObjectIsNotParent,
                                ErrorsFound);
         RegisterNodeConnection(state,
                                OutNode,
                                state.dataLoopNodes->NodeID(InNode),
-                               DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                               Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                ihp.Name + " Water Coil",
-                               DataLoopNode::ConnectionType::Outlet,
-                               NodeInputManager::CompFluidStream::Primary,
-                               ObjectIsNotParent,
+                               Node::ConnectionType::Outlet,
+                               Node::CompFluidStream::Primary,
+                               Node::ObjectIsNotParent,
                                ErrorsFound);
 
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Water Coil", ihp.SCWHCoilType, ihp.SCWHCoilName, InNodeName, OutNodeName);
@@ -868,18 +864,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SCWHCoilTypeNum,
                                    ihp.SCWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Secondary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Secondary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SCWHCoilTypeNum,
                                    ihp.SCWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Secondary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Secondary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Water Coil", ihp.SCDWHWHCoilType, ihp.SCDWHWHCoilName, InNodeName, OutNodeName);
@@ -888,18 +884,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SCDWHWHCoilTypeNum,
                                    ihp.SCDWHWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Secondary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Secondary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SCDWHWHCoilTypeNum,
                                    ihp.SCDWHWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Secondary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Secondary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.SHDWHWHCoilIndex).WaterInletNodeNum != InNode) ||
@@ -914,18 +910,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SHDWHWHCoilTypeNum,
                                    ihp.SHDWHWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Secondary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Secondary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SHDWHWHCoilTypeNum,
                                    ihp.SHDWHWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Secondary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Secondary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         if ((state.dataVariableSpeedCoils->VarSpeedCoil(ihp.DWHCoilIndex).WaterInletNodeNum != InNode) ||
@@ -940,29 +936,29 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.DWHCoilTypeNum,
                                    ihp.DWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Secondary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Secondary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.DWHCoilTypeNum,
                                    ihp.DWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Secondary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Secondary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         ihp.WaterTankoutNod = GetOnlySingleNode(state,
                                                 AlphArray(2),
                                                 ErrorsFound,
-                                                DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                                                Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                                 AlphArray(1),
-                                                DataLoopNode::NodeFluidType::Water,
-                                                DataLoopNode::ConnectionType::Sensor,
-                                                NodeInputManager::CompFluidStream::Secondary,
-                                                ObjectIsNotParent);
+                                                Node::NodeFluidType::Water,
+                                                Node::ConnectionType::Sensor,
+                                                Node::CompFluidStream::Secondary,
+                                                Node::ObjectIsNotParent);
 
         // outdoor air node connections for water heating coils
         // DWH, SCDWH, SHDWH coils have the same outdoor air nodes
@@ -984,20 +980,20 @@ void GetIHPInput(EnergyPlusData &state)
         RegisterNodeConnection(state,
                                InNode,
                                state.dataLoopNodes->NodeID(InNode),
-                               DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                               Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                ihp.Name + " Outdoor Coil",
-                               DataLoopNode::ConnectionType::Inlet,
-                               NodeInputManager::CompFluidStream::Primary,
-                               ObjectIsNotParent,
+                               Node::ConnectionType::Inlet,
+                               Node::CompFluidStream::Primary,
+                               Node::ObjectIsNotParent,
                                ErrorsFound);
         RegisterNodeConnection(state,
                                OutNode,
                                state.dataLoopNodes->NodeID(InNode),
-                               DataLoopNode::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
+                               Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                ihp.Name + " Outdoor Coil",
-                               DataLoopNode::ConnectionType::Outlet,
-                               NodeInputManager::CompFluidStream::Primary,
-                               ObjectIsNotParent,
+                               Node::ConnectionType::Outlet,
+                               Node::CompFluidStream::Primary,
+                               Node::ObjectIsNotParent,
                                ErrorsFound);
 
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Outdoor Coil", ihp.DWHCoilType, ihp.DWHCoilName, InNodeName, OutNodeName);
@@ -1006,18 +1002,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.DWHCoilTypeNum,
                                    ihp.DWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.DWHCoilTypeNum,
                                    ihp.DWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         SetUpCompSets(state, CurrentModuleObject, ihp.Name + " Outdoor Coil", ihp.SCDWHWHCoilType, ihp.SCDWHWHCoilName, InNodeName, OutNodeName);
@@ -1026,18 +1022,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SCDWHWHCoilTypeNum,
                                    ihp.SCDWHWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SCDWHWHCoilTypeNum,
                                    ihp.SCDWHWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         // why was this here
@@ -1056,18 +1052,18 @@ void GetIHPInput(EnergyPlusData &state)
                                    InNodeName,
                                    ihp.SHDWHWHCoilTypeNum,
                                    ihp.SHDWHWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
         OverrideNodeConnectionType(state,
                                    OutNode,
                                    OutNodeName,
                                    ihp.SHDWHWHCoilTypeNum,
                                    ihp.SHDWHWHCoilName,
-                                   DataLoopNode::ConnectionType::Internal,
-                                   NodeInputManager::CompFluidStream::Primary,
-                                   ObjectIsNotParent,
+                                   Node::ConnectionType::Internal,
+                                   Node::CompFluidStream::Primary,
+                                   Node::ObjectIsNotParent,
                                    ErrorsFound);
 
         ihp.IHPCoilsSized = false;

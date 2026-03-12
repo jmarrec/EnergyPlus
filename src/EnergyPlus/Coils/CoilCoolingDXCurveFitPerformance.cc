@@ -216,14 +216,14 @@ CoilCoolingDXCurveFitPerformance::CoilCoolingDXCurveFitPerformance(EnergyPlus::E
 }
 
 void CoilCoolingDXCurveFitPerformance::simulate(EnergyPlus::EnergyPlusData &state,
-                                                const DataLoopNode::NodeData &inletNode,
-                                                DataLoopNode::NodeData &outletNode,
+                                                const Node::NodeData &inletNode,
+                                                Node::NodeData &outletNode,
                                                 HVAC::CoilMode currentCoilMode,
                                                 int const speedNum,
                                                 Real64 const speedRatio,
                                                 HVAC::FanOp const fanOp,
-                                                DataLoopNode::NodeData &condInletNode,
-                                                DataLoopNode::NodeData &condOutletNode,
+                                                Node::NodeData &condInletNode,
+                                                Node::NodeData &condOutletNode,
                                                 bool const singleMode,
                                                 Real64 LoadSHR)
 {
@@ -410,13 +410,13 @@ void CoilCoolingDXCurveFitPerformance::size(EnergyPlus::EnergyPlusData &state)
 
 void CoilCoolingDXCurveFitPerformance::calculate(EnergyPlus::EnergyPlusData &state,
                                                  CoilCoolingDXCurveFitOperatingMode &currentMode,
-                                                 const DataLoopNode::NodeData &inletNode,
-                                                 DataLoopNode::NodeData &outletNode,
+                                                 const Node::NodeData &inletNode,
+                                                 Node::NodeData &outletNode,
                                                  int const speedNum,
                                                  Real64 const speedRatio,
                                                  HVAC::FanOp const fanOp,
-                                                 DataLoopNode::NodeData &condInletNode,
-                                                 DataLoopNode::NodeData &condOutletNode,
+                                                 Node::NodeData &condInletNode,
+                                                 Node::NodeData &condOutletNode,
                                                  bool const singleMode)
 {
 

@@ -260,9 +260,8 @@ namespace InternalHeatGains {
 
         // Using/Aliasing
         using namespace OutputReportPredefined;
-        using namespace DataLoopNode;
         using Curve::GetCurveIndex;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetInternalHeatGains: ");
@@ -1099,12 +1098,12 @@ namespace InternalHeatGains {
                             thisLights.ZoneExhaustNodeNum = GetOnlySingleNode(state,
                                                                               IHGAlphas(8),
                                                                               exhaustNodeError,
-                                                                              DataLoopNode::ConnectionObjectType::Lights,
+                                                                              Node::ConnectionObjectType::Lights,
                                                                               thisLights.Name,
-                                                                              DataLoopNode::NodeFluidType::Air,
-                                                                              DataLoopNode::ConnectionType::ZoneExhaust,
-                                                                              NodeInputManager::CompFluidStream::Primary,
-                                                                              ObjectIsNotParent);
+                                                                              Node::NodeFluidType::Air,
+                                                                              Node::ConnectionType::ZoneExhaust,
+                                                                              Node::CompFluidStream::Primary,
+                                                                              Node::ObjectIsNotParent);
                             if (!exhaustNodeError) { // GetOnlySingleNode will throw error messages if this is a NodeList Name and for other issues
                                 exhaustNodeError =
                                     DataZoneEquipment::VerifyLightsExhaustNodeForZone(state, thisLights.ZonePtr, thisLights.ZoneExhaustNodeNum);
@@ -2277,12 +2276,12 @@ namespace InternalHeatGains {
                             thisZoneITEq.SupplyAirNodeNum = GetOnlySingleNode(state,
                                                                               IHGAlphas(14),
                                                                               ErrorsFound,
-                                                                              DataLoopNode::ConnectionObjectType::ElectricEquipmentITEAirCooled,
+                                                                              Node::ConnectionObjectType::ElectricEquipmentITEAirCooled,
                                                                               IHGAlphas(1),
-                                                                              DataLoopNode::NodeFluidType::Air,
-                                                                              DataLoopNode::ConnectionType::Sensor,
-                                                                              NodeInputManager::CompFluidStream::Primary,
-                                                                              ObjectIsNotParent);
+                                                                              Node::NodeFluidType::Air,
+                                                                              Node::ConnectionType::Sensor,
+                                                                              Node::CompFluidStream::Primary,
+                                                                              Node::ObjectIsNotParent);
                         }
 
                         // check supply air node for matches with zone equipment supply air node

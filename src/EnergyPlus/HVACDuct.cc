@@ -86,8 +86,6 @@ namespace HVACDuct {
 
     // USE STATEMENTS:
     // <use statements for data only modules>
-    // Using/Aliasing
-    using namespace DataLoopNode;
 
     // <use statements for access to subroutines in other modules>
 
@@ -185,8 +183,8 @@ namespace HVACDuct {
         // Uses InputProcessor "Get" routines to obtain data.
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::TestCompSet;
+        using Node::GetOnlySingleNode;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         int DuctNum; // duct index
@@ -219,21 +217,21 @@ namespace HVACDuct {
             state.dataHVACDuct->Duct(DuctNum).InletNodeNum = GetOnlySingleNode(state,
                                                                                state.dataIPShortCut->cAlphaArgs(2),
                                                                                ErrorsFound,
-                                                                               DataLoopNode::ConnectionObjectType::Duct,
+                                                                               Node::ConnectionObjectType::Duct,
                                                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                                               DataLoopNode::NodeFluidType::Air,
-                                                                               DataLoopNode::ConnectionType::Inlet,
-                                                                               NodeInputManager::CompFluidStream::Primary,
-                                                                               ObjectIsNotParent);
+                                                                               Node::NodeFluidType::Air,
+                                                                               Node::ConnectionType::Inlet,
+                                                                               Node::CompFluidStream::Primary,
+                                                                               Node::ObjectIsNotParent);
             state.dataHVACDuct->Duct(DuctNum).OutletNodeNum = GetOnlySingleNode(state,
                                                                                 state.dataIPShortCut->cAlphaArgs(3),
                                                                                 ErrorsFound,
-                                                                                DataLoopNode::ConnectionObjectType::Duct,
+                                                                                Node::ConnectionObjectType::Duct,
                                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                                DataLoopNode::NodeFluidType::Air,
-                                                                                DataLoopNode::ConnectionType::Outlet,
-                                                                                NodeInputManager::CompFluidStream::Primary,
-                                                                                ObjectIsNotParent);
+                                                                                Node::NodeFluidType::Air,
+                                                                                Node::ConnectionType::Outlet,
+                                                                                Node::CompFluidStream::Primary,
+                                                                                Node::ObjectIsNotParent);
             TestCompSet(state,
                         cCurrentModuleObject,
                         state.dataIPShortCut->cAlphaArgs(1),

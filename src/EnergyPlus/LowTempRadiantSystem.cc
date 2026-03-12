@@ -290,7 +290,7 @@ namespace LowTempRadiantSystem {
         // needed to simulate a low temperature radiant system.
 
         // Using/Aliasing
-        using BranchNodeConnections::TestCompSet;
+        using Node::TestCompSet;
         using DataSizing::AutoSize;
         using DataSizing::CapacityPerFloorArea;
         using DataSizing::CoolingDesignCapacity;
@@ -298,8 +298,7 @@ namespace LowTempRadiantSystem {
         using DataSizing::FractionOfAutosizedHeatingCapacity;
         using DataSizing::HeatingDesignCapacity;
 
-        using NodeInputManager::GetOnlySingleNode;
-        using namespace DataLoopNode;
+        using Node::GetOnlySingleNode;
         using namespace DataSurfaceLists;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
@@ -775,22 +774,22 @@ namespace LowTempRadiantSystem {
             thisRadSys.HotWaterInNode = GetOnlySingleNode(state,
                                                           Alphas(6),
                                                           ErrorsFound,
-                                                          DataLoopNode::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
+                                                          Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
                                                           Alphas(1),
-                                                          DataLoopNode::NodeFluidType::Water,
-                                                          DataLoopNode::ConnectionType::Inlet,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          ObjectIsNotParent);
+                                                          Node::NodeFluidType::Water,
+                                                          Node::ConnectionType::Inlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsNotParent);
 
             thisRadSys.HotWaterOutNode = GetOnlySingleNode(state,
                                                            Alphas(7),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
+                                                           Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
                                                            Alphas(1),
-                                                           DataLoopNode::NodeFluidType::Water,
-                                                           DataLoopNode::ConnectionType::Outlet,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           ObjectIsNotParent);
+                                                           Node::NodeFluidType::Water,
+                                                           Node::ConnectionType::Outlet,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent);
 
             if ((!lAlphaBlanks(6)) || (!lAlphaBlanks(7))) {
                 TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(6), Alphas(7), "Hot Water Nodes");
@@ -835,22 +834,22 @@ namespace LowTempRadiantSystem {
             thisRadSys.ColdWaterInNode = GetOnlySingleNode(state,
                                                            Alphas(8),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
+                                                           Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
                                                            Alphas(1),
-                                                           DataLoopNode::NodeFluidType::Water,
-                                                           DataLoopNode::ConnectionType::Inlet,
-                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                           ObjectIsNotParent);
+                                                           Node::NodeFluidType::Water,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Secondary,
+                                                           Node::ObjectIsNotParent);
 
             thisRadSys.ColdWaterOutNode = GetOnlySingleNode(state,
                                                             Alphas(9),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
+                                                            Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
                                                             Alphas(1),
-                                                            DataLoopNode::NodeFluidType::Water,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                            ObjectIsNotParent);
+                                                            Node::NodeFluidType::Water,
+                                                            Node::ConnectionType::Outlet,
+                                                            Node::CompFluidStream::Secondary,
+                                                            Node::ObjectIsNotParent);
 
             if ((!lAlphaBlanks(8)) || (!lAlphaBlanks(9))) {
                 TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(8), Alphas(9), "Chilled Water Nodes");
@@ -1080,22 +1079,22 @@ namespace LowTempRadiantSystem {
             thisCFloSys.HotWaterInNode = GetOnlySingleNode(state,
                                                            Alphas(7),
                                                            ErrorsFound,
-                                                           DataLoopNode::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
+                                                           Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
                                                            Alphas(1),
-                                                           DataLoopNode::NodeFluidType::Water,
-                                                           DataLoopNode::ConnectionType::Inlet,
-                                                           NodeInputManager::CompFluidStream::Primary,
-                                                           ObjectIsNotParent);
+                                                           Node::NodeFluidType::Water,
+                                                           Node::ConnectionType::Inlet,
+                                                           Node::CompFluidStream::Primary,
+                                                           Node::ObjectIsNotParent);
 
             thisCFloSys.HotWaterOutNode = GetOnlySingleNode(state,
                                                             Alphas(8),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
+                                                            Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
                                                             Alphas(1),
-                                                            DataLoopNode::NodeFluidType::Water,
-                                                            DataLoopNode::ConnectionType::Outlet,
-                                                            NodeInputManager::CompFluidStream::Primary,
-                                                            ObjectIsNotParent);
+                                                            Node::NodeFluidType::Water,
+                                                            Node::ConnectionType::Outlet,
+                                                            Node::CompFluidStream::Primary,
+                                                            Node::ObjectIsNotParent);
 
             if ((!lAlphaBlanks(7)) || (!lAlphaBlanks(8))) {
                 TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(7), Alphas(8), "Hot Water Nodes");
@@ -1130,22 +1129,22 @@ namespace LowTempRadiantSystem {
             thisCFloSys.ColdWaterInNode = GetOnlySingleNode(state,
                                                             Alphas(13),
                                                             ErrorsFound,
-                                                            DataLoopNode::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
+                                                            Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
                                                             Alphas(1),
-                                                            DataLoopNode::NodeFluidType::Water,
-                                                            DataLoopNode::ConnectionType::Inlet,
-                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                            ObjectIsNotParent);
+                                                            Node::NodeFluidType::Water,
+                                                            Node::ConnectionType::Inlet,
+                                                            Node::CompFluidStream::Secondary,
+                                                            Node::ObjectIsNotParent);
 
             thisCFloSys.ColdWaterOutNode = GetOnlySingleNode(state,
                                                              Alphas(14),
                                                              ErrorsFound,
-                                                             DataLoopNode::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
+                                                             Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
                                                              Alphas(1),
-                                                             DataLoopNode::NodeFluidType::Water,
-                                                             DataLoopNode::ConnectionType::Outlet,
-                                                             NodeInputManager::CompFluidStream::Secondary,
-                                                             ObjectIsNotParent);
+                                                             Node::NodeFluidType::Water,
+                                                             Node::ConnectionType::Outlet,
+                                                             Node::CompFluidStream::Secondary,
+                                                             Node::ObjectIsNotParent);
 
             if ((!lAlphaBlanks(13)) || (!lAlphaBlanks(14))) {
                 TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(13), Alphas(14), "Chilled Water Nodes");

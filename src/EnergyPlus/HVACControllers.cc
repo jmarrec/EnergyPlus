@@ -508,24 +508,24 @@ void GetControllerInput(EnergyPlusData &state)
                 ShowContinueError(state, EnergyPlus::format("...Invalid {}=\"{}\", only FLOW is allowed.", cAlphaFields(4), AlphArray(4)));
                 ErrorsFound = true;
             }
-            controllerProps.SensedNode = NodeInputManager::GetOnlySingleNode(state,
+            controllerProps.SensedNode = Node::GetOnlySingleNode(state,
                                                                              AlphArray(5),
                                                                              ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ControllerWaterCoil,
+                                                                             Node::ConnectionObjectType::ControllerWaterCoil,
                                                                              AlphArray(1),
-                                                                             DataLoopNode::NodeFluidType::Blank,
-                                                                             DataLoopNode::ConnectionType::Sensor,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsNotParent);
-            controllerProps.ActuatedNode = NodeInputManager::GetOnlySingleNode(state,
+                                                                             Node::NodeFluidType::Blank,
+                                                                             Node::ConnectionType::Sensor,
+                                                                             Node::CompFluidStream::Primary,
+                                                                             Node::ObjectIsNotParent);
+            controllerProps.ActuatedNode = Node::GetOnlySingleNode(state,
                                                                                AlphArray(6),
                                                                                ErrorsFound,
-                                                                               DataLoopNode::ConnectionObjectType::ControllerWaterCoil,
+                                                                               Node::ConnectionObjectType::ControllerWaterCoil,
                                                                                AlphArray(1),
-                                                                               DataLoopNode::NodeFluidType::Blank,
-                                                                               DataLoopNode::ConnectionType::Actuator,
-                                                                               NodeInputManager::CompFluidStream::Primary,
-                                                                               DataLoopNode::ObjectIsNotParent);
+                                                                               Node::NodeFluidType::Blank,
+                                                                               Node::ConnectionType::Actuator,
+                                                                               Node::CompFluidStream::Primary,
+                                                                               Node::ObjectIsNotParent);
             controllerProps.Offset = NumArray(1);
             controllerProps.MaxVolFlowActuated = NumArray(2);
             controllerProps.MinVolFlowActuated = NumArray(3);
@@ -783,7 +783,7 @@ void InitController(EnergyPlusData &state, int const ControlNum, bool &IsConverg
             int SensedNode = controllerProps.SensedNode;
             switch (controllerProps.ControlVar) {
             case HVACControllers::CtrlVarType::Temperature: { // 'Temperature'
-                if (state.dataLoopNodes->Node(SensedNode).TempSetPoint == DataLoopNode::SensedNodeFlagValue) {
+                if (state.dataLoopNodes->Node(SensedNode).TempSetPoint == Node::SensedNodeFlagValue) {
                     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                         ShowSevereError(state,
                                         EnergyPlus::format("HVACControllers: Missing temperature setpoint for controller type={} Name=\"{}\"",
@@ -813,7 +813,7 @@ void InitController(EnergyPlusData &state, int const ControlNum, bool &IsConverg
                     }
                 } else {
                     //           Warn if humidity setpoint is detected (only for cooling coils) and control variable is TEMP.
-                    if (state.dataLoopNodes->Node(SensedNode).HumRatMax != DataLoopNode::SensedNodeFlagValue &&
+                    if (state.dataLoopNodes->Node(SensedNode).HumRatMax != Node::SensedNodeFlagValue &&
                         controllerProps.Action == ControllerAction::Reverse) {
                         ShowWarningError(
                             state,
@@ -831,9 +831,9 @@ void InitController(EnergyPlusData &state, int const ControlNum, bool &IsConverg
             case HVACControllers::CtrlVarType::HumidityRatio: { // 'HumidityRatio'
                 controllerProps.HumRatCntrlType = SetPointManager::GetHumidityRatioVariableType(state, SensedNode);
                 if ((thisController.HumRatCntrlType == HVAC::CtrlVarType::HumRat &&
-                     state.dataLoopNodes->Node(SensedNode).HumRatSetPoint == DataLoopNode::SensedNodeFlagValue) ||
+                     state.dataLoopNodes->Node(SensedNode).HumRatSetPoint == Node::SensedNodeFlagValue) ||
                     (thisController.HumRatCntrlType == HVAC::CtrlVarType::MaxHumRat &&
-                     state.dataLoopNodes->Node(SensedNode).HumRatMax == DataLoopNode::SensedNodeFlagValue)) {
+                     state.dataLoopNodes->Node(SensedNode).HumRatMax == Node::SensedNodeFlagValue)) {
                     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                         ShowSevereError(state,
                                         EnergyPlus::format("HVACControllers: Missing humidity ratio setpoint for controller type={} Name=\"{}\"",
@@ -874,7 +874,7 @@ void InitController(EnergyPlusData &state, int const ControlNum, bool &IsConverg
                 }
             } break;
             case HVACControllers::CtrlVarType::TemperatureAndHumidityRatio: { // 'TemperatureAndHumidityRatio'
-                if (state.dataLoopNodes->Node(SensedNode).TempSetPoint == DataLoopNode::SensedNodeFlagValue) {
+                if (state.dataLoopNodes->Node(SensedNode).TempSetPoint == Node::SensedNodeFlagValue) {
                     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                         ShowSevereError(state,
                                         EnergyPlus::format("HVACControllers: Missing temperature setpoint for controller type={} Name=\"{}\"",
@@ -903,7 +903,7 @@ void InitController(EnergyPlusData &state, int const ControlNum, bool &IsConverg
                         }
                     }
                 }
-                if (state.dataLoopNodes->Node(SensedNode).HumRatMax == DataLoopNode::SensedNodeFlagValue) {
+                if (state.dataLoopNodes->Node(SensedNode).HumRatMax == Node::SensedNodeFlagValue) {
                     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                         ShowSevereError(
                             state,
@@ -936,7 +936,7 @@ void InitController(EnergyPlusData &state, int const ControlNum, bool &IsConverg
                 }
             } break;
             case HVACControllers::CtrlVarType::Flow: { // 'Flow'
-                if (state.dataLoopNodes->Node(SensedNode).MassFlowRateSetPoint == DataLoopNode::SensedNodeFlagValue) {
+                if (state.dataLoopNodes->Node(SensedNode).MassFlowRateSetPoint == Node::SensedNodeFlagValue) {
                     if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                         ShowSevereError(state,
                                         EnergyPlus::format("HVACControllers: Missing mass flow rate setpoint for controller type={} Name=\"{}\"",

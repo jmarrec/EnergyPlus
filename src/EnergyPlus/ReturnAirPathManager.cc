@@ -109,8 +109,7 @@ namespace ReturnAirPathManager {
         // PURPOSE OF THIS SUBROUTINE: This subroutine
 
         // Using/Aliasing
-        using NodeInputManager::GetOnlySingleNode;
-        using namespace DataLoopNode;
+        using Node::GetOnlySingleNode;
 
         //////////// hoisted into namespace ////////////////////////////////////////////////
         // static bool ErrorsFound( false );
@@ -150,12 +149,12 @@ namespace ReturnAirPathManager {
                     GetOnlySingleNode(state,
                                       state.dataIPShortCut->cAlphaArgs(2),
                                       ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::AirLoopHVACReturnPath,
+                                      Node::ConnectionObjectType::AirLoopHVACReturnPath,
                                       state.dataIPShortCut->cAlphaArgs(1),
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Primary,
-                                      ObjectIsParent);
+                                      Node::NodeFluidType::Air,
+                                      Node::ConnectionType::Outlet,
+                                      Node::CompFluidStream::Primary,
+                                      Node::ObjectIsParent);
 
                 state.dataZoneEquip->ReturnAirPath(PathNum).ComponentType.allocate(state.dataZoneEquip->ReturnAirPath(PathNum).NumOfComponents);
                 state.dataZoneEquip->ReturnAirPath(PathNum).ComponentType = "";

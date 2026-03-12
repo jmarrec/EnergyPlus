@@ -61,7 +61,7 @@
 
 namespace EnergyPlus {
 
-namespace DataLoopNode {
+namespace Node {
 
     enum class NodeFluidType
     {
@@ -529,7 +529,7 @@ namespace DataLoopNode {
         bool needsSetpointChecking = false;
         std::array<bool, (int)HVAC::CtrlVarType::Num> checkSetPoint = {false, false, false, false, false, false, false, false, false};
     };
-} // namespace DataLoopNode
+} // namespace Node
 
 struct LoopNodeData : BaseGlobalStruct
 {
@@ -538,11 +538,11 @@ struct LoopNodeData : BaseGlobalStruct
     int NumofSplitters = 0;
     int NumofMixers = 0;
     Array1D_string NodeID;
-    Array1D<DataLoopNode::NodeData> Node; // dim to num nodes in SimHVAC
-    DataLoopNode::NodeData DefaultNodeValues{DataLoopNode::NodeData()};
-    Array1D<DataLoopNode::MoreNodeData> MoreNodeInfo;
-    Array1D<DataLoopNode::MarkedNodeData> MarkedNode;
-    Array1D<DataLoopNode::NodeSetpointCheckData> NodeSetpointCheck;
+    Array1D<Node::NodeData> Node; // dim to num nodes in SimHVAC
+    Node::NodeData DefaultNodeValues{};
+    Array1D<Node::MoreNodeData> MoreNodeInfo;
+    Array1D<Node::MarkedNodeData> MarkedNode;
+    Array1D<Node::NodeSetpointCheckData> NodeSetpointCheck;
 
     void init_constant_state([[maybe_unused]] EnergyPlusData &state) override
     {

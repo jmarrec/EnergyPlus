@@ -179,7 +179,7 @@ namespace ExhaustAirSystemManager {
 
                     thisExhSys.availSched = fan->availSched;
 
-                    BranchNodeConnections::SetUpCompSets(state,
+                    Node::SetUpCompSets(state,
                                                          cCurrentModuleObject,
                                                          thisExhSys.Name,
                                                          HVAC::fanTypeNames[(int)thisExhSys.centralFanType],
@@ -415,28 +415,28 @@ namespace ExhaustAirSystemManager {
 
                 // These two nodes are required inputs:
                 std::string inletNodeName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "inlet_node_name");
-                int inletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                int inletNodeNum = Node::GetOnlySingleNode(state,
                                                                        inletNodeName,
                                                                        ErrorsFound,
-                                                                       DataLoopNode::ConnectionObjectType::ZoneHVACExhaustControl,
+                                                                       Node::ConnectionObjectType::ZoneHVACExhaustControl,
                                                                        thisExhCtrl.Name,
-                                                                       DataLoopNode::NodeFluidType::Air,
-                                                                       DataLoopNode::ConnectionType::Inlet,
-                                                                       NodeInputManager::CompFluidStream::Primary,
-                                                                       DataLoopNode::ObjectIsParent);
+                                                                       Node::NodeFluidType::Air,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsParent);
                 thisExhCtrl.InletNodeNum = inletNodeNum;
 
                 std::string outletNodeName = ip->getAlphaFieldValue(objectFields, objectSchemaProps, "outlet_node_name");
 
-                int outletNodeNum = NodeInputManager::GetOnlySingleNode(state,
+                int outletNodeNum = Node::GetOnlySingleNode(state,
                                                                         outletNodeName,
                                                                         ErrorsFound,
-                                                                        DataLoopNode::ConnectionObjectType::ZoneHVACExhaustControl,
+                                                                        Node::ConnectionObjectType::ZoneHVACExhaustControl,
                                                                         thisExhCtrl.Name,
-                                                                        DataLoopNode::NodeFluidType::Air,
-                                                                        DataLoopNode::ConnectionType::Outlet,
-                                                                        NodeInputManager::CompFluidStream::Primary,
-                                                                        DataLoopNode::ObjectIsParent);
+                                                                        Node::NodeFluidType::Air,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsParent);
                 thisExhCtrl.OutletNodeNum = outletNodeNum;
 
                 if (!state.dataExhAirSystemMrg->mappingDone) {
@@ -469,17 +469,17 @@ namespace ExhaustAirSystemManager {
 
                 ip->getObjectDefMaxArgs(state, "NodeList", NumParams, NumAlphas, NumNums);
                 thisExhCtrl.SuppNodeNums.dimension(NumParams, 0);
-                NodeInputManager::GetNodeNums(state,
+                Node::GetNodeNums(state,
                                               thisExhCtrl.SupplyNodeOrNodelistName,
                                               NumNodes,
                                               thisExhCtrl.SuppNodeNums,
                                               NodeListError,
-                                              DataLoopNode::NodeFluidType::Air,
-                                              DataLoopNode::ConnectionObjectType::ZoneHVACExhaustControl, // maybe zone inlets?
+                                              Node::NodeFluidType::Air,
+                                              Node::ConnectionObjectType::ZoneHVACExhaustControl, // maybe zone inlets?
                                               thisExhCtrl.Name,
-                                              DataLoopNode::ConnectionType::Sensor,
-                                              NodeInputManager::CompFluidStream::Primary,
-                                              DataLoopNode::ObjectIsNotParent); // , // _, // supplyNodeOrNodelistName);
+                                              Node::ConnectionType::Sensor,
+                                              Node::CompFluidStream::Primary,
+                                              Node::ObjectIsNotParent); // , // _, // supplyNodeOrNodelistName);
 
                 // Verify these nodes are indeed supply nodes:
                 if (thisExhCtrl.FlowControlOption == ZoneExhaustControl::FlowControlType::FollowSupply) { // FollowSupply
