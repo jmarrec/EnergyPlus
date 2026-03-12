@@ -85,7 +85,7 @@ struct CoilCoolingDXPerformanceBase
     Real64 wasteHeatRate = 0.0;
     Real64 recoveredEnergyRate = 0.0;
 
-    bool ReportCoolingCoilCrankcasePower = true;  // logical determines if the cooling coil crankcase heater power is reported
+    bool ReportCoolingCoilCrankcasePower = true; // logical determines if the cooling coil crankcase heater power is reported
     Real64 crankcaseHeaterCap = 0.0;
     Real64 crankcaseHeaterPower = 0.0;
     int crankcaseHeaterCapacityCurveIndex = 0;

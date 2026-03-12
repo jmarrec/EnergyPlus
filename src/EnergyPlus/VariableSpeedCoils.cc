@@ -2762,23 +2762,23 @@ namespace VariableSpeedCoils {
                     }
 
                     if (varSpeedCoil.ReportCoolingCoilCrankcasePower) {
-                      SetupOutputVariable(state,
-                                          "Cooling Coil Crankcase Heater Electricity Rate",
-                                          Constant::Units::W,
-                                          varSpeedCoil.CrankcaseHeaterPower,
-                                          OutputProcessor::TimeStepType::System,
-                                          OutputProcessor::StoreType::Average,
-                                          varSpeedCoil.Name);
-                      SetupOutputVariable(state,
-                                          "Cooling Coil Crankcase Heater Electricity Energy",
-                                          Constant::Units::J,
-                                          varSpeedCoil.CrankcaseHeaterConsumption,
-                                          OutputProcessor::TimeStepType::System,
-                                          OutputProcessor::StoreType::Sum,
-                                          varSpeedCoil.Name,
-                                          Constant::eResource::Electricity,
-                                          OutputProcessor::Group::HVAC,
-                                          OutputProcessor::EndUseCat::Cooling);
+                        SetupOutputVariable(state,
+                                            "Cooling Coil Crankcase Heater Electricity Rate",
+                                            Constant::Units::W,
+                                            varSpeedCoil.CrankcaseHeaterPower,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Average,
+                                            varSpeedCoil.Name);
+                        SetupOutputVariable(state,
+                                            "Cooling Coil Crankcase Heater Electricity Energy",
+                                            Constant::Units::J,
+                                            varSpeedCoil.CrankcaseHeaterConsumption,
+                                            OutputProcessor::TimeStepType::System,
+                                            OutputProcessor::StoreType::Sum,
+                                            varSpeedCoil.Name,
+                                            Constant::eResource::Electricity,
+                                            OutputProcessor::Group::HVAC,
+                                            OutputProcessor::EndUseCat::Cooling);
                     }
                 } else {
                     // air source heating coils
