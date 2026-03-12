@@ -3845,7 +3845,7 @@ namespace SurfaceGeometry {
         auto &s_ipsc = state.dataIPShortCut;
 
         GetOSCData(state, ErrorsFound);
-        GetOSCMData(state, ErrorsFound);
+        GetOSCMData(state);
         GetFoundationData(state, ErrorsFound);
 
         NeedToAddSurfaces = 0;
@@ -7483,22 +7483,7 @@ namespace SurfaceGeometry {
                                                                      s_ipsc->lAlphaFieldBlanks,
                                                                      s_ipsc->cAlphaFieldNames,
                                                                      s_ipsc->cNumericFieldNames);
-            // first handle cAlphaArgs
-            bool ErrorInName = false;
-            bool IsBlank = false;
 
-            Util::VerifyName(state,
-                             s_ipsc->cAlphaArgs(1),
-                             state.dataHeatBal->ExtVentedCavity,
-                             Item - 1,
-                             ErrorInName,
-                             IsBlank,
-                             s_ipsc->cCurrentModuleObject + " Name");
-            if (ErrorInName) {
-                ShowContinueError(state, "...cannot not duplicate other names");
-                ErrorsFound = true;
-                continue;
-            }
             state.dataHeatBal->ExtVentedCavity(Item).Name = s_ipsc->cAlphaArgs(1);
 
             state.dataHeatBal->ExtVentedCavity(Item).OSCMName = s_ipsc->cAlphaArgs(2);
@@ -8016,8 +8001,6 @@ namespace SurfaceGeometry {
 
                 ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-                Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
-
                 SurfLocalEnv.Name = s_ipsc->cAlphaArgs(1);
 
                 // Assign surface number
@@ -8195,8 +8178,6 @@ namespace SurfaceGeometry {
                                                                          s_ipsc->cNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
-
-                Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
 
                 // A1: Name
                 SrdSurfsProp.Name = s_ipsc->cAlphaArgs(1);
@@ -9749,21 +9730,6 @@ namespace SurfaceGeometry {
 
             ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-            bool ErrorInName = false;
-            bool IsBlank = false;
-
-            Util::VerifyName(state,
-                             s_ipsc->cAlphaArgs(1),
-                             state.dataSurface->WindowShadingControl,
-                             ControlNum,
-                             ErrorInName,
-                             IsBlank,
-                             s_ipsc->cCurrentModuleObject + " Name");
-            if (ErrorInName) {
-                ErrorsFound = true;
-                continue;
-            }
-
             ++ControlNum;
 
             auto &windowShadingControl = state.dataSurface->WindowShadingControl(ControlNum);
@@ -11034,7 +11000,7 @@ namespace SurfaceGeometry {
 
                 fndInput.name = s_ipsc->cAlphaArgs(alpF);
                 alpF++;
-                Util::IsNameEmpty(state, fndInput.name, s_ipsc->cCurrentModuleObject, ErrorInName);
+
                 if (ErrorInName) {
                     ErrorsFound = true;
                     continue;
@@ -11591,14 +11557,6 @@ namespace SurfaceGeometry {
                                                                      s_ipsc->cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
-            bool ErrorInName = false;
-            bool IsBlank = false;
-            Util::VerifyName(
-                state, s_ipsc->cAlphaArgs(1), state.dataSurface->OSC, OSCNum, ErrorInName, IsBlank, s_ipsc->cCurrentModuleObject + " Name");
-            if (ErrorInName) {
-                ErrorsFound = true;
-                continue;
-            }
 
             ++OSCNum;
             state.dataSurface->OSC(OSCNum).Name = s_ipsc->cAlphaArgs(1);
@@ -11703,7 +11661,7 @@ namespace SurfaceGeometry {
         }
     }
 
-    void GetOSCMData(EnergyPlusData &state, bool &ErrorsFound)
+    void GetOSCMData(EnergyPlusData &state)
     {
 
         // SUBROUTINE INFORMATION:
@@ -11743,14 +11701,6 @@ namespace SurfaceGeometry {
         for (int Loop = 1; Loop <= state.dataSurface->TotOSCM; ++Loop) {
             state.dataInputProcessing->inputProcessor->getObjectItem(
                 state, s_ipsc->cCurrentModuleObject, Loop, s_ipsc->cAlphaArgs, NumAlphas, s_ipsc->rNumericArgs, NumProps, IOStat);
-            bool ErrorInName = false;
-            bool IsBlank = false;
-            Util::VerifyName(
-                state, s_ipsc->cAlphaArgs(1), state.dataSurface->OSCM, OSCMNum, ErrorInName, IsBlank, s_ipsc->cCurrentModuleObject + " Name");
-            if (ErrorInName) {
-                ErrorsFound = true;
-                continue;
-            }
 
             ++OSCMNum;
             state.dataSurface->OSCM(OSCMNum).Name = s_ipsc->cAlphaArgs(1);

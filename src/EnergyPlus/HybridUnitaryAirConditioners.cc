@@ -497,16 +497,6 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
                                                                      cAlphaFields,
                                                                      cNumericFields);
 
-            bool IsNotOK = false;
-            bool IsBlank = false;
-            Util::VerifyName(state,
-                             Alphas(1),
-                             state.dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner,
-                             UnitLoop - 1,
-                             IsNotOK,
-                             IsBlank,
-                             cCurrentModuleObject + " Name");
-
             ErrorObjectHeader eoh{routineName, cCurrentModuleObject, Alphas(1)};
             auto &hybridUnitaryAC = state.dataHybridUnitaryAC->ZoneHybridUnitaryAirConditioner(UnitLoop);
 

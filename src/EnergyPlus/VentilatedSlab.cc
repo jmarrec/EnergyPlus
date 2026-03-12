@@ -302,7 +302,6 @@ namespace VentilatedSlab {
 
             state.dataVentilatedSlab->VentSlabNumericFields(Item).FieldNames.allocate(NumNumbers);
             state.dataVentilatedSlab->VentSlabNumericFields(Item).FieldNames = cNumericFields;
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), CurrentModuleObject, ErrorsFound);
             auto &ventSlab = state.dataVentilatedSlab->VentSlab(Item);
 
             ventSlab.Name = state.dataIPShortCut->cAlphaArgs(1);

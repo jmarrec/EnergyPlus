@@ -148,7 +148,6 @@ namespace MatrixDataManager {
                                                                      state.dataIPShortCut->cAlphaFieldNames,
                                                                      state.dataIPShortCut->cNumericFieldNames);
             ++MatNum;
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
 
             state.dataMatrixDataManager->MatData(MatNum).Name = state.dataIPShortCut->cAlphaArgs(1);
             int NumRows = std::floor(state.dataIPShortCut->rNumericArgs(1));
