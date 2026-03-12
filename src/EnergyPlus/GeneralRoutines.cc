@@ -196,7 +196,7 @@ void ControlCompOutput(EnergyPlusData &state,
     if (ControlCompTypeNum != 0) {
         SimCompNum = ControlCompTypeNum;
     } else {
-        SimCompNum = Util::FindItemInSortedList(CompType, ListOfComponents, NumComponents);
+        SimCompNum = Util::FindItem(CompType, ListOfComponents, NumComponents);
         ControlCompTypeNum = SimCompNum;
     }
 

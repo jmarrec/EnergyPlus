@@ -333,7 +333,6 @@ namespace Photovoltaics {
 
             ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-            Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound);
             state.dataPhotovoltaic->PVarray(PVnum).Name = s_ipsc->cAlphaArgs(1);
 
             state.dataPhotovoltaic->PVarray(PVnum).SurfaceName = s_ipsc->cAlphaArgs(2);
@@ -477,9 +476,6 @@ namespace Photovoltaics {
 
                 ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
 
-                if (Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound)) {
-                    continue;
-                }
                 tmpSimpleModuleParams(ModNum).Name = s_ipsc->cAlphaArgs(1);
                 tmpSimpleModuleParams(ModNum).ActiveFraction = s_ipsc->rNumericArgs(1);
 
@@ -523,9 +519,7 @@ namespace Photovoltaics {
                                                                          s_ipsc->cNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1)};
-                if (Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound)) {
-                    continue;
-                }
+
                 tmpTRNSYSModuleParams(ModNum).Name = s_ipsc->cAlphaArgs(1);
 
                 if (s_ipsc->lAlphaFieldBlanks(2)) {
@@ -575,9 +569,6 @@ namespace Photovoltaics {
                                                                          s_ipsc->lAlphaFieldBlanks,
                                                                          s_ipsc->cAlphaFieldNames,
                                                                          s_ipsc->cNumericFieldNames);
-                if (Util::IsNameEmpty(state, s_ipsc->cAlphaArgs(1), s_ipsc->cCurrentModuleObject, ErrorsFound)) {
-                    continue;
-                }
 
                 tmpSNLModuleParams(ModNum).name = s_ipsc->cAlphaArgs(1);
                 tmpSNLModuleParams(ModNum).Acoll = s_ipsc->rNumericArgs(1);

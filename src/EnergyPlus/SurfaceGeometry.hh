@@ -306,7 +306,7 @@ namespace SurfaceGeometry {
 
     void GetOSCData(EnergyPlusData &state, bool &ErrorsFound);
 
-    void GetOSCMData(EnergyPlusData &state, bool &ErrorsFound);
+    void GetOSCMData(EnergyPlusData &state);
 
     void GetFoundationData(EnergyPlusData &state, bool &ErrorsFound);
 

@@ -714,7 +714,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
             ++NumDisplayCases;
 
             AlphaNum = 1;
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
+
             RefrigCase(CaseNum).Name = Alphas(AlphaNum);
 
             AlphaNum = 2;
@@ -1843,8 +1843,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
-
             WarehouseCoil(CoilID).Name = Alphas(AlphaNum);
 
             // A2
@@ -2482,7 +2480,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
             AlphaNum = 1;
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             AirChillerSet(SetID).Name = Alphas(AlphaNum);
 
@@ -2606,7 +2603,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                      lAlphaBlanks,
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
+
             CaseAndWalkInList(ListNum).Name = Alphas(1);
 
             // CaseAndWalkInList alphas include CaseAndWalkInList name and one name for each Case or WalkIn in list
@@ -2707,7 +2704,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                      cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             RefrigRack(RackNum).Name = Alphas(1);
             RefrigRack(RackNum).MyIdx = RackNum;
@@ -4195,7 +4191,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                          cNumericFieldNames);
 
                 ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
-                Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
                 Secondary(SecondaryNum).Name = Alphas(1);
 
@@ -5150,7 +5145,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                          lAlphaBlanks,
                                                                          cAlphaFieldNames,
                                                                          cNumericFieldNames);
-                Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
                 TransferLoadList(ListNum).Name = Alphas(1);
 
@@ -5234,7 +5228,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                      cAlphaFieldNames,
                                                                      cNumericFieldNames);
             CompressorLists(ListNum).NumCompressors = NumAlphas - 1;
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             CompressorLists(ListNum).Name = Alphas(1);
             if (!allocated(CompressorLists(ListNum).CompItemNum)) {
@@ -5279,7 +5272,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                      cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             System(RefrigSysNum).Name = Alphas(1);
 
@@ -6321,8 +6313,6 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                      cNumericFieldNames);
 
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
-
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             TransSystem(TransRefrigSysNum).Name = Alphas(1);
 

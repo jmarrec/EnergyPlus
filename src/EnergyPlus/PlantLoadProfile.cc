@@ -430,8 +430,6 @@ void GetPlantProfileInput(EnergyPlusData &state)
 
             ErrorObjectHeader eoh{routineName, cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)};
 
-            Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), cCurrentModuleObject, ErrorsFound);
-
             state.dataPlantLoadProfile->PlantProfile(ProfileNum).Name = state.dataIPShortCut->cAlphaArgs(1);
             state.dataPlantLoadProfile->PlantProfile(ProfileNum).Type =
                 DataPlant::PlantEquipmentType::PlantLoadProfile; // parameter assigned in DataPlant

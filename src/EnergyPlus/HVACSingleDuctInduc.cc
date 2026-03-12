@@ -249,7 +249,6 @@ namespace HVACSingleDuctInduc {
             ErrorObjectHeader eoh{routineName, CurrentModuleObject, Alphas(1)};
 
             int IUNum = IUIndex;
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             state.dataHVACSingleDuctInduc->IndUnit(IUNum).Name = Alphas(1);
             state.dataHVACSingleDuctInduc->IndUnit(IUNum).UnitType = CurrentModuleObject;

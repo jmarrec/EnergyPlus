@@ -216,40 +216,6 @@ namespace Util {
         return 0; // Not found
     }
 
-    int FindItemInSortedList(std::string_view const String, Array1S_string const ListOfItems, int const NumItems)
-    {
-
-        // FUNCTION INFORMATION:
-        //       AUTHOR         Linda K. Lawrie
-        //       DATE WRITTEN   September 1997
-
-        // PURPOSE OF THIS FUNCTION:
-        // This function looks up a string in a similar list of
-        // items and returns the index of the item in the list, if
-        // found.  This routine is case insensitive.
-
-        // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-        int Probe = 0;
-        int LBnd = 0;
-        int UBnd = NumItems + 1;
-        while (true) {
-            Probe = (UBnd - LBnd) / 2;
-            if (Probe == 0) {
-                break;
-            }
-            Probe += LBnd;
-            if (equali(String, ListOfItems(Probe))) {
-                break;
-            }
-            if (lessthani(String, ListOfItems(Probe))) {
-                UBnd = Probe;
-            } else {
-                LBnd = Probe;
-            }
-        }
-        return Probe;
-    }
-
     int FindItem(std::string_view const String, Array1D_string const &ListOfItems, int const NumItems)
     {
 
@@ -300,89 +266,6 @@ namespace Util {
             }
         }
         return 0; // Not found
-    }
-
-    void VerifyName(EnergyPlusData &state,
-                    std::string const &NameToVerify,
-                    Array1D_string const &NamesList,
-                    int const NumOfNames,
-                    bool &ErrorFound,
-                    bool &IsBlank,
-                    std::string const &StringToDisplay)
-    {
-
-        // SUBROUTINE INFORMATION:
-        //       AUTHOR         Linda Lawrie
-        //       DATE WRITTEN   February 2000
-
-        // PURPOSE OF THIS SUBROUTINE:
-        // This subroutine verifies that a new name can be added to the
-        // list of names for this item (i.e., that there isn't one of that
-        // name already and that this name is not blank).
-
-        ErrorFound = false;
-        if (NumOfNames > 0) {
-            int Found = FindItem(NameToVerify, NamesList, NumOfNames);
-            if (Found != 0) {
-                ShowSevereError(state, EnergyPlus::format("{}, duplicate name={}", StringToDisplay, NameToVerify));
-                ErrorFound = true;
-            }
-        }
-
-        if (NameToVerify.empty()) {
-            ShowSevereError(state, EnergyPlus::format("{}, cannot be blank", StringToDisplay));
-            ErrorFound = true;
-            IsBlank = true;
-        } else {
-            IsBlank = false;
-        }
-    }
-
-    void VerifyName(EnergyPlusData &state,
-                    std::string const &NameToVerify,
-                    Array1S_string const NamesList,
-                    int const NumOfNames,
-                    bool &ErrorFound,
-                    bool &IsBlank,
-                    std::string const &StringToDisplay)
-    {
-
-        // SUBROUTINE INFORMATION:
-        //       AUTHOR         Linda Lawrie
-        //       DATE WRITTEN   February 2000
-
-        // PURPOSE OF THIS SUBROUTINE:
-        // This subroutine verifies that a new name can be added to the
-        // list of names for this item (i.e., that there isn't one of that
-        // name already and that this name is not blank).
-
-        ErrorFound = false;
-        if (NumOfNames > 0) {
-            int Found = FindItem(NameToVerify, NamesList, NumOfNames);
-            if (Found != 0) {
-                ShowSevereError(state, EnergyPlus::format("{}, duplicate name={}", StringToDisplay, NameToVerify));
-                ErrorFound = true;
-            }
-        }
-
-        if (NameToVerify.empty()) {
-            ShowSevereError(state, EnergyPlus::format("{}, cannot be blank", StringToDisplay));
-            ErrorFound = true;
-            IsBlank = true;
-        } else {
-            IsBlank = false;
-        }
-    }
-
-    bool IsNameEmpty(EnergyPlusData &state, std::string &NameToVerify, std::string_view StringToDisplay, bool &ErrorFound)
-    {
-        if (NameToVerify.empty()) {
-            ShowSevereError(state, EnergyPlus::format("{} Name, cannot be blank", StringToDisplay));
-            ErrorFound = true;
-            NameToVerify = "xxxxx";
-            return true;
-        }
-        return false;
     }
 
     void setDesignObjectNameAndPointer(EnergyPlusData &state,

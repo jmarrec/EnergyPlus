@@ -363,9 +363,6 @@ void GetPlantOperationInput(EnergyPlusData &state, bool &GetInputOK)
     for (OpNum = 1; OpNum <= NumPlantOpSchemes; ++OpNum) {
         state.dataInputProcessing->inputProcessor->getObjectItem(
             state, CurrentModuleObject, OpNum, state.dataIPShortCut->cAlphaArgs, NumAlphas, state.dataIPShortCut->rNumericArgs, NumNums, IOStat);
-        if (Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), CurrentModuleObject, ErrorsFound)) {
-            continue;
-        }
     }
 
     CurrentModuleObject = "CondenserEquipmentOperationSchemes";
@@ -373,9 +370,6 @@ void GetPlantOperationInput(EnergyPlusData &state, bool &GetInputOK)
     for (OpNum = 1; OpNum <= NumCondOpSchemes; ++OpNum) {
         state.dataInputProcessing->inputProcessor->getObjectItem(
             state, CurrentModuleObject, OpNum, state.dataIPShortCut->cAlphaArgs, NumAlphas, state.dataIPShortCut->rNumericArgs, NumNums, IOStat);
-        if (Util::IsNameEmpty(state, state.dataIPShortCut->cAlphaArgs(1), CurrentModuleObject, ErrorsFound)) {
-            continue;
-        }
     }
 
     // Load the Plant data structure

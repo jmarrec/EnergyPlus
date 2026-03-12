@@ -274,7 +274,6 @@ namespace UnitVentilator {
             state.dataUnitVentilators->UnitVentNumericFields(UnitVentNum).FieldNames.allocate(NumNumbers);
             state.dataUnitVentilators->UnitVentNumericFields(UnitVentNum).FieldNames = "";
             state.dataUnitVentilators->UnitVentNumericFields(UnitVentNum).FieldNames = cNumericFields;
-            Util::IsNameEmpty(state, Alphas(1), CurrentModuleObject, ErrorsFound);
 
             unitVent.Name = Alphas(1);
             if (lAlphaBlanks(2)) {
