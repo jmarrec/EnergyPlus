@@ -3448,40 +3448,40 @@ namespace VariableSpeedCoils {
             }
         }
 
-    // CR7308 - Wait for zone and air loop equipment to be simulated, then print out report variables
-    if (state.dataVariableSpeedCoils->CrankcaseHeaterReportVarFlag) {
-        if (state.dataAirLoop->AirLoopInputsFilled) {
-            // Set report variables for DX cooling coils that will have a crankcase heater (all DX coils not used in a HP AC unit)
-            int DXCoilNumTemp; // Counter for crankcase heater report variable DO loop
-            for (DXCoilNumTemp = 1; DXCoilNumTemp <= state.dataVariableSpeedCoils->NumVarSpeedCoils; ++DXCoilNumTemp) {
-                auto &dXCoil_withCrankCase = state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNumTemp);
-                if (dXCoil_withCrankCase.VSCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) {
-                    if (dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower) {
-                        DisplayString(state, " * dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower");
-                        SetupOutputVariable(state,
-                                            "Cooling Coil Crankcase Heater Electricity Rate",
-                                            Constant::Units::W,
-                                            dXCoil_withCrankCase.CrankcaseHeaterPower,
-                                            OutputProcessor::TimeStepType::System,
-                                            OutputProcessor::StoreType::Average,
-                                            dXCoil_withCrankCase.Name);
-                        SetupOutputVariable(state,
-                                            "Cooling Coil Crankcase Heater Electricity Energy",
-                                            Constant::Units::J,
-                                            dXCoil_withCrankCase.CrankcaseHeaterConsumption,
-                                            OutputProcessor::TimeStepType::System,
-                                            OutputProcessor::StoreType::Sum,
-                                            dXCoil_withCrankCase.Name,
-                                            Constant::eResource::Electricity,
-                                            OutputProcessor::Group::HVAC,
-                                            OutputProcessor::EndUseCat::Cooling);
-                        dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower = false;
+        // CR7308 - Wait for zone and air loop equipment to be simulated, then print out report variables
+        if (state.dataVariableSpeedCoils->CrankcaseHeaterReportVarFlag) {
+            if (state.dataAirLoop->AirLoopInputsFilled) {
+                // Set report variables for DX cooling coils that will have a crankcase heater (all DX coils not used in a HP AC unit)
+                int DXCoilNumTemp; // Counter for crankcase heater report variable DO loop
+                for (DXCoilNumTemp = 1; DXCoilNumTemp <= state.dataVariableSpeedCoils->NumVarSpeedCoils; ++DXCoilNumTemp) {
+                    auto &dXCoil_withCrankCase = state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNumTemp);
+                    if (dXCoil_withCrankCase.VSCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) {
+                        if (dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower) {
+                            DisplayString(state, " * dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower");
+                            SetupOutputVariable(state,
+                                                "Cooling Coil Crankcase Heater Electricity Rate",
+                                                Constant::Units::W,
+                                                dXCoil_withCrankCase.CrankcaseHeaterPower,
+                                                OutputProcessor::TimeStepType::System,
+                                                OutputProcessor::StoreType::Average,
+                                                dXCoil_withCrankCase.Name);
+                            SetupOutputVariable(state,
+                                                "Cooling Coil Crankcase Heater Electricity Energy",
+                                                Constant::Units::J,
+                                                dXCoil_withCrankCase.CrankcaseHeaterConsumption,
+                                                OutputProcessor::TimeStepType::System,
+                                                OutputProcessor::StoreType::Sum,
+                                                dXCoil_withCrankCase.Name,
+                                                Constant::eResource::Electricity,
+                                                OutputProcessor::Group::HVAC,
+                                                OutputProcessor::EndUseCat::Cooling);
+                            dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower = false;
+                        }
                     }
                 }
-            }
-            state.dataVariableSpeedCoils->CrankcaseHeaterReportVarFlag = false;
-        } //(AirLoopInputsFilled)THEN
-    } //(CrankcaseHeaterReportVarFlag)THEN
+                state.dataVariableSpeedCoils->CrankcaseHeaterReportVarFlag = false;
+            } //(AirLoopInputsFilled)THEN
+        } //(CrankcaseHeaterReportVarFlag)THEN
 
         if (!state.dataGlobal->SysSizingCalc && state.dataVariableSpeedCoils->MySizeFlag(DXCoilNum) &&
             !state.dataVariableSpeedCoils->MyPlantScanFlag(DXCoilNum)) {
@@ -7363,8 +7363,8 @@ namespace VariableSpeedCoils {
         int DXCoolingCoilIndex; // Index of HP DX cooling coil returned from this function
 
         // FUNCTION LOCAL VARIABLE DECLARATIONS:
-        int WhichComp;           // DO loop counter to find correct comp set
-        int WhichCompanionComp;  // DO loop counter to find companion coil comp set
+        int WhichComp;          // DO loop counter to find correct comp set
+        int WhichCompanionComp; // DO loop counter to find companion coil comp set
 
         DXCoolingCoilIndex = 0;
 
@@ -7374,11 +7374,12 @@ namespace VariableSpeedCoils {
         DataLoopNode::ConnectionObjectType CompSetsParentType; // Parent object type which uses DX heating coil pass into this function
         std::string CompSetsParentName;
         for (WhichComp = 1; WhichComp <= state.dataBranchNodeConnections->NumCompSets; ++WhichComp) {
-
+            DisplayString(state, " * WhichComp 10 " + std::to_string(WhichComp));
             if (HeatingCoilTypeNum != state.dataBranchNodeConnections->CompSets(WhichComp).ComponentObjectType ||
                 !Util::SameString(HeatingCoilName, state.dataBranchNodeConnections->CompSets(WhichComp).CName)) {
                 continue;
             }
+            DisplayString(state, " * WhichComp 11 " + std::to_string(WhichComp));
             CompSetsParentType = state.dataBranchNodeConnections->CompSets(WhichComp).ParentObjectType;
             CompSetsParentName = state.dataBranchNodeConnections->CompSets(WhichComp).ParentCName;
             if ((CompSetsParentType == DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir) ||
@@ -7393,14 +7394,14 @@ namespace VariableSpeedCoils {
                          DataLoopNode::ConnectionObjectType::CoilCoolingDXVariableSpeed)) {
                         continue;
                     }
-                    DXCoolingCoilIndex =
-                        Util::FindItemInList(state.dataBranchNodeConnections->CompSets(WhichCompanionComp).CName, state.dataVariableSpeedCoils->VarSpeedCoil);
+                    DXCoolingCoilIndex = Util::FindItemInList(state.dataBranchNodeConnections->CompSets(WhichCompanionComp).CName,
+                                                              state.dataVariableSpeedCoils->VarSpeedCoil);
                     break;
                 }
             } else {
-                //     ErrorFound, Coil:Heating:DX:SingleSpeed is used in wrong type of parent object (should never get here)
+                //     ErrorFound, Coil:Heating:DX:VariableSpeed is used in wrong type of parent object (should never get here)
                 ShowSevereError(state,
-                                EnergyPlus::format("Configuration error in {}\"{}\"",
+                                EnergyPlus::format("Configuration error in {} \"{}\"",
                                                    BranchNodeConnections::ConnectionObjectTypeNames[static_cast<int>(CompSetsParentType)],
                                                    CompSetsParentName));
                 ShowContinueError(state, "DX heating coil not allowed in this configuration.");
@@ -7417,9 +7418,7 @@ namespace VariableSpeedCoils {
                 if (thisDXCoolingCoil.CrankcaseHeaterCapacity != thisDXHeatingCoil.CrankcaseHeaterCapacity ||
                     thisDXCoolingCoil.MaxOATCrankcaseHeater != thisDXHeatingCoil.MaxOATCrankcaseHeater) {
                     ShowWarningError(state, "Crankcase heater capacity or max outdoor temp for crankcase heater operation specified in");
-                    ShowContinueError(state, EnergyPlus::format("{} = {}",
-                                                                thisDXCoolingCoil.VarSpeedCoilType,
-                                                                thisDXCoolingCoil.Name));
+                    ShowContinueError(state, EnergyPlus::format("{} = {}", thisDXCoolingCoil.VarSpeedCoilType, thisDXCoolingCoil.Name));
                     ShowContinueError(state,
                                       EnergyPlus::format("is different than that specified in Coil:Heating:DX:SingleSpeed = {}.", HeatingCoilName));
                     ShowContinueError(state,
@@ -7432,6 +7431,41 @@ namespace VariableSpeedCoils {
         }
 
         return DXCoolingCoilIndex;
+    }
+
+    void SetCoilSystemHeatingDXFlag(EnergyPlusData &state,
+                                    std::string const &CoilType, // must match coil types in this module
+                                    std::string const &CoilName  // must match coil names for the coil type
+    )
+    {
+
+        // SUBROUTINE INFORMATION:
+        //       AUTHOR         J. Robertson
+        //       DATE WRITTEN   March 2026
+
+        // PURPOSE OF THIS SUBROUTINE:
+        // A modified copy of DXCoils::SetCoilSystemHeatingDXFlag.
+        // inform DX heating coil that is is part of a CoilSystem:Heating:DX
+        // and therefore it need not find its companion cooling coil
+
+        // METHODOLOGY EMPLOYED:
+        // set value of logical flag FindCompanionUpStreamCoil to true
+
+        // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
+        int WhichCoil;
+
+        // Obtains and Allocates DXCoils
+        if (state.dataVariableSpeedCoils->GetCoilsInputFlag) {
+            GetVarSpeedCoilInput(state);
+            state.dataVariableSpeedCoils->GetCoilsInputFlag = false;
+        }
+
+        WhichCoil = Util::FindItemInList(CoilName, state.dataVariableSpeedCoils->VarSpeedCoil);
+        if (WhichCoil != 0) {
+            state.dataVariableSpeedCoils->VarSpeedCoil(WhichCoil).FindCompanionUpStreamCoil = false;
+        } else {
+            ShowSevereError(state, EnergyPlus::format("SetCoilSystemHeatingDXFlag: Could not find Coil, Type=\"{}\"Name=\"{}\"", CoilType, CoilName));
+        }
     }
 
     int GetVSCoilNumOfSpeeds(EnergyPlusData &state,

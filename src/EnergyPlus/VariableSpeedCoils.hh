@@ -143,7 +143,7 @@ namespace VariableSpeedCoils {
         Real64 FrostHeatingCapacityMultiplierEMSOverrideValue; // value to use for EMS override
         bool FrostHeatingInputPowerMultiplierEMSOverrideOn; // if true, then EMS is calling to override multiplier for power when system is in defrost
         Real64 FrostHeatingInputPowerMultiplierEMSOverrideValue; // value to use for EMS override
-        int CompanionUpstreamDXCoil;           // index number of the DX coil that is "upstream" of this DX coil. Currently used for
+        int CompanionUpstreamDXCoil;                             // index number of the DX coil that is "upstream" of this DX coil. Currently used for
         // UnitarySystem:HeatPump:AirToAir for proper calculation of crankcase heater energy
         // consumption
         // set by parent object and "pushed" to this structure in SetVSWSHPData subroutine
@@ -461,6 +461,11 @@ namespace VariableSpeedCoils {
     Real64 GetVSCoilMinOATCompressor(EnergyPlusData &state,
                                      int const CoilIndex, // index to cooling coil
                                      bool &ErrorsFound    // set to true if problem
+    );
+
+    void SetCoilSystemHeatingDXFlag(EnergyPlusData &state,
+                                    std::string const &CoilType, // must match coil types in this module
+                                    std::string const &CoilName  // must match coil names for the coil type
     );
 
     int GetHPCoolingCoilIndex(EnergyPlusData &state,

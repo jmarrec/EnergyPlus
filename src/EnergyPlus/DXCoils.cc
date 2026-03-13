@@ -6925,7 +6925,9 @@ void InitDXCoil(EnergyPlusData &state, int const DXCoilNum) // number of the cur
 
     // Find the companion upstream coil (DX cooling coil) that is used with DX heating coils (HP AC units only)
     if (thisDXCoil.FindCompanionUpStreamCoil) {
+        DisplayString(state, " * thisDXCoil.FindCompanionUpStreamCoil");
         if (thisDXCoil.DXCoilType_Num == HVAC::CoilDX_HeatingEmpirical || thisDXCoil.DXCoilType_Num == HVAC::CoilDX_MultiSpeedHeating) {
+            DisplayString(state, " * thisDXCoil.DXCoilType_Num");
             thisDXCoil.CompanionUpstreamDXCoil = GetHPCoolingCoilIndex(state, thisDXCoil.DXCoilType, thisDXCoil.Name, DXCoilNum);
             if (thisDXCoil.CompanionUpstreamDXCoil > 0) {
                 state.dataDXCoils->DXCoil(thisDXCoil.CompanionUpstreamDXCoil).ReportCoolingCoilCrankcasePower = false;
@@ -15959,11 +15961,12 @@ int GetHPCoolingCoilIndex(EnergyPlusData &state,
     DataLoopNode::ConnectionObjectType CompSetsParentType; // Parent object type which uses DX heating coil pass into this function
     std::string CompSetsParentName;
     for (WhichComp = 1; WhichComp <= state.dataBranchNodeConnections->NumCompSets; ++WhichComp) {
-
+        DisplayString(state, " * WhichComp 00 " + std::to_string(WhichComp));
         if (HeatingCoilTypeNum != state.dataBranchNodeConnections->CompSets(WhichComp).ComponentObjectType ||
             !Util::SameString(HeatingCoilName, state.dataBranchNodeConnections->CompSets(WhichComp).CName)) {
             continue;
         }
+        DisplayString(state, " * WhichComp 01 " + std::to_string(WhichComp));
         CompSetsParentType = state.dataBranchNodeConnections->CompSets(WhichComp).ParentObjectType;
         CompSetsParentName = state.dataBranchNodeConnections->CompSets(WhichComp).ParentCName;
         if ((CompSetsParentType == DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir) ||
@@ -16019,7 +16022,7 @@ int GetHPCoolingCoilIndex(EnergyPlusData &state,
         } else {
             //     ErrorFound, Coil:Heating:DX:SingleSpeed is used in wrong type of parent object (should never get here)
             ShowSevereError(state,
-                            EnergyPlus::format("Configuration error in {}\"{}\"",
+                            EnergyPlus::format("Configuration error in {} \"{}\"",
                                                BranchNodeConnections::ConnectionObjectTypeNames[static_cast<int>(CompSetsParentType)],
                                                CompSetsParentName));
             ShowContinueError(state, "DX heating coil not allowed in this configuration.");
@@ -16036,9 +16039,7 @@ int GetHPCoolingCoilIndex(EnergyPlusData &state,
             if (thisDXCoolingCoil.CrankcaseHeaterCapacity != thisDXHeatingCoil.CrankcaseHeaterCapacity ||
                 thisDXCoolingCoil.MaxOATCrankcaseHeater != thisDXHeatingCoil.MaxOATCrankcaseHeater) {
                 ShowWarningError(state, "Crankcase heater capacity or max outdoor temp for crankcase heater operation specified in");
-                ShowContinueError(state, EnergyPlus::format("{} = {}",
-                                                            thisDXCoolingCoil.DXCoilType,
-                                                            thisDXCoolingCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("{} = {}", thisDXCoolingCoil.DXCoilType, thisDXCoolingCoil.Name));
                 ShowContinueError(state,
                                   EnergyPlus::format("is different than that specified in Coil:Heating:DX:SingleSpeed = {}.", HeatingCoilName));
                 ShowContinueError(state,

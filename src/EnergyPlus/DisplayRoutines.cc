@@ -82,7 +82,7 @@ void DisplayString(EnergyPlusData &state, std::string const &String) // String t
     }
 
     if (state.dataGlobal->KickOffSimulation && !state.dataSysVars->DeveloperFlag) {
-        return;
+        //return;
     }
     if (!state.dataGlobal->printConsoleOutput) {
         return;
@@ -110,7 +110,7 @@ void DisplayString(EnergyPlusData &state, char const *String) // String to be di
     }
 
     if (state.dataGlobal->KickOffSimulation && !state.dataSysVars->DeveloperFlag) {
-        return;
+        //return;
     }
     if (!state.dataGlobal->printConsoleOutput) {
         return;
