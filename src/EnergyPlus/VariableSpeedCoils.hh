@@ -143,6 +143,9 @@ namespace VariableSpeedCoils {
         Real64 FrostHeatingCapacityMultiplierEMSOverrideValue; // value to use for EMS override
         bool FrostHeatingInputPowerMultiplierEMSOverrideOn; // if true, then EMS is calling to override multiplier for power when system is in defrost
         Real64 FrostHeatingInputPowerMultiplierEMSOverrideValue; // value to use for EMS override
+        int CompanionUpstreamDXCoil;           // index number of the DX coil that is "upstream" of this DX coil. Currently used for
+        // UnitarySystem:HeatPump:AirToAir for proper calculation of crankcase heater energy
+        // consumption
         // set by parent object and "pushed" to this structure in SetVSWSHPData subroutine
         bool FindCompanionUpStreamCoil; // Flag to get the companion coil in Init
         bool IsDXCoilInZone;            // true means dx coil is in zone instead of outside
@@ -460,6 +463,12 @@ namespace VariableSpeedCoils {
                                      bool &ErrorsFound    // set to true if problem
     );
 
+    int GetHPCoolingCoilIndex(EnergyPlusData &state,
+                              std::string const &HeatingCoilType, // Type of DX heating coil used in HP
+                              std::string const &HeatingCoilName, // Name of DX heating coil used in HP
+                              int const HeatingCoilIndex          // Index of DX heating coil used in HP
+    );
+
     int GetVSCoilNumOfSpeeds(EnergyPlusData &state,
                              std::string const &CoilName, // must match coil names for the coil type
                              bool &ErrorsFound            // set to true if problem
@@ -540,6 +549,7 @@ struct VariableSpeedCoilsData : BaseGlobalStruct
     bool MyOneTimeFlag = true;     // one time allocation flag
     bool GetCoilsInputFlag = true; // Flag set to make sure you get input once
                                    // LOGICAL, ALLOCATABLE, DIMENSION(:) :: MySizeFlag
+    bool CrankcaseHeaterReportVarFlag = true;
 
     Real64 SourceSideMassFlowRate = 0.0; // Source Side Mass flow rate [Kg/s]
     Real64 SourceSideInletTemp = 0.0;    // Source Side Inlet Temperature [C]

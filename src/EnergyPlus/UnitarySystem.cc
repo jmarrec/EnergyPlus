@@ -5255,12 +5255,7 @@ namespace UnitarySystems {
                         this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
                         this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
                         this->m_HeatPump = true;
-                        if (this->m_HeatingCoilType_Num == HVAC::Coil_HeatingAirToAirVariableSpeed ||
-                            this->m_HeatingCoilType_Num == HVAC::CoilDX_MultiSpeedHeating ||
-                            this->m_HeatingCoilType_Num == HVAC::CoilDX_HeatingEmpirical) {
-                            auto &thisCoolCoil = state.dataVariableSpeedCoils->VarSpeedCoil(this->m_CoolingCoilIndex);
-                            thisCoolCoil.ReportCoolingCoilCrankcasePower = false;
-                        }
+                        // FIXME: ReportCoolingCoilCrankcasePower already handled in VariableSpeedCoils.cc?
                     }
                 }
 
