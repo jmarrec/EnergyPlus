@@ -3457,7 +3457,6 @@ namespace VariableSpeedCoils {
                     auto &dXCoil_withCrankCase = state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNumTemp);
                     if (dXCoil_withCrankCase.VSCoilType == HVAC::Coil_CoolingAirToAirVariableSpeed) {
                         if (dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower) {
-                            DisplayString(state, " * dXCoil_withCrankCase.ReportCoolingCoilCrankcasePower");
                             SetupOutputVariable(state,
                                                 "Cooling Coil Crankcase Heater Electricity Rate",
                                                 Constant::Units::W,
@@ -7374,12 +7373,10 @@ namespace VariableSpeedCoils {
         DataLoopNode::ConnectionObjectType CompSetsParentType; // Parent object type which uses DX heating coil pass into this function
         std::string CompSetsParentName;
         for (WhichComp = 1; WhichComp <= state.dataBranchNodeConnections->NumCompSets; ++WhichComp) {
-            DisplayString(state, " * WhichComp 10 " + std::to_string(WhichComp));
             if (HeatingCoilTypeNum != state.dataBranchNodeConnections->CompSets(WhichComp).ComponentObjectType ||
                 !Util::SameString(HeatingCoilName, state.dataBranchNodeConnections->CompSets(WhichComp).CName)) {
                 continue;
             }
-            DisplayString(state, " * WhichComp 11 " + std::to_string(WhichComp));
             CompSetsParentType = state.dataBranchNodeConnections->CompSets(WhichComp).ParentObjectType;
             CompSetsParentName = state.dataBranchNodeConnections->CompSets(WhichComp).ParentCName;
             if ((CompSetsParentType == DataLoopNode::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir) ||

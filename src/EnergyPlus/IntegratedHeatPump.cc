@@ -1078,6 +1078,9 @@ void GetIHPInput(EnergyPlusData &state)
         ihp.MaxHeatAirVolFlow = 1e10;
         ihp.MaxCoolAirMassFlow = 1e10;
         ihp.MaxCoolAirVolFlow = 1e10;
+
+        VariableSpeedCoils::SetCoilSystemHeatingDXFlag(state, ihp.SHCoilType, ihp.SHCoilName);
+        VariableSpeedCoils::SetCoilSystemHeatingDXFlag(state, ihp.SHDWHHeatCoilType, ihp.SHDWHHeatCoilName);
     }
 
     if (ErrorsFound) {
