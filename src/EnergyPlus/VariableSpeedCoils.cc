@@ -911,7 +911,7 @@ namespace VariableSpeedCoils {
 
                 // Get Water System tank connections
                 //  A8, \field Name of Water Storage Tank for Supply
-                cFieldName = "Supply Water Storage Tank Name"; // cAlphaFields(8)
+                // cFieldName = "Supply Water Storage Tank Name"; // cAlphaFields(8)
                 varSpeedCoil.EvapWaterSupplyName = s_ip->getAlphaFieldValue(fields, schemaProps, "supply_water_storage_tank_name");
                 if (varSpeedCoil.EvapWaterSupplyName.empty()) {
                     varSpeedCoil.EvapWaterSupplyMode = WaterSupplyFromMains;
@@ -927,7 +927,7 @@ namespace VariableSpeedCoils {
                 }
 
                 // A9; \field Name of Water Storage Tank for Condensate Collection
-                cFieldName = "Condensate Collection Water Storage Tank Name"; // cAlphaFields(9)
+                // cFieldName = "Condensate Collection Water Storage Tank Name"; // cAlphaFields(9)
                 varSpeedCoil.CondensateCollectName = s_ip->getAlphaFieldValue(fields, schemaProps, "condensate_collection_water_storage_tank_name");
                 if (varSpeedCoil.CondensateCollectName.empty()) {
                     varSpeedCoil.CondensateCollectMode = CondensateDiscarded;
