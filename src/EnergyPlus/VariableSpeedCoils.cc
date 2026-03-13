@@ -841,7 +841,7 @@ namespace VariableSpeedCoils {
 
                 cFieldName = "Condenser Type"; // cAlphaFields(6)
                 std::string const condenserType = s_ip->getAlphaFieldValue(fields, schemaProps, "condenser_type");
-                if ((Util::SameString(condenserType, "AirCooled")) || cFieldName.empty()) {
+                if ((Util::SameString(condenserType, "AirCooled")) || condenserType.empty()) {
                     varSpeedCoil.CondenserType = DataHeatBalance::RefrigCondenserType::Air;
                 } else if (Util::SameString(condenserType, "EvaporativelyCooled")) {
                     varSpeedCoil.CondenserType = DataHeatBalance::RefrigCondenserType::Evap;
