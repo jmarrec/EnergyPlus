@@ -521,11 +521,7 @@ void SimDXCoilMultiMode(EnergyPlusData &state,
             PerfMode = (int)DehumidMode * 2 + 1;
             CalcDoe2DXCoil(state, DXCoilNum, HVAC::CompressorOp::On, FirstHVACIteration, 1.0, fanOp, PerfMode);
             S1SensCoolingEnergyRate = thisDXCoil.SensCoolingEnergyRate;
-            if (S1SensCoolingEnergyRate > 0.0) {
-                S1PLR = PartLoadRatio;
-            } else {
-                S1PLR = 0.0;
-            }
+
             // Run stage 1+2 at full load
             if (thisDXCoil.NumCapacityStages >= 2) {
                 PerfMode = (int)DehumidMode * 2 + 2;
@@ -11803,7 +11799,6 @@ void CalcMultiSpeedDXCoil(EnergyPlusData &state,
             // get current total capacity, SHR, EIR
             if (SpeedRatio >= 1.0) {
                 TotCap = TotCapHS;
-                SHR = SHRHS;
                 EIR = EIRHS;
                 CBFNom = CBFHS;
                 AirMassFlowNom = thisDXCoil.InletAirMassFlowRateMax;
@@ -14258,7 +14253,7 @@ void CalcMultiSpeedDXCoilHeating(EnergyPlusData &state,
             thisDXCoil.CrankcaseHeaterPower = 0.0;
 
             // Stage 1
-        } else if (CycRatio > 0.0 || (CycRatio > 0.0 && SingleMode == 1)) {
+        } else if (CycRatio > 0.0 || (CycRatio > 0.0 && SingleMode == 1)) { // cppCheck Redundant Condition flag
 
             // for cycling fan, reset mass flow to full on rate
             if (fanOp == HVAC::FanOp::Cycling) {
