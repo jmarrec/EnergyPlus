@@ -1561,7 +1561,7 @@ namespace PlantPipingSystemsManager {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::PipingSystemUndergroundPipeCircuit,
                                                                            s_ipsc->cAlphaArgs(1),
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Inlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -1582,7 +1582,7 @@ namespace PlantPipingSystemsManager {
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::PipingSystemUndergroundPipeCircuit,
                                                                             s_ipsc->cAlphaArgs(1),
-                                                                            Node::NodeFluidType::Water,
+                                                                            Node::FluidType::Water,
                                                                             Node::ConnectionType::Outlet,
                                                                             Node::CompFluidStream::Primary,
                                                                             Node::ObjectIsNotParent);
@@ -1694,7 +1694,7 @@ namespace PlantPipingSystemsManager {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::GroundHeatExchangerHorizontalTrench,
                                                                            thisTrenchName,
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Inlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -1704,7 +1704,7 @@ namespace PlantPipingSystemsManager {
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::GroundHeatExchangerHorizontalTrench,
                                                                             thisTrenchName,
-                                                                            Node::NodeFluidType::Water,
+                                                                            Node::FluidType::Water,
                                                                             Node::ConnectionType::Outlet,
                                                                             Node::CompFluidStream::Primary,
                                                                             Node::ObjectIsNotParent);

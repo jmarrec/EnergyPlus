@@ -2685,7 +2685,7 @@ namespace AirflowNetwork {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::OutdoorAirNode,
                                                         "AirflowNetwork:Multizone:Surface",
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Inlet,
                                                         Node::CompFluidStream::Primary,
                                                         ObjectIsParent);
@@ -10535,7 +10535,7 @@ namespace AirflowNetwork {
             if (NodeFound(k)) {
                 continue;
             }
-            if (m_state.dataLoopNodes->Node(k).FluidType == Node::NodeFluidType::Water) {
+            if (m_state.dataLoopNodes->Node(k).FluidType == Node::FluidType::Water) {
                 NodeFound(k) = true;
             }
         }

@@ -295,7 +295,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::PumpVariableSpeed,
                                                   thisPump.Name,
-                                                  Node::NodeFluidType::Water,
+                                                  Node::FluidType::Water,
                                                   Node::ConnectionType::Inlet,
                                                   Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
@@ -305,7 +305,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                    ErrorsFound,
                                                    Node::ConnectionObjectType::PumpVariableSpeed,
                                                    thisPump.Name,
-                                                   Node::NodeFluidType::Water,
+                                                   Node::FluidType::Water,
                                                    Node::ConnectionType::Outlet,
                                                    Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
@@ -550,7 +550,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::PumpConstantSpeed,
                                                   thisPump.Name,
-                                                  Node::NodeFluidType::Water,
+                                                  Node::FluidType::Water,
                                                   Node::ConnectionType::Inlet,
                                                   Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
@@ -560,7 +560,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                    ErrorsFound,
                                                    Node::ConnectionObjectType::PumpConstantSpeed,
                                                    thisPump.Name,
-                                                   Node::NodeFluidType::Water,
+                                                   Node::FluidType::Water,
                                                    Node::ConnectionType::Outlet,
                                                    Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
@@ -712,7 +712,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::PumpVariableSpeedCondensate,
                                                   thisPump.Name,
-                                                  Node::NodeFluidType::Steam,
+                                                  Node::FluidType::Steam,
                                                   Node::ConnectionType::Inlet,
                                                   Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
@@ -722,7 +722,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                    ErrorsFound,
                                                    Node::ConnectionObjectType::PumpVariableSpeedCondensate,
                                                    thisPump.Name,
-                                                   Node::NodeFluidType::Steam,
+                                                   Node::FluidType::Steam,
                                                    Node::ConnectionType::Outlet,
                                                    Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
@@ -844,7 +844,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::HeaderedPumpsVariableSpeed,
                                                   thisPump.Name,
-                                                  Node::NodeFluidType::Water,
+                                                  Node::FluidType::Water,
                                                   Node::ConnectionType::Inlet,
                                                   Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
@@ -854,7 +854,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                    ErrorsFound,
                                                    Node::ConnectionObjectType::HeaderedPumpsVariableSpeed,
                                                    thisPump.Name,
-                                                   Node::NodeFluidType::Water,
+                                                   Node::FluidType::Water,
                                                    Node::ConnectionType::Outlet,
                                                    Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
@@ -994,7 +994,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::HeaderedPumpsConstantSpeed,
                                                   thisPump.Name,
-                                                  Node::NodeFluidType::Water,
+                                                  Node::FluidType::Water,
                                                   Node::ConnectionType::Inlet,
                                                   Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
@@ -1004,7 +1004,7 @@ void GetPumpInput(EnergyPlusData &state)
                                                    ErrorsFound,
                                                    Node::ConnectionObjectType::HeaderedPumpsConstantSpeed,
                                                    thisPump.Name,
-                                                   Node::NodeFluidType::Water,
+                                                   Node::FluidType::Water,
                                                    Node::ConnectionType::Outlet,
                                                    Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);

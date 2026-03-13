@@ -369,7 +369,7 @@ namespace HeatingCoils {
                                                             errFlag,
                                                             Node::ConnectionObjectType::CoilHeatingElectric,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -380,7 +380,7 @@ namespace HeatingCoils {
                                                              errFlag,
                                                              Node::ConnectionObjectType::CoilHeatingElectric,
                                                              Alphas(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -394,7 +394,7 @@ namespace HeatingCoils {
                                                                 errFlag,
                                                                 Node::ConnectionObjectType::CoilHeatingElectric,
                                                                 Alphas(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Sensor,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -497,7 +497,7 @@ namespace HeatingCoils {
                                                             errFlag,
                                                             Node::ConnectionObjectType::CoilHeatingElectricMultiStage,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -508,7 +508,7 @@ namespace HeatingCoils {
                                                              errFlag,
                                                              Node::ConnectionObjectType::CoilHeatingElectricMultiStage,
                                                              Alphas(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -522,7 +522,7 @@ namespace HeatingCoils {
                                                                 errFlag,
                                                                 Node::ConnectionObjectType::CoilHeatingElectricMultiStage,
                                                                 Alphas(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Sensor,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -633,7 +633,7 @@ namespace HeatingCoils {
                                                             errFlag,
                                                             Node::ConnectionObjectType::CoilHeatingFuel,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -644,7 +644,7 @@ namespace HeatingCoils {
                                                              errFlag,
                                                              Node::ConnectionObjectType::CoilHeatingFuel,
                                                              Alphas(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -658,7 +658,7 @@ namespace HeatingCoils {
                                                                 errFlag,
                                                                 Node::ConnectionObjectType::CoilHeatingFuel,
                                                                 Alphas(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Sensor,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -817,7 +817,7 @@ namespace HeatingCoils {
                                                             errFlag,
                                                             Node::ConnectionObjectType::CoilHeatingGasMultiStage,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -828,7 +828,7 @@ namespace HeatingCoils {
                                                              errFlag,
                                                              Node::ConnectionObjectType::CoilHeatingGasMultiStage,
                                                              Alphas(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -842,7 +842,7 @@ namespace HeatingCoils {
                                                                 errFlag,
                                                                 Node::ConnectionObjectType::CoilHeatingGasMultiStage,
                                                                 Alphas(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Sensor,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -989,7 +989,7 @@ namespace HeatingCoils {
                                                             errFlag,
                                                             Node::ConnectionObjectType::CoilHeatingDesuperheater,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -1000,7 +1000,7 @@ namespace HeatingCoils {
                                                              errFlag,
                                                              Node::ConnectionObjectType::CoilHeatingDesuperheater,
                                                              Alphas(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -1195,7 +1195,7 @@ namespace HeatingCoils {
                                                                 errFlag,
                                                                 Node::ConnectionObjectType::CoilHeatingDesuperheater,
                                                                 Alphas(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Sensor,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);

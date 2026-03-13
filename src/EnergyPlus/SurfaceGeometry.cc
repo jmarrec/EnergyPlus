@@ -8059,7 +8059,7 @@ namespace SurfaceGeometry {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::SurfacePropertyLocalEnvironment,
                                                     SurfLocalEnv.Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);

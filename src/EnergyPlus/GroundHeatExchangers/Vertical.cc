@@ -83,7 +83,7 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
                                                              errorsFound,
                                                              Node::ConnectionObjectType::GroundHeatExchangerSystem,
                                                              objName,
-                                                             Node::NodeFluidType::Water,
+                                                             Node::FluidType::Water,
                                                              Node::ConnectionType::Inlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -96,7 +96,7 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
                                                               errorsFound,
                                                               Node::ConnectionObjectType::GroundHeatExchangerSystem,
                                                               objName,
-                                                              Node::NodeFluidType::Water,
+                                                              Node::FluidType::Water,
                                                               Node::ConnectionType::Outlet,
                                                               Node::CompFluidStream::Primary,
                                                               Node::ObjectIsNotParent);

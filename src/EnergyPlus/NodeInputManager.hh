@@ -95,7 +95,7 @@ namespace Node {
                      int &NumNodes,                                     // Number of nodes accompanying this Name
                      Array1D_int &NodeNumbers,                          // Node Numbers accompanying this Name
                      bool &ErrorsFound,                                 // True when errors are found...
-                     Node::NodeFluidType nodeFluidType,         // Fluidtype for checking/setting node FluidType
+                     Node::FluidType nodeFluidType,         // Fluidtype for checking/setting node FluidType
                      Node::ConnectionObjectType NodeObjectType, // Node Object Type (i.e. "Chiller:Electric")
                      std::string const &NodeObjectName,                 // Node Object Name (i.e. "MyChiller")
                      Node::ConnectionType nodeConnectionType,   // Node Connection Type (see DataLoopNode)
@@ -111,7 +111,7 @@ namespace Node {
 
     int AssignNodeNumber(EnergyPlusData &state,
                          std::string const &Name,                   // Name for assignment
-                         Node::NodeFluidType nodeFluidType, // must be valid
+                         Node::FluidType nodeFluidType, // must be valid
                          bool &ErrorsFound);
 
     int GetOnlySingleNode(EnergyPlusData &state,
@@ -119,7 +119,7 @@ namespace Node {
                           bool &errFlag,
                           Node::ConnectionObjectType NodeObjectType, // Node Object Type (i.e. "Chiller:Electric")
                           std::string const &NodeObjectName,                 // Node Object Name (i.e. "MyChiller")
-                          Node::NodeFluidType nodeFluidType,         // Fluidtype for checking/setting node FluidType
+                          Node::FluidType nodeFluidType,         // Fluidtype for checking/setting node FluidType
                           Node::ConnectionType nodeConnectionType,   // Node Connection Type (see DataLoopNode)
                           CompFluidStream NodeFluidStream,                   // Which Fluid Stream (1,2,3,...)
                           bool ObjectIsParent,                               // True/False

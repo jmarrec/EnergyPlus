@@ -256,7 +256,7 @@ namespace BoilerSteam {
                                                                                 ErrorsFound,
                                                                                 Node::ConnectionObjectType::BoilerSteam,
                                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                                Node::NodeFluidType::Steam,
+                                                                                Node::FluidType::Steam,
                                                                                 Node::ConnectionType::Inlet,
                                                                                 Node::CompFluidStream::Primary,
                                                                                 Node::ObjectIsNotParent);
@@ -265,7 +265,7 @@ namespace BoilerSteam {
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::BoilerSteam,
                                                                                  state.dataIPShortCut->cAlphaArgs(1),
-                                                                                 Node::NodeFluidType::Steam,
+                                                                                 Node::FluidType::Steam,
                                                                                  Node::ConnectionType::Outlet,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsNotParent);

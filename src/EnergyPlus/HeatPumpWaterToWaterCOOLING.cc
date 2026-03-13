@@ -306,7 +306,7 @@ void GetGshpInput(EnergyPlusData &state)
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationCooling,
                                                             thisGSHP.Name,
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -316,7 +316,7 @@ void GetGshpInput(EnergyPlusData &state)
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationCooling,
                                                              thisGSHP.Name,
-                                                             Node::NodeFluidType::Water,
+                                                             Node::FluidType::Water,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -326,7 +326,7 @@ void GetGshpInput(EnergyPlusData &state)
                                                           ErrorsFound,
                                                           Node::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationCooling,
                                                           thisGSHP.Name,
-                                                          Node::NodeFluidType::Water,
+                                                          Node::FluidType::Water,
                                                           Node::ConnectionType::Inlet,
                                                           Node::CompFluidStream::Secondary,
                                                           Node::ObjectIsNotParent);
@@ -336,7 +336,7 @@ void GetGshpInput(EnergyPlusData &state)
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatPumpWaterToWaterParameterEstimationCooling,
                                                            thisGSHP.Name,
-                                                           Node::NodeFluidType::Water,
+                                                           Node::FluidType::Water,
                                                            Node::ConnectionType::Outlet,
                                                            Node::CompFluidStream::Secondary,
                                                            Node::ObjectIsNotParent);

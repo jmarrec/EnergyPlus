@@ -417,7 +417,7 @@ void GetSysInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::AirTerminalSingleDuctVAVReheat,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent,
@@ -427,7 +427,7 @@ void GetSysInput(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::AirTerminalSingleDuctVAVReheat,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent,
@@ -512,7 +512,7 @@ void GetSysInput(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::AirTerminalSingleDuctVAVReheat,
                                                         Alphas(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsParent,
@@ -751,7 +751,7 @@ void GetSysInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::AirTerminalSingleDuctVAVHeatAndCoolReheat,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent,
@@ -761,7 +761,7 @@ void GetSysInput(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::AirTerminalSingleDuctVAVHeatAndCoolReheat,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent,
@@ -806,7 +806,7 @@ void GetSysInput(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::AirTerminalSingleDuctVAVHeatAndCoolReheat,
                                                         Alphas(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsParent,
@@ -995,7 +995,7 @@ void GetSysInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeReheat,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsParent,
@@ -1005,7 +1005,7 @@ void GetSysInput(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeReheat,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsParent,
@@ -1170,7 +1170,7 @@ void GetSysInput(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeNoReheat,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent,
@@ -1180,7 +1180,7 @@ void GetSysInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeNoReheat,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent,
@@ -1345,7 +1345,7 @@ void GetSysInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::AirTerminalSingleDuctVAVNoReheat,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent,
@@ -1355,7 +1355,7 @@ void GetSysInput(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::AirTerminalSingleDuctVAVNoReheat,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent,
@@ -1561,7 +1561,7 @@ void GetSysInput(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::AirTerminalSingleDuctVAVHeatAndCoolNoReheat,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent,
@@ -1571,7 +1571,7 @@ void GetSysInput(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::AirTerminalSingleDuctVAVHeatAndCoolNoReheat,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent,
@@ -1829,7 +1829,7 @@ void GetSysInput(EnergyPlusData &state)
                     }
                 }
                 //               GetOnlySingleNode(state, Alphas(6),ErrorsFound,sd_airterminal(SysNum)%SysType,Alphas(1), &
-                //                                Node::NodeFluidType::Steam,Node::NodeConnectionType::Actuator,1,Node::ObjectIsParent)
+                //                                Node::FluidType::Steam,Node::NodeConnectionType::Actuator,1,Node::ObjectIsParent)
             } else {
                 IsNotOK = false;
                 airTerm.ReheatControlNode = GetCoilWaterInletNode(state, airTerm.ReheatComp, airTerm.ReheatName, IsNotOK);
@@ -1849,7 +1849,7 @@ void GetSysInput(EnergyPlusData &state)
                     }
                 }
                 //               GetOnlySingleNode(state, Alphas(6),ErrorsFound,sd_airterminal(SysNum)%SysType,Alphas(1), &
-                //                                Node::NodeFluidType::Water,Node::NodeConnectionType::Actuator,1,Node::ObjectIsParent)
+                //                                Node::FluidType::Water,Node::NodeConnectionType::Actuator,1,Node::ObjectIsParent)
             }
         }
         //  A4,     \field Unit supply air outlet node
@@ -1858,7 +1858,7 @@ void GetSysInput(EnergyPlusData &state)
         //          \type alpha
         //        sd_airterminal(SysNum)%ReheatAirOutletNode  = &
         //               GetOnlySingleNode(state, Alphas(4),ErrorsFound,sd_airterminal(SysNum)%SysType,Alphas(1), &
-        //                            Node::NodeFluidType::Air,Node::NodeConnectionType::Outlet,1,Node::ObjectIsParent)
+        //                            Node::FluidType::Air,Node::NodeConnectionType::Outlet,1,Node::ObjectIsParent)
         AirTermSysOutletNodeName = state.dataLoopNodes->NodeID(airTerm.ReheatAirOutletNode);
         if (!Util::SameString(Alphas(4), AirTermSysOutletNodeName)) {
             ShowWarningError(
@@ -5214,7 +5214,7 @@ void GetATMixers(EnergyPlusData &state)
                               ErrorsFound,
                               Node::ConnectionObjectType::AirTerminalSingleDuctMixer,
                               state.dataIPShortCut->cAlphaArgs(1),
-                              Node::NodeFluidType::Air,
+                              Node::FluidType::Air,
                               Node::ConnectionType::Outlet,
                               Node::CompFluidStream::Primary,
                               Node::ObjectIsNotParent,
@@ -5225,7 +5225,7 @@ void GetATMixers(EnergyPlusData &state)
                                                                                    ErrorsFound,
                                                                                    Node::ConnectionObjectType::AirTerminalSingleDuctMixer,
                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::NodeFluidType::Air,
+                                                                                   Node::FluidType::Air,
                                                                                    Node::ConnectionType::Inlet,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsNotParent,
@@ -5235,7 +5235,7 @@ void GetATMixers(EnergyPlusData &state)
                                                                                    ErrorsFound,
                                                                                    Node::ConnectionObjectType::AirTerminalSingleDuctMixer,
                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::NodeFluidType::Air,
+                                                                                   Node::FluidType::Air,
                                                                                    Node::ConnectionType::Inlet,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsNotParent,

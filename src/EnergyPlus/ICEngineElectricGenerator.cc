@@ -179,7 +179,7 @@ namespace ICEngineElectricGenerator {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::GeneratorInternalCombustionEngine,
                                                                              AlphArray(1),
-                                                                             Node::NodeFluidType::Electric,
+                                                                             Node::FluidType::Electric,
                                                                              Node::ConnectionType::Electric,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -253,7 +253,7 @@ namespace ICEngineElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorInternalCombustionEngine,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Inlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -268,7 +268,7 @@ namespace ICEngineElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorInternalCombustionEngine,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);

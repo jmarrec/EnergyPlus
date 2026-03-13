@@ -564,7 +564,7 @@ namespace SteamBaseboardRadiator {
                                   ErrorsFound,
                                   Node::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveSteam,
                                   state.dataIPShortCut->cAlphaArgs(1),
-                                  Node::NodeFluidType::Steam,
+                                  Node::FluidType::Steam,
                                   Node::ConnectionType::Inlet,
                                   Node::CompFluidStream::Primary,
                                   ObjectIsNotParent);
@@ -576,7 +576,7 @@ namespace SteamBaseboardRadiator {
                                   ErrorsFound,
                                   Node::ConnectionObjectType::ZoneHVACBaseboardRadiantConvectiveSteam,
                                   state.dataIPShortCut->cAlphaArgs(1),
-                                  Node::NodeFluidType::Steam,
+                                  Node::FluidType::Steam,
                                   Node::ConnectionType::Outlet,
                                   Node::CompFluidStream::Primary,
                                   ObjectIsNotParent);

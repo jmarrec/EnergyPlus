@@ -282,7 +282,7 @@ namespace BaseboardRadiator {
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::ZoneHVACBaseboardConvectiveWater,
                                                                  s_ipsc->cAlphaArgs(1),
-                                                                 Node::NodeFluidType::Water,
+                                                                 Node::FluidType::Water,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -292,7 +292,7 @@ namespace BaseboardRadiator {
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::ZoneHVACBaseboardConvectiveWater,
                                                                   s_ipsc->cAlphaArgs(1),
-                                                                  Node::NodeFluidType::Water,
+                                                                  Node::FluidType::Water,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);

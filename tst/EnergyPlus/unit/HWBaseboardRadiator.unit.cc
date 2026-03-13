@@ -105,7 +105,7 @@ TEST_F(EnergyPlusFixture, HWBaseboardRadiator_CalcHWBaseboard)
     HWBaseboard(1).UA = 370;
     HWBaseboard(1).QBBRadSource = 0.0;
     state->dataPlnt->PlantLoop(1).FluidName = "Water";
-    state->dataPlnt->PlantLoop(1).FluidType = Node::NodeFluidType::Water;
+    state->dataPlnt->PlantLoop(1).FluidType = Node::FluidType::Water;
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     HWBaseboard(1).plantLoc.loopNum = 1;
@@ -165,7 +165,7 @@ TEST_F(EnergyPlusFixture, HWBaseboardRadiator_HWBaseboardWaterFlowResetTest)
     HWBaseboard(1).UA = 400.0;
     HWBaseboard(1).QBBRadSource = 0.0;
     state->dataPlnt->PlantLoop(1).FluidName = "Water";
-    state->dataPlnt->PlantLoop(1).FluidType = Node::NodeFluidType::Water;
+    state->dataPlnt->PlantLoop(1).FluidType = Node::FluidType::Water;
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     state->dataLoopNodes->Node(HWBaseboard(1).WaterInletNode).MassFlowRate = 0.2;

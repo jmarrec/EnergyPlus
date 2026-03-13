@@ -549,7 +549,7 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
                                                           ErrorsFound,
                                                           Node::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
                                                           Alphas(1),
-                                                          Node::NodeFluidType::Air,
+                                                          Node::FluidType::Air,
                                                           Node::ConnectionType::Inlet,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsNotParent);
@@ -558,7 +558,7 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
                                                                    ErrorsFound,
                                                                    Node::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
                                                                    Alphas(1),
-                                                                   Node::NodeFluidType::Air,
+                                                                   Node::FluidType::Air,
                                                                    Node::ConnectionType::OutsideAir,
                                                                    Node::CompFluidStream::Primary,
                                                                    Node::ObjectIsNotParent);
@@ -567,7 +567,7 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
                                                            Alphas(1),
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::Outlet,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -576,7 +576,7 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::ZoneHVACHybridUnitaryHVAC,
                                                                     Alphas(1),
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::ReliefAir,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);

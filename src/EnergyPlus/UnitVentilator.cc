@@ -345,7 +345,7 @@ namespace UnitVentilator {
                                                                      ErrorsFound,
                                                                      Node::ConnectionObjectType::ZoneHVACUnitVentilator,
                                                                      Alphas(1),
-                                                                     Node::NodeFluidType::Air,
+                                                                     Node::FluidType::Air,
                                                                      Node::ConnectionType::Inlet,
                                                                      Node::CompFluidStream::Primary,
                                                                      Node::ObjectIsParent);
@@ -354,7 +354,7 @@ namespace UnitVentilator {
                                                                       ErrorsFound,
                                                                       Node::ConnectionObjectType::ZoneHVACUnitVentilator,
                                                                       Alphas(1),
-                                                                      Node::NodeFluidType::Air,
+                                                                      Node::FluidType::Air,
                                                                       Node::ConnectionType::Outlet,
                                                                       Node::CompFluidStream::Primary,
                                                                       Node::ObjectIsParent);
@@ -384,7 +384,7 @@ namespace UnitVentilator {
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::ZoneHVACUnitVentilator,
                                                                          Alphas(1) + "-OA MIXER",
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::Inlet,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);
@@ -443,7 +443,7 @@ namespace UnitVentilator {
                                                                               ErrorsFound,
                                                                               Node::ConnectionObjectType::ZoneHVACUnitVentilator,
                                                                               Alphas(1) + "-OA MIXER",
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::OutsideAirReference,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);
@@ -460,7 +460,7 @@ namespace UnitVentilator {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACUnitVentilator,
                                                                              Alphas(1) + "-OA MIXER",
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::ReliefAir,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -470,7 +470,7 @@ namespace UnitVentilator {
                                                                               ErrorsFound,
                                                                               Node::ConnectionObjectType::ZoneHVACUnitVentilator,
                                                                               Alphas(1) + "-OA MIXER",
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::Outlet,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);

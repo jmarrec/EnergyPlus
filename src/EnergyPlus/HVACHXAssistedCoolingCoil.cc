@@ -550,7 +550,7 @@ namespace HVACHXAssistedCoolingCoil {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::CoilSystemCoolingDXHeatExchangerAssisted,
                                                     thisHXCoil.Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -560,7 +560,7 @@ namespace HVACHXAssistedCoolingCoil {
                                                 ErrorsFound,
                                                 Node::ConnectionObjectType::CoilSystemCoolingDXHeatExchangerAssisted,
                                                 state.dataHVACAssistedCC->HXAssistedCoil(HXAssistedCoilNum).Name,
-                                                Node::NodeFluidType::Air,
+                                                Node::FluidType::Air,
                                                 Node::ConnectionType::Internal,
                                                 Node::CompFluidStream::Primary,
                                                 Node::ObjectIsParent);
@@ -570,7 +570,7 @@ namespace HVACHXAssistedCoolingCoil {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::CoilSystemCoolingDXHeatExchangerAssisted,
                                                     thisHXCoil.Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Internal,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -580,7 +580,7 @@ namespace HVACHXAssistedCoolingCoil {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::CoilSystemCoolingDXHeatExchangerAssisted,
                                                     thisHXCoil.Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -759,7 +759,7 @@ namespace HVACHXAssistedCoolingCoil {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::CoilSystemCoolingWaterHeatExchangerAssisted,
                                                     thisHXCoil.Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -769,7 +769,7 @@ namespace HVACHXAssistedCoolingCoil {
                                                 ErrorsFound,
                                                 Node::ConnectionObjectType::CoilSystemCoolingWaterHeatExchangerAssisted,
                                                 state.dataHVACAssistedCC->HXAssistedCoil(HXAssistedCoilNum).Name,
-                                                Node::NodeFluidType::Air,
+                                                Node::FluidType::Air,
                                                 Node::ConnectionType::Internal,
                                                 Node::CompFluidStream::Primary,
                                                 Node::ObjectIsParent);
@@ -779,7 +779,7 @@ namespace HVACHXAssistedCoolingCoil {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::CoilSystemCoolingWaterHeatExchangerAssisted,
                                                     thisHXCoil.Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Internal,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -789,7 +789,7 @@ namespace HVACHXAssistedCoolingCoil {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::CoilSystemCoolingWaterHeatExchangerAssisted,
                                                     thisHXCoil.Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);

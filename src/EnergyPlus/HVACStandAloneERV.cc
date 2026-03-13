@@ -320,7 +320,7 @@ void GetStandAloneERV(EnergyPlusData &state)
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
                                                              Alphas(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Inlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsParent);
@@ -329,7 +329,7 @@ void GetStandAloneERV(EnergyPlusData &state)
                                                               ErrorsFound,
                                                               Node::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
                                                               Alphas(1),
-                                                              Node::NodeFluidType::Air,
+                                                              Node::FluidType::Air,
                                                               Node::ConnectionType::Outlet,
                                                               Node::CompFluidStream::Primary,
                                                               Node::ObjectIsParent);
@@ -338,7 +338,7 @@ void GetStandAloneERV(EnergyPlusData &state)
                                                               ErrorsFound,
                                                               Node::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
                                                               Alphas(1),
-                                                              Node::NodeFluidType::Air,
+                                                              Node::FluidType::Air,
                                                               Node::ConnectionType::Inlet,
                                                               Node::CompFluidStream::Secondary,
                                                               Node::ObjectIsParent);
@@ -347,7 +347,7 @@ void GetStandAloneERV(EnergyPlusData &state)
                                                                ErrorsFound,
                                                                Node::ConnectionObjectType::ZoneHVACEnergyRecoveryVentilator,
                                                                Alphas(1),
-                                                               Node::NodeFluidType::Air,
+                                                               Node::FluidType::Air,
                                                                Node::ConnectionType::ReliefAir,
                                                                Node::CompFluidStream::Secondary,
                                                                Node::ObjectIsParent);

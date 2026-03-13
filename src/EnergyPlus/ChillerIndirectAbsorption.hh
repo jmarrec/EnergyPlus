@@ -135,8 +135,8 @@ namespace ChillerIndirectAbsorption {
         int HeatInputFCondTempPtr = 0;                 // Index to generator heat input as a function of absorber temp
         int HeatInputFEvapTempPtr = 0;                 // Index to generator heat input as a function of absorber temp
         int ErrCount2 = 0;                             // error counter
-        Node::NodeFluidType GenHeatSourceType =
-            Node::NodeFluidType::Blank;                      // Generator heat source type, Node::NodeFluidType::Steam=3 or
+        Node::FluidType GenHeatSourceType =
+            Node::FluidType::Blank;                      // Generator heat source type, Node::NodeFluidType::Steam=3 or
                                                                      // Node::NodeFluidType::Water=2
         Fluid::RefrigProps *steam = nullptr;                         // STEAM Fluid Properties
         bool Available = false;                                      // need an array of logicals--load identifiers of available equipment

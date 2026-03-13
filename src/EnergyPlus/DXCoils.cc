@@ -955,7 +955,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilCoolingDXSingleSpeed,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -965,7 +965,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilCoolingDXSingleSpeed,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -1173,7 +1173,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::CoilCoolingDXSingleSpeed,
                                                                     thisDXCoil.Name,
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::OutsideAirReference,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -1431,7 +1431,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilCoolingDXTwoStageWithHumidityControlMode,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -1441,7 +1441,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilCoolingDXTwoStageWithHumidityControlMode,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -1771,7 +1771,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   (Node::ConnectionObjectType)getEnumValue(Node::ConnectionObjectTypeNamesUC,
                                                                                                    Util::makeUPPER(PerfObjectType)),
                                                   PerfObjectName,
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::OutsideAirReference,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -1998,7 +1998,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilHeatingDXSingleSpeed,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -2008,7 +2008,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilHeatingDXSingleSpeed,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -2359,7 +2359,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::CoilHeatingDXSingleSpeed,
                                                                     thisDXCoil.Name,
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::OutsideAirReference,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -2495,7 +2495,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilCoolingDXTwoSpeed,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -2505,7 +2505,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilCoolingDXTwoSpeed,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -2774,7 +2774,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::CoilCoolingDXTwoSpeed,
                                                                     thisDXCoil.Name,
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::OutsideAirReference,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -3192,7 +3192,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
                                                      thisDXCoil.Name,
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -3202,7 +3202,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
                                                       thisDXCoil.Name,
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -3220,7 +3220,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                        ErrorsFound,
                                                        Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
                                                        thisDXCoil.Name,
-                                                       Node::NodeFluidType::Water,
+                                                       Node::FluidType::Water,
                                                        Node::ConnectionType::Inlet,
                                                        Node::CompFluidStream::Secondary,
                                                        Node::ObjectIsNotParent);
@@ -3230,7 +3230,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpPumped,
                                                         thisDXCoil.Name,
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Secondary,
                                                         Node::ObjectIsNotParent);
@@ -3667,7 +3667,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
                                                      thisDXCoil.Name,
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -3677,7 +3677,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
                                                       thisDXCoil.Name,
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -3694,7 +3694,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                        ErrorsFound,
                                                        Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
                                                        thisDXCoil.Name,
-                                                       Node::NodeFluidType::Water,
+                                                       Node::FluidType::Water,
                                                        Node::ConnectionType::Inlet,
                                                        Node::CompFluidStream::Secondary,
                                                        Node::ObjectIsNotParent);
@@ -3704,7 +3704,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpWrapped,
                                                         thisDXCoil.Name,
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Secondary,
                                                         Node::ObjectIsNotParent);
@@ -4015,7 +4015,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilCoolingDXMultiSpeed,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -4025,7 +4025,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilCoolingDXMultiSpeed,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -4041,7 +4041,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::CoilCoolingDXMultiSpeed,
                                                                     thisDXCoil.Name,
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::OutsideAirReference,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -4584,7 +4584,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilHeatingDXMultiSpeed,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -4594,7 +4594,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilHeatingDXMultiSpeed,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -5152,7 +5152,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilCoolingDXVariableRefrigerantFlow,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -5162,7 +5162,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilCoolingDXVariableRefrigerantFlow,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -5235,7 +5235,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilHeatingDXVariableRefrigerantFlow,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -5245,7 +5245,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilHeatingDXVariableRefrigerantFlow,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -5363,7 +5363,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilCoolingDXVariableRefrigerantFlowFluidTemperatureControl,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -5372,7 +5372,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilCoolingDXVariableRefrigerantFlowFluidTemperatureControl,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);
@@ -5479,7 +5479,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                  ErrorsFound,
                                                  Node::ConnectionObjectType::CoilHeatingDXVariableRefrigerantFlowFluidTemperatureControl,
                                                  Alphas(1),
-                                                 Node::NodeFluidType::Air,
+                                                 Node::FluidType::Air,
                                                  Node::ConnectionType::Inlet,
                                                  Node::CompFluidStream::Primary,
                                                  Node::ObjectIsNotParent);
@@ -5488,7 +5488,7 @@ void GetDXCoils(EnergyPlusData &state)
                                                   ErrorsFound,
                                                   Node::ConnectionObjectType::CoilHeatingDXVariableRefrigerantFlowFluidTemperatureControl,
                                                   Alphas(1),
-                                                  Node::NodeFluidType::Air,
+                                                  Node::FluidType::Air,
                                                   Node::ConnectionType::Outlet,
                                                   Node::CompFluidStream::Primary,
                                                   Node::ObjectIsNotParent);

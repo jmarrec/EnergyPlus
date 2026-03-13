@@ -910,7 +910,7 @@ namespace Furnaces {
                                                                                   ErrorsFound,
                                                                                   currentModuleObjectType,
                                                                                   Alphas(1),
-                                                                                  Node::NodeFluidType::Air,
+                                                                                  Node::FluidType::Air,
                                                                                   Node::ConnectionType::Inlet,
                                                                                   Node::CompFluidStream::Primary,
                                                                                   Node::ObjectIsParent);
@@ -919,7 +919,7 @@ namespace Furnaces {
                                                                                    ErrorsFound,
                                                                                    currentModuleObjectType,
                                                                                    Alphas(1),
-                                                                                   Node::NodeFluidType::Air,
+                                                                                   Node::FluidType::Air,
                                                                                    Node::ConnectionType::Outlet,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsParent);
@@ -1469,7 +1469,7 @@ namespace Furnaces {
                                                                                   ErrorsFound,
                                                                                   currentModuleObjectType,
                                                                                   Alphas(1),
-                                                                                  Node::NodeFluidType::Air,
+                                                                                  Node::FluidType::Air,
                                                                                   Node::ConnectionType::Inlet,
                                                                                   Node::CompFluidStream::Primary,
                                                                                   Node::ObjectIsParent);
@@ -1478,7 +1478,7 @@ namespace Furnaces {
                                                                                    ErrorsFound,
                                                                                    currentModuleObjectType,
                                                                                    Alphas(1),
-                                                                                   Node::NodeFluidType::Air,
+                                                                                   Node::FluidType::Air,
                                                                                    Node::ConnectionType::Outlet,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsParent);
@@ -2818,7 +2818,7 @@ namespace Furnaces {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -2829,7 +2829,7 @@ namespace Furnaces {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -3769,7 +3769,7 @@ namespace Furnaces {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -3780,7 +3780,7 @@ namespace Furnaces {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -4169,7 +4169,7 @@ namespace Furnaces {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
                                                         Alphas(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::OutsideAirReference,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);

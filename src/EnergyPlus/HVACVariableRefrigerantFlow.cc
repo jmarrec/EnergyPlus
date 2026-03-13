@@ -2247,7 +2247,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
                                                                 thisVrfSys.Name,
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::OutsideAirReference,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -2268,7 +2268,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
                                                                 thisVrfSys.Name,
-                                                                Node::NodeFluidType::Water,
+                                                                Node::FluidType::Water,
                                                                 Node::ConnectionType::Inlet,
                                                                 Node::CompFluidStream::Secondary,
                                                                 Node::ObjectIsNotParent);
@@ -2284,7 +2284,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::AirConditionerVariableRefrigerantFlow,
                                                                   thisVrfSys.Name,
-                                                                  Node::NodeFluidType::Water,
+                                                                  Node::FluidType::Water,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Secondary,
                                                                   Node::ObjectIsNotParent);
@@ -3385,7 +3385,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::ZoneHVACTerminalUnitVariableRefrigerantFlow,
                                                         thisVrfTU.Name,
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Inlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsParent);
@@ -3395,7 +3395,7 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                          ErrorsFound,
                                                          Node::ConnectionObjectType::ZoneHVACTerminalUnitVariableRefrigerantFlow,
                                                          thisVrfTU.Name,
-                                                         Node::NodeFluidType::Air,
+                                                         Node::FluidType::Air,
                                                          Node::ConnectionType::Outlet,
                                                          Node::CompFluidStream::Primary,
                                                          Node::ObjectIsParent);

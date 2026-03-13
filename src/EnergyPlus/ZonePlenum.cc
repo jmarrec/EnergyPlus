@@ -337,7 +337,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::AirLoopHVACReturnPlenum,
                                                       AlphArray(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::ZoneNode,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -353,7 +353,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::AirLoopHVACReturnPlenum,
                                                      AlphArray(1),
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Outlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -365,7 +365,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
                     NumNodes,
                     NodeNums,
                     NodeListError,
-                    Node::NodeFluidType::Air,
+                    Node::FluidType::Air,
                     Node::ConnectionObjectType::AirLoopHVACReturnPlenum,
                     thisRetPlenum.ZonePlenumName,
                     Node::ConnectionType::InducedAir,
@@ -456,7 +456,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::AirLoopHVACReturnPlenum,
                                                                  AlphArray(1),
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -557,7 +557,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
                                                       AlphArray(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::ZoneNode,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -573,7 +573,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
                                                     AlphArray(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);
@@ -619,7 +619,7 @@ void GetZonePlenumInput(EnergyPlusData &state)
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::AirLoopHVACSupplyPlenum,
                                                                   AlphArray(1),
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);

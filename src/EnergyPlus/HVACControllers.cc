@@ -513,7 +513,7 @@ void GetControllerInput(EnergyPlusData &state)
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ControllerWaterCoil,
                                                                              AlphArray(1),
-                                                                             Node::NodeFluidType::Blank,
+                                                                             Node::FluidType::Blank,
                                                                              Node::ConnectionType::Sensor,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -522,7 +522,7 @@ void GetControllerInput(EnergyPlusData &state)
                                                                                ErrorsFound,
                                                                                Node::ConnectionObjectType::ControllerWaterCoil,
                                                                                AlphArray(1),
-                                                                               Node::NodeFluidType::Blank,
+                                                                               Node::FluidType::Blank,
                                                                                Node::ConnectionType::Actuator,
                                                                                Node::CompFluidStream::Primary,
                                                                                Node::ObjectIsNotParent);

@@ -287,7 +287,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::HeatExchangerFluidToFluid,
                                                     cAlphaArgs(1),
-                                                    Node::NodeFluidType::Water,
+                                                    Node::FluidType::Water,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);
@@ -297,7 +297,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::HeatExchangerFluidToFluid,
                                                     cAlphaArgs(1),
-                                                    Node::NodeFluidType::Water,
+                                                    Node::FluidType::Water,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);
@@ -314,7 +314,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::HeatExchangerFluidToFluid,
                                                     cAlphaArgs(1),
-                                                    Node::NodeFluidType::Water,
+                                                    Node::FluidType::Water,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Secondary,
                                                     Node::ObjectIsNotParent);
@@ -324,7 +324,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::HeatExchangerFluidToFluid,
                                                     cAlphaArgs(1),
-                                                    Node::NodeFluidType::Water,
+                                                    Node::FluidType::Water,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Secondary,
                                                     Node::ObjectIsNotParent);
@@ -373,7 +373,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::HeatExchangerFluidToFluid,
                                                         cAlphaArgs(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Sensor,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -488,7 +488,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::HeatExchangerFluidToFluid,
                                                         cAlphaArgs(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Actuator,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -507,7 +507,7 @@ void GetFluidHeatExchangerInput(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::HeatExchangerFluidToFluid,
                                                         cAlphaArgs(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Actuator,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);

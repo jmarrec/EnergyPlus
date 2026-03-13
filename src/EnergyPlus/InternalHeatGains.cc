@@ -1100,7 +1100,7 @@ namespace InternalHeatGains {
                                                                               exhaustNodeError,
                                                                               Node::ConnectionObjectType::Lights,
                                                                               thisLights.Name,
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::ZoneExhaust,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);
@@ -2278,7 +2278,7 @@ namespace InternalHeatGains {
                                                                               ErrorsFound,
                                                                               Node::ConnectionObjectType::ElectricEquipmentITEAirCooled,
                                                                               IHGAlphas(1),
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::Sensor,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);

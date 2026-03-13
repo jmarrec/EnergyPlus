@@ -312,7 +312,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Water,
+                                      Node::FluidType::Water,
                                       Node::ConnectionType::Inlet,
                                       Node::CompFluidStream::Secondary,
                                       Node::ObjectIsNotParent);
@@ -322,7 +322,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Water,
+                                      Node::FluidType::Water,
                                       Node::ConnectionType::Outlet,
                                       Node::CompFluidStream::Secondary,
                                       Node::ObjectIsNotParent);
@@ -332,7 +332,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Air,
+                                      Node::FluidType::Air,
                                       Node::ConnectionType::Inlet,
                                       Node::CompFluidStream::Primary,
                                       Node::ObjectIsNotParent);
@@ -342,7 +342,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpVariableSpeedEquationFit,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Air,
+                                      Node::FluidType::Air,
                                       Node::ConnectionType::Outlet,
                                       Node::CompFluidStream::Primary,
                                       Node::ObjectIsNotParent);
@@ -756,7 +756,7 @@ namespace VariableSpeedCoils {
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::CoilCoolingDXVariableSpeed,
                                                                  varSpeedCoil.Name,
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -765,7 +765,7 @@ namespace VariableSpeedCoils {
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::CoilCoolingDXVariableSpeed,
                                                                   varSpeedCoil.Name,
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);
@@ -821,7 +821,7 @@ namespace VariableSpeedCoils {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::CoilCoolingDXVariableSpeed,
                                                                            varSpeedCoil.Name,
-                                                                           Node::NodeFluidType::Air,
+                                                                           Node::FluidType::Air,
                                                                            Node::ConnectionType::OutsideAirReference,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -1243,7 +1243,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Water,
+                                      Node::FluidType::Water,
                                       Node::ConnectionType::Inlet,
                                       Node::CompFluidStream::Secondary,
                                       Node::ObjectIsNotParent);
@@ -1253,7 +1253,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Water,
+                                      Node::FluidType::Water,
                                       Node::ConnectionType::Outlet,
                                       Node::CompFluidStream::Secondary,
                                       Node::ObjectIsNotParent);
@@ -1263,7 +1263,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Air,
+                                      Node::FluidType::Air,
                                       Node::ConnectionType::Inlet,
                                       Node::CompFluidStream::Primary,
                                       Node::ObjectIsNotParent);
@@ -1273,7 +1273,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpVariableSpeedEquationFit,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Air,
+                                      Node::FluidType::Air,
                                       Node::ConnectionType::Outlet,
                                       Node::CompFluidStream::Primary,
                                       Node::ObjectIsNotParent);
@@ -1661,7 +1661,7 @@ namespace VariableSpeedCoils {
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::CoilHeatingDXVariableSpeed,
                                                                  varSpeedCoil.Name,
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -1670,7 +1670,7 @@ namespace VariableSpeedCoils {
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::CoilHeatingDXVariableSpeed,
                                                                   varSpeedCoil.Name,
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);
@@ -2166,7 +2166,7 @@ namespace VariableSpeedCoils {
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
                                                                  varSpeedCoil.Name,
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -2176,7 +2176,7 @@ namespace VariableSpeedCoils {
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
                                                                   varSpeedCoil.Name,
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);
@@ -2196,7 +2196,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Water,
+                                      Node::FluidType::Water,
                                       Node::ConnectionType::Inlet,
                                       Node::CompFluidStream::Secondary,
                                       Node::ObjectIsNotParent);
@@ -2207,7 +2207,7 @@ namespace VariableSpeedCoils {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::CoilWaterHeatingAirToWaterHeatPumpVariableSpeed,
                                       varSpeedCoil.Name,
-                                      Node::NodeFluidType::Water,
+                                      Node::FluidType::Water,
                                       Node::ConnectionType::Outlet,
                                       Node::CompFluidStream::Secondary,
                                       Node::ObjectIsNotParent);

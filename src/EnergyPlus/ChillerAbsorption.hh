@@ -125,7 +125,7 @@ namespace ChillerAbsorption {
         std::array<Real64, 3> PumpPowerCoef = {0.0};                                        // coeff of pumping power poly. fit
         Real64 TempLowLimitEvapOut = 0.0;                                                   // C - low temperature shut off
         int ErrCount2 = 0;                                                                  // error counter
-        Node::NodeFluidType GenHeatSourceType = Node::NodeFluidType::Blank; // Generator heat source type
+        Node::FluidType GenHeatSourceType = Node::FluidType::Blank; // Generator heat source type
         Real64 GeneratorVolFlowRate = 0.0;                                                  // m3/s - hot water volumetric flow rate through generator
         bool GeneratorVolFlowRateWasAutoSized = false;                                      // true if hot water flow was autosize on input
         Real64 GeneratorSubcool = 0.0;                                                      // amount of subcooling in steam generator

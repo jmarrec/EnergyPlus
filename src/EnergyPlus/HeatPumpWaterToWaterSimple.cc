@@ -325,7 +325,7 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatPumpWaterToWaterEquationFitCooling,
                                                             state.dataIPShortCut->cAlphaArgs(1),
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -335,7 +335,7 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::HeatPumpWaterToWaterEquationFitCooling,
                                                              state.dataIPShortCut->cAlphaArgs(1),
-                                                             Node::NodeFluidType::Water,
+                                                             Node::FluidType::Water,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -345,7 +345,7 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
                                                           ErrorsFound,
                                                           Node::ConnectionObjectType::HeatPumpWaterToWaterEquationFitCooling,
                                                           state.dataIPShortCut->cAlphaArgs(1),
-                                                          Node::NodeFluidType::Water,
+                                                          Node::FluidType::Water,
                                                           Node::ConnectionType::Inlet,
                                                           Node::CompFluidStream::Secondary,
                                                           Node::ObjectIsNotParent);
@@ -355,7 +355,7 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatPumpWaterToWaterEquationFitCooling,
                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                           Node::NodeFluidType::Water,
+                                                           Node::FluidType::Water,
                                                            Node::ConnectionType::Outlet,
                                                            Node::CompFluidStream::Secondary,
                                                            Node::ObjectIsNotParent);
@@ -488,7 +488,7 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatPumpWaterToWaterEquationFitHeating,
                                                             state.dataIPShortCut->cAlphaArgs(1),
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -498,7 +498,7 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::HeatPumpWaterToWaterEquationFitHeating,
                                                              state.dataIPShortCut->cAlphaArgs(1),
-                                                             Node::NodeFluidType::Water,
+                                                             Node::FluidType::Water,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -508,7 +508,7 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
                                                           ErrorsFound,
                                                           Node::ConnectionObjectType::HeatPumpWaterToWaterEquationFitHeating,
                                                           state.dataIPShortCut->cAlphaArgs(1),
-                                                          Node::NodeFluidType::Water,
+                                                          Node::FluidType::Water,
                                                           Node::ConnectionType::Inlet,
                                                           Node::CompFluidStream::Secondary,
                                                           Node::ObjectIsNotParent);
@@ -518,7 +518,7 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatPumpWaterToWaterEquationFitHeating,
                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                           Node::NodeFluidType::Water,
+                                                           Node::FluidType::Water,
                                                            Node::ConnectionType::Outlet,
                                                            Node::CompFluidStream::Secondary,
                                                            Node::ObjectIsNotParent);

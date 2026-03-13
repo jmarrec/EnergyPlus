@@ -370,7 +370,7 @@ namespace FuelCellElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorFuelCellPowerModule,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Inlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -381,7 +381,7 @@ namespace FuelCellElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorFuelCellPowerModule,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -459,7 +459,7 @@ namespace FuelCellElectricGenerator {
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::GeneratorFuelCellAirSupply,
                                                                                  AlphArray(1),
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::Inlet,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsNotParent);
@@ -672,7 +672,7 @@ namespace FuelCellElectricGenerator {
                                                                                     ErrorsFound,
                                                                                     Node::ConnectionObjectType::GeneratorFuelCellWaterSupply,
                                                                                     AlphArray(1),
-                                                                                    Node::NodeFluidType::Air,
+                                                                                    Node::FluidType::Air,
                                                                                     Node::ConnectionType::Sensor,
                                                                                     Node::CompFluidStream::Primary,
                                                                                     Node::ObjectIsNotParent);
@@ -684,7 +684,7 @@ namespace FuelCellElectricGenerator {
                                                                                     ErrorsFound,
                                                                                     Node::ConnectionObjectType::GeneratorFuelCellWaterSupply,
                                                                                     AlphArray(1),
-                                                                                    Node::NodeFluidType::Water,
+                                                                                    Node::FluidType::Water,
                                                                                     Node::ConnectionType::Sensor,
                                                                                     Node::CompFluidStream::Primary,
                                                                                     Node::ObjectIsNotParent);
@@ -819,7 +819,7 @@ namespace FuelCellElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Inlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -829,7 +829,7 @@ namespace FuelCellElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -843,7 +843,7 @@ namespace FuelCellElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorFuelCellExhaustGasToWaterHeatExchanger,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Secondary,
                                                         Node::ObjectIsNotParent);
@@ -1039,7 +1039,7 @@ namespace FuelCellElectricGenerator {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::GeneratorFuelCellStackCooler,
                                                             AlphArray(1),
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -1049,7 +1049,7 @@ namespace FuelCellElectricGenerator {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::GeneratorFuelCellStackCooler,
                                                             AlphArray(1),
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);

@@ -561,7 +561,7 @@ namespace HVACMultiSpeedHeatPump {
                                                          ErrorsFound,
                                                          Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
                                                          Alphas(1),
-                                                         Node::NodeFluidType::Air,
+                                                         Node::FluidType::Air,
                                                          Node::ConnectionType::Inlet,
                                                          Node::CompFluidStream::Primary,
                                                          Node::ObjectIsParent);
@@ -571,7 +571,7 @@ namespace HVACMultiSpeedHeatPump {
                                                           ErrorsFound,
                                                           Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
                                                           Alphas(1),
-                                                          Node::NodeFluidType::Air,
+                                                          Node::FluidType::Air,
                                                           Node::ConnectionType::Outlet,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsParent);
@@ -1299,7 +1299,7 @@ namespace HVACMultiSpeedHeatPump {
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
                                                                  Alphas(1),
-                                                                 Node::NodeFluidType::Water,
+                                                                 Node::FluidType::Water,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Tertiary,
                                                                  Node::ObjectIsNotParent);
@@ -1314,7 +1314,7 @@ namespace HVACMultiSpeedHeatPump {
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed,
                                                                   Alphas(1),
-                                                                  Node::NodeFluidType::Water,
+                                                                  Node::FluidType::Water,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Tertiary,
                                                                   Node::ObjectIsNotParent);

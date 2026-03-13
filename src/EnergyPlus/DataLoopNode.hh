@@ -63,7 +63,7 @@ namespace EnergyPlus {
 
 namespace Node {
 
-    enum class NodeFluidType
+    enum class FluidType
     {
         Invalid = -1,
         Blank, // TODO: remove, should be same as Invalid
@@ -105,10 +105,10 @@ namespace Node {
     constexpr bool IncrementFluidStreamYes(true);
 
     // Valid Fluid Types for Nodes
-    constexpr static std::array<std::string_view, static_cast<int>(NodeFluidType::Num)> NodeFluidTypeNames = {
+    constexpr static std::array<std::string_view, static_cast<int>(FluidType::Num)> FluidTypeNames = {
         "blank", "Air", "Water", "Steam", "Electric"};
 
-    constexpr static std::array<std::string_view, static_cast<int>(NodeFluidType::Num)> NodeFluidTypeNamesUC = {
+    constexpr static std::array<std::string_view, static_cast<int>(FluidType::Num)> FluidTypeNamesUC = {
         "BLANK", "AIR", "WATER", "STEAM", "ELECTRIC"};
 
     constexpr static std::array<std::string_view, static_cast<int>(ConnectionType::Num)> ConnectionTypeNames = {"blank",
@@ -441,7 +441,7 @@ namespace Node {
     struct NodeData
     {
         // Members
-        NodeFluidType FluidType = NodeFluidType::Blank;      // must be one of the valid parameters
+        FluidType FluidType = FluidType::Blank;      // must be one of the valid parameters
         int FluidIndex = 0;                                  // For Fluid Properties
         Real64 Temp = 0.0;                                   // {C}
         Real64 TempMin = 0.0;                                // {C}

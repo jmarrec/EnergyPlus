@@ -200,7 +200,7 @@ namespace CTElectricGenerator {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::GeneratorCombustionTurbine,
                                                     AlphArray(1),
-                                                    Node::NodeFluidType::Electric,
+                                                    Node::FluidType::Electric,
                                                     Node::ConnectionType::Electric,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);
@@ -264,7 +264,7 @@ namespace CTElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorCombustionTurbine,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Inlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -281,7 +281,7 @@ namespace CTElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorCombustionTurbine,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -332,7 +332,7 @@ namespace CTElectricGenerator {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorCombustionTurbine,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::OutsideAirReference,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);

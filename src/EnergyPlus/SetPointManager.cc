@@ -808,7 +808,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                         ErrorsFound,
                                                         spmNodeObjectTypes[(int)spm->type],
                                                         spmSZR->Name,
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Sensor,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -817,7 +817,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                              ErrorsFound,
                                                              spmNodeObjectTypes[(int)spm->type],
                                                              spmSZR->Name,
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Sensor,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -848,7 +848,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                            ErrorsFound,
                                                            spmNodeObjectTypes[(int)spm->type],
                                                            spmSZTemp->Name,
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::Sensor,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -857,7 +857,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                 ErrorsFound,
                                                                 spmNodeObjectTypes[(int)spm->type],
                                                                 spmSZTemp->Name,
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Sensor,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -878,7 +878,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                             NumNodes,
                             NodeNums,
                             ErrInList,
-                            Node::NodeFluidType::Air,
+                            Node::FluidType::Air,
                             spmNodeObjectTypes[(int)spm->type],
                             spmSZHum->Name,
                             Node::ConnectionType::Sensor,
@@ -918,7 +918,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                       ErrorsFound,
                                                       spmNodeObjectTypes[(int)spm->type],
                                                       spmMA->Name,
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Sensor,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -927,7 +927,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                         ErrorsFound,
                                                         spmNodeObjectTypes[(int)spm->type],
                                                         spmMA->Name,
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Sensor,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -936,7 +936,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                          ErrorsFound,
                                                          spmNodeObjectTypes[(int)spm->type],
                                                          spmMA->Name,
-                                                         Node::NodeFluidType::Air,
+                                                         Node::FluidType::Air,
                                                          Node::ConnectionType::Sensor,
                                                          Node::CompFluidStream::Primary,
                                                          Node::ObjectIsNotParent);
@@ -952,7 +952,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                        ErrorsFound,
                                                        spmNodeObjectTypes[(int)spm->type],
                                                        spmOAP->Name,
-                                                       Node::NodeFluidType::Air,
+                                                       Node::FluidType::Air,
                                                        Node::ConnectionType::Sensor,
                                                        Node::CompFluidStream::Primary,
                                                        Node::ObjectIsNotParent);
@@ -961,7 +961,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                             ErrorsFound,
                                                             spmNodeObjectTypes[(int)spm->type],
                                                             spmOAP->Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Sensor,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -970,7 +970,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                         ErrorsFound,
                                                         spmNodeObjectTypes[(int)spm->type],
                                                         spmOAP->Name,
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Sensor,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -979,7 +979,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                             ErrorsFound,
                                                             spmNodeObjectTypes[(int)spm->type],
                                                             spmOAP->Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Sensor,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -1098,7 +1098,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                        ErrorsFound,
                                                        spmNodeObjectTypes[(int)spm->type],
                                                        spmFNT->Name,
-                                                       Node::NodeFluidType::Blank,
+                                                       Node::FluidType::Blank,
                                                        Node::ConnectionType::Sensor,
                                                        Node::CompFluidStream::Primary,
                                                        Node::ObjectIsNotParent);
@@ -1288,7 +1288,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                           errFlag,
                                                           spmNodeObjectTypes[(int)spm->type],
                                                           spmRWT->Name,
-                                                          Node::NodeFluidType::Blank,
+                                                          Node::FluidType::Blank,
                                                           Node::ConnectionType::SetPoint,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsNotParent,
@@ -1298,7 +1298,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                           errFlag,
                                                           spmNodeObjectTypes[(int)spm->type],
                                                           spmRWT->Name,
-                                                          Node::NodeFluidType::Blank,
+                                                          Node::FluidType::Blank,
                                                           Node::ConnectionType::Sensor,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsNotParent,
@@ -1343,7 +1343,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                            ErrorsFound,
                                                            spmNodeObjectTypes[(int)spm->type],
                                                            spmSNRTemp->Name,
-                                                           Node::NodeFluidType::Blank,
+                                                           Node::FluidType::Blank,
                                                            Node::ConnectionType::Sensor,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -1370,7 +1370,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                           ErrorsFound,
                                                           spmNodeObjectTypes[(int)spm->type],
                                                           spmSNRHum->Name,
-                                                          Node::NodeFluidType::Blank,
+                                                          Node::FluidType::Blank,
                                                           Node::ConnectionType::Sensor,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsNotParent);
@@ -1397,7 +1397,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                             NumNodes,
                             NodeNums,
                             NodeListError,
-                            Node::NodeFluidType::Blank,
+                            Node::FluidType::Blank,
                             spmNodeObjectTypes[iSPM],
                             name,
                             Node::ConnectionType::SetPoint,
@@ -1426,7 +1426,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                  ErrorsFound,
                                                                  spmNodeObjectTypes[(int)spm->type],
                                                                  spmMA->Name,
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Sensor,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -1438,7 +1438,7 @@ void GetSetPointManagerInputData(EnergyPlusData &state, bool &ErrorsFound)
                                                                   ErrorsFound,
                                                                   spmNodeObjectTypes[(int)spm->type],
                                                                   spmMA->Name,
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::Sensor,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);
@@ -2527,9 +2527,9 @@ void InitSetPointManagers(EnergyPlusData &state)
                         }
                     } else { // If reference node is a water node, then set RefTypeMode to NodeDryBulb
 
-                        if (refNode.FluidType == Node::NodeFluidType::Water) {
+                        if (refNode.FluidType == Node::FluidType::Water) {
                             spmFSNT->refTempType = AirTempType::DryBulb;
-                        } else if (refNode.FluidType == Node::NodeFluidType::Air) {
+                        } else if (refNode.FluidType == Node::FluidType::Air) {
                             if (spmFSNT->refTempType == AirTempType::WetBulb) {
                                 refNode.SPMNodeWetBulbRepReq = true;
                             }

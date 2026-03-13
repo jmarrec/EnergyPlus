@@ -776,7 +776,7 @@ namespace LowTempRadiantSystem {
                                                           ErrorsFound,
                                                           Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
                                                           Alphas(1),
-                                                          Node::NodeFluidType::Water,
+                                                          Node::FluidType::Water,
                                                           Node::ConnectionType::Inlet,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsNotParent);
@@ -786,7 +786,7 @@ namespace LowTempRadiantSystem {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
                                                            Alphas(1),
-                                                           Node::NodeFluidType::Water,
+                                                           Node::FluidType::Water,
                                                            Node::ConnectionType::Outlet,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -836,7 +836,7 @@ namespace LowTempRadiantSystem {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
                                                            Alphas(1),
-                                                           Node::NodeFluidType::Water,
+                                                           Node::FluidType::Water,
                                                            Node::ConnectionType::Inlet,
                                                            Node::CompFluidStream::Secondary,
                                                            Node::ObjectIsNotParent);
@@ -846,7 +846,7 @@ namespace LowTempRadiantSystem {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantVariableFlow,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Secondary,
                                                             Node::ObjectIsNotParent);
@@ -1081,7 +1081,7 @@ namespace LowTempRadiantSystem {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
                                                            Alphas(1),
-                                                           Node::NodeFluidType::Water,
+                                                           Node::FluidType::Water,
                                                            Node::ConnectionType::Inlet,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -1091,7 +1091,7 @@ namespace LowTempRadiantSystem {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -1131,7 +1131,7 @@ namespace LowTempRadiantSystem {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Secondary,
                                                             Node::ObjectIsNotParent);
@@ -1141,7 +1141,7 @@ namespace LowTempRadiantSystem {
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::ZoneHVACLowTemperatureRadiantConstantFlow,
                                                              Alphas(1),
-                                                             Node::NodeFluidType::Water,
+                                                             Node::FluidType::Water,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Secondary,
                                                              Node::ObjectIsNotParent);

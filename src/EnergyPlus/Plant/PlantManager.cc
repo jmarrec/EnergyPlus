@@ -399,20 +399,20 @@ void GetPlantLoopData(EnergyPlusData &state)
             // use a single index, and because the index was pre-set
             // the FluidName was never consulted.  That's not a very
             // robust way of doing things.
-            this_loop.FluidType = Node::NodeFluidType::Steam;
+            this_loop.FluidType = Node::FluidType::Steam;
             this_loop.FluidName = Alpha(2);
             this_loop.FluidIndex = 1;
             this_loop.glycol = Fluid::GetWater(state);
             this_loop.steam = Fluid::GetSteam(state);
 
         } else if (Util::SameString(Alpha(2), "WATER")) {
-            this_loop.FluidType = Node::NodeFluidType::Water;
+            this_loop.FluidType = Node::FluidType::Water;
             this_loop.FluidName = Alpha(2);
             this_loop.FluidIndex = 1;
             this_loop.glycol = Fluid::GetWater(state);
 
         } else if (Util::SameString(Alpha(2), "USERDEFINEDFLUIDTYPE")) {
-            this_loop.FluidType = Node::NodeFluidType::Water;
+            this_loop.FluidType = Node::FluidType::Water;
             this_loop.FluidName = Alpha(3);
             // check for valid fluid name
             this_loop.glycol = Fluid::GetGlycol(state, Alpha(3));
@@ -426,7 +426,7 @@ void GetPlantLoopData(EnergyPlusData &state)
         } else {
             ShowWarningInvalidKey(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), Alpha(2), "Water");
 
-            this_loop.FluidType = Node::NodeFluidType::Water;
+            this_loop.FluidType = Node::FluidType::Water;
             this_loop.FluidName = "WATER";
             this_loop.FluidIndex = 1;
             this_loop.glycol = Fluid::GetWater(state);
@@ -546,7 +546,7 @@ void GetPlantLoopData(EnergyPlusData &state)
             if (Util::SameString(Alpha(16), "SingleSetpoint")) {
                 this_loop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
             } else if (Util::SameString(Alpha(16), "DualSetpointDeadband")) {
-                if (this_loop.FluidType == Node::NodeFluidType::Steam) {
+                if (this_loop.FluidType == Node::FluidType::Steam) {
                     ShowWarningError(state, std::string{RoutineName} + CurrentModuleObject + "=\"" + Alpha(1) + "\", Invalid choice.");
                     ShowContinueError(state,
                                       state.dataIPShortCut->cAlphaFieldNames(16) + "=\"" + Alpha(16) + "\" not valid for " +
@@ -2745,19 +2745,19 @@ void ReInitPlantLoopsAtFirstHVACIteration(EnergyPlusData &state)
                 state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).OutletNode.TemperatureHistory = 0.0;
                 state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).OutletNode.MassFlowRateHistory = 0.0;
 
-                if (state.dataPlnt->PlantLoop(LoopNum).FluidType != Node::NodeFluidType::Steam) {
+                if (state.dataPlnt->PlantLoop(LoopNum).FluidType != Node::FluidType::Steam) {
                     Cp = state.dataPlnt->PlantLoop(LoopNum).glycol->getSpecificHeat(state, LoopSetPointTemp, RoutineNameAlt);
                     StartEnthalpy = Cp * LoopSetPointTemp;
                 }
                 // Use Min/Max flow rates to initialize loop
-                if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::NodeFluidType::Water) {
+                if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::FluidType::Water) {
                     rho = state.dataPlnt->PlantLoop(LoopNum).glycol->getDensity(state, LoopSetPointTemp, RoutineNameAlt);
 
                     LoopMaxMassFlowRate = state.dataPlnt->PlantLoop(LoopNum).MaxVolFlowRate * rho;
                     LoopMinMassFlowRate = state.dataPlnt->PlantLoop(LoopNum).MinVolFlowRate * rho;
                 }
                 // use saturated liquid of steam at the loop setpoint temp as the starting enthalpy for a water loop
-                if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::NodeFluidType::Steam) {
+                if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::FluidType::Steam) {
                     SteamTemp = 100.0;
                     auto *steam = Fluid::GetSteam(state);
                     state.dataPlnt->PlantLoop(LoopNum).FluidIndex = steam->Num;
@@ -3381,7 +3381,7 @@ void SizePlantLoop(EnergyPlusData &state,
 
     // should now have plant volume, calculate plant volume's mass for fluid type
     Real64 FluidDensity = 0.0;
-    if (loop.FluidType == Node::NodeFluidType::Water) {
+    if (loop.FluidType == Node::FluidType::Water) {
         FluidDensity = loop.glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
         if (PlantSizNum > 0 && allocated(state.dataSize->PlantSizData)) { // method only works if sizing delta T is available
             auto &loopSizData = state.dataSize->PlantSizData(PlantSizNum);
@@ -3399,7 +3399,7 @@ void SizePlantLoop(EnergyPlusData &state,
         } else {
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchPLCLDesCap, loop.Name, "N/A");
         }
-    } else if (loop.FluidType == Node::NodeFluidType::Steam) {
+    } else if (loop.FluidType == Node::FluidType::Steam) {
         auto *steam = Fluid::GetSteam(state);
         loop.FluidIndex = steam->Num;
         FluidDensity = steam->getSatDensity(state, 100.0, 1.0, RoutineName);
@@ -3529,9 +3529,9 @@ void ResizePlantLoopLevelSizes(EnergyPlusData &state, int const LoopNum // Suppl
     }
 
     // should now have plant volume, calculate plant volume's mass for fluid type
-    if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::NodeFluidType::Water) {
+    if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::FluidType::Water) {
         FluidDensity = state.dataPlnt->PlantLoop(LoopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
-    } else if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::NodeFluidType::Steam) {
+    } else if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::FluidType::Steam) {
         FluidDensity = Fluid::GetSteam(state)->getSatDensity(state, 100.0, 1.0, RoutineName);
     } else {
         assert(false);

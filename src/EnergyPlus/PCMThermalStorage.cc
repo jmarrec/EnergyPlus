@@ -585,7 +585,7 @@ namespace PCMStorage {
                                                                      ErrorsFound,
                                                                      Node::ConnectionObjectType::ThermalStoragePCM,
                                                                      PCM.Name,
-                                                                     Node::NodeFluidType::Water,
+                                                                     Node::FluidType::Water,
                                                                      Node::ConnectionType::Inlet,
                                                                      Node::CompFluidStream::Primary,
                                                                      Node::ObjectIsNotParent);
@@ -595,7 +595,7 @@ namespace PCMStorage {
                                                                       ErrorsFound,
                                                                       Node::ConnectionObjectType::ThermalStoragePCM,
                                                                       PCM.Name,
-                                                                      Node::NodeFluidType::Water,
+                                                                      Node::FluidType::Water,
                                                                       Node::ConnectionType::Outlet,
                                                                       Node::CompFluidStream::Primary,
                                                                       Node::ObjectIsNotParent);
@@ -605,7 +605,7 @@ namespace PCMStorage {
                                                                    ErrorsFound,
                                                                    Node::ConnectionObjectType::ThermalStoragePCM,
                                                                    PCM.Name,
-                                                                   Node::NodeFluidType::Water,
+                                                                   Node::FluidType::Water,
                                                                    Node::ConnectionType::Inlet,
                                                                    Node::CompFluidStream::Secondary,
                                                                    Node::ObjectIsNotParent);
@@ -615,7 +615,7 @@ namespace PCMStorage {
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::ThermalStoragePCM,
                                                                     PCM.Name,
-                                                                    Node::NodeFluidType::Water,
+                                                                    Node::FluidType::Water,
                                                                     Node::ConnectionType::Outlet,
                                                                     Node::CompFluidStream::Secondary,
                                                                     Node::ObjectIsNotParent);

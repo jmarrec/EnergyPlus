@@ -319,7 +319,7 @@ namespace FanCoilUnits {
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::ZoneHVACFourPipeFanCoil,
                                                                     Alphas(1),
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::Inlet,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsParent); // air input node
@@ -329,7 +329,7 @@ namespace FanCoilUnits {
                                                                      ErrorsFound,
                                                                      Node::ConnectionObjectType::ZoneHVACFourPipeFanCoil,
                                                                      Alphas(1),
-                                                                     Node::NodeFluidType::Air,
+                                                                     Node::FluidType::Air,
                                                                      Node::ConnectionType::Outlet,
                                                                      Node::CompFluidStream::Primary,
                                                                      Node::ObjectIsParent); // air outlet node

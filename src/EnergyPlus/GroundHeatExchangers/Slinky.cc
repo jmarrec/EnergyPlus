@@ -77,7 +77,7 @@ GLHESlinky::GLHESlinky(EnergyPlusData &state, std::string const &objName, nlohma
                                                              errorsFound,
                                                              Node::ConnectionObjectType::GroundHeatExchangerSlinky,
                                                              this->name,
-                                                             Node::NodeFluidType::Water,
+                                                             Node::FluidType::Water,
                                                              Node::ConnectionType::Inlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -88,7 +88,7 @@ GLHESlinky::GLHESlinky(EnergyPlusData &state, std::string const &objName, nlohma
                                                               errorsFound,
                                                               Node::ConnectionObjectType::GroundHeatExchangerSlinky,
                                                               this->name,
-                                                              Node::NodeFluidType::Water,
+                                                              Node::FluidType::Water,
                                                               Node::ConnectionType::Outlet,
                                                               Node::CompFluidStream::Primary,
                                                               Node::ObjectIsNotParent);

@@ -292,7 +292,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::EvaporativeCoolerDirectCelDekPad,
                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -302,7 +302,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::EvaporativeCoolerDirectCelDekPad,
                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -390,7 +390,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::EvaporativeCoolerIndirectCelDekPad,
                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -400,7 +400,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::EvaporativeCoolerIndirectCelDekPad,
                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -462,7 +462,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::EvaporativeCoolerIndirectCelDekPad,
                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::OutsideAirReference,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);
@@ -521,7 +521,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::EvaporativeCoolerIndirectWetCoil,
                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -531,7 +531,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::EvaporativeCoolerIndirectWetCoil,
                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -585,7 +585,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::EvaporativeCoolerIndirectWetCoil,
                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::OutsideAirReference,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);
@@ -642,7 +642,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::EvaporativeCoolerIndirectResearchSpecial,
                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -652,7 +652,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::EvaporativeCoolerIndirectResearchSpecial,
                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -672,7 +672,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::EvaporativeCoolerIndirectResearchSpecial,
                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::Inlet,
                                                                   Node::CompFluidStream::Secondary,
                                                                   Node::ObjectIsNotParent);
@@ -686,7 +686,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                                    ErrorsFound,
                                                                    Node::ConnectionObjectType::EvaporativeCoolerIndirectResearchSpecial,
                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                   Node::NodeFluidType::Air,
+                                                                   Node::FluidType::Air,
                                                                    Node::ConnectionType::Outlet,
                                                                    Node::CompFluidStream::Secondary,
                                                                    Node::ObjectIsNotParent);
@@ -697,7 +697,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                               ErrorsFound,
                                                               Node::ConnectionObjectType::EvaporativeCoolerIndirectResearchSpecial,
                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                              Node::NodeFluidType::Air,
+                                                              Node::FluidType::Air,
                                                               Node::ConnectionType::Sensor,
                                                               Node::CompFluidStream::Primary,
                                                               Node::ObjectIsNotParent);
@@ -707,7 +707,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::EvaporativeCoolerIndirectResearchSpecial,
                                                              state.dataIPShortCut->cAlphaArgs(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Inlet,
                                                              Node::CompFluidStream::Tertiary,
                                                              Node::ObjectIsNotParent);
@@ -842,7 +842,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::EvaporativeCoolerDirectResearchSpecial,
                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -852,7 +852,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::EvaporativeCoolerDirectResearchSpecial,
                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -869,7 +869,7 @@ void GetEvapInput(EnergyPlusData &state)
                                                               ErrorsFound,
                                                               Node::ConnectionObjectType::EvaporativeCoolerDirectResearchSpecial,
                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                              Node::NodeFluidType::Air,
+                                                              Node::FluidType::Air,
                                                               Node::ConnectionType::Sensor,
                                                               Node::CompFluidStream::Primary,
                                                               Node::ObjectIsNotParent);
@@ -3479,7 +3479,7 @@ void GetInputZoneEvaporativeCoolerUnit(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::ZoneHVACEvaporativeCoolerUnit,
                                                                 Alphas(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::OutsideAir,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsParent);
@@ -3489,7 +3489,7 @@ void GetInputZoneEvaporativeCoolerUnit(EnergyPlusData &state)
                                                                    ErrorsFound,
                                                                    Node::ConnectionObjectType::ZoneHVACEvaporativeCoolerUnit,
                                                                    Alphas(1),
-                                                                   Node::NodeFluidType::Air,
+                                                                   Node::FluidType::Air,
                                                                    Node::ConnectionType::Outlet,
                                                                    Node::CompFluidStream::Primary,
                                                                    Node::ObjectIsParent);
@@ -3500,7 +3500,7 @@ void GetInputZoneEvaporativeCoolerUnit(EnergyPlusData &state)
                                                                        ErrorsFound,
                                                                        Node::ConnectionObjectType::ZoneHVACEvaporativeCoolerUnit,
                                                                        Alphas(1),
-                                                                       Node::NodeFluidType::Air,
+                                                                       Node::FluidType::Air,
                                                                        Node::ConnectionType::Inlet,
                                                                        Node::CompFluidStream::Primary,
                                                                        Node::ObjectIsParent);

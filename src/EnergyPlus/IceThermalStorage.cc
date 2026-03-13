@@ -817,7 +817,7 @@ namespace IceThermalStorage {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::ThermalStorageIceSimple,
                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                    Node::NodeFluidType::Water,
+                                                    Node::FluidType::Water,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);
@@ -829,7 +829,7 @@ namespace IceThermalStorage {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::ThermalStorageIceSimple,
                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                    Node::NodeFluidType::Water,
+                                                    Node::FluidType::Water,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);
@@ -940,7 +940,7 @@ namespace IceThermalStorage {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::ThermalStorageIceDetailed,
                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                    Node::NodeFluidType::Water,
+                                                    Node::FluidType::Water,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);
@@ -952,7 +952,7 @@ namespace IceThermalStorage {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::ThermalStorageIceDetailed,
                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                    Node::NodeFluidType::Water,
+                                                    Node::FluidType::Water,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);

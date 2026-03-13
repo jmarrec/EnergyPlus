@@ -79,7 +79,7 @@ namespace PlantManager {
         state->dataPlnt->PlantLoop(1).VolumeWasAutoSized = true;
         state->dataPlnt->PlantLoop(1).MaxVolFlowRate = 5;
         state->dataPlnt->PlantLoop(1).CirculationTime = 2;
-        state->dataPlnt->PlantLoop(1).FluidType = Node::NodeFluidType::Water;
+        state->dataPlnt->PlantLoop(1).FluidType = Node::FluidType::Water;
         state->dataPlnt->PlantLoop(1).TypeOfLoop = LoopType::Plant;
         state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
         SizePlantLoop(*state, 1, true);
@@ -239,7 +239,7 @@ namespace PlantManager {
         state->dataPlnt->PlantLoop(1).CirculationTime = 1.0;
         state->dataPlnt->PlantFinalSizesOkayToReport = true;
         state->dataPlnt->PlantLoop(1).MinVolFlowRate = 0.0;
-        state->dataPlnt->PlantLoop(1).FluidType = Node::NodeFluidType::Steam;
+        state->dataPlnt->PlantLoop(1).FluidType = Node::FluidType::Steam;
         state->dataSize->PlantSizData(1).DesVolFlowRate = 1.0;
         state->dataSize->PlantSizData(1).DeltaT = 5.0;
         state->dataSize->PlantSizData(1).ExitTemp = 25.0;

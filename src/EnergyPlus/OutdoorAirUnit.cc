@@ -487,7 +487,7 @@ namespace OutdoorAirUnit {
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
                                                              state.dataIPShortCut->cAlphaArgs(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsParent);
@@ -497,7 +497,7 @@ namespace OutdoorAirUnit {
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Inlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsParent);
@@ -517,7 +517,7 @@ namespace OutdoorAirUnit {
                                                               ErrorsFound,
                                                               Node::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                              Node::NodeFluidType::Air,
+                                                              Node::FluidType::Air,
                                                               Node::ConnectionType::Internal,
                                                               Node::CompFluidStream::Primary,
                                                               Node::ObjectIsNotParent);
@@ -528,7 +528,7 @@ namespace OutdoorAirUnit {
                                                               ErrorsFound,
                                                               Node::ConnectionObjectType::ZoneHVACOutdoorAirUnit,
                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                              Node::NodeFluidType::Air,
+                                                              Node::FluidType::Air,
                                                               Node::ConnectionType::OutsideAirReference,
                                                               Node::CompFluidStream::Primary,
                                                               Node::ObjectIsNotParent);

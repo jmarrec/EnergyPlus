@@ -338,7 +338,7 @@ void GetTESCoilInput(EnergyPlusData &state)
                                                               ErrorsFound,
                                                               Node::ConnectionObjectType::CoilCoolingDXSingleSpeedThermalStorage,
                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                              Node::NodeFluidType::Air,
+                                                              Node::FluidType::Air,
                                                               Node::ConnectionType::Sensor,
                                                               Node::CompFluidStream::Primary,
                                                               Node::ObjectIsNotParent);
@@ -358,7 +358,7 @@ void GetTESCoilInput(EnergyPlusData &state)
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::CoilCoolingDXSingleSpeedThermalStorage,
                                                             state.dataIPShortCut->cAlphaArgs(1),
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Inlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -367,7 +367,7 @@ void GetTESCoilInput(EnergyPlusData &state)
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::CoilCoolingDXSingleSpeedThermalStorage,
                                                              state.dataIPShortCut->cAlphaArgs(1),
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::Outlet,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -1456,7 +1456,7 @@ void GetTESCoilInput(EnergyPlusData &state)
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::CoilCoolingDXSingleSpeedThermalStorage,
                                                             thisTESCoil.Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::OutsideAirReference,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -1465,7 +1465,7 @@ void GetTESCoilInput(EnergyPlusData &state)
                                                              ErrorsFound,
                                                              Node::ConnectionObjectType::CoilCoolingDXSingleSpeedThermalStorage,
                                                              thisTESCoil.Name,
-                                                             Node::NodeFluidType::Air,
+                                                             Node::FluidType::Air,
                                                              Node::ConnectionType::ReliefAir,
                                                              Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -1528,7 +1528,7 @@ void GetTESCoilInput(EnergyPlusData &state)
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::CoilCoolingDXSingleSpeedThermalStorage,
                                                                  state.dataIPShortCut->cAlphaArgs(1),
-                                                                 Node::NodeFluidType::Water,
+                                                                 Node::FluidType::Water,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Secondary,
                                                                  Node::ObjectIsNotParent);
@@ -1543,7 +1543,7 @@ void GetTESCoilInput(EnergyPlusData &state)
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::CoilCoolingDXSingleSpeedThermalStorage,
                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                  Node::NodeFluidType::Water,
+                                                                  Node::FluidType::Water,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Secondary,
                                                                   Node::ObjectIsNotParent);

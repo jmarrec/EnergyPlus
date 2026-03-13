@@ -202,7 +202,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                            thisChiller.Name,
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Inlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -211,7 +211,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                             thisChiller.Name,
-                                                                            Node::NodeFluidType::Water,
+                                                                            Node::FluidType::Water,
                                                                             Node::ConnectionType::Outlet,
                                                                             Node::CompFluidStream::Primary,
                                                                             Node::ObjectIsNotParent);
@@ -233,7 +233,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                            thisChiller.Name,
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Inlet,
                                                                            Node::CompFluidStream::Secondary,
                                                                            Node::ObjectIsNotParent);
@@ -243,7 +243,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                             thisChiller.Name,
-                                                                            Node::NodeFluidType::Water,
+                                                                            Node::FluidType::Water,
                                                                             Node::ConnectionType::Outlet,
                                                                             Node::CompFluidStream::Secondary,
                                                                             Node::ObjectIsNotParent);
@@ -330,7 +330,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                                         ErrorsFound,
                                                                                         Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                                         thisChiller.Name,
-                                                                                        Node::NodeFluidType::Air,
+                                                                                        Node::FluidType::Air,
                                                                                         Node::ConnectionType::OutsideAirReference,
                                                                                         Node::CompFluidStream::Primary,
                                                                                         Node::ObjectIsNotParent);
@@ -371,7 +371,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                                  thisChiller.Name,
-                                                                                 Node::NodeFluidType::Water,
+                                                                                 Node::FluidType::Water,
                                                                                  Node::ConnectionType::Inlet,
                                                                                  Node::CompFluidStream::Tertiary,
                                                                                  Node::ObjectIsNotParent);
@@ -380,7 +380,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                                   ErrorsFound,
                                                                                   Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                                   thisChiller.Name,
-                                                                                  Node::NodeFluidType::Water,
+                                                                                  Node::FluidType::Water,
                                                                                   Node::ConnectionType::Outlet,
                                                                                   Node::CompFluidStream::Tertiary,
                                                                                   Node::ObjectIsNotParent);
@@ -400,7 +400,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                                      ErrorsFound,
                                                                                      Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                                      thisChiller.Name,
-                                                                                     Node::NodeFluidType::Water,
+                                                                                     Node::FluidType::Water,
                                                                                      Node::ConnectionType::Inlet,
                                                                                      Node::CompFluidStream::Quaternary,
                                                                                      Node::ObjectIsNotParent);
@@ -409,7 +409,7 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
                                                                                       ErrorsFound,
                                                                                       Node::ConnectionObjectType::ChillerElectricASHRAE205,
                                                                                       thisChiller.Name,
-                                                                                      Node::NodeFluidType::Water,
+                                                                                      Node::FluidType::Water,
                                                                                       Node::ConnectionType::Outlet,
                                                                                       Node::CompFluidStream::Quaternary,
                                                                                       Node::ObjectIsNotParent);

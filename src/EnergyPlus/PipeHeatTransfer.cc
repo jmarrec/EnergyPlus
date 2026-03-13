@@ -285,7 +285,7 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::PipeIndoor,
                                                                         s_ipsc->cAlphaArgs(1),
-                                                                        Node::NodeFluidType::Water,
+                                                                        Node::FluidType::Water,
                                                                         Node::ConnectionType::Inlet,
                                                                         Node::CompFluidStream::Primary,
                                                                         Node::ObjectIsNotParent);
@@ -302,7 +302,7 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::PipeIndoor,
                                                                          s_ipsc->cAlphaArgs(1),
-                                                                         Node::NodeFluidType::Water,
+                                                                         Node::FluidType::Water,
                                                                          Node::ConnectionType::Outlet,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);
@@ -430,7 +430,7 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::PipeOutdoor,
                                                                         s_ipsc->cAlphaArgs(1),
-                                                                        Node::NodeFluidType::Water,
+                                                                        Node::FluidType::Water,
                                                                         Node::ConnectionType::Inlet,
                                                                         Node::CompFluidStream::Primary,
                                                                         Node::ObjectIsNotParent);
@@ -447,7 +447,7 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::PipeOutdoor,
                                                                          s_ipsc->cAlphaArgs(1),
-                                                                         Node::NodeFluidType::Water,
+                                                                         Node::FluidType::Water,
                                                                          Node::ConnectionType::Outlet,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);
@@ -469,7 +469,7 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::PipeOutdoor,
                                                                           s_ipsc->cAlphaArgs(1),
-                                                                          Node::NodeFluidType::Air,
+                                                                          Node::FluidType::Air,
                                                                           Node::ConnectionType::OutsideAirReference,
                                                                           Node::CompFluidStream::Primary,
                                                                           Node::ObjectIsNotParent);
@@ -560,7 +560,7 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::PipeUnderground,
                                                                         s_ipsc->cAlphaArgs(1),
-                                                                        Node::NodeFluidType::Water,
+                                                                        Node::FluidType::Water,
                                                                         Node::ConnectionType::Inlet,
                                                                         Node::CompFluidStream::Primary,
                                                                         Node::ObjectIsNotParent);
@@ -577,7 +577,7 @@ void GetPipesHeatTransfer(EnergyPlusData &state)
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::PipeUnderground,
                                                                          s_ipsc->cAlphaArgs(1),
-                                                                         Node::NodeFluidType::Water,
+                                                                         Node::FluidType::Water,
                                                                          Node::ConnectionType::Outlet,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);

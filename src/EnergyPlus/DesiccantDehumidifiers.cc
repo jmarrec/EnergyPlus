@@ -317,7 +317,7 @@ namespace DesiccantDehumidifiers {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::DehumidifierDesiccantNoFans,
                                                                            Alphas(1),
-                                                                           Node::NodeFluidType::Air,
+                                                                           Node::FluidType::Air,
                                                                            Node::ConnectionType::Inlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -327,7 +327,7 @@ namespace DesiccantDehumidifiers {
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::DehumidifierDesiccantNoFans,
                                                                             Alphas(1),
-                                                                            Node::NodeFluidType::Air,
+                                                                            Node::FluidType::Air,
                                                                             Node::ConnectionType::Outlet,
                                                                             Node::CompFluidStream::Primary,
                                                                             Node::ObjectIsNotParent);
@@ -337,7 +337,7 @@ namespace DesiccantDehumidifiers {
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::DehumidifierDesiccantNoFans,
                                                                             Alphas(1),
-                                                                            Node::NodeFluidType::Air,
+                                                                            Node::FluidType::Air,
                                                                             Node::ConnectionType::Inlet,
                                                                             Node::CompFluidStream::Secondary,
                                                                             Node::ObjectIsNotParent);
@@ -347,7 +347,7 @@ namespace DesiccantDehumidifiers {
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::DehumidifierDesiccantNoFans,
                                                                             Alphas(1),
-                                                                            Node::NodeFluidType::Air,
+                                                                            Node::FluidType::Air,
                                                                             Node::ConnectionType::Internal,
                                                                             Node::CompFluidStream::Secondary,
                                                                             Node::ObjectIsParent);
@@ -714,7 +714,7 @@ namespace DesiccantDehumidifiers {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                                            desicDehum.Name,
-                                                                           Node::NodeFluidType::Air,
+                                                                           Node::FluidType::Air,
                                                                            Node::ConnectionType::Inlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsParent);
@@ -733,7 +733,7 @@ namespace DesiccantDehumidifiers {
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                                             desicDehum.Name,
-                                                                            Node::NodeFluidType::Air,
+                                                                            Node::FluidType::Air,
                                                                             Node::ConnectionType::Outlet,
                                                                             Node::CompFluidStream::Primary,
                                                                             Node::ObjectIsParent);
@@ -759,7 +759,7 @@ namespace DesiccantDehumidifiers {
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                                             desicDehum.Name,
-                                                                            Node::NodeFluidType::Air,
+                                                                            Node::FluidType::Air,
                                                                             Node::ConnectionType::Sensor,
                                                                             Node::CompFluidStream::Primary,
                                                                             Node::ObjectIsNotParent);
@@ -1082,7 +1082,7 @@ namespace DesiccantDehumidifiers {
                                                                                 ErrorsFound,
                                                                                 Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                                                 desicDehum.Name,
-                                                                                Node::NodeFluidType::Air,
+                                                                                Node::FluidType::Air,
                                                                                 Node::ConnectionType::Inlet,
                                                                                 Node::CompFluidStream::Primary,
                                                                                 Node::ObjectIsParent);
@@ -1091,7 +1091,7 @@ namespace DesiccantDehumidifiers {
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                                                  desicDehum.Name,
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::Outlet,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsParent);
@@ -1137,7 +1137,7 @@ namespace DesiccantDehumidifiers {
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                                                  desicDehum.Name,
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::Outlet,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsParent);
@@ -1147,7 +1147,7 @@ namespace DesiccantDehumidifiers {
                                                                                     ErrorsFound,
                                                                                     Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                                                     desicDehum.Name,
-                                                                                    Node::NodeFluidType::Air,
+                                                                                    Node::FluidType::Air,
                                                                                     Node::ConnectionType::Inlet,
                                                                                     Node::CompFluidStream::Primary,
                                                                                     Node::ObjectIsParent);
@@ -1169,7 +1169,7 @@ namespace DesiccantDehumidifiers {
                                                                                     ErrorsFound,
                                                                                     Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                                                     desicDehum.Name,
-                                                                                    Node::NodeFluidType::Air,
+                                                                                    Node::FluidType::Air,
                                                                                     Node::ConnectionType::Inlet,
                                                                                     Node::CompFluidStream::Primary,
                                                                                     Node::ObjectIsParent);
@@ -1320,7 +1320,7 @@ namespace DesiccantDehumidifiers {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::DehumidifierDesiccantSystem,
                                                             desicDehum.Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::OutsideAirReference,
                                                             Node::CompFluidStream::Secondary,
                                                             Node::ObjectIsNotParent);

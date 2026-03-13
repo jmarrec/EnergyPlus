@@ -20578,7 +20578,7 @@ TEST_F(ZoneUnitarySysTest, UnitarySystemModel_MultiSpeedDXCoilsDirectSolutionTes
     state->dataHeatBalFanSys->TempControlType.allocate(1);
     state->dataHeatBalFanSys->TempControlTypeRpt.allocate(1);
     state->dataHeatBalFanSys->TempControlType(1) = HVAC::SetptType::DualHeatCool;
-    state->dataLoopNodes->Node(7).FluidType = Node::NodeFluidType::Air;
+    state->dataLoopNodes->Node(7).FluidType = Node::FluidType::Air;
     state->dataLoopNodes->Node(7).Temp = 24.0;      // 24C db
     state->dataLoopNodes->Node(7).HumRat = 0.01522; // 17C wb
     state->dataLoopNodes->Node(7).Press = state->dataEnvrn->OutBaroPress;

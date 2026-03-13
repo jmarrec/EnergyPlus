@@ -232,7 +232,7 @@ TEST_F(EnergyPlusFixture, Beam_FactoryAllAutosize)
                                             ErrorsFound,
                                             Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
                                             "BeamTest",
-                                            Node::NodeFluidType::Air,
+                                            Node::FluidType::Air,
                                             Node::ConnectionType::ZoneNode,
                                             Node::CompFluidStream::Primary,
                                             Node::ObjectIsNotParent,

@@ -296,7 +296,7 @@ namespace SteamCoils {
                                                                                            ErrorsFound,
                                                                                            Node::ConnectionObjectType::CoilHeatingSteam,
                                                                                            AlphArray(1),
-                                                                                           Node::NodeFluidType::Steam,
+                                                                                           Node::FluidType::Steam,
                                                                                            Node::ConnectionType::Inlet,
                                                                                            Node::CompFluidStream::Secondary,
                                                                                            Node::ObjectIsNotParent);
@@ -305,7 +305,7 @@ namespace SteamCoils {
                                                                                             ErrorsFound,
                                                                                             Node::ConnectionObjectType::CoilHeatingSteam,
                                                                                             AlphArray(1),
-                                                                                            Node::NodeFluidType::Steam,
+                                                                                            Node::FluidType::Steam,
                                                                                             Node::ConnectionType::Outlet,
                                                                                             Node::CompFluidStream::Secondary,
                                                                                             Node::ObjectIsNotParent);
@@ -314,7 +314,7 @@ namespace SteamCoils {
                                                                                          ErrorsFound,
                                                                                          Node::ConnectionObjectType::CoilHeatingSteam,
                                                                                          AlphArray(1),
-                                                                                         Node::NodeFluidType::Air,
+                                                                                         Node::FluidType::Air,
                                                                                          Node::ConnectionType::Inlet,
                                                                                          Node::CompFluidStream::Primary,
                                                                                          Node::ObjectIsNotParent);
@@ -323,7 +323,7 @@ namespace SteamCoils {
                                                                                           ErrorsFound,
                                                                                           Node::ConnectionObjectType::CoilHeatingSteam,
                                                                                           AlphArray(1),
-                                                                                          Node::NodeFluidType::Air,
+                                                                                          Node::FluidType::Air,
                                                                                           Node::ConnectionType::Outlet,
                                                                                           Node::CompFluidStream::Primary,
                                                                                           Node::ObjectIsNotParent);
@@ -338,7 +338,7 @@ namespace SteamCoils {
                                                                                                  ErrorsFound,
                                                                                                  Node::ConnectionObjectType::CoilHeatingSteam,
                                                                                                  AlphArray(1),
-                                                                                                 Node::NodeFluidType::Air,
+                                                                                                 Node::FluidType::Air,
                                                                                                  Node::ConnectionType::Sensor,
                                                                                                  Node::CompFluidStream::Primary,
                                                                                                  Node::ObjectIsNotParent);

@@ -678,7 +678,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name + "-OA MIXER",
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Outlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -687,7 +687,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name,
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Inlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsParent);
@@ -696,7 +696,7 @@ namespace VentilatedSlab {
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                          ventSlab.Name,
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::Inlet,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);
@@ -706,7 +706,7 @@ namespace VentilatedSlab {
                                                                               ErrorsFound,
                                                                               Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                               ventSlab.Name + "-OA MIXER",
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::Outlet,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);
@@ -715,7 +715,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name,
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Internal,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsParent);
@@ -727,7 +727,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name + "-OA MIXER",
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Outlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -736,7 +736,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name,
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Inlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsParent);
@@ -745,7 +745,7 @@ namespace VentilatedSlab {
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                          ventSlab.Name,
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::Inlet,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);
@@ -755,7 +755,7 @@ namespace VentilatedSlab {
                                                                               ErrorsFound,
                                                                               Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                               ventSlab.Name + "-OA MIXER",
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::Outlet,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);
@@ -764,7 +764,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name,
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Internal,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsParent);
@@ -776,7 +776,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name + "-SYSTEM",
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Inlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsParent);
@@ -785,7 +785,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name,
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Inlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsParent);
@@ -794,7 +794,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name + "-OA MIXER",
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Inlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -803,7 +803,7 @@ namespace VentilatedSlab {
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                          ventSlab.Name,
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::Inlet,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);
@@ -812,7 +812,7 @@ namespace VentilatedSlab {
                                                                               ErrorsFound,
                                                                               Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                               ventSlab.Name + "-OA MIXER",
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::Outlet,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);
@@ -821,7 +821,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name,
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Internal,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsParent);
@@ -851,7 +851,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name + "-SYSTEM",
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Outlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsParent);
@@ -861,7 +861,7 @@ namespace VentilatedSlab {
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                              ventSlab.Name,
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Outlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -873,7 +873,7 @@ namespace VentilatedSlab {
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                           ventSlab.Name + "-OA MIXER",
-                                                                          Node::NodeFluidType::Air,
+                                                                          Node::FluidType::Air,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Primary,
                                                                           Node::ObjectIsNotParent);
@@ -893,7 +893,7 @@ namespace VentilatedSlab {
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                          ventSlab.Name + "-OA MIXER",
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::ReliefAir,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsNotParent);
@@ -1040,7 +1040,7 @@ namespace VentilatedSlab {
                                                                                       ErrorsFound,
                                                                                       Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                                       ventSlab.Name,
-                                                                                      Node::NodeFluidType::Water,
+                                                                                      Node::FluidType::Water,
                                                                                       Node::ConnectionType::Actuator,
                                                                                       Node::CompFluidStream::Primary,
                                                                                       Node::ObjectIsParent);
@@ -1152,7 +1152,7 @@ namespace VentilatedSlab {
                                                                                    ErrorsFound,
                                                                                    Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                                    ventSlab.Name,
-                                                                                   Node::NodeFluidType::Water,
+                                                                                   Node::FluidType::Water,
                                                                                    Node::ConnectionType::Actuator,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsParent);
@@ -2700,7 +2700,7 @@ namespace VentilatedSlab {
                                                                                ErrorsFound,
                                                                                Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                                SlabName,
-                                                                               Node::NodeFluidType::Air,
+                                                                               Node::FluidType::Air,
                                                                                Node::ConnectionType::Internal,
                                                                                Node::CompFluidStream::Primary,
                                                                                Node::ObjectIsNotParent);
@@ -2709,7 +2709,7 @@ namespace VentilatedSlab {
                                                                                 ErrorsFound,
                                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                                 SlabName,
-                                                                                Node::NodeFluidType::Air,
+                                                                                Node::FluidType::Air,
                                                                                 Node::ConnectionType::Internal,
                                                                                 Node::CompFluidStream::Primary,
                                                                                 Node::ObjectIsNotParent);
@@ -4030,7 +4030,7 @@ namespace VentilatedSlab {
                                                                                ErrorsFound,
                                                                                Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                                SlabName,
-                                                                               Node::NodeFluidType::Air,
+                                                                               Node::FluidType::Air,
                                                                                Node::ConnectionType::Internal,
                                                                                Node::CompFluidStream::Primary,
                                                                                Node::ObjectIsNotParent);
@@ -4039,7 +4039,7 @@ namespace VentilatedSlab {
                                                                                 ErrorsFound,
                                                                                 Node::ConnectionObjectType::ZoneHVACVentilatedSlab,
                                                                                 SlabName,
-                                                                                Node::NodeFluidType::Air,
+                                                                                Node::FluidType::Air,
                                                                                 Node::ConnectionType::Internal,
                                                                                 Node::CompFluidStream::Primary,
                                                                                 Node::ObjectIsNotParent);

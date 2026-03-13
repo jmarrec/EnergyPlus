@@ -2536,7 +2536,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                 // Node identification reserved for future use.  Currently exchange energy directly with zone outside any air system
                 // AirChillerSet(SetID)%NodeNumInlet = &
                 //       Node::GetOnlySingleNode(state, Alphas(AlphaNum),ErrorsFound,TRIM(CurrentModuleObject), &
-                //                    AirChillerSet(SetID)%Name,Node::NodeFluidType::Air,Node::NodeConnectionType::Inlet,1,Node::ObjectIsNotParent)
+                //                    AirChillerSet(SetID)%Name,Node::FluidType::Air,Node::NodeConnectionType::Inlet,1,Node::ObjectIsNotParent)
             }
 
             ++AlphaNum;
@@ -2552,7 +2552,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                 // Node identification reserved for future use.  Currently exchange energy directly with zone outside any air system
                 // AirChillerSet(SetID)%NodeNumOutlet = &
                 //         Node::GetOnlySingleNode(state, Alphas(AlphaNum),ErrorsFound,TRIM(CurrentModuleObject), &
-                //                      AirChillerSet(SetID)%Name,Node::NodeFluidType::Air,Node::NodeConnectionType::Outlet,1,Node::ObjectIsNotParent)
+                //                      AirChillerSet(SetID)%Name,Node::FluidType::Air,Node::NodeConnectionType::Outlet,1,Node::ObjectIsNotParent)
             }
 
             // An extensible list is used to enter the individual names of each chiller in the set.
@@ -2808,7 +2808,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                                     ErrorsFound,
                                                                                     Node::ConnectionObjectType::RefrigerationCompressorRack,
                                                                                     Alphas(1),
-                                                                                    Node::NodeFluidType::Water,
+                                                                                    Node::FluidType::Water,
                                                                                     Node::ConnectionType::Inlet,
                                                                                     Node::CompFluidStream::Primary,
                                                                                     Node::ObjectIsNotParent);
@@ -2817,7 +2817,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                                      ErrorsFound,
                                                                                      Node::ConnectionObjectType::RefrigerationCompressorRack,
                                                                                      Alphas(1),
-                                                                                     Node::NodeFluidType::Water,
+                                                                                     Node::FluidType::Water,
                                                                                      Node::ConnectionType::Outlet,
                                                                                      Node::CompFluidStream::Primary,
                                                                                      Node::ObjectIsNotParent);
@@ -2955,7 +2955,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::RefrigerationCompressorRack,
                                                         Alphas(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::OutsideAirReference,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsParent);
@@ -3339,7 +3339,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::RefrigerationCondenserAirCooled,
                                                                 Alphas(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::OutsideAirReference,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsParent);
@@ -3551,7 +3551,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::RefrigerationCondenserEvaporativeCooled,
                                                             Alphas(1),
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::OutsideAirReference,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsParent);
@@ -3744,7 +3744,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::RefrigerationCondenserWaterCooled,
                                                         Alphas(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Inlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -3754,7 +3754,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::RefrigerationCondenserWaterCooled,
                                                         Alphas(1),
-                                                        Node::NodeFluidType::Water,
+                                                        Node::FluidType::Water,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -4137,7 +4137,7 @@ void GetRefrigerationInput(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::RefrigerationGasCoolerAirCooled,
                                                                 Alphas(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::OutsideAirReference,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsParent);

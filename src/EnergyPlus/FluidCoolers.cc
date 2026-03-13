@@ -230,7 +230,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                 ErrorsFound,
                                                 Node::ConnectionObjectType::FluidCoolerSingleSpeed,
                                                 AlphArray(1),
-                                                Node::NodeFluidType::Water,
+                                                Node::FluidType::Water,
                                                 Node::ConnectionType::Inlet,
                                                 Node::CompFluidStream::Primary,
                                                 Node::ObjectIsNotParent);
@@ -240,7 +240,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                 ErrorsFound,
                                                 Node::ConnectionObjectType::FluidCoolerSingleSpeed,
                                                 AlphArray(1),
-                                                Node::NodeFluidType::Water,
+                                                Node::FluidType::Water,
                                                 Node::ConnectionType::Outlet,
                                                 Node::CompFluidStream::Primary,
                                                 Node::ObjectIsNotParent);
@@ -276,7 +276,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::FluidCoolerSingleSpeed,
                                                     state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::OutsideAirReference,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);
@@ -331,7 +331,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                 ErrorsFound,
                                                 Node::ConnectionObjectType::FluidCoolerTwoSpeed,
                                                 AlphArray(1),
-                                                Node::NodeFluidType::Water,
+                                                Node::FluidType::Water,
                                                 Node::ConnectionType::Inlet,
                                                 Node::CompFluidStream::Primary,
                                                 Node::ObjectIsNotParent);
@@ -341,7 +341,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                 ErrorsFound,
                                                 Node::ConnectionObjectType::FluidCoolerTwoSpeed,
                                                 AlphArray(1),
-                                                Node::NodeFluidType::Water,
+                                                Node::FluidType::Water,
                                                 Node::ConnectionType::Outlet,
                                                 Node::CompFluidStream::Primary,
                                                 Node::ObjectIsNotParent);
@@ -398,7 +398,7 @@ void GetFluidCoolerInput(EnergyPlusData &state)
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::FluidCoolerTwoSpeed,
                                                     state.dataFluidCoolers->SimpleFluidCooler(FluidCoolerNum).Name,
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::OutsideAirReference,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsNotParent);

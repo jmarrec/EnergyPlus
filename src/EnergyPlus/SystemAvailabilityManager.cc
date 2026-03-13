@@ -882,7 +882,7 @@ namespace Avail {
                                                           ErrorsFound,
                                                           Node::ConnectionObjectType::AvailabilityManagerDifferentialThermostat,
                                                           cAlphaArgs(1),
-                                                          Node::NodeFluidType::Blank,
+                                                          Node::FluidType::Blank,
                                                           Node::ConnectionType::Sensor,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsNotParent);
@@ -896,7 +896,7 @@ namespace Avail {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::AvailabilityManagerDifferentialThermostat,
                                                            cAlphaArgs(1),
-                                                           Node::NodeFluidType::Blank,
+                                                           Node::FluidType::Blank,
                                                            Node::ConnectionType::Sensor,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -961,7 +961,7 @@ namespace Avail {
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::AvailabilityManagerHighTemperatureTurnOff,
                                                       cAlphaArgs(1),
-                                                      Node::NodeFluidType::Blank,
+                                                      Node::FluidType::Blank,
                                                       Node::ConnectionType::Sensor,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -1014,7 +1014,7 @@ namespace Avail {
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::AvailabilityManagerHighTemperatureTurnOn,
                                                      cAlphaArgs(1),
-                                                     Node::NodeFluidType::Blank,
+                                                     Node::FluidType::Blank,
                                                      Node::ConnectionType::Sensor,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -1068,7 +1068,7 @@ namespace Avail {
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::AvailabilityManagerLowTemperatureTurnOff,
                                                       cAlphaArgs(1),
-                                                      Node::NodeFluidType::Blank,
+                                                      Node::FluidType::Blank,
                                                       Node::ConnectionType::Sensor,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -1128,7 +1128,7 @@ namespace Avail {
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::AvailabilityManagerLowTemperatureTurnOn,
                                                      cAlphaArgs(1),
-                                                     Node::NodeFluidType::Blank,
+                                                     Node::FluidType::Blank,
                                                      Node::ConnectionType::Sensor,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);

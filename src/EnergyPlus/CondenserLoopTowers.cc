@@ -290,7 +290,7 @@ namespace CondenserLoopTowers {
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::CoolingTowerSingleSpeed,
                                                                           tower.Name,
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Primary,
                                                                           Node::ObjectIsNotParent);
@@ -299,7 +299,7 @@ namespace CondenserLoopTowers {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::CoolingTowerSingleSpeed,
                                                                            tower.Name,
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -440,7 +440,7 @@ namespace CondenserLoopTowers {
                                                                                    ErrorsFound,
                                                                                    Node::ConnectionObjectType::CoolingTowerSingleSpeed,
                                                                                    tower.Name,
-                                                                                   Node::NodeFluidType::Air,
+                                                                                   Node::FluidType::Air,
                                                                                    Node::ConnectionType::OutsideAirReference,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsNotParent);
@@ -588,7 +588,7 @@ namespace CondenserLoopTowers {
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::CoolingTowerTwoSpeed,
                                                                           tower.Name,
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Primary,
                                                                           Node::ObjectIsNotParent);
@@ -597,7 +597,7 @@ namespace CondenserLoopTowers {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::CoolingTowerTwoSpeed,
                                                                            tower.Name,
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -773,7 +773,7 @@ namespace CondenserLoopTowers {
                                                                                    ErrorsFound,
                                                                                    Node::ConnectionObjectType::CoolingTowerTwoSpeed,
                                                                                    tower.Name,
-                                                                                   Node::NodeFluidType::Air,
+                                                                                   Node::FluidType::Air,
                                                                                    Node::ConnectionType::OutsideAirReference,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsNotParent);
@@ -978,7 +978,7 @@ namespace CondenserLoopTowers {
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::CoolingTowerVariableSpeed,
                                                                           AlphArray(1),
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Primary,
                                                                           Node::ObjectIsNotParent);
@@ -987,7 +987,7 @@ namespace CondenserLoopTowers {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::CoolingTowerVariableSpeed,
                                                                            AlphArray(1),
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -1417,7 +1417,7 @@ namespace CondenserLoopTowers {
                                                                                    ErrorsFound,
                                                                                    Node::ConnectionObjectType::CoolingTowerVariableSpeed,
                                                                                    tower.Name,
-                                                                                   Node::NodeFluidType::Air,
+                                                                                   Node::FluidType::Air,
                                                                                    Node::ConnectionType::OutsideAirReference,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsNotParent);
@@ -1461,7 +1461,7 @@ namespace CondenserLoopTowers {
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::CoolingTowerVariableSpeedMerkel,
                                                                           AlphArray(1),
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Primary,
                                                                           Node::ObjectIsNotParent);
@@ -1470,7 +1470,7 @@ namespace CondenserLoopTowers {
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::CoolingTowerVariableSpeedMerkel,
                                                                            AlphArray(1),
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -1660,7 +1660,7 @@ namespace CondenserLoopTowers {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::CoolingTowerVariableSpeedMerkel,
                                                         tower.Name,
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::OutsideAirReference,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);

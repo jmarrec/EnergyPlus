@@ -335,7 +335,7 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::ChillerElectricReformulatedEIR,
                                                                            s_ipsc->cAlphaArgs(1),
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Inlet,
                                                                            Node::CompFluidStream::Primary,
                                                                            Node::ObjectIsNotParent);
@@ -344,7 +344,7 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::ChillerElectricReformulatedEIR,
                                                                             s_ipsc->cAlphaArgs(1),
-                                                                            Node::NodeFluidType::Water,
+                                                                            Node::FluidType::Water,
                                                                             Node::ConnectionType::Outlet,
                                                                             Node::CompFluidStream::Primary,
                                                                             Node::ObjectIsNotParent);
@@ -370,7 +370,7 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::ChillerElectricReformulatedEIR,
                                                                            s_ipsc->cAlphaArgs(1),
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Inlet,
                                                                            Node::CompFluidStream::Secondary,
                                                                            Node::ObjectIsNotParent);
@@ -379,7 +379,7 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
                                                                             ErrorsFound,
                                                                             Node::ConnectionObjectType::ChillerElectricReformulatedEIR,
                                                                             s_ipsc->cAlphaArgs(1),
-                                                                            Node::NodeFluidType::Water,
+                                                                            Node::FluidType::Water,
                                                                             Node::ConnectionType::Outlet,
                                                                             Node::CompFluidStream::Secondary,
                                                                             Node::ObjectIsNotParent);
@@ -505,7 +505,7 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
                                                                                   ErrorsFound,
                                                                                   Node::ConnectionObjectType::ChillerElectricReformulatedEIR,
                                                                                   s_ipsc->cAlphaArgs(1),
-                                                                                  Node::NodeFluidType::Water,
+                                                                                  Node::FluidType::Water,
                                                                                   Node::ConnectionType::Inlet,
                                                                                   Node::CompFluidStream::Tertiary,
                                                                                   Node::ObjectIsNotParent);
@@ -519,7 +519,7 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
                                                                                    ErrorsFound,
                                                                                    Node::ConnectionObjectType::ChillerElectricReformulatedEIR,
                                                                                    s_ipsc->cAlphaArgs(1),
-                                                                                   Node::NodeFluidType::Water,
+                                                                                   Node::FluidType::Water,
                                                                                    Node::ConnectionType::Outlet,
                                                                                    Node::CompFluidStream::Tertiary,
                                                                                    Node::ObjectIsNotParent);
@@ -560,7 +560,7 @@ void GetElecReformEIRChillerInput(EnergyPlusData &state)
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::ChillerElectricReformulatedEIR,
                                                             s_ipsc->cAlphaArgs(1),
-                                                            Node::NodeFluidType::Water,
+                                                            Node::FluidType::Water,
                                                             Node::ConnectionType::Sensor,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);

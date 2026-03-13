@@ -312,7 +312,7 @@ namespace WindowAC {
                                                                                 ErrorsFound,
                                                                                 Node::ConnectionObjectType::ZoneHVACWindowAirConditioner,
                                                                                 Alphas(1),
-                                                                                Node::NodeFluidType::Air,
+                                                                                Node::FluidType::Air,
                                                                                 Node::ConnectionType::Inlet,
                                                                                 Node::CompFluidStream::Primary,
                                                                                 Node::ObjectIsParent);
@@ -322,7 +322,7 @@ namespace WindowAC {
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::ZoneHVACWindowAirConditioner,
                                                                                  Alphas(1),
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::Outlet,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsParent);

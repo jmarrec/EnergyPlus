@@ -373,7 +373,7 @@ namespace TranspiredCollector {
                                               ErrorsFound,
                                               Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                               AlphasSplit(1),
-                                              Node::NodeFluidType::Air,
+                                              Node::FluidType::Air,
                                               Node::ConnectionType::Inlet,
                                               static_cast<Node::CompFluidStream>(NumOASys),
                                               ObjectIsNotParent);
@@ -384,7 +384,7 @@ namespace TranspiredCollector {
                                               ErrorsFound,
                                               Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                               AlphasSplit(1),
-                                              Node::NodeFluidType::Air,
+                                              Node::FluidType::Air,
                                               Node::ConnectionType::Outlet,
                                               static_cast<Node::CompFluidStream>(NumOASys),
                                               ObjectIsNotParent);
@@ -400,7 +400,7 @@ namespace TranspiredCollector {
                                               ErrorsFound,
                                               Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                               AlphasSplit(1),
-                                              Node::NodeFluidType::Air,
+                                              Node::FluidType::Air,
                                               Node::ConnectionType::Sensor,
                                               Node::CompFluidStream::Primary,
                                               ObjectIsNotParent);
@@ -411,7 +411,7 @@ namespace TranspiredCollector {
                                               ErrorsFound,
                                               Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                               AlphasSplit(1),
-                                              Node::NodeFluidType::Air,
+                                              Node::FluidType::Air,
                                               Node::ConnectionType::Sensor,
                                               Node::CompFluidStream::Primary,
                                               ObjectIsNotParent);
@@ -459,7 +459,7 @@ namespace TranspiredCollector {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                       Alphas(1),
-                                      Node::NodeFluidType::Air,
+                                      Node::FluidType::Air,
                                       Node::ConnectionType::Inlet,
                                       Node::CompFluidStream::Primary,
                                       ObjectIsNotParent);
@@ -469,7 +469,7 @@ namespace TranspiredCollector {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                       Alphas(1),
-                                      Node::NodeFluidType::Air,
+                                      Node::FluidType::Air,
                                       Node::ConnectionType::Outlet,
                                       Node::CompFluidStream::Primary,
                                       ObjectIsNotParent);
@@ -481,7 +481,7 @@ namespace TranspiredCollector {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                       Alphas(1),
-                                      Node::NodeFluidType::Air,
+                                      Node::FluidType::Air,
                                       Node::ConnectionType::Sensor,
                                       Node::CompFluidStream::Primary,
                                       ObjectIsNotParent);
@@ -491,7 +491,7 @@ namespace TranspiredCollector {
                                       ErrorsFound,
                                       Node::ConnectionObjectType::SolarCollectorUnglazedTranspired,
                                       Alphas(1),
-                                      Node::NodeFluidType::Air,
+                                      Node::FluidType::Air,
                                       Node::ConnectionType::Sensor,
                                       Node::CompFluidStream::Primary,
                                       ObjectIsNotParent);

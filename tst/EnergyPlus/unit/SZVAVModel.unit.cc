@@ -191,7 +191,7 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
                                                           errFlag,
                                                           Node::ConnectionObjectType::ZoneHVACPackagedTerminalAirConditioner,
                                                           "PTUnit",
-                                                          Node::NodeFluidType::Air,
+                                                          Node::FluidType::Air,
                                                           Node::ConnectionType::Inlet,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsNotParent);

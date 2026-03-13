@@ -1937,7 +1937,7 @@ TEST_F(EnergyPlusFixture, ChillerAbsorption_Autosize)
     EXPECT_TRUE(thisChiller.GenInputOutputNodesUsed);
     EXPECT_GT(thisChiller.GeneratorInletNodeNum, 0);
     EXPECT_GT(thisChiller.GeneratorOutletNodeNum, 0);
-    EXPECT_ENUM_EQ(thisChiller.GenHeatSourceType, Node::NodeFluidType::Water);
+    EXPECT_ENUM_EQ(thisChiller.GenHeatSourceType, Node::FluidType::Water);
     EXPECT_TRUE(thisChiller.GeneratorVolFlowRateWasAutoSized);
 
     EXPECT_DOUBLE_EQ(2.0, thisChiller.GeneratorSubcool);

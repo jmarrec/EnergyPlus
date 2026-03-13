@@ -786,7 +786,7 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                                                                       ErrorsFound,
                                                                       Node::ConnectionObjectType::CoilWaterHeatingDesuperheater,
                                                                       cAlphaArgs(1),
-                                                                      Node::NodeFluidType::Water,
+                                                                      Node::FluidType::Water,
                                                                       Node::ConnectionType::Inlet,
                                                                       Node::CompFluidStream::Primary,
                                                                       Node::ObjectIsParent);
@@ -796,7 +796,7 @@ bool getDesuperHtrInput(EnergyPlusData &state)
                                                                        ErrorsFound,
                                                                        Node::ConnectionObjectType::CoilWaterHeatingDesuperheater,
                                                                        cAlphaArgs(1),
-                                                                       Node::NodeFluidType::Water,
+                                                                       Node::FluidType::Water,
                                                                        Node::ConnectionType::Outlet,
                                                                        Node::CompFluidStream::Primary,
                                                                        Node::ObjectIsParent);
@@ -1280,7 +1280,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                           ErrorsFound,
                                                                           objType,
                                                                           HPWH.Name,
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Secondary,
                                                                           Node::ObjectIsParent);
@@ -1290,7 +1290,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            objType,
                                                                            HPWH.Name,
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Secondary,
                                                                            Node::ObjectIsParent);
@@ -1423,7 +1423,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                       ErrorsFound,
                                                                       objType,
                                                                       HPWH.Name,
-                                                                      Node::NodeFluidType::Water,
+                                                                      Node::FluidType::Water,
                                                                       Node::ConnectionType::Inlet,
                                                                       Node::CompFluidStream::Primary,
                                                                       Node::ObjectIsParent);
@@ -1432,7 +1432,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                        ErrorsFound,
                                                                        objType,
                                                                        HPWH.Name,
-                                                                       Node::NodeFluidType::Water,
+                                                                       Node::FluidType::Water,
                                                                        Node::ConnectionType::Outlet,
                                                                        Node::CompFluidStream::Primary,
                                                                        Node::ObjectIsParent);
@@ -1535,7 +1535,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                           ErrorsFound,
                                                                           objType,
                                                                           HPWH.Name,
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Secondary,
                                                                           Node::ObjectIsParent);
@@ -1545,7 +1545,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            objType,
                                                                            HPWH.Name,
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Secondary,
                                                                            Node::ObjectIsParent);
@@ -1779,7 +1779,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                              ErrorsFound,
                                                                              objType,
                                                                              HPWH.Name + "-INLET AIR MIXER",
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Outlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -1804,7 +1804,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                                  ErrorsFound,
                                                                                  objType,
                                                                                  HPWH.Name + "-OUTLET AIR SPLITTER",
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::Inlet,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsNotParent);
@@ -1829,7 +1829,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                             ErrorsFound,
                                                                             objType,
                                                                             HPWH.Name + "-INLET AIR MIXER",
-                                                                            Node::NodeFluidType::Air,
+                                                                            Node::FluidType::Air,
                                                                             Node::ConnectionType::Inlet,
                                                                             Node::CompFluidStream::Primary,
                                                                             Node::ObjectIsNotParent);
@@ -1839,7 +1839,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                              ErrorsFound,
                                                                              objType,
                                                                              HPWH.Name + "-OUTLET AIR SPLITTER",
-                                                                             Node::NodeFluidType::Air,
+                                                                             Node::FluidType::Air,
                                                                              Node::ConnectionType::Outlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -1849,7 +1849,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                       ErrorsFound,
                                                                       objType,
                                                                       HPWH.Name,
-                                                                      Node::NodeFluidType::Air,
+                                                                      Node::FluidType::Air,
                                                                       Node::ConnectionType::OutsideAirReference,
                                                                       Node::CompFluidStream::Primary,
                                                                       Node::ObjectIsParent);
@@ -1870,7 +1870,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                       ErrorsFound,
                                                                       objType,
                                                                       HPWH.Name,
-                                                                      Node::NodeFluidType::Air,
+                                                                      Node::FluidType::Air,
                                                                       Node::ConnectionType::ReliefAir,
                                                                       Node::CompFluidStream::Primary,
                                                                       Node::ObjectIsParent);
@@ -1885,7 +1885,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                                 ErrorsFound,
                                                                                 objType,
                                                                                 HPWH.Name,
-                                                                                Node::NodeFluidType::Air,
+                                                                                Node::FluidType::Air,
                                                                                 Node::ConnectionType::Outlet,
                                                                                 Node::CompFluidStream::Primary,
                                                                                 Node::ObjectIsParent);
@@ -1895,7 +1895,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                                  ErrorsFound,
                                                                                  objType,
                                                                                  HPWH.Name,
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::Outlet,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsParent);
@@ -1907,7 +1907,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                                     ErrorsFound,
                                                                                     objType,
                                                                                     HPWH.Name,
-                                                                                    Node::NodeFluidType::Air,
+                                                                                    Node::FluidType::Air,
                                                                                     Node::ConnectionType::Inlet,
                                                                                     Node::CompFluidStream::Primary,
                                                                                     Node::ObjectIsParent);
@@ -1917,7 +1917,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                                      ErrorsFound,
                                                                                      objType,
                                                                                      HPWH.Name,
-                                                                                     Node::NodeFluidType::Air,
+                                                                                     Node::FluidType::Air,
                                                                                      Node::ConnectionType::Outlet,
                                                                                      Node::CompFluidStream::Primary,
                                                                                      Node::ObjectIsParent);
@@ -1927,7 +1927,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                               ErrorsFound,
                                                                               objType,
                                                                               HPWH.Name,
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::OutsideAirReference,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsParent);
@@ -1948,7 +1948,7 @@ bool getHPWaterHeaterInput(EnergyPlusData &state)
                                                                               ErrorsFound,
                                                                               objType,
                                                                               HPWH.Name,
-                                                                              Node::NodeFluidType::Air,
+                                                                              Node::FluidType::Air,
                                                                               Node::ConnectionType::ReliefAir,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsParent);
@@ -2560,7 +2560,7 @@ bool getWaterHeaterMixedInputs(EnergyPlusData &state)
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::WaterHeaterMixed,
                                                                                  state.dataIPShortCut->cAlphaArgs(1),
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::OutsideAirReference,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsNotParent);
@@ -2682,7 +2682,7 @@ bool getWaterHeaterMixedInputs(EnergyPlusData &state)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::WaterHeaterMixed,
                                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                                    Node::NodeFluidType::Water,
+                                                                    Node::FluidType::Water,
                                                                     Node::ConnectionType::Inlet,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -2692,7 +2692,7 @@ bool getWaterHeaterMixedInputs(EnergyPlusData &state)
                                                                      ErrorsFound,
                                                                      Node::ConnectionObjectType::WaterHeaterMixed,
                                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                                     Node::NodeFluidType::Water,
+                                                                     Node::FluidType::Water,
                                                                      Node::ConnectionType::Outlet,
                                                                      Node::CompFluidStream::Primary,
                                                                      Node::ObjectIsNotParent);
@@ -2726,7 +2726,7 @@ bool getWaterHeaterMixedInputs(EnergyPlusData &state)
                                                                        ErrorsFound,
                                                                        Node::ConnectionObjectType::WaterHeaterMixed,
                                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                                       Node::NodeFluidType::Water,
+                                                                       Node::FluidType::Water,
                                                                        Node::ConnectionType::Inlet,
                                                                        Node::CompFluidStream::Secondary,
                                                                        Node::ObjectIsNotParent);
@@ -2736,7 +2736,7 @@ bool getWaterHeaterMixedInputs(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::WaterHeaterMixed,
                                                                         state.dataIPShortCut->cAlphaArgs(1),
-                                                                        Node::NodeFluidType::Water,
+                                                                        Node::FluidType::Water,
                                                                         Node::ConnectionType::Outlet,
                                                                         Node::CompFluidStream::Secondary,
                                                                         Node::ObjectIsNotParent);
@@ -3077,7 +3077,7 @@ bool getWaterHeaterStratifiedInput(EnergyPlusData &state)
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::WaterHeaterStratified,
                                                                                  state.dataIPShortCut->cAlphaArgs(1),
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::Inlet,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsNotParent);
@@ -3272,7 +3272,7 @@ bool getWaterHeaterStratifiedInput(EnergyPlusData &state)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::WaterHeaterStratified,
                                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                                    Node::NodeFluidType::Water,
+                                                                    Node::FluidType::Water,
                                                                     Node::ConnectionType::Inlet,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -3282,7 +3282,7 @@ bool getWaterHeaterStratifiedInput(EnergyPlusData &state)
                                                                      ErrorsFound,
                                                                      Node::ConnectionObjectType::WaterHeaterStratified,
                                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                                     Node::NodeFluidType::Water,
+                                                                     Node::FluidType::Water,
                                                                      Node::ConnectionType::Outlet,
                                                                      Node::CompFluidStream::Primary,
                                                                      Node::ObjectIsNotParent);
@@ -3316,7 +3316,7 @@ bool getWaterHeaterStratifiedInput(EnergyPlusData &state)
                                                                        ErrorsFound,
                                                                        Node::ConnectionObjectType::WaterHeaterStratified,
                                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                                       Node::NodeFluidType::Water,
+                                                                       Node::FluidType::Water,
                                                                        Node::ConnectionType::Inlet,
                                                                        Node::CompFluidStream::Secondary,
                                                                        Node::ObjectIsNotParent);
@@ -3326,7 +3326,7 @@ bool getWaterHeaterStratifiedInput(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::WaterHeaterStratified,
                                                                         state.dataIPShortCut->cAlphaArgs(1),
-                                                                        Node::NodeFluidType::Water,
+                                                                        Node::FluidType::Water,
                                                                         Node::ConnectionType::Outlet,
                                                                         Node::CompFluidStream::Secondary,
                                                                         Node::ObjectIsNotParent);
@@ -3528,7 +3528,7 @@ bool getWaterTankMixedInput(EnergyPlusData &state)
                                                                                  ErrorsFound,
                                                                                  Node::ConnectionObjectType::ThermalStorageChilledWaterMixed,
                                                                                  state.dataIPShortCut->cAlphaArgs(1),
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::OutsideAirReference,
                                                                                  Node::CompFluidStream::Primary,
                                                                                  Node::ObjectIsNotParent);
@@ -3644,7 +3644,7 @@ bool getWaterTankMixedInput(EnergyPlusData &state)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::ThermalStorageChilledWaterMixed,
                                                                     state.dataIPShortCut->cAlphaArgs(1),
-                                                                    Node::NodeFluidType::Water,
+                                                                    Node::FluidType::Water,
                                                                     Node::ConnectionType::Inlet,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -3654,7 +3654,7 @@ bool getWaterTankMixedInput(EnergyPlusData &state)
                                                                      ErrorsFound,
                                                                      Node::ConnectionObjectType::ThermalStorageChilledWaterMixed,
                                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                                     Node::NodeFluidType::Water,
+                                                                     Node::FluidType::Water,
                                                                      Node::ConnectionType::Outlet,
                                                                      Node::CompFluidStream::Primary,
                                                                      Node::ObjectIsNotParent);
@@ -3667,7 +3667,7 @@ bool getWaterTankMixedInput(EnergyPlusData &state)
                                                                        ErrorsFound,
                                                                        Node::ConnectionObjectType::ThermalStorageChilledWaterMixed,
                                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                                       Node::NodeFluidType::Water,
+                                                                       Node::FluidType::Water,
                                                                        Node::ConnectionType::Inlet,
                                                                        Node::CompFluidStream::Secondary,
                                                                        Node::ObjectIsNotParent);
@@ -3677,7 +3677,7 @@ bool getWaterTankMixedInput(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::ThermalStorageChilledWaterMixed,
                                                                         state.dataIPShortCut->cAlphaArgs(1),
-                                                                        Node::NodeFluidType::Water,
+                                                                        Node::FluidType::Water,
                                                                         Node::ConnectionType::Outlet,
                                                                         Node::CompFluidStream::Secondary,
                                                                         Node::ObjectIsNotParent);
@@ -3933,7 +3933,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::ThermalStorageChilledWaterStratified,
                                                         Tank.Name,
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Inlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);
@@ -4066,7 +4066,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::ThermalStorageChilledWaterStratified,
                                                                     Util::makeUPPER(thisObjectName),
-                                                                    Node::NodeFluidType::Water,
+                                                                    Node::FluidType::Water,
                                                                     Node::ConnectionType::Inlet,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -4076,7 +4076,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
                                                                      ErrorsFound,
                                                                      Node::ConnectionObjectType::ThermalStorageChilledWaterStratified,
                                                                      Util::makeUPPER(thisObjectName),
-                                                                     Node::NodeFluidType::Water,
+                                                                     Node::FluidType::Water,
                                                                      Node::ConnectionType::Outlet,
                                                                      Node::CompFluidStream::Primary,
                                                                      Node::ObjectIsNotParent);
@@ -4091,7 +4091,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
                                                                        ErrorsFound,
                                                                        Node::ConnectionObjectType::ThermalStorageChilledWaterStratified,
                                                                        Util::makeUPPER(thisObjectName),
-                                                                       Node::NodeFluidType::Water,
+                                                                       Node::FluidType::Water,
                                                                        Node::ConnectionType::Inlet,
                                                                        Node::CompFluidStream::Secondary,
                                                                        Node::ObjectIsNotParent);
@@ -4101,7 +4101,7 @@ bool getWaterTankStratifiedInput(EnergyPlusData &state, std::string objectType)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::ThermalStorageChilledWaterStratified,
                                                                         Util::makeUPPER(thisObjectName),
-                                                                        Node::NodeFluidType::Water,
+                                                                        Node::FluidType::Water,
                                                                         Node::ConnectionType::Outlet,
                                                                         Node::CompFluidStream::Secondary,
                                                                         Node::ObjectIsNotParent);
@@ -4464,7 +4464,7 @@ void GetWaterThermalTankInput(EnergyPlusData &state)
                                                                                        ErrorsFound,
                                                                                        objType,
                                                                                        Tank.Name,
-                                                                                       Node::NodeFluidType::Water,
+                                                                                       Node::FluidType::Water,
                                                                                        Node::ConnectionType::Inlet,
                                                                                        Node::CompFluidStream::Secondary,
                                                                                        Node::ObjectIsNotParent);
@@ -4474,7 +4474,7 @@ void GetWaterThermalTankInput(EnergyPlusData &state)
                                                                                         ErrorsFound,
                                                                                         objType,
                                                                                         Tank.Name,
-                                                                                        Node::NodeFluidType::Water,
+                                                                                        Node::FluidType::Water,
                                                                                         Node::ConnectionType::Outlet,
                                                                                         Node::CompFluidStream::Secondary,
                                                                                         Node::ObjectIsNotParent);

@@ -299,7 +299,7 @@ namespace Humidifiers {
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::HumidifierSteamElectric,
                                                      Alphas(1),
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -308,7 +308,7 @@ namespace Humidifiers {
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::HumidifierSteamElectric,
                                                       Alphas(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
@@ -365,7 +365,7 @@ namespace Humidifiers {
                                                      ErrorsFound,
                                                      Node::ConnectionObjectType::HumidifierSteamGas,
                                                      Alphas(1),
-                                                     Node::NodeFluidType::Air,
+                                                     Node::FluidType::Air,
                                                      Node::ConnectionType::Inlet,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
@@ -374,7 +374,7 @@ namespace Humidifiers {
                                                       ErrorsFound,
                                                       Node::ConnectionObjectType::HumidifierSteamGas,
                                                       Alphas(1),
-                                                      Node::NodeFluidType::Air,
+                                                      Node::FluidType::Air,
                                                       Node::ConnectionType::Outlet,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);

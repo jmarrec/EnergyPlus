@@ -359,7 +359,7 @@ namespace HeatRecovery {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
                                                            thisExchanger.Name,
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::Inlet,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -368,7 +368,7 @@ namespace HeatRecovery {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
                                                             thisExchanger.Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -377,7 +377,7 @@ namespace HeatRecovery {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
                                                            thisExchanger.Name,
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::Inlet,
                                                            Node::CompFluidStream::Secondary,
                                                            Node::ObjectIsNotParent);
@@ -386,7 +386,7 @@ namespace HeatRecovery {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatExchangerAirToAirFlatPlate,
                                                             thisExchanger.Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Secondary,
                                                             Node::ObjectIsNotParent);
@@ -447,7 +447,7 @@ namespace HeatRecovery {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
                                                            thisExchanger.Name,
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::Inlet,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -456,7 +456,7 @@ namespace HeatRecovery {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
                                                             thisExchanger.Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -465,7 +465,7 @@ namespace HeatRecovery {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
                                                            thisExchanger.Name,
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::Inlet,
                                                            Node::CompFluidStream::Secondary,
                                                            Node::ObjectIsNotParent);
@@ -474,7 +474,7 @@ namespace HeatRecovery {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatExchangerAirToAirSensibleAndLatent,
                                                             thisExchanger.Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Secondary,
                                                             Node::ObjectIsNotParent);
@@ -578,7 +578,7 @@ namespace HeatRecovery {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
                                                            thisExchanger.Name,
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::Inlet,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
@@ -587,7 +587,7 @@ namespace HeatRecovery {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
                                                             thisExchanger.Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -597,7 +597,7 @@ namespace HeatRecovery {
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
                                                            thisExchanger.Name,
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::Inlet,
                                                            Node::CompFluidStream::Secondary,
                                                            Node::ObjectIsNotParent);
@@ -606,7 +606,7 @@ namespace HeatRecovery {
                                                             ErrorsFound,
                                                             Node::ConnectionObjectType::HeatExchangerDesiccantBalancedFlow,
                                                             thisExchanger.Name,
-                                                            Node::NodeFluidType::Air,
+                                                            Node::FluidType::Air,
                                                             Node::ConnectionType::Outlet,
                                                             Node::CompFluidStream::Secondary,
                                                             Node::ObjectIsNotParent);

@@ -382,7 +382,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpEquationFit,
                                                                  simpleWAHP.Name,
-                                                                 Node::NodeFluidType::Water,
+                                                                 Node::FluidType::Water,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Secondary,
                                                                  Node::ObjectIsNotParent);
@@ -392,7 +392,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpEquationFit,
                                                                   simpleWAHP.Name,
-                                                                  Node::NodeFluidType::Water,
+                                                                  Node::FluidType::Water,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Secondary,
                                                                   Node::ObjectIsNotParent);
@@ -401,7 +401,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                ErrorsFound,
                                                                Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpEquationFit,
                                                                simpleWAHP.Name,
-                                                               Node::NodeFluidType::Air,
+                                                               Node::FluidType::Air,
                                                                Node::ConnectionType::Inlet,
                                                                Node::CompFluidStream::Primary,
                                                                Node::ObjectIsNotParent);
@@ -410,7 +410,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::CoilCoolingWaterToAirHeatPumpEquationFit,
                                                                 simpleWAHP.Name,
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Outlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -606,7 +606,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpEquationFit,
                                                                  simpleWAHP.Name,
-                                                                 Node::NodeFluidType::Water,
+                                                                 Node::FluidType::Water,
                                                                  Node::ConnectionType::Inlet,
                                                                  Node::CompFluidStream::Secondary,
                                                                  Node::ObjectIsNotParent);
@@ -616,7 +616,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                   ErrorsFound,
                                                                   Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpEquationFit,
                                                                   simpleWAHP.Name,
-                                                                  Node::NodeFluidType::Water,
+                                                                  Node::FluidType::Water,
                                                                   Node::ConnectionType::Outlet,
                                                                   Node::CompFluidStream::Secondary,
                                                                   Node::ObjectIsNotParent);
@@ -625,7 +625,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                ErrorsFound,
                                                                Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpEquationFit,
                                                                simpleWAHP.Name,
-                                                               Node::NodeFluidType::Air,
+                                                               Node::FluidType::Air,
                                                                Node::ConnectionType::Inlet,
                                                                Node::CompFluidStream::Primary,
                                                                Node::ObjectIsNotParent);
@@ -634,7 +634,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::CoilHeatingWaterToAirHeatPumpEquationFit,
                                                                 simpleWAHP.Name,
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Outlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);

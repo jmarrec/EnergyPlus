@@ -2249,7 +2249,7 @@ namespace HeatBalanceManager {
                                                 ErrorsFound,
                                                 Node::ConnectionObjectType::ZonePropertyLocalEnvironment,
                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                Node::NodeFluidType::Air,
+                                                Node::FluidType::Air,
                                                 Node::ConnectionType::Inlet,
                                                 Node::CompFluidStream::Primary,
                                                 ObjectIsParent);

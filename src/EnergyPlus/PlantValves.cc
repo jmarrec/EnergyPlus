@@ -173,7 +173,7 @@ namespace PlantValves {
                                                                                          ErrorsFound,
                                                                                          Node::ConnectionObjectType::TemperingValve,
                                                                                          Alphas(1),
-                                                                                         Node::NodeFluidType::Water,
+                                                                                         Node::FluidType::Water,
                                                                                          Node::ConnectionType::Inlet,
                                                                                          Node::CompFluidStream::Primary,
                                                                                          Node::ObjectIsNotParent);
@@ -183,7 +183,7 @@ namespace PlantValves {
                                                                                           ErrorsFound,
                                                                                           Node::ConnectionObjectType::TemperingValve,
                                                                                           Alphas(1),
-                                                                                          Node::NodeFluidType::Water,
+                                                                                          Node::FluidType::Water,
                                                                                           Node::ConnectionType::Outlet,
                                                                                           Node::CompFluidStream::Primary,
                                                                                           Node::ObjectIsNotParent);
@@ -194,7 +194,7 @@ namespace PlantValves {
                                                                                            ErrorsFound,
                                                                                            Node::ConnectionObjectType::TemperingValve,
                                                                                            Alphas(1),
-                                                                                           Node::NodeFluidType::Water,
+                                                                                           Node::FluidType::Water,
                                                                                            Node::ConnectionType::Sensor,
                                                                                            Node::CompFluidStream::Primary,
                                                                                            Node::ObjectIsNotParent);
@@ -204,7 +204,7 @@ namespace PlantValves {
                                                                                             ErrorsFound,
                                                                                             Node::ConnectionObjectType::TemperingValve,
                                                                                             Alphas(1),
-                                                                                            Node::NodeFluidType::Water,
+                                                                                            Node::FluidType::Water,
                                                                                             Node::ConnectionType::SetPoint,
                                                                                             Node::CompFluidStream::Primary,
                                                                                             Node::ObjectIsNotParent);
@@ -215,7 +215,7 @@ namespace PlantValves {
                                                                                               ErrorsFound,
                                                                                               Node::ConnectionObjectType::TemperingValve,
                                                                                               Alphas(1),
-                                                                                              Node::NodeFluidType::Water,
+                                                                                              Node::FluidType::Water,
                                                                                               Node::ConnectionType::Sensor,
                                                                                               Node::CompFluidStream::Primary,
                                                                                               Node::ObjectIsNotParent);

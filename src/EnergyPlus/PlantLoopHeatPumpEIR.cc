@@ -2125,7 +2125,7 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                    nodeErrorsFound,
                                                                                    objType,
                                                                                    thisPLHP.name,
-                                                                                   Node::NodeFluidType::Water,
+                                                                                   Node::FluidType::Water,
                                                                                    Node::ConnectionType::Inlet,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsNotParent);
@@ -2134,21 +2134,21 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                     nodeErrorsFound,
                                                                                     objType,
                                                                                     thisPLHP.name,
-                                                                                    Node::NodeFluidType::Water,
+                                                                                    Node::FluidType::Water,
                                                                                     Node::ConnectionType::Outlet,
                                                                                     Node::CompFluidStream::Primary,
                                                                                     Node::ObjectIsNotParent);
-                Node::NodeFluidType condenserNodeType = Node::NodeFluidType::Blank;
+                Node::FluidType condenserNodeType = Node::FluidType::Blank;
                 Node::ConnectionType condenserNodeConnectionType_Inlet = Node::ConnectionType::Blank;
                 Node::ConnectionType condenserNodeConnectionType_Outlet = Node::ConnectionType::Blank;
                 if (condenserType == "WATERSOURCE") {
                     thisPLHP.waterSource = true;
-                    condenserNodeType = Node::NodeFluidType::Water;
+                    condenserNodeType = Node::FluidType::Water;
                     condenserNodeConnectionType_Inlet = Node::ConnectionType::Inlet;
                     condenserNodeConnectionType_Outlet = Node::ConnectionType::Outlet;
                 } else if (condenserType == "AIRSOURCE") {
                     thisPLHP.airSource = true;
-                    condenserNodeType = Node::NodeFluidType::Air;
+                    condenserNodeType = Node::FluidType::Air;
                     condenserNodeConnectionType_Inlet = Node::ConnectionType::Inlet;
                     condenserNodeConnectionType_Outlet = Node::ConnectionType::Outlet;
                     if (sourceSideInletNodeName == sourceSideOutletNodeName) {
@@ -2202,7 +2202,7 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                            nodeErrorsFound,
                                                                                            objType,
                                                                                            thisPLHP.name,
-                                                                                           Node::NodeFluidType::Water,
+                                                                                           Node::FluidType::Water,
                                                                                            Node::ConnectionType::Inlet,
                                                                                            Node::CompFluidStream::Tertiary,
                                                                                            Node::ObjectIsNotParent);
@@ -2211,7 +2211,7 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                             nodeErrorsFound,
                                                                                             objType,
                                                                                             thisPLHP.name,
-                                                                                            Node::NodeFluidType::Water,
+                                                                                            Node::FluidType::Water,
                                                                                             Node::ConnectionType::Outlet,
                                                                                             Node::CompFluidStream::Tertiary,
                                                                                             Node::ObjectIsNotParent);
@@ -3747,7 +3747,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                nodeErrorsFound,
                                                                                objType,
                                                                                thisPLHP.name,
-                                                                               Node::NodeFluidType::Water,
+                                                                               Node::FluidType::Water,
                                                                                Node::ConnectionType::Inlet,
                                                                                Node::CompFluidStream::Primary,
                                                                                Node::ObjectIsNotParent);
@@ -3756,7 +3756,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                 nodeErrorsFound,
                                                                                 objType,
                                                                                 thisPLHP.name,
-                                                                                Node::NodeFluidType::Water,
+                                                                                Node::FluidType::Water,
                                                                                 Node::ConnectionType::Outlet,
                                                                                 Node::CompFluidStream::Primary,
                                                                                 Node::ObjectIsNotParent);
@@ -3768,7 +3768,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                  nodeErrorsFound,
                                                                                  objType,
                                                                                  thisPLHP.name,
-                                                                                 Node::NodeFluidType::Air,
+                                                                                 Node::FluidType::Air,
                                                                                  Node::ConnectionType::OutsideAir,
                                                                                  Node::CompFluidStream::Secondary,
                                                                                  Node::ObjectIsNotParent);
@@ -3777,7 +3777,7 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                   nodeErrorsFound,
                                                                                   objType,
                                                                                   thisPLHP.name,
-                                                                                  Node::NodeFluidType::Air,
+                                                                                  Node::FluidType::Air,
                                                                                   Node::ConnectionType::OutsideAir,
                                                                                   Node::CompFluidStream::Secondary,
                                                                                   Node::ObjectIsNotParent);
@@ -4116,7 +4116,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                    nodeErrorsFound,
                                                                                    objType,
                                                                                    thisAWHP.name,
-                                                                                   Node::NodeFluidType::Water,
+                                                                                   Node::FluidType::Water,
                                                                                    Node::ConnectionType::Inlet,
                                                                                    Node::CompFluidStream::Primary,
                                                                                    Node::ObjectIsNotParent);
@@ -4125,7 +4125,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                     nodeErrorsFound,
                                                                                     objType,
                                                                                     thisAWHP.name,
-                                                                                    Node::NodeFluidType::Water,
+                                                                                    Node::FluidType::Water,
                                                                                     Node::ConnectionType::Outlet,
                                                                                     Node::CompFluidStream::Primary,
                                                                                     Node::ObjectIsNotParent);
@@ -4134,7 +4134,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                      nodeErrorsFound,
                                                                                      objType,
                                                                                      thisAWHP.name,
-                                                                                     Node::NodeFluidType::Air,
+                                                                                     Node::FluidType::Air,
                                                                                      Node::ConnectionType::OutsideAir,
                                                                                      Node::CompFluidStream::Secondary,
                                                                                      Node::ObjectIsNotParent);
@@ -4143,7 +4143,7 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
                                                                                       nodeErrorsFound,
                                                                                       objType,
                                                                                       thisAWHP.name,
-                                                                                      Node::NodeFluidType::Air,
+                                                                                      Node::FluidType::Air,
                                                                                       Node::ConnectionType::OutsideAir,
                                                                                       Node::CompFluidStream::Secondary,
                                                                                       Node::ObjectIsNotParent);

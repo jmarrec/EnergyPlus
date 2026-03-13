@@ -219,7 +219,7 @@ namespace HVACDuct {
                                                                                ErrorsFound,
                                                                                Node::ConnectionObjectType::Duct,
                                                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                                               Node::NodeFluidType::Air,
+                                                                               Node::FluidType::Air,
                                                                                Node::ConnectionType::Inlet,
                                                                                Node::CompFluidStream::Primary,
                                                                                Node::ObjectIsNotParent);
@@ -228,7 +228,7 @@ namespace HVACDuct {
                                                                                 ErrorsFound,
                                                                                 Node::ConnectionObjectType::Duct,
                                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                                Node::NodeFluidType::Air,
+                                                                                Node::FluidType::Air,
                                                                                 Node::ConnectionType::Outlet,
                                                                                 Node::CompFluidStream::Primary,
                                                                                 Node::ObjectIsNotParent);

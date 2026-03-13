@@ -483,7 +483,7 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
                                                            ErrorsFound,
                                                            Node::ConnectionObjectType::ZoneHVACExhaustControl,
                                                            thisExhCtrl1.Name,
-                                                           Node::NodeFluidType::Air,
+                                                           Node::FluidType::Air,
                                                            Node::ConnectionType::ZoneInlet,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsParent);
@@ -515,7 +515,7 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::ZoneHVACExhaustControl,
                                                                     thisExhCtrl1.Name,
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::Sensor,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsParent);
@@ -536,7 +536,7 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
                                                        ErrorsFound,
                                                        Node::ConnectionObjectType::ZoneHVACExhaustControl,
                                                        thisExhCtrl2.Name,
-                                                       Node::NodeFluidType::Air,
+                                                       Node::FluidType::Air,
                                                        Node::ConnectionType::ZoneInlet,
                                                        Node::CompFluidStream::Primary,
                                                        Node::ObjectIsParent);
@@ -568,7 +568,7 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::ZoneHVACExhaustControl,
                                                                     thisExhCtrl2.Name,
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::Sensor,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsParent);

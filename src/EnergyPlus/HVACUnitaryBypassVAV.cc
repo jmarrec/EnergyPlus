@@ -440,7 +440,7 @@ namespace HVACUnitaryBypassVAV {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -454,7 +454,7 @@ namespace HVACUnitaryBypassVAV {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -465,7 +465,7 @@ namespace HVACUnitaryBypassVAV {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Internal,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -477,7 +477,7 @@ namespace HVACUnitaryBypassVAV {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
                                                         Alphas(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Internal,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsParent);
@@ -487,7 +487,7 @@ namespace HVACUnitaryBypassVAV {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
                                                         Alphas(1) + "_PlenumMixerInlet",
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Outlet,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsParent);
@@ -518,7 +518,7 @@ namespace HVACUnitaryBypassVAV {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Internal,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -529,7 +529,7 @@ namespace HVACUnitaryBypassVAV {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
                                                     Alphas(1) + "_Mixer",
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -540,7 +540,7 @@ namespace HVACUnitaryBypassVAV {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::AirLoopHVACUnitaryHeatCoolVAVChangeoverBypass,
                                                     Alphas(1) + "_Splitter",
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);

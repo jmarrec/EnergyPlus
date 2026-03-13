@@ -737,7 +737,7 @@ namespace DataPlant {
 
         Real64 WeightedInletTemp = SumMdotTimesTemp / SumMdot;
 
-        if (thisPlantLoop.FluidType == Node::NodeFluidType::Water) {
+        if (thisPlantLoop.FluidType == Node::FluidType::Water) {
 
             Real64 Cp = thisPlantLoop.glycol->getSpecificHeat(state, WeightedInletTemp, RoutineName);
 
@@ -811,7 +811,7 @@ namespace DataPlant {
                 }
             }
 
-        } else if (thisPlantLoop.FluidType == Node::NodeFluidType::Steam) {
+        } else if (thisPlantLoop.FluidType == Node::FluidType::Steam) {
 
             Real64 Cp = thisPlantLoop.glycol->getSpecificHeat(state, WeightedInletTemp, RoutineName);
 

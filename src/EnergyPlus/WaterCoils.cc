@@ -354,7 +354,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::CoilHeatingWater,
                                                                           AlphArray(1),
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Secondary,
                                                               Node::ObjectIsNotParent);
@@ -363,7 +363,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::CoilHeatingWater,
                                                                            AlphArray(1),
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Secondary,
                                                                Node::ObjectIsNotParent);
@@ -372,7 +372,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::CoilHeatingWater,
                                                                         AlphArray(1),
-                                                                        Node::NodeFluidType::Air,
+                                                                        Node::FluidType::Air,
                                                                         Node::ConnectionType::Inlet,
                                                                         Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -381,7 +381,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::CoilHeatingWater,
                                                                          AlphArray(1),
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::Outlet,
                                                                          Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -585,7 +585,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
                                                                           AlphArray(1),
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Secondary,
                                                               Node::ObjectIsNotParent);
@@ -594,7 +594,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
                                                                            AlphArray(1),
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Secondary,
                                                                Node::ObjectIsNotParent);
@@ -603,7 +603,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
                                                                         AlphArray(1),
-                                                                        Node::NodeFluidType::Air,
+                                                                        Node::FluidType::Air,
                                                                         Node::ConnectionType::Inlet,
                                                                         Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -612,7 +612,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::CoilCoolingWaterDetailedGeometry,
                                                                          AlphArray(1),
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::Outlet,
                                                                          Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);
@@ -782,7 +782,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                           ErrorsFound,
                                                                           Node::ConnectionObjectType::CoilCoolingWater,
                                                                           AlphArray(1),
-                                                                          Node::NodeFluidType::Water,
+                                                                          Node::FluidType::Water,
                                                                           Node::ConnectionType::Inlet,
                                                                           Node::CompFluidStream::Secondary,
                                                               Node::ObjectIsNotParent);
@@ -791,7 +791,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                            ErrorsFound,
                                                                            Node::ConnectionObjectType::CoilCoolingWater,
                                                                            AlphArray(1),
-                                                                           Node::NodeFluidType::Water,
+                                                                           Node::FluidType::Water,
                                                                            Node::ConnectionType::Outlet,
                                                                            Node::CompFluidStream::Secondary,
                                                                Node::ObjectIsNotParent);
@@ -800,7 +800,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::CoilCoolingWater,
                                                                         AlphArray(1),
-                                                                        Node::NodeFluidType::Air,
+                                                                        Node::FluidType::Air,
                                                                         Node::ConnectionType::Inlet,
                                                                         Node::CompFluidStream::Primary,
                                                             Node::ObjectIsNotParent);
@@ -809,7 +809,7 @@ void GetWaterCoilInput(EnergyPlusData &state)
                                                                          ErrorsFound,
                                                                          Node::ConnectionObjectType::CoilCoolingWater,
                                                                          AlphArray(1),
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::Outlet,
                                                                          Node::CompFluidStream::Primary,
                                                              Node::ObjectIsNotParent);

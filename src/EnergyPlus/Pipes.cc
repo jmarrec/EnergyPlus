@@ -186,7 +186,7 @@ void GetPipeInput(EnergyPlusData &state)
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::PipeAdiabatic,
                                                                              state.dataIPShortCut->cAlphaArgs(1),
-                                                                             Node::NodeFluidType::Water,
+                                                                             Node::FluidType::Water,
                                                                              Node::ConnectionType::Inlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -195,7 +195,7 @@ void GetPipeInput(EnergyPlusData &state)
                                                                               ErrorsFound,
                                                                               Node::ConnectionObjectType::PipeAdiabatic,
                                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                                              Node::NodeFluidType::Water,
+                                                                              Node::FluidType::Water,
                                                                               Node::ConnectionType::Outlet,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);
@@ -229,7 +229,7 @@ void GetPipeInput(EnergyPlusData &state)
                                                                              ErrorsFound,
                                                                              Node::ConnectionObjectType::PipeAdiabaticSteam,
                                                                              state.dataIPShortCut->cAlphaArgs(1),
-                                                                             Node::NodeFluidType::Steam,
+                                                                             Node::FluidType::Steam,
                                                                              Node::ConnectionType::Inlet,
                                                                              Node::CompFluidStream::Primary,
                                                                              Node::ObjectIsNotParent);
@@ -238,7 +238,7 @@ void GetPipeInput(EnergyPlusData &state)
                                                                               ErrorsFound,
                                                                               Node::ConnectionObjectType::PipeAdiabaticSteam,
                                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                                              Node::NodeFluidType::Steam,
+                                                                              Node::FluidType::Steam,
                                                                               Node::ConnectionType::Outlet,
                                                                               Node::CompFluidStream::Primary,
                                                                               Node::ObjectIsNotParent);

@@ -154,7 +154,7 @@ namespace GeneratorFuelSupply {
                                                         ErrorsFound,
                                                         Node::ConnectionObjectType::GeneratorFuelSupply,
                                                         AlphArray(1),
-                                                        Node::NodeFluidType::Air,
+                                                        Node::FluidType::Air,
                                                         Node::ConnectionType::Sensor,
                                                         Node::CompFluidStream::Primary,
                                                         Node::ObjectIsNotParent);

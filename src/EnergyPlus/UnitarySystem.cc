@@ -3747,7 +3747,7 @@ namespace UnitarySystems {
                                                                   errorsFound,
                                                                   objType,
                                                                   thisObjectName,
-                                                                  Node::NodeFluidType::Air,
+                                                                  Node::FluidType::Air,
                                                                   Node::ConnectionType::Inlet,
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsParent);
@@ -3761,7 +3761,7 @@ namespace UnitarySystems {
                                                                    errorsFound,
                                                                    objType,
                                                                    thisObjectName,
-                                                                   Node::NodeFluidType::Air,
+                                                                   Node::FluidType::Air,
                                                                    Node::ConnectionType::Outlet,
                                                                    Node::CompFluidStream::Primary,
                                                                    Node::ObjectIsParent);
@@ -5470,7 +5470,7 @@ namespace UnitarySystems {
                                                                          errFlag,
                                                                          objType,
                                                                          thisObjectName,
-                                                                         Node::NodeFluidType::Air,
+                                                                         Node::FluidType::Air,
                                                                          Node::ConnectionType::Sensor,
                                                                          Node::CompFluidStream::Primary,
                                                                          Node::ObjectIsParent);
@@ -6929,7 +6929,7 @@ namespace UnitarySystems {
                                                                                errFlag,
                                                                                objType,
                                                                                thisObjectName,
-                                                                               Node::NodeFluidType::Air,
+                                                                               Node::FluidType::Air,
                                                                                Node::ConnectionType::Inlet,
                                                                                Node::CompFluidStream::Primary,
                                                                                Node::ObjectIsParent);
@@ -6955,7 +6955,7 @@ namespace UnitarySystems {
                                                                                        errFlag,
                                                                                        objType,
                                                                                        thisObjectName,
-                                                                                       Node::NodeFluidType::Water,
+                                                                                       Node::FluidType::Water,
                                                                                        Node::ConnectionType::Inlet,
                                                                                        Node::CompFluidStream::Tertiary,
                                                                                        Node::ObjectIsNotParent);
@@ -6964,7 +6964,7 @@ namespace UnitarySystems {
                                                                                         errFlag,
                                                                                         objType,
                                                                                         thisObjectName,
-                                                                                        Node::NodeFluidType::Water,
+                                                                                        Node::FluidType::Water,
                                                                                         Node::ConnectionType::Outlet,
                                                                                         Node::CompFluidStream::Tertiary,
                                                                                         Node::ObjectIsNotParent);

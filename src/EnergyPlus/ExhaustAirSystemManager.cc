@@ -420,7 +420,7 @@ namespace ExhaustAirSystemManager {
                                                                        ErrorsFound,
                                                                        Node::ConnectionObjectType::ZoneHVACExhaustControl,
                                                                        thisExhCtrl.Name,
-                                                                       Node::NodeFluidType::Air,
+                                                                       Node::FluidType::Air,
                                                                        Node::ConnectionType::Inlet,
                                                                        Node::CompFluidStream::Primary,
                                                                        Node::ObjectIsParent);
@@ -433,7 +433,7 @@ namespace ExhaustAirSystemManager {
                                                                         ErrorsFound,
                                                                         Node::ConnectionObjectType::ZoneHVACExhaustControl,
                                                                         thisExhCtrl.Name,
-                                                                        Node::NodeFluidType::Air,
+                                                                        Node::FluidType::Air,
                                                                         Node::ConnectionType::Outlet,
                                                                         Node::CompFluidStream::Primary,
                                                                         Node::ObjectIsParent);
@@ -474,7 +474,7 @@ namespace ExhaustAirSystemManager {
                                               NumNodes,
                                               thisExhCtrl.SuppNodeNums,
                                               NodeListError,
-                                              Node::NodeFluidType::Air,
+                                              Node::FluidType::Air,
                                               Node::ConnectionObjectType::ZoneHVACExhaustControl, // maybe zone inlets?
                                               thisExhCtrl.Name,
                                               Node::ConnectionType::Sensor,

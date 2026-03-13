@@ -169,7 +169,7 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
                                                                    errorsFound,
                                                                    Node::ConnectionObjectType::CoilCoolingDX,
                                                                    input_data.name,
-                                                                   Node::NodeFluidType::Air,
+                                                                   Node::FluidType::Air,
                                                                    Node::ConnectionType::Inlet,
                                                                    Node::CompFluidStream::Primary,
                                                                    Node::ObjectIsNotParent);
@@ -178,7 +178,7 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
                                                                     errorsFound,
                                                                     Node::ConnectionObjectType::CoilCoolingDX,
                                                                     input_data.name,
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::Outlet,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -188,7 +188,7 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
                                                                    errorsFound,
                                                                    Node::ConnectionObjectType::CoilCoolingDX,
                                                                    input_data.name,
-                                                                   Node::NodeFluidType::Air,
+                                                                   Node::FluidType::Air,
                                                                    Node::ConnectionType::Inlet,
                                                                    Node::CompFluidStream::Secondary,
                                                                    Node::ObjectIsNotParent);
@@ -198,7 +198,7 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
                                                                     errorsFound,
                                                                     Node::ConnectionObjectType::CoilCoolingDX,
                                                                     input_data.name,
-                                                                    Node::NodeFluidType::Air,
+                                                                    Node::FluidType::Air,
                                                                     Node::ConnectionType::Outlet,
                                                                     Node::CompFluidStream::Secondary,
                                                                     Node::ObjectIsNotParent);

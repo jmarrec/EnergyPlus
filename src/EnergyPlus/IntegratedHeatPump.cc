@@ -955,7 +955,7 @@ void GetIHPInput(EnergyPlusData &state)
                                                 ErrorsFound,
                                                 Node::ConnectionObjectType::CoilSystemIntegratedHeatPumpAirSource,
                                                 AlphArray(1),
-                                                Node::NodeFluidType::Water,
+                                                Node::FluidType::Water,
                                                 Node::ConnectionType::Sensor,
                                                 Node::CompFluidStream::Secondary,
                                                 Node::ObjectIsNotParent);

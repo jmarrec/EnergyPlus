@@ -304,7 +304,7 @@ void GetCoolingPanelInput(EnergyPlusData &state)
                                                                     ErrorsFound,
                                                                     Node::ConnectionObjectType::ZoneHVACCoolingPanelRadiantConvectiveWater,
                                                                     s_ipsc->cAlphaArgs(1),
-                                                                    Node::NodeFluidType::Water,
+                                                                    Node::FluidType::Water,
                                                                     Node::ConnectionType::Inlet,
                                                                     Node::CompFluidStream::Primary,
                                                                     Node::ObjectIsNotParent);
@@ -315,7 +315,7 @@ void GetCoolingPanelInput(EnergyPlusData &state)
                                                                      ErrorsFound,
                                                                      Node::ConnectionObjectType::ZoneHVACCoolingPanelRadiantConvectiveWater,
                                                                      s_ipsc->cAlphaArgs(1),
-                                                                     Node::NodeFluidType::Water,
+                                                                     Node::FluidType::Water,
                                                                      Node::ConnectionType::Outlet,
                                                                      Node::CompFluidStream::Primary,
                                                                      Node::ObjectIsNotParent);

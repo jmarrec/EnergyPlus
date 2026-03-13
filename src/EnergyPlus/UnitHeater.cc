@@ -278,7 +278,7 @@ namespace UnitHeater {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::ZoneHVACUnitHeater,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Inlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);
@@ -289,7 +289,7 @@ namespace UnitHeater {
                                                     ErrorsFound,
                                                     Node::ConnectionObjectType::ZoneHVACUnitHeater,
                                                     Alphas(1),
-                                                    Node::NodeFluidType::Air,
+                                                    Node::FluidType::Air,
                                                     Node::ConnectionType::Outlet,
                                                     Node::CompFluidStream::Primary,
                                                     Node::ObjectIsParent);

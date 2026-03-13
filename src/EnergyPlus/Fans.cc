@@ -331,7 +331,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::FanConstantVolume,
                                                                 cAlphaArgs(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Inlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -340,7 +340,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::FanConstantVolume,
                                                                  cAlphaArgs(1),
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Outlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -422,7 +422,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::FanVariableVolume,
                                                                 cAlphaArgs(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Inlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -431,7 +431,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::FanVariableVolume,
                                                                  cAlphaArgs(1),
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Outlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -511,7 +511,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::FanZoneExhaust,
                                                                 cAlphaArgs(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Inlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -520,7 +520,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::FanZoneExhaust,
                                                                  cAlphaArgs(1),
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Outlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -641,7 +641,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::FanOnOff,
                                                                 cAlphaArgs(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Inlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -650,7 +650,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::FanOnOff,
                                                                  cAlphaArgs(1),
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Outlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
@@ -759,7 +759,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::FanComponentModel,
                                                                 cAlphaArgs(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Inlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent); // Air inlet node name
@@ -768,7 +768,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::FanComponentModel,
                                                                  cAlphaArgs(1),
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Outlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent); // Air outlet node name
@@ -883,7 +883,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                 ErrorsFound,
                                                                 Node::ConnectionObjectType::FanSystemModel,
                                                                 cAlphaArgs(1),
-                                                                Node::NodeFluidType::Air,
+                                                                Node::FluidType::Air,
                                                                 Node::ConnectionType::Inlet,
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
@@ -892,7 +892,7 @@ void GetFanInput(EnergyPlusData &state)
                                                                  ErrorsFound,
                                                                  Node::ConnectionObjectType::FanSystemModel,
                                                                  cAlphaArgs(1),
-                                                                 Node::NodeFluidType::Air,
+                                                                 Node::FluidType::Air,
                                                                  Node::ConnectionType::Outlet,
                                                                  Node::CompFluidStream::Primary,
                                                                  Node::ObjectIsNotParent);
