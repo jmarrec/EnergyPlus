@@ -16041,7 +16041,9 @@ int GetHPCoolingCoilIndex(EnergyPlusData &state,
             if (thisDXCoolingCoil.CrankcaseHeaterCapacity != thisDXHeatingCoil.CrankcaseHeaterCapacity ||
                 thisDXCoolingCoil.MaxOATCrankcaseHeater != thisDXHeatingCoil.MaxOATCrankcaseHeater) {
                 ShowWarningError(state, "Crankcase heater capacity or max outdoor temp for crankcase heater operation specified in");
-                ShowContinueError(state, EnergyPlus::format("Coil:Cooling:DX:SingleSpeed = {}", thisDXCoolingCoil.Name));
+                ShowContinueError(state, EnergyPlus::format("{} = {}",
+                                                            thisDXCoolingCoil.DXCoilType,
+                                                            thisDXCoolingCoil.Name));
                 ShowContinueError(state,
                                   EnergyPlus::format("is different than that specified in Coil:Heating:DX:SingleSpeed = {}.", HeatingCoilName));
                 ShowContinueError(state,
