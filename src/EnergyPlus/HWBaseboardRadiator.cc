@@ -1049,7 +1049,7 @@ namespace HWBaseboardRadiator {
         }
 
         // find the appropriate heating Plant Sizing object
-        PltSizHeatNum = state.dataPlnt->PlantLoop(hWBaseboard.plantLoc.loopNum).PlantSizNum;
+        PltSizHeatNum = hWBaseboard.plantLoc.loop->PlantSizNum;
 
         if (PltSizHeatNum > 0) {
             if (state.dataSize->CurZoneEqNum > 0) {

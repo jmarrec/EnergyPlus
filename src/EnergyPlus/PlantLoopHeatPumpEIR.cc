@@ -1189,19 +1189,14 @@ void HeatPumpAirToWater::reportEquipmentSummary(EnergyPlusData &state)
                 state, state.dataOutRptPredefined->pdchAWHPDesSizeRefAirFlowRate, objectName, this->sourceSideDesignMassFlowRate);
             OutputReportPredefined::PreDefTableEntry(
                 state, state.dataOutRptPredefined->pdchAWHPDesSizeRefWaterFlowRate, objectName, this->loadSideDesignMassFlowRate);
-            OutputReportPredefined::PreDefTableEntry(
-                state,
-                state.dataOutRptPredefined->pdchAWHPPlantloopName,
-                objectName,
-                this->loadSidePlantLoc.loopNum > 0 ? state.dataPlnt->PlantLoop(this->loadSidePlantLoc.loopNum).Name : "N/A");
+            OutputReportPredefined::PreDefTableEntry(state,
+                                                     state.dataOutRptPredefined->pdchAWHPPlantloopName,
+                                                     objectName,
+                                                     this->loadSidePlantLoc.loop != nullptr ? this->loadSidePlantLoc.loop->Name : "N/A");
             OutputReportPredefined::PreDefTableEntry(state,
                                                      state.dataOutRptPredefined->pdchAWHPPlantloopBranchName,
                                                      objectName,
-                                                     this->loadSidePlantLoc.loopNum > 0 ? state.dataPlnt->PlantLoop(this->loadSidePlantLoc.loopNum)
-                                                                                              .LoopSide(this->loadSidePlantLoc.loopSideNum)
-                                                                                              .Branch(this->loadSidePlantLoc.branchNum)
-                                                                                              .Name
-                                                                                        : "N/A");
+                                                     this->loadSidePlantLoc.loop != nullptr ? this->loadSidePlantLoc.branch->Name : "N/A");
             OutputReportPredefined::PreDefTableEntry(state,
                                                      state.dataOutRptPredefined->pdchAWHPDesSizeRefWaterFlowRate,
                                                      objectName,
@@ -3191,8 +3186,7 @@ void EIRFuelFiredHeatPump::doPhysics(EnergyPlusData &state, Real64 currentLoad)
     // calculate source side outlet conditions
     Real64 CpSrc = 0.0;
     if (this->waterSource) {
-        auto &thisSourcePlantLoop = state.dataPlnt->PlantLoop(this->sourceSidePlantLoc.loopNum);
-        CpSrc = thisSourcePlantLoop.glycol->getSpecificHeat(state, this->sourceSideInletTemp, "PLFFHPEIR::simulate()");
+        CpSrc = this->sourceSidePlantLoc.loop->glycol->getSpecificHeat(state, this->sourceSideInletTemp, "PLFFHPEIR::simulate()");
     } else if (this->airSource) {
         CpSrc = Psychrometrics::PsyCpAirFnW(state.dataEnvrn->OutHumRat);
     }

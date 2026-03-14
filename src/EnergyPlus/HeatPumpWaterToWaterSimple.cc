@@ -863,7 +863,7 @@ void GshpSpecs::sizeCoolingWaterToWaterHP(EnergyPlusData &state)
         this->ratedPowerHeatWasAutoSized = state.dataHPWaterToWaterSimple->GSHP(this->companionIndex).ratedPowerHeatWasAutoSized;
     }
 
-    int pltLoadSizNum = state.dataPlnt->PlantLoop(this->LoadPlantLoc.loopNum).PlantSizNum;
+    int pltLoadSizNum = this->LoadPlantLoc.loop->PlantSizNum;
     if (pltLoadSizNum > 0) {
         if (state.dataSize->PlantSizData(pltLoadSizNum).DesVolFlowRate > HVAC::SmallWaterVolFlow) {
             tmpLoadSideVolFlowRate = state.dataSize->PlantSizData(pltLoadSizNum).DesVolFlowRate * this->sizFac;
@@ -1054,7 +1054,7 @@ void GshpSpecs::sizeCoolingWaterToWaterHP(EnergyPlusData &state)
     if (!this->ratedLoadVolFlowCoolWasAutoSized) {
         tmpLoadSideVolFlowRate = this->RatedLoadVolFlowCool;
     }
-    int pltSourceSizNum = state.dataPlnt->PlantLoop(this->SourcePlantLoc.loopNum).PlantSizNum;
+    int pltSourceSizNum = this->SourcePlantLoc.loop->PlantSizNum;
     if (pltSourceSizNum > 0) {
         Real64 rho = this->SourcePlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
         Real64 Cp = this->SourcePlantLoc.loop->glycol->getSpecificHeat(state, Constant::CWInitConvTemp, RoutineName);
@@ -1212,7 +1212,7 @@ void GshpSpecs::sizeHeatingWaterToWaterHP(EnergyPlusData &state)
         this->ratedPowerCoolWasAutoSized = state.dataHPWaterToWaterSimple->GSHP(this->companionIndex).ratedPowerCoolWasAutoSized;
     }
 
-    int pltLoadSizNum = state.dataPlnt->PlantLoop(this->LoadPlantLoc.loopNum).PlantSizNum;
+    int pltLoadSizNum = this->LoadPlantLoc.loop->PlantSizNum;
     if (pltLoadSizNum > 0) {
         if (state.dataSize->PlantSizData(pltLoadSizNum).DesVolFlowRate > HVAC::SmallWaterVolFlow) {
             tmpLoadSideVolFlowRate = state.dataSize->PlantSizData(pltLoadSizNum).DesVolFlowRate * this->sizFac;

@@ -306,10 +306,7 @@ TEST_F(EnergyPlusFixture, SupervisoryControl_PlantComponent_SetActuatedBranchFlo
     // expect node data to represent full flow
     // SetActuatedBranchFlowRate(*state, CompFlow, ActuatedNode, LoopNum, LoopSideNum, BranchNum, ResetMode )
     PlantLocation plantLoc0{1, DataPlant::LoopSideLocation::Demand, 1, 0};
-    plantLoc0.loop = &state->dataPlnt->PlantLoop(plantLoc0.loopNum);
-    plantLoc0.side = &plantLoc0.loop->LoopSide(plantLoc0.loopSideNum);
-    plantLoc0.branch = &plantLoc0.side->Branch(plantLoc0.branchNum);
-    plantLoc0.comp = nullptr;
+    PlantUtilities::SetPlantLocationLinks(*state, plantLoc0);
 
     SetActuatedBranchFlowRate(*state, NodeMdot, 1, plantLoc0, false);
     EXPECT_EQ(state->dataLoopNodes->Node(1).MassFlowRate, NodeMdot);
@@ -476,10 +473,7 @@ TEST_F(EnergyPlusFixture, SupervisoryControl_PlantComponent_SetComponentFlowRate
     // expect node data to represent full flow
     // SetComponentFlowRate(*state, CompFlow, InletNode, OutletNode, LoopNum, LoopSideNum, BranchIndex, CompIndex )
     PlantLocation plantLoc1{1, DataPlant::LoopSideLocation::Demand, 1, 1};
-    plantLoc1.loop = &state->dataPlnt->PlantLoop(plantLoc1.loopNum);
-    plantLoc1.side = &plantLoc1.loop->LoopSide(plantLoc1.loopSideNum);
-    plantLoc1.branch = &plantLoc1.side->Branch(plantLoc1.branchNum);
-    plantLoc1.comp = &plantLoc1.branch->Comp(plantLoc1.compNum);
+    PlantUtilities::SetPlantLocationLinks(*state, plantLoc1);
 
     SetComponentFlowRate(*state, NodeMdot, 1, 2, plantLoc1);
     EXPECT_EQ(state->dataLoopNodes->Node(1).MassFlowRate, NodeMdot);

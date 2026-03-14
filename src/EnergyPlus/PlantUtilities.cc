@@ -325,25 +325,23 @@ void SetActuatedBranchFlowRate(EnergyPlusData &state,
         return;
     }
 
-    auto &loop_side = state.dataPlnt->PlantLoop(plantLoc.loopNum).LoopSide(plantLoc.loopSideNum);
-
     // store original flow
     Real64 const MdotOldRequest = a_node.MassFlowRateRequest;
     a_node.MassFlowRateRequest = CompFlow;
     if (plantLoc.loopNum > 0 && plantLoc.loopSideNum != DataPlant::LoopSideLocation::Invalid && (!ResetMode)) {
         if ((MdotOldRequest > 0.0) && (CompFlow > 0.0)) { // sure that not coming back from a no flow reset
             if ((std::abs(MdotOldRequest - a_node.MassFlowRateRequest) > DataBranchAirLoopPlant::MassFlowTolerance) &&
-                (loop_side.FlowLock == DataPlant::FlowLock::Unlocked)) {
-                loop_side.SimLoopSideNeeded = true;
+                (plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked)) {
+                plantLoc.side->SimLoopSideNeeded = true;
             }
         }
     }
     // Set loop flow rate
 
     if (plantLoc.loopNum > 0 && plantLoc.loopSideNum != DataPlant::LoopSideLocation::Invalid) {
-        auto const &branch = loop_side.Branch(plantLoc.branchNum);
-        if (loop_side.FlowLock == DataPlant::FlowLock::Unlocked) {
-            if (state.dataPlnt->PlantLoop(plantLoc.loopNum).MaxVolFlowRate == DataSizing::AutoSize) { // still haven't sized the plant loop
+        auto const &branch = plantLoc.side->Branch(plantLoc.branchNum);
+        if (plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
+            if (plantLoc.loop->MaxVolFlowRate == DataSizing::AutoSize) { // still haven't sized the plant loop
                 a_node.MassFlowRate = CompFlow;
             } else { // bound the flow by Min/Max available across entire branch
 
@@ -383,7 +381,7 @@ void SetActuatedBranchFlowRate(EnergyPlusData &state,
                 }
             }
 
-        } else if (loop_side.FlowLock == DataPlant::FlowLock::Locked) {
+        } else if (plantLoc.side->FlowLock == DataPlant::FlowLock::Locked) {
 
             CompFlow = a_node.MassFlowRate;
             // do not change requested flow rate either
@@ -399,7 +397,7 @@ void SetActuatedBranchFlowRate(EnergyPlusData &state,
         } else {
             ShowFatalError(state,
                            EnergyPlus::format("SetActuatedBranchFlowRate: Flowlock out of range, value={}",
-                                              loop_side.FlowLock)); // DEBUG error...should never get here LCOV_EXCL_LINE
+                                              plantLoc.side->FlowLock)); // DEBUG error...should never get here LCOV_EXCL_LINE
         }
 
         Real64 const a_node_MasFlowRate(a_node.MassFlowRate);
@@ -926,7 +924,7 @@ void PullCompInterconnectTrigger(EnergyPlusData &state,
         }
         // Since this was the first pass, it is safe to assume something has changed!
         // Therefore we'll set the sim flag to true
-        state.dataPlnt->PlantLoop(ConnectedPlantLoc.loopNum).LoopSide(ConnectedPlantLoc.loopSideNum).SimLoopSideNeeded = true;
+        ConnectedPlantLoc.side->SimLoopSideNeeded = true;
 
         // Make sure we return the proper value of index
         UniqueCriteriaCheckIndex = CurrentNumChecksStored;
@@ -943,17 +941,17 @@ void PullCompInterconnectTrigger(EnergyPlusData &state,
         switch (CriteriaType) {
         case DataPlant::CriteriaType::MassFlowRate: {
             if (std::abs(CurCriteria.ThisCriteriaCheckValue - CriteriaValue) > DataPlant::CriteriaDelta_MassFlowRate) {
-                state.dataPlnt->PlantLoop(ConnectedPlantLoc.loopNum).LoopSide(ConnectedPlantLoc.loopSideNum).SimLoopSideNeeded = true;
+                ConnectedPlantLoc.side->SimLoopSideNeeded = true;
             }
         } break;
         case DataPlant::CriteriaType::Temperature: {
             if (std::abs(CurCriteria.ThisCriteriaCheckValue - CriteriaValue) > DataPlant::CriteriaDelta_Temperature) {
-                state.dataPlnt->PlantLoop(ConnectedPlantLoc.loopNum).LoopSide(ConnectedPlantLoc.loopSideNum).SimLoopSideNeeded = true;
+                ConnectedPlantLoc.side->SimLoopSideNeeded = true;
             }
         } break;
         case DataPlant::CriteriaType::HeatTransferRate: {
             if (std::abs(CurCriteria.ThisCriteriaCheckValue - CriteriaValue) > DataPlant::CriteriaDelta_HeatTransferRate) {
-                state.dataPlnt->PlantLoop(ConnectedPlantLoc.loopNum).LoopSide(ConnectedPlantLoc.loopSideNum).SimLoopSideNeeded = true;
+                ConnectedPlantLoc.side->SimLoopSideNeeded = true;
             }
         } break;
         default:
@@ -1185,7 +1183,7 @@ void UpdateAbsorberChillerComponentGeneratorSide(EnergyPlusData &state,
     }
 }
 
-void InterConnectTwoPlantLoopSides(EnergyPlusData &state,
+void InterConnectTwoPlantLoopSides([[maybe_unused]] EnergyPlusData &state,
                                    PlantLocation const &Loop1PlantLoc,
                                    PlantLocation const &Loop2PlantLoc,
                                    DataPlant::PlantEquipmentType ComponentType,
@@ -1213,13 +1211,12 @@ void InterConnectTwoPlantLoopSides(EnergyPlusData &state,
 
     int TotalConnected;
 
-    auto &loop_side_1 = state.dataPlnt->PlantLoop(Loop1PlantLoc.loopNum).LoopSide(Loop1PlantLoc.loopSideNum);
-    auto &connected_1 = loop_side_1.Connected;
+    auto &connected_1 = Loop1PlantLoc.side->Connected;
     if (allocated(connected_1)) {
-        TotalConnected = ++loop_side_1.TotalConnected;
+        TotalConnected = ++Loop1PlantLoc.side->TotalConnected;
         connected_1.redimension(TotalConnected);
     } else {
-        TotalConnected = loop_side_1.TotalConnected = 1;
+        TotalConnected = Loop1PlantLoc.side->TotalConnected = 1;
         connected_1.allocate(1);
     }
     connected_1(TotalConnected).LoopNum = Loop2PlantLoc.loopNum;
@@ -1227,13 +1224,12 @@ void InterConnectTwoPlantLoopSides(EnergyPlusData &state,
     connected_1(TotalConnected).ConnectorTypeOf_Num = static_cast<int>(ComponentType);
     connected_1(TotalConnected).LoopDemandsOnRemote = Loop1DemandsOnLoop2;
 
-    auto &loop_side_2 = state.dataPlnt->PlantLoop(Loop2PlantLoc.loopNum).LoopSide(Loop2PlantLoc.loopSideNum);
-    auto &connected_2 = loop_side_2.Connected;
+    auto &connected_2 = Loop2PlantLoc.side->Connected;
     if (allocated(connected_2)) {
-        TotalConnected = ++loop_side_2.TotalConnected;
+        TotalConnected = ++Loop2PlantLoc.side->TotalConnected;
         connected_2.redimension(TotalConnected);
     } else {
-        TotalConnected = loop_side_2.TotalConnected = 1;
+        TotalConnected = Loop2PlantLoc.side->TotalConnected = 1;
         connected_2.allocate(1);
     }
     connected_2(TotalConnected).LoopNum = Loop1PlantLoc.loopNum;

@@ -1240,9 +1240,6 @@ namespace SteamCoils {
                     // Setting to Maximum Coil Capacity
                     QCoilCap = QSteamCoilMaxHT;
 
-                    // Temperature of air at outlet
-                    TempAirOut = TempAirIn + QCoilCap / (AirMassFlow * PsyCpAirFnW(Win));
-
                     // In practice Sensible & Superheated heat transfer is negligible compared to latent part.
                     // This is required for outlet water temperature, otherwise it will be saturation temperature.
                     // Steam Trap drains off all the Water formed.
@@ -1273,9 +1270,6 @@ namespace SteamCoils {
                     state.dataSteamCoils->SteamCoil(CoilNum).InletSteamMassFlowRate = SteamMassFlowRate;
 
                 } else {
-                    // Temp air out is temperature Setpoint
-                    TempAirOut = TempSetPoint;
-
                     // In practice Sensible & Superheated heat transfer is negligible compared to latent part.
                     // This is required for outlet water temperature, otherwise it will be saturation temperature.
                     // Steam Trap drains off all the Water formed.

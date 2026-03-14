@@ -2495,11 +2495,10 @@ namespace UserDefinedComponents {
 
         // fill internal variable targets
         this->Loop(LoopNum).MyLoad = MyLoad;
-        this->Loop(LoopNum).InletRho = state.dataPlnt->PlantLoop(this->Loop(LoopNum).plantLoc.loopNum)
-                                           .glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp, RoutineName);
-        this->Loop(LoopNum).InletCp =
-            state.dataPlnt->PlantLoop(this->Loop(LoopNum).plantLoc.loopNum)
-                .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp, RoutineName);
+        this->Loop(LoopNum).InletRho = this->Loop(LoopNum).plantLoc.loop->glycol->getDensity(
+            state, state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp, RoutineName);
+        this->Loop(LoopNum).InletCp = this->Loop(LoopNum).plantLoc.loop->glycol->getSpecificHeat(
+            state, state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp, RoutineName);
         this->Loop(LoopNum).InletMassFlowRate = state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).MassFlowRate;
         this->Loop(LoopNum).InletTemp = state.dataLoopNodes->Node(this->Loop(LoopNum).InletNodeNum).Temp;
         if (this->Air.InletNodeNum > 0) {
@@ -2558,10 +2557,10 @@ namespace UserDefinedComponents {
         }
 
         if (this->PlantIsConnected) {
-            this->Loop.InletRho = state.dataPlnt->PlantLoop(this->Loop.plantLoc.loopNum)
-                                      .glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp, RoutineName);
-            this->Loop.InletCp = state.dataPlnt->PlantLoop(this->Loop.plantLoc.loopNum)
-                                     .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp, RoutineName);
+            this->Loop.InletRho =
+                this->Loop.plantLoc.loop->glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp, RoutineName);
+            this->Loop.InletCp =
+                this->Loop.plantLoc.loop->glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp, RoutineName);
             this->Loop.InletTemp = state.dataLoopNodes->Node(this->Loop.InletNodeNum).Temp;
             this->Loop.InletMassFlowRate = state.dataLoopNodes->Node(this->Loop.InletNodeNum).MassFlowRate;
         }
@@ -2635,12 +2634,10 @@ namespace UserDefinedComponents {
 
         if (this->NumPlantConnections > 0) {
             for (int loop = 1; loop <= this->NumPlantConnections; ++loop) {
-                this->Loop(loop).InletRho =
-                    state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum)
-                        .glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
-                this->Loop(loop).InletCp =
-                    state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum)
-                        .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
+                this->Loop(loop).InletRho = this->Loop(loop).plantLoc.loop->glycol->getDensity(
+                    state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
+                this->Loop(loop).InletCp = this->Loop(loop).plantLoc.loop->glycol->getSpecificHeat(
+                    state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
                 this->Loop(loop).InletTemp = state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp;
                 this->Loop(loop).InletMassFlowRate = state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).MassFlowRate;
             }
@@ -2712,12 +2709,10 @@ namespace UserDefinedComponents {
 
         if (this->NumPlantConnections > 0) {
             for (int loop = 1; loop <= this->NumPlantConnections; ++loop) {
-                this->Loop(loop).InletRho =
-                    state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum)
-                        .glycol->getDensity(state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
-                this->Loop(loop).InletCp =
-                    state.dataPlnt->PlantLoop(this->Loop(loop).plantLoc.loopNum)
-                        .glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
+                this->Loop(loop).InletRho = this->Loop(loop).plantLoc.loop->glycol->getDensity(
+                    state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
+                this->Loop(loop).InletCp = this->Loop(loop).plantLoc.loop->glycol->getSpecificHeat(
+                    state, state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp, RoutineName);
                 this->Loop(loop).InletTemp = state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).Temp;
                 this->Loop(loop).InletMassFlowRate = state.dataLoopNodes->Node(this->Loop(loop).InletNodeNum).MassFlowRate;
             }

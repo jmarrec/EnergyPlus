@@ -271,7 +271,7 @@ namespace PlantComponentTemperatureSources {
         bool ErrorsFound(false);   // If errors detected in input
         Real64 DesVolFlowRateUser; // Hardsized design volume flow rate for reporting
         Real64 tmpVolFlowRate = this->DesVolFlowRate;
-        int PltSizNum = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).PlantSizNum;
+        int PltSizNum = this->plantLoc.loop->PlantSizNum;
 
         if (PltSizNum > 0) {
             if (state.dataSize->PlantSizData(PltSizNum).DesVolFlowRate >= HVAC::SmallWaterVolFlow) {

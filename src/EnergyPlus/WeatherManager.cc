@@ -8704,11 +8704,10 @@ namespace Weather {
                 while (statFile.good()) {
                     auto lineIn = statFile.readLine();
                     if (has(lineIn.data, "Monthly Statistics for Dry Bulb temperatures")) {
-                        for (int i = 1; i <= 7; ++i) {
-                            lineIn = statFile.readLine();
+                        for (int i = 0; i < 7; ++i) {
+                            statFile.readLine();
                         }
-                        lineIn = statFile.readLine();
-                        lineAvg = lineIn.data;
+                        lineAvg = statFile.readLine().data;
                         break;
                     }
                 }

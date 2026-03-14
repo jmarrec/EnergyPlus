@@ -162,7 +162,7 @@ namespace Avail {
         int ZoneEquipType;              // Type of ZoneHVAC:* component
         int CompNum;                    // Index of ZoneHVAC:* component
         int ZoneCompAvailMgrNum;        // Index of availability manager associated with the ZoneHVAC:* component
-        int constexpr DummyArgument(1); // This variable is used when SimSysAvailManager is called for a ZoneHVAC:* component
+        int constexpr DummyArgument(0); // This variable is used when SimSysAvailManager is called for a ZoneHVAC:* component
 
         if (state.dataAvail->GetAvailMgrInputFlag) {
             GetSysAvailManagerInputs(state);
@@ -271,6 +271,7 @@ namespace Avail {
                                                          zcam.availManagers(ZoneCompAvailMgrNum).Num,
                                                          DummyArgument,
                                                          previousAvailStatus,
+                                                         zcam.ZoneNum,
                                                          ZoneEquipType,
                                                          CompNum);
                         if (availStatus == Status::ForceOff) {
@@ -1676,6 +1677,14 @@ namespace Avail {
                 e.availStatus = Status::NoAction;
                 e.isSimulated = false;
             }
+            if (!allocated(state.dataAvail->OptStart)) {
+                state.dataAvail->OptStart.allocate(state.dataGlobal->NumOfZones);
+            }
+
+            // OptStartFlag needs to be reset each timestep to not stay set to true post-occupancy
+            for (auto &optStart : state.dataAvail->OptStart) {
+                optStart.OptStartFlag = false;
+            }
         }
         //  HybridVentSysAvailMgrData%AvailStatus= Status::NoAction
         if (allocated(state.dataAvail->ZoneComp)) {
@@ -1695,6 +1704,7 @@ namespace Avail {
                               int &SysAvailNum,
                               int const PriAirSysNum, // Primary Air System index. If being called for a ZoneHVAC:* component
                               Status const previousStatus,
+                              int const zoneNum,                           // zone index of zone availability manager
                               ObjexxFCL::Optional_int_const ZoneEquipType, // Type of ZoneHVAC:* equipment component
                               ObjexxFCL::Optional_int_const CompNum        // Index of ZoneHVAC:* equipment component
     )
@@ -1762,7 +1772,7 @@ namespace Avail {
                 SysAvailNum = Util::FindItemInList(SysAvailName, state.dataAvail->OptimumStartData);
             }
             if (SysAvailNum > 0) {
-                availStatus = CalcOptStartSysAvailMgr(state, SysAvailNum, PriAirSysNum, ZoneEquipType, CompNum);
+                availStatus = CalcOptStartSysAvailMgr(state, SysAvailNum, PriAirSysNum, zoneNum, ZoneEquipType, CompNum);
             } else {
                 ShowFatalError(state, EnergyPlus::format("SimSysAvailManager: AvailabilityManager:OptimumStart not found: {}", SysAvailName));
             }
@@ -2277,6 +2287,7 @@ namespace Avail {
     Status CalcOptStartSysAvailMgr(EnergyPlusData &state,
                                    int const SysAvailNum,  // number of the current scheduled system availability manager
                                    int const PriAirSysNum, // number of the primary air system affected by this Avail. Manager
+                                   int const zoneNum,      // zone index for zone availability managers
                                    [[maybe_unused]] ObjexxFCL::Optional_int_const ZoneEquipType, // Type of ZoneHVAC equipment component
                                    [[maybe_unused]] ObjexxFCL::Optional_int_const CompNum        // Index of ZoneHVAC equipment component
     )
@@ -2384,14 +2395,6 @@ namespace Avail {
 
             DayValues.allocate(state.dataGlobal->TimeStepsInHour, Constant::iHoursInDay);
             DayValuesTmr.allocate(state.dataGlobal->TimeStepsInHour, Constant::iHoursInDay);
-            if (!allocated(state.dataAvail->OptStart)) {
-                state.dataAvail->OptStart.allocate(state.dataGlobal->NumOfZones);
-            }
-
-            // OptStartFlag needs to be reset each timestep to not stay set to true post-occupancy
-            for (auto &optStart : state.dataAvail->OptStart) {
-                optStart.OptStartFlag = false;
-            }
 
             // reset OptStartData once per beginning of day
             if (state.dataGlobal->BeginDayFlag) {
@@ -2447,17 +2450,23 @@ namespace Avail {
             }
 
             // Pass the start time to ZoneTempPredictorCorrector
-            for (int counter = 1; counter <= state.dataAirLoop->AirToZoneNodeInfo(PriAirSysNum).NumZonesCooled; ++counter) {
-                int actZoneNum = state.dataAirLoop->AirToZoneNodeInfo(PriAirSysNum).CoolCtrlZoneNums(counter);
-                auto &optStart = state.dataAvail->OptStart(actZoneNum);
+            if (zoneNum == 0) {
+                for (int counter = 1; counter <= state.dataAirLoop->AirToZoneNodeInfo(PriAirSysNum).NumZonesCooled; ++counter) {
+                    int actZoneNum = state.dataAirLoop->AirToZoneNodeInfo(PriAirSysNum).CoolCtrlZoneNums(counter);
+                    auto &optStart = state.dataAvail->OptStart(actZoneNum);
+                    optStart.OccStartTime = FanStartTime;
+                    optStart.ActualZoneNum = actZoneNum;
+                }
+                for (int counter = 1; counter <= state.dataAirLoop->AirToZoneNodeInfo(PriAirSysNum).NumZonesHeated; ++counter) {
+                    int actZoneNum = state.dataAirLoop->AirToZoneNodeInfo(PriAirSysNum).HeatCtrlZoneNums(counter);
+                    auto &optStart = state.dataAvail->OptStart(actZoneNum);
+                    optStart.OccStartTime = FanStartTime;
+                    optStart.ActualZoneNum = actZoneNum;
+                }
+            } else {
+                auto &optStart = state.dataAvail->OptStart(zoneNum);
                 optStart.OccStartTime = FanStartTime;
-                optStart.ActualZoneNum = actZoneNum;
-            }
-            for (int counter = 1; counter <= state.dataAirLoop->AirToZoneNodeInfo(PriAirSysNum).NumZonesHeated; ++counter) {
-                int actZoneNum = state.dataAirLoop->AirToZoneNodeInfo(PriAirSysNum).HeatCtrlZoneNums(counter);
-                auto &optStart = state.dataAvail->OptStart(actZoneNum);
-                optStart.OccStartTime = FanStartTime;
-                optStart.ActualZoneNum = actZoneNum;
+                optStart.ActualZoneNum = zoneNum;
             }
 
             if (state.dataEnvrn->DSTIndicator > 0) {
@@ -2495,7 +2504,7 @@ namespace Avail {
                                 OSReportVarFlag = false;
                             }
                             availStatus = Status::CycleOn;
-                            OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                            OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                         } else {
                             availStatus = Status::NoAction;
                             OSReportVarFlag = true;
@@ -2510,7 +2519,7 @@ namespace Avail {
                                 OSReportVarFlag = false;
                             }
                             availStatus = Status::CycleOn;
-                            OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                            OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                         } else {
                             availStatus = Status::NoAction;
                             OSReportVarFlag = true;
@@ -2561,7 +2570,7 @@ namespace Avail {
                                     OSReportVarFlag = true;
                                 } else if (CycleOnFlag) {
                                     availStatus = Status::CycleOn;
-                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                     if (state.dataGlobal->CurrentTime > FanStartTime) {
                                         CycleOnFlag = false;
                                     }
@@ -2572,7 +2581,7 @@ namespace Avail {
                                         NumHoursBeforeOccupancy = DeltaTime;
                                         OSReportVarFlag = false;
                                     }
-                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 } else {
                                     availStatus = Status::NoAction;
                                     CycleOnFlag = false;
@@ -2586,7 +2595,7 @@ namespace Avail {
                                     OSReportVarFlag = true;
                                 } else if (CycleOnFlag) {
                                     availStatus = Status::CycleOn;
-                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                     if (state.dataGlobal->CurrentTime > FanStartTime && state.dataGlobal->CurrentTime < PreStartTimeTmr) {
                                         CycleOnFlag = false;
                                     }
@@ -2597,7 +2606,7 @@ namespace Avail {
                                     }
                                     availStatus = Status::CycleOn;
                                     CycleOnFlag = true;
-                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 } else {
                                     availStatus = Status::NoAction;
                                     CycleOnFlag = false;
@@ -2632,7 +2641,7 @@ namespace Avail {
                                 OSReportVarFlag = true;
                             } else if (CycleOnFlag) {
                                 availStatus = Status::CycleOn;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else if (PreStartTime < state.dataGlobal->CurrentTime) {
                                 if (OSReportVarFlag) {
                                     NumHoursBeforeOccupancy = DeltaTime;
@@ -2640,7 +2649,7 @@ namespace Avail {
                                 }
                                 availStatus = Status::CycleOn;
                                 CycleOnFlag = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -2654,7 +2663,7 @@ namespace Avail {
                                 OSReportVarFlag = true;
                             } else if (CycleOnFlag) {
                                 availStatus = Status::CycleOn;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else if (PreStartTime < state.dataGlobal->CurrentTime || PreStartTimeTmr < state.dataGlobal->CurrentTime) {
                                 if (OSReportVarFlag) {
                                     NumHoursBeforeOccupancy = DeltaTime;
@@ -2662,7 +2671,7 @@ namespace Avail {
                                 }
                                 availStatus = Status::CycleOn;
                                 CycleOnFlag = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -2722,7 +2731,7 @@ namespace Avail {
                                 OSReportVarFlag = true;
                             } else if (CycleOnFlag) {
                                 availStatus = Status::CycleOn;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 if (state.dataGlobal->CurrentTime > FanStartTime) {
                                     CycleOnFlag = false;
                                 }
@@ -2733,7 +2742,7 @@ namespace Avail {
                                 }
                                 availStatus = Status::CycleOn;
                                 CycleOnFlag = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -2747,7 +2756,7 @@ namespace Avail {
                                 OSReportVarFlag = true;
                             } else if (CycleOnFlag) {
                                 availStatus = Status::CycleOn;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 if (state.dataGlobal->CurrentTime > FanStartTime && state.dataGlobal->CurrentTime < PreStartTimeTmr) {
                                     CycleOnFlag = false;
                                 }
@@ -2758,7 +2767,7 @@ namespace Avail {
                                 }
                                 availStatus = Status::CycleOn;
                                 CycleOnFlag = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -2794,7 +2803,7 @@ namespace Avail {
                                 OSReportVarFlag = true;
                             } else if (CycleOnFlag) {
                                 availStatus = Status::CycleOn;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else if (PreStartTime < state.dataGlobal->CurrentTime) {
                                 if (OSReportVarFlag) {
                                     NumHoursBeforeOccupancy = DeltaTime;
@@ -2802,7 +2811,7 @@ namespace Avail {
                                 }
                                 availStatus = Status::CycleOn;
                                 CycleOnFlag = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -2816,7 +2825,7 @@ namespace Avail {
                                 OSReportVarFlag = true;
                             } else if (CycleOnFlag) {
                                 availStatus = Status::CycleOn;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else if (PreStartTime < state.dataGlobal->CurrentTime || PreStartTimeTmr < state.dataGlobal->CurrentTime) {
                                 if (OSReportVarFlag) {
                                     NumHoursBeforeOccupancy = DeltaTime;
@@ -2824,7 +2833,7 @@ namespace Avail {
                                 }
                                 availStatus = Status::CycleOn;
                                 CycleOnFlag = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -2916,7 +2925,7 @@ namespace Avail {
                                     OSReportVarFlag = true;
                                 } else if (CycleOnFlag) {
                                     availStatus = Status::CycleOn;
-                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                     if (state.dataGlobal->CurrentTime > FanStartTime) {
                                         CycleOnFlag = false;
                                     }
@@ -2951,7 +2960,7 @@ namespace Avail {
                                     CycleOnFlag = true;
                                     ATGUpdateFlag1 = true;
                                     ATGUpdateFlag2 = true;
-                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 } else {
                                     availStatus = Status::NoAction;
                                     CycleOnFlag = false;
@@ -2965,7 +2974,7 @@ namespace Avail {
                                     OSReportVarFlag = true;
                                 } else if (CycleOnFlag) {
                                     availStatus = Status::CycleOn;
-                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                     if (state.dataGlobal->CurrentTime > FanStartTime && state.dataGlobal->CurrentTime < PreStartTimeTmr) {
                                         CycleOnFlag = false;
                                     }
@@ -3000,7 +3009,7 @@ namespace Avail {
                                     CycleOnFlag = true;
                                     ATGUpdateFlag1 = true;
                                     ATGUpdateFlag2 = true;
-                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                    OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 } else {
                                     availStatus = Status::NoAction;
                                     CycleOnFlag = false;
@@ -3039,7 +3048,7 @@ namespace Avail {
                                     OSReportVarFlag = false;
                                 }
                                 availStatus = Status::CycleOn;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 if (!state.dataGlobal->WarmupFlag) {
                                     if (ATGUpdateFlag1) {
                                         ATGUpdateTime1 = state.dataGlobal->CurrentTime;
@@ -3065,7 +3074,7 @@ namespace Avail {
                                 CycleOnFlag = true;
                                 ATGUpdateFlag1 = true;
                                 ATGUpdateFlag2 = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -3099,7 +3108,7 @@ namespace Avail {
                                         }
                                     }
                                 }
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else if (PreStartTime < state.dataGlobal->CurrentTime || PreStartTimeTmr < state.dataGlobal->CurrentTime) {
                                 if (OSReportVarFlag) {
                                     NumHoursBeforeOccupancy = DeltaTime;
@@ -3109,7 +3118,7 @@ namespace Avail {
                                 CycleOnFlag = true;
                                 ATGUpdateFlag1 = true;
                                 ATGUpdateFlag2 = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -3213,7 +3222,7 @@ namespace Avail {
                                 CycleOnFlag = false;
                             } else if (CycleOnFlag) {
                                 availStatus = Status::CycleOn;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 if (state.dataGlobal->CurrentTime > FanStartTime) {
                                     CycleOnFlag = false;
                                 }
@@ -3249,7 +3258,7 @@ namespace Avail {
                                 CycleOnFlag = true;
                                 ATGUpdateFlag1 = true;
                                 ATGUpdateFlag2 = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -3286,7 +3295,7 @@ namespace Avail {
                                     }
                                 }
                                 //---------------------------------------------------------------------------------
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                                 if (state.dataGlobal->CurrentTime > FanStartTime && state.dataGlobal->CurrentTime < PreStartTimeTmr) {
                                     CycleOnFlag = false;
                                 }
@@ -3299,7 +3308,7 @@ namespace Avail {
                                 CycleOnFlag = true;
                                 ATGUpdateFlag1 = true;
                                 ATGUpdateFlag2 = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -3358,7 +3367,7 @@ namespace Avail {
                                     }
                                 }
                                 //---------------------------------------------------------------------------------
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else if (PreStartTime < state.dataGlobal->CurrentTime) {
                                 if (OSReportVarFlag) {
                                     NumHoursBeforeOccupancy = DeltaTime;
@@ -3368,7 +3377,7 @@ namespace Avail {
                                 CycleOnFlag = true;
                                 ATGUpdateFlag1 = true;
                                 ATGUpdateFlag2 = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -3405,7 +3414,7 @@ namespace Avail {
                                     }
                                 }
                                 //---------------------------------------------------------------------------------
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else if (PreStartTime < state.dataGlobal->CurrentTime || PreStartTimeTmr < state.dataGlobal->CurrentTime) {
                                 if (OSReportVarFlag) {
                                     NumHoursBeforeOccupancy = DeltaTime;
@@ -3415,7 +3424,7 @@ namespace Avail {
                                 CycleOnFlag = true;
                                 ATGUpdateFlag2 = true;
                                 ATGUpdateFlag1 = true;
-                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum);
+                                OptStartMgr.SetOptStartFlag(state, PriAirSysNum, zoneNum);
                             } else {
                                 availStatus = Status::NoAction;
                                 CycleOnFlag = false;
@@ -3464,15 +3473,19 @@ namespace Avail {
         return availStatus;
     }
 
-    void SysAvailManagerOptimumStart::SetOptStartFlag(EnergyPlusData &state, int const AirLoopNum)
+    void SysAvailManagerOptimumStart::SetOptStartFlag(EnergyPlusData &state, int const AirLoopNum, int const zoneNum)
     {
         // Set the OptStartFlag true for all zones on the air loop
-        auto const &thisAirToZoneNodeInfo = state.dataAirLoop->AirToZoneNodeInfo(AirLoopNum);
-        for (int counter = 1; counter <= thisAirToZoneNodeInfo.NumZonesCooled; ++counter) {
-            state.dataAvail->OptStart(thisAirToZoneNodeInfo.CoolCtrlZoneNums(counter)).OptStartFlag = true;
-        }
-        for (int counter = 1; counter <= thisAirToZoneNodeInfo.NumZonesHeated; ++counter) {
-            state.dataAvail->OptStart(thisAirToZoneNodeInfo.HeatCtrlZoneNums(counter)).OptStartFlag = true;
+        if (zoneNum > 0) {
+            state.dataAvail->OptStart(zoneNum).OptStartFlag = true;
+        } else {
+            auto const &thisAirToZoneNodeInfo = state.dataAirLoop->AirToZoneNodeInfo(AirLoopNum);
+            for (int counter = 1; counter <= thisAirToZoneNodeInfo.NumZonesCooled; ++counter) {
+                state.dataAvail->OptStart(thisAirToZoneNodeInfo.CoolCtrlZoneNums(counter)).OptStartFlag = true;
+            }
+            for (int counter = 1; counter <= thisAirToZoneNodeInfo.NumZonesHeated; ++counter) {
+                state.dataAvail->OptStart(thisAirToZoneNodeInfo.HeatCtrlZoneNums(counter)).OptStartFlag = true;
+            }
         }
     }
 

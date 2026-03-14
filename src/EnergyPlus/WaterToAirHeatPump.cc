@@ -950,7 +950,7 @@ namespace WaterToAirHeatPump {
             bool errFlag = false;
             PlantUtilities::ScanPlantLoopsForObject(state, heatPump.Name, heatPump.WAHPType, heatPump.plantLoc, errFlag, _, _, _, _, _);
 
-            if (state.dataPlnt->PlantLoop(heatPump.plantLoc.loopNum).FluidName == "WATER") {
+            if (heatPump.plantLoc.loop->FluidName == "WATER") {
                 if (heatPump.SourceSideUACoeff < Constant::rTinyValue) {
                     ShowSevereError(state, EnergyPlus::format("Input problem for water to air heat pump, \"{}\".", heatPump.Name));
                     ShowContinueError(state, " Source side UA value is less than tolerance, likely zero or blank.");

@@ -1728,10 +1728,7 @@ namespace DataPlant {
 
                 auto &this_comp(branch.Comp(CompCounter));
                 PlantLocation this_plantLoc = {this->plantLoc.loopNum, this->plantLoc.loopSideNum, BranchCounter, CompCounter};
-                this_plantLoc.loop = &state.dataPlnt->PlantLoop(this_plantLoc.loopNum);
-                this_plantLoc.side = &this_plantLoc.loop->LoopSide(this_plantLoc.loopSideNum);
-                this_plantLoc.branch = &this_plantLoc.side->Branch(this_plantLoc.branchNum);
-                this_plantLoc.comp = &this_plantLoc.branch->Comp(this_plantLoc.compNum);
+                PlantUtilities::SetPlantLocationLinks(state, this_plantLoc);
 
                 DataPlant::OpScheme const CurOpSchemeType(this_comp.CurOpSchemeType);
 
@@ -1821,13 +1818,13 @@ namespace DataPlant {
         bool EncounteredNonLBObjDuringPass2(false);
         for (int BranchCounter = FirstBranchNum; BranchCounter <= LastBranchNum; ++BranchCounter) {
             auto &branch(this->Branch(BranchCounter));
-
             //~ Always start from the last component we did the last time around + 1 and
             //~  try to make it all the way to the end of the loop
             int const StartingComponent = branch.lastComponentSimulated + 1;
             int const EndingComponent = branch.TotalComponents;
             for (int CompCounter = StartingComponent; CompCounter <= EndingComponent; ++CompCounter) {
                 PlantLocation this_plantLoc = {this->plantLoc.loopNum, this->plantLoc.loopSideNum, BranchCounter, CompCounter};
+                PlantUtilities::SetPlantLocationLinks(state, this_plantLoc);
 
                 DataPlant::OpScheme const CurOpSchemeType(branch.Comp(CompCounter).CurOpSchemeType);
 
@@ -1839,7 +1836,7 @@ namespace DataPlant {
                 case DataPlant::OpScheme::CompSetPtBased:
                 case DataPlant::OpScheme::FreeRejection: //~ other control types
                     EncounteredNonLBObjDuringPass2 = true;
-                    goto components2_end;       // don't do anymore components on this branch
+                    goto components2_end;       // don't do anymore components on this branch // This is not good
                 case DataPlant::OpScheme::Pump: //~ pump
                     PumpLocation.loopNum = this->plantLoc.loopNum;
                     PumpLocation.loopSideNum = this->plantLoc.loopSideNum;

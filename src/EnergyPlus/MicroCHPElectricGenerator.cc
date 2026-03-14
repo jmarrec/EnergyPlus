@@ -715,9 +715,9 @@ void MicroCHPDataStruct::onInitLoopEquip(EnergyPlusData &state, const EnergyPlus
         this->PlantMassFlowRateMax =
             2.0 * this->A42Model.WaterFlowCurve->value(state, this->A42Model.MaxElecPower, state.dataLoopNodes->Node(this->PlantInletNodeID).Temp);
     } else if (this->CWPlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply) {
-        if (state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).MaxMassFlowRate > 0.0) {
-            this->PlantMassFlowRateMax = state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).MaxMassFlowRate;
-        } else if (state.dataPlnt->PlantLoop(this->CWPlantLoc.loopNum).PlantSizNum > 0) {
+        if (this->CWPlantLoc.loop->MaxMassFlowRate > 0.0) {
+            this->PlantMassFlowRateMax = this->CWPlantLoc.loop->MaxMassFlowRate;
+        } else if (this->CWPlantLoc.loop->PlantSizNum > 0) {
             this->PlantMassFlowRateMax = state.dataSize->PlantSizData(this->CWPlantLoc.loopNum).DesVolFlowRate * rho;
         } else {
             this->PlantMassFlowRateMax = 2.0;
