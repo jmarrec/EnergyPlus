@@ -194,6 +194,7 @@ protected:
 
         state->dataSize->ZoneEqSizing.allocate(1);
         state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod.allocate(25);
+        state->dataSize->ZoneEqSizing(state->dataSize->CurZoneEqNum).SizingMethod = 0;
         state->dataSize->ZoneSizingRunDone = true;
 
         // set up plant loop
