@@ -362,17 +362,17 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
 
         // Test node sets
         Node::TestCompSet(state,
-                                           HPEqFitCoolingUC,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(2),
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           "Condenser Water Nodes");
+                          HPEqFitCoolingUC,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(2),
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          "Condenser Water Nodes");
         Node::TestCompSet(state,
-                                           HPEqFitCoolingUC,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(4),
-                                           state.dataIPShortCut->cAlphaArgs(5),
-                                           "Chilled Water Nodes");
+                          HPEqFitCoolingUC,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(4),
+                          state.dataIPShortCut->cAlphaArgs(5),
+                          "Chilled Water Nodes");
 
         if (NumAlphas > 7 && !state.dataIPShortCut->lAlphaFieldBlanks(8)) {
             thisGSHP.companionName = state.dataIPShortCut->cAlphaArgs(8);
@@ -529,17 +529,17 @@ void GshpSpecs::GetWatertoWaterHPInput(EnergyPlusData &state)
 
         // Test node sets
         Node::TestCompSet(state,
-                                           HPEqFitHeatingUC,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(2),
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           "Condenser Water Nodes");
+                          HPEqFitHeatingUC,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(2),
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          "Condenser Water Nodes");
         Node::TestCompSet(state,
-                                           HPEqFitHeatingUC,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(4),
-                                           state.dataIPShortCut->cAlphaArgs(5),
-                                           "Hot Water Nodes");
+                          HPEqFitHeatingUC,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(4),
+                          state.dataIPShortCut->cAlphaArgs(5),
+                          "Hot Water Nodes");
 
         // CurrentModuleObject='HeatPump:WatertoWater:EquationFit:Heating'
         SetupOutputVariable(state,

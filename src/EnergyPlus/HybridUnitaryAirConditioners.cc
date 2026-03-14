@@ -443,9 +443,9 @@ void GetInputZoneHybridUnitaryAirConditioners(EnergyPlusData &state, bool &Error
     //       RE-ENGINEERED  na
 
     // Using/Aliasing
+    using Node::GetOnlySingleNode;
     using Node::SetUpCompSets;
     using Node::TestCompSet;
-    using Node::GetOnlySingleNode;
     std::string cCurrentModuleObject; // Object type for getting and error messages
     Array1D_string Alphas;            // Alpha items for object
     Array1D<Real64> Numbers;          // Numeric items for object

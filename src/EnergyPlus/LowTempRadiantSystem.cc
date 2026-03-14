@@ -290,13 +290,13 @@ namespace LowTempRadiantSystem {
         // needed to simulate a low temperature radiant system.
 
         // Using/Aliasing
-        using Node::TestCompSet;
         using DataSizing::AutoSize;
         using DataSizing::CapacityPerFloorArea;
         using DataSizing::CoolingDesignCapacity;
         using DataSizing::FractionOfAutosizedCoolingCapacity;
         using DataSizing::FractionOfAutosizedHeatingCapacity;
         using DataSizing::HeatingDesignCapacity;
+        using Node::TestCompSet;
 
         using Node::GetOnlySingleNode;
         using namespace DataSurfaceLists;

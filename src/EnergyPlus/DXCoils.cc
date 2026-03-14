@@ -710,12 +710,12 @@ void GetDXCoils(EnergyPlusData &state)
     // Uses "Get" routines to read in data.
 
     // Using/Aliasing
-    using Node::TestCompSet;
     using Curve::checkCurveIsNormalizedToOne;
     using Curve::CurveValue;
     using Curve::GetCurveIndex;
     using DataSizing::AutoSize;
     using EMSManager::ManageEMS;
+    using Node::TestCompSet;
 
     using GlobalNames::VerifyUniqueCoilName;
     using Node::GetOnlySingleNode;
@@ -1760,17 +1760,16 @@ void GetDXCoils(EnergyPlusData &state)
                         if (lAlphaBlanks2(7)) {
                             thisDXCoil.CondenserInletNodeNum(PerfModeNum) = 0;
                         } else {
-                            thisDXCoil.CondenserInletNodeNum(PerfModeNum) =
-                                GetOnlySingleNode(state,
-                                                  Alphas2(7),
-                                                  ErrorsFound,
-                                                  (Node::ConnectionObjectType)getEnumValue(Node::ConnectionObjectTypeNamesUC,
-                                                                                                   Util::makeUPPER(PerfObjectType)),
-                                                  PerfObjectName,
-                                                  Node::FluidType::Air,
-                                                  Node::ConnectionType::OutsideAirReference,
-                                                  Node::CompFluidStream::Primary,
-                                                  Node::ObjectIsNotParent);
+                            thisDXCoil.CondenserInletNodeNum(PerfModeNum) = GetOnlySingleNode(
+                                state,
+                                Alphas2(7),
+                                ErrorsFound,
+                                (Node::ConnectionObjectType)getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(PerfObjectType)),
+                                PerfObjectName,
+                                Node::FluidType::Air,
+                                Node::ConnectionType::OutsideAirReference,
+                                Node::CompFluidStream::Primary,
+                                Node::ObjectIsNotParent);
                             if (!CheckOutAirNodeNumber(state, thisDXCoil.CondenserInletNodeNum(PerfModeNum))) {
                                 ShowWarningError(state, EnergyPlus::format("{}{}=\"{}\":", RoutineName, PerfObjectType, PerfObjectName));
                                 ShowContinueError(state, EnergyPlus::format("may not be valid {}=\"{}\".", cAlphaFields2(7), Alphas2(7)));
@@ -15952,8 +15951,8 @@ int GetHPCoolingCoilIndex(EnergyPlusData &state,
 
     DXCoolingCoilIndex = 0;
 
-    Node::ConnectionObjectType HeatingCoilTypeNum = static_cast<Node::ConnectionObjectType>(
-        getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(HeatingCoilType)));
+    Node::ConnectionObjectType HeatingCoilTypeNum =
+        static_cast<Node::ConnectionObjectType>(getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(HeatingCoilType)));
 
     Node::ConnectionObjectType CompSetsParentType; // Parent object type which uses DX heating coil pass into this function
     std::string CompSetsParentName;

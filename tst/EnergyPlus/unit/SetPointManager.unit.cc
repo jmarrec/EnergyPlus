@@ -693,83 +693,78 @@ TEST_F(EnergyPlusFixture, SZRHOAFractionImpact)
     state->dataZoneEnergyDemand->DeadBandOrSetback.allocate(1);
 
     state->dataAirSystemsData->PrimaryAirSystems.allocate(1);
-    state->dataAirSystemsData->PrimaryAirSystems(1).OASysOutletNodeNum =
-        Node::GetOnlySingleNode(*state,
-                                            "FAN INLET NODE",
-                                            ErrorsFound,
-                                            Node::ConnectionObjectType::FanOnOff,
-                                            "SZRHtest",
-                                            Node::FluidType::Air,
-                                            Node::ConnectionType::Internal,
-                                            Node::CompFluidStream::Primary,
-                                            Node::ObjectIsNotParent,
-                                            "AHU node");
-    state->dataAirSystemsData->PrimaryAirSystems(1).OASysInletNodeNum =
-        Node::GetOnlySingleNode(*state,
-                                            "RETURN NODE",
-                                            ErrorsFound,
-                                            Node::ConnectionObjectType::OutdoorAirMixer,
-                                            "SZRHtest",
-                                            Node::FluidType::Air,
-                                            Node::ConnectionType::Inlet,
-                                            Node::CompFluidStream::Primary,
-                                            Node::ObjectIsNotParent,
-                                            "AHU node");
-    state->dataAirSystemsData->PrimaryAirSystems(1).OAMixOAInNodeNum =
-        Node::GetOnlySingleNode(*state,
-                                            "OA INLET TO MIXER",
-                                            ErrorsFound,
-                                            Node::ConnectionObjectType::OutdoorAirMixer,
-                                            "SZRHtest",
-                                            Node::FluidType::Air,
-                                            Node::ConnectionType::Internal,
-                                            Node::CompFluidStream::Primary,
-                                            Node::ObjectIsNotParent,
-                                            "AHU node");
+    state->dataAirSystemsData->PrimaryAirSystems(1).OASysOutletNodeNum = Node::GetOnlySingleNode(*state,
+                                                                                                 "FAN INLET NODE",
+                                                                                                 ErrorsFound,
+                                                                                                 Node::ConnectionObjectType::FanOnOff,
+                                                                                                 "SZRHtest",
+                                                                                                 Node::FluidType::Air,
+                                                                                                 Node::ConnectionType::Internal,
+                                                                                                 Node::CompFluidStream::Primary,
+                                                                                                 Node::ObjectIsNotParent,
+                                                                                                 "AHU node");
+    state->dataAirSystemsData->PrimaryAirSystems(1).OASysInletNodeNum = Node::GetOnlySingleNode(*state,
+                                                                                                "RETURN NODE",
+                                                                                                ErrorsFound,
+                                                                                                Node::ConnectionObjectType::OutdoorAirMixer,
+                                                                                                "SZRHtest",
+                                                                                                Node::FluidType::Air,
+                                                                                                Node::ConnectionType::Inlet,
+                                                                                                Node::CompFluidStream::Primary,
+                                                                                                Node::ObjectIsNotParent,
+                                                                                                "AHU node");
+    state->dataAirSystemsData->PrimaryAirSystems(1).OAMixOAInNodeNum = Node::GetOnlySingleNode(*state,
+                                                                                               "OA INLET TO MIXER",
+                                                                                               ErrorsFound,
+                                                                                               Node::ConnectionObjectType::OutdoorAirMixer,
+                                                                                               "SZRHtest",
+                                                                                               Node::FluidType::Air,
+                                                                                               Node::ConnectionType::Internal,
+                                                                                               Node::CompFluidStream::Primary,
+                                                                                               Node::ObjectIsNotParent,
+                                                                                               "AHU node");
     state->dataAirSystemsData->PrimaryAirSystems(1).NumBranches = 1;
     state->dataAirSystemsData->PrimaryAirSystems(1).InletBranchNum[0] = 1;
 
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch.allocate(state->dataAirSystemsData->PrimaryAirSystems(1).NumBranches);
 
-    state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).NodeNumIn =
-        Node::GetOnlySingleNode(*state,
-                                            "RETURN NODE",
-                                            ErrorsFound,
-                                            Node::ConnectionObjectType::OutdoorAirMixer,
-                                            "SZRHtest",
-                                            Node::FluidType::Air,
-                                            Node::ConnectionType::Inlet,
-                                            Node::CompFluidStream::Primary,
-                                            Node::ObjectIsNotParent,
-                                            "AHU node");
+    state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).NodeNumIn = Node::GetOnlySingleNode(*state,
+                                                                                                  "RETURN NODE",
+                                                                                                  ErrorsFound,
+                                                                                                  Node::ConnectionObjectType::OutdoorAirMixer,
+                                                                                                  "SZRHtest",
+                                                                                                  Node::FluidType::Air,
+                                                                                                  Node::ConnectionType::Inlet,
+                                                                                                  Node::CompFluidStream::Primary,
+                                                                                                  Node::ObjectIsNotParent,
+                                                                                                  "AHU node");
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).TotalComponents = 1;
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp.allocate(1);
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).TypeOf = "Fan:ConstantVolume";
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).CompType_Num = SimAirServingZones::CompType::Fan_Simple_CV;
 
-    state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).NodeNumIn =
-        Node::GetOnlySingleNode(*state,
-                                            "FAN INLET NODE",
-                                            ErrorsFound,
-                                            Node::ConnectionObjectType::OutdoorAirMixer,
-                                            "SZRHtest",
-                                            Node::FluidType::Air,
-                                            Node::ConnectionType::Internal,
-                                            Node::CompFluidStream::Primary,
-                                            Node::ObjectIsNotParent,
-                                            "AHU node");
+    state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).NodeNumIn = Node::GetOnlySingleNode(*state,
+                                                                                                          "FAN INLET NODE",
+                                                                                                          ErrorsFound,
+                                                                                                          Node::ConnectionObjectType::OutdoorAirMixer,
+                                                                                                          "SZRHtest",
+                                                                                                          Node::FluidType::Air,
+                                                                                                          Node::ConnectionType::Internal,
+                                                                                                          Node::CompFluidStream::Primary,
+                                                                                                          Node::ObjectIsNotParent,
+                                                                                                          "AHU node");
 
     state->dataAirSystemsData->PrimaryAirSystems(1).Branch(1).Comp(1).NodeNumOut =
         Node::GetOnlySingleNode(*state,
-                                            "FAN OUTLET NODE",
-                                            ErrorsFound,
-                                            Node::ConnectionObjectType::OutdoorAirMixer,
-                                            "SZRHtest",
-                                            Node::FluidType::Air,
-                                            Node::ConnectionType::Internal,
-                                            Node::CompFluidStream::Primary,
-                                            Node::ObjectIsNotParent,
-                                            "AHU node");
+                                "FAN OUTLET NODE",
+                                ErrorsFound,
+                                Node::ConnectionObjectType::OutdoorAirMixer,
+                                "SZRHtest",
+                                Node::FluidType::Air,
+                                Node::ConnectionType::Internal,
+                                Node::CompFluidStream::Primary,
+                                Node::ObjectIsNotParent,
+                                "AHU node");
 
     state->dataZoneEquip->ZoneEquipConfig.allocate(1);
     state->dataZoneEquip->ZoneEquipConfig(1).NumInletNodes = 1;
@@ -779,26 +774,26 @@ TEST_F(EnergyPlusFixture, SZRHOAFractionImpact)
     state->dataZoneEquip->ZoneEquipConfig(1).AirDistUnitCool.allocate(1);
     state->dataZoneEquip->ZoneEquipConfig(1).AirDistUnitHeat.allocate(1);
     int zoneAirNode = Node::GetOnlySingleNode(*state,
-                                                          "KITCHEN AIR NODE",
-                                                          ErrorsFound,
-                                                          Node::ConnectionObjectType::OutdoorAirMixer,
-                                                          "SZRHspmTest",
-                                                          Node::FluidType::Air,
-                                                          Node::ConnectionType::ZoneNode,
-                                                          Node::CompFluidStream::Primary,
-                                                          Node::ObjectIsNotParent,
-                                                          "Test zone node");
+                                              "KITCHEN AIR NODE",
+                                              ErrorsFound,
+                                              Node::ConnectionObjectType::OutdoorAirMixer,
+                                              "SZRHspmTest",
+                                              Node::FluidType::Air,
+                                              Node::ConnectionType::ZoneNode,
+                                              Node::CompFluidStream::Primary,
+                                              Node::ObjectIsNotParent,
+                                              "Test zone node");
     state->dataZoneEquip->ZoneEquipConfig(1).ZoneNode = zoneAirNode;
     int zoneInletNode = Node::GetOnlySingleNode(*state,
-                                                            "KITCHEN DIRECT AIR INLET NODE NAME",
-                                                            ErrorsFound,
-                                                            Node::ConnectionObjectType::OutdoorAirMixer,
-                                                            "SZRHspmTest",
-                                                            Node::FluidType::Air,
-                                                            Node::ConnectionType::ZoneInlet,
-                                                            Node::CompFluidStream::Primary,
-                                                            Node::ObjectIsNotParent,
-                                                            "Test zone inlet node");
+                                                "KITCHEN DIRECT AIR INLET NODE NAME",
+                                                ErrorsFound,
+                                                Node::ConnectionObjectType::OutdoorAirMixer,
+                                                "SZRHspmTest",
+                                                Node::FluidType::Air,
+                                                Node::ConnectionType::ZoneInlet,
+                                                Node::CompFluidStream::Primary,
+                                                Node::ObjectIsNotParent,
+                                                "Test zone inlet node");
     state->dataZoneEquip->ZoneEquipConfig(1).InletNode(1) = zoneInletNode;
     state->dataZoneEquip->ZoneEquipConfig(1).InletNodeAirLoopNum(1) = 1;
 

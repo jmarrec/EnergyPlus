@@ -105,11 +105,9 @@ namespace Node {
     constexpr bool IncrementFluidStreamYes(true);
 
     // Valid Fluid Types for Nodes
-    constexpr static std::array<std::string_view, static_cast<int>(FluidType::Num)> FluidTypeNames = {
-        "blank", "Air", "Water", "Steam", "Electric"};
+    constexpr static std::array<std::string_view, static_cast<int>(FluidType::Num)> FluidTypeNames = {"blank", "Air", "Water", "Steam", "Electric"};
 
-    constexpr static std::array<std::string_view, static_cast<int>(FluidType::Num)> FluidTypeNamesUC = {
-        "BLANK", "AIR", "WATER", "STEAM", "ELECTRIC"};
+    constexpr static std::array<std::string_view, static_cast<int>(FluidType::Num)> FluidTypeNamesUC = {"BLANK", "AIR", "WATER", "STEAM", "ELECTRIC"};
 
     constexpr static std::array<std::string_view, static_cast<int>(ConnectionType::Num)> ConnectionTypeNames = {"blank",
                                                                                                                 "Inlet",
@@ -441,7 +439,7 @@ namespace Node {
     struct NodeData
     {
         // Members
-        FluidType fluidType = FluidType::Blank;      // must be one of the valid parameters
+        FluidType fluidType = FluidType::Blank;              // must be one of the valid parameters
         int FluidIndex = 0;                                  // For Fluid Properties
         Real64 Temp = 0.0;                                   // {C}
         Real64 TempMin = 0.0;                                // {C}

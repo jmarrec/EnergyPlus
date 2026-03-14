@@ -509,23 +509,23 @@ void GetControllerInput(EnergyPlusData &state)
                 ErrorsFound = true;
             }
             controllerProps.SensedNode = Node::GetOnlySingleNode(state,
-                                                                             AlphArray(5),
-                                                                             ErrorsFound,
-                                                                             Node::ConnectionObjectType::ControllerWaterCoil,
-                                                                             AlphArray(1),
-                                                                             Node::FluidType::Blank,
-                                                                             Node::ConnectionType::Sensor,
-                                                                             Node::CompFluidStream::Primary,
-                                                                             Node::ObjectIsNotParent);
+                                                                 AlphArray(5),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ControllerWaterCoil,
+                                                                 AlphArray(1),
+                                                                 Node::FluidType::Blank,
+                                                                 Node::ConnectionType::Sensor,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
             controllerProps.ActuatedNode = Node::GetOnlySingleNode(state,
-                                                                               AlphArray(6),
-                                                                               ErrorsFound,
-                                                                               Node::ConnectionObjectType::ControllerWaterCoil,
-                                                                               AlphArray(1),
-                                                                               Node::FluidType::Blank,
-                                                                               Node::ConnectionType::Actuator,
-                                                                               Node::CompFluidStream::Primary,
-                                                                               Node::ObjectIsNotParent);
+                                                                   AlphArray(6),
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::ControllerWaterCoil,
+                                                                   AlphArray(1),
+                                                                   Node::FluidType::Blank,
+                                                                   Node::ConnectionType::Actuator,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
             controllerProps.Offset = NumArray(1);
             controllerProps.MaxVolFlowActuated = NumArray(2);
             controllerProps.MinVolFlowActuated = NumArray(3);

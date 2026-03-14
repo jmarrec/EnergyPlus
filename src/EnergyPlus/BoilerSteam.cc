@@ -252,29 +252,29 @@ namespace BoilerSteam {
                 ErrorsFound = true;
             }
             thisBoiler.BoilerInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                state.dataIPShortCut->cAlphaArgs(3),
-                                                                                ErrorsFound,
-                                                                                Node::ConnectionObjectType::BoilerSteam,
-                                                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                                                Node::FluidType::Steam,
-                                                                                Node::ConnectionType::Inlet,
-                                                                                Node::CompFluidStream::Primary,
-                                                                                Node::ObjectIsNotParent);
+                                                                    state.dataIPShortCut->cAlphaArgs(3),
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::BoilerSteam,
+                                                                    state.dataIPShortCut->cAlphaArgs(1),
+                                                                    Node::FluidType::Steam,
+                                                                    Node::ConnectionType::Inlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
             thisBoiler.BoilerOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                 state.dataIPShortCut->cAlphaArgs(4),
-                                                                                 ErrorsFound,
-                                                                                 Node::ConnectionObjectType::BoilerSteam,
-                                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                                 Node::FluidType::Steam,
-                                                                                 Node::ConnectionType::Outlet,
-                                                                                 Node::CompFluidStream::Primary,
-                                                                                 Node::ObjectIsNotParent);
+                                                                     state.dataIPShortCut->cAlphaArgs(4),
+                                                                     ErrorsFound,
+                                                                     Node::ConnectionObjectType::BoilerSteam,
+                                                                     state.dataIPShortCut->cAlphaArgs(1),
+                                                                     Node::FluidType::Steam,
+                                                                     Node::ConnectionType::Outlet,
+                                                                     Node::CompFluidStream::Primary,
+                                                                     Node::ObjectIsNotParent);
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Hot Steam Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Hot Steam Nodes");
 
             thisBoiler.fluid = Fluid::GetSteam(state);
             if (thisBoiler.fluid == nullptr && BoilerNum == 1) {

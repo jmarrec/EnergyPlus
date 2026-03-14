@@ -215,18 +215,18 @@ namespace OutdoorAirUnit {
         // Mixed Air.cc
 
         // Using/Aliasing
+        using HeatingCoils::GetCoilInletNode;
+        using HeatingCoils::GetCoilOutletNode;
+        using Node::GetOnlySingleNode;
         using Node::SetUpCompSets;
         using Node::TestCompSet;
-        using Node::GetOnlySingleNode;
+        using OutAirNodeManager::CheckAndAddAirNodeNumber;
         using SteamCoils::GetCoilAirInletNode;
         using SteamCoils::GetCoilAirOutletNode;
         using SteamCoils::GetCoilMaxSteamFlowRate;
         using SteamCoils::GetCoilSteamInletNode;
         using SteamCoils::GetCoilSteamOutletNode;
         using SteamCoils::GetSteamCoilIndex;
-        using HeatingCoils::GetCoilInletNode;
-        using HeatingCoils::GetCoilOutletNode;
-        using OutAirNodeManager::CheckAndAddAirNodeNumber;
         using WaterCoils::GetCoilWaterInletNode;
         using WaterCoils::GetCoilWaterOutletNode;
         using WaterCoils::GetWaterCoilIndex;

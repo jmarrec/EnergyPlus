@@ -479,14 +479,14 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
 
     bool ErrorsFound = false;
     int inletNodeNum = Node::GetOnlySingleNode(*state,
-                                                           Zone1InletName,
-                                                           ErrorsFound,
-                                                           Node::ConnectionObjectType::ZoneHVACExhaustControl,
-                                                           thisExhCtrl1.Name,
-                                                           Node::FluidType::Air,
-                                                           Node::ConnectionType::ZoneInlet,
-                                                           Node::CompFluidStream::Primary,
-                                                           Node::ObjectIsParent);
+                                               Zone1InletName,
+                                               ErrorsFound,
+                                               Node::ConnectionObjectType::ZoneHVACExhaustControl,
+                                               thisExhCtrl1.Name,
+                                               Node::FluidType::Air,
+                                               Node::ConnectionType::ZoneInlet,
+                                               Node::CompFluidStream::Primary,
+                                               Node::ObjectIsParent);
 
     ZoneEquipConf1.ZoneName = "ZONE1";
     ZoneEquipConf1.NumInletNodes = 1;
@@ -511,14 +511,14 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
     thisExhCtrl1.SuppNodeNums.dimension(NumParams, 0);
 
     thisExhCtrl1.SuppNodeNums = Node::GetOnlySingleNode(*state,
-                                                                    thisExhCtrl1.SupplyNodeOrNodelistName,
-                                                                    ErrorsFound,
-                                                                    Node::ConnectionObjectType::ZoneHVACExhaustControl,
-                                                                    thisExhCtrl1.Name,
-                                                                    Node::FluidType::Air,
-                                                                    Node::ConnectionType::Sensor,
-                                                                    Node::CompFluidStream::Primary,
-                                                                    Node::ObjectIsParent);
+                                                        thisExhCtrl1.SupplyNodeOrNodelistName,
+                                                        ErrorsFound,
+                                                        Node::ConnectionObjectType::ZoneHVACExhaustControl,
+                                                        thisExhCtrl1.Name,
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Sensor,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsParent);
 
     bool NodeNotFound = false;
     ExhaustAirSystemManager::CheckForSupplyNode(*state, ExhCtrlNum, NodeNotFound);
@@ -532,14 +532,14 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
 
     ErrorsFound = false;
     inletNodeNum = Node::GetOnlySingleNode(*state,
-                                                       Zone2InletName,
-                                                       ErrorsFound,
-                                                       Node::ConnectionObjectType::ZoneHVACExhaustControl,
-                                                       thisExhCtrl2.Name,
-                                                       Node::FluidType::Air,
-                                                       Node::ConnectionType::ZoneInlet,
-                                                       Node::CompFluidStream::Primary,
-                                                       Node::ObjectIsParent);
+                                           Zone2InletName,
+                                           ErrorsFound,
+                                           Node::ConnectionObjectType::ZoneHVACExhaustControl,
+                                           thisExhCtrl2.Name,
+                                           Node::FluidType::Air,
+                                           Node::ConnectionType::ZoneInlet,
+                                           Node::CompFluidStream::Primary,
+                                           Node::ObjectIsParent);
 
     ZoneEquipConf2.ZoneName = "ZONE2";
     ZoneEquipConf2.NumInletNodes = 1;
@@ -564,14 +564,14 @@ TEST_F(EnergyPlusFixture, ZoneExhaustCtrl_CheckSupplyNode_Test)
     thisExhCtrl2.SuppNodeNums.dimension(NumParams, 0);
 
     thisExhCtrl2.SuppNodeNums = Node::GetOnlySingleNode(*state,
-                                                                    thisExhCtrl2.SupplyNodeOrNodelistName,
-                                                                    ErrorsFound,
-                                                                    Node::ConnectionObjectType::ZoneHVACExhaustControl,
-                                                                    thisExhCtrl2.Name,
-                                                                    Node::FluidType::Air,
-                                                                    Node::ConnectionType::Sensor,
-                                                                    Node::CompFluidStream::Primary,
-                                                                    Node::ObjectIsParent);
+                                                        thisExhCtrl2.SupplyNodeOrNodelistName,
+                                                        ErrorsFound,
+                                                        Node::ConnectionObjectType::ZoneHVACExhaustControl,
+                                                        thisExhCtrl2.Name,
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Sensor,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsParent);
 
     NodeNotFound = false;
     ExhaustAirSystemManager::CheckForSupplyNode(*state, ExhCtrlNum, NodeNotFound);

@@ -205,9 +205,9 @@ namespace Humidifiers {
         // Uses InputProcessor "Get" routines to obtain data.
 
         // Using/Aliasing
-        using Node::TestCompSet;
         using Curve::GetCurveIndex;
         using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
         using WaterManager::SetupTankDemandComponent;
         using WaterManager::SetupTankSupplyComponent;
 

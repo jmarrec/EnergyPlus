@@ -1103,12 +1103,12 @@ namespace BranchInputManager {
         // Locals
         PressureCurveType pressureCurveType;
         int PressureCurveIndex;
-        bool ErrFound;                               // Flag for error detection
-        int Comp;                                    // Loop Counter
-        bool IsNotOK;                                // Flag to verify name
-        int NumInComps;                              // Number of components actually verified (no SPLITTER or MIXER allowed)
+        bool ErrFound;                       // Flag for error detection
+        int Comp;                            // Loop Counter
+        bool IsNotOK;                        // Flag to verify name
+        int NumInComps;                      // Number of components actually verified (no SPLITTER or MIXER allowed)
         Node::ConnectionType ConnectionType; // Used to pass variable node connection type to GetNodeNums
-        int NumNodes;                                // Number of Nodes from NodeInputManager
+        int NumNodes;                        // Number of Nodes from NodeInputManager
 
         std::string CurrentModuleObject = "Branch";
 
@@ -1240,12 +1240,12 @@ namespace BranchInputManager {
 
             if (!lAlphaBlanks(Loop) && !lAlphaBlanks(Loop + 1) && !lAlphaBlanks(Loop + 2) && !lAlphaBlanks(Loop + 3)) {
                 Node::SetUpCompSets(state,
-                              CurrentModuleObject,
-                              state.dataBranchInputManager->Branch(BCount).Name,
-                              Alphas(Loop),
-                              Alphas(Loop + 1),
-                              Alphas(Loop + 2),
-                              Alphas(Loop + 3)); // no blanks in required field set
+                                    CurrentModuleObject,
+                                    state.dataBranchInputManager->Branch(BCount).Name,
+                                    Alphas(Loop),
+                                    Alphas(Loop + 1),
+                                    Alphas(Loop + 2),
+                                    Alphas(Loop + 3)); // no blanks in required field set
             }
 
             ++Comp;
@@ -2751,8 +2751,7 @@ namespace BranchInputManager {
                         continue;
                     }
                     for (Loop2 = Ptr; Loop2 <= EndPtr; ++Loop2) {
-                        cBranchFluidType =
-                            Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(BranchFluidNodes(Loop2)).fluidType)];
+                        cBranchFluidType = Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(BranchFluidNodes(Loop2)).fluidType)];
                         if (cBranchFluidType.empty()) {
                             cBranchFluidType = "**Unknown**";
                         }

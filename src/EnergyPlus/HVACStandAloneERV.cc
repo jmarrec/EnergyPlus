@@ -604,21 +604,21 @@ void GetStandAloneERV(EnergyPlusData &state)
 
         // Add supply fan to component sets array
         Node::SetUpCompSets(state,
-                                             standAloneERV.UnitType,
-                                             standAloneERV.Name,
-                                             "UNDEFINED",
-                                             standAloneERV.SupplyAirFanName,
-                                             CompSetSupplyFanInlet,
-                                             CompSetSupplyFanOutlet);
+                            standAloneERV.UnitType,
+                            standAloneERV.Name,
+                            "UNDEFINED",
+                            standAloneERV.SupplyAirFanName,
+                            CompSetSupplyFanInlet,
+                            CompSetSupplyFanOutlet);
 
         // Add exhaust fan to component sets array
         Node::SetUpCompSets(state,
-                                             standAloneERV.UnitType,
-                                             standAloneERV.Name,
-                                             "UNDEFINED",
-                                             standAloneERV.ExhaustAirFanName,
-                                             CompSetExhaustFanInlet,
-                                             CompSetExhaustFanOutlet);
+                            standAloneERV.UnitType,
+                            standAloneERV.Name,
+                            "UNDEFINED",
+                            standAloneERV.ExhaustAirFanName,
+                            CompSetExhaustFanInlet,
+                            CompSetExhaustFanOutlet);
 
         // Verify HX name in Stand Alone ERV object matches name of valid HX object
         if (state.dataInputProcessing->inputProcessor->getObjectItemNum(

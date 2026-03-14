@@ -78,18 +78,18 @@ namespace EnergyPlus::Node {
 // nodes in the HVAC loops.
 
 void GetNodeNums(EnergyPlusData &state,
-                 std::string const &Name,                                 // Name for which to obtain information
-                 int &NumNodes,                                           // Number of nodes accompanying this Name
-                 Array1D_int &NodeNumbers,                                // Node Numbers accompanying this Name
-                 bool &ErrorsFound,                                       // True when errors are found...
-                 Node::FluidType nodeFluidType,               // Fluidtype for checking/setting node FluidType
+                 std::string const &Name,                         // Name for which to obtain information
+                 int &NumNodes,                                   // Number of nodes accompanying this Name
+                 Array1D_int &NodeNumbers,                        // Node Numbers accompanying this Name
+                 bool &ErrorsFound,                               // True when errors are found...
+                 Node::FluidType nodeFluidType,                   // Fluidtype for checking/setting node FluidType
                  Node::ConnectionObjectType const NodeObjectType, // Node Object Type (i.e. "Chiller:Electric")
-                 std::string const &NodeObjectName,                       // Node Object Name (i.e. "MyChiller")
+                 std::string const &NodeObjectName,               // Node Object Name (i.e. "MyChiller")
                  Node::ConnectionType const nodeConnectionType,   // Node Connection Type (see DataLoopNode)
-                 CompFluidStream const NodeFluidStream,                   // Which Fluid Stream (1,2,3,...)
-                 bool const ObjectIsParent,                               // True/False
-                 bool const IncrementFluidStream,                         // True/False
-                 std::string_view const InputFieldName                    // Input Field Name
+                 CompFluidStream const NodeFluidStream,           // Which Fluid Stream (1,2,3,...)
+                 bool const ObjectIsParent,                       // True/False
+                 bool const IncrementFluidStream,                 // True/False
+                 std::string_view const InputFieldName            // Input Field Name
 )
 {
 
@@ -115,9 +115,8 @@ void GetNodeNums(EnergyPlusData &state,
         state.dataNodeInputMgr->GetNodeInputFlag = false;
     }
 
-    if (nodeFluidType != Node::FluidType::Air && nodeFluidType != Node::FluidType::Water &&
-        nodeFluidType != Node::FluidType::Electric && nodeFluidType != Node::FluidType::Steam &&
-        nodeFluidType != Node::FluidType::Blank) {
+    if (nodeFluidType != Node::FluidType::Air && nodeFluidType != Node::FluidType::Water && nodeFluidType != Node::FluidType::Electric &&
+        nodeFluidType != Node::FluidType::Steam && nodeFluidType != Node::FluidType::Blank) {
         ShowSevereError(state, EnergyPlus::format("{}{}=\"{}=\", invalid fluid type.", RoutineName, objTypeStr, NodeObjectName));
         ShowContinueError(state, EnergyPlus::format("..Invalid FluidType={}", nodeFluidType));
         ErrorsFound = true;
@@ -130,8 +129,7 @@ void GetNodeNums(EnergyPlusData &state,
             NumNodes = state.dataNodeInputMgr->NodeLists(ThisOne).NumOfNodesInList;
             NodeNumbers({1, NumNodes}) = state.dataNodeInputMgr->NodeLists(ThisOne).NodeNumbers({1, NumNodes});
             for (int Loop = 1; Loop <= NumNodes; ++Loop) {
-                if (nodeFluidType != Node::FluidType::Blank &&
-                    state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType != Node::FluidType::Blank) {
+                if (nodeFluidType != Node::FluidType::Blank && state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType != Node::FluidType::Blank) {
                     if (state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType != nodeFluidType) {
                         ShowSevereError(state, EnergyPlus::format("{}{}=\"{}=\", invalid data.", RoutineName, objTypeStr, NodeObjectName));
                         if (!InputFieldName.empty()) {
@@ -144,8 +142,8 @@ void GetNodeNums(EnergyPlusData &state,
                             state,
                             EnergyPlus::format(
                                 "Existing Fluid type={}, Requested Fluid Type={}",
-                                EnergyPlus::format(
-                                    "{}", Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType)]),
+                                EnergyPlus::format("{}",
+                                                   Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType)]),
                                 EnergyPlus::format("{}", Node::FluidTypeNames[static_cast<int>(nodeFluidType)])));
                         ErrorsFound = true;
                     }
@@ -587,8 +585,8 @@ void GetNodeListsInput(EnergyPlusData &state, bool &ErrorsFound) // Set to true 
                 }
                 continue;
             }
-            state.dataNodeInputMgr->NodeLists(NCount).NodeNumbers(Loop1) = AssignNodeNumber(
-                state, state.dataNodeInputMgr->NodeLists(NCount).NodeNames(Loop1), Node::FluidType::Blank, localErrorsFound);
+            state.dataNodeInputMgr->NodeLists(NCount).NodeNumbers(Loop1) =
+                AssignNodeNumber(state, state.dataNodeInputMgr->NodeLists(NCount).NodeNames(Loop1), Node::FluidType::Blank, localErrorsFound);
             if (Util::SameString(state.dataNodeInputMgr->NodeLists(NCount).NodeNames(Loop1), state.dataNodeInputMgr->NodeLists(NCount).Name)) {
                 ShowSevereError(state, EnergyPlus::format("{}{}=\"{}\", invalid node name in list.", RoutineName, CurrentModuleObject, cAlphas(1)));
                 ShowContinueError(state, EnergyPlus::format("... Node {} Name=\"{}\", duplicates NodeList Name.", Loop1, cAlphas(Loop1 + 1)));
@@ -651,7 +649,7 @@ void GetNodeListsInput(EnergyPlusData &state, bool &ErrorsFound) // Set to true 
 }
 
 int AssignNodeNumber(EnergyPlusData &state,
-                     std::string const &Name,                         // Name for assignment
+                     std::string const &Name,             // Name for assignment
                      Node::FluidType const nodeFluidType, // must be valid
                      bool &ErrorsFound)
 {
@@ -672,9 +670,8 @@ int AssignNodeNumber(EnergyPlusData &state,
     // Return value
     int AssignNodeNumber;
 
-    if (nodeFluidType != Node::FluidType::Air && nodeFluidType != Node::FluidType::Water &&
-        nodeFluidType != Node::FluidType::Electric && nodeFluidType != Node::FluidType::Steam &&
-        nodeFluidType != Node::FluidType::Blank) {
+    if (nodeFluidType != Node::FluidType::Air && nodeFluidType != Node::FluidType::Water && nodeFluidType != Node::FluidType::Electric &&
+        nodeFluidType != Node::FluidType::Steam && nodeFluidType != Node::FluidType::Blank) {
         ShowSevereError(state, EnergyPlus::format("AssignNodeNumber: Invalid FluidType={}", nodeFluidType));
         ErrorsFound = true;
         ShowFatalError(state, "AssignNodeNumber: Preceding issue causes termination.");
@@ -692,12 +689,12 @@ int AssignNodeNumber(EnergyPlusData &state,
                     ShowSevereError(
                         state,
                         EnergyPlus::format("Existing Fluid type for node, incorrect for request. Node={}", state.dataLoopNodes->NodeID(NumNode)));
-                    ShowContinueError(state,
-                                      EnergyPlus::format(
-                                          "Existing Fluid type={}, Requested Fluid Type={}",
-                                          EnergyPlus::format(
-                                              "{}", Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NumNode).fluidType)]),
-                                          EnergyPlus::format("{}", Node::FluidTypeNames[static_cast<int>(nodeFluidType)])));
+                    ShowContinueError(
+                        state,
+                        EnergyPlus::format(
+                            "Existing Fluid type={}, Requested Fluid Type={}",
+                            EnergyPlus::format("{}", Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NumNode).fluidType)]),
+                            EnergyPlus::format("{}", Node::FluidTypeNames[static_cast<int>(nodeFluidType)])));
                     ErrorsFound = true;
                 }
             }
@@ -744,12 +741,12 @@ int GetOnlySingleNode(EnergyPlusData &state,
                       std::string const &NodeName,
                       bool &errFlag,
                       ConnectionObjectType const NodeObjectType, // Node Object Type (i.e. "Chiller:Electric")
-                      std::string const &NodeObjectName,                       // Node Object Name (i.e. "MyChiller")
-                      FluidType const nodeFluidType,         // Fluidtype for checking/setting node FluidType
+                      std::string const &NodeObjectName,         // Node Object Name (i.e. "MyChiller")
+                      FluidType const nodeFluidType,             // Fluidtype for checking/setting node FluidType
                       ConnectionType const nodeConnectionType,   // Node Connection Type (see DataLoopNode)
-                      CompFluidStream const NodeFluidStream,                   // Which Fluid Stream
-                      bool const ObjectIsParent,                               // True/False
-                      std::string_view const InputFieldName                    // Input Field Name
+                      CompFluidStream const NodeFluidStream,     // Which Fluid Stream
+                      bool const ObjectIsParent,                 // True/False
+                      std::string_view const InputFieldName      // Input Field Name
 )
 {
 
@@ -1245,8 +1242,7 @@ void CheckMarkedNodes(EnergyPlusData &state, bool &ErrorsFound)
     for (int NodeNum = 1; NodeNum <= state.dataLoopNodes->NumOfNodes; ++NodeNum) {
         if (state.dataLoopNodes->MarkedNode(NodeNum).IsMarked) {
             if (state.dataNodeInputMgr->NodeRef(NodeNum) == 0) {
-                std::string_view objType =
-                    Node::ConnectionObjectTypeNames[static_cast<int>(state.dataLoopNodes->MarkedNode(NodeNum).ObjectType)];
+                std::string_view objType = Node::ConnectionObjectTypeNames[static_cast<int>(state.dataLoopNodes->MarkedNode(NodeNum).ObjectType)];
                 ShowSevereError(state,
                                 EnergyPlus::format("Node=\"{}\" did not find reference by another object.", state.dataLoopNodes->NodeID(NodeNum)));
                 ShowContinueError(state,

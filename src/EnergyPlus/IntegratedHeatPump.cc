@@ -399,11 +399,11 @@ void GetIHPInput(EnergyPlusData &state)
     // Uses "Get" routines to read in data.
 
     // Using/Aliasing
+    using GlobalNames::VerifyUniqueCoilName;
     using Node::OverrideNodeConnectionType;
     using Node::RegisterNodeConnection;
     using Node::SetUpCompSets;
     using Node::TestCompSet;
-    using GlobalNames::VerifyUniqueCoilName;
     using VariableSpeedCoils::GetCoilIndexVariableSpeed;
 
     // SUBROUTINE PARAMETER DEFINITIONS:

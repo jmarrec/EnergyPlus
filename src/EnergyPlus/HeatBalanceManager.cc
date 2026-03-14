@@ -2186,8 +2186,8 @@ namespace HeatBalanceManager {
         // load input data for Outdoor Air Node for zones
 
         // Using/Aliasing
-        using Node::ObjectIsParent;
         using Node::GetOnlySingleNode;
+        using Node::ObjectIsParent;
         using OutAirNodeManager::CheckOutAirNodeNumber;
 
         //-----------------------------------------------------------------------

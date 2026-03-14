@@ -79,27 +79,27 @@ GLHEVert::GLHEVert(EnergyPlusData &state, std::string const &objName, nlohmann::
     std::string const inletNodeName = Util::makeUPPER(j["inlet_node_name"].get<std::string>());
 
     this->inletNodeNum = Node::GetOnlySingleNode(state,
-                                                             inletNodeName,
-                                                             errorsFound,
-                                                             Node::ConnectionObjectType::GroundHeatExchangerSystem,
-                                                             objName,
-                                                             Node::FluidType::Water,
-                                                             Node::ConnectionType::Inlet,
-                                                             Node::CompFluidStream::Primary,
-                                                             Node::ObjectIsNotParent);
+                                                 inletNodeName,
+                                                 errorsFound,
+                                                 Node::ConnectionObjectType::GroundHeatExchangerSystem,
+                                                 objName,
+                                                 Node::FluidType::Water,
+                                                 Node::ConnectionType::Inlet,
+                                                 Node::CompFluidStream::Primary,
+                                                 Node::ObjectIsNotParent);
 
     // get outlet node num
     std::string const outletNodeName = Util::makeUPPER(j["outlet_node_name"].get<std::string>());
 
     this->outletNodeNum = Node::GetOnlySingleNode(state,
-                                                              outletNodeName,
-                                                              errorsFound,
-                                                              Node::ConnectionObjectType::GroundHeatExchangerSystem,
-                                                              objName,
-                                                              Node::FluidType::Water,
-                                                              Node::ConnectionType::Outlet,
-                                                              Node::CompFluidStream::Primary,
-                                                              Node::ObjectIsNotParent);
+                                                  outletNodeName,
+                                                  errorsFound,
+                                                  Node::ConnectionObjectType::GroundHeatExchangerSystem,
+                                                  objName,
+                                                  Node::FluidType::Water,
+                                                  Node::ConnectionType::Outlet,
+                                                  Node::CompFluidStream::Primary,
+                                                  Node::ObjectIsNotParent);
     this->available = true;
     this->on = true;
 

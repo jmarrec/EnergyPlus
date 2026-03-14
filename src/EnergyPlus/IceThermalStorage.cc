@@ -809,34 +809,34 @@ namespace IceThermalStorage {
             // Get Plant Inlet Node Num
             state.dataIceThermalStorage->SimpleIceStorage(iceNum).PltInletNodeNum =
                 Node::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(3),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::ThermalStorageIceSimple,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    Node::FluidType::Water,
-                                                    Node::ConnectionType::Inlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsNotParent);
+                                        state.dataIPShortCut->cAlphaArgs(3),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::ThermalStorageIceSimple,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Inlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             // Get Plant Outlet Node Num
             state.dataIceThermalStorage->SimpleIceStorage(iceNum).PltOutletNodeNum =
                 Node::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(4),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::ThermalStorageIceSimple,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    Node::FluidType::Water,
-                                                    Node::ConnectionType::Outlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsNotParent);
+                                        state.dataIPShortCut->cAlphaArgs(4),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::ThermalStorageIceSimple,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Outlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             // Test InletNode and OutletNode
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Chilled Water Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Chilled Water Nodes");
 
             state.dataIceThermalStorage->SimpleIceStorage(iceNum).TESSizingIndex = Util::FindItemInList(
                 state.dataIPShortCut->cAlphaArgs(5), state.dataIceThermalStorage->ThermalStorageSizing, &ThermalStorageSizingData::name);
@@ -932,34 +932,34 @@ namespace IceThermalStorage {
             // Get Plant Inlet Node Num
             state.dataIceThermalStorage->DetailedIceStorage(iceNum).PlantInNodeNum =
                 Node::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(3),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::ThermalStorageIceDetailed,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    Node::FluidType::Water,
-                                                    Node::ConnectionType::Inlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsNotParent);
+                                        state.dataIPShortCut->cAlphaArgs(3),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::ThermalStorageIceDetailed,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Inlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             // Get Plant Outlet Node Num
             state.dataIceThermalStorage->DetailedIceStorage(iceNum).PlantOutNodeNum =
                 Node::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(4),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::ThermalStorageIceDetailed,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    Node::FluidType::Water,
-                                                    Node::ConnectionType::Outlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsNotParent);
+                                        state.dataIPShortCut->cAlphaArgs(4),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::ThermalStorageIceDetailed,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Outlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             // Test InletNode and OutletNode
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Chilled Water Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Chilled Water Nodes");
 
             // Obtain the Charging and Discharging Curve types and names
             state.dataIceThermalStorage->DetailedIceStorage(iceNum).DischargeCurveName = state.dataIPShortCut->cAlphaArgs(6);

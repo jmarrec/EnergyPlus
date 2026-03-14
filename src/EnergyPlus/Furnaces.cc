@@ -906,23 +906,23 @@ namespace Furnaces {
             }
 
             thisFurnace.FurnaceInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                  Alphas(3),
-                                                                                  ErrorsFound,
-                                                                                  currentModuleObjectType,
-                                                                                  Alphas(1),
-                                                                                  Node::FluidType::Air,
-                                                                                  Node::ConnectionType::Inlet,
-                                                                                  Node::CompFluidStream::Primary,
-                                                                                  Node::ObjectIsParent);
+                                                                      Alphas(3),
+                                                                      ErrorsFound,
+                                                                      currentModuleObjectType,
+                                                                      Alphas(1),
+                                                                      Node::FluidType::Air,
+                                                                      Node::ConnectionType::Inlet,
+                                                                      Node::CompFluidStream::Primary,
+                                                                      Node::ObjectIsParent);
             thisFurnace.FurnaceOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   Alphas(4),
-                                                                                   ErrorsFound,
-                                                                                   currentModuleObjectType,
-                                                                                   Alphas(1),
-                                                                                   Node::FluidType::Air,
-                                                                                   Node::ConnectionType::Outlet,
-                                                                                   Node::CompFluidStream::Primary,
-                                                                                   Node::ObjectIsParent);
+                                                                       Alphas(4),
+                                                                       ErrorsFound,
+                                                                       currentModuleObjectType,
+                                                                       Alphas(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::Outlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsParent);
 
             Node::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(3), Alphas(4), "Air Nodes");
 
@@ -1350,11 +1350,9 @@ namespace Furnaces {
             }
 
             // Add fan to component sets array
-            Node::SetUpCompSets(
-                state, CurrentModuleObject, thisFurnace.Name, Alphas(7), Alphas(8), CompSetFanInlet, CompSetFanOutlet);
+            Node::SetUpCompSets(state, CurrentModuleObject, thisFurnace.Name, Alphas(7), Alphas(8), CompSetFanInlet, CompSetFanOutlet);
             // Add heating coil to component sets array
-            Node::SetUpCompSets(
-                state, CurrentModuleObject, thisFurnace.Name, Alphas(10), Alphas(11), CompSetHeatInlet, CompSetHeatOutlet);
+            Node::SetUpCompSets(state, CurrentModuleObject, thisFurnace.Name, Alphas(10), Alphas(11), CompSetHeatInlet, CompSetHeatOutlet);
 
             // Set the furnace max outlet temperature
             thisFurnace.DesignMaxOutletTemp = Numbers(1);
@@ -1465,23 +1463,23 @@ namespace Furnaces {
             }
 
             thisFurnace.FurnaceInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                  Alphas(3),
-                                                                                  ErrorsFound,
-                                                                                  currentModuleObjectType,
-                                                                                  Alphas(1),
-                                                                                  Node::FluidType::Air,
-                                                                                  Node::ConnectionType::Inlet,
-                                                                                  Node::CompFluidStream::Primary,
-                                                                                  Node::ObjectIsParent);
+                                                                      Alphas(3),
+                                                                      ErrorsFound,
+                                                                      currentModuleObjectType,
+                                                                      Alphas(1),
+                                                                      Node::FluidType::Air,
+                                                                      Node::ConnectionType::Inlet,
+                                                                      Node::CompFluidStream::Primary,
+                                                                      Node::ObjectIsParent);
             thisFurnace.FurnaceOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   Alphas(4),
-                                                                                   ErrorsFound,
-                                                                                   currentModuleObjectType,
-                                                                                   Alphas(1),
-                                                                                   Node::FluidType::Air,
-                                                                                   Node::ConnectionType::Outlet,
-                                                                                   Node::CompFluidStream::Primary,
-                                                                                   Node::ObjectIsParent);
+                                                                       Alphas(4),
+                                                                       ErrorsFound,
+                                                                       currentModuleObjectType,
+                                                                       Alphas(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::Outlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsParent);
 
             Node::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(3), Alphas(4), "Air Nodes");
 
@@ -2578,61 +2576,61 @@ namespace Furnaces {
 
             // Add fan to component sets array
             Node::SetUpCompSets(state,
-                                                 CurrentModuleObject,
-                                                 Alphas(1),
-                                                 Alphas(7),
-                                                 Alphas(8),
-                                                 state.dataLoopNodes->NodeID(FanInletNode),
-                                                 state.dataLoopNodes->NodeID(FanOutletNode));
+                                CurrentModuleObject,
+                                Alphas(1),
+                                Alphas(7),
+                                Alphas(8),
+                                state.dataLoopNodes->NodeID(FanInletNode),
+                                state.dataLoopNodes->NodeID(FanOutletNode));
 
             // Add DX cooling coil to component sets array
             if (thisFurnace.bIsIHP) {
                 Node::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     Alphas(1),
-                                                     Alphas(12),
-                                                     Alphas(13) + " Cooling Coil",
-                                                     state.dataLoopNodes->NodeID(CoolingCoilInletNode),
-                                                     state.dataLoopNodes->NodeID(CoolingCoilOutletNode));
+                                    CurrentModuleObject,
+                                    Alphas(1),
+                                    Alphas(12),
+                                    Alphas(13) + " Cooling Coil",
+                                    state.dataLoopNodes->NodeID(CoolingCoilInletNode),
+                                    state.dataLoopNodes->NodeID(CoolingCoilOutletNode));
             } else {
                 Node::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     Alphas(1),
-                                                     Alphas(12),
-                                                     Alphas(13),
-                                                     state.dataLoopNodes->NodeID(CoolingCoilInletNode),
-                                                     state.dataLoopNodes->NodeID(CoolingCoilOutletNode));
+                                    CurrentModuleObject,
+                                    Alphas(1),
+                                    Alphas(12),
+                                    Alphas(13),
+                                    state.dataLoopNodes->NodeID(CoolingCoilInletNode),
+                                    state.dataLoopNodes->NodeID(CoolingCoilOutletNode));
             }
 
             // Add heating coil to component sets array
             if (thisFurnace.bIsIHP) {
                 Node::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     Alphas(1),
-                                                     Alphas(10),
-                                                     Alphas(11) + " Heating Coil",
-                                                     state.dataLoopNodes->NodeID(HeatingCoilInletNode),
-                                                     state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
+                                    CurrentModuleObject,
+                                    Alphas(1),
+                                    Alphas(10),
+                                    Alphas(11) + " Heating Coil",
+                                    state.dataLoopNodes->NodeID(HeatingCoilInletNode),
+                                    state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
             } else {
                 Node::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     Alphas(1),
-                                                     Alphas(10),
-                                                     Alphas(11),
-                                                     state.dataLoopNodes->NodeID(HeatingCoilInletNode),
-                                                     state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
+                                    CurrentModuleObject,
+                                    Alphas(1),
+                                    Alphas(10),
+                                    Alphas(11),
+                                    state.dataLoopNodes->NodeID(HeatingCoilInletNode),
+                                    state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
             }
 
             if (ReheatCoilInletNode > 0) {
 
                 // Add reheating coil to component sets array
                 Node::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     Alphas(1),
-                                                     Alphas(15),
-                                                     Alphas(16),
-                                                     state.dataLoopNodes->NodeID(ReheatCoilInletNode),
-                                                     state.dataLoopNodes->NodeID(ReheatCoilOutletNode));
+                                    CurrentModuleObject,
+                                    Alphas(1),
+                                    Alphas(15),
+                                    Alphas(16),
+                                    state.dataLoopNodes->NodeID(ReheatCoilInletNode),
+                                    state.dataLoopNodes->NodeID(ReheatCoilOutletNode));
             }
 
             // Set the furnace max outlet temperature
@@ -2812,27 +2810,25 @@ namespace Furnaces {
                 ErrorsFound = true;
             }
 
-            thisFurnace.FurnaceInletNodeNum =
-                Node::GetOnlySingleNode(state,
-                                                    Alphas(3),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir,
-                                                    Alphas(1),
-                                                    Node::FluidType::Air,
-                                                    Node::ConnectionType::Inlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsParent);
+            thisFurnace.FurnaceInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                      Alphas(3),
+                                                                      ErrorsFound,
+                                                                      Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir,
+                                                                      Alphas(1),
+                                                                      Node::FluidType::Air,
+                                                                      Node::ConnectionType::Inlet,
+                                                                      Node::CompFluidStream::Primary,
+                                                                      Node::ObjectIsParent);
 
-            thisFurnace.FurnaceOutletNodeNum =
-                Node::GetOnlySingleNode(state,
-                                                    Alphas(4),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir,
-                                                    Alphas(1),
-                                                    Node::FluidType::Air,
-                                                    Node::ConnectionType::Outlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsParent);
+            thisFurnace.FurnaceOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                       Alphas(4),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpAirToAir,
+                                                                       Alphas(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::Outlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsParent);
 
             Node::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(3), Alphas(4), "Air Nodes");
 
@@ -3519,15 +3515,13 @@ namespace Furnaces {
 
             // Add DX cooling coil to component sets array
             if (thisFurnace.bIsIHP) {
-                Node::SetUpCompSets(
-                    state, CurrentModuleObject, Alphas(1), Alphas(10), Alphas(11) + " Cooling Coil", CompSetCoolInlet, "UNDEFINED");
+                Node::SetUpCompSets(state, CurrentModuleObject, Alphas(1), Alphas(10), Alphas(11) + " Cooling Coil", CompSetCoolInlet, "UNDEFINED");
             } else {
                 Node::SetUpCompSets(state, CurrentModuleObject, Alphas(1), Alphas(10), Alphas(11), CompSetCoolInlet, "UNDEFINED");
             }
             // Add DX heating coil to component sets array
             if (thisFurnace.bIsIHP) {
-                Node::SetUpCompSets(
-                    state, CurrentModuleObject, Alphas(1), Alphas(8), Alphas(9) + " Heating Coil", "UNDEFINED", "UNDEFINED");
+                Node::SetUpCompSets(state, CurrentModuleObject, Alphas(1), Alphas(8), Alphas(9) + " Heating Coil", "UNDEFINED", "UNDEFINED");
             } else {
                 Node::SetUpCompSets(state, CurrentModuleObject, Alphas(1), Alphas(8), Alphas(9), "UNDEFINED", "UNDEFINED");
             }
@@ -3763,27 +3757,25 @@ namespace Furnaces {
                 ErrorsFound = true;
             }
 
-            thisFurnace.FurnaceInletNodeNum =
-                Node::GetOnlySingleNode(state,
-                                                    Alphas(3),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
-                                                    Alphas(1),
-                                                    Node::FluidType::Air,
-                                                    Node::ConnectionType::Inlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsParent);
+            thisFurnace.FurnaceInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                      Alphas(3),
+                                                                      ErrorsFound,
+                                                                      Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
+                                                                      Alphas(1),
+                                                                      Node::FluidType::Air,
+                                                                      Node::ConnectionType::Inlet,
+                                                                      Node::CompFluidStream::Primary,
+                                                                      Node::ObjectIsParent);
 
-            thisFurnace.FurnaceOutletNodeNum =
-                Node::GetOnlySingleNode(state,
-                                                    Alphas(4),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
-                                                    Alphas(1),
-                                                    Node::FluidType::Air,
-                                                    Node::ConnectionType::Outlet,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsParent);
+            thisFurnace.FurnaceOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                       Alphas(4),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
+                                                                       Alphas(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::Outlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsParent);
 
             Node::TestCompSet(state, CurrentModuleObject, Alphas(1), Alphas(3), Alphas(4), "Air Nodes");
 
@@ -4163,16 +4155,15 @@ namespace Furnaces {
             if (lAlphaBlanks(14)) {
                 thisFurnace.CondenserNodeNum = 0;
             } else {
-                thisFurnace.CondenserNodeNum =
-                    Node::GetOnlySingleNode(state,
-                                                        Alphas(14),
-                                                        ErrorsFound,
-                                                        Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
-                                                        Alphas(1),
-                                                        Node::FluidType::Air,
-                                                        Node::ConnectionType::OutsideAirReference,
-                                                        Node::CompFluidStream::Primary,
-                                                        Node::ObjectIsNotParent);
+                thisFurnace.CondenserNodeNum = Node::GetOnlySingleNode(state,
+                                                                       Alphas(14),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::AirLoopHVACUnitaryHeatPumpWaterToAir,
+                                                                       Alphas(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::OutsideAirReference,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsNotParent);
                 // need better verification.
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, thisFurnace.CondenserNodeNum)) {
                     ShowSevereError(state, EnergyPlus::format("For {} = {}", CurrentModuleObject, Alphas(1)));

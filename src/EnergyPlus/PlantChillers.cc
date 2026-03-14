@@ -259,29 +259,29 @@ namespace PlantChillers {
                 ErrorsFound = true;
             }
             thisChiller.EvapInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                               state.dataIPShortCut->cAlphaArgs(3),
-                                                                               ErrorsFound,
-                                                                               Node::ConnectionObjectType::ChillerElectric,
-                                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                                               Node::FluidType::Water,
-                                                                               Node::ConnectionType::Inlet,
-                                                                               Node::CompFluidStream::Primary,
-                                                                               Node::ObjectIsNotParent);
+                                                                   state.dataIPShortCut->cAlphaArgs(3),
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::ChillerElectric,
+                                                                   state.dataIPShortCut->cAlphaArgs(1),
+                                                                   Node::FluidType::Water,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
             thisChiller.EvapOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                state.dataIPShortCut->cAlphaArgs(4),
-                                                                                ErrorsFound,
-                                                                                Node::ConnectionObjectType::ChillerElectric,
-                                                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                                                Node::FluidType::Water,
-                                                                                Node::ConnectionType::Outlet,
-                                                                                Node::CompFluidStream::Primary,
-                                                                                Node::ObjectIsNotParent);
+                                                                    state.dataIPShortCut->cAlphaArgs(4),
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::ChillerElectric,
+                                                                    state.dataIPShortCut->cAlphaArgs(1),
+                                                                    Node::FluidType::Water,
+                                                                    Node::ConnectionType::Outlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Chilled Water Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Chilled Water Nodes");
 
             if (thisChiller.CondenserType == DataPlant::CondenserType::AirCooled ||
                 thisChiller.CondenserType == DataPlant::CondenserType::EvapCooled) {
@@ -305,14 +305,14 @@ namespace PlantChillers {
                 }
 
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerElectric,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Air,
-                                                                                   Node::ConnectionType::OutsideAirReference,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerElectric,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::OutsideAirReference,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 bool Okay;
                 OutAirNodeManager::CheckAndAddAirNodeNumber(state, thisChiller.CondInletNodeNum, Okay);
                 if (!Okay) {
@@ -323,39 +323,39 @@ namespace PlantChillers {
                 }
 
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerElectric,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Air,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerElectric,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Air,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
             } else if (thisChiller.CondenserType == DataPlant::CondenserType::WaterCooled) {
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerElectric,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Water,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerElectric,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Water,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerElectric,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Water,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerElectric,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                   state.dataIPShortCut->cAlphaArgs(6),
-                                                   "Condenser Water Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(5),
+                                  state.dataIPShortCut->cAlphaArgs(6),
+                                  "Condenser Water Nodes");
                 // Condenser Inlet node name is necessary for Water Cooled
                 if (state.dataIPShortCut->lAlphaFieldBlanks(5)) {
                     ShowSevereError(state, EnergyPlus::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
@@ -372,29 +372,29 @@ namespace PlantChillers {
                 }
             } else {
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerElectric,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Blank,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerElectric,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Blank,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerElectric,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Blank,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerElectric,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Blank,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                   state.dataIPShortCut->cAlphaArgs(6),
-                                                   "Condenser (unknown?) Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(5),
+                                  state.dataIPShortCut->cAlphaArgs(6),
+                                  "Condenser (unknown?) Nodes");
                 // Condenser Inlet node name is necessary
                 if (state.dataIPShortCut->lAlphaFieldBlanks(5)) {
                     ShowSevereError(state, EnergyPlus::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
@@ -470,14 +470,14 @@ namespace PlantChillers {
             if ((thisChiller.DesignHeatRecVolFlowRate > 0.0) || (thisChiller.DesignHeatRecVolFlowRate == DataSizing::AutoSize)) {
                 thisChiller.HeatRecActive = true;
                 thisChiller.HeatRecInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                      state.dataIPShortCut->cAlphaArgs(8),
-                                                                                      ErrorsFound,
-                                                                                      Node::ConnectionObjectType::ChillerElectric,
-                                                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                                                      Node::FluidType::Water,
-                                                                                      Node::ConnectionType::Inlet,
-                                                                                      Node::CompFluidStream::Tertiary,
-                                                                                      Node::ObjectIsNotParent);
+                                                                          state.dataIPShortCut->cAlphaArgs(8),
+                                                                          ErrorsFound,
+                                                                          Node::ConnectionObjectType::ChillerElectric,
+                                                                          state.dataIPShortCut->cAlphaArgs(1),
+                                                                          Node::FluidType::Water,
+                                                                          Node::ConnectionType::Inlet,
+                                                                          Node::CompFluidStream::Tertiary,
+                                                                          Node::ObjectIsNotParent);
                 if (thisChiller.HeatRecInletNodeNum == 0) {
                     ShowSevereError(
                         state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(8), state.dataIPShortCut->cAlphaArgs(8)));
@@ -487,14 +487,14 @@ namespace PlantChillers {
                     ErrorsFound = true;
                 }
                 thisChiller.HeatRecOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                       state.dataIPShortCut->cAlphaArgs(9),
-                                                                                       ErrorsFound,
-                                                                                       Node::ConnectionObjectType::ChillerElectric,
-                                                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                                                       Node::FluidType::Water,
-                                                                                       Node::ConnectionType::Outlet,
-                                                                                       Node::CompFluidStream::Tertiary,
-                                                                                       Node::ObjectIsNotParent);
+                                                                           state.dataIPShortCut->cAlphaArgs(9),
+                                                                           ErrorsFound,
+                                                                           Node::ConnectionObjectType::ChillerElectric,
+                                                                           state.dataIPShortCut->cAlphaArgs(1),
+                                                                           Node::FluidType::Water,
+                                                                           Node::ConnectionType::Outlet,
+                                                                           Node::CompFluidStream::Tertiary,
+                                                                           Node::ObjectIsNotParent);
                 if (thisChiller.HeatRecOutletNodeNum == 0) {
                     ShowSevereError(
                         state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(9), state.dataIPShortCut->cAlphaArgs(9)));
@@ -505,11 +505,11 @@ namespace PlantChillers {
                 }
 
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(8),
-                                                   state.dataIPShortCut->cAlphaArgs(9),
-                                                   "Heat Recovery Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(8),
+                                  state.dataIPShortCut->cAlphaArgs(9),
+                                  "Heat Recovery Nodes");
                 if (thisChiller.DesignHeatRecVolFlowRate > 0.0) {
                     PlantUtilities::RegisterPlantCompDesignFlow(state, thisChiller.HeatRecInletNodeNum, thisChiller.DesignHeatRecVolFlowRate);
                 }
@@ -548,14 +548,14 @@ namespace PlantChillers {
                 if (NumAlphas > 11) {
                     if (!state.dataIPShortCut->lAlphaFieldBlanks(12)) {
                         thisChiller.HeatRecSetPointNodeNum = Node::GetOnlySingleNode(state,
-                                                                                                 state.dataIPShortCut->cAlphaArgs(12),
-                                                                                                 ErrorsFound,
-                                                                                                 Node::ConnectionObjectType::ChillerElectric,
-                                                                                                 state.dataIPShortCut->cAlphaArgs(1),
-                                                                                                 Node::FluidType::Water,
-                                                                                                 Node::ConnectionType::Sensor,
-                                                                                                 Node::CompFluidStream::Primary,
-                                                                                                 Node::ObjectIsNotParent);
+                                                                                     state.dataIPShortCut->cAlphaArgs(12),
+                                                                                     ErrorsFound,
+                                                                                     Node::ConnectionObjectType::ChillerElectric,
+                                                                                     state.dataIPShortCut->cAlphaArgs(1),
+                                                                                     Node::FluidType::Water,
+                                                                                     Node::ConnectionType::Sensor,
+                                                                                     Node::CompFluidStream::Primary,
+                                                                                     Node::ObjectIsNotParent);
                     } else {
                         thisChiller.HeatRecSetPointNodeNum = 0;
                     }
@@ -2302,29 +2302,29 @@ namespace PlantChillers {
             }
 
             thisChiller.EvapInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                               state.dataIPShortCut->cAlphaArgs(3),
-                                                                               ErrorsFound,
-                                                                               Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                                               Node::FluidType::Water,
-                                                                               Node::ConnectionType::Inlet,
-                                                                               Node::CompFluidStream::Primary,
-                                                                               Node::ObjectIsNotParent);
+                                                                   state.dataIPShortCut->cAlphaArgs(3),
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                   state.dataIPShortCut->cAlphaArgs(1),
+                                                                   Node::FluidType::Water,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
             thisChiller.EvapOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                state.dataIPShortCut->cAlphaArgs(4),
-                                                                                ErrorsFound,
-                                                                                Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                                                Node::FluidType::Water,
-                                                                                Node::ConnectionType::Outlet,
-                                                                                Node::CompFluidStream::Primary,
-                                                                                Node::ObjectIsNotParent);
+                                                                    state.dataIPShortCut->cAlphaArgs(4),
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                    state.dataIPShortCut->cAlphaArgs(1),
+                                                                    Node::FluidType::Water,
+                                                                    Node::ConnectionType::Outlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Chilled Water Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Chilled Water Nodes");
 
             if (thisChiller.CondenserType == DataPlant::CondenserType::AirCooled ||
                 thisChiller.CondenserType == DataPlant::CondenserType::EvapCooled) {
@@ -2347,14 +2347,14 @@ namespace PlantChillers {
                 }
 
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Air,
-                                                                                   Node::ConnectionType::OutsideAirReference,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::OutsideAirReference,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 bool Okay;
                 OutAirNodeManager::CheckAndAddAirNodeNumber(state, thisChiller.CondInletNodeNum, Okay);
                 if (!Okay) {
@@ -2365,39 +2365,39 @@ namespace PlantChillers {
                 }
 
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Air,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Air,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
             } else if (thisChiller.CondenserType == DataPlant::CondenserType::WaterCooled) {
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Water,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Water,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Water,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                   state.dataIPShortCut->cAlphaArgs(6),
-                                                   "Condenser Water Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(5),
+                                  state.dataIPShortCut->cAlphaArgs(6),
+                                  "Condenser Water Nodes");
                 // Condenser Inlet node name is necessary for Water Cooled
                 if (state.dataIPShortCut->lAlphaFieldBlanks(5)) {
                     ShowSevereError(state, EnergyPlus::format("Invalid, {} is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
@@ -2414,29 +2414,29 @@ namespace PlantChillers {
                 }
             } else {
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Blank,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Blank,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Blank,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Blank,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                   state.dataIPShortCut->cAlphaArgs(6),
-                                                   "Condenser (unknown?) Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(5),
+                                  state.dataIPShortCut->cAlphaArgs(6),
+                                  "Condenser (unknown?) Nodes");
                 // Condenser Inlet node name is necessary for Water Cooled
                 if (state.dataIPShortCut->lAlphaFieldBlanks(5)) {
                     ShowSevereError(state, EnergyPlus::format("Invalid, {} is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
@@ -2550,14 +2550,14 @@ namespace PlantChillers {
             if (thisChiller.DesignHeatRecVolFlowRate > 0.0 || thisChiller.DesignHeatRecVolFlowRate == DataSizing::AutoSize) {
                 thisChiller.HeatRecActive = true;
                 thisChiller.HeatRecInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                      state.dataIPShortCut->cAlphaArgs(13),
-                                                                                      ErrorsFound,
-                                                                                      Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                                                      Node::FluidType::Water,
-                                                                                      Node::ConnectionType::Inlet,
-                                                                                      Node::CompFluidStream::Tertiary,
-                                                                                      Node::ObjectIsNotParent);
+                                                                          state.dataIPShortCut->cAlphaArgs(13),
+                                                                          ErrorsFound,
+                                                                          Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                          state.dataIPShortCut->cAlphaArgs(1),
+                                                                          Node::FluidType::Water,
+                                                                          Node::ConnectionType::Inlet,
+                                                                          Node::CompFluidStream::Tertiary,
+                                                                          Node::ObjectIsNotParent);
                 if (thisChiller.HeatRecInletNodeNum == 0) {
                     ShowSevereError(
                         state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(13), state.dataIPShortCut->cAlphaArgs(13)));
@@ -2567,14 +2567,14 @@ namespace PlantChillers {
                     ErrorsFound = true;
                 }
                 thisChiller.HeatRecOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                       state.dataIPShortCut->cAlphaArgs(14),
-                                                                                       ErrorsFound,
-                                                                                       Node::ConnectionObjectType::ChillerEngineDriven,
-                                                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                                                       Node::FluidType::Water,
-                                                                                       Node::ConnectionType::Outlet,
-                                                                                       Node::CompFluidStream::Tertiary,
-                                                                                       Node::ObjectIsNotParent);
+                                                                           state.dataIPShortCut->cAlphaArgs(14),
+                                                                           ErrorsFound,
+                                                                           Node::ConnectionObjectType::ChillerEngineDriven,
+                                                                           state.dataIPShortCut->cAlphaArgs(1),
+                                                                           Node::FluidType::Water,
+                                                                           Node::ConnectionType::Outlet,
+                                                                           Node::CompFluidStream::Tertiary,
+                                                                           Node::ObjectIsNotParent);
                 if (thisChiller.HeatRecOutletNodeNum == 0) {
                     ShowSevereError(
                         state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(14), state.dataIPShortCut->cAlphaArgs(14)));
@@ -2584,11 +2584,11 @@ namespace PlantChillers {
                     ErrorsFound = true;
                 }
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(13),
-                                                   state.dataIPShortCut->cAlphaArgs(14),
-                                                   "Heat Recovery Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(13),
+                                  state.dataIPShortCut->cAlphaArgs(14),
+                                  "Heat Recovery Nodes");
                 if (thisChiller.DesignHeatRecVolFlowRate == DataSizing::AutoSize) {
                     thisChiller.DesignHeatRecVolFlowRateWasAutoSized = true;
                 } else {
@@ -4370,29 +4370,29 @@ namespace PlantChillers {
             }
 
             thisChiller.EvapInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                               state.dataIPShortCut->cAlphaArgs(3),
-                                                                               ErrorsFound,
-                                                                               Node::ConnectionObjectType::ChillerCombustionTurbine,
-                                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                                               Node::FluidType::Water,
-                                                                               Node::ConnectionType::Inlet,
-                                                                               Node::CompFluidStream::Primary,
-                                                                               Node::ObjectIsNotParent);
+                                                                   state.dataIPShortCut->cAlphaArgs(3),
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::ChillerCombustionTurbine,
+                                                                   state.dataIPShortCut->cAlphaArgs(1),
+                                                                   Node::FluidType::Water,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
             thisChiller.EvapOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                state.dataIPShortCut->cAlphaArgs(4),
-                                                                                ErrorsFound,
-                                                                                Node::ConnectionObjectType::ChillerCombustionTurbine,
-                                                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                                                Node::FluidType::Water,
-                                                                                Node::ConnectionType::Outlet,
-                                                                                Node::CompFluidStream::Primary,
-                                                                                Node::ObjectIsNotParent);
+                                                                    state.dataIPShortCut->cAlphaArgs(4),
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::ChillerCombustionTurbine,
+                                                                    state.dataIPShortCut->cAlphaArgs(1),
+                                                                    Node::FluidType::Water,
+                                                                    Node::ConnectionType::Outlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Chilled Water Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Chilled Water Nodes");
 
             if (thisChiller.CondenserType == DataPlant::CondenserType::AirCooled ||
                 thisChiller.CondenserType == DataPlant::CondenserType::EvapCooled) {
@@ -4415,14 +4415,14 @@ namespace PlantChillers {
                 }
 
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerCombustionTurbine,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Air,
-                                                                                   Node::ConnectionType::OutsideAirReference,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerCombustionTurbine,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::OutsideAirReference,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 bool Okay;
                 OutAirNodeManager::CheckAndAddAirNodeNumber(state, thisChiller.CondInletNodeNum, Okay);
                 if (!Okay) {
@@ -4433,39 +4433,39 @@ namespace PlantChillers {
                 }
 
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerCombustionTurbine,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Air,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerCombustionTurbine,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Air,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
             } else { // WaterCooled CondenserType
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerCombustionTurbine,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Blank,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(5),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerCombustionTurbine,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Blank,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(6),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerCombustionTurbine,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Blank,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerCombustionTurbine,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Blank,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                   state.dataIPShortCut->cAlphaArgs(6),
-                                                   "Condenser (unknown?) Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(5),
+                                  state.dataIPShortCut->cAlphaArgs(6),
+                                  "Condenser (unknown?) Nodes");
                 // Condenser Inlet node name is necessary for Water Cooled
                 if (state.dataIPShortCut->lAlphaFieldBlanks(5)) {
                     ShowSevereError(state, EnergyPlus::format("Invalid, {} is blank ", state.dataIPShortCut->cAlphaFieldNames(5)));
@@ -4560,14 +4560,14 @@ namespace PlantChillers {
             if (thisChiller.DesignHeatRecVolFlowRate > 0.0 || thisChiller.DesignHeatRecVolFlowRate == DataSizing::AutoSize) {
                 thisChiller.HeatRecActive = true;
                 thisChiller.HeatRecInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                      state.dataIPShortCut->cAlphaArgs(7),
-                                                                                      ErrorsFound,
-                                                                                      Node::ConnectionObjectType::ChillerCombustionTurbine,
-                                                                                      state.dataIPShortCut->cAlphaArgs(1),
-                                                                                      Node::FluidType::Water,
-                                                                                      Node::ConnectionType::Inlet,
-                                                                                      Node::CompFluidStream::Tertiary,
-                                                                                      Node::ObjectIsNotParent);
+                                                                          state.dataIPShortCut->cAlphaArgs(7),
+                                                                          ErrorsFound,
+                                                                          Node::ConnectionObjectType::ChillerCombustionTurbine,
+                                                                          state.dataIPShortCut->cAlphaArgs(1),
+                                                                          Node::FluidType::Water,
+                                                                          Node::ConnectionType::Inlet,
+                                                                          Node::CompFluidStream::Tertiary,
+                                                                          Node::ObjectIsNotParent);
                 if (thisChiller.HeatRecInletNodeNum == 0) {
                     ShowSevereError(
                         state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(7), state.dataIPShortCut->cAlphaArgs(7)));
@@ -4577,14 +4577,14 @@ namespace PlantChillers {
                     ErrorsFound = true;
                 }
                 thisChiller.HeatRecOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                       state.dataIPShortCut->cAlphaArgs(8),
-                                                                                       ErrorsFound,
-                                                                                       Node::ConnectionObjectType::ChillerCombustionTurbine,
-                                                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                                                       Node::FluidType::Water,
-                                                                                       Node::ConnectionType::Outlet,
-                                                                                       Node::CompFluidStream::Tertiary,
-                                                                                       Node::ObjectIsNotParent);
+                                                                           state.dataIPShortCut->cAlphaArgs(8),
+                                                                           ErrorsFound,
+                                                                           Node::ConnectionObjectType::ChillerCombustionTurbine,
+                                                                           state.dataIPShortCut->cAlphaArgs(1),
+                                                                           Node::FluidType::Water,
+                                                                           Node::ConnectionType::Outlet,
+                                                                           Node::CompFluidStream::Tertiary,
+                                                                           Node::ObjectIsNotParent);
                 if (thisChiller.HeatRecOutletNodeNum == 0) {
                     ShowSevereError(
                         state, EnergyPlus::format("Invalid {}={}", state.dataIPShortCut->cAlphaFieldNames(8), state.dataIPShortCut->cAlphaArgs(8)));
@@ -4594,11 +4594,11 @@ namespace PlantChillers {
                     ErrorsFound = true;
                 }
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(7),
-                                                   state.dataIPShortCut->cAlphaArgs(8),
-                                                   "Heat Recovery Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(7),
+                                  state.dataIPShortCut->cAlphaArgs(8),
+                                  "Heat Recovery Nodes");
 
                 if (thisChiller.DesignHeatRecVolFlowRate == DataSizing::AutoSize) {
                     thisChiller.DesignHeatRecVolFlowRateWasAutoSized = true;
@@ -6354,29 +6354,29 @@ namespace PlantChillers {
             thisChiller.SizFac = state.dataIPShortCut->rNumericArgs(5);
 
             thisChiller.EvapInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                               state.dataIPShortCut->cAlphaArgs(2),
-                                                                               ErrorsFound,
-                                                                               Node::ConnectionObjectType::ChillerConstantCOP,
-                                                                               state.dataIPShortCut->cAlphaArgs(1),
-                                                                               Node::FluidType::Water,
-                                                                               Node::ConnectionType::Inlet,
-                                                                               Node::CompFluidStream::Primary,
-                                                                               Node::ObjectIsNotParent);
+                                                                   state.dataIPShortCut->cAlphaArgs(2),
+                                                                   ErrorsFound,
+                                                                   Node::ConnectionObjectType::ChillerConstantCOP,
+                                                                   state.dataIPShortCut->cAlphaArgs(1),
+                                                                   Node::FluidType::Water,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
             thisChiller.EvapOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                state.dataIPShortCut->cAlphaArgs(3),
-                                                                                ErrorsFound,
-                                                                                Node::ConnectionObjectType::ChillerConstantCOP,
-                                                                                state.dataIPShortCut->cAlphaArgs(1),
-                                                                                Node::FluidType::Water,
-                                                                                Node::ConnectionType::Outlet,
-                                                                                Node::CompFluidStream::Primary,
-                                                                                Node::ObjectIsNotParent);
+                                                                    state.dataIPShortCut->cAlphaArgs(3),
+                                                                    ErrorsFound,
+                                                                    Node::ConnectionObjectType::ChillerConstantCOP,
+                                                                    state.dataIPShortCut->cAlphaArgs(1),
+                                                                    Node::FluidType::Water,
+                                                                    Node::ConnectionType::Outlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(2),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               "Chilled Water Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(2),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              "Chilled Water Nodes");
 
             if (thisChiller.CondenserType == DataPlant::CondenserType::AirCooled ||
                 thisChiller.CondenserType == DataPlant::CondenserType::EvapCooled) {
@@ -6399,14 +6399,14 @@ namespace PlantChillers {
                 }
 
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(4),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerConstantCOP,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Air,
-                                                                                   Node::ConnectionType::OutsideAirReference,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(4),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerConstantCOP,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::OutsideAirReference,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 bool Okay;
                 OutAirNodeManager::CheckAndAddAirNodeNumber(state, thisChiller.CondInletNodeNum, Okay);
                 if (!Okay) {
@@ -6417,39 +6417,39 @@ namespace PlantChillers {
                 }
 
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(5),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerConstantCOP,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Air,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(5),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerConstantCOP,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Air,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
             } else if (thisChiller.CondenserType == DataPlant::CondenserType::WaterCooled) {
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(4),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerConstantCOP,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Water,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(4),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerConstantCOP,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Water,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(5),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerConstantCOP,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Water,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(5),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerConstantCOP,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(4),
-                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                   "Condenser Water Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(4),
+                                  state.dataIPShortCut->cAlphaArgs(5),
+                                  "Condenser Water Nodes");
                 // Condenser Inlet node name is necessary for Water Cooled
                 if (state.dataIPShortCut->lAlphaFieldBlanks(4)) {
                     ShowSevereError(state, EnergyPlus::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(4)));
@@ -6466,29 +6466,29 @@ namespace PlantChillers {
                 }
             } else {
                 thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                   state.dataIPShortCut->cAlphaArgs(4),
-                                                                                   ErrorsFound,
-                                                                                   Node::ConnectionObjectType::ChillerConstantCOP,
-                                                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                                                   Node::FluidType::Blank,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Secondary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       state.dataIPShortCut->cAlphaArgs(4),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::ChillerConstantCOP,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Blank,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Secondary,
+                                                                       Node::ObjectIsNotParent);
                 thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                    state.dataIPShortCut->cAlphaArgs(5),
-                                                                                    ErrorsFound,
-                                                                                    Node::ConnectionObjectType::ChillerConstantCOP,
-                                                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                                                    Node::FluidType::Blank,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Secondary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        state.dataIPShortCut->cAlphaArgs(5),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::ChillerConstantCOP,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Blank,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Secondary,
+                                                                        Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(4),
-                                                   state.dataIPShortCut->cAlphaArgs(5),
-                                                   "Condenser (unknown?) Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(4),
+                                  state.dataIPShortCut->cAlphaArgs(5),
+                                  "Condenser (unknown?) Nodes");
                 // Condenser Inlet node name is necessary for Water Cooled
                 if (state.dataIPShortCut->lAlphaFieldBlanks(4)) {
                     ShowSevereError(state, EnergyPlus::format("Invalid, {}is blank ", state.dataIPShortCut->cAlphaFieldNames(4)));

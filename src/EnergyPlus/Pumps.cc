@@ -101,8 +101,8 @@ namespace EnergyPlus::Pumps {
 // Energy Calculations, ASHRAE, 1993, pp2-10 to 2-15
 
 // Using/Aliasing
-using Node::ObjectIsNotParent;
 using HVAC::SmallWaterVolFlow;
+using Node::ObjectIsNotParent;
 
 static constexpr std::array<std::string_view, static_cast<int>(PumpType::Num)> pumpTypeIDFNames = {
     "Pump:VariableSpeed", "Pump:ConstantSpeed", "Pump:VariableSpeed:Condensate", "HeaderedPumps:VariableSpeed", "HeaderedPumps:ConstantSpeed"};
@@ -210,11 +210,11 @@ void GetPumpInput(EnergyPlusData &state)
     //  Energy Calculations, ASHRAE, 1993, pp2-10 to 2-15
 
     // Using/Aliasing
-    using Node::TestCompSet;
     using Curve::GetCurveIndex;
     using Curve::GetCurveMinMaxValues;
     using DataSizing::AutoSize;
     using Node::GetOnlySingleNode;
+    using Node::TestCompSet;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
     Real64 constexpr StartTemp(100.0); // Standard Temperature across code to calculated Steam density

@@ -165,43 +165,43 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
 
     // other construction below
     this->evapInletNodeIndex = Node::GetOnlySingleNode(state,
-                                                                   input_data.evaporator_inlet_node_name,
-                                                                   errorsFound,
-                                                                   Node::ConnectionObjectType::CoilCoolingDX,
-                                                                   input_data.name,
-                                                                   Node::FluidType::Air,
-                                                                   Node::ConnectionType::Inlet,
-                                                                   Node::CompFluidStream::Primary,
-                                                                   Node::ObjectIsNotParent);
+                                                       input_data.evaporator_inlet_node_name,
+                                                       errorsFound,
+                                                       Node::ConnectionObjectType::CoilCoolingDX,
+                                                       input_data.name,
+                                                       Node::FluidType::Air,
+                                                       Node::ConnectionType::Inlet,
+                                                       Node::CompFluidStream::Primary,
+                                                       Node::ObjectIsNotParent);
     this->evapOutletNodeIndex = Node::GetOnlySingleNode(state,
-                                                                    input_data.evaporator_outlet_node_name,
-                                                                    errorsFound,
-                                                                    Node::ConnectionObjectType::CoilCoolingDX,
-                                                                    input_data.name,
-                                                                    Node::FluidType::Air,
-                                                                    Node::ConnectionType::Outlet,
-                                                                    Node::CompFluidStream::Primary,
-                                                                    Node::ObjectIsNotParent);
+                                                        input_data.evaporator_outlet_node_name,
+                                                        errorsFound,
+                                                        Node::ConnectionObjectType::CoilCoolingDX,
+                                                        input_data.name,
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsNotParent);
 
     this->condInletNodeIndex = Node::GetOnlySingleNode(state,
-                                                                   input_data.condenser_inlet_node_name,
-                                                                   errorsFound,
-                                                                   Node::ConnectionObjectType::CoilCoolingDX,
-                                                                   input_data.name,
-                                                                   Node::FluidType::Air,
-                                                                   Node::ConnectionType::Inlet,
-                                                                   Node::CompFluidStream::Secondary,
-                                                                   Node::ObjectIsNotParent);
+                                                       input_data.condenser_inlet_node_name,
+                                                       errorsFound,
+                                                       Node::ConnectionObjectType::CoilCoolingDX,
+                                                       input_data.name,
+                                                       Node::FluidType::Air,
+                                                       Node::ConnectionType::Inlet,
+                                                       Node::CompFluidStream::Secondary,
+                                                       Node::ObjectIsNotParent);
 
     this->condOutletNodeIndex = Node::GetOnlySingleNode(state,
-                                                                    input_data.condenser_outlet_node_name,
-                                                                    errorsFound,
-                                                                    Node::ConnectionObjectType::CoilCoolingDX,
-                                                                    input_data.name,
-                                                                    Node::FluidType::Air,
-                                                                    Node::ConnectionType::Outlet,
-                                                                    Node::CompFluidStream::Secondary,
-                                                                    Node::ObjectIsNotParent);
+                                                        input_data.condenser_outlet_node_name,
+                                                        errorsFound,
+                                                        Node::ConnectionObjectType::CoilCoolingDX,
+                                                        input_data.name,
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Secondary,
+                                                        Node::ObjectIsNotParent);
 
     this->performance = makePerformanceSubclass(state, input_data.performance_object_name);
     this->subcoolReheatFlag = this->performance->subcoolReheatFlag();
@@ -240,11 +240,11 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
     }
 
     Node::TestCompSet(state,
-                                       state.dataCoilCoolingDX->coilCoolingDXObjectName,
-                                       this->name,
-                                       input_data.evaporator_inlet_node_name,
-                                       input_data.evaporator_outlet_node_name,
-                                       "Air Nodes");
+                      state.dataCoilCoolingDX->coilCoolingDXObjectName,
+                      this->name,
+                      input_data.evaporator_inlet_node_name,
+                      input_data.evaporator_outlet_node_name,
+                      "Air Nodes");
 
     if (errorsFound) {
         ShowFatalError(state,

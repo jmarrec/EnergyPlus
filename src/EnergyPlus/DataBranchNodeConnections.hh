@@ -79,36 +79,33 @@ namespace Node {
     struct NodeConnectionDef
     {
         // Members
-        int NodeNumber = 0;                                                                          // Node number of this node connection
-        std::string NodeName;                                                                        // Node Name of this node connection
+        int NodeNumber = 0;                                                          // Node number of this node connection
+        std::string NodeName;                                                        // Node Name of this node connection
         Node::ConnectionObjectType ObjectType = Node::ConnectionObjectType::Invalid; // Object/Component Type of this node connection
-        std::string ObjectName; // Name of the Object/Component Type of this node connection
-        Node::ConnectionType ConnectionType =
-            Node::ConnectionType::Invalid; // Connection Type (must be valid) for this node connection
-        Node::CompFluidStream FluidStream = Node::CompFluidStream::Invalid; // Fluid Stream for this node connection
-        bool ObjectIsParent = false;                                                                // Indicator whether the object is a parent or not
+        std::string ObjectName;                                                      // Name of the Object/Component Type of this node connection
+        Node::ConnectionType ConnectionType = Node::ConnectionType::Invalid;         // Connection Type (must be valid) for this node connection
+        Node::CompFluidStream FluidStream = Node::CompFluidStream::Invalid;          // Fluid Stream for this node connection
+        bool ObjectIsParent = false;                                                 // Indicator whether the object is a parent or not
     };
 
     struct ParentListData
     {
         // Members
-        Node::ConnectionObjectType ComponentType =
-            Node::ConnectionObjectType::Invalid; // Component Type (Cannot be SPLITTER or MIXER)
-        std::string ComponentName;                       // Component Name
-        std::string InletNodeName;                       // Inlet Node ID
-        std::string OutletNodeName;                      // Outlet Node ID
-        std::string Description;                         // Description of Component List Type
+        Node::ConnectionObjectType ComponentType = Node::ConnectionObjectType::Invalid; // Component Type (Cannot be SPLITTER or MIXER)
+        std::string ComponentName;                                                      // Component Name
+        std::string InletNodeName;                                                      // Inlet Node ID
+        std::string OutletNodeName;                                                     // Outlet Node ID
+        std::string Description;                                                        // Description of Component List Type
     };
 
     struct EqNodeConnectionDef
     {
         // Members
-        std::string NodeName;                                                                        // Node Name of this node connection
+        std::string NodeName;                                                        // Node Name of this node connection
         Node::ConnectionObjectType ObjectType = Node::ConnectionObjectType::Invalid; // Object/Component Type of this node connection
-        std::string ObjectName;     // Name of the Object/Component Type of this node connection
-        std::string InputFieldName; // Input Field Name for this connection
-        Node::ConnectionType ConnectionType =
-            Node::ConnectionType::Invalid; // Connection Type (must be valid) for this node connection
+        std::string ObjectName;                                                      // Name of the Object/Component Type of this node connection
+        std::string InputFieldName;                                                  // Input Field Name for this connection
+        Node::ConnectionType ConnectionType = Node::ConnectionType::Invalid;         // Connection Type (must be valid) for this node connection
     };
 
 } // namespace Node

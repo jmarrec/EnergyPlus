@@ -3728,8 +3728,8 @@ namespace UnitarySystems {
         static constexpr std::string_view unitarySysHeatPumpPerformanceObjectType("UnitarySystemPerformance:Multispeed");
 
         std::string const &cCurrentModuleObject = input_data.system_type;
-        Node::ConnectionObjectType objType = static_cast<Node::ConnectionObjectType>(
-            getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(input_data.system_type)));
+        Node::ConnectionObjectType objType =
+            static_cast<Node::ConnectionObjectType>(getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(input_data.system_type)));
         std::string const &thisObjectName = input_data.name;
 
         ErrorObjectHeader eoh{routineName, cCurrentModuleObject, thisObjectName};
@@ -3743,28 +3743,28 @@ namespace UnitarySystems {
         }
         if (state.dataUnitarySystems->getInputOnceFlag) {
             this->AirInNode = Node::GetOnlySingleNode(state,
-                                                                  input_data.air_inlet_node_name,
-                                                                  errorsFound,
-                                                                  objType,
-                                                                  thisObjectName,
-                                                                  Node::FluidType::Air,
-                                                                  Node::ConnectionType::Inlet,
-                                                                  Node::CompFluidStream::Primary,
-                                                                  Node::ObjectIsParent);
+                                                      input_data.air_inlet_node_name,
+                                                      errorsFound,
+                                                      objType,
+                                                      thisObjectName,
+                                                      Node::FluidType::Air,
+                                                      Node::ConnectionType::Inlet,
+                                                      Node::CompFluidStream::Primary,
+                                                      Node::ObjectIsParent);
         } else {
             this->AirInNode = Util::FindItemInList(input_data.air_inlet_node_name, state.dataLoopNodes->NodeID);
         }
 
         if (state.dataUnitarySystems->getInputOnceFlag) {
             this->AirOutNode = Node::GetOnlySingleNode(state,
-                                                                   input_data.air_outlet_node_name,
-                                                                   errorsFound,
-                                                                   objType,
-                                                                   thisObjectName,
-                                                                   Node::FluidType::Air,
-                                                                   Node::ConnectionType::Outlet,
-                                                                   Node::CompFluidStream::Primary,
-                                                                   Node::ObjectIsParent);
+                                                       input_data.air_outlet_node_name,
+                                                       errorsFound,
+                                                       objType,
+                                                       thisObjectName,
+                                                       Node::FluidType::Air,
+                                                       Node::ConnectionType::Outlet,
+                                                       Node::CompFluidStream::Primary,
+                                                       Node::ObjectIsParent);
         } else {
             this->AirOutNode = Util::FindItemInList(input_data.air_outlet_node_name, state.dataLoopNodes->NodeID);
         }
@@ -4365,11 +4365,11 @@ namespace UnitarySystems {
 
         if (!ZoneEquipment) {
             Node::TestCompSet(state,
-                                               cCurrentModuleObject,
-                                               Util::makeUPPER(thisObjectName),
-                                               input_data.air_inlet_node_name,
-                                               input_data.air_outlet_node_name,
-                                               "Air Nodes");
+                              cCurrentModuleObject,
+                              Util::makeUPPER(thisObjectName),
+                              input_data.air_inlet_node_name,
+                              input_data.air_outlet_node_name,
+                              "Air Nodes");
         }
 
         std::string const &loc_fanType = input_data.supply_fan_object_type;
@@ -4406,12 +4406,12 @@ namespace UnitarySystems {
         // Add fan to component sets array
         if (this->m_FanExists && this->m_FanCompNotSetYet) {
             Node::SetUpCompSets(state,
-                                                 cCurrentModuleObject,
-                                                 thisObjectName,
-                                                 loc_fanType,
-                                                 loc_m_FanName,
-                                                 state.dataLoopNodes->NodeID(FanInletNode),
-                                                 state.dataLoopNodes->NodeID(FanOutletNode));
+                                cCurrentModuleObject,
+                                thisObjectName,
+                                loc_fanType,
+                                loc_m_FanName,
+                                state.dataLoopNodes->NodeID(FanInletNode),
+                                state.dataLoopNodes->NodeID(FanOutletNode));
             this->m_FanCompNotSetYet = false;
         }
 
@@ -4767,12 +4767,12 @@ namespace UnitarySystems {
         if (this->m_HeatCoilExists && this->m_HeatCompNotSetYet) {
             if (this->m_HeatingCoilType_Num != HVAC::CoilDX_MultiSpeedHeating) {
                 Node::SetUpCompSets(state,
-                                                     cCurrentModuleObject,
-                                                     thisObjectName,
-                                                     this->m_HeatingCoilTypeName,
-                                                     this->m_HeatingCoilName,
-                                                     state.dataLoopNodes->NodeID(HeatingCoilInletNode),
-                                                     state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
+                                    cCurrentModuleObject,
+                                    thisObjectName,
+                                    this->m_HeatingCoilTypeName,
+                                    this->m_HeatingCoilName,
+                                    state.dataLoopNodes->NodeID(HeatingCoilInletNode),
+                                    state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
             } else {
                 Node::SetUpCompSets(
                     state, cCurrentModuleObject, thisObjectName, this->m_HeatingCoilTypeName, this->m_HeatingCoilName, "UNDEFINED", "UNDEFINED");
@@ -5466,14 +5466,14 @@ namespace UnitarySystems {
 
             if (!input_data.dx_cooling_coil_system_sensor_node_name.empty()) { // used by CoilSystem:Cooling:DX
                 this->CoolCtrlNode = Node::GetOnlySingleNode(state,
-                                                                         input_data.dx_cooling_coil_system_sensor_node_name,
-                                                                         errFlag,
-                                                                         objType,
-                                                                         thisObjectName,
-                                                                         Node::FluidType::Air,
-                                                                         Node::ConnectionType::Sensor,
-                                                                         Node::CompFluidStream::Primary,
-                                                                         Node::ObjectIsParent);
+                                                             input_data.dx_cooling_coil_system_sensor_node_name,
+                                                             errFlag,
+                                                             objType,
+                                                             thisObjectName,
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Sensor,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsParent);
             } else {
                 if (SetPointManager::NodeHasSPMCtrlVarType(state, this->AirOutNode, HVAC::CtrlVarType::Temp)) {
                     this->CoolCtrlNode = this->AirOutNode;
@@ -5511,20 +5511,20 @@ namespace UnitarySystems {
         if (this->m_CoolCoilExists && this->m_CoolCompNotSetYet) {
             if (this->m_CoolingCoilType_Num != HVAC::CoilDX_MultiSpeedCooling) {
                 Node::SetUpCompSets(state,
-                                                     cCurrentModuleObject,
-                                                     thisObjectName,
-                                                     input_data.cooling_coil_object_type,
-                                                     this->m_CoolingCoilName,
-                                                     state.dataLoopNodes->NodeID(CoolingCoilInletNode),
-                                                     state.dataLoopNodes->NodeID(CoolingCoilOutletNode));
+                                    cCurrentModuleObject,
+                                    thisObjectName,
+                                    input_data.cooling_coil_object_type,
+                                    this->m_CoolingCoilName,
+                                    state.dataLoopNodes->NodeID(CoolingCoilInletNode),
+                                    state.dataLoopNodes->NodeID(CoolingCoilOutletNode));
             } else {
                 Node::SetUpCompSets(state,
-                                                     cCurrentModuleObject,
-                                                     thisObjectName,
-                                                     input_data.cooling_coil_object_type,
-                                                     this->m_CoolingCoilName,
-                                                     "UNDEFINED",
-                                                     "UNDEFINED");
+                                    cCurrentModuleObject,
+                                    thisObjectName,
+                                    input_data.cooling_coil_object_type,
+                                    this->m_CoolingCoilName,
+                                    "UNDEFINED",
+                                    "UNDEFINED");
             }
             this->m_CoolCompNotSetYet = false;
         }
@@ -5767,24 +5767,24 @@ namespace UnitarySystems {
         // Add supplemental heating coil to component sets array
         if (this->m_SuppCoilExists && this->m_SuppCompNotSetYet) {
             Node::SetUpCompSets(state,
-                                                 cCurrentModuleObject,
-                                                 thisObjectName,
-                                                 this->m_SuppHeatCoilTypeName,
-                                                 this->m_SuppHeatCoilName,
-                                                 state.dataLoopNodes->NodeID(SupHeatCoilInletNode),
-                                                 state.dataLoopNodes->NodeID(SupHeatCoilOutletNode));
+                                cCurrentModuleObject,
+                                thisObjectName,
+                                this->m_SuppHeatCoilTypeName,
+                                this->m_SuppHeatCoilName,
+                                state.dataLoopNodes->NodeID(SupHeatCoilInletNode),
+                                state.dataLoopNodes->NodeID(SupHeatCoilOutletNode));
             this->m_SuppCompNotSetYet = false;
         }
 
         if (this->OAMixerExists) {
             // Set up component set for OA mixer - use OA node and Mixed air node
             Node::SetUpCompSets(state,
-                                                 this->UnitType,
-                                                 this->Name,
-                                                 input_data.oa_mixer_type,
-                                                 input_data.oa_mixer_name,
-                                                 state.dataLoopNodes->NodeID(this->m_OAMixerNodes[0]),
-                                                 state.dataLoopNodes->NodeID(this->m_OAMixerNodes[3]));
+                                this->UnitType,
+                                this->Name,
+                                input_data.oa_mixer_type,
+                                input_data.oa_mixer_name,
+                                state.dataLoopNodes->NodeID(this->m_OAMixerNodes[0]),
+                                state.dataLoopNodes->NodeID(this->m_OAMixerNodes[3]));
         }
 
         // set fan info for supplemental heating coils
@@ -6925,14 +6925,14 @@ namespace UnitarySystems {
         } else {
             if (!input_data.outdoor_dry_bulb_temperature_sensor_node_name.empty()) {
                 this->m_CondenserNodeNum = Node::GetOnlySingleNode(state,
-                                                                               input_data.outdoor_dry_bulb_temperature_sensor_node_name,
-                                                                               errFlag,
-                                                                               objType,
-                                                                               thisObjectName,
-                                                                               Node::FluidType::Air,
-                                                                               Node::ConnectionType::Inlet,
-                                                                               Node::CompFluidStream::Primary,
-                                                                               Node::ObjectIsParent);
+                                                                   input_data.outdoor_dry_bulb_temperature_sensor_node_name,
+                                                                   errFlag,
+                                                                   objType,
+                                                                   thisObjectName,
+                                                                   Node::FluidType::Air,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsParent);
             } else {
                 // do nothing?
             }
@@ -6951,30 +6951,30 @@ namespace UnitarySystems {
             this->m_HeatRecActive = true;
             if (!input_data.heat_recovery_water_inlet_node_name.empty() && !input_data.heat_recovery_water_outlet_node_name.empty()) {
                 this->m_HeatRecoveryInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                       input_data.heat_recovery_water_inlet_node_name,
-                                                                                       errFlag,
-                                                                                       objType,
-                                                                                       thisObjectName,
-                                                                                       Node::FluidType::Water,
-                                                                                       Node::ConnectionType::Inlet,
-                                                                                       Node::CompFluidStream::Tertiary,
-                                                                                       Node::ObjectIsNotParent);
+                                                                           input_data.heat_recovery_water_inlet_node_name,
+                                                                           errFlag,
+                                                                           objType,
+                                                                           thisObjectName,
+                                                                           Node::FluidType::Water,
+                                                                           Node::ConnectionType::Inlet,
+                                                                           Node::CompFluidStream::Tertiary,
+                                                                           Node::ObjectIsNotParent);
                 this->m_HeatRecoveryOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                        input_data.heat_recovery_water_outlet_node_name,
-                                                                                        errFlag,
-                                                                                        objType,
-                                                                                        thisObjectName,
-                                                                                        Node::FluidType::Water,
-                                                                                        Node::ConnectionType::Outlet,
-                                                                                        Node::CompFluidStream::Tertiary,
-                                                                                        Node::ObjectIsNotParent);
+                                                                            input_data.heat_recovery_water_outlet_node_name,
+                                                                            errFlag,
+                                                                            objType,
+                                                                            thisObjectName,
+                                                                            Node::FluidType::Water,
+                                                                            Node::ConnectionType::Outlet,
+                                                                            Node::CompFluidStream::Tertiary,
+                                                                            Node::ObjectIsNotParent);
 
                 Node::TestCompSet(state,
-                                                   cCurrentModuleObject,
-                                                   thisObjectName,
-                                                   input_data.heat_recovery_water_inlet_node_name,
-                                                   input_data.heat_recovery_water_outlet_node_name,
-                                                   "Unitary System Heat Recovery Nodes");
+                                  cCurrentModuleObject,
+                                  thisObjectName,
+                                  input_data.heat_recovery_water_inlet_node_name,
+                                  input_data.heat_recovery_water_outlet_node_name,
+                                  "Unitary System Heat Recovery Nodes");
 
                 if (this->m_CoolingCoilType_Num == HVAC::CoilDX_MultiSpeedCooling) {
                     DXCoils::SetMSHPDXCoilHeatRecoveryFlag(state, this->m_CoolingCoilIndex);

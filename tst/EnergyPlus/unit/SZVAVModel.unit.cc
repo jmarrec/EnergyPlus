@@ -187,14 +187,14 @@ TEST_F(EnergyPlusFixture, SZVAV_PTUnit_Testing)
     thisUnit.AirOutNode = thisUnit.HeatCoilOutletNodeNum;
     // set zone condition
     int zoneNodeNum = Node::GetOnlySingleNode(*state,
-                                                          "ZoneNode",
-                                                          errFlag,
-                                                          Node::ConnectionObjectType::ZoneHVACPackagedTerminalAirConditioner,
-                                                          "PTUnit",
-                                                          Node::FluidType::Air,
-                                                          Node::ConnectionType::Inlet,
-                                                          Node::CompFluidStream::Primary,
-                                                          Node::ObjectIsNotParent);
+                                              "ZoneNode",
+                                              errFlag,
+                                              Node::ConnectionObjectType::ZoneHVACPackagedTerminalAirConditioner,
+                                              "PTUnit",
+                                              Node::FluidType::Air,
+                                              Node::ConnectionType::Inlet,
+                                              Node::CompFluidStream::Primary,
+                                              Node::ObjectIsNotParent);
 
     state->dataLoopNodes->Node(thisUnit.AirInNode).Temp = 21.0;
     state->dataLoopNodes->Node(thisUnit.AirInNode).HumRat = 0.00773;

@@ -209,9 +209,9 @@ namespace ZoneAirLoopEquipmentManager {
         // na
 
         // Using/Aliasing
+        using DualDuct::GetDualDuctOutdoorAirRecircUse;
         using Node::GetOnlySingleNode;
         using Node::SetUpCompSets;
-        using DualDuct::GetDualDuctOutdoorAirRecircUse;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetZoneAirLoopEquipment: ");   // include trailing blank space

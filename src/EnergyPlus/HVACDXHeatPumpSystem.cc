@@ -246,11 +246,11 @@ namespace HVACDXHeatPumpSystem {
         // Uses "Get" routines to read in data.
 
         // Using/Aliasing
-        using Node::SetUpCompSets;
-        using Node::TestCompSet;
         using DXCoils::GetCoilInletNode;
         using DXCoils::GetCoilOutletNode;
         using DXCoils::SetCoilSystemHeatingDXFlag;
+        using Node::SetUpCompSets;
+        using Node::TestCompSet;
         using VariableSpeedCoils::GetCoilInletNodeVariableSpeed;
         using VariableSpeedCoils::GetCoilOutletNodeVariableSpeed;
 

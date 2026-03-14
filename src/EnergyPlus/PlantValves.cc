@@ -143,8 +143,8 @@ namespace PlantValves {
         // usual method using InputProcessor
 
         // Using/Aliasing
-        using Node::TestCompSet;
         using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         int Item;                        // Item to be "gotten"

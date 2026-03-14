@@ -649,15 +649,15 @@ constexpr std::array<std::string_view, static_cast<int>(Node::ConnectionObjectTy
     "SPACEHVAC:ZONEEQUIPMENTMIXER"};
 
 void RegisterNodeConnection(EnergyPlusData &state,
-                            int const NodeNumber,                                // Number for this Node
-                            std::string_view const NodeName,                     // Name of this Node
+                            int const NodeNumber,                        // Number for this Node
+                            std::string_view const NodeName,             // Name of this Node
                             Node::ConnectionObjectType const ObjectType, // Type of object this Node is connected to (e.g. Chiller:Electric)
-                            std::string_view const ObjectName,                   // Name of object this Node is connected to (e.g. MyChiller)
+                            std::string_view const ObjectName,           // Name of object this Node is connected to (e.g. MyChiller)
                             Node::ConnectionType const ConnectionType,   // Connection Type for this Node (must be valid)
-                            Node::CompFluidStream const FluidStream, // Count on Fluid Streams
-                            bool const IsParent,                                 // True when node is a parent node
-                            bool &errFlag,                                       // Will be True if errors already detected or if errors found here
-                            std::string_view const InputFieldName                // Input Field Name
+                            Node::CompFluidStream const FluidStream,     // Count on Fluid Streams
+                            bool const IsParent,                         // True when node is a parent node
+                            bool &errFlag,                               // Will be True if errors already detected or if errors found here
+                            std::string_view const InputFieldName        // Input Field Name
 )
 {
 
@@ -759,20 +759,20 @@ void RegisterNodeConnection(EnergyPlusData &state,
                 ShowSevereError(state, fmt::format("{}{}=\"{}\" node name duplicated", RoutineName, ObjectType, ObjectName));
                 ShowContinueError(state, EnergyPlus::format("NodeName=\"{}\", entered as type={}", NodeName, conTypeStr));
                 ShowContinueError(state, fmt::format("In Field={}", InputFieldName));
-                ShowContinueError(
-                    state,
-                    EnergyPlus::format("NodeName=\"{}\", entered as type={}", NodeName, Node::ConnectionTypeNamesUC[static_cast<int>(ConnectionType)]));
+                ShowContinueError(state,
+                                  EnergyPlus::format("NodeName=\"{}\", entered as type={}",
+                                                     NodeName,
+                                                     Node::ConnectionTypeNamesUC[static_cast<int>(ConnectionType)]));
                 ShowContinueError(state, EnergyPlus::format("In Field={}", InputFieldName));
                 ShowContinueError(state,
                                   EnergyPlus::format("Already used in {}=\"{}\".",
                                                      objTypeStr,
                                                      state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).ObjectName));
-                ShowContinueError(
-                    state,
-                    EnergyPlus::format(
-                        " as type={}, In Field={}",
-                        Node::ConnectionTypeNamesUC[static_cast<int>(state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).ConnectionType)],
-                        state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).InputFieldName));
+                ShowContinueError(state,
+                                  EnergyPlus::format(" as type={}, In Field={}",
+                                                     Node::ConnectionTypeNamesUC[static_cast<int>(
+                                                         state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).ConnectionType)],
+                                                     state.dataBranchNodeConnections->AirTerminalNodeConnections(Found).InputFieldName));
                 ErrorsFoundHere = true;
             } else {
                 state.dataBranchNodeConnections->AirTerminalNodeConnections(state.dataBranchNodeConnections->NumOfAirTerminalNodes).NodeName =
@@ -797,16 +797,15 @@ void RegisterNodeConnection(EnergyPlusData &state,
     }
 }
 
-void OverrideNodeConnectionType(
-    EnergyPlusData &state,
-    int const NodeNumber,                                // Number for this Node
-    std::string const &NodeName,                         // Name of this Node
-    Node::ConnectionObjectType const ObjectType, // Type of object this Node is connected to (e.g. Chiller:Electric)
-    std::string const &ObjectName,                       // Name of object this Node is connected to (e.g. MyChiller)
-    Node::ConnectionType const ConnectionType,   // Connection Type for this Node (must be valid)
-    Node::CompFluidStream const FluidStream, // Count on Fluid Streams
-    bool const IsParent,                                 // True when node is a parent node
-    bool &errFlag                                        // Will be True if errors already detected or if errors found here
+void OverrideNodeConnectionType(EnergyPlusData &state,
+                                int const NodeNumber,                        // Number for this Node
+                                std::string const &NodeName,                 // Name of this Node
+                                Node::ConnectionObjectType const ObjectType, // Type of object this Node is connected to (e.g. Chiller:Electric)
+                                std::string const &ObjectName,               // Name of object this Node is connected to (e.g. MyChiller)
+                                Node::ConnectionType const ConnectionType,   // Connection Type for this Node (must be valid)
+                                Node::CompFluidStream const FluidStream,     // Count on Fluid Streams
+                                bool const IsParent,                         // True when node is a parent node
+                                bool &errFlag                                // Will be True if errors already detected or if errors found here
 )
 {
 
@@ -826,7 +825,7 @@ void OverrideNodeConnectionType(
         ShowContinueError(
             state,
             EnergyPlus::format(
-                               "Occurs for Node={}, ObjectType={}, ObjectName={}", NodeName, Node::ConnectionTypeNames[static_cast<int>(ObjectType)], ObjectName));
+                "Occurs for Node={}, ObjectType={}, ObjectName={}", NodeName, Node::ConnectionTypeNames[static_cast<int>(ObjectType)], ObjectName));
         errFlag = true;
     }
 
@@ -858,7 +857,7 @@ void OverrideNodeConnectionType(
         ShowContinueError(
             state,
             EnergyPlus::format(
-                               "Occurs for Node={}, ObjectType={}, ObjectName={}", NodeName, Node::ConnectionTypeNames[static_cast<int>(ObjectType)], ObjectName));
+                "Occurs for Node={}, ObjectType={}, ObjectName={}", NodeName, Node::ConnectionTypeNames[static_cast<int>(ObjectType)], ObjectName));
         errFlag = true;
     }
 }
@@ -1345,7 +1344,7 @@ void CheckNodeConnections(EnergyPlusData &state, bool &ErrorsFound)
     // Check 10 -- fluid streams cannot have multiple inlet/outlet nodes on same component
     //  can have multiple inlets with one outlet or vice versa but cannot have multiple both inlet and outlet
     if (state.dataBranchNodeConnections->NumOfNodeConnections > 0) {
-      int MaxFluidStream = static_cast<int>(maxval(state.dataBranchNodeConnections->NodeConnections, &Node::NodeConnectionDef::FluidStream));
+        int MaxFluidStream = static_cast<int>(maxval(state.dataBranchNodeConnections->NodeConnections, &Node::NodeConnectionDef::FluidStream));
         FluidStreamInletCount.allocate(MaxFluidStream);
         FluidStreamOutletCount.allocate(MaxFluidStream);
         FluidStreamCounts.allocate(MaxFluidStream);
@@ -2039,12 +2038,10 @@ void SetUpCompSets(EnergyPlusData &state,
     std::string ParentTypeUC = Util::makeUPPER(ParentType);
     std::string CompTypeUC = Util::makeUPPER(CompType);
     // TODO: Refactor this away by passing in enums
-    Node::ConnectionObjectType ParentTypeEnum =
-        static_cast<Node::ConnectionObjectType>(getEnumValue(ConnectionObjectTypeNamesUC, ParentTypeUC));
+    Node::ConnectionObjectType ParentTypeEnum = static_cast<Node::ConnectionObjectType>(getEnumValue(ConnectionObjectTypeNamesUC, ParentTypeUC));
     assert(ParentTypeEnum != Node::ConnectionObjectType::Invalid);
 
-    Node::ConnectionObjectType ComponentTypeEnum =
-        static_cast<Node::ConnectionObjectType>(getEnumValue(ConnectionObjectTypeNamesUC, CompTypeUC));
+    Node::ConnectionObjectType ComponentTypeEnum = static_cast<Node::ConnectionObjectType>(getEnumValue(ConnectionObjectTypeNamesUC, CompTypeUC));
     assert(ComponentTypeEnum != Node::ConnectionObjectType::Invalid);
 
     int Found = 0;
@@ -2381,8 +2378,7 @@ void TestCompSet(EnergyPlusData &state,
     std::string CompTypeUC = Util::makeUPPER(CompType);
 
     // TODO: Refactor this away by passing in enums
-    Node::ConnectionObjectType ComponentTypeEnum =
-        static_cast<Node::ConnectionObjectType>(getEnumValue(ConnectionObjectTypeNamesUC, CompTypeUC));
+    Node::ConnectionObjectType ComponentTypeEnum = static_cast<Node::ConnectionObjectType>(getEnumValue(ConnectionObjectTypeNamesUC, CompTypeUC));
     assert(ComponentTypeEnum != Node::ConnectionObjectType::Invalid);
 
     // See if Already there

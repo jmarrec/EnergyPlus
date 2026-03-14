@@ -148,8 +148,8 @@ void GetPipeInput(EnergyPlusData &state)
     //       RE-ENGINEERED  na
 
     // Using/Aliasing
-    using Node::TestCompSet;
     using Node::GetOnlySingleNode;
+    using Node::TestCompSet;
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     int PipeNum = 0;

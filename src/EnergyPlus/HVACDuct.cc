@@ -183,8 +183,8 @@ namespace HVACDuct {
         // Uses InputProcessor "Get" routines to obtain data.
 
         // Using/Aliasing
-        using Node::TestCompSet;
         using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
         int DuctNum; // duct index

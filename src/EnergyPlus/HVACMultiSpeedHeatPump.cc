@@ -677,12 +677,12 @@ namespace HVACMultiSpeedHeatPump {
                 thisMSHP.FanInletNode = fan->inletNodeNum;
                 thisMSHP.FanOutletNode = fan->outletNodeNum;
                 Node::SetUpCompSets(state,
-                                                     state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                     thisMSHP.Name,
-                                                     HVAC::fanTypeNames[(int)thisMSHP.fanType],
-                                                     thisMSHP.FanName,
-                                                     "UNDEFINED",
-                                                     "UNDEFINED");
+                                    state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                    thisMSHP.Name,
+                                    HVAC::fanTypeNames[(int)thisMSHP.fanType],
+                                    thisMSHP.FanName,
+                                    "UNDEFINED",
+                                    "UNDEFINED");
             }
 
             // Get supply fan placement data
@@ -754,12 +754,12 @@ namespace HVACMultiSpeedHeatPump {
                     LocalError = false;
                 }
                 Node::SetUpCompSets(state,
-                                                     state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                     thisMSHP.Name,
-                                                     "Coil:Heating:DX:MultiSpeed",
-                                                     thisMSHP.DXHeatCoilName,
-                                                     "UNDEFINED",
-                                                     "UNDEFINED");
+                                    state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                    thisMSHP.Name,
+                                    "Coil:Heating:DX:MultiSpeed",
+                                    thisMSHP.DXHeatCoilName,
+                                    "UNDEFINED",
+                                    "UNDEFINED");
             } else if (Util::SameString(Alphas(10), "Coil:Heating:Electric:MultiStage") ||
                        Util::SameString(Alphas(10), "Coil:Heating:Gas:MultiStage")) {
 
@@ -823,20 +823,20 @@ namespace HVACMultiSpeedHeatPump {
                 }
                 if (Util::SameString(Alphas(10), "Coil:Heating:Electric:MultiStage")) {
                     Node::SetUpCompSets(state,
-                                                         state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                         thisMSHP.Name,
-                                                         "Coil:Heating:Electric:MultiStage",
-                                                         thisMSHP.HeatCoilName,
-                                                         "UNDEFINED",
-                                                         "UNDEFINED");
+                                        state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                        thisMSHP.Name,
+                                        "Coil:Heating:Electric:MultiStage",
+                                        thisMSHP.HeatCoilName,
+                                        "UNDEFINED",
+                                        "UNDEFINED");
                 } else {
                     Node::SetUpCompSets(state,
-                                                         state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                         thisMSHP.Name,
-                                                         "Coil:Heating:Gas:MultiStage",
-                                                         thisMSHP.HeatCoilName,
-                                                         "UNDEFINED",
-                                                         "UNDEFINED");
+                                        state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                        thisMSHP.Name,
+                                        "Coil:Heating:Gas:MultiStage",
+                                        thisMSHP.HeatCoilName,
+                                        "UNDEFINED",
+                                        "UNDEFINED");
                 }
             } else if (Util::SameString(Alphas(10), "Coil:Heating:Water")) {
                 thisMSHP.HeatCoilType = HVAC::Coil_HeatingWater;
@@ -884,12 +884,12 @@ namespace HVACMultiSpeedHeatPump {
                         ErrorsFound = true;
                     }
                     Node::SetUpCompSets(state,
-                                                         state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                         thisMSHP.Name,
-                                                         "Coil:Heating:Water",
-                                                         thisMSHP.HeatCoilName,
-                                                         state.dataLoopNodes->NodeID(HeatingCoilInletNode),
-                                                         state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
+                                        state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                        thisMSHP.Name,
+                                        "Coil:Heating:Water",
+                                        thisMSHP.HeatCoilName,
+                                        state.dataLoopNodes->NodeID(HeatingCoilInletNode),
+                                        state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
                 }
             } else if (Util::SameString(Alphas(10), "Coil:Heating:Steam")) {
                 thisMSHP.HeatCoilType = HVAC::Coil_HeatingSteam;
@@ -949,12 +949,12 @@ namespace HVACMultiSpeedHeatPump {
                     }
 
                     Node::SetUpCompSets(state,
-                                                         state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                         thisMSHP.Name,
-                                                         "Coil:Heating:Steam",
-                                                         thisMSHP.HeatCoilName,
-                                                         state.dataLoopNodes->NodeID(HeatingCoilInletNode),
-                                                         state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
+                                        state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                        thisMSHP.Name,
+                                        "Coil:Heating:Steam",
+                                        thisMSHP.HeatCoilName,
+                                        state.dataLoopNodes->NodeID(HeatingCoilInletNode),
+                                        state.dataLoopNodes->NodeID(HeatingCoilOutletNode));
                 }
             } else {
                 ShowSevereError(state,
@@ -1020,12 +1020,12 @@ namespace HVACMultiSpeedHeatPump {
                 ErrorsFound = true;
             }
             Node::SetUpCompSets(state,
-                                                 state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                 thisMSHP.Name,
-                                                 "Coil:Cooling:DX:MultiSpeed",
-                                                 thisMSHP.DXCoolCoilName,
-                                                 "UNDEFINED",
-                                                 "UNDEFINED");
+                                state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                thisMSHP.Name,
+                                "Coil:Cooling:DX:MultiSpeed",
+                                thisMSHP.DXCoolCoilName,
+                                "UNDEFINED",
+                                "UNDEFINED");
 
             // Get supplemental heating coil data
             thisMSHP.SuppHeatCoilName = Alphas(15);
@@ -1066,12 +1066,12 @@ namespace HVACMultiSpeedHeatPump {
                     LocalError = false;
                 }
                 Node::SetUpCompSets(state,
-                                                     state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                     thisMSHP.Name,
-                                                     "Coil:Heating:Fuel",
-                                                     thisMSHP.SuppHeatCoilName,
-                                                     "UNDEFINED",
-                                                     "UNDEFINED");
+                                    state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                    thisMSHP.Name,
+                                    "Coil:Heating:Fuel",
+                                    thisMSHP.SuppHeatCoilName,
+                                    "UNDEFINED",
+                                    "UNDEFINED");
             }
             if (Util::SameString(Alphas(14), "Coil:Heating:Electric")) {
                 thisMSHP.SuppHeatCoilType = HVAC::Coil_HeatingElectric;
@@ -1111,12 +1111,12 @@ namespace HVACMultiSpeedHeatPump {
                 }
 
                 Node::SetUpCompSets(state,
-                                                     state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                     thisMSHP.Name,
-                                                     "Coil:Heating:Electric",
-                                                     thisMSHP.SuppHeatCoilName,
-                                                     "UNDEFINED",
-                                                     "UNDEFINED");
+                                    state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                    thisMSHP.Name,
+                                    "Coil:Heating:Electric",
+                                    thisMSHP.SuppHeatCoilName,
+                                    "UNDEFINED",
+                                    "UNDEFINED");
             }
 
             if (Util::SameString(Alphas(14), "Coil:Heating:Water")) {
@@ -1166,12 +1166,12 @@ namespace HVACMultiSpeedHeatPump {
                         ErrorsFound = true;
                     }
                     Node::SetUpCompSets(state,
-                                                         state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                         thisMSHP.Name,
-                                                         "Coil:Heating:Water",
-                                                         thisMSHP.SuppHeatCoilName,
-                                                         state.dataLoopNodes->NodeID(SuppHeatCoilInletNode),
-                                                         state.dataLoopNodes->NodeID(SuppHeatCoilOutletNode));
+                                        state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                        thisMSHP.Name,
+                                        "Coil:Heating:Water",
+                                        thisMSHP.SuppHeatCoilName,
+                                        state.dataLoopNodes->NodeID(SuppHeatCoilInletNode),
+                                        state.dataLoopNodes->NodeID(SuppHeatCoilOutletNode));
                 }
             }
             if (Util::SameString(Alphas(14), "Coil:Heating:Steam")) {
@@ -1232,12 +1232,12 @@ namespace HVACMultiSpeedHeatPump {
                     }
 
                     Node::SetUpCompSets(state,
-                                                         state.dataHVACMultiSpdHP->CurrentModuleObject,
-                                                         thisMSHP.Name,
-                                                         "Coil:Heating:Steam",
-                                                         thisMSHP.SuppHeatCoilName,
-                                                         state.dataLoopNodes->NodeID(SuppHeatCoilInletNode),
-                                                         state.dataLoopNodes->NodeID(SuppHeatCoilOutletNode));
+                                        state.dataHVACMultiSpdHP->CurrentModuleObject,
+                                        thisMSHP.Name,
+                                        "Coil:Heating:Steam",
+                                        thisMSHP.SuppHeatCoilName,
+                                        state.dataLoopNodes->NodeID(SuppHeatCoilInletNode),
+                                        state.dataLoopNodes->NodeID(SuppHeatCoilOutletNode));
                 }
             }
 

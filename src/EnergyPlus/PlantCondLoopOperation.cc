@@ -689,30 +689,18 @@ void GetOperationSchemeInput(EnergyPlusData &state)
 
                 } else if (plantLoopOperation == "PLANTEQUIPMENTOPERATION:OUTDOORDRYBULBDIFFERENCE") {
                     CurrentModuleObject = "PlantEquipmentOperation:OutdoorDryBulbDifference";
-                    FindDeltaTempRangeInput(state,
-                                            Node::ConnectionObjectType::PlantEquipmentOperationOutdoorDrybulbDifference,
-                                            DBTDBO,
-                                            LoopNum,
-                                            SchemeNum,
-                                            ErrorsFound);
+                    FindDeltaTempRangeInput(
+                        state, Node::ConnectionObjectType::PlantEquipmentOperationOutdoorDrybulbDifference, DBTDBO, LoopNum, SchemeNum, ErrorsFound);
 
                 } else if (plantLoopOperation == "PLANTEQUIPMENTOPERATION:OUTDOORWETBULBDIFFERENCE") {
                     CurrentModuleObject = "PlantEquipmentOperation:OutdoorWetBulbDifference";
-                    FindDeltaTempRangeInput(state,
-                                            Node::ConnectionObjectType::PlantEquipmentOperationOutdoorWetbulbDifference,
-                                            WBTDBO,
-                                            LoopNum,
-                                            SchemeNum,
-                                            ErrorsFound);
+                    FindDeltaTempRangeInput(
+                        state, Node::ConnectionObjectType::PlantEquipmentOperationOutdoorWetbulbDifference, WBTDBO, LoopNum, SchemeNum, ErrorsFound);
 
                 } else if (plantLoopOperation == "PLANTEQUIPMENTOPERATION:OUTDOORDEWPOINTDIFFERENCE") {
                     CurrentModuleObject = "PlantEquipmentOperation:OutdoorDewPointDifference";
-                    FindDeltaTempRangeInput(state,
-                                            Node::ConnectionObjectType::PlantEquipmentOperationOutdoorDewpointDifference,
-                                            DPTDBO,
-                                            LoopNum,
-                                            SchemeNum,
-                                            ErrorsFound);
+                    FindDeltaTempRangeInput(
+                        state, Node::ConnectionObjectType::PlantEquipmentOperationOutdoorDewpointDifference, DPTDBO, LoopNum, SchemeNum, ErrorsFound);
 
                 } else if (plantLoopOperation == "PLANTEQUIPMENTOPERATION:UNCONTROLLED") {
                     CurrentModuleObject = "PlantEquipmentOperation:Uncontrolled";
@@ -945,10 +933,10 @@ void FindRangeBasedOrUncontrolledInput(EnergyPlusData &state,
 
 void FindDeltaTempRangeInput(EnergyPlusData &state,
                              Node::ConnectionObjectType const CurrentModuleObject, // for ease in renaming
-                             int const NumSchemes,                                         // May be set here and passed on
-                             int const LoopNum,                                            // May be set here and passed on
-                             int const SchemeNum,                                          // May be set here and passed on
-                             bool &ErrorsFound                                             // May be set here and passed on
+                             int const NumSchemes,                                 // May be set here and passed on
+                             int const LoopNum,                                    // May be set here and passed on
+                             int const SchemeNum,                                  // May be set here and passed on
+                             bool &ErrorsFound                                     // May be set here and passed on
 )
 {
     // SUBROUTINE INFORMATION:
@@ -1035,16 +1023,15 @@ void FindDeltaTempRangeInput(EnergyPlusData &state,
                     state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).NumEquipLists);
                 int NumEquipLists = state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).NumEquipLists;
                 state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).ReferenceNodeName = AlphArray(2);
-                state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).ReferenceNodeNumber =
-                    GetOnlySingleNode(state,
-                                      AlphArray(2),
-                                      ErrorsFound,
-                                      CurrentModuleObject,
-                                      AlphArray(1),
-                                      Node::FluidType::Water,
-                                      Node::ConnectionType::Sensor,
-                                      Node::CompFluidStream::Primary,
-                                      Node::ObjectIsNotParent);
+                state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).ReferenceNodeNumber = GetOnlySingleNode(state,
+                                                                                                               AlphArray(2),
+                                                                                                               ErrorsFound,
+                                                                                                               CurrentModuleObject,
+                                                                                                               AlphArray(1),
+                                                                                                               Node::FluidType::Water,
+                                                                                                               Node::ConnectionType::Sensor,
+                                                                                                               Node::CompFluidStream::Primary,
+                                                                                                               Node::ObjectIsNotParent);
                 // For DO Loop below -- Check for lower limit > upper limit.(invalid)
                 for (int ListNum = 1; ListNum <= NumEquipLists; ++ListNum) {
                     state.dataPlnt->PlantLoop(LoopNum).OpScheme(SchemeNum).EquipList(ListNum).RangeLowerLimit = NumArray(ListNum * 2 - 1);
@@ -1390,8 +1377,8 @@ void FindCompSPInput(EnergyPlusData &state,
 
     SchemeNameFound = true;
 
-    Node::ConnectionObjectType objType = static_cast<Node::ConnectionObjectType>(
-        getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(CurrentModuleObject)));
+    Node::ConnectionObjectType objType =
+        static_cast<Node::ConnectionObjectType>(getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(CurrentModuleObject)));
 
     if (state.dataPlnt->PlantLoop(LoopNum).TypeOfLoop == LoopType::Plant) {
         LoopOpSchemeObj = "PlantEquipmentOperationSchemes";

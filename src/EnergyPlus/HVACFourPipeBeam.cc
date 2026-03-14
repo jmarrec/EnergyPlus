@@ -90,10 +90,10 @@ namespace FourPipeBeam {
     std::shared_ptr<AirTerminalUnit> HVACFourPipeBeam::fourPipeBeamFactory(EnergyPlusData &state, std::string objectName)
     {
 
-        using Node::TestCompSet;
+        using Node::GetOnlySingleNode;
         using Node::ObjectIsNotParent;
         using Node::ObjectIsParent;
-        using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
         using namespace DataSizing;
         using Curve::GetCurveIndex;
         static constexpr std::string_view routineName("FourPipeBeamFactory "); // include trailing blank space

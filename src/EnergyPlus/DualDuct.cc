@@ -601,8 +601,7 @@ namespace DualDuct {
                 // Register component set data - one for OA and one for RA
                 Node::TestCompSet(state, CurrentModuleObject + ":OutdoorAir", thisDD.Name, AlphArray(4), AlphArray(3), "Air Nodes");
                 if (thisDD.RecircIsUsed) {
-                    Node::TestCompSet(
-                        state, CurrentModuleObject + ":RecirculatedAir", thisDD.Name, AlphArray(5), AlphArray(3), "Air Nodes");
+                    Node::TestCompSet(state, CurrentModuleObject + ":RecirculatedAir", thisDD.Name, AlphArray(5), AlphArray(3), "Air Nodes");
                 }
 
                 thisDD.OAPerPersonMode = static_cast<PerPersonMode>(getEnumValue(modeStrings, AlphArray(7)));

@@ -71,27 +71,26 @@ namespace Node {
     extern const std::array<std::string_view, static_cast<int>(Node::ConnectionObjectType::Num)> ConnectionObjectTypeNamesUC;
 
     void RegisterNodeConnection(EnergyPlusData &state,
-                                int NodeNumber,                                // Number for this Node
-                                std::string_view NodeName,                     // Name of this Node
-                                Node::ConnectionObjectType ObjectType, // Type of object this Node is connected to (e.g. Chiller:Electric)
-                                std::string_view ObjectName,                   // Name of object this Node is connected to (e.g. MyChiller)
-                                Node::ConnectionType ConnectionType,   // Connection Type for this Node (must be valid)
-                                Node::CompFluidStream FluidStream, // Count on Fluid Streams
-                                bool IsParent,                                 // True when node is a parent node
-                                bool &errFlag,                                 // Will be True if errors already detected or if errors found here
-                                std::string_view const InputFieldName = {}     // Input Field Name
+                                int NodeNumber,                            // Number for this Node
+                                std::string_view NodeName,                 // Name of this Node
+                                Node::ConnectionObjectType ObjectType,     // Type of object this Node is connected to (e.g. Chiller:Electric)
+                                std::string_view ObjectName,               // Name of object this Node is connected to (e.g. MyChiller)
+                                Node::ConnectionType ConnectionType,       // Connection Type for this Node (must be valid)
+                                Node::CompFluidStream FluidStream,         // Count on Fluid Streams
+                                bool IsParent,                             // True when node is a parent node
+                                bool &errFlag,                             // Will be True if errors already detected or if errors found here
+                                std::string_view const InputFieldName = {} // Input Field Name
     );
 
-    void OverrideNodeConnectionType(
-        EnergyPlusData &state,
-        int const NodeNumber,                                // Number for this Node
-        std::string const &NodeName,                         // Name of this Node
-        Node::ConnectionObjectType const ObjectType, // Type of object this Node is connected to (e.g. Chiller:Electric)
-        std::string const &ObjectName,                       // Name of object this Node is connected to (e.g. MyChiller)
-        Node::ConnectionType const ConnectionType,   // Connection Type for this Node (must be valid)
-        Node::CompFluidStream const FluidStream, // Count on Fluid Streams
-        bool const IsParent,                                 // True when node is a parent node
-        bool &errFlag                                        // Will be True if errors already detected or if errors found here
+    void OverrideNodeConnectionType(EnergyPlusData &state,
+                                    int const NodeNumber,                        // Number for this Node
+                                    std::string const &NodeName,                 // Name of this Node
+                                    Node::ConnectionObjectType const ObjectType, // Type of object this Node is connected to (e.g. Chiller:Electric)
+                                    std::string const &ObjectName,               // Name of object this Node is connected to (e.g. MyChiller)
+                                    Node::ConnectionType const ConnectionType,   // Connection Type for this Node (must be valid)
+                                    Node::CompFluidStream const FluidStream,     // Count on Fluid Streams
+                                    bool const IsParent,                         // True when node is a parent node
+                                    bool &errFlag                                // Will be True if errors already detected or if errors found here
     );
 
     void CheckNodeConnections(EnergyPlusData &state, bool &ErrorsFound);

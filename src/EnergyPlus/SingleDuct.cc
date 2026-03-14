@@ -103,11 +103,11 @@ namespace EnergyPlus::SingleDuct {
 // simulate single duct systems as a single driver or inter-connecting controllers.
 
 // Using/Aliasing
-using Node::SetUpCompSets;
-using Node::TestCompSet;
 using HVAC::SmallAirVolFlow;
 using HVAC::SmallLoad;
 using HVAC::SmallMassFlow;
+using Node::SetUpCompSets;
+using Node::TestCompSet;
 using namespace DataSizing;
 using Psychrometrics::PsyCpAirFnW;
 using Psychrometrics::PsyRhoAirFnPbTdbW;
@@ -5208,17 +5208,16 @@ void GetATMixers(EnergyPlusData &state)
         ValidateComponent(
             state, state.dataIPShortCut->cAlphaArgs(2), state.dataSingleDuct->SysATMixer(ATMixerNum).ZoneHVACUnitName, errFlag, cCurrentModuleObject);
 
-        state.dataSingleDuct->SysATMixer(ATMixerNum).MixedAirOutNode =
-            GetOnlySingleNode(state,
-                              state.dataIPShortCut->cAlphaArgs(4),
-                              ErrorsFound,
-                              Node::ConnectionObjectType::AirTerminalSingleDuctMixer,
-                              state.dataIPShortCut->cAlphaArgs(1),
-                              Node::FluidType::Air,
-                              Node::ConnectionType::Outlet,
-                              Node::CompFluidStream::Primary,
-                              Node::ObjectIsNotParent,
-                              state.dataIPShortCut->cAlphaFieldNames(4));
+        state.dataSingleDuct->SysATMixer(ATMixerNum).MixedAirOutNode = GetOnlySingleNode(state,
+                                                                                         state.dataIPShortCut->cAlphaArgs(4),
+                                                                                         ErrorsFound,
+                                                                                         Node::ConnectionObjectType::AirTerminalSingleDuctMixer,
+                                                                                         state.dataIPShortCut->cAlphaArgs(1),
+                                                                                         Node::FluidType::Air,
+                                                                                         Node::ConnectionType::Outlet,
+                                                                                         Node::CompFluidStream::Primary,
+                                                                                         Node::ObjectIsNotParent,
+                                                                                         state.dataIPShortCut->cAlphaFieldNames(4));
 
         state.dataSingleDuct->SysATMixer(ATMixerNum).PriInNode = GetOnlySingleNode(state,
                                                                                    state.dataIPShortCut->cAlphaArgs(5),

@@ -327,23 +327,23 @@ void GetFanInput(EnergyPlusData &state)
         fan->minAirFlowRate = 0.0;
 
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
-                                                                cAlphaArgs(3),
-                                                                ErrorsFound,
-                                                                Node::ConnectionObjectType::FanConstantVolume,
-                                                                cAlphaArgs(1),
-                                                                Node::FluidType::Air,
-                                                                Node::ConnectionType::Inlet,
-                                                                Node::CompFluidStream::Primary,
-                                                                Node::ObjectIsNotParent);
+                                                    cAlphaArgs(3),
+                                                    ErrorsFound,
+                                                    Node::ConnectionObjectType::FanConstantVolume,
+                                                    cAlphaArgs(1),
+                                                    Node::FluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
         fan->outletNodeNum = Node::GetOnlySingleNode(state,
-                                                                 cAlphaArgs(4),
-                                                                 ErrorsFound,
-                                                                 Node::ConnectionObjectType::FanConstantVolume,
-                                                                 cAlphaArgs(1),
-                                                                 Node::FluidType::Air,
-                                                                 Node::ConnectionType::Outlet,
-                                                                 Node::CompFluidStream::Primary,
-                                                                 Node::ObjectIsNotParent);
+                                                     cAlphaArgs(4),
+                                                     ErrorsFound,
+                                                     Node::ConnectionObjectType::FanConstantVolume,
+                                                     cAlphaArgs(1),
+                                                     Node::FluidType::Air,
+                                                     Node::ConnectionType::Outlet,
+                                                     Node::CompFluidStream::Primary,
+                                                     Node::ObjectIsNotParent);
 
         fan->endUseSubcategoryName = (NumAlphas > 4) ? cAlphaArgs(5) : "General";
 
@@ -418,23 +418,23 @@ void GetFanInput(EnergyPlusData &state)
             ShowContinueError(state, EnergyPlus::format("For {}, Fan={}", cCurrentModuleObject, cAlphaArgs(1)));
         }
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
-                                                                cAlphaArgs(4),
-                                                                ErrorsFound,
-                                                                Node::ConnectionObjectType::FanVariableVolume,
-                                                                cAlphaArgs(1),
-                                                                Node::FluidType::Air,
-                                                                Node::ConnectionType::Inlet,
-                                                                Node::CompFluidStream::Primary,
-                                                                Node::ObjectIsNotParent);
+                                                    cAlphaArgs(4),
+                                                    ErrorsFound,
+                                                    Node::ConnectionObjectType::FanVariableVolume,
+                                                    cAlphaArgs(1),
+                                                    Node::FluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
         fan->outletNodeNum = Node::GetOnlySingleNode(state,
-                                                                 cAlphaArgs(5),
-                                                                 ErrorsFound,
-                                                                 Node::ConnectionObjectType::FanVariableVolume,
-                                                                 cAlphaArgs(1),
-                                                                 Node::FluidType::Air,
-                                                                 Node::ConnectionType::Outlet,
-                                                                 Node::CompFluidStream::Primary,
-                                                                 Node::ObjectIsNotParent);
+                                                     cAlphaArgs(5),
+                                                     ErrorsFound,
+                                                     Node::ConnectionObjectType::FanVariableVolume,
+                                                     cAlphaArgs(1),
+                                                     Node::FluidType::Air,
+                                                     Node::ConnectionType::Outlet,
+                                                     Node::CompFluidStream::Primary,
+                                                     Node::ObjectIsNotParent);
 
         fan->endUseSubcategoryName = (NumAlphas > 5) ? cAlphaArgs(6) : "General";
 
@@ -507,23 +507,23 @@ void GetFanInput(EnergyPlusData &state)
         }
 
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
-                                                                cAlphaArgs(3),
-                                                                ErrorsFound,
-                                                                Node::ConnectionObjectType::FanZoneExhaust,
-                                                                cAlphaArgs(1),
-                                                                Node::FluidType::Air,
-                                                                Node::ConnectionType::Inlet,
-                                                                Node::CompFluidStream::Primary,
-                                                                Node::ObjectIsNotParent);
+                                                    cAlphaArgs(3),
+                                                    ErrorsFound,
+                                                    Node::ConnectionObjectType::FanZoneExhaust,
+                                                    cAlphaArgs(1),
+                                                    Node::FluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
         fan->outletNodeNum = Node::GetOnlySingleNode(state,
-                                                                 cAlphaArgs(4),
-                                                                 ErrorsFound,
-                                                                 Node::ConnectionObjectType::FanZoneExhaust,
-                                                                 cAlphaArgs(1),
-                                                                 Node::FluidType::Air,
-                                                                 Node::ConnectionType::Outlet,
-                                                                 Node::CompFluidStream::Primary,
-                                                                 Node::ObjectIsNotParent);
+                                                     cAlphaArgs(4),
+                                                     ErrorsFound,
+                                                     Node::ConnectionObjectType::FanZoneExhaust,
+                                                     cAlphaArgs(1),
+                                                     Node::FluidType::Air,
+                                                     Node::ConnectionType::Outlet,
+                                                     Node::CompFluidStream::Primary,
+                                                     Node::ObjectIsNotParent);
 
         fan->endUseSubcategoryName = (NumAlphas > 4 && !lAlphaFieldBlanks(5)) ? cAlphaArgs(5) : "General";
 
@@ -637,23 +637,23 @@ void GetFanInput(EnergyPlusData &state)
         fan->minAirFlowRate = 0.0;
 
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
-                                                                cAlphaArgs(3),
-                                                                ErrorsFound,
-                                                                Node::ConnectionObjectType::FanOnOff,
-                                                                cAlphaArgs(1),
-                                                                Node::FluidType::Air,
-                                                                Node::ConnectionType::Inlet,
-                                                                Node::CompFluidStream::Primary,
-                                                                Node::ObjectIsNotParent);
+                                                    cAlphaArgs(3),
+                                                    ErrorsFound,
+                                                    Node::ConnectionObjectType::FanOnOff,
+                                                    cAlphaArgs(1),
+                                                    Node::FluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
         fan->outletNodeNum = Node::GetOnlySingleNode(state,
-                                                                 cAlphaArgs(4),
-                                                                 ErrorsFound,
-                                                                 Node::ConnectionObjectType::FanOnOff,
-                                                                 cAlphaArgs(1),
-                                                                 Node::FluidType::Air,
-                                                                 Node::ConnectionType::Outlet,
-                                                                 Node::CompFluidStream::Primary,
-                                                                 Node::ObjectIsNotParent);
+                                                     cAlphaArgs(4),
+                                                     ErrorsFound,
+                                                     Node::ConnectionObjectType::FanOnOff,
+                                                     cAlphaArgs(1),
+                                                     Node::FluidType::Air,
+                                                     Node::ConnectionType::Outlet,
+                                                     Node::CompFluidStream::Primary,
+                                                     Node::ObjectIsNotParent);
 
         if (NumAlphas > 4 && !lAlphaFieldBlanks(5)) {
             fan->powerRatioAtSpeedRatioCurveNum = Curve::GetCurveIndex(state, cAlphaArgs(5));
@@ -755,23 +755,23 @@ void GetFanInput(EnergyPlusData &state)
         fan->sizingPrefix = cNumericFieldNames(1);
 
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
-                                                                cAlphaArgs(2),
-                                                                ErrorsFound,
-                                                                Node::ConnectionObjectType::FanComponentModel,
-                                                                cAlphaArgs(1),
-                                                                Node::FluidType::Air,
-                                                                Node::ConnectionType::Inlet,
-                                                                Node::CompFluidStream::Primary,
-                                                                Node::ObjectIsNotParent); // Air inlet node name
+                                                    cAlphaArgs(2),
+                                                    ErrorsFound,
+                                                    Node::ConnectionObjectType::FanComponentModel,
+                                                    cAlphaArgs(1),
+                                                    Node::FluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent); // Air inlet node name
         fan->outletNodeNum = Node::GetOnlySingleNode(state,
-                                                                 cAlphaArgs(3),
-                                                                 ErrorsFound,
-                                                                 Node::ConnectionObjectType::FanComponentModel,
-                                                                 cAlphaArgs(1),
-                                                                 Node::FluidType::Air,
-                                                                 Node::ConnectionType::Outlet,
-                                                                 Node::CompFluidStream::Primary,
-                                                                 Node::ObjectIsNotParent); // Air outlet node name
+                                                     cAlphaArgs(3),
+                                                     ErrorsFound,
+                                                     Node::ConnectionObjectType::FanComponentModel,
+                                                     cAlphaArgs(1),
+                                                     Node::FluidType::Air,
+                                                     Node::ConnectionType::Outlet,
+                                                     Node::CompFluidStream::Primary,
+                                                     Node::ObjectIsNotParent); // Air outlet node name
 
         Node::TestCompSet(state, cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(2), cAlphaArgs(3), "Air Nodes");
 
@@ -879,23 +879,23 @@ void GetFanInput(EnergyPlusData &state)
         }
 
         fan->inletNodeNum = Node::GetOnlySingleNode(state,
-                                                                cAlphaArgs(3),
-                                                                ErrorsFound,
-                                                                Node::ConnectionObjectType::FanSystemModel,
-                                                                cAlphaArgs(1),
-                                                                Node::FluidType::Air,
-                                                                Node::ConnectionType::Inlet,
-                                                                Node::CompFluidStream::Primary,
-                                                                Node::ObjectIsNotParent);
+                                                    cAlphaArgs(3),
+                                                    ErrorsFound,
+                                                    Node::ConnectionObjectType::FanSystemModel,
+                                                    cAlphaArgs(1),
+                                                    Node::FluidType::Air,
+                                                    Node::ConnectionType::Inlet,
+                                                    Node::CompFluidStream::Primary,
+                                                    Node::ObjectIsNotParent);
         fan->outletNodeNum = Node::GetOnlySingleNode(state,
-                                                                 cAlphaArgs(4),
-                                                                 ErrorsFound,
-                                                                 Node::ConnectionObjectType::FanSystemModel,
-                                                                 cAlphaArgs(1),
-                                                                 Node::FluidType::Air,
-                                                                 Node::ConnectionType::Outlet,
-                                                                 Node::CompFluidStream::Primary,
-                                                                 Node::ObjectIsNotParent);
+                                                     cAlphaArgs(4),
+                                                     ErrorsFound,
+                                                     Node::ConnectionObjectType::FanSystemModel,
+                                                     cAlphaArgs(1),
+                                                     Node::FluidType::Air,
+                                                     Node::ConnectionType::Outlet,
+                                                     Node::CompFluidStream::Primary,
+                                                     Node::ObjectIsNotParent);
 
         Node::TestCompSet(state, cCurrentModuleObject, cAlphaArgs(1), cAlphaArgs(3), cAlphaArgs(4), "Air Nodes");
 

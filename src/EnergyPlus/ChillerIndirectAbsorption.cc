@@ -281,54 +281,54 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
         }
         // Assign Node Numbers to specified nodes
         thisChiller.EvapInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                           state.dataIPShortCut->cAlphaArgs(2),
-                                                                           ErrorsFound,
-                                                                           Node::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                           state.dataIPShortCut->cAlphaArgs(1),
-                                                                           Node::FluidType::Water,
-                                                                           Node::ConnectionType::Inlet,
-                                                                           Node::CompFluidStream::Primary,
-                                                                           Node::ObjectIsNotParent);
+                                                               state.dataIPShortCut->cAlphaArgs(2),
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                               state.dataIPShortCut->cAlphaArgs(1),
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsNotParent);
         thisChiller.EvapOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                            state.dataIPShortCut->cAlphaArgs(3),
-                                                                            ErrorsFound,
-                                                                            Node::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                                            Node::FluidType::Water,
-                                                                            Node::ConnectionType::Outlet,
-                                                                            Node::CompFluidStream::Primary,
-                                                                            Node::ObjectIsNotParent);
+                                                                state.dataIPShortCut->cAlphaArgs(3),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                state.dataIPShortCut->cAlphaArgs(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
         Node::TestCompSet(state,
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(2),
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           "Chilled Water Nodes");
+                          state.dataIPShortCut->cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(2),
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          "Chilled Water Nodes");
 
         thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                           state.dataIPShortCut->cAlphaArgs(4),
-                                                                           ErrorsFound,
-                                                                           Node::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                           state.dataIPShortCut->cAlphaArgs(1),
-                                                                           Node::FluidType::Water,
-                                                                           Node::ConnectionType::Inlet,
-                                                                           Node::CompFluidStream::Secondary,
-                                                                           Node::ObjectIsNotParent);
+                                                               state.dataIPShortCut->cAlphaArgs(4),
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                               state.dataIPShortCut->cAlphaArgs(1),
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
         thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                            state.dataIPShortCut->cAlphaArgs(5),
-                                                                            ErrorsFound,
-                                                                            Node::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                                            Node::FluidType::Water,
-                                                                            Node::ConnectionType::Outlet,
-                                                                            Node::CompFluidStream::Secondary,
-                                                                            Node::ObjectIsNotParent);
+                                                                state.dataIPShortCut->cAlphaArgs(5),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                state.dataIPShortCut->cAlphaArgs(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Secondary,
+                                                                Node::ObjectIsNotParent);
         Node::TestCompSet(state,
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(4),
-                                           state.dataIPShortCut->cAlphaArgs(5),
-                                           "Condenser (not tested) Nodes");
+                          state.dataIPShortCut->cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(4),
+                          state.dataIPShortCut->cAlphaArgs(5),
+                          "Condenser (not tested) Nodes");
 
         thisChiller.GeneratorInputCurvePtr = Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(7));
         if (thisChiller.GeneratorInputCurvePtr > 0) {
@@ -379,30 +379,29 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
             thisChiller.GenInputOutputNodesUsed = true;
             if (thisChiller.GenHeatSourceType == Node::FluidType::Water) {
                 thisChiller.GeneratorInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                        state.dataIPShortCut->cAlphaArgs(9),
-                                                                                        ErrorsFound,
-                                                                                        Node::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                                                        Node::FluidType::Water,
-                                                                                        Node::ConnectionType::Inlet,
-                                                                                        Node::CompFluidStream::Tertiary,
-                                                                                        Node::ObjectIsNotParent);
-                thisChiller.GeneratorOutletNodeNum =
-                    Node::GetOnlySingleNode(state,
-                                                        state.dataIPShortCut->cAlphaArgs(10),
-                                                        ErrorsFound,
-                                                        Node::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                        Node::FluidType::Water,
-                                                        Node::ConnectionType::Outlet,
-                                                        Node::CompFluidStream::Tertiary,
-                                                        Node::ObjectIsNotParent);
+                                                                            state.dataIPShortCut->cAlphaArgs(9),
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                            state.dataIPShortCut->cAlphaArgs(1),
+                                                                            Node::FluidType::Water,
+                                                                            Node::ConnectionType::Inlet,
+                                                                            Node::CompFluidStream::Tertiary,
+                                                                            Node::ObjectIsNotParent);
+                thisChiller.GeneratorOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                             state.dataIPShortCut->cAlphaArgs(10),
+                                                                             ErrorsFound,
+                                                                             Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                             state.dataIPShortCut->cAlphaArgs(1),
+                                                                             Node::FluidType::Water,
+                                                                             Node::ConnectionType::Outlet,
+                                                                             Node::CompFluidStream::Tertiary,
+                                                                             Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(9),
-                                                   state.dataIPShortCut->cAlphaArgs(10),
-                                                   "Hot Water Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(9),
+                                  state.dataIPShortCut->cAlphaArgs(10),
+                                  "Hot Water Nodes");
             } else {
                 if ((thisChiller.steam = Fluid::GetSteam(state)) == nullptr) {
                     ShowSevereError(state, "Fluid Properties for STEAM not found.");
@@ -410,30 +409,29 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
                 }
 
                 thisChiller.GeneratorInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                                        state.dataIPShortCut->cAlphaArgs(9),
-                                                                                        ErrorsFound,
-                                                                                        Node::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                                                        Node::FluidType::Steam,
-                                                                                        Node::ConnectionType::Inlet,
-                                                                                        Node::CompFluidStream::Tertiary,
-                                                                                        Node::ObjectIsNotParent);
-                thisChiller.GeneratorOutletNodeNum =
-                    Node::GetOnlySingleNode(state,
-                                                        state.dataIPShortCut->cAlphaArgs(10),
-                                                        ErrorsFound,
-                                                        Node::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                        Node::FluidType::Steam,
-                                                        Node::ConnectionType::Outlet,
-                                                        Node::CompFluidStream::Tertiary,
-                                                        Node::ObjectIsNotParent);
+                                                                            state.dataIPShortCut->cAlphaArgs(9),
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                            state.dataIPShortCut->cAlphaArgs(1),
+                                                                            Node::FluidType::Steam,
+                                                                            Node::ConnectionType::Inlet,
+                                                                            Node::CompFluidStream::Tertiary,
+                                                                            Node::ObjectIsNotParent);
+                thisChiller.GeneratorOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                             state.dataIPShortCut->cAlphaArgs(10),
+                                                                             ErrorsFound,
+                                                                             Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                             state.dataIPShortCut->cAlphaArgs(1),
+                                                                             Node::FluidType::Steam,
+                                                                             Node::ConnectionType::Outlet,
+                                                                             Node::CompFluidStream::Tertiary,
+                                                                             Node::ObjectIsNotParent);
                 Node::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(9),
-                                                   state.dataIPShortCut->cAlphaArgs(10),
-                                                   "Steam Nodes");
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(9),
+                                  state.dataIPShortCut->cAlphaArgs(10),
+                                  "Steam Nodes");
             }
         } else if (state.dataIPShortCut->cAlphaArgs(9).empty() != state.dataIPShortCut->cAlphaArgs(10).empty()) {
             ShowWarningError(state,
@@ -1566,10 +1564,8 @@ void IndirectAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                                                  this->Name,
                                                  (this->CDPlantLoc.branch != nullptr) ? this->CDPlantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchChillerMinPLR, this->Name, this->MinPartLoadRat);
-        OutputReportPredefined::PreDefTableEntry(state,
-                                                 state.dataOutRptPredefined->pdchChillerFuelType,
-                                                 this->Name,
-                                                 Node::FluidTypeNames[static_cast<int>(this->GenHeatSourceType)]);
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchChillerFuelType, this->Name, Node::FluidTypeNames[static_cast<int>(this->GenHeatSourceType)]);
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchChillerRatedEntCondTemp, this->Name, this->TempDesCondIn); // Rated==Ref?
         OutputReportPredefined::PreDefTableEntry(

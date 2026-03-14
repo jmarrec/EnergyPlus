@@ -258,16 +258,15 @@ void GetMixerInput(EnergyPlusData &state)
 
         for (NodeNum = 1; NodeNum <= state.dataMixerComponent->MixerCond(MixerNum).NumInletNodes; ++NodeNum) {
 
-            state.dataMixerComponent->MixerCond(MixerNum).InletNode(NodeNum) =
-                GetOnlySingleNode(state,
-                                  AlphArray(2 + NodeNum),
-                                  ErrorsFound,
-                                  Node::ConnectionObjectType::AirLoopHVACZoneMixer,
-                                  AlphArray(1),
-                                  Node::FluidType::Air,
-                                  Node::ConnectionType::Inlet,
-                                  Node::CompFluidStream::Primary,
-                                  Node::ObjectIsNotParent);
+            state.dataMixerComponent->MixerCond(MixerNum).InletNode(NodeNum) = GetOnlySingleNode(state,
+                                                                                                 AlphArray(2 + NodeNum),
+                                                                                                 ErrorsFound,
+                                                                                                 Node::ConnectionObjectType::AirLoopHVACZoneMixer,
+                                                                                                 AlphArray(1),
+                                                                                                 Node::FluidType::Air,
+                                                                                                 Node::ConnectionType::Inlet,
+                                                                                                 Node::CompFluidStream::Primary,
+                                                                                                 Node::ObjectIsNotParent);
             if (lAlphaBlanks(2 + NodeNum)) {
                 ShowSevereError(state, EnergyPlus::format("{} is Blank, {} = {}", cAlphaFields(2 + NodeNum), CurrentModuleObject, AlphArray(1)));
                 ErrorsFound = true;

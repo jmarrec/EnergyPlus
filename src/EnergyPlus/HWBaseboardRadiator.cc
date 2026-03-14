@@ -503,11 +503,11 @@ namespace HWBaseboardRadiator {
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
             Node::TestCompSet(state,
-                                               cCMO_BBRadiator_Water,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               state.dataIPShortCut->cAlphaArgs(5),
-                                               "Hot Water Nodes");
+                              cCMO_BBRadiator_Water,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              state.dataIPShortCut->cAlphaArgs(5),
+                              "Hot Water Nodes");
 
             thisHWBaseboard.WaterTempAvg = state.dataIPShortCut->rNumericArgs(1);
             if (thisHWBaseboard.WaterTempAvg > MaxWaterTempAvg + 0.001) {

@@ -215,9 +215,9 @@ namespace BaseboardRadiator {
         // Standard input processor calls.
 
         // Using/Aliasing
-        using Node::TestCompSet;
-        using Node::GetOnlySingleNode;
         using GlobalNames::VerifyUniqueBaseboardName;
+        using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
         using namespace DataSizing;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
@@ -297,7 +297,8 @@ namespace BaseboardRadiator {
                                                                   Node::CompFluidStream::Primary,
                                                                   Node::ObjectIsNotParent);
 
-                Node::TestCompSet(state, cCMO_BBRadiator_Water, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(3), s_ipsc->cAlphaArgs(4), "Hot Water Nodes");
+                Node::TestCompSet(
+                    state, cCMO_BBRadiator_Water, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(3), s_ipsc->cAlphaArgs(4), "Hot Water Nodes");
 
                 // Determine steam baseboard radiator system heating design capacity sizing method
                 if (Util::SameString(s_ipsc->cAlphaArgs(iHeatCAPMAlphaNum), "HeatingDesignCapacity")) {

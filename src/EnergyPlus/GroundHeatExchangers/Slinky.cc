@@ -73,25 +73,25 @@ GLHESlinky::GLHESlinky(EnergyPlusData &state, std::string const &objName, nlohma
 
     // get inlet node num
     this->inletNodeNum = Node::GetOnlySingleNode(state,
-                                                             inletNodeName,
-                                                             errorsFound,
-                                                             Node::ConnectionObjectType::GroundHeatExchangerSlinky,
-                                                             this->name,
-                                                             Node::FluidType::Water,
-                                                             Node::ConnectionType::Inlet,
-                                                             Node::CompFluidStream::Primary,
-                                                             Node::ObjectIsNotParent);
+                                                 inletNodeName,
+                                                 errorsFound,
+                                                 Node::ConnectionObjectType::GroundHeatExchangerSlinky,
+                                                 this->name,
+                                                 Node::FluidType::Water,
+                                                 Node::ConnectionType::Inlet,
+                                                 Node::CompFluidStream::Primary,
+                                                 Node::ObjectIsNotParent);
 
     // get outlet node num
     this->outletNodeNum = Node::GetOnlySingleNode(state,
-                                                              outletNodeName,
-                                                              errorsFound,
-                                                              Node::ConnectionObjectType::GroundHeatExchangerSlinky,
-                                                              this->name,
-                                                              Node::FluidType::Water,
-                                                              Node::ConnectionType::Outlet,
-                                                              Node::CompFluidStream::Primary,
-                                                              Node::ObjectIsNotParent);
+                                                  outletNodeName,
+                                                  errorsFound,
+                                                  Node::ConnectionObjectType::GroundHeatExchangerSlinky,
+                                                  this->name,
+                                                  Node::FluidType::Water,
+                                                  Node::ConnectionType::Outlet,
+                                                  Node::CompFluidStream::Primary,
+                                                  Node::ObjectIsNotParent);
 
     this->available = true;
     this->on = true;

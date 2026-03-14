@@ -201,8 +201,8 @@ namespace HVACCooledBeam {
         // Uses "Get" routines to read in data.
 
         // Using/Aliasing
-        using Node::TestCompSet;
         using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
         using namespace DataSizing;
         using WaterCoils::GetCoilWaterInletNode;
 

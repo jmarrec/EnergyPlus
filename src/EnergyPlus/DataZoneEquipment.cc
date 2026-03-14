@@ -861,8 +861,7 @@ void processZoneEquipmentInput(EnergyPlusData &state,
         state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
     } else {
         bool UniqueNodeError = false;
-        Node::CheckUniqueNodeNames(
-            state, cAlphaFields(5 + spaceFieldShift), UniqueNodeError, AlphArray(5 + spaceFieldShift), AlphArray(1));
+        Node::CheckUniqueNodeNames(state, cAlphaFields(5 + spaceFieldShift), UniqueNodeError, AlphArray(5 + spaceFieldShift), AlphArray(1));
         if (UniqueNodeError) {
             // ShowContinueError(state, format("Occurs for {} = {}", trim( cAlphaFields( 1 ) ), trim( AlphArray( 1 ) )));
             state.dataZoneEquip->GetZoneEquipmentDataErrorsFound = true;
@@ -1099,8 +1098,7 @@ void processZoneEquipmentInput(EnergyPlusData &state,
                 NodeNums,
                 NodeListError,
                 Node::FluidType::Air,
-                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections
-                         : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
+                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
                 thisEquipConfig.ZoneName,
                 Node::ConnectionType::ZoneInlet,
                 Node::CompFluidStream::Primary,
@@ -1148,8 +1146,7 @@ void processZoneEquipmentInput(EnergyPlusData &state,
                 NodeNums,
                 NodeListError,
                 Node::FluidType::Air,
-                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections
-                         : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
+                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
                 thisEquipConfig.ZoneName,
                 Node::ConnectionType::ZoneExhaust,
                 Node::CompFluidStream::Primary,
@@ -1183,8 +1180,7 @@ void processZoneEquipmentInput(EnergyPlusData &state,
                 NodeNums,
                 NodeListError,
                 Node::FluidType::Air,
-                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections
-                         : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
+                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
                 thisEquipConfig.ZoneName,
                 Node::ConnectionType::ZoneReturn,
                 Node::CompFluidStream::Primary,
@@ -1239,8 +1235,7 @@ void processZoneEquipmentInput(EnergyPlusData &state,
                 NodeNums,
                 NodeListError,
                 Node::FluidType::Air,
-                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections
-                         : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
+                (isSpace ? Node::ConnectionObjectType::SpaceHVACEquipmentConnections : Node::ConnectionObjectType::ZoneHVACEquipmentConnections),
                 thisEquipConfig.ZoneName,
                 Node::ConnectionType::Sensor,
                 Node::CompFluidStream::Primary,

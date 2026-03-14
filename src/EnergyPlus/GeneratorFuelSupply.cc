@@ -148,16 +148,15 @@ namespace GeneratorFuelSupply {
                 }
 
                 state.dataGenerator->FuelSupply(FuelSupNum).NodeName = AlphArray(3);
-                state.dataGenerator->FuelSupply(FuelSupNum).NodeNum =
-                    Node::GetOnlySingleNode(state,
-                                                        AlphArray(3),
-                                                        ErrorsFound,
-                                                        Node::ConnectionObjectType::GeneratorFuelSupply,
-                                                        AlphArray(1),
-                                                        Node::FluidType::Air,
-                                                        Node::ConnectionType::Sensor,
-                                                        Node::CompFluidStream::Primary,
-                                                        Node::ObjectIsNotParent);
+                state.dataGenerator->FuelSupply(FuelSupNum).NodeNum = Node::GetOnlySingleNode(state,
+                                                                                              AlphArray(3),
+                                                                                              ErrorsFound,
+                                                                                              Node::ConnectionObjectType::GeneratorFuelSupply,
+                                                                                              AlphArray(1),
+                                                                                              Node::FluidType::Air,
+                                                                                              Node::ConnectionType::Sensor,
+                                                                                              Node::CompFluidStream::Primary,
+                                                                                              Node::ObjectIsNotParent);
 
                 if (state.dataGenerator->FuelSupply(FuelSupNum).FuelTempMode == DataGenerators::FuelTemperatureMode::FuelInTempSchedule) {
                     if ((state.dataGenerator->FuelSupply(FuelSupNum).sched = Sched::GetSchedule(state, AlphArray(4))) == nullptr) {

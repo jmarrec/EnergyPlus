@@ -308,11 +308,11 @@ void GetEvapInput(EnergyPlusData &state)
                                                       Node::ObjectIsNotParent);
 
         Node::TestCompSet(state,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           state.dataIPShortCut->cAlphaArgs(4),
-                                           "Evap Air Nodes");
+                          cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          state.dataIPShortCut->cAlphaArgs(4),
+                          "Evap Air Nodes");
 
         thisEvapCooler.EvapControlType = state.dataIPShortCut->cAlphaArgs(5);
 
@@ -406,11 +406,11 @@ void GetEvapInput(EnergyPlusData &state)
                                                       Node::ObjectIsNotParent);
 
         Node::TestCompSet(state,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           state.dataIPShortCut->cAlphaArgs(4),
-                                           "Evap Air Nodes");
+                          cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          state.dataIPShortCut->cAlphaArgs(4),
+                          "Evap Air Nodes");
 
         thisEvapCooler.EvapControlType = state.dataIPShortCut->cAlphaArgs(5);
 
@@ -537,11 +537,11 @@ void GetEvapInput(EnergyPlusData &state)
                                                       Node::ObjectIsNotParent);
 
         Node::TestCompSet(state,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           state.dataIPShortCut->cAlphaArgs(4),
-                                           "Evap Air Nodes");
+                          cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          state.dataIPShortCut->cAlphaArgs(4),
+                          "Evap Air Nodes");
 
         thisEvapCooler.EvapControlType = state.dataIPShortCut->cAlphaArgs(5);
 
@@ -658,11 +658,11 @@ void GetEvapInput(EnergyPlusData &state)
                                                       Node::ObjectIsNotParent);
 
         Node::TestCompSet(state,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(7),
-                                           state.dataIPShortCut->cAlphaArgs(8),
-                                           "Evap Air Nodes");
+                          cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(7),
+                          state.dataIPShortCut->cAlphaArgs(8),
+                          "Evap Air Nodes");
 
         if (state.dataIPShortCut->lAlphaFieldBlanks(9)) {
             thisEvapCooler.SecondaryInletNode = 0;
@@ -858,11 +858,11 @@ void GetEvapInput(EnergyPlusData &state)
                                                       Node::ObjectIsNotParent);
 
         Node::TestCompSet(state,
-                                           cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(5),
-                                           state.dataIPShortCut->cAlphaArgs(6),
-                                           "Evap Air Nodes");
+                          cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(5),
+                          state.dataIPShortCut->cAlphaArgs(6),
+                          "Evap Air Nodes");
 
         thisEvapCooler.EvapControlNodeNum = GetOnlySingleNode(state,
                                                               state.dataIPShortCut->cAlphaArgs(7),
@@ -3617,31 +3617,31 @@ void GetInputZoneEvaporativeCoolerUnit(EnergyPlusData &state)
 
             // Add fan to component sets array
             Node::SetUpCompSets(state,
-                                                 CurrentModuleObject,
-                                                 thisZoneEvapUnit.Name,
-                                                 HVAC::fanTypeNamesUC[(int)thisZoneEvapUnit.fanType],
-                                                 thisZoneEvapUnit.FanName,
-                                                 state.dataLoopNodes->NodeID(thisZoneEvapUnit.FanInletNodeNum),
-                                                 state.dataLoopNodes->NodeID(thisZoneEvapUnit.FanOutletNodeNum));
+                                CurrentModuleObject,
+                                thisZoneEvapUnit.Name,
+                                HVAC::fanTypeNamesUC[(int)thisZoneEvapUnit.fanType],
+                                thisZoneEvapUnit.FanName,
+                                state.dataLoopNodes->NodeID(thisZoneEvapUnit.FanInletNodeNum),
+                                state.dataLoopNodes->NodeID(thisZoneEvapUnit.FanOutletNodeNum));
 
             // Add first evap cooler to component sets array
             Node::SetUpCompSets(state,
-                                                 CurrentModuleObject,
-                                                 thisZoneEvapUnit.Name,
-                                                 thisZoneEvapUnit.EvapCooler_1_ObjectClassName,
-                                                 thisZoneEvapUnit.EvapCooler_1_Name,
-                                                 state.dataLoopNodes->NodeID(EvapCond(thisZoneEvapUnit.EvapCooler_1_Index).InletNode),
-                                                 state.dataLoopNodes->NodeID(EvapCond(thisZoneEvapUnit.EvapCooler_1_Index).OutletNode));
+                                CurrentModuleObject,
+                                thisZoneEvapUnit.Name,
+                                thisZoneEvapUnit.EvapCooler_1_ObjectClassName,
+                                thisZoneEvapUnit.EvapCooler_1_Name,
+                                state.dataLoopNodes->NodeID(EvapCond(thisZoneEvapUnit.EvapCooler_1_Index).InletNode),
+                                state.dataLoopNodes->NodeID(EvapCond(thisZoneEvapUnit.EvapCooler_1_Index).OutletNode));
 
             if (thisZoneEvapUnit.EvapCooler_2_Index > 0) {
                 // Add second evap cooler to component sets array
                 Node::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     thisZoneEvapUnit.Name,
-                                                     thisZoneEvapUnit.EvapCooler_2_ObjectClassName,
-                                                     thisZoneEvapUnit.EvapCooler_2_Name,
-                                                     state.dataLoopNodes->NodeID(EvapCond(thisZoneEvapUnit.EvapCooler_2_Index).InletNode),
-                                                     state.dataLoopNodes->NodeID(EvapCond(thisZoneEvapUnit.EvapCooler_2_Index).OutletNode));
+                                    CurrentModuleObject,
+                                    thisZoneEvapUnit.Name,
+                                    thisZoneEvapUnit.EvapCooler_2_ObjectClassName,
+                                    thisZoneEvapUnit.EvapCooler_2_Name,
+                                    state.dataLoopNodes->NodeID(EvapCond(thisZoneEvapUnit.EvapCooler_2_Index).InletNode),
+                                    state.dataLoopNodes->NodeID(EvapCond(thisZoneEvapUnit.EvapCooler_2_Index).OutletNode));
             }
 
             // check that fan type is consistent with control method

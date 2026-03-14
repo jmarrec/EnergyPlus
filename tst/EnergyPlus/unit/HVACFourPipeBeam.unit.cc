@@ -228,15 +228,15 @@ TEST_F(EnergyPlusFixture, Beam_FactoryAllAutosize)
     bool ErrorsFound = false;
     state->dataZoneEquip->ZoneEquipConfig(1).ZoneNode =
         Node::GetOnlySingleNode(*state,
-                                            "Zone 1 Node",
-                                            ErrorsFound,
-                                            Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
-                                            "BeamTest",
-                                            Node::FluidType::Air,
-                                            Node::ConnectionType::ZoneNode,
-                                            Node::CompFluidStream::Primary,
-                                            Node::ObjectIsNotParent,
-                                            "Test zone node");
+                                "Zone 1 Node",
+                                ErrorsFound,
+                                Node::ConnectionObjectType::AirTerminalSingleDuctConstantVolumeFourPipeBeam,
+                                "BeamTest",
+                                Node::FluidType::Air,
+                                Node::ConnectionType::ZoneNode,
+                                Node::CompFluidStream::Primary,
+                                Node::ObjectIsNotParent,
+                                "Test zone node");
 
     state->dataDefineEquipment->AirDistUnit.allocate(1);
     state->dataDefineEquipment->AirDistUnit(1).EquipName(1) =

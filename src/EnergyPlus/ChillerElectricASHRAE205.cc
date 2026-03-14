@@ -198,23 +198,23 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
             ErrorsFound = true;
         }
         thisChiller.EvapInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                           evap_inlet_node_name,
-                                                                           ErrorsFound,
-                                                                           Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                           thisChiller.Name,
-                                                                           Node::FluidType::Water,
-                                                                           Node::ConnectionType::Inlet,
-                                                                           Node::CompFluidStream::Primary,
-                                                                           Node::ObjectIsNotParent);
+                                                               evap_inlet_node_name,
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                               thisChiller.Name,
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsNotParent);
         thisChiller.EvapOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                            evap_outlet_node_name,
-                                                                            ErrorsFound,
-                                                                            Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                            thisChiller.Name,
-                                                                            Node::FluidType::Water,
-                                                                            Node::ConnectionType::Outlet,
-                                                                            Node::CompFluidStream::Primary,
-                                                                            Node::ObjectIsNotParent);
+                                                                evap_outlet_node_name,
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                                thisChiller.Name,
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
         Node::TestCompSet(
             state, state.dataIPShortCut->cCurrentModuleObject, thisChiller.Name, evap_inlet_node_name, evap_outlet_node_name, "Chilled Water Nodes");
 
@@ -229,31 +229,31 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
             ErrorsFound = true;
         }
         thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                           cond_inlet_node_name,
-                                                                           ErrorsFound,
-                                                                           Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                           thisChiller.Name,
-                                                                           Node::FluidType::Water,
-                                                                           Node::ConnectionType::Inlet,
-                                                                           Node::CompFluidStream::Secondary,
-                                                                           Node::ObjectIsNotParent);
+                                                               cond_inlet_node_name,
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                               thisChiller.Name,
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
 
         thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                            cond_outlet_node_name,
-                                                                            ErrorsFound,
-                                                                            Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                            thisChiller.Name,
-                                                                            Node::FluidType::Water,
-                                                                            Node::ConnectionType::Outlet,
-                                                                            Node::CompFluidStream::Secondary,
-                                                                            Node::ObjectIsNotParent);
+                                                                cond_outlet_node_name,
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                                thisChiller.Name,
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Secondary,
+                                                                Node::ObjectIsNotParent);
 
         Node::TestCompSet(state,
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           thisChiller.Name,
-                                           cond_inlet_node_name,
-                                           cond_outlet_node_name,
-                                           "Condenser Water Nodes");
+                          state.dataIPShortCut->cCurrentModuleObject,
+                          thisChiller.Name,
+                          cond_inlet_node_name,
+                          cond_outlet_node_name,
+                          "Condenser Water Nodes");
 
         thisChiller.FlowMode = static_cast<DataPlant::FlowMode>(
             getEnumValue(DataPlant::FlowModeNamesUC, s_ip->getAlphaFieldValue(fields, objectSchemaProps, "chiller_flow_mode")));
@@ -326,14 +326,14 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
             std::string const ambient_temp_outdoor_node =
                 s_ip->getAlphaFieldValue(fields, objectSchemaProps, "ambient_temperature_outdoor_air_node_name");
             thisChiller.AmbientTempOutsideAirNode = Node::GetOnlySingleNode(state,
-                                                                                        ambient_temp_outdoor_node,
-                                                                                        ErrorsFound,
-                                                                                        Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                                        thisChiller.Name,
-                                                                                        Node::FluidType::Air,
-                                                                                        Node::ConnectionType::OutsideAirReference,
-                                                                                        Node::CompFluidStream::Primary,
-                                                                                        Node::ObjectIsNotParent);
+                                                                            ambient_temp_outdoor_node,
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                                            thisChiller.Name,
+                                                                            Node::FluidType::Air,
+                                                                            Node::ConnectionType::OutsideAirReference,
+                                                                            Node::CompFluidStream::Primary,
+                                                                            Node::ObjectIsNotParent);
             if (fields.count("ambient_temperature_outdoor_air_node_name") != 0u) {
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, thisChiller.AmbientTempOutsideAirNode)) {
                     ShowSevereError(state,
@@ -367,58 +367,58 @@ void getChillerASHRAE205Input(EnergyPlusData &state)
         std::string const oil_cooler_outlet_node = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "oil_cooler_outlet_node_name");
         if (!oil_cooler_inlet_node.empty() && !oil_cooler_outlet_node.empty()) {
             thisChiller.OilCoolerInletNode = Node::GetOnlySingleNode(state,
-                                                                                 oil_cooler_inlet_node,
-                                                                                 ErrorsFound,
-                                                                                 Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                                 thisChiller.Name,
-                                                                                 Node::FluidType::Water,
-                                                                                 Node::ConnectionType::Inlet,
-                                                                                 Node::CompFluidStream::Tertiary,
-                                                                                 Node::ObjectIsNotParent);
+                                                                     oil_cooler_inlet_node,
+                                                                     ErrorsFound,
+                                                                     Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                                     thisChiller.Name,
+                                                                     Node::FluidType::Water,
+                                                                     Node::ConnectionType::Inlet,
+                                                                     Node::CompFluidStream::Tertiary,
+                                                                     Node::ObjectIsNotParent);
             thisChiller.OilCoolerOutletNode = Node::GetOnlySingleNode(state,
-                                                                                  oil_cooler_outlet_node,
-                                                                                  ErrorsFound,
-                                                                                  Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                                  thisChiller.Name,
-                                                                                  Node::FluidType::Water,
-                                                                                  Node::ConnectionType::Outlet,
-                                                                                  Node::CompFluidStream::Tertiary,
-                                                                                  Node::ObjectIsNotParent);
+                                                                      oil_cooler_outlet_node,
+                                                                      ErrorsFound,
+                                                                      Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                                      thisChiller.Name,
+                                                                      Node::FluidType::Water,
+                                                                      Node::ConnectionType::Outlet,
+                                                                      Node::CompFluidStream::Tertiary,
+                                                                      Node::ObjectIsNotParent);
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               thisChiller.Name,
-                                               oil_cooler_inlet_node,
-                                               oil_cooler_outlet_node,
-                                               "Oil Cooler Water Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              thisChiller.Name,
+                              oil_cooler_inlet_node,
+                              oil_cooler_outlet_node,
+                              "Oil Cooler Water Nodes");
         }
         std::string const aux_heat_inlet_node = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "auxiliary_inlet_node_name");
         std::string const aux_heat_outlet_node = s_ip->getAlphaFieldValue(fields, objectSchemaProps, "auxiliary_outlet_node_name");
         if (!aux_heat_inlet_node.empty() && !aux_heat_outlet_node.empty()) {
 
             thisChiller.AuxiliaryHeatInletNode = Node::GetOnlySingleNode(state,
-                                                                                     aux_heat_inlet_node,
-                                                                                     ErrorsFound,
-                                                                                     Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                                     thisChiller.Name,
-                                                                                     Node::FluidType::Water,
-                                                                                     Node::ConnectionType::Inlet,
-                                                                                     Node::CompFluidStream::Quaternary,
-                                                                                     Node::ObjectIsNotParent);
+                                                                         aux_heat_inlet_node,
+                                                                         ErrorsFound,
+                                                                         Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                                         thisChiller.Name,
+                                                                         Node::FluidType::Water,
+                                                                         Node::ConnectionType::Inlet,
+                                                                         Node::CompFluidStream::Quaternary,
+                                                                         Node::ObjectIsNotParent);
             thisChiller.AuxiliaryHeatOutletNode = Node::GetOnlySingleNode(state,
-                                                                                      aux_heat_outlet_node,
-                                                                                      ErrorsFound,
-                                                                                      Node::ConnectionObjectType::ChillerElectricASHRAE205,
-                                                                                      thisChiller.Name,
-                                                                                      Node::FluidType::Water,
-                                                                                      Node::ConnectionType::Outlet,
-                                                                                      Node::CompFluidStream::Quaternary,
-                                                                                      Node::ObjectIsNotParent);
+                                                                          aux_heat_outlet_node,
+                                                                          ErrorsFound,
+                                                                          Node::ConnectionObjectType::ChillerElectricASHRAE205,
+                                                                          thisChiller.Name,
+                                                                          Node::FluidType::Water,
+                                                                          Node::ConnectionType::Outlet,
+                                                                          Node::CompFluidStream::Quaternary,
+                                                                          Node::ObjectIsNotParent);
             Node::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               thisChiller.Name,
-                                               aux_heat_inlet_node,
-                                               aux_heat_outlet_node,
-                                               "Auxiliary Water Nodes");
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              thisChiller.Name,
+                              aux_heat_inlet_node,
+                              aux_heat_outlet_node,
+                              "Auxiliary Water Nodes");
         }
 
         // TODO: When implemented, add ...WasAutoSized variables

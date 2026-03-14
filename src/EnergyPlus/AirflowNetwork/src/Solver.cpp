@@ -1658,10 +1658,10 @@ namespace AirflowNetwork {
 
         // Using/Aliasing
         using Curve::GetCurveIndex;
-        using Node::ObjectIsParent;
         using HVACHXAssistedCoolingCoil::VerifyHeatExchangerParent;
         using MixedAir::GetOAMixerNumber;
         using Node::GetOnlySingleNode;
+        using Node::ObjectIsParent;
         using OutAirNodeManager::SetOutAirNodes;
         using RoomAir::GetRAFNNodeNum;
 
@@ -10406,10 +10406,10 @@ namespace AirflowNetwork {
         // Note: this routine shouldn't be called more than once
 
         // Using/Aliasing
-        using Node::GetNodeConnectionType;
         using MixedAir::GetNumOAMixers;
         using MixedAir::GetOAMixerInletNodeNumber;
         using MixedAir::GetOAMixerReliefNodeNumber;
+        using Node::GetNodeConnectionType;
         using SingleDuct::GetHVACSingleDuctSysIndex;
         auto &NumPrimaryAirSys = m_state.dataHVACGlobal->NumPrimaryAirSys;
         using DXCoils::SetDXCoilAirLoopNumber;

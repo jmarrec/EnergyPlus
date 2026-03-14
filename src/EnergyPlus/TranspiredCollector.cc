@@ -237,11 +237,11 @@ namespace TranspiredCollector {
         static constexpr std::string_view routineName = "GetTranspiredCollectorInput";
 
         // Using/Aliasing
-        using Node::TestCompSet;
-        using Node::ObjectIsNotParent;
         using DataSurfaces::OtherSideCondModeledExt;
         using DataSurfaces::SurfaceData;
         using Node::GetOnlySingleNode;
+        using Node::ObjectIsNotParent;
+        using Node::TestCompSet;
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 

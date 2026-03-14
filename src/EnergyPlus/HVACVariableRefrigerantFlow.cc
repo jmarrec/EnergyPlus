@@ -1418,12 +1418,12 @@ void GetVRFInputData(EnergyPlusData &state, bool &ErrorsFound)
     // PURPOSE OF THIS SUBROUTINE:
     // Obtains input data for VRF systems and stores it in data structures
 
-    using Node::SetUpCompSets;
-    using Node::TestCompSet;
     using Curve::checkCurveIsNormalizedToOne;
     using Curve::CurveValue;
     using Curve::GetCurveIndex;
     using DXCoils::GetDXCoilIndex;
+    using Node::SetUpCompSets;
+    using Node::TestCompSet;
 
     using DataSizing::AutoSize;
     using DXCoils::GetCoilCondenserInletNode;
@@ -5860,13 +5860,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                                     state.dataHVACVarRefFlow->VRFTU(TUIndex).airLoopNum = AirLoopNum;
                                     AirLoopFound = true;
                                     state.dataHVACVarRefFlow->VRFTU(TUIndex).isInAirLoop = true;
-                                    Node::TestCompSet(
-                                        state,
-                                        cCurrentModuleObject,
-                                        thisObjectName,
-                                        state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUInletNodeNum),
-                                        state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUOutletNodeNum),
-                                        "Air Nodes");
+                                    Node::TestCompSet(state,
+                                                      cCurrentModuleObject,
+                                                      thisObjectName,
+                                                      state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUInletNodeNum),
+                                                      state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUOutletNodeNum),
+                                                      "Air Nodes");
                                     if (state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneNum > 0) {
                                         state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneAirNode =
                                             state.dataZoneEquip->ZoneEquipConfig(state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneNum).ZoneNode;
@@ -5935,13 +5934,12 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                             // user may have inadvertently entered a zone name in the OA system TU object
                             state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneNum = 0;
                             state.dataHVACVarRefFlow->VRFTU(TUIndex).ZoneAirNode = 0;
-                            Node::TestCompSet(
-                                state,
-                                cCurrentModuleObject,
-                                thisObjectName,
-                                state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUInletNodeNum),
-                                state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUOutletNodeNum),
-                                "Air Nodes");
+                            Node::TestCompSet(state,
+                                              cCurrentModuleObject,
+                                              thisObjectName,
+                                              state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUInletNodeNum),
+                                              state.dataLoopNodes->NodeID(state.dataHVACVarRefFlow->VRFTU(TUIndex).VRFTUOutletNodeNum),
+                                              "Air Nodes");
                             goto EquipList_exit;
                         }
                     }
@@ -6136,8 +6134,7 @@ void InitVRF(EnergyPlusData &state, int const VRFTUNum, int const ZoneNum, bool 
                             }
                             // or at coil outlet nodes
                             if (missingSetPoint) {
-                                if (coolCoilOutNodeSP != Node::SensedNodeFlagValue &&
-                                    heatCoilOutNodeSP != Node::SensedNodeFlagValue) {
+                                if (coolCoilOutNodeSP != Node::SensedNodeFlagValue && heatCoilOutNodeSP != Node::SensedNodeFlagValue) {
                                     missingSetPoint = false;
                                 }
                             }

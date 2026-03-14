@@ -211,9 +211,9 @@ namespace SteamCoils {
         // Uses "Get" routines to read in data.
 
         // Using/Aliasing
-        using Node::TestCompSet;
         using GlobalNames::VerifyUniqueCoilName;
         using Node::GetOnlySingleNode;
+        using Node::TestCompSet;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetSteamCoilInput: "); // include trailing blank space

@@ -221,16 +221,15 @@ namespace SplitterComponent {
                                                                      cNumericFields);
 
             state.dataSplitterComponent->SplitterCond(SplitterNum).SplitterName = AlphArray(1);
-            state.dataSplitterComponent->SplitterCond(SplitterNum).InletNode =
-                GetOnlySingleNode(state,
-                                  AlphArray(2),
-                                  ErrorsFound,
-                                  Node::ConnectionObjectType::AirLoopHVACZoneSplitter,
-                                  AlphArray(1),
-                                  Node::FluidType::Air,
-                                  Node::ConnectionType::Inlet,
-                                  Node::CompFluidStream::Primary,
-                                  Node::ObjectIsNotParent);
+            state.dataSplitterComponent->SplitterCond(SplitterNum).InletNode = GetOnlySingleNode(state,
+                                                                                                 AlphArray(2),
+                                                                                                 ErrorsFound,
+                                                                                                 Node::ConnectionObjectType::AirLoopHVACZoneSplitter,
+                                                                                                 AlphArray(1),
+                                                                                                 Node::FluidType::Air,
+                                                                                                 Node::ConnectionType::Inlet,
+                                                                                                 Node::CompFluidStream::Primary,
+                                                                                                 Node::ObjectIsNotParent);
             state.dataSplitterComponent->SplitterCond(SplitterNum).NumOutletNodes = NumAlphas - 2;
 
             state.dataSplitterComponent->SplitterCond(SplitterNum)

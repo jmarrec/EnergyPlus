@@ -1557,14 +1557,14 @@ namespace PlantPipingSystemsManager {
             // Read inlet and outlet node names and validate them
             thisCircuit.InletNodeName = s_ipsc->cAlphaArgs(2);
             thisCircuit.InletNodeNum = Node::GetOnlySingleNode(state,
-                                                                           s_ipsc->cAlphaArgs(2),
-                                                                           ErrorsFound,
-                                                                           Node::ConnectionObjectType::PipingSystemUndergroundPipeCircuit,
-                                                                           s_ipsc->cAlphaArgs(1),
-                                                                           Node::FluidType::Water,
-                                                                           Node::ConnectionType::Inlet,
-                                                                           Node::CompFluidStream::Primary,
-                                                                           Node::ObjectIsNotParent);
+                                                               s_ipsc->cAlphaArgs(2),
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::PipingSystemUndergroundPipeCircuit,
+                                                               s_ipsc->cAlphaArgs(1),
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsNotParent);
             if (thisCircuit.InletNodeNum == 0) {
                 CurIndex = 2;
                 IssueSevereInputFieldError(state,
@@ -1578,14 +1578,14 @@ namespace PlantPipingSystemsManager {
             }
             thisCircuit.OutletNodeName = s_ipsc->cAlphaArgs(3);
             thisCircuit.OutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                            s_ipsc->cAlphaArgs(3),
-                                                                            ErrorsFound,
-                                                                            Node::ConnectionObjectType::PipingSystemUndergroundPipeCircuit,
-                                                                            s_ipsc->cAlphaArgs(1),
-                                                                            Node::FluidType::Water,
-                                                                            Node::ConnectionType::Outlet,
-                                                                            Node::CompFluidStream::Primary,
-                                                                            Node::ObjectIsNotParent);
+                                                                s_ipsc->cAlphaArgs(3),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::PipingSystemUndergroundPipeCircuit,
+                                                                s_ipsc->cAlphaArgs(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
             if (thisCircuit.OutletNodeNum == 0) {
                 CurIndex = 3;
                 IssueSevereInputFieldError(state,
@@ -1690,24 +1690,24 @@ namespace PlantPipingSystemsManager {
             // Read inlet and outlet node names and validate them
             thisCircuit.InletNodeName = s_ipsc->cAlphaArgs(2);
             thisCircuit.InletNodeNum = Node::GetOnlySingleNode(state,
-                                                                           thisCircuit.InletNodeName,
-                                                                           ErrorsFound,
-                                                                           Node::ConnectionObjectType::GroundHeatExchangerHorizontalTrench,
-                                                                           thisTrenchName,
-                                                                           Node::FluidType::Water,
-                                                                           Node::ConnectionType::Inlet,
-                                                                           Node::CompFluidStream::Primary,
-                                                                           Node::ObjectIsNotParent);
+                                                               thisCircuit.InletNodeName,
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::GroundHeatExchangerHorizontalTrench,
+                                                               thisTrenchName,
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsNotParent);
             thisCircuit.OutletNodeName = s_ipsc->cAlphaArgs(3);
             thisCircuit.OutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                            thisCircuit.OutletNodeName,
-                                                                            ErrorsFound,
-                                                                            Node::ConnectionObjectType::GroundHeatExchangerHorizontalTrench,
-                                                                            thisTrenchName,
-                                                                            Node::FluidType::Water,
-                                                                            Node::ConnectionType::Outlet,
-                                                                            Node::CompFluidStream::Primary,
-                                                                            Node::ObjectIsNotParent);
+                                                                thisCircuit.OutletNodeName,
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::GroundHeatExchangerHorizontalTrench,
+                                                                thisTrenchName,
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
             Node::TestCompSet(
                 state, ObjName_HorizTrench, thisTrenchName, thisCircuit.InletNodeName, thisCircuit.OutletNodeName, "Piping System Circuit Nodes");
 

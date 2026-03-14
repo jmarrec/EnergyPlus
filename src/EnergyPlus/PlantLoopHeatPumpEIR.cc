@@ -1916,8 +1916,8 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
     bool errorsFound = false;
     for (auto const &classToInput : classesToInput) {
         auto cCurrentModuleObject = static_cast<std::string>(DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)]);
-        Node::ConnectionObjectType objType = static_cast<Node::ConnectionObjectType>(
-            getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
+        Node::ConnectionObjectType objType =
+            static_cast<Node::ConnectionObjectType>(getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
         int numPLHP = state.dataInputProcessing->inputProcessor->getNumObjectsFound(state, cCurrentModuleObject);
         if (numPLHP > 0) {
             auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(cCurrentModuleObject);
@@ -2116,23 +2116,23 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
 
                 bool nodeErrorsFound = false;
                 thisPLHP.loadSideNodes.inlet = Node::GetOnlySingleNode(state,
-                                                                                   loadSideInletNodeName,
-                                                                                   nodeErrorsFound,
-                                                                                   objType,
-                                                                                   thisPLHP.name,
-                                                                                   Node::FluidType::Water,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Primary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       loadSideInletNodeName,
+                                                                       nodeErrorsFound,
+                                                                       objType,
+                                                                       thisPLHP.name,
+                                                                       Node::FluidType::Water,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsNotParent);
                 thisPLHP.loadSideNodes.outlet = Node::GetOnlySingleNode(state,
-                                                                                    loadSideOutletNodeName,
-                                                                                    nodeErrorsFound,
-                                                                                    objType,
-                                                                                    thisPLHP.name,
-                                                                                    Node::FluidType::Water,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Primary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        loadSideOutletNodeName,
+                                                                        nodeErrorsFound,
+                                                                        objType,
+                                                                        thisPLHP.name,
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
                 Node::FluidType condenserNodeType = Node::FluidType::Blank;
                 Node::ConnectionType condenserNodeConnectionType_Inlet = Node::ConnectionType::Blank;
                 Node::ConnectionType condenserNodeConnectionType_Outlet = Node::ConnectionType::Blank;
@@ -2160,23 +2160,23 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                     errorsFound = true;                                  // LCOV_EXCL_LINE
                 }
                 thisPLHP.sourceSideNodes.inlet = Node::GetOnlySingleNode(state,
-                                                                                     sourceSideInletNodeName,
-                                                                                     nodeErrorsFound,
-                                                                                     objType,
-                                                                                     thisPLHP.name,
-                                                                                     condenserNodeType,
-                                                                                     condenserNodeConnectionType_Inlet,
-                                                                                     Node::CompFluidStream::Secondary,
-                                                                                     Node::ObjectIsNotParent);
+                                                                         sourceSideInletNodeName,
+                                                                         nodeErrorsFound,
+                                                                         objType,
+                                                                         thisPLHP.name,
+                                                                         condenserNodeType,
+                                                                         condenserNodeConnectionType_Inlet,
+                                                                         Node::CompFluidStream::Secondary,
+                                                                         Node::ObjectIsNotParent);
                 thisPLHP.sourceSideNodes.outlet = Node::GetOnlySingleNode(state,
-                                                                                      sourceSideOutletNodeName,
-                                                                                      nodeErrorsFound,
-                                                                                      objType,
-                                                                                      thisPLHP.name,
-                                                                                      condenserNodeType,
-                                                                                      condenserNodeConnectionType_Outlet,
-                                                                                      Node::CompFluidStream::Secondary,
-                                                                                      Node::ObjectIsNotParent);
+                                                                          sourceSideOutletNodeName,
+                                                                          nodeErrorsFound,
+                                                                          objType,
+                                                                          thisPLHP.name,
+                                                                          condenserNodeType,
+                                                                          condenserNodeConnectionType_Outlet,
+                                                                          Node::CompFluidStream::Secondary,
+                                                                          Node::ObjectIsNotParent);
 
                 // heat recovery inputs
                 std::string heatRecoveryInletNodeName;
@@ -2193,23 +2193,23 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
 
                 if (thisPLHP.airSource && thisPLHP.heatRecoveryAvailable) {
                     thisPLHP.heatRecoveryNodes.inlet = Node::GetOnlySingleNode(state,
-                                                                                           heatRecoveryInletNodeName,
-                                                                                           nodeErrorsFound,
-                                                                                           objType,
-                                                                                           thisPLHP.name,
-                                                                                           Node::FluidType::Water,
-                                                                                           Node::ConnectionType::Inlet,
-                                                                                           Node::CompFluidStream::Tertiary,
-                                                                                           Node::ObjectIsNotParent);
+                                                                               heatRecoveryInletNodeName,
+                                                                               nodeErrorsFound,
+                                                                               objType,
+                                                                               thisPLHP.name,
+                                                                               Node::FluidType::Water,
+                                                                               Node::ConnectionType::Inlet,
+                                                                               Node::CompFluidStream::Tertiary,
+                                                                               Node::ObjectIsNotParent);
                     thisPLHP.heatRecoveryNodes.outlet = Node::GetOnlySingleNode(state,
-                                                                                            heatRecoveryOutletNodeName,
-                                                                                            nodeErrorsFound,
-                                                                                            objType,
-                                                                                            thisPLHP.name,
-                                                                                            Node::FluidType::Water,
-                                                                                            Node::ConnectionType::Outlet,
-                                                                                            Node::CompFluidStream::Tertiary,
-                                                                                            Node::ObjectIsNotParent);
+                                                                                heatRecoveryOutletNodeName,
+                                                                                nodeErrorsFound,
+                                                                                objType,
+                                                                                thisPLHP.name,
+                                                                                Node::FluidType::Water,
+                                                                                Node::ConnectionType::Outlet,
+                                                                                Node::CompFluidStream::Tertiary,
+                                                                                Node::ObjectIsNotParent);
 
                     thisPLHP.heatRecoveryDesignVolFlowRate =
                         state.dataInputProcessing->inputProcessor->getRealFieldValue(fields, schemaProps, "heat_recovery_reference_flow_rate");
@@ -2232,8 +2232,7 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
                 if (nodeErrorsFound) {
                     errorsFound = true;
                 }
-                Node::TestCompSet(
-                    state, cCurrentModuleObject, thisPLHP.name, loadSideInletNodeName, loadSideOutletNodeName, classToInput.nodesType);
+                Node::TestCompSet(state, cCurrentModuleObject, thisPLHP.name, loadSideInletNodeName, loadSideOutletNodeName, classToInput.nodesType);
 
                 if (thisPLHP.waterSource) {
                     Node::TestCompSet(
@@ -2242,11 +2241,11 @@ void EIRPlantLoopHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
 
                 if (thisPLHP.airSource && thisPLHP.heatRecoveryAvailable) {
                     Node::TestCompSet(state,
-                                                       cCurrentModuleObject,
-                                                       thisPLHP.name,
-                                                       heatRecoveryInletNodeName,
-                                                       heatRecoveryOutletNodeName,
-                                                       "Heat Recovery Water Nodes");
+                                      cCurrentModuleObject,
+                                      thisPLHP.name,
+                                      heatRecoveryInletNodeName,
+                                      heatRecoveryOutletNodeName,
+                                      "Heat Recovery Water Nodes");
 
                     auto const heatRecoveryCapFTempCurveName = fields.find("heat_recovery_capacity_modifier_function_of_temperature_curve_name");
                     if (heatRecoveryCapFTempCurveName != fields.end()) {
@@ -3417,8 +3416,8 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
     bool errorsFound = false;
     for (auto &classToInput : classesToInput) {
         auto cCurrentModuleObject = static_cast<std::string>(DataPlant::PlantEquipTypeNames[static_cast<int>(classToInput.thisType)]);
-        Node::ConnectionObjectType objType = static_cast<Node::ConnectionObjectType>(
-            getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
+        Node::ConnectionObjectType objType =
+            static_cast<Node::ConnectionObjectType>(getEnumValue(Node::ConnectionObjectTypeNamesUC, Util::makeUPPER(cCurrentModuleObject)));
 
         auto const instances = state.dataInputProcessing->inputProcessor->epJSON.find(cCurrentModuleObject);
         if (instances == state.dataInputProcessing->inputProcessor->epJSON.end()) {
@@ -3737,50 +3736,49 @@ void EIRFuelFiredHeatPump::processInputForEIRPLHP(EnergyPlusData &state)
 
             bool nodeErrorsFound = false;
             thisPLHP.loadSideNodes.inlet = Node::GetOnlySingleNode(state,
-                                                                               loadSideInletNodeName,
-                                                                               nodeErrorsFound,
-                                                                               objType,
-                                                                               thisPLHP.name,
-                                                                               Node::FluidType::Water,
-                                                                               Node::ConnectionType::Inlet,
-                                                                               Node::CompFluidStream::Primary,
-                                                                               Node::ObjectIsNotParent);
+                                                                   loadSideInletNodeName,
+                                                                   nodeErrorsFound,
+                                                                   objType,
+                                                                   thisPLHP.name,
+                                                                   Node::FluidType::Water,
+                                                                   Node::ConnectionType::Inlet,
+                                                                   Node::CompFluidStream::Primary,
+                                                                   Node::ObjectIsNotParent);
             thisPLHP.loadSideNodes.outlet = Node::GetOnlySingleNode(state,
-                                                                                loadSideOutletNodeName,
-                                                                                nodeErrorsFound,
-                                                                                objType,
-                                                                                thisPLHP.name,
-                                                                                Node::FluidType::Water,
-                                                                                Node::ConnectionType::Outlet,
-                                                                                Node::CompFluidStream::Primary,
-                                                                                Node::ObjectIsNotParent);
+                                                                    loadSideOutletNodeName,
+                                                                    nodeErrorsFound,
+                                                                    objType,
+                                                                    thisPLHP.name,
+                                                                    Node::FluidType::Water,
+                                                                    Node::ConnectionType::Outlet,
+                                                                    Node::CompFluidStream::Primary,
+                                                                    Node::ObjectIsNotParent);
 
             thisPLHP.airSource = true;    // this is always true, at least for now, for Fuel-Fired PlantLoop Heat Pump
             thisPLHP.waterSource = false; // this is always false, at least for now, for Fuel-Fired PlantLoop Heat Pump
             thisPLHP.sourceSideNodes.inlet = Node::GetOnlySingleNode(state,
-                                                                                 sourceSideInletNodeName,
-                                                                                 nodeErrorsFound,
-                                                                                 objType,
-                                                                                 thisPLHP.name,
-                                                                                 Node::FluidType::Air,
-                                                                                 Node::ConnectionType::OutsideAir,
-                                                                                 Node::CompFluidStream::Secondary,
-                                                                                 Node::ObjectIsNotParent);
+                                                                     sourceSideInletNodeName,
+                                                                     nodeErrorsFound,
+                                                                     objType,
+                                                                     thisPLHP.name,
+                                                                     Node::FluidType::Air,
+                                                                     Node::ConnectionType::OutsideAir,
+                                                                     Node::CompFluidStream::Secondary,
+                                                                     Node::ObjectIsNotParent);
             thisPLHP.sourceSideNodes.outlet = Node::GetOnlySingleNode(state,
-                                                                                  sourceSideOutletNodeName,
-                                                                                  nodeErrorsFound,
-                                                                                  objType,
-                                                                                  thisPLHP.name,
-                                                                                  Node::FluidType::Air,
-                                                                                  Node::ConnectionType::OutsideAir,
-                                                                                  Node::CompFluidStream::Secondary,
-                                                                                  Node::ObjectIsNotParent);
+                                                                      sourceSideOutletNodeName,
+                                                                      nodeErrorsFound,
+                                                                      objType,
+                                                                      thisPLHP.name,
+                                                                      Node::FluidType::Air,
+                                                                      Node::ConnectionType::OutsideAir,
+                                                                      Node::CompFluidStream::Secondary,
+                                                                      Node::ObjectIsNotParent);
 
             if (nodeErrorsFound) {
                 errorsFound = true;
             }
-            Node::TestCompSet(
-                state, cCurrentModuleObject, thisPLHP.name, loadSideInletNodeName, loadSideOutletNodeName, classToInput.nodesType);
+            Node::TestCompSet(state, cCurrentModuleObject, thisPLHP.name, loadSideInletNodeName, loadSideOutletNodeName, classToInput.nodesType);
 
             // store the worker functions that generalized the heating/cooling sides
             thisPLHP.calcLoadOutletTemp = classToInput.calcLoadOutletTemp;
@@ -4106,51 +4104,51 @@ void HeatPumpAirToWater::processInputForEIRPLHP(EnergyPlusData &state)
 
                 bool nodeErrorsFound = false;
                 thisAWHP.loadSideNodes.inlet = Node::GetOnlySingleNode(state,
-                                                                                   loadSideInletNodeName,
-                                                                                   nodeErrorsFound,
-                                                                                   objType,
-                                                                                   thisAWHP.name,
-                                                                                   Node::FluidType::Water,
-                                                                                   Node::ConnectionType::Inlet,
-                                                                                   Node::CompFluidStream::Primary,
-                                                                                   Node::ObjectIsNotParent);
+                                                                       loadSideInletNodeName,
+                                                                       nodeErrorsFound,
+                                                                       objType,
+                                                                       thisAWHP.name,
+                                                                       Node::FluidType::Water,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsNotParent);
                 thisAWHP.loadSideNodes.outlet = Node::GetOnlySingleNode(state,
-                                                                                    loadSideOutletNodeName,
-                                                                                    nodeErrorsFound,
-                                                                                    objType,
-                                                                                    thisAWHP.name,
-                                                                                    Node::FluidType::Water,
-                                                                                    Node::ConnectionType::Outlet,
-                                                                                    Node::CompFluidStream::Primary,
-                                                                                    Node::ObjectIsNotParent);
+                                                                        loadSideOutletNodeName,
+                                                                        nodeErrorsFound,
+                                                                        objType,
+                                                                        thisAWHP.name,
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
                 thisAWHP.sourceSideNodes.inlet = Node::GetOnlySingleNode(state,
-                                                                                     sourceSideInletNodeName,
-                                                                                     nodeErrorsFound,
-                                                                                     objType,
-                                                                                     thisAWHP.name,
-                                                                                     Node::FluidType::Air,
-                                                                                     Node::ConnectionType::OutsideAir,
-                                                                                     Node::CompFluidStream::Secondary,
-                                                                                     Node::ObjectIsNotParent);
+                                                                         sourceSideInletNodeName,
+                                                                         nodeErrorsFound,
+                                                                         objType,
+                                                                         thisAWHP.name,
+                                                                         Node::FluidType::Air,
+                                                                         Node::ConnectionType::OutsideAir,
+                                                                         Node::CompFluidStream::Secondary,
+                                                                         Node::ObjectIsNotParent);
                 thisAWHP.sourceSideNodes.outlet = Node::GetOnlySingleNode(state,
-                                                                                      sourceSideOutletNodeName,
-                                                                                      nodeErrorsFound,
-                                                                                      objType,
-                                                                                      thisAWHP.name,
-                                                                                      Node::FluidType::Air,
-                                                                                      Node::ConnectionType::OutsideAir,
-                                                                                      Node::CompFluidStream::Secondary,
-                                                                                      Node::ObjectIsNotParent);
+                                                                          sourceSideOutletNodeName,
+                                                                          nodeErrorsFound,
+                                                                          objType,
+                                                                          thisAWHP.name,
+                                                                          Node::FluidType::Air,
+                                                                          Node::ConnectionType::OutsideAir,
+                                                                          Node::CompFluidStream::Secondary,
+                                                                          Node::ObjectIsNotParent);
 
                 if (nodeErrorsFound) {
                     errorsFound = true;
                 }
                 Node::TestCompSet(state,
-                                                   Util::makeUPPER(cCurrentModuleObject),
-                                                   thisAWHP.name,
-                                                   loadSideInletNodeName,
-                                                   loadSideOutletNodeName,
-                                                   classToInput.nodesType);
+                                  Util::makeUPPER(cCurrentModuleObject),
+                                  thisAWHP.name,
+                                  loadSideInletNodeName,
+                                  loadSideOutletNodeName,
+                                  classToInput.nodesType);
 
                 // store the worker functions that generalized the heating/cooling sides
                 thisAWHP.calcLoadOutletTemp = classToInput.calcLoadOutletTemp;

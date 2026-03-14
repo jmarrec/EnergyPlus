@@ -196,14 +196,14 @@ namespace CTElectricGenerator {
             // Not sure what to do with electric nodes, so do not use optional arguments
             state.dataCTElectricGenerator->CTGenerator(genNum).ElectricCircuitNode =
                 Node::GetOnlySingleNode(state,
-                                                    AlphArray(2),
-                                                    ErrorsFound,
-                                                    Node::ConnectionObjectType::GeneratorCombustionTurbine,
-                                                    AlphArray(1),
-                                                    Node::FluidType::Electric,
-                                                    Node::ConnectionType::Electric,
-                                                    Node::CompFluidStream::Primary,
-                                                    Node::ObjectIsNotParent);
+                                        AlphArray(2),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::GeneratorCombustionTurbine,
+                                        AlphArray(1),
+                                        Node::FluidType::Electric,
+                                        Node::ConnectionType::Electric,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
 
             state.dataCTElectricGenerator->CTGenerator(genNum).MinPartLoadRat = NumArray(2);
             state.dataCTElectricGenerator->CTGenerator(genNum).MaxPartLoadRat = NumArray(3);
@@ -260,14 +260,14 @@ namespace CTElectricGenerator {
                 state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecActive = true;
                 state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecInletNodeNum =
                     Node::GetOnlySingleNode(state,
-                                                        AlphArray(9),
-                                                        ErrorsFound,
-                                                        Node::ConnectionObjectType::GeneratorCombustionTurbine,
-                                                        AlphArray(1),
-                                                        Node::FluidType::Water,
-                                                        Node::ConnectionType::Inlet,
-                                                        Node::CompFluidStream::Primary,
-                                                        Node::ObjectIsNotParent);
+                                            AlphArray(9),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::GeneratorCombustionTurbine,
+                                            AlphArray(1),
+                                            Node::FluidType::Water,
+                                            Node::ConnectionType::Inlet,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 if (state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecInletNodeNum == 0) {
                     ShowSevereError(state,
                                     EnergyPlus::format("Missing Node Name, Heat Recovery Inlet, for {}={}",
@@ -277,14 +277,14 @@ namespace CTElectricGenerator {
                 }
                 state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecOutletNodeNum =
                     Node::GetOnlySingleNode(state,
-                                                        AlphArray(10),
-                                                        ErrorsFound,
-                                                        Node::ConnectionObjectType::GeneratorCombustionTurbine,
-                                                        AlphArray(1),
-                                                        Node::FluidType::Water,
-                                                        Node::ConnectionType::Outlet,
-                                                        Node::CompFluidStream::Primary,
-                                                        Node::ObjectIsNotParent);
+                                            AlphArray(10),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::GeneratorCombustionTurbine,
+                                            AlphArray(1),
+                                            Node::FluidType::Water,
+                                            Node::ConnectionType::Outlet,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 if (state.dataCTElectricGenerator->CTGenerator(genNum).HeatRecOutletNodeNum == 0) {
                     ShowSevereError(state,
                                     EnergyPlus::format("Missing Node Name, Heat Recovery Outlet, for {}={}",
@@ -328,14 +328,14 @@ namespace CTElectricGenerator {
             } else {
                 state.dataCTElectricGenerator->CTGenerator(genNum).OAInletNode =
                     Node::GetOnlySingleNode(state,
-                                                        AlphArray(12),
-                                                        ErrorsFound,
-                                                        Node::ConnectionObjectType::GeneratorCombustionTurbine,
-                                                        AlphArray(1),
-                                                        Node::FluidType::Air,
-                                                        Node::ConnectionType::OutsideAirReference,
-                                                        Node::CompFluidStream::Primary,
-                                                        Node::ObjectIsNotParent);
+                                            AlphArray(12),
+                                            ErrorsFound,
+                                            Node::ConnectionObjectType::GeneratorCombustionTurbine,
+                                            AlphArray(1),
+                                            Node::FluidType::Air,
+                                            Node::ConnectionType::OutsideAirReference,
+                                            Node::CompFluidStream::Primary,
+                                            Node::ObjectIsNotParent);
                 if (!OutAirNodeManager::CheckOutAirNodeNumber(state, state.dataCTElectricGenerator->CTGenerator(genNum).OAInletNode)) {
                     ShowSevereError(state,
                                     EnergyPlus::format("{}, \"{}\" Outdoor Air Inlet Node Name not valid Outdoor Air Node= {}",

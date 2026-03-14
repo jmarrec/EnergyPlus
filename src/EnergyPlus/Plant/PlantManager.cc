@@ -864,18 +864,18 @@ void GetPlantInput(EnergyPlusData &state)
                 OutletNodeNumbers.dimension(branch.TotalComponents, 0);
 
                 BranchInputManager::GetBranchData(state,
-                              plantLoop.Name,
-                              BranchNames(BranchNum),
-                              branch.PressureCurveType,
-                              branch.PressureCurveIndex,
-                              branch.TotalComponents,
-                              CompTypes,
-                              CompNames,
-                              InletNodeNames,
-                              InletNodeNumbers,
-                              OutletNodeNames,
-                              OutletNodeNumbers,
-                              ErrorsFound);
+                                                  plantLoop.Name,
+                                                  BranchNames(BranchNum),
+                                                  branch.PressureCurveType,
+                                                  branch.PressureCurveIndex,
+                                                  branch.TotalComponents,
+                                                  CompTypes,
+                                                  CompNames,
+                                                  InletNodeNames,
+                                                  InletNodeNumbers,
+                                                  OutletNodeNames,
+                                                  OutletNodeNumbers,
+                                                  ErrorsFound);
 
                 branch.Comp.allocate(branch.TotalComponents);
 
@@ -1493,18 +1493,18 @@ void GetPlantInput(EnergyPlusData &state)
                 OutletNodeNames.allocate(MaxNumAlphas);
                 OutletNodeNumbers.allocate(MaxNumAlphas);
                 BranchInputManager::GetLoopSplitter(state,
-                                plantLoop.Name,
-                                loopSide.ConnectList,
-                                loopSide.Splitter.Name,
-                                loopSide.Splitter.Exists,
-                                loopSide.Splitter.NodeNameIn,
-                                loopSide.Splitter.NodeNumIn,
-                                loopSide.Splitter.TotalOutletNodes,
-                                OutletNodeNames,
-                                OutletNodeNumbers,
-                                ErrorsFound,
-                                ConnNum,
-                                SplitNum);
+                                                    plantLoop.Name,
+                                                    loopSide.ConnectList,
+                                                    loopSide.Splitter.Name,
+                                                    loopSide.Splitter.Exists,
+                                                    loopSide.Splitter.NodeNameIn,
+                                                    loopSide.Splitter.NodeNumIn,
+                                                    loopSide.Splitter.TotalOutletNodes,
+                                                    OutletNodeNames,
+                                                    OutletNodeNumbers,
+                                                    ErrorsFound,
+                                                    ConnNum,
+                                                    SplitNum);
 
                 if (SplitNum == 1) {
                     OutletNodeNames.deallocate();
@@ -1580,18 +1580,18 @@ void GetPlantInput(EnergyPlusData &state)
                 InletNodeNames.allocate(MaxNumAlphas);
                 InletNodeNumbers.allocate(MaxNumAlphas);
                 BranchInputManager::GetLoopMixer(state,
-                             plantLoop.Name,
-                             loopSide.ConnectList,
-                             loopSide.Mixer.Name,
-                             loopSide.Mixer.Exists,
-                             loopSide.Mixer.NodeNameOut,
-                             loopSide.Mixer.NodeNumOut,
-                             loopSide.Mixer.TotalInletNodes,
-                             InletNodeNames,
-                             InletNodeNumbers,
-                             ErrorsFound,
-                             ConnNum,
-                             MixNum);
+                                                 plantLoop.Name,
+                                                 loopSide.ConnectList,
+                                                 loopSide.Mixer.Name,
+                                                 loopSide.Mixer.Exists,
+                                                 loopSide.Mixer.NodeNameOut,
+                                                 loopSide.Mixer.NodeNumOut,
+                                                 loopSide.Mixer.TotalInletNodes,
+                                                 InletNodeNames,
+                                                 InletNodeNumbers,
+                                                 ErrorsFound,
+                                                 ConnNum,
+                                                 MixNum);
 
                 if (MixNum == 1) {
                     InletNodeNames.deallocate();

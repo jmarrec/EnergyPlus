@@ -415,8 +415,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
 
-                Node::TestCompSet(
-                    state, CurrentModuleObject, simpleWAHP.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, simpleWAHP.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
                 Node::TestCompSet(state, CurrentModuleObject, simpleWAHP.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
 
                 // Setup Report variables for the cooling coil
@@ -639,8 +638,7 @@ namespace WaterToAirHeatPumpSimple {
                                                                 Node::CompFluidStream::Primary,
                                                                 Node::ObjectIsNotParent);
 
-                Node::TestCompSet(
-                    state, CurrentModuleObject, simpleWAHP.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
+                Node::TestCompSet(state, CurrentModuleObject, simpleWAHP.Name, waterInletNodeName, waterOutletNodeName, "Water Nodes");
                 Node::TestCompSet(state, CurrentModuleObject, simpleWAHP.Name, airInletNodeName, airOutletNodeName, "Air Nodes");
 
                 // CurrentModuleObject = "Coil:Heating:WaterToAirHeatPump:EquationFit"

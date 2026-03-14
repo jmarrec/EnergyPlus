@@ -309,23 +309,23 @@ void GetBoilerInput(EnergyPlusData &state)
         }
 
         thisBoiler.BoilerInletNodeNum = Node::GetOnlySingleNode(state,
-                                                                            s_ipsc->cAlphaArgs(5),
-                                                                            ErrorsFound,
-                                                                            Node::ConnectionObjectType::BoilerHotWater,
-                                                                            s_ipsc->cAlphaArgs(1),
-                                                                            Node::FluidType::Water,
-                                                                            Node::ConnectionType::Inlet,
-                                                                            Node::CompFluidStream::Primary,
-                                                                            Node::ObjectIsNotParent);
+                                                                s_ipsc->cAlphaArgs(5),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::BoilerHotWater,
+                                                                s_ipsc->cAlphaArgs(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Inlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
         thisBoiler.BoilerOutletNodeNum = Node::GetOnlySingleNode(state,
-                                                                             s_ipsc->cAlphaArgs(6),
-                                                                             ErrorsFound,
-                                                                             Node::ConnectionObjectType::BoilerHotWater,
-                                                                             s_ipsc->cAlphaArgs(1),
-                                                                             Node::FluidType::Water,
-                                                                             Node::ConnectionType::Outlet,
-                                                                             Node::CompFluidStream::Primary,
-                                                                             Node::ObjectIsNotParent);
+                                                                 s_ipsc->cAlphaArgs(6),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::BoilerHotWater,
+                                                                 s_ipsc->cAlphaArgs(1),
+                                                                 Node::FluidType::Water,
+                                                                 Node::ConnectionType::Outlet,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
         Node::TestCompSet(
             state, s_ipsc->cCurrentModuleObject, s_ipsc->cAlphaArgs(1), s_ipsc->cAlphaArgs(5), s_ipsc->cAlphaArgs(6), "Hot Water Nodes");
 

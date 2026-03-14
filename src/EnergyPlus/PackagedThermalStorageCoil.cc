@@ -196,10 +196,10 @@ void GetTESCoilInput(EnergyPlusData &state)
     //       RE-ENGINEERED  na
 
     // Using/Aliasing
-    using Node::TestCompSet;
     using DataZoneEquipment::FindControlledZoneIndexFromSystemNodeNumberForZone;
     using GlobalNames::VerifyUniqueCoilName;
     using Node::GetOnlySingleNode;
+    using Node::TestCompSet;
     using WaterManager::SetupTankDemandComponent;
     using WaterManager::SetupTankSupplyComponent;
 

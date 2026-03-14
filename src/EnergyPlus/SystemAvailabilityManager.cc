@@ -324,10 +324,10 @@ namespace Avail {
         // Uses InputProcessor "Get" routines to obtain data.
 
         // Using/Aliasing
-        using Node::GetOnlySingleNode;
-        using Node::MarkNode;
         using DataZoneEquipment::cValidSysAvailManagerCompTypes;
         using DataZoneEquipment::NumValidSysAvailZoneComponents;
+        using Node::GetOnlySingleNode;
+        using Node::MarkNode;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetSysAvailManagerInputs: "); // include trailing blank
@@ -887,11 +887,8 @@ namespace Avail {
                                                           Node::ConnectionType::Sensor,
                                                           Node::CompFluidStream::Primary,
                                                           Node::ObjectIsNotParent);
-                MarkNode(state,
-                         diffThermoMgr.HotNode,
-                         Node::ConnectionObjectType::AvailabilityManagerDifferentialThermostat,
-                         cAlphaArgs(1),
-                         "Hot Node");
+                MarkNode(
+                    state, diffThermoMgr.HotNode, Node::ConnectionObjectType::AvailabilityManagerDifferentialThermostat, cAlphaArgs(1), "Hot Node");
                 diffThermoMgr.ColdNode = GetOnlySingleNode(state,
                                                            cAlphaArgs(3),
                                                            ErrorsFound,
@@ -901,11 +898,8 @@ namespace Avail {
                                                            Node::ConnectionType::Sensor,
                                                            Node::CompFluidStream::Primary,
                                                            Node::ObjectIsNotParent);
-                MarkNode(state,
-                         diffThermoMgr.ColdNode,
-                         Node::ConnectionObjectType::AvailabilityManagerDifferentialThermostat,
-                         cAlphaArgs(1),
-                         "Cold Node");
+                MarkNode(
+                    state, diffThermoMgr.ColdNode, Node::ConnectionObjectType::AvailabilityManagerDifferentialThermostat, cAlphaArgs(1), "Cold Node");
 
                 diffThermoMgr.TempDiffOn = rNumericArgs(1);
 
@@ -966,11 +960,8 @@ namespace Avail {
                                                       Node::ConnectionType::Sensor,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
-                MarkNode(state,
-                         hiTurnOffMgr.Node,
-                         Node::ConnectionObjectType::AvailabilityManagerHighTemperatureTurnOff,
-                         cAlphaArgs(1),
-                         "Sensor Node");
+                MarkNode(
+                    state, hiTurnOffMgr.Node, Node::ConnectionObjectType::AvailabilityManagerHighTemperatureTurnOff, cAlphaArgs(1), "Sensor Node");
 
                 hiTurnOffMgr.Temp = rNumericArgs(1);
 
@@ -1019,11 +1010,7 @@ namespace Avail {
                                                      Node::ConnectionType::Sensor,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
-                MarkNode(state,
-                         hiTurnOnMgr.Node,
-                         Node::ConnectionObjectType::AvailabilityManagerHighTemperatureTurnOn,
-                         cAlphaArgs(1),
-                         "Sensor Node");
+                MarkNode(state, hiTurnOnMgr.Node, Node::ConnectionObjectType::AvailabilityManagerHighTemperatureTurnOn, cAlphaArgs(1), "Sensor Node");
 
                 hiTurnOnMgr.Temp = rNumericArgs(1);
 
@@ -1073,11 +1060,8 @@ namespace Avail {
                                                       Node::ConnectionType::Sensor,
                                                       Node::CompFluidStream::Primary,
                                                       Node::ObjectIsNotParent);
-                MarkNode(state,
-                         loTurnOffMgr.Node,
-                         Node::ConnectionObjectType::AvailabilityManagerLowTemperatureTurnOff,
-                         cAlphaArgs(1),
-                         "Sensor Node");
+                MarkNode(
+                    state, loTurnOffMgr.Node, Node::ConnectionObjectType::AvailabilityManagerLowTemperatureTurnOff, cAlphaArgs(1), "Sensor Node");
 
                 loTurnOffMgr.Temp = rNumericArgs(1);
 
@@ -1133,11 +1117,7 @@ namespace Avail {
                                                      Node::ConnectionType::Sensor,
                                                      Node::CompFluidStream::Primary,
                                                      Node::ObjectIsNotParent);
-                MarkNode(state,
-                         loTurnOnMgr.Node,
-                         Node::ConnectionObjectType::AvailabilityManagerLowTemperatureTurnOn,
-                         cAlphaArgs(1),
-                         "Sensor Node");
+                MarkNode(state, loTurnOnMgr.Node, Node::ConnectionObjectType::AvailabilityManagerLowTemperatureTurnOn, cAlphaArgs(1), "Sensor Node");
 
                 loTurnOnMgr.Temp = rNumericArgs(1);
 

@@ -392,11 +392,11 @@ namespace HeatRecovery {
                                                             Node::ObjectIsNotParent);
 
             Node::TestCompSet(state,
-                                               HVAC::hxTypeNames[(int)thisExchanger.type],
-                                               thisExchanger.Name,
-                                               state.dataIPShortCut->cAlphaArgs(5),
-                                               state.dataIPShortCut->cAlphaArgs(6),
-                                               "Process Air Nodes");
+                              HVAC::hxTypeNames[(int)thisExchanger.type],
+                              thisExchanger.Name,
+                              state.dataIPShortCut->cAlphaArgs(5),
+                              state.dataIPShortCut->cAlphaArgs(6),
+                              "Process Air Nodes");
 
         } // end of input loop over air to air plate heat exchangers
 
@@ -524,11 +524,11 @@ namespace HeatRecovery {
                 Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(14)); // convert curve name to number
 
             Node::TestCompSet(state,
-                                               HVAC::hxTypeNames[(int)thisExchanger.type],
-                                               thisExchanger.Name,
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               state.dataIPShortCut->cAlphaArgs(4),
-                                               "Process Air Nodes");
+                              HVAC::hxTypeNames[(int)thisExchanger.type],
+                              thisExchanger.Name,
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              state.dataIPShortCut->cAlphaArgs(4),
+                              "Process Air Nodes");
         } // end of input loop over air to air generic heat exchangers
 
         // loop over the desiccant balanced heat exchangers and load their input data
@@ -613,11 +613,11 @@ namespace HeatRecovery {
 
             // Set up the component set for the process side of the HX (Sec = Process)
             Node::TestCompSet(state,
-                                               HVAC::hxTypeNames[(int)thisExchanger.type],
-                                               thisExchanger.Name,
-                                               state.dataLoopNodes->NodeID(thisExchanger.SecInletNode),
-                                               state.dataLoopNodes->NodeID(thisExchanger.SecOutletNode),
-                                               "Process Air Nodes");
+                              HVAC::hxTypeNames[(int)thisExchanger.type],
+                              thisExchanger.Name,
+                              state.dataLoopNodes->NodeID(thisExchanger.SecInletNode),
+                              state.dataLoopNodes->NodeID(thisExchanger.SecOutletNode),
+                              "Process Air Nodes");
 
             // A7 is the heat exchanger performance object type
             // It currently only has one choice key, with a default value, so currently no logic is needed

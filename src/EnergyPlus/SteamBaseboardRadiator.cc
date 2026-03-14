@@ -103,8 +103,8 @@ namespace SteamBaseboardRadiator {
     // 1. HWBaseboardRadiator module (ZoneHVAC:Baseboard:RadiantConvective:Water)
     // 2. SteamCoils module (Coil:Heating:Steam)
 
-    using Node::ObjectIsNotParent;
     using HVAC::SmallLoad;
+    using Node::ObjectIsNotParent;
 
     using DataZoneEquipment::CheckZoneEquipmentList;
 

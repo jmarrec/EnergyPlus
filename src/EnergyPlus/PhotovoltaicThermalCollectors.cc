@@ -465,63 +465,59 @@ namespace PhotovoltaicThermalCollectors {
                 }
 
                 if (thisPVT.WorkingFluidType == WorkingFluidEnum::LIQUID) {
-                    thisPVT.PlantInletNodeNum =
-                        Node::GetOnlySingleNode(state,
-                                                            state.dataIPShortCut->cAlphaArgs(6),
-                                                            ErrorsFound,
-                                                            Node::ConnectionObjectType::SolarCollectorFlatPlatePhotovoltaicThermal,
-                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                            Node::FluidType::Water,
-                                                            Node::ConnectionType::Inlet,
-                                                            Node::CompFluidStream::Primary,
-                                                            Node::ObjectIsNotParent);
-                    thisPVT.PlantOutletNodeNum =
-                        Node::GetOnlySingleNode(state,
-                                                            state.dataIPShortCut->cAlphaArgs(7),
-                                                            ErrorsFound,
-                                                            Node::ConnectionObjectType::SolarCollectorFlatPlatePhotovoltaicThermal,
-                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                            Node::FluidType::Water,
-                                                            Node::ConnectionType::Outlet,
-                                                            Node::CompFluidStream::Primary,
-                                                            Node::ObjectIsNotParent);
+                    thisPVT.PlantInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                        state.dataIPShortCut->cAlphaArgs(6),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::SolarCollectorFlatPlatePhotovoltaicThermal,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Water,
+                                                                        Node::ConnectionType::Inlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
+                    thisPVT.PlantOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                         state.dataIPShortCut->cAlphaArgs(7),
+                                                                         ErrorsFound,
+                                                                         Node::ConnectionObjectType::SolarCollectorFlatPlatePhotovoltaicThermal,
+                                                                         state.dataIPShortCut->cAlphaArgs(1),
+                                                                         Node::FluidType::Water,
+                                                                         Node::ConnectionType::Outlet,
+                                                                         Node::CompFluidStream::Primary,
+                                                                         Node::ObjectIsNotParent);
                     Node::TestCompSet(state,
-                                                       state.dataIPShortCut->cCurrentModuleObject,
-                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                       state.dataIPShortCut->cAlphaArgs(6),
-                                                       state.dataIPShortCut->cAlphaArgs(7),
-                                                       "Water Nodes");
+                                      state.dataIPShortCut->cCurrentModuleObject,
+                                      state.dataIPShortCut->cAlphaArgs(1),
+                                      state.dataIPShortCut->cAlphaArgs(6),
+                                      state.dataIPShortCut->cAlphaArgs(7),
+                                      "Water Nodes");
 
                     thisPVT.WPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Invalid;
                 }
                 if (thisPVT.WorkingFluidType == WorkingFluidEnum::AIR) {
-                    thisPVT.HVACInletNodeNum =
-                        Node::GetOnlySingleNode(state,
-                                                            state.dataIPShortCut->cAlphaArgs(8),
-                                                            ErrorsFound,
-                                                            Node::ConnectionObjectType::SolarCollectorFlatPlatePhotovoltaicThermal,
-                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                            Node::FluidType::Air,
-                                                            Node::ConnectionType::Inlet,
-                                                            Node::CompFluidStream::Primary,
-                                                            Node::ObjectIsNotParent);
-                    thisPVT.HVACOutletNodeNum =
-                        Node::GetOnlySingleNode(state,
-                                                            state.dataIPShortCut->cAlphaArgs(9),
-                                                            ErrorsFound,
-                                                            Node::ConnectionObjectType::SolarCollectorFlatPlatePhotovoltaicThermal,
-                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                            Node::FluidType::Air,
-                                                            Node::ConnectionType::Outlet,
-                                                            Node::CompFluidStream::Primary,
-                                                            Node::ObjectIsNotParent);
+                    thisPVT.HVACInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                       state.dataIPShortCut->cAlphaArgs(8),
+                                                                       ErrorsFound,
+                                                                       Node::ConnectionObjectType::SolarCollectorFlatPlatePhotovoltaicThermal,
+                                                                       state.dataIPShortCut->cAlphaArgs(1),
+                                                                       Node::FluidType::Air,
+                                                                       Node::ConnectionType::Inlet,
+                                                                       Node::CompFluidStream::Primary,
+                                                                       Node::ObjectIsNotParent);
+                    thisPVT.HVACOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                        state.dataIPShortCut->cAlphaArgs(9),
+                                                                        ErrorsFound,
+                                                                        Node::ConnectionObjectType::SolarCollectorFlatPlatePhotovoltaicThermal,
+                                                                        state.dataIPShortCut->cAlphaArgs(1),
+                                                                        Node::FluidType::Air,
+                                                                        Node::ConnectionType::Outlet,
+                                                                        Node::CompFluidStream::Primary,
+                                                                        Node::ObjectIsNotParent);
 
                     Node::TestCompSet(state,
-                                                       state.dataIPShortCut->cCurrentModuleObject,
-                                                       state.dataIPShortCut->cAlphaArgs(1),
-                                                       state.dataIPShortCut->cAlphaArgs(8),
-                                                       state.dataIPShortCut->cAlphaArgs(9),
-                                                       "Air Nodes");
+                                      state.dataIPShortCut->cCurrentModuleObject,
+                                      state.dataIPShortCut->cAlphaArgs(1),
+                                      state.dataIPShortCut->cAlphaArgs(8),
+                                      state.dataIPShortCut->cAlphaArgs(9),
+                                      "Air Nodes");
                 }
 
                 thisPVT.DesignVolFlowRate = state.dataIPShortCut->rNumericArgs(1);
