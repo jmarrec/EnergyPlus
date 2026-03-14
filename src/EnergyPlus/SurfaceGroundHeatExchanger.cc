@@ -1158,7 +1158,7 @@ namespace SurfaceGroundHeatExchanger {
         }
         // arguments are glycol name, temperature, and concentration
         if (Temperature < 0.0) { // check if fluid is water and would be freezing
-            if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidIndex == WaterIndex) {
+            if (this->plantLoc.loop->FluidIndex == WaterIndex) {
                 if (this->FrozenErrIndex1 == 0) {
                     ShowWarningMessage(
                         state,
@@ -1382,7 +1382,7 @@ namespace SurfaceGroundHeatExchanger {
 
         // Calculate the water side outlet conditions and set the
         // appropriate conditions on the correct HVAC node.
-        if (state.dataPlnt->PlantLoop(this->plantLoc.loopNum).FluidName == "WATER") {
+        if (this->plantLoc.loop->FluidName == "WATER") {
             if (InletTemp < 0.0) {
                 ShowRecurringWarningErrorAtEnd(state,
                                                "UpdateSurfaceGroundHeatExchngr: Water is frozen in Surf HX=" + this->Name,
