@@ -10535,7 +10535,7 @@ namespace AirflowNetwork {
             if (NodeFound(k)) {
                 continue;
             }
-            if (m_state.dataLoopNodes->Node(k).FluidType == Node::FluidType::Water) {
+            if (m_state.dataLoopNodes->Node(k).fluidType == Node::FluidType::Water) {
                 NodeFound(k) = true;
             }
         }

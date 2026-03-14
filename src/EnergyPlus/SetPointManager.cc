@@ -2527,9 +2527,9 @@ void InitSetPointManagers(EnergyPlusData &state)
                         }
                     } else { // If reference node is a water node, then set RefTypeMode to NodeDryBulb
 
-                        if (refNode.FluidType == Node::FluidType::Water) {
+                        if (refNode.fluidType == Node::FluidType::Water) {
                             spmFSNT->refTempType = AirTempType::DryBulb;
-                        } else if (refNode.FluidType == Node::FluidType::Air) {
+                        } else if (refNode.fluidType == Node::FluidType::Air) {
                             if (spmFSNT->refTempType == AirTempType::WetBulb) {
                                 refNode.SPMNodeWetBulbRepReq = true;
                             }

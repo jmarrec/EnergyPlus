@@ -1419,7 +1419,7 @@ void SafeCopyPlantNode(EnergyPlusData &state,
     // derived from adiabatic Pipes
 
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
-    state.dataLoopNodes->Node(OutletNodeNum).FluidType = state.dataLoopNodes->Node(InletNodeNum).FluidType;
+    state.dataLoopNodes->Node(OutletNodeNum).fluidType = state.dataLoopNodes->Node(InletNodeNum).fluidType;
 
     state.dataLoopNodes->Node(OutletNodeNum).Temp = state.dataLoopNodes->Node(InletNodeNum).Temp;
     state.dataLoopNodes->Node(OutletNodeNum).MassFlowRate = state.dataLoopNodes->Node(InletNodeNum).MassFlowRate;

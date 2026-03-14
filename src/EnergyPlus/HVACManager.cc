@@ -616,7 +616,7 @@ void ManageHVAC(EnergyPlusData &state)
                     print(state.files.debug,
                           " {:3}        {}         {}\n",
                           NodeNum,
-                          Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNum).FluidType)],
+                          Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNum).fluidType)],
                           state.dataLoopNodes->NodeID(NodeNum));
                 }
                 print(state.files.debug, "Day of Sim, Hour of Day, TimeStep,");
@@ -670,7 +670,7 @@ void ManageHVAC(EnergyPlusData &state)
                       state.dataLoopNodes->Node(NodeNum).Press,
                       state.dataLoopNodes->Node(NodeNum).Enthalpy,
                       state.dataLoopNodes->Node(NodeNum).HumRat,
-                      Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNum).FluidType)]);
+                      Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNum).fluidType)]);
                 if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
                     print(state.files.debug, Format_21, state.dataLoopNodes->Node(NodeNum).CO2);
                 }

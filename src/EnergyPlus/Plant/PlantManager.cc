@@ -2812,7 +2812,7 @@ void ReInitPlantLoopsAtFirstHVACIteration(EnergyPlusData &state)
                         state.dataLoopNodes->Node(ComponentInlet).Enthalpy = StartEnthalpy;
                         state.dataLoopNodes->Node(ComponentInlet).HumRat = StartHumRat;
 
-                        state.dataLoopNodes->Node(ComponentOutlet).FluidType = state.dataLoopNodes->Node(BranchInlet).FluidType;
+                        state.dataLoopNodes->Node(ComponentOutlet).fluidType = state.dataLoopNodes->Node(BranchInlet).fluidType;
                         state.dataLoopNodes->Node(ComponentOutlet).Temp = state.dataLoopNodes->Node(BranchInlet).Temp;
                         state.dataLoopNodes->Node(ComponentOutlet).TempMin = state.dataLoopNodes->Node(BranchInlet).TempMin;
                         state.dataLoopNodes->Node(ComponentOutlet).TempMax = state.dataLoopNodes->Node(BranchInlet).TempMax;

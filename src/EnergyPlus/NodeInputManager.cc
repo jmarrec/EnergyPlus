@@ -131,8 +131,8 @@ void GetNodeNums(EnergyPlusData &state,
             NodeNumbers({1, NumNodes}) = state.dataNodeInputMgr->NodeLists(ThisOne).NodeNumbers({1, NumNodes});
             for (int Loop = 1; Loop <= NumNodes; ++Loop) {
                 if (nodeFluidType != Node::FluidType::Blank &&
-                    state.dataLoopNodes->Node(NodeNumbers(Loop)).FluidType != Node::FluidType::Blank) {
-                    if (state.dataLoopNodes->Node(NodeNumbers(Loop)).FluidType != nodeFluidType) {
+                    state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType != Node::FluidType::Blank) {
+                    if (state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType != nodeFluidType) {
                         ShowSevereError(state, EnergyPlus::format("{}{}=\"{}=\", invalid data.", RoutineName, objTypeStr, NodeObjectName));
                         if (!InputFieldName.empty()) {
                             ShowContinueError(state, fmt::format("...Ref field={}", InputFieldName));
@@ -145,13 +145,13 @@ void GetNodeNums(EnergyPlusData &state,
                             EnergyPlus::format(
                                 "Existing Fluid type={}, Requested Fluid Type={}",
                                 EnergyPlus::format(
-                                    "{}", Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNumbers(Loop)).FluidType)]),
+                                    "{}", Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType)]),
                                 EnergyPlus::format("{}", Node::FluidTypeNames[static_cast<int>(nodeFluidType)])));
                         ErrorsFound = true;
                     }
                 }
-                if (state.dataLoopNodes->Node(NodeNumbers(Loop)).FluidType == Node::FluidType::Blank) {
-                    state.dataLoopNodes->Node(NodeNumbers(Loop)).FluidType = nodeFluidType;
+                if (state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType == Node::FluidType::Blank) {
+                    state.dataLoopNodes->Node(NodeNumbers(Loop)).fluidType = nodeFluidType;
                 }
                 ++state.dataNodeInputMgr->NodeRef(NodeNumbers(Loop));
             }
@@ -291,8 +291,8 @@ void SetupNodeVarsForReporting(EnergyPlusData &state)
                                     OutputProcessor::TimeStepType::System,
                                     OutputProcessor::StoreType::Average,
                                     NodeID);
-                if (Node.FluidType == Node::FluidType::Air ||
-                    Node.FluidType == Node::FluidType::Water) { // setup volume flow rate report for actual/current density
+                if (Node.fluidType == Node::FluidType::Air ||
+                    Node.fluidType == Node::FluidType::Water) { // setup volume flow rate report for actual/current density
                     SetupOutputVariable(state,
                                         "System Node Current Density Volume Flow Rate",
                                         Constant::Units::m3_s,
@@ -484,7 +484,7 @@ void SetupNodeVarsForReporting(EnergyPlusData &state)
                   " Node,{},{},{},{}\n",
                   NumNode,
                   NodeID,
-                  Node::FluidTypeNames[static_cast<int>(Node.FluidType)],
+                  Node::FluidTypeNames[static_cast<int>(Node.fluidType)],
                   state.dataNodeInputMgr->NodeRef(NumNode));
             if (state.dataNodeInputMgr->NodeRef(NumNode) == 0) {
                 ++Count0;
@@ -508,7 +508,7 @@ void SetupNodeVarsForReporting(EnergyPlusData &state)
                       " Suspicious Node,{},{},{},{}\n",
                       NumNode,
                       NodeID,
-                      Node::FluidTypeNames[static_cast<int>(Node.FluidType)],
+                      Node::FluidTypeNames[static_cast<int>(Node.fluidType)],
                       state.dataNodeInputMgr->NodeRef(NumNode));
             }
         }
@@ -687,8 +687,8 @@ int AssignNodeNumber(EnergyPlusData &state,
             AssignNodeNumber = NumNode;
             ++state.dataNodeInputMgr->NodeRef(NumNode);
             if (nodeFluidType != Node::FluidType::Blank) {
-                if (state.dataLoopNodes->Node(NumNode).FluidType != nodeFluidType &&
-                    state.dataLoopNodes->Node(NumNode).FluidType != Node::FluidType::Blank) {
+                if (state.dataLoopNodes->Node(NumNode).fluidType != nodeFluidType &&
+                    state.dataLoopNodes->Node(NumNode).fluidType != Node::FluidType::Blank) {
                     ShowSevereError(
                         state,
                         EnergyPlus::format("Existing Fluid type for node, incorrect for request. Node={}", state.dataLoopNodes->NodeID(NumNode)));
@@ -696,13 +696,13 @@ int AssignNodeNumber(EnergyPlusData &state,
                                       EnergyPlus::format(
                                           "Existing Fluid type={}, Requested Fluid Type={}",
                                           EnergyPlus::format(
-                                              "{}", Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NumNode).FluidType)]),
+                                              "{}", Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NumNode).fluidType)]),
                                           EnergyPlus::format("{}", Node::FluidTypeNames[static_cast<int>(nodeFluidType)])));
                     ErrorsFound = true;
                 }
             }
-            if (state.dataLoopNodes->Node(NumNode).FluidType == Node::FluidType::Blank) {
-                state.dataLoopNodes->Node(NumNode).FluidType = nodeFluidType;
+            if (state.dataLoopNodes->Node(NumNode).fluidType == Node::FluidType::Blank) {
+                state.dataLoopNodes->Node(NumNode).fluidType = nodeFluidType;
             }
         } else {
             ++state.dataNodeInputMgr->NumOfUniqueNodeNames;
@@ -714,7 +714,7 @@ int AssignNodeNumber(EnergyPlusData &state,
             state.dataLoopNodes->MarkedNode.redimension(state.dataLoopNodes->NumOfNodes);
             state.dataLoopNodes->NodeSetpointCheck.redimension(state.dataLoopNodes->NumOfNodes);
             // Set new item in Node
-            state.dataLoopNodes->Node(state.dataLoopNodes->NumOfNodes).FluidType = nodeFluidType;
+            state.dataLoopNodes->Node(state.dataLoopNodes->NumOfNodes).fluidType = nodeFluidType;
             state.dataNodeInputMgr->NodeRef(state.dataLoopNodes->NumOfNodes) = 0;
             state.dataLoopNodes->NodeID(state.dataNodeInputMgr->NumOfUniqueNodeNames) = Name;
 
@@ -722,7 +722,7 @@ int AssignNodeNumber(EnergyPlusData &state,
         }
     } else {
         state.dataLoopNodes->Node.allocate(1);
-        state.dataLoopNodes->Node(1).FluidType = nodeFluidType;
+        state.dataLoopNodes->Node(1).fluidType = nodeFluidType;
         // Allocate takes care of defining
         state.dataLoopNodes->NumOfNodes = 1;
         state.dataLoopNodes->NodeID.allocate({0, 1});
@@ -1095,7 +1095,7 @@ void CalcMoreNodeInfo(EnergyPlusData &state)
             ReportSpecificHeat = true;
         }
         // calculate the volume flow rate
-        if (state.dataLoopNodes->Node(iNode).FluidType == Node::FluidType::Air) {
+        if (state.dataLoopNodes->Node(iNode).fluidType == Node::FluidType::Air) {
             state.dataLoopNodes->MoreNodeInfo(iNode).VolFlowRateStdRho = state.dataLoopNodes->Node(iNode).MassFlowRate / RhoAirStdInit;
             // if Node%Press was reliable could be used here.
             RhoAirCurrent = PsyRhoAirFnPbTdbW(
@@ -1138,7 +1138,7 @@ void CalcMoreNodeInfo(EnergyPlusData &state)
             } else {
                 state.dataLoopNodes->MoreNodeInfo(iNode).SpecificHeat = 0.0;
             }
-        } else if (state.dataLoopNodes->Node(iNode).FluidType == Node::FluidType::Water) {
+        } else if (state.dataLoopNodes->Node(iNode).fluidType == Node::FluidType::Water) {
 
             if (!((state.dataLoopNodes->Node(iNode).FluidIndex > 0) &&
                   (state.dataLoopNodes->Node(iNode).FluidIndex <= state.dataFluid->glycols.isize()))) {
@@ -1158,7 +1158,7 @@ void CalcMoreNodeInfo(EnergyPlusData &state)
             state.dataLoopNodes->MoreNodeInfo(iNode).SpecificHeat = Cp; // always fill since cp already always being calculated anyway
             state.dataLoopNodes->MoreNodeInfo(iNode).WetBulbTemp = 0.0;
             state.dataLoopNodes->MoreNodeInfo(iNode).RelHumidity = 100.0;
-        } else if (state.dataLoopNodes->Node(iNode).FluidType == Node::FluidType::Steam) {
+        } else if (state.dataLoopNodes->Node(iNode).fluidType == Node::FluidType::Steam) {
             if (state.dataLoopNodes->Node(iNode).Quality == 1.0) {
                 auto *steam = Fluid::GetSteam(state);
                 SteamDensity =
@@ -1176,7 +1176,7 @@ void CalcMoreNodeInfo(EnergyPlusData &state)
                 state.dataLoopNodes->MoreNodeInfo(iNode).WetBulbTemp = 0.0;
                 state.dataLoopNodes->MoreNodeInfo(iNode).RelHumidity = 0.0;
             }
-        } else if (state.dataLoopNodes->Node(iNode).FluidType == Node::FluidType::Electric) {
+        } else if (state.dataLoopNodes->Node(iNode).fluidType == Node::FluidType::Electric) {
             state.dataLoopNodes->MoreNodeInfo(iNode).VolFlowRateStdRho = 0.0;
             state.dataLoopNodes->MoreNodeInfo(iNode).ReportEnthalpy = 0.0;
             state.dataLoopNodes->MoreNodeInfo(iNode).WetBulbTemp = 0.0;

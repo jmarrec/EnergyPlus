@@ -441,7 +441,7 @@ namespace Node {
     struct NodeData
     {
         // Members
-        FluidType FluidType = FluidType::Blank;      // must be one of the valid parameters
+        FluidType fluidType = FluidType::Blank;      // must be one of the valid parameters
         int FluidIndex = 0;                                  // For Fluid Properties
         Real64 Temp = 0.0;                                   // {C}
         Real64 TempMin = 0.0;                                // {C}
