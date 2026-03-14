@@ -1278,7 +1278,7 @@ TEST_F(EnergyPlusFixture, calcPowerUsage_AWHP)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp.allocate(1);
     auto &PLHPPlantLoadSideComp = state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Supply).Branch(1).Comp(1);
     PLHPPlantLoadSideComp.Type = DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;
-    thisAWHP.loadSidePlantLoc = {1, DataPlant::LoopSideLocation::Supply, 1, 1}; 
+    thisAWHP.loadSidePlantLoc = {1, DataPlant::LoopSideLocation::Supply, 1, 1};
     PlantUtilities::SetPlantLocationLinks(*state, thisAWHP.loadSidePlantLoc);
     thisAWHP.loadSidePlantLoc.comp->CurOpSchemeType = DataPlant::OpScheme::CompSetPtBased;
     thisAWHP.EIRHPType = EnergyPlus::DataPlant::PlantEquipmentType::HeatPumpAirToWaterCooling;

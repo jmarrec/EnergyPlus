@@ -475,10 +475,10 @@ TEST_F(EnergyPlusFixture, SetPointManager_DefineCondEntSetPointManager)
     thisSPM.condenserEnteringTempSched = Sched::GetSchedule(*state, "CONDENSER LOOP TEMP SCHEDULE");
     thisSPM.plantPloc = {chwLoopIndex, DataPlant::LoopSideLocation::Supply, chillerBranchChW, chillerCompIndex};
     PlantUtilities::SetPlantLocationLinks(*state, thisSPM.plantPloc);
-    
+
     thisSPM.demandPloc = {condLoopIndex, DataPlant::LoopSideLocation::Demand, chillerBranchCW, chillerCompIndex};
     PlantUtilities::SetPlantLocationLinks(*state, thisSPM.demandPloc);
-    
+
     thisSPM.chillerType = DataPlant::PlantEquipmentType::Chiller_Electric;
 
     // switch: Weighted ratio > 9 && etc...

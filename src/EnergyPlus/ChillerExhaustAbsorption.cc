@@ -1439,20 +1439,18 @@ void ExhaustAbsorberSpecs::size(EnergyPlusData &state)
                                                  state.dataOutRptPredefined->pdchChillerPlantloopName,
                                                  this->Name,
                                                  this->CWPlantLoc.loop != nullptr ? this->CWPlantLoc.loop->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchChillerPlantloopBranchName,
-            this->Name,
-            this->CWPlantLoc.loop != nullptr ? this->CWPlantLoc.branch->Name : "N/A");
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchChillerPlantloopBranchName,
+                                                 this->Name,
+                                                 this->CWPlantLoc.loop != nullptr ? this->CWPlantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state,
                                                  state.dataOutRptPredefined->pdchChillerCondLoopName,
                                                  this->Name,
                                                  this->CDPlantLoc.loop != nullptr ? this->CDPlantLoc.loop->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchChillerCondLoopBranchName,
-            this->Name,
-            this->CDPlantLoc.loop != nullptr ? this->CDPlantLoc.branch->Name : "N/A");
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchChillerCondLoopBranchName,
+                                                 this->Name,
+                                                 this->CDPlantLoc.loop != nullptr ? this->CDPlantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchChillerMinPLR, this->Name, this->MinPartLoadRat);
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchChillerFuelType, this->Name, this->ExhaustSourceName);
         OutputReportPredefined::PreDefTableEntry(
@@ -1522,8 +1520,8 @@ void ExhaustAbsorberSpecs::calcChiller(EnergyPlusData &state, Real64 &MyLoad)
     Real64 revisedEstimateAvailCap; // final estimate of available capacity if using leaving
     // condenser water temperature
     Real64 errorAvailCap; // error fraction on final estimate of AvailableCoolingCapacity
-    Real64 Cp_CD = -1; // local fluid specific heat for condenser water -- initializing to negative to ensure it isn't used uninitialized
-    Real64 CpAir;      // specific heat of exhaust air
+    Real64 Cp_CD = -1;    // local fluid specific heat for condenser water -- initializing to negative to ensure it isn't used uninitialized
+    Real64 CpAir;         // specific heat of exhaust air
 
     // set node values to data structure values for nodes
     int lChillReturnNodeNum = this->ChillReturnNodeNum;         // Node number on the inlet side of the plant

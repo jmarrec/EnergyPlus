@@ -132,10 +132,9 @@ void LocalPipeData::oneTimeInit_new(EnergyPlusData &state)
 
 void LocalPipeData::initEachEnvironment(EnergyPlusData &state) const
 {
-    PlantUtilities::InitComponentNodes(
-        state, 0.0, this->plantLoc.loop->MaxMassFlowRate, this->InletNodeNum, this->OutletNodeNum);
+    PlantUtilities::InitComponentNodes(state, 0.0, this->plantLoc.loop->MaxMassFlowRate, this->InletNodeNum, this->OutletNodeNum);
 }
-  
+
 void LocalPipeData::oneTimeInit([[maybe_unused]] EnergyPlusData &state)
 {
 }

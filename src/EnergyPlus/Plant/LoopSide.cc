@@ -1826,7 +1826,7 @@ namespace DataPlant {
             for (int CompCounter = StartingComponent; CompCounter <= EndingComponent; ++CompCounter) {
                 PlantLocation this_plantLoc = {this->plantLoc.loopNum, this->plantLoc.loopSideNum, BranchCounter, CompCounter};
                 PlantUtilities::SetPlantLocationLinks(state, this_plantLoc);
-                
+
                 DataPlant::OpScheme const CurOpSchemeType(branch.Comp(CompCounter).CurOpSchemeType);
 
                 switch (CurOpSchemeType) {

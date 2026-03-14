@@ -623,8 +623,7 @@ namespace HVACSingleDuctInduc {
             int HotConNode = state.dataHVACSingleDuctInduc->IndUnit(IUNum).HWControlNode;
             if (HotConNode > 0 && !state.dataHVACSingleDuctInduc->MyPlantScanFlag(IUNum)) {
 
-                rho = state.dataHVACSingleDuctInduc->IndUnit(IUNum).HWPlantLoc.loop->
-                    glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                rho = state.dataHVACSingleDuctInduc->IndUnit(IUNum).HWPlantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
                 state.dataHVACSingleDuctInduc->IndUnit(IUNum).MaxHotWaterFlow =
                     rho * state.dataHVACSingleDuctInduc->IndUnit(IUNum).MaxVolHotWaterFlow;
                 state.dataHVACSingleDuctInduc->IndUnit(IUNum).MinHotWaterFlow =
@@ -640,8 +639,7 @@ namespace HVACSingleDuctInduc {
 
             int ColdConNode = state.dataHVACSingleDuctInduc->IndUnit(IUNum).CWControlNode;
             if (ColdConNode > 0) {
-                rho = state.dataHVACSingleDuctInduc->IndUnit(IUNum).CWPlantLoc.loop->
-                          glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
+                rho = state.dataHVACSingleDuctInduc->IndUnit(IUNum).CWPlantLoc.loop->glycol->getDensity(state, Constant::CWInitConvTemp, RoutineName);
                 state.dataHVACSingleDuctInduc->IndUnit(IUNum).MaxColdWaterFlow =
                     rho * state.dataHVACSingleDuctInduc->IndUnit(IUNum).MaxVolColdWaterFlow;
                 state.dataHVACSingleDuctInduc->IndUnit(IUNum).MinColdWaterFlow =
@@ -847,11 +845,11 @@ namespace HVACSingleDuctInduc {
                                                    state.dataSize->TermUnitFinalZoneSizing(state.dataSize->CurTermUnitSizingNum).DesHeatCoilInTempTU);
                                 }
                                 state.dataHVACSingleDuctInduc->IndUnit(IUNum).DesHeatingLoad = DesCoilLoad;
-                                Cp = state.dataHVACSingleDuctInduc->IndUnit(IUNum).HWPlantLoc.loop->
-                                         glycol->getSpecificHeat(state, Constant::HWInitConvTemp, RoutineName);
+                                Cp = state.dataHVACSingleDuctInduc->IndUnit(IUNum).HWPlantLoc.loop->glycol->getSpecificHeat(
+                                    state, Constant::HWInitConvTemp, RoutineName);
 
-                                rho = state.dataHVACSingleDuctInduc->IndUnit(IUNum).HWPlantLoc.loop->
-                                          glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
+                                rho = state.dataHVACSingleDuctInduc->IndUnit(IUNum).HWPlantLoc.loop->glycol->getDensity(
+                                    state, Constant::HWInitConvTemp, RoutineName);
 
                                 MaxVolHotWaterFlowDes = DesCoilLoad / (state.dataSize->PlantSizData(PltSizHeatNum).DeltaT * Cp * rho);
                                 MaxVolHotWaterFlowDes = max(MaxVolHotWaterFlowDes, 0.0);
@@ -976,11 +974,9 @@ namespace HVACSingleDuctInduc {
                                                    state.dataSize->TermUnitFinalZoneSizing(state.dataSize->CurTermUnitSizingNum).ZoneSizThermSetPtHi);
                                 }
                                 state.dataHVACSingleDuctInduc->IndUnit(IUNum).DesCoolingLoad = DesCoilLoad;
-                                Cp = state.dataHVACSingleDuctInduc->IndUnit(IUNum).CWPlantLoc.loop->
-                                         glycol->getSpecificHeat(state, 5.0, RoutineName);
+                                Cp = state.dataHVACSingleDuctInduc->IndUnit(IUNum).CWPlantLoc.loop->glycol->getSpecificHeat(state, 5.0, RoutineName);
 
-                                rho = state.dataHVACSingleDuctInduc->IndUnit(IUNum).CWPlantLoc.loop->
-                                          glycol->getDensity(state, 5.0, RoutineName);
+                                rho = state.dataHVACSingleDuctInduc->IndUnit(IUNum).CWPlantLoc.loop->glycol->getDensity(state, 5.0, RoutineName);
 
                                 MaxVolColdWaterFlowDes = DesCoilLoad / (state.dataSize->PlantSizData(PltSizCoolNum).DeltaT * Cp * rho);
                                 MaxVolColdWaterFlowDes = max(MaxVolColdWaterFlowDes, 0.0);

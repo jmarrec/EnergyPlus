@@ -1382,20 +1382,18 @@ void BLASTAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                                                  state.dataOutRptPredefined->pdchChillerPlantloopName,
                                                  this->Name,
                                                  this->CWPlantLoc.loop != nullptr ? this->CWPlantLoc.loop->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchChillerPlantloopBranchName,
-            this->Name,
-            this->CWPlantLoc.loop != nullptr ? this->CWPlantLoc.branch->Name : "N/A");
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchChillerPlantloopBranchName,
+                                                 this->Name,
+                                                 this->CWPlantLoc.loop != nullptr ? this->CWPlantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state,
                                                  state.dataOutRptPredefined->pdchChillerCondLoopName,
                                                  this->Name,
                                                  this->CDPlantLoc.loop != nullptr ? this->CDPlantLoc.loop->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchChillerCondLoopBranchName,
-            this->Name,
-            this->CDPlantLoc.loop != nullptr ? this->CDPlantLoc.branch->Name : "N/A");
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchChillerCondLoopBranchName,
+                                                 this->Name,
+                                                 this->CDPlantLoc.loop != nullptr ? this->CDPlantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchChillerMinPLR, this->Name, this->MinPartLoadRat);
         OutputReportPredefined::PreDefTableEntry(state,
                                                  state.dataOutRptPredefined->pdchChillerFuelType,
@@ -1575,8 +1573,7 @@ void BLASTAbsorberSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad, bool R
                     (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint != DataLoopNode::SensedNodeFlagValue)) {
                     TempEvapOutSetPoint = state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint;
                 } else {
-                    TempEvapOutSetPoint =
-                        state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
+                    TempEvapOutSetPoint = state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
                 }
             } break;
             case DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand: {
@@ -1585,8 +1582,7 @@ void BLASTAbsorberSpecs::calculate(EnergyPlusData &state, Real64 &MyLoad, bool R
                     (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi != DataLoopNode::SensedNodeFlagValue)) {
                     TempEvapOutSetPoint = state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi;
                 } else {
-                    TempEvapOutSetPoint =
-                        state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
+                    TempEvapOutSetPoint = state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
                 }
             } break;
             default: {

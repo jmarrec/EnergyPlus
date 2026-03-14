@@ -273,10 +273,10 @@ TEST_F(EnergyPlusFixture, TestPullCompInterconnectTrigger)
     PlantUtilities::SetPlantLocationLinks(*state, plantLoc);
     // plantLoc.branch = &plantLoc.side->Branch(plantLoc.branchNum);
     // plantLoc.comp = &plantLoc.branch->Comp(plantLoc.compNum);
-    
+
     PlantLocation connectedPlantLoc{2, DataPlant::LoopSideLocation::Demand, 0, 0};
     PlantUtilities::SetPlantLocationLinks(*state, connectedPlantLoc);
-    
+
     int criteriaCheckIndex1 = 0, criteriaCheckIndex2 = 0, criteriaCheckIndex3 = 0;
     Real64 criteriaValue1 = 0.0, criteriaValue2 = 0.0, criteriaValue3 = 0.0;
 

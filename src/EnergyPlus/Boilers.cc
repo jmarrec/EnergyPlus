@@ -740,11 +740,10 @@ void BoilerSpecs::SizeBoiler(EnergyPlusData &state)
                                                  state.dataOutRptPredefined->pdchBoilerPlantloopName,
                                                  equipName,
                                                  this->plantLoc.loop != nullptr ? this->plantLoc.loop->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchBoilerPlantloopBranchName,
-            equipName,
-            this->plantLoc.loop != nullptr ? this->plantLoc.branch->Name : "N/A");
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchBoilerPlantloopBranchName,
+                                                 equipName,
+                                                 this->plantLoc.loop != nullptr ? this->plantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchBoilerMinPLR, equipName, this->MinPartLoadRat);
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchBoilerFuelType, equipName, Constant::eFuelNames[static_cast<int>(this->FuelType)]);

@@ -152,9 +152,7 @@ void ManagePlantLoadDistribution(EnergyPlusData &state,
     }
 
     // Return if there are no loop operation schemes available
-    if (!std::any_of(plantLoc.loop->OpScheme.begin(),
-                     plantLoc.loop->OpScheme.end(),
-                     [](DataPlant::OperationData const &e) { return e.Available; })) {
+    if (!std::any_of(plantLoc.loop->OpScheme.begin(), plantLoc.loop->OpScheme.end(), [](DataPlant::OperationData const &e) { return e.Available; })) {
         return;
     }
 
@@ -3968,21 +3966,15 @@ void DistributeUserDefinedPlantLoad(EnergyPlusData &state,
     // Call EMS program(s)
     if (plantLoc.loop->OpScheme(CurSchemePtr).ErlSimProgramMngr > 0) {
         bool anyEMSRan;
-        ManageEMS(state,
-                  EMSManager::EMSCallFrom::UserDefinedComponentModel,
-                  anyEMSRan,
-                  plantLoc.loop->OpScheme(CurSchemePtr).ErlSimProgramMngr);
+        ManageEMS(state, EMSManager::EMSCallFrom::UserDefinedComponentModel, anyEMSRan, plantLoc.loop->OpScheme(CurSchemePtr).ErlSimProgramMngr);
     } else if (plantLoc.loop->OpScheme(CurSchemePtr).simPluginLocation > -1) {
-        state.dataPluginManager->pluginManager->runSingleUserDefinedPlugin(
-            state, plantLoc.loop->OpScheme(CurSchemePtr).simPluginLocation);
+        state.dataPluginManager->pluginManager->runSingleUserDefinedPlugin(state, plantLoc.loop->OpScheme(CurSchemePtr).simPluginLocation);
     }
 
     // move actuated value to MyLoad
 
-    this_component.MyLoad =
-        plantLoc.loop->OpScheme(CurSchemePtr).EquipList(1).Comp(CompPtr).EMSActuatorDispatchedLoadValue;
-    this_component.EquipDemand =
-        plantLoc.loop->OpScheme(CurSchemePtr).EquipList(1).Comp(CompPtr).EMSActuatorDispatchedLoadValue;
+    this_component.MyLoad = plantLoc.loop->OpScheme(CurSchemePtr).EquipList(1).Comp(CompPtr).EMSActuatorDispatchedLoadValue;
+    this_component.EquipDemand = plantLoc.loop->OpScheme(CurSchemePtr).EquipList(1).Comp(CompPtr).EMSActuatorDispatchedLoadValue;
     if (std::abs(this_component.MyLoad) > LoopDemandTol) {
         this_component.ON = true;
 

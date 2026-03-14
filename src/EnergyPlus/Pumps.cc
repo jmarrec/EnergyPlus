@@ -1386,10 +1386,8 @@ void InitializePumps(EnergyPlusData &state, int const PumpNum)
 
         bool errFlag = false;
         ScanPlantLoopsForObject(state, thisPump.Name, thisPump.TypeOf_Num, thisPump.plantLoc, errFlag, _, _, _, _, _);
-        if (thisPump.plantLoc.loopNum > 0 &&
-            thisPump.plantLoc.loopSideNum != DataPlant::LoopSideLocation::Invalid &&
-            thisPump.plantLoc.branchNum > 0 &&
-            thisPump.plantLoc.compNum > 0) {
+        if (thisPump.plantLoc.loopNum > 0 && thisPump.plantLoc.loopSideNum != DataPlant::LoopSideLocation::Invalid &&
+            thisPump.plantLoc.branchNum > 0 && thisPump.plantLoc.compNum > 0) {
             if (thisPump.plantLoc.comp->NodeNumIn != InletNode || thisPump.plantLoc.comp->NodeNumOut != OutletNode) {
                 ShowSevereError(state,
                                 EnergyPlus::format("InitializePumps: {}=\"{}\", non-matching nodes.",
@@ -1690,8 +1688,7 @@ void SetupPumpMinMaxFlows(EnergyPlusData &state, int const LoopNum, int const Pu
         // Override (lock down flow) for pressure drop if applicable
         if (thisPump.plantLoc.loopNum > 0) {
             if (thisPump.plantLoc.loop->UsePressureForPumpCalcs &&
-                thisPump.plantLoc.loop->PressureSimType == DataPlant::PressSimType::FlowCorrection &&
-                thisPump.plantLoc.loop->PressureDrop > 0.0) {
+                thisPump.plantLoc.loop->PressureSimType == DataPlant::PressSimType::FlowCorrection && thisPump.plantLoc.loop->PressureDrop > 0.0) {
                 state.dataPumps->PumpMassFlowRate = ResolveLoopFlowVsPressure(state,
                                                                               thisPump.plantLoc.loopNum,
                                                                               state.dataLoopNodes->Node(thisPump.InletNodeNum).MassFlowRate,
@@ -2289,15 +2286,9 @@ void PumpDataForTable(EnergyPlusData &state, int const NumPump)
     PreDefTableEntry(state, thisReport->pdchMotEff, equipName, thisPump.MotorEffic);
     // Std 229
     PreDefTableEntry(state, thisReport->pdchPumpAutosized, equipName, thisPump.NomVolFlowRateWasAutoSized ? "Yes" : "No");
-    PreDefTableEntry(state,
-                     thisReport->pdchPumpPlantloopName,
-                     equipName,
-                     thisPump.plantLoc.loop != nullptr ? thisPump.plantLoc.loop->Name : "N/A");
+    PreDefTableEntry(state, thisReport->pdchPumpPlantloopName, equipName, thisPump.plantLoc.loop != nullptr ? thisPump.plantLoc.loop->Name : "N/A");
     PreDefTableEntry(
-        state,
-        thisReport->pdchPumpPlantloopBranchName,
-        equipName,
-        thisPump.plantLoc.loop != nullptr ? thisPump.plantLoc.branch->Name : "N/A");
+        state, thisReport->pdchPumpPlantloopBranchName, equipName, thisPump.plantLoc.loop != nullptr ? thisPump.plantLoc.branch->Name : "N/A");
 }
 
 void GetRequiredMassFlowRate(EnergyPlusData &state,
@@ -2328,8 +2319,7 @@ void GetRequiredMassFlowRate(EnergyPlusData &state,
 
     // Calculate maximum and minimum mass flow rate associated with maximum and minimum RPM
     if (thisPump.plantLoc.loopNum > 0) {
-        if (thisPump.plantLoc.loop->UsePressureForPumpCalcs &&
-            thisPump.plantLoc.loop->PressureSimType == DataPlant::PressSimType::FlowCorrection &&
+        if (thisPump.plantLoc.loop->UsePressureForPumpCalcs && thisPump.plantLoc.loop->PressureSimType == DataPlant::PressSimType::FlowCorrection &&
             thisPump.plantLoc.loop->PressureDrop > 0.0) {
             thisPump.PumpMassFlowRateMaxRPM = ResolveLoopFlowVsPressure(state,
                                                                         thisPump.plantLoc.loopNum,

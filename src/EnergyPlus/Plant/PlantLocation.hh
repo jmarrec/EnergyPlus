@@ -86,18 +86,17 @@ struct PlantLocation
         return !operator==(lhsPlantLoc, rhsPlantLoc);
     }
 
-    PlantLocation() :
-        loopNum(0), loopSideNum(DataPlant::LoopSideLocation::Invalid), branchNum(0), compNum(0)
+    PlantLocation() : loopNum(0), loopSideNum(DataPlant::LoopSideLocation::Invalid), branchNum(0), compNum(0)
     {
     }
-  
+
     // Member Constructor
     PlantLocation(int const loopNum, const DataPlant::LoopSideLocation loopSideNum, int const branchNum, int const compNum)
         : loopNum(loopNum), loopSideNum(loopSideNum), branchNum(branchNum), compNum(compNum)
     {
     }
 };
-  
+
 } // namespace EnergyPlus
 
 #endif

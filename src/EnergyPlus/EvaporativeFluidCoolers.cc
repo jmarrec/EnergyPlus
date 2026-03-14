@@ -2179,20 +2179,16 @@ namespace EvaporativeFluidCoolers {
         // create std 229 new table for cooling towers and fluid coolers
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchCTFCType, this->Name, DataPlant::PlantEquipTypeNames[static_cast<int>(this->Type)]);
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchCTFCCondLoopName, this->Name, this->plantLoc.loop != nullptr ? this->plantLoc.loop->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state,
-                                                 state.dataOutRptPredefined->pdchCTFCCondLoopName,
+                                                 state.dataOutRptPredefined->pdchCTFCCondLoopBranchName,
                                                  this->Name,
-                                                 this->plantLoc.loop != nullptr ? this->plantLoc.loop->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchCTFCCondLoopBranchName,
-            this->Name,
-            this->plantLoc.loop != nullptr ? plantLoc.branch->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchCTFCFluidType,
-            this->Name,
-            this->plantLoc.loop->FluidName); // Fluid Name more reasonable than FluidType
+                                                 this->plantLoc.loop != nullptr ? plantLoc.branch->Name : "N/A");
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchCTFCFluidType,
+                                                 this->Name,
+                                                 this->plantLoc.loop->FluidName); // Fluid Name more reasonable than FluidType
         if ((this->DesignExitWaterTemp > -999.0) && (this->DesignEnteringWaterTemp > 0)) {
             OutputReportPredefined::PreDefTableEntry(
                 state, state.dataOutRptPredefined->pdchCTFCRange, this->Name, this->DesignEnteringWaterTemp - this->DesignExitWaterTemp);
@@ -2305,8 +2301,7 @@ namespace EvaporativeFluidCoolers {
         this->BypassFraction = 0.0;
 
         //   MassFlowTol is a parameter to indicate a no flow condition
-        if (this->WaterMassFlowRate <= DataBranchAirLoopPlant::MassFlowTolerance ||
-            this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
+        if (this->WaterMassFlowRate <= DataBranchAirLoopPlant::MassFlowTolerance || this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
             return;
         }
 
@@ -2487,8 +2482,7 @@ namespace EvaporativeFluidCoolers {
         }
 
         //   MassFlowTol is a parameter to indicate a no flow condition
-        if (this->WaterMassFlowRate <= DataBranchAirLoopPlant::MassFlowTolerance ||
-            this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
+        if (this->WaterMassFlowRate <= DataBranchAirLoopPlant::MassFlowTolerance || this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
             return;
         }
 
@@ -2766,8 +2760,7 @@ namespace EvaporativeFluidCoolers {
 
         state.dataLoopNodes->Node(this->WaterOutletNode).Temp = this->OutletWaterTemp;
 
-        if (this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked ||
-            state.dataGlobal->WarmupFlag) {
+        if (this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked || state.dataGlobal->WarmupFlag) {
             return;
         }
 

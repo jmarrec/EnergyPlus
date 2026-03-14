@@ -160,7 +160,7 @@ TEST_F(EnergyPlusFixture, HWBaseboardRadiator_HWBaseboardWaterFlowResetTest)
     HWBaseboard(1).WaterMassFlowRateMax = 0.40;
     HWBaseboard(1).AirMassFlowRateStd = 0.5;
     HWBaseboard(1).availSched = Sched::GetScheduleAlwaysOn(*state);
-    
+
     HWBaseboard(1).UA = 400.0;
     HWBaseboard(1).QBBRadSource = 0.0;
     state->dataPlnt->PlantLoop(1).FluidName = "Water";
@@ -192,7 +192,7 @@ TEST_F(EnergyPlusFixture, HWBaseboardRadiator_HWBaseboardWaterFlowResetTest)
 
     HWBaseboard(1).plantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 0};
     PlantUtilities::SetPlantLocationLinks(*state, HWBaseboard(1).plantLoc);
-    
+
     // zero zone load case, so zero LoadMet must be returned
     CalcHWBaseboard(*state, BBNum, LoadMet);
 

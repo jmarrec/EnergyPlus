@@ -258,7 +258,6 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils1)
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
     PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
-
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
         DataPlant::PlantEquipmentType::CoilWaterSimpleHeating;
@@ -1433,7 +1432,7 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils6)
 
     state->dataWaterCoils->WaterCoil(1).WaterPlantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
     PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
-    
+
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
@@ -1445,7 +1444,6 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils6)
 
     state->dataSingleDuct->sd_airterminal(1).HWplantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 0};
     PlantUtilities::SetPlantLocationLinks(*state, state->dataSingleDuct->sd_airterminal(1).HWplantLoc);
-
 
     state->dataSize->CurZoneEqNum = 1;
     state->dataSize->CurTermUnitSizingNum = 1;

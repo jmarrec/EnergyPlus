@@ -1616,20 +1616,16 @@ void FluidCoolerspecs::size(EnergyPlusData &state)
         // create std 229 new table for cooling towers and fluid coolers
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchCTFCType, this->Name, DataPlant::PlantEquipTypeNames[static_cast<int>(this->FluidCoolerType)]);
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchCTFCCondLoopName, this->Name, this->plantLoc.loop != nullptr ? this->plantLoc.loop->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state,
-                                                 state.dataOutRptPredefined->pdchCTFCCondLoopName,
+                                                 state.dataOutRptPredefined->pdchCTFCCondLoopBranchName,
                                                  this->Name,
-                                                 this->plantLoc.loop != nullptr ? this->plantLoc.loop->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchCTFCCondLoopBranchName,
-            this->Name,
-            this->plantLoc.loop != nullptr ? plantLoc.branch->Name : "N/A");
-        OutputReportPredefined::PreDefTableEntry(
-            state,
-            state.dataOutRptPredefined->pdchCTFCFluidType,
-            this->Name,
-            this->plantLoc.loop->FluidName); // Fluid Name more reasonable than FluidType
+                                                 this->plantLoc.loop != nullptr ? plantLoc.branch->Name : "N/A");
+        OutputReportPredefined::PreDefTableEntry(state,
+                                                 state.dataOutRptPredefined->pdchCTFCFluidType,
+                                                 this->Name,
+                                                 this->plantLoc.loop->FluidName); // Fluid Name more reasonable than FluidType
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchCTFCRange, this->Name, this->DesignEnteringWaterTemp - this->DesignLeavingWaterTemp);
         OutputReportPredefined::PreDefTableEntry(
@@ -1835,8 +1831,7 @@ void FluidCoolerspecs::calcTwoSpeed(EnergyPlusData &state)
     }
 
     // MassFlowTol is a parameter to indicate a no flow condition
-    if (this->WaterMassFlowRate <= DataBranchAirLoopPlant::MassFlowTolerance ||
-        this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
+    if (this->WaterMassFlowRate <= DataBranchAirLoopPlant::MassFlowTolerance || this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked) {
         return;
     }
 
@@ -1963,8 +1958,7 @@ void FluidCoolerspecs::update(EnergyPlusData &state)
     int waterOutletNode = this->WaterOutletNodeNum;
     state.dataLoopNodes->Node(waterOutletNode).Temp = this->OutletWaterTemp;
 
-    if (this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked ||
-        state.dataGlobal->WarmupFlag) {
+    if (this->plantLoc.side->FlowLock == DataPlant::FlowLock::Unlocked || state.dataGlobal->WarmupFlag) {
         return;
     }
 

@@ -1189,11 +1189,10 @@ void HeatPumpAirToWater::reportEquipmentSummary(EnergyPlusData &state)
                 state, state.dataOutRptPredefined->pdchAWHPDesSizeRefAirFlowRate, objectName, this->sourceSideDesignMassFlowRate);
             OutputReportPredefined::PreDefTableEntry(
                 state, state.dataOutRptPredefined->pdchAWHPDesSizeRefWaterFlowRate, objectName, this->loadSideDesignMassFlowRate);
-            OutputReportPredefined::PreDefTableEntry(
-                state,
-                state.dataOutRptPredefined->pdchAWHPPlantloopName,
-                objectName,
-                this->loadSidePlantLoc.loop != nullptr ? this->loadSidePlantLoc.loop->Name : "N/A");
+            OutputReportPredefined::PreDefTableEntry(state,
+                                                     state.dataOutRptPredefined->pdchAWHPPlantloopName,
+                                                     objectName,
+                                                     this->loadSidePlantLoc.loop != nullptr ? this->loadSidePlantLoc.loop->Name : "N/A");
             OutputReportPredefined::PreDefTableEntry(state,
                                                      state.dataOutRptPredefined->pdchAWHPPlantloopBranchName,
                                                      objectName,

@@ -195,7 +195,7 @@ namespace DataPlant {
                         if (this_plant_loopside.Branch(BranchNum).Comp(CompNum).Type == DataPlant::PlantEquipmentType::PlantLoadProfile) {
                             PlantLocation foundLoc{LoopNum, DataPlant::LoopSideLocation::Demand, BranchNum, CompNum};
                             PlantUtilities::SetPlantLocationLinks(state, foundLoc);
-                            
+
                             PlantLoadProfileComps(loadProfileCompNum) = foundLoc;
                             ++loadProfileCompNum;
                         }
@@ -1266,7 +1266,7 @@ namespace DataPlant {
         // Step 1. get the mass flow rates of the returns.  both must be non-zero for the WWHP to run
         int inletChWReturnNodeNum = this->DedicatedHR_HeatingPLHP.sourceSidePlantLoc.comp->NodeNumIn;
         int inletHWReturnNodeNum = this->DedicatedHR_CoolingPLHP.sourceSidePlantLoc.comp->NodeNumIn;
-        
+
         Real64 CW_RetMdot = state.dataLoopNodes->Node(inletChWReturnNodeNum).MassFlowRate;
         Real64 HW_RetMdot = state.dataLoopNodes->Node(inletHWReturnNodeNum).MassFlowRate;
 
@@ -1280,15 +1280,13 @@ namespace DataPlant {
 
         // step 2. calculate the loads to adjust the
         // returns to hit the associated setpoints at their current mass flow
-        Real64 const CpCW =
-            this->DedicatedHR_HeatingPLHP.sourceSidePlantLoc.loop->
-               glycol->getSpecificHeat(state, state.dataLoopNodes->Node(inletChWReturnNodeNum).Temp, "EvaluateChillerHeaterChangeoverOpScheme");
+        Real64 const CpCW = this->DedicatedHR_HeatingPLHP.sourceSidePlantLoc.loop->glycol->getSpecificHeat(
+            state, state.dataLoopNodes->Node(inletChWReturnNodeNum).Temp, "EvaluateChillerHeaterChangeoverOpScheme");
         Real64 CW_Qdot =
             CW_RetMdot * CpCW *
             (this->Setpoint.SecCW - state.dataLoopNodes->Node(inletChWReturnNodeNum).Temp); // power = Mdot Cp Delta T, cooling load is negative
-        Real64 const CpHW =
-            this->DedicatedHR_CoolingPLHP.sourceSidePlantLoc.loop->
-                glycol->getSpecificHeat(state, state.dataLoopNodes->Node(inletHWReturnNodeNum).Temp, "EvaluateChillerHeaterChangeoverOpScheme");
+        Real64 const CpHW = this->DedicatedHR_CoolingPLHP.sourceSidePlantLoc.loop->glycol->getSpecificHeat(
+            state, state.dataLoopNodes->Node(inletHWReturnNodeNum).Temp, "EvaluateChillerHeaterChangeoverOpScheme");
         Real64 HW_Qdot = HW_RetMdot * CpHW * (this->Setpoint.SecHW - state.dataLoopNodes->Node(inletHWReturnNodeNum).Temp); // power = Mdot Cp Delta T
 
         // store for reporting
@@ -1357,10 +1355,9 @@ namespace DataPlant {
             this->DedicatedHR_CoolingPLHP.loadSidePlantLoc.comp->MyLoad = CW_Qdot; // cooling load is negative
 
             int OutletChWReturnNodeNum = this->DedicatedHR_CoolingPLHP.loadSidePlantLoc.comp->NodeNumOut;
-            
+
             state.dataLoopNodes->Node(OutletChWReturnNodeNum).TempSetPoint = this->Setpoint.SecCW;
-            state.dataLoopNodes->Node(this->DedicatedHR_CoolingPLHP.loadSidePlantLoc.loop->TempSetPointNodeNum)
-                .TempSetPoint = this->Setpoint.SecCW;
+            state.dataLoopNodes->Node(this->DedicatedHR_CoolingPLHP.loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint = this->Setpoint.SecCW;
 
             if (this->DedicatedHR_CoolingPLHP.loadSidePlantLoc.loopNum ==
                 SecondaryPlantLoopIndicesBeingSupervised(this->DedicatedHR_CoolingPLHP.loadSidePlantLoc.loopNum)) {
@@ -1388,8 +1385,7 @@ namespace DataPlant {
             int OutletHWReturnNodeNum = this->DedicatedHR_HeatingPLHP.loadSidePlantLoc.comp->NodeNumOut;
 
             state.dataLoopNodes->Node(OutletHWReturnNodeNum).TempSetPoint = this->Setpoint.SecHW;
-            state.dataLoopNodes->Node(this->DedicatedHR_HeatingPLHP.loadSidePlantLoc.loop->TempSetPointNodeNum)
-                .TempSetPoint = this->Setpoint.SecHW;
+            state.dataLoopNodes->Node(this->DedicatedHR_HeatingPLHP.loadSidePlantLoc.loop->TempSetPointNodeNum).TempSetPoint = this->Setpoint.SecHW;
 
             if (this->DedicatedHR_HeatingPLHP.loadSidePlantLoc.loopNum ==
                 SecondaryPlantLoopIndicesBeingSupervised(this->DedicatedHR_HeatingPLHP.loadSidePlantLoc.loopNum)) {
@@ -1448,8 +1444,8 @@ namespace DataPlant {
                 Real64 Tin = state.dataLoopNodes->Node(inletBoilerNodeNum).Temp;
                 Real64 Mdot = state.dataLoopNodes->Node(inletBoilerNodeNum).MassFlowRate;
 
-                Real64 const CpHW = this->PlantBoilerComps(BoilerNum).loop->
-                                        glycol->getSpecificHeat(state, Tin, "ChillerHeaterSupervisoryOperationData::ProcessAndSetAuxilBoiler");
+                Real64 const CpHW = this->PlantBoilerComps(BoilerNum).loop->glycol->getSpecificHeat(
+                    state, Tin, "ChillerHeaterSupervisoryOperationData::ProcessAndSetAuxilBoiler");
                 Real64 LoadToSetpoint = max(0.0, Mdot * CpHW * (HWsetpt - Tin));
                 int pltSizNum = this->PlantBoilerComps(BoilerNum).loop->PlantSizNum;
                 Real64 const thresholdPlantLoad =
@@ -1470,14 +1466,12 @@ namespace DataPlant {
                     this->PlantBoilerComps(BoilerNum).comp->MyLoad = LoadToSetpoint;
                     int OutletBoilerNodeNum = this->PlantBoilerComps(BoilerNum).comp->NodeNumOut;
                     state.dataLoopNodes->Node(OutletBoilerNodeNum).TempSetPoint = HWsetpt;
-                    state.dataLoopNodes->Node(this->PlantBoilerComps(BoilerNum).loop->TempSetPointNodeNum).TempSetPoint =
-                        HWsetpt;
+                    state.dataLoopNodes->Node(this->PlantBoilerComps(BoilerNum).loop->TempSetPointNodeNum).TempSetPoint = HWsetpt;
                     this->Report.BoilerAux_OpMode = 1;
                 } else { // still apply the setpoint, but don't turn on
                     int OutletBoilerNodeNum = this->PlantBoilerComps(BoilerNum).comp->NodeNumOut;
                     state.dataLoopNodes->Node(OutletBoilerNodeNum).TempSetPoint = HWsetpt;
-                    state.dataLoopNodes->Node(this->PlantBoilerComps(BoilerNum).loop->TempSetPointNodeNum).TempSetPoint =
-                        HWsetpt;
+                    state.dataLoopNodes->Node(this->PlantBoilerComps(BoilerNum).loop->TempSetPointNodeNum).TempSetPoint = HWsetpt;
                 }
             }
         }

@@ -279,7 +279,7 @@ void PlantProfileData::InitPlantProfile(EnergyPlusData &state)
         if (arrayIndex == -1) {
             this->plantLoc.loop->plantCoilObjectNames.emplace_back(this->Name);
             this->plantLoc.loop->plantCoilObjectTypes.emplace_back(this->Type);
-            
+
             std::vector<Real64> tmpFlowData;
             tmpFlowData.resize(size_t(Constant::iHoursInDay * state.dataGlobal->TimeStepsInHour + 1));
             tmpFlowData[0] = -1; // comp index

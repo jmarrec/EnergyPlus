@@ -2101,5 +2101,3 @@ MinFlowIfBranchHasVSPump(EnergyPlusData &state, PlantLocation const &plantLoc, b
 }
 
 } // namespace EnergyPlus::PlantUtilities
-
-
