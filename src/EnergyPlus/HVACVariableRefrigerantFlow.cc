@@ -9068,7 +9068,7 @@ void VRFCondenserEquipment::SizeVRFCondenser(EnergyPlusData &state)
         if (this->WaterCondVolFlowRate == DataSizing::AutoSize) {
             int PltSizCondNum = 0;
             if (this->SourcePlantLoc.loopNum > 0) {
-                PltSizCondNum = state.dataPlnt->PlantLoop(this->SourcePlantLoc.loopNum).PlantSizNum;
+                PltSizCondNum = this->SourcePlantLoc.loop->PlantSizNum;
             }
             if (PltSizCondNum > 0) {
                 rho = this->SourcePlantLoc.loop->glycol->getDensity(state, state.dataSize->PlantSizData(PltSizCondNum).ExitTemp, RoutineName);
