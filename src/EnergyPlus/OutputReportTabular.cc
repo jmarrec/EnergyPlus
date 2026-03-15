@@ -14120,7 +14120,7 @@ void WritePredefinedTables(EnergyPlusData &state)
                                         std::string repTableTag;
                                         auto &entry1 = table.entries(lTableEntry + 1); // What the what?
                                         LookupSItoIP(state, entry1.charEntry, columnUnitConv, repTableTag);
-                                        entry.charEntry = repTableTag;
+                                        entry1.charEntry = repTableTag;
                                     }
                                 }
                                 if (entry.origEntryIsReal &&
