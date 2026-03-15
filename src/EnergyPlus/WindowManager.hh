@@ -50,8 +50,6 @@
 
 // ObjexxFCL Headers
 #include <ObjexxFCL/Array1A.hh>
-#include <ObjexxFCL/Array1D.hh>
-#include <ObjexxFCL/Array2A.hh>
 
 // EnergyPlus Headers
 #include <EnergyPlus/Data/BaseData.hh>
@@ -360,17 +358,17 @@ namespace Window {
     void BlindOpticsDiffuse(EnergyPlusData &state,
                             int BlindNum,      // Blind number
                             int ISolVis,       // 1 = solar and IR calculation; 2 = visible calculation
-                            Array1A<Real64> c, // Slat properties
+                            std::array<Real64, 15> const &c, // Slat properties
                             Real64 b_el,       // Slat elevation (radians)
-                            Array1A<Real64> p  // Blind properties
+                            std::array<Real64, 16> &p  // Blind properties
     );
 
     void BlindOpticsBeam(EnergyPlusData &state,
                          int BlindNum,      // Blind number
-                         Array1A<Real64> c, // Slat properties (equivalent to BLD_PR)
+                         std::array<Real64, 15> const &c, // Slat properties (equivalent to BLD_PR)
                          Real64 b_el,       // Slat elevation (radians)
                          Real64 s_el,       // Solar profile angle (radians)
-                         Array1A<Real64> p  // Blind properties (equivalent to ST_LAY)
+                         std::array<Real64, 16> &p  // Blind properties (equivalent to ST_LAY)
     );
 
     inline Real64 InterpSw(Real64 const SwitchFac, // Switching factor: 0.0 if glazing is unswitched, = 1.0 if fully switched

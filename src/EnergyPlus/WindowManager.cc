@@ -4664,7 +4664,7 @@ namespace Window {
         constexpr Real64 resgap(0.21); // Typical gap resistance (m2-K/W)
 
         WinShadingType ShadeFlag;   // Shading flag
-        Array1D<Real64> rguess(11); // Combined radiative/convective resistance (m2-K/W) of
+        std::array<Real64, 11> rguess; // Combined radiative/convective resistance (m2-K/W) of
         // inside or outside air film, or gap
         Real64 restot; // Total window resistance including outside
         //   and inside air films (m2-K/W)
@@ -4690,19 +4690,19 @@ namespace Window {
             // Interaction with shade or blind, if one of these is present, is ignored. See below for
             // separate calculation of shade/blind temperature.
 
-            rguess(1) = 1.0 / (wm->hcout + hrad);
-            rguess(wm->nglface + 1) = 1.0 / (wm->hcin + hrad);
+            rguess[0] = 1.0 / (wm->hcout + hrad);
+            rguess[wm->nglface] = 1.0 / (wm->hcin + hrad);
 
-            for (int i = 2; i <= wm->nglface; i += 2) {
-                rguess(i) = 1.0 / wm->scon[i / 2 - 1];
-                if (i < wm->nglface) {
-                    rguess(i + 1) = resgap;
+            for (int i = 1; i < wm->nglface; i += 2) {
+                rguess[i] = 1.0 / wm->scon[i / 2];
+                if (i < wm->nglface - 1) {
+                    rguess[i + 1] = resgap;
                 }
             }
 
             restot = 0.0;
-            for (int i = 1; i <= wm->nglface + 1; ++i) {
-                restot += rguess(i);
+            for (int i = 0; i < wm->nglface + 1; ++i) {
+                restot += rguess[i];
             }
 
             temdiff = wm->tin - wm->tout;
@@ -4711,15 +4711,15 @@ namespace Window {
             }
 
             ressum = 0.0;
-            for (int i = 1; i <= wm->nglface; ++i) {
-                ressum += rguess(i);
-                wm->thetas[i - 1] = (ressum / restot) * temdiff + wm->tout;
+            for (int i = 0; i < wm->nglface; ++i) {
+                ressum += rguess[i];
+                wm->thetas[i] = (ressum / restot) * temdiff + wm->tout;
             }
 
         } else {
             // Use previous time step values
-            for (int i = 1; i <= wm->nglface; ++i) {
-                wm->thetas[i - 1] = s_surf->SurfaceWindow(SurfNum).thetaFace[i];
+            for (int i = 0; i < wm->nglface; ++i) {
+                wm->thetas[i] = s_surf->SurfaceWindow(SurfNum).thetaFace[i + 1]; // This was [i]
             }
         }
 
@@ -5514,100 +5514,7 @@ namespace Window {
         }
     } // W5LsqFit()
 
-    //********************************************************************************
-
-    void W5LsqFit2(Array1A<Real64> const IndepVar, // Independent variables
-                   Array1A<Real64> const DepVar,   // Dependent variables
-                   int const N,                    // Order of polynomial
-                   int const N1,                   // First and last data points used
-                   int const N2,
-                   Array1A<Real64> CoeffsCurve // Polynomial coefficients from fit
-    )
-    {
-
-        // SUBROUTINE INFORMATION:
-        //       AUTHOR         George Walton
-        //       DATE WRITTEN   April 1976
-        //       MODIFIED       November 1999 F.Winkelmann
-        //                      May 2001 F. Winkelmann, to do 19 indep. variables
-        //       RE-ENGINEERED  na
-
-        // PURPOSE OF THIS SUBROUTINE:
-        // Does least squares fit for coefficients of a polynomial
-        // that gives a window property, such as transmittance, as a function of
-        // the cosine of the angle of incidence. The polynomial is of the
-        // form C1*X + C2*X**2 + C3*X**3 + ... +CN*X**N, where N <= 6.
-        // Adapted from BLAST subroutine LSQFIT.
-
-        // Argument array dimensioning
-        IndepVar.dim(19);
-        DepVar.dim(19);
-        CoeffsCurve.dim(6);
-
-        Array2D<Real64> A(6, 6);  // Least squares derivative matrix
-        Array1D<Real64> B(6);     // Least squares derivative vector
-        Array2D<Real64> D(6, 16); // Powers of independent variable
-        Real64 ACON;              // Intermediate variables
-        Real64 SUM;
-        int LP1;
-        int NM1;
-
-        // Set up least squares matrix
-        for (int M = N1; M <= N2; ++M) {
-            D(1, M) = IndepVar(M);
-        }
-
-        for (int i = 2; i <= N; ++i) {
-            for (int M = N1; M <= N2; ++M) {
-                D(i, M) = D(i - 1, M) * IndepVar(M);
-            }
-        }
-
-        for (int i = 1; i <= N; ++i) {
-            SUM = 0.0;
-            for (int M = N1; M <= N2; ++M) {
-                SUM += DepVar(M) * D(i, M);
-            }
-            B(i) = SUM;
-            for (int j = 1; j <= N; ++j) {
-                SUM = 0.0;
-                for (int M = N1; M <= N2; ++M) {
-                    SUM += D(i, M) * D(j, M);
-                }
-                A(j, i) = SUM;
-                A(i, j) = SUM;
-            }
-        }
-
-        // Solve the simultaneous equations using Gauss elimination
-        NM1 = N - 1;
-        for (int K = 1; K <= NM1; ++K) {
-            int KP1 = K + 1;
-            for (int i = KP1; i <= N; ++i) {
-                ACON = A(K, i) / A(K, K);
-                B(i) -= B(K) * ACON;
-                for (int j = K; j <= N; ++j) {
-                    A(j, i) -= A(j, K) * ACON;
-                }
-            }
-        }
-
-        // Perform back substitution
-        CoeffsCurve(N) = B(N) / A(N, N);
-        LP1 = N;
-        int L = N - 1;
-
-        while (L > 0) {
-            SUM = 0.0;
-            for (int j = LP1; j <= N; ++j) {
-                SUM += A(j, L) * CoeffsCurve(j);
-            }
-            CoeffsCurve(L) = (B(L) - SUM) / A(L, L);
-            LP1 = L;
-            --L;
-        }
-    } // W5LsqFit2()
-
+  
     //***********************************************************************
 
     Real64 DiffuseAverage(std::array<Real64, numPhis> const &props) // Property value at angles of incidence
@@ -5958,7 +5865,7 @@ namespace Window {
         //   resistance [m2-K/W]
         std::array<Real64, maxGlassLayers>
             hgap;                 // Conductive gap conductance [W/m2-K]
-                                  //        Array1D<Real64> hGapTot(5);     // Combined radiative and conductive gap conductance [W/m2-K]
+                                  //        std::array<Real64, maxGlassLayers> hGapTot; // Combined radiative and conductive gap conductance [W/m2-K]
                                   //        Real64 Rbare;                   // Nominal center-of-glass resistance without air films [m2-K/W]
         WinShadingType ShadeFlag; // Shading flag
         Real64 ShadeRes;          // Thermal resistance of shade
@@ -6647,7 +6554,7 @@ namespace Window {
         //   room air temp - inside surface temp = 14.2K)
         Real64 constexpr resgap = 0.21; // Typical gap resistance (m2-K/W)
 
-        Array1D<Real64> rguess(11); // Combined radiative/convective resistance (m2-K/W) of
+        std::array<Real64, 11> rguess; // Combined radiative/convective resistance (m2-K/W) of
         // inside or outside air film, or gap
         Real64 restot; // Total window resistance including outside
         //   and inside air films (m2-K/W)
@@ -6656,19 +6563,19 @@ namespace Window {
 
         auto const &wm = state.dataWindowManager;
 
-        rguess(1) = 1.0 / (wm->hcout + hrad);
-        rguess(wm->nglface + 1) = 1.0 / (hcinStartValue + hrad);
+        rguess[0] = 1.0 / (wm->hcout + hrad);
+        rguess[wm->nglface] = 1.0 / (hcinStartValue + hrad);
 
-        for (int i = 2; i <= wm->nglface; i += 2) {
-            rguess(i) = 1.0 / wm->scon[i / 2 - 1];
-            if (i < wm->nglface) {
-                rguess(i + 1) = resgap;
+        for (int i = 1; i < wm->nglface; i += 2) {
+            rguess[i] = 1.0 / wm->scon[i / 2];
+            if (i < wm->nglface - 1) {
+                rguess[i + 1] = resgap;
             }
         }
         restot = 0.0;
 
-        for (int i = 1; i <= wm->nglface + 1; ++i) {
-            restot += rguess(i);
+        for (int i = 0; i < wm->nglface + 1; ++i) {
+            restot += rguess[i];
         }
 
         temdiff = wm->tin - wm->tout;
@@ -6677,9 +6584,9 @@ namespace Window {
         }
         ressum = 0.0;
 
-        for (int i = 1; i <= wm->nglface; ++i) {
-            ressum += rguess(i);
-            wm->thetas[i - 1] = (ressum / restot) * temdiff + wm->tout;
+        for (int i = 0; i < wm->nglface; ++i) {
+            ressum += rguess[i];
+            wm->thetas[i] = (ressum / restot) * temdiff + wm->tout;
         }
     } // StartingWinTempsForNominalCond()
 
@@ -7248,8 +7155,8 @@ namespace Window {
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-        Array1D<Real64> bld_pr(15);                        // Slat properties
-        Array1D<Real64> st_lay(16);                        // Solar-optical blind/glazing system properties
+        std::array<Real64, 15> bld_pr;                        // Slat properties
+        std::array<Real64, 16> st_lay;                        // Solar-optical blind/glazing system properties
         Real64 sun_el;                                     // Solar profile angle (radians)
         Array1D<Real64> sun_el_deg(Material::MaxProfAngs); // Solar profile angle (deg) corresponding to sun_el values
         Real64 bld_el;                                     // Slat angle (elevation of slat normal vector in plane
@@ -7265,35 +7172,35 @@ namespace Window {
             auto *matBlind = dynamic_cast<Material::MaterialBlind *>(mat);
             assert(matBlind != nullptr);
 
-            bld_pr(2) = matBlind->SlatWidth;
-            bld_pr(3) = matBlind->SlatSeparation;
+            bld_pr[1] = matBlind->SlatWidth;
+            bld_pr[2] = matBlind->SlatSeparation;
 
             for (int ISolVis = 1; ISolVis <= 2; ++ISolVis) {
                 if (ISolVis == 1) { // For solar calculation
-                    bld_pr(4) = 0.0;
-                    bld_pr(5) = 0.0;
-                    bld_pr(6) = 0.0;
-                    bld_pr(7) = matBlind->slatTAR.Sol.Ft.Bm[0].DfTra;
-                    bld_pr(8) = matBlind->slatTAR.Sol.Ft.Bm[0].DfRef;
-                    bld_pr(9) = matBlind->slatTAR.Sol.Bk.Bm[0].DfRef;
-                    bld_pr(10) = matBlind->slatTAR.Sol.Ft.Df.Tra;
-                    bld_pr(11) = matBlind->slatTAR.Sol.Ft.Df.Ref;
-                    bld_pr(12) = matBlind->slatTAR.Sol.Bk.Df.Ref;
+                    bld_pr[3] = 0.0;
+                    bld_pr[4] = 0.0;
+                    bld_pr[5] = 0.0;
+                    bld_pr[6] = matBlind->slatTAR.Sol.Ft.Bm[0].DfTra;
+                    bld_pr[7] = matBlind->slatTAR.Sol.Ft.Bm[0].DfRef;
+                    bld_pr[8] = matBlind->slatTAR.Sol.Bk.Bm[0].DfRef;
+                    bld_pr[9] = matBlind->slatTAR.Sol.Ft.Df.Tra;
+                    bld_pr[10] = matBlind->slatTAR.Sol.Ft.Df.Ref;
+                    bld_pr[11] = matBlind->slatTAR.Sol.Bk.Df.Ref;
                 } else { // For visible calculation
-                    bld_pr(4) = 0.0;
-                    bld_pr(5) = 0.0;
-                    bld_pr(6) = 0.0;
-                    bld_pr(7) = matBlind->slatTAR.Vis.Ft.Bm[0].DfTra;
-                    bld_pr(8) = matBlind->slatTAR.Vis.Ft.Bm[0].DfRef;
-                    bld_pr(9) = matBlind->slatTAR.Vis.Bk.Bm[0].DfRef;
-                    bld_pr(10) = matBlind->slatTAR.Vis.Ft.Df.Tra;
-                    bld_pr(11) = matBlind->slatTAR.Vis.Ft.Df.Ref;
-                    bld_pr(12) = matBlind->slatTAR.Vis.Bk.Df.Ref;
+                    bld_pr[3] = 0.0;
+                    bld_pr[4] = 0.0;
+                    bld_pr[5] = 0.0;
+                    bld_pr[6] = matBlind->slatTAR.Vis.Ft.Bm[0].DfTra;
+                    bld_pr[7] = matBlind->slatTAR.Vis.Ft.Bm[0].DfRef;
+                    bld_pr[8] = matBlind->slatTAR.Vis.Bk.Bm[0].DfRef;
+                    bld_pr[9] = matBlind->slatTAR.Vis.Ft.Df.Tra;
+                    bld_pr[10] = matBlind->slatTAR.Vis.Ft.Df.Ref;
+                    bld_pr[11] = matBlind->slatTAR.Vis.Bk.Df.Ref;
                 }
                 // For IR calculation
-                bld_pr(13) = matBlind->slatTAR.IR.Ft.Tra;
-                bld_pr(14) = matBlind->slatTAR.IR.Ft.Emi;
-                bld_pr(15) = matBlind->slatTAR.IR.Bk.Emi;
+                bld_pr[12] = matBlind->slatTAR.IR.Ft.Tra;
+                bld_pr[13] = matBlind->slatTAR.IR.Ft.Emi;
+                bld_pr[14] = matBlind->slatTAR.IR.Bk.Emi;
 
                 // Calculate diffuse properties of blind. If blind has variable slat angle, &
                 // vary slat angle from 0 to 180 deg in 10-deg steps (for Material::MaxSlatAngs = 19).
@@ -7303,27 +7210,27 @@ namespace Window {
 
                     auto &btar = matBlind->TARs[iSlatAng];
 
-                    st_lay = 0.0;
+                    st_lay = {0.0};
                     bld_el = Material::dSlatAng * iSlatAng; // 0 <= bld_el <= 180 deg
 
                     BlindOpticsDiffuse(state, matBlind->Num, ISolVis, bld_pr, bld_el, st_lay);
 
                     if (ISolVis == 1) { // Fill blind diffuse solar and IR properties
-                        btar.Sol.Ft.Df.Tra = st_lay(9);
-                        btar.Sol.Ft.Df.Ref = st_lay(10);
-                        btar.Sol.Bk.Df.Tra = st_lay(11);
-                        btar.Sol.Bk.Df.Ref = st_lay(12);
-                        btar.Sol.Ft.Df.Abs = max(0.0, 1.0 - st_lay(9) - st_lay(10));
-                        btar.Sol.Bk.Df.Abs = max(0.0, 1.0 - st_lay(11) - st_lay(12));
-                        btar.IR.Ft.Tra = st_lay(13);
-                        btar.IR.Ft.Emi = st_lay(14);
-                        btar.IR.Bk.Tra = st_lay(13);
-                        btar.IR.Bk.Emi = st_lay(15);
+                        btar.Sol.Ft.Df.Tra = st_lay[8];
+                        btar.Sol.Ft.Df.Ref = st_lay[9];
+                        btar.Sol.Bk.Df.Tra = st_lay[10];
+                        btar.Sol.Bk.Df.Ref = st_lay[11];
+                        btar.Sol.Ft.Df.Abs = max(0.0, 1.0 - st_lay[8] - st_lay[9]);
+                        btar.Sol.Bk.Df.Abs = max(0.0, 1.0 - st_lay[10] - st_lay[11]);
+                        btar.IR.Ft.Tra = st_lay[12];
+                        btar.IR.Ft.Emi = st_lay[13];
+                        btar.IR.Bk.Tra = st_lay[12];
+                        btar.IR.Bk.Emi = st_lay[14];
                     } else { // Fill blind diffuse visible properties
-                        btar.Vis.Ft.Df.Tra = st_lay(9);
-                        btar.Vis.Ft.Df.Ref = st_lay(10);
-                        btar.Vis.Bk.Df.Tra = st_lay(11);
-                        btar.Vis.Bk.Df.Ref = st_lay(12);
+                        btar.Vis.Ft.Df.Tra = st_lay[8];
+                        btar.Vis.Ft.Df.Ref = st_lay[9];
+                        btar.Vis.Bk.Df.Tra = st_lay[10];
+                        btar.Vis.Bk.Df.Ref = st_lay[11];
                     }
 
                     // If blind has variable slat angle, vary slat angle from 0 to 180 deg in 10-deg steps
@@ -7338,26 +7245,26 @@ namespace Window {
                         BlindOpticsBeam(state, matBlind->Num, bld_pr, bld_el, sun_el, st_lay);
 
                         if (ISolVis == 1) { // Fill blind beam solar properties
-                            btar.Sol.Ft.Bm[IProfAng].BmTra = st_lay(1);
-                            btar.Sol.Ft.Bm[IProfAng].BmRef = st_lay(2);
-                            btar.Sol.Bk.Bm[IProfAng].BmTra = st_lay(3);
-                            btar.Sol.Bk.Bm[IProfAng].BmRef = st_lay(4);
-                            btar.Sol.Ft.Bm[IProfAng].DfTra = st_lay(5);
-                            btar.Sol.Ft.Bm[IProfAng].DfRef = st_lay(6);
-                            btar.Sol.Bk.Bm[IProfAng].DfTra = st_lay(7);
-                            btar.Sol.Bk.Bm[IProfAng].DfRef = st_lay(8);
-                            btar.Sol.Ft.Bm[IProfAng].Abs = max(0.0, 1.0 - st_lay(6) - st_lay(1) - st_lay(5));
-                            btar.Sol.Bk.Bm[IProfAng].Abs = max(0.0, 1.0 - st_lay(7) - st_lay(3) - st_lay(8));
+                            btar.Sol.Ft.Bm[IProfAng].BmTra = st_lay[0];
+                            btar.Sol.Ft.Bm[IProfAng].BmRef = st_lay[1];
+                            btar.Sol.Bk.Bm[IProfAng].BmTra = st_lay[2];
+                            btar.Sol.Bk.Bm[IProfAng].BmRef = st_lay[3];
+                            btar.Sol.Ft.Bm[IProfAng].DfTra = st_lay[4];
+                            btar.Sol.Ft.Bm[IProfAng].DfRef = st_lay[5];
+                            btar.Sol.Bk.Bm[IProfAng].DfTra = st_lay[6];
+                            btar.Sol.Bk.Bm[IProfAng].DfRef = st_lay[7];
+                            btar.Sol.Ft.Bm[IProfAng].Abs = max(0.0, 1.0 - st_lay[5] - st_lay[0] - st_lay[4]);
+                            btar.Sol.Bk.Bm[IProfAng].Abs = max(0.0, 1.0 - st_lay[6] - st_lay[2] - st_lay[7]);
 
                         } else { // Fill blind beam visible properties
-                            btar.Vis.Ft.Bm[IProfAng].BmTra = st_lay(1);
-                            btar.Vis.Ft.Bm[IProfAng].BmRef = st_lay(2);
-                            btar.Vis.Bk.Bm[IProfAng].BmTra = st_lay(3);
-                            btar.Vis.Bk.Bm[IProfAng].BmRef = st_lay(4);
-                            btar.Vis.Ft.Bm[IProfAng].DfTra = st_lay(5);
-                            btar.Vis.Ft.Bm[IProfAng].DfRef = st_lay(6);
-                            btar.Vis.Bk.Bm[IProfAng].DfTra = st_lay(7);
-                            btar.Vis.Bk.Bm[IProfAng].DfRef = st_lay(8);
+                            btar.Vis.Ft.Bm[IProfAng].BmTra = st_lay[0];
+                            btar.Vis.Ft.Bm[IProfAng].BmRef = st_lay[1];
+                            btar.Vis.Bk.Bm[IProfAng].BmTra = st_lay[2];
+                            btar.Vis.Bk.Bm[IProfAng].BmRef = st_lay[3];
+                            btar.Vis.Ft.Bm[IProfAng].DfTra = st_lay[4];
+                            btar.Vis.Ft.Bm[IProfAng].DfRef = st_lay[5];
+                            btar.Vis.Bk.Bm[IProfAng].DfTra = st_lay[6];
+                            btar.Vis.Bk.Bm[IProfAng].DfRef = st_lay[7];
                         }
                     } // End of loop over slat angles
                 } // End of loop over profile angles
@@ -7671,9 +7578,9 @@ namespace Window {
     void BlindOpticsDiffuse(EnergyPlusData &state,
                             int const BlindNum,      // Blind number
                             int const ISolVis,       // 1 = solar and IR calculation; 2 = visible calculation
-                            Array1A<Real64> const c, // Slat properties
+                            std::array<Real64, 15> const &c, // Slat properties
                             Real64 const b_el,       // Slat elevation (radians)
-                            Array1A<Real64> p        // Blind properties
+                            std::array<Real64, 16> &p        // Blind properties
     )
     {
 
@@ -7696,10 +7603,6 @@ namespace Window {
         // REFERENCES:
         // "Solar-Thermal Window Blind Model for DOE-2," H. Simmler, U. Fischer and
         // F. Winkelmann, Lawrence Berkeley National Laboratory, Jan. 1996.
-
-        // Argument array dimensioning
-        c.dim(15);
-        p.dim(16);
 
         std::array<Real64, 2> fEdgeA; // Average slat edge correction factor for upper and lower quadrants
         //  seen by window blind
@@ -7754,14 +7657,14 @@ namespace Window {
         auto *matBlind = dynamic_cast<Material::MaterialBlind *>(s_mat->materials(BlindNum));
         //     Calculate view factors between slat sections (slat is divided longitudinally into two equal parts)
 
-        ViewFac(c(2), c(3), b_el, Constant::PiOvr2, F);
+        ViewFac(c[1], c[2], b_el, Constant::PiOvr2, F);
 
         //     Set up exchange matrix X for diffuse properties
 
         for (int k = 2; k < 5; k += 2) {
             for (int m = 2; m < 6; ++m) {
-                X[m - 2][k - 2] = -c(12) * F[k][m] - c(10) * F[k + 1][m];
-                X[m - 2][k - 1] = -c(10) * F[k][m] - c(11) * F[k + 1][m];
+                X[m - 2][k - 2] = -c[11] * F[k][m] - c[9] * F[k + 1][m];
+                X[m - 2][k - 1] = -c[9] * F[k][m] - c[10] * F[k + 1][m];
             }
         }
 
@@ -7776,10 +7679,10 @@ namespace Window {
 
         //     Sources
 
-        Q[2] = c(12) * F[2][0] + c(10) * F[3][0];
-        Q[3] = c(10) * F[2][0] + c(11) * F[3][0];
-        Q[4] = c(12) * F[4][0] + c(10) * F[5][0];
-        Q[5] = c(10) * F[4][0] + c(11) * F[5][0];
+        Q[2] = c[11] * F[2][0] + c[9] * F[3][0];
+        Q[3] = c[9] * F[2][0] + c[10] * F[3][0];
+        Q[4] = c[11] * F[4][0] + c[9] * F[5][0];
+        Q[5] = c[9] * F[4][0] + c[10] * F[5][0];
 
         //     Radiosities
 
@@ -7832,20 +7735,20 @@ namespace Window {
         Real64 fEdge = 0.5 * (fEdgeA[0] + fEdgeA[1]); // Slat edge correction factor
 
         //     Front diffuse-diffuse transmittance (transmittance of slat edge assumed zero)
-        p(9) = G[1] * (1.0 - fEdge);
+        p[8] = G[1] * (1.0 - fEdge);
 
         //     Front diffuse-diffuse reflectance (edge of slat is assumed to have same diffuse
         //     reflectance as front side of slat, c(11))
-        p(10) = G[0] * (1.0 - fEdge) + fEdge * c(11);
+        p[9] = G[0] * (1.0 - fEdge) + fEdge * c[10];
 
         //-----------Calculate diffuse short-wave properties for the back side of the blind
 
         //     Sources
 
-        Q[2] = c(12) * F[2][1] + c(10) * F[3][1];
-        Q[3] = c(10) * F[2][1] + c(11) * F[3][1];
-        Q[4] = c(12) * F[4][1] + c(10) * F[5][1];
-        Q[5] = c(10) * F[4][1] + c(11) * F[5][1];
+        Q[2] = c[11] * F[2][1] + c[9] * F[3][1];
+        Q[3] = c[9] * F[2][1] + c[10] * F[3][1];
+        Q[4] = c[11] * F[4][1] + c[9] * F[5][1];
+        Q[5] = c[9] * F[4][1] + c[10] * F[5][1];
 
         //     Radiosities
 
@@ -7869,10 +7772,10 @@ namespace Window {
         }
 
         //     Back diffuse-diffuse transmittance
-        p(11) = G[0] * (1.0 - fEdge);
+        p[10] = G[0] * (1.0 - fEdge);
 
         //     Back hemi-hemi reflectance
-        p(12) = G[1] * (1.0 - fEdge) + fEdge * c(11);
+        p[11] = G[1] * (1.0 - fEdge) + fEdge * c[10];
 
         if (ISolVis == 1) {
 
@@ -7880,15 +7783,15 @@ namespace Window {
             //           (use same set of view factors as for diffuse short-wave properties)
 
             //     Front and back slat IR reflectances
-            Real64 ri = 1 - c(13) - c(14); // Front and back IR slat reflectance
-            Real64 rib = 1 - c(13) - c(15);
+            Real64 ri = 1 - c[12] - c[13]; // Front and back IR slat reflectance
+            Real64 rib = 1 - c[12] - c[14];
 
             //     Set up exchange matrix X for diffuse properties
 
             for (int k = 2; k < 5; k += 2) {
                 for (int m = 2; m < 6; ++m) {
-                    X[m - 2][k - 2] = -rib * F[k][m] - c(13) * F[k + 1][m];
-                    X[m - 2][k - 1] = -c(13) * F[k][m] - ri * F[k + 1][m];
+                    X[m - 2][k - 2] = -rib * F[k][m] - c[12] * F[k + 1][m];
+                    X[m - 2][k - 1] = -c[12] * F[k][m] - ri * F[k + 1][m];
                 }
             }
 
@@ -7903,10 +7806,10 @@ namespace Window {
 
             //     Sources
 
-            Q[2] = rib * F[2][0] + c(13) * F[3][0];
-            Q[3] = c(13) * F[2][0] + ri * F[3][0];
-            Q[4] = rib * F[4][0] + c(13) * F[5][0];
-            Q[5] = c(13) * F[4][0] + ri * F[5][0];
+            Q[2] = rib * F[2][0] + c[12] * F[3][0];
+            Q[3] = c[12] * F[2][0] + ri * F[3][0];
+            Q[4] = rib * F[4][0] + c[12] * F[5][0];
+            Q[5] = c[12] * F[4][0] + ri * F[5][0];
 
             //     Radiosities
 
@@ -7929,23 +7832,23 @@ namespace Window {
             }
 
             //     Front diffuse-diffuse IR transmittance (transmittance of slat edge assumed zero)
-            p(13) = G[1] * (1.0 - fEdge);
+            p[12] = G[1] * (1.0 - fEdge);
 
             //     Front diffuse-diffuse IR reflectance (edge of slat is assumed to have same IR
             //     reflectance as front side of slat, ri)
             Real64 BlindIRreflFront = G[0] * (1.0 - fEdge) + fEdge * ri; // Blind front IR reflectance
 
             //     Front IR emissivity
-            p(14) = max(0.0001, 1.0 - p(13) - BlindIRreflFront);
+            p[13] = max(0.0001, 1.0 - p[12] - BlindIRreflFront);
 
             //-----------Calculate diffuse IR properties for the BACK side of the blind
 
             //     Sources
 
-            Q[2] = rib * F[2][1] + c(13) * F[3][1];
-            Q[3] = c(13) * F[2][1] + ri * F[3][1];
-            Q[4] = rib * F[4][1] + c(13) * F[5][1];
-            Q[5] = c(13) * F[4][1] + ri * F[5][1];
+            Q[2] = rib * F[2][1] + c[12] * F[3][1];
+            Q[3] = c[12] * F[2][1] + ri * F[3][1];
+            Q[4] = rib * F[4][1] + c[12] * F[5][1];
+            Q[5] = c[12] * F[4][1] + ri * F[5][1];
 
             //     Radiosities
 
@@ -7972,7 +7875,7 @@ namespace Window {
             Real64 BlindIRreflBack = G[1] * (1.0 - fEdge) + fEdge * ri; // Blind back IR reflectance
 
             //     Back IR emissivity
-            p(15) = max(0.0001, 1.0 - p(13) - BlindIRreflBack);
+            p[14] = max(0.0001, 1.0 - p[12] - BlindIRreflBack);
 
         } // End of IR properties calculation
     } // BlindOpticsDiffuse()
@@ -7981,10 +7884,10 @@ namespace Window {
 
     void BlindOpticsBeam(EnergyPlusData &state,
                          int const BlindNum,      // Blind number
-                         Array1A<Real64> const c, // Slat properties (equivalent to BLD_PR)
+                         std::array<Real64, 15> const &c, // Slat properties (equivalent to BLD_PR)
                          Real64 const b_el,       // Slat elevation (radians)
                          Real64 const s_el,       // Solar profile angle (radians)
-                         Array1A<Real64> p        // Blind properties (equivalent to ST_LAY)
+                         std::array<Real64, 16> &p        // Blind properties (equivalent to ST_LAY)
     )
     {
 
@@ -8008,10 +7911,6 @@ namespace Window {
         // REFERENCES:
         // "Solar-Thermal Window Blind Model for DOE-2," H. Simmler, U. Fischer and
         // F. Winkelmann, Lawrence Berkeley National Laboratory, Jan. 1996.
-
-        // Argument array dimensioning
-        c.dim(15);
-        p.dim(16);
 
         struct BlindInputs
         {
@@ -8106,7 +8005,7 @@ namespace Window {
         auto &s_mat = state.dataMaterial;
         auto const *matBlind = dynamic_cast<Material::MaterialBlind const *>(s_mat->materials(BlindNum));
 
-        p = 0.0;
+        p = {0.0};
 
         //     Elevation of radiation source; source is assumed to be in a plane that
         //     (1) contains the slat outward normal and (2) is perpendicular to plane of the blinds.
@@ -8148,19 +8047,19 @@ namespace Window {
             //       Direct-to-direct transmittance (portion of beam that passes between slats without
             //       without touching them
 
-            p(1 + i) = matBlind->BeamBeamTrans(phis, phib);
+            p[i] = matBlind->BeamBeamTrans(phis, phib);
             //       Direct-to-direct reflectance; this is zero for now since all reflection is assumed to be diffuse.
-            p(2 + i) = 0.0;
+            p[1 + i] = 0.0;
 
             //       View factors between slat sections for calculating direct-to-diffuse transmittance and reflectance
-            ViewFac(c(2), c(3), phib, phis, F);
+            ViewFac(c[1], c[2], phib, phis, F);
 
             //       Set up exchange matrix X for calculating direct-to-diffuse properties
 
             for (int k = 2; k < 5; k += 2) {
                 for (int m = 2; m < 6; ++m) {
-                    X[m - 2][k - 2] = -c(12) * F[k][m] - c(10) * F[k + 1][m];
-                    X[m - 2][k - 1] = -c(10) * F[k][m] - c(11) * F[k + 1][m];
+                    X[m - 2][k - 2] = -c[11] * F[k][m] - c[9] * F[k + 1][m];
+                    X[m - 2][k - 1] = -c[9] * F[k][m] - c[10] * F[k + 1][m];
                 }
             }
 
@@ -8174,17 +8073,17 @@ namespace Window {
 
             //       Set up sources for direct-diffuse slat properties
             if (std::abs(phis - phib) <= Constant::PiOvr2) { // Beam hits front of slat
-                Q[2] = c(4) + c(7);                          // beam-beam trans of slat + beam-diff trans of slat
-                Q[3] = c(5) + c(8);                          // front beam-beam refl of slat + front beam-diff refl of slat
+                Q[2] = c[3] + c[6];                          // beam-beam trans of slat + beam-diff trans of slat
+                Q[3] = c[4] + c[7];                          // front beam-beam refl of slat + front beam-diff refl of slat
             } else {                                         // Beam hits back of slat
-                Q[2] = c(6) + c(9);                          // back beam-beam refl of slat  + back beam-diff refl of slat
-                Q[3] = c(4) + c(7);                          // beam-beam trans of slat + beam-diff trans of slat
+                Q[2] = c[5] + c[8];                          // back beam-beam refl of slat  + back beam-diff refl of slat
+                Q[3] = c[3] + c[6];                          // beam-beam trans of slat + beam-diff trans of slat
             }
 
             //       Correct for fraction of beam that is not directly transmitted; 1 - this fraction is
             //       the fraction of the incoming beam that is incident on the front or back surfaces of the slats.
-            Q[2] *= (1.0 - p(1 + i));
-            Q[3] *= (1.0 - p(1 + i));
+            Q[2] *= (1.0 - p[i]);
+            Q[3] *= (1.0 - p[i]);
 
             //       Radiosities (radiance of slat sections)
             j[0] = 0.0;
@@ -8205,11 +8104,11 @@ namespace Window {
             }
 
             //       Direct-to-diffuse transmittance
-            p(5 + i) = G[1] * (1.0 - fEdge);
+            p[4 + i] = G[1] * (1.0 - fEdge);
 
             //       Direct-to-diffuse reflectance (assuming the edge reflectance is the same as the
             //       reflectance of the front side of the slat, C(8))
-            p(6 + i) = G[0] * (1.0 - fEdge) + fEdge * c(8);
+            p[5 + i] = G[0] * (1.0 - fEdge) + fEdge * c[7];
 
         } // End of loop over front and back side properties of blind
     } // BlindOpticsBeam()
