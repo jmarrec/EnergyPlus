@@ -409,27 +409,27 @@ namespace IndoorGreen {
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("ETModel: ");
         auto &lw = state.dataIndoorGreen;
-        Real64 ZonePreTemp; // Indoor air temperature (C)
-        Real64 ZonePreHum;  // Indoor humidity ratio (kg moisture / kg dry air)
-        Real64 ZoneNewTemp; // Indoor air temperature (C) after ET
-        Real64 ZoneNewHum;  // Indoor humidity ratio (kg moisture / kg dry air) after ET
-        Real64 ZoneSatHum;  // Saturated humidity ratio
-        Real64 ZoneCO2;     // Indoor zone co2 concentration (ppm)
-        Real64 ZonePPFD;    // Indoor net radiation (PPFD)
-        Real64 ZoneVPD;     // vapor pressure deficit (kpa); local variable
-        Real64 Timestep;    // s
-        Real64 ETTotal;     // kg
-        Real64 rhoair;      // kg/m3
-        Real64 Tdp;         // dew point temperature
-        Real64 Twb;         // wet bulb temperature
-        Real64 HCons;       // enthalpy (J/kg)
-        Real64 HMid;        // enthalpy 3rd point (J/kg)
-        Real64 ZoneAirVol;  // zone air volume (m3)
-        Real64 LAI;         // leaf area index, the ratio of one-side leaf area per unit plant growing area, maximum LAI =2 if LAI_cal>2.0
-        Real64 LAI_Cal;     // calculated leaf area index based on users's input on total leaf area
-        Real64 OutPb;       // outdoor pressure (kPa)
-        Real64 vp;          // actual vapor pressure of the air (kpa)
-        Real64 vpSat;       // saturated vapor pressure at air temperature (kpa)
+        Real64 ZonePreTemp;                              // Indoor air temperature (C)
+        Real64 ZonePreHum;                               // Indoor humidity ratio (kg moisture / kg dry air)
+        Real64 ZoneNewTemp;                              // Indoor air temperature (C) after ET
+        Real64 ZoneNewHum;                               // Indoor humidity ratio (kg moisture / kg dry air) after ET
+        Real64 ZoneSatHum;                               // Saturated humidity ratio
+        Real64 ZoneCO2;                                  // Indoor zone co2 concentration (ppm)
+        Real64 ZonePPFD;                                 // Indoor net radiation (PPFD)
+        Real64 ZoneVPD;                                  // vapor pressure deficit (kpa); local variable
+        Real64 Timestep;                                 // s
+        Real64 ETTotal;                                  // kg
+        Real64 rhoair;                                   // kg/m3
+        Real64 Tdp;                                      // dew point temperature
+        Real64 Twb;                                      // wet bulb temperature
+        Real64 HCons;                                    // enthalpy (J/kg)
+        Real64 HMid;                                     // enthalpy 3rd point (J/kg)
+        Real64 ZoneAirVol;                               // zone air volume (m3)
+        Real64 LAI;                                      // leaf area index, the ratio of one-side leaf area per unit plant growing area
+        Real64 LAI_Cal;                                  // calculated leaf area index based on users's input on total leaf area
+        Real64 OutPb;                                    // outdoor pressure (kPa)
+        Real64 vp;                                       // actual vapor pressure of the air (kpa)
+        Real64 vpSat;                                    // saturated vapor pressure at air temperature (kpa)
         Timestep = state.dataHVACGlobal->TimeStepSysSec; // unit s
         for (int IndoorGreenNum = 1; IndoorGreenNum <= lw->NumIndoorGreen; ++IndoorGreenNum) {
             auto &ig = lw->indoorGreens(IndoorGreenNum);
@@ -443,10 +443,10 @@ namespace IndoorGreen {
             ig.ZVPD = (vpSat - vp) * 1000; // Pa
             LAI_Cal = ig.LeafArea / state.dataSurface->Surface(ig.SurfPtr).Area;
             LAI = LAI_Cal;
-            if (LAI_Cal > 2.0) {
-                LAI = 2.0; // maximum LAI=2.0 in the surface heat balance
+            if (LAI_Cal > 10.0) {
+                LAI = 10.0;
                 ShowSevereError(state,
-                                EnergyPlus::format("Maximum indoor living wall leaf area index (LAI) =2.0 is used,calculated LAI is {}", LAI_Cal));
+                                EnergyPlus::format("Maximum indoor living wall leaf area index (LAI) =10.0 is used,calculated LAI is {}", LAI_Cal));
             }
             switch (ig.lightingMethod) {
             case LightingMethod::LED: {

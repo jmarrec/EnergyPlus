@@ -213,14 +213,14 @@ TEST_F(LowTempRadiantSystemTest, SizeLowTempRadiantVariableFlow)
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).HotWaterInNode = 1;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).HotWaterOutNode = 2;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc.loopNum = 1;
-    state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataLowTempRadSys->HydrRadSys(RadSysNum).HotWaterInNode;
 
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).ColdWaterInNode = 3;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).ColdWaterOutNode = 4;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc.loopNum = 2;
-    state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc.loop = &state->dataPlnt->PlantLoop(2);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataLowTempRadSys->HydrRadSys(RadSysNum).ColdWaterInNode;
 
@@ -308,14 +308,14 @@ TEST_F(LowTempRadiantSystemTest, SizeCapacityLowTempRadiantVariableFlow)
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).HotWaterInNode = 1;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).HotWaterOutNode = 2;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc.loopNum = 1;
-    state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataLowTempRadSys->HydrRadSys(RadSysNum).HotWaterInNode;
 
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).ColdWaterInNode = 3;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).ColdWaterOutNode = 4;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc.loopNum = 2;
-    state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc.loop = &state->dataPlnt->PlantLoop(2);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataLowTempRadSys->HydrRadSys(RadSysNum).ColdWaterInNode;
 
@@ -386,14 +386,14 @@ TEST_F(LowTempRadiantSystemTest, SizeLowTempRadiantConstantFlow)
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).HotWaterInNode = 1;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).HotWaterOutNode = 2;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc.loopNum = 1;
-    state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataLowTempRadSys->CFloRadSys(RadSysNum).HotWaterInNode;
 
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).ColdWaterInNode = 3;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).ColdWaterOutNode = 4;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc.loopNum = 2;
-    state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc.loop = &state->dataPlnt->PlantLoop(2);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataLowTempRadSys->CFloRadSys(RadSysNum).ColdWaterInNode;
 
@@ -2599,14 +2599,14 @@ TEST_F(LowTempRadiantSystemTest, LowTempRadConFlowSystemAutoSizeTempTest)
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).HotWaterInNode = 1;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).HotWaterOutNode = 2;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc.loopNum = 1;
-    state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataLowTempRadSys->CFloRadSys(RadSysNum).HotWaterInNode;
 
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).ColdWaterInNode = 3;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).ColdWaterOutNode = 4;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc.loopNum = 2;
-    state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc.loop = &state->dataPlnt->PlantLoop(2);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc);
     state->dataPlnt->PlantLoop(2).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumIn =
         state->dataLowTempRadSys->CFloRadSys(RadSysNum).ColdWaterInNode;
 
@@ -2701,7 +2701,7 @@ TEST_F(LowTempRadiantSystemTest, LowTempRadCalcRadSysHXEffectTermTest)
     RadSysType = SystemType::Hydronic;
     Temperature = 10.0;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc.loopNum = 1;
-    state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->HydrRadSys(RadSysNum).HWPlantLoc);
     HXEffectFuncResult =
         state->dataLowTempRadSys->HydrRadSys(RadSysNum).calculateHXEffectivenessTerm(*state,
                                                                                      SurfNum,
@@ -2719,7 +2719,7 @@ TEST_F(LowTempRadiantSystemTest, LowTempRadCalcRadSysHXEffectTermTest)
     RadSysType = SystemType::Hydronic;
     Temperature = 10.0;
     state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc.loopNum = 1;
-    state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->HydrRadSys(RadSysNum).CWPlantLoc);
     HXEffectFuncResult =
         state->dataLowTempRadSys->HydrRadSys(RadSysNum).calculateHXEffectivenessTerm(*state,
                                                                                      SurfNum,
@@ -2737,7 +2737,7 @@ TEST_F(LowTempRadiantSystemTest, LowTempRadCalcRadSysHXEffectTermTest)
     RadSysType = SystemType::ConstantFlow;
     Temperature = 10.0;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc.loopNum = 1;
-    state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->CFloRadSys(RadSysNum).HWPlantLoc);
     HXEffectFuncResult =
         state->dataLowTempRadSys->CFloRadSys(RadSysNum).calculateHXEffectivenessTerm(*state,
                                                                                      SurfNum,
@@ -2755,7 +2755,7 @@ TEST_F(LowTempRadiantSystemTest, LowTempRadCalcRadSysHXEffectTermTest)
     RadSysType = SystemType::ConstantFlow;
     Temperature = 10.0;
     state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc.loopNum = 1;
-    state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataLowTempRadSys->CFloRadSys(RadSysNum).CWPlantLoc);
     HXEffectFuncResult =
         state->dataLowTempRadSys->CFloRadSys(RadSysNum).calculateHXEffectivenessTerm(*state,
                                                                                      SurfNum,

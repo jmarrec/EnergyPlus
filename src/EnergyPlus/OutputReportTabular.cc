@@ -15179,7 +15179,6 @@ void GatherComponentLoadsHVAC(EnergyPlusData &state)
                 spCompLoadDayTSSpace.infilInstantSeq = space.fracZoneVolume * znCompLoadDayTSZone.infilInstantSeq;
                 spCompLoadDayTSSpace.infilLatentSeq = space.fracZoneVolume * znCompLoadDayTSZone.infilLatentSeq;
                 spCompLoadDayTSSpace.zoneVentInstantSeq = space.fracZoneVolume * znCompLoadDayTSZone.zoneVentInstantSeq;
-                spCompLoadDayTSSpace.zoneVentInstantSeq = space.fracZoneVolume * znCompLoadDayTSZone.zoneVentInstantSeq;
                 spCompLoadDayTSSpace.interZoneMixInstantSeq = space.fracZoneVolume * znCompLoadDayTSZone.interZoneMixInstantSeq;
                 spCompLoadDayTSSpace.interZoneMixLatentSeq = space.fracZoneVolume * znCompLoadDayTSZone.interZoneMixLatentSeq;
             }

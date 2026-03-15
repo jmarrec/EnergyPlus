@@ -260,15 +260,15 @@ void PlantProfileData::InitPlantProfile(EnergyPlusData &state)
         PlantUtilities::RegisterPlantCompDesignFlow(state, InletNode, this->PeakVolFlowRate);
         auto &thisLoadSched = this->loadSched->getDayVals(state, -1, -1);
         auto &thisFlowSched = this->flowRateFracSched->getDayVals(state, -1, -1);
-        int plntSizIndex = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).PlantSizNum;
+        int plntSizIndex = this->plantLoc.loop->PlantSizNum;
         Real64 plntDeltaT = 0.0;
         Real64 inletTemp = Constant::InitConvTemp;
         if (plntSizIndex > 0) {
             plntDeltaT = state.dataSize->PlantSizData(plntSizIndex).DeltaT;
             inletTemp = state.dataSize->PlantSizData(plntSizIndex).ExitTemp;
         }
-        auto &plntComps = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).plantCoilObjectNames;
-        auto &cmpType = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).plantCoilObjectTypes;
+        auto &plntComps = this->plantLoc.loop->plantCoilObjectNames;
+        auto &cmpType = this->plantLoc.loop->plantCoilObjectTypes;
         int arrayIndex = -1;
         for (size_t i = 0; i < plntComps.size(); ++i) {
             if (plntComps[i] == this->Name && cmpType[i] == this->Type) {
@@ -277,10 +277,11 @@ void PlantProfileData::InitPlantProfile(EnergyPlusData &state)
             }
         }
         if (arrayIndex == -1) {
-            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).plantCoilObjectNames.emplace_back(this->Name);
-            state.dataPlnt->PlantLoop(this->plantLoc.loopNum).plantCoilObjectTypes.emplace_back(this->Type);
+            this->plantLoc.loop->plantCoilObjectNames.emplace_back(this->Name);
+            this->plantLoc.loop->plantCoilObjectTypes.emplace_back(this->Type);
+
             std::vector<Real64> tmpFlowData;
-            tmpFlowData.resize(size_t(24 * state.dataGlobal->TimeStepsInHour + 1));
+            tmpFlowData.resize(size_t(Constant::iHoursInDay * state.dataGlobal->TimeStepsInHour + 1));
             tmpFlowData[0] = -1; // comp index
             if (this->FluidType == PlantLoopFluidType::Water) {
                 FluidDensityInit = this->plantLoc.loop->glycol->getDensity(state, inletTemp, RoutineName);
@@ -310,10 +311,10 @@ void PlantProfileData::InitPlantProfile(EnergyPlusData &state)
                     tmpFlowData[i] = thisFlowSched[i - 1] * this->PeakVolFlowRate; // use flow schedule if not a sizing run
                 }
             }
-            auto &plntCoilData = state.dataPlnt->PlantLoop(this->plantLoc.loopNum).compDesWaterFlowRate;
+            auto &plntCoilData = this->plantLoc.loop->compDesWaterFlowRate;
             size_t newEntryIndex = plntCoilData.size() + 1;
             plntCoilData.resize(newEntryIndex);
-            plntCoilData[newEntryIndex - 1].tsDesWaterFlowRate.resize(size_t(24 * state.dataGlobal->TimeStepsInHour));
+            plntCoilData[newEntryIndex - 1].tsDesWaterFlowRate.resize(size_t(Constant::iHoursInDay * state.dataGlobal->TimeStepsInHour));
             plntCoilData[newEntryIndex - 1].tsDesWaterFlowRate = tmpFlowData;
         } // if PeakVolFlowRate is ever autosized this will need the else
         this->InitSizing = false; // if PeakVolFlowRate is ever autosized this will need to repeat

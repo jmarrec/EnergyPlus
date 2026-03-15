@@ -803,7 +803,7 @@ namespace PhotovoltaicThermalCollectors {
             int PltSizNum = 0; // Plant Sizing index corresponding to CurLoopNum
 
             if (this->WPlantLoc.loopNum > 0) {
-                PltSizNum = state.dataPlnt->PlantLoop(this->WPlantLoc.loopNum).PlantSizNum;
+                PltSizNum = this->WPlantLoc.loop->PlantSizNum;
             }
             if (this->WPlantLoc.loopSideNum == DataPlant::LoopSideLocation::Supply) {
                 if (PltSizNum > 0) {
