@@ -167,11 +167,11 @@ namespace Window {
     );
 
     void GetHeatBalanceEqCoefMatrixSimple(EnergyPlusData &state,
-                                          int nglasslayer,           // Number of glass layers
-                                          Array1D<Real64> const &hr, // Radiative conductance (W/m2-K)
-                                          Array1A<Real64> &hgap,     // Gap gas conductive conductance (W/m2-K)
-                                          Array2D<Real64> &Aface,    // Coefficient in equation Aface*thetas = Bface
-                                          Array1D<Real64> &Bface     // Coefficient in equation Aface*thetas = Bface
+                                          int nglasslayer,                                  // Number of glass layers
+                                          std::array<Real64, 2 * maxGlassLayers> const &hr, // Radiative conductance (W/m2-K)
+                                          std::array<Real64, maxGapLayers> &hgap,           // Gap gas conductive conductance (W/m2-K)
+                                          Array2D<Real64> &Aface,                           // Coefficient in equation Aface*thetas = Bface
+                                          Array1D<Real64> &Bface                            // Coefficient in equation Aface*thetas = Bface
     );
 
     void GetHeatBalanceEqCoefMatrix(EnergyPlusData &state,
@@ -187,14 +187,14 @@ namespace Window {
                                     Real64 ShGlReflFacIR,
                                     Real64 RhoGlIR1,
                                     Real64 RhoGlIR2,
-                                    Real64 hcv,                   // Convection coefficient from gap glass or shade/blind to gap air (W/m2-K)
-                                    Real64 TGapNew,               // Current-iteration average air temp in airflow gap (K)
-                                    Real64 TAirflowGapNew,        // Average air temp in airflow gap between glass panes (K)
-                                    Real64 hcvAirflowGap,         // Convection coefficient from airflow gap glass to airflow gap air (W/m2-K)
-                                    Array1A<Real64> const &hcvBG, // Convection coefficient from gap glass or shade to gap gas (W/m2-K)
-                                    Array1A<Real64> const &TGapNewBG,
-                                    Array1A<Real64> const &AbsRadShadeFace,
-                                    Array1D<Real64> const &hr,
+                                    Real64 hcv,                         // Convection coefficient from gap glass or shade/blind to gap air (W/m2-K)
+                                    Real64 TGapNew,                     // Current-iteration average air temp in airflow gap (K)
+                                    Real64 TAirflowGapNew,              // Average air temp in airflow gap between glass panes (K)
+                                    Real64 hcvAirflowGap,               // Convection coefficient from airflow gap glass to airflow gap air (W/m2-K)
+                                    std::array<Real64, 2> const &hcvBG, // Convection coefficient from gap glass or shade to gap gas (W/m2-K)
+                                    std::array<Real64, 2> const &TGapNewBG,
+                                    std::array<Real64, 2> const &AbsRadShadeFace,
+                                    std::array<Real64, 2 * maxGlassLayers> const &hr,
                                     Array2D<Real64> &Aface,
                                     Array1D<Real64> &Bface);
 
@@ -211,11 +211,11 @@ namespace Window {
     );
 
     void BetweenGlassShadeNaturalFlow(EnergyPlusData &state,
-                                      int SurfNum,             // Surface number
-                                      int iter,                // Iteration number for glass heat balance calculation
-                                      Real64 &VGap,            // Gas velocity in gaps (m/s)
-                                      Array1A<Real64> TGapNew, // Current-iteration average gas temp in gaps (K)
-                                      Array1A<Real64> hcv      // Convection coefficient from gap glass or shade to gap gas (W/m2-K)
+                                      int SurfNum,                    // Surface number
+                                      int iter,                       // Iteration number for glass heat balance calculation
+                                      Real64 &VGap,                   // Gas velocity in gaps (m/s)
+                                      std::array<Real64, 2> &TGapNew, // Current iteration average gas temp in gaps (K)
+                                      std::array<Real64, 2> &hcv      // Convection coefficient from gap glass or shade to gap gas (W/m2-K)
     );
 
     void BetweenGlassForcedFlow(EnergyPlusData &state,
@@ -229,13 +229,13 @@ namespace Window {
     );
 
     void BetweenGlassShadeForcedFlow(EnergyPlusData &state,
-                                     int SurfNum,             // Surface number
-                                     int iter,                // Iteration number for glass heat balance calculation
-                                     Real64 &VGap,            // Air velocity in each gap (m/s)
-                                     Array1A<Real64> TGapNew, // Current-iteration average gas temp in gaps (K)
-                                     Real64 &TGapOutletAve,   // Average of TGapOutlet(1) and TGapOutlet(2) (K)
-                                     Array1A<Real64> hcv,     // Convection coefficient from gap glass or shade to gap gas (W/m2-K)
-                                     Real64 &QConvTot         // Sum of convective heat flow from gaps (W)
+                                     int const SurfNum,              // Surface number
+                                     int const iter,                 // Iteration number for glass heat balance calculation
+                                     Real64 &VGap,                   // Air velocity in each gap (m/s)
+                                     std::array<Real64, 2> &TGapNew, // Current-iteration average gas temp in gaps (K)
+                                     Real64 &TGapOutletAve,          // Average of TGapOutlet(1) and TGapOutlet(2) (K)
+                                     std::array<Real64, 2> &hcv,     // Convection coefficient from gap glass or shade to gap gas (W/m2-K)
+                                     Real64 &QConvTot                // Sum of convective heat flow from gaps (W)
     );
 
     void LUdecomposition(EnergyPlusData &state,
@@ -289,8 +289,8 @@ namespace Window {
     );
 
     void StartingWindowTemps(EnergyPlusData &state,
-                             int SurfNum,                // Surface number
-                             Array1A<Real64> AbsRadShade // Short-wave radiation absorbed by shade/blind faces
+                             int SurfNum,                             // Surface number
+                             std::array<Real64, 2> const &AbsRadShade // Short-wave radiation absorbed by shade/blind faces
     );
 
     void NusseltNumber(EnergyPlusData &state,
@@ -348,18 +348,18 @@ namespace Window {
     );
 
     void EvalNominalWindowCond(EnergyPlusData &state,
-                               Real64 AbsBeamShadeNorm,     // Shade solar absorptance at normal incidence
-                               Array1D<Real64> AbsBeamNorm, // Beam absorptance at normal incidence for each glass layer
-                               Array1D<Real64> hgap,        // Conductive gap conductance [W/m2-K]
-                               Real64 &NominalConductance,  // Nominal center-of-glass conductance, including air films
-                               Real64 &SHGC,                // Nominal center-of-glass solar heat gain coefficient for
-                               Real64 TSolNorm              // Overall beam solar transmittance at normal incidence
+                               Real64 AbsBeamShadeNorm,                               // Shade solar absorptance at normal incidence
+                               std::array<Real64, maxGlassLayers> const &AbsBeamNorm, // Beam absorptance at normal incidence for each glass layer
+                               std::array<Real64, maxGapLayers> const &hgap,          // Conductive gap conductance [W/m2-K]
+                               Real64 &NominalConductance,                            // Nominal center-of-glass conductance, including air films
+                               Real64 &SHGC,                                          // Nominal center-of-glass solar heat gain coefficient for
+                               Real64 TSolNorm                                        // Overall beam solar transmittance at normal incidence
     );
 
     void WindowTempsForNominalCond(EnergyPlusData &state,
-                                   int ConstrNum,        // Construction number
-                                   Array1A<Real64> hgap, // Gap gas conductive conductance (W/m2-K)
-                                   Real64 adjRatio       // adjustment Ratio to hcin
+                                   int ConstrNum,                          // Construction number
+                                   std::array<Real64, maxGapLayers> &hgap, // Gap gas conductive conductance (W/m2-K)
+                                   Real64 adjRatio                         // adjustment Ratio to hcin
     );
 
     void StartingWinTempsForNominalCond(EnergyPlusData &state);

@@ -21,18 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - os: ubuntu-22.04
-          pretty: "Ubuntu 22.04"
-          arch: x86_64
-          python-arch: x64
         - os: ubuntu-24.04
           pretty: "Ubuntu 24.04"
           arch: x86_64
           python-arch: x64
-        - os: ubuntu-22.04-arm
-          pretty: "Ubuntu 22.04 arm64"
-          arch: arm64
-          python-arch: arm64
         - os: ubuntu-24.04-arm
           pretty: "Ubuntu 24.04 arm64"
           arch: arm64
@@ -142,12 +134,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
-            test_key: ubuntu2204
           - os: ubuntu-24.04
             test_key: ubuntu2404
-          - os: ubuntu-22.04-arm
-            test_key: ubuntu2204-arm64
           - os: ubuntu-24.04-arm
             test_key: ubuntu2404-arm64
 

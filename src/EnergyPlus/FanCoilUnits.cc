@@ -2043,16 +2043,14 @@ namespace FanCoilUnits {
             mdot = 0.0;
             PlantUtilities::SetComponentFlowRate(
                 state, mdot, fanCoil.CoolCoilFluidInletNode, fanCoil.CoolCoilFluidOutletNodeNum, fanCoil.CoolCoilPlantLoc);
-            if (state.dataPlnt->PlantLoop(fanCoil.CoolCoilPlantLoc.loopNum).LoopSide(fanCoil.CoolCoilPlantLoc.loopSideNum).FlowLock ==
-                DataPlant::FlowLock::Locked) {
+            if (fanCoil.CoolCoilPlantLoc.side->FlowLock == DataPlant::FlowLock::Locked) {
                 ColdFlowLocked = true; // check for flow lock
             }
             if (fanCoil.HCoilType_Num == HCoil::Water) {
                 mdot = 0.0;
                 PlantUtilities::SetComponentFlowRate(
                     state, mdot, fanCoil.HeatCoilFluidInletNode, fanCoil.HeatCoilFluidOutletNodeNum, fanCoil.HeatCoilPlantLoc);
-                if (state.dataPlnt->PlantLoop(fanCoil.HeatCoilPlantLoc.loopNum).LoopSide(fanCoil.HeatCoilPlantLoc.loopSideNum).FlowLock ==
-                    DataPlant::FlowLock::Locked) {
+                if (fanCoil.HeatCoilPlantLoc.side->FlowLock == DataPlant::FlowLock::Locked) {
                     HotFlowLocked = true; // save locked flow
                 }
             }
@@ -2390,16 +2388,14 @@ namespace FanCoilUnits {
             mdot = 0.0;
             PlantUtilities::SetComponentFlowRate(
                 state, mdot, fanCoil.CoolCoilFluidInletNode, fanCoil.CoolCoilFluidOutletNodeNum, fanCoil.CoolCoilPlantLoc);
-            if (state.dataPlnt->PlantLoop(fanCoil.CoolCoilPlantLoc.loopNum).LoopSide(fanCoil.CoolCoilPlantLoc.loopSideNum).FlowLock ==
-                DataPlant::FlowLock::Locked) {
+            if (fanCoil.CoolCoilPlantLoc.side->FlowLock == DataPlant::FlowLock::Locked) {
                 ColdFlowLocked = true; // check for flow lock
             }
             if (fanCoil.HCoilType_Num == HCoil::Water) {
                 mdot = 0.0;
                 PlantUtilities::SetComponentFlowRate(
                     state, mdot, fanCoil.HeatCoilFluidInletNode, fanCoil.HeatCoilFluidOutletNodeNum, fanCoil.HeatCoilPlantLoc);
-                if (state.dataPlnt->PlantLoop(fanCoil.HeatCoilPlantLoc.loopNum).LoopSide(fanCoil.HeatCoilPlantLoc.loopSideNum).FlowLock ==
-                    DataPlant::FlowLock::Locked) {
+                if (fanCoil.HeatCoilPlantLoc.side->FlowLock == DataPlant::FlowLock::Locked) {
                     HotFlowLocked = true; // save locked flow
                 }
             }

@@ -64,6 +64,7 @@
 #include <EnergyPlus/HeatBalanceManager.hh>
 #include <EnergyPlus/IOFiles.hh>
 #include <EnergyPlus/OutputReportPredefined.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/SimAirServingZones.hh>
@@ -254,11 +255,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils1)
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
@@ -268,15 +266,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils1)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
         state->dataWaterCoils->WaterCoil(1).WaterOutletNodeNum;
 
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    ;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branchNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.side = &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branch =
-        &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1);
+    state->dataSingleDuct->sd_airterminal(1).HWplantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 0};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataSingleDuct->sd_airterminal(1).HWplantLoc);
 
     state->dataSize->PlantSizData(1).DeltaT = 11.0;
     state->dataSize->PlantSizData(1).ExitTemp = 82;
@@ -515,11 +506,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils2)
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
@@ -529,14 +517,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils2)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
         state->dataWaterCoils->WaterCoil(1).WaterOutletNodeNum;
 
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branchNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.side = &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branch =
-        &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1);
+    state->dataSingleDuct->sd_airterminal(1).HWplantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 0};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataSingleDuct->sd_airterminal(1).HWplantLoc);
 
     state->dataSize->PlantSizData(1).DeltaT = 11.0;
     state->dataSize->PlantSizData(1).ExitTemp = 82;
@@ -775,11 +757,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils3)
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
@@ -789,14 +768,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils3)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
         state->dataWaterCoils->WaterCoil(1).WaterOutletNodeNum;
 
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branchNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.side = &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branch =
-        &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1);
+    state->dataSingleDuct->sd_airterminal(1).HWplantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 0};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataSingleDuct->sd_airterminal(1).HWplantLoc);
 
     state->dataSize->PlantSizData(1).DeltaT = 11.0;
     state->dataSize->PlantSizData(1).ExitTemp = 82;
@@ -1034,11 +1007,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils4)
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
@@ -1048,14 +1018,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils4)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
         state->dataWaterCoils->WaterCoil(1).WaterOutletNodeNum;
 
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branchNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.side = &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branch =
-        &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1);
+    state->dataSingleDuct->sd_airterminal(1).HWplantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 0};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataSingleDuct->sd_airterminal(1).HWplantLoc);
 
     state->dataSize->PlantSizData(1).DeltaT = 11.0;
     state->dataSize->PlantSizData(1).ExitTemp = 82;
@@ -1251,11 +1215,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils5)
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Type =
@@ -1469,11 +1430,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils6)
     state->dataPlnt->PlantLoop(1).Name = "HotWaterLoop";
     state->dataPlnt->PlantLoop(1).FluidName = "WATER";
 
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.branchNum = 1;
-    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc.compNum = 1;
+    state->dataWaterCoils->WaterCoil(1).WaterPlantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 1};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataWaterCoils->WaterCoil(1).WaterPlantLoc);
 
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).Name = state->dataWaterCoils->WaterCoil(1).Name;
@@ -1484,14 +1442,8 @@ TEST_F(EnergyPlusFixture, TestSizingRoutineForHotWaterCoils6)
     state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1).Comp(1).NodeNumOut =
         state->dataWaterCoils->WaterCoil(1).WaterOutletNodeNum;
 
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loopSideNum = DataPlant::LoopSideLocation::Demand;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branchNum = 1;
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.loop = &state->dataPlnt->PlantLoop(1);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.side = &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand);
-    state->dataSingleDuct->sd_airterminal(1).HWplantLoc.branch =
-        &state->dataPlnt->PlantLoop(1).LoopSide(DataPlant::LoopSideLocation::Demand).Branch(1);
+    state->dataSingleDuct->sd_airterminal(1).HWplantLoc = {1, DataPlant::LoopSideLocation::Demand, 1, 0};
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataSingleDuct->sd_airterminal(1).HWplantLoc);
 
     state->dataSize->CurZoneEqNum = 1;
     state->dataSize->CurTermUnitSizingNum = 1;
