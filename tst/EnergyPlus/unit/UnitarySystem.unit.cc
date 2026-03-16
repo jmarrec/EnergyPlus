@@ -19230,7 +19230,10 @@ Dimensionless;	!- Output Unit Type
     // Now call the OA system to make sure the above data is not corrupted
     // The test here is if the index has changed
     int OASysNum = 1;
-    state->dataOutRptPredefined->subTable.allocate(5); //<-- have to set up a few of these table foot notes
+
+    // This now takes place in init_constant_state
+    // state->dataOutRptPredefined->subTable.allocate(5); //<-- have to set up a few of these table foot notes
+    
     state->dataOutRptPredefined->pdstDXCoolCoil = 1;
     state->dataOutRptPredefined->pdstDXCoolCoil_2023 = 2;
     state->dataOutRptPredefined->pdstCoolCoil = 3;
