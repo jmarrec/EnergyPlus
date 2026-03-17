@@ -462,38 +462,38 @@ void GetMTGeneratorInput(EnergyPlusData &state)
 
         if (!state.dataIPShortCut->lAlphaFieldBlanks(7)) {
             state.dataMircoturbElectGen->MTGenerator(GeneratorNum).HeatRecInletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    AlphArray(7),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::GeneratorMicroTurbine,
-                                                    state.dataMircoturbElectGen->MTGenerator(GeneratorNum).Name,
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        AlphArray(7),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::GeneratorMicroTurbine,
+                                        state.dataMircoturbElectGen->MTGenerator(GeneratorNum).Name,
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Inlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
         }
 
         if (!state.dataIPShortCut->lAlphaFieldBlanks(8)) {
             state.dataMircoturbElectGen->MTGenerator(GeneratorNum).HeatRecOutletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    AlphArray(8),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::GeneratorMicroTurbine,
-                                                    state.dataMircoturbElectGen->MTGenerator(GeneratorNum).Name,
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        AlphArray(8),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::GeneratorMicroTurbine,
+                                        state.dataMircoturbElectGen->MTGenerator(GeneratorNum).Name,
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Outlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
         }
 
         if (state.dataMircoturbElectGen->MTGenerator(GeneratorNum).HeatRecInletNodeNum > 0 &&
             state.dataMircoturbElectGen->MTGenerator(GeneratorNum).HeatRecOutletNodeNum > 0) {
-            BranchNodeConnections::TestCompSet(state,
-                                               state.dataIPShortCut->cCurrentModuleObject,
-                                               state.dataMircoturbElectGen->MTGenerator(GeneratorNum).Name,
-                                               AlphArray(7),
-                                               AlphArray(8),
-                                               "Heat Recovery Nodes");
+            Node::TestCompSet(state,
+                              state.dataIPShortCut->cCurrentModuleObject,
+                              state.dataMircoturbElectGen->MTGenerator(GeneratorNum).Name,
+                              AlphArray(7),
+                              AlphArray(8),
+                              "Heat Recovery Nodes");
         }
 
         if ((state.dataMircoturbElectGen->MTGenerator(GeneratorNum).HeatRecOutletNodeNum > 0 &&
@@ -765,15 +765,15 @@ void GetMTGeneratorInput(EnergyPlusData &state)
 
         if (!state.dataIPShortCut->lAlphaFieldBlanks(15)) {
             state.dataMircoturbElectGen->MTGenerator(GeneratorNum).CombustionAirInletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    AlphArray(15),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::GeneratorMicroTurbine,
-                                                    AlphArray(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Secondary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        AlphArray(15),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::GeneratorMicroTurbine,
+                                        AlphArray(1),
+                                        Node::FluidType::Air,
+                                        Node::ConnectionType::Inlet,
+                                        Node::CompFluidStream::Secondary,
+                                        Node::ObjectIsNotParent);
         }
 
         //    Combustion air inlet node must be an outside air node
@@ -791,15 +791,15 @@ void GetMTGeneratorInput(EnergyPlusData &state)
 
         if (!state.dataIPShortCut->lAlphaFieldBlanks(16)) {
             state.dataMircoturbElectGen->MTGenerator(GeneratorNum).CombustionAirOutletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    AlphArray(16),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::GeneratorMicroTurbine,
-                                                    AlphArray(1),
-                                                    DataLoopNode::NodeFluidType::Air,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Secondary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        AlphArray(16),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::GeneratorMicroTurbine,
+                                        AlphArray(1),
+                                        Node::FluidType::Air,
+                                        Node::ConnectionType::Outlet,
+                                        Node::CompFluidStream::Secondary,
+                                        Node::ObjectIsNotParent);
         }
 
         if (state.dataMircoturbElectGen->MTGenerator(GeneratorNum).CombustionAirOutletNodeNum > 0 &&

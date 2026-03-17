@@ -164,44 +164,44 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
     this->reclaimHeat.SourceType = state.dataCoilCoolingDX->coilCoolingDXObjectName;
 
     // other construction below
-    this->evapInletNodeIndex = NodeInputManager::GetOnlySingleNode(state,
-                                                                   input_data.evaporator_inlet_node_name,
-                                                                   errorsFound,
-                                                                   DataLoopNode::ConnectionObjectType::CoilCoolingDX,
-                                                                   input_data.name,
-                                                                   DataLoopNode::NodeFluidType::Air,
-                                                                   DataLoopNode::ConnectionType::Inlet,
-                                                                   NodeInputManager::CompFluidStream::Primary,
-                                                                   DataLoopNode::ObjectIsNotParent);
-    this->evapOutletNodeIndex = NodeInputManager::GetOnlySingleNode(state,
-                                                                    input_data.evaporator_outlet_node_name,
-                                                                    errorsFound,
-                                                                    DataLoopNode::ConnectionObjectType::CoilCoolingDX,
-                                                                    input_data.name,
-                                                                    DataLoopNode::NodeFluidType::Air,
-                                                                    DataLoopNode::ConnectionType::Outlet,
-                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                    DataLoopNode::ObjectIsNotParent);
+    this->evapInletNodeIndex = Node::GetOnlySingleNode(state,
+                                                       input_data.evaporator_inlet_node_name,
+                                                       errorsFound,
+                                                       Node::ConnectionObjectType::CoilCoolingDX,
+                                                       input_data.name,
+                                                       Node::FluidType::Air,
+                                                       Node::ConnectionType::Inlet,
+                                                       Node::CompFluidStream::Primary,
+                                                       Node::ObjectIsNotParent);
+    this->evapOutletNodeIndex = Node::GetOnlySingleNode(state,
+                                                        input_data.evaporator_outlet_node_name,
+                                                        errorsFound,
+                                                        Node::ConnectionObjectType::CoilCoolingDX,
+                                                        input_data.name,
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsNotParent);
 
-    this->condInletNodeIndex = NodeInputManager::GetOnlySingleNode(state,
-                                                                   input_data.condenser_inlet_node_name,
-                                                                   errorsFound,
-                                                                   DataLoopNode::ConnectionObjectType::CoilCoolingDX,
-                                                                   input_data.name,
-                                                                   DataLoopNode::NodeFluidType::Air,
-                                                                   DataLoopNode::ConnectionType::Inlet,
-                                                                   NodeInputManager::CompFluidStream::Secondary,
-                                                                   DataLoopNode::ObjectIsNotParent);
+    this->condInletNodeIndex = Node::GetOnlySingleNode(state,
+                                                       input_data.condenser_inlet_node_name,
+                                                       errorsFound,
+                                                       Node::ConnectionObjectType::CoilCoolingDX,
+                                                       input_data.name,
+                                                       Node::FluidType::Air,
+                                                       Node::ConnectionType::Inlet,
+                                                       Node::CompFluidStream::Secondary,
+                                                       Node::ObjectIsNotParent);
 
-    this->condOutletNodeIndex = NodeInputManager::GetOnlySingleNode(state,
-                                                                    input_data.condenser_outlet_node_name,
-                                                                    errorsFound,
-                                                                    DataLoopNode::ConnectionObjectType::CoilCoolingDX,
-                                                                    input_data.name,
-                                                                    DataLoopNode::NodeFluidType::Air,
-                                                                    DataLoopNode::ConnectionType::Outlet,
-                                                                    NodeInputManager::CompFluidStream::Secondary,
-                                                                    DataLoopNode::ObjectIsNotParent);
+    this->condOutletNodeIndex = Node::GetOnlySingleNode(state,
+                                                        input_data.condenser_outlet_node_name,
+                                                        errorsFound,
+                                                        Node::ConnectionObjectType::CoilCoolingDX,
+                                                        input_data.name,
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Secondary,
+                                                        Node::ObjectIsNotParent);
 
     this->performance = makePerformanceSubclass(state, input_data.performance_object_name);
     this->subcoolReheatFlag = this->performance->subcoolReheatFlag();
@@ -239,12 +239,12 @@ void CoilCoolingDX::instantiateFromInputSpec(EnergyPlusData &state, const CoilCo
         // Setup zone data here
     }
 
-    BranchNodeConnections::TestCompSet(state,
-                                       state.dataCoilCoolingDX->coilCoolingDXObjectName,
-                                       this->name,
-                                       input_data.evaporator_inlet_node_name,
-                                       input_data.evaporator_outlet_node_name,
-                                       "Air Nodes");
+    Node::TestCompSet(state,
+                      state.dataCoilCoolingDX->coilCoolingDXObjectName,
+                      this->name,
+                      input_data.evaporator_inlet_node_name,
+                      input_data.evaporator_outlet_node_name,
+                      "Air Nodes");
 
     if (errorsFound) {
         ShowFatalError(state,
@@ -823,10 +823,10 @@ void CoilCoolingDX::simulate(EnergyPlusData &state,
             }
 
             // report out coil rating conditions, just create a set of dummy nodes and run calculate on them
-            DataLoopNode::NodeData dummyEvapInlet;
-            DataLoopNode::NodeData dummyEvapOutlet;
-            DataLoopNode::NodeData dummyCondInlet;
-            DataLoopNode::NodeData dummyCondOutlet;
+            Node::NodeData dummyEvapInlet;
+            Node::NodeData dummyEvapOutlet;
+            Node::NodeData dummyCondInlet;
+            Node::NodeData dummyCondOutlet;
             int dummySpeedNum = 1;
             Real64 dummySpeedRatio = 1.0;
             HVAC::FanOp dummyFanOp = HVAC::FanOp::Cycling;
@@ -929,7 +929,7 @@ void CoilCoolingDX::setToHundredPercentDOAS()
     performance->setToHundredPercentDOAS();
 }
 
-void CoilCoolingDX::passThroughNodeData(DataLoopNode::NodeData &in, DataLoopNode::NodeData &out)
+void CoilCoolingDX::passThroughNodeData(Node::NodeData &in, Node::NodeData &out)
 {
     // pass through all the other node variables that we don't update as a part of this model calculation
     out.MassFlowRate = in.MassFlowRate;

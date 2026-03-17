@@ -131,7 +131,7 @@ void PlantLoopData::CalcUnmetPlantDemand(EnergyPlusData &state)
     TargetTemp = state.dataLoopNodes->Node(this->TempSetPointNodeNum).Temp;
     MassFlowRate = state.dataLoopNodes->Node(this->TempSetPointNodeNum).MassFlowRate;
 
-    if (this->FluidType == DataLoopNode::NodeFluidType::Water) {
+    if (this->FluidType == Node::FluidType::Water) {
 
         Cp = this->glycol->getSpecificHeat(state, TargetTemp, RoutineName);
 
@@ -175,7 +175,7 @@ void PlantLoopData::CalcUnmetPlantDemand(EnergyPlusData &state)
             break;
         }
 
-    } else if (this->FluidType == DataLoopNode::NodeFluidType::Steam) {
+    } else if (this->FluidType == Node::FluidType::Steam) {
 
         Cp = this->glycol->getSpecificHeat(state, TargetTemp, RoutineName);
 

@@ -101,8 +101,8 @@ namespace EnergyPlus::Pumps {
 // Energy Calculations, ASHRAE, 1993, pp2-10 to 2-15
 
 // Using/Aliasing
-using DataLoopNode::ObjectIsNotParent;
 using HVAC::SmallWaterVolFlow;
+using Node::ObjectIsNotParent;
 
 static constexpr std::array<std::string_view, static_cast<int>(PumpType::Num)> pumpTypeIDFNames = {
     "Pump:VariableSpeed", "Pump:ConstantSpeed", "Pump:VariableSpeed:Condensate", "HeaderedPumps:VariableSpeed", "HeaderedPumps:ConstantSpeed"};
@@ -210,11 +210,11 @@ void GetPumpInput(EnergyPlusData &state)
     //  Energy Calculations, ASHRAE, 1993, pp2-10 to 2-15
 
     // Using/Aliasing
-    using BranchNodeConnections::TestCompSet;
     using Curve::GetCurveIndex;
     using Curve::GetCurveMinMaxValues;
     using DataSizing::AutoSize;
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetOnlySingleNode;
+    using Node::TestCompSet;
 
     // SUBROUTINE PARAMETER DEFINITIONS:
     Real64 constexpr StartTemp(100.0); // Standard Temperature across code to calculated Steam density
@@ -293,21 +293,21 @@ void GetPumpInput(EnergyPlusData &state)
         thisPump.InletNodeNum = GetOnlySingleNode(state,
                                                   thisInput->cAlphaArgs(2),
                                                   ErrorsFound,
-                                                  DataLoopNode::ConnectionObjectType::PumpVariableSpeed,
+                                                  Node::ConnectionObjectType::PumpVariableSpeed,
                                                   thisPump.Name,
-                                                  DataLoopNode::NodeFluidType::Water,
-                                                  DataLoopNode::ConnectionType::Inlet,
-                                                  NodeInputManager::CompFluidStream::Primary,
+                                                  Node::FluidType::Water,
+                                                  Node::ConnectionType::Inlet,
+                                                  Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
 
         thisPump.OutletNodeNum = GetOnlySingleNode(state,
                                                    thisInput->cAlphaArgs(3),
                                                    ErrorsFound,
-                                                   DataLoopNode::ConnectionObjectType::PumpVariableSpeed,
+                                                   Node::ConnectionObjectType::PumpVariableSpeed,
                                                    thisPump.Name,
-                                                   DataLoopNode::NodeFluidType::Water,
-                                                   DataLoopNode::ConnectionType::Outlet,
-                                                   NodeInputManager::CompFluidStream::Primary,
+                                                   Node::FluidType::Water,
+                                                   Node::ConnectionType::Outlet,
+                                                   Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
         TestCompSet(state, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaArgs(2), thisInput->cAlphaArgs(3), "Water Nodes");
 
@@ -548,21 +548,21 @@ void GetPumpInput(EnergyPlusData &state)
         thisPump.InletNodeNum = GetOnlySingleNode(state,
                                                   thisInput->cAlphaArgs(2),
                                                   ErrorsFound,
-                                                  DataLoopNode::ConnectionObjectType::PumpConstantSpeed,
+                                                  Node::ConnectionObjectType::PumpConstantSpeed,
                                                   thisPump.Name,
-                                                  DataLoopNode::NodeFluidType::Water,
-                                                  DataLoopNode::ConnectionType::Inlet,
-                                                  NodeInputManager::CompFluidStream::Primary,
+                                                  Node::FluidType::Water,
+                                                  Node::ConnectionType::Inlet,
+                                                  Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
 
         thisPump.OutletNodeNum = GetOnlySingleNode(state,
                                                    thisInput->cAlphaArgs(3),
                                                    ErrorsFound,
-                                                   DataLoopNode::ConnectionObjectType::PumpConstantSpeed,
+                                                   Node::ConnectionObjectType::PumpConstantSpeed,
                                                    thisPump.Name,
-                                                   DataLoopNode::NodeFluidType::Water,
-                                                   DataLoopNode::ConnectionType::Outlet,
-                                                   NodeInputManager::CompFluidStream::Primary,
+                                                   Node::FluidType::Water,
+                                                   Node::ConnectionType::Outlet,
+                                                   Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
         TestCompSet(state, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaArgs(2), thisInput->cAlphaArgs(3), "Water Nodes");
 
@@ -710,21 +710,21 @@ void GetPumpInput(EnergyPlusData &state)
         thisPump.InletNodeNum = GetOnlySingleNode(state,
                                                   thisInput->cAlphaArgs(2),
                                                   ErrorsFound,
-                                                  DataLoopNode::ConnectionObjectType::PumpVariableSpeedCondensate,
+                                                  Node::ConnectionObjectType::PumpVariableSpeedCondensate,
                                                   thisPump.Name,
-                                                  DataLoopNode::NodeFluidType::Steam,
-                                                  DataLoopNode::ConnectionType::Inlet,
-                                                  NodeInputManager::CompFluidStream::Primary,
+                                                  Node::FluidType::Steam,
+                                                  Node::ConnectionType::Inlet,
+                                                  Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
 
         thisPump.OutletNodeNum = GetOnlySingleNode(state,
                                                    thisInput->cAlphaArgs(3),
                                                    ErrorsFound,
-                                                   DataLoopNode::ConnectionObjectType::PumpVariableSpeedCondensate,
+                                                   Node::ConnectionObjectType::PumpVariableSpeedCondensate,
                                                    thisPump.Name,
-                                                   DataLoopNode::NodeFluidType::Steam,
-                                                   DataLoopNode::ConnectionType::Outlet,
-                                                   NodeInputManager::CompFluidStream::Primary,
+                                                   Node::FluidType::Steam,
+                                                   Node::ConnectionType::Outlet,
+                                                   Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
         TestCompSet(state, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaArgs(2), thisInput->cAlphaArgs(3), "Water Nodes");
 
@@ -842,21 +842,21 @@ void GetPumpInput(EnergyPlusData &state)
         thisPump.InletNodeNum = GetOnlySingleNode(state,
                                                   thisInput->cAlphaArgs(2),
                                                   ErrorsFound,
-                                                  DataLoopNode::ConnectionObjectType::HeaderedPumpsVariableSpeed,
+                                                  Node::ConnectionObjectType::HeaderedPumpsVariableSpeed,
                                                   thisPump.Name,
-                                                  DataLoopNode::NodeFluidType::Water,
-                                                  DataLoopNode::ConnectionType::Inlet,
-                                                  NodeInputManager::CompFluidStream::Primary,
+                                                  Node::FluidType::Water,
+                                                  Node::ConnectionType::Inlet,
+                                                  Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
 
         thisPump.OutletNodeNum = GetOnlySingleNode(state,
                                                    thisInput->cAlphaArgs(3),
                                                    ErrorsFound,
-                                                   DataLoopNode::ConnectionObjectType::HeaderedPumpsVariableSpeed,
+                                                   Node::ConnectionObjectType::HeaderedPumpsVariableSpeed,
                                                    thisPump.Name,
-                                                   DataLoopNode::NodeFluidType::Water,
-                                                   DataLoopNode::ConnectionType::Outlet,
-                                                   NodeInputManager::CompFluidStream::Primary,
+                                                   Node::FluidType::Water,
+                                                   Node::ConnectionType::Outlet,
+                                                   Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
         TestCompSet(state, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaArgs(2), thisInput->cAlphaArgs(3), "Water Nodes");
 
@@ -992,21 +992,21 @@ void GetPumpInput(EnergyPlusData &state)
         thisPump.InletNodeNum = GetOnlySingleNode(state,
                                                   thisInput->cAlphaArgs(2),
                                                   ErrorsFound,
-                                                  DataLoopNode::ConnectionObjectType::HeaderedPumpsConstantSpeed,
+                                                  Node::ConnectionObjectType::HeaderedPumpsConstantSpeed,
                                                   thisPump.Name,
-                                                  DataLoopNode::NodeFluidType::Water,
-                                                  DataLoopNode::ConnectionType::Inlet,
-                                                  NodeInputManager::CompFluidStream::Primary,
+                                                  Node::FluidType::Water,
+                                                  Node::ConnectionType::Inlet,
+                                                  Node::CompFluidStream::Primary,
                                                   ObjectIsNotParent);
 
         thisPump.OutletNodeNum = GetOnlySingleNode(state,
                                                    thisInput->cAlphaArgs(3),
                                                    ErrorsFound,
-                                                   DataLoopNode::ConnectionObjectType::HeaderedPumpsConstantSpeed,
+                                                   Node::ConnectionObjectType::HeaderedPumpsConstantSpeed,
                                                    thisPump.Name,
-                                                   DataLoopNode::NodeFluidType::Water,
-                                                   DataLoopNode::ConnectionType::Outlet,
-                                                   NodeInputManager::CompFluidStream::Primary,
+                                                   Node::FluidType::Water,
+                                                   Node::ConnectionType::Outlet,
+                                                   Node::CompFluidStream::Primary,
                                                    ObjectIsNotParent);
         TestCompSet(state, cCurrentModuleObject, thisPump.Name, thisInput->cAlphaArgs(2), thisInput->cAlphaArgs(3), "Water Nodes");
 
