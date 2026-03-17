@@ -68,7 +68,6 @@
 
 using namespace EnergyPlus;
 using namespace EnergyPlus::ChillerReformulatedEIR;
-using namespace EnergyPlus::DataLoopNode;
 
 TEST_F(EnergyPlusFixture, ChillerElectricReformulatedEIR_WaterCooledChillerVariableSpeedCondenser)
 {

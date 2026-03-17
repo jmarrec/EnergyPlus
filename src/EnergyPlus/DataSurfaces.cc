@@ -80,7 +80,6 @@ using namespace DataVectorTypes;
 using namespace DataBSDFWindow;
 using namespace DataHeatBalance;
 using namespace DataZoneEquipment;
-using namespace DataLoopNode;
 using namespace Psychrometrics;
 using namespace DataEnvironment;
 using namespace Window;

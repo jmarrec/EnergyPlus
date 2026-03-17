@@ -72,7 +72,6 @@
 
 using namespace EnergyPlus;
 using namespace Curve;
-using namespace DataLoopNode;
 using namespace Fans;
 using namespace FaultsManager;
 

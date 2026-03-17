@@ -85,7 +85,6 @@
 
 using namespace EnergyPlus;
 using namespace EnergyPlus::EMSManager;
-using namespace EnergyPlus::DataLoopNode;
 using namespace EnergyPlus::DataPlant;
 using namespace EnergyPlus::DataRuntimeLanguage;
 using namespace EnergyPlus::PlantUtilities;
@@ -829,7 +828,7 @@ TEST_F(EnergyPlusFixture, TestAnyRanArgument)
     state->init_state(*state);
 
     OutAirNodeManager::SetOutAirNodes(*state);
-    NodeInputManager::SetupNodeVarsForReporting(*state);
+    Node::SetupNodeVarsForReporting(*state);
     EMSManager::CheckIfAnyEMS(*state);
 
     state->dataEMSMgr->FinishProcessingUserInput = true;

@@ -144,7 +144,6 @@ namespace EnergyPlus::PlantManager {
 // Using/Aliasing
 using namespace DataPlant;
 using namespace DataBranchAirLoopPlant;
-using namespace DataLoopNode;
 
 void ManagePlantLoops(EnergyPlusData &state,
                       bool const FirstHVACIteration,
@@ -294,7 +293,7 @@ void GetPlantLoopData(EnergyPlusData &state)
     // Using/Aliasing
     using SetPointManager::IsNodeOnSetPtManager;
     HVAC::CtrlVarType localTempSetPt = HVAC::CtrlVarType::Temp;
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetOnlySingleNode;
     using namespace BranchInputManager;
     using DataSizing::AutoSize;
 
@@ -347,12 +346,12 @@ void GetPlantLoopData(EnergyPlusData &state)
         ErrorObjectHeader eoh;
         eoh.routineName = routineName;
 
-        DataLoopNode::ConnectionObjectType objType;
+        Node::ConnectionObjectType objType;
         if (LoopNum <= state.dataHVACGlobal->NumPlantLoops) {
             PlantLoopNum = LoopNum;
             this_loop.TypeOfLoop = LoopType::Plant;
             CurrentModuleObject = "PlantLoop";
-            objType = DataLoopNode::ConnectionObjectType::PlantLoop;
+            objType = Node::ConnectionObjectType::PlantLoop;
             state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                      CurrentModuleObject,
                                                                      PlantLoopNum,
@@ -372,7 +371,7 @@ void GetPlantLoopData(EnergyPlusData &state)
             CondLoopNum = LoopNum - state.dataHVACGlobal->NumPlantLoops;
             this_loop.TypeOfLoop = LoopType::Condenser;
             CurrentModuleObject = "CondenserLoop";
-            objType = DataLoopNode::ConnectionObjectType::CondenserLoop;
+            objType = Node::ConnectionObjectType::CondenserLoop;
             state.dataInputProcessing->inputProcessor->getObjectItem(state,
                                                                      CurrentModuleObject,
                                                                      CondLoopNum,
@@ -400,20 +399,20 @@ void GetPlantLoopData(EnergyPlusData &state)
             // use a single index, and because the index was pre-set
             // the FluidName was never consulted.  That's not a very
             // robust way of doing things.
-            this_loop.FluidType = DataLoopNode::NodeFluidType::Steam;
+            this_loop.FluidType = Node::FluidType::Steam;
             this_loop.FluidName = Alpha(2);
             this_loop.FluidIndex = 1;
             this_loop.glycol = Fluid::GetWater(state);
             this_loop.steam = Fluid::GetSteam(state);
 
         } else if (Util::SameString(Alpha(2), "WATER")) {
-            this_loop.FluidType = DataLoopNode::NodeFluidType::Water;
+            this_loop.FluidType = Node::FluidType::Water;
             this_loop.FluidName = Alpha(2);
             this_loop.FluidIndex = 1;
             this_loop.glycol = Fluid::GetWater(state);
 
         } else if (Util::SameString(Alpha(2), "USERDEFINEDFLUIDTYPE")) {
-            this_loop.FluidType = DataLoopNode::NodeFluidType::Water;
+            this_loop.FluidType = Node::FluidType::Water;
             this_loop.FluidName = Alpha(3);
             // check for valid fluid name
             this_loop.glycol = Fluid::GetGlycol(state, Alpha(3));
@@ -427,7 +426,7 @@ void GetPlantLoopData(EnergyPlusData &state)
         } else {
             ShowWarningInvalidKey(state, eoh, state.dataIPShortCut->cAlphaFieldNames(2), Alpha(2), "Water");
 
-            this_loop.FluidType = DataLoopNode::NodeFluidType::Water;
+            this_loop.FluidType = Node::FluidType::Water;
             this_loop.FluidName = "WATER";
             this_loop.FluidIndex = 1;
             this_loop.glycol = Fluid::GetWater(state);
@@ -477,36 +476,36 @@ void GetPlantLoopData(EnergyPlusData &state)
                                                        objType,
                                                        Alpha(1),
                                                        this_loop.FluidType,
-                                                       DataLoopNode::ConnectionType::Inlet,
-                                                       NodeInputManager::CompFluidStream::Primary,
-                                                       ObjectIsParent);
+                                                       Node::ConnectionType::Inlet,
+                                                       Node::CompFluidStream::Primary,
+                                                       Node::ObjectIsParent);
         this_supply_side.NodeNumOut = GetOnlySingleNode(state,
                                                         Alpha(7),
                                                         ErrorsFound,
                                                         objType,
                                                         Alpha(1),
                                                         this_loop.FluidType,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsParent);
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsParent);
         this_demand_side.NodeNumIn = GetOnlySingleNode(state,
                                                        Alpha(10),
                                                        ErrorsFound,
                                                        objType,
                                                        Alpha(1),
                                                        this_loop.FluidType,
-                                                       DataLoopNode::ConnectionType::Inlet,
-                                                       NodeInputManager::CompFluidStream::Primary,
-                                                       ObjectIsParent);
+                                                       Node::ConnectionType::Inlet,
+                                                       Node::CompFluidStream::Primary,
+                                                       Node::ObjectIsParent);
         this_demand_side.NodeNumOut = GetOnlySingleNode(state,
                                                         Alpha(11),
                                                         ErrorsFound,
                                                         objType,
                                                         Alpha(1),
                                                         this_loop.FluidType,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Primary,
-                                                        ObjectIsParent);
+                                                        Node::ConnectionType::Outlet,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsParent);
 
         this_demand_side.InletNodeSetPt = IsNodeOnSetPtManager(state, this_demand_side.NodeNumIn, localTempSetPt);
         this_demand_side.OutletNodeSetPt = IsNodeOnSetPtManager(state, this_demand_side.NodeNumOut, localTempSetPt);
@@ -518,9 +517,9 @@ void GetPlantLoopData(EnergyPlusData &state)
                                                           objType,
                                                           Alpha(1),
                                                           this_loop.FluidType,
-                                                          DataLoopNode::ConnectionType::Sensor,
-                                                          NodeInputManager::CompFluidStream::Primary,
-                                                          ObjectIsParent);
+                                                          Node::ConnectionType::Sensor,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsParent);
 
         // Load the load distribution scheme.
         std::string LoadingScheme = Alpha(14);
@@ -547,7 +546,7 @@ void GetPlantLoopData(EnergyPlusData &state)
             if (Util::SameString(Alpha(16), "SingleSetpoint")) {
                 this_loop.LoopDemandCalcScheme = DataPlant::LoopDemandCalcScheme::SingleSetPoint;
             } else if (Util::SameString(Alpha(16), "DualSetpointDeadband")) {
-                if (this_loop.FluidType == DataLoopNode::NodeFluidType::Steam) {
+                if (this_loop.FluidType == Node::FluidType::Steam) {
                     ShowWarningError(state, std::string{RoutineName} + CurrentModuleObject + "=\"" + Alpha(1) + "\", Invalid choice.");
                     ShowContinueError(state,
                                       state.dataIPShortCut->cAlphaFieldNames(16) + "=\"" + Alpha(16) + "\" not valid for " +
@@ -778,10 +777,6 @@ void GetPlantInput(EnergyPlusData &state)
     // the routine the module level derived type Loop should be fully allocated
     // and fully populated.
 
-    // Using/Aliasing
-    using namespace NodeInputManager;
-    using namespace BranchInputManager;
-
     // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
     int LoopNum; // DO loop counter for loops
     int HalfLoopNum;
@@ -847,17 +842,17 @@ void GetPlantInput(EnergyPlusData &state)
             }
 
             // Get the branch list and size the Branch portion of the Loop derived type
-            loopSide.TotalBranches = NumBranchesInBranchList(state, loopSide.BranchList);
+            loopSide.TotalBranches = BranchInputManager::NumBranchesInBranchList(state, loopSide.BranchList);
             BranchNames.allocate(loopSide.TotalBranches);
             BranchNames = "";
-            GetBranchList(state, plantLoop.Name, loopSide.BranchList, loopSide.TotalBranches, BranchNames, LoopIdentifier);
+            BranchInputManager::GetBranchList(state, plantLoop.Name, loopSide.BranchList, loopSide.TotalBranches, BranchNames, LoopIdentifier);
             loopSide.Branch.allocate(loopSide.TotalBranches);
 
             // Cycle through all of the branches and set up the node data
             for (BranchNum = 1; BranchNum <= loopSide.TotalBranches; ++BranchNum) {
                 auto &branch = loopSide.Branch(BranchNum);
                 branch.Name = BranchNames(BranchNum);
-                branch.TotalComponents = NumCompsInBranch(state, BranchNames(BranchNum));
+                branch.TotalComponents = BranchInputManager::NumCompsInBranch(state, BranchNames(BranchNum));
                 branch.IsBypass = false;
 
                 CompTypes.allocate(branch.TotalComponents);
@@ -868,19 +863,19 @@ void GetPlantInput(EnergyPlusData &state)
                 OutletNodeNames.allocate(branch.TotalComponents);
                 OutletNodeNumbers.dimension(branch.TotalComponents, 0);
 
-                GetBranchData(state,
-                              plantLoop.Name,
-                              BranchNames(BranchNum),
-                              branch.PressureCurveType,
-                              branch.PressureCurveIndex,
-                              branch.TotalComponents,
-                              CompTypes,
-                              CompNames,
-                              InletNodeNames,
-                              InletNodeNumbers,
-                              OutletNodeNames,
-                              OutletNodeNumbers,
-                              ErrorsFound);
+                BranchInputManager::GetBranchData(state,
+                                                  plantLoop.Name,
+                                                  BranchNames(BranchNum),
+                                                  branch.PressureCurveType,
+                                                  branch.PressureCurveIndex,
+                                                  branch.TotalComponents,
+                                                  CompTypes,
+                                                  CompNames,
+                                                  InletNodeNames,
+                                                  InletNodeNumbers,
+                                                  OutletNodeNames,
+                                                  OutletNodeNumbers,
+                                                  ErrorsFound);
 
                 branch.Comp.allocate(branch.TotalComponents);
 
@@ -1468,7 +1463,7 @@ void GetPlantInput(EnergyPlusData &state)
                 state.dataLoopNodes->NumofMixers = 0;
             } else {
                 errFlag = false;
-                GetNumSplitterMixerInConntrList(
+                BranchInputManager::GetNumSplitterMixerInConntrList(
                     state, plantLoop.Name, loopSide.ConnectList, state.dataLoopNodes->NumofSplitters, state.dataLoopNodes->NumofMixers, errFlag);
                 if (errFlag) {
                     ErrorsFound = true;
@@ -1497,19 +1492,19 @@ void GetPlantInput(EnergyPlusData &state)
                 }
                 OutletNodeNames.allocate(MaxNumAlphas);
                 OutletNodeNumbers.allocate(MaxNumAlphas);
-                GetLoopSplitter(state,
-                                plantLoop.Name,
-                                loopSide.ConnectList,
-                                loopSide.Splitter.Name,
-                                loopSide.Splitter.Exists,
-                                loopSide.Splitter.NodeNameIn,
-                                loopSide.Splitter.NodeNumIn,
-                                loopSide.Splitter.TotalOutletNodes,
-                                OutletNodeNames,
-                                OutletNodeNumbers,
-                                ErrorsFound,
-                                ConnNum,
-                                SplitNum);
+                BranchInputManager::GetLoopSplitter(state,
+                                                    plantLoop.Name,
+                                                    loopSide.ConnectList,
+                                                    loopSide.Splitter.Name,
+                                                    loopSide.Splitter.Exists,
+                                                    loopSide.Splitter.NodeNameIn,
+                                                    loopSide.Splitter.NodeNumIn,
+                                                    loopSide.Splitter.TotalOutletNodes,
+                                                    OutletNodeNames,
+                                                    OutletNodeNumbers,
+                                                    ErrorsFound,
+                                                    ConnNum,
+                                                    SplitNum);
 
                 if (SplitNum == 1) {
                     OutletNodeNames.deallocate();
@@ -1584,19 +1579,19 @@ void GetPlantInput(EnergyPlusData &state)
                 }
                 InletNodeNames.allocate(MaxNumAlphas);
                 InletNodeNumbers.allocate(MaxNumAlphas);
-                GetLoopMixer(state,
-                             plantLoop.Name,
-                             loopSide.ConnectList,
-                             loopSide.Mixer.Name,
-                             loopSide.Mixer.Exists,
-                             loopSide.Mixer.NodeNameOut,
-                             loopSide.Mixer.NodeNumOut,
-                             loopSide.Mixer.TotalInletNodes,
-                             InletNodeNames,
-                             InletNodeNumbers,
-                             ErrorsFound,
-                             ConnNum,
-                             MixNum);
+                BranchInputManager::GetLoopMixer(state,
+                                                 plantLoop.Name,
+                                                 loopSide.ConnectList,
+                                                 loopSide.Mixer.Name,
+                                                 loopSide.Mixer.Exists,
+                                                 loopSide.Mixer.NodeNameOut,
+                                                 loopSide.Mixer.NodeNumOut,
+                                                 loopSide.Mixer.TotalInletNodes,
+                                                 InletNodeNames,
+                                                 InletNodeNumbers,
+                                                 ErrorsFound,
+                                                 ConnNum,
+                                                 MixNum);
 
                 if (MixNum == 1) {
                     InletNodeNames.deallocate();
@@ -2750,19 +2745,19 @@ void ReInitPlantLoopsAtFirstHVACIteration(EnergyPlusData &state)
                 state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).OutletNode.TemperatureHistory = 0.0;
                 state.dataPlnt->PlantLoop(LoopNum).LoopSide(LoopSideNum).OutletNode.MassFlowRateHistory = 0.0;
 
-                if (state.dataPlnt->PlantLoop(LoopNum).FluidType != DataLoopNode::NodeFluidType::Steam) {
+                if (state.dataPlnt->PlantLoop(LoopNum).FluidType != Node::FluidType::Steam) {
                     Cp = state.dataPlnt->PlantLoop(LoopNum).glycol->getSpecificHeat(state, LoopSetPointTemp, RoutineNameAlt);
                     StartEnthalpy = Cp * LoopSetPointTemp;
                 }
                 // Use Min/Max flow rates to initialize loop
-                if (state.dataPlnt->PlantLoop(LoopNum).FluidType == DataLoopNode::NodeFluidType::Water) {
+                if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::FluidType::Water) {
                     rho = state.dataPlnt->PlantLoop(LoopNum).glycol->getDensity(state, LoopSetPointTemp, RoutineNameAlt);
 
                     LoopMaxMassFlowRate = state.dataPlnt->PlantLoop(LoopNum).MaxVolFlowRate * rho;
                     LoopMinMassFlowRate = state.dataPlnt->PlantLoop(LoopNum).MinVolFlowRate * rho;
                 }
                 // use saturated liquid of steam at the loop setpoint temp as the starting enthalpy for a water loop
-                if (state.dataPlnt->PlantLoop(LoopNum).FluidType == DataLoopNode::NodeFluidType::Steam) {
+                if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::FluidType::Steam) {
                     SteamTemp = 100.0;
                     auto *steam = Fluid::GetSteam(state);
                     state.dataPlnt->PlantLoop(LoopNum).FluidIndex = steam->Num;
@@ -2817,7 +2812,7 @@ void ReInitPlantLoopsAtFirstHVACIteration(EnergyPlusData &state)
                         state.dataLoopNodes->Node(ComponentInlet).Enthalpy = StartEnthalpy;
                         state.dataLoopNodes->Node(ComponentInlet).HumRat = StartHumRat;
 
-                        state.dataLoopNodes->Node(ComponentOutlet).FluidType = state.dataLoopNodes->Node(BranchInlet).FluidType;
+                        state.dataLoopNodes->Node(ComponentOutlet).fluidType = state.dataLoopNodes->Node(BranchInlet).fluidType;
                         state.dataLoopNodes->Node(ComponentOutlet).Temp = state.dataLoopNodes->Node(BranchInlet).Temp;
                         state.dataLoopNodes->Node(ComponentOutlet).TempMin = state.dataLoopNodes->Node(BranchInlet).TempMin;
                         state.dataLoopNodes->Node(ComponentOutlet).TempMax = state.dataLoopNodes->Node(BranchInlet).TempMax;
@@ -3386,7 +3381,7 @@ void SizePlantLoop(EnergyPlusData &state,
 
     // should now have plant volume, calculate plant volume's mass for fluid type
     Real64 FluidDensity = 0.0;
-    if (loop.FluidType == DataLoopNode::NodeFluidType::Water) {
+    if (loop.FluidType == Node::FluidType::Water) {
         FluidDensity = loop.glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
         if (PlantSizNum > 0 && allocated(state.dataSize->PlantSizData)) { // method only works if sizing delta T is available
             auto &loopSizData = state.dataSize->PlantSizData(PlantSizNum);
@@ -3404,7 +3399,7 @@ void SizePlantLoop(EnergyPlusData &state,
         } else {
             OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchPLCLDesCap, loop.Name, "N/A");
         }
-    } else if (loop.FluidType == DataLoopNode::NodeFluidType::Steam) {
+    } else if (loop.FluidType == Node::FluidType::Steam) {
         auto *steam = Fluid::GetSteam(state);
         loop.FluidIndex = steam->Num;
         FluidDensity = steam->getSatDensity(state, 100.0, 1.0, RoutineName);
@@ -3534,9 +3529,9 @@ void ResizePlantLoopLevelSizes(EnergyPlusData &state, int const LoopNum // Suppl
     }
 
     // should now have plant volume, calculate plant volume's mass for fluid type
-    if (state.dataPlnt->PlantLoop(LoopNum).FluidType == DataLoopNode::NodeFluidType::Water) {
+    if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::FluidType::Water) {
         FluidDensity = state.dataPlnt->PlantLoop(LoopNum).glycol->getDensity(state, Constant::InitConvTemp, RoutineName);
-    } else if (state.dataPlnt->PlantLoop(LoopNum).FluidType == DataLoopNode::NodeFluidType::Steam) {
+    } else if (state.dataPlnt->PlantLoop(LoopNum).FluidType == Node::FluidType::Steam) {
         FluidDensity = Fluid::GetSteam(state)->getSatDensity(state, 100.0, 1.0, RoutineName);
     } else {
         assert(false);

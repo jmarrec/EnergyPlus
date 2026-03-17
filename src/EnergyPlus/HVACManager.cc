@@ -449,7 +449,7 @@ void ManageHVAC(EnergyPlusData &state)
         // This is where output processor data is updated for System Timestep reporting
         if (!state.dataGlobal->WarmupFlag) {
             if (state.dataGlobal->DoOutputReporting && !state.dataGlobal->ZoneSizingCalc) {
-                NodeInputManager::CalcMoreNodeInfo(state);
+                Node::CalcMoreNodeInfo(state);
                 Pollution::CalculatePollution(state);
                 SystemReports::InitEnergyReports(state);
                 SystemReports::ReportSystemEnergyUse(state);
@@ -513,7 +513,7 @@ void ManageHVAC(EnergyPlusData &state)
                 state.dataHVACMgr->PrintedWarmup = true;
             }
             if (!state.dataGlobal->DoingSizing) {
-                NodeInputManager::CalcMoreNodeInfo(state);
+                Node::CalcMoreNodeInfo(state);
             }
             UpdateDataandReport(state, OutputProcessor::TimeStepType::System);
             if (state.dataGlobal->KindOfSim == Constant::KindOfSim::HVACSizeDesignDay ||
@@ -616,7 +616,7 @@ void ManageHVAC(EnergyPlusData &state)
                     print(state.files.debug,
                           " {:3}        {}         {}\n",
                           NodeNum,
-                          DataLoopNode::NodeFluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNum).FluidType)],
+                          Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNum).fluidType)],
                           state.dataLoopNodes->NodeID(NodeNum));
                 }
                 print(state.files.debug, "Day of Sim, Hour of Day, TimeStep,");
@@ -670,7 +670,7 @@ void ManageHVAC(EnergyPlusData &state)
                       state.dataLoopNodes->Node(NodeNum).Press,
                       state.dataLoopNodes->Node(NodeNum).Enthalpy,
                       state.dataLoopNodes->Node(NodeNum).HumRat,
-                      DataLoopNode::NodeFluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNum).FluidType)]);
+                      Node::FluidTypeNames[static_cast<int>(state.dataLoopNodes->Node(NodeNum).fluidType)]);
                 if (state.dataContaminantBalance->Contaminant.CO2Simulation) {
                     print(state.files.debug, Format_21, state.dataLoopNodes->Node(NodeNum).CO2);
                 }
@@ -1767,18 +1767,18 @@ void SimHVAC(EnergyPlusData &state)
         if (state.dataHVACMgr->MySetPointInit) {
             if (state.dataLoopNodes->NumOfNodes > 0) {
                 for (auto &e : state.dataLoopNodes->Node) {
-                    e.TempSetPoint = DataLoopNode::SensedNodeFlagValue;
-                    e.HumRatSetPoint = DataLoopNode::SensedNodeFlagValue;
-                    e.HumRatMin = DataLoopNode::SensedNodeFlagValue;
-                    e.HumRatMax = DataLoopNode::SensedNodeFlagValue;
-                    e.MassFlowRateSetPoint = DataLoopNode::SensedNodeFlagValue; // BG 5-26-2009 (being checked in HVACControllers.cc)
+                    e.TempSetPoint = Node::SensedNodeFlagValue;
+                    e.HumRatSetPoint = Node::SensedNodeFlagValue;
+                    e.HumRatMin = Node::SensedNodeFlagValue;
+                    e.HumRatMax = Node::SensedNodeFlagValue;
+                    e.MassFlowRateSetPoint = Node::SensedNodeFlagValue; // BG 5-26-2009 (being checked in HVACControllers.cc)
                 }
-                state.dataLoopNodes->DefaultNodeValues.TempSetPoint = DataLoopNode::SensedNodeFlagValue;
-                state.dataLoopNodes->DefaultNodeValues.HumRatSetPoint = DataLoopNode::SensedNodeFlagValue;
-                state.dataLoopNodes->DefaultNodeValues.HumRatMin = DataLoopNode::SensedNodeFlagValue;
-                state.dataLoopNodes->DefaultNodeValues.HumRatMax = DataLoopNode::SensedNodeFlagValue;
+                state.dataLoopNodes->DefaultNodeValues.TempSetPoint = Node::SensedNodeFlagValue;
+                state.dataLoopNodes->DefaultNodeValues.HumRatSetPoint = Node::SensedNodeFlagValue;
+                state.dataLoopNodes->DefaultNodeValues.HumRatMin = Node::SensedNodeFlagValue;
+                state.dataLoopNodes->DefaultNodeValues.HumRatMax = Node::SensedNodeFlagValue;
                 state.dataLoopNodes->DefaultNodeValues.MassFlowRateSetPoint =
-                    DataLoopNode::SensedNodeFlagValue; // BG 5-26-2009 (being checked in HVACControllers.cc)
+                    Node::SensedNodeFlagValue; // BG 5-26-2009 (being checked in HVACControllers.cc)
             }
             state.dataHVACMgr->MySetPointInit = false;
             state.dataHVACGlobal->DoSetPointTest = true;

@@ -340,24 +340,24 @@ namespace UnitVentilator {
             // non-parent OA mixing box within the unit ventilator.
             // Because there is overlap between the nodes that are parent and non-parent, use a different
             // object type for the non parent nodes
-            unitVent.AirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                     Alphas(6),
-                                                                     ErrorsFound,
-                                                                     DataLoopNode::ConnectionObjectType::ZoneHVACUnitVentilator,
-                                                                     Alphas(1),
-                                                                     DataLoopNode::NodeFluidType::Air,
-                                                                     DataLoopNode::ConnectionType::Inlet,
-                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                     DataLoopNode::ObjectIsParent);
-            unitVent.AirOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                      Alphas(7),
-                                                                      ErrorsFound,
-                                                                      DataLoopNode::ConnectionObjectType::ZoneHVACUnitVentilator,
-                                                                      Alphas(1),
-                                                                      DataLoopNode::NodeFluidType::Air,
-                                                                      DataLoopNode::ConnectionType::Outlet,
-                                                                      NodeInputManager::CompFluidStream::Primary,
-                                                                      DataLoopNode::ObjectIsParent);
+            unitVent.AirInNode = Node::GetOnlySingleNode(state,
+                                                         Alphas(6),
+                                                         ErrorsFound,
+                                                         Node::ConnectionObjectType::ZoneHVACUnitVentilator,
+                                                         Alphas(1),
+                                                         Node::FluidType::Air,
+                                                         Node::ConnectionType::Inlet,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsParent);
+            unitVent.AirOutNode = Node::GetOnlySingleNode(state,
+                                                          Alphas(7),
+                                                          ErrorsFound,
+                                                          Node::ConnectionObjectType::ZoneHVACUnitVentilator,
+                                                          Alphas(1),
+                                                          Node::FluidType::Air,
+                                                          Node::ConnectionType::Outlet,
+                                                          Node::CompFluidStream::Primary,
+                                                          Node::ObjectIsParent);
 
             // Get AirTerminal mixer data
             SingleDuct::GetATMixer(state,
@@ -379,15 +379,15 @@ namespace UnitVentilator {
             }
 
             if (!unitVent.ATMixerExists) {
-                unitVent.AirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                         Alphas(6),
-                                                                         ErrorsFound,
-                                                                         DataLoopNode::ConnectionObjectType::ZoneHVACUnitVentilator,
-                                                                         Alphas(1) + "-OA MIXER",
-                                                                         DataLoopNode::NodeFluidType::Air,
-                                                                         DataLoopNode::ConnectionType::Inlet,
-                                                                         NodeInputManager::CompFluidStream::Primary,
-                                                                         DataLoopNode::ObjectIsNotParent);
+                unitVent.AirInNode = Node::GetOnlySingleNode(state,
+                                                             Alphas(6),
+                                                             ErrorsFound,
+                                                             Node::ConnectionObjectType::ZoneHVACUnitVentilator,
+                                                             Alphas(1) + "-OA MIXER",
+                                                             Node::FluidType::Air,
+                                                             Node::ConnectionType::Inlet,
+                                                             Node::CompFluidStream::Primary,
+                                                             Node::ObjectIsNotParent);
             }
 
             unitVent.FanName = Alphas(12);
@@ -438,15 +438,15 @@ namespace UnitVentilator {
             // object type for the non parent nodes
             //  Set connection type to 'OutdoorAir', because this is hardwired to OA conditions
             if (!unitVent.ATMixerExists) {
-                unitVent.OutsideAirNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                              Alphas(8),
-                                                                              ErrorsFound,
-                                                                              DataLoopNode::ConnectionObjectType::ZoneHVACUnitVentilator,
-                                                                              Alphas(1) + "-OA MIXER",
-                                                                              DataLoopNode::NodeFluidType::Air,
-                                                                              DataLoopNode::ConnectionType::OutsideAirReference,
-                                                                              NodeInputManager::CompFluidStream::Primary,
-                                                                              DataLoopNode::ObjectIsNotParent);
+                unitVent.OutsideAirNode = Node::GetOnlySingleNode(state,
+                                                                  Alphas(8),
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::ZoneHVACUnitVentilator,
+                                                                  Alphas(1) + "-OA MIXER",
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::OutsideAirReference,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
                 if (!lAlphaBlanks(8)) {
                     OutAirNodeManager::CheckAndAddAirNodeNumber(state, unitVent.OutsideAirNode, IsValid);
                     if (!IsValid) {
@@ -455,25 +455,25 @@ namespace UnitVentilator {
                     }
                 }
 
-                unitVent.AirReliefNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                             Alphas(9),
-                                                                             ErrorsFound,
-                                                                             DataLoopNode::ConnectionObjectType::ZoneHVACUnitVentilator,
-                                                                             Alphas(1) + "-OA MIXER",
-                                                                             DataLoopNode::NodeFluidType::Air,
-                                                                             DataLoopNode::ConnectionType::ReliefAir,
-                                                                             NodeInputManager::CompFluidStream::Primary,
-                                                                             DataLoopNode::ObjectIsNotParent);
+                unitVent.AirReliefNode = Node::GetOnlySingleNode(state,
+                                                                 Alphas(9),
+                                                                 ErrorsFound,
+                                                                 Node::ConnectionObjectType::ZoneHVACUnitVentilator,
+                                                                 Alphas(1) + "-OA MIXER",
+                                                                 Node::FluidType::Air,
+                                                                 Node::ConnectionType::ReliefAir,
+                                                                 Node::CompFluidStream::Primary,
+                                                                 Node::ObjectIsNotParent);
 
-                unitVent.OAMixerOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                              Alphas(10),
-                                                                              ErrorsFound,
-                                                                              DataLoopNode::ConnectionObjectType::ZoneHVACUnitVentilator,
-                                                                              Alphas(1) + "-OA MIXER",
-                                                                              DataLoopNode::NodeFluidType::Air,
-                                                                              DataLoopNode::ConnectionType::Outlet,
-                                                                              NodeInputManager::CompFluidStream::Primary,
-                                                                              DataLoopNode::ObjectIsNotParent);
+                unitVent.OAMixerOutNode = Node::GetOnlySingleNode(state,
+                                                                  Alphas(10),
+                                                                  ErrorsFound,
+                                                                  Node::ConnectionObjectType::ZoneHVACUnitVentilator,
+                                                                  Alphas(1) + "-OA MIXER",
+                                                                  Node::FluidType::Air,
+                                                                  Node::ConnectionType::Outlet,
+                                                                  Node::CompFluidStream::Primary,
+                                                                  Node::ObjectIsNotParent);
             } else {
                 unitVent.OutsideAirNode = unitVent.ATMixerPriNode;
                 unitVent.OAMixerOutNode = unitVent.ATMixerOutNode;
@@ -502,33 +502,33 @@ namespace UnitVentilator {
 
             if (!unitVent.ATMixerExists) {
                 // Add fan to component sets array
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     CurrentModuleObject,
-                                                     unitVent.Name,
-                                                     Alphas(11),
-                                                     unitVent.FanName,
-                                                     state.dataLoopNodes->NodeID(unitVent.OAMixerOutNode),
-                                                     state.dataLoopNodes->NodeID(unitVent.FanOutletNode));
+                Node::SetUpCompSets(state,
+                                    CurrentModuleObject,
+                                    unitVent.Name,
+                                    Alphas(11),
+                                    unitVent.FanName,
+                                    state.dataLoopNodes->NodeID(unitVent.OAMixerOutNode),
+                                    state.dataLoopNodes->NodeID(unitVent.FanOutletNode));
             } else {
                 if (unitVent.ATMixerType == HVAC::MixerType::InletSide) {
                     // Add fan to component sets array
-                    BranchNodeConnections::SetUpCompSets(state,
-                                                         CurrentModuleObject,
-                                                         unitVent.Name,
-                                                         Alphas(11),
-                                                         unitVent.FanName,
-                                                         state.dataLoopNodes->NodeID(unitVent.ATMixerOutNode),
-                                                         state.dataLoopNodes->NodeID(unitVent.FanOutletNode));
+                    Node::SetUpCompSets(state,
+                                        CurrentModuleObject,
+                                        unitVent.Name,
+                                        Alphas(11),
+                                        unitVent.FanName,
+                                        state.dataLoopNodes->NodeID(unitVent.ATMixerOutNode),
+                                        state.dataLoopNodes->NodeID(unitVent.FanOutletNode));
                 }
                 if (unitVent.ATMixerType == HVAC::MixerType::SupplySide) {
                     // Add fan to component sets array
-                    BranchNodeConnections::SetUpCompSets(state,
-                                                         CurrentModuleObject,
-                                                         unitVent.Name,
-                                                         Alphas(11),
-                                                         unitVent.FanName,
-                                                         state.dataLoopNodes->NodeID(unitVent.AirInNode),
-                                                         state.dataLoopNodes->NodeID(unitVent.FanOutletNode));
+                    Node::SetUpCompSets(state,
+                                        CurrentModuleObject,
+                                        unitVent.Name,
+                                        Alphas(11),
+                                        unitVent.FanName,
+                                        state.dataLoopNodes->NodeID(unitVent.AirInNode),
+                                        state.dataLoopNodes->NodeID(unitVent.FanOutletNode));
                 }
             }
 
@@ -844,42 +844,42 @@ namespace UnitVentilator {
                 switch (unitVent.CoilOption) {
                 case CoilsUsed::Both: {
                     // Add cooling coil to component sets array when present
-                    BranchNodeConnections::SetUpCompSets(state,
-                                                         CurrentModuleObject,
-                                                         unitVent.Name,
-                                                         cCoolingCoilType,
-                                                         unitVent.CCoilName,
-                                                         state.dataLoopNodes->NodeID(unitVent.FanOutletNode),
-                                                         "UNDEFINED");
+                    Node::SetUpCompSets(state,
+                                        CurrentModuleObject,
+                                        unitVent.Name,
+                                        cCoolingCoilType,
+                                        unitVent.CCoilName,
+                                        state.dataLoopNodes->NodeID(unitVent.FanOutletNode),
+                                        "UNDEFINED");
 
                     // Add heating coil to component sets array when cooling coil present
-                    BranchNodeConnections::SetUpCompSets(state,
-                                                         CurrentModuleObject,
-                                                         unitVent.Name,
-                                                         cHeatingCoilType,
-                                                         unitVent.HCoilName,
-                                                         "UNDEFINED",
-                                                         state.dataLoopNodes->NodeID(unitVent.AirOutNode));
+                    Node::SetUpCompSets(state,
+                                        CurrentModuleObject,
+                                        unitVent.Name,
+                                        cHeatingCoilType,
+                                        unitVent.HCoilName,
+                                        "UNDEFINED",
+                                        state.dataLoopNodes->NodeID(unitVent.AirOutNode));
                 } break;
                 case CoilsUsed::Heating: {
                     // Add heating coil to component sets array when no cooling coil present
-                    BranchNodeConnections::SetUpCompSets(state,
-                                                         CurrentModuleObject,
-                                                         unitVent.Name,
-                                                         cHeatingCoilType,
-                                                         unitVent.HCoilName,
-                                                         state.dataLoopNodes->NodeID(unitVent.FanOutletNode),
-                                                         state.dataLoopNodes->NodeID(unitVent.AirOutNode));
+                    Node::SetUpCompSets(state,
+                                        CurrentModuleObject,
+                                        unitVent.Name,
+                                        cHeatingCoilType,
+                                        unitVent.HCoilName,
+                                        state.dataLoopNodes->NodeID(unitVent.FanOutletNode),
+                                        state.dataLoopNodes->NodeID(unitVent.AirOutNode));
                 } break;
                 case CoilsUsed::Cooling: {
                     // Add cooling coil to component sets array when no heating coil present
-                    BranchNodeConnections::SetUpCompSets(state,
-                                                         CurrentModuleObject,
-                                                         unitVent.Name,
-                                                         cCoolingCoilType,
-                                                         unitVent.CCoilName,
-                                                         state.dataLoopNodes->NodeID(unitVent.FanOutletNode),
-                                                         state.dataLoopNodes->NodeID(unitVent.AirOutNode));
+                    Node::SetUpCompSets(state,
+                                        CurrentModuleObject,
+                                        unitVent.Name,
+                                        cCoolingCoilType,
+                                        unitVent.CCoilName,
+                                        state.dataLoopNodes->NodeID(unitVent.FanOutletNode),
+                                        state.dataLoopNodes->NodeID(unitVent.AirOutNode));
                 } break;
                 default: {
                 } break;

@@ -74,8 +74,6 @@ namespace SplitterComponent {
     // To encapsulate the data and algorithms required to
     // manage Air Path Splitter Components
 
-    using namespace DataLoopNode;
-
     void SimAirLoopSplitter(EnergyPlusData &state,
                             std::string_view CompName,
                             bool const FirstHVACIteration,
@@ -166,7 +164,7 @@ namespace SplitterComponent {
         // Uses the status flags to trigger events.
 
         // Using/Aliasing
-        using NodeInputManager::GetOnlySingleNode;
+        using Node::GetOnlySingleNode;
 
         // SUBROUTINE PARAMETER DEFINITIONS:
         static constexpr std::string_view RoutineName("GetSplitterInput: "); // include trailing blank space
@@ -223,16 +221,15 @@ namespace SplitterComponent {
                                                                      cNumericFields);
 
             state.dataSplitterComponent->SplitterCond(SplitterNum).SplitterName = AlphArray(1);
-            state.dataSplitterComponent->SplitterCond(SplitterNum).InletNode =
-                GetOnlySingleNode(state,
-                                  AlphArray(2),
-                                  ErrorsFound,
-                                  DataLoopNode::ConnectionObjectType::AirLoopHVACZoneSplitter,
-                                  AlphArray(1),
-                                  DataLoopNode::NodeFluidType::Air,
-                                  DataLoopNode::ConnectionType::Inlet,
-                                  NodeInputManager::CompFluidStream::Primary,
-                                  ObjectIsNotParent);
+            state.dataSplitterComponent->SplitterCond(SplitterNum).InletNode = GetOnlySingleNode(state,
+                                                                                                 AlphArray(2),
+                                                                                                 ErrorsFound,
+                                                                                                 Node::ConnectionObjectType::AirLoopHVACZoneSplitter,
+                                                                                                 AlphArray(1),
+                                                                                                 Node::FluidType::Air,
+                                                                                                 Node::ConnectionType::Inlet,
+                                                                                                 Node::CompFluidStream::Primary,
+                                                                                                 Node::ObjectIsNotParent);
             state.dataSplitterComponent->SplitterCond(SplitterNum).NumOutletNodes = NumAlphas - 2;
 
             state.dataSplitterComponent->SplitterCond(SplitterNum)
@@ -262,12 +259,12 @@ namespace SplitterComponent {
                     GetOnlySingleNode(state,
                                       AlphArray(2 + NodeNum),
                                       ErrorsFound,
-                                      DataLoopNode::ConnectionObjectType::AirLoopHVACZoneSplitter,
+                                      Node::ConnectionObjectType::AirLoopHVACZoneSplitter,
                                       AlphArray(1),
-                                      DataLoopNode::NodeFluidType::Air,
-                                      DataLoopNode::ConnectionType::Outlet,
-                                      NodeInputManager::CompFluidStream::Primary,
-                                      ObjectIsNotParent);
+                                      Node::FluidType::Air,
+                                      Node::ConnectionType::Outlet,
+                                      Node::CompFluidStream::Primary,
+                                      Node::ObjectIsNotParent);
                 if (lAlphaBlanks(2 + NodeNum)) {
                     ShowSevereError(state, EnergyPlus::format("{} is Blank, {} = {}", cAlphaFields(2 + NodeNum), CurrentModuleObject, AlphArray(1)));
                     ErrorsFound = true;
