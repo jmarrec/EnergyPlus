@@ -7492,7 +7492,7 @@ Real64 GetHeatingSATempForSizing(EnergyPlusData &state, int const IndexAirLoop /
 
     if (PrimaryAirSystems(IndexAirLoop).CentralHeatCoilExists) {
         // Case: Central heating coils exist
-        auto &CalcSysSizing = state.dataSize->CalcSysSizing;
+        const auto &CalcSysSizing = state.dataSize->CalcSysSizing;
         ReheatCoilInTempForSizing = CalcSysSizing(IndexAirLoop).HeatSupTemp;
 
     } else if ((PrimaryAirSystems(IndexAirLoop).NumOAHeatCoils > 0) || ((PrimaryAirSystems(IndexAirLoop).NumOAHXs) != 0)) {

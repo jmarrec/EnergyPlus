@@ -1450,7 +1450,7 @@ namespace SurfaceGeometry {
 
         // Move all shading Surfaces to Front
         for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
-            auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
+            const auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
             if (surfTemp.Class != SurfaceClass::Detached_F && surfTemp.Class != SurfaceClass::Detached_B && surfTemp.Class != SurfaceClass::Shading) {
                 continue;
             }
@@ -1506,7 +1506,7 @@ namespace SurfaceGeometry {
                 for (const DataSurfaces::SurfaceClass Loop : state.dataSurfaceGeometry->BaseSurfIDs) {
 
                     for (int SurfNum = 1; SurfNum <= state.dataSurface->TotSurfaces; ++SurfNum) {
-                        auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
+                        const auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
 
                         if (SurfaceTmpClassMoved(SurfNum)) {
                             continue;
@@ -1554,7 +1554,7 @@ namespace SurfaceGeometry {
                         continue;
                     }
 
-                    auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
+                    const auto &surfTemp = state.dataSurfaceGeometry->SurfaceTmp(SurfNum);
                     if (surfTemp.spaceNum != spaceNum) {
                         continue;
                     }

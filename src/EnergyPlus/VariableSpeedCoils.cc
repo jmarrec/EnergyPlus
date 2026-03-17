@@ -7591,7 +7591,7 @@ namespace VariableSpeedCoils {
         Real64 Error;    // Error for iteration (DO) loop
         Real64 LHRmult;  // Latent Heat Ratio (LHR) multiplier. The effective latent heat ratio LHR = (1-SHRss)*LHRmult
 
-        auto &varSpeedCoil = state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum);
+        const auto &varSpeedCoil = state.dataVariableSpeedCoils->VarSpeedCoil(DXCoilNum);
         Real64 Twet_Rated = varSpeedCoil.Twet_Rated; // [s]
         Real64 Gamma_Rated = varSpeedCoil.Gamma_Rated;
         Real64 MaxONOFFCyclesperHour = varSpeedCoil.MaxONOFFCyclesperHour;           // [cycles/hr]

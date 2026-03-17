@@ -16358,7 +16358,7 @@ void ZeroHVACValues(EnergyPlusData &state)
     if (state.dataRefrigCase->HaveRefrigRacks) {
         // HaveRefrigRacks is TRUE when NumRefrigeratedRAcks > 0
         // RefrigRack ALLOCATED to NumRefrigeratedRacks
-        auto &RefrigRack = state.dataRefrigCase->RefrigRack;
+        const auto &RefrigRack = state.dataRefrigCase->RefrigRack;
         for (int RackNum = 1; RackNum <= state.dataRefrigCase->NumRefrigeratedRacks; ++RackNum) {
             if (RefrigRack(RackNum).CondenserType == DataHeatBalance::RefrigCondenserType::Water) {
                 Real64 MassFlowRate = 0.0;
@@ -16377,7 +16377,7 @@ void ZeroHVACValues(EnergyPlusData &state)
 
     if (state.dataRefrigCase->NumRefrigCondensers > 0) {
         // Condenser ALLOCATED to DataHeatBalance::NumRefrigCondensers
-        auto &Condenser = state.dataRefrigCase->Condenser;
+        const auto &Condenser = state.dataRefrigCase->Condenser;
         for (int CondID = 1; CondID <= state.dataRefrigCase->NumRefrigCondensers; ++CondID) {
             if (Condenser(CondID).CondenserType == DataHeatBalance::RefrigCondenserType::Water) {
                 Real64 MassFlowRate = 0.0;
