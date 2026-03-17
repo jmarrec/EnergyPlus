@@ -2633,12 +2633,13 @@ namespace Window {
 
     //****************************************************************************
 
-    void GetHeatBalanceEqCoefMatrixSimple(EnergyPlusData &state,
-                                          int const nglasslayer,                            // Number of glass layers
-                                          std::array<Real64, 2 * maxGlassLayers> const &hr, // Radiative conductance (W/m2-K)
-                                          std::array<Real64, maxGapLayers> &hgap,           // Gap gas conductive conductance (W/m2-K)
-                                          std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &Aface, // Coefficient in equation Aface*thetas = Bface
-                                          std::array<Real64, 2 * maxGlassLayers> &Bface     // Coefficient in equation Aface*thetas = Bface
+    void GetHeatBalanceEqCoefMatrixSimple(
+        EnergyPlusData &state,
+        int const nglasslayer,                                                         // Number of glass layers
+        std::array<Real64, 2 * maxGlassLayers> const &hr,                              // Radiative conductance (W/m2-K)
+        std::array<Real64, maxGapLayers> &hgap,                                        // Gap gas conductive conductance (W/m2-K)
+        std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &Aface, // Coefficient in equation Aface*thetas = Bface
+        std::array<Real64, 2 * maxGlassLayers> &Bface                                  // Coefficient in equation Aface*thetas = Bface
     )
     {
         Real64 gr;  // Grashof number of gas in a gap
@@ -3118,7 +3119,7 @@ namespace Window {
                 wm->hrgap[2] = 0.5 * std::abs(wm->A67) * pow_3(wm->thetas[5] + wm->thetas[6]);
                 hgap[2] = hgap[2] * surfWin.edgeGlassCorrFac + wm->hrgap[2] * (surfWin.edgeGlassCorrFac - 1.0);
             }
-            
+
             Bface[0] = wm->Outir * wm->emis[0] + wm->hcout * wm->tout + wm->AbsRadGlassFace[0];
             Bface[1] = wm->AbsRadGlassFace[1];
             Bface[2] = wm->AbsRadGlassFace[2];
@@ -3311,8 +3312,8 @@ namespace Window {
         //  shade/blind to gap gas on either side of shade/blind (W/m2-K)
 
         std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> Aface; // Coefficient in equation Aface*thetas = Bface
-        std::array<Real64, 2 * maxGlassLayers> Bface;                     // Coefficient in equation Aface*thetas = Bface
-        std::array<int, 2 * maxGlassLayers> indx;                          // Vector of row permutations in LU decomposition
+        std::array<Real64, 2 * maxGlassLayers> Bface;                                 // Coefficient in equation Aface*thetas = Bface
+        std::array<int, 2 * maxGlassLayers> indx;                                     // Vector of row permutations in LU decomposition
 
         auto &s_surf = state.dataSurface;
 
@@ -4242,9 +4243,9 @@ namespace Window {
 
     void LUdecomposition(EnergyPlusData &state,
                          std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &ajac, // As input: matrix to be decomposed;
-                         int const n,          // Dimension of matrix
-                         std::array<int, 2 * maxGlassLayers> &indx,    // Vector of row permutations
-                         int &d                // +1 if even number of row interchange is even, -1
+                         int const n,                                                                  // Dimension of matrix
+                         std::array<int, 2 * maxGlassLayers> &indx,                                    // Vector of row permutations
+                         int &d // +1 if even number of row interchange is even, -1
     )
     {
 
@@ -4279,7 +4280,7 @@ namespace Window {
             vv[i] = 1.0 / aamax;
         }
         for (int j = 0; j < n; ++j) {
-          for (int i = 0; i < j; ++i) { // should this be j-1?
+            for (int i = 0; i < j; ++i) { // should this be j-1?
                 Real64 sum = ajac[j][i];
                 for (int k = 0; k < i; ++k) {
                     sum -= ajac[k][i] * ajac[j][k];
@@ -4325,9 +4326,9 @@ namespace Window {
 
     void LUsolution([[maybe_unused]] EnergyPlusData &state,
                     std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> const &a, // Matrix and vector in a.x = b;
-                    int const n,             // Dimension of a and b
-                    std::array<int, 2 * maxGlassLayers> const &indx, // Vector of row permutations
-                    std::array<Real64, 2 * maxGlassLayers> &b       // Matrix and vector in a.x = b;
+                    int const n,                                                                     // Dimension of a and b
+                    std::array<int, 2 * maxGlassLayers> const &indx,                                 // Vector of row permutations
+                    std::array<Real64, 2 * maxGlassLayers> &b                                        // Matrix and vector in a.x = b;
     )
     {
 
@@ -4663,7 +4664,7 @@ namespace Window {
         constexpr Real64 hrad(5.3);    // Typical radiative conductance (W/m2-K)
         constexpr Real64 resgap(0.21); // Typical gap resistance (m2-K/W)
 
-        WinShadingType ShadeFlag;   // Shading flag
+        WinShadingType ShadeFlag;      // Shading flag
         std::array<Real64, 11> rguess; // Combined radiative/convective resistance (m2-K/W) of
         // inside or outside air film, or gap
         Real64 restot; // Total window resistance including outside
@@ -5514,7 +5515,6 @@ namespace Window {
         }
     } // W5LsqFit()
 
-  
     //***********************************************************************
 
     Real64 DiffuseAverage(std::array<Real64, numPhis> const &props) // Property value at angles of incidence
@@ -6431,11 +6431,11 @@ namespace Window {
         Real64 hcinprev;                           // Value of hcin from previous iteration
         int d;                                     // +1 if number of row interchanges is even,
         // -1 if odd (in LU decomposition)
-        std::array<int, 2 * maxGlassLayers> indx;          // Vector of row permutations in LU decomposition
+        std::array<int, 2 * maxGlassLayers> indx;                                     // Vector of row permutations in LU decomposition
         std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> Aface; // Coefficient in equation Aface*thetas = Bface
-        std::array<Real64, 2 * maxGlassLayers> Bface;     // Coefficient in equation Aface*thetas = Bface
-        int iter;                      // Iteration number
-        Real64 errtemp;                // Absolute value of sum of face temperature differences
+        std::array<Real64, 2 * maxGlassLayers> Bface;                                 // Coefficient in equation Aface*thetas = Bface
+        int iter;                                                                     // Iteration number
+        Real64 errtemp;                                                               // Absolute value of sum of face temperature differences
         //   between iterations, divided by number of faces
         Real64 TmeanFilm;       // mean film temperature
         Real64 TmeanFilmKelvin; // mean film temperature for property evaluation
@@ -7155,8 +7155,8 @@ namespace Window {
 
         // SUBROUTINE LOCAL VARIABLE DECLARATIONS:
 
-        std::array<Real64, 15> bld_pr;                        // Slat properties
-        std::array<Real64, 16> st_lay;                        // Solar-optical blind/glazing system properties
+        std::array<Real64, 15> bld_pr;                     // Slat properties
+        std::array<Real64, 16> st_lay;                     // Solar-optical blind/glazing system properties
         Real64 sun_el;                                     // Solar profile angle (radians)
         Array1D<Real64> sun_el_deg(Material::MaxProfAngs); // Solar profile angle (deg) corresponding to sun_el values
         Real64 bld_el;                                     // Slat angle (elevation of slat normal vector in plane
@@ -7576,10 +7576,10 @@ namespace Window {
     } // CalcWindowScreenProperties()
 
     void BlindOpticsDiffuse(EnergyPlusData &state,
-                            int const BlindNum,      // Blind number
-                            int const ISolVis,       // 1 = solar and IR calculation; 2 = visible calculation
+                            int const BlindNum,              // Blind number
+                            int const ISolVis,               // 1 = solar and IR calculation; 2 = visible calculation
                             std::array<Real64, 15> const &c, // Slat properties
-                            Real64 const b_el,       // Slat elevation (radians)
+                            Real64 const b_el,               // Slat elevation (radians)
                             std::array<Real64, 16> &p        // Blind properties
     )
     {
@@ -7606,13 +7606,13 @@ namespace Window {
 
         std::array<Real64, 2> fEdgeA; // Average slat edge correction factor for upper and lower quadrants
         //  seen by window blind
-        std::array<Real64, 6> j;       // Slat section radiosity vector
-        std::array<Real64, 6> G;       // Slat section irradiance vector
-        std::array<Real64, 6> Q;       // Slat section radiance vector
-        std::array<std::array<Real64, 6>, 6> F;    // View factor array
+        std::array<Real64, 6> j;                                                     // Slat section radiosity vector
+        std::array<Real64, 6> G;                                                     // Slat section irradiance vector
+        std::array<Real64, 6> Q;                                                     // Slat section radiance vector
+        std::array<std::array<Real64, 6>, 6> F;                                      // View factor array
         std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> X;    // Exchange matrix
         std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> Xinv; // Inverse of exchange matrix
-        std::array<int, 2 * maxGlassLayers> indx;        // LU decomposition indices
+        std::array<int, 2 * maxGlassLayers> indx;                                    // LU decomposition indices
 
         // The slat input properties are:
         // c(1)    0. (unused)
@@ -7883,10 +7883,10 @@ namespace Window {
     //**********************************************************************************************
 
     void BlindOpticsBeam(EnergyPlusData &state,
-                         int const BlindNum,      // Blind number
+                         int const BlindNum,              // Blind number
                          std::array<Real64, 15> const &c, // Slat properties (equivalent to BLD_PR)
-                         Real64 const b_el,       // Slat elevation (radians)
-                         Real64 const s_el,       // Solar profile angle (radians)
+                         Real64 const b_el,               // Slat elevation (radians)
+                         Real64 const s_el,               // Solar profile angle (radians)
                          std::array<Real64, 16> &p        // Blind properties (equivalent to ST_LAY)
     )
     {
@@ -7987,19 +7987,19 @@ namespace Window {
         // p(15)   IR emissivity back
         // p(16)   0.0 (unused)
 
-        Real64 phib;                // Elevation angle of normal vector to front of slat (0 to pi radians)
-        Real64 phis;                // Elevation angle of source vector; same as "profile angle" (-pi/2 to pi/2 radians)
-        Real64 gamma;               // phib - phis (radians)
-        std::array<Real64, 6> j;       // Slat surface section radiosity vector
-        std::array<Real64, 6> G;       // Slat surface section irradiance vector
-        std::array<Real64, 6> Q;       // Slat surface section source vector
-        std::array<std::array<Real64, 6>, 6> F;    // View factor array
+        Real64 phib;                            // Elevation angle of normal vector to front of slat (0 to pi radians)
+        Real64 phis;                            // Elevation angle of source vector; same as "profile angle" (-pi/2 to pi/2 radians)
+        Real64 gamma;                           // phib - phis (radians)
+        std::array<Real64, 6> j;                // Slat surface section radiosity vector
+        std::array<Real64, 6> G;                // Slat surface section irradiance vector
+        std::array<Real64, 6> Q;                // Slat surface section source vector
+        std::array<std::array<Real64, 6>, 6> F; // View factor array
 
         std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> X;    // X*J = Q
         std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> Xinv; // J = Xinv*Q
-        std::array<int, 2 * maxGlassLayers> indx; // Indices for LU decomposition
+        std::array<int, 2 * maxGlassLayers> indx;                                    // Indices for LU decomposition
 
-        Real64 fEdge;               // Slat edge correction factor
+        Real64 fEdge; // Slat edge correction factor
         Real64 fEdge1;
 
         auto &s_mat = state.dataMaterial;
@@ -8115,11 +8115,11 @@ namespace Window {
 
     //********************************************************************************************
 
-    void ViewFac(Real64 const s,    // Slat width (m)
-                 Real64 const h,    // Distance between faces of adjacent slats (m)
-                 Real64 const phib, // Elevation angle of normal to slat (radians)
-                 Real64 const phis, // Profile angle of radiation source (radians)
-                 std::array<std::array<Real64, 6>, 6> &F  // View factor array
+    void ViewFac(Real64 const s,                         // Slat width (m)
+                 Real64 const h,                         // Distance between faces of adjacent slats (m)
+                 Real64 const phib,                      // Elevation angle of normal to slat (radians)
+                 Real64 const phis,                      // Profile angle of radiation source (radians)
+                 std::array<std::array<Real64, 6>, 6> &F // View factor array
     )
     {
 
@@ -8173,7 +8173,7 @@ namespace Window {
         for (int i = 0; i < 6; ++i) {
             F[i][i] = 0.0;
         }
-        
+
         F[0][0] = 0.0;
         F[1][0] = (d1 + d2 - 2.0 * s) / ht;
         F[2][0] = (h + L3 - d3) / ht;
@@ -8193,7 +8193,7 @@ namespace Window {
         if (L5 > 0.0) {
             F[5][4] = (d5 + d6 - ht) / (2.0 * L5);
         }
-        
+
         L[0] = h;
         L[1] = h;
         L[2] = L3;
@@ -8215,7 +8215,7 @@ namespace Window {
     void InvertMatrix(EnergyPlusData &state,
                       std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &a, // Matrix to be inverted
                       std::array<std::array<Real64, 2 * maxGlassLayers>, 2 * maxGlassLayers> &y, // Inverse of matrix a
-                      std::array<int, 2 * maxGlassLayers> &indx,  // Index vector for LU decomposition
+                      std::array<int, 2 * maxGlassLayers> &indx,                                 // Index vector for LU decomposition
                       int const n)
     {
 
