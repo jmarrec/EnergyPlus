@@ -8220,7 +8220,7 @@ TEST_F(EnergyPlusFixture, InitDXCoil_GetHPCoolingCoilIndex)
 
     GetDXCoils(*state);
     state->dataGlobal->SysSizingCalc = true;
-    state->dataBranchNodeConnections->CompSets(1).ParentObjectType = EnergyPlus::DataLoopNode::ConnectionObjectType::AirLoopHVACUnitarySystem;
+    state->dataBranchNodeConnections->CompSets(1).ParentObjectType = Node::ConnectionObjectType::AirLoopHVACUnitarySystem;
     InitDXCoil(*state, 1);
 
     // since there is no companion cooling coil of the correct type, the FindCompanionUpStreamCoil flag for calling into GetHPCoolingCoilIndex should

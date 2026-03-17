@@ -280,55 +280,55 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
             ErrorsFound = true;
         }
         // Assign Node Numbers to specified nodes
-        thisChiller.EvapInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                           state.dataIPShortCut->cAlphaArgs(2),
-                                                                           ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                           state.dataIPShortCut->cAlphaArgs(1),
-                                                                           DataLoopNode::NodeFluidType::Water,
-                                                                           DataLoopNode::ConnectionType::Inlet,
-                                                                           NodeInputManager::CompFluidStream::Primary,
-                                                                           DataLoopNode::ObjectIsNotParent);
-        thisChiller.EvapOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                            state.dataIPShortCut->cAlphaArgs(3),
-                                                                            ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                                            DataLoopNode::NodeFluidType::Water,
-                                                                            DataLoopNode::ConnectionType::Outlet,
-                                                                            NodeInputManager::CompFluidStream::Primary,
-                                                                            DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(state,
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(2),
-                                           state.dataIPShortCut->cAlphaArgs(3),
-                                           "Chilled Water Nodes");
+        thisChiller.EvapInletNodeNum = Node::GetOnlySingleNode(state,
+                                                               state.dataIPShortCut->cAlphaArgs(2),
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                               state.dataIPShortCut->cAlphaArgs(1),
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Primary,
+                                                               Node::ObjectIsNotParent);
+        thisChiller.EvapOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                state.dataIPShortCut->cAlphaArgs(3),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                state.dataIPShortCut->cAlphaArgs(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Primary,
+                                                                Node::ObjectIsNotParent);
+        Node::TestCompSet(state,
+                          state.dataIPShortCut->cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(2),
+                          state.dataIPShortCut->cAlphaArgs(3),
+                          "Chilled Water Nodes");
 
-        thisChiller.CondInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                           state.dataIPShortCut->cAlphaArgs(4),
-                                                                           ErrorsFound,
-                                                                           DataLoopNode::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                           state.dataIPShortCut->cAlphaArgs(1),
-                                                                           DataLoopNode::NodeFluidType::Water,
-                                                                           DataLoopNode::ConnectionType::Inlet,
-                                                                           NodeInputManager::CompFluidStream::Secondary,
-                                                                           DataLoopNode::ObjectIsNotParent);
-        thisChiller.CondOutletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                            state.dataIPShortCut->cAlphaArgs(5),
-                                                                            ErrorsFound,
-                                                                            DataLoopNode::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                            state.dataIPShortCut->cAlphaArgs(1),
-                                                                            DataLoopNode::NodeFluidType::Water,
-                                                                            DataLoopNode::ConnectionType::Outlet,
-                                                                            NodeInputManager::CompFluidStream::Secondary,
-                                                                            DataLoopNode::ObjectIsNotParent);
-        BranchNodeConnections::TestCompSet(state,
-                                           state.dataIPShortCut->cCurrentModuleObject,
-                                           state.dataIPShortCut->cAlphaArgs(1),
-                                           state.dataIPShortCut->cAlphaArgs(4),
-                                           state.dataIPShortCut->cAlphaArgs(5),
-                                           "Condenser (not tested) Nodes");
+        thisChiller.CondInletNodeNum = Node::GetOnlySingleNode(state,
+                                                               state.dataIPShortCut->cAlphaArgs(4),
+                                                               ErrorsFound,
+                                                               Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                               state.dataIPShortCut->cAlphaArgs(1),
+                                                               Node::FluidType::Water,
+                                                               Node::ConnectionType::Inlet,
+                                                               Node::CompFluidStream::Secondary,
+                                                               Node::ObjectIsNotParent);
+        thisChiller.CondOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                state.dataIPShortCut->cAlphaArgs(5),
+                                                                ErrorsFound,
+                                                                Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                state.dataIPShortCut->cAlphaArgs(1),
+                                                                Node::FluidType::Water,
+                                                                Node::ConnectionType::Outlet,
+                                                                Node::CompFluidStream::Secondary,
+                                                                Node::ObjectIsNotParent);
+        Node::TestCompSet(state,
+                          state.dataIPShortCut->cCurrentModuleObject,
+                          state.dataIPShortCut->cAlphaArgs(1),
+                          state.dataIPShortCut->cAlphaArgs(4),
+                          state.dataIPShortCut->cAlphaArgs(5),
+                          "Condenser (not tested) Nodes");
 
         thisChiller.GeneratorInputCurvePtr = Curve::GetCurveIndex(state, state.dataIPShortCut->cAlphaArgs(7));
         if (thisChiller.GeneratorInputCurvePtr > 0) {
@@ -357,10 +357,10 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
         if (NumAlphas > 15) {
             if (Util::SameString(state.dataIPShortCut->cAlphaArgs(16), "HotWater") ||
                 Util::SameString(state.dataIPShortCut->cAlphaArgs(16), "HotWater")) {
-                thisChiller.GenHeatSourceType = DataLoopNode::NodeFluidType::Water;
+                thisChiller.GenHeatSourceType = Node::FluidType::Water;
                 //       Default to Steam if left blank
             } else if (Util::SameString(state.dataIPShortCut->cAlphaArgs(16), "STEAM") || state.dataIPShortCut->cAlphaArgs(16).empty()) {
-                thisChiller.GenHeatSourceType = DataLoopNode::NodeFluidType::Steam;
+                thisChiller.GenHeatSourceType = Node::FluidType::Steam;
                 thisChiller.steam = Fluid::GetSteam(state);
             } else {
                 ShowWarningError(state,
@@ -371,69 +371,67 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
             }
         } else {
             //     Default to Steam if not entered as input
-            thisChiller.GenHeatSourceType = DataLoopNode::NodeFluidType::Steam;
+            thisChiller.GenHeatSourceType = Node::FluidType::Steam;
             thisChiller.steam = Fluid::GetSteam(state);
         }
 
         if ((!state.dataIPShortCut->cAlphaArgs(9).empty()) && (!state.dataIPShortCut->cAlphaArgs(10).empty())) {
             thisChiller.GenInputOutputNodesUsed = true;
-            if (thisChiller.GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
-                thisChiller.GeneratorInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                                        state.dataIPShortCut->cAlphaArgs(9),
-                                                                                        ErrorsFound,
-                                                                                        DataLoopNode::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                                                        DataLoopNode::NodeFluidType::Water,
-                                                                                        DataLoopNode::ConnectionType::Inlet,
-                                                                                        NodeInputManager::CompFluidStream::Tertiary,
-                                                                                        DataLoopNode::ObjectIsNotParent);
-                thisChiller.GeneratorOutletNodeNum =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        state.dataIPShortCut->cAlphaArgs(10),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Water,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Tertiary,
-                                                        DataLoopNode::ObjectIsNotParent);
-                BranchNodeConnections::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(9),
-                                                   state.dataIPShortCut->cAlphaArgs(10),
-                                                   "Hot Water Nodes");
+            if (thisChiller.GenHeatSourceType == Node::FluidType::Water) {
+                thisChiller.GeneratorInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                            state.dataIPShortCut->cAlphaArgs(9),
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                            state.dataIPShortCut->cAlphaArgs(1),
+                                                                            Node::FluidType::Water,
+                                                                            Node::ConnectionType::Inlet,
+                                                                            Node::CompFluidStream::Tertiary,
+                                                                            Node::ObjectIsNotParent);
+                thisChiller.GeneratorOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                             state.dataIPShortCut->cAlphaArgs(10),
+                                                                             ErrorsFound,
+                                                                             Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                             state.dataIPShortCut->cAlphaArgs(1),
+                                                                             Node::FluidType::Water,
+                                                                             Node::ConnectionType::Outlet,
+                                                                             Node::CompFluidStream::Tertiary,
+                                                                             Node::ObjectIsNotParent);
+                Node::TestCompSet(state,
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(9),
+                                  state.dataIPShortCut->cAlphaArgs(10),
+                                  "Hot Water Nodes");
             } else {
                 if ((thisChiller.steam = Fluid::GetSteam(state)) == nullptr) {
                     ShowSevereError(state, "Fluid Properties for STEAM not found.");
                     ErrorsFound = true;
                 }
 
-                thisChiller.GeneratorInletNodeNum = NodeInputManager::GetOnlySingleNode(state,
-                                                                                        state.dataIPShortCut->cAlphaArgs(9),
-                                                                                        ErrorsFound,
-                                                                                        DataLoopNode::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                                                        DataLoopNode::NodeFluidType::Steam,
-                                                                                        DataLoopNode::ConnectionType::Inlet,
-                                                                                        NodeInputManager::CompFluidStream::Tertiary,
-                                                                                        DataLoopNode::ObjectIsNotParent);
-                thisChiller.GeneratorOutletNodeNum =
-                    NodeInputManager::GetOnlySingleNode(state,
-                                                        state.dataIPShortCut->cAlphaArgs(10),
-                                                        ErrorsFound,
-                                                        DataLoopNode::ConnectionObjectType::ChillerAbsorptionIndirect,
-                                                        state.dataIPShortCut->cAlphaArgs(1),
-                                                        DataLoopNode::NodeFluidType::Steam,
-                                                        DataLoopNode::ConnectionType::Outlet,
-                                                        NodeInputManager::CompFluidStream::Tertiary,
-                                                        DataLoopNode::ObjectIsNotParent);
-                BranchNodeConnections::TestCompSet(state,
-                                                   state.dataIPShortCut->cCurrentModuleObject,
-                                                   state.dataIPShortCut->cAlphaArgs(1),
-                                                   state.dataIPShortCut->cAlphaArgs(9),
-                                                   state.dataIPShortCut->cAlphaArgs(10),
-                                                   "Steam Nodes");
+                thisChiller.GeneratorInletNodeNum = Node::GetOnlySingleNode(state,
+                                                                            state.dataIPShortCut->cAlphaArgs(9),
+                                                                            ErrorsFound,
+                                                                            Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                            state.dataIPShortCut->cAlphaArgs(1),
+                                                                            Node::FluidType::Steam,
+                                                                            Node::ConnectionType::Inlet,
+                                                                            Node::CompFluidStream::Tertiary,
+                                                                            Node::ObjectIsNotParent);
+                thisChiller.GeneratorOutletNodeNum = Node::GetOnlySingleNode(state,
+                                                                             state.dataIPShortCut->cAlphaArgs(10),
+                                                                             ErrorsFound,
+                                                                             Node::ConnectionObjectType::ChillerAbsorptionIndirect,
+                                                                             state.dataIPShortCut->cAlphaArgs(1),
+                                                                             Node::FluidType::Steam,
+                                                                             Node::ConnectionType::Outlet,
+                                                                             Node::CompFluidStream::Tertiary,
+                                                                             Node::ObjectIsNotParent);
+                Node::TestCompSet(state,
+                                  state.dataIPShortCut->cCurrentModuleObject,
+                                  state.dataIPShortCut->cAlphaArgs(1),
+                                  state.dataIPShortCut->cAlphaArgs(9),
+                                  state.dataIPShortCut->cAlphaArgs(10),
+                                  "Steam Nodes");
             }
         } else if (state.dataIPShortCut->cAlphaArgs(9).empty() != state.dataIPShortCut->cAlphaArgs(10).empty()) {
             ShowWarningError(state,
@@ -444,12 +442,12 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
             ErrorsFound = true;
         } else {
             //     Generator fluid type must be steam if generator inlet/outlet nodes are not used
-            if (thisChiller.GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+            if (thisChiller.GenHeatSourceType == Node::FluidType::Water) {
                 ShowWarningError(state,
                                  EnergyPlus::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
                 ShowContinueError(state, "...Generator fluid type must be Steam if generator inlet/outlet nodes are blank.");
                 ShowContinueError(state, "...Generator fluid type is set to Steam and the simulation continues.");
-                thisChiller.GenHeatSourceType = DataLoopNode::NodeFluidType::Steam;
+                thisChiller.GenHeatSourceType = Node::FluidType::Steam;
             }
         }
 
@@ -549,7 +547,7 @@ void GetIndirectAbsorberInput(EnergyPlusData &state)
             }
         }
 
-        if (thisChiller.GeneratorVolFlowRate == 0.0 && thisChiller.GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+        if (thisChiller.GeneratorVolFlowRate == 0.0 && thisChiller.GenHeatSourceType == Node::FluidType::Water) {
             ShowWarningError(state,
                              EnergyPlus::format("{}, Name={}", state.dataIPShortCut->cCurrentModuleObject, state.dataIPShortCut->cAlphaArgs(1)));
             ShowContinueError(state, "...Generator water flow rate must be greater than 0 when absorber generator fluid type is hot water.");
@@ -693,7 +691,7 @@ void IndirectAbsorberSpecs::setupOutputVars(EnergyPlusData &state)
                         OutputProcessor::StoreType::Average,
                         this->Name);
 
-    if (this->GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+    if (this->GenHeatSourceType == Node::FluidType::Water) {
         SetupOutputVariable(state,
                             "Chiller Hot Water Consumption Rate",
                             Constant::Units::W,
@@ -843,8 +841,8 @@ void IndirectAbsorberSpecs::oneTimeInit(EnergyPlusData &state)
         // reset flow priority
         this->CWPlantLoc.comp->FlowPriority = DataPlant::LoopFlowStatus::NeedyIfLoopOn;
 
-        if ((state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint == DataLoopNode::SensedNodeFlagValue) &&
-            (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi == DataLoopNode::SensedNodeFlagValue)) {
+        if ((state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint == Node::SensedNodeFlagValue) &&
+            (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi == Node::SensedNodeFlagValue)) {
             if (!state.dataGlobal->AnyEnergyManagementSystemInModel) {
                 if (!this->ModulatedFlowErrDone) {
                     ShowWarningError(
@@ -925,7 +923,7 @@ void IndirectAbsorberSpecs::initialize(EnergyPlusData &state, bool RunFlag, Real
 
         if (this->GeneratorInletNodeNum > 0) {
 
-            if (this->GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+            if (this->GenHeatSourceType == Node::FluidType::Water) {
 
                 rho = this->GenPlantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
                 this->GenMassFlowRateMax = rho * this->GeneratorVolFlowRate;
@@ -1027,7 +1025,7 @@ void IndirectAbsorberSpecs::sizeChiller(EnergyPlusData &state)
             state, "Chiller:Absorption:Indirect", this->Name, this->CondInletNodeNum, this->CondOutletNodeNum, LoopErrorsFound);
     }
 
-    if (this->GenHeatSourceType == DataLoopNode::NodeFluidType::Steam) {
+    if (this->GenHeatSourceType == Node::FluidType::Steam) {
         if (this->GeneratorInletNodeNum > 0 && this->GeneratorOutletNodeNum > 0) {
             PltSizSteamNum = PlantUtilities::MyPlantSizingIndex(
                 state, "Chiller:Absorption:Indirect", this->Name, this->GeneratorInletNodeNum, this->GeneratorOutletNodeNum, LoopErrorsFound);
@@ -1336,10 +1334,10 @@ void IndirectAbsorberSpecs::sizeChiller(EnergyPlusData &state)
         PlantUtilities::RegisterPlantCompDesignFlow(state, this->CondInletNodeNum, tmpCondVolFlowRate);
     }
 
-    if ((PltSizSteamNum > 0 && this->GenHeatSourceType == DataLoopNode::NodeFluidType::Steam) ||
-        (PltSizHeatingNum > 0 && this->GenHeatSourceType == DataLoopNode::NodeFluidType::Water)) {
+    if ((PltSizSteamNum > 0 && this->GenHeatSourceType == Node::FluidType::Steam) ||
+        (PltSizHeatingNum > 0 && this->GenHeatSourceType == Node::FluidType::Water)) {
         if (this->EvapVolFlowRate >= HVAC::SmallWaterVolFlow && tmpNomCap > 0.0) {
-            if (this->GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+            if (this->GenHeatSourceType == Node::FluidType::Water) {
                 Real64 CpWater =
                     this->GenPlantLoc.loop->glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizHeatingNum).ExitTemp, RoutineName);
                 Real64 SteamDeltaT = max(0.5, state.dataSize->PlantSizData(PltSizHeatingNum).DeltaT);
@@ -1516,9 +1514,9 @@ void IndirectAbsorberSpecs::sizeChiller(EnergyPlusData &state)
     }
 
     if (this->GeneratorDeltaTempWasAutoSized) {
-        if (PltSizHeatingNum > 0 && this->GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+        if (PltSizHeatingNum > 0 && this->GenHeatSourceType == Node::FluidType::Water) {
             this->GeneratorDeltaTemp = max(0.5, state.dataSize->PlantSizData(PltSizHeatingNum).DeltaT);
-        } else if (this->GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+        } else if (this->GenHeatSourceType == Node::FluidType::Water) {
             Real64 rho = this->GenPlantLoc.loop->glycol->getDensity(state, Constant::HWInitConvTemp, RoutineName);
             Real64 CpWater =
                 this->GenPlantLoc.loop->glycol->getSpecificHeat(state, state.dataSize->PlantSizData(PltSizHeatingNum).ExitTemp, RoutineName);
@@ -1566,10 +1564,8 @@ void IndirectAbsorberSpecs::sizeChiller(EnergyPlusData &state)
                                                  this->Name,
                                                  (this->CDPlantLoc.branch != nullptr) ? this->CDPlantLoc.branch->Name : "N/A");
         OutputReportPredefined::PreDefTableEntry(state, state.dataOutRptPredefined->pdchChillerMinPLR, this->Name, this->MinPartLoadRat);
-        OutputReportPredefined::PreDefTableEntry(state,
-                                                 state.dataOutRptPredefined->pdchChillerFuelType,
-                                                 this->Name,
-                                                 DataLoopNode::NodeFluidTypeNames[static_cast<int>(this->GenHeatSourceType)]);
+        OutputReportPredefined::PreDefTableEntry(
+            state, state.dataOutRptPredefined->pdchChillerFuelType, this->Name, Node::FluidTypeNames[static_cast<int>(this->GenHeatSourceType)]);
         OutputReportPredefined::PreDefTableEntry(
             state, state.dataOutRptPredefined->pdchChillerRatedEntCondTemp, this->Name, this->TempDesCondIn); // Rated==Ref?
         OutputReportPredefined::PreDefTableEntry(
@@ -1735,7 +1731,7 @@ void IndirectAbsorberSpecs::calculate(EnergyPlusData &state, Real64 MyLoad, bool
     Real64 CapacityfGeneratorTemp = 1.0; // performance curve output
     if (this->CapFGeneratorTempPtr > 0) {
         if (this->GeneratorInletNodeNum > 0) {
-            if (this->GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+            if (this->GenHeatSourceType == Node::FluidType::Water) {
                 CapacityfGeneratorTemp =
                     Curve::CurveValue(state, this->CapFGeneratorTempPtr, state.dataLoopNodes->Node(this->GeneratorInletNodeNum).Temp);
             } else {
@@ -1843,7 +1839,7 @@ void IndirectAbsorberSpecs::calculate(EnergyPlusData &state, Real64 MyLoad, bool
             case DataPlant::LoopDemandCalcScheme::SingleSetPoint: {
                 if ((this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) ||
                     (this->CWPlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) ||
-                    (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint != DataLoopNode::SensedNodeFlagValue)) {
+                    (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint != Node::SensedNodeFlagValue)) {
                     TempEvapOutSetPoint = state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPoint;
                 } else {
                     TempEvapOutSetPoint = state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPoint;
@@ -1852,7 +1848,7 @@ void IndirectAbsorberSpecs::calculate(EnergyPlusData &state, Real64 MyLoad, bool
             case DataPlant::LoopDemandCalcScheme::DualSetPointDeadBand: {
                 if ((this->FlowMode == DataPlant::FlowMode::LeavingSetpointModulated) ||
                     (this->CWPlantLoc.comp->CurOpSchemeType == DataPlant::OpScheme::CompSetPtBased) ||
-                    (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi != DataLoopNode::SensedNodeFlagValue)) {
+                    (state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi != Node::SensedNodeFlagValue)) {
                     TempEvapOutSetPoint = state.dataLoopNodes->Node(this->EvapOutletNodeNum).TempSetPointHi;
                 } else {
                     TempEvapOutSetPoint = state.dataLoopNodes->Node(this->CWPlantLoc.loop->TempSetPointNodeNum).TempSetPointHi;
@@ -1990,7 +1986,7 @@ void IndirectAbsorberSpecs::calculate(EnergyPlusData &state, Real64 MyLoad, bool
 
     if (this->GeneratorInletNodeNum > 0) {
         //   Hot water plant is used for the generator
-        if (this->GenHeatSourceType == DataLoopNode::NodeFluidType::Water) {
+        if (this->GenHeatSourceType == Node::FluidType::Water) {
 
             CpFluid =
                 this->GenPlantLoc.loop->glycol->getSpecificHeat(state, state.dataLoopNodes->Node(this->GeneratorInletNodeNum).Temp, RoutineName);
@@ -2080,7 +2076,7 @@ void IndirectAbsorberSpecs::calculate(EnergyPlusData &state, Real64 MyLoad, bool
 
             } // IF(GenMassFlowRate .LE. 0.0d0)THEN
 
-        } // IF(IndirectAbsorber(ChillNum)%GenHeatSourceType == DataLoopNode::NodeFluidType::Water)THEN
+        } // IF(IndirectAbsorber(ChillNum)%GenHeatSourceType == Node::FluidType::Water)THEN
 
     } // IF(GeneratorInletNode .GT. 0)THEN
 

@@ -110,7 +110,6 @@ namespace EnergyPlus::PoweredInductionUnits {
 // to meet the zone load.
 
 // Using/Aliasing
-using namespace DataLoopNode;
 using HVAC::SmallAirVolFlow;
 using HVAC::SmallLoad;
 using HVAC::SmallMassFlow;
@@ -236,10 +235,10 @@ void GetPIUs(EnergyPlusData &state)
     // Uses "Get" routines to read in data.
 
     // Using/Aliasing
-    using BranchNodeConnections::SetUpCompSets;
-    using BranchNodeConnections::TestCompSet;
+    using Node::SetUpCompSets;
+    using Node::TestCompSet;
 
-    using NodeInputManager::GetOnlySingleNode;
+    using Node::GetOnlySingleNode;
     using SteamCoils::GetCoilSteamInletNode;
     using WaterCoils::GetCoilWaterInletNode;
 
@@ -347,19 +346,19 @@ void GetPIUs(EnergyPlusData &state)
                 }
                 }
 
-                auto connectionType = DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctSeriesPIUReheat;
+                auto connectionType = Node::ConnectionObjectType::AirTerminalSingleDuctSeriesPIUReheat;
                 if (cCurrentModuleObject == "AirTerminal:SingleDuct:ParallelPIU:Reheat") {
-                    connectionType = DataLoopNode::ConnectionObjectType::AirTerminalSingleDuctParallelPIUReheat;
+                    connectionType = Node::ConnectionObjectType::AirTerminalSingleDuctParallelPIUReheat;
                 }
                 thisPIU.PriAirInNode = GetOnlySingleNode(state,
                                                          ip->getAlphaFieldValue(fields, objectSchemaProps, "supply_air_inlet_node_name"),
                                                          ErrorsFound,
                                                          connectionType,
                                                          thisPIU.Name,
-                                                         DataLoopNode::NodeFluidType::Air,
-                                                         DataLoopNode::ConnectionType::Inlet,
-                                                         NodeInputManager::CompFluidStream::Primary,
-                                                         ObjectIsParent,
+                                                         Node::FluidType::Air,
+                                                         Node::ConnectionType::Inlet,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsParent,
                                                          "Supply Air Inlet Node Name");
 
                 thisPIU.SecAirInNode = GetOnlySingleNode(state,
@@ -367,10 +366,10 @@ void GetPIUs(EnergyPlusData &state)
                                                          ErrorsFound,
                                                          connectionType,
                                                          thisPIU.Name,
-                                                         DataLoopNode::NodeFluidType::Air,
-                                                         DataLoopNode::ConnectionType::Inlet,
-                                                         NodeInputManager::CompFluidStream::Primary,
-                                                         ObjectIsParent,
+                                                         Node::FluidType::Air,
+                                                         Node::ConnectionType::Inlet,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsParent,
                                                          "Secondary Air Inlet Node Name");
 
                 thisPIU.OutAirNode = GetOnlySingleNode(state,
@@ -378,10 +377,10 @@ void GetPIUs(EnergyPlusData &state)
                                                        ErrorsFound,
                                                        connectionType,
                                                        thisPIU.Name,
-                                                       DataLoopNode::NodeFluidType::Air,
-                                                       DataLoopNode::ConnectionType::Outlet,
-                                                       NodeInputManager::CompFluidStream::Primary,
-                                                       ObjectIsParent,
+                                                       Node::FluidType::Air,
+                                                       Node::ConnectionType::Outlet,
+                                                       Node::CompFluidStream::Primary,
+                                                       Node::ObjectIsParent,
                                                        "Outlet Node Name");
 
                 // The reheat coil control node is necessary for hot water reheat, but not necessary for electric or gas reheat.

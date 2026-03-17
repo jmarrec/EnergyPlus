@@ -494,31 +494,31 @@ namespace PlantComponentTemperatureSources {
             state.dataPlantCompTempSrc->WaterSource(SourceNum).Name = state.dataIPShortCut->cAlphaArgs(1);
 
             state.dataPlantCompTempSrc->WaterSource(SourceNum).InletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(2),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::PlantComponentTemperatureSource,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Inlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
+                Node::GetOnlySingleNode(state,
+                                        state.dataIPShortCut->cAlphaArgs(2),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::PlantComponentTemperatureSource,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Inlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
             state.dataPlantCompTempSrc->WaterSource(SourceNum).OutletNodeNum =
-                NodeInputManager::GetOnlySingleNode(state,
-                                                    state.dataIPShortCut->cAlphaArgs(3),
-                                                    ErrorsFound,
-                                                    DataLoopNode::ConnectionObjectType::PlantComponentTemperatureSource,
-                                                    state.dataIPShortCut->cAlphaArgs(1),
-                                                    DataLoopNode::NodeFluidType::Water,
-                                                    DataLoopNode::ConnectionType::Outlet,
-                                                    NodeInputManager::CompFluidStream::Primary,
-                                                    DataLoopNode::ObjectIsNotParent);
-            BranchNodeConnections::TestCompSet(state,
-                                               cCurrentModuleObject,
-                                               state.dataIPShortCut->cAlphaArgs(1),
-                                               state.dataIPShortCut->cAlphaArgs(2),
-                                               state.dataIPShortCut->cAlphaArgs(3),
-                                               "Chilled Water Nodes");
+                Node::GetOnlySingleNode(state,
+                                        state.dataIPShortCut->cAlphaArgs(3),
+                                        ErrorsFound,
+                                        Node::ConnectionObjectType::PlantComponentTemperatureSource,
+                                        state.dataIPShortCut->cAlphaArgs(1),
+                                        Node::FluidType::Water,
+                                        Node::ConnectionType::Outlet,
+                                        Node::CompFluidStream::Primary,
+                                        Node::ObjectIsNotParent);
+            Node::TestCompSet(state,
+                              cCurrentModuleObject,
+                              state.dataIPShortCut->cAlphaArgs(1),
+                              state.dataIPShortCut->cAlphaArgs(2),
+                              state.dataIPShortCut->cAlphaArgs(3),
+                              "Chilled Water Nodes");
 
             state.dataPlantCompTempSrc->WaterSource(SourceNum).DesVolFlowRate = state.dataIPShortCut->rNumericArgs(1);
             if (state.dataPlantCompTempSrc->WaterSource(SourceNum).DesVolFlowRate == DataSizing::AutoSize) {

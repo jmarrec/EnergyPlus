@@ -70,7 +70,6 @@
 
 using namespace EnergyPlus;
 using namespace ZoneEquipmentManager;
-using namespace DataLoopNode;
 using namespace DataSizing;
 using namespace DataZoneEquipment;
 using namespace DataEnvironment;

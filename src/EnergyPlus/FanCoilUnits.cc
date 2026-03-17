@@ -314,25 +314,25 @@ namespace FanCoilUnits {
 
             fanCoil.OutAirVolFlow = Numbers(4);
 
-            fanCoil.AirInNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                    Alphas(5),
-                                                                    ErrorsFound,
-                                                                    DataLoopNode::ConnectionObjectType::ZoneHVACFourPipeFanCoil,
-                                                                    Alphas(1),
-                                                                    DataLoopNode::NodeFluidType::Air,
-                                                                    DataLoopNode::ConnectionType::Inlet,
-                                                                    NodeInputManager::CompFluidStream::Primary,
-                                                                    DataLoopNode::ObjectIsParent); // air input node
+            fanCoil.AirInNode = Node::GetOnlySingleNode(state,
+                                                        Alphas(5),
+                                                        ErrorsFound,
+                                                        Node::ConnectionObjectType::ZoneHVACFourPipeFanCoil,
+                                                        Alphas(1),
+                                                        Node::FluidType::Air,
+                                                        Node::ConnectionType::Inlet,
+                                                        Node::CompFluidStream::Primary,
+                                                        Node::ObjectIsParent); // air input node
 
-            fanCoil.AirOutNode = NodeInputManager::GetOnlySingleNode(state,
-                                                                     Alphas(6),
-                                                                     ErrorsFound,
-                                                                     DataLoopNode::ConnectionObjectType::ZoneHVACFourPipeFanCoil,
-                                                                     Alphas(1),
-                                                                     DataLoopNode::NodeFluidType::Air,
-                                                                     DataLoopNode::ConnectionType::Outlet,
-                                                                     NodeInputManager::CompFluidStream::Primary,
-                                                                     DataLoopNode::ObjectIsParent); // air outlet node
+            fanCoil.AirOutNode = Node::GetOnlySingleNode(state,
+                                                         Alphas(6),
+                                                         ErrorsFound,
+                                                         Node::ConnectionObjectType::ZoneHVACFourPipeFanCoil,
+                                                         Alphas(1),
+                                                         Node::FluidType::Air,
+                                                         Node::ConnectionType::Outlet,
+                                                         Node::CompFluidStream::Primary,
+                                                         Node::ObjectIsParent); // air outlet node
 
             fanCoil.OAMixType = Alphas(7);
             fanCoil.OAMixName = Alphas(8);
@@ -805,44 +805,43 @@ namespace FanCoilUnits {
 
             // Set up component set for supply fan
             if (fanCoil.OutsideAirNode > 0) {
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     fanCoil.UnitType,
-                                                     fanCoil.Name,
-                                                     HVAC::fanTypeNames[(int)fanCoil.fanType],
-                                                     fanCoil.FanName,
-                                                     state.dataLoopNodes->NodeID(fanCoil.MixedAirNode),
-                                                     "UNDEFINED");
+                Node::SetUpCompSets(state,
+                                    fanCoil.UnitType,
+                                    fanCoil.Name,
+                                    HVAC::fanTypeNames[(int)fanCoil.fanType],
+                                    fanCoil.FanName,
+                                    state.dataLoopNodes->NodeID(fanCoil.MixedAirNode),
+                                    "UNDEFINED");
             } else {
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     fanCoil.UnitType,
-                                                     fanCoil.Name,
-                                                     HVAC::fanTypeNames[(int)fanCoil.fanType],
-                                                     fanCoil.FanName,
-                                                     state.dataLoopNodes->NodeID(fanCoil.AirInNode),
-                                                     "UNDEFINED");
+                Node::SetUpCompSets(state,
+                                    fanCoil.UnitType,
+                                    fanCoil.Name,
+                                    HVAC::fanTypeNames[(int)fanCoil.fanType],
+                                    fanCoil.FanName,
+                                    state.dataLoopNodes->NodeID(fanCoil.AirInNode),
+                                    "UNDEFINED");
             }
             // Set up component set for cooling coil
-            BranchNodeConnections::SetUpCompSets(
-                state, fanCoil.UnitType, fanCoil.Name, fanCoil.CCoilType, fanCoil.CCoilName, "UNDEFINED", "UNDEFINED");
+            Node::SetUpCompSets(state, fanCoil.UnitType, fanCoil.Name, fanCoil.CCoilType, fanCoil.CCoilName, "UNDEFINED", "UNDEFINED");
 
             // Set up component set for heating coil
-            BranchNodeConnections::SetUpCompSets(state,
-                                                 fanCoil.UnitType,
-                                                 fanCoil.Name,
-                                                 fanCoil.HCoilType,
-                                                 fanCoil.HCoilName,
-                                                 "UNDEFINED",
-                                                 state.dataLoopNodes->NodeID(fanCoil.AirOutNode));
+            Node::SetUpCompSets(state,
+                                fanCoil.UnitType,
+                                fanCoil.Name,
+                                fanCoil.HCoilType,
+                                fanCoil.HCoilName,
+                                "UNDEFINED",
+                                state.dataLoopNodes->NodeID(fanCoil.AirOutNode));
 
             // Set up component set for OA mixer - use OA node and Mixed air node
             if (fanCoil.OutsideAirNode > 0) {
-                BranchNodeConnections::SetUpCompSets(state,
-                                                     fanCoil.UnitType,
-                                                     fanCoil.Name,
-                                                     fanCoil.OAMixType,
-                                                     fanCoil.OAMixName,
-                                                     state.dataLoopNodes->NodeID(fanCoil.OutsideAirNode),
-                                                     state.dataLoopNodes->NodeID(fanCoil.MixedAirNode));
+                Node::SetUpCompSets(state,
+                                    fanCoil.UnitType,
+                                    fanCoil.Name,
+                                    fanCoil.OAMixType,
+                                    fanCoil.OAMixName,
+                                    state.dataLoopNodes->NodeID(fanCoil.OutsideAirNode),
+                                    state.dataLoopNodes->NodeID(fanCoil.MixedAirNode));
             }
         }
 

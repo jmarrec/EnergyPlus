@@ -432,7 +432,7 @@ namespace SetPointManager {
 
         // Calculation method
         void calculate(EnergyPlusData &state) override;
-        // void calculate(EnergyPlusData &state, DataLoopNode::NodeData &returnNode, DataLoopNode::NodeData &supplyNode);
+        // void calculate(EnergyPlusData &state, Node::NodeData &returnNode, Node::NodeData &supplyNode);
     };
 
     struct SPMTESScheduled : SPMBase // Derived type for Scheduled TES Setpoint Manager data
