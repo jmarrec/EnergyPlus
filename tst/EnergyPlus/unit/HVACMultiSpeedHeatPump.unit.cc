@@ -67,6 +67,7 @@
 #include <EnergyPlus/HeatingCoils.hh>
 #include <EnergyPlus/IOFiles.hh>
 #include <EnergyPlus/MixedAir.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 #include <EnergyPlus/ScheduleManager.hh>
 #include <EnergyPlus/SimAirServingZones.hh>
@@ -1475,7 +1476,7 @@ TEST_F(EnergyPlusFixture, HVACMultiSpeedHeatPump_HeatRecoveryTest)
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     state->dataHVACMultiSpdHP->MSHeatPump(1).HRPlantLoc.loopNum = 1;
-    state->dataHVACMultiSpdHP->MSHeatPump(1).HRPlantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataHVACMultiSpdHP->MSHeatPump(1).HRPlantLoc);
 
     state->dataLoopNodes->Node(HeatRecInNode).MassFlowRate = 0.0; // test heat recovery result with 0 water flow rate
     HVACMultiSpeedHeatPump::MSHPHeatRecovery(*state, 1);

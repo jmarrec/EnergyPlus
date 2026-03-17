@@ -58,6 +58,7 @@
 #include <EnergyPlus/DataSizing.hh>
 #include <EnergyPlus/FluidProperties.hh>
 #include <EnergyPlus/Plant/DataPlant.hh>
+#include <EnergyPlus/PlantUtilities.hh>
 #include <EnergyPlus/Psychrometrics.hh>
 
 #include "Fixtures/EnergyPlusFixture.hh"
@@ -91,7 +92,7 @@ TEST_F(EnergyPlusFixture, Boiler_HotWaterSizingTest)
     state->dataPlnt->PlantLoop(1).glycol = Fluid::GetWater(*state);
 
     state->dataBoilers->Boiler[0].plantLoc.loopNum = 1;
-    state->dataBoilers->Boiler[0].plantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataBoilers->Boiler[0].plantLoc);
 
     state->dataSize->PlantSizData(1).DesVolFlowRate = 1.0;
     state->dataSize->PlantSizData(1).DeltaT = 10.0;
@@ -143,7 +144,7 @@ TEST_F(EnergyPlusFixture, Boiler_HotWaterAutoSizeTempTest)
     state->dataPlnt->PlantFirstSizesOkayToFinalize = true;
 
     state->dataBoilers->Boiler[0].plantLoc.loopNum = 1;
-    state->dataBoilers->Boiler[0].plantLoc.loop = &state->dataPlnt->PlantLoop(1);
+    PlantUtilities::SetPlantLocationLinks(*state, state->dataBoilers->Boiler[0].plantLoc);
 
     // calculate nominal capacity at 60.0 C hot water temperature
     Real64 rho = state->dataBoilers->Boiler[0].plantLoc.loop->glycol->getDensity(*state, 60.0, "Boiler_HotWaterAutoSizeTempTest");
